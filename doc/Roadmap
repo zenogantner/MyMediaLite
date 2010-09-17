@@ -1,0 +1,29 @@
+TODO list (no particular order):
+ - add function that maps original entity IDs to internal ones
+ - add filtering mechanism (pre-filter, post-filter)
+ - support for non-binary attributes
+ - additional engines
+   - non-negative matrix factorization (easy)
+   - adaptive kNN by Koren+Bell
+   - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
+ - parameterize types: user and item IDs, prediction values
+ - nicer, more generic structure for kNN engines
+   - non-weighted kNN
+   - more correlation measures (Jaccard index)
+ - faster evaluation routines
+ - time-aware rating and item prediction
+ - new engine types: TagRecommender, ContextAwareRecommender
+ - ranking ensembles
+ - generic optimization interface and algorithms (compare Mallet)
+ - re-implement rating data structure
+ - data types: introduce more properties
+ - data type: symmetric matrix
+ - profile+optimize data types
+ - add a simple logging mechanism (interface with 4 delegates):
+    - debug, info, warn; progress 
+ - Java port 
+ - multi-core support
+ - GPU support
+ - support for distributed computing
+ - webservice interface
+

@@ -1,0 +1,11 @@
+Differences between MyMediaLite and the MyMedia Recommender Framework
+1. MyMediaLite is Free and Open Source Software, published under the terms of
+   GPLv3.
+2. MyMediaLite is, as the name says, leaner and simpler and carries less
+   overhead, in particular:
+   - it does not presuppose special database schemas
+   - it does not have a database connector
+   - it contains a different set of recommender algorithms (even though
+     there is an overlap)
+   - it does not contain complex engines, recommender flows, (not yet)
+     filters, etc. 

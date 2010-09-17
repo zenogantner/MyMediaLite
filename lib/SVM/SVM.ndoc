@@ -1,0 +1,15 @@
+<project SchemaVersion="1.3">
+    <assemblies>
+        <assembly location=".\bin\Debug\SVM.dll" documentation=".\svm.xml" />
+    </assemblies>
+    <documenters>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="svm" />
+            <property name="Title" value="SVM.NET 1.6.1" />
+            <property name="FeedbackEmailAddress" value="matthew@matthewajohnson.org" />
+            <property name="SdkDocVersion" value="SDK_v3_5" />
+            <property name="SdkDocVersionString" value="VS.90" />
+        </documenter>
+    </documenters>
+</project>

@@ -1,0 +1,876 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SVM</name>
+    </assembly>
+    <members>
+        <member name="T:SVM.RangeTransform">
+            <summary>
+            Class which encapsulates a range transformation.
+            </summary>
+        </member>
+        <member name="T:SVM.IRangeTransform">
+            <summary>
+            Interface implemented by range transforms.
+            </summary>
+        </member>
+        <member name="M:SVM.IRangeTransform.Transform(System.Double,System.Int32)">
+            <summary>
+            Transform the input value using the transform stored for the provided index.
+            </summary>
+            <param name="input">Input value</param>
+            <param name="index">Index of the transform to use</param>
+            <returns>The transformed value</returns>
+        </member>
+        <member name="M:SVM.IRangeTransform.Transform(SVM.Node[])">
+            <summary>
+            Transforms the input array.
+            </summary>
+            <param name="input">The array to transform</param>
+            <returns>The transformed array</returns>
+        </member>
+        <member name="F:SVM.RangeTransform.DEFAULT_LOWER_BOUND">
+            <summary>
+            Default lower bound for scaling (-1).
+            </summary>
+        </member>
+        <member name="F:SVM.RangeTransform.DEFAULT_UPPER_BOUND">
+            <summary>
+            Default upper bound for scaling (1).
+            </summary>
+        </member>
+        <member name="M:SVM.RangeTransform.Compute(SVM.Problem)">
+            <summary>
+            Determines the Range transform for the provided problem.  Uses the default lower and upper bounds.
+            </summary>
+            <param name="prob">The Problem to analyze</param>
+            <returns>The Range transform for the problem</returns>
+        </member>
+        <member name="M:SVM.RangeTransform.Compute(SVM.Problem,System.Double,System.Double)">
+            <summary>
+            Determines the Range transform for the provided problem.
+            </summary>
+            <param name="prob">The Problem to analyze</param>
+            <param name="lowerBound">The lower bound for scaling</param>
+            <param name="upperBound">The upper bound for scaling</param>
+            <returns>The Range transform for the problem</returns>
+        </member>
+        <member name="M:SVM.RangeTransform.#ctor(System.Double[],System.Double[],System.Double,System.Double)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="minValues">The minimum values in each dimension.</param>
+            <param name="maxValues">The maximum values in each dimension.</param>
+            <param name="lowerBound">The desired lower bound for all dimensions.</param>
+            <param name="upperBound">The desired upper bound for all dimensions.</param>
+        </member>
+        <member name="M:SVM.RangeTransform.Transform(SVM.Node[])">
+            <summary>
+            Transforms the input array based upon the values provided.
+            </summary>
+            <param name="input">The input array</param>
+            <returns>A scaled array</returns>
+        </member>
+        <member name="M:SVM.RangeTransform.Transform(System.Double,System.Int32)">
+            <summary>
+            Transforms this an input value using the scaling transform for the provided dimension.
+            </summary>
+            <param name="input">The input value to transform</param>
+            <param name="index">The dimension whose scaling transform should be used</param>
+            <returns>The scaled value</returns>
+        </member>
+        <member name="M:SVM.RangeTransform.Write(System.IO.Stream,SVM.RangeTransform)">
+            <summary>
+            Writes this Range transform to a stream.
+            </summary>
+            <param name="stream">The stream to write to</param>
+            <param name="r">The range to write</param>
+        </member>
+        <member name="M:SVM.RangeTransform.Write(System.String,SVM.RangeTransform)">
+            <summary>
+            Writes this Range transform to a file.    This will overwrite any previous data in the file.
+            </summary>
+            <param name="outputFile">The file to write to</param>
+            <param name="r">The Range to write</param>
+        </member>
+        <member name="M:SVM.RangeTransform.Read(System.String)">
+            <summary>
+            Reads a Range transform from a file.
+            </summary>
+            <param name="inputFile">The file to read from</param>
+            <returns>The Range transform</returns>
+        </member>
+        <member name="M:SVM.RangeTransform.Read(System.IO.Stream)">
+            <summary>
+            Reads a Range transform from a stream.
+            </summary>
+            <param name="stream">The stream to read from</param>
+            <returns>The Range transform</returns>
+        </member>
+        <member name="T:SVM.PrecomputedKernel">
+            <summary>
+            Class encapsulating a precomputed kernel, where each position indicates the similarity score for two items in the training data.
+            </summary>
+        </member>
+        <member name="M:SVM.PrecomputedKernel.#ctor(System.Single[0:,0:])">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="similarities">The similarity scores between all items in the training data</param>
+        </member>
+        <member name="M:SVM.PrecomputedKernel.#ctor(System.Collections.Generic.List{SVM.Node[]},SVM.Parameter)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="nodes">Nodes for self-similarity analysis</param>
+            <param name="param">Parameters to use when computing similarities</param>
+        </member>
+        <member name="M:SVM.PrecomputedKernel.#ctor(System.Collections.Generic.List{SVM.Node[]},System.Collections.Generic.List{SVM.Node[]},SVM.Parameter)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="rows">Nodes to use as the rows of the matrix</param>
+            <param name="columns">Nodes to use as the columns of the matrix</param>
+            <param name="param">Parameters to use when compute similarities</param>
+        </member>
+        <member name="M:SVM.PrecomputedKernel.Compute(System.Double[],System.Double[])">
+            <summary>
+            Constructs a <see cref="T:SVM.Problem"/> object using the labels provided.  If a label is set to "0" that item is ignored.
+            </summary>
+            <param name="rowLabels">The labels for the row items</param>
+            <param name="columnLabels">The labels for the column items</param>
+            <returns>A <see cref="T:SVM.Problem"/> object</returns>
+        </member>
+        <member name="T:SVM.Problem">
+            <summary>
+            Encapsulates a problem, or set of vectors which must be classified.
+            </summary>
+        </member>
+        <member name="M:SVM.Problem.#ctor(System.Int32,System.Double[],SVM.Node[][],System.Int32)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="count">Number of vectors</param>
+            <param name="y">The class labels</param>
+            <param name="x">Vector data.</param>
+            <param name="maxIndex">Maximum index for a vector</param>
+        </member>
+        <member name="M:SVM.Problem.#ctor">
+            <summary>
+            Empty Constructor.  Nothing is initialized.
+            </summary>
+        </member>
+        <member name="M:SVM.Problem.Read(System.IO.Stream)">
+            <summary>
+            Reads a problem from a stream.
+            </summary>
+            <param name="stream">Stream to read from</param>
+            <returns>The problem</returns>
+        </member>
+        <member name="M:SVM.Problem.Write(System.IO.Stream,SVM.Problem)">
+            <summary>
+            Writes a problem to a stream.
+            </summary>
+            <param name="stream">The stream to write the problem to.</param>
+            <param name="problem">The problem to write.</param>
+        </member>
+        <member name="M:SVM.Problem.Read(System.String)">
+            <summary>
+            Reads a Problem from a file.
+            </summary>
+            <param name="filename">The file to read from.</param>
+            <returns>the Probem</returns>
+        </member>
+        <member name="M:SVM.Problem.Write(System.String,SVM.Problem)">
+            <summary>
+            Writes a problem to a file.   This will overwrite any previous data in the file.
+            </summary>
+            <param name="filename">The file to write to</param>
+            <param name="problem">The problem to write</param>
+        </member>
+        <member name="P:SVM.Problem.Count">
+            <summary>
+            Number of vectors.
+            </summary>
+        </member>
+        <member name="P:SVM.Problem.Y">
+            <summary>
+            Class labels.
+            </summary>
+        </member>
+        <member name="P:SVM.Problem.X">
+            <summary>
+            Vector data.
+            </summary>
+        </member>
+        <member name="P:SVM.Problem.MaxIndex">
+            <summary>
+            Maximum index for a vector.
+            </summary>
+        </member>
+        <member name="T:SVM.SvmType">
+            <summary>
+            Contains all of the types of SVM this library can model.
+            </summary>
+        </member>
+        <member name="F:SVM.SvmType.C_SVC">
+            <summary>
+            C-SVC.
+            </summary>
+        </member>
+        <member name="F:SVM.SvmType.NU_SVC">
+            <summary>
+            nu-SVC.
+            </summary>
+        </member>
+        <member name="F:SVM.SvmType.ONE_CLASS">
+            <summary>
+            one-class SVM
+            </summary>
+        </member>
+        <member name="F:SVM.SvmType.EPSILON_SVR">
+            <summary>
+            epsilon-SVR
+            </summary>
+        </member>
+        <member name="F:SVM.SvmType.NU_SVR">
+            <summary>
+            nu-SVR
+            </summary>
+        </member>
+        <member name="T:SVM.KernelType">
+            <summary>
+            Contains the various kernel types this library can use.
+            </summary>
+        </member>
+        <member name="F:SVM.KernelType.LINEAR">
+            <summary>
+            Linear: u'*v
+            </summary>
+        </member>
+        <member name="F:SVM.KernelType.POLY">
+            <summary>
+            Polynomial: (gamma*u'*v + coef0)^degree
+            </summary>
+        </member>
+        <member name="F:SVM.KernelType.RBF">
+            <summary>
+            Radial basis function: exp(-gamma*|u-v|^2)
+            </summary>
+        </member>
+        <member name="F:SVM.KernelType.SIGMOID">
+            <summary>
+            Sigmoid: tanh(gamma*u'*v + coef0)
+            </summary>
+        </member>
+        <member name="F:SVM.KernelType.PRECOMPUTED">
+            <summary>
+            Precomputed kernel
+            </summary>
+        </member>
+        <member name="T:SVM.Parameter">
+            <summary>
+            This class contains the various parameters which can affect the way in which an SVM
+            is learned.  Unless you know what you are doing, chances are you are best off using
+            the default values.
+            </summary>
+        </member>
+        <member name="M:SVM.Parameter.#ctor">
+            <summary>
+            Default Constructor.  Gives good default values to all parameters.
+            </summary>
+        </member>
+        <member name="M:SVM.Parameter.Clone">
+            <summary>
+            Creates a memberwise clone of this parameters object.
+            </summary>
+            <returns>The clone (as type Parameter)</returns>
+        </member>
+        <member name="P:SVM.Parameter.SvmType">
+            <summary>
+            Type of SVM (default C-SVC)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.KernelType">
+            <summary>
+            Type of kernel function (default Polynomial)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Degree">
+            <summary>
+            Degree in kernel function (default 3).
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Gamma">
+            <summary>
+            Gamma in kernel function (default 1/k)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Coefficient0">
+            <summary>
+            Zeroeth coefficient in kernel function (default 0)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.CacheSize">
+            <summary>
+            Cache memory size in MB (default 100)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.EPS">
+            <summary>
+            Tolerance of termination criterion (default 0.001)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.C">
+            <summary>
+            The parameter C of C-SVC, epsilon-SVR, and nu-SVR (default 1)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Weights">
+            <summary>
+            Contains custom weights for class labels.  Default weight value is 1.
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Nu">
+            <summary>
+            The parameter nu of nu-SVC, one-class SVM, and nu-SVR (default 0.5)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.P">
+            <summary>
+            The epsilon in loss function of epsilon-SVR (default 0.1)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Shrinking">
+            <summary>
+            Whether to use the shrinking heuristics, (default True)
+            </summary>
+        </member>
+        <member name="P:SVM.Parameter.Probability">
+            <summary>
+            Whether to train an SVC or SVR model for probability estimates, (default False)
+            </summary>
+        </member>
+        <member name="T:SVM.Node">
+            <summary>
+            Encapsulates a node in a Problem vector, with an index and a value (for more efficient representation
+            of sparse data.
+            </summary>
+        </member>
+        <member name="M:SVM.Node.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:SVM.Node.#ctor(System.Int32,System.Double)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="index">The index of the value.</param>
+            <param name="value">The value to store.</param>
+        </member>
+        <member name="M:SVM.Node.ToString">
+            <summary>
+            String representation of this Node as {index}:{value}.
+            </summary>
+            <returns>{index}:{value}</returns>
+        </member>
+        <member name="M:SVM.Node.CompareTo(SVM.Node)">
+            <summary>
+            Compares this node with another.
+            </summary>
+            <param name="other">The node to compare to</param>
+            <returns>A positive number if this node is greater, a negative number if it is less than, or 0 if equal</returns>
+        </member>
+        <member name="P:SVM.Node.Index">
+            <summary>
+            Index of this Node.
+            </summary>
+        </member>
+        <member name="P:SVM.Node.Value">
+            <summary>
+            Value at Index.
+            </summary>
+        </member>
+        <member name="T:SVM.Training">
+            <summary>
+            Class containing the routines to train SVM models.
+            </summary>
+        </member>
+        <member name="M:SVM.Training.Train(System.String[])">
+            <summary>
+            Legacy.  Allows use as if this was svm_train.  See libsvm documentation for details on which arguments to pass.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:SVM.Training.PerformCrossValidation(SVM.Problem,SVM.Parameter,System.Int32)">
+            <summary>
+            Performs cross validation.
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="parameters">The parameters to test</param>
+            <param name="nrfold">The number of cross validations to use</param>
+            <returns>The cross validation score</returns>
+        </member>
+        <member name="M:SVM.Training.Train(SVM.Problem,SVM.Parameter)">
+            <summary>
+            Trains a model using the provided training data and parameters.
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="parameters">The parameters to use</param>
+            <returns>A trained SVM Model</returns>
+        </member>
+        <member name="P:SVM.Training.IsVerbose">
+            <summary>
+            Whether the system will output information to the console during the training process.
+            </summary>
+        </member>
+        <member name="T:SVM.Model">
+            <summary>
+            Encapsulates an SVM Model.
+            </summary>
+        </member>
+        <member name="M:SVM.Model.Read(System.String)">
+            <summary>
+            Reads a Model from the provided file.
+            </summary>
+            <param name="filename">The name of the file containing the Model</param>
+            <returns>the Model</returns>
+        </member>
+        <member name="M:SVM.Model.Read(System.IO.Stream)">
+            <summary>
+            Reads a Model from the provided stream.
+            </summary>
+            <param name="stream">The stream from which to read the Model.</param>
+            <returns>the Model</returns>
+        </member>
+        <member name="M:SVM.Model.Write(System.String,SVM.Model)">
+            <summary>
+            Writes a model to the provided filename.  This will overwrite any previous data in the file.
+            </summary>
+            <param name="filename">The desired file</param>
+            <param name="model">The Model to write</param>
+        </member>
+        <member name="M:SVM.Model.Write(System.IO.Stream,SVM.Model)">
+            <summary>
+            Writes a model to the provided stream.
+            </summary>
+            <param name="stream">The output stream</param>
+            <param name="model">The model to write</param>
+        </member>
+        <member name="P:SVM.Model.Parameter">
+            <summary>
+            Parameter object.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.NumberOfClasses">
+            <summary>
+            Number of classes in the model.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.SupportVectorCount">
+            <summary>
+            Total number of support vectors.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.SupportVectors">
+            <summary>
+            The support vectors.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.SupportVectorCoefficients">
+            <summary>
+            The coefficients for the support vectors.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.Rho">
+            <summary>
+            Rho values.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.PairwiseProbabilityA">
+            <summary>
+            First pairwise probability.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.PairwiseProbabilityB">
+            <summary>
+            Second pairwise probability.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.ClassLabels">
+            <summary>
+            Class labels.
+            </summary>
+        </member>
+        <member name="P:SVM.Model.NumberOfSVPerClass">
+            <summary>
+            Number of support vectors per class.
+            </summary>
+        </member>
+        <member name="T:SVM.RankPair">
+            <summary>
+            Class encoding a member of a ranked set of labels.
+            </summary>
+        </member>
+        <member name="M:SVM.RankPair.#ctor(System.Double,System.Double)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="score">Score for this pair</param>
+            <param name="label">Label associated with the given score</param>
+        </member>
+        <member name="M:SVM.RankPair.CompareTo(SVM.RankPair)">
+            <summary>
+            Compares this pair to another.  It will end up in a sorted list in decending score order.
+            </summary>
+            <param name="other">The pair to compare to</param>
+            <returns>Whether this should come before or after the argument</returns>
+        </member>
+        <member name="M:SVM.RankPair.ToString">
+            <summary>
+            Returns a string representation of this pair.
+            </summary>
+            <returns>A string in the for Score:Label</returns>
+        </member>
+        <member name="P:SVM.RankPair.Score">
+            <summary>
+            The score for this pair.
+            </summary>
+        </member>
+        <member name="P:SVM.RankPair.Label">
+            <summary>
+            The Label for this pair.
+            </summary>
+        </member>
+        <member name="T:SVM.CurvePoint">
+            <summary>
+            Class encoding the point on a 2D curve.
+            </summary>
+        </member>
+        <member name="M:SVM.CurvePoint.#ctor(System.Single,System.Single)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="x">X coordinate</param>
+            <param name="y">Y coordinate</param>
+        </member>
+        <member name="M:SVM.CurvePoint.ToString">
+            <summary>
+            Creates a string representation of this point.
+            </summary>
+            <returns>string in the form (x, y)</returns>
+        </member>
+        <member name="P:SVM.CurvePoint.X">
+            <summary>
+            X coordinate
+            </summary>
+        </member>
+        <member name="P:SVM.CurvePoint.Y">
+            <summary>
+            Y coordinate
+            </summary>
+        </member>
+        <member name="T:SVM.PerformanceEvaluator">
+            <summary>
+            Class which evaluates an SVM model using several standard techniques.
+            </summary>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.#ctor(System.Collections.Generic.List{SVM.RankPair})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="set">A pre-computed ranked pair set</param>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.#ctor(SVM.Model,SVM.Problem,System.Double)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="model">Model to evaluate</param>
+            <param name="problem">Problem to evaluate</param>
+            <param name="category">Label to be evaluate for</param>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.#ctor(SVM.Model,SVM.Problem,System.Double,System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="model">Model to evaluate</param>
+            <param name="problem">Problem to evaluate</param>
+            <param name="resultsFile">Results file for output</param>
+            <param name="category">Category to evaluate for</param>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.#ctor(System.String,System.Double[],System.Double)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="resultsFile">Results file</param>
+            <param name="correctLabels">The correct labels of each data item</param>
+            <param name="category">The category to evaluate for</param>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.WritePRCurve(System.String)">
+            <summary>
+            Writes the Precision-Recall curve to a tab-delimited file.
+            </summary>
+            <param name="filename">Filename for output</param>
+        </member>
+        <member name="M:SVM.PerformanceEvaluator.WriteROCCurve(System.String)">
+            <summary>
+            Writes the Receiver Operating Characteristic curve to a tab-delimited file.
+            </summary>
+            <param name="filename">Filename for output</param>
+        </member>
+        <member name="P:SVM.PerformanceEvaluator.ROCCurve">
+            <summary>
+            Receiver Operating Characteristic curve
+            </summary>
+        </member>
+        <member name="P:SVM.PerformanceEvaluator.AuC">
+            <summary>
+            Returns the area under the ROC Curve
+            </summary>
+        </member>
+        <member name="P:SVM.PerformanceEvaluator.PRCurve">
+            <summary>
+            Precision-Recall curve
+            </summary>
+        </member>
+        <member name="P:SVM.PerformanceEvaluator.AP">
+            <summary>
+            The average precision
+            </summary>
+        </member>
+        <member name="T:SVM.Scaling">
+            <summary>
+            Deals with the scaling of Problems so they have uniform ranges across all dimensions in order to
+            result in better SVM performance.
+            </summary>
+        </member>
+        <member name="M:SVM.Scaling.Scale(SVM.IRangeTransform,SVM.Problem)">
+            <summary>
+            Scales a problem using the provided range.  This will not affect the parameter.
+            </summary>
+            <param name="prob">The problem to scale</param>
+            <param name="range">The Range transform to use in scaling</param>
+            <returns>The Scaled problem</returns>
+        </member>
+        <member name="T:SVM.GaussianTransform">
+            <summary>
+            A transform which learns the mean and variance of a sample set and uses these to transform new data
+            so that it has zero mean and unit variance.
+            </summary>
+        </member>
+        <member name="M:SVM.GaussianTransform.Compute(SVM.Problem)">
+            <summary>
+            Determines the Gaussian transform for the provided problem.
+            </summary>
+            <param name="prob">The Problem to analyze</param>
+            <returns>The Gaussian transform for the problem</returns>
+        </member>
+        <member name="M:SVM.GaussianTransform.#ctor(System.Double[],System.Double[])">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="means">Means in each dimension</param>
+            <param name="stddevs">Standard deviation in each dimension</param>
+        </member>
+        <member name="M:SVM.GaussianTransform.Write(System.IO.Stream,SVM.GaussianTransform)">
+            <summary>
+            Saves the transform to the disk.  The samples are not stored, only the 
+            statistics.
+            </summary>
+            <param name="stream">The destination stream</param>
+            <param name="transform">The transform</param>
+        </member>
+        <member name="M:SVM.GaussianTransform.Read(System.IO.Stream)">
+            <summary>
+            Reads a GaussianTransform from the provided stream.
+            </summary>
+            <param name="stream">The source stream</param>
+            <returns>The transform</returns>
+        </member>
+        <member name="M:SVM.GaussianTransform.Write(System.String,SVM.GaussianTransform)">
+            <summary>
+            Saves the transform to the disk.  The samples are not stored, only the 
+            statistics.
+            </summary>
+            <param name="filename">The destination filename</param>
+            <param name="transform">The transform</param>
+        </member>
+        <member name="M:SVM.GaussianTransform.Read(System.String)">
+            <summary>
+            Reads a GaussianTransform from the provided stream.
+            </summary>
+            <param name="filename">The source filename</param>
+            <returns>The transform</returns>
+        </member>
+        <member name="M:SVM.GaussianTransform.Transform(System.Double,System.Int32)">
+            <summary>
+            Transform the input value using the transform stored for the provided index.
+            </summary>
+            <param name="input">Input value</param>
+            <param name="index">Index of the transform to use</param>
+            <returns>The transformed value</returns>
+        </member>
+        <member name="M:SVM.GaussianTransform.Transform(SVM.Node[])">
+            <summary>
+            Transforms the input array.
+            </summary>
+            <param name="input">The array to transform</param>
+            <returns>The transformed array</returns>
+        </member>
+        <member name="T:SVM.ParameterSelection">
+            <summary>
+            This class contains routines which perform parameter selection for a model which uses C-SVC and
+            an RBF kernel.
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.NFOLD">
+            <summary>
+            Default number of times to divide the data.
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.MIN_C">
+            <summary>
+            Default minimum power of 2 for the C value (-5)
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.MAX_C">
+            <summary>
+            Default maximum power of 2 for the C value (15)
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.C_STEP">
+            <summary>
+            Default power iteration step for the C value (2)
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.MIN_G">
+            <summary>
+            Default minimum power of 2 for the Gamma value (-15)
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.MAX_G">
+            <summary>
+            Default maximum power of 2 for the Gamma Value (3)
+            </summary>
+        </member>
+        <member name="F:SVM.ParameterSelection.G_STEP">
+            <summary>
+            Default power iteration step for the Gamma value (2)
+            </summary>
+        </member>
+        <member name="M:SVM.ParameterSelection.GetList(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns a logarithmic list of values from minimum power of 2 to the maximum power of 2 using the provided iteration size.
+            </summary>
+            <param name="minPower">The minimum power of 2</param>
+            <param name="maxPower">The maximum power of 2</param>
+            <param name="iteration">The iteration size to use in powers</param>
+            <returns></returns>
+        </member>
+        <member name="M:SVM.ParameterSelection.Grid(SVM.Problem,SVM.Parameter,System.String,System.Double@,System.Double@)">
+            <summary>
+            Performs a Grid parameter selection, trying all possible combinations of the two lists and returning the
+            combination which performed best.  The default ranges of C and Gamma values are used.  Use this method if there is no validation data available, and it will
+            divide it 5 times to allow 5-fold validation (training on 4/5 and validating on 1/5, 5 times).
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="parameters">The parameters to use when optimizing</param>
+            <param name="outputFile">Output file for the parameter results.</param>
+            <param name="C">The optimal C value will be put into this variable</param>
+            <param name="Gamma">The optimal Gamma value will be put into this variable</param>
+        </member>
+        <member name="M:SVM.ParameterSelection.Grid(SVM.Problem,SVM.Parameter,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double},System.String,System.Double@,System.Double@)">
+            <summary>
+            Performs a Grid parameter selection, trying all possible combinations of the two lists and returning the
+            combination which performed best.  Use this method if there is no validation data available, and it will
+            divide it 5 times to allow 5-fold validation (training on 4/5 and validating on 1/5, 5 times).
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="parameters">The parameters to use when optimizing</param>
+            <param name="CValues">The set of C values to use</param>
+            <param name="GammaValues">The set of Gamma values to use</param>
+            <param name="outputFile">Output file for the parameter results.</param>
+            <param name="C">The optimal C value will be put into this variable</param>
+            <param name="Gamma">The optimal Gamma value will be put into this variable</param>
+        </member>
+        <member name="M:SVM.ParameterSelection.Grid(SVM.Problem,SVM.Parameter,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double},System.String,System.Int32,System.Double@,System.Double@)">
+            <summary>
+            Performs a Grid parameter selection, trying all possible combinations of the two lists and returning the
+            combination which performed best.  Use this method if validation data isn't available, as it will
+            divide the training data and train on a portion of it and test on the rest.
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="parameters">The parameters to use when optimizing</param>
+            <param name="CValues">The set of C values to use</param>
+            <param name="GammaValues">The set of Gamma values to use</param>
+            <param name="outputFile">Output file for the parameter results.</param>
+            <param name="nrfold">The number of times the data should be divided for validation</param>
+            <param name="C">The optimal C value will be placed in this variable</param>
+            <param name="Gamma">The optimal Gamma value will be placed in this variable</param>
+        </member>
+        <member name="M:SVM.ParameterSelection.Grid(SVM.Problem,SVM.Problem,SVM.Parameter,System.String,System.Double@,System.Double@)">
+            <summary>
+            Performs a Grid parameter selection, trying all possible combinations of the two lists and returning the
+            combination which performed best.  Uses the default values of C and Gamma.
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="validation">The validation data</param>
+            <param name="parameters">The parameters to use when optimizing</param>
+            <param name="outputFile">The output file for the parameter results</param>
+            <param name="C">The optimal C value will be placed in this variable</param>
+            <param name="Gamma">The optimal Gamma value will be placed in this variable</param>
+        </member>
+        <member name="M:SVM.ParameterSelection.Grid(SVM.Problem,SVM.Problem,SVM.Parameter,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Double},System.String,System.Double@,System.Double@)">
+            <summary>
+            Performs a Grid parameter selection, trying all possible combinations of the two lists and returning the
+            combination which performed best.
+            </summary>
+            <param name="problem">The training data</param>
+            <param name="validation">The validation data</param>
+            <param name="parameters">The parameters to use when optimizing</param>
+            <param name="CValues">The C values to use</param>
+            <param name="GammaValues">The Gamma values to use</param>
+            <param name="outputFile">The output file for the parameter results</param>
+            <param name="C">The optimal C value will be placed in this variable</param>
+            <param name="Gamma">The optimal Gamma value will be placed in this variable</param>
+        </member>
+        <member name="T:SVM.Prediction">
+            <summary>
+            Class containing the routines to perform class membership prediction using a trained SVM.
+            </summary>
+        </member>
+        <member name="M:SVM.Prediction.Predict(SVM.Problem,System.String,SVM.Model,System.Boolean)">
+            <summary>
+            Predicts the class memberships of all the vectors in the problem.
+            </summary>
+            <param name="problem">The SVM Problem to solve</param>
+            <param name="outputFile">File for result output</param>
+            <param name="model">The Model to use</param>
+            <param name="predict_probability">Whether to output a distribution over the classes</param>
+            <returns>Percentage correctly labelled</returns>
+        </member>
+        <member name="M:SVM.Prediction.Predict(SVM.Model,SVM.Node[])">
+            <summary>
+            Predict the class for a single input vector.
+            </summary>
+            <param name="model">The Model to use for prediction</param>
+            <param name="x">The vector for which to predict class</param>
+            <returns>The result</returns>
+        </member>
+        <member name="M:SVM.Prediction.PredictProbability(SVM.Model,SVM.Node[])">
+            <summary>
+            Predicts a class distribution for the single input vector.
+            </summary>
+            <param name="model">Model to use for prediction</param>
+            <param name="x">The vector for which to predict the class distribution</param>
+            <returns>A probability distribtion over classes</returns>
+        </member>
+        <member name="M:SVM.Prediction.Predict(System.String[])">
+            <summary>
+            Legacy method, provided to allow usage as though this were the command line version of libsvm.
+            </summary>
+            <param name="args">Standard arguments passed to the svm_predict exectutable.  See libsvm documentation for details.</param>
+        </member>
+    </members>
+</doc>

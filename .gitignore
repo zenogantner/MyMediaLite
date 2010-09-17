@@ -1,0 +1,7 @@
+*.exe
+*.mdb
+*.dll
+*.bak
+*.tmp
+bin
+

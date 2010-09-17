@@ -1,0 +1,15 @@
+MyMediaLite - a recommender system algorithm library
+
+TODO: Feature list
+
+MyMediaLite is under development, its API and architecture may change over
+time. Major API and structure changes will be denoted by a major version
+number jump, i.e. from 0.x to 1.0.
+
+See doc/ for more documentation
+
+TODO: Licensing statement
+
+This work was funded by the European Commission FP7 project MyMedia
+(Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
+under the grant agreement no. 215006.

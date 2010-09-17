@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MyMediaLite</RootNamespace>
+    <AssemblyName>Algorithms</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\common\MyMedia Certificate (Test Only).snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Algorithms.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\MathNet\MathNet.Iridium.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ItemAttributeAwareRecommender.cs" />
+    <Compile Include="UserAttributeAwareRecommender.cs" />
+    <Compile Include="correlation\Pearson.cs" />
+    <Compile Include="correlation\CorrelationMatrix.cs" />
+    <Compile Include="correlation\Cosine.cs" />
+    <Compile Include="data_type\Matrix.cs" />
+    <Compile Include="data_type\SparseBooleanMatrix.cs" />
+    <Compile Include="data_type\SparseMatrix.cs" />
+    <Compile Include="data_type\VectorUtils.cs" />
+    <Compile Include="data_type\WeightedItem.cs" />
+    <Compile Include="item_recommender\BPR_Linear.cs" />
+    <Compile Include="rating_predictor\ItemAttributeKNN.cs" />
+    <Compile Include="item_recommender\BPRMF.cs" />
+    <Compile Include="item_recommender\Random.cs" />
+    <Compile Include="item_recommender\ItemAttributeKNN.cs" />
+    <Compile Include="item_recommender\ItemKNN.cs" />
+    <Compile Include="item_recommender\KNN.cs" />
+    <Compile Include="item_recommender\Memory.cs" />
+    <Compile Include="item_recommender\MF.cs" />
+    <Compile Include="item_recommender\MostPopular.cs" />
+    <Compile Include="item_recommender\SVD.cs" />
+    <Compile Include="item_recommender\UserKNN.cs" />
+    <Compile Include="item_recommender\WRMF.cs" />
+    <Compile Include="rating_predictor\MatrixFactorization.cs" />
+    <Compile Include="rating_predictor\ItemKNN.cs" />
+    <Compile Include="rating_predictor\KNN.cs" />
+    <Compile Include="rating_predictor\Linear.cs" />
+    <Compile Include="rating_predictor\Memory.cs" />
+    <Compile Include="rating_predictor\UserAttributeKNN.cs" />
+    <Compile Include="rating_predictor\UserItemBaseline.cs" />
+    <Compile Include="rating_predictor\UserKNN.cs" />
+    <Compile Include="util\Random.cs" />
+    <Compile Include="util\EngineStorage.cs" />
+    <Compile Include="eval\Evaluate.cs" />
+    <Compile Include="RecommenderEngine.cs" />
+    <Compile Include="Ensemble.cs" />
+    <Compile Include="item_recommender\UserAttributeKNN.cs" />
+    <Compile Include="util\CommandLineParameters.cs" />
+    <Compile Include="util\Handlers.cs" />
+    <Compile Include="util\Utils.cs" />
+    <Compile Include="io\ItemRecommenderData.cs" />
+    <Compile Include="util\Pair.cs" />
+    <Compile Include="data\BinaryAttributes.cs" />
+    <Compile Include="data\RatingData.cs" />
+    <Compile Include="io\AttributeData.cs" />
+    <Compile Include="io\RatingPredictionData.cs" />
+    <Compile Include="taxonomy\EntityType.cs" />
+    <Compile Include="item_recommender\ItemRecommender.cs" />
+    <Compile Include="rating_predictor\RatingPredictor.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_Complex.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_kNN.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_Optimal.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_SVR.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping_Optimal.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_Mapping.cs" />
+    <Compile Include="util\Triple.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Folder Include="item_recommender\" />
+    <Folder Include="rating_predictor\" />
+    <Folder Include="data_type\" />
+    <Folder Include="eval\" />
+    <Folder Include="util\" />
+    <Folder Include="io\" />
+    <Folder Include="data\" />
+    <Folder Include="taxonomy\" />
+    <Folder Include="experimental\" />
+    <Folder Include="experimental\attr_to_feature\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lib\SVM\SVM.csproj">
+      <Project>{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}</Project>
+      <Name>SVM</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

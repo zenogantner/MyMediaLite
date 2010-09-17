@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="SVM">
+</Property><Property Name="Solution File" Value="C:\lib\SVM\SVM.sln">
+</Property><Property Name="User Options File" Value="C:\lib\SVM\SVM.suo">
+</Property><Property Name="Date" Value="Saturday, March 08, 2008">
+</Property><Property Name="Time" Value="6:52 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="SVM.sln" Description="File successfully backed up as C:\lib\SVM\Backup\SVM.sln">
+</Event><Event ErrorLevel="0" Project="" Source="SVM.suo" Description="File successfully backed up as C:\lib\SVM\Backup\SVM.suo">
+</Event><Event ErrorLevel="0" Project="SVM" Source="SVM.csproj" Description="Project file successfully backed up as C:\lib\SVM\Backup\SVM.csproj">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Cache.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Cache.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="IRangeTransform.cs" Description="File successfully backed up as C:\lib\SVM\Backup\IRangeTransform.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="ParameterSelection.cs" Description="File successfully backed up as C:\lib\SVM\Backup\ParameterSelection.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Properties\AssemblyInfo.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Model.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Model.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Node.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Node.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Parameter.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Parameter.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Prediction.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Prediction.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Problem.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Problem.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="RangeTransform.cs" Description="File successfully backed up as C:\lib\SVM\Backup\RangeTransform.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="GaussianTransform.cs" Description="File successfully backed up as C:\lib\SVM\Backup\GaussianTransform.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Scaling.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Scaling.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Solver.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Solver.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="PerformanceEvaluator.cs" Description="File successfully backed up as C:\lib\SVM\Backup\PerformanceEvaluator.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="Training.cs" Description="File successfully backed up as C:\lib\SVM\Backup\Training.cs">
+</Event><Event ErrorLevel="0" Project="SVM" Source="SVM.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="SVM" Source="SVM.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="2" Project="SVMProgram" Source="..\SVMProgram\SVMProgram.csproj" Description="Unable to open project file to perform upgrade.  ">
+</Event><Event ErrorLevel="1" Project="CommandLineUtilities" Source="..\CommandLineUtilities\CommandLineUtilities.csproj" Description="Warning: The project file is being backed up to a relative path that differs from the original solution relative path.  The difference in folder hierarchy may create problems in opening or building the backed up solution and project.">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\CommandLineUtilities.csproj" Description="Project file successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\CommandLineUtilities.csproj">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\DataArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\DataArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\DoubleArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\DoubleArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\FlagArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\FlagArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\IArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\IArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\ArgumentParser.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\ArgumentParser.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\IntArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\IntArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\Pinwheel.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\Pinwheel.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\ProgressBar.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\ProgressBar.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\Properties\AssemblyInfo.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\SwitchArgument.cs" Description="File successfully backed up as C:\lib\SVM\Backup\CommandLineUtilities\SwitchArgument.cs">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\CommandLineUtilities.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="CommandLineUtilities" Source="..\CommandLineUtilities\CommandLineUtilities.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="SVM.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="SVM.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="CommandLineUtilities" Source="..\CommandLineUtilities\CommandLineUtilities.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
