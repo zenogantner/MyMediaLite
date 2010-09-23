@@ -1,14 +1,14 @@
-Steffen Rendle, University of Hildesheim
-initial version of many recommender engines
-
 Zeno Gantner, University of Hildesheim
 engine implementations and extensions; architectural changes that led to MyMediaLite; release manager
+
+Steffen Rendle, University of Hildesheim
+initial version of many recommender engines
 
 Christoph Freudenthaler, University of Hildesheim
 help with BPR-MF engine
 
 Christina Lichtenthäler, University of Hildesheim
-support for getting MyMediaLite into shape for a public release
+(planned) support for getting MyMediaLite into shape for a public release
 
 
 This work was funded by the European Commission FP7 project MyMedia

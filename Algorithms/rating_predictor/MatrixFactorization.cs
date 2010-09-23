@@ -36,6 +36,7 @@ namespace MyMediaLite.rating_predictor
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
+		// TODO make one MF class for both ItemRecommender and RatingPredictor (which need to be turned into interfaces for that ...)
 		// TODO think about de-activating/separating regularization for the user and item bias
 
 		/// <inheritdoc />
