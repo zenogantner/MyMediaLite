@@ -1,0 +1,72 @@
+\documentclass{report}
+\usepackage{fancyhdr}
+\usepackage[latin1]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{color}
+\usepackage{url}
+\usepackage{times}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{hyperref}
+ \usepackage[small,compact]{titlesec} 
+
+\definecolor{mymediacolor}{rgb}{0.33,0.42,0.53}%84,107,136
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.02in}
+
+\title{MyMediaLite Manual}
+
+\author{Steffen Rendle, Zeno Gantner}
+
+
+%% Format the header
+\pagestyle{fancyplain}%
+\renewcommand{\headrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[L]{\sffamily September 24, 2010}
+\fancyhead[C]{}
+%\fancyhead[R]{\sffamily Public Document}
+%\fancyfoot[L]{\sffamily MyMedia ICT-2008-215006}
+\fancyfoot[C]{}
+\fancyfoot[R]{\sffamily Page $|$ \thepage}
+
+
+
+%% Write only chapter name instead of ``chapter'' and chapter name 
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+\vspace*{50 pt}%
+{\setlength{\parindent}{0pt} \raggedright \normalfont
+\bfseries\Huge
+\ifnum \value{secnumdepth}>1
+%   \if@mainmatter\thechapter.\ \fi%
+   \thechapter.\
+\fi
+#1\par\nobreak\vspace{40 pt}}}
+\makeatother
+
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{abstract}
+TODO
+\end{abstract}
+
+\newpage
+
+
+
+
+\end{document}
