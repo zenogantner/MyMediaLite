@@ -80,6 +80,7 @@ namespace RatingPrediction
 			Console.WriteLine("    - " + ia);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
 			Console.WriteLine("  - general OPTIONS have the form name=value");
+			Console.WriteLine("    - option_file=FILE       read options from FILE (line format KEY: VALUE)");
 			Console.WriteLine("    - random_seed=N");
 			Console.WriteLine("    - data_dir=DIR           load all files from DIR");
 			Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");

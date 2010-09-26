@@ -15,7 +15,7 @@
       <File FileName="rating_predictor/MatrixFactorization.cs" Line="373" Column="1" />
       <File FileName="item_recommender/UserAttributeKNN.cs" Line="29" Column="1" />
       <File FileName="experimental/attr_to_feature/BPRMF_ItemMapping_Complex.cs" Line="29" Column="1" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="220" Column="24" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="220" Column="21" />
       <File FileName="eval/Evaluate.cs" Line="235" Column="33" />
     </Files>
     <Pads>

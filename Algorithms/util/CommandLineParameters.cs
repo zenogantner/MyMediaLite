@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 
@@ -25,7 +26,7 @@ namespace MyMediaLite.util
 {
 	public class CommandLineParameters
 	{
-		protected Dictionary<string,string> dict;
+		protected Dictionary<string, string> dict;
 		public NumberFormatInfo ni = new NumberFormatInfo();
 
 		public CommandLineParameters(string[] args, int start)
@@ -49,7 +50,10 @@ namespace MyMediaLite.util
 				if (arg_value.Equals(String.Empty))
 				    throw new ArgumentException(arg_name + " has an empty value.");
 
-				dict.Add(arg_name, arg_value);
+				if (arg_name.Equals("option_file"))
+					AddArgumentsFromFile(dict, arg_value);
+				else
+					dict.Add(arg_name, arg_value);
 			}
 		}
 
@@ -193,6 +197,32 @@ namespace MyMediaLite.util
 			else
 			{
 				return dvalue;
+			}
+		}
+
+		protected void AddArgumentsFromFile(Dictionary<string, string> dict, string filename)
+		{
+            using ( StreamReader reader = new StreamReader(filename) )
+			{
+				while (!reader.EndOfStream)
+				{
+		           	string line = reader.ReadLine();
+					if (line.Trim().Equals(String.Empty))
+						continue;
+
+		            string[] tokens = line.Split(':');
+					if (tokens.Length != 2)
+						throw new IOException("Expected format: 'KEY: VALUE':" + line);
+
+					string arg_name  = tokens[0].Trim();
+					string arg_value = tokens[1].Trim();
+
+					if (arg_value.Equals(String.Empty))
+					    throw new ArgumentException(arg_name + " has an empty value.");
+
+					if (!dict.ContainsKey(arg_name)) // command line overrides argument file
+						dict.Add(arg_name, arg_value);
+				}
 			}
 		}
 	}
