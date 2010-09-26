@@ -126,6 +126,13 @@ namespace RatingPrediction
 			int max_iter                = parameters.GetRemoveInt32(  "max_iter", 500);
 			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
 
+			// collaborative data characteristics
+			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
+			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
+			int num_ratings             = parameters.GetRemoveInt32(  "num_ratings", 1);
+			int num_users               = parameters.GetRemoveInt32(  "num_users",   1);			
+			int num_items               = parameters.GetRemoveInt32(  "num_items",   1);			
+			
 			// other arguments
 			string data_dir             = parameters.GetRemoveString( "data_dir");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
@@ -133,8 +140,6 @@ namespace RatingPrediction
 			string save_model_file      = parameters.GetRemoveString( "save_model");
 			string load_model_file      = parameters.GetRemoveString( "load_model");
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed",     -1);
-			double min_rating           = parameters.GetRemoveDouble( "min_rating",      1);
-			double max_rating           = parameters.GetRemoveDouble( "max_rating",      5);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval",         false);
 			bool predict_ratings        = parameters.GetRemoveBool(   "predict_ratings", false); // TODO write to file
 
@@ -203,7 +208,7 @@ namespace RatingPrediction
 				Usage(-1); // TODO give out leftovers
 
 			// read training data
-			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating);
+			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), -1, -1, num_ratings, min_rating, max_rating);
 			recommender.SetCollaborativeData(training_data);
 
 			// user attributes
@@ -364,7 +369,7 @@ namespace RatingPrediction
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.num_iter       = parameters.GetRemoveInt32( "num_iter",       mf.num_iter);
-			mf.num_features   = parameters.GetRemoveInt32( "num_features",   mf.num_iter);
+			mf.num_features   = parameters.GetRemoveInt32( "num_features",   mf.num_features);
    			mf.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    mf.init_f_mean);
    			mf.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   mf.init_f_stdev);
 			mf.regularization = parameters.GetRemoveDouble("reg",            mf.regularization);

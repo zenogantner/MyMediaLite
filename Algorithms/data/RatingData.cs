@@ -47,44 +47,51 @@ namespace MyMediaLite.data
 		}
     }
 
+	// TODO document
     public class Ratings
     {
-		// TODO: remark: Theoretically, we could hold several ratings (of different value) for each user-item combination.
-		//               However, FindRating does not support it, and it is strange that we do not allow the user to
-		//               give the same rating twice.
-		//               We should consider using a lighter backend than HashSet, e.g. a list datatype.
-		//               As we do not have performance problems at the moment, we will do this at some point in the future.
-		//               Zeno Gantner, 2009-02-17
-
-        private HashSet<RatingEvent> ratingSet = new HashSet<RatingEvent>();
+        private List<RatingEvent> ratingList;
         private double sum_rating = 0;
 
-        public int Count {
-			get { return ratingSet.Count; }
+		public Ratings()
+		{
+			 this.ratingList = new List<RatingEvent>();
+		}
+		
+		public Ratings(int num_ratings)
+		{
+			 this.ratingList = new List<RatingEvent>(num_ratings);
+		}
+		
+        public int Count
+		{
+			get { return ratingList.Count; }
 		}
 
-		public double Average {
+		public double Average
+		{
 			get { return sum_rating / Count; }
 		}
 
-		public double Sum {
+		public double Sum
+		{
 			get { return sum_rating; }
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return ratingSet.GetEnumerator();
+			return ratingList.GetEnumerator();
 		}
 
 		public List<RatingEvent> ToList()
 		{
-			return ratingSet.ToList();
+			return ratingList;
 		}
 
 		public void AddRating(RatingEvent rating)
         {
             sum_rating += rating.rating;
-            ratingSet.Add(rating);
+            ratingList.Add(rating);
         }
 
 		public void ChangeRating(RatingEvent rating, double new_rating)
@@ -94,18 +101,17 @@ namespace MyMediaLite.data
 
         public void RemoveRating(RatingEvent rating)
         {
-            ratingSet.Remove(rating);
+            ratingList.Remove(rating);
             sum_rating -= rating.rating;
         }
 
         public RatingEvent FindRating(int user_id, int item_id)
         {
-            foreach (RatingEvent rating in ratingSet)
+			// TODO think about how to exploit orderings
+            foreach (RatingEvent rating in ratingList)
             {
                 if ((rating.user_id == user_id) && (rating.item_id == item_id))
-                {
                     return rating;
-                }
             }
             return null;
         }
@@ -113,7 +119,7 @@ namespace MyMediaLite.data
 		public HashSet<int> GetUsers()
 		{
 			HashSet<int> users = new HashSet<int>();
-			foreach (RatingEvent rating in ratingSet)
+			foreach (RatingEvent rating in ratingList)
 				users.Add(rating.user_id);
 			return users;
 		}
@@ -121,7 +127,7 @@ namespace MyMediaLite.data
 		public HashSet<int> GetItems()
 		{
 			HashSet<int> items = new HashSet<int>();
-			foreach (RatingEvent rating in ratingSet)
+			foreach (RatingEvent rating in ratingList)
 				items.Add(rating.item_id);
 			return items;
 		}
@@ -132,24 +138,26 @@ namespace MyMediaLite.data
     /// The rating events are accessible in user-wise, item-wise and unsorted triple-wise order.
     /// In order to save memory, the different access modes can be deactivated by constructor parameters.
     /// </remarks>
-    /// <author>Steffen Rendle, University of Hildesheim</author>
+    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class RatingData
     {
         public Ratings all = null;
         public List<Ratings> byUser = null;
         public List<Ratings> byItem = null;
+		
+		public int max_user_id = 0;
+		public int max_item_id = 0;
 
-        public RatingData(bool hasAll, bool hasUser, bool hasItem)
+		// TODO document
+		// TODO argument order should be different
+        public RatingData(int num_ratings, int num_users, int num_items)
         {
-            if (hasAll) {
-                all = new Ratings();
-            }
-            if (hasUser) {
-                byUser = new List<Ratings>();
-            }
-            if (hasItem) {
-                byItem = new List<Ratings>();
-            }
+            if (num_ratings > -1)
+                all = new Ratings(num_ratings);
+            if (num_users > -1)
+                byUser = new List<Ratings>(num_users);
+            if (num_items > -1)
+				byItem = new List<Ratings>(num_items);
         }
 
         public void AddRating(RatingEvent rating)
@@ -169,6 +177,10 @@ namespace MyMediaLite.data
                 all.AddRating(rating);
             }
 
+			if (rating.user_id > max_user_id)
+				max_user_id = rating.user_id;
+			if (rating.item_id > max_item_id)
+				max_item_id = rating.item_id;
         }
 
         public void AddUser(int entity_id)

@@ -97,8 +97,8 @@ namespace MyMediaLite.rating_predictor
 		{
 			this.ratings = ratings;
 
-			MaxUserID = ratings.byUser.Count - 1;
-			MaxItemID = ratings.byItem.Count - 1;
+			MaxUserID = ratings.max_user_id;
+			MaxItemID = ratings.max_item_id;
 		}
 	}
 }

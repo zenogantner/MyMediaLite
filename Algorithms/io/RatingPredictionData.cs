@@ -27,17 +27,23 @@ namespace MyMediaLite.io
 	public class RatingPredictionData
 	{
 		// TODO find better name for RatingData - isn't this a 'sparse' matrix with column/row indices?
+		
 		static public RatingData Read(string filename, double min_rating, double max_rating)
+		{
+			return Read(filename, 1, 1, 1, min_rating, max_rating);
+		}				
+		
+		static public RatingData Read(string filename, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
 			{
-				return Read(reader, min_rating, max_rating);
+				return Read(reader, num_users, num_items, num_ratings, min_rating, max_rating);
 			}
 		}
-
-		static public RatingData Read(StreamReader reader, double min_rating, double max_rating)
+		
+		static public RatingData Read(StreamReader reader, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)
 		{
-		    RatingData ratings = new RatingData(true, true, true);
+		    RatingData ratings = new RatingData(num_ratings, num_users, num_items);
 
 			bool out_of_range_warning_issued = false;
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';

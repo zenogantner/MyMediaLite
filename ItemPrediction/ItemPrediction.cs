@@ -443,7 +443,7 @@ namespace MyMediaLite
 		static void InitWRMF(CommandLineParameters parameters)
 		{
 			wrmf.num_iter       = parameters.GetRemoveInt32( "num_iter",         wrmf.num_iter);
-			wrmf.num_features   = parameters.GetRemoveInt32( "num_features",     wrmf.num_iter);
+			wrmf.num_features   = parameters.GetRemoveInt32( "num_features",     wrmf.num_features);
    			wrmf.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",      wrmf.init_f_mean);
    			wrmf.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",     wrmf.init_f_stdev);
 			wrmf.regularization = parameters.GetRemoveDouble("reg",              wrmf.regularization);
@@ -456,7 +456,7 @@ namespace MyMediaLite
 		static void InitBPRMF(BPRMF engine, CommandLineParameters parameters)
 		{
 			engine.num_iter     = parameters.GetRemoveInt32( "num_iter",     engine.num_iter);
-			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_iter);
+			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_features);
 			engine.init_f_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_f_mean);
 			engine.init_f_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_f_stdev);
 			engine.reg_u        = parameters.GetRemoveDouble("reg",   engine.reg_u);

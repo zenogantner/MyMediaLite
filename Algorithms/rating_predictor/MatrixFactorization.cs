@@ -177,8 +177,8 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>init feature matrices</summary>
         protected virtual void _Init()
 		{
-        	user_feature = new Matrix<double>((int) ratings.byUser.Count, num_features);
-        	item_feature = new Matrix<double>((int) ratings.byItem.Count, num_features);
+        	user_feature = new Matrix<double>(ratings.max_user_id + 1, num_features);
+        	item_feature = new Matrix<double>(ratings.max_item_id + 1, num_features);
         	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
         	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 		}
