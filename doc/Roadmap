@@ -6,6 +6,7 @@ Recommender functionality
  - additional engines
    - non-negative matrix factorization (easy)
    - adaptive kNN by Koren+Bell
+   - scalable CF by Koren: http://research.yahoo.com/pub/2435
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
  - time-aware rating and item prediction
  - new engine types: TagRecommender, ContextAwareRecommender
@@ -18,6 +19,7 @@ Data types
 Architecture
  - add function that maps original entity IDs to internal ones
  - use input from STDIN as training data
+ - define an easy interface for data access
  - parameterize types: user and item IDs, prediction values
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
