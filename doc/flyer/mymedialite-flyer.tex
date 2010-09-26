@@ -1,24 +1,130 @@
-\documentclass[a4]{leaflet}
+\documentclass[a4paper, foldmark, 12pt]{leaflet}
+%\documentclass[a4paper, foldmark, nocombine]{leaflet}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{hyperref}
+\usepackage{times}
 
-\title{MyMediaLite -- A Recommender System Algorithm Library}
+\title{MyMediaLite -- Recommender System Algorithm Library}
 
-\author{Zeno Gantner}
+\author{Zeno Gantner, University of Hildesheim}
+\date{Pre-release at the ACM Recommender Systems in Barcelona\\
+      Sorry -- no fancy flyers yet ;-)}
 
 \begin{document}
 
+\maketitle
+
+%% TODO later --
+
+%% TODO title page
+%% TODO university logo
+%% TODO MyMedia logo
+
+MyMediaLite is a lightweight, multi-purpose library
+of recommender system algorithms.
+It addresses the two most common scenarios in collaborative filtering,
+rating prediction (e.g. on a scale of 1 to 5 stars)
+and item prediction from implicit feedback (e.g. from clicks or purchase actions).
+
+\begin{center}
+	\url{http://gitorious.org/mymedialite}
+\end{center}
+
+\newpage
+
 \section{Features}
 
-\section{For Researcher}
+\begin{itemize}
+	\item dozens of different recommender engines
+	\item collaborative and attribute-based methods
+	\item evaluation routines for rating and item prediction:
+	      MAE, RMSE, AUC, prec@N, NDCG
+	\item simple text-based input format
+	\item Written in C\#, works on Linux, Windows, Mac OS X (using Mono)
+	\item Free/Open Source Software, distributed under the terms of the
+	      GNU General Public License (GPL)
+\end{itemize}
+
+\section{For Researchers}
+\begin{itemize}
+	\item don't waste time implementing methods if you really want to study
+	      other aspects of recommender systems
+	\item use the standard algorithms as baseline methods in benchmarks
+	\item use MyMediaLite's infrastructure to implement your own methods
+\end{itemize}
 
 \section{For Developers}
+\begin{itemize}
+	\item Add recommender system technologies to your software.
+\end{itemize}
 
 \section{For Students}
+\begin{itemize}
+	\item See how typical recommender system methods are implement.
+	\item Use MyMediaLite as a basis for you school projects.
+\end{itemize}
 
 \section{Recommendation Tasks Addressed}
 
+\subsection{Rating Prediction}
+TODO: gfx
+
+\subsection{Item Recommendation from Implicit Feedback}
+positive-only
+
+TODO: gfx
+
+\newpage 
+
 \section{Implemented Methods}
+Rating Prediction
+\begin{itemize}
+	\item averages: global, user, item
+	\item linear baseline method by Koren and Bell
+	\item k-Nearest Neighbor (kNN):
+		\begin{itemize}
+			\item based on user or item similarities
+			\item using collaborative or attribute (content) data
+			\item different similarity measures
+		\end{itemize}
+	\item (Biased) matrix factorization
+\end{itemize}
+
+Item Prediction
+\begin{itemize}
+	\item Random
+	\item Most Popular Item
+	\item Singular Value Decomposition (SVD)
+	\item k-Nearest Neighbor (kNN):
+		\begin{itemize}
+			\item based on user or item similarities
+			\item using collaborative or attribute (content) data
+		\end{itemize}
+	\item Weighted Regularized Matrix Factorization (WR-MF)
+	\item Matrix Factorization Optimized for Bayesian Personalized Ranking (BPR-MF)
+\end{itemize}
+
+\newpage
+
+\section{Download}
+\begin{center}
+	\url{http://gitorious.org/mymedialite}
+\end{center}
+
+\section{Contact}
+We would like to get feedback (suggestions, bug reports, etc.) about MyMediaLite
+\begin{center}
+	\texttt{mymedialite@ismll.de}
+\end{center}
 
 \section{Acknowledgements}
+MyMediaLite was developed by Zeno Gantner, Steffen Rendle, and Christoph Freudenthaler
+at University of Hildesheim.
 
+Their work was partly funded by the European Commission FP7 project MyMedia
+(Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
+under the grant agreement no. 215006.
 
 \end{document}

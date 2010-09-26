@@ -1,2 +1,6 @@
+0.02	2010-09-26
+	save some memory
+	fix an argument bug in the command line programs
+
 0.01	2010-09-24
 	Initial release
