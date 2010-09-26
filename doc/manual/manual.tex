@@ -1,72 +1,331 @@
-\documentclass{report}
-\usepackage{fancyhdr}
-\usepackage[latin1]{inputenc}
-
+\documentclass[]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
+\usepackage{amssymb,amsfonts,textcomp}
 \usepackage{color}
-\usepackage{url}
-\usepackage{times}
-\usepackage{amsfonts}
-\usepackage{latexsym}
+\usepackage{array}
+\usepackage{supertabular}
+\usepackage{hhline}
 \usepackage{hyperref}
- \usepackage[small,compact]{titlesec} 
-
-\definecolor{mymediacolor}{rgb}{0.33,0.42,0.53}%84,107,136
-
-\setlength{\parindent}{0.0in}
-\setlength{\parskip}{0.02in}
+\usepackage[pdftex]{graphicx}
+\usepackage[english]{babel}
 
 \title{MyMediaLite Manual}
 
-\author{Steffen Rendle, Zeno Gantner}
-
-
-%% Format the header
-\pagestyle{fancyplain}%
-\renewcommand{\headrulewidth}{0.1pt}
-\renewcommand{\footrulewidth}{0pt}
-\fancyhf{}
-\fancyhead[L]{\sffamily September 24, 2010}
-\fancyhead[C]{}
-%\fancyhead[R]{\sffamily Public Document}
-%\fancyfoot[L]{\sffamily MyMedia ICT-2008-215006}
-\fancyfoot[C]{}
-\fancyfoot[R]{\sffamily Page $|$ \thepage}
-
-
-
-%% Write only chapter name instead of ``chapter'' and chapter name 
-\makeatletter
-\renewcommand{\@makechapterhead}[1]{%
-\vspace*{50 pt}%
-{\setlength{\parindent}{0pt} \raggedright \normalfont
-\bfseries\Huge
-\ifnum \value{secnumdepth}>1
-%   \if@mainmatter\thechapter.\ \fi%
-   \thechapter.\
-\fi
-#1\par\nobreak\vspace{40 pt}}}
-\makeatother
-
-
+\author{Zeno Gantner, Steffen Rendle}
 
 \begin{document}
-
 \maketitle
 
 \tableofcontents
 
-\begin{abstract}
+\chapter{Recommender Engines}
+
+\section{Rating Predictors}
+
+\subsection{Global average}
+The global average engine is one of the simplest engines
+available. Its prediction is based on the average of all observed
+ratings (so for all items and all users). This is a baseline
+method, useful mainly when other algorithms lack the required
+amount of data to be sufficiently accurate: the item average engine
+for example cannot be used on items that have not yet been rated by
+anyone.
+
+This engine does not support online updates. However, full training is
+very fast.
+
+\paragraph[Configuration]{Configuration}
+There is no configuration necessary.
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.rating\_predictor.GlobalAverage}
+
+\subsection[Item average]{Item average}
+Similarly to the global average engine, the item average engine is
+based on the average of the observed ratings, but for a specific item.
+In other words, this returns the average of all ratings of an item made
+by all users.
+
+This engine is less suitable for items that have received no or very
+few ratings.
+
+This engine does not support online updates. However, full training is
+very fast.
+
+\paragraph{Configuration}
+There is no configuration necessary.
+
+\paragraph{Implementation}
+\texttt{MyMediaLite.rating\_predictor.ItemAverage}
+
+\subsection{User average}
+The prediction of the user average engine is based on the average of
+the observed ratings for a specific user. In other words, this returns
+the average of all ratings made by a specific user.
+
+This engine is less suitable for users that have rated no or very few
+items.
+
+This engine does not support online updates. However, full training is
+very fast.
+
+\paragraph{Configuration}
+There is no configuration necessary.
+
+\paragraph{Implementation}
+\texttt{MyMediaLite.rating\_predictor.UserAverage}
+
+\subsection{Matrix factorization}
+Matrix factorization is a method for approximating the true unobserved
+ratings matrix $R$ by TODO, where the $u$-th row $w_{u}$ of $W$
+contains the k features that describe the $u$-th user
+(e.g. how much a user likes action movies) and the
+$i$-{th} row $h_{i}$ of $H$ contains $k$
+corresponding features for the $i$-{th} item (e.g. how
+much this movie is an action movie). This means that the predicted
+rating of an item for a specific user is the dot product of the
+user's features and the item's
+features. The feature matrices can be seen as latent variables – i.e.
+they are unobserved values. This means that no features are given in
+advance, instead the best “features” are automatically learned from the
+feedback data. For learning one usually tries to find the best values
+of the matrices on the observed feedback. For preventing overfitting,
+the learning method should use some kind of regularization. Using a
+higher feature dimension can improve the quality of the prediction but
+makes the computations more resource intensive. 
+
+This engine is less suitable for new users (that have rated no or
+very few items) and new items (that have received no or very few
+ratings).
+
+This engine supports online updates.
+
+\paragraph[Configuration]{Configuration}
+\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{1.6712599in}|m{4.6781597in}|}
+\hline
+ num\_features &
+ The number of feature dimensions of
+the factorization.\\\hline
+ learn\_rate &
+ Learn rate for training.\\\hline
+ regularization &
+ Regularization \ constant to prevent
+overfitting.\\\hline
+ init\_f\_mean &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ init\_f\_stdev &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ num\_iter &
+ Number of iterations over the training
+data.\\\hline
+\end{supertabular}
+\end{flushleft}
+\paragraph[Data requirements]{Data requirements}
+This algorithm expects the 1-{st} attribute of the Rating
+relationship to be the user ID, the 2-{nd} to be the
+item ID and the 3-{rd} to be the rating value. No other
+attributes are used.
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.rating\_predictor.MatrixFactorization}
+
+The implementation uses a gradient descent method for minimizing the
+regularized error.
+
+
+\section[Item Recommenders]{Item Recommenders}
+The following engines recommend items based on implicit feedback. E.g. a
+user has viewed/ purchased an item. These engines can be used to
+recommend a ranked list of items.
+
+
+\subsection[Most Popular]{Most Popular}
+The items that are most popular over all users are recommended.
+
+This engine supports online updates. Full training is very fast.
+
+\paragraph[Configuration]{Configuration}
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.item\_recommender.MostPopular}
+
+\subsection[K{}-Nearest Neighbor (Item{}-Based)]{K-Nearest Neighbor
+(Item-Based)}
+This engine ranks items based on the feedback history of the user and
+similar items. The similarity of a pair of items is measured by the
+cosine similarity. Then for prediction, the similarity of the current
+item to items in the feedback history of the specific user is summed
+up. According to these personalized scores the items are ranked.
+
+This engine does not support online updates. Entity and relation updates
+will simply be ignored.
+
+\paragraph[Configuration]{Configuration}
 TODO
-\end{abstract}
 
-\newpage
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.item\_recommender.kNN}
 
+\subsection[User{}-Based K{}-Nearest Neighbor]{User-Based K-Nearest
+Neighbor}
+This engine ranks items based on their feedback history. The
+similarity of two users is measured by the cosine similarity. Then, for
+prediction, the similarity of the user to users in the feedback history
+of the specific item is summed up. According to these personalized
+scores the items are ranked.
 
+This engine does not support online updates. Entity and relation updates
+will simply be ignored.
 
+\paragraph[Configuration]{Configuration}
+TODO
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.item\_recommender.UserkNN}
+
+\subsection{Singular Value Decomposition (SVD)}
+A singular value decomposition on the observed feedback matrix. It is
+assumed that all unobserved data are negative values.
+
+\paragraph[Configuration]{Configuration}
+\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{1.6712599in}|m{4.6781597in}|}
+\hline
+ num\_features &
+ The number of dimensions of the
+factorization.\\\hline
+ init\_f\_mean &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ init\_f\_stdev &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ num\_iter &
+ Number of iterations over the training
+data.\\\hline
+\end{supertabular}
+\end{flushleft}
+
+\paragraph{Implementation}
+\texttt{MyMediaLite.item\_recommender.SVD}
+
+\subsection[Weighted Regularized Matrix Factorization
+(WRMF)]{Weighted Regularized Matrix Factorization (WRMF)}
+
+Weighted matrix factorization method proposed by
+\begin{itemize}
+\item {
+Hu et al. and Pan et al.: Y. Hu, Y. Koren, and C. Volinsky:
+Collaborative filtering for implicit feedback datasets. In IEEE
+International Conference on Data Mining (ICDM 2008), pages 263-{}-272,
+2008.}
+\item {
+R. Pan, Y.Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, and Q. Yang:
+One-class collaborative filtering. In IEEE International Conference on
+Data Mining (ICDM 2008), pages 502-{}-511, 2008.}
+\end{itemize}
+
+We use the fast computation method proposed by Hu et al. and we allow a
+global weight to penalize observed/unobserved values.
+
+This engine does not support online updates. Entity and relation updates
+will simply be ignored.
+
+\paragraph[Configuration]{Configuration}
+\hypertarget{RefHeading1091696489703}{}\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{1.6712599in}|m{4.6781597in}|}
+\hline
+ num\_features &
+ The number of dimensions of the
+factorization.\\\hline
+ regularization &
+ Regularization constant to prevent
+overfitting.\\\hline
+ c\_pos &
+ The weight/confidence that is put on
+positive observations.\\\hline
+ init\_f\_mean &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ init\_f\_stdev &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ num\_iter &
+ Number of iterations over the training
+data.\\\hline
+\end{supertabular}
+\end{flushleft}
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.item\_recommender.WRMF}
+
+\subsection[Matrix Factorization optimized for Bayesian Personalized
+Ranking (BPR{}-MF)]{Matrix Factorization optimized for Bayesian
+Personalized Ranking (BPR-MF)}
+Matrix factorization method proposed by 
+
+\begin{itemize}
+\item {
+Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars
+Schmidt-Thieme (2009): \textit{BPR: Bayesian Personalized
+Ranking from Implicit Feedback, }in Proceedings of the 25th Conference
+on Uncertainty in Artificial Intelligence (UAI 2009), Montreal,
+Canada.}
+\end{itemize}
+
+This engine supports online updates.
+
+\paragraph[Configuration]{Configuration}
+\hypertarget{RefHeading1151696489703}{}\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{1.6712599in}|m{4.6781597in}|}
+\hline
+ num\_features &
+ The number of dimensions of the
+factorization.\\\hline
+ learn\_rate &
+ Learn rate for training.\\\hline
+ reg\_u &
+ Regularization constant for the user
+factors.\\\hline
+ reg\_i &
+ Regularization constant for the
+factors of positive items.\\\hline
+ reg\_j &
+ Regularization constant for the
+factors of negative items.\\\hline
+ init\_f\_mean &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ init\_f\_stdev &
+ The feature values are initialized by
+drawing from the normal distribution N(init\_f\_mean,
+init\_f\_stdev).\\\hline
+ num\_iter &
+ Number of iterations over the training
+data.\\\hline
+\end{supertabular}
+\end{flushleft}
+
+\paragraph[Implementation]{Implementation}
+\texttt{MyMediaLite.item\_recommender.BPR\_MF}
+
+The implementation uses a gradient descent method for optimizing the
+BPR-Opt criterion.
 
 \end{document}
