@@ -20,14 +20,15 @@ Architecture
  - add function that maps original entity IDs to internal ones
  - use input from STDIN as training data
  - define an easy interface for data access
- - parameterize types: user and item IDs, prediction values
+ - Makefile-based build systems (find dependencies automagically?)
+ - parameterize types: user and item IDs, prediction values (in C++ port)
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
    - more correlation measures (Jaccard index)
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
- - Java port 
+ - Java port
  - multi-core support
  - GPU support
  - support for distributed computing

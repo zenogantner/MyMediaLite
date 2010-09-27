@@ -18,11 +18,14 @@ B. USING
 C. POSITIONAL ARGUMENTS
 9. If there are minimum and maximum values as method parameters, the minimum
    value always comes first.
+D.
+10. One file per externally used class
 
 this.p vs. p
 
-Specific standards
+Specific standards (in argument lists, data formats)
 a. user_id, item_id
-b. training_data, test_data
+b. user_id, item_id, rating, date/time
+c. training_data, test_data
 
 TODO: add more, discuss
