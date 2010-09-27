@@ -282,11 +282,10 @@ namespace RatingPrediction
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							RatingEval.EvaluateRated(recommender, test_data);
+							result = RatingEval.EvaluateRated(mf_recommender, test_data);
+							Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
-
-						Console.WriteLine(" " + (i));
 					}
 				} // for
 				Console.Out.Flush();

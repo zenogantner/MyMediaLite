@@ -1,6 +1,9 @@
-0.02	2010-09-26
+0.02	2010-09-27
 	save some memory
 	fix an argument bug in the command line programs
+	nicer find_iter output in rating prediction command line program
+	add a flyer for the RecSys 2010 demo session
+        finalize README
 
 0.01	2010-09-24
 	Initial release
