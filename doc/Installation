@@ -1,5 +1,5 @@
 System Requirements:
- - Mono
+ - Mono or another recent .NET runtime
 
 Instructions:
  - For building from source, we recommend to use MonoDevelop.
