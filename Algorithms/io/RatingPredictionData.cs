@@ -52,7 +52,7 @@ namespace MyMediaLite.io
 		
 		static public RatingData Read(StreamReader reader, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)
 		{
-		    RatingData ratings = new RatingData(num_ratings, num_users, num_items);
+		    RatingData ratings = new RatingData(num_ratings, num_users, num_items); // TODO change order
 
 			bool out_of_range_warning_issued = false;
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';

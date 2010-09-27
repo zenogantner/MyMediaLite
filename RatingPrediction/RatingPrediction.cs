@@ -154,6 +154,8 @@ namespace RatingPrediction
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
 
+			bool need_user_item_index = false;
+			
 			// set correct recommender
 			MyMediaLite.rating_predictor.Memory recommender = null;
 			switch (method)
@@ -185,6 +187,7 @@ namespace RatingPrediction
 					recommender = InitKNN(parameters, iaknn);
 					break;
 				case "user-item-baseline":
+					need_user_item_index = true;
 					recommender = InitUIB(parameters);
 					break;
 				case "global-average":
@@ -207,9 +210,14 @@ namespace RatingPrediction
 
 			if (parameters.CheckForLeftovers())
 				Usage(-1); // TODO give out leftovers
-
+			
 			// read training data
-			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), -1, -1, num_ratings, min_rating, max_rating);
+			RatingData training_data = RatingPredictionData.Read(
+			                                                     Path.Combine(data_dir, trainfile), 
+			                                                     ( need_user_item_index ? num_users : -1 ),
+			                                                     ( need_user_item_index ? num_items : -1 ),
+			                                                     num_ratings,
+			                                                     min_rating, max_rating);
 			recommender.SetCollaborativeData(training_data);
 
 			// user attributes
@@ -293,14 +301,14 @@ namespace RatingPrediction
 				if (training_time_stats.Count > 0)
 				{
 					Console.Error.WriteLine(
-						"iterations: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 					);
 				}
 				if (eval_time_stats.Count > 0)
 				{
 					Console.Error.WriteLine(
-						"eval: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 					);
 				}
@@ -309,7 +317,7 @@ namespace RatingPrediction
 					if (fit_time_stats.Count > 0)
 					{
 						Console.Error.WriteLine(
-							"fit: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 						);
 					}

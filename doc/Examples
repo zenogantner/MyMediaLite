@@ -8,18 +8,10 @@ result
 
 
 command
-  mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt biased-matrix-factorization find_iter=1 max_iter=30 num_iter=1 compute_fit=true
+  mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt biased-matrix-factorization find_iter=1 max_iter=100 num_iter=1 compute_fit=true reg=0.05 num_features=20
 result
-  fit 0,78444 RMSE 0,86132 MAE 0,6773 30
-  iterations: min=1,12, max=1,16, avg=1,14
-  eval: min=0,06, max=0,06, avg=0,06
-  fit: min=0,66, max=0,69, avg=0,68
-
-command
-  mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt biased-matrix-factorization find_iter=1 max_iter=30 num_iter=1 compute_fit=true reg=0.03
-result
-  fit 0,79579 RMSE 0,85906 MAE 0,67807 30
-  iterations: min=1,11, max=1,16, avg=1,12
-  eval: min=0,06, max=0,06, avg=0,06
-  fit: min=0,65, max=0,69, avg=0,67
+  fit 0,74894 RMSE 0,85354 MAE 0,67475 100
+  iteration_time: min=2,01, max=2,1, avg=2,05
+  eval_time: min=0,09, max=0,1, avg=0,09
+  fit_time: min=0,93, max=1,02, avg=0,95
   

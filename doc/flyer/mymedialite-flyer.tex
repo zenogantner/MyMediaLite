@@ -54,10 +54,6 @@
 
 \maketitle
 
-%% TODO title page
-%% TODO university logo
-%% TODO MyMedia logo
-
 MyMediaLite is a lightweight, multi-purpose library
 of recommender system algorithms.
 It addresses the two most common scenarios in collaborative filtering:
@@ -76,9 +72,10 @@ and item prediction from implicit feedback (e.g. from clicks or purchase actions
 	\item \textbf{Choice:}
 		\begin{itemize}
 			\item Dozens of different recommender engines (see list on this flyer),
-			\item methods can use collaborative and attribute/content data,
+			\item methods can use collaborative and attribute/content data.
 		\end{itemize}
-	\item support for \textbf{on-line updates} to most models.
+	\item \textbf{Serialization:} save and reload recommender engine models.
+	\item \textbf{Real-time online updates} for most models.
 	\item \textbf{Ready to use:}
 		\begin{itemize}
 			\item Includes evaluation routines for rating and item prediction;
@@ -143,7 +140,7 @@ the goal is predict unknown ratings.
 \end{center}
 
 
-\subsection{Item Recommendation from Implicit Feedback}
+\subsection{Implicit Feedback Item Recommendation}
 
 Getting ratings from users requires explicit actions from their side.
 Much more data is available in the form of implicit feedback,
