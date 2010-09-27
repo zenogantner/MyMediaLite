@@ -1,13 +1,33 @@
 MyMediaLite - a recommender system algorithm library
 
-TODO: Feature list
+Features
+--------
+ - Choice:
+   - Dozens of different recommender engines,
+   - methods can use collaborative and attribute/content data,
+ - support for \textbf{on-line updates} to most models.
+ - Ready to use:
+   - Includes evaluation routines for rating and item prediction;
+     quality measures MAE, RMSE, AUC, prec@N, NDCG; and
+   - command line tools that read a simple text-based input format.
+ - Portability: Written in C#, for the .NET platform;
+   runs on every architecture where Mono works: Linux, Windows, Mac OS X.
+ - Freedom: Free/Open Source software, distributed under the terms of the
+            GNU General Public License (GPL).
 
+Remark
+------
 MyMediaLite is under development, its API and architecture may change over
 time. Major API and structure changes will be denoted by a major version
 number jump, i.e. from 0.x to 1.0.
 
-See doc/ for more documentation
+Documentation
+-------------
+See doc/ for more documentation.
 
+
+Acknowledgments
+---------------
 If you use MyMediaLite for your research, it would be nice to acknowledge it
 in your papers. Please inform us about if you have publication that uses
 this software, so we can list it on MyMediaLite's website.

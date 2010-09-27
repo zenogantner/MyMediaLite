@@ -1,4 +1,8 @@
 System Requirements:
+ - Mono
 
 Instructions:
+ - For building from source, we recommend to use MonoDevelop.
+ - If you have the binary package, just copy the contents of the bin/ directory
+   to wherever you want and run the programs from there.
 
