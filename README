@@ -25,6 +25,15 @@ Documentation
 -------------
 See doc/ for more documentation.
 
+Getting it
+----------
+Browse+branch MyMediaLite's source code here:
+	http://gitorious.org/mymedialite/mymedialite
+
+Cloning the repository:
+	git clone git://gitorious.org/mymedialite/mymedialite.git mymedialite
+	cd mymedialite
+
 
 Acknowledgments
 ---------------
