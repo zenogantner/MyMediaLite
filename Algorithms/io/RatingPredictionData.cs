@@ -35,10 +35,19 @@ namespace MyMediaLite.io
 		
 		static public RatingData Read(string filename, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)
 		{
-            using ( StreamReader reader = new StreamReader(filename) )
+			/*
+			if (filename.Equals("--"))
 			{
-				return Read(reader, num_users, num_items, num_ratings, min_rating, max_rating);
+				return Read(Console.In, num_users, num_items, num_ratings, min_rating, max_rating);
 			}
+			else
+			{
+			*/
+	            using ( StreamReader reader = new StreamReader(filename) )
+				{
+					return Read(reader, num_users, num_items, num_ratings, min_rating, max_rating);
+				}
+			//}
 		}
 		
 		static public RatingData Read(StreamReader reader, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)

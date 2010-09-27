@@ -66,6 +66,7 @@ namespace RatingPrediction
 
 			Console.WriteLine("MyMedia rating prediction; usage:");
 			Console.WriteLine(" RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
+			//Console.WriteLine("    - use '--' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + mf);
 			Console.WriteLine("    - " + bmf);
@@ -254,7 +255,7 @@ namespace RatingPrediction
 				if (compute_fit)
 					Console.Write("fit {0,0:0.#####} ", mf_recommender.ComputeFit());
 
-				var result = Evaluate.EvaluateRated(mf_recommender, test_data);
+				var result = RatingEval.EvaluateRated(mf_recommender, test_data);
 				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], mf_recommender.num_iter);
 
 				List<double> training_time_stats = new List<double>();
@@ -281,7 +282,7 @@ namespace RatingPrediction
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							Evaluate.EvaluateRated(recommender, test_data);
+							RatingEval.EvaluateRated(recommender, test_data);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
@@ -342,7 +343,7 @@ namespace RatingPrediction
 					seconds = Utils.MeasureTime(
 				    	delegate()
 					    {
-							var result = Evaluate.EvaluateRated(recommender, test_data);
+							var result = RatingEval.EvaluateRated(recommender, test_data);
 							Console.Write("RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]);
 						}
 					);

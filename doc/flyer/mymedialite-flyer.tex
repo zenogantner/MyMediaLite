@@ -73,16 +73,19 @@ and item prediction from implicit feedback (e.g. from clicks or purchase actions
 \section{MyMediaLite's Features}
 
 \begin{itemize}
-	\item Dozens of different recommender engines (see list on this flyer),
+	\item \textbf{Choice:} Dozens of different recommender engines (see list on this flyer),
 	\item methods can use collaborative and attribute/content data,
 	\item support for on-line updates to most models,
-	\item evaluation routines for rating and item prediction;
-	      quality measures MAE, RMSE, AUC, prec@N, NDCG
-	\item command line tools that read a simple text-based input format.
-	\item Written in C\#, for the .NET platform;
+	\item \textbf{Ready to use:}
+		\begin{itemize}
+			\item Includes evaluation routines for rating and item prediction;
+			      quality measures MAE, RMSE, AUC, prec@N, NDCG; and
+			\item command line tools that read a simple text-based input format.
+		\end{itemize}
+	\item \textbf{Portability:} Written in C\#, for the .NET platform;
 	      runs on every architecture where \href{www.mono-project.com}{Mono} works:
 	      Linux, Windows, Mac OS X
-	\item Free/Open Source software, distributed under the terms of the
+	\item \textbf{Freedom:} Free/Open Source software, distributed under the terms of the
 	      GNU General Public License (GPL)
 \end{itemize}
 
@@ -169,6 +172,7 @@ Item Prediction
 \begin{itemize}
 	\item Random
 	\item Most Popular Item
+	\item Linear Content-based Model Optimized for Bayesian Personalized Ranking (BPR-Linear)
 	\item Singular Value Decomposition (SVD)
 	\item k-Nearest Neighbor (kNN):
 		\begin{itemize}

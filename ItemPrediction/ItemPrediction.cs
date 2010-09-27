@@ -287,7 +287,7 @@ namespace MyMediaLite
 				if (compute_fit)
 					Console.Write("fit {0,0:0.#####} ", mf_recommender.ComputeFit());
 
-				var result = Evaluate.EvaluateItemRecommender(recommender,
+				var result = ItemRankingEval.EvaluateItemRecommender(recommender,
 				                                 test_data.First,
 					                             training_data.First,
 					                             relevant_items,
@@ -319,7 +319,7 @@ namespace MyMediaLite
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							result = Evaluate.EvaluateItemRecommender(
+							result = ItemRankingEval.EvaluateItemRecommender(
 								recommender,
 							    test_data.First,
 								training_data.First,
@@ -393,7 +393,7 @@ namespace MyMediaLite
 						if (predict_for_users_file.Equals(String.Empty))
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	Evaluate.WritePredictions(
+							    	Prediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        max_user_id,
@@ -406,7 +406,7 @@ namespace MyMediaLite
 						else
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	Evaluate.WritePredictions(
+							    	Prediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        Utils.ReadIntegers(predict_for_users_file), relevant_items, predict_items_number,
@@ -422,7 +422,7 @@ namespace MyMediaLite
 				{
 					time_span = Utils.MeasureTime( delegate()
 				    	{
-					    	var result = Evaluate.EvaluateItemRecommender(
+					    	var result = ItemRankingEval.EvaluateItemRecommender(
 						    	recommender,
 								test_data.First,
 					            training_data.First,

@@ -88,7 +88,6 @@
     <Compile Include="rating_predictor\UserKNN.cs" />
     <Compile Include="util\Random.cs" />
     <Compile Include="util\EngineStorage.cs" />
-    <Compile Include="eval\Evaluate.cs" />
     <Compile Include="RecommenderEngine.cs" />
     <Compile Include="Ensemble.cs" />
     <Compile Include="item_recommender\UserAttributeKNN.cs" />
@@ -113,6 +112,12 @@
     <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping_Optimal.cs" />
     <Compile Include="experimental\attr_to_feature\BPRMF_Mapping.cs" />
     <Compile Include="util\Triple.cs" />
+    <Compile Include="eval\RatingEval.cs" />
+    <Compile Include="WeightedEnsemble.cs" />
+    <Compile Include="data\RatingEvent.cs" />
+    <Compile Include="data\Ratings.cs" />
+    <Compile Include="eval\ItemRankingEval.cs" />
+    <Compile Include="eval\Prediction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

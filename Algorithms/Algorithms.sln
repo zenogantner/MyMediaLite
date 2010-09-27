@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "..\lib\SVM\SVM.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapping", "..\Mapping\Mapping.csproj", "{7ECAE320-D318-4000-B3F1-E481488D150D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingDemo", "..\RatingDemo\RatingDemo.csproj", "{C250C550-983A-413C-B94A-6D6014DD6DE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C250C550-983A-413C-B94A-6D6014DD6DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C250C550-983A-413C-B94A-6D6014DD6DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C250C550-983A-413C-B94A-6D6014DD6DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C250C550-983A-413C-B94A-6D6014DD6DE2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
