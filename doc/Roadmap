@@ -3,9 +3,12 @@ TODO list
 Recommender functionality
  - add filtering mechanism (pre-filter, post-filter)
  - support for non-binary attributes
- - additional engines
-   - non-negative matrix factorization (easy)
+ - additional engines (?)
+   - non-negative matrix factorization
+   - matrix factorization with bias term
+   - really simple matrix factorization (without sigmoid function)
    - adaptive kNN by Koren+Bell
+   - MF with Euclidean Embeddings
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
  - time-aware rating and item prediction
@@ -28,6 +31,7 @@ Architecture
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
+ - provide bindings to languages like Python, Ruby, Perl
  - Java port
  - multi-core support
  - GPU support
