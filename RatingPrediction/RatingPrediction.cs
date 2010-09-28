@@ -35,6 +35,8 @@ namespace RatingPrediction
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class RatingPrediction
 	{
+		static bool need_user_item_index = false;		
+		
 		// recommender engines
 		static MatrixFactorization mf  = new MatrixFactorization();
 		static MatrixFactorization bmf = new BiasedMatrixFactorization();
@@ -153,8 +155,6 @@ namespace RatingPrediction
 
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
-
-			bool need_user_item_index = false;
 			
 			// set correct recommender
 			MyMediaLite.rating_predictor.Memory recommender = null;
@@ -389,6 +389,8 @@ namespace RatingPrediction
 
 		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
 		{
+			need_user_item_index = true;			
+			
 			knn.k         = parameters.GetRemoveUInt32("k",         knn.k);  // TODO handle "inf"
 			knn.shrinkage = parameters.GetRemoveDouble("shrinkage", knn.shrinkage);
 			knn.reg_i     = parameters.GetRemoveDouble("reg_i",     knn.reg_i);

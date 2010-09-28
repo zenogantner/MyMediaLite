@@ -21,26 +21,8 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.data
 {
-	// TODO obsolete documentation
-
 	/// <remarks>
 	/// A class for loading and representing binary entity attributes in-memory in recommender engines.
-	///
-	/// You need to add 5 lines to your engine class definition in order to use attributes for one entity
-	/// type. An example follows.
-	///
-	/// In the class definition:
-	/// <code>
-	///     protected EntityAttributesBinary item_attributes;
-	///     public int num_item_attributes = 0;
-	/// </code>
-	///
-	/// In ReadData(), usually after <c>base.ReadData();</c>:
-	/// <code>
-	///     item_attributes = new EntityAttributesBinary(max_item_id);
-	///		item_attributes.ReadData(backend.GetEntity(EntityType.CatalogItem), num_item_attributes);
-	///		max_item_id = Math.Max(max_item_id, item_attributes.max_entity_id);
-	/// </code>
 	/// </remarks>
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class BinaryAttributes
@@ -75,4 +57,3 @@ namespace MyMediaLite.data
 		}
 	}
 }
-

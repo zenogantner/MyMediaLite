@@ -46,7 +46,7 @@ namespace MyMediaLite.data
 		// TODO argument order should be different
         public RatingData(int num_ratings, int num_users, int num_items)
         {
-			Console.Error.WriteLine("{0}/{1}/{2}", num_users, num_items, num_ratings);
+			//Console.Error.WriteLine("{0}/{1}/{2}", num_users, num_items, num_ratings);
 			
             if (num_ratings > -1)
                 all = new Ratings(num_ratings);

@@ -21,6 +21,8 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.correlation;
 using MyMediaLite.data;
+using MyMediaLite.data_type;
+using MyMediaLite.util;
 
 
 namespace MyMediaLite.rating_predictor
@@ -28,10 +30,10 @@ namespace MyMediaLite.rating_predictor
 	/// <summary>
 	/// This engine does NOT support online updates.
 	/// </summary>
-	public class ItemAttributeKNN : ItemKNN
+	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
 	{
 	    public int NumItemAttributes { get;	set; }
-		protected BinaryAttributes user_attributes;
+		protected BinaryAttributes item_attributes;
 
         /// <inheritdoc />
         public override void Train()
@@ -39,10 +41,20 @@ namespace MyMediaLite.rating_predictor
 			base.Train();
 
 			correlation.Cosine cosine_correlation = new Cosine(MaxItemID + 1);
-			cosine_correlation.ComputeCorrelations(user_attributes.GetAttributes());
+			cosine_correlation.ComputeCorrelations(item_attributes.GetAttributes());
 			this.correlation = cosine_correlation;
+			
+			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
+		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
+		{
+			this.item_attributes = new BinaryAttributes(matrix);
+			this.NumItemAttributes = num_attr;
+
+			// TODO check whether there is a match between num. of items here and in the collaborative data
+		}		
+		
         /// <inheritdoc />
 		public override string ToString()
 		{
