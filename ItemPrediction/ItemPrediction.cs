@@ -165,13 +165,16 @@ namespace MyMediaLite
 			switch (method)
 			{
 				case "WR-MF":
+				case "wr-mf":
 					compute_fit = false; // deactivate as long it is not implemented
 					InitWRMF(parameters);
 					break;
 				case "BPR-MF":
+				case "bpr-mf":				
 					InitBPRMF(bprmf, parameters);
 					break;
 				case "BPR-Linear":
+				case "bpr-linear":
 					InitBPR_Linear(bpr_linear, parameters);
 					break;
 				case "item-knn":
