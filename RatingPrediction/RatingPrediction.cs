@@ -251,8 +251,8 @@ namespace RatingPrediction
 			// TODO put the main program modes into static methods
 			if (find_iter != 0)
 			{
-				if ( !(recommender is MatrixFactorization) )
-					Usage("Only matrix-factorization supports find_iter.");
+				if ( !(recommender is IterativeModel) )
+					Usage("Only iterative recommender engines support find_iter.");
 				MatrixFactorization mf_recommender = (MatrixFactorization) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
@@ -338,7 +338,7 @@ namespace RatingPrediction
 
 					Console.Write(recommender.ToString() + " ");
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
-            		Console.Write("training " + seconds + " ");
+            		Console.Write("training_time " + seconds + " ");
 				}
 				else
 				{
@@ -355,7 +355,7 @@ namespace RatingPrediction
 							Console.Write("RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]);
 						}
 					);
-					Console.Write(" testing " + seconds);
+					Console.Write(" testing_time " + seconds);
 				}
 
 				if (predict_ratings)

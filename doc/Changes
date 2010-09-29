@@ -1,3 +1,6 @@
+0.04	2010-??-??
+	nicer time output for both demo programs
+
 0.03	2010-09-29
 	fix some crashes in both demo programs
 	add initial pre-release test suite

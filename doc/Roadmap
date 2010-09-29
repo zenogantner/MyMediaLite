@@ -15,6 +15,7 @@ Recommender functionality
  - new engine types: TagRecommender, ContextAwareRecommender
  - ranking ensembles
  - stacking ensembles
+ - ensembles for new users/new items
  - add more content-based routines (using Lemur?)
 Data types
  - re-implement rating data structure

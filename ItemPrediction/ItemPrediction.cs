@@ -351,14 +351,14 @@ namespace MyMediaLite
 				if (training_time_stats.Count > 0)
 				{
 					Console.Error.WriteLine(
-						"iterations: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 					);
 				}
 				if (eval_time_stats.Count > 0)
 				{
 					Console.Error.WriteLine(
-						"eval: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 					);
 				}
@@ -367,7 +367,7 @@ namespace MyMediaLite
 					if (fit_time_stats.Count > 0)
 					{
 						Console.Error.WriteLine(
-							"fit: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 						);
 					}
@@ -380,7 +380,7 @@ namespace MyMediaLite
 				{
 					Console.Write(recommender.ToString() + " ");
 					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
-            		Console.Write("training " + time_span + " ");
+            		Console.Write("training_time " + time_span + " ");
 				}
 				else
 				{
@@ -418,7 +418,7 @@ namespace MyMediaLite
 									Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
 						    	}
 							);
-						Console.Write(" predicting " + time_span);
+						Console.Write(" predicting_time " + time_span);
 					}
 				}
 				else if (!no_eval)
@@ -435,7 +435,7 @@ namespace MyMediaLite
 							Console.Write("AUC {0} prec@5 {1} prec@10 {2} NDCG {3}", result["AUC"], result["prec@5"], result["prec@10"], result["NDCG"]);
 				    	}
 					);
-					Console.Write(" testing " + time_span);
+					Console.Write(" testing_time " + time_span);
 				}
 				Console.WriteLine();
 			}
