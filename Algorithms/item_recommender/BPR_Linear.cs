@@ -48,7 +48,8 @@ namespace MyMediaLite.item_recommender
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
-        public int num_iter = 30;
+		public int NumIter { get { return num_iter; } set { num_iter = value; } }
+		private int num_iter = 10;
 
 		/// <summary>Learning rate alpha</summary>
 		public double learn_rate = 0.05;
@@ -94,7 +95,7 @@ namespace MyMediaLite.item_recommender
         	item_attribute_weight_by_user = new Matrix<double>(max_user_id + 1, NumItemAttributes);
         	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_f_mean, init_f_stdev);
 
-			for (int i = 0; i < num_iter; i++)
+			for (int i = 0; i < NumIter; i++)
 			{
 				Iterate();
 				Console.Error.WriteLine(i);
@@ -291,7 +292,7 @@ namespace MyMediaLite.item_recommender
 		public override string ToString()
 		{
 			return String.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_f_mean={4} init_f_stdev={5}",
-								  reg, num_iter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
+								  reg, NumIter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
 		}
 
 	}

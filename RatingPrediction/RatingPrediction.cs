@@ -274,7 +274,7 @@ namespace RatingPrediction
 				for (int i = mf_recommender.num_iter + 1; i <= max_iter; i++)
 				{
 					TimeSpan t = Utils.MeasureTime(delegate() {
-						mf_recommender.iterate(mf_recommender.ratings.all, true, true);
+						mf_recommender.Iterate(mf_recommender.ratings.all, true, true);
 					});
 					training_time_stats.Add(t.TotalSeconds);
 

@@ -1,27 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../RatingPrediction/RatingPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="correlation/CorrelationMatrix.cs" ctype="Workbench">
     <Files>
-      <File FileName="correlation/Pearson.cs" Line="28" Column="9" />
-      <File FileName="correlation/CorrelationMatrix.cs" Line="32" Column="37" />
-      <File FileName="correlation/Cosine.cs" Line="45" Column="1" />
-      <File FileName="data_type/SparseMatrix.cs" Line="27" Column="1" />
-      <File FileName="item_recommender/BPR_Linear.cs" Line="92" Column="5" />
-      <File FileName="data_type/VectorUtils.cs" Line="23" Column="9" />
-      <File FileName="item_recommender/ItemAttributeKNN.cs" Line="29" Column="1" />
-      <File FileName="item_recommender/KNN.cs" Line="41" Column="1" />
-      <File FileName="item_recommender/Memory.cs" Line="123" Column="1" />
-      <File FileName="item_recommender/MF.cs" Line="142" Column="3" />
-      <File FileName="rating_predictor/MatrixFactorization.cs" Line="373" Column="1" />
-      <File FileName="item_recommender/UserAttributeKNN.cs" Line="29" Column="1" />
-      <File FileName="experimental/attr_to_feature/BPRMF_ItemMapping_Complex.cs" Line="29" Column="1" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="220" Column="1" />
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="289" Column="1" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="480" Column="4" />
+      <File FileName="item_recommender/UserKNN.cs" Line="63" Column="6" />
+      <File FileName="correlation/CorrelationMatrix.cs" Line="165" Column="2" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Algorithms" expanded="True">
-            <Node name="correlation" expanded="True" />
+            <Node name="correlation" expanded="True">
+              <Node name="CorrelationMatrix.cs" selected="True" />
+            </Node>
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
             <Node name="eval" expanded="True" />
@@ -41,7 +31,6 @@
           <Node name="Mapping" expanded="True" />
           <Node name="RatingPrediction" expanded="True">
             <Node name="References" expanded="True" />
-            <Node name="RatingPrediction.cs" selected="True" />
           </Node>
           <Node name="SVM" expanded="True" />
         </State>

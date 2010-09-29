@@ -38,13 +38,19 @@ namespace MyMediaLite.item_recommender
 		protected BinaryAttributes user_attributes;
 	    public int NumUserAttributes { get;	set; }
 
+		
         /// <inheritdoc />
         public override void Train()
         {
             int num_users = max_user_id + 1;
 			correlation = new Cosine(num_users);
 			correlation.ComputeCorrelations(user_attributes.GetAttributes());
+			
+			nearest_neighbors = new int[max_user_id + 1][];
+			for (int u = 0; u < num_users; u++)
+				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
+        
 
 		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{

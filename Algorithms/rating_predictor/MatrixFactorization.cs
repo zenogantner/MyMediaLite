@@ -56,7 +56,8 @@ namespace MyMediaLite.rating_predictor
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
-		public int num_iter = 30;
+		public int NumIter { get { return num_iter; } set { num_iter = value; } }
+        protected int num_iter = 30;
 
         public bool update_item_features = true;
         public bool update_user_features = true;

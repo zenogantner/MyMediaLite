@@ -14,4 +14,9 @@ result
   iteration_time: min=2,01, max=2,1, avg=2,05
   eval_time: min=0,09, max=0,1, avg=0,09
   fit_time: min=0,93, max=1,02, avg=0,95
+
+LANG=C; mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt item-attribute-knn item_attributes=item-attributes-genres.txt k=80
+ratings range: [1, 5]
+item-attribute-kNN k=80 reg_u=25 reg_i=10 Computation of cosine similarity for 3953 entities... .......................................
+training 00:00:03.5536330 RMSE 0.91078 MAE 0.7187 testing 00:03:32.9025240
   

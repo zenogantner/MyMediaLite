@@ -43,26 +43,33 @@ namespace MyMediaLite.item_recommender
 			correlation = new Cosine(num_users);
 			correlation.ComputeCorrelations(data_user);
 
-			if (k != UInt32.MaxValue)
-			{
-				nearest_neighbors = new int[max_user_id + 1][];
-				for (int u = 0; u <= max_user_id; u++)
-					nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
-			}
+			nearest_neighbors = new int[max_user_id + 1][];
+			for (int u = 0; u < num_users; u++)
+				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
 
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id > max_user_id))
-                throw new ArgumentException("user is unknown: " + user_id);
+                throw new ArgumentException("User is unknown: " + user_id);
             if ((item_id < 0) || (item_id > max_item_id))
-                throw new ArgumentException("item is unknown: " + item_id);
+                throw new ArgumentException("Item is unknown: " + item_id);
 
 			int count = 0;
-			foreach (int neighbor in nearest_neighbors[user_id])
-				if (data_user.GetRow(neighbor).Contains(item_id))
-					count++;
+			try
+			{
+				foreach (int neighbor in nearest_neighbors[user_id])
+				{
+						if (data_user.GetRow(neighbor).Contains(item_id))
+							count++;
+				}
+			}
+			catch (Exception)
+			{
+				Console.Error.WriteLine("u: {0}", user_id);
+				throw;
+			}			
 			return (double) count / k;
         }
 
