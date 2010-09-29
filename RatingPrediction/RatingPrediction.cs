@@ -35,8 +35,8 @@ namespace RatingPrediction
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class RatingPrediction
 	{
-		static bool need_user_item_index = false;		
-		
+		static bool need_user_item_index = false;
+
 		// recommender engines
 		static MatrixFactorization mf  = new MatrixFactorization();
 		static MatrixFactorization bmf = new BiasedMatrixFactorization();
@@ -133,9 +133,9 @@ namespace RatingPrediction
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
 			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
 			int num_ratings             = parameters.GetRemoveInt32(  "num_ratings", 1);
-			int num_users               = parameters.GetRemoveInt32(  "num_users",   1);			
-			int num_items               = parameters.GetRemoveInt32(  "num_items",   1);			
-			
+			int num_users               = parameters.GetRemoveInt32(  "num_users",   1);
+			int num_items               = parameters.GetRemoveInt32(  "num_items",   1);
+
 			// other arguments
 			string data_dir             = parameters.GetRemoveString( "data_dir");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
@@ -155,7 +155,7 @@ namespace RatingPrediction
 
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
-			
+
 			// set correct recommender
 			MyMediaLite.rating_predictor.Memory recommender = null;
 			switch (method)
@@ -187,16 +187,17 @@ namespace RatingPrediction
 					recommender = InitKNN(parameters, iaknn);
 					break;
 				case "user-item-baseline":
-					need_user_item_index = true;
 					recommender = InitUIB(parameters);
 					break;
 				case "global-average":
 					recommender = ga;
 					break;
 				case "user-average":
+					need_user_item_index = true;
 					recommender = ua;
 					break;
 				case "item-average":
+					need_user_item_index = true;
 					recommender = ia;
 					break;
 				default:
@@ -210,10 +211,10 @@ namespace RatingPrediction
 
 			if (parameters.CheckForLeftovers())
 				Usage(-1); // TODO give out leftovers
-			
+
 			// read training data
 			RatingData training_data = RatingPredictionData.Read(
-			                                                     Path.Combine(data_dir, trainfile), 
+			                                                     Path.Combine(data_dir, trainfile),
 			                                                     ( need_user_item_index ? num_users : -1 ),
 			                                                     ( need_user_item_index ? num_items : -1 ),
 			                                                     num_ratings,
@@ -389,19 +390,23 @@ namespace RatingPrediction
 
 		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
 		{
-			need_user_item_index = true;			
-			
+			need_user_item_index = true;
+
 			knn.k         = parameters.GetRemoveUInt32("k",         knn.k);  // TODO handle "inf"
 			knn.shrinkage = parameters.GetRemoveDouble("shrinkage", knn.shrinkage);
 			knn.reg_i     = parameters.GetRemoveDouble("reg_i",     knn.reg_i);
 			knn.reg_u     = parameters.GetRemoveDouble("reg_u",     knn.reg_u);
+
 			return knn;
 		}
 
 		static Memory InitUIB(CommandLineParameters parameters)
 		{
+			need_user_item_index = true;
+
 			uib.reg_i = parameters.GetRemoveDouble("reg_i", uib.reg_i);
 			uib.reg_u = parameters.GetRemoveDouble("reg_u", uib.reg_u);
+
 			return uib;
 		}
 
