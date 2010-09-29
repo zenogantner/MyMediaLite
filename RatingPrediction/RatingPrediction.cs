@@ -265,13 +265,13 @@ namespace RatingPrediction
 					Console.Write("fit {0,0:0.#####} ", mf_recommender.ComputeFit());
 
 				var result = RatingEval.EvaluateRated(mf_recommender, test_data);
-				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], mf_recommender.num_iter);
+				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], mf_recommender.NumIter);
 
 				List<double> training_time_stats = new List<double>();
 				List<double> fit_time_stats      = new List<double>();
 				List<double> eval_time_stats     = new List<double>();
 
-				for (int i = mf_recommender.num_iter + 1; i <= max_iter; i++)
+				for (int i = mf_recommender.NumIter + 1; i <= max_iter; i++)
 				{
 					TimeSpan t = Utils.MeasureTime(delegate() {
 						mf_recommender.Iterate(mf_recommender.ratings.all, true, true);
@@ -377,7 +377,7 @@ namespace RatingPrediction
 		// TODO reverse arguments (like in ItemPrediction.exe)
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
-			mf.num_iter       = parameters.GetRemoveInt32( "num_iter",       mf.num_iter);
+			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
 			mf.num_features   = parameters.GetRemoveInt32( "num_features",   mf.num_features);
    			mf.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    mf.init_f_mean);
    			mf.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   mf.init_f_stdev);

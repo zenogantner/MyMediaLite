@@ -57,19 +57,11 @@ namespace MyMediaLite.item_recommender
                 throw new ArgumentException("Item is unknown: " + item_id);
 
 			int count = 0;
-			try
+			foreach (int neighbor in nearest_neighbors[user_id])
 			{
-				foreach (int neighbor in nearest_neighbors[user_id])
-				{
-						if (data_user.GetRow(neighbor).Contains(item_id))
-							count++;
-				}
+				if (data_user.GetRow(neighbor).Contains(item_id))
+					count++;
 			}
-			catch (Exception)
-			{
-				Console.Error.WriteLine("u: {0}", user_id);
-				throw;
-			}			
 			return (double) count / k;
         }
 

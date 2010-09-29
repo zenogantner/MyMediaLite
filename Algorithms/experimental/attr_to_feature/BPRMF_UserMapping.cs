@@ -56,23 +56,23 @@ namespace MyMediaLite.experimental.attr_to_feature
 			Console.Error.WriteLine("\nAttributes of user number 10:");
 			HashSet<int> user_one_attr = user_attributes.GetAttributes(10);
 			foreach (int attr_id in user_one_attr)
-				System.Console.Error.Write(attr_id + " ");
-			System.Console.Error.WriteLine();
+				Console.Error.Write(attr_id + " ");
+			Console.Error.WriteLine();
 
 			// create attribute-to-feature weight matrix
 			attribute_to_feature = new Matrix<double>(NumUserAttributes + 1, num_features);
-			System.Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
+			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
-			System.Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * max_user_id);
+			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * max_user_id);
 
 			double[][] old_rmse_per_feature = new double[num_init_mapping][];
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
 				MatrixUtils.InitNormal(attribute_to_feature, init_f_mean, init_f_stdev);
-				System.Console.Error.WriteLine("----");
+				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * max_user_id; i++)
 				{
@@ -107,14 +107,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 			// set the best weight combinations for each feature mapping
 			for (int i = 0; i < num_features; i++)
 			{
-				System.Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
+				Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
 
 				attribute_to_feature.SetColumn(i,
 					old_attribute_to_feature[best_feature_init[i]].GetColumn(i)
 				);
 			}
 
-			System.Console.Error.WriteLine("----");
+			Console.Error.WriteLine("----");
 			ComputeMappingFit();
 		}
 

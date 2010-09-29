@@ -80,7 +80,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			// set the best weight combinations for each feature mapping
 			for (int i = 0; i < num_features; i++)
 			{
-				System.Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
+				Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
 
 				attribute_to_feature.SetColumn(i,
 					old_attribute_to_feature[best_feature_init[i]].GetColumn(i)

@@ -60,10 +60,7 @@ namespace MyMediaLite.item_recommender
         	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 
 			for (int i = 0; i < num_iter; i++)
-			{
 				Iterate();
-				System.Console.Error.WriteLine(i);
-			}
         }
 
 		/// <summary>

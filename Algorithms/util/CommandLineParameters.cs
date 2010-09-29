@@ -71,7 +71,7 @@ namespace MyMediaLite.util
 		{
 			if (dict.Count != 0)
 			{
-				System.Console.WriteLine("Unknown argument " + dict.Keys.First());
+				Console.WriteLine("Unknown argument " + dict.Keys.First());
 				return true;
 			}
 			return false;

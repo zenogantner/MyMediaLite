@@ -42,7 +42,7 @@ namespace MyMediaLite.correlation
 			}
 			catch (OverflowException)
 			{
-				System.Console.Error.WriteLine("Too many entities: " + num_entities);
+				Console.Error.WriteLine("Too many entities: " + num_entities);
 				throw;
 			}
 
