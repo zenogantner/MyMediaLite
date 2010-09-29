@@ -14,6 +14,7 @@ Recommender functionality
  - time-aware rating and item prediction
  - new engine types: TagRecommender, ContextAwareRecommender
  - ranking ensembles
+ - add more content-based routines (using Lemur?)
 Data types
  - re-implement rating data structure
  - data types: introduce more properties
