@@ -34,7 +34,7 @@ namespace MyMediaLite.item_recommender
 	/// This engine does not support online updates.
 	/// </summary>
 	/// <author>Zeno Gantner, University of Hildesheim</a>
-	public class BPR_Linear : Memory, ItemAttributeAwareRecommender
+	public class BPR_Linear : Memory, ItemAttributeAwareRecommender, IterativeModel
 	{
 		protected BinaryAttributes item_attributes;
 	    public int NumItemAttributes { get;	set; }
@@ -96,7 +96,7 @@ namespace MyMediaLite.item_recommender
 
 			for (int i = 0; i < num_iter; i++)
 			{
-				iterate();
+				Iterate();
 				Console.Error.WriteLine(i);
 			}
 		}
@@ -105,11 +105,12 @@ namespace MyMediaLite.item_recommender
 		/// Perform one iteration of stochastic gradient ascent over the training data.
 		/// One iteration is <see cref="iteration_length"/> * number of entries in the training matrix
 		/// </summary>
-		public void iterate()
+		public void Iterate()
 		{
 			int num_pos_events = data_user.GetNumberOfEntries();
 
-			for (int i = 0; i < num_pos_events * iteration_length; i++) {
+			for (int i = 0; i < num_pos_events * iteration_length; i++)
+			{
 				if (i % 1000000 == 999999)
 					Console.Error.Write(".");
 				if (i % 100000000 == 99999999)
@@ -280,6 +281,12 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
+		public double ComputeFit()
+		{
+			// TODO
+			return -1;
+		}
+		
 		/// <inheritdoc/>
 		public override string ToString()
 		{

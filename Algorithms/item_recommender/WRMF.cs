@@ -54,7 +54,7 @@ namespace MyMediaLite.item_recommender
         public double c_pos = 1;
 
 		/// <inheritdoc />
-		public override void iterate()
+		public override void Iterate()
 		{
         	optimize(data_user, user_feature, item_feature);
             optimize(data_item, item_feature, user_feature);

@@ -33,7 +33,7 @@ namespace MyMediaLite.item_recommender
 	/// in UAI 2009
 	/// </summary>
 	/// <author>Zeno Gantner, Christoph Freudenthaler, University of Hildesheim</author>
-	public class BPRMF : MF
+	public class BPRMF : MF, IterativeModel
 	{
 		public bool item_bias = false;
 
@@ -73,7 +73,7 @@ namespace MyMediaLite.item_recommender
 		/// Perform one iteration of stochastic gradient ascent over the training data.
 		/// One iteration is <see cref="iteration_length"/> * number of entries in the training matrix
 		/// </summary>
-		public override void iterate()
+		public override void Iterate()
 		{
 			int num_pos_events = data_user.GetNumberOfEntries();
 

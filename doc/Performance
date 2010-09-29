@@ -1,0 +1,5 @@
+MF, 6 features on Netflix (80%)
+iteration_time: min=35.39, max=35.57, avg=35.44
+eval_time: min=0.36, max=0.38, avg=0.36
+fit_time: min=24.51, max=24.56, avg=24.54
+

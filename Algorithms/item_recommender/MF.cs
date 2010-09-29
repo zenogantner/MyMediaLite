@@ -31,7 +31,7 @@ namespace MyMediaLite.item_recommender
     /// Abstract class for matrix factorization based item predictors
     /// </summary>
     /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
-    public abstract class MF : Memory
+    public abstract class MF : Memory, IterativeModel
     {
 		// TODO call iterations 'epochs'
 
@@ -60,7 +60,7 @@ namespace MyMediaLite.item_recommender
 
 			for (int i = 0; i < num_iter; i++)
 			{
-				iterate();
+				Iterate();
 				System.Console.Error.WriteLine(i);
 			}
         }
@@ -69,7 +69,7 @@ namespace MyMediaLite.item_recommender
 		/// Iterate once over the data
 		/// </summary>
 		/// <returns>true if training should be aborted</returns>
-		public abstract void iterate();
+		public abstract void Iterate();
 
 		/// <summary>
 		/// Computes the fit (optimization criterion) on the training data

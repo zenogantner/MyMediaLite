@@ -28,103 +28,6 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// Matrix factorization engine with explicit user and item bias.
-	///
-	/// In the future, this engine will replace the default MF engine in the MyMedia framework.
-	/// </summary>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
-	public class BiasedMatrixFactorization : MatrixFactorization
-	{
-		// TODO make one MF class for both ItemRecommender and RatingPredictor (which need to be turned into interfaces for that ...)
-		// TODO think about de-activating/separating regularization for the user and item bias
-
-		/// <inheritdoc />
-        protected override void _Init()
-		{
-			base._Init();
-			if (num_features < 2)
-				throw new ArgumentException("num_features must be >= 2");
-        	this.user_feature.SetColumnToOneValue(0, 1);
-			this.item_feature.SetColumnToOneValue(1, 1);
-		}
-
-		/// <inheritdoc />
-		public override void iterate(Ratings ratings, bool update_user, bool update_item)
-		{
-			double rating_range_size = MaxRatingValue - MinRatingValue;
-
-			foreach (RatingEvent rating in ratings)
-            {
-            	int u = rating.user_id;
-                int i = rating.item_id;
-
-				double dot_product = 0;
-	            for (int f = 0; f < num_features; f++) {
-    	            dot_product += user_feature.Get(u, f) * item_feature.Get(i, f);
-        	    }
-				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
-
-				double r = rating.rating;
-                double p = MinRatingValue + sig_dot * rating_range_size;
-				double err = r - p;
-
-				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
-
-				// Adjust features
-                for (int f = 0; f < num_features; f++)
-                {
-                 	double u_f = user_feature.Get(u, f);
-                    double i_f = item_feature.Get(i, f);
-
-                    if (update_user && f != 0)
-					{
-						double delta_u = gradient_common * i_f;
-						if (f != 1)
-							delta_u -= regularization * u_f;
-						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
-					}
-                    if (update_item && f != 1)
-					{
-						double delta_i = gradient_common * u_f;
-						if (f != 0)
-							delta_i -= regularization * i_f;
-						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
-					}
-                }
-            }
-		}
-
-        /// <inheritdoc />
-        public override double Predict(int user_id, int item_id)
-        {
-            if (user_id >= user_feature.dim1) {
-				return bias;
-			}
-            if (item_id >= item_feature.dim1) {
-				return bias;
-			}
-
-            double dot_product = 0;
-
-            // U*V
-            for (int f = 0; f < num_features; f++) {
-                dot_product += user_feature.Get(user_id, f) * item_feature.Get(item_id, f);
-            }
-
-			double result = MinRatingValue + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRatingValue - MinRatingValue);
-
-            return result;
-        }
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return String.Format("biased-matrix-factorization num_features={0}, regularization={1}, learn_rate={2}, num_iter={3}, init_f_mean={4}, init_f_stdev={5}",
-				                 num_features, regularization, learn_rate, num_iter, init_f_mean, init_f_stdev);
-		}
-	}
-
     /// <remarks>
     /// Factorizing the observed rating values using a feature matrix for users and one for items.
     /// This class can update the factorization online.
@@ -203,7 +106,7 @@ namespace MyMediaLite.rating_predictor
             LearnFeatures(ratings.byItem[(int)item_id], false, true);
         }
 
-		public virtual void iterate(Ratings ratings, bool update_user, bool update_item)
+		public virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			foreach (RatingEvent rating in ratings)
             {
@@ -233,9 +136,7 @@ namespace MyMediaLite.rating_predictor
         private void LearnFeatures(Ratings rating_set, bool update_user, bool update_item)
         {
             for (int current_iter = 0; current_iter < num_iter; current_iter++)
-            {
-				iterate(rating_set, update_user, update_item);
-            }
+				Iterate(rating_set, update_user, update_item);
         }
 
         /// <inheritdoc />
@@ -244,11 +145,11 @@ namespace MyMediaLite.rating_predictor
             double result = bias;
 
             // U*V
-            for (int f = 0; f < num_features; f++) {
+            for (int f = 0; f < num_features; f++)
                 result += user_feature.Get(user_id, f) * item_feature.Get(item_id, f);
-            }
 
-            if (bound) {
+            if (bound)
+			{
                 if (result > MaxRatingValue)
 					result = MaxRatingValue;
                 if (result < MinRatingValue)
@@ -268,12 +169,10 @@ namespace MyMediaLite.rating_predictor
 		/// <returns>the predicted rating</returns>
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id >= user_feature.dim1) {
+            if (user_id >= user_feature.dim1)
 				return bias;
-			}
-            if (item_id >= item_feature.dim1) {
+            if (item_id >= item_feature.dim1)
 				return bias;
-			}
 
             return Predict(user_id, item_id, true);
         }
@@ -435,9 +334,8 @@ namespace MyMediaLite.rating_predictor
 		{
 			double rmse_sum = 0;
 			foreach (RatingEvent rating in ratings.all)
-            {
 				rmse_sum += Math.Pow(Predict(rating.user_id, rating.item_id) - rating.rating, 2);
-			}
+
 			return Math.Sqrt((double) rmse_sum / ratings.all.Count);
 		}
 

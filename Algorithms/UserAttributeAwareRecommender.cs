@@ -20,7 +20,7 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite
 {
-	public interface UserAttributeAwareRecommender
+	public interface UserAttributeAwareRecommender : RecommenderEngine
 	{
 	    int NumUserAttributes { get; set; }
 		void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr);
