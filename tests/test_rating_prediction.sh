@@ -7,7 +7,7 @@
 LANG=C
 PROGRAM="mono --debug RatingPrediction.exe"
 
-echo "This may take 5 minutes"
+echo "This will take about 5 minutes"
 
 cd RatingPrediction/bin/Debug
 
