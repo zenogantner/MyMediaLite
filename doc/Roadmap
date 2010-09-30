@@ -10,13 +10,16 @@ Recommender functionality
    - adaptive kNN by Koren+Bell
    - MF with Euclidean Embeddings
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
+   - Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
  - time-aware rating and item prediction
+   - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender
  - ranking ensembles
  - stacking ensembles
  - ensembles for new users/new items
  - add more content-based routines (using Lemur?)
+ - evaluation measure: MAP
 Data types
  - re-implement rating data structure
  - data types: introduce more properties

@@ -28,21 +28,27 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
+	// TODO adapt to IterativeModel
+	
     /// <remarks>
     /// Factorizing the observed rating values using a feature matrix for users and one for items.
     /// This class can update the factorization online.
     ///
     /// After training, an ArithmeticException is thrown if there are NaN values in the model.
     /// NaN values occur if values become too large or too small to be represented by the type double.
-    /// If you encounter such problems, there are two ways to fix them:
+    /// If you encounter such problems, there are three ways to fix them:
     /// (1) Change the range of rating values (1 to 5 works generally well with the default settings)
     /// (2) Change the learn_rate (decrease it if your range is larger than 1 to 5)
+    /// (3) (preferred) Use BiasedMatrixFactorization
     /// </remarks>
     /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
     public class MatrixFactorization : Memory
     {
+		/// <summary>Matrix containing the latent user features</summary>
         protected Matrix<double> user_feature;
+		/// <summary>Matrix containing the latent item features</summary>
         protected Matrix<double> item_feature;
+		/// <summary>The bias (global average)</summary>
         protected double bias;
 
         /// <summary>Number of latent features</summary>
@@ -57,10 +63,8 @@ namespace MyMediaLite.rating_predictor
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
+        /// <summary>Number of iterations over the training data</summary>		
         protected int num_iter = 30;
-
-        public bool update_item_features = true;
-        public bool update_user_features = true;
 
         /// <inheritdoc />
         public override void Train()
@@ -93,7 +97,6 @@ namespace MyMediaLite.rating_predictor
         /// <param name="user_id">the user ID</param>
         public void RetrainUser(int user_id)
         {
-            //if (!update_user_features) { return; }
             MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
             LearnFeatures(ratings.byUser[(int)user_id], true, false);
         }
@@ -102,11 +105,16 @@ namespace MyMediaLite.rating_predictor
         /// <param name="item_id">the item ID</param>
         public void RetrainItem(int item_id)
         {
-            //if (!update_item_features) { return; }
             MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
             LearnFeatures(ratings.byItem[(int)item_id], false, true);
         }
 
+		/// <summary>
+		/// Iterate once over rating data and adjust corresponding features (stochastic gradient descent).
+		/// </summary>
+		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
+		/// <param name="update_user">true if user features to be updated</param>
+		/// <param name="update_item">true if item features to be updated</param>
 		public virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			foreach (RatingEvent rating in ratings)
@@ -114,22 +122,25 @@ namespace MyMediaLite.rating_predictor
             	int u = rating.user_id;
                 int i = rating.item_id;
 
-				double r = rating.rating;
                 double p = Predict(u, i, false);
 
-				double err = r - p;
+				double err = rating.rating - p;
 
-                 // Adjust features
+                 // Adjust features, factor by factor
                  for (int f = 0; f < num_features; f++)
                  {
                  	double u_f = user_feature.Get(u, f);
                     double i_f = item_feature.Get(i, f);
 
+					// compute feature updates
                     double delta_u = (err * i_f - regularization * u_f);
                     double delta_i = (err * u_f - regularization * i_f);
 
-                    if (update_user) MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
-                    if (update_item) MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
+					// if necessary, apply updates
+                    if (update_user)
+						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
+                    if (update_item)
+						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
                  }
             }
 		}
@@ -228,7 +239,8 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveUser(int user_id)
         {
             base.RemoveUser(user_id);
-            // set user features to zero
+            
+			// set user features to zero
             user_feature.SetRowToOneValue(user_id, 0);
         }
 
@@ -236,7 +248,8 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveItem(int item_id)
         {
             base.RemoveItem(item_id);
-            // set item features to zero
+            
+			// set item features to zero
             item_feature.SetRowToOneValue(item_id, 0);
         }
 
@@ -313,7 +326,6 @@ namespace MyMediaLite.rating_predictor
 	                item_feature.Set(i, j, v);
     	        }
 
-				// TODO maybe we could release some data to save memory
 				this.MaxUserID = num_users - 1;
 				this.MaxItemID = num_items - 1;
 

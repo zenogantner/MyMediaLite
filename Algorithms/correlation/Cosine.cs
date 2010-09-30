@@ -30,9 +30,7 @@ namespace MyMediaLite.correlation
 		/// <summary>
 		/// Copy constructor
 		/// </summary>
-		/// <param name="correlation">
-		/// A <see cref="CorrelationMatrix"/>
-		/// </param>
+		/// <param name="correlation_matrix">A <see cref="CorrelationMatrix"/></param>
 		public Cosine(CorrelationMatrix correlation_matrix)
 		{
 			this.num_entities = correlation_matrix.data.dim1;

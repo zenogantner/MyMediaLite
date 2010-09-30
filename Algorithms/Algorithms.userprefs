@@ -1,17 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="correlation/CorrelationMatrix.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../RatingPrediction/RatingPrediction.cs" ctype="Workbench">
     <Files>
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="480" Column="4" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="438" Column="34" />
       <File FileName="item_recommender/UserKNN.cs" Line="63" Column="6" />
       <File FileName="correlation/CorrelationMatrix.cs" Line="165" Column="2" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="340" Column="46" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True">
-            <Node name="correlation" expanded="True">
-              <Node name="CorrelationMatrix.cs" selected="True" />
-            </Node>
+          <Node name="Algorithms" expanded="True" selected="True">
+            <Node name="correlation" expanded="True" />
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
             <Node name="eval" expanded="True" />

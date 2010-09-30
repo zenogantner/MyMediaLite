@@ -53,7 +53,7 @@ namespace MyMediaLite.data_type
         public int dim2;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix&lt;T&gt;"/> class.
+        /// Initializes a new instance of the Matrix class.
         /// </summary>
         /// <param name="dim1">the number of rows</param>
         /// <param name="dim2">the number of columns</param>

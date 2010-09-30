@@ -21,12 +21,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-/// <summary>
-/// Helper data structures used by some of the MyMedia engines
-/// </summary>
-/// <author>Steffen Rendle, University of Hildesheim</author>
 namespace MyMediaLite.data
 {
+	/// <author>Steffen Rendle, University of Hildesheim</author>
     public class Ratings
     {
         private List<RatingEvent> ratingList;

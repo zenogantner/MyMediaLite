@@ -36,7 +36,7 @@ namespace MyMediaLite.data_type
 
 		/// <summary>
 		/// Initializes a new instance of the
-		/// <see cref="MyMediaLite.Utils.SparseBooleanMatrix"/> class.
+		/// <see cref="MyMediaLite.data_tyoe.SparseBooleanMatrix"/> class.
 		/// </summary>
 		public SparseBooleanMatrix() {}
 
@@ -134,7 +134,7 @@ namespace MyMediaLite.data_type
 		/// <summary>
 		/// Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs.
 		/// </summary>
-		/// <param name="y">the column ID</param>
+		/// <param name="delete_columns">an array with column IDs</param>
 		public void RemoveColumn(int[] delete_columns)
 		{
 			foreach (var row in rows)

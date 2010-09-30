@@ -235,7 +235,7 @@ namespace RatingPrediction
 
 			// item attributes
 			if (recommender is ItemAttributeAwareRecommender)
-				if (item_attributes_file.Equals("") )
+				if (item_attributes_file.Equals(string.Empty) )
 				{
 					Usage("Recommender expects item_attributes.");
 				}
@@ -251,12 +251,12 @@ namespace RatingPrediction
 			// TODO put the main program modes into static methods
 			if (find_iter != 0)
 			{
-				if ( !(recommender is IterativeModel) )
+				if ( !(recommender is MatrixFactorization) )
 					Usage("Only iterative recommender engines support find_iter.");
 				MatrixFactorization mf_recommender = (MatrixFactorization) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
-				if (load_model_file.Equals(""))
+				if (load_model_file.Equals(string.Empty))
 					mf_recommender.Train();
 				else
 					EngineStorage.LoadModel(mf_recommender, data_dir, load_model_file);
