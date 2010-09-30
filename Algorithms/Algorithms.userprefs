@@ -1,13 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="rating_predictor/MatrixFactorization.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../RatingPrediction/RatingPrediction.cs" ctype="Workbench">
     <Files>
       <File FileName="rating_predictor/MatrixFactorization.cs" Line="131" Column="19" />
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="265" Column="40" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="257" Column="22" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True">
+          <Node name="Algorithms" expanded="True" selected="True">
             <Node name="correlation" expanded="True" />
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
@@ -18,9 +18,7 @@
             <Node name="io" expanded="True" />
             <Node name="item_recommender" expanded="True" />
             <Node name="Properties" expanded="True" />
-            <Node name="rating_predictor" expanded="True">
-              <Node name="MatrixFactorization.cs" selected="True" />
-            </Node>
+            <Node name="rating_predictor" expanded="True" />
             <Node name="taxonomy" expanded="True" />
             <Node name="util" expanded="True" />
           </Node>

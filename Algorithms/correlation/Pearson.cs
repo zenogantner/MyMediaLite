@@ -27,9 +27,20 @@ namespace MyMediaLite.correlation
 {
 	// TODO: think about better names
 
+	/// <summary>
+	/// Correlation class for Pearson correlation.
+	/// </summary>
 	public class Pearson : CorrelationMatrix
 	{
+		/// <summary>
+		/// shrinkage parameter
+		/// </summary>
 		public float shrinkage = 10;
+		
+		/// <summary>
+		/// Create a Pearson correlation object
+		/// </summary>
+		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
 
 		public static float ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)

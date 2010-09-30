@@ -20,9 +20,17 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite
 {
+	/// <summary>Interface for recommender engines that take binary user attributes into account</summary>
 	public interface UserAttributeAwareRecommender : RecommenderEngine
 	{
+		/// <summary>Number of binary user attributes</summary>
 	    int NumUserAttributes { get; set; }
+
+		/// <summary>Set binary user attributes</summary>
+		/// <param name="matrix">
+		/// A <see cref="SparseBooleanMatrix"/> containing the binary attributes, rows are users, columns are attributes
+		/// </param>
+		/// <param name="num_attr">number of attributes</param>
 		void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr);
 	}
 }

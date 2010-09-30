@@ -20,9 +20,17 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite
 {
+	/// <summary>Interface for recommender engines that take binary item attributes into account</summary>
 	public interface ItemAttributeAwareRecommender : RecommenderEngine
 	{
+		/// <summary>Number of binary item attributes</summary>
 	    int NumItemAttributes { get; set; }
+		
+		/// <summary>Set binary item attributes</summary>
+		/// <param name="matrix">
+		/// A <see cref="SparseBooleanMatrix"/> containing the binary attributes, rows are items, columns are attributes
+		/// </param>
+		/// <param name="num_attr">number of attributes</param>
 		void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr);
 	}
 }
