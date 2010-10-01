@@ -28,8 +28,6 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	// TODO adapt to IterativeModel
-	
     /// <remarks>
     /// Factorizing the observed rating values using a feature matrix for users and one for items.
     /// This class can update the factorization online.
@@ -63,7 +61,7 @@ namespace MyMediaLite.rating_predictor
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-        /// <summary>Number of iterations over the training data</summary>		
+        /// <summary>Number of iterations over the training data</summary>
         protected int num_iter = 30;
 
         /// <inheritdoc />
@@ -87,7 +85,7 @@ namespace MyMediaLite.rating_predictor
 		{
 			Iterate(ratings.all, true, true);
 		}
-		
+
 		/// <summary>init feature matrices</summary>
         protected virtual void _Init()
 		{
@@ -245,7 +243,7 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveUser(int user_id)
         {
             base.RemoveUser(user_id);
-            
+
 			// set user features to zero
             user_feature.SetRowToOneValue(user_id, 0);
         }
@@ -254,7 +252,7 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveItem(int item_id)
         {
             base.RemoveItem(item_id);
-            
+
 			// set item features to zero
             item_feature.SetRowToOneValue(item_id, 0);
         }
