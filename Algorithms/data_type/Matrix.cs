@@ -16,10 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using MyMediaLite.util;
 
 
@@ -110,12 +106,10 @@ namespace MyMediaLite.data_type
 		/// <returns>A <see cref="T[]"/> containing the row data</returns>
 		public T[] GetRow(int i)
 		{
-			// TODO speed up using Array.Copy()
+			// TODO speed up using Array.Copy()?
 			T[] row = new T[this.dim2];
 			for (int x = 0; x < this.dim2; x++)
-			{
 				row[x] = this.Get(i, x);
-			}
 			return row;
 		}
 
@@ -139,7 +133,7 @@ namespace MyMediaLite.data_type
 		/// <param name="row">A <see cref="T[]"/> of length dim1</param>
 		public void SetRow(int i, T[] row)
 		{
-			// TODO speed up using Array.Copy()
+			// TODO speed up using Array.Copy()?
 			if (row.Length != this.dim2)
 				throw new ArgumentException(String.Format("Array length ({0}) must equal number of columns ({1}",
 				                                          row.Length, this.dim2));
@@ -170,9 +164,7 @@ namespace MyMediaLite.data_type
         public void Init(T d)
         {
             for (int i = 0; i < dim1 * dim2; i++)
-            {
                 data[i] = d;
-            }
         }
 
         /// <summary>
@@ -260,9 +252,7 @@ namespace MyMediaLite.data_type
         {
             var rnd = MyMediaLite.util.Random.GetInstance();
             for (int j = 0; j < matrix.dim2; j++)
-            {
                 matrix.Set(row, j, rnd.NextNormal(mean, stdev));
-            }
         }
 
         /// <summary>
@@ -275,12 +265,8 @@ namespace MyMediaLite.data_type
         {
             var rnd = MyMediaLite.util.Random.GetInstance();
             for (int i = 0; i < matrix.dim1; i++)
-            {
                 for (int j = 0; j < matrix.dim2; j++)
-                {
                     matrix.Set(i, j, rnd.NextNormal(mean, stdev));
-                }
-            }
         }
 
 		/// <summary>
@@ -313,6 +299,12 @@ namespace MyMediaLite.data_type
 					matrix1.data[x * dim2 + y] += matrix2.data[x * dim2 + y];
         }
 
+		/// <summary>
+		/// Compute the average value of the entries in a column of a matrix
+		/// </summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="col">the column ID</param>
+		/// <returns>the average</returns>
 		static public double ColumnAverage(Matrix<double> matrix, int col)
 		{
 			double sum = 0;
@@ -323,6 +315,12 @@ namespace MyMediaLite.data_type
 			return sum / matrix.dim1;
 		}
 
+		/// <summary>
+		/// Compute the average value of the entries in a row of a matrix
+		/// </summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="row">the row ID</param>
+		/// <returns>the average</returns>		
 		static public double RowAverage(Matrix<double> matrix, int row)
 		{
 			double sum = 0;
@@ -333,6 +331,11 @@ namespace MyMediaLite.data_type
 			return sum / matrix.dim2;
 		}
 
+		/// <summary>
+		/// Multiply all entries of a matrix with a scalar
+		/// </summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="d">the number to multiply with</param>
 		static public void Multiply(Matrix<double> matrix, double d)
 		{
 			for (int x = 0; x < matrix.dim1; x++)
@@ -340,6 +343,11 @@ namespace MyMediaLite.data_type
 					matrix.data[x * matrix.dim2 + y] *= d;
 		}
 
+		/// <summary>
+		/// Compute the Frobenius norm (sum of squared entries) of a matrix
+		/// </summary>
+		/// <param name="matrix">the matrix</param>
+		/// <returns>the Frobenius norm of the matrix</returns>
 		static public double FrobeniusNorm(Matrix<double> matrix)
 		{
 			double result = 0;
@@ -366,13 +374,9 @@ namespace MyMediaLite.data_type
 		{
 			int nan_counter = 0;
             for (int x = 0; x < matrix.dim1; x++)
-            {
                 for (int y = 0; y < matrix.dim2; y++)
-                {
                     if ( Double.IsNaN(matrix.Get(x, y)) )
 						nan_counter++;
-                }
-            }
 			if (nan_counter > 0) {
 				Console.Error.WriteLine("Number of NaNs: " + nan_counter);
 				return true;

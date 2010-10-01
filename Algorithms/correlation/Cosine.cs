@@ -23,20 +23,22 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.correlation
 {
+	/// <summary>
+	/// Class for storing cosine similarities
+	/// </summary>
 	public class Cosine : CorrelationMatrix
 	{
+		/// <inheritdoc />
 		public Cosine(int num_entities) : base(num_entities) { }
-
-		/// <summary>
-		/// Copy constructor
-		/// </summary>
-		/// <param name="correlation_matrix">A <see cref="CorrelationMatrix"/></param>
+		
+		/// <inheritdoc />
 		public Cosine(CorrelationMatrix correlation_matrix)
 		{
 			this.num_entities = correlation_matrix.data.dim1;
 			this.data = correlation_matrix.data;
 		}
 
+		/// <inheritdoc />
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
 			Console.Error.Write("Computation of cosine similarity for {0} entities... ", num_entities);
@@ -55,19 +57,18 @@ namespace MyMediaLite.correlation
 					Console.Error.WriteLine("{0}/{1}", i, num_entities);
 
 				for (int j = i + 1; j < num_entities; j++)
-				{
                     if (entity_data.GetRow(j).Count > 0)
                     {
 						float corr = ComputeCorrelation(attributes_i, entity_data.GetRow(j));
 						data.Set(i, j, corr);
 						data.Set(j, i, corr);
             	    }
-				}
 			}
 
 			Console.Error.WriteLine();
-		} // method
+		}
 
+		/// <inheritdoc />
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;
@@ -79,20 +80,4 @@ namespace MyMediaLite.correlation
             return  (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
 		}
 	}
-
-	/*
-	public class ShrunkCosine
-	{
-		public override float ComputeCorrelation(HashSet<int> attr_i, HashSet<int> attr_j)
-		{
-			int cntr = 0;
-            foreach (int k in attr_j)
-			{
-            	if (attr_i.Contains(k))
-	            	cntr++;
-            }
-            return  (float) cntr / (float) (Math.Sqrt(attr_i.Count) * Math.Sqrt(attr_j.Count));
-		}
-	}
-	*/
 }

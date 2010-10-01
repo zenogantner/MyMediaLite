@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.taxonomy;
@@ -43,6 +42,7 @@ namespace MyMediaLite.correlation
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
 
+		/// <inheritdoc />
 		public static float ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)

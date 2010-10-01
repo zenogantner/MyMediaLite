@@ -279,16 +279,16 @@ namespace MyMediaLite
 			// TODO give out time for each iteration
 			if (find_iter != 0)
 			{
-				IterativeModel mf_recommender = (IterativeModel) recommender;
+				IterativeModel iterative_recommender = (IterativeModel) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
 				if (load_model_file.Equals(String.Empty))
-					mf_recommender.Train();
+					iterative_recommender.Train();
 				else
-					EngineStorage.LoadModel(mf_recommender, data_dir, load_model_file);
+					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
-					Console.Write("fit {0,0:0.#####} ", mf_recommender.ComputeFit());
+					Console.Write("fit {0,0:0.#####} ", iterative_recommender.ComputeFit());
 
 				var result = ItemRankingEval.EvaluateItemRecommender(recommender,
 				                                 test_data.First,
@@ -296,16 +296,16 @@ namespace MyMediaLite
 					                             relevant_items,
 				                                 !eval_new_users);
 				Console.Write("AUC {0} prec@5 {1} prec@10 {2} NDCG {3}", result["AUC"], result["prec@5"], result["prec@10"], result["NDCG"]);
-				Console.WriteLine(" " + mf_recommender.NumIter);
+				Console.WriteLine(" " + iterative_recommender.NumIter);
 
 				List<double> training_time_stats = new List<double>();
 				List<double> fit_time_stats      = new List<double>();
 				List<double> eval_time_stats     = new List<double>();
 
-				for (int i = mf_recommender.NumIter + 1; i <= max_iter; i++)
+				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
 					TimeSpan t = Utils.MeasureTime(delegate() {
-						mf_recommender.Iterate();
+						iterative_recommender.Iterate();
 					});
 					training_time_stats.Add(t.TotalSeconds);
 
@@ -315,7 +315,7 @@ namespace MyMediaLite
 						{
 							double fit = 0;
 							t = Utils.MeasureTime(delegate() {
-								fit = mf_recommender.ComputeFit();
+								fit = iterative_recommender.ComputeFit();
 							});
 							fit_time_stats.Add(t.TotalSeconds);
 							Console.Write("fit {0,0:0.#####} ", fit);

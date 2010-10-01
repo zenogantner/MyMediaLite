@@ -42,7 +42,7 @@ namespace MyMediaLite.rating_predictor
     /// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
     /// </remarks>
     /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
-    public class MatrixFactorization : Memory
+    public class MatrixFactorization : Memory, IterativeModel
     {
 		/// <summary>Matrix containing the latent user features</summary>
         protected Matrix<double> user_feature;
@@ -82,6 +82,12 @@ namespace MyMediaLite.rating_predictor
 				throw new ArithmeticException("item_feature contains NaN");
         }
 
+		/// <inheritdoc />
+		public virtual void Iterate()
+		{
+			Iterate(ratings.all, true, true);
+		}
+		
 		/// <summary>init feature matrices</summary>
         protected virtual void _Init()
 		{
@@ -115,7 +121,7 @@ namespace MyMediaLite.rating_predictor
 		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
 		/// <param name="update_user">true if user features to be updated</param>
 		/// <param name="update_item">true if item features to be updated</param>
-		public virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
+		protected virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			foreach (RatingEvent rating in ratings)
             {

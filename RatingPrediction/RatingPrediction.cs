@@ -251,30 +251,30 @@ namespace RatingPrediction
 			// TODO put the main program modes into static methods
 			if (find_iter != 0)
 			{
-				if ( !(recommender is MatrixFactorization) )
+				if ( !(recommender is IterativeModel) )
 					Usage("Only iterative recommender engines support find_iter.");
-				MatrixFactorization mf_recommender = (MatrixFactorization) recommender;
+				IterativeModel iterative_recommender = (MatrixFactorization) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
 				if (load_model_file.Equals(string.Empty))
-					mf_recommender.Train();
+					iterative_recommender.Train();
 				else
-					EngineStorage.LoadModel(mf_recommender, data_dir, load_model_file);
+					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
-					Console.Write("fit {0,0:0.#####} ", mf_recommender.ComputeFit());
+					Console.Write("fit {0,0:0.#####} ", iterative_recommender.ComputeFit());
 
-				var result = RatingEval.EvaluateRated(mf_recommender, test_data);
-				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], mf_recommender.NumIter);
+				var result = RatingEval.EvaluateRated(iterative_recommender, test_data);
+				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], iterative_recommender.NumIter);
 
 				List<double> training_time_stats = new List<double>();
 				List<double> fit_time_stats      = new List<double>();
 				List<double> eval_time_stats     = new List<double>();
 
-				for (int i = mf_recommender.NumIter + 1; i <= max_iter; i++)
+				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
 					TimeSpan t = Utils.MeasureTime(delegate() {
-						mf_recommender.Iterate(mf_recommender.ratings.all, true, true);
+						iterative_recommender.Iterate(iterative_recommender.ratings.all, true, true);
 					});
 					training_time_stats.Add(t.TotalSeconds);
 
@@ -284,14 +284,14 @@ namespace RatingPrediction
 						{
 							double fit = 0;
 							t = Utils.MeasureTime(delegate() {
-								fit = mf_recommender.ComputeFit();
+								fit = iterative_recommender.ComputeFit();
 							});
 							fit_time_stats.Add(t.TotalSeconds);
 							Console.Write("fit {0,0:0.#####} ", fit);
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							result = RatingEval.EvaluateRated(mf_recommender, test_data);
+							result = RatingEval.EvaluateRated(iterative_recommender, test_data);
 							Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);

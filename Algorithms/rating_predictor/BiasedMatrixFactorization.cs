@@ -48,7 +48,7 @@ namespace MyMediaLite.rating_predictor
 		}
 
 		/// <inheritdoc />
-		public override void Iterate(Ratings ratings, bool update_user, bool update_item)
+		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRatingValue - MinRatingValue;
 

@@ -26,14 +26,29 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.correlation
 {
+	/// <summary>Class for computing and storing correlations</summary>
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class CorrelationMatrix
 	{
-		public Matrix<float> data; // TODO use inheritance?
+		/// <summary>
+		/// Matrix object containing the correlations
+		/// </summary>
+		public Matrix<float> data;
+		
+		/// <summary>
+		/// Number of entities, e.g. users or items
+		/// </summary>
 		protected int num_entities;
 
+		/// <summary>
+		/// Default constructor
+		/// </summary>
 		public CorrelationMatrix() { }
-
+		
+		/// <summary>
+		/// Creates a CorrelationMatrix object for a given number of entities
+		/// </summary>
+		/// <param name="num_entities">number of entities</param>
 		public CorrelationMatrix(int num_entities)
 		{
 			try
@@ -49,6 +64,10 @@ namespace MyMediaLite.correlation
 			this.num_entities = num_entities;
 		}
 
+		/// <summary>
+		/// Create a CorrelationMatrix from the lines of a StreamReader
+		/// </summary>
+		/// <param name="reader">the StreamReader to read from</param>
 		public CorrelationMatrix(StreamReader reader)
 		{
 			num_entities = System.Int32.Parse(reader.ReadLine());
@@ -57,9 +76,7 @@ namespace MyMediaLite.correlation
 
 			// diagonal values
 			for (int i = 0; i < num_entities; i++)
-			{
 				data.Set(i, i, 1);
-			}
 
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -81,6 +98,12 @@ namespace MyMediaLite.correlation
 			}
 		}
 
+		/// <summary>
+		/// Write out the correlations to a StreamWriter
+		/// </summary>
+		/// <param name="writer">
+		/// A <see cref="StreamWriter"/>
+		/// </param>
 		public void Write(StreamWriter writer)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -99,16 +122,34 @@ namespace MyMediaLite.correlation
 			}
 		}
 
+		/// <summary>
+		/// Get the correlation for a given entity pair
+		/// </summary>
+		/// <param name="i">the numerical ID of the first entity</param>
+		/// <param name="j">the numerical ID of the second entity</param>
+		/// <returns>the correlation between entity i and entity j</returns>
 		public float Get(int i, int j)
 		{
 			return data.Get(i, j);
 		}
 
+		/// <summary>
+		/// Add an entity to the CorrelationMatrix by growing it to the requested size.
+		/// 
+		/// Note that you still have to correctly compute and set the entity's correlation values
+		/// </summary>
+		/// <param name="entity_id">the numerical ID of the entity</param>
 		public void AddEntity(int entity_id)
 		{
 			this.data = this.data.Grow(entity_id + 1, entity_id + 1);
 		}
 
+		/// <summary>
+		/// Sum up the correlations between a given entity and the entities in a collection
+		/// </summary>
+		/// <param name="entity_id">the numerical ID of the entity</param>
+		/// <param name="entities">a collection containing the numerical IDs of the entities to compare to</param>
+		/// <returns>the correlation sum</returns>
 		public double SumUp(int entity_id, ICollection<int> entities)
 		{
 			if (entity_id < 0 || entity_id >= num_entities)
@@ -140,6 +181,12 @@ namespace MyMediaLite.correlation
 			return result;
 		}
 
+		/// <summary>
+		/// Get the k nearest neighbors of a given entity
+		/// </summary>
+		/// <param name="entity_id">the numerical ID of the entity</param>
+		/// <param name="k">the neighborhood size</param>
+		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
 		public int[] GetNearestNeighbors(int entity_id, uint k)
 		{
 			List<int> entities = new List<int>();
@@ -152,11 +199,20 @@ namespace MyMediaLite.correlation
 			return entities.GetRange(0, (int) k).ToArray();
 		}
 
+		/// <summary>
+		/// Compute the correlations for a given entity type from a rating dataset
+		/// </summary>
+		/// <param name="ratings">the rating data</param>
+		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
 		public virtual void ComputeCorrelations(RatingData ratings, EntityType entity_type)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Compute the correlations from an implicit feedback, positive-only dataset
+		/// </summary>
+		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
 		public virtual void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
 			throw new NotImplementedException();
