@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
