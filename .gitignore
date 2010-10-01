@@ -4,4 +4,4 @@
 *.bak
 *.tmp
 bin
-
+*.tar.gz
