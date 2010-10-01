@@ -34,7 +34,7 @@ namespace MyMediaLite.data
         public Ratings all = null;
         public List<Ratings> byUser = null;
         public List<Ratings> byItem = null;
-		
+
 		public int max_user_id = 0;
 		public int max_item_id = 0;
 
@@ -63,9 +63,7 @@ namespace MyMediaLite.data
                 byItem[(int)rating.item_id].AddRating(rating);
             }
             if (all != null)
-            {
                 all.AddRating(rating);
-            }
 
 			if (rating.user_id > max_user_id)
 				max_user_id = rating.user_id;
@@ -114,9 +112,7 @@ namespace MyMediaLite.data
                 Ratings r = byUser[(int)user_id];
                 List<RatingEvent> temp = r.ToList();
                 while (temp.Count > 0)
-                {
                     RemoveRating(temp[0]);
-                }
             }
             else if ((byItem != null) || (all != null))
             {
