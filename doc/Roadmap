@@ -21,14 +21,14 @@ Recommender functionality
  - add more content-based routines (using Lemur?)
  - evaluation measure: MAP
 Data types
- - re-implement rating data structure
+ - (*) re-implement rating data structure
  - data types: introduce more properties
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
- - add function that maps original entity IDs to internal ones
+ - (*) add function that maps original entity IDs to internal ones
  - use input from STDIN as training data
- - define an easy interface for data access
+ - (*) define an easy interface for data access
  - Makefile-based build system (find dependencies automagically?)
  - parameterize types: user and item IDs, prediction values (in C++ port)
  - nicer, more generic structure for kNN engines

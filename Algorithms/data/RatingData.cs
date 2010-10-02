@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -40,7 +40,7 @@ namespace MyMediaLite.data
 
 		// TODO document
 		// TODO argument order should be different
-        public RatingData(int num_ratings, int num_users, int num_items)
+        public RatingData(int num_users, int num_items, int num_ratings)
         {
             if (num_ratings > -1)
                 all = new Ratings(num_ratings);

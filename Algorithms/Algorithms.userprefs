@@ -1,15 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../RatingPrediction/RatingPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="data/EntityMapping.cs" ctype="Workbench">
     <Files>
-      <File FileName="rating_predictor/MatrixFactorization.cs" Line="131" Column="19" />
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="257" Column="22" />
+      <File FileName="rating_predictor/MatrixFactorization.cs" Line="69" Column="1" />
+      <File FileName="data/EntityMapping.cs" Line="77" Column="23" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="294" Column="42" />
+      <File FileName="eval/Prediction.cs" Line="1" Column="1" />
+      <File FileName="data_type/SparseMatrix.cs" Line="47" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True" selected="True">
+          <Node name="Algorithms" expanded="True">
             <Node name="correlation" expanded="True" />
-            <Node name="data" expanded="True" />
+            <Node name="data" expanded="True">
+              <Node name="EntityMapping.cs" selected="True" />
+            </Node>
             <Node name="data_type" expanded="True" />
             <Node name="eval" expanded="True" />
             <Node name="experimental" expanded="True">
