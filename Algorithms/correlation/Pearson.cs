@@ -110,7 +110,7 @@ namespace MyMediaLite.correlation
 			Console.Error.Write("Computation of Pearson correlation... ");
 
 			int num_entities = data.dim1;
-			List<Ratings> ratings_by_entity = entity_type == EntityType.USER ? ratings.byUser : ratings.byItem;
+			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
 
 			// compute Pearson product-moment correlation coefficients for all entity pairs
 			for (int i = 0; i < num_entities; i++)

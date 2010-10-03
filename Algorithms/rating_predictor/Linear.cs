@@ -49,8 +49,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-			Ratings r = ratings.all;
-            return r.Average;
+            return ratings.Average();
         }
 
 		/// <inheritdoc />
@@ -124,10 +123,10 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id < MaxUserID && ratings.byUser[user_id].Count != 0)
-                return ratings.byUser[user_id].Average;
+            if (user_id < MaxUserID && ratings.ByUser[user_id].Count != 0)
+                return ratings.ByUser[user_id].Average;
             else
-				return ratings.all.Average;
+				return ratings.Average();
         }
 
 		/// <inheritdoc />
@@ -153,10 +152,10 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (item_id < MaxItemID && ratings.byItem[item_id].Count != 0)
-                return ratings.byItem[item_id].Average;
+            if (item_id < MaxItemID && ratings.ByItem[item_id].Count != 0)
+                return ratings.ByItem[item_id].Average;
 			else
-				return ratings.all.Average;
+				return ratings.Average();
         }
 
 		/// <inheritdoc />

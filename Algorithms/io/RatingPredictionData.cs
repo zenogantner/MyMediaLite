@@ -30,18 +30,6 @@ namespace MyMediaLite.io
 	public class RatingPredictionData
 	{
 		/// <summary>
-		/// Read in rating data from a file
-		/// </summary>
-		/// <param name="filename">the name of the file to read from</param>
-		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
-		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
-		/// <returns>the rating data</returns>		
-		static public RatingData Read(string filename, double min_rating, double max_rating)
-		{
-			return Read(filename, 1, 1, 1, min_rating, max_rating);
-		}				
-
-		/// <summary>
 		/// Read in rating data from a StreamReader
 		/// </summary>
 		/// <param name="filename">the name of the file to read from</param>
@@ -51,7 +39,7 @@ namespace MyMediaLite.io
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <returns>the rating data</returns>		
-		static public RatingData Read(string filename, int num_users, int num_items, int num_ratings, double min_rating, double max_rating)
+		static public RatingData Read(string filename, double min_rating, double max_rating)
 		{
 			/*
 			if (filename.Equals("--"))
@@ -63,27 +51,22 @@ namespace MyMediaLite.io
 			*/
 	            using ( StreamReader reader = new StreamReader(filename) )
 				{
-					return Read(reader, num_users, num_items, num_ratings, min_rating, max_rating);
+					return Read(reader, min_rating, max_rating);
 				}
 			//}
 		}
 		
-		// TODO re-work interface
 		/// <summary>
 		/// Read in rating data from a StreamReader
 		/// </summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
-		/// <param name="num_users">the number of users (-1 means do not create a per-user data structure)</param>
-		/// <param name="num_items">the number of items (-1 means do not create a per-item data structure)</param>
-		/// <param name="num_ratings">the expected number of ratings</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <returns>the rating data</returns>
 		static public RatingData Read(StreamReader reader,
-		                              int num_users, int num_items, int num_ratings,
 		                              double min_rating, double max_rating)
 		{
-		    RatingData ratings = new RatingData(num_users, num_items, num_ratings); // TODO change order
+		    RatingData ratings = new RatingData();
 
 			bool out_of_range_warning_issued = false;
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';

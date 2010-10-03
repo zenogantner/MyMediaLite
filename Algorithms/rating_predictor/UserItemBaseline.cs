@@ -55,27 +55,29 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override void Train()
         {
-			global_average = ratings.all.Average;
+			global_average = ratings.Average();
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
 
+			// TODO check for unnecessary memory consumption
+			
 			// compute item biases
-			foreach (RatingEvent r in ratings.all)
+			foreach (RatingEvent r in ratings)
 			{
 				item_biases[r.item_id] += r.rating - global_average;
 			}
 			for (int i = 0; i < item_biases.Length; i++)
-				if (ratings.byItem[i].Count != 0)
-					item_biases[i] = item_biases[i] / (reg_i + ratings.byItem[i].Count);
+				if (ratings.ByItem[i].Count != 0)
+					item_biases[i] = item_biases[i] / (reg_i + ratings.ByItem[i].Count);
 
 			// compute user biases
-			foreach (RatingEvent r in ratings.all)
+			foreach (RatingEvent r in ratings)
 			{
 				user_biases[r.user_id] += r.rating - global_average - item_biases[r.item_id];
 			}
 			for (int u = 0; u < user_biases.Length; u++)
-				if (ratings.byUser[u].Count != 0)
-					user_biases[u] = user_biases[u] / (reg_u + ratings.byUser[u].Count);
+				if (ratings.ByUser[u].Count != 0)
+					user_biases[u] = user_biases[u] / (reg_u + ratings.ByUser[u].Count);
         }
 
         /// <inheritdoc />
@@ -97,12 +99,10 @@ namespace MyMediaLite.rating_predictor
 		{
 			if (UpdateUsers)
 			{
-				foreach (RatingEvent r in ratings.byUser[user_id])
-				{
+				foreach (RatingEvent r in ratings.ByUser[user_id])
 					user_biases[user_id] += r.rating - global_average - item_biases[r.item_id];
-				}
-				if (ratings.byUser[user_id].Count != 0)
-					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.byUser[user_id].Count);
+				if (ratings.ByUser[user_id].Count != 0)
+					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.ByUser[user_id].Count);
 			}
 		}
 
@@ -110,10 +110,10 @@ namespace MyMediaLite.rating_predictor
 		{
 			if (UpdateItems)
 			{
-				foreach (RatingEvent r in ratings.byItem[item_id])
+				foreach (RatingEvent r in ratings.ByItem[item_id])
 					item_biases[item_id] += r.rating - global_average;
-				if (ratings.byItem[item_id].Count != 0)
-					item_biases[item_id] = item_biases[item_id] / (reg_i + ratings.byItem[item_id].Count);
+				if (ratings.ByItem[item_id].Count != 0)
+					item_biases[item_id] = item_biases[item_id] / (reg_i + ratings.ByItem[item_id].Count);
 			}
 		}
 

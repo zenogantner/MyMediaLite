@@ -69,8 +69,8 @@ namespace MyMediaLite.rating_predictor
             _Init();
 
             // learn model parameters
-            bias = ratings.all.Average;
-            LearnFeatures(ratings.all, true, true);
+            bias = ratings.Average();
+            LearnFeatures(ratings.All, true, true);
 
 			// check for NaN in the model
 			if (MatrixUtils.ContainsNaN(user_feature))
@@ -82,7 +82,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public virtual void Iterate()
 		{
-			Iterate(ratings.all, true, true);
+			Iterate(ratings.All, true, true);
 		}
 
 		/// <summary>init feature matrices</summary>
@@ -101,7 +101,7 @@ namespace MyMediaLite.rating_predictor
         public void RetrainUser(int user_id)
         {
             MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
-            LearnFeatures(ratings.byUser[(int)user_id], true, false);
+            LearnFeatures(ratings.ByUser[(int)user_id], true, false);
         }
 
         /// <summary>Updates the latent features of an item</summary>
@@ -109,7 +109,7 @@ namespace MyMediaLite.rating_predictor
         public void RetrainItem(int item_id)
         {
             MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
-            LearnFeatures(ratings.byItem[(int)item_id], false, true);
+            LearnFeatures(ratings.ByItem[(int)item_id], false, true);
         }
 
 		/// <summary>
@@ -148,10 +148,10 @@ namespace MyMediaLite.rating_predictor
             }
 		}
 
-        private void LearnFeatures(Ratings rating_set, bool update_user, bool update_item)
+        private void LearnFeatures(Ratings ratings, bool update_user, bool update_item)
         {
             for (int current_iter = 0; current_iter < num_iter; current_iter++)
-				Iterate(rating_set, update_user, update_item);
+				Iterate(ratings, update_user, update_item);
         }
 
         /// <inheritdoc />
@@ -349,10 +349,10 @@ namespace MyMediaLite.rating_predictor
 		public double ComputeFit()
 		{
 			double rmse_sum = 0;
-			foreach (RatingEvent rating in ratings.all)
+			foreach (RatingEvent rating in ratings)
 				rmse_sum += Math.Pow(Predict(rating.user_id, rating.item_id) - rating.rating, 2);
 
-			return Math.Sqrt((double) rmse_sum / ratings.all.Count);
+			return Math.Sqrt((double) rmse_sum / ratings.Count());
 		}
 
 		/// <inheritdoc />

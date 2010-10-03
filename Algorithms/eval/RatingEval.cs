@@ -46,7 +46,7 @@ namespace MyMediaLite.eval
             double mae = 0;
             int cnt = 0;
 
-            foreach (RatingEvent r in ratings.all)
+            foreach (RatingEvent r in ratings)
             {
                 double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
 

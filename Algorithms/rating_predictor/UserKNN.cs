@@ -40,7 +40,7 @@ namespace MyMediaLite.rating_predictor
 			base.SetCollaborativeData(ratings);
 
             data_user = new SparseBooleanMatrix();
-			foreach (RatingEvent r in ratings.all)
+			foreach (RatingEvent r in ratings)
                	data_user.AddEntry(r.user_id, r.item_id);
 		}
 
@@ -64,7 +64,7 @@ namespace MyMediaLite.rating_predictor
 			{
 				if (data_user.GetRow(user_id2).Contains(item_id))
 				{
-					RatingEvent r = ratings.byUser[user_id2].FindRating(user_id2, item_id);
+					RatingEvent r = ratings.ByUser[user_id2].FindRating(user_id2, item_id);
 					double weight = correlation.Get(user_id, user_id2);
 					weight_sum += weight;
 					sum += weight * (r.rating - base.Predict(user_id2, item_id));
@@ -181,7 +181,7 @@ namespace MyMediaLite.rating_predictor
 			{
 				for (int i = 0; i < MaxUserID; i++)
 				{
-					float cor = Pearson.ComputeCorrelation(ratings.byUser[user_id], ratings.byUser[i], EntityType.USER, user_id, i, (float) shrinkage);
+					float cor = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, (float) shrinkage);
 					correlation.data.Set(user_id, i, cor);
 					correlation.data.Set(i, user_id, cor);
 				}

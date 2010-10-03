@@ -27,7 +27,7 @@ Data types
  - profile+optimize data types
 Architecture
  - (*) add function that maps original entity IDs to internal ones
- - use input from STDIN as training data
+ - (*) use input from STDIN as training data
  - (*) define an easy interface for data access
  - Makefile-based build system (find dependencies automagically?)
  - parameterize types: user and item IDs, prediction values (in C++ port)

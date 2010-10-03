@@ -19,44 +19,82 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MyMediaLite.data
 {
     /// <remarks>
     /// Data storage for rating data.
     /// The rating events are accessible in user-wise, item-wise and unsorted triple-wise order.
-    /// In order to save memory, the different access modes can be deactivated by constructor parameters.
+    /// 
+    /// In order to save memory, the object initially stores only the unsorted ratings.
+    /// If at some point user or item-wise access is needed, the underlying data structures
+    /// are transparently created on-the-fly.
     /// </remarks>
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class RatingData
     {
-        public Ratings all = null;
-        public List<Ratings> byUser = null;
-        public List<Ratings> byItem = null;
+        private Ratings all = new Ratings();
+        public Ratings All { get { return all; } }
+		
+		public List<Ratings> ByUser
+		{
+			get
+			{
+				if (byUser == null)
+					InitByUser();	
+					
+				return byUser;
+			}
+		}
+		protected List<Ratings> byUser = null;
+
+		public List<Ratings> ByItem
+		{
+			get
+			{
+				if (byUser == null)
+					InitByItem();	
+					
+				return byItem;
+			}
+		}		
+		protected List<Ratings> byItem = null;
 
 		public int max_user_id = 0;
 		public int max_item_id = 0;
 
-		// TODO document
-		// TODO argument order should be different
-        public RatingData(int num_users, int num_items, int num_ratings)
-        {
-            if (num_ratings > -1)
-                all = new Ratings(num_ratings);
-            if (num_users > -1)
-                byUser = new List<Ratings>(num_users);
-            if (num_items > -1)
-				byItem = new List<Ratings>(num_items);
-        }
-
-        public void AddRating(RatingEvent rating)
-        {
-            if (byItem != null)
+		private void InitByUser()
+		{
+			byUser = new List<Ratings>();
+			foreach (RatingEvent rating in all)
             {
                 AddUser(rating.user_id);
                 byUser[(int)rating.user_id].AddRating(rating);
             }
+		}
+
+		private void InitByItem()
+		{
+			byItem = new List<Ratings>();
+			foreach (RatingEvent rating in all)
+            {
+                AddItem(rating.item_id);
+                byItem[(int)rating.item_id].AddRating(rating);
+            }
+		}		
+
+		public IEnumerator GetEnumerator()
+		{
+			return all.GetEnumerator();
+		}		
+		
+        public void AddRating(RatingEvent rating)
+        {
+            if (byUser != null)			
+			{
+                AddUser(rating.user_id);
+                byUser[(int)rating.user_id].AddRating(rating);
+			}			
             if (byItem != null)
             {
                 AddItem(rating.item_id);
@@ -167,5 +205,17 @@ namespace MyMediaLite.data
 			else
                 return null;
         }
+		
+		
+		// TODO think about making those properties
+		public double Average()
+		{
+			return all.Average;
+		}
+		
+		public int Count()
+		{
+			return all.Count;
+		}
     }
 }

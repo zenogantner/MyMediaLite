@@ -35,8 +35,6 @@ namespace RatingPrediction
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class RatingPrediction
 	{
-		static bool need_user_item_index = false;
-
 		// recommender engines
 		static MatrixFactorization mf  = new MatrixFactorization();
 		static MatrixFactorization bmf = new BiasedMatrixFactorization();
@@ -132,9 +130,9 @@ namespace RatingPrediction
 			// collaborative data characteristics
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
 			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
-			int num_ratings             = parameters.GetRemoveInt32(  "num_ratings", 1);
-			int num_users               = parameters.GetRemoveInt32(  "num_users",   1);
-			int num_items               = parameters.GetRemoveInt32(  "num_items",   1);
+			//int num_ratings             = parameters.GetRemoveInt32(  "num_ratings", 1);
+			//int num_users               = parameters.GetRemoveInt32(  "num_users",   1);
+			//int num_items               = parameters.GetRemoveInt32(  "num_items",   1);
 
 			// other arguments
 			string data_dir             = parameters.GetRemoveString( "data_dir");
@@ -193,11 +191,9 @@ namespace RatingPrediction
 					recommender = ga;
 					break;
 				case "user-average":
-					need_user_item_index = true;
 					recommender = ua;
 					break;
 				case "item-average":
-					need_user_item_index = true;
 					recommender = ia;
 					break;
 				default:
@@ -213,12 +209,7 @@ namespace RatingPrediction
 				Usage(-1); // TODO give out leftovers
 
 			// read training data
-			RatingData training_data = RatingPredictionData.Read(
-			                                                     Path.Combine(data_dir, trainfile),
-			                                                     ( need_user_item_index ? num_users : -1 ),
-			                                                     ( need_user_item_index ? num_items : -1 ),
-			                                                     num_ratings,
-			                                                     min_rating, max_rating);
+			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating);
 			recommender.SetCollaborativeData(training_data);
 
 			// user attributes
@@ -390,8 +381,6 @@ namespace RatingPrediction
 
 		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
 		{
-			need_user_item_index = true;
-
 			knn.k         = parameters.GetRemoveUInt32("k",         knn.k);  // TODO handle "inf"
 			knn.shrinkage = parameters.GetRemoveDouble("shrinkage", knn.shrinkage);
 			knn.reg_i     = parameters.GetRemoveDouble("reg_i",     knn.reg_i);
@@ -402,8 +391,6 @@ namespace RatingPrediction
 
 		static Memory InitUIB(CommandLineParameters parameters)
 		{
-			need_user_item_index = true;
-
 			uib.reg_i = parameters.GetRemoveDouble("reg_i", uib.reg_i);
 			uib.reg_u = parameters.GetRemoveDouble("reg_u", uib.reg_u);
 
@@ -415,7 +402,7 @@ namespace RatingPrediction
         /// <param name="ratings">Test cases</param>
         static void rate(RatingPredictor engine, RatingData ratings)
 		{
-			foreach (RatingEvent r in ratings.all)
+			foreach (RatingEvent r in ratings)
 				Console.WriteLine("{0}\t{1}\t{2}", r.user_id, r.item_id, engine.Predict(r.user_id, r.item_id));
         }
 		// TODO have the same thing as with item prediction (e.g. write to file)
