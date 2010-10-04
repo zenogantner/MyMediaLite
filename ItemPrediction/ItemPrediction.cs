@@ -54,6 +54,7 @@ namespace MyMediaLite
 		static KNN         wuknn  = new WeightedUserKNN();
 		static KNN         uaknn  = new UserAttributeKNN();
 		static MostPopular mp     = new MostPopular();
+		static WRMF        svd    = new SVD();
 		static WRMF        wrmf   = new WRMF();
 		static BPRMF       bprmf  = new BPRMF();
 		static item_recommender.Random random = new item_recommender.Random();
@@ -166,10 +167,14 @@ namespace MyMediaLite
 				case "WR-MF":
 				case "wr-mf":
 					compute_fit = false; // deactivate as long it is not implemented
-					InitWRMF(parameters);
+					InitWRMF(wrmf, parameters);
+					break;
+				case "svd":
+					compute_fit = false; // deactivate as long it is not implemented
+					InitWRMF(svd, parameters);
 					break;
 				case "BPR-MF":
-				case "bpr-mf":				
+				case "bpr-mf":
 					InitBPRMF(bprmf, parameters);
 					break;
 				case "BPR-Linear":
@@ -219,7 +224,7 @@ namespace MyMediaLite
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
-			
+
 			// training data
 			training_data   = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 			int max_user_id = training_data.First.GetNumberOfRows() - 1;
@@ -397,7 +402,7 @@ namespace MyMediaLite
 						if (predict_for_users_file.Equals(String.Empty))
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	ItemPrediction.WritePredictions(
+							    	eval.ItemPrediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        max_user_id,
@@ -411,7 +416,7 @@ namespace MyMediaLite
 						else
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	ItemPrediction.WritePredictions(
+							    	eval.ItemPrediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
@@ -447,17 +452,17 @@ namespace MyMediaLite
 		}
 
 		// undo the void thing ...
-		static void InitWRMF(CommandLineParameters parameters)
+		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
-			wrmf.NumIter       = parameters.GetRemoveInt32( "num_iter",         wrmf.NumIter);
-			wrmf.num_features   = parameters.GetRemoveInt32( "num_features",     wrmf.num_features);
-   			wrmf.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",      wrmf.init_f_mean);
-   			wrmf.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",     wrmf.init_f_stdev);
-			wrmf.regularization = parameters.GetRemoveDouble("reg",              wrmf.regularization);
-			wrmf.regularization = parameters.GetRemoveDouble("regularization",   wrmf.regularization);
-			wrmf.c_pos          = parameters.GetRemoveDouble("c_pos",            wrmf.c_pos);
+			engine.NumIter       = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
+			engine.num_features   = parameters.GetRemoveInt32( "num_features",   engine.num_features);
+   			engine.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    engine.init_f_mean);
+   			engine.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   engine.init_f_stdev);
+			engine.regularization = parameters.GetRemoveDouble("reg",            engine.regularization);
+			engine.regularization = parameters.GetRemoveDouble("regularization", engine.regularization);
+			engine.c_pos          = parameters.GetRemoveDouble("c_pos",          engine.c_pos);
 
-			recommender = wrmf;
+			recommender = engine;
 		}
 
 		static void InitBPRMF(BPRMF engine, CommandLineParameters parameters)

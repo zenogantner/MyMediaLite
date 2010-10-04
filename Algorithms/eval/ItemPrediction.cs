@@ -35,7 +35,7 @@ namespace MyMediaLite.eval
     {
 		// TODO there are too many different versions of this method interface
 		//      we should simplify the API here
-		
+
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
@@ -126,14 +126,14 @@ namespace MyMediaLite.eval
 		/// </param>
 		/// <param name="writer">
 		/// the <see cref="StreamWriter"/> to write to
-		/// </param>		
+		/// </param>
 		static public void WritePredictions(
 			RecommenderEngine engine,
             int user_id,
 		    HashSet<int> relevant_items,
 		    HashSet<int> ignore_items,
 			int num_predictions, // -1 if no limit ...
-		    EntityMapping user_mapping, EntityMapping item_mapping,		                                    
+		    EntityMapping user_mapping, EntityMapping item_mapping,
 		    StreamWriter writer)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -142,7 +142,7 @@ namespace MyMediaLite.eval
             List<WeightedItem> score_list = new List<WeightedItem>();
             foreach (int item_id in relevant_items)
                 score_list.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
-				
+
 			score_list.Sort(); // TODO actually a heap would be enough
 			score_list.Reverse();
 
