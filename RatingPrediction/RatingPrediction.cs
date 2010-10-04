@@ -208,8 +208,12 @@ namespace RatingPrediction
 			if (parameters.CheckForLeftovers())
 				Usage(-1); // TODO give out leftovers
 
+			// create ID mapping objects
+			EntityMapping user_mapping = new EntityMapping();
+			EntityMapping item_mapping = new EntityMapping();
+			
 			// read training data
-			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating);
+			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
 			recommender.SetCollaborativeData(training_data);
 
 			// user attributes
@@ -220,7 +224,7 @@ namespace RatingPrediction
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file));
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 					((UserAttributeAwareRecommender)recommender).SetUserAttributeData(attr_data.First, attr_data.Second);
 				}
 
@@ -232,12 +236,12 @@ namespace RatingPrediction
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file));
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).SetItemAttributeData(attr_data.First, attr_data.Second);
 				}
 
 			// read test data
-			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating);
+			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 
 			// TODO put the main program modes into static methods
 			if (find_iter != 0)

@@ -31,13 +31,13 @@ namespace MyMediaLite.data
 		///
 		/// Never, to repeat NEVER, delete entries from that dictionary!
 		/// </summary>
-		protected Dictionary<int, int> original_to_internal;
+		protected Dictionary<int, int> original_to_internal = new Dictionary<int, int>();
 		/// <summary>
 		/// Contains the mapping from the internal IDs to the original (external) IDs
 		///
 		/// Never, to repeat NEVER, delete entries from that dictionary!
 		/// </summary>
-		protected Dictionary<int, int> internal_to_original;
+		protected Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
 
 		/// <summary>
 		/// Default constructor

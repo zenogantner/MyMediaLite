@@ -24,17 +24,36 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.io
 {
+	/// <summary>
+	/// Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects.
+	/// 
+	/// The expected (sparse) line format is:
+	/// ENTITY_ID whitespace ATTRIBUTE_ID
+	/// for attributes that are set.
+	/// </summary>
 	public class AttributeData
 	{
-		static public Pair<SparseBooleanMatrix, int> Read(string filename)
+		/// <summary>
+		/// Read binary attribute data from file
+		/// </summary>
+		/// <param name="filename">the name of the file to be read from</param>
+		/// <param name="mapping">the mapping object for the given entity type</param>
+		/// <returns>the attribute data and the number of attributes</returns>
+		static public Pair<SparseBooleanMatrix, int> Read(string filename, EntityMapping mapping)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
 			{
-				return Read(reader);
+				return Read(reader, mapping);
 			}
 		}
 
-		static public Pair<SparseBooleanMatrix, int> Read(StreamReader reader)
+		/// <summary>
+		/// Read binary attribute data from file
+		/// </summary>
+		/// <param name="reader">a StreamReader to be read from</param>
+		/// <param name="mapping">the mapping object for the given entity type</param>
+		/// <returns>the attribute data and the number of attributes</returns>		
+		static public Pair<SparseBooleanMatrix, int> Read(StreamReader reader, EntityMapping mapping)
 		{
 			SparseBooleanMatrix matrix  = new SparseBooleanMatrix();
 			int max_attr_id = 0;
@@ -55,7 +74,7 @@ namespace MyMediaLite.io
 					throw new IOException("Expected at least two columns: " + line);
 				// TODO more checks
 
-				int entity_id = int.Parse(tokens[0]);
+				int entity_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int attr_id   = int.Parse(tokens[1]);
 
                	matrix.AddEntry(entity_id, attr_id);

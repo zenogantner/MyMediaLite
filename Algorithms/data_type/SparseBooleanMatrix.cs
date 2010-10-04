@@ -36,7 +36,7 @@ namespace MyMediaLite.data_type
 
 		/// <summary>
 		/// Initializes a new instance of the
-		/// <see cref="MyMediaLite.data_tyoe.SparseBooleanMatrix"/> class.
+		/// <see cref="MyMediaLite.data_type.SparseBooleanMatrix"/> class.
 		/// </summary>
 		public SparseBooleanMatrix() {}
 

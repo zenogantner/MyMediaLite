@@ -29,6 +29,7 @@ Architecture
  - (*) add function that maps original entity IDs to internal ones
  - (*) use input from STDIN as training data
  - (*) define an easy interface for data access
+ - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
  - parameterize types: user and item IDs, prediction values (in C++ port)
  - nicer, more generic structure for kNN engines
@@ -37,7 +38,7 @@ Architecture
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
- - provide bindings to languages like Python, Ruby, Perl
+ - provide bindings for languages like Python, Ruby, Perl
  - Java port
  - multi-core support
  - GPU support

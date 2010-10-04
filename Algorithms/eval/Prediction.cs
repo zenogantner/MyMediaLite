@@ -40,13 +40,14 @@ namespace MyMediaLite.eval
 			int max_user_id,
 			HashSet<int> relevant_items,
 			int num_predictions, // -1 if no limit ...
+		    EntityMapping user_mapping, EntityMapping item_mapping,
 			StreamWriter writer)
 		{
 
 			List<int> relevant_users = new List<int>();
 			for (int u = 0; u <= max_user_id; u++)
 				relevant_users.Add(u);
-			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, writer);
+			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		static public void WritePredictions(
@@ -55,12 +56,13 @@ namespace MyMediaLite.eval
 		    List<int> relevant_users,
 			HashSet<int> relevant_items,
 			int num_predictions, // -1 if no limit ... TODO why not 0?
+		    EntityMapping user_mapping, EntityMapping item_mapping,
 			StreamWriter writer)
 		{
 			foreach (int user_id in relevant_users)
 			{
 				HashSet<int> ignore_items = train.GetRow(user_id);
-				WritePredictions(engine, user_id, relevant_items, ignore_items, num_predictions, writer);
+				WritePredictions(engine, user_id, relevant_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
 			}
 		}
 
@@ -72,6 +74,7 @@ namespace MyMediaLite.eval
 		    HashSet<int> relevant_items,
 		    HashSet<int> ignore_items,
 			int num_predictions, // -1 if no limit ...
+		    EntityMapping user_mapping, EntityMapping item_mapping,		                                    
 		    StreamWriter writer)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -91,7 +94,9 @@ namespace MyMediaLite.eval
 				// TODO move up the ignore_items check
 				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
 				{
-					writer.WriteLine("{0}\t{1}\t{2}", user_id, wi.item_id, wi.weight.ToString(ni));
+					writer.WriteLine("{0}\t{1}\t{2}",
+					                 user_mapping.ToOriginalID(user_id), item_mapping.ToOriginalID(wi.item_id),
+					                 wi.weight.ToString(ni));
 					prediction_count++;
 				}
 

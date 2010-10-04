@@ -33,13 +33,10 @@ namespace MyMediaLite.io
 		/// Read in rating data from a StreamReader
 		/// </summary>
 		/// <param name="filename">the name of the file to read from</param>
-		/// <param name="num_users">the number of users (-1 means do not create a per-user data structure)</param>
-		/// <param name="num_items">the number of items (-1 means do not create a per-item data structure)</param>
-		/// <param name="num_ratings">the expected number of ratings</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <returns>the rating data</returns>		
-		static public RatingData Read(string filename, double min_rating, double max_rating)
+		static public RatingData Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			/*
 			if (filename.Equals("--"))
@@ -51,23 +48,23 @@ namespace MyMediaLite.io
 			*/
 	            using ( StreamReader reader = new StreamReader(filename) )
 				{
-					return Read(reader, min_rating, max_rating);
+					return Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 				}
 			//}
 		}
 		
 		/// <summary>
-		/// Read in rating data from a StreamReader
+		/// Read in rating data from a StreamReader and map the IDs to internal ones
 		/// </summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <returns>the rating data</returns>
-		static public RatingData Read(StreamReader reader,
-		                              double min_rating, double max_rating)
+		static public RatingData
+			Read(StreamReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 		    RatingData ratings = new RatingData();
-
+			
 			bool out_of_range_warning_issued = false;
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			char[] split_chars = new char[]{ '\t', ' ' };
@@ -85,8 +82,8 @@ namespace MyMediaLite.io
 					throw new IOException("Expected at least two columns: " + line);
 
                 RatingEvent rating = new RatingEvent();
-                rating.user_id = int.Parse(tokens[0]);
-                rating.item_id = int.Parse(tokens[1]);
+                rating.user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
+                rating.item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
                 rating.rating = double.Parse(tokens[2], ni);
 
 				if (!out_of_range_warning_issued)
@@ -102,6 +99,6 @@ namespace MyMediaLite.io
                 ratings.AddRating(rating);
             }
 			return ratings;
-        }
+        }		
 	}
 }
