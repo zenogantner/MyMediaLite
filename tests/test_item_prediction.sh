@@ -15,25 +15,37 @@ cd ItemPrediction/bin/Debug
 
 for method in bpr-mf wr-mf
 do
-	$PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=2 num_iter=1
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=2 num_iter=1
+   	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=2 num_iter=1
 done
 
-for method in random most-popular item-kNN user-kNN weighted-user-kNN
+
+for method in random most-popular
 do
-	$PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method k=20
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
+	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
+done
+
+for method in item-kNN user-kNN weighted-user-kNN
+do
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method k=20
+	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method k=20
 done
 
 for method in item-attribute-knn
 do
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20
 	$PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20
 done
 
 for method in bpr-linear
 do
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt  find_iter=1 max_iter=2 num_iter=1
 	$PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt  find_iter=1 max_iter=2 num_iter=1
 done
 
 for method in user-attribute-knn
 do
+	echo $PROGRAM ml1m-new-user-0.train.txt ml1m-new-user-0.test.txt $method user_attributes=user-attributes-nozip.txt k=20
 	$PROGRAM ml1m-new-user-0.train.txt ml1m-new-user-0.test.txt $method user_attributes=user-attributes-nozip.txt k=20
 done
