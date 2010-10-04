@@ -18,26 +18,63 @@
 using System;
 using System.Globalization;
 using System.IO;
+using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.util;
 
 namespace MyMediaLite.io
 {
+	/// <summary>
+	/// Class that contains static methods for reading in implicit feedback data for ItemRecommender engines
+	/// </summary>
 	public class ItemRecommenderData
 	{
-		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(string filename)
+		/// <summary>
+		/// Read in implicit feedback data from a file
+		/// </summary>
+		/// <param name="filename">
+		/// name of the file to be read from
+		/// </param>
+		/// <param name="user_mapping">
+		/// user <see cref="EntityMapping"/> object
+		/// </param>
+		/// <param name="item_mapping">
+		/// item <see cref="EntityMapping"/> object
+		/// </param>
+		/// <returns>
+		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
+		/// </returns>
+		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(string filename,
+		                                                                  EntityMapping user_mapping,
+		                                                                  EntityMapping item_mapping)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
 			{
-				return Read(reader);
+				return Read(reader, user_mapping, item_mapping);
 			}
 		}
 
-		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(StreamReader reader)
+		/// <summary>
+		/// Read in implicit feedback data from a StreamReader
+		/// </summary>
+		/// <param name="reader">
+		/// the StreamReader to be read from
+		/// </param>
+		/// <param name="user_mapping">
+		/// user <see cref="EntityMapping"/> object
+		/// </param>
+		/// <param name="item_mapping">
+		/// item <see cref="EntityMapping"/> object
+		/// </param>
+		/// <returns>
+		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
+		/// </returns>		
+		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(StreamReader reader,
+		                                                                  EntityMapping user_mapping,
+		                                                                  EntityMapping item_mapping)		                                                                  
 		{
 	        SparseBooleanMatrix user_items = new SparseBooleanMatrix();
         	SparseBooleanMatrix item_users = new SparseBooleanMatrix();
-
 
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			char[] split_chars = new char[]{ '\t', ' ' };
@@ -54,8 +91,8 @@ namespace MyMediaLite.io
 				if (tokens.Length < 2)
 					throw new IOException("Expected at least two columns: " + line);
 
-				int user_id = int.Parse(tokens[0]);
-				int item_id = int.Parse(tokens[1]);
+				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
+				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
                	user_items.AddEntry(user_id, item_id);
                	item_users.AddEntry(item_id, user_id);
