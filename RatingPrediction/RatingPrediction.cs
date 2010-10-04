@@ -208,10 +208,10 @@ namespace RatingPrediction
 			if (parameters.CheckForLeftovers())
 				Usage(-1); // TODO give out leftovers
 
-			// create ID mapping objects
+			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
-			
+
 			// read training data
 			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
 			recommender.SetCollaborativeData(training_data);

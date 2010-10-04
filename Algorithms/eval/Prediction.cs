@@ -31,9 +31,11 @@ using MyMediaLite.util;
 namespace MyMediaLite.eval
 {
     /// <summary>Evaluation class</summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class Prediction
     {
+		// TODO there are too many different versions of this method interface
+		//      we should simplify the API here
+		
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
@@ -50,10 +52,37 @@ namespace MyMediaLite.eval
 			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
+		/// <summary>
+		/// Write item predictions (scores) to a StreamWriter object
+		/// </summary>
+		/// <param name="engine">
+		/// the <see cref="RecommenderEngine"/> to use for making the predictions
+		/// </param>
+		/// <param name="train">
+		/// A user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed
+		/// </param>
+		/// <param name="relevant_users">
+		/// a list of users to make recommendations for
+		/// </param>
+		/// <param name="relevant_items">
+		/// the list of candidate items
+		/// </param>
+		/// <param name="num_predictions">
+		/// the number of items to return per user, -1 if there should be no limit
+		/// </param>
+		/// <param name="user_mapping">
+		/// An <see cref="EntityMapping"/> object for the user IDs
+		/// </param>
+		/// <param name="item_mapping">
+		/// An <see cref="EntityMapping"/> object for the item IDs
+		/// </param>
+		/// <param name="writer">
+		/// the <see cref="StreamWriter"/> to write to
+		/// </param>
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
-		    List<int> relevant_users,
+		    IList<int> relevant_users,
 			HashSet<int> relevant_items,
 			int num_predictions, // -1 if no limit ... TODO why not 0?
 		    EntityMapping user_mapping, EntityMapping item_mapping,
@@ -68,6 +97,36 @@ namespace MyMediaLite.eval
 
 		// TODO think about not using WeightedItems, because there may be some overhead involved ...
 
+		/// <summary>
+		/// Write item predictions (scores) to a StreamWriter object
+		/// </summary>
+		/// <param name="engine">
+		/// the <see cref="RecommenderEngine"/> to use for making the predictions
+		/// </param>
+		/// <param name="train">
+		/// A user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed
+		/// </param>
+		/// <param name="user_id">
+		/// the ID of the user to make recommendations for
+		/// </param>
+		/// <param name="relevant_items">
+		/// the list of candidate items
+		/// </param>
+		/// <param name="ignore_items">
+		/// a list of items for which no predictions should be made
+		/// </param>
+		/// <param name="num_predictions">
+		/// the number of items to return per user, -1 if there should be no limit
+		/// </param>
+		/// <param name="user_mapping">
+		/// An <see cref="EntityMapping"/> object for the user IDs
+		/// </param>
+		/// <param name="item_mapping">
+		/// An <see cref="EntityMapping"/> object for the item IDs
+		/// </param>
+		/// <param name="writer">
+		/// the <see cref="StreamWriter"/> to write to
+		/// </param>		
 		static public void WritePredictions(
 			RecommenderEngine engine,
             int user_id,

@@ -58,7 +58,7 @@ namespace MyMediaLite.data
 			else
 				throw new ArgumentException("Unknown internal ID: " + internal_id);
 		}
-
+		
 		/// <summary>
 		/// Get internal ID of a given entity.
 		/// If the given external ID is unknown, create a new internal ID for it and store the mapping.
@@ -77,6 +77,40 @@ namespace MyMediaLite.data
 			return internal_id;
 		}
 
+		/// <summary>
+		/// Get original (external) IDs of a list of given entities.
+		/// </summary>
+		/// <param name="internal_id_list">
+		/// the list of internal IDs
+		/// </param>
+		/// <returns>
+		/// the list of original (external) IDs
+		/// </returns>
+		public IList<int> ToOriginalID(IList<int> internal_id_list)
+		{
+			List<int> result = new List<int>(internal_id_list.Count);
+			foreach (int id in internal_id_list)
+				result.Add(ToOriginalID(id));
+			return result;
+		}		
+		
+		/// <summary>
+		/// Get internal IDs of a list of given entities.
+		/// </summary>
+		/// <param name="original_id_list">
+		/// the list of original (external) IDs
+		/// </param>
+		/// <returns>
+		/// a list of internal IDs
+		/// </returns>
+		public IList<int> ToInternalID(IList<int> original_id_list)
+		{
+			List<int> result = new List<int>(original_id_list.Count);
+			foreach (int id in original_id_list)
+				result.Add(ToInternalID(id));
+			return result;
+		}
+		
 		// TODO store to textfile (for debugging purposes)
 	}
 }

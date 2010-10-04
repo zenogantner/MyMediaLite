@@ -21,6 +21,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.eval;
 using MyMediaLite.io;
@@ -30,10 +31,8 @@ using MyMediaLite.util;
 
 namespace MyMediaLite
 {
-	// TODO support CV like LIBSVM
 	// TODO catch FileNotFoundException
 	// TODO predict_items=true option
-	// TODO learn rate detection for BPR-Linear
 
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class ItemPrediction
@@ -217,13 +216,17 @@ namespace MyMediaLite
 			if (parameters.CheckForLeftovers())
 				Usage(-1);// TODO give out leftovers
 
+			// ID mapping objects
+			EntityMapping user_mapping = new EntityMapping();
+			EntityMapping item_mapping = new EntityMapping();
+			
 			// training data
-			training_data   = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile));
+			training_data   = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 			int max_user_id = training_data.First.GetNumberOfRows() - 1;
 
 			// relevant items
 			if (! relevant_items_file.Equals(String.Empty) )
-				relevant_items = new HashSet<int>( Utils.ReadIntegers( Path.Combine(data_dir, relevant_items_file) ) );
+				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.GetNonEmptyRowIDs();
 
@@ -238,7 +241,7 @@ namespace MyMediaLite
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file));
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 					((UserAttributeAwareRecommender)recommender).SetUserAttributeData(attr_data.First, attr_data.Second);
 					max_user_id = Math.Max(max_user_id, attr_data.First.GetNumberOfRows());
 				}
@@ -251,12 +254,12 @@ namespace MyMediaLite
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file));
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).SetItemAttributeData(attr_data.First, attr_data.Second);
 				}
 
 			// test data
-            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile) );
+            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 			TimeSpan time_span;
 
@@ -264,7 +267,6 @@ namespace MyMediaLite
 			if (hyper_split != -1)
 			{
 				time_span = Utils.MeasureTime( delegate() {
-					// TODO handle via multiple dispatch
 					if (recommender is BPR_Linear)
 						FindGoodHyperparameters(recommender as BPR_Linear, hyper_split, hyper_criterion);
 					else
@@ -274,7 +276,6 @@ namespace MyMediaLite
 			}
 			*/
 
-			// TODO compute average improvement over the start value per iteration
 			// TODO put the main program modes into static methods
 			// TODO give out time for each iteration
 			if (find_iter != 0)
@@ -401,6 +402,7 @@ namespace MyMediaLite
 								        training_data.First,
 								        max_user_id,
 								        relevant_items, predict_items_number,
+								        user_mapping, item_mapping,
 								        writer
 									);
 									Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
@@ -412,7 +414,9 @@ namespace MyMediaLite
 							    	Prediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
-								        Utils.ReadIntegers(predict_for_users_file), relevant_items, predict_items_number,
+								        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
+								        relevant_items, predict_items_number,
+								        user_mapping, item_mapping,
 								        writer
 									);
 									Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);

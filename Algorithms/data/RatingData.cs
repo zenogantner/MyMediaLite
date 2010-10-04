@@ -52,7 +52,7 @@ namespace MyMediaLite.data
 				return this.byUser;
 			}
 		}
-		protected List<Ratings> byUser = null;
+		private List<Ratings> byUser = null;
 
 		/// <summary>
 		/// Ratings by item
@@ -67,7 +67,7 @@ namespace MyMediaLite.data
 				return this.byItem;
 			}
 		}
-		protected List<Ratings> byItem = null;
+		private List<Ratings> byItem = null;
 
 		/// <summary>
 		/// The maximum user ID in the ratings

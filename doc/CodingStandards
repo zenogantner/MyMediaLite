@@ -1,25 +1,21 @@
 We use a blending of guidelines that are used in the C# and Java communities.
 We apologize to both camps for this heresy.
 
-A. NAMING
 1. Class, interface, method and property names are written in CamelCase.
 2. Interface names do NOT have a preceding 'I'.
 3. Enum values are written in UPPER_CASE.
 4. Namespace names below MyMedia are written in lower_case.
 5. Field variables, local variables, and method parameters are written in
    lower_case.
-C. PROPERTY DECLARATIONS
 6. Properties with default accessors are defined in one line.
-B. USING
 7. 'using' declarations start with the 'System' namespaces, followed by all
    other namespaces. Those two groups of declarations are internally sorted
    by alphabet.
 8. After the 'using' declarations, there are two empty lines.
-C. POSITIONAL ARGUMENTS
 9. If there are minimum and maximum values as method parameters, the minimum
    value always comes first.
-D.
 10. One file per externally used class
+11. Prefer interface types for method arguments and return types.
 
 this.p vs. p
 
@@ -28,4 +24,4 @@ a. user_id, item_id
 b. user_id, item_id, rating, date/time
 c. training_data, test_data
 
-TODO: add more, discuss
+TODO: add more, discuss, group
