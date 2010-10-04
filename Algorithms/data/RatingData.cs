@@ -25,7 +25,7 @@ namespace MyMediaLite.data
     /// <remarks>
     /// Data storage for rating data.
     /// The rating events are accessible in user-wise, item-wise and unsorted triple-wise order.
-    /// 
+    ///
     /// In order to save memory, the object initially stores only the unsorted ratings.
     /// If at some point user or item-wise access is needed, the underlying data structures
     /// are transparently created on-the-fly.
@@ -34,38 +34,66 @@ namespace MyMediaLite.data
     public class RatingData
     {
         private Ratings all = new Ratings();
+		/// <summary>
+		/// All ratings
+		/// </summary>
         public Ratings All { get { return all; } }
-		
+
+		/// <summary>
+		/// Ratings by user
+		/// </summary>
 		public List<Ratings> ByUser
 		{
 			get
 			{
-				if (byUser == null)
-					InitByUser();	
-					
-				return byUser;
+				if (this.byUser == null)
+					InitByUser();
+
+				return this.byUser;
 			}
 		}
 		protected List<Ratings> byUser = null;
 
+		/// <summary>
+		/// Ratings by item
+		/// </summary>
 		public List<Ratings> ByItem
 		{
 			get
 			{
-				if (byUser == null)
-					InitByItem();	
-					
-				return byItem;
+				if (this.byItem == null)
+					InitByItem();
+
+				return this.byItem;
 			}
-		}		
+		}
 		protected List<Ratings> byItem = null;
 
-		public int max_user_id = 0;
-		public int max_item_id = 0;
+		/// <summary>
+		/// The maximum user ID in the ratings
+		/// </summary>
+		public int MaxUserID { get { return max_user_id; } }
+		private int max_user_id = 0;
+		
+		/// <summary>
+		/// The maximum item ID in the ratings
+		/// </summary>
+		public int MaxItemID { get { return max_item_id; } }
+		private int max_item_id = 0;
 
+		/// <summary>
+		/// The average rating value in the collection
+		/// </summary>
+		public double Average { get { return all.Average; } }
+		
+		/// <summary>
+		/// The number of ratings in the collection
+		/// </summary>
+		public int Count { get { return all.Count; } }		
+		
 		private void InitByUser()
 		{
-			byUser = new List<Ratings>();
+			this.byUser = new List<Ratings>();
 			foreach (RatingEvent rating in all)
             {
                 AddUser(rating.user_id);
@@ -75,26 +103,38 @@ namespace MyMediaLite.data
 
 		private void InitByItem()
 		{
-			byItem = new List<Ratings>();
+			this.byItem = new List<Ratings>();
 			foreach (RatingEvent rating in all)
             {
                 AddItem(rating.item_id);
                 byItem[(int)rating.item_id].AddRating(rating);
             }
-		}		
+		}
 
+		/// <summary>
+		/// Returns an enumerator for use in foreach loops
+		/// </summary>
+		/// <returns>
+		/// A <see cref="IEnumerator"/> containing the elements of this.All
+		/// </returns>
 		public IEnumerator GetEnumerator()
 		{
 			return all.GetEnumerator();
-		}		
-		
+		}
+
+		/// <summary>
+		/// Add a rating event to the collection
+		/// </summary>
+		/// <param name="rating">
+		/// the rating event
+		/// </param>
         public void AddRating(RatingEvent rating)
         {
-            if (byUser != null)			
+            if (byUser != null)
 			{
                 AddUser(rating.user_id);
                 byUser[(int)rating.user_id].AddRating(rating);
-			}			
+			}
             if (byItem != null)
             {
                 AddItem(rating.item_id);
@@ -109,23 +149,34 @@ namespace MyMediaLite.data
 				max_item_id = rating.item_id;
         }
 
-        public void AddUser(int entity_id)
+		/// <summary>
+		/// Add a user - reserve resources for a new user
+		/// </summary>
+		/// <param name="user_id">
+		/// the user ID
+		/// </param>
+        public void AddUser(int user_id)
         {
             if (byUser != null)
             {
-                while (entity_id >= byUser.Count)
+                while (user_id >= byUser.Count)
                 {
                     Ratings ratings = new Ratings();
                     byUser.Add(ratings);
                 }
             }
         }
-
-        public void AddItem(int entity_id)
+		/// <summary>
+		/// Add an item - reserve resources for a new item
+		/// </summary>
+		/// <param name="item_id">
+		/// the item ID
+		/// </param>
+        public void AddItem(int item_id)
         {
             if (byItem != null)
             {
-                while (entity_id >= byItem.Count)
+                while (item_id >= byItem.Count)
                 {
                     Ratings ratings = new Ratings();
                     byItem.Add(ratings);
@@ -133,6 +184,11 @@ namespace MyMediaLite.data
             }
         }
 
+		/// <summary>
+		/// Remove a rating from the collection
+		/// </summary>
+		/// <param name="rating">
+		/// </param>
         public void RemoveRating(RatingEvent rating)
         {
             if ((byUser != null) && (rating.user_id < byUser.Count))
@@ -143,6 +199,12 @@ namespace MyMediaLite.data
                 all.RemoveRating(rating);
         }
 
+		/// <summary>
+		/// Remove a user and all their ratings from the collection
+		/// </summary>
+		/// <param name="user_id">
+		/// the numerical ID of the user
+		/// </param>
         public void RemoveUser(int user_id)
         {
             if (byUser != null)
@@ -154,10 +216,16 @@ namespace MyMediaLite.data
             }
             else if ((byItem != null) || (all != null))
             {
-                throw new Exception("data storage out of sync");
+                throw new Exception("Data storage is out of sync.");
             }
         }
 
+		/// <summary>
+		/// Remove an item and all its ratings from the collection
+		/// </summary>
+		/// <param name="item_id">
+		/// the numerical ID of the item
+		/// </param>
         public void RemoveItem(int item_id)
         {
             if (byItem != null)
@@ -169,10 +237,19 @@ namespace MyMediaLite.data
             }
             else if ((byUser != null) || (all != null))
             {
-                throw new Exception("data storage out of sync");
+                throw new Exception("Data storage is out of sync.");
             }
         }
 
+		/// <summary>
+		/// Change a rating value in the collection
+		/// </summary>
+		/// <param name="rating">
+		/// the rating event
+		/// </param>
+		/// <param name="new_rating">
+		/// the new rating value
+		/// </param>
         public void ChangeRating(RatingEvent rating, double new_rating)
         {
             if ((byUser != null) && (rating.user_id < byUser.Count))
@@ -184,7 +261,20 @@ namespace MyMediaLite.data
 
             rating.rating = new_rating;
         }
+		// TODO interface change to (user_id, item_id, rating)
 
+		/// <summary>
+		/// Find the rating value for a given user and item
+		/// </summary>
+		/// <param name="user_id">
+		/// the numerical ID of the user
+		/// </param>
+		/// <param name="item_id">
+		/// the numerical ID of the user
+		/// </param>
+		/// <returns>
+		/// the rating event corresponding to the given user and item
+		/// </returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {
             int cnt_user = Int32.MaxValue;
@@ -205,17 +295,5 @@ namespace MyMediaLite.data
 			else
                 return null;
         }
-		
-		
-		// TODO think about making those properties
-		public double Average()
-		{
-			return all.Average;
-		}
-		
-		public int Count()
-		{
-			return all.Count;
-		}
     }
 }

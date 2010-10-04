@@ -1,23 +1,21 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="eval/RatingEval.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="data/RatingData.cs" ctype="Workbench">
     <Files>
-      <File FileName="data/RatingData.cs" Line="78" Column="31" />
-      <File FileName="data/EntityMapping.cs" Line="18" Column="3" />
-      <File FileName="rating_predictor/UserItemBaseline.cs" Line="156" Column="26" />
-      <File FileName="rating_predictor/ItemKNN.cs" Line="189" Column="54" />
-      <File FileName="rating_predictor/MatrixFactorization.cs" Line="355" Column="56" />
-      <File FileName="rating_predictor/BiasedMatrixFactorization.cs" Line="51" Column="42" />
-      <File FileName="rating_predictor/Linear.cs" Line="147" Column="24" />
-      <File FileName="rating_predictor/UserKNN.cs" Line="184" Column="54" />
-      <File FileName="io/RatingPredictionData.cs" Line="66" Column="26" />
-      <File FileName="eval/RatingEval.cs" Line="49" Column="46" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="261" Column="22" />
+      <File FileName="io/RatingPredictionData.cs" Line="32" Column="1" />
+      <File FileName="rating_predictor/UserItemBaseline.cs" Line="67" Column="21" />
+      <File FileName="data/RatingData.cs" Line="63" Column="51" />
+      <File FileName="rating_predictor/Memory.cs" Line="101" Column="33" />
+      <File FileName="rating_predictor/MatrixFactorization.cs" Line="92" Column="61" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True" selected="True">
+          <Node name="Algorithms" expanded="True">
             <Node name="correlation" expanded="True" />
-            <Node name="data" expanded="True" />
+            <Node name="data" expanded="True">
+              <Node name="RatingData.cs" selected="True" />
+            </Node>
             <Node name="data_type" expanded="True" />
             <Node name="eval" expanded="True" />
             <Node name="io" expanded="True" />

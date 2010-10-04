@@ -69,7 +69,7 @@ namespace MyMediaLite.rating_predictor
             _Init();
 
             // learn model parameters
-            bias = ratings.Average();
+            bias = ratings.Average;
             LearnFeatures(ratings.All, true, true);
 
 			// check for NaN in the model
@@ -88,8 +88,8 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>init feature matrices</summary>
         protected virtual void _Init()
 		{
-        	user_feature = new Matrix<double>(ratings.max_user_id + 1, num_features);
-        	item_feature = new Matrix<double>(ratings.max_item_id + 1, num_features);
+        	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
+        	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
         	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
         	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 		}
@@ -352,7 +352,7 @@ namespace MyMediaLite.rating_predictor
 			foreach (RatingEvent rating in ratings)
 				rmse_sum += Math.Pow(Predict(rating.user_id, rating.item_id) - rating.rating, 2);
 
-			return Math.Sqrt((double) rmse_sum / ratings.Count());
+			return Math.Sqrt((double) rmse_sum / ratings.Count);
 		}
 
 		/// <inheritdoc />

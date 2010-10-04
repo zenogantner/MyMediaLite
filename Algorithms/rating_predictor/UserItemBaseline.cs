@@ -55,7 +55,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override void Train()
         {
-			global_average = ratings.Average();
+			global_average = ratings.Average;
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
 
