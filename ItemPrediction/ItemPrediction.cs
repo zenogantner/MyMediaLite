@@ -397,7 +397,7 @@ namespace MyMediaLite
 						if (predict_for_users_file.Equals(String.Empty))
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	Prediction.WritePredictions(
+							    	ItemPrediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        max_user_id,
@@ -411,7 +411,7 @@ namespace MyMediaLite
 						else
 							time_span = Utils.MeasureTime( delegate()
 						    	{
-							    	Prediction.WritePredictions(
+							    	ItemPrediction.WritePredictions(
 								    	recommender,
 								        training_data.First,
 								        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),

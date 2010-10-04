@@ -68,7 +68,7 @@ namespace MyMediaLite.eval
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
 
-				int[] prediction = Prediction.PredictItems(engine, user_id, relevant_items);
+				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
 
                 if (prediction.Length != relevant_items.Count)
                     throw new Exception("Not all items have been ranked.");

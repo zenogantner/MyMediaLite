@@ -30,8 +30,8 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.eval
 {
-    /// <summary>Evaluation class</summary>
-    public static class Prediction
+    /// <summary>Class that contains static methods for item prediction</summary>
+    public static class ItemPrediction
     {
 		// TODO there are too many different versions of this method interface
 		//      we should simplify the API here

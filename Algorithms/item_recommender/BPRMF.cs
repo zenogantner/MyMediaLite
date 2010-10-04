@@ -355,7 +355,7 @@ namespace MyMediaLite.item_recommender
 				HashSet<int> test_items = data_user.GetRow (user_id);
 				if (test_items.Count == 0)
 					continue;
-				int[] prediction = Prediction.PredictItems(this, user_id, max_item_id);
+				int[] prediction = ItemPrediction.PredictItems(this, user_id, max_item_id);
 
 				int num_eval_items = max_item_id + 1;
 				int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
