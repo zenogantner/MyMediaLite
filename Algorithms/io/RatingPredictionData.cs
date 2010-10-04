@@ -87,7 +87,7 @@ namespace MyMediaLite.io
                 RatingEvent rating = new RatingEvent();
                 rating.user_id = int.Parse(tokens[0]);
                 rating.item_id = int.Parse(tokens[1]);
-                rating.rating = double.Parse(tokens[2]);
+                rating.rating = double.Parse(tokens[2], ni);
 
 				if (!out_of_range_warning_issued)
 				{
