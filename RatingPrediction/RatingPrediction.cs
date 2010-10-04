@@ -66,7 +66,7 @@ namespace RatingPrediction
 
 			Console.WriteLine("MyMedia rating prediction; usage:");
 			Console.WriteLine(" RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
-			//Console.WriteLine("    - use '--' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
+			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + mf);
 			Console.WriteLine("    - " + bmf);
@@ -205,9 +205,15 @@ namespace RatingPrediction
 			recommender.MaxRatingValue = max_rating;
 			Console.Error.WriteLine("ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue);
 
+			// check command-line parameters
 			if (parameters.CheckForLeftovers())
-				Usage(-1); // TODO give out leftovers
-
+				Usage(-1);
+			if (trainfile.Equals("-") && testfile.Equals("-"))
+			{
+				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
+				Usage(-1);
+			}
+			
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();

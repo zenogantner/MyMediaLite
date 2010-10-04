@@ -30,38 +30,36 @@ namespace MyMediaLite.io
 	public class RatingPredictionData
 	{
 		/// <summary>
-		/// Read in rating data from a StreamReader
+		/// Read in rating data from a file
 		/// </summary>
-		/// <param name="filename">the name of the file to read from</param>
+		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
+		/// <param name="user_mapping">mapping object for user IDs</param>
+		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public RatingData Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-			/*
-			if (filename.Equals("--"))
-			{
-				return Read(Console.In, num_users, num_items, num_ratings, min_rating, max_rating);
-			}
+			if (filename.Equals("-"))
+				return Read(Console.In, min_rating, max_rating, user_mapping, item_mapping);
 			else
-			{
-			*/
 	            using ( StreamReader reader = new StreamReader(filename) )
 				{
 					return Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 				}
-			//}
 		}
 
 		/// <summary>
-		/// Read in rating data from a StreamReader and map the IDs to internal ones
+		/// Read in rating data from a TextReader
 		/// </summary>
-		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
+		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
+		/// <param name="user_mapping">mapping object for user IDs</param>
+		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public RatingData
-			Read(StreamReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+			Read(TextReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 		    RatingData ratings = new RatingData();
 
@@ -70,9 +68,8 @@ namespace MyMediaLite.io
 			char[] split_chars = new char[]{ '\t', ' ' };
 			string line;
 
-			while (!reader.EndOfStream)
+			while ( (line = reader.ReadLine()) != null )
 			{
-	           	line = reader.ReadLine();
 				if (line.Trim().Equals(String.Empty))
 					continue;
 

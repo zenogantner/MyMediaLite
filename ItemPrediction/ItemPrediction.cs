@@ -70,6 +70,7 @@ namespace MyMediaLite
 		{
 			Console.WriteLine("MyMedia item prediction; usage:");
 			Console.WriteLine(" ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
+			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + wrmf);
 			Console.WriteLine("    - " + bprmf);
@@ -107,7 +108,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - hyper_criterion=NAME       values {0}", String.Join( ", ", Evaluate.GetItemPredictionMeasures().ToArray()));
 			Console.WriteLine("    - hyper_half_size=N          number of values tried in each iteration/2");
 			*/
-			Environment.Exit (exit_code);
+			Environment.Exit(exit_code);
 		}
 
         public static void Main(string[] args)
@@ -119,10 +120,6 @@ namespace MyMediaLite
 				Usage("Not enough arguments.");
 
 			// read command line parameters
-			string trainfile = args[0];
-			string testfile  = args[1];
-			string method    = args[2];
-
 			CommandLineParameters parameters = null;
 			try	{ parameters = new CommandLineParameters(args, 3);	}
 			catch (ArgumentException e)	{ Usage(e.Message);  		}
@@ -157,6 +154,12 @@ namespace MyMediaLite
 			     half_size              = parameters.GetRemoveUInt32( "half_size", 2); // TODO nicer name?
 				 reg_base               = parameters.GetRemoveUInt32( "reg_base", 2);  // TODO nicer name?
 			*/
+
+			// main data files and method
+			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
+			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
+			string method    = args[2];
+
 
 			if (random_seed != -1)
 				util.Random.InitInstance(random_seed);
@@ -218,15 +221,21 @@ namespace MyMediaLite
 					break;
 			}
 
+			// check command-line parameters
 			if (parameters.CheckForLeftovers())
-				Usage(-1);// TODO give out leftovers
+				Usage(-1);
+			if (trainfile.Equals("-") && testfile.Equals("-"))
+			{
+				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
+				Usage(-1);
+			}
 
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
 
 			// training data
-			training_data   = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
+			training_data   = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
 			int max_user_id = training_data.First.GetNumberOfRows() - 1;
 
 			// relevant items
@@ -264,7 +273,7 @@ namespace MyMediaLite
 				}
 
 			// test data
-            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
 
 			TimeSpan time_span;
 

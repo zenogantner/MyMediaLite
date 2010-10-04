@@ -24,11 +24,25 @@ using System.Linq;
 
 namespace MyMediaLite.util
 {
+	/// <summary>
+	/// Class for command line argument processing
+	/// </summary>
 	public class CommandLineParameters
 	{
+		/// <summary>
+		/// Object to store the key/value pairs
+		/// </summary>
 		protected Dictionary<string, string> dict;
-		public NumberFormatInfo ni = new NumberFormatInfo();
 
+		private NumberFormatInfo ni = new NumberFormatInfo();
+
+		/// <summary>
+		/// Create a CommandLineParameters object
+		/// </summary>
+		/// <param name="args">
+		/// a list of strings that contains the command line parameters
+		/// </param>
+		/// <param name="start">ignore all parameters before this position</param>
 		public CommandLineParameters(string[] args, int start)
 		{
 			this.dict = new Dictionary<string, string>();
@@ -67,11 +81,17 @@ namespace MyMediaLite.util
 			get { return dict.Count; }
 		}
 
+		/// <summary>
+		/// Check for parameters that have not been processed yet
+		/// </summary>
+		/// <returns>
+		/// true if there are leftovers
+		/// </returns>
 		public bool CheckForLeftovers()
 		{
 			if (dict.Count != 0)
 			{
-				Console.WriteLine("Unknown argument " + dict.Keys.First());
+				Console.WriteLine("Unknown argument '{0}'", dict.Keys.First());
 				return true;
 			}
 			return false;

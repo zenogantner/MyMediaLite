@@ -33,7 +33,7 @@ namespace MyMediaLite.io
 		/// Read in implicit feedback data from a file
 		/// </summary>
 		/// <param name="filename">
-		/// name of the file to be read from
+		/// name of the file to be read from, "-" if STDIN
 		/// </param>
 		/// <param name="user_mapping">
 		/// user <see cref="EntityMapping"/> object
@@ -48,17 +48,20 @@ namespace MyMediaLite.io
 		                                                                  EntityMapping user_mapping,
 		                                                                  EntityMapping item_mapping)
 		{
-            using ( StreamReader reader = new StreamReader(filename) )
-			{
-				return Read(reader, user_mapping, item_mapping);
-			}
+			if (filename.Equals("-"))
+				return Read(Console.In, user_mapping, item_mapping);
+			else			
+            	using ( StreamReader reader = new StreamReader(filename) )
+				{
+					return Read(reader, user_mapping, item_mapping);
+				}
 		}
 
 		/// <summary>
-		/// Read in implicit feedback data from a StreamReader
+		/// Read in implicit feedback data from a TextReader
 		/// </summary>
 		/// <param name="reader">
-		/// the StreamReader to be read from
+		/// the TextReader to be read from
 		/// </param>
 		/// <param name="user_mapping">
 		/// user <see cref="EntityMapping"/> object
@@ -69,7 +72,7 @@ namespace MyMediaLite.io
 		/// <returns>
 		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
 		/// </returns>		
-		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(StreamReader reader,
+		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(TextReader reader,
 		                                                                  EntityMapping user_mapping,
 		                                                                  EntityMapping item_mapping)		                                                                  
 		{
@@ -80,9 +83,8 @@ namespace MyMediaLite.io
 			char[] split_chars = new char[]{ '\t', ' ' };
 			string line;
 
-			while (!reader.EndOfStream)
+			while ( (line = reader.ReadLine()) != null )
 			{
-	           	line = reader.ReadLine();
 				if (line.Trim().Equals(String.Empty))
 					continue;
 
