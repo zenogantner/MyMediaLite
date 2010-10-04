@@ -318,6 +318,7 @@ namespace RatingPrediction
 						);
 					}
 				}
+				EngineStorage.SaveModel(recommender, data_dir, save_model_file);
 				Console.Error.Flush();
 			}
 			else
@@ -334,6 +335,7 @@ namespace RatingPrediction
 					Console.Write(recommender.ToString() + " ");
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
             		Console.Write("training_time " + seconds + " ");
+					EngineStorage.SaveModel(recommender, data_dir, save_model_file);
 				}
 				else
 				{
@@ -366,7 +368,6 @@ namespace RatingPrediction
 
 				Console.WriteLine();
 			}
-			EngineStorage.SaveModel(recommender, data_dir, save_model_file);
 		}
 
 		// TODO reverse arguments (like in ItemPrediction.exe)
