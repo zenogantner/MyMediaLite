@@ -31,12 +31,12 @@ namespace MyMediaLite.data
 		{
 			 this.ratingList = new List<RatingEvent>();
 		}
-		
+
 		public Ratings(int num_ratings)
 		{
 			 this.ratingList = new List<RatingEvent>(num_ratings);
 		}
-		
+
         public int Count
 		{
 			get { return ratingList.Count; }
@@ -52,6 +52,7 @@ namespace MyMediaLite.data
 			get { return sum_rating; }
 		}
 
+		/// <inheritdoc />
 		public IEnumerator GetEnumerator()
 		{
 			return ratingList.GetEnumerator();

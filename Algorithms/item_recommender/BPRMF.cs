@@ -35,6 +35,9 @@ namespace MyMediaLite.item_recommender
 	/// <author>Zeno Gantner, Christoph Freudenthaler, University of Hildesheim</author>
 	public class BPRMF : MF, IterativeModel
 	{
+		/// <summary>
+		/// Use the first item feature as a bias term if set to true
+		/// </summary>
 		public bool item_bias = false;
 
 		/// <summary>Regularization parameter for user factors</summary>
@@ -315,7 +318,7 @@ namespace MyMediaLite.item_recommender
 			MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
 
 			HashSet<int> user_items = data_user.GetRow(user_id);
-			for (int i = 0; i < user_items.Count * iteration_length * num_iter; i++) {
+			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
 				int item_id_1, item_id_2;
 				SampleItemPair(user_id, out item_id_1, out item_id_2);
 				UpdateFeatures(user_id, item_id_1, item_id_2, true, false, false);
@@ -329,7 +332,7 @@ namespace MyMediaLite.item_recommender
 			MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
 
 			int num_pos_events = data_user.GetNumberOfEntries();
-			int num_item_iterations = num_pos_events * iteration_length * num_iter / (max_item_id + 1);
+			int num_item_iterations = num_pos_events * iteration_length * NumIter / (max_item_id + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
 				int user_id = SampleUser();
@@ -382,7 +385,7 @@ namespace MyMediaLite.item_recommender
 			return auc;
 		}
 
-		protected void CreateFastSamplingData(int u)
+		private void CreateFastSamplingData(int u)
 		{
 			while (u >= user_pos_items.Count)
 				user_pos_items.Add(null);
@@ -437,7 +440,7 @@ namespace MyMediaLite.item_recommender
 		public override string ToString()
 		{
 			return String.Format("BPR-MF num_features={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_f_mean={8} init_f_stdev={9}",
-			                     num_features, item_bias, reg_u, reg_i, reg_j, num_iter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
+			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
 		}
 	}
 }

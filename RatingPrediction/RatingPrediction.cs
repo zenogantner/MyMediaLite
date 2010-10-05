@@ -32,7 +32,7 @@ using MyMediaLite.util;
 
 namespace RatingPrediction
 {
-	/// <author>Zeno Gantner, University of Hildesheim</author>
+	/// <summary>Rating prediction program, see Usage() method for more information</summary>
 	public class RatingPrediction
 	{
 		// recommender engines
@@ -48,11 +48,6 @@ namespace RatingPrediction
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
 
-		/*
-		static uint half_size;
-		static uint reg_base = 2;
-		*/
-
 		public static void Usage(string message)
 		{
 			Console.Error.WriteLine(message);
@@ -62,8 +57,6 @@ namespace RatingPrediction
 
 		public static void Usage(int exit_code)
 		{
-			// TODO output on different streams, depending on exit_code
-
 			Console.WriteLine("MyMedia rating prediction; usage:");
 			Console.WriteLine(" RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
 			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
@@ -213,7 +206,7 @@ namespace RatingPrediction
 				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
 				Usage(-1);
 			}
-			
+
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();

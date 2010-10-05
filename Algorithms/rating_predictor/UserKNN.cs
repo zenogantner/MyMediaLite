@@ -35,6 +35,7 @@ namespace MyMediaLite.rating_predictor
 	{
 		protected SparseBooleanMatrix data_user;
 
+		/// <inheritdoc />
 		public override void SetCollaborativeData(RatingData ratings)
 		{
 			base.SetCollaborativeData(ratings);
@@ -136,6 +137,7 @@ namespace MyMediaLite.rating_predictor
 
         }
 
+		/// <inheritdoc />
 		protected override void RetrainUser(int user_id)
 		{
 			base.RetrainUser(user_id);
@@ -174,6 +176,7 @@ namespace MyMediaLite.rating_predictor
 			this.correlation = pearson_correlation;
         }
 
+		/// <inheritdoc />
 		protected override void RetrainUser(int user_id)
 		{
 			base.RetrainUser(user_id);

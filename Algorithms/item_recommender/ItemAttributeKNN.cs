@@ -16,9 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using MyMediaLite.correlation;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -35,7 +32,8 @@ namespace MyMediaLite.item_recommender
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
     {
-		protected BinaryAttributes item_attributes;
+		private BinaryAttributes item_attributes;
+		/// <inheritdoc />
 	    public int NumItemAttributes { get;	set; }
 
         /// <inheritdoc />
@@ -46,6 +44,7 @@ namespace MyMediaLite.item_recommender
 			correlation.ComputeCorrelations(item_attributes.GetAttributes());
         }
 
+		/// <inheritdoc />
 		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.item_attributes = new BinaryAttributes(matrix);

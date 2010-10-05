@@ -29,6 +29,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 	{
 
 		// HACK make it protected after implementation is completed
+		/// <inheritdoc />
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-feature weight matrix
@@ -79,6 +80,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
+		/// <inheritdoc />
 		protected override double[] MapUserToLatentFeatureSpace(HashSet<int> user_attributes)
 		{
 			double[] feature_representation = new double[num_features];
@@ -90,10 +92,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return feature_representation;
 		}
 
+		/// <inheritdoc />		
 		public override string ToString()
 		{
 			return String.Format("BPR-MF-UserMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_features, reg_u, reg_i, reg_j, num_iter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_f_mean, init_f_stdev);
+				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_f_mean, init_f_stdev);
 		}
 
 	}

@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using MyMediaLite.correlation;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -32,8 +30,9 @@ namespace MyMediaLite.rating_predictor
 	/// </summary>
 	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
 	{
+		/// <inheritdoc />
 	    public int NumItemAttributes { get;	set; }
-		protected BinaryAttributes item_attributes;
+		private BinaryAttributes item_attributes;
 
         /// <inheritdoc />
         public override void Train()
@@ -43,18 +42,19 @@ namespace MyMediaLite.rating_predictor
 			correlation.Cosine cosine_correlation = new Cosine(MaxItemID + 1);
 			cosine_correlation.ComputeCorrelations(item_attributes.GetAttributes());
 			this.correlation = cosine_correlation;
-			
+
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
+		/// <inheritdoc />
 		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.item_attributes = new BinaryAttributes(matrix);
 			this.NumItemAttributes = num_attr;
 
 			// TODO check whether there is a match between num. of items here and in the collaborative data
-		}		
-		
+		}
+
         /// <inheritdoc />
 		public override string ToString()
 		{

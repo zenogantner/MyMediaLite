@@ -46,7 +46,7 @@ namespace MyMediaLite.util
 		/// <summary>
 		/// Initializes the instance with a given random seed.
 		/// </summary>
-		/// <param name="seed">a seed value</seed>
+		/// <param name="seed">a seed value</param>
 		public static void InitInstance(int seed)
 		{
 			Console.Error.WriteLine("Set random seed to {0}.", seed);

@@ -48,9 +48,9 @@ namespace MyMediaLite.rating_predictor
         public bool UpdateUsers { get; set; }
         public bool UpdateItems { get; set; }
 
-		protected double global_average;
-		protected double[] user_biases;
-		protected double[] item_biases;
+		private double global_average;
+		private double[] user_biases;
+		private double[] item_biases;
 
         /// <inheritdoc />
         public override void Train()
@@ -95,6 +95,7 @@ namespace MyMediaLite.rating_predictor
 			return result;
         }
 
+		/// <inheritdoc />
 		protected virtual void RetrainUser(int user_id)
 		{
 			if (UpdateUsers)
@@ -105,7 +106,8 @@ namespace MyMediaLite.rating_predictor
 					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.ByUser[user_id].Count);
 			}
 		}
-
+		
+		/// <inheritdoc />
 		protected virtual void RetrainItem(int item_id)
 		{
 			if (UpdateItems)

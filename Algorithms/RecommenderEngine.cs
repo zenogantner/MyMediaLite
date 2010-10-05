@@ -23,12 +23,35 @@ namespace MyMediaLite
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public interface RecommenderEngine
     {
+		/// <summary>
+		/// Predict rating or score for a given user-item combination
+		/// </summary>
+		/// <param name="user_id">
+		/// the user ID
+		/// </param>
+		/// <param name="item_id">
+		/// the item ID
+		/// </param>
+		/// <returns>
+		/// the predicted score/rating for the given user-item combination
+		/// </returns>
         double Predict(int user_id, int item_id);
 
+		/// <summary>
+		/// Learn the model parameters of the engine from the training data
+		/// </summary>
         void Train();
 
-		void SaveModel(string filePath);
+		/// <summary>
+		/// Save the model parameters to a file
+		/// </summary>
+		/// <param name="filename">the name of the file to write to</param>
+		void SaveModel(string filename);
 
-		void LoadModel(string filePath);
+		/// <summary>
+		/// Get the model parameters from a file
+		/// </summary>
+		/// <param name="filename">the name of the file to read from</param>
+		void LoadModel(string filename);
    }
 }

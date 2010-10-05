@@ -18,8 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using MyMediaLite.util;
 
 
@@ -34,7 +32,7 @@ namespace MyMediaLite.item_recommender
     public class MostPopular : Memory
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemRecommenderMostPopular"/> class.
+        /// Initializes a new instance of the <see cref="MostPopular"/> class.
         /// </summary>
         public MostPopular() { }
         /// <summary>

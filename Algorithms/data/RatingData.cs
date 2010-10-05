@@ -86,9 +86,7 @@ namespace MyMediaLite.data
 		/// </summary>
 		public double Average { get { return all.Average; } }
 		
-		/// <summary>
-		/// The number of ratings in the collection
-		/// </summary>
+		/// <summary>The number of ratings in the collection</summary>
 		public int Count { get { return all.Count; } }		
 		
 		private void InitByUser()

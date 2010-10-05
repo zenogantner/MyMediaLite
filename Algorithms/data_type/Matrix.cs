@@ -356,6 +356,13 @@ namespace MyMediaLite.data_type
 			return result;
 		}
 
+		/// <summary>
+		/// Compute the scalar product between a vector and a row of the matrix
+		/// </summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="i">the row ID</param>
+		/// <param name="vector">the numeric vector</param>
+		/// <returns>the scalar product of row i and the vector</returns>
 		static public double RowScalarProduct(Matrix<double> matrix, int i, double[] vector)
 		{
         	if (i >= matrix.dim1)
@@ -370,6 +377,11 @@ namespace MyMediaLite.data_type
             return result;
 		}
 
+		/// <summary>
+		/// Check whether a matrix contains NaN ("not a number") elements
+		/// </summary>
+		/// <param name="matrix">a matrix</param>
+		/// <returns>true if there are NaN elements in the matrix, false otherwise</returns>
 		static public bool ContainsNaN(Matrix<double> matrix)
 		{
 			int nan_counter = 0;

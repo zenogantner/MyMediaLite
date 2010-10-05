@@ -166,10 +166,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return feature_representation;
 		}
 
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return String.Format("BPR-MF-ItemMapping-Complex num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_features={9}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_features, reg_u, reg_i, reg_j, num_iter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_features, init_f_mean, init_f_stdev);
+				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_features, init_f_mean, init_f_stdev);
 		}
 
 	}

@@ -16,7 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -33,8 +33,6 @@ namespace MyMediaLite.item_recommender
     /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
     public abstract class MF : Memory, IterativeModel
     {
-		// TODO call iterations 'epochs'
-
         /// <summary>User feature matrix</summary>
         protected Matrix<double> user_feature;
         /// <summary>Item feature matrix</summary>
@@ -48,7 +46,7 @@ namespace MyMediaLite.item_recommender
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-        protected int num_iter = 30;
+        private int num_iter = 30;
 
         /// <inheritdoc />
         public override void Train()

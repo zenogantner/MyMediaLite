@@ -16,9 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using MyMediaLite.correlation;
 using MyMediaLite.util;
 
@@ -55,6 +52,7 @@ namespace MyMediaLite.item_recommender
 			return correlation.SumUp(item_id, data_user.GetRow(user_id));
         }
 
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return String.Format("item-kNN, k={0}" , k == UInt32.MaxValue ? "inf" : k.ToString());

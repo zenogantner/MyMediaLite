@@ -16,9 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using MyMediaLite.correlation;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -36,22 +33,23 @@ namespace MyMediaLite.item_recommender
     public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
     {
 		protected BinaryAttributes user_attributes;
+		/// <inheritdoc />
 	    public int NumUserAttributes { get;	set; }
 
-		
+
         /// <inheritdoc />
         public override void Train()
         {
             int num_users = max_user_id + 1;
 			correlation = new Cosine(num_users);
 			correlation.ComputeCorrelations(user_attributes.GetAttributes());
-			
+
 			nearest_neighbors = new int[max_user_id + 1][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
-        
 
+		/// <inheritdoc />
 		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.user_attributes = new BinaryAttributes(matrix);

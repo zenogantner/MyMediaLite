@@ -34,16 +34,11 @@ namespace MyMediaLite
 	// TODO catch FileNotFoundException
 	// TODO predict_items=true option
 
-	/// <author>Zeno Gantner, University of Hildesheim</author>
+	/// <summary>Item prediction program, see Usage() method for more information</summary>
 	public class ItemPrediction
 	{
 		static ItemRecommender recommender = null;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
-
-		/*
-		static uint half_size;     // TODO better name/rm
-		static uint reg_base = 2;  // TODO better name/rm
-		 */
 
 		static HashSet<int> relevant_items;
 
@@ -554,7 +549,6 @@ namespace MyMediaLite
 			Console.Error.WriteLine();
 		}
 		 */
-		// TODO: adapt HP search to new data format
 
 		/*
 		static double FindGoodHyperparameters(BPR_Linear engine, uint half_size, double center, double step_size, int cross_validation, string criterion)  // TODO make the type of split configurable

@@ -27,18 +27,18 @@ namespace MyMediaLite.item_recommender
 {
     /// <summary>
     /// Weighted matrix factorization method proposed by Hu et al. and Pan et al.:
-    /// 
+    ///
     /// Y. Hu, Y. Koren, and C. Volinsky:
     /// Collaborative filtering for implicit feedback datasets.
     /// In IEEE International Conference on Data Mining (ICDM 2008), pages 263--272, 2008.
-    /// 
+    ///
     /// R. Pan, Y.Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, and Q. Yang:
     /// One-class collaborative filtering.
     /// In IEEE International Conference on Data Mining (ICDM 2008), pages 502--511, 2008.
-    /// 
-    /// We use the fast computation method proposed by Hu et al. and we allow a global 
+    ///
+    /// We use the fast computation method proposed by Hu et al. and we allow a global
     /// weight to penalize observed/unobserved values.
-    /// 
+    ///
     /// This engine does not support online updates.
     /// </summary>
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
@@ -56,17 +56,18 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void Iterate()
 		{
+			// perform alternating parameter fitting
         	optimize(data_user, user_feature, item_feature);
             optimize(data_item, item_feature, user_feature);
 		}
-		
+
         /// <summary>
         /// Optimizes the specified data.
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="W">The W.</param>
         /// <param name="H">The H.</param>
-        protected void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H) 
+        protected void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
         {
             Matrix<double> HH   = new Matrix<double>(num_features, num_features);
             Matrix<double> HCIH = new Matrix<double>(num_features, num_features);
@@ -86,7 +87,7 @@ namespace MyMediaLite.item_recommender
                     {
                         d += H.Get(i, f_1) * H.Get(i, f_2);
                     }
-                    HH.Set(f_1, f_2, d);	
+                    HH.Set(f_1, f_2, d);
                 }
 
             }
@@ -146,22 +147,18 @@ namespace MyMediaLite.item_recommender
                 }
             }
         }
-		
+
+		/// <inheritdoc />
 		public override double ComputeFit()
 		{
 			return 0;
 		}
-		
-		/// <summary>
-		/// Returns the method name and the current hyperparameters
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return String.Format("WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_f_mean={4} init_f_stdev={5}",
-				                 num_features, regularization, c_pos, num_iter, init_f_mean, init_f_stdev);
+				                 num_features, regularization, c_pos, NumIter, init_f_mean, init_f_stdev);
 		}
     }
 }

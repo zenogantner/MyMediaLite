@@ -33,7 +33,7 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// This engine does NOT support online updates.
 	///
-	/// <seealso cref="ItemRecommenderkNN"/>
+	/// <seealso cref="item_recommender.kNN"/>
 	/// </remarks>
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class KNN : UserItemBaseline

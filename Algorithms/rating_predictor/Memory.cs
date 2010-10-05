@@ -21,6 +21,9 @@ using MyMediaLite.data;
 
 namespace MyMediaLite.rating_predictor
 {
+	/// <summary>
+	/// Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)
+	/// </summary>
 	public abstract class Memory : RatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
@@ -34,6 +37,7 @@ namespace MyMediaLite.rating_predictor
 		/// </summary>
 		public RatingData ratings;
 
+		/// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
@@ -93,6 +97,7 @@ namespace MyMediaLite.rating_predictor
             ratings.RemoveItem(item_id);
         }
 
+		/// <inheritdoc />
 		public virtual void SetCollaborativeData(RatingData ratings)
 		{
 			this.ratings = ratings;

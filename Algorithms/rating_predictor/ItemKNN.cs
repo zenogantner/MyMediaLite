@@ -34,6 +34,7 @@ namespace MyMediaLite.rating_predictor
 	{
 		protected SparseBooleanMatrix data_item;
 
+		/// <inheritdoc />
 		public override void SetCollaborativeData(RatingData ratings)
 		{
 			base.SetCollaborativeData(ratings);
@@ -120,6 +121,7 @@ namespace MyMediaLite.rating_predictor
 			correlation.AddEntity(item_id);
         }
 
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			base.LoadModel(filePath);
@@ -128,6 +130,7 @@ namespace MyMediaLite.rating_predictor
 
 	}
 
+	/// <summary>Item-based kNN with cosine similarity</summary>
 	public class ItemKNNCosine : ItemKNN
 	{
         /// <inheritdoc />
@@ -142,6 +145,7 @@ namespace MyMediaLite.rating_predictor
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
+		/// <inheritdoc />
 		protected override void RetrainItem(int item_id)
 		{
 			base.RetrainUser(item_id);
@@ -164,6 +168,7 @@ namespace MyMediaLite.rating_predictor
 		}
 	}
 
+	/// <summary>Item-based kNN with pearson correlation</summary>
 	public class ItemKNNPearson : ItemKNN
 	{
         /// <inheritdoc />
@@ -179,6 +184,7 @@ namespace MyMediaLite.rating_predictor
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
+		/// <inheritdoc />
 		protected override void RetrainItem(int item_id)
 		{
 			base.RetrainUser(item_id);

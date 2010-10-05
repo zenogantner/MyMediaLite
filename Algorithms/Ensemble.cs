@@ -38,10 +38,8 @@ namespace MyMediaLite
         /// </summary>
         public List<RecommenderEngine> engines = new List<RecommenderEngine>();
 
-        /// <inheritdoc />
-        protected double max_data_value = 5;
-        /// <inheritdoc />
-        protected double min_data_value = 1;
+        private double max_rating_value = 5;
+        private double min_rating_value = 1;
 
 		/// <inheritdoc />
 		public abstract double Predict(int user_id, int item_id);
@@ -67,11 +65,11 @@ namespace MyMediaLite
         {
             get
             {
-                return this.max_data_value;
+                return this.max_rating_value;
             }
             set
             {
-                this.max_data_value = value;
+                this.max_rating_value = value;
 				foreach (RecommenderEngine engine in engines)
 					if (engine is RatingPredictor)
 						((RatingPredictor)engine).MaxRatingValue = value;
@@ -86,11 +84,11 @@ namespace MyMediaLite
         {
             get
             {
-                return this.min_data_value;
+                return this.min_rating_value;
             }
             set
             {
-                this.min_data_value = value;
+                this.min_rating_value = value;
 				foreach (RecommenderEngine engine in engines)
 					if (engine is RatingPredictor)
 						((RatingPredictor)engine).MinRatingValue = value;

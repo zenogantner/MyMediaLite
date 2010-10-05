@@ -16,9 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using MyMediaLite.correlation;
 using MyMediaLite.util;
 
@@ -31,6 +29,9 @@ namespace MyMediaLite.item_recommender
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class KNN : Memory
 	{
+		/// <summary>
+		/// The number of neighbors to take into account for prediction
+		/// </summary>
 		public uint k = 80; // TODO make it a property that checks whether changes are allowed after training ...
 
         /// <summary>

@@ -17,6 +17,7 @@
 
 using System;
 
+
 namespace MyMediaLite.data_type
 {
     /// <summary>Weighted items class</summary>
@@ -50,6 +51,7 @@ namespace MyMediaLite.data_type
             return this.weight.CompareTo(otherItem.weight);
         }
 
+		/// <inheritdoc />
 		public override bool Equals(Object o)
 		{
 			if (o == null)
@@ -59,6 +61,7 @@ namespace MyMediaLite.data_type
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
+        /// <inheritdoc />
 		public bool Equals(WeightedItem otherItem)
 		{
 			if (otherItem == null)
@@ -67,6 +70,7 @@ namespace MyMediaLite.data_type
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
+        /// <inheritdoc />
 		public override int GetHashCode()
 		{
 			return weight.GetHashCode();

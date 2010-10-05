@@ -31,6 +31,7 @@ namespace MyMediaLite.rating_predictor
 	/// </summary>
 	public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
 	{
+		/// <inheritdoc />
 	    public int NumUserAttributes { get;	set; }
 
 		protected BinaryAttributes user_attributes;
@@ -45,6 +46,7 @@ namespace MyMediaLite.rating_predictor
 			this.correlation = cosine_correlation;
         }
 
+		/// <inheritdoc />
 		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.user_attributes = new BinaryAttributes(matrix);
