@@ -181,7 +181,6 @@ namespace MyMediaLite.eval
             return return_array;
 		}
 
-		// TODO this should be part of the real API ...?
 		static public int[] PredictItems(RecommenderEngine engine, int user_id, HashSet<int> relevant_items)
 		{
             List<WeightedItem> result = new List<WeightedItem>();
