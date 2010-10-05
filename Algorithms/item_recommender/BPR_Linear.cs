@@ -33,10 +33,10 @@ namespace MyMediaLite.item_recommender
 	///
 	/// This engine does not support online updates.
 	/// </summary>
-	/// <author>Zeno Gantner, University of Hildesheim</a>
 	public class BPR_Linear : Memory, ItemAttributeAwareRecommender, IterativeModel
 	{
-		protected BinaryAttributes item_attributes;
+		private BinaryAttributes item_attributes;
+		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
 	    /// <summary>Item attribute weights</summary>
@@ -44,8 +44,9 @@ namespace MyMediaLite.item_recommender
 
         /// <summary>Regularization parameter</summary>
         public double reg = 0.015;
+		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
         public double init_f_mean = 0;
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
+        /// <summary>standard deviation of the normal distribution used to initialize the features</summary>
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
@@ -56,7 +57,7 @@ namespace MyMediaLite.item_recommender
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
 
-		protected System.Random random;
+		private System.Random random;
 
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		bool fast_sampling = false;
@@ -67,6 +68,7 @@ namespace MyMediaLite.item_recommender
 		/// <summary>support data structure for fast sampling</summary>
 		int[][] user_neg_items;
 
+		/// <inheritdoc/>
 		public override void Train()
 		{
 			random = util.Random.GetInstance();
@@ -225,6 +227,7 @@ namespace MyMediaLite.item_recommender
             return result;
         }
 
+		/// <inheritdoc/>
 		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.item_attributes = new BinaryAttributes(matrix);
@@ -282,6 +285,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
+		/// <inheritdoc/>
 		public double ComputeFit()
 		{
 			// TODO

@@ -36,12 +36,39 @@ namespace MyMediaLite.eval
 		// TODO there are too many different versions of this method interface
 		//      we should simplify the API here
 
+		/// <summary>
+		/// Write item predictions (scores) to a StreamWriter object, for users from ID 0 to max:user_it
+		/// </summary>
+		/// <param name="engine">
+		/// the <see cref="RecommenderEngine"/> to use for making the predictions
+		/// </param>
+		/// <param name="train">
+		/// A user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed
+		/// </param>
+		/// <param name="max_user_id">
+		/// the maximum user ID
+		/// </param>
+		/// <param name="relevant_items">
+		/// the list of candidate items
+		/// </param>
+		/// <param name="num_predictions">
+		/// the number of items to return per user, -1 if there should be no limit
+		/// </param>
+		/// <param name="user_mapping">
+		/// An <see cref="EntityMapping"/> object for the user IDs
+		/// </param>
+		/// <param name="item_mapping">
+		/// An <see cref="EntityMapping"/> object for the item IDs
+		/// </param>
+		/// <param name="writer">
+		/// the <see cref="StreamWriter"/> to write to
+		/// </param>		
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
 			int max_user_id,
 			HashSet<int> relevant_items,
-			int num_predictions, // -1 if no limit ...
+			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			StreamWriter writer)
 		{
@@ -84,7 +111,7 @@ namespace MyMediaLite.eval
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
 			HashSet<int> relevant_items,
-			int num_predictions, // -1 if no limit ... TODO why not 0?
+			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			StreamWriter writer)
 		{
@@ -100,9 +127,7 @@ namespace MyMediaLite.eval
 		/// <summary>
 		/// Write item predictions (scores) to a StreamWriter object
 		/// </summary>
-		/// <param name="engine">
-		/// the <see cref="RecommenderEngine"/> to use for making the predictions
-		/// </param>
+		/// <param name="engine">the <see cref="RecommenderEngine"/> to use for making the predictions</param>
 		/// <param name="train">
 		/// A user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed
 		/// </param>
@@ -124,15 +149,13 @@ namespace MyMediaLite.eval
 		/// <param name="item_mapping">
 		/// An <see cref="EntityMapping"/> object for the item IDs
 		/// </param>
-		/// <param name="writer">
-		/// the <see cref="StreamWriter"/> to write to
-		/// </param>
+		/// <param name="writer">the <see cref="StreamWriter"/> to write to</param>
 		static public void WritePredictions(
 			RecommenderEngine engine,
             int user_id,
 		    HashSet<int> relevant_items,
 		    HashSet<int> ignore_items,
-			int num_predictions, // -1 if no limit ...
+			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 		    StreamWriter writer)
 		{
@@ -164,7 +187,6 @@ namespace MyMediaLite.eval
 			}
 		}
 
-		// TODO get rid of this method? It is used in BPR-MF's ComputeFit method.
 		static public int[] PredictItems(RecommenderEngine engine, int user_id, int max_item_id)
 		{
             List<WeightedItem> result = new List<WeightedItem>();
