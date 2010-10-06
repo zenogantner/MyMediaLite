@@ -29,11 +29,23 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public class BPRMF_ItemMapping : BPRMF_Mapping, ItemAttributeAwareRecommender
 	{
+		/// <inheritdoc />
+		public SparseBooleanMatrix ItemAttributes			
+		{
+			set
+			{
+				this.item_attributes = value;
+				// TODO check whether there is a match between num. of items here and in the collaborative data
+			}
+		}
+		/// <summary>The matrix storing the item attributes</summary>
+		protected SparseBooleanMatrix item_attributes;
+		
+		/// <inheritdoc/>
+	    public int NumItemAttributes { get;	set; }		
+		
 		public bool mapping_feature_bias = false;
 		protected double[] feature_bias;
-
-		protected BinaryAttributes item_attributes;
-	    public int NumItemAttributes { get;	set; }
 
 		public override void LearnAttributeToFactorMapping()
 		{
@@ -104,7 +116,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				int item_id = random.Next(0, max_item_id + 1);
 				HashSet<int> item_users = data_item[item_id];
-				HashSet<int> item_attrs = item_attributes.GetAttributes(item_id);
+				HashSet<int> item_attrs = item_attributes[item_id];
 				if (item_users.Count == 0 || item_attrs.Count == 0)
 					continue;
 				return item_id;
@@ -125,7 +137,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				double diff = est_features[j] - item_feature.Get(item_id, j);
 				if (diff > 0)
 				{
-					foreach (int attribute in item_attributes.GetAttributes(item_id))
+					foreach (int attribute in item_attributes[item_id])
 					{
 						double w = attribute_to_feature.Get(attribute, j);
 						double deriv = diff * w + reg_mapping * w;
@@ -149,7 +161,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			for (int i = 0; i < max_item_id + 1; i++)
 			{
 				HashSet<int> item_users = data_item[i];
-				HashSet<int> item_attrs = item_attributes.GetAttributes(i);
+				HashSet<int> item_attrs = item_attributes[i];
 				if (item_users.Count == 0 || item_attrs.Count == 0)
 					continue;
 
@@ -188,7 +200,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		protected virtual double[] __MapToLatentFeatureSpace(int item_id)
 		{
-			HashSet<int> item_attributes = this.item_attributes.GetAttributes(item_id);
+			HashSet<int> item_attributes = this.item_attributes[item_id];
 
 			double[] feature_representation = new double[num_features];
 			for (int j = 0; j < num_features; j++)
@@ -219,15 +231,6 @@ namespace MyMediaLite.experimental.attr_to_feature
 			double[] est_features = MapToLatentFeatureSpace(item_id);
             return MatrixUtils.RowScalarProduct(user_feature, user_id, est_features);
         }
-
-		/// <inheritdoc />
-		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.item_attributes = new BinaryAttributes(matrix);
-			this.NumItemAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of items here and in the collaborative data
-		}
 
 		/// <inheritdoc />
 		public override string ToString()

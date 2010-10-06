@@ -28,9 +28,20 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public class BPRMF_UserMapping : BPRMF_Mapping, UserAttributeAwareRecommender
 	{
-		protected BinaryAttributes user_attributes;
 		/// <inheritdoc />
-	    public int NumUserAttributes { get;	set; }
+		public SparseBooleanMatrix UserAttributes
+		{
+			set
+			{
+				this.user_attributes = value;
+				// TODO check whether there is a match between num. of users here and in the collaborative data
+			}
+		}
+		/// <summary>The matrix storing the user attributes</summary>
+		protected SparseBooleanMatrix user_attributes;
+
+		/// <inheritdoc />
+		public int NumUserAttributes { get; set; }
 
 
 		/// <summary>
@@ -45,7 +56,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				int user_id = random.Next(0, max_user_id + 1);
 				HashSet<int> user_items = data_user[user_id];
-				HashSet<int> user_attrs = user_attributes.GetAttributes(user_id);
+				HashSet<int> user_attrs = user_attributes[user_id];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;
 				return user_id;
@@ -54,12 +65,6 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		public override void LearnAttributeToFactorMapping()
 		{
-			Console.Error.WriteLine("\nAttributes of user number 10:");
-			HashSet<int> user_one_attr = user_attributes.GetAttributes(10);
-			foreach (int attr_id in user_one_attr)
-				Console.Error.Write(attr_id + " ");
-			Console.Error.WriteLine();
-
 			// create attribute-to-feature weight matrix
 			attribute_to_feature = new Matrix<double>(NumUserAttributes + 1, num_features);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
@@ -124,7 +129,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			// stochastic gradient descent
 			int user_id = SampleUserWithAttributes();
 
-			HashSet<int> attributes = user_attributes.GetAttributes(user_id);
+			HashSet<int> attributes = user_attributes[user_id];
 			double[] est_features = MapUserToLatentFeatureSpace(attributes);
 
 			for (int j = 0; j < num_features; j++) {
@@ -156,13 +161,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 			for (int i = 0; i < max_user_id + 1; i++)
 			{
 				HashSet<int> user_items = data_user[i];
-				HashSet<int> user_attrs = user_attributes.GetAttributes(i);
+				HashSet<int> user_attrs = user_attributes[i];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;
 
 				num_users++;
 
-				HashSet<int> attributes = user_attributes.GetAttributes(i);
+				HashSet<int> attributes = user_attributes[i];
 				double[] est_features = MapUserToLatentFeatureSpace(attributes);
 				for (int j = 0; j < num_features; j++)
 				{
@@ -203,7 +208,7 @@ namespace MyMediaLite.experimental.attr_to_feature
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-			HashSet<int> attributes = user_attributes.GetAttributes(user_id);
+			HashSet<int> attributes = user_attributes[user_id];
 			double[] est_features = MapUserToLatentFeatureSpace(attributes);
 
             double result = 0;
@@ -213,27 +218,6 @@ namespace MyMediaLite.experimental.attr_to_feature
             }
             return result;
         }
-
-		/*
-		public override void SaveModel(string filePath)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void LoadModel(string filePath)
-		{
-			throw new NotImplementedException();
-		}
-		*/
-
-		/// <inheritdoc />
-		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.user_attributes = new BinaryAttributes(matrix);
-			this.NumUserAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of entities here and in the collaborative data
-		}
 
 		/// <inheritdoc />
 		public override string ToString()

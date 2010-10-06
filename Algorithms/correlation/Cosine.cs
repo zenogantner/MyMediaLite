@@ -30,7 +30,7 @@ namespace MyMediaLite.correlation
 	{
 		/// <inheritdoc />
 		public Cosine(int num_entities) : base(num_entities) { }
-		
+
 		/// <inheritdoc />
 		public Cosine(CorrelationMatrix correlation_matrix)
 		{

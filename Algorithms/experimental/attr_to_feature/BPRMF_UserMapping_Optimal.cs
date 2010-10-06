@@ -65,7 +65,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_u = user_attributes.GetAttributes(u);
+			HashSet<int> attr_u = user_attributes[u];
 
 			for (int f = 0; f < num_features; f++)
 			{

@@ -50,7 +50,7 @@ namespace MyMediaLite.data_type
 				if (value)
             		this[x].Add(y);
 				else
-            		this[x].Remove(y);				
+            		this[x].Remove(y);
 			}
 		}
 

@@ -1,12 +1,19 @@
 0.04	2010-10-??
-	new feature: Map user/item IDs to internal IDs on the fly. That makes
-                     it unnecessary to convert datasets before using them with
-                     the MyMediaLite command-line tools.
-	nicer time output for both demo programs
-	improved XML documentation and code clean-up for some classes
-	use IterativeModel interface in rating prediction program
-	consistent parameters for RatingData constructor
-	rating prediction program: save model earlier
+	new features:
+         - Map user/item IDs to internal IDs on the fly. That makes it
+           unnecessary to convert datasets before using them with the
+           MyMediaLite command-line tools.
+        changes to the command-line programs:
+	 - nicer time output for both demo programs
+	 - rating prediction program: save model earlier
+	interface changes:
+	 - use IterativeModel interface in rating prediction program
+	 - consistent parameters for RatingData constructor
+	 - SparseBooleanMatrix now allows [x, y] and [x] access
+         - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
+           now both are completely property-based
+	misc:
+         - improved XML documentation and code clean-up for some classes
 
 0.03	2010-09-29
 	fix some crashes in both demo programs

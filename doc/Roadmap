@@ -19,15 +19,15 @@ Recommender functionality
  - stacking ensembles
  - ensembles for new users/new items
  - add more content-based routines (using Lemur?)
- - evaluation measure: MAP
+ - evaluation
+   - measure: MAP
+   - support evaluation protocols w/ repeated events
 Data types
  - (*) re-implement rating data structure
  - data types: introduce more properties
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
- - (*) add function that maps original entity IDs to internal ones
- - (*) use input from STDIN as training data
  - (*) define an easy interface for data access
  - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
@@ -46,4 +46,5 @@ Architecture
  - webservice interface
 Misc
  - faster evaluation routines
-
+   - approximate AUC
+   - sample precision@N

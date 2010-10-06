@@ -32,31 +32,31 @@ namespace MyMediaLite.item_recommender
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
     {
-		protected BinaryAttributes user_attributes;
 		/// <inheritdoc />
-	    public int NumUserAttributes { get;	set; }
+		public SparseBooleanMatrix UserAttributes
+		{
+			set
+			{
+				this.user_attributes = value;
+				// TODO check whether there is a match between num. of users here and in the collaborative data
+			}
+		}
+		private SparseBooleanMatrix user_attributes;
 
-
+		/// <inheritdoc />
+		public int NumUserAttributes { get; set; }		
+		
         /// <inheritdoc />
         public override void Train()
         {
             int num_users = max_user_id + 1;
 			correlation = new Cosine(num_users);
-			correlation.ComputeCorrelations(user_attributes.GetAttributes());
+			correlation.ComputeCorrelations(user_attributes);
 
 			nearest_neighbors = new int[max_user_id + 1][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
-
-		/// <inheritdoc />
-		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.user_attributes = new BinaryAttributes(matrix);
-			this.NumUserAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of entities here and in the collaborative data
-		}
 
         /// <inheritdoc />
 		public override string ToString()

@@ -32,9 +32,18 @@ namespace MyMediaLite.rating_predictor
 	public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
 	{
 		/// <inheritdoc />
-	    public int NumUserAttributes { get;	set; }
-
-		protected BinaryAttributes user_attributes;
+		public SparseBooleanMatrix UserAttributes
+		{
+			set
+			{
+				this.user_attributes = value;
+				// TODO check whether there is a match between num. of users here and in the collaborative data
+			}
+		}
+		private SparseBooleanMatrix user_attributes;
+		
+		/// <inheritdoc />
+		public int NumUserAttributes { get; set; }
 
         /// <inheritdoc />
         public override void Train()
@@ -42,18 +51,9 @@ namespace MyMediaLite.rating_predictor
 			base.Train();
 
 			correlation.Cosine cosine_correlation = new Cosine(MaxUserID + 1);
-			cosine_correlation.ComputeCorrelations(user_attributes.GetAttributes());
+			cosine_correlation.ComputeCorrelations(user_attributes);
 			this.correlation = cosine_correlation;
         }
-
-		/// <inheritdoc />
-		public void SetUserAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.user_attributes = new BinaryAttributes(matrix);
-			this.NumUserAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of entities here and in the collaborative data
-		}
 
         /// <inheritdoc />
 		public override string ToString()

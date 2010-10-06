@@ -45,7 +45,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				if (data_item[i].Count == 0)
 					continue;
 				// ignore items w/o attribute data
-				if (item_attributes.GetAttributes(i).Count == 0)
+				if (item_attributes[i].Count == 0)
 					continue;
 
 				svm_features.Add( CreateNodes(i) );
@@ -93,7 +93,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		protected Node[] CreateNodes(int item_id)
 		{
 			// create attribute representation digestible by LIBSVM
-			HashSet<int> attributes = this.item_attributes.GetAttributes(item_id);
+			HashSet<int> attributes = this.item_attributes[item_id];
 			Node[] item_svm_data = new Node[attributes.Count];
 			int counter = 0;
 			foreach (int attr in attributes)

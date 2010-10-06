@@ -38,7 +38,17 @@ namespace MyMediaLite.item_recommender
 	/// </summary>
 	public class BPR_Linear : Memory, ItemAttributeAwareRecommender, IterativeModel
 	{
-		private BinaryAttributes item_attributes;
+		/// <inheritdoc />
+		public SparseBooleanMatrix ItemAttributes			
+		{
+			set
+			{
+				this.item_attributes = value;
+				// TODO check whether there is a match between num. of items here and in the collaborative data
+			}
+		}		
+		private SparseBooleanMatrix item_attributes;
+		
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
@@ -186,8 +196,8 @@ namespace MyMediaLite.item_recommender
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_i = item_attributes.GetAttributes(i);
-			HashSet<int> attr_j = item_attributes.GetAttributes(j);
+			HashSet<int> attr_i = item_attributes[i];
+			HashSet<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
 			HashSet<int> attr_i_over_j = new HashSet<int>(attr_i);
@@ -224,20 +234,11 @@ namespace MyMediaLite.item_recommender
             }
 
 			double result = 0;
-			HashSet<int> attributes = this.item_attributes.GetAttributes(item_id);
+			HashSet<int> attributes = this.item_attributes[item_id];
 			foreach (int a in attributes)
 				result += item_attribute_weight_by_user.Get(user_id, a);
             return result;
         }
-
-		/// <inheritdoc/>
-		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.item_attributes = new BinaryAttributes(matrix);
-			this.NumItemAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of items here and in the collaborative data
-		}
 
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)

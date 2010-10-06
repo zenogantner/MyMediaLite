@@ -50,7 +50,7 @@ namespace MyMediaLite.io
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
-			else			
+			else
             	using ( StreamReader reader = new StreamReader(filename) )
 				{
 					return Read(reader, user_mapping, item_mapping);
@@ -71,10 +71,10 @@ namespace MyMediaLite.io
 		/// </param>
 		/// <returns>
 		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
-		/// </returns>		
+		/// </returns>
 		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(TextReader reader,
 		                                                                  EntityMapping user_mapping,
-		                                                                  EntityMapping item_mapping)		                                                                  
+		                                                                  EntityMapping item_mapping)
 		{
 	        SparseBooleanMatrix user_items = new SparseBooleanMatrix();
         	SparseBooleanMatrix item_users = new SparseBooleanMatrix();

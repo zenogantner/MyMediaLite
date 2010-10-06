@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using MyMediaLite.data_type;
 
 namespace MyMediaLite
@@ -25,12 +24,8 @@ namespace MyMediaLite
 	{
 		/// <summary>Number of binary item attributes</summary>
 	    int NumItemAttributes { get; set; }
-		
-		/// <summary>Set binary item attributes</summary>
-		/// <param name="matrix">
-		/// A <see cref="SparseBooleanMatrix"/> containing the binary attributes, rows are items, columns are attributes
-		/// </param>
-		/// <param name="num_attr">number of attributes</param>
-		void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr);
+
+		/// <summary>The binary item attributes</summary>
+		SparseBooleanMatrix ItemAttributes { set; }
 	}
 }

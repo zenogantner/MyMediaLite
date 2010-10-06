@@ -32,7 +32,17 @@ namespace MyMediaLite.item_recommender
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
     {
-		private BinaryAttributes item_attributes;
+		/// <inheritdoc />
+		public SparseBooleanMatrix ItemAttributes			
+		{
+			set
+			{
+				this.item_attributes = value;
+				// TODO check whether there is a match between num. of items here and in the collaborative data
+			}
+		}		
+		private SparseBooleanMatrix item_attributes;
+		
 		/// <inheritdoc />
 	    public int NumItemAttributes { get;	set; }
 
@@ -41,17 +51,8 @@ namespace MyMediaLite.item_recommender
         {
             int num_items = max_item_id + 1;
 			correlation = new Cosine(num_items);
-			correlation.ComputeCorrelations(item_attributes.GetAttributes());
+			correlation.ComputeCorrelations(item_attributes);
         }
-
-		/// <inheritdoc />
-		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.item_attributes = new BinaryAttributes(matrix);
-			this.NumItemAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of items here and in the collaborative data
-		}
 
         /// <inheritdoc />
 		public override string ToString()

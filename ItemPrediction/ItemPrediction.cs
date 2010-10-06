@@ -251,8 +251,9 @@ namespace MyMediaLite
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((UserAttributeAwareRecommender)recommender).SetUserAttributeData(attr_data.First, attr_data.Second);
-					max_user_id = Math.Max(max_user_id, attr_data.First.GetNumberOfRows());
+					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					max_user_id = Math.Max(max_user_id, attr_data.First.GetNumberOfRows()); // TODO check whether this is necessary
 				}
 
 			// item attributes
@@ -264,7 +265,8 @@ namespace MyMediaLite
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((ItemAttributeAwareRecommender)recommender).SetItemAttributeData(attr_data.First, attr_data.Second);
+					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;				
 				}
 
 			// test data

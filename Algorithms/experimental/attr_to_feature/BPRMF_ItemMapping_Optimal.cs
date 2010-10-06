@@ -69,8 +69,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_i = item_attributes.GetAttributes(i);
-			HashSet<int> attr_j = item_attributes.GetAttributes(j);
+			HashSet<int> attr_i = item_attributes[i];
+			HashSet<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
 			HashSet<int> attr_i_over_j = new HashSet<int>(attr_i);
@@ -101,7 +101,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
-			HashSet<int> attributes = this.item_attributes.GetAttributes(item_id);
+			HashSet<int> attributes = this.item_attributes[item_id];
 			double[] feature_representation = new double[num_features];
 
 			if (this.mapping_feature_bias)

@@ -31,8 +31,18 @@ namespace MyMediaLite.rating_predictor
 	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
 	{
 		/// <inheritdoc />
+		public SparseBooleanMatrix ItemAttributes			
+		{
+			set
+			{
+				this.item_attributes = value;
+				// TODO check whether there is a match between num. of items here and in the collaborative data
+			}
+		}		
+		private SparseBooleanMatrix item_attributes;
+		
+		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
-		private BinaryAttributes item_attributes;
 
         /// <inheritdoc />
         public override void Train()
@@ -40,20 +50,11 @@ namespace MyMediaLite.rating_predictor
 			base.Train();
 
 			correlation.Cosine cosine_correlation = new Cosine(MaxItemID + 1);
-			cosine_correlation.ComputeCorrelations(item_attributes.GetAttributes());
+			cosine_correlation.ComputeCorrelations(item_attributes);
 			this.correlation = cosine_correlation;
 
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
-
-		/// <inheritdoc />
-		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
-		{
-			this.item_attributes = new BinaryAttributes(matrix);
-			this.NumItemAttributes = num_attr;
-
-			// TODO check whether there is a match between num. of items here and in the collaborative data
-		}
 
         /// <inheritdoc />
 		public override string ToString()
