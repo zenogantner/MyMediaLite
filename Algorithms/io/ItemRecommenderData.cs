@@ -96,8 +96,8 @@ namespace MyMediaLite.io
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
-               	user_items.AddEntry(user_id, item_id);
-               	item_users.AddEntry(item_id, user_id);
+               	user_items[user_id, item_id] = true;
+               	item_users[item_id, user_id] = true;
 			}
 
 			return new Pair<SparseBooleanMatrix, SparseBooleanMatrix>(user_items, item_users);

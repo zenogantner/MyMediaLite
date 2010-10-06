@@ -92,7 +92,7 @@ namespace MyMediaLite.eval
 	            for (int i = 0; i < prediction.Length; i++)
 				{
 					int item_id = prediction[i];
-					if (train.Get(user_id, item_id))
+					if (train[user_id, item_id])
 						left_out++;
 					else
 					{

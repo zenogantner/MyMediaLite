@@ -220,6 +220,7 @@ namespace MyMediaLite.experimental.attr_to_feature
             return MatrixUtils.RowScalarProduct(user_feature, user_id, est_features);
         }
 
+		/// <inheritdoc />
 		public void SetItemAttributeData(SparseBooleanMatrix matrix, int num_attr)
 		{
 			this.item_attributes = new BinaryAttributes(matrix);

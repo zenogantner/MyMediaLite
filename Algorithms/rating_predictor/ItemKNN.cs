@@ -41,7 +41,7 @@ namespace MyMediaLite.rating_predictor
 
             data_item = new SparseBooleanMatrix();
 			foreach (RatingEvent r in ratings)
-               	data_item.AddEntry(r.item_id, r.user_id);
+               	data_item[r.item_id, r.user_id] = true;
 		}
 
 		protected Func<int, IList<int>> GetPositivelyCorrelatedEntities;
@@ -95,7 +95,7 @@ namespace MyMediaLite.rating_predictor
         public override void AddRating(int user_id, int item_id, double rating)
         {
 			base.AddRating(user_id, item_id, rating);
-			data_item.AddEntry(item_id, user_id);
+			data_item[item_id, user_id] = true;
             RetrainItem(item_id);
         }
 
@@ -110,7 +110,7 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveRating(int user_id, int item_id)
         {
 			base.RemoveRating(user_id, item_id);
-			data_item.RemoveEntry(item_id, user_id);
+			data_item[item_id, user_id] = false;
             RetrainItem(user_id);
         }
 

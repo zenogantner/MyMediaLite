@@ -77,7 +77,7 @@ namespace MyMediaLite.io
 				int entity_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int attr_id   = int.Parse(tokens[1]);
 
-               	matrix.AddEntry(entity_id, attr_id);
+               	matrix[entity_id, attr_id] = true;
 				max_attr_id = Math.Max(max_attr_id, attr_id);
 			}
 

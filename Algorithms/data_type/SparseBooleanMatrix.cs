@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 
@@ -28,7 +26,6 @@ namespace MyMediaLite.data_type
     /// Sparse representation of a boolean matrix.
     /// Fast row-wise access is possible.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     [Serializable]
     public class SparseBooleanMatrix
     {
@@ -40,12 +37,27 @@ namespace MyMediaLite.data_type
 		/// </summary>
 		public SparseBooleanMatrix() {}
 
-		public bool Get(int x, int y)
+		/// <summary>
+		/// Indexer to access the elements of the matrix
+		/// </summary>
+		/// <param name="x">the row ID</param>
+		/// <param name="y">the column ID</param>
+		public bool this [int x, int y]
 		{
-            if (x < rows.Count)
-                return rows[x].Contains(y);
-			else
-				return false;
+			get
+			{
+	            if (x < rows.Count)
+	                return rows[x].Contains(y);
+				else
+					return false;
+			}
+			set
+			{
+				if (value)
+            		GetRow(x).Add(y);
+				else
+            		GetRow(x).Remove(y);				
+			}
 		}
 
         /// <summary>Get a row</summary>
@@ -101,19 +113,6 @@ namespace MyMediaLite.data_type
 		{
 			return rows.Count;
 		}
-
-		/// <summary>Adds an entry to the matrix</summary>
-        /// <param name="x">row ID</param>
-        /// <param name="y">column ID</param>
-        public void AddEntry(int x, int y)
-        {
-            GetRow(x).Add(y);
-        }
-
-        public void RemoveEntry(int x, int y)
-        {
-            GetRow(x).Remove(y);
-        }
 
 		/// <summary>
 		/// Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.
@@ -178,7 +177,7 @@ namespace MyMediaLite.data_type
 			for (int i = 0; i < rows.Count; i++)
 			{
 				foreach (int j in this.GetRow(i))
-					transpose.AddEntry(j, i);
+					transpose[j, i] = true;
 			}
 			return transpose;
 		}
@@ -189,7 +188,7 @@ namespace MyMediaLite.data_type
 
 			for (int i = 0; i < rows.Count; i++)
 				foreach (int j in rows[i])
-					if (s.Get(i, j))
+					if (s[i, j])
 						c++;
 
 			return c;

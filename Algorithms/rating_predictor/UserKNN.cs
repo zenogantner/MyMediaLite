@@ -33,6 +33,9 @@ namespace MyMediaLite.rating_predictor
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class UserKNN : KNN
 	{
+		/// <summary>
+		/// boolean matrix indicating which user rated which item
+		/// </summary>
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc />
@@ -42,7 +45,7 @@ namespace MyMediaLite.rating_predictor
 
             data_user = new SparseBooleanMatrix();
 			foreach (RatingEvent r in ratings)
-               	data_user.AddEntry(r.user_id, r.item_id);
+               	data_user[r.user_id, r.item_id] = true;
 		}
 
 		/// <summary>
@@ -96,7 +99,7 @@ namespace MyMediaLite.rating_predictor
         public override void AddRating(int user_id, int item_id, double rating)
         {
 			base.AddRating(user_id, item_id, rating);
-			data_user.AddEntry(user_id, item_id);
+			data_user[user_id, item_id] = true;
             RetrainUser(user_id);
         }
 
@@ -111,7 +114,7 @@ namespace MyMediaLite.rating_predictor
         public override void RemoveRating(int user_id, int item_id)
         {
 			base.RemoveRating(user_id, item_id);
-			data_user.RemoveEntry(user_id, item_id);
+			data_user[user_id, item_id] = false;
             RetrainUser(user_id);
         }
 
