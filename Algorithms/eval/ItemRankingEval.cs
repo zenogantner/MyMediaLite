@@ -72,7 +72,7 @@ namespace MyMediaLite.eval
                 if (prediction.Length != relevant_items.Count)
                     throw new Exception("Not all items have been ranked.");
 
-                int num_eval_items = relevant_items.Count - relevant_items.Intersect(train.GetRow(user_id)).Count();
+                int num_eval_items = relevant_items.Count - relevant_items.Intersect(train[user_id]).Count();
 	            int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
 
 				if (num_eval_pairs == 0)

@@ -46,10 +46,10 @@ namespace MyMediaLite.correlation
             for (int i = 0; i < num_entities; i++)
 			{
 				data.Set(i, i, 1);
-                if (entity_data.GetRow(i).Count == 0)
+                if (entity_data[i].Count == 0)
                     continue;
 
-			    HashSet<int> attributes_i = entity_data.GetRow(i);
+			    HashSet<int> attributes_i = entity_data[i];
 
 				if (i % 100 == 99)
 					Console.Error.Write(".");
@@ -57,9 +57,9 @@ namespace MyMediaLite.correlation
 					Console.Error.WriteLine("{0}/{1}", i, num_entities);
 
 				for (int j = i + 1; j < num_entities; j++)
-                    if (entity_data.GetRow(j).Count > 0)
+                    if (entity_data[j].Count > 0)
                     {
-						float corr = ComputeCorrelation(attributes_i, entity_data.GetRow(j));
+						float corr = ComputeCorrelation(attributes_i, entity_data[j]);
 						data.Set(i, j, corr);
 						data.Set(j, i, corr);
             	    }

@@ -95,7 +95,7 @@ namespace MyMediaLite.item_recommender
             // HCIH is symmetric
             for (int u = 0; u < W.dim1; u++)
             {
-                HashSet<int> row = data.GetRow(u);
+                HashSet<int> row = data[u];
                 // create HCIH in O(f^2|S_u|)
                 for (int f_1 = 0; f_1 < num_features; f_1++)
                 {

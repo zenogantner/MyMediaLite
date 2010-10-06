@@ -117,7 +117,7 @@ namespace MyMediaLite.eval
 		{
 			foreach (int user_id in relevant_users)
 			{
-				HashSet<int> ignore_items = train.GetRow(user_id);
+				HashSet<int> ignore_items = train[user_id];
 				WritePredictions(engine, user_id, relevant_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
 			}
 		}

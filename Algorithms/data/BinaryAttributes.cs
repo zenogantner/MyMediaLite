@@ -21,6 +21,8 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.data
 {
+	// TODO think about getting rid of this -- all the functionality is already covered by SparseBooleanMatrix
+	
 	/// <remarks>
 	/// A class for loading and representing binary entity attributes in-memory in recommender engines.
 	/// </remarks>
@@ -29,16 +31,31 @@ namespace MyMediaLite.data
 	{
 		SparseBooleanMatrix data;
 
+		/// <summary>
+		/// The maximum ID of the described entities
+		/// </summary>
 		public int MaxEntityID  {
 			get;
 			private set;
 		}
 
+		/// <summary>
+		/// Constructor. Creates an object of type BinaryAttributes
+		/// </summary>
+		/// <param name="attr">
+		/// a sparse boolean matrix where the rows represent entities and the columns represent attributes
+		/// </param>
 		public BinaryAttributes(SparseBooleanMatrix attr)
 		{
 			this.SetAttributes(attr);
 		}
 
+		/// <summary>
+		/// Get the attribute data
+		/// </summary>
+		/// <returns>
+		/// A <see cref="SparseBooleanMatrix"/>
+		/// </returns>
 		public SparseBooleanMatrix GetAttributes()
 		{
 			return data;
@@ -53,7 +70,7 @@ namespace MyMediaLite.data
 		// TODO [] access
 		public HashSet<int> GetAttributes(int entity_id)
 		{
-			return data.GetRow(entity_id);
+			return data[entity_id];
 		}
 	}
 }

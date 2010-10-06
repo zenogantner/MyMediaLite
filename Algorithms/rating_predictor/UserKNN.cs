@@ -66,7 +66,7 @@ namespace MyMediaLite.rating_predictor
 			uint neighbors = k;
 			foreach (int user_id2 in relevant_users)
 			{
-				if (data_user.GetRow(user_id2).Contains(item_id))
+				if (data_user[user_id2, item_id])
 				{
 					RatingEvent r = ratings.ByUser[user_id2].FindRating(user_id2, item_id);
 					double weight = correlation.Get(user_id, user_id2);
@@ -126,6 +126,9 @@ namespace MyMediaLite.rating_predictor
         }
 	}
 
+	/// <summary>
+	/// User-based kNN with cosine similarity
+	/// </summary>
 	public class UserKNNCosine : UserKNN
 	{
         /// <inheritdoc />
@@ -151,7 +154,7 @@ namespace MyMediaLite.rating_predictor
 					if (i == user_id)
 						continue;
 
-					float cor = Cosine.ComputeCorrelation(data_user.GetRow(user_id), data_user.GetRow(i));
+					float cor = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
 					correlation.data.Set(user_id, i, cor);
 					correlation.data.Set(i, user_id, cor);
 				}
@@ -166,6 +169,9 @@ namespace MyMediaLite.rating_predictor
 		}
 	}
 
+	/// <summary>
+	/// user-based kNN with Pearson correlation
+	/// </summary>
 	public class UserKNNPearson : UserKNN
 	{
         /// <inheritdoc />

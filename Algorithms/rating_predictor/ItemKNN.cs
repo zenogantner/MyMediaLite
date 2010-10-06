@@ -32,6 +32,9 @@ namespace MyMediaLite.rating_predictor
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class ItemKNN : KNN
 	{
+		/// <summary>
+		/// Matrix indicating which item was rated by which user
+		/// </summary>
 		protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc />
@@ -65,7 +68,7 @@ namespace MyMediaLite.rating_predictor
 			uint neighbors = k;
 			foreach (int item_id2 in relevant_items)
 			{
-				if (data_item.GetRow(item_id2).Contains(user_id))
+				if (data_item[item_id2, user_id])
 				{
 					RatingEvent r = ratings.ByItem[item_id2].FindRating(user_id, item_id2);
 					double weight = correlation.Get(item_id, item_id2);
@@ -150,14 +153,12 @@ namespace MyMediaLite.rating_predictor
 		{
 			base.RetrainUser(item_id);
 			if (UpdateItems)
-			{
 				for (int i = 0; i < MaxItemID; i++)
 				{
-					float cor = Cosine.ComputeCorrelation(data_item.GetRow(item_id), data_item.GetRow(i));
+					float cor = Cosine.ComputeCorrelation(data_item[item_id], data_item[i]);
 					correlation.data.Set(item_id, i, cor);
 					correlation.data.Set(i, item_id, cor);
 				}
-			}
 		}
 
         /// <inheritdoc />

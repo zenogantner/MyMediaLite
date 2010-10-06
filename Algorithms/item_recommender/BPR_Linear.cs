@@ -29,9 +29,12 @@ namespace MyMediaLite.item_recommender
 {
 	/// <summary>
 	/// Linear model optimized for BPR.
-	/// No academic publications about this yet.
 	///
-	/// This engine does not support online updates.
+	/// Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme (2010):
+    /// Learning Attribute-to-Feature Mappings for Cold-start Recommendations
+    /// in IEEE International Conference on Data Mining (ICDM 2010), Sydney, Australia.
+    ///
+    /// This engine does not support online updates.
 	/// </summary>
 	public class BPR_Linear : Memory, ItemAttributeAwareRecommender, IterativeModel
 	{
@@ -84,11 +87,11 @@ namespace MyMediaLite.item_recommender
 				user_neg_items = new int[max_user_id + 1][];
 				for (int u = 0; u < max_user_id + 1; u++)
 				{
-					List<int> pos_list = new List<int>(data_user.GetRow(u));
+					List<int> pos_list = new List<int>(data_user[u]);
 					user_pos_items[u] = pos_list.ToArray();
 					List<int> neg_list = new List<int>();
 					for (int i = 0; i < max_item_id; i++)
-						if (!data_user.GetRow(u).Contains(i) && data_item.GetRow(i).Count != 0)
+						if (!data_user[u].Contains(i) && data_item[i].Count != 0)
 							neg_list.Add(i);
 					user_neg_items[u] = neg_list.ToArray();
 				}
@@ -144,11 +147,11 @@ namespace MyMediaLite.item_recommender
 			}
 			else
 			{
-				HashSet<int> user_items = data_user.GetRow (u);
+				HashSet<int> user_items = data_user[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
 					j = random.Next (0, max_item_id + 1);
-				while (user_items.Contains(j) || data_item.GetRow(j).Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
+				while (user_items.Contains(j) || data_item[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
 			}
 		}
 
@@ -159,7 +162,7 @@ namespace MyMediaLite.item_recommender
 			while (true)
 			{
 				int u = random.Next(0, max_user_id + 1);
-				HashSet<int> user_items = data_user.GetRow(u);
+				HashSet<int> user_items = data_user[u];
 				if (user_items.Count == 0 || user_items.Count == max_item_id + 1)
 					continue;
 				return u;
@@ -291,7 +294,7 @@ namespace MyMediaLite.item_recommender
 			// TODO
 			return -1;
 		}
-		
+
 		/// <inheritdoc/>
 		public override string ToString()
 		{

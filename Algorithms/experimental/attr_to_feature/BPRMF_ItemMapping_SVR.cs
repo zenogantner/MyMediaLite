@@ -42,7 +42,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			for (int i = 0; i < max_item_id + 1; i++)
 			{
 				// ignore items w/o collaborative data
-				if (data_item.GetRow(i).Count == 0)
+				if (data_item[i].Count == 0)
 					continue;
 				// ignore items w/o attribute data
 				if (item_attributes.GetAttributes(i).Count == 0)

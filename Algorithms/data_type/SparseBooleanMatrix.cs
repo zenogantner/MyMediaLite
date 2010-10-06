@@ -29,13 +29,7 @@ namespace MyMediaLite.data_type
     [Serializable]
     public class SparseBooleanMatrix
     {
-		List<HashSet<int>> rows = new List<HashSet<int>>();
-
-		/// <summary>
-		/// Initializes a new instance of the
-		/// <see cref="MyMediaLite.data_type.SparseBooleanMatrix"/> class.
-		/// </summary>
-		public SparseBooleanMatrix() {}
+		private List<HashSet<int>> rows = new List<HashSet<int>>();
 
 		/// <summary>
 		/// Indexer to access the elements of the matrix
@@ -54,24 +48,39 @@ namespace MyMediaLite.data_type
 			set
 			{
 				if (value)
-            		GetRow(x).Add(y);
+            		this[x].Add(y);
 				else
-            		GetRow(x).Remove(y);				
+            		this[x].Remove(y);				
 			}
 		}
 
-        /// <summary>Get a row</summary>
-        /// <param name="x">row ID</param>
-        /// <returns>the row</returns>
-        public HashSet<int> GetRow(int x)
-        {
-            if (x >= rows.Count)
-				for (int i = rows.Count; i <= x; i++)
-                	rows.Add(new HashSet<int>());
+		/// <summary>
+		/// Indexer to access the rows of the matrix
+		/// </summary>
+		/// <param name="x">
+		/// the row ID
+		/// </param>
+		public HashSet<int> this [int x]
+		{
+			get
+			{
+	            if (x >= rows.Count)
+					for (int i = rows.Count; i <= x; i++)
+        	        	rows.Add(new HashSet<int>());
+				return rows[x];
+			}
+			set
+			{
+				rows[x] = value;
+			}
+		}
 
-			return rows[x];
-        }
-
+		/// <summary>
+		/// Get the rows of the matrix
+		/// </summary>
+		/// <returns>
+		/// a list containing the rows of the matrix
+		/// </returns>
 		public IList<KeyValuePair<int, HashSet<int>>> GetRows()
 		{
 			var return_list = new List<KeyValuePair<int, HashSet<int>>>();
@@ -82,6 +91,12 @@ namespace MyMediaLite.data_type
 			return return_list;
 		}
 
+		/// <summary>
+		/// Get the non-empty rows of the matrix (the ones that contain at least one true entry)
+		/// </summary>
+		/// <returns>
+		/// a list containing the non-empty rows of the matrix
+		/// </returns>
 		public IList<KeyValuePair<int, HashSet<int>>> GetNonEmptyRows()
 		{
 			var return_list = new List<KeyValuePair<int, HashSet<int>>>();
@@ -93,6 +108,12 @@ namespace MyMediaLite.data_type
 			return return_list;
 		}
 
+		/// <summary>
+		/// Get the IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)
+		/// </summary>
+		/// <returns>
+		/// a list containing the IDs of the non-empty rows in the matrix
+		/// </returns>
 		public HashSet<int> GetNonEmptyRowIDs()
 		{
 			HashSet<int> row_ids = new HashSet<int>();
@@ -104,11 +125,12 @@ namespace MyMediaLite.data_type
 			return row_ids;
 		}
 
-		public void SetRow(int x, HashSet<int> row)
-		{
-			rows[x] = row;
-		}
-
+		/// <summary>
+		/// Get the number of rows in the matrix
+		/// </summary>
+		/// <returns>
+		/// the number of rows in the matrix
+		/// </returns>
 		public int GetNumberOfRows()
 		{
 			return rows.Count;
@@ -171,17 +193,32 @@ namespace MyMediaLite.data_type
 			return n;
 		}
 
+		/// <summary>
+		/// Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged
+		/// </summary>
+		/// <returns>
+		/// the transpose of the matrix
+		/// </returns>
 		public SparseBooleanMatrix Transpose()
 		{
 			SparseBooleanMatrix transpose = new SparseBooleanMatrix();
 			for (int i = 0; i < rows.Count; i++)
 			{
-				foreach (int j in this.GetRow(i))
+				foreach (int j in this[i])
 					transpose[j, i] = true;
 			}
 			return transpose;
 		}
 
+		/// <summary>
+		/// Get the overlap of two matrices, i.e. the number of true entries where they agree
+		/// </summary>
+		/// <param name="s">
+		/// the <see cref="SparseBooleanMatrix"/> to compare to
+		/// </param>
+		/// <returns>
+		/// the number of entries that are true in both matrices
+		/// </returns>
 		public int Overlap(SparseBooleanMatrix s)
 		{
 			int c = 0;

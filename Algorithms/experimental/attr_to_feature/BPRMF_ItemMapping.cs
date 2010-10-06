@@ -103,7 +103,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			while (true)
 			{
 				int item_id = random.Next(0, max_item_id + 1);
-				HashSet<int> item_users = data_item.GetRow(item_id);
+				HashSet<int> item_users = data_item[item_id];
 				HashSet<int> item_attrs = item_attributes.GetAttributes(item_id);
 				if (item_users.Count == 0 || item_attrs.Count == 0)
 					continue;
@@ -148,7 +148,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			int num_items = 0;
 			for (int i = 0; i < max_item_id + 1; i++)
 			{
-				HashSet<int> item_users = data_item.GetRow(i);
+				HashSet<int> item_users = data_item[i];
 				HashSet<int> item_attrs = item_attributes.GetAttributes(i);
 				if (item_users.Count == 0 || item_attrs.Count == 0)
 					continue;

@@ -49,7 +49,7 @@ namespace MyMediaLite.item_recommender
             if ((item_id < 0) || (item_id > max_item_id))
                 throw new ArgumentException("item is unknown: " + item_id);
 
-			return correlation.SumUp(item_id, data_user.GetRow(user_id));
+			return correlation.SumUp(item_id, data_user[user_id]);
         }
 
 		/// <inheritdoc />

@@ -56,15 +56,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				if (item_id2 >= item_feature.dim1) // check whether item is in training data
 					continue;
-				if (data_item.GetRow(item_id2).Count == 0)
+				if (data_item[item_id2].Count == 0)
 					continue;
 
 				double weight = item_correlation.Get(item_id, item_id2);
 				weight_sum += weight;
 				for (int f = 0; f < num_features; f++)
-				{
 					item_features[f] += weight * item_feature.Get(item_id2, f);
-				}
 
 				if (--neighbors == 0)
 					break;
@@ -77,6 +75,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		}
 
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return String.Format("BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_f_mean={7}, init_f_stdev={8}",

@@ -34,6 +34,9 @@ namespace MyMediaLite.item_recommender
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public class UserKNN : KNN
     {
+		/// <summary>
+		/// Precomputed nearest neighbors
+		/// </summary>
 		protected int[][] nearest_neighbors;
 
         /// <inheritdoc />
@@ -59,7 +62,7 @@ namespace MyMediaLite.item_recommender
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[user_id])
 			{
-				if (data_user.GetRow(neighbor).Contains(item_id))
+				if (data_user[neighbor, item_id])
 					count++;
 			}
 			return (double) count / k;
@@ -91,13 +94,13 @@ namespace MyMediaLite.item_recommender
 
 			if (k == UInt32.MaxValue)
 			{
-				return correlation.SumUp(user_id, data_item.GetRow(item_id));
+				return correlation.SumUp(user_id, data_item[item_id]);
 			}
 			else
 			{
 				double result = 0;
 				foreach (int neighbor in nearest_neighbors[user_id])
-					if (data_user.GetRow(neighbor).Contains(item_id))
+					if (data_user[neighbor, item_id])
 						result += correlation.Get(user_id, neighbor);
 				return result;
 			}

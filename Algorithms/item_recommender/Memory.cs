@@ -56,9 +56,9 @@ namespace MyMediaLite.item_recommender
 				throw new ArgumentException("Unknown item " + item_id + ". Add it before inserting event data.");
 
 			// update data structures
-			HashSet<int> user_items = data_user.GetRow(user_id);
+			HashSet<int> user_items = data_user[user_id];
 			user_items.Add(item_id);
-			HashSet<int> item_users = data_item.GetRow(item_id);
+			HashSet<int> item_users = data_item[item_id];
 			item_users.Add(user_id);
 		}
 
@@ -71,9 +71,9 @@ namespace MyMediaLite.item_recommender
 				throw new ArgumentException("Unknown item " + item_id);
 
 			// update data structures
-			HashSet<int> user_items = data_user.GetRow(user_id);
+			HashSet<int> user_items = data_user[user_id];
 			user_items.Remove(item_id);
-			HashSet<int> item_users = data_item.GetRow(item_id);
+			HashSet<int> item_users = data_item[item_id];
 			item_users.Remove(user_id);
 		}
 
@@ -81,30 +81,23 @@ namespace MyMediaLite.item_recommender
 		public override void AddUser(int user_id)
 		{
 			if (user_id > max_user_id)
-			{
-				data_user.GetRow(user_id);
 				max_user_id = user_id;
-			}
 		}
 
 		/// <inheritdoc/>
 		public override void AddItem(int item_id)
 		{
 			if (item_id > max_item_id)
-			{
-				data_item.GetRow(item_id);
 				max_item_id = item_id;
-			}
 		}
 
 		/// <inheritdoc/>
 		public override void RemoveUser(int user_id)
 		{
 			// remove all mentions of this user from data structures
-			HashSet<int> user_items = data_user.GetRow (user_id);
-			foreach (int item_id in user_items) {
-				data_item.GetRow (item_id).Remove(user_id);
-			}
+			HashSet<int> user_items = data_user[user_id];
+			foreach (int item_id in user_items)
+				data_item[item_id, user_id] = false;
 			user_items.Clear();
 
 			if (user_id == max_user_id)
@@ -115,16 +108,16 @@ namespace MyMediaLite.item_recommender
 		public override void RemoveItem(int item_id)
 		{
 			// remove all mentions of this item from data structures
-			HashSet<int> item_users = data_item.GetRow (item_id);
-			foreach (int user_id in item_users) {
-				data_user.GetRow (user_id).Remove(item_id);
-			}
+			HashSet<int> item_users = data_item[item_id];
+			foreach (int user_id in item_users)
+				data_user[user_id, item_id] = false;
 			item_users.Clear();
 
 			if (item_id == max_item_id)
 				max_item_id--;
 		}
 
+		/// <inheritdoc/>
 		public void SetCollaborativeData(SparseBooleanMatrix user_items, SparseBooleanMatrix item_users)
 		{
             this.data_user = user_items;

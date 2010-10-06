@@ -44,7 +44,7 @@ namespace MyMediaLite.item_recommender
         public override void Train()
         {
             for (int i = 0; i <= max_item_id; i++)
-                view_count[i] = this.data_item.GetRow(i).Count;
+                view_count[i] = this.data_item[i].Count;
         }
 
 		/// <inheritdoc />

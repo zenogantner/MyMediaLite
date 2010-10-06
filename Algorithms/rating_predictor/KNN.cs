@@ -33,12 +33,18 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// This engine does NOT support online updates.
 	///
-	/// <seealso cref="item_recommender.kNN"/>
+	/// <seealso cref="item_recommender.KNN"/>
 	/// </remarks>
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class KNN : UserItemBaseline
 	{
+		/// <summary>
+		/// Number of neighbors to take into account for predictions
+		/// </summary>
 		public uint k           = UInt32.MaxValue;
+		/// <summary>
+		/// Shrinkage parameter
+		/// </summary>
 		public double shrinkage = 10;
 
         /// <summary>

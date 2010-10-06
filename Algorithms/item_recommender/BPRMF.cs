@@ -99,8 +99,8 @@ namespace MyMediaLite.item_recommender
 		/// <returns>true if the given item was already seen by user u</returns>
 		protected virtual bool SampleOtherItem(int u, int i, out int j)
 		{
-			HashSet<int> user_items = data_user.GetRow (u);
-			bool item_is_positive = user_items.Contains (i);
+			HashSet<int> user_items = data_user[u];
+			bool item_is_positive = user_items.Contains(i);
 
 			if (fast_sampling)
 			{
@@ -143,7 +143,7 @@ namespace MyMediaLite.item_recommender
 			}
 			else
 			{
-				HashSet<int> user_items = data_user.GetRow(u);
+				HashSet<int> user_items = data_user[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
 					j = random.Next (0, max_item_id + 1);
@@ -158,7 +158,7 @@ namespace MyMediaLite.item_recommender
 			while (true)
 			{
 				int u = random.Next(0, max_user_id + 1);
-				HashSet<int> user_items = data_user.GetRow(u);
+				HashSet<int> user_items = data_user[u];
 				if (user_items.Count == 0 || user_items.Count == max_item_id + 1)
 					continue;
 				return u;
@@ -317,7 +317,7 @@ namespace MyMediaLite.item_recommender
 		{
 			MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
 
-			HashSet<int> user_items = data_user.GetRow(user_id);
+			HashSet<int> user_items = data_user[user_id];
 			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
 				int item_id_1, item_id_2;
 				SampleItemPair(user_id, out item_id_1, out item_id_2);
@@ -355,7 +355,7 @@ namespace MyMediaLite.item_recommender
 
 			for (int user_id = 0; user_id < max_user_id + 1; user_id++)
 			{
-				HashSet<int> test_items = data_user.GetRow (user_id);
+				HashSet<int> test_items = data_user[user_id];
 				if (test_items.Count == 0)
 					continue;
 				int[] prediction = ItemPrediction.PredictItems(this, user_id, max_item_id);
@@ -370,7 +370,7 @@ namespace MyMediaLite.item_recommender
 				{
 					int item_id = prediction[i];
 
-					if (test_items.Contains (item_id)) {
+					if (test_items.Contains(item_id)) {
 						num_pos_above++;
 					} else {
 						num_correct_pairs += num_pos_above;
@@ -392,11 +392,11 @@ namespace MyMediaLite.item_recommender
 			while (u >= user_neg_items.Count)
 				user_neg_items.Add(null);
 
-			List<int> pos_list = new List<int>(data_user.GetRow(u));
+			List<int> pos_list = new List<int>(data_user[u]);
 			user_pos_items[u] = pos_list.ToArray();
 			List<int> neg_list = new List<int>();
 			for (int i = 0; i < max_item_id; i++)
-				if (!data_user.GetRow(u).Contains(i))
+				if (! data_user[u, i])
 					neg_list.Add(i);
 			user_neg_items[u] = neg_list.ToArray();
 		}
