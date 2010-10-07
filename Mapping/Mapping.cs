@@ -97,11 +97,6 @@ namespace Mapping
 				Usage("Not enough arguments.");
 
 			// read command line parameters
-			string trainfile       = args[0];
-			string testfile        = args[1];
-			string load_model_file = args[2];
-			string method          = args[3];
-
 			CommandLineParameters parameters = null;
 			try	{ parameters = new CommandLineParameters(args, 4);	}
 			catch (ArgumentException e)	{ Usage(e.Message); 		}
@@ -119,11 +114,17 @@ namespace Mapping
 			int  cross_validation       = parameters.GetRemoveInt32(  "cross_validation", -1);
 			     half_size              = parameters.GetRemoveUInt32( "half_size", 2);
 			*/
-			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
-
+			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);			
+			
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
 
+			// main data files and method
+			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
+			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
+			string load_model_file = args[2];
+			string method    = args[3];			
+			
 			// set correct recommender
 			BPRMF_Mapping recommender = null;
 			switch (method)
@@ -155,10 +156,14 @@ namespace Mapping
 			}
 
 			if (parameters.CheckForLeftovers())
-				Usage(-1);// TODO give out leftovers
+				Usage(-1);
 
+			// ID mapping objects
+			EntityMapping user_mapping = new EntityMapping();
+			EntityMapping item_mapping = new EntityMapping();			
+			
 			// training data
-			Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile));
+			Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 			recommender.SetCollaborativeData(training_data.First, training_data.Second);
 
 			// relevant items
@@ -175,8 +180,9 @@ namespace Mapping
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file));
-					((UserAttributeAwareRecommender)recommender).SetUserAttributeData(attr_data.First, attr_data.Second);
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
 				}
 
 			// item attributes
@@ -187,12 +193,13 @@ namespace Mapping
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file));
-					((ItemAttributeAwareRecommender)recommender).SetItemAttributeData(attr_data.First, attr_data.Second);
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 				}
 
 			// test data
-            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile) );
+            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 			TimeSpan seconds;
 
@@ -262,7 +269,7 @@ namespace Mapping
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
-		    		var result = RatingEval.EvaluateItemRecommender(
+		    		var result = ItemRankingEval.EvaluateItemRecommender(
 	                                recommender,
 									test_user_items,
             	                    train_user_items,

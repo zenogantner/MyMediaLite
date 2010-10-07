@@ -2,7 +2,7 @@ We use a blending of guidelines that are used in the C# and Java communities.
 We apologize to both camps for this heresy.
 
 1. Class, interface, method and property names are written in CamelCase.
-2. Interface names do NOT have a preceding 'I'.
+2. Interface names have a preceding 'I'.
 3. Enum values are written in UPPER_CASE.
 4. Namespace names below MyMedia are written in lower_case.
 5. Field variables, local variables, and method parameters are written in

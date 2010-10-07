@@ -39,13 +39,15 @@ namespace MyMediaLite.rating_predictor
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc />
-		public override void SetCollaborativeData(RatingData ratings)
+		public override RatingData Ratings
 		{
-			base.SetCollaborativeData(ratings);
-
-            data_user = new SparseBooleanMatrix();
-			foreach (RatingEvent r in ratings)
-               	data_user[r.user_id, r.item_id] = true;
+			set
+			{
+				base.Ratings = value;
+	            data_user = new SparseBooleanMatrix();
+				foreach (RatingEvent r in ratings)
+	               	data_user[r.user_id, r.item_id] = true;
+			}
 		}
 
 		/// <summary>

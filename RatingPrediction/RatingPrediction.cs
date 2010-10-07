@@ -107,7 +107,7 @@ namespace RatingPrediction
 				Usage("Not enough arguments.");
 
 			// read command line parameters
-			string trainfile = args[0];
+			string training_file = args[0];
 			string testfile  = args[1];
 			string method    = args[2];
 
@@ -201,7 +201,7 @@ namespace RatingPrediction
 			// check command-line parameters
 			if (parameters.CheckForLeftovers())
 				Usage(-1);
-			if (trainfile.Equals("-") && testfile.Equals("-"))
+			if (training_file.Equals("-") && testfile.Equals("-"))
 			{
 				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
 				Usage(-1);
@@ -212,8 +212,8 @@ namespace RatingPrediction
 			EntityMapping item_mapping = new EntityMapping();
 
 			// read training data
-			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
-			recommender.SetCollaborativeData(training_data);
+			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			recommender.Ratings = training_data;
 
 			// user attributes
 			if (recommender is UserAttributeAwareRecommender)

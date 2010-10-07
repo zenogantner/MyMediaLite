@@ -31,11 +31,26 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; protected set; }
 
+		/// <summary>The rating data</summary>
+		public virtual RatingData Ratings
+		{
+			get
+			{
+				return this.ratings;
+			}
+			set
+			{
+				this.ratings = value;
+				MaxUserID = ratings.MaxUserID;
+				MaxItemID = ratings.MaxItemID;
+			}
+		}
+
 		/// <summary>
 		/// public in order to allow more fine-grained access by some programs, e.g. for finding the right number
 		/// of iterations w/ MatrixFactorization
 		/// </summary>
-		public RatingData ratings;
+		protected RatingData ratings;
 
 		/// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)
@@ -96,15 +111,6 @@ namespace MyMediaLite.rating_predictor
         {
             ratings.RemoveItem(item_id);
         }
-
-		/// <inheritdoc />
-		public virtual void SetCollaborativeData(RatingData ratings)
-		{
-			this.ratings = ratings;
-
-			MaxUserID = ratings.MaxUserID;
-			MaxItemID = ratings.MaxItemID;
-		}
 	}
 }
 
