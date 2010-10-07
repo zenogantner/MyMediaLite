@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 
+
 namespace MyMediaLite.data
 {
 	/// <summary>
@@ -39,10 +40,17 @@ namespace MyMediaLite.data
 		/// </summary>
 		protected Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
 
-		/// <summary>
-		/// Default constructor
-		/// </summary>
-		public EntityMapping()	{ }
+		/// <summary>all original (external) entity IDs</summary>
+		public ICollection<int> OriginalIDs
+		{
+			get { return original_to_internal.Keys; }
+		}
+
+		/// <summary>all internal entity IDs</summary>
+		public ICollection<int> InternalIDs
+		{
+			get { return internal_to_original.Keys; }
+		}
 
 		/// <summary>
 		/// Get original (external) ID of a given entity.
@@ -58,7 +66,7 @@ namespace MyMediaLite.data
 			else
 				throw new ArgumentException("Unknown internal ID: " + internal_id);
 		}
-		
+
 		/// <summary>
 		/// Get internal ID of a given entity.
 		/// If the given external ID is unknown, create a new internal ID for it and store the mapping.
@@ -92,8 +100,8 @@ namespace MyMediaLite.data
 			foreach (int id in internal_id_list)
 				result.Add(ToOriginalID(id));
 			return result;
-		}		
-		
+		}
+
 		/// <summary>
 		/// Get internal IDs of a list of given entities.
 		/// </summary>
@@ -110,7 +118,7 @@ namespace MyMediaLite.data
 				result.Add(ToInternalID(id));
 			return result;
 		}
-		
+
 		// TODO store to textfile (for debugging purposes)
 	}
 }

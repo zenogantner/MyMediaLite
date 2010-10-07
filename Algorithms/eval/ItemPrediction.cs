@@ -36,11 +36,10 @@ namespace MyMediaLite.eval
 		// TODO there are too many different versions of this method interface - we should simplify the API
 
 		/// <summary>
-		/// Write item predictions (scores) to a file, for users from ID 0 to max:user_it
+		/// Write item predictions (scores) for all users to a file
 		/// </summary>
 		/// <param name="engine">the <see cref="RecommenderEngine"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
-		/// <param name="max_user_id">the maximum user ID</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
@@ -49,18 +48,17 @@ namespace MyMediaLite.eval
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
-			int max_user_id,
 			HashSet<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
-				WritePredictions(engine, train, max_user_id, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
+				WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
 				using ( StreamWriter writer = new StreamWriter(filename) )
 				{
-					WritePredictions(engine, train, max_user_id, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+					WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 				}
 		}
 
@@ -89,32 +87,27 @@ namespace MyMediaLite.eval
 				{
 					WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 				}
-		}		
-		
+		}
+
 		/// <summary>
-		/// Write item predictions (scores) to a TextWriter object, for users from ID 0 to max:user_it
+		/// Write item predictions (scores) for all users to a TextWriter object
 		/// </summary>
 		/// <param name="engine">the <see cref="RecommenderEngine"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
-		/// <param name="max_user_id">the maximum user ID</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
-		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>		
+		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
-			int max_user_id,
 			HashSet<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
-
-			List<int> relevant_users = new List<int>();
-			for (int u = 0; u <= max_user_id; u++)
-				relevant_users.Add(u);
+			List<int> relevant_users = new List<int>(user_mapping.InternalIDs);
 			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
@@ -147,27 +140,12 @@ namespace MyMediaLite.eval
 		/// Write item predictions (scores) to a TextWriter object
 		/// </summary>
 		/// <param name="engine">the <see cref="RecommenderEngine"/> to use for making the predictions</param>
-		/// <param name="train">
-		/// A user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed
-		/// </param>
-		/// <param name="user_id">
-		/// the ID of the user to make recommendations for
-		/// </param>
-		/// <param name="relevant_items">
-		/// the list of candidate items
-		/// </param>
-		/// <param name="ignore_items">
-		/// a list of items for which no predictions should be made
-		/// </param>
-		/// <param name="num_predictions">
-		/// the number of items to return per user, -1 if there should be no limit
-		/// </param>
-		/// <param name="user_mapping">
-		/// An <see cref="EntityMapping"/> object for the user IDs
-		/// </param>
-		/// <param name="item_mapping">
-		/// An <see cref="EntityMapping"/> object for the item IDs
-		/// </param>
+		/// <param name="user_id">the ID of the user to make recommendations for</param>
+		/// <param name="relevant_items">the list of candidate items</param>
+		/// <param name="ignore_items">a list of items for which no predictions should be made</param>
+		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			RecommenderEngine engine,
@@ -206,6 +184,13 @@ namespace MyMediaLite.eval
 			}
 		}
 
+		/// <summary>
+		/// predict items for a specific users
+		/// </summary>
+		/// <param name="engine">the <see cref="RecommenderEngine"/> object to use for the predictions</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="max_item_id">the maximum item ID</param>
+		/// <returns>a list sorted list of item IDs</returns>
 		static public int[] PredictItems(RecommenderEngine engine, int user_id, int max_item_id)
 		{
             List<WeightedItem> result = new List<WeightedItem>();

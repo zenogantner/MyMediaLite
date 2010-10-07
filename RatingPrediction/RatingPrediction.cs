@@ -238,7 +238,7 @@ namespace RatingPrediction
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;				
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 				}
 
 			// read test data
@@ -290,7 +290,7 @@ namespace RatingPrediction
 							Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
-						
+
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
 					}
 				} // for

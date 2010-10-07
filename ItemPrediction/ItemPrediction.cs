@@ -266,7 +266,7 @@ namespace MyMediaLite
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;				
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 				}
 
 			// test data
@@ -395,8 +395,8 @@ namespace MyMediaLite
 				else
 				{
 					EngineStorage.LoadModel(recommender, data_dir, load_model_file);
-
 					Console.Write(recommender.ToString() + " ");
+					// TODO is this the right time to load the model?
 				}
 
 				if (!predict_items_file.Equals(String.Empty))
@@ -408,7 +408,6 @@ namespace MyMediaLite
 						    	eval.ItemPrediction.WritePredictions(
 							    	recommender,
 							        training_data.First,
-							        max_user_id,
 							        relevant_items, predict_items_number,
 							        user_mapping, item_mapping,
 							        predict_items_file

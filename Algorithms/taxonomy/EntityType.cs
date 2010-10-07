@@ -17,9 +17,17 @@
 
 namespace MyMediaLite.taxonomy
 {
+	/// <summary>Type to refer to different kinds of entities like users and items</summary>
 	public enum EntityType
 	{
-		USER, ITEM, TAG, TIMESTAMP
+		/// <summary>users</summary>
+		USER,
+		/// <summary>items like movies, DVDs, books, products, etc.</summary>
+		ITEM,
+		/// <summary>folksonomy tags</summary>
+		TAG,
+		/// <summary>timestamps</summary>
+		TIMESTAMP
 	}
 }
 
