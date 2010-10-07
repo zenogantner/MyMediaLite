@@ -287,7 +287,6 @@ namespace MyMediaLite
 			}
 			*/
 
-			// TODO put the main program modes into static methods
 			// TODO give out time for each iteration
 			if (find_iter != 0)
 			{
@@ -355,7 +354,6 @@ namespace MyMediaLite
 								Console.Error.WriteLine("DONE");
 								break;
 						}
-						// TODO implement save model at every Nth iteration
 					}
 				} // for
 				Console.Out.Flush();
@@ -403,38 +401,36 @@ namespace MyMediaLite
 
 				if (!predict_items_file.Equals(String.Empty))
 				{
-					using ( StreamWriter writer = new StreamWriter(Path.Combine(data_dir, predict_items_file)) )
-					{
-						if (predict_for_users_file.Equals(String.Empty))
-							time_span = Utils.MeasureTime( delegate()
-						    	{
-							    	eval.ItemPrediction.WritePredictions(
-								    	recommender,
-								        training_data.First,
-								        max_user_id,
-								        relevant_items, predict_items_number,
-								        user_mapping, item_mapping,
-								        writer
-									);
-									Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
-						    	}
-							);
-						else
-							time_span = Utils.MeasureTime( delegate()
-						    	{
-							    	eval.ItemPrediction.WritePredictions(
-								    	recommender,
-								        training_data.First,
-								        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
-								        relevant_items, predict_items_number,
-								        user_mapping, item_mapping,
-								        writer
-									);
-									Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
-						    	}
-							);
-						Console.Write(" predicting_time " + time_span);
-					}
+
+					if (predict_for_users_file.Equals(String.Empty))
+						time_span = Utils.MeasureTime( delegate()
+					    	{
+						    	eval.ItemPrediction.WritePredictions(
+							    	recommender,
+							        training_data.First,
+							        max_user_id,
+							        relevant_items, predict_items_number,
+							        user_mapping, item_mapping,
+							        predict_items_file
+								);
+								Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
+					    	}
+						);
+					else
+						time_span = Utils.MeasureTime( delegate()
+					    	{
+						    	eval.ItemPrediction.WritePredictions(
+							    	recommender,
+							        training_data.First,
+							        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
+							        relevant_items, predict_items_number,
+							        user_mapping, item_mapping,
+							        predict_items_file
+								);
+								Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
+					    	}
+						);
+					Console.Write(" predicting_time " + time_span);
 				}
 				else if (!no_eval)
 				{

@@ -74,16 +74,16 @@ namespace RatingPrediction
 			Console.WriteLine("    - " + ia);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
 			Console.WriteLine("  - general OPTIONS have the form name=value");
-			Console.WriteLine("    - option_file=FILE       read options from FILE (line format KEY: VALUE)");
-			Console.WriteLine("    - random_seed=N");
-			Console.WriteLine("    - data_dir=DIR           load all files from DIR");
-			Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");
-			Console.WriteLine("    - save_model=FILE        save computed model to FILE");
-			Console.WriteLine("    - load_model=FILE        load model from FILE");
-			Console.WriteLine("    - min_rating=NUM         ");
-			Console.WriteLine("    - max_rating=NUM         ");
-			Console.WriteLine("    - no_eval=BOOL           ");
-			Console.WriteLine("    - predict_ratings=BOOL   write the rating predictions to STDOUT");
+			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
+			Console.WriteLine("    - random_seed=N              ");
+			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
+			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
+			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
+			Console.WriteLine("    - load_model=FILE            load model from FILE");
+			Console.WriteLine("    - min_rating=NUM             ");
+			Console.WriteLine("    - max_rating=NUM             ");
+			Console.WriteLine("    - no_eval=BOOL               ");
+			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to STDOUT");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
 			Console.WriteLine("    - find_iter=STEP");
 			Console.WriteLine("    - max_iter=N");
@@ -133,9 +133,9 @@ namespace RatingPrediction
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 			string save_model_file      = parameters.GetRemoveString( "save_model");
 			string load_model_file      = parameters.GetRemoveString( "load_model");
-			int random_seed             = parameters.GetRemoveInt32(  "random_seed",     -1);
-			bool no_eval                = parameters.GetRemoveBool(   "no_eval",         false);
-			bool predict_ratings        = parameters.GetRemoveBool(   "predict_ratings", false); // TODO write to file
+			int random_seed             = parameters.GetRemoveInt32(  "random_seed",  -1);
+			bool no_eval                = parameters.GetRemoveBool(   "no_eval",      false);
+			string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
 
 			/*
 			// hyperparameter search arguments
@@ -244,7 +244,6 @@ namespace RatingPrediction
 			// read test data
 			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 
-			// TODO put the main program modes into static methods
 			if (find_iter != 0)
 			{
 				if ( !(recommender is IterativeModel) )
@@ -291,6 +290,8 @@ namespace RatingPrediction
 							Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
+						
+						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
 					}
 				} // for
 				Console.Out.Flush();
@@ -356,22 +357,21 @@ namespace RatingPrediction
 					Console.Write(" testing_time " + seconds);
 				}
 
-				if (predict_ratings)
+				if (!predict_ratings_file.Equals(string.Empty))
 				{
 					seconds = Utils.MeasureTime(
 				    	delegate() {
 							Console.WriteLine();
-							rate(recommender, test_data);
+							MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, predict_ratings_file);
 						}
 					);
-					Console.Error.Write("predicting " + seconds);
+					Console.Error.Write("predicting_time " + seconds);
 				}
 
 				Console.WriteLine();
 			}
 		}
 
-		// TODO reverse arguments (like in ItemPrediction.exe)
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
@@ -402,17 +402,6 @@ namespace RatingPrediction
 
 			return uib;
 		}
-
-        /// <summary>Rates a given set of instances</summary>
-        /// <param name="engine">Rating prediction engine</param>
-        /// <param name="ratings">Test cases</param>
-        static void rate(RatingPredictor engine, RatingData ratings)
-		{
-			foreach (RatingEvent r in ratings)
-				Console.WriteLine("{0}\t{1}\t{2}", r.user_id, r.item_id, engine.Predict(r.user_id, r.item_id));
-        }
-		// TODO have the same thing as with item prediction (e.g. write to file)
-		//      define a library function
 
 		/*
 		static void FindHyperparameters(RatingPredictor recommender, int cross_validation, string criterion)

@@ -4,6 +4,7 @@
            unnecessary to convert datasets before using them with the
            MyMediaLite command-line tools.
         changes to the command-line programs:
+         - allow input from STDIN and output to STDOUT
 	 - nicer time output for both demo programs
 	 - rating prediction program: save model earlier
 	interface changes:
