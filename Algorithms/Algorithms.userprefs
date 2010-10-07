@@ -1,23 +1,31 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="io/RatingPredictionData.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="util/EngineStorage.cs" ctype="Workbench">
     <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="151" Column="1" />
-      <File FileName="io/RatingPredictionData.cs" Line="64" Column="8" />
-      <File FileName="data/RatingData.cs" Line="90" Column="46" />
-      <File FileName="data/EntityMapping.cs" Line="45" Column="29" />
-      <File FileName="eval/Prediction.cs" Line="16" Column="73" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="294" Column="72" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="399" Column="55" />
+      <File FileName="item_recommender/BPRMF.cs" Line="40" Column="17" />
+      <File FileName="data_type/VectorUtils.cs" Line="26" Column="32" />
+      <File FileName="util/EngineStorage.cs" Line="101" Column="33" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Algorithms" expanded="True">
+            <Node name="correlation" expanded="True" />
             <Node name="data" expanded="True" />
+            <Node name="data_type" expanded="True" />
             <Node name="eval" expanded="True" />
-            <Node name="io" expanded="True">
-              <Node name="RatingPredictionData.cs" selected="True" />
+            <Node name="experimental" expanded="True">
+              <Node name="attr_to_feature" expanded="True" />
             </Node>
+            <Node name="io" expanded="True" />
+            <Node name="item_recommender" expanded="True" />
             <Node name="Properties" expanded="True" />
+            <Node name="rating_predictor" expanded="True" />
             <Node name="taxonomy" expanded="True" />
+            <Node name="util" expanded="True">
+              <Node name="EngineStorage.cs" selected="True" />
+            </Node>
           </Node>
           <Node name="ItemPrediction" expanded="True">
             <Node name="References" expanded="True" />

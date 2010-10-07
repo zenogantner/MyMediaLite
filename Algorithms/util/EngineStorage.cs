@@ -42,30 +42,49 @@ namespace MyMediaLite.util
 			engine.SaveModel(filename);
 		}
 
-		public static void SaveModel(RecommenderEngine engine, string data_dir, string file, int iteration)
+		/// <summary>
+		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
+		/// </summary>
+		/// <param name="engine">the <see cref="RecommenderEngine"/> to save</param>
+		/// <param name="data_dir">the directory where the file will  be stored</param>
+		/// <param name="filename">the filename template</param>
+		/// <param name="iteration">the iteration (will be appended to the filename)</param>
+		public static void SaveModel(RecommenderEngine engine, string data_dir, string filename, int iteration)
 		{
-			if (file.Equals(String.Empty))
+			if (filename.Equals(String.Empty))
 				return;
 
-			SaveModel(engine, data_dir, file + "-it-" + iteration);
+			SaveModel(engine, data_dir, filename + "-it-" + iteration);
 		}
 
-		public static void LoadModel(RecommenderEngine engine, string data_dir, string file)
+		/// <summary>
+		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
+		/// </summary>
+		/// <param name="engine">the <see cref="RecommenderEngine"/> to save</param>
+		/// <param name="data_dir">the directory where the file will  be stored</param>
+		/// <param name="filename">the filename template</param>
+		public static void LoadModel(RecommenderEngine engine, string data_dir, string filename)
 		{
-			if (file.Equals(String.Empty))
+			if (filename.Equals(String.Empty))
 				return;
 
-			string filename = Path.Combine(data_dir, file);
+			filename = Path.Combine(data_dir, filename);
 			Console.Error.WriteLine("Load model from {0}", filename);
 			engine.LoadModel(filename);
 		}
 
-		public static StreamReader GetReader(string filePath, System.Type engine_type)
+		/// <summary>
+		/// Get a reader object to read in model parameters of a recommender engine
+		/// </summary>
+		/// <param name="filename">the filename of the model file</param>
+		/// <param name="engine_type">the expected engine type</param>
+		/// <returns>a <see cref="StreamReader"/></returns>
+		public static StreamReader GetReader(string filename, System.Type engine_type)
 		{
-            StreamReader reader = new StreamReader(filePath);
+            StreamReader reader = new StreamReader(filename);
 
 			if (reader.EndOfStream)
-				throw new IOException("Unexpected end of file " + filePath);
+				throw new IOException("Unexpected end of file " + filename);
 
 			string type_name = reader.ReadLine();
 			if (!type_name.Equals(engine_type.ToString()))
@@ -73,9 +92,15 @@ namespace MyMediaLite.util
 			return reader;
 		}
 
-		public static StreamWriter GetWriter(string filePath, System.Type engine_type)
+		/// <summary>
+		/// Get a writer object to save the model parameters of a recommender engine
+		/// </summary>
+		/// <param name="filename">the filename of the model file</param>
+		/// <param name="engine_type">the engine type</param>
+		/// <returns>a <see cref="StreamWriter"/></returns>
+		public static StreamWriter GetWriter(string filename, System.Type engine_type)
 		{
-			StreamWriter writer = new StreamWriter(filePath);
+			StreamWriter writer = new StreamWriter(filename);
 			writer.WriteLine(engine_type);
 			return writer;
 		}

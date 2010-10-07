@@ -22,8 +22,20 @@ namespace MyMediaLite.data_type
 {
 	// TODO move some of the similarity measures/norms/distances here
 
+	/// <summary>
+	/// Tools for vector-like data
+	/// </summary>
 	public class VectorUtils
 	{
+		/// <summary>
+		/// Compute the Euclidean norm of a collection of doubles
+		/// </summary>
+		/// <param name="vector">
+		/// the vector to compute the norm for
+		/// </param>
+		/// <returns>
+		/// the Euclidean norm of the vector
+		/// </returns>
 		public static double EuclideanNorm(ICollection<double> vector)
 		{
 			double norm = 0;
@@ -32,6 +44,14 @@ namespace MyMediaLite.data_type
 			return norm;
 		}
 
+		/// <summary>
+		/// Initialize a collection of doubles with values from a normal distribution
+		/// </summary>
+		/// <param name="vector">
+		/// the vector to initialize
+		/// </param>
+		/// <param name="mean">the mean of the normal distribution</param>
+		/// <param name="stdev">the standard deviation of the normal distribution</param>
         static public void InitNormal(IList<double> vector, double mean, double stdev)
         {
             var rnd = MyMediaLite.util.Random.GetInstance();
