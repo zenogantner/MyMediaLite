@@ -118,8 +118,6 @@ namespace MyMediaLite.data
 				result.Add(ToInternalID(id));
 			return result;
 		}
-
-		// TODO store to textfile (for debugging purposes)
 	}
 }
 

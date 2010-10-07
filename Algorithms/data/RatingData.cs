@@ -259,7 +259,6 @@ namespace MyMediaLite.data
 
             rating.rating = new_rating;
         }
-		// TODO interface change to (user_id, item_id, rating)
 
 		/// <summary>
 		/// Find the rating value for a given user and item

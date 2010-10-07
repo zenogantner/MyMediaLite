@@ -82,12 +82,9 @@ namespace MyMediaLite.data
 
         public RatingEvent FindRating(int user_id, int item_id)
         {
-			// TODO think about how to exploit orderings
             foreach (RatingEvent rating in ratingList)
-            {
                 if ((rating.user_id == user_id) && (rating.item_id == item_id))
                     return rating;
-            }
             return null;
         }
 
