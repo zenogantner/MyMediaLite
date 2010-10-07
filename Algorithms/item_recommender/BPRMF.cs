@@ -118,7 +118,7 @@ namespace MyMediaLite.item_recommender
 			else
 			{
 				do
-					j = random.Next (0, max_item_id + 1);
+					j = random.Next (0, MaxItemID + 1);
 				while (user_items.Contains(j) != item_is_positive);
 			}
 
@@ -146,7 +146,7 @@ namespace MyMediaLite.item_recommender
 				HashSet<int> user_items = data_user[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
-					j = random.Next (0, max_item_id + 1);
+					j = random.Next (0, MaxItemID + 1);
 				while (user_items.Contains(j));
 			}
 		}
@@ -157,9 +157,9 @@ namespace MyMediaLite.item_recommender
 		{
 			while (true)
 			{
-				int u = random.Next(0, max_user_id + 1);
+				int u = random.Next(0, MaxUserID + 1);
 				HashSet<int> user_items = data_user[u];
-				if (user_items.Count == 0 || user_items.Count == max_item_id + 1)
+				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
 			}
@@ -263,7 +263,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void AddUser(int user_id)
 		{
-			if (user_id > max_user_id)
+			if (user_id > MaxUserID)
 			{
 				user_feature.AddRows(user_id + 1);
 				MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
@@ -275,7 +275,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void AddItem(int item_id)
 		{
-			if (item_id > max_item_id)
+			if (item_id > MaxItemID)
 			{
 				item_feature.AddRows(item_id + 1);
 				MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
@@ -332,7 +332,7 @@ namespace MyMediaLite.item_recommender
 			MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
 
 			int num_pos_events = data_user.GetNumberOfEntries();
-			int num_item_iterations = num_pos_events * iteration_length * NumIter / (max_item_id + 1);
+			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
 				int user_id = SampleUser();
@@ -353,14 +353,14 @@ namespace MyMediaLite.item_recommender
 			double sum_auc = 0;
 			int num_user = 0;
 
-			for (int user_id = 0; user_id < max_user_id + 1; user_id++)
+			for (int user_id = 0; user_id < MaxUserID + 1; user_id++)
 			{
 				HashSet<int> test_items = data_user[user_id];
 				if (test_items.Count == 0)
 					continue;
-				int[] prediction = ItemPrediction.PredictItems(this, user_id, max_item_id);
+				int[] prediction = ItemPrediction.PredictItems(this, user_id, MaxItemID);
 
-				int num_eval_items = max_item_id + 1;
+				int num_eval_items = MaxItemID + 1;
 				int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
 
 				int num_correct_pairs = 0;
@@ -395,7 +395,7 @@ namespace MyMediaLite.item_recommender
 			List<int> pos_list = new List<int>(data_user[u]);
 			user_pos_items[u] = pos_list.ToArray();
 			List<int> neg_list = new List<int>();
-			for (int i = 0; i < max_item_id; i++)
+			for (int i = 0; i < MaxItemID; i++)
 				if (! data_user[u, i])
 					neg_list.Add(i);
 			user_neg_items[u] = neg_list.ToArray();
@@ -408,16 +408,16 @@ namespace MyMediaLite.item_recommender
 			{
 				checked
 				{
-					int fast_sampling_memory_size = ((max_user_id + 1) * (max_item_id + 1) * 4) / (1024 * 1024);
+					int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
 					Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
 
 					if (fast_sampling_memory_size <= fast_sampling_memory_limit)
 					{
 						fast_sampling = true;
 
-						user_pos_items = new List<int[]>(max_user_id + 1);
-						user_neg_items = new List<int[]>(max_user_id + 1);
-						for (int u = 0; u < max_user_id + 1; u++)
+						user_pos_items = new List<int[]>(MaxUserID + 1);
+						user_neg_items = new List<int[]>(MaxUserID + 1);
+						for (int u = 0; u < MaxUserID + 1; u++)
 							CreateFastSamplingData(u);
 					}
 				}

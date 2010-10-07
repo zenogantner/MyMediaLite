@@ -54,7 +54,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
-			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * max_item_id);
+			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
 
 			double[][] old_rmse_per_feature = new double[num_init_mapping][];
 
@@ -63,7 +63,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				MatrixUtils.InitNormal(attribute_to_feature, init_f_mean, init_f_stdev);
 				Console.Error.WriteLine("----");
 
-				for (int i = 0; i < num_iter_mapping * max_item_id; i++)
+				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
 				{
 					iterate_mapping();
 				}
@@ -114,7 +114,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			while (true)
 			{
-				int item_id = random.Next(0, max_item_id + 1);
+				int item_id = random.Next(0, MaxItemID + 1);
 				HashSet<int> item_users = data_item[item_id];
 				HashSet<int> item_attrs = item_attributes[item_id];
 				if (item_users.Count == 0 || item_attrs.Count == 0)
@@ -158,7 +158,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			double[] rmse_and_penalty_per_feature = new double[num_features];
 
 			int num_items = 0;
-			for (int i = 0; i < max_item_id + 1; i++)
+			for (int i = 0; i < MaxItemID + 1; i++)
 			{
 				HashSet<int> item_users = data_item[i];
 				HashSet<int> item_attrs = item_attributes[i];

@@ -105,14 +105,14 @@ namespace MyMediaLite.correlation
 		public override void ComputeCorrelations(RatingData ratings, EntityType entity_type)
 		{
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
-				throw new ArgumentException("entity type must be either User or CatalogItem, not " + entity_type);
+				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			Console.Error.Write("Computation of Pearson correlation... ");
-
-			int num_entities = data.dim1;
-			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
+			
+			int num_entities = data.dim1;			
+						List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
 
 			// compute Pearson product-moment correlation coefficients for all entity pairs
+			Console.Error.Write("Computation of Pearson correlation for {0} entities... ", num_entities);
 			for (int i = 0; i < num_entities; i++)
 			{
 				if (i % 100 == 99)

@@ -30,29 +30,26 @@ namespace MyMediaLite.item_recommender
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public abstract class Memory : ItemRecommender
     {
+		/// <summary>Maximum user ID</summary>
+		public int MaxUserID  { get; protected set;	}
+		/// <summary>Maximum item ID</summary>
+		public int MaxItemID  {	get; protected set; }
+		
         /// <summary>
-        /// Maximum user ID
-        /// </summary>
-        protected int max_user_id = 0;
-        /// <summary>
-        /// Maximum item ID
-        /// </summary>
-        protected int max_item_id = 0;
-        /// <summary>
-        /// Data user
+        /// Implicit feedback, user-wise
         /// </summary>
         protected SparseBooleanMatrix data_user;
         /// <summary>
-        /// Data item
+        /// Implicit feedback, item-wise
         /// </summary>
         protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc/>
 		public override void AddFeedback(int user_id, int item_id)
 		{
-			if (user_id > max_user_id)
+			if (user_id > MaxUserID)
 				throw new ArgumentException("Unknown user " + user_id + ". Add it before inserting event data.");
-			if (item_id > max_item_id)
+			if (item_id > MaxItemID)
 				throw new ArgumentException("Unknown item " + item_id + ". Add it before inserting event data.");
 
 			// update data structures
@@ -65,9 +62,9 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void RemoveFeedback(int user_id, int item_id)
 		{
-			if (user_id > max_user_id)
+			if (user_id > MaxUserID)
 				throw new ArgumentException("Unknown user " + user_id);
-			if (item_id > max_item_id)
+			if (item_id > MaxItemID)
 				throw new ArgumentException("Unknown item " + item_id);
 
 			// update data structures
@@ -80,15 +77,15 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void AddUser(int user_id)
 		{
-			if (user_id > max_user_id)
-				max_user_id = user_id;
+			if (user_id > MaxUserID)
+				MaxUserID = user_id;
 		}
 
 		/// <inheritdoc/>
 		public override void AddItem(int item_id)
 		{
-			if (item_id > max_item_id)
-				max_item_id = item_id;
+			if (item_id > MaxItemID)
+				MaxItemID = item_id;
 		}
 
 		/// <inheritdoc/>
@@ -100,8 +97,8 @@ namespace MyMediaLite.item_recommender
 				data_item[item_id, user_id] = false;
 			user_items.Clear();
 
-			if (user_id == max_user_id)
-				max_user_id--;
+			if (user_id == MaxUserID)
+				MaxUserID--;
 		}
 
 		/// <inheritdoc/>
@@ -113,8 +110,8 @@ namespace MyMediaLite.item_recommender
 				data_user[user_id, item_id] = false;
 			item_users.Clear();
 
-			if (item_id == max_item_id)
-				max_item_id--;
+			if (item_id == MaxItemID)
+				MaxItemID--;
 		}
 
 		/// <inheritdoc/>
@@ -122,8 +119,8 @@ namespace MyMediaLite.item_recommender
 		{
             this.data_user = user_items;
             this.data_item = item_users;
-			this.max_user_id = user_items.GetNumberOfRows() - 1;
-			this.max_item_id = item_users.GetNumberOfRows() - 1;
+			this.MaxUserID = user_items.GetNumberOfRows() - 1;
+			this.MaxItemID = item_users.GetNumberOfRows() - 1;
 		}
     }
 

@@ -42,11 +42,11 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_users = max_user_id + 1;
+            int num_users = MaxUserID + 1;
 			correlation = new Cosine(num_users);
 			correlation.ComputeCorrelations(data_user);
 
-			nearest_neighbors = new int[max_user_id + 1][];
+			nearest_neighbors = new int[MaxUserID + 1][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
@@ -54,9 +54,9 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id > max_user_id))
+            if ((user_id < 0) || (user_id > MaxUserID))
                 throw new ArgumentException("User is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > max_item_id))
+            if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("Item is unknown: " + item_id);
 
 			int count = 0;
@@ -87,9 +87,9 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id > max_user_id))
+            if ((user_id < 0) || (user_id > MaxUserID))
                 throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > max_item_id))
+            if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("item is unknown: " + item_id);
 
 			if (k == UInt32.MaxValue)

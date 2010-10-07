@@ -253,7 +253,6 @@ namespace MyMediaLite
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
 					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
-					max_user_id = Math.Max(max_user_id, attr_data.First.GetNumberOfRows()); // TODO check whether this is necessary
 				}
 
 			// item attributes

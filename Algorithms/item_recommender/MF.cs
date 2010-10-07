@@ -51,8 +51,8 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-			user_feature = new Matrix<double>(max_user_id + 1, num_features);
-        	item_feature = new Matrix<double>(max_item_id + 1, num_features);
+			user_feature = new Matrix<double>(MaxUserID + 1, num_features);
+        	item_feature = new Matrix<double>(MaxItemID + 1, num_features);
 
             MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
         	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
@@ -148,7 +148,7 @@ namespace MyMediaLite.item_recommender
 				int num_users = System.Int32.Parse(numbers[0]);
 				int dim2 = System.Int32.Parse(numbers[1]);
 
-				max_user_id = num_users - 1;
+				MaxUserID = num_users - 1;
 				Matrix<double> user_feature = new Matrix<double>(num_users, dim2);
 				int num_features = dim2;
 
@@ -190,9 +190,9 @@ namespace MyMediaLite.item_recommender
 					item_feature.Set(i, j, v);
 				}
 
-				// fix max_user_id and max_item_id - our model does not know more
-				this.max_user_id = num_users - 1;
-				this.max_item_id = num_items - 1;
+				// fix MaxUserID and MaxItemID - our model does not know more
+				this.MaxUserID = num_users - 1;
+				this.MaxItemID = num_items - 1;
 
             	// assign new model
 				if (this.num_features != num_features)

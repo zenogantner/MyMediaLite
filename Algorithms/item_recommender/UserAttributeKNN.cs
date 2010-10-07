@@ -38,7 +38,7 @@ namespace MyMediaLite.item_recommender
 			set
 			{
 				this.user_attributes = value;
-				// TODO check whether there is a match between num. of users here and in the collaborative data
+				//this.MaxUserID = Math.Max(MaxUserID, user_attributes.GetNumberOfRows());
 			}
 		}
 		private SparseBooleanMatrix user_attributes;
@@ -49,11 +49,11 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_users = max_user_id + 1;
+            int num_users = MaxUserID + 1;
 			correlation = new Cosine(num_users);
 			correlation.ComputeCorrelations(user_attributes);
 
-			nearest_neighbors = new int[max_user_id + 1][];
+			nearest_neighbors = new int[MaxUserID + 1][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }

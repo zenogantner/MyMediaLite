@@ -203,7 +203,7 @@ namespace RatingPrediction
 				Usage(-1);
 			if (training_file.Equals("-") && testfile.Equals("-"))
 			{
-				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
+				Console.Out.WriteLine("Either training or test data, not both, can be read from STDIN.");
 				Usage(-1);
 			}
 

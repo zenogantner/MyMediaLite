@@ -53,7 +53,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 
 			// set item_features to the mapped ones:                     // TODO: put into a separate method
-			for (int item_id = 0; item_id < max_item_id + 1; item_id++)
+			for (int item_id = 0; item_id < MaxItemID + 1; item_id++)
 			{
 				HashSet<int> attributes = item_attributes[item_id];
 

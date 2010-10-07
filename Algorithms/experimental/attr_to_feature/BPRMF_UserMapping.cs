@@ -54,7 +54,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			while (true)
 			{
-				int user_id = random.Next(0, max_user_id + 1);
+				int user_id = random.Next(0, MaxUserID + 1);
 				HashSet<int> user_items = data_user[user_id];
 				HashSet<int> user_attrs = user_attributes[user_id];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
@@ -71,7 +71,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
-			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * max_user_id);
+			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxUserID);
 
 			double[][] old_rmse_per_feature = new double[num_init_mapping][];
 
@@ -80,7 +80,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				MatrixUtils.InitNormal(attribute_to_feature, init_f_mean, init_f_stdev);
 				Console.Error.WriteLine("----");
 
-				for (int i = 0; i < num_iter_mapping * max_user_id; i++)
+				for (int i = 0; i < num_iter_mapping * MaxUserID; i++)
 				{
 					if (i % 5000 == 0)
 						ComputeMappingFit();
@@ -158,7 +158,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			double[] rmse_and_penalty_per_feature = new double[num_features];
 
 			int num_users = 0;
-			for (int i = 0; i < max_user_id + 1; i++)
+			for (int i = 0; i < MaxUserID + 1; i++)
 			{
 				HashSet<int> user_items = data_user[i];
 				HashSet<int> user_attrs = user_attributes[i];

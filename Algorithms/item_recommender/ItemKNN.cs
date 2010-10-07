@@ -36,7 +36,7 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_items = max_item_id + 1;
+            int num_items = MaxItemID + 1;
 			correlation = new Cosine(num_items);
 			correlation.ComputeCorrelations(data_item);
         }
@@ -44,9 +44,9 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id > max_user_id))
+            if ((user_id < 0) || (user_id > MaxUserID))
                 throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > max_item_id))
+            if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("item is unknown: " + item_id);
 
 			return correlation.SumUp(item_id, data_user[user_id]);

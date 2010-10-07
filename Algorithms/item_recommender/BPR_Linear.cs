@@ -87,27 +87,27 @@ namespace MyMediaLite.item_recommender
 			random = util.Random.GetInstance();
 
 			// prepare fast sampling, if necessary
-			int support_data_size = ((max_user_id + 1) * (max_item_id + 1) * 4) / (1024 * 1024);
+			int support_data_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
 			Console.Error.WriteLine("BPR-LIN sds=" + support_data_size);
 			if (support_data_size <= fast_sampling_memory_limit)
 			{
 				fast_sampling = true;
 
-				user_pos_items = new int[max_user_id + 1][];
-				user_neg_items = new int[max_user_id + 1][];
-				for (int u = 0; u < max_user_id + 1; u++)
+				user_pos_items = new int[MaxUserID + 1][];
+				user_neg_items = new int[MaxUserID + 1][];
+				for (int u = 0; u < MaxUserID + 1; u++)
 				{
 					List<int> pos_list = new List<int>(data_user[u]);
 					user_pos_items[u] = pos_list.ToArray();
 					List<int> neg_list = new List<int>();
-					for (int i = 0; i < max_item_id; i++)
+					for (int i = 0; i < MaxItemID; i++)
 						if (!data_user[u].Contains(i) && data_item[i].Count != 0)
 							neg_list.Add(i);
 					user_neg_items[u] = neg_list.ToArray();
 				}
 			}
 
-        	item_attribute_weight_by_user = new Matrix<double>(max_user_id + 1, NumItemAttributes);
+        	item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
         	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_f_mean, init_f_stdev);
 
 			for (int i = 0; i < NumIter; i++)
@@ -160,7 +160,7 @@ namespace MyMediaLite.item_recommender
 				HashSet<int> user_items = data_user[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
-					j = random.Next (0, max_item_id + 1);
+					j = random.Next (0, MaxItemID + 1);
 				while (user_items.Contains(j) || data_item[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
 			}
 		}
@@ -171,9 +171,9 @@ namespace MyMediaLite.item_recommender
 		{
 			while (true)
 			{
-				int u = random.Next(0, max_user_id + 1);
+				int u = random.Next(0, MaxUserID + 1);
 				HashSet<int> user_items = data_user[u];
-				if (user_items.Count == 0 || user_items.Count == max_item_id + 1)
+				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
 			}
@@ -227,7 +227,7 @@ namespace MyMediaLite.item_recommender
                 Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
             }
-            if ((item_id < 0) || (item_id > max_item_id))
+            if ((item_id < 0) || (item_id > MaxItemID))
             {
                 Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
@@ -267,7 +267,7 @@ namespace MyMediaLite.item_recommender
 				int num_users = Int32.Parse(numbers[0]);
 				int dim2 = Int32.Parse(numbers[1]);
 
-				max_user_id = num_users - 1;
+				MaxUserID = num_users - 1;
 				Matrix<double> matrix = new Matrix<double>(num_users, dim2);
 				int num_item_attributes = dim2;
 

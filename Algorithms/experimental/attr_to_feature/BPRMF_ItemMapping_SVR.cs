@@ -39,7 +39,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			List<Node[]> svm_features = new List<Node[]>();
 			List<int> relevant_items  = new List<int>();
-			for (int i = 0; i < max_item_id + 1; i++)
+			for (int i = 0; i < MaxItemID + 1; i++)
 			{
 				// ignore items w/o collaborative data
 				if (data_item[i].Count == 0)

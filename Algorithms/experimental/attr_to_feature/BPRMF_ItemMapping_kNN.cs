@@ -38,7 +38,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		// HACK: make it protected after implementation is completed
 		public override void LearnAttributeToFactorMapping()
 		{
-			Cosine cosine_correlation = new Cosine(max_item_id + 1);
+			Cosine cosine_correlation = new Cosine(MaxItemID + 1);
 			cosine_correlation.ComputeCorrelations(item_attributes);
 			this.item_correlation = cosine_correlation;
 			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);

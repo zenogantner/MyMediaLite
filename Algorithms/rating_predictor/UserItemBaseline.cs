@@ -59,25 +59,28 @@ namespace MyMediaLite.rating_predictor
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
 
-			// TODO check for unnecessary memory consumption
-			
+			int[] user_ratings_count = new int[MaxUserID + 1];
+			int[] item_ratings_count = new int[MaxItemID + 1];
+
 			// compute item biases
 			foreach (RatingEvent r in ratings)
 			{
 				item_biases[r.item_id] += r.rating - global_average;
+				item_ratings_count[r.item_id]++;
 			}
 			for (int i = 0; i < item_biases.Length; i++)
-				if (ratings.ByItem[i].Count != 0)
-					item_biases[i] = item_biases[i] / (reg_i + ratings.ByItem[i].Count);
+				if (item_ratings_count[i] != 0)
+					item_biases[i] = item_biases[i] / (reg_i + item_ratings_count[i]);
 
 			// compute user biases
 			foreach (RatingEvent r in ratings)
 			{
 				user_biases[r.user_id] += r.rating - global_average - item_biases[r.item_id];
+				user_ratings_count[r.user_id]++;
 			}
 			for (int u = 0; u < user_biases.Length; u++)
-				if (ratings.ByUser[u].Count != 0)
-					user_biases[u] = user_biases[u] / (reg_u + ratings.ByUser[u].Count);
+				if (user_ratings_count[u] != 0)
+					user_biases[u] = user_biases[u] / (reg_u + user_ratings_count[u]);
         }
 
         /// <inheritdoc />
@@ -106,7 +109,7 @@ namespace MyMediaLite.rating_predictor
 					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.ByUser[user_id].Count);
 			}
 		}
-		
+
 		/// <inheritdoc />
 		protected virtual void RetrainItem(int item_id)
 		{

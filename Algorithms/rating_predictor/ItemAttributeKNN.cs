@@ -36,7 +36,7 @@ namespace MyMediaLite.rating_predictor
 			set
 			{
 				this.item_attributes = value;
-				// TODO check whether there is a match between num. of items here and in the collaborative data
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.GetNumberOfRows());
 			}
 		}		
 		private SparseBooleanMatrix item_attributes;

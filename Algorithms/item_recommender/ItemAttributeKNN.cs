@@ -38,7 +38,7 @@ namespace MyMediaLite.item_recommender
 			set
 			{
 				this.item_attributes = value;
-				// TODO check whether there is a match between num. of items here and in the collaborative data
+				//this.MaxItemID = Math.Max(MaxItemID, item_attributes.GetNumberOfRows());
 			}
 		}		
 		private SparseBooleanMatrix item_attributes;
@@ -49,7 +49,7 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_items = max_item_id + 1;
+            int num_items = MaxItemID + 1;
 			correlation = new Cosine(num_items);
 			correlation.ComputeCorrelations(item_attributes);
         }
