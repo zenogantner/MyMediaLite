@@ -54,9 +54,9 @@ namespace MyMediaLite.eval
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			// compute evaluation measures
-            double   auc_sum      = 0; // for AUC
-			double   map_sum      = 0; // for MAP
-            int     num_users      = 0; // for all
+            double auc_sum        = 0; // for AUC
+			double map_sum        = 0; // for MAP
+            int num_users         = 0; // for all
 			int hit_count_5       = 0; // for precision@N
 			int hit_count_10      = 0; // for precision@N
 			int hit_count_15      = 0; // for precision@N
@@ -76,14 +76,12 @@ namespace MyMediaLite.eval
                 int num_eval_items = relevant_items.Count - relevant_items.Intersect(train[user_id]).Count();
 	            int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
 
+				// skip all users that have 0 or #relevant_items test items
 				if (num_eval_pairs == 0)
-				{
-					// TODO depending on the verbosity level, there should be a warning
 					continue;
-				}
 
 				num_correct_items += test_items.Count;                 // for recall@N
-				
+
 				int num_correct_pairs = 0;                             // for AUC
 	            int hit_count         = 0;                             // for AUC and MAP
 				double dcg            = 0;				               // for NDCG
@@ -100,29 +98,29 @@ namespace MyMediaLite.eval
 						left_out++;
 						continue;
 					}
-					// compute AUC part
-                    if (test_items.Contains(item_id))
-		                hit_count++;
-                    else
-                        num_correct_pairs += hit_count;
 
-                    if (test_items.Contains(item_id))
+					// compute AUC/general hit count part
+                    if (!test_items.Contains(item_id))
 					{
-						// compute MAP part
-						avg_prec_sum = hit_count / (i + 1 - left_out);
-						
-						// compute precision@N part
-						if (i < 5 + left_out)
-							hit_count_5++;
-						if (i < 10 + left_out)
-							hit_count_10++;
-						if (i < 15 + left_out)
-							hit_count_15++;
-
-						// compute NDCG part
-						int rank = i + 1 - left_out;
-						dcg += 1 / Math.Log(rank + 1, 2);
+                        num_correct_pairs += hit_count;
+						continue;
 					}
+
+		            hit_count++;
+
+					// compute MAP part
+					avg_prec_sum += hit_count / (i + 1 - left_out);
+
+					// compute NDCG part
+					int rank = i + 1 - left_out;
+					dcg += 1 / Math.Log(rank + 1, 2);
+
+					if (i < 5 + left_out)
+						hit_count_5++;
+					if (i < 10 + left_out)
+						hit_count_10++;
+					if (i < 15 + left_out)
+						hit_count_15++;
                 }
 
                 double user_auc  = ((double) num_correct_pairs) / num_eval_pairs;
@@ -130,7 +128,8 @@ namespace MyMediaLite.eval
 
 				auc_sum  += user_auc;
 				ndcg_sum += user_ndcg;
-				map_sum  += hit_count != 0 ? avg_prec_sum / hit_count : 0;
+				if (hit_count != 0)
+					map_sum  += avg_prec_sum / hit_count;
                 num_users++;
             }
 
