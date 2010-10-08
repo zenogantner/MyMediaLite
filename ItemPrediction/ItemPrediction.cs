@@ -231,7 +231,6 @@ namespace MyMediaLite
 
 			// training data
 			training_data   = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
-			int max_user_id = training_data.First.GetNumberOfRows() - 1;
 
 			// relevant items
 			if (! relevant_items_file.Equals(String.Empty) )
@@ -305,7 +304,7 @@ namespace MyMediaLite
 					                             training_data.First,
 					                             relevant_items,
 				                                 !eval_new_users);
-				Console.Write("AUC {0} prec@5 {1} prec@10 {2} NDCG {3}", result["AUC"], result["prec@5"], result["prec@10"], result["NDCG"]);
+				DisplayResults(result);
 				Console.WriteLine(" " + iterative_recommender.NumIter);
 
 				List<double> training_time_stats = new List<double>();
@@ -441,7 +440,7 @@ namespace MyMediaLite
 					            relevant_items,
 						        !eval_new_users
 							);
-							Console.Write("AUC {0} prec@5 {1} prec@10 {2} NDCG {3}", result["AUC"], result["prec@5"], result["prec@10"], result["NDCG"]);
+							DisplayResults(result);
 				    	}
 					);
 					Console.Write(" testing_time " + time_span);
@@ -505,6 +504,18 @@ namespace MyMediaLite
 			recommender = engine;
 		}
 
+		static void DisplayResults(Dictionary<string, double> result) {
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			Console.Write("AUC {0} prec@5 {1} prec@10 {2} MAP {3} NDCG {4}",
+			              result["AUC"].ToString(ni),
+			              result["prec@5"].ToString(ni),
+			              result["prec@10"].ToString(ni),
+			              result["MAP"].ToString(ni),
+			              result["NDCG"].ToString(ni));
+		}
+		
 		/*
         static void FindGoodHyperparameters(BPR_Linear recommender, int cross_validation, string criterion)
 		{

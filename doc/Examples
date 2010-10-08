@@ -15,8 +15,27 @@ result
   eval_time: min=0,09, max=0,1, avg=0,09
   fit_time: min=0,93, max=1,02, avg=0,95
 
-LANG=C; mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt item-attribute-knn item_attributes=item-attributes-genres.txt k=80
-ratings range: [1, 5]
-item-attribute-kNN k=80 reg_u=25 reg_i=10 Computation of cosine similarity for 3953 entities... .......................................
-training 00:00:03.5536330 RMSE 0.91078 MAE 0.7187 testing 00:03:32.9025240
-  
+command
+  mono --debug RatingPrediction.exe ml1m-0.train.txt ml1m-0.test.txt item-attribute-knn item_attributes=item-attributes-genres.txt k=80
+result
+  item-attribute-kNN k=80 reg_u=25 reg_i=10 Computation of cosine similarity for 3953 entities... .......................................
+  training 00:00:03.5536330 RMSE 0.91078 MAE 0.7187 testing 00:03:32.9025240
+
+command
+  mono --debug RatingPrediction.exe train-byuser-nd.txt test-byuser-nd.txt matrix-factorization find_iter=1 num_iter=0 max_iter=10
+result
+  matrix-factorization num_features=10 regularization=0.015 learn_rate=0.01 num_iter=0 init_f_mean=0 init_f_stdev=0.1 
+  RMSE 1.13227 MAE 0.95272 0
+  RMSE 1.07302 MAE 0.88146 1
+  RMSE 1.0076 MAE 0.80675 2
+  RMSE 0.98931 MAE 0.7876 3
+  RMSE 0.97834 MAE 0.77572 4
+  RMSE 0.97114 MAE 0.76767 5
+  RMSE 0.96604 MAE 0.76178 6
+  RMSE 0.96225 MAE 0.75727 7
+  RMSE 0.95936 MAE 0.75372 8
+  RMSE 0.95712 MAE 0.75085 9
+  RMSE 0.95537 MAE 0.7485 10
+  iteration_time: min=58.03, max=58.19, avg=58.07
+  eval_time: min=0.37, max=0.37, avg=0.37
+

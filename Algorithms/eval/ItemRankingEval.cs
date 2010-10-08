@@ -55,7 +55,8 @@ namespace MyMediaLite.eval
 
 			// compute evaluation measures
             double   auc_sum      = 0; // for AUC
-            int     num_user      = 0; // for all
+			double   map_sum      = 0; // for MAP
+            int     num_users      = 0; // for all
 			int hit_count_5       = 0; // for precision@N
 			int hit_count_10      = 0; // for precision@N
 			int hit_count_15      = 0; // for precision@N
@@ -82,10 +83,12 @@ namespace MyMediaLite.eval
 				}
 
 				num_correct_items += test_items.Count;                 // for recall@N
+				
 				int num_correct_pairs = 0;                             // for AUC
-	            int num_pos_above     = 0;                             // for AUC
+	            int hit_count         = 0;                             // for AUC and MAP
 				double dcg            = 0;				               // for NDCG
 				double idcg           = ComputeIDCG(test_items.Count); // for NDCG
+				double avg_prec_sum   = 0;                             // for MAP
 
 				int left_out = 0;
 				// start with the highest weighting item
@@ -93,34 +96,33 @@ namespace MyMediaLite.eval
 				{
 					int item_id = prediction[i];
 					if (train[user_id, item_id])
-						left_out++;
-					else
 					{
-						// compute AUC part
-                        if (test_items.Contains(item_id))
-			                num_pos_above++;
-                        else
-                            num_correct_pairs += num_pos_above;
+						left_out++;
+						continue;
+					}
+					// compute AUC part
+                    if (test_items.Contains(item_id))
+		                hit_count++;
+                    else
+                        num_correct_pairs += hit_count;
 
-                        if (test_items.Contains(item_id))
-						{
-							// compute precision@N part
-							if (i < 5 + left_out)
-								hit_count_5++;
-							if (i < 10 + left_out)
-								hit_count_10++;
-							if (i < 15 + left_out)
-								hit_count_15++;
+                    if (test_items.Contains(item_id))
+					{
+						// compute MAP part
+						avg_prec_sum = hit_count / (i + 1 - left_out);
+						
+						// compute precision@N part
+						if (i < 5 + left_out)
+							hit_count_5++;
+						if (i < 10 + left_out)
+							hit_count_10++;
+						if (i < 15 + left_out)
+							hit_count_15++;
 
-							// compute NDCG part
-							int rank = i + 1 - left_out;
-							dcg += 1 / Math.Log(rank + 1, 2);
-						}
-                    }
-
-					// TODO H-measure
-					// TODO R-measure
-					// TODO NDPM
+						// compute NDCG part
+						int rank = i + 1 - left_out;
+						dcg += 1 / Math.Log(rank + 1, 2);
+					}
                 }
 
                 double user_auc  = ((double) num_correct_pairs) / num_eval_pairs;
@@ -128,16 +130,18 @@ namespace MyMediaLite.eval
 
 				auc_sum  += user_auc;
 				ndcg_sum += user_ndcg;
-                num_user++;
+				map_sum  += hit_count != 0 ? avg_prec_sum / hit_count : 0;
+                num_users++;
             }
 
-            double auc  = auc_sum  / num_user;
-			double ndcg = ndcg_sum / num_user;
+            double auc  = auc_sum  / num_users;
+			double map  = map_sum  / num_users;
+			double ndcg = ndcg_sum / num_users;
 
-	        double precision_5 = (double) hit_count_5 / (num_user * 5);
+	        double precision_5 = (double) hit_count_5 / (num_users * 5);
 
-			double precision_10 = (double) hit_count_10 / (num_user * 10);
-			double precision_15 = (double) hit_count_15 / (num_user * 15);
+			double precision_10 = (double) hit_count_10 / (num_users * 10);
+			double precision_15 = (double) hit_count_15 / (num_users * 15);
 
 			double recall_5  = (double) hit_count_5  / num_correct_items;
 			double recall_10 = (double) hit_count_10 / num_correct_items;
@@ -149,6 +153,7 @@ namespace MyMediaLite.eval
 			Dictionary<string, double> result = new Dictionary<string, double>();
 			result.Add("AUC",     auc);
 			result.Add("NDCG",    ndcg);
+			result.Add("MAP",     map);
 			result.Add("prec@5",  precision_5);
 			result.Add("prec@10", precision_10);
 			result.Add("prec@15", precision_15);

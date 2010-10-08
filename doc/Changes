@@ -3,10 +3,13 @@
          - Map user/item IDs to internal IDs on the fly. That makes it
            unnecessary to convert datasets before using them with the
            MyMediaLite command-line tools.
+         - MAP (mean average precision) for item recommender evaluation
         changes to the command-line programs:
          - allow input from STDIN and output to STDOUT
 	 - nicer time output for both demo programs
 	 - rating prediction program: save model earlier
+         - always output '.'-separated floating point numbers, independent
+           of the current locale.
 	interface changes:
 	 - use IterativeModel interface in rating prediction program
 	 - consistent parameters for RatingData constructor
