@@ -48,7 +48,7 @@
 	\includegraphics[width=4.0cm]{fig/uni-hildesheim-400x400.jpg}\\
 	Machine Learning Lab
 }
-\date{Pre-release at ACM RecSys in Barcelona}
+\date{October 2010}
 
 \begin{document}
 
@@ -79,10 +79,10 @@ and item prediction from implicit feedback (e.g. from clicks or purchase actions
 	\item \textbf{Ready to use:}
 		\begin{itemize}
 			\item Includes evaluation routines for rating and item prediction;
-			      quality measures MAE, RMSE, AUC, prec@N, NDCG; and
+			      quality measures MAE, RMSE, AUC, prec@N, MAP, NDCG; and
 			\item command line tools that read a simple text-based input format.
 		\end{itemize}
-	\item \textbf{Compactness:} Core library is 82KB ``big''.
+	\item \textbf{Compactness:} Core library is 85KB ``big''.
 	\item \textbf{Portability:} Written in C\#, for the .NET platform;
 	      runs on every architecture where \href{www.mono-project.com}{Mono} works:
 	      Linux, Windows, Mac OS X.
@@ -174,7 +174,6 @@ Item Prediction
 	\item Random
 	\item Most Popular Item
 	\item Linear Content-based Model Optimized for Bayesian Personalized Ranking (BPR-Linear)
-	\item Singular Value Decomposition (SVD)
 	\item k-Nearest Neighbor (kNN):
 		\begin{itemize}
 			\item based on user or item similarities
