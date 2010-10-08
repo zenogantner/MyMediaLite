@@ -29,6 +29,8 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.eval
 {
+	// TODO: think about a better name for the class - we do not compare rankings here ...
+	
     /// <summary>Evaluation class</summary>
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class ItemRankingEval
@@ -37,13 +39,16 @@ namespace MyMediaLite.eval
         /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
         /// 
-        /// MAP: C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
+        /// Literature:
+        ///   C. Manning, P. Raghavan, H. Schütze
+        ///   Introduction to Information Retrieval,
+        ///   Cambridge University Press, 2008
         /// </summary>
         /// <param name="engine">Item recommender engine</param>
         /// <param name="test">test cases</param>
         /// <param name="train">training data</param>
-        /// <param name="relevant_items">a HashSet<int> with all relevant items</param>
-        /// <returns>a Dictionary<string, double> containing the evaluation results</returns>
+        /// <param name="relevant_items">a collection of integers with all relevant items</param>
+        /// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> EvaluateItemRecommender(
 			ItemRecommender engine,
 			SparseBooleanMatrix test,
@@ -54,116 +59,200 @@ namespace MyMediaLite.eval
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			// compute evaluation measures
-            double auc_sum        = 0; // for AUC
-			double map_sum        = 0; // for MAP
-            int num_users         = 0; // for all
-			int hit_count_5       = 0; // for precision@N
-			int hit_count_10      = 0; // for precision@N
-			int hit_count_15      = 0; // for precision@N
-			int num_correct_items = 0; // for recall@N
-			double ndcg_sum       = 0; // for nDCG
-
+            double auc_sum     = 0;
+			double map_sum     = 0;
+			double prec_5_sum  = 0;
+			double prec_10_sum = 0;
+			double prec_15_sum = 0;
+			double ndcg_sum    = 0;
+            int num_users      = 0;
+			
             foreach (KeyValuePair<int, HashSet<int>> user in test.GetNonEmptyRows())
             {
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
 
-                int num_eval_items = relevant_items.Count - relevant_items.Intersect(train[user_id]).Count();
-	            int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
+				// the number of items that are really relevant for this user
+                int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
 
 				// skip all users that have 0 or #relevant_items test items
-				if (num_eval_pairs == 0)
+				if (test_items.Count == 0)
+					continue;
+				if (num_eval_items - test_items.Count == 0)
 					continue;
 
+				num_users++;
 				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
 
-                if (prediction.Length != relevant_items.Count)
-                    throw new Exception("Not all items have been ranked.");				
+				auc_sum     += AUC(prediction, test_items, train[user_id]);
+				map_sum     += MAP(prediction, test_items, train[user_id]);
+				ndcg_sum    += NDCG(prediction, test_items, train[user_id]);
+				prec_5_sum  += PrecisionAt(prediction, test_items, train[user_id],  5);
+				prec_10_sum += PrecisionAt(prediction, test_items, train[user_id], 10);
+				prec_15_sum += PrecisionAt(prediction, test_items, train[user_id], 15);				
 				
-				num_correct_items += test_items.Count;                 // for recall@N
-
-				int num_correct_pairs = 0;                             // for AUC
-	            int hit_count         = 0;                             // for AUC and MAP
-				double dcg            = 0;				               // for NDCG
-				double idcg           = ComputeIDCG(test_items.Count); // for NDCG
-				double avg_prec_sum   = 0;                             // for MAP
-
-				int left_out = 0;
-				// start with the highest weighting item
-	            for (int i = 0; i < prediction.Length; i++)
-				{
-					int item_id = prediction[i];
-					if (train[user_id, item_id])
-					{
-						left_out++;
-						continue;
-					}
-
-					// compute AUC/general hit count part
-                    if (!test_items.Contains(item_id))
-					{
-                        num_correct_pairs += hit_count;
-						continue;
-					}
-
-		            hit_count++;
-
-					// compute MAP part
-					avg_prec_sum += hit_count / (i + 1 - left_out);
-
-					// compute NDCG part
-					int rank = i + 1 - left_out;
-					dcg += 1 / Math.Log(rank + 1, 2);
-
-					if (i < 5 + left_out)
-						hit_count_5++;
-					if (i < 10 + left_out)
-						hit_count_10++;
-					if (i < 15 + left_out)
-						hit_count_15++;
-                }
-
-                double user_auc  = ((double) num_correct_pairs) / num_eval_pairs;
-                double user_ndcg = dcg / idcg;
-
-				auc_sum  += user_auc;
-				ndcg_sum += user_ndcg;
-				if (hit_count != 0)
-					map_sum  += avg_prec_sum / hit_count;
-                num_users++;
-            }
-
-            double auc  = auc_sum  / num_users;
-			double map  = map_sum  / num_users;
-			double ndcg = ndcg_sum / num_users;
-
-	        double precision_5 = (double) hit_count_5 / (num_users * 5);
-
-			double precision_10 = (double) hit_count_10 / (num_users * 10);
-			double precision_15 = (double) hit_count_15 / (num_users * 15);
-
-			double recall_5  = (double) hit_count_5  / num_correct_items;
-			double recall_10 = (double) hit_count_10 / num_correct_items;
-			double recall_15 = (double) hit_count_15 / num_correct_items;
-
-			double precision_combined = (precision_5 + precision_10 + precision_15) / 3;
-			double recall_combined    = (recall_5 + recall_10 + recall_15) / 3;
-
+                if (prediction.Length != relevant_items.Count)
+                    throw new Exception("Not all items have been ranked.");
+			}
+			
 			Dictionary<string, double> result = new Dictionary<string, double>();
-			result.Add("AUC",     auc);
-			result.Add("NDCG",    ndcg);
-			result.Add("MAP",     map);
-			result.Add("prec@5",  precision_5);
-			result.Add("prec@10", precision_10);
-			result.Add("prec@15", precision_15);
-			result.Add("prec_combined", precision_combined);
-			result.Add("recall@5",  recall_5);
-			result.Add("recall@10", recall_10);
-			result.Add("recall@15", recall_15);
-			result.Add("recall_combined", recall_combined);
+			result.Add("AUC",     auc_sum / num_users);
+			result.Add("MAP",     map_sum / num_users);
+			result.Add("NDCG",    ndcg_sum / num_users);
+			result.Add("prec@5",  prec_5_sum / num_users);
+			result.Add("prec@10", prec_10_sum / num_users);
+			result.Add("prec@15", prec_15_sum / num_users);
 
 			return result;
         }
+
+		/// <summary>
+		/// Compute the area under the ROC curve (AUC) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <returns>the AUC for the given data</returns>
+		public static double AUC(int[] ranked_items, ICollection<int> correct_items)
+		{
+			return AUC(ranked_items, correct_items, new HashSet<int>());
+		}
+		
+		/// <summary>
+		/// Compute the area under the ROC curve (AUC) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <returns>the AUC for the given data</returns>
+		public static double AUC(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		{
+                int num_eval_items = ranked_items.Length - ignore_items.Intersect(ranked_items).Count();
+	            int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;			
+			
+				int num_correct_pairs = 0;
+				int hit_count         = 0;
+
+	            foreach (int item_id in ranked_items)
+				{
+					if (ignore_items.Contains(item_id))
+						continue;
+
+                    if (!correct_items.Contains(item_id))
+                        num_correct_pairs += hit_count;
+					else
+		            	hit_count++;
+                }
+			
+                return ((double) num_correct_pairs) / num_eval_pairs;			
+		}
+
+		// TODO methods w/o ignore
+		
+		/// <summary>
+		/// Compute the mean average precision (MAP) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <returns>the MAP for the given data</returns>		
+		public static double MAP(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		{
+            int hit_count       = 0;
+			double avg_prec_sum = 0;
+			int left_out        = 0;
+
+			for (int i = 0; i < ranked_items.Length; i++)
+			{
+				int item_id = ranked_items[i];
+				if (ignore_items.Contains(item_id))
+				{
+					left_out++;
+					continue;
+				}
+				
+                if (!correct_items.Contains(item_id))
+					continue;
+
+	            hit_count++;
+
+				avg_prec_sum += hit_count / (i + 1 - left_out);
+            }
+
+			if (hit_count != 0)
+				return avg_prec_sum / hit_count;
+			else
+				return 0;
+		}
+		
+		/// <summary>
+		/// Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <returns>the NDCG for the given data</returns>		
+		public static double NDCG(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		{
+			double dcg   = 0;
+			double idcg  = ComputeIDCG(correct_items.Count);
+			int left_out = 0;
+		
+            for (int i = 0; i < ranked_items.Length; i++)
+			{
+				int item_id = ranked_items[i];
+				if (ignore_items.Contains(item_id))
+				{
+					left_out++;
+					continue;
+				}
+
+                if (!correct_items.Contains(item_id))
+					continue;
+
+				// compute NDCG part
+				int rank = i + 1 - left_out;
+				dcg += 1 / Math.Log(rank + 1, 2);
+            }
+
+            return dcg / idcg;
+		}
+
+		/// <summary>
+		/// Compute the precision@N of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <param name="n">the cutoff position in the list</param>
+		/// <returns>the precision@N for the given data</returns>		
+		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items, int n)
+		{
+			if (n < 1)
+				throw new ArgumentException("N must be at least 1.");
+			
+            int hit_count = 0;
+			int left_out  = 0;
+
+			for (int i = 0; i < ranked_items.Length; i++)
+			{				
+				int item_id = ranked_items[i];
+				if (ignore_items.Contains(item_id))
+				{
+					left_out++;
+					continue;
+				}
+				
+                if (!correct_items.Contains(item_id))
+					continue;
+
+				if (i < n + left_out)
+					hit_count++;
+				else
+					break;
+            }
+
+			return (double) hit_count / n;
+		}
 
 		/// <summary>Computes the ideal DCG given the number of positive items.</summary>
 		/// <returns>the ideal DCG</returns>
@@ -182,8 +271,7 @@ namespace MyMediaLite.eval
 		}
 
 		static public ICollection<string> GetItemPredictionMeasures() {
-			string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "prec_combined",
-				                  "recall@5", "recall@10", "recall@15",	"recall_combined" };
+			string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
 			return new HashSet<string>(measures);
 		}
     }
