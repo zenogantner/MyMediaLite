@@ -259,8 +259,8 @@ namespace RatingPrediction
 				if (compute_fit)
 					Console.Write("fit {0,0:0.#####} ", iterative_recommender.ComputeFit());
 
-				var result = RatingEval.EvaluateRated(recommender, test_data);
-				Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], iterative_recommender.NumIter);
+				DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
+				Console.WriteLine(" " + iterative_recommender.NumIter);
 
 				List<double> training_time_stats = new List<double>();
 				List<double> fit_time_stats      = new List<double>();
@@ -286,8 +286,8 @@ namespace RatingPrediction
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							result = RatingEval.EvaluateRated(recommender, test_data);
-							Console.WriteLine("RMSE {0,0:0.#####} MAE {1,0:0.#####} {2}", result["RMSE"], result["MAE"], i);
+							DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
+							Console.WriteLine(" " + i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
@@ -350,8 +350,7 @@ namespace RatingPrediction
 					seconds = Utils.MeasureTime(
 				    	delegate()
 					    {
-							var result = RatingEval.EvaluateRated(recommender, test_data);
-							Console.Write("RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]);
+							DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
 						}
 					);
 					Console.Write(" testing_time " + seconds);
@@ -403,6 +402,15 @@ namespace RatingPrediction
 			return uib;
 		}
 
+		static void DisplayResults(Dictionary<string, double> result) {
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			Console.Write("RMSE {0,0:0.#####} MAE {1,0:0.#####}",
+			              result["RMSE"].ToString(ni),
+			              result["MAE"].ToString(ni));
+		}
+		
 		/*
 		static void FindHyperparameters(RatingPredictor recommender, int cross_validation, string criterion)
 		{

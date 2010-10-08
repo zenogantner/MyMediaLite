@@ -49,7 +49,6 @@ namespace MyMediaLite
 		static KNN         wuknn  = new WeightedUserKNN();
 		static KNN         uaknn  = new UserAttributeKNN();
 		static MostPopular mp     = new MostPopular();
-		static WRMF        svd    = new SVD();
 		static WRMF        wrmf   = new WRMF();
 		static BPRMF       bprmf  = new BPRMF();
 		static item_recommender.Random random = new item_recommender.Random();
@@ -167,11 +166,8 @@ namespace MyMediaLite
 					compute_fit = false; // deactivate as long it is not implemented
 					InitWRMF(wrmf, parameters);
 					break;
-				case "svd":
-					compute_fit = false; // deactivate as long it is not implemented
-					InitWRMF(svd, parameters);
-					break;
-				case "BPR-MF":
+
+			case "BPR-MF":
 				case "bpr-mf":
 					InitBPRMF(bprmf, parameters);
 					break;
@@ -338,13 +334,14 @@ namespace MyMediaLite
 								relevant_items,
 							    !eval_new_users
 							);
-							Console.Write("AUC {0} prec@5 {1} prec@10 {2} NDCG {3}", result["AUC"], result["prec@5"], result["prec@10"], result["NDCG"]);
+							DisplayResults(result);
+							Console.WriteLine(" " + i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
 
-						Console.WriteLine(" " + (i));
+
 
 						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec_cutoff)
 						{
