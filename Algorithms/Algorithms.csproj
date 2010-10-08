@@ -76,7 +76,6 @@
     <Compile Include="item_recommender\Memory.cs" />
     <Compile Include="item_recommender\MF.cs" />
     <Compile Include="item_recommender\MostPopular.cs" />
-    <Compile Include="item_recommender\SVD.cs" />
     <Compile Include="item_recommender\UserKNN.cs" />
     <Compile Include="item_recommender\WRMF.cs" />
     <Compile Include="rating_predictor\MatrixFactorization.cs" />
@@ -122,6 +121,10 @@
     <Compile Include="data\EntityMapping.cs" />
     <Compile Include="eval\ItemPrediction.cs" />
     <Compile Include="eval\RatingPrediction.cs" />
+    <Compile Include="rating_predictor\ItemKNNCosine.cs" />
+    <Compile Include="rating_predictor\ItemKNNPearson.cs" />
+    <Compile Include="rating_predictor\UserKNNPearson.cs" />
+    <Compile Include="rating_predictor\UserKNNCosine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
