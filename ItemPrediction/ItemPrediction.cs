@@ -86,7 +86,6 @@ namespace MyMediaLite
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
 			Console.WriteLine("    - no_eval=BOOL               do not evaluate");
-			Console.WriteLine("    - eval_new_users=BOOL        also evaluate users not present in the training data");
 			Console.WriteLine("    - predict_items_file=FILE    write predictions to FILE");
 			Console.WriteLine("    - predict_items_num=N        predict N items per user (needs predict_items_file)");
 			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
@@ -134,7 +133,6 @@ namespace MyMediaLite
 			string load_model_file        = parameters.GetRemoveString( "load_model");
 			int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
 			bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
-			bool eval_new_users           = parameters.GetRemoveBool(   "eval_new_users", false);
 			string predict_items_file     = parameters.GetRemoveString( "predict_items_file", String.Empty);
 			int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
 			string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", String.Empty);
@@ -298,8 +296,7 @@ namespace MyMediaLite
 				var result = ItemRankingEval.EvaluateItemRecommender(recommender,
 				                                 test_data.First,
 					                             training_data.First,
-					                             relevant_items,
-				                                 !eval_new_users);
+					                             relevant_items);
 				DisplayResults(result);
 				Console.WriteLine(" " + iterative_recommender.NumIter);
 
@@ -331,8 +328,7 @@ namespace MyMediaLite
 								recommender,
 							    test_data.First,
 								training_data.First,
-								relevant_items,
-							    !eval_new_users
+								relevant_items
 							);
 							DisplayResults(result);
 							Console.WriteLine(" " + i);
@@ -340,8 +336,6 @@ namespace MyMediaLite
 						eval_time_stats.Add(t.TotalSeconds);
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
-
-
 
 						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec_cutoff)
 						{
@@ -434,8 +428,7 @@ namespace MyMediaLite
 						    	recommender,
 								test_data.First,
 					            training_data.First,
-					            relevant_items,
-						        !eval_new_users
+					            relevant_items
 							);
 							DisplayResults(result);
 				    	}
@@ -483,12 +476,12 @@ namespace MyMediaLite
 
 		static void InitBPR_Linear(BPR_Linear engine, CommandLineParameters parameters)
 		{
-			engine.NumIter     = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
+			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
 			engine.init_f_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_f_mean);
 			engine.init_f_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_f_stdev);
-			engine.reg          = parameters.GetRemoveDouble("reg",   engine.reg);
-			engine.learn_rate   = parameters.GetRemoveDouble("lr",         engine.learn_rate);
-			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate", engine.learn_rate);
+			engine.reg          = parameters.GetRemoveDouble("reg",          engine.reg);
+			engine.learn_rate   = parameters.GetRemoveDouble("lr",           engine.learn_rate);
+			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate",   engine.learn_rate);
 			engine.fast_sampling_memory_limit = parameters.GetRemoveInt32( "fast_sampling_memory_limit", engine.fast_sampling_memory_limit);
 
 			recommender = engine;

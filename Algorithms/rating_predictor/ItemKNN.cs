@@ -59,6 +59,11 @@ namespace MyMediaLite.rating_predictor
 		/// <returns>the predicted rating</returns>
         public override double Predict(int user_id, int item_id)
         {
+            if ((user_id < 0) || (user_id > MaxUserID))
+                throw new ArgumentException("user is unknown: " + user_id);
+            if ((item_id < 0) || (item_id > MaxItemID))
+                throw new ArgumentException("item is unknown: " + item_id);
+			
 			// TODO think about also including negatively correlated entities
 			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
 
@@ -66,7 +71,6 @@ namespace MyMediaLite.rating_predictor
 			double weight_sum = 0;
 			uint neighbors = k;
 			foreach (int item_id2 in relevant_items)
-			{
 				if (data_item[item_id2, user_id])
 				{
 					RatingEvent r = ratings.ByItem[item_id2].FindRating(user_id, item_id2);
@@ -77,7 +81,6 @@ namespace MyMediaLite.rating_predictor
 					if (--neighbors == 0)
 						break;
 				}
-			}
 
 			double result = base.Predict(user_id, item_id);
 			if (weight_sum != 0)

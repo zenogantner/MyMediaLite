@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -56,6 +57,11 @@ namespace MyMediaLite.rating_predictor
 		/// <returns>the predicted rating</returns>
         public override double Predict(int user_id, int item_id)
         {
+            if ((user_id < 0) || (user_id > MaxUserID))
+                throw new ArgumentException("user is unknown: " + user_id);
+            if ((item_id < 0) || (item_id > MaxItemID))
+                throw new ArgumentException("item is unknown: " + item_id);			
+			
 			IList<int> relevant_users = correlation.GetPositivelyCorrelatedEntities(user_id);
 
 			double sum = 0;

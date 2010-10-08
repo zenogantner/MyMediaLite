@@ -112,14 +112,12 @@ namespace MyMediaLite.correlation
 			int num_entities = data.dim1;
 			writer.WriteLine(num_entities);
 			for (int i = 0; i < num_entities; i++)
-			{
 				for (int j = i + 1; j < num_entities; j++)
 				{
 					float val = data.Get(i,j);
 					if (val != 0)
 						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
 				}
-			}
 		}
 
 		/// <summary>
@@ -157,10 +155,8 @@ namespace MyMediaLite.correlation
 
 			double result = 0;
             foreach (int entity_id2 in entities)
-			{
 				if (entity_id2 >= 0 && entity_id2 < num_entities)
                 	result += data.Get(entity_id, entity_id2);
-            }
 			return result;
 		}
 

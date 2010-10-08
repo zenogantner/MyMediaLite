@@ -79,7 +79,7 @@ namespace MyMediaLite.data
             if (original_to_internal.TryGetValue(original_id, out internal_id))
                 return internal_id;
 
-			internal_id = original_to_internal.Count + 1;
+			internal_id = original_to_internal.Count;
 			original_to_internal.Add(original_id, internal_id);
 			internal_to_original.Add(internal_id, original_id);
 			return internal_id;

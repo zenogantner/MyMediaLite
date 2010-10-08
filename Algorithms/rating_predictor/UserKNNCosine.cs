@@ -40,17 +40,12 @@ namespace MyMediaLite.rating_predictor
 		{
 			base.RetrainUser(user_id);
 			if (UpdateUsers)
-			{
-				for (int i = 0; i < MaxUserID; i++)
+				for (int i = 0; i <= MaxUserID; i++)
 				{
-					if (i == user_id)
-						continue;
-
 					float cor = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
 					correlation.data.Set(user_id, i, cor);
 					correlation.data.Set(i, user_id, cor);
 				}
-			}
 		}
 
         /// <inheritdoc />

@@ -36,19 +36,19 @@ namespace MyMediaLite.eval
         /// <summary>
         /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
+        /// 
+        /// MAP: C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
         /// </summary>
         /// <param name="engine">Item recommender engine</param>
         /// <param name="test">test cases</param>
         /// <param name="train">training data</param>
         /// <param name="relevant_items">a HashSet<int> with all relevant items</param>
-        /// <param name="ignoreNewUsers">bool stating whether new users (w/o) prior ratings should be ignored</param>
         /// <returns>a Dictionary<string, double> containing the evaluation results</returns>
 		static public Dictionary<string, double> EvaluateItemRecommender(
 			ItemRecommender engine,
 			SparseBooleanMatrix test,
 			SparseBooleanMatrix train,
-			HashSet<int> relevant_items,
-			bool ignoreNewUsers)
+			HashSet<int> relevant_items)
         {
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
@@ -68,11 +68,6 @@ namespace MyMediaLite.eval
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
 
-				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
-
-                if (prediction.Length != relevant_items.Count)
-                    throw new Exception("Not all items have been ranked.");
-
                 int num_eval_items = relevant_items.Count - relevant_items.Intersect(train[user_id]).Count();
 	            int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
 
@@ -80,6 +75,11 @@ namespace MyMediaLite.eval
 				if (num_eval_pairs == 0)
 					continue;
 
+				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
+
+                if (prediction.Length != relevant_items.Count)
+                    throw new Exception("Not all items have been ranked.");				
+				
 				num_correct_items += test_items.Count;                 // for recall@N
 
 				int num_correct_pairs = 0;                             // for AUC

@@ -29,6 +29,7 @@ Data types
  - profile+optimize data types
 Architecture
  - (*) define an easy interface for data access
+ - user and item IDs should be unsigned integers
  - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
  - parameterize types: user and item IDs, prediction values (in C++ port)

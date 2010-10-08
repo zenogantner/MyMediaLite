@@ -42,7 +42,7 @@ namespace MyMediaLite.rating_predictor
 		{
 			base.RetrainUser(item_id);
 			if (UpdateItems)
-				for (int i = 0; i < MaxItemID; i++)
+				for (int i = 0; i <= MaxItemID; i++)
 				{
 					float cor = Cosine.ComputeCorrelation(data_item[item_id], data_item[i]);
 					correlation.data.Set(item_id, i, cor);
