@@ -41,11 +41,11 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>
 		/// Number of neighbors to take into account for predictions
 		/// </summary>
-		public uint k           = UInt32.MaxValue;
+		public uint k          = uint.MaxValue;
 		/// <summary>
 		/// Shrinkage parameter
 		/// </summary>
-		public double shrinkage = 10;
+		public float shrinkage = 10;
 
         /// <summary>
         /// Correlation matrix over some kind of entity
@@ -74,11 +74,11 @@ namespace MyMediaLite.rating_predictor
             using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
 				string[] numbers = reader.ReadLine().Split(' ');
-				double shrinkage = Double.Parse(numbers[1], ni);
+				float shrinkage  = float.Parse(numbers[1], ni);
 
-				CorrelationMatrix correlation = new CorrelationMatrix(reader);
+				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 
-				base.Train(); // ReadData(), train baseline model
+				base.Train(); // train baseline model
 				this.correlation = new Cosine(correlation);
 				this.shrinkage = shrinkage;
 			}

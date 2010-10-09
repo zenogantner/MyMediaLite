@@ -366,7 +366,7 @@ namespace RatingPrediction
 		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
 		{
 			knn.k         = parameters.GetRemoveUInt32("k",         knn.k);  // TODO handle "inf"
-			knn.shrinkage = parameters.GetRemoveDouble("shrinkage", knn.shrinkage);
+			knn.shrinkage = parameters.GetRemoveFloat( "shrinkage", knn.shrinkage);
 			knn.reg_i     = parameters.GetRemoveDouble("reg_i",     knn.reg_i);
 			knn.reg_u     = parameters.GetRemoveDouble("reg_u",     knn.reg_u);
 

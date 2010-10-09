@@ -28,55 +28,50 @@ namespace MyMediaLite.correlation
 {
 	/// <summary>Class for computing and storing correlations</summary>
 	/// <author>Zeno Gantner, University of Hildesheim</author>
-	public class CorrelationMatrix
+	public class CorrelationMatrix : Matrix<float>
 	{
-		/// <summary>
-		/// Matrix object containing the correlations
-		/// </summary>
-		public Matrix<float> data;
-		
 		/// <summary>
 		/// Number of entities, e.g. users or items
 		/// </summary>
 		protected int num_entities;
-
-		/// <summary>
-		/// Default constructor
-		/// </summary>
-		public CorrelationMatrix() { }
 		
 		/// <summary>
 		/// Creates a CorrelationMatrix object for a given number of entities
 		/// </summary>
 		/// <param name="num_entities">number of entities</param>
-		public CorrelationMatrix(int num_entities)
+		public CorrelationMatrix(int num_entities) : base(num_entities, num_entities)
 		{
+			this.num_entities = num_entities;
+		}
+		
+		static public CorrelationMatrix Create(int num_entities)
+		{
+			CorrelationMatrix cm;
 			try
 			{
-		    	data = new Matrix<float>(num_entities, num_entities);
+				cm = new CorrelationMatrix(num_entities);
 			}
 			catch (OverflowException)
 			{
 				Console.Error.WriteLine("Too many entities: " + num_entities);
 				throw;
 			}
-
-			this.num_entities = num_entities;
-		}
-
+			return cm;
+		}		
+		
 		/// <summary>
 		/// Create a CorrelationMatrix from the lines of a StreamReader
 		/// </summary>
 		/// <param name="reader">the StreamReader to read from</param>
-		public CorrelationMatrix(StreamReader reader)
+		static public CorrelationMatrix ReadCorrelationMatrix(StreamReader reader)
 		{
-			num_entities = System.Int32.Parse(reader.ReadLine());
+			int num_entities = int.Parse(reader.ReadLine());
 
-			data = new Matrix<float>(num_entities, num_entities);
+			CorrelationMatrix cm = Create(num_entities);
 
 			// diagonal values
 			for (int i = 0; i < num_entities; i++)
-				data[i, i] = 1;
+				cm[i, i] = 1;
 
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -93,9 +88,11 @@ namespace MyMediaLite.correlation
 				if (j >= num_entities)
 					throw new Exception("i = " + i);
 
-				data[i, j] = c;
-				data[j, i] = c;
+				cm[i, j] = c;
+				cm[j, i] = c;
 			}
+			
+			return cm;
 		}
 
 		/// <summary>
@@ -109,26 +106,14 @@ namespace MyMediaLite.correlation
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			int num_entities = data.dim1;
 			writer.WriteLine(num_entities);
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
 				{
-					float val = data[i,j];
+					float val = this[i,j];
 					if (val != 0)
 						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
 				}
-		}
-
-		/// <summary>
-		/// Get the correlation for a given entity pair
-		/// </summary>
-		/// <param name="i">the numerical ID of the first entity</param>
-		/// <param name="j">the numerical ID of the second entity</param>
-		/// <returns>the correlation between entity i and entity j</returns>
-		public float Get(int i, int j)
-		{
-			return data[i, j];
 		}
 
 		/// <summary>
@@ -139,7 +124,7 @@ namespace MyMediaLite.correlation
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		public void AddEntity(int entity_id)
 		{
-			this.data = this.data.Grow(entity_id + 1, entity_id + 1);
+			this.Grow(entity_id + 1, entity_id + 1);
 		}
 
 		/// <summary>
@@ -156,7 +141,7 @@ namespace MyMediaLite.correlation
 			double result = 0;
             foreach (int entity_id2 in entities)
 				if (entity_id2 >= 0 && entity_id2 < num_entities)
-                	result += data[entity_id, entity_id2];
+                	result += this[entity_id, entity_id2];
 			return result;
 		}
 
@@ -169,11 +154,11 @@ namespace MyMediaLite.correlation
 		{
 			List<int> result = new List<int>();
 			for (int i = 0; i < num_entities; i++)
-				if (data[i, entity_id] > 0)
+				if (this[i, entity_id] > 0)
 					result.Add(i);
 
 			result.Remove(entity_id);
-			result.Sort(delegate(int i, int j) { return data[j, entity_id].CompareTo(data[i, entity_id]); });
+			result.Sort(delegate(int i, int j) { return this[j, entity_id].CompareTo(this[i, entity_id]); });
 			return result;
 		}
 
@@ -190,7 +175,7 @@ namespace MyMediaLite.correlation
 				entities.Add(i);
 
 			entities.Remove(entity_id);
-			entities.Sort(delegate(int i, int j) { return data[j, entity_id].CompareTo(data[i, entity_id]); });
+			entities.Sort(delegate(int i, int j) { return this[j, entity_id].CompareTo(this[i, entity_id]); });
 
 			return entities.GetRange(0, (int) k).ToArray();
 		}

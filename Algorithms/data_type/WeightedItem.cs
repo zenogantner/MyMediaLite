@@ -40,11 +40,7 @@ namespace MyMediaLite.data_type
 			this.weight  = weight;
 		}
 
-        /// <summary>
-        /// Compares to another object.
-        /// </summary>
-        /// <param name="o">The other object</param>
-        /// <returns></returns>
+		/// <inheritdoc />
         public int CompareTo(Object o)
         {
 			WeightedItem otherItem = o as WeightedItem;
@@ -77,4 +73,3 @@ namespace MyMediaLite.data_type
 		}
     }
 }
-

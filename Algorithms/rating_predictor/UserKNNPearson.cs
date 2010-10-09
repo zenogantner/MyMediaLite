@@ -31,11 +31,7 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-
-			correlation.Pearson pearson_correlation = new Pearson(MaxUserID + 1);
-			pearson_correlation.shrinkage = (float) this.shrinkage;
-			pearson_correlation.ComputeCorrelations(ratings, EntityType.USER);
-			this.correlation = pearson_correlation;
+			this.correlation = Pearson.Create(ratings, EntityType.USER, shrinkage);
         }
 
 		/// <inheritdoc />
@@ -47,8 +43,8 @@ namespace MyMediaLite.rating_predictor
 				for (int i = 0; i <= MaxUserID; i++)
 				{
 					float cor = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, (float) shrinkage);
-					correlation.data[user_id, i] = cor;
-					correlation.data[i, user_id] = cor;
+					correlation[user_id, i] = cor;
+					correlation[i, user_id] = cor;
 				}
 			}
 		}

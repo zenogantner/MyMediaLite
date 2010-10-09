@@ -32,12 +32,31 @@ namespace MyMediaLite.correlation
 		public Cosine(int num_entities) : base(num_entities) { }
 
 		/// <inheritdoc />
-		public Cosine(CorrelationMatrix correlation_matrix)
+		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.dim1)
 		{
-			this.num_entities = correlation_matrix.data.dim1;
+			//this.num_entities = correlation_matrix.data.dim1;
+			//this.dim1 = correlation_matrix.data.dim1;
+			//this.dim2 = correlation_matrix.data.dim2;
 			this.data = correlation_matrix.data;
 		}
 
+		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
+		{
+			CorrelationMatrix cm;
+			int num_entities = vectors.NumberOfRows;
+			try
+			{
+				cm = new Cosine(num_entities);
+			}
+			catch (OverflowException)
+			{
+				Console.Error.WriteLine("Too many entities: " + num_entities);
+				throw;
+			}
+			cm.ComputeCorrelations(vectors);
+			return cm;
+		}		
+		
 		/// <inheritdoc />
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
@@ -45,7 +64,7 @@ namespace MyMediaLite.correlation
 
             for (int i = 0; i < num_entities; i++)
 			{
-				data[i, i] = 1;
+				this[i, i] = 1;
                 if (entity_data[i].Count == 0)
                     continue;
 
@@ -60,8 +79,8 @@ namespace MyMediaLite.correlation
                     if (entity_data[j].Count > 0)
                     {
 						float corr = ComputeCorrelation(attributes_i, entity_data[j]);
-						data[i, j] = corr;
-						data[j, i] = corr;
+						this[i, j] = corr;
+						this[j, i] = corr;
             	    }
 			}
 

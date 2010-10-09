@@ -42,6 +42,31 @@ namespace MyMediaLite.correlation
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
 
+		static public CorrelationMatrix Create(RatingData ratings, EntityType entity_type, float shrinkage)
+		{
+			Pearson cm;
+			int num_entities = 0;
+			if (entity_type.Equals(EntityType.USER))
+				num_entities = ratings.MaxUserID;
+			else if (entity_type.Equals(EntityType.ITEM))
+				num_entities = ratings.MaxItemID;
+			else
+				throw new ArgumentException("Unknown entity type: " + entity_type);
+
+			try
+			{
+				cm = new Pearson(num_entities);
+			}
+			catch (OverflowException)
+			{
+				Console.Error.WriteLine("Too many entities: " + num_entities);
+				throw;
+			}
+			cm.shrinkage = shrinkage;
+			cm.ComputeCorrelations(ratings, entity_type);
+			return cm;
+		}		
+
 		/// <inheritdoc />
 		public static float ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
 		{
@@ -108,7 +133,7 @@ namespace MyMediaLite.correlation
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
 			
-			int num_entities = data.dim1;			
+			int num_entities = this.dim1;
 						List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
 
 			// compute Pearson product-moment correlation coefficients for all entity pairs
@@ -120,13 +145,13 @@ namespace MyMediaLite.correlation
 				if (i % 4000 == 3999)
 					Console.Error.WriteLine("{0}/{1}", i, num_entities);
 
-				data[i, i] = 1;
+				this[i, i] = 1;
 
 				for (int j = i + 1; j < num_entities; j++)
 				{
 					float pmcc = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
-					data[i, j] = pmcc;
-					data[j, i] = pmcc;
+					this[i, j] = pmcc;
+					this[j, i] = pmcc;
 				}
 			}
 		}

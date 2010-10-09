@@ -101,7 +101,7 @@ namespace MyMediaLite.item_recommender
 				double result = 0;
 				foreach (int neighbor in nearest_neighbors[user_id])
 					if (data_user[neighbor, item_id])
-						result += correlation.Get(user_id, neighbor);
+						result += correlation[user_id, neighbor];
 				return result;
 			}
         }

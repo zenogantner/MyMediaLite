@@ -53,7 +53,7 @@ namespace MyMediaLite.item_recommender
 		{
 			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
-		    	CorrelationMatrix correlation = new CorrelationMatrix(reader);
+		    	CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 				this.correlation = correlation;
 			}
 		}

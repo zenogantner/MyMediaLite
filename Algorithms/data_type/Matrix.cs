@@ -167,39 +167,38 @@ namespace MyMediaLite.data_type
         {
             if (num_rows > dim1)
             {
+				// create new data structure
                 T[] data_new = new T[num_rows * dim2];
                 data.CopyTo(data_new, 0);
-                data = data_new;
-                dim1 = num_rows;
+
+				// replace old data structure
+                this.dim1 = num_rows;
+                this.data = data_new;
             }
         }
 
         /// <summary>
-        /// Returns a larger version of the matrix.
-        /// Do nothing if already big enough.
-        ///
-		/// Beware: This operation may be slow for big matrices.
-        /// The new entries are filled with zeros.
+        /// Grows the matrix to the requested size, if necessary
+		///
+		/// The new entries are filled with zeros.
         /// </summary>
         /// <param name="num_rows">the minimum number of rows</param>
         /// <param name="num_cols">the minimum number of columns</param>
-        public Matrix<T> Grow(int num_rows, int num_cols)
+        public void Grow(int num_rows, int num_cols)
         {
-            if (num_cols <= dim2)
-            {
-				AddRows(num_rows);
-				return this;
-            }
+			if (num_rows > dim1 || num_cols > dim2)
+			{
+				// create new data structure
+				T[] new_data = new T[num_rows * num_cols];
+				for (int i = 0; i < dim1; i++)
+					for (int j = 0; j < dim2; j++)
+						new_data[i * num_cols + j] = this[i, j];
 
-			if (num_rows < dim1)
-				num_rows = dim1;
-
-			Matrix<T> new_matrix = new Matrix<T>(num_rows, num_cols);
-			for (int i = 0; i < dim1; i++)
-				for (int j = 0; j < dim2; j++)
-					new_matrix[i, j] = this[i, j];
-
-			return new_matrix;
+				// replace old data structure
+				this.dim1 = num_rows;
+				this.dim2 = num_cols;
+				this.data = new_data;
+			}
         }
 
 		/// <summary>
@@ -310,7 +309,7 @@ namespace MyMediaLite.data_type
 		/// </summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="row">the row ID</param>
-		/// <returns>the average</returns>		
+		/// <returns>the average</returns>
 		static public double RowAverage(Matrix<double> matrix, int row)
 		{
 			double sum = 0;

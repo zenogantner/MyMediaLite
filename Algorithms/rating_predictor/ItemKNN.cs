@@ -74,7 +74,7 @@ namespace MyMediaLite.rating_predictor
 				if (data_item[item_id2, user_id])
 				{
 					RatingEvent r = ratings.ByItem[item_id2].FindRating(user_id, item_id2);
-					double weight = correlation.Get(item_id, item_id2);
+					double weight = correlation[item_id, item_id2];
 					weight_sum += weight;
 					sum += weight * (r.rating - base.Predict(user_id, item_id2));
 

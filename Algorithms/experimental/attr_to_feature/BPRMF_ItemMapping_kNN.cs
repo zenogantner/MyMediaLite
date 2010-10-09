@@ -59,7 +59,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				if (data_item[item_id2].Count == 0)
 					continue;
 
-				double weight = item_correlation.Get(item_id, item_id2);
+				double weight = item_correlation[item_id, item_id2];
 				weight_sum += weight;
 				for (int f = 0; f < num_features; f++)
 					item_features[f] += weight * item_feature[item_id2, f];

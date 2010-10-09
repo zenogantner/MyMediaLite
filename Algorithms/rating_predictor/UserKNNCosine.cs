@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using MyMediaLite.correlation;
 
 
@@ -30,9 +31,7 @@ namespace MyMediaLite.rating_predictor
         {
 			base.Train();
 
-			correlation.Cosine cosine_correlation = new Cosine(MaxUserID + 1);
-			cosine_correlation.ComputeCorrelations(data_user);
-			this.correlation = cosine_correlation;
+			this.correlation = Cosine.Create(data_user);
         }
 
 		/// <inheritdoc />
@@ -43,8 +42,8 @@ namespace MyMediaLite.rating_predictor
 				for (int i = 0; i <= MaxUserID; i++)
 				{
 					float cor = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
-					correlation.data[user_id, i] = cor;
-					correlation.data[i, user_id] = cor;
+					correlation[user_id, i] = cor;
+					correlation[i, user_id] = cor;
 				}
 		}
 
