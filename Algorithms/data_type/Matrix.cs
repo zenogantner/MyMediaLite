@@ -67,12 +67,10 @@ namespace MyMediaLite.data_type
 			matrix.data.CopyTo(this.data, 0);
 		}
 
-        /// <summary>
-        /// The value at (i,j)
-        /// </summary>
+        /// <summary>The value at (i,j)</summary>
         /// <param name="i">the row ID</param>
         /// <param name="j">the column ID</param>
-        public T this [int i, int j]
+        public virtual T this [int i, int j]
         {
 			get
 			{

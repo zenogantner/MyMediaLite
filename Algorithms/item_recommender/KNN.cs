@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.IO;
 using MyMediaLite.correlation;
 using MyMediaLite.util;
@@ -53,8 +52,7 @@ namespace MyMediaLite.item_recommender
 		{
 			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
-		    	CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
-				this.correlation = correlation;
+				this.correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 			}
 		}
 	}

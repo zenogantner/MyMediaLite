@@ -34,9 +34,6 @@ namespace MyMediaLite.correlation
 		/// <inheritdoc />
 		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.dim1)
 		{
-			//this.num_entities = correlation_matrix.data.dim1;
-			//this.dim1 = correlation_matrix.data.dim1;
-			//this.dim2 = correlation_matrix.data.dim2;
 			this.data = correlation_matrix.data;
 		}
 
@@ -77,11 +74,7 @@ namespace MyMediaLite.correlation
 
 				for (int j = i + 1; j < num_entities; j++)
                     if (entity_data[j].Count > 0)
-                    {
-						float corr = ComputeCorrelation(attributes_i, entity_data[j]);
-						this[i, j] = corr;
-						this[j, i] = corr;
-            	    }
+						this[i, j] = ComputeCorrelation(attributes_i, entity_data[j]);
 			}
 
 			Console.Error.WriteLine();
@@ -92,10 +85,8 @@ namespace MyMediaLite.correlation
 		{
 			int cntr = 0;
             foreach (int k in vector_j)
-			{
             	if (vector_i.Contains(k))
 	            	cntr++;
-            }
             return  (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
 		}
 	}

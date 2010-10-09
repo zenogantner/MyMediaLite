@@ -30,7 +30,6 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-
 			this.correlation = Cosine.Create(data_user);
         }
 
@@ -40,11 +39,7 @@ namespace MyMediaLite.rating_predictor
 			base.RetrainUser(user_id);
 			if (UpdateUsers)
 				for (int i = 0; i <= MaxUserID; i++)
-				{
-					float cor = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
-					correlation[user_id, i] = cor;
-					correlation[i, user_id] = cor;
-				}
+					correlation[user_id, i] = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
 		}
 
         /// <inheritdoc />

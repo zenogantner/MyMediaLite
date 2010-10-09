@@ -33,24 +33,15 @@ namespace MyMediaLite.item_recommender
     public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
     {
 		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes			
-		{
-			set
-			{
-				this.item_attributes = value;
-			}
-		}		
-		private SparseBooleanMatrix item_attributes;
-		
+		public SparseBooleanMatrix ItemAttributes { get; set; }
+
 		/// <inheritdoc />
 	    public int NumItemAttributes { get;	set; }
 
         /// <inheritdoc />
         public override void Train()
         {
-            int num_items = MaxItemID + 1;
-			correlation = new Cosine(num_items);
-			correlation.ComputeCorrelations(item_attributes);
+			this.correlation = Cosine.Create(ItemAttributes);
         }
 
         /// <inheritdoc />

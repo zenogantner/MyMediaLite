@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using MyMediaLite.correlation;
-using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.util;
 
@@ -26,6 +25,8 @@ using MyMediaLite.util;
 namespace MyMediaLite.rating_predictor
 {
 	/// <summary>
+	/// Attribute-aware item-based kNN recommender.
+	/// 
 	/// This engine does NOT support online updates.
 	/// </summary>
 	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
@@ -33,6 +34,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes			
 		{
+			get { return this.item_attributes; }
 			set
 			{
 				this.item_attributes = value;
@@ -48,11 +50,7 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-
-			correlation.Cosine cosine_correlation = new Cosine(MaxItemID + 1);
-			cosine_correlation.ComputeCorrelations(item_attributes);
-			this.correlation = cosine_correlation;
-
+			this.correlation = Cosine.Create(ItemAttributes);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
@@ -60,7 +58,7 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			return String.Format("item-attribute-kNN k={0} reg_u={1} reg_i={2}",
-			                     k == UInt32.MaxValue ? "inf" : k.ToString(), reg_u, reg_i);
+			                     k == uint.MaxValue ? "inf" : k.ToString(), reg_u, reg_i);
 		}
 	}
 

@@ -24,24 +24,25 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.correlation
 {
-	// TODO: think about better names
-
 	/// <summary>
 	/// Correlation class for Pearson correlation.
 	/// </summary>
 	public class Pearson : CorrelationMatrix
 	{
-		/// <summary>
-		/// shrinkage parameter
-		/// </summary>
+		/// <summary>shrinkage parameter</summary>
 		public float shrinkage = 10;
 		
-		/// <summary>
-		/// Create a Pearson correlation object
-		/// </summary>
+		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
 
+		/// <summary>
+		/// Create a Pearson correlation matrix from given data
+		/// </summary>
+		/// <param name="ratings">the ratings data</param>
+		/// <param name="entity_type">the entity type, either USER or ITEM</param>
+		/// <param name="shrinkage">a shrinkage parameter</param>
+		/// <returns>the complete Pearson correlation matrix</returns>
 		static public CorrelationMatrix Create(RatingData ratings, EntityType entity_type, float shrinkage)
 		{
 			Pearson cm;
@@ -119,22 +120,17 @@ namespace MyMediaLite.correlation
 		}
 
 		/// <summary>
-		///
+		/// Compute correlations for given ratings
 		/// </summary>
-		/// <param name="ratings">
-		/// A <see cref="RatingData"/>
-		/// </param>
-		/// <param name="entity_type">
-		/// A <see cref="EntityType"/>
-		/// </param>
+		/// <param name="ratings">the rating data</param>
+		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		public override void ComputeCorrelations(RatingData ratings, EntityType entity_type)
 		{
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			
 			int num_entities = this.dim1;
-						List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
+			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
 
 			// compute Pearson product-moment correlation coefficients for all entity pairs
 			Console.Error.Write("Computation of Pearson correlation for {0} entities... ", num_entities);
@@ -149,9 +145,7 @@ namespace MyMediaLite.correlation
 
 				for (int j = i + 1; j < num_entities; j++)
 				{
-					float pmcc = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
-					this[i, j] = pmcc;
-					this[j, i] = pmcc;
+					this[i, j] = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
 				}
 			}
 		}

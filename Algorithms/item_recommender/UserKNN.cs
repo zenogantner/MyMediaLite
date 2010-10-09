@@ -16,11 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using MyMediaLite.correlation;
-using MyMediaLite.util;
 
 
 namespace MyMediaLite.item_recommender
@@ -31,7 +27,6 @@ namespace MyMediaLite.item_recommender
     ///
     /// This engine does not support online updates.
     /// </summary>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
     public class UserKNN : KNN
     {
 		/// <summary>
@@ -42,11 +37,10 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_users = MaxUserID + 1;
-			correlation = new Cosine(num_users);
-			correlation.ComputeCorrelations(data_user);
+			correlation = Cosine.Create(data_user);
 
-			nearest_neighbors = new int[MaxUserID + 1][];
+			int num_users = MaxUserID + 1;
+			nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
@@ -72,45 +66,7 @@ namespace MyMediaLite.item_recommender
 		public override string ToString()
 		{
 			return String.Format("user-kNN, k={0}",
-			                     k == UInt32.MaxValue ? "inf" : k.ToString());
-		}
-    }
-
-    /// <summary>
-    /// Weighted k-nearest neighbor user-based collaborative filtering using cosine-similarity
-    ///
-    /// This engine does not support online updates.
-    /// </summary>
-	/// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
-    public class WeightedUserKNN : UserKNN
-    {
-        /// <inheritdoc />
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id > MaxUserID))
-                throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
-                throw new ArgumentException("item is unknown: " + item_id);
-
-			if (k == UInt32.MaxValue)
-			{
-				return correlation.SumUp(user_id, data_item[item_id]);
-			}
-			else
-			{
-				double result = 0;
-				foreach (int neighbor in nearest_neighbors[user_id])
-					if (data_user[neighbor, item_id])
-						result += correlation[user_id, neighbor];
-				return result;
-			}
-        }
-
-		/// <inheritdoc />
-		public override string ToString()
-		{
-			return String.Format("weighted-user-kNN k={0}",
-			                     k == UInt32.MaxValue ? "inf" : k.ToString());
+			                     k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }

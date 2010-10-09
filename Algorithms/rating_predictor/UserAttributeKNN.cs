@@ -49,17 +49,14 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-
-			correlation.Cosine cosine_correlation = new Cosine(MaxUserID + 1);
-			cosine_correlation.ComputeCorrelations(user_attributes);
-			this.correlation = cosine_correlation;
+			this.correlation = Cosine.Create(user_attributes);
         }
 
         /// <inheritdoc />
 		public override string ToString()
 		{
 			return String.Format("user-attribute-kNN k={0} reg_u={1} reg_i={2}",
-			                     k == UInt32.MaxValue ? "inf" : k.ToString(), reg_u, reg_i);
+			                     k == uint.MaxValue ? "inf" : k.ToString(), reg_u, reg_i);
 		}
 	}
 

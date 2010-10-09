@@ -30,10 +30,18 @@ namespace MyMediaLite.correlation
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class CorrelationMatrix : Matrix<float>
 	{
-		/// <summary>
-		/// Number of entities, e.g. users or items
-		/// </summary>
+		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
+
+		/// <inheritdoc/>
+        public override float this [int i, int j]
+        {
+			set
+        	{
+            	data[i * dim2 + j] = value;
+            	data[j * dim2 + i] = value;
+        	}
+		}		
 		
 		/// <summary>
 		/// Creates a CorrelationMatrix object for a given number of entities
@@ -44,6 +52,11 @@ namespace MyMediaLite.correlation
 			this.num_entities = num_entities;
 		}
 		
+		/// <summary>
+		/// Create a correlation matrix, give out useful warning if there is not enough memory
+		/// </summary>
+		/// <param name="num_entities">the number of entities</param>
+		/// <returns>the correlation matrix</returns>
 		static public CorrelationMatrix Create(int num_entities)
 		{
 			CorrelationMatrix cm;
@@ -89,7 +102,6 @@ namespace MyMediaLite.correlation
 					throw new Exception("i = " + i);
 
 				cm[i, j] = c;
-				cm[j, i] = c;
 			}
 			
 			return cm;

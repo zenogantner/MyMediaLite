@@ -22,8 +22,6 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-	// TODO implement non-weighted, non-inf kNN
-
 	/// <summary>
     /// k-nearest neighbor item-based collaborative filtering using cosine-similarity
     /// k=\infty.
@@ -36,9 +34,7 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-            int num_items = MaxItemID + 1;
-			correlation = new Cosine(num_items);
-			correlation.ComputeCorrelations(data_item);
+			correlation = Cosine.Create(data_item);
         }
 
         /// <inheritdoc />
@@ -55,7 +51,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("item-kNN, k={0}" , k == UInt32.MaxValue ? "inf" : k.ToString());
+			return String.Format("item-kNN, k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }

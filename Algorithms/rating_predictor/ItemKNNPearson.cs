@@ -30,12 +30,7 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-
-			correlation.Pearson pearson_correlation = new Pearson(MaxItemID + 1);
-			pearson_correlation.shrinkage = (float) this.shrinkage;
-			pearson_correlation.ComputeCorrelations(ratings, EntityType.ITEM);
-			this.correlation = pearson_correlation;
-
+			this.correlation = Pearson.Create(ratings, EntityType.ITEM, shrinkage);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
@@ -45,11 +40,7 @@ namespace MyMediaLite.rating_predictor
 			base.RetrainUser(item_id);
 			if (UpdateItems)
 				for (int i = 0; i <= MaxItemID; i++)
-				{
-					float cor = Pearson.ComputeCorrelation(ratings.ByItem[item_id], ratings.ByItem[i], EntityType.ITEM, item_id, i, (float) shrinkage);
-					correlation[item_id, i] = cor;
-					correlation[i, item_id] = cor;
-				}
+					correlation[item_id, i] = Pearson.ComputeCorrelation(ratings.ByItem[item_id], ratings.ByItem[i], EntityType.ITEM, item_id, i, shrinkage);;
 		}
 
         /// <inheritdoc />

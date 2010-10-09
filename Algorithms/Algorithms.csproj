@@ -63,7 +63,6 @@
     <Compile Include="correlation\Cosine.cs" />
     <Compile Include="data_type\Matrix.cs" />
     <Compile Include="data_type\SparseBooleanMatrix.cs" />
-    <Compile Include="data_type\SparseMatrix.cs" />
     <Compile Include="data_type\VectorUtils.cs" />
     <Compile Include="data_type\WeightedItem.cs" />
     <Compile Include="item_recommender\BPR_Linear.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="rating_predictor\ItemKNNPearson.cs" />
     <Compile Include="rating_predictor\UserKNNPearson.cs" />
     <Compile Include="rating_predictor\UserKNNCosine.cs" />
+    <Compile Include="item_recommender\WeightedUserKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
