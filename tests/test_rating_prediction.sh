@@ -11,6 +11,9 @@ echo "This will take about 5 minutes"
 
 cd RatingPrediction/bin/Debug
 
+echo "MovieLens 1M"
+echo "------------"
+
 for method in matrix-factorization biased-matrix-factorization
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true
@@ -28,6 +31,13 @@ do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20
 done
+
+echo "MovieLens 100K"
+echo "--------------"
+
+method=user-item-baseline
+echo $PROGRAM u1.base u1.test $method
+     $PROGRAM u1.base u1.test $method
 
 for method in user-kNN-pearson user-kNN-cosine item-kNN-pearson item-kNN-cosine
 do

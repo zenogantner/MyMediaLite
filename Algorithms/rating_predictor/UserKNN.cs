@@ -49,7 +49,7 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
 		///
-		/// If the user or the item are not known to the engine, the global average is returned.
+		/// If the user or the item are not known to the engine, a suitable average rating is returned.
 		/// To avoid this behavior for unknown entities, use CanPredictRating() to check before.
 		/// </summary>
 		/// <param name="user_id">the user ID</param>
@@ -57,11 +57,14 @@ namespace MyMediaLite.rating_predictor
 		/// <returns>the predicted rating</returns>
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id > MaxUserID))
+            if (user_id < 0)
                 throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
+            if (item_id < 0)
                 throw new ArgumentException("item is unknown: " + item_id);			
 			
+            if ((user_id > MaxUserID) || (item_id > MaxItemID))
+                return base.Predict(user_id, item_id);
+					
 			IList<int> relevant_users = correlation.GetPositivelyCorrelatedEntities(user_id);
 
 			double sum = 0;

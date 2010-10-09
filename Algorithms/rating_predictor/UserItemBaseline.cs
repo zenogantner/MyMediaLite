@@ -27,7 +27,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	// TODO: think about running CV internally in order to find suitable hyperparameters
+	// TODO: run CV internally in order to find suitable hyperparameters
 
     /// <summary>
     /// Uses the average rating value, plus a regularized user and item bias
@@ -42,7 +42,9 @@ namespace MyMediaLite.rating_predictor
     /// <author>Zeno Gantner, University of Hildesheim</author>
     public class UserItemBaseline : Memory
     {
+		/// <summary>Regularization parameter for the user biases</summary>
 		public double reg_u = 25;
+		/// <summary>Regularization parameter for the item biases</summary>
 		public double reg_i = 10;
 
         public bool UpdateUsers { get; set; }

@@ -14,6 +14,7 @@ Recommender functionality
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
    - item-to-item CF (Linden et al., 2003)
    - attribute-based engines using LIBSVM
+   - Bayesian Probabilistic Matrix Factorization http://www.mit.edu/~rsalakhu/BPMF.html
  - time-aware rating and item prediction
    - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender
