@@ -20,11 +20,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.item_recommender;
-using MyMediaLite.rating_predictor;
 using MyMediaLite.util;
 
 
@@ -207,6 +205,13 @@ namespace MyMediaLite.eval
             return return_array;
 		}
 
+		/// <summary>
+		/// Predict items for a given user
+		/// </summary>
+		/// <param name="engine">the recommender engine to use</param>
+		/// <param name="user_id">the numerical ID of the user</param>
+		/// <param name="relevant_items">a collection of numerical IDs of relevant items</param>
+		/// <returns>an ordered list of items, the most likely item first</returns>
 		static public int[] PredictItems(RecommenderEngine engine, int user_id, ICollection<int> relevant_items)
 		{
             List<WeightedItem> result = new List<WeightedItem>();

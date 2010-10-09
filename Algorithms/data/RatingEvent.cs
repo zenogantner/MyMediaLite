@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
@@ -24,11 +24,30 @@ namespace MyMediaLite.data
 	/// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class RatingEvent
     {
+		/// <summary>
+		/// The user ID
+		/// </summary>
         public int user_id;
+		/// <summary>
+		/// The item ID
+		/// </summary>
         public int item_id;
+		/// <summary>
+		/// The rating value
+		/// </summary>
         public double rating;
 
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
 		public RatingEvent() { }
+
+		/// <summary>
+		/// Create a RatingEvent object from given data
+		/// </summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">the rating value</param>
 		public RatingEvent(int user_id, int item_id, double rating)
 		{
 			this.user_id = user_id;

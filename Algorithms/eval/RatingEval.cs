@@ -34,12 +34,24 @@ namespace MyMediaLite.eval
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class RatingEval
     {
+		/// <summary>
+		/// the evaluation measures for rating prediction offered by the class
+		/// </summary>
+		static public ICollection<string> RatingPredictionMeasures			
+		{
+			get
+			{
+				string[] measures = { "RMSE", "MAE" };
+				return new HashSet<string>(measures);
+			}
+		}		
+		
         /// <summary>
         /// Evaluates a rating predictor for RMSE and MAE.
         /// </summary>
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
-        /// <returns>a Dictionary<string, double> containing the evaluation results</returns>
+        /// <returns>a Dictionary containing the evaluation results</returns>
         static public Dictionary<string, double> EvaluateRated(RatingPredictor engine, RatingData ratings)
 		{
             double rmse = 0;

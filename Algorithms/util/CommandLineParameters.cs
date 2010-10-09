@@ -163,7 +163,7 @@ namespace MyMediaLite.util
 
 		/// <summary>Get a double value from the parameters</summary>
 		/// <param name="key">the parameter name</param>
-		/// <param name="dvalue">the default value if parameter of the given name is not found</para>
+		/// <param name="dvalue">the default value if parameter of the given name is not found</param>
 		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>		
 		public double GetRemoveDouble(string key, double dvalue)
 		{
@@ -195,7 +195,7 @@ namespace MyMediaLite.util
 
 		/// <summary>Get a float value from the parameters</summary>
 		/// <param name="key">the parameter name</param>
-		/// <param name="dvalue">the default value if parameter of the given name is not found</para>
+		/// <param name="dvalue">the default value if parameter of the given name is not found</param>
 		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>
 		public float GetRemoveFloat(string key, float dvalue)
 		{
@@ -217,12 +217,22 @@ namespace MyMediaLite.util
 				return dvalue;
 		}
 		
-		
+		/// <summary>
+		/// Get a string parameter
+		/// </summary>
+		/// <param name="key">the name of the parameter</param>
+		/// <returns>the parameter value related to key, an empty string if it does not exist</returns>
 		public string GetRemoveString(string key)
 		{
 			return GetRemoveString(key, String.Empty);
 		}
 
+		/// <summary>
+		/// Get a string parameter
+		/// </summary>
+		/// <param name="key">the name of the parameter</param>
+		/// <param name="dvalue">the default value</param>
+		/// <returns>the parameter value related to key, the default value if it does not exist</returns>		
 		public string GetRemoveString(string key, string dvalue)
 		{
 			if (dict.ContainsKey(key))

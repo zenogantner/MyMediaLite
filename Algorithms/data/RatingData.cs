@@ -206,16 +206,10 @@ namespace MyMediaLite.data
         public void RemoveUser(int user_id)
         {
             if (byUser != null)
-            {
-                Ratings r = byUser[(int)user_id];
-                List<RatingEvent> temp = r.ToList();
-                while (temp.Count > 0)
-                    RemoveRating(temp[0]);
-            }
+				foreach (RatingEvent r in ByUser[user_id])
+                    RemoveRating(r);
             else if ((byItem != null) || (all != null))
-            {
                 throw new Exception("Data storage is out of sync.");
-            }
         }
 
 		/// <summary>
@@ -227,16 +221,10 @@ namespace MyMediaLite.data
         public void RemoveItem(int item_id)
         {
             if (byItem != null)
-            {
-                Ratings r = byItem[(int)item_id];
-                List<RatingEvent> temp = r.ToList();
-                while (temp.Count > 0)
-                    RemoveRating(temp[0]);
-            }
+                foreach (RatingEvent r in ByItem[item_id])
+                    RemoveRating(r);
             else if ((byUser != null) || (all != null))
-            {
                 throw new Exception("Data storage is out of sync.");
-            }
         }
 
 		/// <summary>

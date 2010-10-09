@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Steffen Rendle
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,35 +21,26 @@ using System.Linq;
 
 namespace MyMediaLite.data
 {
-	/// <author>Steffen Rendle, University of Hildesheim</author>
+	/// <summary>Class representing a collection of ratings in a particular order</summary>
     public class Ratings
     {
-        private List<RatingEvent> ratingList;
+        private List<RatingEvent> ratingList = new List<RatingEvent>();
         private double sum_rating = 0;
 
-		public Ratings()
-		{
-			 this.ratingList = new List<RatingEvent>();
-		}
-
-		public Ratings(int num_ratings)
-		{
-			 this.ratingList = new List<RatingEvent>(num_ratings);
-		}
-
+		/// <summary>
+		/// Number of ratings in the collection
+		/// </summary>
         public int Count
 		{
 			get { return ratingList.Count; }
 		}
 
+		/// <summary>
+		/// The average (mean) rating in the collection
+		/// </summary>
 		public double Average
 		{
 			get { return sum_rating / Count; }
-		}
-
-		public double Sum
-		{
-			get { return sum_rating; }
 		}
 
 		/// <inheritdoc />
@@ -58,28 +49,48 @@ namespace MyMediaLite.data
 			return ratingList.GetEnumerator();
 		}
 
-		public List<RatingEvent> ToList()
-		{
-			return ratingList;
-		}
-
+		/// <summary>
+		/// Add a rating event to the collection.
+		/// 
+		/// Also updates the statistics.
+		/// </summary>
+		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
 		public void AddRating(RatingEvent rating)
         {
             sum_rating += rating.rating;
             ratingList.Add(rating);
         }
 
+		/// <summary>
+		/// Change a rating event in the collection.
+		///
+		/// Only updates the statistics, it is assumed that the value is modified through other means afterwards.
+		/// </summary>
+		/// <param name="rating">a rating event</param>
+		/// <param name="new_rating">the new rating value</param>
 		public void ChangeRating(RatingEvent rating, double new_rating)
         {
             sum_rating += new_rating - rating.rating;
         }
 
+		/// <summary>
+		/// Remove a rating from the collection.
+		/// 
+		/// Also updates the statistics.
+		/// </summary>
+		/// <param name="rating">the rating event to remove</param>
         public void RemoveRating(RatingEvent rating)
         {
             ratingList.Remove(rating);
             sum_rating -= rating.rating;
         }
 
+		/// <summary>
+		/// Find a rating for a given user and item
+		/// </summary>
+		/// <param name="user_id">the numerical ID of the user</param>
+		/// <param name="item_id">the numerical ID of the item</param>
+		/// <returns>the rating event corresponding to the given user and item, null otherwise</returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {
             foreach (RatingEvent rating in ratingList)
@@ -88,6 +99,12 @@ namespace MyMediaLite.data
             return null;
         }
 
+		/// <summary>
+		/// Get the users in the rating collection
+		/// </summary>
+		/// <returns>
+		/// a collection of numerical user IDs
+		/// </returns>
 		public HashSet<int> GetUsers()
 		{
 			HashSet<int> users = new HashSet<int>();
@@ -95,7 +112,14 @@ namespace MyMediaLite.data
 				users.Add(rating.user_id);
 			return users;
 		}
+		// TODO use ISet as soon as we support Mono 2.8
 
+		/// <summary>
+		/// Get the items in the rating collection
+		/// </summary>
+		/// <returns>
+		/// a collection of numerical item IDs
+		/// </returns>		
 		public HashSet<int> GetItems()
 		{
 			HashSet<int> items = new HashSet<int>();

@@ -35,6 +35,18 @@ namespace MyMediaLite.eval
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class ItemRankingEval
     {
+		/// <summary>
+		/// the evaluation measures for item prediction offered by the class
+		/// </summary>
+		static public ICollection<string> ItemPredictionMeasures
+		{
+			get
+			{
+				string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
+				return new HashSet<string>(measures);
+			}
+		}
+
         /// <summary>
         /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
@@ -297,16 +309,6 @@ namespace MyMediaLite.eval
 			for (int i = 0; i < n; i++)
 				idcg += 1 / Math.Log(i + 2, 2);
 			return idcg;
-		}
-
-		static public ICollection<string> GetRatingPredictionMeasures() {
-			string[] measures = { "MAE", "RMSE" };
-			return new HashSet<string>(measures);
-		}
-
-		static public ICollection<string> GetItemPredictionMeasures() {
-			string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
-			return new HashSet<string>(measures);
 		}
     }
 }
