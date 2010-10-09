@@ -21,11 +21,6 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.data_type
 {
-	// TODO SetRow, SetColumn
-	//      simple arithmetics
-	//      [,] access
-	//      check whether rectangular 2d arrays come with a performance penalty
-
     /// <summary>
     /// Class for storing dense matrices.
     /// The data is stored in row-major mode.
@@ -73,31 +68,26 @@ namespace MyMediaLite.data_type
 		}
 
         /// <summary>
-        /// Gets the value at (i,j)
+        /// The value at (i,j)
         /// </summary>
         /// <param name="i">the row ID</param>
         /// <param name="j">the column ID</param>
-        /// <returns></returns>
-        public T Get(int i, int j)
+        public T this [int i, int j]
         {
-        	if (i >= this.dim1)
-        		throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
-			if (j >= this.dim2)
-				throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
+			get
+			{
+        		if (i >= this.dim1)
+        			throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
+				if (j >= this.dim2)
+					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
 
-            return data[i * dim2 + j];
-        }
-
-        /// <summary>
-        /// Sets the value of an matrix element
-        /// </summary>
-        /// <param name="i">the row ID</param>
-        /// <param name="j">the column ID</param>
-        /// <param name="v">the value to set</param>
-        public void Set(int i, int j, T v)
-        {
-            data[i * dim2 + j] = v;
-        }
+            	return data[i * dim2 + j];
+			}
+			set
+        	{
+            	data[i * dim2 + j] = value;
+        	}
+		}
 
 		/// <summary>
 		/// Returns a copy of the i-th row of the matrix
@@ -109,7 +99,7 @@ namespace MyMediaLite.data_type
 			// TODO speed up using Array.Copy()?
 			T[] row = new T[this.dim2];
 			for (int x = 0; x < this.dim2; x++)
-				row[x] = this.Get(i, x);
+				row[x] = this[i, x];
 			return row;
 		}
 
@@ -122,7 +112,7 @@ namespace MyMediaLite.data_type
 		{
 			T[] column = new T[this.dim1];
 			for (int x = 0; x < this.dim1; x++)
-				column[x] = this.Get(x, j);
+				column[x] = this[x, j];
 			return column;
 		}
 
@@ -139,7 +129,7 @@ namespace MyMediaLite.data_type
 				                                          row.Length, this.dim2));
 
 			for (int j = 0; j < this.dim2; j++)
-				this.Set(i, j, row[j]);
+				this[i, j] = row[j];
 		}
 
 		/// <summary>
@@ -154,7 +144,7 @@ namespace MyMediaLite.data_type
 				                                          column.Length, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
-				this.Set(i, j, column[i]);
+				this[i, j] = column[i];
 		}
 
 		/// <summary>
@@ -207,7 +197,7 @@ namespace MyMediaLite.data_type
 			Matrix<T> new_matrix = new Matrix<T>(num_rows, num_cols);
 			for (int i = 0; i < dim1; i++)
 				for (int j = 0; j < dim2; j++)
-					new_matrix.Set(i, j, this.Get(i, j));
+					new_matrix[i, j] = this[i, j];
 
 			return new_matrix;
         }
@@ -220,7 +210,7 @@ namespace MyMediaLite.data_type
         public void SetRowToOneValue(int i, T v)
         {
             for (int j = 0; j < dim2; j++)
-                Set(i, j, v);
+                this[i, j] = v;
         }
 
 		/// <summary>
@@ -231,7 +221,7 @@ namespace MyMediaLite.data_type
         public void SetColumnToOneValue(int j, T v)
         {
             for (int i = 0; i < dim1; i++)
-                Set(i, j, v);
+                this[i, j] = v;
         }
 
     }
@@ -252,7 +242,7 @@ namespace MyMediaLite.data_type
         {
             var rnd = MyMediaLite.util.Random.GetInstance();
             for (int j = 0; j < matrix.dim2; j++)
-                matrix.Set(row, j, rnd.NextNormal(mean, stdev));
+                matrix[row, j] = rnd.NextNormal(mean, stdev);
         }
 
         /// <summary>
@@ -266,7 +256,7 @@ namespace MyMediaLite.data_type
             var rnd = MyMediaLite.util.Random.GetInstance();
             for (int i = 0; i < matrix.dim1; i++)
                 for (int j = 0; j < matrix.dim2; j++)
-                    matrix.Set(i, j, rnd.NextNormal(mean, stdev));
+                    matrix[i, j] = rnd.NextNormal(mean, stdev);
         }
 
 		/// <summary>
@@ -387,7 +377,7 @@ namespace MyMediaLite.data_type
 			int nan_counter = 0;
             for (int x = 0; x < matrix.dim1; x++)
                 for (int y = 0; y < matrix.dim2; y++)
-                    if ( Double.IsNaN(matrix.Get(x, y)) )
+                    if ( Double.IsNaN(matrix[x, y]) )
 						nan_counter++;
 			if (nan_counter > 0) {
 				Console.Error.WriteLine("Number of NaNs: " + nan_counter);

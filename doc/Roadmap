@@ -13,6 +13,7 @@ Recommender functionality
    - Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
    - item-to-item CF (Linden et al., 2003)
+   - attribute-based engines using LIBSVM
  - time-aware rating and item prediction
    - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender

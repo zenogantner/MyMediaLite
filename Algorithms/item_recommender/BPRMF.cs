@@ -78,7 +78,7 @@ namespace MyMediaLite.item_recommender
 		/// </summary>
 		public override void Iterate()
 		{
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 
 			user_feature.SetColumnToOneValue(0, 1.0);
 
@@ -191,45 +191,45 @@ namespace MyMediaLite.item_recommender
 			if (item_bias)
 			{
 				start_feature = 1;
-				double w_uf = user_feature.Get(u, 0);
-				double h_if = item_feature.Get(i, 0);
-				double h_jf = item_feature.Get(j, 0);
+				double w_uf = user_feature[u, 0];
+				double h_if = item_feature[i, 0];
+				double h_jf = item_feature[j, 0];
 
 				if (update_i)
 				{
 					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
-					item_feature.Set(i, 0, h_if + learn_rate * if_update);
+					item_feature[i, 0] = h_if + learn_rate * if_update;
 				}
 
 				if (update_j)
 				{
 					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
-					item_feature.Set(j, 0, h_jf + learn_rate * jf_update);
+					item_feature[j, 0] = h_jf + learn_rate * jf_update;
 				}
 			}
 
 			for (int f = start_feature; f < num_features; f++)
 			{
-				double w_uf = user_feature.Get(u, f);
-				double h_if = item_feature.Get(i, f);
-				double h_jf = item_feature.Get(j, f);
+				double w_uf = user_feature[u, f];
+				double h_if = item_feature[i, f];
+				double h_jf = item_feature[j, f];
 
 				if (update_u)
 				{
 					double uf_update = (h_if - h_jf) / (1 + Math.Exp(x_uij)) - reg_u * w_uf;
-					user_feature.Set(u, f, w_uf + learn_rate * uf_update);
+					user_feature[u, f] = w_uf + learn_rate * uf_update;
 				}
 
 				if (update_i)
 				{
 					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
-					item_feature.Set(i, f, h_if + learn_rate * if_update);
+					item_feature[i, f] = h_if + learn_rate * if_update;
 				}
 
 				if (update_j)
 				{
 					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
-					item_feature.Set(j, f, h_jf + learn_rate * jf_update);
+					item_feature[j, f] = h_jf + learn_rate * jf_update;
 				}
 			}
 		}
@@ -331,7 +331,7 @@ namespace MyMediaLite.item_recommender
 		{
 			MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
 
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training

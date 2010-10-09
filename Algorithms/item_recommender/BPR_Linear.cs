@@ -123,7 +123,7 @@ namespace MyMediaLite.item_recommender
 		/// </summary>
 		public void Iterate()
 		{
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 
 			for (int i = 0; i < num_pos_events * iteration_length; i++)
 			{
@@ -207,15 +207,15 @@ namespace MyMediaLite.item_recommender
 
 			foreach (int a in attr_i_over_j)
 			{
-				double w_uf = item_attribute_weight_by_user.Get(u, a);
+				double w_uf = item_attribute_weight_by_user[u, a];
 				double uf_update = 1 / (1 + Math.Exp(x_uij)) - reg * w_uf;
-				item_attribute_weight_by_user.Set(u, a, w_uf + learn_rate * uf_update);
+				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 			foreach (int a in attr_j_over_i)
 			{
-				double w_uf = item_attribute_weight_by_user.Get(u, a);
+				double w_uf = item_attribute_weight_by_user[u, a];
 				double uf_update = -1 / (1 + Math.Exp(x_uij)) - reg * w_uf;
-				item_attribute_weight_by_user.Set(u, a, w_uf + learn_rate * uf_update);
+				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace MyMediaLite.item_recommender
 			double result = 0;
 			HashSet<int> attributes = this.item_attributes[item_id];
 			foreach (int a in attributes)
-				result += item_attribute_weight_by_user.Get(user_id, a);
+				result += item_attribute_weight_by_user[user_id, a];
             return result;
         }
 
@@ -251,7 +251,7 @@ namespace MyMediaLite.item_recommender
 				writer.WriteLine(item_attribute_weight_by_user.dim1 + " " + item_attribute_weight_by_user.dim2);
 				for (int i = 0; i < item_attribute_weight_by_user.dim1; i++)
 					for (int j = 0; j < item_attribute_weight_by_user.dim2; j++)
-						writer.WriteLine(i + " " + j + " " + item_attribute_weight_by_user.Get(i, j).ToString(ni));
+						writer.WriteLine(i + " " + j + " " + item_attribute_weight_by_user[i, j].ToString(ni));
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace MyMediaLite.item_recommender
 					if (j >= num_item_attributes)
 						throw new Exception(string.Format("Invalid weight ID {0} is greater than {1}.", j, num_item_attributes - 1));
 
-                	matrix.Set(i, j, v);
+                	matrix[i, j] = v;
 				}
 
 				this.item_attribute_weight_by_user = matrix;

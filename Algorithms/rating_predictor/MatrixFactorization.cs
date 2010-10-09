@@ -132,8 +132,8 @@ namespace MyMediaLite.rating_predictor
                  // Adjust features, factor by factor
                  for (int f = 0; f < num_features; f++)
                  {
-                 	double u_f = user_feature.Get(u, f);
-                    double i_f = item_feature.Get(i, f);
+                 	double u_f = user_feature[u, f];
+                    double i_f = item_feature[i, f];
 
 					// compute feature updates
                     double delta_u = (err * i_f - regularization * u_f);
@@ -161,7 +161,7 @@ namespace MyMediaLite.rating_predictor
 
             // U*V
             for (int f = 0; f < num_features; f++)
-                result += user_feature.Get(user_id, f) * item_feature.Get(item_id, f);
+                result += user_feature[user_id, f] * item_feature[item_id, f];
 
             if (bound)
 			{
@@ -269,12 +269,12 @@ namespace MyMediaLite.rating_predictor
             	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
             	for (int i = 0; i < user_feature.dim1; i++)
                 	for (int j = 0; j < user_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + user_feature.Get(i, j).ToString(ni));
+                    	writer.WriteLine(i + " " + j + " " + user_feature[i, j].ToString(ni));
 
             	writer.WriteLine(item_feature.dim1 + " " + item_feature.dim2);
             	for (int i = 0; i < item_feature.dim1; i++)
                 	for (int j = 0; j < item_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + item_feature.Get(i, j).ToString(ni));
+                    	writer.WriteLine(i + " " + j + " " + item_feature[i, j].ToString(ni));
 			}
 		}
 
@@ -304,7 +304,7 @@ namespace MyMediaLite.rating_predictor
 	                if (j >= num_user_features)
 	                    throw new Exception("j = " + j);
 
-	                user_feature.Set(i, j, v);
+	                user_feature[i, j] = v;
     	        }
 
         	    int num_items         = System.Int32.Parse(numbers[0]);
@@ -326,7 +326,7 @@ namespace MyMediaLite.rating_predictor
 	                if (j >= num_item_features)
 	                    throw new Exception("j = " + j);
 
-	                item_feature.Set(i, j, v);
+	                item_feature[i, j] = v;
     	        }
 
 				this.MaxUserID = num_users - 1;

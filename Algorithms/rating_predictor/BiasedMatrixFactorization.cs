@@ -59,7 +59,7 @@ namespace MyMediaLite.rating_predictor
 
 				double dot_product = 0;
 	            for (int f = 0; f < num_features; f++)
-    	            dot_product += user_feature.Get(u, f) * item_feature.Get(i, f);
+    	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double r = rating.rating;
@@ -71,8 +71,8 @@ namespace MyMediaLite.rating_predictor
 				// Adjust features
                 for (int f = 0; f < num_features; f++)
                 {
-                 	double u_f = user_feature.Get(u, f);
-                    double i_f = item_feature.Get(i, f);
+                 	double u_f = user_feature[u, f];
+                    double i_f = item_feature[i, f];
 
                     if (update_user && f != 0)
 					{
@@ -104,7 +104,7 @@ namespace MyMediaLite.rating_predictor
 
             // U*V
             for (int f = 0; f < num_features; f++)
-                dot_product += user_feature.Get(user_id, f) * item_feature.Get(item_id, f);
+                dot_product += user_feature[user_id, f] * item_feature[item_id, f];
 
 			double result = MinRatingValue + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRatingValue - MinRatingValue);
 

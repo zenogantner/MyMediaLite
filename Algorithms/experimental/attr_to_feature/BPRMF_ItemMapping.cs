@@ -134,17 +134,17 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			for (int j = 0; j < num_features; j++) {
 				// TODO: do we need an absolute term here???
-				double diff = est_features[j] - item_feature.Get(item_id, j);
+				double diff = est_features[j] - item_feature[item_id, j];
 				if (diff > 0)
 				{
 					foreach (int attribute in item_attributes[item_id])
 					{
-						double w = attribute_to_feature.Get(attribute, j);
+						double w = attribute_to_feature[attribute, j];
 						double deriv = diff * w + reg_mapping * w;
 						MatrixUtils.Inc(attribute_to_feature, attribute, j, learn_rate_mapping * -deriv);
 					}
 					// bias term
-					double w_bias = attribute_to_feature.Get(NumItemAttributes, j);
+					double w_bias = attribute_to_feature[NumItemAttributes, j];
 					double deriv_bias = diff * w_bias + reg_mapping * w_bias;
 					MatrixUtils.Inc(attribute_to_feature, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
@@ -170,7 +170,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				double[] est_features = MapToLatentFeatureSpace(i);
 				for (int j = 0; j < num_features; j++)
 				{
-					double error    = Math.Pow(est_features[j] - item_feature.Get(i, j), 2);
+					double error    = Math.Pow(est_features[j] - item_feature[i, j], 2);
 					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
@@ -205,11 +205,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 			double[] feature_representation = new double[num_features];
 			for (int j = 0; j < num_features; j++)
 				// bias
-				feature_representation[j] = attribute_to_feature.Get(NumItemAttributes, j);
+				feature_representation[j] = attribute_to_feature[NumItemAttributes, j];
 
 			foreach (int i in item_attributes)
 				for (int j = 0; j < num_features; j++)
-					feature_representation[j] += attribute_to_feature.Get(i, j);
+					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
 		}

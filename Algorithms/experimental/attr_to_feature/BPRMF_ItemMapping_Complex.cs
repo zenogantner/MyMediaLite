@@ -71,7 +71,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			Console.Error.Write(".");
 
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 
 			for (int i = 0; i < num_pos_events / 50; i++)
 			{
@@ -103,13 +103,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 					double sum = 0;
 					for (int f = 0; f < num_features; f++)
 					{
-						double w_uf = user_feature.Get(u, f);
-						double m2_bf = output_layer.Get(b, f);
+						double w_uf = user_feature[u, f];
+						double m2_bf = output_layer[b, f];
 						sum += w_uf * m2_bf;
 					}
-					double m1_ab = attribute_to_feature.Get(a, b);
+					double m1_ab = attribute_to_feature[a, b];
 					double update = sum / (1 + Math.Exp(x_uij)) - reg_mapping * m1_ab;
-					attribute_to_feature.Set(a, b, m1_ab + learn_rate_mapping * update);
+					attribute_to_feature[a, b] = m1_ab + learn_rate_mapping * update;
 				}
 
 				foreach (int a in attr_j_over_i)
@@ -117,13 +117,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 					double sum = 0;
 					for (int f = 0; f < num_features; f++)
 					{
-						double w_uf = user_feature.Get(u, f);
-						double m2_bf = output_layer.Get(b, f);
+						double w_uf = user_feature[u, f];
+						double m2_bf = output_layer[b, f];
 						sum -= w_uf * m2_bf;
 					}
-					double m1_ab = attribute_to_feature.Get(a, b);
+					double m1_ab = attribute_to_feature[a, b];
 					double update = sum / (1 + Math.Exp(x_uij)) - reg_mapping * m1_ab;
-					attribute_to_feature.Set(a, b, m1_ab + learn_rate_mapping * update);
+					attribute_to_feature[a, b] = m1_ab + learn_rate_mapping * update;
 				}
 			}
 
@@ -132,22 +132,22 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				for (int f = 0; f < num_features; f++)
 				{
-					double w_uf = user_feature.Get(u, f);
+					double w_uf = user_feature[u, f];
 
 					double sum = 0;
 					foreach (int a in attr_i_over_j)
 					{
-						double m1_ab = attribute_to_feature.Get(a, b);
+						double m1_ab = attribute_to_feature[a, b];
 						sum += w_uf * m1_ab;
 					}
 					foreach (int a in attr_j_over_i)
 					{
-						double m1_ab = attribute_to_feature.Get(a, b);
+						double m1_ab = attribute_to_feature[a, b];
 						sum -= w_uf * m1_ab;
 					}
-					double m2_bf = output_layer.Get(b, f);
+					double m2_bf = output_layer[b, f];
 					double update = sum / (1 + Math.Exp(x_uij)) - reg_mapping * m2_bf;
-					output_layer.Set(b, f, m2_bf + learn_rate_mapping * update);
+					output_layer[b, f] = m2_bf + learn_rate_mapping * update;
 				}
 			}
 		}
@@ -160,7 +160,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			foreach (int i in attributes)
 				for (int j = 0; j < num_features; j++)
 					for (int k = 0; k < num_hidden_features; k++)
-						feature_representation[j] += attribute_to_feature.Get(i, k) * output_layer.Get(k, j);
+						feature_representation[j] += attribute_to_feature[i, k] * output_layer[k, j];
 			// TODO: ADD IN THRESHOLD FUNCTION
 
 			return feature_representation;

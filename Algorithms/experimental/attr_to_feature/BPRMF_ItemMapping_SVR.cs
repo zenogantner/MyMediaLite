@@ -69,7 +69,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				for (int i = 0; i < svm_features.Count; i++)
 				{
 					int item_id = relevant_items[i];
-					targets[i] = item_feature.Get(item_id, f);
+					targets[i] = item_feature[item_id, f];
 				}
 
 				Problem svm_problem = new Problem(svm_features.Count, targets, svm_features_array, NumItemAttributes - 1);

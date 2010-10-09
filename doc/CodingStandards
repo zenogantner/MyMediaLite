@@ -19,9 +19,9 @@ We apologize to both camps for this heresy.
 
 this.p vs. p
 
-Specific standards (in argument lists, data formats)
-a. user_id, item_id
-b. user_id, item_id, rating, date/time
-c. training_data, test_data
+Specific standards for ordering (in argument lists, data formats)
+a. user_id, item_id, rating, date/time
+b. training_data, test_data
+c. row, column, value
 
 TODO: add more, discuss, group

@@ -16,7 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-//using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -99,9 +98,7 @@ namespace MyMediaLite.item_recommender
 
             double result = 0;
             for (int f = 0; f < num_features; f++)
-            {
-                result += user_feature.Get(user_id, f) * item_feature.Get(item_id, f);
-            }
+                result += user_feature[user_id, f] * item_feature[item_id, f];
             return result;
         }
 
@@ -117,21 +114,13 @@ namespace MyMediaLite.item_recommender
 				// TODO move matrix reading and writing to the MatrixUtils class
             	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
             	for (int i = 0; i < user_feature.dim1; i++)
-            	{
                 	for (int j = 0; j < user_feature.dim2; j++)
-                	{
-                    	writer.WriteLine(i + " " + j + " " + user_feature.Get(i, j).ToString(ni));
-                	}
-            	}
+                    	writer.WriteLine(i + " " + j + " " + user_feature[i, j].ToString(ni));
 
             	writer.WriteLine(item_feature.dim1 + " " + item_feature.dim2);
             	for (int i = 0; i < item_feature.dim1; i++)
-            	{
                 	for (int j = 0; j < item_feature.dim2; j++)
-                	{
-                    	writer.WriteLine(i + " " + j + " " + item_feature.Get(i, j).ToString(ni));
-                	}
-            	}
+                    	writer.WriteLine(i + " " + j + " " + item_feature[i, j].ToString(ni));
 			}
 		}
 
@@ -163,7 +152,7 @@ namespace MyMediaLite.item_recommender
 					if (j >= num_features)
 						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_features - 1));
 
-                	user_feature.Set(i, j, v);
+                	user_feature[i, j] = v;
 				}
 
             	int num_items = System.Int32.Parse(numbers[0]);
@@ -186,8 +175,7 @@ namespace MyMediaLite.item_recommender
 					if (j >= num_features)
 						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_features - 1));
 
-
-					item_feature.Set(i, j, v);
+					item_feature[i, j] = v;
 				}
 
 				// fix MaxUserID and MaxItemID - our model does not know more

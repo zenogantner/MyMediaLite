@@ -84,10 +84,8 @@ namespace MyMediaLite.item_recommender
                 {
                     double d = 0;
                     for (int i = 0; i < H.dim1; i++)
-                    {
-                        d += H.Get(i, f_1) * H.Get(i, f_2);
-                    }
-                    HH.Set(f_1, f_2, d);
+                        d += H[i, f_1] * H[i, f_2];
+                    HH[f_1, f_2] = d;
                 }
 
             }
@@ -103,10 +101,8 @@ namespace MyMediaLite.item_recommender
                     {
                         double d = 0;
                         foreach (int i in row)
-                        {
-                            d += H.Get(i, f_1) * H.Get(i, f_2) * (c_pos - 1);
-                        }
-                        HCIH.Set(f_1, f_2, d);
+                            d += H[i, f_1] * H[i, f_2] * (c_pos - 1);
+                        HCIH[f_1, f_2] = d;
                     }
                 }
                 // create HCp in O(f|S_u|)
@@ -114,9 +110,7 @@ namespace MyMediaLite.item_recommender
                 {
                     double d = 0;
                     foreach (int i in row)
-                    {
-                        d += H.Get(i, f) * c_pos * 1;
-                    }
+                        d += H[i, f] * c_pos * 1;
                     HCp[f] = d;
                 }
                 // create m = HH + HCp + gamma*I
@@ -126,11 +120,9 @@ namespace MyMediaLite.item_recommender
                 {
                     for (int f_2 = 0; f_2 < num_features; f_2++)
                     {
-                        double d = HH.Get(f_1, f_2) + HCIH.Get(f_1, f_2);
+                        double d = HH[f_1, f_2] + HCIH[f_1, f_2];
                         if (f_1 == f_2)
-                        {
                             d += regularization;
-                        }
                         m[f_1, f_2] = d;
                     }
                 }
@@ -140,10 +132,8 @@ namespace MyMediaLite.item_recommender
                 {
                     double d = 0;
                     for (int f_2 = 0; f_2 < num_features; f_2++)
-                    {
                         d += m_inv[f, f_2] * HCp[f_2];
-                    }
-                    W.Set(u, f, d);
+                    W[u, f] = d;
                 }
             }
         }

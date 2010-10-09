@@ -55,7 +55,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
 
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 
 			for (int i = 0; i < num_pos_events / 250; i++) // TODO: think about using another number here ...
 			{
@@ -80,20 +80,20 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			for (int f = 0; f < num_features; f++)
 			{
-				double w_uf = user_feature.Get(u, f);
+				double w_uf = user_feature[u, f];
 
 				// update attribute-feature parameter for features which are different between the items
 				foreach (int a in attr_i_over_j)
 				{
-					double m_af = attribute_to_feature.Get(a, f);
+					double m_af = attribute_to_feature[a, f];
 					double update = w_uf / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature.Set(a, f, m_af + learn_rate_mapping * update);
+					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
 				}
 				foreach (int a in attr_j_over_i)
 				{
-					double m_af = attribute_to_feature.Get(a, f);
+					double m_af = attribute_to_feature[a, f];
 					double update = -w_uf / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature.Set(a, f, m_af + learn_rate_mapping * update);
+					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
 				}
 			}
 		}
@@ -110,7 +110,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			foreach (int i in attributes)
 				for (int j = 0; j < num_features; j++)
-					feature_representation[j] += attribute_to_feature.Get(i, j);
+					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
 		}

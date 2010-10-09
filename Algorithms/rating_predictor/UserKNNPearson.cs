@@ -47,8 +47,8 @@ namespace MyMediaLite.rating_predictor
 				for (int i = 0; i <= MaxUserID; i++)
 				{
 					float cor = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, (float) shrinkage);
-					correlation.data.Set(user_id, i, cor);
-					correlation.data.Set(i, user_id, cor);
+					correlation.data[user_id, i] = cor;
+					correlation.data[i, user_id] = cor;
 				}
 			}
 		}

@@ -120,13 +120,13 @@ namespace MyMediaLite.correlation
 				if (i % 4000 == 3999)
 					Console.Error.WriteLine("{0}/{1}", i, num_entities);
 
-				data.Set(i, i, 1);
+				data[i, i] = 1;
 
 				for (int j = i + 1; j < num_entities; j++)
 				{
 					float pmcc = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
-					data.Set(i, j, pmcc);
-					data.Set(j, i, pmcc);
+					data[i, j] = pmcc;
+					data[j, i] = pmcc;
 				}
 			}
 		}

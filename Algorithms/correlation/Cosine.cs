@@ -45,7 +45,7 @@ namespace MyMediaLite.correlation
 
             for (int i = 0; i < num_entities; i++)
 			{
-				data.Set(i, i, 1);
+				data[i, i] = 1;
                 if (entity_data[i].Count == 0)
                     continue;
 
@@ -60,8 +60,8 @@ namespace MyMediaLite.correlation
                     if (entity_data[j].Count > 0)
                     {
 						float corr = ComputeCorrelation(attributes_i, entity_data[j]);
-						data.Set(i, j, corr);
-						data.Set(j, i, corr);
+						data[i, j] = corr;
+						data[j, i] = corr;
             	    }
 			}
 

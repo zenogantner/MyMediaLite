@@ -76,7 +76,7 @@ namespace MyMediaLite.correlation
 
 			// diagonal values
 			for (int i = 0; i < num_entities; i++)
-				data.Set(i, i, 1);
+				data[i, i] = 1;
 
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -93,8 +93,8 @@ namespace MyMediaLite.correlation
 				if (j >= num_entities)
 					throw new Exception("i = " + i);
 
-				data.Set(i, j, c);
-				data.Set(j, i, c);
+				data[i, j] = c;
+				data[j, i] = c;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace MyMediaLite.correlation
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
 				{
-					float val = data.Get(i,j);
+					float val = data[i,j];
 					if (val != 0)
 						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
 				}
@@ -128,7 +128,7 @@ namespace MyMediaLite.correlation
 		/// <returns>the correlation between entity i and entity j</returns>
 		public float Get(int i, int j)
 		{
-			return data.Get(i, j);
+			return data[i, j];
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace MyMediaLite.correlation
 			double result = 0;
             foreach (int entity_id2 in entities)
 				if (entity_id2 >= 0 && entity_id2 < num_entities)
-                	result += data.Get(entity_id, entity_id2);
+                	result += data[entity_id, entity_id2];
 			return result;
 		}
 
@@ -169,11 +169,11 @@ namespace MyMediaLite.correlation
 		{
 			List<int> result = new List<int>();
 			for (int i = 0; i < num_entities; i++)
-				if (data.Get(i, entity_id) > 0)
+				if (data[i, entity_id] > 0)
 					result.Add(i);
 
 			result.Remove(entity_id);
-			result.Sort(delegate(int i, int j) { return data.Get(j, entity_id).CompareTo(data.Get(i, entity_id)); });
+			result.Sort(delegate(int i, int j) { return data[j, entity_id].CompareTo(data[i, entity_id]); });
 			return result;
 		}
 
@@ -190,7 +190,7 @@ namespace MyMediaLite.correlation
 				entities.Add(i);
 
 			entities.Remove(entity_id);
-			entities.Sort(delegate(int i, int j) { return data.Get(j, entity_id).CompareTo(data.Get(i, entity_id)); });
+			entities.Sort(delegate(int i, int j) { return data[j, entity_id].CompareTo(data[i, entity_id]); });
 
 			return entities.GetRange(0, (int) k).ToArray();
 		}

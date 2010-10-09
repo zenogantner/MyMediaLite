@@ -130,6 +130,19 @@ namespace MyMediaLite.data_type
 		/// </summary>
 		public int NumberOfRows	{ get { return rows.Count; } }
 
+		/// <summary>The number of (true) entries</summary>
+		public int NumberOfEntries
+		{
+			get
+			{
+				int n = 0;
+				foreach (var row in rows)
+					n += row.Count;
+	
+				return n;
+			}
+		}		
+		
 		/// <summary>
 		/// Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.
 		/// </summary>
@@ -175,16 +188,6 @@ namespace MyMediaLite.data_type
 					NEXT_COL:;
 				} //COL
 			} //ROW
-		}
-
-		/// <summary>Returns the number of (true) entries</summary>
-		public int GetNumberOfEntries()
-		{
-			int n = 0;
-			foreach (var row in rows)
-				n += row.Count;
-
-			return n;
 		}
 
 		/// <summary>

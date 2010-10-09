@@ -51,7 +51,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override void iterate_mapping()
 		{
 
-			int num_pos_events = data_user.GetNumberOfEntries();
+			int num_pos_events = data_user.NumberOfEntries;
 
 			for (int i = 0; i < num_pos_events / 250; i++)
 			{
@@ -69,13 +69,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			for (int f = 0; f < num_features; f++)
 			{
-				double diff = item_feature.Get(i, f) - item_feature.Get(j, f);
+				double diff = item_feature[i, f] - item_feature[j, f];
 
 				foreach (int a in attr_u)
 				{
-					double m_af = attribute_to_feature.Get(a, f);
+					double m_af = attribute_to_feature[a, f];
 					double update = diff / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature.Set(a, f, m_af + learn_rate_mapping * update);
+					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
 				}
 			}
 		}
@@ -87,7 +87,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			foreach (int i in user_attributes)
 				for (int j = 0; j < num_features; j++)
-					feature_representation[j] += attribute_to_feature.Get(i, j);
+					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
 		}

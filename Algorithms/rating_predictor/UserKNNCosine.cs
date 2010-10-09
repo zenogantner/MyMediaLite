@@ -43,8 +43,8 @@ namespace MyMediaLite.rating_predictor
 				for (int i = 0; i <= MaxUserID; i++)
 				{
 					float cor = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
-					correlation.data.Set(user_id, i, cor);
-					correlation.data.Set(i, user_id, cor);
+					correlation.data[user_id, i] = cor;
+					correlation.data[i, user_id] = cor;
 				}
 		}
 

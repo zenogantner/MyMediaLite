@@ -15,6 +15,7 @@
 	 - consistent parameters for RatingData constructor
 	 - SparseBooleanMatrix now allows [x, y] and [x] access, has 
            properties instead of GetXXX() methods
+         - Matrix now allos [x, y] access
          - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
            now both are completely property-based
 	misc:
