@@ -50,8 +50,8 @@ namespace RatingPrediction
 
 		public static void Usage(string message)
 		{
-			Console.Error.WriteLine(message);
-			Console.Error.WriteLine();
+			Console.WriteLine(message);
+			Console.WriteLine();
 			Usage(-1);
 		}
 
@@ -186,10 +186,7 @@ namespace RatingPrediction
 			if (parameters.CheckForLeftovers())
 				Usage(-1);
 			if (training_file.Equals("-") && testfile.Equals("-"))
-			{
-				Console.Out.WriteLine("Either training or test data, not both, can be read from STDIN.");
-				Usage(-1);
-			}
+				Usage("Either training or test data, not both, can be read from STDIN.");
 
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
@@ -281,29 +278,21 @@ namespace RatingPrediction
 				Console.Out.Flush();
 
 				if (training_time_stats.Count > 0)
-				{
 					Console.Error.WriteLine(
 						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 					);
-				}
 				if (eval_time_stats.Count > 0)
-				{
 					Console.Error.WriteLine(
 						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 					);
-				}
 				if (compute_fit)
-				{
 					if (fit_time_stats.Count > 0)
-					{
 						Console.Error.WriteLine(
 							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 						);
-					}
-				}
 				EngineStorage.SaveModel(recommender, data_dir, save_model_file);
 				Console.Error.Flush();
 			}

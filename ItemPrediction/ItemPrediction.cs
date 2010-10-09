@@ -53,7 +53,8 @@ namespace MyMediaLite
 
 		public static void Usage(string message)
 		{
-			Console.Error.WriteLine(message);
+			Console.WriteLine(message);
+			Console.WriteLine();
 			Usage(-1);
 		}
 
@@ -204,10 +205,7 @@ namespace MyMediaLite
 			if (parameters.CheckForLeftovers())
 				Usage(-1);
 			if (trainfile.Equals("-") && testfile.Equals("-"))
-			{
-				Console.Out.WriteLine("Either training OR test data, not both, can be read from STDIN.");
-				Usage(-1);
-			}
+				Usage("Either training OR test data, not both, can be read from STDIN.");
 
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
