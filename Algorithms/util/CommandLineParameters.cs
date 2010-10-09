@@ -106,7 +106,7 @@ namespace MyMediaLite.util
 		{
 			if (dict.ContainsKey(key))
 			{
-				int value = System.Int32.Parse(dict[key]);
+				int value = int.Parse(dict[key]);
 				dict.Remove(key);
 				return value;
 			}
@@ -129,7 +129,7 @@ namespace MyMediaLite.util
 				string[] numbers = dict[key].Split(sep);
 				dict.Remove(key);
 				foreach (string s in numbers)
-					result_list.Add(System.Int32.Parse(s));
+					result_list.Add(int.Parse(s));
 			}
 			return result_list;
 		}
@@ -143,7 +143,7 @@ namespace MyMediaLite.util
 		{
 			if (dict.ContainsKey(key))
 			{
-				uint value = System.UInt32.Parse(dict[key]);
+				uint value = uint.Parse(dict[key]);
 				dict.Remove(key);
 				return value;
 			}
@@ -153,20 +153,26 @@ namespace MyMediaLite.util
 			}
 		}
 
+		/// <summary>Get a double value from the parameters</summary>
+		/// <param name="key">the parameter name</param>
+		/// <returns>the value of the parameter, 0 if no parameter of the given name found</returns>		
 		public double GetRemoveDouble(string key)
 		{
 			return GetRemoveDouble(key, 0.0);
 		}
 
+		/// <summary>Get a double value from the parameters</summary>
+		/// <param name="key">the parameter name</param>
+		/// <param name="dvalue">the default value if parameter of the given name is not found</para>
+		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>		
 		public double GetRemoveDouble(string key, double dvalue)
 		{
 			ni.NumberDecimalDigits = '.';
 
 			if (dict.ContainsKey(key))
-			{
 				try
 				{
-					double value = System.Double.Parse(dict[key], ni);
+					double value = double.Parse(dict[key], ni);
 					dict.Remove(key);
 					return value;
 				}
@@ -175,13 +181,43 @@ namespace MyMediaLite.util
 					Console.Error.WriteLine("'{0}'", dict[key]);
 					throw;
 				}
-			}
 			else
-			{
 				return dvalue;
-			}
 		}
 
+		/// <summary>Get a float value from the parameters</summary>
+		/// <param name="key">the parameter name</param>
+		/// <returns>the value of the parameter, 0 if no parameter of the given name found</returns>
+		public float GetRemoveFloat(string key)
+		{
+			return GetRemoveFloat(key, 0.0f);
+		}
+
+		/// <summary>Get a float value from the parameters</summary>
+		/// <param name="key">the parameter name</param>
+		/// <param name="dvalue">the default value if parameter of the given name is not found</para>
+		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>
+		public float GetRemoveFloat(string key, float dvalue)
+		{
+			ni.NumberDecimalDigits = '.';
+
+			if (dict.ContainsKey(key))
+				try
+				{
+					float value = float.Parse(dict[key], ni);
+					dict.Remove(key);
+					return value;
+				}
+				catch (FormatException)
+				{
+					Console.Error.WriteLine("'{0}'", dict[key]);
+					throw;
+				}
+			else
+				return dvalue;
+		}
+		
+		
 		public string GetRemoveString(string key)
 		{
 			return GetRemoveString(key, String.Empty);
@@ -210,7 +246,7 @@ namespace MyMediaLite.util
 		{
 			if (dict.ContainsKey(key))
 			{
-				bool value = System.Boolean.Parse(dict[key]);
+				bool value = bool.Parse(dict[key]);
 				dict.Remove(key);
 				return value;
 			}
