@@ -88,12 +88,6 @@ namespace RatingPrediction
 			Console.WriteLine("    - find_iter=STEP");
 			Console.WriteLine("    - max_iter=N");
 			Console.WriteLine("    - compute_fit=BOOL");
-			/*
-			Console.WriteLine("  - options for hyperparameter search:");
-			Console.WriteLine("    - hyper_split=N          number of folds used in cross-validation");
-			Console.WriteLine("    - hyper_criterion=NAME   values {0}", String.Join( ", ", Evaluate.GetRatingPredictionMeasures().ToArray()));
-			Console.WriteLine("    - hyper_half_size=N      number of values tried in each iteration/2");
-			*/
 
 			Environment.Exit(exit_code);
 		}
@@ -123,9 +117,6 @@ namespace RatingPrediction
 			// collaborative data characteristics
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
 			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
-			//int num_ratings             = parameters.GetRemoveInt32(  "num_ratings", 1);
-			//int num_users               = parameters.GetRemoveInt32(  "num_users",   1);
-			//int num_items               = parameters.GetRemoveInt32(  "num_items",   1);
 
 			// other arguments
 			string data_dir             = parameters.GetRemoveString( "data_dir");
@@ -136,13 +127,6 @@ namespace RatingPrediction
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed",  -1);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval",      false);
 			string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
-
-			/*
-			// hyperparameter search arguments
-			int    hyper_split          = parameters.GetRemoveInt32(  "hyper_split", -1);
-			string hyper_criterion      = parameters.GetRemoveString( "hyper_criterion", "RMSE");
-			       half_size            = parameters.GetRemoveUInt32( "half_size", 2);
-			*/
 
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
@@ -329,11 +313,6 @@ namespace RatingPrediction
 
 				if (load_model_file.Equals(string.Empty))
 				{
-					/*
-					if (hyper_split != -1)
-						FindHyperparameters(recommender, hyper_split, hyper_criterion);
-					*/
-
 					Console.Write(recommender.ToString() + " ");
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
             		Console.Write("training_time " + seconds + " ");
@@ -410,151 +389,5 @@ namespace RatingPrediction
 			              result["RMSE"].ToString(ni),
 			              result["MAE"].ToString(ni));
 		}
-		
-		/*
-		static void FindHyperparameters(RatingPredictor recommender, int cross_validation, string criterion)
-		{
-			TimeSpan seconds = Utils.MeasureTime( delegate() {
-				// TODO handle via multiple dispatch
-				if (recommender is MatrixFactorization)
-				{
-					FindGoodLearnRate((MatrixFactorization) recommender);
-					FindGoodHyperparameters((MatrixFactorization) recommender, cross_validation, criterion);
-				}
-				else
-				{
-					throw new ArgumentException(string.Format("Hyperparameter search not supported for {0}", recommender));
-				}
-			});
-			Console.Write("hyperparameters {0} ", seconds);
-		}
-
-        static void FindGoodHyperparameters(MatrixFactorization recommender, int cross_validation, string criterion)
-		{
-			Console.Error.WriteLine();
-			Console.Error.WriteLine("Hyperparameter search ...");
-
-			double step = 1.0;
-
-			double center = -4; // TODO make configurable
-			double new_center;
-
-			double upper_limit = 0; // highest (log) hyperparameter tried so far
-			double lower_limit = 0; // lowest (log) hyperparameter tried so far
-
-			while (step > 0.125)
-			{
-				upper_limit = Math.Max(upper_limit, center + half_size * step);
-				lower_limit = Math.Min(lower_limit, center - half_size * step);
-				new_center = FindGoodHyperparameters(recommender, half_size, center, step,  cross_validation, criterion);
-				if (new_center == lower_limit)
-				{
-					center = new_center - half_size * step;
-					Console.Error.WriteLine("Set center below lower limit: {0} < {1}", center, lower_limit);
-				}
-				else if (new_center == upper_limit)
-				{
-					center = new_center + half_size * step;
-					Console.Error.WriteLine("Set center above upper limit: {0} > {1}", center, upper_limit);
-				}
-				else
-				{
-					center = new_center;
-					step = step / 2;
-					Console.Error.WriteLine("Set center: {0}", center);
-				}
-			}
-			//recommender.num_iter_mapping = num_iter_mapping; // restore
-			Console.Error.WriteLine();
-		}
-
-		static double FindGoodHyperparameters(MatrixFactorization engine, uint half_size, double center, double step_size, int cross_validation, string criterion)
-		{
-			IEntityRelationDataProvider backend = engine.EntityRelationDataProvider; // save for later use
-			CrossvalidationSplit split = new CrossvalidationSplit((WP2Backend)backend, cross_validation, true);
-			// TODO the split should only be created once, not on every call of the function
-
-			double best_log_reg = 0;
-			double best_q       = double.MaxValue;
-
-            double[] log_reg = new double[2 * half_size + 1];
-
-            log_reg[half_size] = center;
-	        for (int i = 0; i <= half_size; i++) {
-      	        log_reg[half_size - i] = center - step_size * i;
-                log_reg[half_size + i] = center + step_size * i;
-            }
-
-			foreach (double exp in log_reg)
-			{
-				double reg = Math.Pow(reg_base, exp);
-				engine.regularization = reg;
-				IList<double> quality = new List<double>();
-				for (int j = 0; j < cross_validation; j++)
-				{
-					engine.EntityRelationDataProvider = split.GetTrainingSet(j);
-					engine.Train();
-
-					var results = Evaluate.EvaluateRated(engine, split.GetTestSet(j));
-					if (!results.ContainsKey(criterion))
-						throw new ArgumentException(string.Format("Unknown criterion {0}, valid criteria are {1}",
-						                            	          criterion, String.Join( ", ", Evaluate.GetRatingPredictionMeasures().ToArray() ) ));
-					quality.Add(results[criterion]);
-					Console.Error.Write(".");
-				}
-
-				if (quality.Average() < best_q)
-				{
-					best_q = quality.Average();
-					best_log_reg = exp;
-				}
-
-				Console.Error.WriteLine("reg={0}, {1}=({2}, {3}, {4})", reg, criterion, quality.Min(), quality.Average(), quality.Max());
-			} //foreach
-
-			engine.regularization = Math.Pow(reg_base, best_log_reg);
-			engine.EntityRelationDataProvider = backend; // reset
-			Console.Error.WriteLine();
-			return best_log_reg;
-		}
-
-		static void FindGoodLearnRate(MatrixFactorization engine)
-		{
-			Console.Error.WriteLine("Finding good learn rate ...");
-
-			double best_fit = double.MaxValue;
-			double best_lr  = 0;
-
-			engine.regularization = 0;
-
-			double[] learn_rates = new double[]{ 0.0001, 0.001, 0.005, 0.01, 0.05, 0.1, 0.25};
-
-			foreach (var lr in learn_rates)
-			{
-				try
-				{
-					engine.learn_rate = lr;
-
-					engine.Train();
-					double fit = engine.ComputeFit();
-
-					if (fit < best_fit)
-					{
-						best_fit = fit;
-						best_lr  = lr;
-					}
-					Console.Error.WriteLine("lr={0}, fit={1}", lr, fit);
-				}
-				catch (Exception)
-				{
-					Console.Error.WriteLine("Caught exception, ignore this learn rate.");
-				}
-			} //foreach
-
-			engine.learn_rate = best_lr;
-			Console.Error.WriteLine("Pick {0}", best_lr);
-		}
-		*/
-		// TODO move hyperparameter search into library
 	}
 }

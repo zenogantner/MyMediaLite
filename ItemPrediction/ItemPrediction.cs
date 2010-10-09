@@ -31,9 +31,6 @@ using MyMediaLite.util;
 
 namespace MyMediaLite
 {
-	// TODO catch FileNotFoundException
-	// TODO predict_items=true option
-
 	/// <summary>Item prediction program, see Usage() method for more information</summary>
 	public class ItemPrediction
 	{
@@ -95,12 +92,6 @@ namespace MyMediaLite
 			Console.WriteLine("    - auc_cutoff=F");
 			Console.WriteLine("    - prec_cutoff=F");
 			Console.WriteLine("    - compute_fit=BOOL");
-			/*
-			Console.WriteLine("  - options for hyperparameter search:");
-			Console.WriteLine("    - hyper_split=N              number of folds used in cross-validation");
-			Console.WriteLine("    - hyper_criterion=NAME       values {0}", String.Join( ", ", Evaluate.GetItemPredictionMeasures().ToArray()));
-			Console.WriteLine("    - hyper_half_size=N          number of values tried in each iteration/2");
-			*/
 			Environment.Exit(exit_code);
 		}
 
@@ -265,19 +256,6 @@ namespace MyMediaLite
 
 			TimeSpan time_span;
 
-			/*
-			if (hyper_split != -1)
-			{
-				time_span = Utils.MeasureTime( delegate() {
-					if (recommender is BPR_Linear)
-						FindGoodHyperparameters(recommender as BPR_Linear, hyper_split, hyper_criterion);
-					else
-						throw new NotImplementedException();
-				});
-				Console.Write("hyperparameters {0} ", time_span);
-			}
-			*/
-
 			// TODO give out time for each iteration
 			if (find_iter != 0)
 			{
@@ -347,29 +325,21 @@ namespace MyMediaLite
 				Console.Out.Flush();
 
 				if (training_time_stats.Count > 0)
-				{
 					Console.Error.WriteLine(
 						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 					);
-				}
 				if (eval_time_stats.Count > 0)
-				{
 					Console.Error.WriteLine(
 						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 					);
-				}
 				if (compute_fit)
-				{
 					if (fit_time_stats.Count > 0)
-					{
 						Console.Error.WriteLine(
 							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 						);
-					}
-				}
 				Console.Error.Flush();
 			}
 			else
@@ -389,7 +359,6 @@ namespace MyMediaLite
 
 				if (!predict_items_file.Equals(String.Empty))
 				{
-
 					if (predict_for_users_file.Equals(String.Empty))
 						time_span = Utils.MeasureTime( delegate()
 					    	{
@@ -442,7 +411,7 @@ namespace MyMediaLite
 		// undo the void thing ...
 		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
-			engine.NumIter       = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
+			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
 			engine.num_features   = parameters.GetRemoveInt32( "num_features",   engine.num_features);
    			engine.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    engine.init_f_mean);
    			engine.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   engine.init_f_stdev);
@@ -455,7 +424,7 @@ namespace MyMediaLite
 
 		static void InitBPRMF(BPRMF engine, CommandLineParameters parameters)
 		{
-			engine.NumIter     = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
+			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
 			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_features);
 			engine.init_f_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_f_mean);
 			engine.init_f_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_f_stdev);
@@ -504,107 +473,5 @@ namespace MyMediaLite
 			              result["MAP"].ToString(ni),
 			              result["NDCG"].ToString(ni));
 		}
-		
-		/*
-        static void FindGoodHyperparameters(BPR_Linear recommender, int cross_validation, string criterion)
-		{
-			Console.Error.WriteLine();
-			Console.Error.WriteLine("Hyperparameter search ...");
-
-			double step = 1.0;
-
-			double center = 0;
-			double new_center;
-
-			double upper_limit = 0; // highest (log) hyperparameter tried so far
-			double lower_limit = 0; // lowest (log) hyperparameter tried so far
-
-			while (step > 0.125)
-			{
-				upper_limit = Math.Max(upper_limit, center + half_size * step);
-				lower_limit = Math.Min(lower_limit, center - half_size * step);
-				new_center = FindGoodHyperparameters(recommender, half_size, center, step,  cross_validation, criterion);
-				if (new_center == lower_limit)
-				{
-					center = new_center - half_size * step;
-					Console.Error.WriteLine("Set center below lower limit: {0} < {1}", center, lower_limit);
-				}
-				else if (new_center == upper_limit)
-				{
-					center = new_center + half_size * step;
-					Console.Error.WriteLine("Set center above upper limit: {0} > {1}", center, upper_limit);
-				}
-				else
-				{
-					center = new_center;
-					step = step / 2;
-					Console.Error.WriteLine("Set center: {0}", center);
-				}
-			}
-			//recommender.num_iter_mapping = num_iter_mapping; // restore
-			Console.Error.WriteLine();
-		}
-		 */
-
-		/*
-		static double FindGoodHyperparameters(BPR_Linear engine, uint half_size, double center, double step_size, int cross_validation, string criterion)  // TODO make the type of split configurable
-		{
-			IEntityRelationDataProvider backend = engine.EntityRelationDataProvider; // save for later use
-			CrossvalidationSplit split = new CrossvalidationSplit((WP2Backend)backend, cross_validation, true); // TODO make configurable
-			// TODO: the split should only be created once, not on every call of the function
-
-			double best_log_reg = 0;
-			double best_q       = double.MinValue;
-
-            double[] log_reg = new double[2 * half_size + 1];
-
-            log_reg[half_size] = center;
-	        for (int i = 0; i <= half_size; i++) {
-      	        log_reg[half_size - i] = center - step_size * i;
-                log_reg[half_size + i] = center + step_size * i;
-            }
-
-			foreach (double exp in log_reg)
-			{
-				double reg = Math.Pow(reg_base, exp);
-				engine.reg = reg;
-				IList<double> quality = new List<double>();
-				for (int j = 0; j < cross_validation; j++)
-				{
-					engine.EntityRelationDataProvider = split.GetTrainingSet(j);
-
-					engine.Train();
-
-					var eval_result = Evaluate.EvaluateItemRecommender(
-                    	engine,
-						split.GetTestSet(j),
-        	            split.GetTrainingSet(j).GetRelation(RelationType.Viewed),
-            	        relevant_items
-				        // split.GetRelevantItems(j),
-                        // TODO !eval_new_users
-			    	);
-
-					if (!eval_result.ContainsKey(criterion))
-						throw new ArgumentException(string.Format("Unknown criterion {0}, valid criteria are {1}",
-						                            	          criterion, String.Join( ", ", Evaluate.GetItemPredictionMeasures().ToArray() ) ));
-					quality.Add(eval_result[criterion]);
-					Console.Error.Write(".");
-				}
-
-				if (quality.Average() > best_q)
-				{
-					best_q = quality.Average();
-					best_log_reg = exp;
-				}
-
-				Console.Error.WriteLine("reg={0}, {1}=({2}, {3}, {4})", reg, criterion, quality.Min(), quality.Average(), quality.Max());
-			} //foreach
-
-			engine.reg = Math.Pow(reg_base, best_log_reg);
-			engine.EntityRelationDataProvider = backend; // reset
-			Console.Error.WriteLine();
-			return best_log_reg;
-		}
-		*/
 	}
 }
