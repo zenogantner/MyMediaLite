@@ -30,7 +30,7 @@ using MyMediaLite.util;
 namespace MyMediaLite.eval
 {
 	// TODO: think about a better name for the class - we do not compare rankings here ...
-	
+
     /// <summary>Evaluation class</summary>
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class ItemRankingEval
@@ -38,7 +38,7 @@ namespace MyMediaLite.eval
         /// <summary>
         /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-        /// 
+        ///
         /// Literature:
         ///   C. Manning, P. Raghavan, H. Schütze
         ///   Introduction to Information Retrieval,
@@ -66,7 +66,7 @@ namespace MyMediaLite.eval
 			double prec_15_sum = 0;
 			double ndcg_sum    = 0;
             int num_users      = 0;
-			
+
             foreach (KeyValuePair<int, HashSet<int>> user in test.GetNonEmptyRows())
             {
                 int user_id = user.Key;
@@ -89,12 +89,12 @@ namespace MyMediaLite.eval
 				ndcg_sum    += NDCG(prediction, test_items, train[user_id]);
 				prec_5_sum  += PrecisionAt(prediction, test_items, train[user_id],  5);
 				prec_10_sum += PrecisionAt(prediction, test_items, train[user_id], 10);
-				prec_15_sum += PrecisionAt(prediction, test_items, train[user_id], 15);				
-				
+				prec_15_sum += PrecisionAt(prediction, test_items, train[user_id], 15);
+
                 if (prediction.Length != relevant_items.Count)
                     throw new Exception("Not all items have been ranked.");
 			}
-			
+
 			Dictionary<string, double> result = new Dictionary<string, double>();
 			result.Add("AUC",     auc_sum / num_users);
 			result.Add("MAP",     map_sum / num_users);
@@ -116,7 +116,7 @@ namespace MyMediaLite.eval
 		{
 			return AUC(ranked_items, correct_items, new HashSet<int>());
 		}
-		
+
 		/// <summary>
 		/// Compute the area under the ROC curve (AUC) of a list of ranked items.
 		/// </summary>
@@ -127,8 +127,8 @@ namespace MyMediaLite.eval
 		public static double AUC(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
                 int num_eval_items = ranked_items.Length - ignore_items.Intersect(ranked_items).Count();
-	            int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;			
-			
+	            int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
+
 				int num_correct_pairs = 0;
 				int hit_count         = 0;
 
@@ -142,19 +142,30 @@ namespace MyMediaLite.eval
 					else
 		            	hit_count++;
                 }
-			
-                return ((double) num_correct_pairs) / num_eval_pairs;			
+
+                return ((double) num_correct_pairs) / num_eval_pairs;
 		}
 
 		// TODO methods w/o ignore
-		
+
+		/// <summary>
+		/// Compute the mean average precision (MAP) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <returns>the MAP for the given data</returns>
+		public static double MAP(int[] ranked_items, ICollection<int> correct_items)
+		{
+			return MAP(ranked_items, correct_items);
+		}
+
 		/// <summary>
 		/// Compute the mean average precision (MAP) of a list of ranked items.
 		/// </summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the MAP for the given data</returns>		
+		/// <returns>the MAP for the given data</returns>
 		public static double MAP(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
             int hit_count       = 0;
@@ -169,7 +180,7 @@ namespace MyMediaLite.eval
 					left_out++;
 					continue;
 				}
-				
+
                 if (!correct_items.Contains(item_id))
 					continue;
 
@@ -183,20 +194,31 @@ namespace MyMediaLite.eval
 			else
 				return 0;
 		}
-		
+
+		/// <summary>
+		/// Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <returns>the NDCG for the given data</returns>
+		public static double NDCG(int[] ranked_items, ICollection<int> correct_items)
+		{
+			return NDCG(ranked_items, correct_items);
+		}
+
 		/// <summary>
 		/// Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items.
 		/// </summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the NDCG for the given data</returns>		
+		/// <returns>the NDCG for the given data</returns>
 		public static double NDCG(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
 			double dcg   = 0;
 			double idcg  = ComputeIDCG(correct_items.Count);
 			int left_out = 0;
-		
+
             for (int i = 0; i < ranked_items.Length; i++)
 			{
 				int item_id = ranked_items[i];
@@ -222,26 +244,38 @@ namespace MyMediaLite.eval
 		/// </summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="n">the cutoff position in the list</param>
+		/// <returns>the precision@N for the given data</returns>
+		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, int n)
+		{
+			return PrecisionAt(ranked_items, correct_items, n);
+		}
+
+		/// <summary>
+		/// Compute the precision@N of a list of ranked items.
+		/// </summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the precision@N for the given data</returns>		
+		/// <returns>the precision@N for the given data</returns>
 		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items, int n)
 		{
 			if (n < 1)
 				throw new ArgumentException("N must be at least 1.");
-			
+
             int hit_count = 0;
 			int left_out  = 0;
 
 			for (int i = 0; i < ranked_items.Length; i++)
-			{				
+			{
 				int item_id = ranked_items[i];
 				if (ignore_items.Contains(item_id))
 				{
 					left_out++;
 					continue;
 				}
-				
+
                 if (!correct_items.Contains(item_id))
 					continue;
 
