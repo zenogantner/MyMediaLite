@@ -30,9 +30,7 @@ namespace MyMediaLite.data_type
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class Matrix<T>
     {
-        /// <summary>
-        /// Data array: data is stored in columns.
-        /// </summary>
+        /// <summary>Data array: data is stored in columns.</summary>
         public T[] data;
         /// <summary>
         /// Dimension 1, the number of rows
@@ -43,6 +41,19 @@ namespace MyMediaLite.data_type
         /// </summary>
         public int dim2;
 
+		/// <summary>True if the matrix is symmetric, false otherwise</summary>
+		public virtual bool IsSymmetric
+		{
+			get
+			{
+				for (int i = 0; i < dim1; i++)
+					for (int j = i + 1; j < dim2; j++)
+						if (!this[i, j].Equals(this[j, i]))
+							return false;
+				return true;
+			}
+		}
+		
         /// <summary>
         /// Initializes a new instance of the Matrix class.
         /// </summary>

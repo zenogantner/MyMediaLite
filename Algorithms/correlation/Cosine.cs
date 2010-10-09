@@ -37,6 +37,11 @@ namespace MyMediaLite.correlation
 			this.data = correlation_matrix.data;
 		}
 
+		/// <summary>
+		/// Create a Cosine similarity matrix from given data
+		/// </summary>
+		/// <param name="vectors">the boolean data</param>
+		/// <returns>the similarity matrix based on the data</returns>
 		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
 		{
 			CorrelationMatrix cm;

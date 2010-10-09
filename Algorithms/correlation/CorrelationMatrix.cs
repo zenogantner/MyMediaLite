@@ -26,12 +26,14 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.correlation
 {
-	/// <summary>Class for computing and storing correlations</summary>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
+	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class CorrelationMatrix : Matrix<float>
 	{
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
+
+		/// <inheritdoc/>
+		public override bool IsSymmetric { get { return true; } }
 
 		/// <inheritdoc/>
         public override float this [int i, int j]
@@ -41,8 +43,8 @@ namespace MyMediaLite.correlation
             	data[i * dim2 + j] = value;
             	data[j * dim2 + i] = value;
         	}
-		}		
-		
+		}
+
 		/// <summary>
 		/// Creates a CorrelationMatrix object for a given number of entities
 		/// </summary>
@@ -51,7 +53,7 @@ namespace MyMediaLite.correlation
 		{
 			this.num_entities = num_entities;
 		}
-		
+
 		/// <summary>
 		/// Create a correlation matrix, give out useful warning if there is not enough memory
 		/// </summary>
@@ -70,8 +72,8 @@ namespace MyMediaLite.correlation
 				throw;
 			}
 			return cm;
-		}		
-		
+		}
+
 		/// <summary>
 		/// Create a CorrelationMatrix from the lines of a StreamReader
 		/// </summary>
@@ -103,7 +105,7 @@ namespace MyMediaLite.correlation
 
 				cm[i, j] = c;
 			}
-			
+
 			return cm;
 		}
 
@@ -130,7 +132,7 @@ namespace MyMediaLite.correlation
 
 		/// <summary>
 		/// Add an entity to the CorrelationMatrix by growing it to the requested size.
-		/// 
+		///
 		/// Note that you still have to correctly compute and set the entity's correlation values
 		/// </summary>
 		/// <param name="entity_id">the numerical ID of the entity</param>
