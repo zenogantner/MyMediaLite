@@ -26,7 +26,6 @@ namespace MyMediaLite.data_type
     /// Sparse representation of a boolean matrix.
     /// Fast row-wise access is possible.
     /// </summary>
-    [Serializable]
     public class SparseBooleanMatrix
     {
 		private List<HashSet<int>> rows = new List<HashSet<int>>();
@@ -76,65 +75,60 @@ namespace MyMediaLite.data_type
 		}
 
 		/// <summary>
-		/// Get the rows of the matrix
+		/// The rows of the matrix, with their IDs
 		/// </summary>
-		/// <returns>
-		/// a list containing the rows of the matrix
-		/// </returns>
-		public IList<KeyValuePair<int, HashSet<int>>> GetRows()
+		public IList<KeyValuePair<int, HashSet<int>>> Rows
 		{
-			var return_list = new List<KeyValuePair<int, HashSet<int>>>();
-			for (int i = 0; i < rows.Count; i++)
+			get
 			{
-				return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
-			}
-			return return_list;
-		}
-
-		/// <summary>
-		/// Get the non-empty rows of the matrix (the ones that contain at least one true entry)
-		/// </summary>
-		/// <returns>
-		/// a list containing the non-empty rows of the matrix
-		/// </returns>
-		public IList<KeyValuePair<int, HashSet<int>>> GetNonEmptyRows()
-		{
-			var return_list = new List<KeyValuePair<int, HashSet<int>>>();
-			for (int i = 0; i < rows.Count; i++)
-			{
-				if (rows[i].Count > 0)
+				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
+				for (int i = 0; i < rows.Count; i++)
+				{
 					return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
+				}
+				return return_list;
 			}
-			return return_list;
 		}
 
 		/// <summary>
-		/// Get the IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)
+		/// The non-empty rows of the matrix (the ones that contain at least one true entry),
+		/// with their IDs
 		/// </summary>
-		/// <returns>
-		/// a list containing the IDs of the non-empty rows in the matrix
-		/// </returns>
-		public HashSet<int> GetNonEmptyRowIDs()
+		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
 		{
-			HashSet<int> row_ids = new HashSet<int>();
-
-			for (int i = 0; i < rows.Count; i++)
-				if (rows[i].Count > 0)
-					row_ids.Add(i);
-
-			return row_ids;
+			get
+			{
+				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
+				for (int i = 0; i < rows.Count; i++)
+				{
+					if (rows[i].Count > 0)
+						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
+				}
+				return return_list;
+			}
 		}
 
 		/// <summary>
-		/// Get the number of rows in the matrix
+		/// The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)
 		/// </summary>
-		/// <returns>
-		/// the number of rows in the matrix
-		/// </returns>
-		public int GetNumberOfRows()
+		public ICollection<int> NonEmptyRowIDs
 		{
-			return rows.Count;
+			get
+			{
+				HashSet<int> row_ids = new HashSet<int>();
+
+				for (int i = 0; i < rows.Count; i++)
+					if (rows[i].Count > 0)
+						row_ids.Add(i);
+
+				return row_ids;
+			}
 		}
+
+		/// <summary>
+		/// The number of rows in the matrix
+		/// </summary>
+		public int NumberOfRows	{ get { return rows.Count; } }
 
 		/// <summary>
 		/// Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.

@@ -48,7 +48,7 @@ namespace MyMediaLite.eval
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
-			HashSet<int> relevant_items,
+			ICollection<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
@@ -75,7 +75,7 @@ namespace MyMediaLite.eval
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
-			HashSet<int> relevant_items,
+			ICollection<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
@@ -102,7 +102,7 @@ namespace MyMediaLite.eval
 		static public void WritePredictions(
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
-			HashSet<int> relevant_items,
+			ICollection<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
@@ -124,7 +124,7 @@ namespace MyMediaLite.eval
 			RecommenderEngine engine,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
-			HashSet<int> relevant_items,
+			ICollection<int> relevant_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
@@ -150,8 +150,8 @@ namespace MyMediaLite.eval
 		static public void WritePredictions(
 			RecommenderEngine engine,
             int user_id,
-		    HashSet<int> relevant_items,
-		    HashSet<int> ignore_items,
+		    ICollection<int> relevant_items,
+		    ICollection<int> ignore_items,
 			int num_predictions,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 		    TextWriter writer)
@@ -207,7 +207,7 @@ namespace MyMediaLite.eval
             return return_array;
 		}
 
-		static public int[] PredictItems(RecommenderEngine engine, int user_id, HashSet<int> relevant_items)
+		static public int[] PredictItems(RecommenderEngine engine, int user_id, ICollection<int> relevant_items)
 		{
             List<WeightedItem> result = new List<WeightedItem>();
 

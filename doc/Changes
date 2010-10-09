@@ -13,7 +13,8 @@
 	interface changes:
 	 - use IterativeModel interface in rating prediction program
 	 - consistent parameters for RatingData constructor
-	 - SparseBooleanMatrix now allows [x, y] and [x] access
+	 - SparseBooleanMatrix now allows [x, y] and [x] access, has 
+           properties instead of GetXXX() methods
          - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
            now both are completely property-based
 	misc:

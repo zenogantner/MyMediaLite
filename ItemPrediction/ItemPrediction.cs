@@ -40,7 +40,7 @@ namespace MyMediaLite
 		static ItemRecommender recommender = null;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
 
-		static HashSet<int> relevant_items;
+		static ICollection<int> relevant_items;
 
 		// recommender engines
 		static KNN         iknn   = new ItemKNN();
@@ -230,7 +230,7 @@ namespace MyMediaLite
 			if (! relevant_items_file.Equals(String.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
-				relevant_items = training_data.Second.GetNonEmptyRowIDs();
+				relevant_items = training_data.Second.NonEmptyRowIDs;
 
 			if (recommender != random)
 				((Memory)recommender).SetCollaborativeData(training_data.First, training_data.Second);

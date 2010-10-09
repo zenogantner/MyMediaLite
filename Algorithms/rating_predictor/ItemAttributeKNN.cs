@@ -36,7 +36,7 @@ namespace MyMediaLite.rating_predictor
 			set
 			{
 				this.item_attributes = value;
-				this.MaxItemID = Math.Max(MaxItemID, item_attributes.GetNumberOfRows());
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
 			}
 		}		
 		private SparseBooleanMatrix item_attributes;

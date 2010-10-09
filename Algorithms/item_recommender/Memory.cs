@@ -119,8 +119,8 @@ namespace MyMediaLite.item_recommender
 		{
             this.data_user = user_items;
             this.data_item = item_users;
-			this.MaxUserID = user_items.GetNumberOfRows() - 1;
-			this.MaxItemID = item_users.GetNumberOfRows() - 1;
+			this.MaxUserID = user_items.NumberOfRows - 1;
+			this.MaxItemID = item_users.NumberOfRows - 1;
 		}
     }
 

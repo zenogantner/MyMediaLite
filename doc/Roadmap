@@ -40,6 +40,8 @@ Architecture
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
  - provide bindings for languages like Python, Ruby, Perl
+ - use Parallel.ForEach for item recommender evaluation
+   - as soon as Mono 2.8 is more widely available
  - Java port
  - multi-core support
  - GPU support

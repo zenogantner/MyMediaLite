@@ -53,7 +53,7 @@ namespace MyMediaLite.eval
 			ItemRecommender engine,
 			SparseBooleanMatrix test,
 			SparseBooleanMatrix train,
-			HashSet<int> relevant_items)
+			ICollection<int> relevant_items)
         {
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
@@ -67,7 +67,7 @@ namespace MyMediaLite.eval
 			double ndcg_sum    = 0;
             int num_users      = 0;
 
-            foreach (KeyValuePair<int, HashSet<int>> user in test.GetNonEmptyRows())
+            foreach (KeyValuePair<int, HashSet<int>> user in test.NonEmptyRows)
             {
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
