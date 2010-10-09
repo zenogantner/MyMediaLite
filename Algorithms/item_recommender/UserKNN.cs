@@ -37,9 +37,11 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
+			Console.WriteLine("Starting training ...");
 			correlation = Cosine.Create(data_user);
 
 			int num_users = MaxUserID + 1;
+			Console.WriteLine("{0} users", num_users);
 			nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);

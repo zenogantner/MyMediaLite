@@ -86,7 +86,7 @@ namespace MyMediaLite.eval
 
 				// the number of items that are really relevant for this user
                 int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
-
+				
 				// skip all users that have 0 or #relevant_items test items
 				if (test_items.Count == 0)
 					continue;

@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using MyMediaLite.correlation;
 using MyMediaLite.data_type;
 
@@ -30,7 +31,16 @@ namespace MyMediaLite.item_recommender
     public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
     {
 		/// <inheritdoc />
-		public SparseBooleanMatrix UserAttributes { get; set; }
+		public SparseBooleanMatrix UserAttributes
+		{
+			set
+			{
+				this.user_attributes = value;
+				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
+			}
+		}
+		private SparseBooleanMatrix user_attributes;
+
 
 		/// <inheritdoc />
 		public int NumUserAttributes { get; set; }		
@@ -38,12 +48,14 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-			correlation = Cosine.Create(UserAttributes);
+			correlation = Cosine.Create(user_attributes);
 
-			int num_users = UserAttributes.NumberOfRows;
+			int num_users = user_attributes.NumberOfRows;
 			nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
+			
+			Console.WriteLine("MaxUserID: {0}", MaxUserID);
         }
 
         /// <inheritdoc />

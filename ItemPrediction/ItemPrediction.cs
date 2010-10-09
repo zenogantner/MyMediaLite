@@ -129,16 +129,6 @@ namespace MyMediaLite
 			int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
 			string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", String.Empty);
 
-			// TODO specific model file directory, specific prediction file directory
-
-			// variables for hyperparameter search via crossvalidation
-			/*
-			int  hyper_split            = parameters.GetRemoveInt32(  "hyper_split", -1);
-			string hyper_criterion      = parameters.GetRemoveString( "hyper_criterion", "prec@5"); // TODO AUC must be maximized - take care of that!!
-			     half_size              = parameters.GetRemoveUInt32( "half_size", 2); // TODO nicer name?
-				 reg_base               = parameters.GetRemoveUInt32( "reg_base", 2);  // TODO nicer name?
-			*/
-
 			// main data files and method
 			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
 			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);

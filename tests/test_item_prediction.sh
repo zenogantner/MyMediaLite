@@ -8,29 +8,35 @@
 LANG=C
 PROGRAM="mono --debug ItemPrediction.exe"
 
-echo "This may take up to 60 minutes"
+echo "This may take about 15 minutes"
 echo "Do not take the results serious - we do not use the best hyperparameters here"
 
 cd ItemPrediction/bin/Debug
 
+echo "MovieLens 100K"
+echo "--------------"
+
 for method in bpr-mf wr-mf
 do
-	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=2 num_iter=1
-   	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=2 num_iter=1
+	echo $PROGRAM u1.base u1.test $method find_iter=1 max_iter=5 num_iter=1
+   	     $PROGRAM u1.base u1.test $method find_iter=1 max_iter=5 num_iter=1
 done
 
 
 for method in random most-popular
 do
-	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
-	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
+	echo $PROGRAM u1.base u1.test $method
+	     $PROGRAM u1.base u1.test $method
 done
 
 for method in item-kNN user-kNN weighted-user-kNN
 do
-	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method k=20
-	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method k=20
+	echo $PROGRAM u1.base u1.test $method k=20
+	     $PROGRAM u1.base u1.test $method k=20
 done
+
+echo "MovieLens 1M"
+echo "------------"
 
 for method in item-attribute-knn
 do
