@@ -29,13 +29,13 @@ using MyMediaLite.experimental.attr_to_feature;
 using MyMediaLite.io;
 using MyMediaLite.util;
 
+
 namespace Mapping
 {
 	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class Mapping
 	{
-		static HashSet<int> relevant_items;
-		static bool eval_new_users;
+		static ICollection<int> relevant_items;
 		/*
 		static uint half_size;
 		static uint reg_base = 2;
@@ -77,7 +77,6 @@ namespace Mapping
 			Console.WriteLine("    - user_attributes=FILE   file containing user attribute information");
 			//Console.WriteLine("    - save_mappings=FILE     save computed mapping model to FILE");
 			Console.WriteLine("    - no_eval=BOOL           don't evaluate, only run the mapping");
-			Console.WriteLine("    - eval_new_users=BOOL    also evaluate users not present in the training data");
 			Console.WriteLine("    - compute_fit=N          compute fit every N iterations");
 			/*
 			Console.WriteLine("  - options for hyperparameter search:");
@@ -109,7 +108,6 @@ namespace Mapping
 			//string save_mapping_file    = parameters.GetRemoveString( "save_model");
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed", -1);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval", false);
-			     eval_new_users         = parameters.GetRemoveBool(   "eval_new_users", false);
 			/*
 			int  cross_validation       = parameters.GetRemoveInt32(  "cross_validation", -1);
 			     half_size              = parameters.GetRemoveUInt32( "half_size", 2);
@@ -170,7 +168,7 @@ namespace Mapping
 			if (! relevant_items_file.Equals(String.Empty) )
 				relevant_items = new HashSet<int>( Utils.ReadIntegers( Path.Combine(data_dir, relevant_items_file) ) );
 			else
-				relevant_items = training_data.Second.GetNonEmptyRowIDs();
+				relevant_items = training_data.Second.NonEmptyRowIDs;
 
 			// user attributes
 			if (recommender is UserAttributeAwareRecommender)
@@ -273,8 +271,7 @@ namespace Mapping
 	                                recommender,
 									test_user_items,
             	                    train_user_items,
-                	                relevant_items,
-	                                !eval_new_users
+                	                relevant_items
 				    );
 					Console.Write("AUC {0} prec@5 {1} prec@10 {2}", result["AUC"], result["prec@5"], result["prec@10"]);
 		    	} );

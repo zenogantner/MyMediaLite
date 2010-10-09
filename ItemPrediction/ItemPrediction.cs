@@ -152,7 +152,6 @@ namespace MyMediaLite
 			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
 			string method    = args[2];
 
-
 			if (random_seed != -1)
 				util.Random.InitInstance(random_seed);
 
