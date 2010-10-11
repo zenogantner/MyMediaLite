@@ -61,7 +61,7 @@ rating prediction (e.g. on a scale of 1 to 5 stars)
 and item prediction from implicit feedback (e.g. from clicks or purchase actions).
 
 \begin{center}
-	\url{http://gitorious.org/mymedialite}
+	\url{http://ismll.de/mymedialite/}
 \end{center}
 
 \newpage
@@ -160,33 +160,38 @@ Rating Prediction
 \begin{itemize}
 	\item averages: global, user, item
 	\item linear baseline method by Koren and Bell
-	\item k-Nearest Neighbor (kNN):
+	\item k-nearest neighbor (kNN):
 		\begin{itemize}
 			\item based on user or item similarities
-			\item using collaborative or attribute (content) data
-			\item different similarity measures
+			\item collaborative or attribute-/content-based
+			\item different similarity measures: Pearson correlation, Cosine similarity
 		\end{itemize}
-	\item (Biased) matrix factorization
+	\item (biased) matrix factorization
 \end{itemize}
 
 Item Prediction
 \begin{itemize}
-	\item Random
-	\item Most Popular Item
-	\item Linear Content-based Model Optimized for Bayesian Personalized Ranking (BPR-Linear)
-	\item k-Nearest Neighbor (kNN):
+	\item random
+	\item most popular Iiem
+	\item linear content-based model optimized for Bayesian Personalized Ranking (BPR-Linear)
+	\item k-nearest neighbor (kNN):
 		\begin{itemize}
 			\item based on user or item similarities
-			\item using collaborative or attribute (content) data
+			\item collaborative or attribute-/content-based
 		\end{itemize}
-	\item Weighted Regularized Matrix Factorization (WR-MF)
-	\item Matrix Factorization Optimized for Bayesian Personalized Ranking (BPR-MF)
+	\item weighted regularized matrix factorization (WR-MF)
+	\item matrix factorization optimized for Bayesian Personalized Ranking (BPR-MF)
 \end{itemize}
 
 \newpage
 
 \section{Download}
-Get the code here:
+Get the latest release of MyMediaLite here:
+\begin{center}
+	\url{http://ismll.de/mymedialite/}
+\end{center}
+
+Get/branch the source code:
 \begin{center}
 	\url{http://gitorious.org/mymedialite}
 \end{center}
