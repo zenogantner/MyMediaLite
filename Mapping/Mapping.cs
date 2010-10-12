@@ -234,7 +234,7 @@ namespace Mapping
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
-		    		var result = ItemRankingEval.EvaluateItemRecommender(
+		    		var result = ItemPredictionEval.EvaluateItemRecommender(
 	                                recommender,
 									test_user_items,
             	                    train_user_items,
