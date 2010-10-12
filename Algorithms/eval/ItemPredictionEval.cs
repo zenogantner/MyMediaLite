@@ -47,12 +47,13 @@ namespace MyMediaLite.eval
         /// <summary>
         /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-        ///
+        /// </summary>
+        /// <remarks>
         /// Literature:
         ///   C. Manning, P. Raghavan, H. Schütze
         ///   Introduction to Information Retrieval,
         ///   Cambridge University Press, 2008
-        /// </summary>
+		/// </remarks>
         /// <param name="engine">Item recommender engine</param>
         /// <param name="test">test cases</param>
         /// <param name="train">training data</param>
@@ -154,8 +155,6 @@ namespace MyMediaLite.eval
 
                 return ((double) num_correct_pairs) / num_eval_pairs;
 		}
-
-		// TODO methods w/o ignore
 
 		/// <summary>
 		/// Compute the mean average precision (MAP) of a list of ranked items.
