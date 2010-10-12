@@ -1,9 +1,12 @@
 PDF_VIEWER=evince
 EDITOR=editor
 
-apidoc:
+monodoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
+htmldoc:
 	mdoc-export-html doc/monodoc/ -o doc/html --template doc/doctemplate.xsl
+
+apidoc:	api-monodoc api-htmldoc
 
 view-apidoc:
 	x-www-browser doc/html/index.html
