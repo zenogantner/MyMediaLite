@@ -143,6 +143,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="GetItems">

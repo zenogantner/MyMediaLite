@@ -47,6 +47,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddRating">
@@ -73,6 +75,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddUser">
@@ -91,6 +95,8 @@
         <param name="user_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -116,6 +122,8 @@
         <summary>To be added.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -204,6 +212,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveRating">
@@ -224,6 +234,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -250,6 +262,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="UpdateRating">
@@ -272,6 +286,8 @@
         <param name="rating">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

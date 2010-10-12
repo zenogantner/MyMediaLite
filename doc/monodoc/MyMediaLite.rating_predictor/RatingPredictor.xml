@@ -21,6 +21,8 @@
     <author>Steffen Rendle, University of Hildesheim</author>
     <author>Steffen Rendle, University of Hildesheim</author>
     <author>Steffen Rendle, University of Hildesheim</author>
+    <author>Steffen Rendle, University of Hildesheim</author>
+    <author>Steffen Rendle, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -55,6 +57,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddRating">
@@ -81,6 +85,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddUser">
@@ -99,6 +105,8 @@
         <param name="user_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -128,6 +136,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="LoadModel">
@@ -150,6 +160,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="max_data_value">
@@ -164,6 +176,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -199,6 +213,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -245,6 +261,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveItem">
@@ -263,6 +281,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -291,6 +311,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveUser">
@@ -313,6 +335,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="SaveModel">
@@ -331,6 +355,8 @@
         <param name="filePath">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -370,6 +396,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="UpdateRating">
@@ -392,6 +420,8 @@
         <param name="rating">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

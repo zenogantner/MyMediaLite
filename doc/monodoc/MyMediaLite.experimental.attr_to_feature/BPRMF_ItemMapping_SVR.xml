@@ -46,6 +46,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="C">
@@ -138,6 +140,8 @@
         <summary>To be added.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

@@ -32,6 +32,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName=".ctor">
@@ -47,6 +49,8 @@
         <param name="num_entities">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -76,6 +80,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="ComputeCorrelations">
@@ -94,6 +100,8 @@
         <param name="entity_data">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

@@ -15,6 +15,8 @@
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -49,6 +51,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddRating">
@@ -71,6 +75,8 @@
         <param name="rating">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -127,6 +133,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Predict">
@@ -171,6 +179,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveRating">
@@ -191,6 +201,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -217,6 +229,8 @@
         <param name="rating">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

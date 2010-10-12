@@ -4,6 +4,7 @@
            unnecessary to convert datasets before using them with the
            MyMediaLite command-line tools.
          - MAP (mean average precision) for item recommender evaluation
+         - API documentation in XML (generated from the inline XML docs)
         changes to the command-line programs:
          - allow input from STDIN and output to STDOUT
 	 - nicer time output for both demo programs

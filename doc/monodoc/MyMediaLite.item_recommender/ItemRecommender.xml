@@ -21,6 +21,8 @@
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -57,6 +59,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddItem">
@@ -75,6 +79,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -101,6 +107,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="LoadModel">
@@ -119,6 +127,8 @@
         <param name="filePath">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -148,6 +158,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveFeedback">
@@ -168,6 +180,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -194,6 +208,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveUser">
@@ -212,6 +228,8 @@
         <param name="user_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -238,6 +256,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Train">
@@ -253,6 +273,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

@@ -17,6 +17,8 @@
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -51,6 +53,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Predict">
@@ -72,6 +76,8 @@
         <summary>To be added.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -98,6 +104,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="ToString">
@@ -118,6 +126,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Train">
@@ -133,6 +143,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

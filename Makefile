@@ -1,4 +1,5 @@
 PDF_VIEWER=evince
+EDITOR=editor
 
 apidoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
@@ -6,7 +7,10 @@ apidoc:
 
 view-apidoc:
 	x-www-browser doc/html/index.html
-	
+
+edit-apidoc-stylesheet:
+	${EDITOR} doc/doctemplate.xsl
+
 flyer:
 	cd doc/flyer
 	pdflatex mymedialite-flyer.tex

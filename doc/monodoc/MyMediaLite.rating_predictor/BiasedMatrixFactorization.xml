@@ -16,6 +16,8 @@
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
     <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -46,6 +48,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Iterate">
@@ -68,6 +72,8 @@
         <param name="update_item">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -95,6 +101,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="ToString">
@@ -111,6 +119,8 @@
         <summary>To be added.</summary>
         <returns>To be added.</returns>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

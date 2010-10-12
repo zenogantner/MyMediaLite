@@ -17,6 +17,8 @@
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -53,6 +55,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddItem">
@@ -75,6 +79,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="AddUser">
@@ -93,6 +99,8 @@
         <param name="user_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -183,6 +191,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="RemoveItem">
@@ -201,6 +211,8 @@
         <param name="item_id">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -227,6 +239,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="SetCollaborativeData">
@@ -247,6 +261,8 @@
         <param name="item_users">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

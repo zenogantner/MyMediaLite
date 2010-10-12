@@ -18,6 +18,8 @@
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -55,6 +57,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="LoadModel">
@@ -73,6 +77,8 @@
         <param name="filePath">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -102,6 +108,8 @@
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="SaveModel">
@@ -120,6 +128,8 @@
         <param name="filePath">To be added.</param>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />
@@ -158,6 +168,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
         <inheritdoc />

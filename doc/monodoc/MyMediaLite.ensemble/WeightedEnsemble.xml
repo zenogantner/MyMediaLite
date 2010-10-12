@@ -18,6 +18,10 @@
             University of Hildesheim</author>
     <author>Steffen Rendle, Zeno Gantner, Christoph Freundenthaler,
             University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, Christoph Freundenthaler,
+            University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, Christoph Freundenthaler,
+            University of Hildesheim</author>
   </Docs>
   <Members>
     <Member MemberName=".ctor">
@@ -50,6 +54,8 @@
         <remarks>To be added.</remarks>
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Predict">
@@ -73,6 +79,8 @@
         <remarks>To be added.</remarks>
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="SaveModel">
@@ -93,6 +101,8 @@
         <remarks>To be added.</remarks>
         <inheritdoc />
         <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
       </Docs>
     </Member>
     <Member MemberName="Train">
@@ -108,6 +118,8 @@
       <Docs>
         <summary>To be added.</summary>
         <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
         <inheritdoc />
         <inheritdoc />
       </Docs>
