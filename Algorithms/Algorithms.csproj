@@ -88,7 +88,6 @@
     <Compile Include="util\Random.cs" />
     <Compile Include="util\EngineStorage.cs" />
     <Compile Include="RecommenderEngine.cs" />
-    <Compile Include="Ensemble.cs" />
     <Compile Include="item_recommender\UserAttributeKNN.cs" />
     <Compile Include="util\CommandLineParameters.cs" />
     <Compile Include="util\Handlers.cs" />
@@ -111,10 +110,8 @@
     <Compile Include="experimental\attr_to_feature\BPRMF_Mapping.cs" />
     <Compile Include="util\Triple.cs" />
     <Compile Include="eval\RatingEval.cs" />
-    <Compile Include="WeightedEnsemble.cs" />
     <Compile Include="data\RatingEvent.cs" />
     <Compile Include="data\Ratings.cs" />
-    <Compile Include="eval\ItemRankingEval.cs" />
     <Compile Include="IterativeModel.cs" />
     <Compile Include="rating_predictor\BiasedMatrixFactorization.cs" />
     <Compile Include="data\EntityMapping.cs" />
@@ -125,6 +122,9 @@
     <Compile Include="rating_predictor\UserKNNPearson.cs" />
     <Compile Include="rating_predictor\UserKNNCosine.cs" />
     <Compile Include="item_recommender\WeightedUserKNN.cs" />
+    <Compile Include="eval\ItemPredictionEval.cs" />
+    <Compile Include="ensemble\Ensemble.cs" />
+    <Compile Include="ensemble\WeightedEnsemble.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -145,6 +145,7 @@
     <Folder Include="taxonomy\" />
     <Folder Include="experimental\" />
     <Folder Include="experimental\attr_to_feature\" />
+    <Folder Include="ensemble\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\SVM\SVM.csproj">
