@@ -230,7 +230,7 @@ namespace MyMediaLite
 			if (recommender is ItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(String.Empty))
 				{
-					Usage("Recommender expects item_attributes.\n");
+					Usage("Recommender expects item_attributes.");
 				}
 				else
 				{
