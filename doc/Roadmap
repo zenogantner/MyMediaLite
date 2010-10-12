@@ -1,7 +1,10 @@
 TODO list
 ---------
 Recommender functionality
+ - (*) allow new user/new item evaluation for item prediction
+ - (*) output number of users/items in training and evaluation set
  - add filtering mechanism (pre-filter, post-filter)
+   - result diversification (Ziegler)
  - support for non-binary attributes
  - additional engines (?)
    - non-negative matrix factorization
@@ -15,6 +18,8 @@ Recommender functionality
    - item-to-item CF (Linden et al., 2003)
    - attribute-based engines using LIBSVM
    - Bayesian Probabilistic Matrix Factorization http://www.mit.edu/~rsalakhu/BPMF.html
+   - Content-boosted CF http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.73.8546&rep=rep1&type=pdf
+   - restricted boltzmann machines
  - time-aware rating and item prediction
    - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender
@@ -25,11 +30,11 @@ Recommender functionality
  - evaluation
    - support evaluation protocols w/ repeated events
 Data types
- - (*) re-implement rating data structure
  - data types: introduce more properties
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
+ - integrate with easyrec JavaScript API http://easyrec.org/ 
  - (*) define an easy interface for data access
  - user and item IDs should be unsigned integers
  - command line programs: load/configure engines via reflection
