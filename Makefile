@@ -6,7 +6,7 @@ monodoc:
 htmldoc:
 	mdoc-export-html doc/monodoc/ -o doc/html --template doc/doctemplate.xsl
 
-apidoc:	api-monodoc api-htmldoc
+apidoc: monodoc htmldoc
 
 view-apidoc:
 	x-www-browser doc/html/index.html
