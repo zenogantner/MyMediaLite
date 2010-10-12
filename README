@@ -8,9 +8,9 @@ Features
  - support for on-line updates to most models.
  - Ready to use:
    - Includes evaluation routines for rating and item prediction;
-     quality measures MAE, RMSE, AUC, prec@N, NDCG; and
+     quality measures MAE, RMSE, AUC, MAP, prec@N, NDCG; and
    - command line tools that read a simple text-based input format.
- - Compactness: Core library is 82KB "big".
+ - Compactness: Core library is 85KB "big".
  - Portability: Written in C#, for the .NET platform;
    runs on every architecture where Mono works: Linux, Windows, Mac OS X.
  - Freedom: Free/Open Source software, distributed under the terms of the
@@ -36,7 +36,7 @@ Cloning the repository:
   cd mymedialite
 
 Binary packages:
-  http://www.ismll.uni-hildesheim.de/personen/gantner/MyMediaLite-0.03.tar.gz
+  http://ismll.de/personen/mymedialite
 
 Acknowledgments
 ---------------
