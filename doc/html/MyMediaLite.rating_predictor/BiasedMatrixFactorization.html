@@ -1,0 +1,513 @@
+<html>
+  <head>
+    <title>MyMediaLite.rating_predictor.BiasedMatrixFactorization</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+      span.NotEntered /* Documentation for this section has not yet been entered */ {
+        font-style: italic;
+        
+      }
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.rating_predictor Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.rating_predictor.BiasedMatrixFactorization">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization">BiasedMatrixFactorization  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Summary">
+            Matrix factorization engine with explicit user and item bias.
+            </p>
+    <div id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Signature">
+      <div class="Signature">public class  <b>BiasedMatrixFactorization</b> : <a href="../MyMediaLite.rating_predictor/MatrixFactorization.html">MatrixFactorization</a></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Remarks')">
+          <span id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Version Information')">
+          <span id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="../MyMediaLite.rating_predictor/MatrixFactorization.html">MatrixFactorization</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Constructors')">
+            <span id="Public Constructors:toggle">⊟</span> Public Constructors</a>
+        </h3>
+        <blockquote id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.rating_predictor.BiasedMatrixFactorization">BiasedMatrixFactorization</a>
+                    </b>()</div>
+                </td>
+                <td>
+                  <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Methods')">
+            <span id="Public Methods:toggle">⊟</span> Public Methods</a>
+        </h3>
+        <blockquote id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32)">Predict</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString">ToString</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Protected Methods')">
+            <span id="Protected Methods:toggle">⊟</span> Protected Methods</a>
+        </h3>
+        <blockquote id="Protected Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init">_Init</a>
+                  </b>()<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean)">Iterate</a>
+                  </b>(<a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization">
+          <a href="javascript:toggle_display('C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:member')">
+            <span id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:member:toggle">⊟</span> BiasedMatrixFactorization Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public  <b>BiasedMatrixFactorization</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Remarks')">
+              <span id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Version Information')">
+              <span id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.rating_predictor.BiasedMatrixFactorization:Version Information">
+            <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init">
+          <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:member')">
+            <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:member:toggle">⊟</span> _Init Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">protected override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>_Init</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Remarks')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Version Information')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization._Init:Version Information">
+            <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean)">
+          <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):member')">
+            <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):member:toggle">⊟</span> Iterate Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">protected override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Iterate</b> (<a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a> ratings, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> update_user, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> update_item)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Parameters')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Parameters">
+            <dl>
+              <dt>
+                <i>ratings</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>update_user</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>update_item</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Remarks')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Version Information')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Iterate(MyMediaLite.data.Ratings,System.Boolean,System.Boolean):Version Information">
+            <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):member')">
+            <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):member:toggle">⊟</span> Predict Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>Predict</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Parameters')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Returns')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Remarks')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Version Information')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.Predict(System.Int32,System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString">
+          <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:member')">
+            <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:member:toggle">⊟</span> ToString Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>ToString</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Returns')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Remarks')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Version Information')">
+              <span id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.rating_predictor.BiasedMatrixFactorization.ToString:Version Information">
+            <b>Namespace: </b>MyMediaLite.rating_predictor<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

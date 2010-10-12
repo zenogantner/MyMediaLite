@@ -1,0 +1,82 @@
+<Type Name="VectorUtils" FullName="MyMediaLite.data_type.VectorUtils">
+  <TypeSignature Language="C#" Value="public class VectorUtils" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            Tools for vector-like data
+            </summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public VectorUtils ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EuclideanNorm">
+      <MemberSignature Language="C#" Value="public static double EuclideanNorm (System.Collections.Generic.ICollection&lt;double&gt; vector);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vector" Type="System.Collections.Generic.ICollection&lt;System.Double&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="vector">
+            the vector to compute the norm for
+            </param>
+        <summary>
+            Compute the Euclidean norm of a collection of doubles
+            </summary>
+        <returns>
+            the Euclidean norm of the vector
+            </returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InitNormal">
+      <MemberSignature Language="C#" Value="public static void InitNormal (System.Collections.Generic.IList&lt;double&gt; vector, double mean, double stdev);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vector" Type="System.Collections.Generic.IList&lt;System.Double&gt;" />
+        <Parameter Name="mean" Type="System.Double" />
+        <Parameter Name="stdev" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="vector">
+            the vector to initialize
+            </param>
+        <param name="mean">the mean of the normal distribution</param>
+        <param name="stdev">the standard deviation of the normal distribution</param>
+        <summary>
+            Initialize a collection of doubles with values from a normal distribution
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,227 @@
+<Type Name="ItemKNN" FullName="MyMediaLite.rating_predictor.ItemKNN">
+  <TypeSignature Language="C#" Value="public abstract class ItemKNN : MyMediaLite.rating_predictor.KNN" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>MyMediaLite.rating_predictor.KNN</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>This engine supports online updates.</summary>
+    <remarks>To be added.</remarks>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected ItemKNN ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddItem">
+      <MemberSignature Language="C#" Value="public override void AddItem (int item_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="item_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="item_id">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="AddRating">
+      <MemberSignature Language="C#" Value="public override void AddRating (int user_id, int item_id, double rating);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+        <Parameter Name="rating" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">To be added.</param>
+        <param name="item_id">To be added.</param>
+        <param name="rating">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="data_item">
+      <MemberSignature Language="C#" Value="protected MyMediaLite.data_type.SparseBooleanMatrix data_item;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>MyMediaLite.data_type.SparseBooleanMatrix</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            Matrix indicating which item was rated by which user
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetPositivelyCorrelatedEntities">
+      <MemberSignature Language="C#" Value="protected Func&lt;int,System.Collections.Generic.IList&lt;int&gt;&gt; GetPositivelyCorrelatedEntities;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Func&lt;System.Int32,System.Collections.Generic.IList&lt;System.Int32&gt;&gt;</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadModel">
+      <MemberSignature Language="C#" Value="public override void LoadModel (string filePath);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filePath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="filePath">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="Predict">
+      <MemberSignature Language="C#" Value="public override double Predict (int user_id, int item_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">the user ID</param>
+        <param name="item_id">the item ID</param>
+        <summary>
+            Predict the rating of a given user for a given item.
+            If the user or the item are not known to the engine, a suitable average is returned.
+            To avoid this behavior for unknown entities, use CanPredictRating() to check before.
+            </summary>
+        <returns>the predicted rating</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Ratings">
+      <MemberSignature Language="C#" Value="public override MyMediaLite.data.RatingData Ratings { set; }" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>MyMediaLite.data.RatingData</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveRating">
+      <MemberSignature Language="C#" Value="public override void RemoveRating (int user_id, int item_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">To be added.</param>
+        <param name="item_id">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="UpdateRating">
+      <MemberSignature Language="C#" Value="public override void UpdateRating (int user_id, int item_id, double rating);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+        <Parameter Name="rating" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">To be added.</param>
+        <param name="item_id">To be added.</param>
+        <param name="rating">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

@@ -1,0 +1,111 @@
+<Type Name="KNN" FullName="MyMediaLite.item_recommender.KNN">
+  <TypeSignature Language="C#" Value="public abstract class KNN : MyMediaLite.item_recommender.Memory" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>MyMediaLite.item_recommender.Memory</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>
+            Base class for item recommenders that use some kind of kNN
+            </remarks>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="protected KNN ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="correlation">
+      <MemberSignature Language="C#" Value="protected MyMediaLite.correlation.CorrelationMatrix correlation;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>MyMediaLite.correlation.CorrelationMatrix</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            Correlation matrix over some kind of entity
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="k">
+      <MemberSignature Language="C#" Value="public uint k;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.UInt32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            The number of neighbors to take into account for prediction
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadModel">
+      <MemberSignature Language="C#" Value="public override void LoadModel (string filePath);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filePath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="filePath">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="SaveModel">
+      <MemberSignature Language="C#" Value="public override void SaveModel (string filePath);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filePath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="filePath">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

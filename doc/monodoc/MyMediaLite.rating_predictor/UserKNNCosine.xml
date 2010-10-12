@@ -1,0 +1,89 @@
+<Type Name="UserKNNCosine" FullName="MyMediaLite.rating_predictor.UserKNNCosine">
+  <TypeSignature Language="C#" Value="public class UserKNNCosine : MyMediaLite.rating_predictor.UserKNN" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>MyMediaLite.rating_predictor.UserKNN</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            User-based kNN with cosine similarity
+            </summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public UserKNNCosine ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RetrainUser">
+      <MemberSignature Language="C#" Value="protected override void RetrainUser (int user_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="ToString">
+      <MemberSignature Language="C#" Value="public override string ToString ();" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.String</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="Train">
+      <MemberSignature Language="C#" Value="public override void Train ();" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+  </Members>
+</Type>

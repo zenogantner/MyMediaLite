@@ -1,0 +1,106 @@
+<Type Name="RatingEvent" FullName="MyMediaLite.data.RatingEvent">
+  <TypeSignature Language="C#" Value="public class RatingEvent" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            Representation of a rating event, consisting of a user ID, an item ID,
+            and the value of the rating.
+            </summary>
+    <remarks>To be added.</remarks>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RatingEvent ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>
+            Default constructor.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public RatingEvent (int user_id, int item_id, double rating);" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+        <Parameter Name="rating" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">the user ID</param>
+        <param name="item_id">the item ID</param>
+        <param name="rating">the rating value</param>
+        <summary>
+            Create a RatingEvent object from given data
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="item_id">
+      <MemberSignature Language="C#" Value="public int item_id;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            The item ID
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="rating">
+      <MemberSignature Language="C#" Value="public double rating;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            The rating value
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="user_id">
+      <MemberSignature Language="C#" Value="public int user_id;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            The user ID
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

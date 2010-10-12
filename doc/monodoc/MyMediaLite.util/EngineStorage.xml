@@ -1,0 +1,155 @@
+<Type Name="EngineStorage" FullName="MyMediaLite.util.EngineStorage">
+  <TypeSignature Language="C#" Value="public class EngineStorage" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            Helper class for storing and loading engine models
+            </summary>
+    <remarks>To be added.</remarks>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+    <author>Zeno Gantner, University of Hildesheim</author>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public EngineStorage ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetReader">
+      <MemberSignature Language="C#" Value="public static System.IO.StreamReader GetReader (string filename, Type engine_type);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IO.StreamReader</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filename" Type="System.String" />
+        <Parameter Name="engine_type" Type="System.Type" />
+      </Parameters>
+      <Docs>
+        <param name="filename">the filename of the model file</param>
+        <param name="engine_type">the expected engine type</param>
+        <summary>
+            Get a reader object to read in model parameters of a recommender engine
+            </summary>
+        <returns>a <see cref="T:System.IO.StreamReader" /></returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetWriter">
+      <MemberSignature Language="C#" Value="public static System.IO.StreamWriter GetWriter (string filename, Type engine_type);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.IO.StreamWriter</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="filename" Type="System.String" />
+        <Parameter Name="engine_type" Type="System.Type" />
+      </Parameters>
+      <Docs>
+        <param name="filename">the filename of the model file</param>
+        <param name="engine_type">the engine type</param>
+        <summary>
+            Get a writer object to save the model parameters of a recommender engine
+            </summary>
+        <returns>a <see cref="T:System.IO.StreamWriter" /></returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="LoadModel">
+      <MemberSignature Language="C#" Value="public static void LoadModel (MyMediaLite.RecommenderEngine engine, string data_dir, string filename);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="data_dir" Type="System.String" />
+        <Parameter Name="filename" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to save</param>
+        <param name="data_dir">the directory where the file will  be stored</param>
+        <param name="filename">the filename template</param>
+        <summary>
+            Save the model parameters of a recommender engine (in a given iteration of the training) to a file
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SaveModel">
+      <MemberSignature Language="C#" Value="public static void SaveModel (MyMediaLite.RecommenderEngine engine, string data_dir, string file);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="data_dir" Type="System.String" />
+        <Parameter Name="file" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the engine to store</param>
+        <param name="data_dir">data directory prefix</param>
+        <param name="file">the filename (may include relative paths)</param>
+        <summary>
+            Does not save if file is an empty string
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SaveModel">
+      <MemberSignature Language="C#" Value="public static void SaveModel (MyMediaLite.RecommenderEngine engine, string data_dir, string filename, int iteration);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="data_dir" Type="System.String" />
+        <Parameter Name="filename" Type="System.String" />
+        <Parameter Name="iteration" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to save</param>
+        <param name="data_dir">the directory where the file will  be stored</param>
+        <param name="filename">the filename template</param>
+        <param name="iteration">the iteration (will be appended to the filename)</param>
+        <summary>
+            Save the model parameters of a recommender engine (in a given iteration of the training) to a file
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

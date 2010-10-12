@@ -1,0 +1,125 @@
+<Type Name="Cosine" FullName="MyMediaLite.correlation.Cosine">
+  <TypeSignature Language="C#" Value="public class Cosine : MyMediaLite.correlation.CorrelationMatrix" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>MyMediaLite.correlation.CorrelationMatrix</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            Class for storing cosine similarities
+            </summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Cosine (MyMediaLite.correlation.CorrelationMatrix correlation_matrix);" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="correlation_matrix" Type="MyMediaLite.correlation.CorrelationMatrix" />
+      </Parameters>
+      <Docs>
+        <param name="correlation_matrix">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Cosine (int num_entities);" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="num_entities" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="num_entities">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="ComputeCorrelation">
+      <MemberSignature Language="C#" Value="public static float ComputeCorrelation (System.Collections.Generic.HashSet&lt;int&gt; vector_i, System.Collections.Generic.HashSet&lt;int&gt; vector_j);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Single</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vector_i" Type="System.Collections.Generic.HashSet&lt;System.Int32&gt;" />
+        <Parameter Name="vector_j" Type="System.Collections.Generic.HashSet&lt;System.Int32&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="vector_i">To be added.</param>
+        <param name="vector_j">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="ComputeCorrelations">
+      <MemberSignature Language="C#" Value="public override void ComputeCorrelations (MyMediaLite.data_type.SparseBooleanMatrix entity_data);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="entity_data" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+      </Parameters>
+      <Docs>
+        <param name="entity_data">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="Create">
+      <MemberSignature Language="C#" Value="public static MyMediaLite.correlation.CorrelationMatrix Create (MyMediaLite.data_type.SparseBooleanMatrix vectors);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>MyMediaLite.correlation.CorrelationMatrix</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vectors" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+      </Parameters>
+      <Docs>
+        <param name="vectors">the boolean data</param>
+        <summary>
+            Create a Cosine similarity matrix from given data
+            </summary>
+        <returns>the similarity matrix based on the data</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

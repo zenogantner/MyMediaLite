@@ -1,0 +1,1626 @@
+<html>
+  <head>
+    <title>MyMediaLite.item_recommender.BPRMF</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+      span.NotEntered /* Documentation for this section has not yet been entered */ {
+        font-style: italic;
+        
+      }
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.item_recommender Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.item_recommender.BPRMF">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.item_recommender.BPRMF:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.item_recommender.BPRMF:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.item_recommender.BPRMF:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.item_recommender.BPRMF">BPRMF  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.item_recommender.BPRMF:Summary">
+            Matrix factorization model for item prediction optimized using BPR-Opt;
+            Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, and Lars Schmidt-Thieme:
+            BPR: Bayesian Personalized Ranking from Implicit Feedback.
+            in UAI 2009
+            </p>
+    <div id="T:MyMediaLite.item_recommender.BPRMF:Signature">
+      <div class="Signature">public class  <b>BPRMF</b> : <a href="../MyMediaLite.item_recommender/MF.html">MF</a></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.item_recommender.BPRMF:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.item_recommender.BPRMF:Docs:Remarks')">
+          <span id="T:MyMediaLite.item_recommender.BPRMF:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.item_recommender.BPRMF:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.item_recommender.BPRMF:Docs:Version Information')">
+          <span id="T:MyMediaLite.item_recommender.BPRMF:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.item_recommender.BPRMF:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="../MyMediaLite.item_recommender/MF.html">MF</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Constructors')">
+            <span id="Public Constructors:toggle">⊟</span> Public Constructors</a>
+        </h3>
+        <blockquote id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.item_recommender.BPRMF">BPRMF</a>
+                    </b>()</div>
+                </td>
+                <td>
+                  <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Fields')">
+            <span id="Public Fields:toggle">⊟</span> Public Fields</a>
+        </h3>
+        <blockquote id="Public Fields">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit">fast_sampling_memory_limit</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>
+                  </i>. Fast sampling memory limit, in MiB</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.item_bias">item_bias</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>
+                  </i>. 
+            Use the first item feature as a bias term if set to true
+            </td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.learn_rate">learn_rate</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>
+                  </i>. Learning rate alpha</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.reg_i">reg_i</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>
+                  </i>. Regularization parameter for positive item factors</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.reg_j">reg_j</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>
+                  </i>. Regularization parameter for negative item factors</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.reg_u">reg_u</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>
+                  </i>. Regularization parameter for user factors</td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Protected Fields')">
+            <span id="Protected Fields:toggle">⊟</span> Protected Fields</a>
+        </h3>
+        <blockquote id="Protected Fields">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.fast_sampling">fast_sampling</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>
+                  </i>. Fast, but memory-intensive sampling</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.iteration_length">iteration_length</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>
+                  </i>. One iteration is <a href="../MyMediaLite.item_recommender/BPRMF.html#F:MyMediaLite.item_recommender.BPRMF.iteration_length">BPRMF.iteration_length</a> * number of entries in the training matrix</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.random">random</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Random">Random</a>
+                  </i>. Random number generator</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.user_neg_items">user_neg_items</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.List`1">List&lt;Int32[]&gt;</a>
+                  </i>. support data structure for fast sampling</td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.item_recommender.BPRMF.user_pos_items">user_pos_items</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.List`1">List&lt;Int32[]&gt;</a>
+                  </i>. support data structure for fast sampling</td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Methods')">
+            <span id="Public Methods:toggle">⊟</span> Public Methods</a>
+        </h3>
+        <blockquote id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32)">AddFeedback</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32)">AddItem</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32)">AddUser</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.ComputeFit">ComputeFit</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a></nobr><blockquote>Compute approximate fit (AUC on training data)</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.Iterate">Iterate</a>
+                  </b>()<blockquote>
+            Perform one iteration of stochastic gradient ascent over the training data.
+            One iteration is <a href="../MyMediaLite.item_recommender/BPRMF.html#F:MyMediaLite.item_recommender.BPRMF.iteration_length">BPRMF.iteration_length</a> * number of entries in the training matrix
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String)">LoadModel</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32)">RemoveFeedback</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32)">RemoveItem</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32)">RemoveUser</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.ToString">ToString</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.Train">Train</a>
+                  </b>()<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Protected Methods')">
+            <span id="Protected Methods:toggle">⊟</span> Protected Methods</a>
+        </h3>
+        <blockquote id="Protected Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.CheckSampling">CheckSampling</a>
+                  </b>()<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32)">RetrainItem</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Retrain the features of a given item</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32)">RetrainUser</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Retrain the features of a given user</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@)">SampleItemPair</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Sample a pair of items, given a user</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@)">SampleOtherItem</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote>Sample another item, given the first one and the user</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@)">SampleTriple</a>
+                  </b>(<i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<blockquote>Sample a triple for BPR learning</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.SampleUser">SampleUser</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a></nobr><blockquote>Sample a user that has viewed at least one and not all items</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean)">UpdateFeatures</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>)<blockquote>Update features according to the stochastic gradient descent update rule</blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.item_recommender.BPRMF:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="C:MyMediaLite.item_recommender.BPRMF">
+          <a href="javascript:toggle_display('C:MyMediaLite.item_recommender.BPRMF:member')">
+            <span id="C:MyMediaLite.item_recommender.BPRMF:member:toggle">⊟</span> BPRMF Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.item_recommender.BPRMF:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public  <b>BPRMF</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.item_recommender.BPRMF:Remarks')">
+              <span id="C:MyMediaLite.item_recommender.BPRMF:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.item_recommender.BPRMF:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.item_recommender.BPRMF:Version Information')">
+              <span id="C:MyMediaLite.item_recommender.BPRMF:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.item_recommender.BPRMF:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):member:toggle">⊟</span> AddFeedback Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>AddFeedback</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddFeedback(System.Int32,System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):member:toggle">⊟</span> AddItem Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>AddItem</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddItem(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):member:toggle">⊟</span> AddUser Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>AddUser</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.AddUser(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.CheckSampling:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:member:toggle">⊟</span> CheckSampling Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>CheckSampling</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.CheckSampling:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ComputeFit:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:member:toggle">⊟</span> ComputeFit Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:member">
+          <p class="Summary">Compute approximate fit (AUC on training data)</p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>ComputeFit</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Returns')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Returns">the fit</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ComputeFit:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:member:toggle">⊟</span> fast_sampling Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:member">
+          <p class="Summary">Fast, but memory-intensive sampling</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>fast_sampling</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:member:toggle">⊟</span> fast_sampling_memory_limit Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:member">
+          <p class="Summary">Fast sampling memory limit, in MiB</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>fast_sampling_memory_limit</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.fast_sampling_memory_limit:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.item_bias">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.item_bias:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.item_bias:member:toggle">⊟</span> item_bias Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.item_bias:member">
+          <p class="Summary">
+            Use the first item feature as a bias term if set to true
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>item_bias</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.item_bias:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.item_bias:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.item_bias:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.item_bias:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.item_bias:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.item_bias:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.Iterate">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Iterate:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.Iterate:member:toggle">⊟</span> Iterate Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.Iterate:member">
+          <p class="Summary">
+            Perform one iteration of stochastic gradient ascent over the training data.
+            One iteration is <a href="../MyMediaLite.item_recommender/BPRMF.html#F:MyMediaLite.item_recommender.BPRMF.iteration_length">BPRMF.iteration_length</a> * number of entries in the training matrix
+            </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Iterate</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Iterate:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.Iterate:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.Iterate:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Iterate:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.Iterate:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.Iterate:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.iteration_length">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.iteration_length:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:member:toggle">⊟</span> iteration_length Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:member">
+          <p class="Summary">One iteration is <a href="../MyMediaLite.item_recommender/BPRMF.html#F:MyMediaLite.item_recommender.BPRMF.iteration_length">BPRMF.iteration_length</a> * number of entries in the training matrix</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>iteration_length</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.iteration_length:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.iteration_length:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.iteration_length:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.learn_rate">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.learn_rate:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:member:toggle">⊟</span> learn_rate Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:member">
+          <p class="Summary">Learning rate alpha</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>learn_rate</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.learn_rate:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.learn_rate:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.learn_rate:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):member:toggle">⊟</span> LoadModel Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>LoadModel</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> filePath)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>filePath</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.LoadModel(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.random">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.random:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.random:member:toggle">⊟</span> random Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.random:member">
+          <p class="Summary">Random number generator</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Random">Random</a> <b>random</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.random:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.random:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.random:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.random:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.random:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.random:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.reg_i">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_i:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.reg_i:member:toggle">⊟</span> reg_i Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.reg_i:member">
+          <p class="Summary">Regularization parameter for positive item factors</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>reg_i</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_i:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_i:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_i:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_i:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_i:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_i:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.reg_j">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_j:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.reg_j:member:toggle">⊟</span> reg_j Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.reg_j:member">
+          <p class="Summary">Regularization parameter for negative item factors</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>reg_j</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_j:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_j:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_j:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_j:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_j:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_j:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.reg_u">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_u:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.reg_u:member:toggle">⊟</span> reg_u Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.reg_u:member">
+          <p class="Summary">Regularization parameter for user factors</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>reg_u</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_u:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_u:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_u:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.reg_u:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.reg_u:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.reg_u:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):member:toggle">⊟</span> RemoveFeedback Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RemoveFeedback</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveFeedback(System.Int32,System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):member:toggle">⊟</span> RemoveItem Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RemoveItem</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveItem(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):member:toggle">⊟</span> RemoveUser Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RemoveUser</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RemoveUser(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):member:toggle">⊟</span> RetrainItem Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):member">
+          <p class="Summary">Retrain the features of a given item</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RetrainItem</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>the item ID</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainItem(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):member:toggle">⊟</span> RetrainUser Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):member">
+          <p class="Summary">Retrain the features of a given user</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>RetrainUser</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>the user ID</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.RetrainUser(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):member:toggle">⊟</span> SampleItemPair Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):member">
+          <p class="Summary">Sample a pair of items, given a user</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SampleItemPair</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> u, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> i, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> j)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Parameters">
+            <dl>
+              <dt>
+                <i>u</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>i</i>
+              </dt>
+              <dd>the ID of the first item</dd>
+              <dt>
+                <i>j</i>
+              </dt>
+              <dd>the ID of the second item</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleItemPair(System.Int32,System.Int32@,System.Int32@):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):member:toggle">⊟</span> SampleOtherItem Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):member">
+          <p class="Summary">Sample another item, given the first one and the user</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>SampleOtherItem</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> u, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> i, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> j)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Parameters">
+            <dl>
+              <dt>
+                <i>u</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>i</i>
+              </dt>
+              <dd>the ID of the given item</dd>
+              <dt>
+                <i>j</i>
+              </dt>
+              <dd>the ID of the other item</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Returns')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Returns">true if the given item was already seen by user u</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleOtherItem(System.Int32,System.Int32,System.Int32@):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):member:toggle">⊟</span> SampleTriple Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):member">
+          <p class="Summary">Sample a triple for BPR learning</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>SampleTriple</b> (<i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> u, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> i, <i>out</i> <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> j)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Parameters">
+            <dl>
+              <dt>
+                <i>u</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>i</i>
+              </dt>
+              <dd>the ID of the first item</dd>
+              <dt>
+                <i>j</i>
+              </dt>
+              <dd>the ID of the second item</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleTriple(System.Int32@,System.Int32@,System.Int32@):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.SampleUser">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleUser:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:member:toggle">⊟</span> SampleUser Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:member">
+          <p class="Summary">Sample a user that has viewed at least one and not all items</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>SampleUser</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleUser:Returns')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Returns">the user ID</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleUser:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.SampleUser:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.SampleUser:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.ToString">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ToString:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.ToString:member:toggle">⊟</span> ToString Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.ToString:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>ToString</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ToString:Returns')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ToString:Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ToString:Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ToString:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ToString:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ToString:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.ToString:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.ToString:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.ToString:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.Train">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Train:member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.Train:member:toggle">⊟</span> Train Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.Train:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>Train</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Train:Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.Train:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.Train:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.Train:Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.Train:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.Train:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+          <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):member')">
+            <span id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):member:toggle">⊟</span> UpdateFeatures Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):member">
+          <p class="Summary">Update features according to the stochastic gradient descent update rule</p>
+          <div class="Signature">protected virtual <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>UpdateFeatures</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> u, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> i, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> j, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> update_u, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> update_i, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> update_j)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Parameters')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Parameters">
+            <dl>
+              <dt>
+                <i>u</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>i</i>
+              </dt>
+              <dd>the ID of the first item</dd>
+              <dt>
+                <i>j</i>
+              </dt>
+              <dd>the ID of the second item</dd>
+              <dt>
+                <i>update_u</i>
+              </dt>
+              <dd>if true, update the user features</dd>
+              <dt>
+                <i>update_i</i>
+              </dt>
+              <dd>if true, update the features of the first item</dd>
+              <dt>
+                <i>update_j</i>
+              </dt>
+              <dd>if true, update the features of the second item</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Remarks')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Version Information')">
+              <span id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.item_recommender.BPRMF.UpdateFeatures(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean):Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_neg_items:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:member:toggle">⊟</span> user_neg_items Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:member">
+          <p class="Summary">support data structure for fast sampling</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.List`1">List&lt;Int32[]&gt;</a> <b>user_neg_items</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.user_neg_items:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items">
+          <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_pos_items:member')">
+            <span id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:member:toggle">⊟</span> user_pos_items Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:member">
+          <p class="Summary">support data structure for fast sampling</p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.List`1">List&lt;Int32[]&gt;</a> <b>user_pos_items</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Remarks')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Version Information')">
+              <span id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.item_recommender.BPRMF.user_pos_items:Version Information">
+            <b>Namespace: </b>MyMediaLite.item_recommender<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

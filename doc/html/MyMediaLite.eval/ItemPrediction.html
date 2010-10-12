@@ -1,0 +1,736 @@
+<html>
+  <head>
+    <title>MyMediaLite.eval.ItemPrediction</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.eval Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.eval.ItemPrediction">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.eval.ItemPrediction:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.eval.ItemPrediction:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.eval.ItemPrediction:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.eval.ItemPrediction">ItemPrediction  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.eval.ItemPrediction:Summary">Class that contains static methods for item prediction</p>
+    <div id="T:MyMediaLite.eval.ItemPrediction:Signature">
+      <div class="Signature">public static class  <b>ItemPrediction</b></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.eval.ItemPrediction:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.eval.ItemPrediction:Docs:Remarks')">
+          <span id="T:MyMediaLite.eval.ItemPrediction:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.eval.ItemPrediction:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.eval.ItemPrediction:Docs:Version Information')">
+          <span id="T:MyMediaLite.eval.ItemPrediction:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.eval.ItemPrediction:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Object">object</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Methods')">
+            <span id="Public Methods:toggle">⊟</span> Public Methods</a>
+        </h3>
+        <blockquote id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32})">PredictItems</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>[]</nobr><blockquote>
+            Predict items for a given user
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32)">PredictItems</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>[]</nobr><blockquote>
+            predict items for a specific users
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">WritePredictions</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a>)<blockquote>
+            Write item predictions (scores) for all users to a TextWriter object
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String)">WritePredictions</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>
+            Write item predictions (scores) for all users to a file
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">WritePredictions</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a>)<blockquote>Write item predictions (scores) to a TextWriter object</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String)">WritePredictions</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote>Write item predictions (scores) to a file</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">WritePredictions</a>
+                  </b>(<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a>)<blockquote>
+            Write item predictions (scores) to a TextWriter object
+            </blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.eval.ItemPrediction:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32})">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):member:toggle">⊟</span> PredictItems Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):member">
+          <p class="Summary">
+            Predict items for a given user
+            </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>[] <b>PredictItems</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the recommender engine to use</dd>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>the numerical ID of the user</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>a collection of numerical IDs of relevant items</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Returns')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Returns">an ordered list of items, the most likely item first</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32}):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):member:toggle">⊟</span> PredictItems Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):member">
+          <p class="Summary">
+            predict items for a specific users
+            </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>[] <b>PredictItems</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> max_item_id)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> object to use for the predictions</dd>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>max_item_id</i>
+              </dt>
+              <dd>the maximum item ID</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Returns')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Returns">a list sorted list of item IDs</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.PredictItems(MyMediaLite.RecommenderEngine,System.Int32,System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member:toggle">⊟</span> WritePredictions Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member">
+          <p class="Summary">
+            Write item predictions (scores) for all users to a TextWriter object
+            </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>WritePredictions</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> train, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_predictions, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> user_mapping, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> item_mapping, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> writer)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> to use for making the predictions</dd>
+              <dt>
+                <i>train</i>
+              </dt>
+              <dd>a user-wise <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> containing the items already observed</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>the list of candidate items</dd>
+              <dt>
+                <i>num_predictions</i>
+              </dt>
+              <dd>the number of items to return per user, -1 if there should be no limit</dd>
+              <dt>
+                <i>user_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the user IDs</dd>
+              <dt>
+                <i>item_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the item IDs</dd>
+              <dt>
+                <i>writer</i>
+              </dt>
+              <dd>the <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> to write to</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member:toggle">⊟</span> WritePredictions Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member">
+          <p class="Summary">
+            Write item predictions (scores) for all users to a file
+            </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>WritePredictions</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> train, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_predictions, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> user_mapping, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> item_mapping, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> filename)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> to use for making the predictions</dd>
+              <dt>
+                <i>train</i>
+              </dt>
+              <dd>a user-wise <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> containing the items already observed</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>the list of candidate items</dd>
+              <dt>
+                <i>num_predictions</i>
+              </dt>
+              <dd>the number of items to return per user, -1 if there should be no limit</dd>
+              <dt>
+                <i>user_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the user IDs</dd>
+              <dt>
+                <i>item_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the item IDs</dd>
+              <dt>
+                <i>filename</i>
+              </dt>
+              <dd>the name of the file to write to</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member:toggle">⊟</span> WritePredictions Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member">
+          <p class="Summary">Write item predictions (scores) to a TextWriter object</p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>WritePredictions</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> train, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a> relevant_users, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_predictions, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> user_mapping, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> item_mapping, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> writer)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> to use for making the predictions</dd>
+              <dt>
+                <i>train</i>
+              </dt>
+              <dd>a user-wise <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> containing the items already observed</dd>
+              <dt>
+                <i>relevant_users</i>
+              </dt>
+              <dd>a list of users to make recommendations for</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>the list of candidate items</dd>
+              <dt>
+                <i>num_predictions</i>
+              </dt>
+              <dd>the number of items to return per user, -1 if there should be no limit</dd>
+              <dt>
+                <i>user_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the user IDs</dd>
+              <dt>
+                <i>item_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the item IDs</dd>
+              <dt>
+                <i>writer</i>
+              </dt>
+              <dd>the <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> to write to</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member:toggle">⊟</span> WritePredictions Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):member">
+          <p class="Summary">Write item predictions (scores) to a file</p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>WritePredictions</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> train, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a> relevant_users, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_predictions, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> user_mapping, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> item_mapping, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> filename)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> to use for making the predictions</dd>
+              <dt>
+                <i>train</i>
+              </dt>
+              <dd>a user-wise <a href="../MyMediaLite.data_type/SparseBooleanMatrix.html">MyMediaLite.data_type.SparseBooleanMatrix</a> containing the items already observed</dd>
+              <dt>
+                <i>relevant_users</i>
+              </dt>
+              <dd>a list of users to make recommendations for</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>the list of candidate items</dd>
+              <dt>
+                <i>num_predictions</i>
+              </dt>
+              <dd>the number of items to return per user, -1 if there should be no limit</dd>
+              <dt>
+                <i>user_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the user IDs</dd>
+              <dt>
+                <i>item_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the item IDs</dd>
+              <dt>
+                <i>filename</i>
+              </dt>
+              <dd>the name of the file to write to</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,MyMediaLite.data_type.SparseBooleanMatrix,System.Collections.Generic.IList{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter)">
+          <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member')">
+            <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member:toggle">⊟</span> WritePredictions Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):member">
+          <p class="Summary">
+            Write item predictions (scores) to a TextWriter object
+            </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>WritePredictions</b> (<a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> engine, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> relevant_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.ICollection`1">ICollection&lt;int&gt;</a> ignore_items, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_predictions, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> user_mapping, <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> item_mapping, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> writer)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Parameters">
+            <dl>
+              <dt>
+                <i>engine</i>
+              </dt>
+              <dd>the <a href="../MyMediaLite/RecommenderEngine.html">MyMediaLite.RecommenderEngine</a> to use for making the predictions</dd>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>the ID of the user to make recommendations for</dd>
+              <dt>
+                <i>relevant_items</i>
+              </dt>
+              <dd>the list of candidate items</dd>
+              <dt>
+                <i>ignore_items</i>
+              </dt>
+              <dd>a list of items for which no predictions should be made</dd>
+              <dt>
+                <i>num_predictions</i>
+              </dt>
+              <dd>the number of items to return per user, -1 if there should be no limit</dd>
+              <dt>
+                <i>user_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the user IDs</dd>
+              <dt>
+                <i>item_mapping</i>
+              </dt>
+              <dd>an <a href="../MyMediaLite.data/EntityMapping.html">MyMediaLite.data.EntityMapping</a> object for the item IDs</dd>
+              <dt>
+                <i>writer</i>
+              </dt>
+              <dd>the <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.IO.TextWriter">System.IO.TextWriter</a> to write to</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information')">
+              <span id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.eval.ItemPrediction.WritePredictions(MyMediaLite.RecommenderEngine,System.Int32,System.Collections.Generic.ICollection{System.Int32},System.Collections.Generic.ICollection{System.Int32},System.Int32,MyMediaLite.data.EntityMapping,MyMediaLite.data.EntityMapping,System.IO.TextWriter):Version Information">
+            <b>Namespace: </b>MyMediaLite.eval<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

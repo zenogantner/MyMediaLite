@@ -1,0 +1,561 @@
+<html>
+  <head>
+    <title>MyMediaLite.correlation.Pearson</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+      span.NotEntered /* Documentation for this section has not yet been entered */ {
+        font-style: italic;
+        
+      }
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.correlation Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.correlation.Pearson">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.correlation.Pearson:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.correlation.Pearson:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.correlation.Pearson:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.correlation.Pearson">Pearson  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.correlation.Pearson:Summary">
+            Correlation class for Pearson correlation.
+            </p>
+    <div id="T:MyMediaLite.correlation.Pearson:Signature">
+      <div class="Signature">public class  <b>Pearson</b> : <a href="../MyMediaLite.correlation/CorrelationMatrix.html">CorrelationMatrix</a></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.correlation.Pearson:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.correlation.Pearson:Docs:Remarks')">
+          <span id="T:MyMediaLite.correlation.Pearson:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.correlation.Pearson:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.correlation.Pearson:Docs:Version Information')">
+          <span id="T:MyMediaLite.correlation.Pearson:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.correlation.Pearson:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="../MyMediaLite.correlation/CorrelationMatrix.html">CorrelationMatrix</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Constructors')">
+            <span id="Public Constructors:toggle">⊟</span> Public Constructors</a>
+        </h3>
+        <blockquote id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.correlation.Pearson(System.Int32)">Pearson</a>
+                    </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)</div>
+                </td>
+                <td>Constructor. Create a Pearson correlation matrix</td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Fields')">
+            <span id="Public Fields:toggle">⊟</span> Public Fields</a>
+        </h3>
+        <blockquote id="Public Fields">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.correlation.Pearson.shrinkage">shrinkage</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a>
+                  </i>. shrinkage parameter</td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Methods')">
+            <span id="Public Methods:toggle">⊟</span> Public Methods</a>
+        </h3>
+        <blockquote id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single)">ComputeCorrelation</a>
+                  </b>(<a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a>, <a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a>, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>override </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType)">ComputeCorrelations</a>
+                  </b>(<a href="../MyMediaLite.data/RatingData.html">MyMediaLite.data.RatingData</a>, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a>)<blockquote>
+            Compute correlations for given ratings
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>static </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single)">Create</a>
+                  </b>(<a href="../MyMediaLite.data/RatingData.html">MyMediaLite.data.RatingData</a>, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a>)<nobr> : <a href="../MyMediaLite.correlation/CorrelationMatrix.html">CorrelationMatrix</a></nobr><blockquote>
+            Create a Pearson correlation matrix from given data
+            </blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.correlation.Pearson:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="C:MyMediaLite.correlation.Pearson(System.Int32)">
+          <a href="javascript:toggle_display('C:MyMediaLite.correlation.Pearson(System.Int32):member')">
+            <span id="C:MyMediaLite.correlation.Pearson(System.Int32):member:toggle">⊟</span> Pearson Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.correlation.Pearson(System.Int32):member">
+          <p class="Summary">Constructor. Create a Pearson correlation matrix</p>
+          <div class="Signature">public  <b>Pearson</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> num_entities)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.correlation.Pearson(System.Int32):Parameters')">
+              <span id="C:MyMediaLite.correlation.Pearson(System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.correlation.Pearson(System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>num_entities</i>
+              </dt>
+              <dd>the number of entities</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.correlation.Pearson(System.Int32):Remarks')">
+              <span id="C:MyMediaLite.correlation.Pearson(System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.correlation.Pearson(System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.correlation.Pearson(System.Int32):Version Information')">
+              <span id="C:MyMediaLite.correlation.Pearson(System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.correlation.Pearson(System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single)">
+          <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):member')">
+            <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):member:toggle">⊟</span> ComputeCorrelation Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public static <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> <b>ComputeCorrelation</b> (<a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a> ratings_1, <a href="../MyMediaLite.data/Ratings.html">MyMediaLite.data.Ratings</a> ratings_2, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a> entity_type, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> i, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> j, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> shrinkage)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Parameters')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Parameters">
+            <dl>
+              <dt>
+                <i>ratings_1</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>ratings_2</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>entity_type</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>i</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>j</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>shrinkage</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Returns')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Remarks')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Version Information')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelation(MyMediaLite.data.Ratings,MyMediaLite.data.Ratings,MyMediaLite.taxonomy.EntityType,System.Int32,System.Int32,System.Single):Version Information">
+            <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType)">
+          <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):member')">
+            <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):member:toggle">⊟</span> ComputeCorrelations Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):member">
+          <p class="Summary">
+            Compute correlations for given ratings
+            </p>
+          <div class="Signature">public override <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>ComputeCorrelations</b> (<a href="../MyMediaLite.data/RatingData.html">MyMediaLite.data.RatingData</a> ratings, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a> entity_type)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Parameters')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Parameters">
+            <dl>
+              <dt>
+                <i>ratings</i>
+              </dt>
+              <dd>the rating data</dd>
+              <dt>
+                <i>entity_type</i>
+              </dt>
+              <dd>the entity type, either USER or ITEM</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Remarks')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Version Information')">
+              <span id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.ComputeCorrelations(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType):Version Information">
+            <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single)">
+          <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):member')">
+            <span id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):member:toggle">⊟</span> Create Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):member">
+          <p class="Summary">
+            Create a Pearson correlation matrix from given data
+            </p>
+          <div class="Signature">public static <a href="../MyMediaLite.correlation/CorrelationMatrix.html">CorrelationMatrix</a> <b>Create</b> (<a href="../MyMediaLite.data/RatingData.html">MyMediaLite.data.RatingData</a> ratings, <a href="../MyMediaLite.taxonomy/EntityType.html">MyMediaLite.taxonomy.EntityType</a> entity_type, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> shrinkage)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Parameters')">
+              <span id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Parameters">
+            <dl>
+              <dt>
+                <i>ratings</i>
+              </dt>
+              <dd>the ratings data</dd>
+              <dt>
+                <i>entity_type</i>
+              </dt>
+              <dd>the entity type, either USER or ITEM</dd>
+              <dt>
+                <i>shrinkage</i>
+              </dt>
+              <dd>a shrinkage parameter</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Returns')">
+              <span id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Returns">the complete Pearson correlation matrix</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Remarks')">
+              <span id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Version Information')">
+              <span id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.correlation.Pearson.Create(MyMediaLite.data.RatingData,MyMediaLite.taxonomy.EntityType,System.Single):Version Information">
+            <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.correlation.Pearson.shrinkage">
+          <a href="javascript:toggle_display('F:MyMediaLite.correlation.Pearson.shrinkage:member')">
+            <span id="F:MyMediaLite.correlation.Pearson.shrinkage:member:toggle">⊟</span> shrinkage Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.correlation.Pearson.shrinkage:member">
+          <p class="Summary">shrinkage parameter</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> <b>shrinkage</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.correlation.Pearson.shrinkage:Remarks')">
+              <span id="F:MyMediaLite.correlation.Pearson.shrinkage:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.correlation.Pearson.shrinkage:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.correlation.Pearson.shrinkage:Version Information')">
+              <span id="F:MyMediaLite.correlation.Pearson.shrinkage:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.correlation.Pearson.shrinkage:Version Information">
+            <b>Namespace: </b>MyMediaLite.correlation<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

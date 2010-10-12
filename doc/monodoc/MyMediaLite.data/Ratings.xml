@@ -1,0 +1,210 @@
+<Type Name="Ratings" FullName="MyMediaLite.data.Ratings">
+  <TypeSignature Language="C#" Value="public class Ratings" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Class representing a collection of ratings in a particular order</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Ratings ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddRating">
+      <MemberSignature Language="C#" Value="public void AddRating (MyMediaLite.data.RatingEvent rating);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rating" Type="MyMediaLite.data.RatingEvent" />
+      </Parameters>
+      <Docs>
+        <param name="rating">the <see cref="T:MyMediaLite.data.RatingEvent" /> to add</param>
+        <summary>
+            Add a rating event to the collection.
+            Also updates the statistics.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Average">
+      <MemberSignature Language="C#" Value="public double Average { get; }" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            The average (mean) rating in the collection
+            </summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ChangeRating">
+      <MemberSignature Language="C#" Value="public void ChangeRating (MyMediaLite.data.RatingEvent rating, double new_rating);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rating" Type="MyMediaLite.data.RatingEvent" />
+        <Parameter Name="new_rating" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="rating">a rating event</param>
+        <param name="new_rating">the new rating value</param>
+        <summary>
+            Change a rating event in the collection.
+            Only updates the statistics, it is assumed that the value is modified through other means afterwards.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Count">
+      <MemberSignature Language="C#" Value="public int Count { get; }" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            Number of ratings in the collection
+            </summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FindRating">
+      <MemberSignature Language="C#" Value="public MyMediaLite.data.RatingEvent FindRating (int user_id, int item_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>MyMediaLite.data.RatingEvent</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="item_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="user_id">the numerical ID of the user</param>
+        <param name="item_id">the numerical ID of the item</param>
+        <summary>
+            Find a rating for a given user and item
+            </summary>
+        <returns>the rating event corresponding to the given user and item, null otherwise</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetEnumerator">
+      <MemberSignature Language="C#" Value="public System.Collections.IEnumerator GetEnumerator ();" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.IEnumerator</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+        <inheritdoc />
+        <inheritdoc />
+        <inheritdoc />
+      </Docs>
+    </Member>
+    <Member MemberName="GetItems">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.HashSet&lt;int&gt; GetItems ();" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.HashSet&lt;System.Int32&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>
+            Get the items in the rating collection
+            </summary>
+        <returns>
+            a collection of numerical item IDs
+            </returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetUsers">
+      <MemberSignature Language="C#" Value="public System.Collections.Generic.HashSet&lt;int&gt; GetUsers ();" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Collections.Generic.HashSet&lt;System.Int32&gt;</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>
+            Get the users in the rating collection
+            </summary>
+        <returns>
+            a collection of numerical user IDs
+            </returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RemoveRating">
+      <MemberSignature Language="C#" Value="public void RemoveRating (MyMediaLite.data.RatingEvent rating);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rating" Type="MyMediaLite.data.RatingEvent" />
+      </Parameters>
+      <Docs>
+        <param name="rating">the rating event to remove</param>
+        <summary>
+            Remove a rating from the collection.
+            Also updates the statistics.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

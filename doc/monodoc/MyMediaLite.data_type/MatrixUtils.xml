@@ -1,0 +1,264 @@
+<Type Name="MatrixUtils" FullName="MyMediaLite.data_type.MatrixUtils">
+  <TypeSignature Language="C#" Value="public class MatrixUtils" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>
+            Utilities to work with matrices.
+            </summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MatrixUtils ();" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ColumnAverage">
+      <MemberSignature Language="C#" Value="public static double ColumnAverage (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, int col);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="col" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix</param>
+        <param name="col">the column ID</param>
+        <summary>
+            Compute the average value of the entries in a column of a matrix
+            </summary>
+        <returns>the average</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ContainsNaN">
+      <MemberSignature Language="C#" Value="public static bool ContainsNaN (MyMediaLite.data_type.Matrix&lt;double&gt; matrix);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">a matrix</param>
+        <summary>
+            Check whether a matrix contains NaN ("not a number") elements
+            </summary>
+        <returns>true if there are NaN elements in the matrix, false otherwise</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="FrobeniusNorm">
+      <MemberSignature Language="C#" Value="public static double FrobeniusNorm (MyMediaLite.data_type.Matrix&lt;double&gt; matrix);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix</param>
+        <summary>
+            Compute the Frobenius norm (sum of squared entries) of a matrix
+            </summary>
+        <returns>the Frobenius norm of the matrix</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Inc">
+      <MemberSignature Language="C#" Value="public static void Inc (MyMediaLite.data_type.Matrix&lt;double&gt; matrix1, MyMediaLite.data_type.Matrix&lt;double&gt; matrix2);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix1" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="matrix2" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="matrix1">the matrix to be incremented</param>
+        <param name="matrix2">the other matrix</param>
+        <summary>
+            Increment the elements in one matrix by the ones in another
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Inc">
+      <MemberSignature Language="C#" Value="public static void Inc (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, int i, int j, double v);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="j" Type="System.Int32" />
+        <Parameter Name="v" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">The matrix.</param>
+        <param name="i">the row</param>
+        <param name="j">the column</param>
+        <param name="v">the value</param>
+        <summary>
+            Increments the specified matrix element by a double value.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InitNormal">
+      <MemberSignature Language="C#" Value="public static void InitNormal (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, double mean, double stdev);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="mean" Type="System.Double" />
+        <Parameter Name="stdev" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix to initialize</param>
+        <param name="mean">the mean of the normal distribution drawn from</param>
+        <param name="stdev">the standard deviation of the normal distribution</param>
+        <summary>
+            Initializes a double matrix with normal distributed (Gaussian) noise
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="InitNormal">
+      <MemberSignature Language="C#" Value="public static void InitNormal (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, double mean, double stdev, int row);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="mean" Type="System.Double" />
+        <Parameter Name="stdev" Type="System.Double" />
+        <Parameter Name="row" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix to initialize</param>
+        <param name="mean">the mean of the normal distribution drawn from</param>
+        <param name="stdev">the standard deviation of the normal distribution</param>
+        <param name="row">the row to be initialized</param>
+        <summary>
+            Initializes one row of a double matrix with normal distributed (Gaussian) noise
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Multiply">
+      <MemberSignature Language="C#" Value="public static void Multiply (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, double d);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="d" Type="System.Double" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix</param>
+        <param name="d">the number to multiply with</param>
+        <summary>
+            Multiply all entries of a matrix with a scalar
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RowAverage">
+      <MemberSignature Language="C#" Value="public static double RowAverage (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, int row);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="row" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix</param>
+        <param name="row">the row ID</param>
+        <summary>
+            Compute the average value of the entries in a row of a matrix
+            </summary>
+        <returns>the average</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RowScalarProduct">
+      <MemberSignature Language="C#" Value="public static double RowScalarProduct (MyMediaLite.data_type.Matrix&lt;double&gt; matrix, int i, double[] vector);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Double</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;System.Double&gt;" />
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="vector" Type="System.Double[]" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix</param>
+        <param name="i">the row ID</param>
+        <param name="vector">the numeric vector</param>
+        <summary>
+            Compute the scalar product between a vector and a row of the matrix
+            </summary>
+        <returns>the scalar product of row i and the vector</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

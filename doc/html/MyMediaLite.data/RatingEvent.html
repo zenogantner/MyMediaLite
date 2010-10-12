@@ -1,0 +1,494 @@
+<html>
+  <head>
+    <title>MyMediaLite.data.RatingEvent</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+      span.NotEntered /* Documentation for this section has not yet been entered */ {
+        font-style: italic;
+        
+      }
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.data Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.data.RatingEvent">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.data.RatingEvent:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.data.RatingEvent:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.data.RatingEvent:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.data.RatingEvent">RatingEvent  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.data.RatingEvent:Summary">
+            Representation of a rating event, consisting of a user ID, an item ID,
+            and the value of the rating.
+            </p>
+    <div id="T:MyMediaLite.data.RatingEvent:Signature">
+      <div class="Signature">public class  <b>RatingEvent</b></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.data.RatingEvent:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.data.RatingEvent:Docs:Remarks')">
+          <span id="T:MyMediaLite.data.RatingEvent:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.data.RatingEvent:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.data.RatingEvent:Docs:Version Information')">
+          <span id="T:MyMediaLite.data.RatingEvent:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.data.RatingEvent:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Object">object</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Constructors')">
+            <span id="Public Constructors:toggle">⊟</span> Public Constructors</a>
+        </h3>
+        <blockquote id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.data.RatingEvent">RatingEvent</a>
+                    </b>()</div>
+                </td>
+                <td>
+            Default constructor.
+            </td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double)">RatingEvent</a>
+                    </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>)</div>
+                </td>
+                <td>
+            Create a RatingEvent object from given data
+            </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Fields')">
+            <span id="Public Fields:toggle">⊟</span> Public Fields</a>
+        </h3>
+        <blockquote id="Public Fields">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.data.RatingEvent.item_id">item_id</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>
+                  </i>. 
+            The item ID
+            </td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.data.RatingEvent.rating">rating</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>
+                  </i>. 
+            The rating value
+            </td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.data.RatingEvent.user_id">user_id</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>
+                  </i>. 
+            The user ID
+            </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.data.RatingEvent:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="C:MyMediaLite.data.RatingEvent">
+          <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent:member')">
+            <span id="C:MyMediaLite.data.RatingEvent:member:toggle">⊟</span> RatingEvent Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.data.RatingEvent:member">
+          <p class="Summary">
+            Default constructor.
+            </p>
+          <div class="Signature">public  <b>RatingEvent</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent:Remarks')">
+              <span id="C:MyMediaLite.data.RatingEvent:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.data.RatingEvent:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent:Version Information')">
+              <span id="C:MyMediaLite.data.RatingEvent:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.data.RatingEvent:Version Information">
+            <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double)">
+          <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):member')">
+            <span id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):member:toggle">⊟</span> RatingEvent Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):member">
+          <p class="Summary">
+            Create a RatingEvent object from given data
+            </p>
+          <div class="Signature">public  <b>RatingEvent</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> user_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> item_id, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> rating)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Parameters')">
+              <span id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Parameters">
+            <dl>
+              <dt>
+                <i>user_id</i>
+              </dt>
+              <dd>the user ID</dd>
+              <dt>
+                <i>item_id</i>
+              </dt>
+              <dd>the item ID</dd>
+              <dt>
+                <i>rating</i>
+              </dt>
+              <dd>the rating value</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Remarks')">
+              <span id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Version Information')">
+              <span id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.data.RatingEvent(System.Int32,System.Int32,System.Double):Version Information">
+            <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.data.RatingEvent.item_id">
+          <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.item_id:member')">
+            <span id="F:MyMediaLite.data.RatingEvent.item_id:member:toggle">⊟</span> item_id Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.data.RatingEvent.item_id:member">
+          <p class="Summary">
+            The item ID
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>item_id</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.item_id:Remarks')">
+              <span id="F:MyMediaLite.data.RatingEvent.item_id:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.item_id:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.item_id:Version Information')">
+              <span id="F:MyMediaLite.data.RatingEvent.item_id:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.item_id:Version Information">
+            <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.data.RatingEvent.rating">
+          <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.rating:member')">
+            <span id="F:MyMediaLite.data.RatingEvent.rating:member:toggle">⊟</span> rating Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.data.RatingEvent.rating:member">
+          <p class="Summary">
+            The rating value
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>rating</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.rating:Remarks')">
+              <span id="F:MyMediaLite.data.RatingEvent.rating:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.rating:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.rating:Version Information')">
+              <span id="F:MyMediaLite.data.RatingEvent.rating:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.rating:Version Information">
+            <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.data.RatingEvent.user_id">
+          <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.user_id:member')">
+            <span id="F:MyMediaLite.data.RatingEvent.user_id:member:toggle">⊟</span> user_id Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.data.RatingEvent.user_id:member">
+          <p class="Summary">
+            The user ID
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>user_id</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.user_id:Remarks')">
+              <span id="F:MyMediaLite.data.RatingEvent.user_id:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.user_id:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.data.RatingEvent.user_id:Version Information')">
+              <span id="F:MyMediaLite.data.RatingEvent.user_id:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.data.RatingEvent.user_id:Version Information">
+            <b>Namespace: </b>MyMediaLite.data<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

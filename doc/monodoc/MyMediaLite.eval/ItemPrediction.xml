@@ -1,0 +1,229 @@
+<Type Name="ItemPrediction" FullName="MyMediaLite.eval.ItemPrediction">
+  <TypeSignature Language="C#" Value="public static class ItemPrediction" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <summary>Class that contains static methods for item prediction</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+  <Members>
+    <Member MemberName="PredictItems">
+      <MemberSignature Language="C#" Value="public static int[] PredictItems (MyMediaLite.RecommenderEngine engine, int user_id, System.Collections.Generic.ICollection&lt;int&gt; relevant_items);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the recommender engine to use</param>
+        <param name="user_id">the numerical ID of the user</param>
+        <param name="relevant_items">a collection of numerical IDs of relevant items</param>
+        <summary>
+            Predict items for a given user
+            </summary>
+        <returns>an ordered list of items, the most likely item first</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="PredictItems">
+      <MemberSignature Language="C#" Value="public static int[] PredictItems (MyMediaLite.RecommenderEngine engine, int user_id, int max_item_id);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="max_item_id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> object to use for the predictions</param>
+        <param name="user_id">the user ID</param>
+        <param name="max_item_id">the maximum item ID</param>
+        <summary>
+            predict items for a specific users
+            </summary>
+        <returns>a list sorted list of item IDs</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePredictions">
+      <MemberSignature Language="C#" Value="public static void WritePredictions (MyMediaLite.RecommenderEngine engine, MyMediaLite.data_type.SparseBooleanMatrix train, System.Collections.Generic.ICollection&lt;int&gt; relevant_items, int num_predictions, MyMediaLite.data.EntityMapping user_mapping, MyMediaLite.data.EntityMapping item_mapping, System.IO.TextWriter writer);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="train" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="num_predictions" Type="System.Int32" />
+        <Parameter Name="user_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="item_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="writer" Type="System.IO.TextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to use for making the predictions</param>
+        <param name="train">a user-wise <see cref="T:MyMediaLite.data_type.SparseBooleanMatrix" /> containing the items already observed</param>
+        <param name="relevant_items">the list of candidate items</param>
+        <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+        <param name="user_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the user IDs</param>
+        <param name="item_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the item IDs</param>
+        <param name="writer">the <see cref="T:System.IO.TextWriter" /> to write to</param>
+        <summary>
+            Write item predictions (scores) for all users to a TextWriter object
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePredictions">
+      <MemberSignature Language="C#" Value="public static void WritePredictions (MyMediaLite.RecommenderEngine engine, MyMediaLite.data_type.SparseBooleanMatrix train, System.Collections.Generic.ICollection&lt;int&gt; relevant_items, int num_predictions, MyMediaLite.data.EntityMapping user_mapping, MyMediaLite.data.EntityMapping item_mapping, string filename);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="train" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="num_predictions" Type="System.Int32" />
+        <Parameter Name="user_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="item_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="filename" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to use for making the predictions</param>
+        <param name="train">a user-wise <see cref="T:MyMediaLite.data_type.SparseBooleanMatrix" /> containing the items already observed</param>
+        <param name="relevant_items">the list of candidate items</param>
+        <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+        <param name="user_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the user IDs</param>
+        <param name="item_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the item IDs</param>
+        <param name="filename">the name of the file to write to</param>
+        <summary>
+            Write item predictions (scores) for all users to a file
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePredictions">
+      <MemberSignature Language="C#" Value="public static void WritePredictions (MyMediaLite.RecommenderEngine engine, MyMediaLite.data_type.SparseBooleanMatrix train, System.Collections.Generic.IList&lt;int&gt; relevant_users, System.Collections.Generic.ICollection&lt;int&gt; relevant_items, int num_predictions, MyMediaLite.data.EntityMapping user_mapping, MyMediaLite.data.EntityMapping item_mapping, System.IO.TextWriter writer);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="train" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+        <Parameter Name="relevant_users" Type="System.Collections.Generic.IList&lt;System.Int32&gt;" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="num_predictions" Type="System.Int32" />
+        <Parameter Name="user_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="item_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="writer" Type="System.IO.TextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to use for making the predictions</param>
+        <param name="train">a user-wise <see cref="T:MyMediaLite.data_type.SparseBooleanMatrix" /> containing the items already observed</param>
+        <param name="relevant_users">a list of users to make recommendations for</param>
+        <param name="relevant_items">the list of candidate items</param>
+        <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+        <param name="user_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the user IDs</param>
+        <param name="item_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the item IDs</param>
+        <param name="writer">the <see cref="T:System.IO.TextWriter" /> to write to</param>
+        <summary>Write item predictions (scores) to a TextWriter object</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePredictions">
+      <MemberSignature Language="C#" Value="public static void WritePredictions (MyMediaLite.RecommenderEngine engine, MyMediaLite.data_type.SparseBooleanMatrix train, System.Collections.Generic.IList&lt;int&gt; relevant_users, System.Collections.Generic.ICollection&lt;int&gt; relevant_items, int num_predictions, MyMediaLite.data.EntityMapping user_mapping, MyMediaLite.data.EntityMapping item_mapping, string filename);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="train" Type="MyMediaLite.data_type.SparseBooleanMatrix" />
+        <Parameter Name="relevant_users" Type="System.Collections.Generic.IList&lt;System.Int32&gt;" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="num_predictions" Type="System.Int32" />
+        <Parameter Name="user_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="item_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="filename" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to use for making the predictions</param>
+        <param name="train">a user-wise <see cref="T:MyMediaLite.data_type.SparseBooleanMatrix" /> containing the items already observed</param>
+        <param name="relevant_users">a list of users to make recommendations for</param>
+        <param name="relevant_items">the list of candidate items</param>
+        <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+        <param name="user_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the user IDs</param>
+        <param name="item_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the item IDs</param>
+        <param name="filename">the name of the file to write to</param>
+        <summary>Write item predictions (scores) to a file</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="WritePredictions">
+      <MemberSignature Language="C#" Value="public static void WritePredictions (MyMediaLite.RecommenderEngine engine, int user_id, System.Collections.Generic.ICollection&lt;int&gt; relevant_items, System.Collections.Generic.ICollection&lt;int&gt; ignore_items, int num_predictions, MyMediaLite.data.EntityMapping user_mapping, MyMediaLite.data.EntityMapping item_mapping, System.IO.TextWriter writer);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="engine" Type="MyMediaLite.RecommenderEngine" />
+        <Parameter Name="user_id" Type="System.Int32" />
+        <Parameter Name="relevant_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="ignore_items" Type="System.Collections.Generic.ICollection&lt;System.Int32&gt;" />
+        <Parameter Name="num_predictions" Type="System.Int32" />
+        <Parameter Name="user_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="item_mapping" Type="MyMediaLite.data.EntityMapping" />
+        <Parameter Name="writer" Type="System.IO.TextWriter" />
+      </Parameters>
+      <Docs>
+        <param name="engine">the <see cref="T:MyMediaLite.RecommenderEngine" /> to use for making the predictions</param>
+        <param name="user_id">the ID of the user to make recommendations for</param>
+        <param name="relevant_items">the list of candidate items</param>
+        <param name="ignore_items">a list of items for which no predictions should be made</param>
+        <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+        <param name="user_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the user IDs</param>
+        <param name="item_mapping">an <see cref="T:MyMediaLite.data.EntityMapping" /> object for the item IDs</param>
+        <param name="writer">the <see cref="T:System.IO.TextWriter" /> to write to</param>
+        <summary>
+            Write item predictions (scores) to a TextWriter object
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>

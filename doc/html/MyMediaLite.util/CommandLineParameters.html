@@ -1,0 +1,1368 @@
+<html>
+  <head>
+    <title>MyMediaLite.util.CommandLineParameters</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+      a { text-decoration: none }
+
+      div.SideBar {
+        padding-left: 1em;
+        padding-right: 1em;
+        right: 0;
+        float: right;
+        border: thin solid black;
+        background-color: #f2f2f2;
+      }
+    
+      .CollectionTitle { font-weight: bold }
+      .PageTitle { font-size: 150%; font-weight: bold }
+
+      .Summary { }
+      .Signature { }          
+      .Remarks { }
+      .Members { }
+      .Copyright { }
+      
+      .Section { font-size: 125%; font-weight: bold }
+      p.Summary {
+        margin-left: 1em;
+      }
+      .SectionBox { margin-left: 2em }
+      .NamespaceName { font-size: 105%; font-weight: bold }
+      .NamespaceSumary { }
+      .MemberName { font-size: 115%; font-weight: bold; margin-top: 1em }
+      .Subsection { font-size: 105%; font-weight: bold }
+      .SubsectionBox { margin-left: 2em; margin-bottom: 1em }
+
+      .CodeExampleTable { background-color: #f5f5dd; border: thin solid black; padding: .25em; }
+      
+      .TypesListing {
+        border-collapse: collapse;
+      }
+
+      td {
+        vertical-align: top;
+      }
+      th {
+        text-align: left;
+      }
+
+      .TypesListing td { 
+        margin: 0px;  
+        padding: .25em;
+        border: solid gray 1px;
+      }
+
+      .TypesListing th { 
+        margin: 0px;  
+        padding: .25em;
+        background-color: #f2f2f2;
+        border: solid gray 1px;
+      }
+
+      div.Footer {
+        border-top: 1px solid gray;
+        margin-top: 1.5em;
+        padding-top: 0.6em;
+        text-align: center;
+        color: gray;
+      }
+
+
+
+      div.Header {
+        background: #B0C4DE;
+        border: double;
+        border-color: white;
+        border-width: 7px;
+        padding: 0.5em;
+      }
+
+      div.Header * {
+        font-size: smaller;
+      }
+
+      div.Note {
+      }
+
+      i.ParamRef {
+      }
+
+      i.subtitle {
+      }
+
+      ul.TypeMembersIndex {
+        text-align: left;
+        background: #F8F8F8;
+      }
+
+      ul.TypeMembersIndex li {
+        display: inline;
+        margin:  0.5em;
+      }
+
+      table.HeaderTable {
+      }
+
+      table.SignatureTable {
+      }
+
+      table.Documentation, table.Enumeration, table.TypeDocumentation {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table.Documentation tr th, table.TypeMembers tr th, table.Enumeration tr th, table.TypeDocumentation tr th {
+        background: whitesmoke;
+        padding: 0.8em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: bottom;
+      }
+
+      table.Documentation tr td, table.TypeMembers tr td, table.Enumeration tr td, table.TypeDocumentation tr td {
+        padding: 0.5em;
+        border: 1px solid gray;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      table.TypeMembers {
+        border: 1px solid #C0C0C0;
+        width: 100%;
+      }
+
+      table.TypeMembers tr td {
+        background: #F8F8F8;
+        border: white;
+      }
+
+      table.Documentation {
+      }
+
+      table.TypeMembers {
+      }
+
+      div.CodeExample {
+        width: 100%;
+        border: 1px solid #DDDDDD;
+        background-color: #F8F8F8;
+      }
+
+      div.CodeExample p {
+        margin: 0.5em;
+        border-bottom: 1px solid #DDDDDD;
+      }
+
+      div.CodeExample div {
+        margin: 0.5em;
+      }
+
+      h4 {
+        margin-bottom: 0;
+      }
+
+      div.Signature {
+        border: 1px solid #C0C0C0;
+        background: #F2F2F2;
+        padding: 1em;
+      }
+    </style>
+    <script type="text/JavaScript">
+      function toggle_display (block) {
+        var w = document.getElementById (block);
+        var t = document.getElementById (block + ":toggle");
+        if (w.style.display == "none") {
+          w.style.display = "block";
+          t.innerHTML = "⊟";
+        } else {
+          w.style.display = "none";
+          t.innerHTML = "⊞";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="CollectionTitle">
+      <a href="../index.html">Algorithms</a> : <a href="index.html">MyMediaLite.util Namespace</a></div>
+    <div class="SideBar">
+      <p>
+        <a href="#T:MyMediaLite.util.CommandLineParameters">Overview</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.util.CommandLineParameters:Signature">Signature</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.util.CommandLineParameters:Docs">Remarks</a>
+      </p>
+      <p>
+        <a href="#Members">Members</a>
+      </p>
+      <p>
+        <a href="#T:MyMediaLite.util.CommandLineParameters:Members">Member Details</a>
+      </p>
+    </div>
+    <h1 class="PageTitle" id="T:MyMediaLite.util.CommandLineParameters">CommandLineParameters  Class</h1>
+    <p class="Summary" id="T:MyMediaLite.util.CommandLineParameters:Summary">
+            Class for command line argument processing
+            </p>
+    <div id="T:MyMediaLite.util.CommandLineParameters:Signature">
+      <div class="Signature">public class  <b>CommandLineParameters</b></div>
+    </div>
+    <div class="Remarks" id="T:MyMediaLite.util.CommandLineParameters:Docs">
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.util.CommandLineParameters:Docs:Remarks')">
+          <span id="T:MyMediaLite.util.CommandLineParameters:Docs:Remarks:toggle">⊟</span> Remarks</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.util.CommandLineParameters:Docs:Remarks">
+        <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+      </blockquote>
+      <h4 class="Subsection">
+        <a href="javascript:toggle_display('T:MyMediaLite.util.CommandLineParameters:Docs:Version Information')">
+          <span id="T:MyMediaLite.util.CommandLineParameters:Docs:Version Information:toggle">⊟</span> Requirements</a>
+      </h4>
+      <blockquote class="SubsectionBox" id="T:MyMediaLite.util.CommandLineParameters:Docs:Version Information">
+        <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+      <h2 class="Section" id="Members">
+        <a href="javascript:toggle_display('_Members')">
+          <span id="_Members:toggle">⊟</span> Members</a>
+      </h2>
+      <blockquote class="SectionBox" id="_Members">
+        <p>
+								See Also: Inherited members from
+								<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Object">object</a>.
+							</p>
+        <h3>
+          <a href="javascript:toggle_display('Public Constructors')">
+            <span id="Public Constructors:toggle">⊟</span> Public Constructors</a>
+        </h3>
+        <blockquote id="Public Constructors">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String})">CommandLineParameters</a>
+                    </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a>)</div>
+                </td>
+                <td>
+                  <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+                </td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <b>
+                      <a href="#C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32)">CommandLineParameters</a>
+                    </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>[], <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)</div>
+                </td>
+                <td>
+            Create a CommandLineParameters object
+            </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Protected Fields')">
+            <span id="Protected Fields:toggle">⊟</span> Protected Fields</a>
+        </h3>
+        <blockquote id="Protected Fields">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td>
+                  <b>
+                    <a href="#F:MyMediaLite.util.CommandLineParameters.dict">dict</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a>
+                  </i>. 
+            Object to store the key/value pairs
+            </td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Properties')">
+            <span id="Public Properties:toggle">⊟</span> Public Properties</a>
+        </h3>
+        <blockquote id="Public Properties">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>[read-only]<div></div></td>
+                <td>
+                  <b>
+                    <a href="#P:MyMediaLite.util.CommandLineParameters.Count">Count</a>
+                  </b>
+                </td>
+                <td>
+                  <i>
+                    <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>
+                  </i>. <span class="NotEntered">Documentation for this section has not yet been entered.</span></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Public Methods')">
+            <span id="Public Methods:toggle">⊟</span> Public Methods</a>
+        </h3>
+        <blockquote id="Public Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers">CheckForLeftovers</a>
+                  </b>()<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote>
+            Check for parameters that have not been processed yet
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String)">GetRemoveBool</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean)">GetRemoveBool</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String)">GetRemoveDouble</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a></nobr><blockquote>Get a double value from the parameters</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double)">GetRemoveDouble</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a></nobr><blockquote>Get a double value from the parameters</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String)">GetRemoveFloat</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a></nobr><blockquote>Get a float value from the parameters</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single)">GetRemoveFloat</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a></nobr><blockquote>Get a float value from the parameters</blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String)">GetRemoveInt32</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32)">GetRemoveInt32</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String)">GetRemoveInt32List</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char)">GetRemoveInt32List</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Char">char</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String)">GetRemoveString</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote>
+            Get a string parameter
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String)">GetRemoveString</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a></nobr><blockquote>
+            Get a string parameter
+            </blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String)">GetRemoveUInt32</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32)">GetRemoveUInt32</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a>)<nobr> : <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a></nobr><blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+        <h3>
+          <a href="javascript:toggle_display('Protected Methods')">
+            <span id="Protected Methods:toggle">⊟</span> Protected Methods</a>
+        </h3>
+        <blockquote id="Protected Methods">
+          <div class="SubsectionBox">
+            <table class="TypeMembers">
+              <tr valign="top">
+                <td>
+                  <div>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <b>
+                    <a href="#M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">AddArgumentsFromFile</a>
+                  </b>(<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a>, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>)<blockquote><span class="NotEntered">Documentation for this section has not yet been entered.</span></blockquote></td>
+              </tr>
+            </table>
+          </div>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="Members" id="T:MyMediaLite.util.CommandLineParameters:Members">
+      <h2 class="Section" id="MemberDetails">
+        <a href="javascript:toggle_display('_MemberDetails')">
+          <span id="_MemberDetails:toggle">⊟</span> Member Details</a>
+      </h2>
+      <blockquote class="SectionBox" id="_MemberDetails">
+        <h3 id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String})">
+          <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):member')">
+            <span id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):member:toggle">⊟</span> CommandLineParameters Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public  <b>CommandLineParameters</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a> parameters)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Parameters')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Parameters">
+            <dl>
+              <dt>
+                <i>parameters</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Remarks')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Version Information')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.Collections.Generic.Dictionary{System.String,System.String}):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32)">
+          <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):member')">
+            <span id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):member:toggle">⊟</span> CommandLineParameters Constructor</a>
+        </h3>
+        <blockquote id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):member">
+          <p class="Summary">
+            Create a CommandLineParameters object
+            </p>
+          <div class="Signature">public  <b>CommandLineParameters</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a>[] args, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> start)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Parameters')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>args</i>
+              </dt>
+              <dd>
+            a list of strings that contains the command line parameters
+            </dd>
+              <dt>
+                <i>start</i>
+              </dt>
+              <dd>ignore all parameters before this position</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Remarks')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Version Information')">
+              <span id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="C:MyMediaLite.util.CommandLineParameters(System.String[],System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):member:toggle">⊟</span> AddArgumentsFromFile Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Void">void</a> <b>AddArgumentsFromFile</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a> dict, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> filename)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Parameters">
+            <dl>
+              <dt>
+                <i>dict</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>filename</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.AddArgumentsFromFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:member:toggle">⊟</span> CheckForLeftovers Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:member">
+          <p class="Summary">
+            Check for parameters that have not been processed yet
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>CheckForLeftovers</b> ()</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Returns">
+            true if there are leftovers
+            </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.CheckForLeftovers:Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="P:MyMediaLite.util.CommandLineParameters.Count">
+          <a href="javascript:toggle_display('P:MyMediaLite.util.CommandLineParameters.Count:member')">
+            <span id="P:MyMediaLite.util.CommandLineParameters.Count:member:toggle">⊟</span> Count Property</a>
+        </h3>
+        <blockquote id="P:MyMediaLite.util.CommandLineParameters.Count:member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>Count</b>  { get; }</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('P:MyMediaLite.util.CommandLineParameters.Count:Value')">
+              <span id="P:MyMediaLite.util.CommandLineParameters.Count:Value:toggle">⊟</span> Value</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="P:MyMediaLite.util.CommandLineParameters.Count:Value">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('P:MyMediaLite.util.CommandLineParameters.Count:Remarks')">
+              <span id="P:MyMediaLite.util.CommandLineParameters.Count:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="P:MyMediaLite.util.CommandLineParameters.Count:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('P:MyMediaLite.util.CommandLineParameters.Count:Version Information')">
+              <span id="P:MyMediaLite.util.CommandLineParameters.Count:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="P:MyMediaLite.util.CommandLineParameters.Count:Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="F:MyMediaLite.util.CommandLineParameters.dict">
+          <a href="javascript:toggle_display('F:MyMediaLite.util.CommandLineParameters.dict:member')">
+            <span id="F:MyMediaLite.util.CommandLineParameters.dict:member:toggle">⊟</span> dict Field</a>
+        </h3>
+        <blockquote id="F:MyMediaLite.util.CommandLineParameters.dict:member">
+          <p class="Summary">
+            Object to store the key/value pairs
+            </p>
+          <div class="Signature">protected <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string&gt;</a> <b>dict</b> </div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.util.CommandLineParameters.dict:Remarks')">
+              <span id="F:MyMediaLite.util.CommandLineParameters.dict:Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.util.CommandLineParameters.dict:Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('F:MyMediaLite.util.CommandLineParameters.dict:Version Information')">
+              <span id="F:MyMediaLite.util.CommandLineParameters.dict:Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="F:MyMediaLite.util.CommandLineParameters.dict:Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):member:toggle">⊟</span> GetRemoveBool Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>GetRemoveBool</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):member:toggle">⊟</span> GetRemoveBool Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> <b>GetRemoveBool</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Boolean">bool</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveBool(System.String,System.Boolean):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):member:toggle">⊟</span> GetRemoveDouble Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):member">
+          <p class="Summary">Get a double value from the parameters</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>GetRemoveDouble</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the parameter name</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Returns">the value of the parameter, 0 if no parameter of the given name found</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):member:toggle">⊟</span> GetRemoveDouble Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):member">
+          <p class="Summary">Get a double value from the parameters</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> <b>GetRemoveDouble</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Double">double</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the parameter name</dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>the default value if parameter of the given name is not found</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Returns">the value of the parameter if it is found, the default value otherwise</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveDouble(System.String,System.Double):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):member:toggle">⊟</span> GetRemoveFloat Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):member">
+          <p class="Summary">Get a float value from the parameters</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> <b>GetRemoveFloat</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the parameter name</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Returns">the value of the parameter, 0 if no parameter of the given name found</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):member:toggle">⊟</span> GetRemoveFloat Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):member">
+          <p class="Summary">Get a float value from the parameters</p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> <b>GetRemoveFloat</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Single">float</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the parameter name</dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>the default value if parameter of the given name is not found</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Returns">the value of the parameter if it is found, the default value otherwise</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveFloat(System.String,System.Single):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):member:toggle">⊟</span> GetRemoveInt32 Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>GetRemoveInt32</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):member:toggle">⊟</span> GetRemoveInt32 Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> <b>GetRemoveInt32</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Int32">int</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32(System.String,System.Int32):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):member:toggle">⊟</span> GetRemoveInt32List Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a> <b>GetRemoveInt32List</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):member:toggle">⊟</span> GetRemoveInt32List Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Collections.Generic.IList`1">IList&lt;int&gt;</a> <b>GetRemoveInt32List</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.Char">char</a> sep)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>sep</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveInt32List(System.String,System.Char):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):member:toggle">⊟</span> GetRemoveString Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):member">
+          <p class="Summary">
+            Get a string parameter
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>GetRemoveString</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the name of the parameter</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Returns">the parameter value related to key, an empty string if it does not exist</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):member:toggle">⊟</span> GetRemoveString Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):member">
+          <p class="Summary">
+            Get a string parameter
+            </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> <b>GetRemoveString</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>the name of the parameter</dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>the default value</dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Returns">the parameter value related to key, the default value if it does not exist</blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveString(System.String,System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):member:toggle">⊟</span> GetRemoveUInt32 Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a> <b>GetRemoveUInt32</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+        <h3 id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32)">
+          <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):member')">
+            <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):member:toggle">⊟</span> GetRemoveUInt32 Method</a>
+        </h3>
+        <blockquote id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):member">
+          <p class="Summary">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </p>
+          <div class="Signature">public <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a> <b>GetRemoveUInt32</b> (<a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.String">string</a> key, <a href="http://www.go-mono.com/docs/monodoc.ashx?link=T:System.UInt32">uint</a> dvalue)</div>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Parameters')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Parameters:toggle">⊟</span> Parameters</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Parameters">
+            <dl>
+              <dt>
+                <i>key</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+              <dt>
+                <i>dvalue</i>
+              </dt>
+              <dd>
+                <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+              </dd>
+            </dl>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Returns')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Returns:toggle">⊟</span> Returns</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Returns">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Remarks')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Remarks:toggle">⊟</span> Remarks</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Remarks">
+            <span class="NotEntered">Documentation for this section has not yet been entered.</span>
+          </blockquote>
+          <h4 class="Subsection">
+            <a href="javascript:toggle_display('M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Version Information')">
+              <span id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Version Information:toggle">⊟</span> Requirements</a>
+          </h4>
+          <blockquote class="SubsectionBox" id="M:MyMediaLite.util.CommandLineParameters.GetRemoveUInt32(System.String,System.UInt32):Version Information">
+            <b>Namespace: </b>MyMediaLite.util<br /><b>Assembly: </b>Algorithms (in Algorithms.dll)<br /><b>Assembly Versions: </b>0.0.0.0</blockquote>
+          <hr size="1" />
+        </blockquote>
+      </blockquote>
+    </div>
+    <hr size="1" />
+    <div class="Copyright">
+    </div>
+  </body>
+</html>

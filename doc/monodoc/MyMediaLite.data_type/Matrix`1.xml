@@ -1,0 +1,339 @@
+<Type Name="Matrix&lt;T&gt;" FullName="MyMediaLite.data_type.Matrix&lt;T&gt;">
+  <TypeSignature Language="C#" Value="public class Matrix&lt;T&gt;" />
+  <AssemblyInfo>
+    <AssemblyName>Algorithms</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <TypeParameters>
+    <TypeParameter Name="T" />
+  </TypeParameters>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Docs>
+    <typeparam name="T" />
+    <summary>
+            Class for storing dense matrices.
+            The data is stored in row-major mode.
+            Indexes are zero-based.
+            </summary>
+    <remarks>To be added.</remarks>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+  </Docs>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Matrix (MyMediaLite.data_type.Matrix&lt;T&gt; matrix);" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="matrix" Type="MyMediaLite.data_type.Matrix&lt;T&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="matrix">the matrix to be copied</param>
+        <summary>
+            Copy constructor. Creates a deep copy of the given matrix.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public Matrix (int dim1, int dim2);" />
+      <MemberType>Constructor</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <Parameters>
+        <Parameter Name="dim1" Type="System.Int32" />
+        <Parameter Name="dim2" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="dim1">the number of rows</param>
+        <param name="dim2">the number of columns</param>
+        <summary>
+            Initializes a new instance of the Matrix class.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddRows">
+      <MemberSignature Language="C#" Value="public void AddRows (int num_rows);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="num_rows" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="num_rows">the minimum number of rows</param>
+        <summary>
+            Enlarges the matrix to num_rows rows.
+            Do nothing if num_rows is less than dim1.
+            The new entries are filled with zeros.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="data">
+      <MemberSignature Language="C#" Value="public T[] data;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Data array: data is stored in columns.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="dim1">
+      <MemberSignature Language="C#" Value="public int dim1;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            Dimension 1, the number of rows
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="dim2">
+      <MemberSignature Language="C#" Value="public int dim2;" />
+      <MemberType>Field</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>
+            Dimension 2, the number of columns
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetColumn">
+      <MemberSignature Language="C#" Value="public T[] GetColumn (int j);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="j" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="j">the column ID</param>
+        <summary>
+            Returns a copy of the j-th column of the matrix
+            </summary>
+        <returns>
+          <see cref="T:`0[]" /> containing the column data</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRow">
+      <MemberSignature Language="C#" Value="public T[] GetRow (int i);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T[]</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">the row ID</param>
+        <summary>
+            Returns a copy of the i-th row of the matrix
+            </summary>
+        <returns>A <see cref="T:`0[]" /> containing the row data</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Grow">
+      <MemberSignature Language="C#" Value="public void Grow (int num_rows, int num_cols);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="num_rows" Type="System.Int32" />
+        <Parameter Name="num_cols" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="num_rows">the minimum number of rows</param>
+        <param name="num_cols">the minimum number of columns</param>
+        <summary>
+            Grows the matrix to the requested size, if necessary
+            The new entries are filled with zeros.
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Init">
+      <MemberSignature Language="C#" Value="public void Init (T d);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="d" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="d">the default value</param>
+        <summary>
+            Init the matrix with a default value
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="IsSymmetric">
+      <MemberSignature Language="C#" Value="public virtual bool IsSymmetric { get; }" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>True if the matrix is symmetric, false otherwise</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Item">
+      <MemberSignature Language="C#" Value="public virtual T this[int i, int j] { set; get; }" />
+      <MemberType>Property</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>T</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="j" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="i">the row ID</param>
+        <param name="j">the column ID</param>
+        <summary>The value at (i,j)</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetColumn">
+      <MemberSignature Language="C#" Value="public void SetColumn (int j, T[] column);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="j" Type="System.Int32" />
+        <Parameter Name="column" Type="T[]" />
+      </Parameters>
+      <Docs>
+        <param name="j">To be added.</param>
+        <param name="column">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetColumnToOneValue">
+      <MemberSignature Language="C#" Value="public void SetColumnToOneValue (int j, T v);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="j" Type="System.Int32" />
+        <Parameter Name="v" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="j">the column ID</param>
+        <param name="v">the value to be used</param>
+        <summary>
+            Sets an entire column to a specified value
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetRow">
+      <MemberSignature Language="C#" Value="public void SetRow (int i, T[] row);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="row" Type="T[]" />
+      </Parameters>
+      <Docs>
+        <param name="i">To be added.</param>
+        <param name="row">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetRowToOneValue">
+      <MemberSignature Language="C#" Value="public void SetRowToOneValue (int i, T v);" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="i" Type="System.Int32" />
+        <Parameter Name="v" Type="T" />
+      </Parameters>
+      <Docs>
+        <param name="i">the row ID</param>
+        <param name="v">the value to be used</param>
+        <summary>
+            Sets an entire row to a specified value
+            </summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+</Type>
