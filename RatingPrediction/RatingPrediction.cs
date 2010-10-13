@@ -374,9 +374,7 @@ namespace RatingPrediction
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
-			Console.Write("RMSE {0,0:0.#####} MAE {1,0:0.#####}",
-			              result["RMSE"].ToString(ni),
-			              result["MAE"].ToString(ni));
+			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]));
 		}
 	}
 }

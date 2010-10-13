@@ -10,6 +10,7 @@
         changes to the command-line programs:
          - allow input from STDIN and output to STDOUT
 	 - nicer time output for both demo programs
+         - nicer result output for both demo programs
 	 - rating prediction program: save model earlier
          - always output '.'-separated floating point numbers, independent
            of the current locale.

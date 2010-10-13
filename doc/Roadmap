@@ -35,7 +35,13 @@ Data types
  - profile+optimize data types
 Architecture
  - integrate with easyrec JavaScript API http://easyrec.org/ 
- - (*) define an easy interface for data access
+ - define an easy interface for data access
+   - allow lazy iteration
+   - allow random and randomized access
+ - rewrite rating data structures
+   - implement easy interface (see above)
+   - store in one list (as values, not references!)
+   - create special index data structures on demand
  - user and item IDs should be unsigned integers
  - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)

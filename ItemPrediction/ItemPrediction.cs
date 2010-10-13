@@ -36,7 +36,7 @@ namespace MyMediaLite
 	{
 		static ItemRecommender recommender = null;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
-
+		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
 		static ICollection<int> relevant_items;
 
 		// recommender engines
@@ -73,6 +73,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - " + uknn);
 			Console.WriteLine("    - " + wuknn);
 			Console.WriteLine("    - " + uaknn + " (needs user_attributes)");
+			Console.WriteLine("    - " + svm + " (needs item_attributes)");
 			Console.WriteLine("    - " + mp);
 			Console.WriteLine("    - " + random);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
@@ -80,7 +81,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
 			Console.WriteLine("    - random_seed=N");
 			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
-			Console.WriteLine("    - relevant_items=FILE        use only item in the given file for evaluation");
+			Console.WriteLine("    - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
 			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
@@ -180,7 +181,7 @@ namespace MyMediaLite
 				case "user-attribute-KNN":
 					InitKNN(uaknn, parameters);
 					break;
-			case "item-attribute-svm":
+				case "item-attribute-svm":
 					recommender = svm;
 					break;
 				case "most-popular":
@@ -206,7 +207,7 @@ namespace MyMediaLite
 			EntityMapping item_mapping = new EntityMapping();
 
 			// training data
-			training_data   = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
+			training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
 
 			// relevant items
 			if (! relevant_items_file.Equals(String.Empty) )
@@ -244,7 +245,9 @@ namespace MyMediaLite
 				}
 
 			// test data
-            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+            test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+
+			DisplayDataStats(); // TODO attribute data as well ...
 
 			TimeSpan time_span;
 
@@ -456,14 +459,32 @@ namespace MyMediaLite
 
 		static void DisplayResults(Dictionary<string, double> result) {
 			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"]));
+		}
+
+		static void DisplayDataStats()
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
-			Console.Write("AUC {0} prec@5 {1} prec@10 {2} MAP {3} NDCG {4}",
-			              result["AUC"].ToString(ni),
-			              result["prec@5"].ToString(ni),
-			              result["prec@10"].ToString(ni),
-			              result["MAP"].ToString(ni),
-			              result["NDCG"].ToString(ni));
+			// training data stats
+			int num_users = training_data.First.NonEmptyRowIDs.Count;
+			int num_items = training_data.Second.NonEmptyRowIDs.Count;
+			int matrix_size = num_users * num_items;
+			int empty_size  = matrix_size - training_data.First.NumberOfEntries;
+			double sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+			// test data stats
+			num_users = test_data.First.NonEmptyRowIDs.Count;
+			num_items = test_data.Second.NonEmptyRowIDs.Count;
+			matrix_size = num_users * num_items;
+			empty_size  = matrix_size - test_data.First.NumberOfEntries;
+			sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
 	}
 }
