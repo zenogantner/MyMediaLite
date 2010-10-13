@@ -5,7 +5,7 @@ Recommender functionality
  - (*) output number of users/items in training and evaluation set
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
- - support for non-binary attributes
+ - support for non-binary attributes: real numbers, textual descriptions
  - additional engines (?)
    - non-negative matrix factorization
    - matrix factorization with bias term

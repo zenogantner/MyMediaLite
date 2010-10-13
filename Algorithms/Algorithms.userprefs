@@ -1,24 +1,30 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="eval/ItemPredictionEval.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
     <Files>
       <File FileName="../RatingPrediction/RatingPrediction.cs" Line="320" Column="11" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="427" Column="35" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="52" Column="52" />
       <File FileName="../Mapping/Mapping.cs" Line="69" Column="40" />
-      <File FileName="eval/ItemPredictionEval.cs" Line="32" Column="44" />
+      <File FileName="eval/ItemPredictionEval.cs" Line="158" Column="1" />
+      <File FileName="data_type/Matrix.cs" Line="22" Column="1" />
+      <File FileName="eval/ItemPrediction.cs" Line="29" Column="1" />
+      <File FileName="correlation/CorrelationMatrix.cs" Line="26" Column="1" />
+      <File FileName="ensemble/Ensemble.cs" Line="28" Column="31" />
+      <File FileName="ensemble/WeightedEnsemble.cs" Line="28" Column="31" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True" selected="True">
+          <Node name="Algorithms" expanded="True">
             <Node name="correlation" expanded="True" />
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
+            <Node name="ensemble" expanded="True" />
             <Node name="eval" expanded="True" />
             <Node name="experimental" expanded="True">
               <Node name="attr_to_feature" expanded="True" />
             </Node>
             <Node name="io" expanded="True" />
-            <Node name="item_recommender" expanded="True" />
+            <Node name="item_recommender" expanded="True" selected="True" />
             <Node name="Properties" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
             <Node name="taxonomy" expanded="True" />

@@ -40,16 +40,17 @@ namespace MyMediaLite
 		static ICollection<int> relevant_items;
 
 		// recommender engines
-		static KNN         iknn   = new ItemKNN();
-		static KNN         iaknn  = new ItemAttributeKNN();
-		static KNN         uknn   = new UserKNN();
-		static KNN         wuknn  = new WeightedUserKNN();
-		static KNN         uaknn  = new UserAttributeKNN();
-		static MostPopular mp     = new MostPopular();
-		static WRMF        wrmf   = new WRMF();
-		static BPRMF       bprmf  = new BPRMF();
-		static item_recommender.Random random = new item_recommender.Random();
-		static BPR_Linear  bpr_linear = new BPR_Linear();
+		static KNN                     iknn       = new ItemKNN();
+		static KNN                     iaknn      = new ItemAttributeKNN();
+		static KNN                     uknn       = new UserKNN();
+		static KNN                     wuknn      = new WeightedUserKNN();
+		static KNN                     uaknn      = new UserAttributeKNN();
+		static MostPopular             mp         = new MostPopular();
+		static WRMF                    wrmf       = new WRMF();
+		static BPRMF                   bprmf      = new BPRMF();
+		static item_recommender.Random random     = new item_recommender.Random();
+		static BPR_Linear              bpr_linear = new BPR_Linear();
+		static ItemAttributeSVM        svm        = new ItemAttributeSVM();
 
 		public static void Usage(string message)
 		{
@@ -178,6 +179,9 @@ namespace MyMediaLite
 				case "user-attribute-kNN":
 				case "user-attribute-KNN":
 					InitKNN(uaknn, parameters);
+					break;
+			case "item-attribute-svm":
+					recommender = svm;
 					break;
 				case "most-popular":
 					recommender = mp;

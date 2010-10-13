@@ -121,6 +121,7 @@
     <Compile Include="eval\ItemPredictionEval.cs" />
     <Compile Include="ensemble\Ensemble.cs" />
     <Compile Include="ensemble\WeightedEnsemble.cs" />
+    <Compile Include="item_recommender\ItemAttributeSVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
