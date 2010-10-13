@@ -60,13 +60,16 @@ namespace MyMediaLite.rating_predictor
         public double init_f_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-        /// <summary>Number of iterations over the training data</summary>
-        protected int num_iter = 30;
+        private int num_iter = 30;
 
         /// <inheritdoc />
         public override void Train()
         {
-            _Init();
+			// init feature matrices
+	       	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
+	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
+	       	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
+	       	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 
             // learn model parameters
             bias = ratings.Average;
@@ -83,15 +86,6 @@ namespace MyMediaLite.rating_predictor
 		public virtual void Iterate()
 		{
 			Iterate(ratings.All, true, true);
-		}
-
-		/// <summary>init feature matrices</summary>
-        protected virtual void _Init()
-		{
-        	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
-        	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
-        	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
-        	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 		}
 
         /// <summary>

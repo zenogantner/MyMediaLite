@@ -38,13 +38,22 @@ namespace MyMediaLite.rating_predictor
 		// TODO think about de-activating/separating regularization for the user and item bias
 
 		/// <inheritdoc />
-        protected override void _Init()
+        public override void Train()
 		{
-			base._Init();
+			// init feature matrices
+	       	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
+	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
+	       	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
+	       	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
 			if (num_features < 2)
 				throw new ArgumentException("num_features must be >= 2");
         	this.user_feature.SetColumnToOneValue(0, 1);
 			this.item_feature.SetColumnToOneValue(1, 1);
+
+            // learn model parameters
+            bias = Math.Log( (ratings.Average - MinRatingValue) / (MaxRatingValue - ratings.Average) );
+            for (int current_iter = 0; current_iter < NumIter; current_iter++)
+				Iterate(ratings.All, true, true);
 		}
 
 		/// <inheritdoc />
@@ -57,7 +66,7 @@ namespace MyMediaLite.rating_predictor
             	int u = rating.user_id;
                 int i = rating.item_id;
 
-				double dot_product = 0;
+				double dot_product = bias;
 	            for (int f = 0; f < num_features; f++)
     	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
@@ -95,27 +104,23 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id >= user_feature.dim1)
-				return bias;
-            if (item_id >= item_feature.dim1)
-				return bias;
+            if (user_id >= user_feature.dim1 || item_id >= item_feature.dim1)
+				return MinRatingValue + ( 1 / (1 + Math.Exp(-bias)) ) * (MaxRatingValue - MinRatingValue);;
 
-            double dot_product = 0;
+			double dot_product = bias;
 
             // U*V
             for (int f = 0; f < num_features; f++)
                 dot_product += user_feature[user_id, f] * item_feature[item_id, f];
 
-			double result = MinRatingValue + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRatingValue - MinRatingValue);
-
-            return result;
+			return MinRatingValue + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRatingValue - MinRatingValue);
         }
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			return String.Format("biased-matrix-factorization num_features={0}, regularization={1}, learn_rate={2}, num_iter={3}, init_f_mean={4}, init_f_stdev={5}",
-				                 num_features, regularization, learn_rate, num_iter, init_f_mean, init_f_stdev);
+				                 num_features, regularization, learn_rate, NumIter, init_f_mean, init_f_stdev);
 		}
 	}
 }
