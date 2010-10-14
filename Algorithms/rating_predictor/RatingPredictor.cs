@@ -67,7 +67,7 @@ namespace MyMediaLite.rating_predictor
 		/// <remarks>
 		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
 		/// </remarks>
-		public abstract string ToString();
+		public abstract override string ToString();
 
         /// <summary>
         /// Gets or sets the max rating value.

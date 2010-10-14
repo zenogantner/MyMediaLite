@@ -48,6 +48,6 @@ namespace MyMediaLite.item_recommender
 		/// <remarks>
 		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
 		/// </remarks>
-		public abstract string ToString();		
+		public abstract override string ToString();		
     }
 }
