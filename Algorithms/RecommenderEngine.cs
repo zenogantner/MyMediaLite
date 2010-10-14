@@ -20,7 +20,9 @@ namespace MyMediaLite
     /// <summary>
     /// Generic interface for simple recommender engines.
     /// </summary>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
+    /// <remarks>
+    /// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
+    /// </remarks>
     public interface RecommenderEngine
     {
 		/// <summary>

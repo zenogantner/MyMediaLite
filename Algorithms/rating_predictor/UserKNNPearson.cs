@@ -46,7 +46,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format("user-kNN-pearson k={0}, shrinkage={1}, reg_u={2}, reg_i={3}",
+			return string.Format("user-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
 			                     k == uint.MaxValue ? "inf" : k.ToString(), shrinkage, reg_u, reg_i);
 		}
 	}

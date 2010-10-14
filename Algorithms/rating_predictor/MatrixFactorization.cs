@@ -43,8 +43,10 @@ namespace MyMediaLite.rating_predictor
     {
 		/// <summary>Matrix containing the latent user features</summary>
         protected Matrix<double> user_feature;
+		
 		/// <summary>Matrix containing the latent item features</summary>
         protected Matrix<double> item_feature;
+		
 		/// <summary>The bias (global average)</summary>
         protected double bias;
 

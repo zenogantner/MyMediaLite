@@ -61,10 +61,13 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public abstract void Train();
 
-		public override string ToString()
-		{
-			return "RatingPredictor";
-		}
+		/// <summary>
+		/// Return a string representation of the engine
+		/// </summary>
+		/// <remarks>
+		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
+		/// </remarks>
+		public abstract string ToString();
 
         /// <summary>
         /// Gets or sets the max rating value.

@@ -74,7 +74,7 @@ namespace MyMediaLite.item_recommender
             double[] HCp = new double[num_features];
 
             MathNet.Numerics.LinearAlgebra.Matrix m = new MathNet.Numerics.LinearAlgebra.Matrix(num_features, num_features);
-            MathNet.Numerics.LinearAlgebra.Matrix m_inv; // = new MathNet.Numerics.LinearAlgebra.Matrix(num_feature);
+            MathNet.Numerics.LinearAlgebra.Matrix m_inv;
 
             // (1) create HH in O(f^2|I|)
             // HH is symmetric

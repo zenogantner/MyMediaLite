@@ -47,6 +47,7 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>Regularization parameter for the item biases</summary>
 		public double reg_i = 10;
 
+		// TODO should be part of the interface of all update-able engines ...
         public bool UpdateUsers { get; set; }
         public bool UpdateItems { get; set; }
 

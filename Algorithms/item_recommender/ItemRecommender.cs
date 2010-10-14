@@ -43,5 +43,11 @@ namespace MyMediaLite.item_recommender
 		public abstract void SaveModel(string filePath);
 		/// <inheritdoc />
 		public abstract void LoadModel(string filePath);
+		
+		/// <summary>Return a string representation of the engine</summary>
+		/// <remarks>
+		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
+		/// </remarks>
+		public abstract string ToString();		
     }
 }
