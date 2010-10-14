@@ -225,32 +225,34 @@ namespace MyMediaLite
 			if (recommender is UserAttributeAwareRecommender)
 				if (user_attributes_file.Equals(String.Empty))
 				{
-					Usage("Recommender expects user_attributes.");
+					Usage("Recommender expects user_attributes=FILE.");
 				}
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
 					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					Console.WriteLine("{0} user attributes", attr_data.Second);
 				}
 
 			// item attributes
 			if (recommender is ItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(String.Empty))
 				{
-					Usage("Recommender expects item_attributes.");
+					Usage("Recommender expects item_attributes=FILE.");
 				}
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
 					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
 
 			// test data
             test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
 
-			DisplayDataStats(); // TODO attribute data as well ...
+			DisplayDataStats();
 
 			TimeSpan time_span;
 

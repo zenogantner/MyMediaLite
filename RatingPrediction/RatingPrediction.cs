@@ -36,8 +36,9 @@ namespace RatingPrediction
 	public class RatingPrediction
 	{
 		// recommender engines
-		static MatrixFactorization mf  = new MatrixFactorization();
-		static MatrixFactorization bmf = new BiasedMatrixFactorization();
+		static MatrixFactorization        mf = new MatrixFactorization();
+		static MatrixFactorization       bmf = new BiasedMatrixFactorization();
+		static MatrixFactorization social_mf = new SocialMF();		
 		static UserKNNCosine    uknn_c = new UserKNNCosine();
 		static UserKNNPearson   uknn_p = new UserKNNPearson();
 		static ItemKNNCosine    iknn_c = new ItemKNNCosine();
@@ -141,6 +142,9 @@ namespace RatingPrediction
 				case "biased-matrix-factorization":
 					recommender = InitMatrixFactorization(parameters, bmf);
 					break;
+				case "SocialMF":
+					recommender = InitMatrixFactorization(parameters, social_mf); // TODO setup social regularization
+					break;				
 				case "user-knn-pearson":
 				case "user-kNN-pearson":
 					recommender = InitKNN(parameters, uknn_p);
@@ -174,7 +178,7 @@ namespace RatingPrediction
 					recommender = ia;
 					break;
 				default:
-					Usage(String.Format("Unknown method: '{0}'", method));
+					Usage(string.Format("Unknown method: '{0}'", method));
 					break;
 			}
 
@@ -200,31 +204,35 @@ namespace RatingPrediction
 			if (recommender is UserAttributeAwareRecommender)
 				if (user_attributes_file.Equals(String.Empty))
 				{
-					Usage("Recommender expects user_attributes.");
+					Usage("Recommender expects user_attributes=FILE.");
 				}
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
 					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					Console.WriteLine("{0} user attributes", attr_data.Second);
 				}
 
 			// item attributes
 			if (recommender is ItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(string.Empty) )
 				{
-					Usage("Recommender expects item_attributes.");
+					Usage("Recommender expects item_attributes=FILE.");
 				}
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
 					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
-
+			
 			// read test data
 			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 
+			// TODO DisplayStats
+			
 			if (find_iter != 0)
 			{
 				if ( !(recommender is IterativeModel) )
