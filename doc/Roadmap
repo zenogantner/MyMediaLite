@@ -1,15 +1,13 @@
 TODO list
 ---------
 Recommender functionality
- - (*) allow new user/new item evaluation for item prediction
- - (*) output number of users/items in training and evaluation set
+ - (*) allow new user evaluation for item prediction
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
- - support for non-binary attributes: real numbers, textual descriptions
+ - support for non-binary attributes: real, nominal, textual descriptions
  - additional engines (?)
    - non-negative matrix factorization
-   - matrix factorization with bias term
-   - really simple matrix factorization (without sigmoid function)
+   - matrix factorization learned with alternating least squares
    - adaptive kNN by Koren+Bell
    - MF with Euclidean Embeddings
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
@@ -35,7 +33,8 @@ Data types
  - profile+optimize data types
 Architecture
  - integrate with easyrec JavaScript API http://easyrec.org/ 
- - define an easy interface for data access
+ - interface(s) for recommenders that support online updates
+ - define an easy interface for rating data access
    - allow lazy iteration
    - allow random and randomized access
    - allow creating splits for cross-validation w/o duplicating data
@@ -43,6 +42,7 @@ Architecture
    - implement easy interface (see above)
    - store in one list (as values, not references!)
    - create special index data structures on demand
+ - redesign/rewrite implicit feedback data structures
  - user and item IDs should be unsigned integers
  - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
@@ -66,3 +66,4 @@ Misc
  - faster evaluation routines
    - approximate AUC
    - sample precision@N
+ - rewrite MF techniques using vector/matrix abstractions

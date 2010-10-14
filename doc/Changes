@@ -5,6 +5,7 @@
            MyMediaLite command-line tools.
          - MAP (mean average precision) for item recommender evaluation
          - API documentation in XML (generated from the inline XML docs)
+         - implemented SocialMF by Jamali+Ester 2010
         engine changes:
          - added global bias term to BiasedMatrixFactorization
         changes to the command-line programs:

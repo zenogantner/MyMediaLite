@@ -35,10 +35,12 @@ namespace RatingPrediction
 	/// <summary>Rating prediction program, see Usage() method for more information</summary>
 	public class RatingPrediction
 	{
+		static NumberFormatInfo ni = new NumberFormatInfo();
+
 		// recommender engines
 		static MatrixFactorization        mf = new MatrixFactorization();
-		static MatrixFactorization       bmf = new BiasedMatrixFactorization();
-		static MatrixFactorization social_mf = new SocialMF();		
+		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
+		static MatrixFactorization social_mf = new SocialMF();
 		static UserKNNCosine    uknn_c = new UserKNNCosine();
 		static UserKNNPearson   uknn_p = new UserKNNPearson();
 		static ItemKNNCosine    iknn_c = new ItemKNNCosine();
@@ -63,7 +65,8 @@ namespace RatingPrediction
 			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + mf);
-			Console.WriteLine("    - " + bmf);
+			Console.WriteLine("    - " + biased_mf);
+			Console.WriteLine("    - " + social_mf);
 			Console.WriteLine("    - " + uknn_p);
 			Console.WriteLine("    - " + uknn_c);
 			Console.WriteLine("    - " + iknn_p);
@@ -96,6 +99,7 @@ namespace RatingPrediction
         public static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
+			ni.NumberDecimalDigits = '.';
 
 			// check number of command line parameters
 			if (args.Length < 3)
@@ -140,11 +144,11 @@ namespace RatingPrediction
 					recommender = InitMatrixFactorization(parameters, mf);
 					break;
 				case "biased-matrix-factorization":
-					recommender = InitMatrixFactorization(parameters, bmf);
+					recommender = InitMatrixFactorization(parameters, biased_mf);
 					break;
 				case "SocialMF":
 					recommender = InitMatrixFactorization(parameters, social_mf); // TODO setup social regularization
-					break;				
+					break;
 				case "user-knn-pearson":
 				case "user-kNN-pearson":
 					recommender = InitKNN(parameters, uknn_p);
@@ -182,16 +186,14 @@ namespace RatingPrediction
 					break;
 			}
 
-			recommender.MinRatingValue = min_rating;
-			recommender.MaxRatingValue = max_rating;
-			Console.Error.WriteLine("ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue);
-
 			// check command-line parameters
 			if (parameters.CheckForLeftovers())
 				Usage(-1);
 			if (training_file.Equals("-") && testfile.Equals("-"))
 				Usage("Either training or test data, not both, can be read from STDIN.");
 
+			// TODO check for the existence of files before starting to load all of them
+			
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
@@ -227,12 +229,16 @@ namespace RatingPrediction
 					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
-			
+
 			// read test data
 			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 
+			recommender.MinRatingValue = min_rating;
+			recommender.MaxRatingValue = max_rating;
+			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue));
+
 			// TODO DisplayStats
-			
+
 			if (find_iter != 0)
 			{
 				if ( !(recommender is IterativeModel) )
@@ -246,7 +252,7 @@ namespace RatingPrediction
 					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
-					Console.Write("fit {0,0:0.#####} ", iterative_recommender.ComputeFit());
+					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
 				DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
 				Console.WriteLine(" " + iterative_recommender.NumIter);
@@ -271,7 +277,7 @@ namespace RatingPrediction
 								fit = iterative_recommender.ComputeFit();
 							});
 							fit_time_stats.Add(t.TotalSeconds);
-							Console.Write("fit {0,0:0.#####} ", fit);
+							Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 						}
 
 						t = Utils.MeasureTime(delegate() {
@@ -351,12 +357,19 @@ namespace RatingPrediction
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
 			mf.NumFeatures    = parameters.GetRemoveInt32( "num_features",   mf.NumFeatures);
-   			mf.InitMean       = parameters.GetRemoveDouble("init_f_mean",    mf.InitMean);
-   			mf.InitStdev      = parameters.GetRemoveDouble("init_f_stdev",   mf.InitStdev);
+   			mf.InitMean       = parameters.GetRemoveDouble("init_mean",      mf.InitMean);
+   			mf.InitStdev      = parameters.GetRemoveDouble("init_stdev",     mf.InitStdev);
 			mf.Regularization = parameters.GetRemoveDouble("reg",            mf.Regularization);
 			mf.Regularization = parameters.GetRemoveDouble("regularization", mf.Regularization);
 			mf.LearnRate      = parameters.GetRemoveDouble("lr",             mf.LearnRate);
 			mf.LearnRate      = parameters.GetRemoveDouble("learn_rate",     mf.LearnRate);
+			
+			if (mf is SocialMF)
+			{
+				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_reg",            ((SocialMF)mf).SocialRegularization);
+				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_regularization", ((SocialMF)mf).SocialRegularization);
+				((SocialMF)mf).StochasticLearning   = parameters.GetRemoveBool(  "stochastic",            ((SocialMF)mf).StochasticLearning);
+			}
 			return mf;
 		}
 
@@ -378,10 +391,8 @@ namespace RatingPrediction
 			return uib;
 		}
 
-		static void DisplayResults(Dictionary<string, double> result) {
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+		static void DisplayResults(Dictionary<string, double> result)
+		{
 			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]));
 		}
 	}
