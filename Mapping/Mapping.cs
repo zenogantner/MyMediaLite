@@ -39,6 +39,8 @@ namespace Mapping
 	/// </summary>
 	public class Mapping
 	{
+		static NumberFormatInfo ni = new NumberFormatInfo();		
+		
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
 		static ICollection<int> relevant_items;
@@ -86,7 +88,8 @@ namespace Mapping
         public static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
-
+			ni.NumberDecimalDigits = '.';
+			
 			// check number of command line parameters
 			if (args.Length < 4)
 				Usage("Not enough arguments.");
@@ -179,7 +182,7 @@ namespace Mapping
 			if (recommender is ItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(String.Empty))
 				{
-					Usage("Recommender expects item_attributes.\n");
+					Usage("Recommender expects item_attributes.");
 				}
 				else
 				{
@@ -204,13 +207,13 @@ namespace Mapping
 					recommender.num_iter_mapping = 0;
 					recommender.LearnAttributeToFactorMapping();
 					Console.Error.WriteLine();
-					Console.Error.WriteLine("iteration {0} fit {1}", -1, recommender.ComputeFit());
+					Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
 
 					recommender.num_iter_mapping = 1;
 					for (int i = 0; i < num_iter; i++, i++)
 					{
 						recommender.iterate_mapping();
-						Console.Error.WriteLine("iteration {0} fit {1}", i, recommender.ComputeFit());
+						Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 					}
 					recommender.num_iter_mapping = num_iter; // restore
 		    	} );
@@ -230,7 +233,7 @@ namespace Mapping
 
         static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, SparseBooleanMatrix test_user_items, SparseBooleanMatrix train_user_items)
 		{
-			Console.Error.WriteLine("fit {0}", recommender.ComputeFit());
+			Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
@@ -292,14 +295,10 @@ namespace Mapping
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			Console.Write("AUC {0} prec@5 {1} prec@10 {2} MAP {3} NDCG {4}",
-			              result["AUC"].ToString(ni),
-			              result["prec@5"].ToString(ni),
-			              result["prec@10"].ToString(ni),
-			              result["MAP"].ToString(ni),
-			              result["NDCG"].ToString(ni));
+			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
-
+		
 		static void DisplayDataStats()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

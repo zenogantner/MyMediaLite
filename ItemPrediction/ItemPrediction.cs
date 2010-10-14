@@ -34,12 +34,14 @@ namespace MyMediaLite
 	/// <summary>Item prediction program, see Usage() method for more information</summary>
 	public class ItemPrediction
 	{
-		static ItemRecommender recommender = null;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
 		static ICollection<int> relevant_items;
 
+		static NumberFormatInfo ni = new NumberFormatInfo();
+
 		// recommender engines
+		static ItemRecommender recommender = null;
 		static KNN                     iknn       = new ItemKNN();
 		static KNN                     iaknn      = new ItemAttributeKNN();
 		static KNN                     uknn       = new UserKNN();
@@ -101,6 +103,7 @@ namespace MyMediaLite
         public static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(util.Handlers.UnhandledExceptionHandler);
+			ni.NumberDecimalDigits = '.';
 
 			// check number of command line parameters
 			if (args.Length < 3)
@@ -263,7 +266,7 @@ namespace MyMediaLite
 					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
-					Console.Write("fit {0,0:0.#####} ", iterative_recommender.ComputeFit());
+					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
 				var result = ItemPredictionEval.EvaluateItemRecommender(recommender,
 				                                 test_data.First,
@@ -292,7 +295,7 @@ namespace MyMediaLite
 								fit = iterative_recommender.ComputeFit();
 							});
 							fit_time_stats.Add(t.TotalSeconds);
-							Console.Write("fit {0,0:0.#####} ", fit);
+							Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 						}
 
 						t = Utils.MeasureTime(delegate() {
@@ -458,11 +461,8 @@ namespace MyMediaLite
 		}
 
 		static void DisplayResults(Dictionary<string, double> result) {
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"]));
+			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
 
 		static void DisplayDataStats()

@@ -45,10 +45,14 @@ namespace MyMediaLite.eval
 		}
 
         /// <summary>
-        /// Evaluation for rankings of item recommenders. Computes the AUC and precision at different levels.
-        /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
+        /// Evaluation for rankings of item recommenders.
         /// </summary>
         /// <remarks>
+        /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
+        /// The evaluation measures are listed in the ItemPredictionMeasures property.
+        /// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
+        /// and the number of items that were taken into account.
+        /// 
         /// Literature:
         ///   C. Manning, P. Raghavan, H. Schütze
         ///   Introduction to Information Retrieval,
@@ -112,6 +116,8 @@ namespace MyMediaLite.eval
 			result.Add("prec@5",  prec_5_sum / num_users);
 			result.Add("prec@10", prec_10_sum / num_users);
 			result.Add("prec@15", prec_15_sum / num_users);
+			result.Add("num_users", num_users);
+			result.Add("num_items", relevant_items.Count);
 
 			return result;
         }
