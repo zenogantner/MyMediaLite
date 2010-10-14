@@ -342,13 +342,13 @@ namespace RatingPrediction
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
-			mf.num_features   = parameters.GetRemoveInt32( "num_features",   mf.num_features);
-   			mf.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    mf.init_f_mean);
-   			mf.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   mf.init_f_stdev);
-			mf.regularization = parameters.GetRemoveDouble("reg",            mf.regularization);
-			mf.regularization = parameters.GetRemoveDouble("regularization", mf.regularization);
-			mf.learn_rate     = parameters.GetRemoveDouble("lr",             mf.learn_rate);
-			mf.learn_rate     = parameters.GetRemoveDouble("learn_rate",     mf.learn_rate);
+			mf.NumFeatures    = parameters.GetRemoveInt32( "num_features",   mf.NumFeatures);
+   			mf.InitMean       = parameters.GetRemoveDouble("init_f_mean",    mf.InitMean);
+   			mf.InitStdev      = parameters.GetRemoveDouble("init_f_stdev",   mf.InitStdev);
+			mf.Regularization = parameters.GetRemoveDouble("reg",            mf.Regularization);
+			mf.Regularization = parameters.GetRemoveDouble("regularization", mf.Regularization);
+			mf.LearnRate      = parameters.GetRemoveDouble("lr",             mf.LearnRate);
+			mf.LearnRate      = parameters.GetRemoveDouble("learn_rate",     mf.LearnRate);
 			return mf;
 		}
 
