@@ -53,15 +53,15 @@ namespace Mapping
 		static BPRMF_Mapping bprmf_user_map            = new BPRMF_UserMapping();
 		static BPRMF_Mapping bprmf_user_map_bpr        = new BPRMF_UserMapping_Optimal();
 
-		public static void Usage(string message)
+		static void Usage(string message)
 		{
 			Console.Error.WriteLine(message);
 			Usage(-1);
 		}
 
-		public static void Usage(int exit_code)
+		static void Usage(int exit_code)
 		{
-			Console.WriteLine("MyMedia attribute mapping for item prediction; usage:");
+			Console.WriteLine("MyMediaLite attribute mapping for item prediction; usage:");
 			Console.WriteLine(" Mapping.exe TRAINING_FILE TEST_FILE MODEL_FILE METHOD [ARGUMENTS] [OPTIONS]");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + bprmf_map     + " (needs item_attributes)");

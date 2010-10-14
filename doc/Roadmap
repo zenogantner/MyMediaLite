@@ -38,6 +38,7 @@ Architecture
  - define an easy interface for data access
    - allow lazy iteration
    - allow random and randomized access
+   - allow creating splits for cross-validation w/o duplicating data
  - rewrite rating data structures
    - implement easy interface (see above)
    - store in one list (as values, not references!)

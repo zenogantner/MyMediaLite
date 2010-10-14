@@ -48,16 +48,16 @@ namespace RatingPrediction
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
 
-		public static void Usage(string message)
+		static void Usage(string message)
 		{
 			Console.WriteLine(message);
 			Console.WriteLine();
 			Usage(-1);
 		}
 
-		public static void Usage(int exit_code)
+		static void Usage(int exit_code)
 		{
-			Console.WriteLine("MyMedia rating prediction; usage:");
+			Console.WriteLine("MyMediaLite rating prediction; usage:");
 			Console.WriteLine(" RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
 			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
