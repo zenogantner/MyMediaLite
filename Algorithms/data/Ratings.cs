@@ -28,6 +28,18 @@ namespace MyMediaLite.data
         private double sum_rating = 0;
 
 		/// <summary>
+		/// Access an event in the collection directly via an index
+		/// </summary>
+		/// <param name="index">
+		/// the index
+		/// </param>
+		public RatingEvent this [int index] {
+			get {
+				return ratingList[index];
+			}
+		}		
+		
+		/// <summary>
 		/// Number of ratings in the collection
 		/// </summary>
         public int Count
