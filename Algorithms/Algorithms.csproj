@@ -122,6 +122,8 @@
     <Compile Include="ensemble\Ensemble.cs" />
     <Compile Include="ensemble\WeightedEnsemble.cs" />
     <Compile Include="item_recommender\ItemAttributeSVM.cs" />
+    <Compile Include="data_type\SparseMatrix.cs" />
+    <Compile Include="data_type\SparseVector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

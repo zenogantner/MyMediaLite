@@ -1,43 +1,28 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="data_type/SparseMatrix.cs" ctype="Workbench">
     <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="320" Column="11" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="52" Column="52" />
-      <File FileName="../Mapping/Mapping.cs" Line="69" Column="40" />
-      <File FileName="eval/ItemPredictionEval.cs" Line="158" Column="1" />
-      <File FileName="data_type/Matrix.cs" Line="22" Column="1" />
-      <File FileName="eval/ItemPrediction.cs" Line="29" Column="1" />
-      <File FileName="correlation/CorrelationMatrix.cs" Line="26" Column="1" />
-      <File FileName="ensemble/Ensemble.cs" Line="28" Column="31" />
-      <File FileName="ensemble/WeightedEnsemble.cs" Line="28" Column="31" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="341" Column="1" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="64" Column="3" />
+      <File FileName="../Mapping/Mapping.cs" Line="56" Column="3" />
+      <File FileName="eval/ItemPredictionEval.cs" Line="54" Column="66" />
+      <File FileName="../RatingExperiment/RatingExperiment.cs" Line="186" Column="31" />
+      <File FileName="data/RatingData.cs" Line="92" Column="28" />
+      <File FileName="data/EntityMapping (Kopie).cs" Line="28" Column="39" />
+      <File FileName="data_type/SparseMatrix.cs" Line="38" Column="33" />
+      <File FileName="data_type/Matrix.cs" Line="30" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True">
-            <Node name="correlation" expanded="True" />
+          <Node name="Algorithms" expanded="True" selected="True">
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
-            <Node name="ensemble" expanded="True" />
-            <Node name="eval" expanded="True" />
-            <Node name="experimental" expanded="True">
-              <Node name="attr_to_feature" expanded="True" />
-            </Node>
-            <Node name="io" expanded="True" />
-            <Node name="item_recommender" expanded="True" selected="True" />
-            <Node name="Properties" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
-            <Node name="taxonomy" expanded="True" />
-            <Node name="util" expanded="True" />
           </Node>
-          <Node name="ItemPrediction" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
+          <Node name="ItemPrediction" expanded="True" />
           <Node name="Mapping" expanded="True" />
-          <Node name="RatingPrediction" expanded="True">
-            <Node name="References" expanded="True" />
-          </Node>
-          <Node name="SVM" expanded="True" />
+          <Node name="RatingExperiment" expanded="True" />
+          <Node name="RatingPrediction" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

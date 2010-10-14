@@ -27,7 +27,6 @@ namespace MyMediaLite.data_type
     /// Indexes are zero-based.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class Matrix<T>
     {
         /// <summary>Data array: data is stored in columns.</summary>
