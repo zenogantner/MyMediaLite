@@ -39,6 +39,8 @@ namespace Mapping
 	/// </summary>
 	public class Mapping
 	{
+		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
+		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
 		static ICollection<int> relevant_items;
 
 		static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
@@ -102,8 +104,8 @@ namespace Mapping
 			//string save_mapping_file    = parameters.GetRemoveString( "save_model");
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed", -1);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval", false);
-			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);			
-			
+			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
+
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
 
@@ -111,8 +113,8 @@ namespace Mapping
 			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
 			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
 			string load_model_file = args[2];
-			string method    = args[3];			
-			
+			string method    = args[3];
+
 			// set correct recommender
 			BPRMF_Mapping recommender = null;
 			switch (method)
@@ -148,15 +150,15 @@ namespace Mapping
 
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
-			EntityMapping item_mapping = new EntityMapping();			
-			
+			EntityMapping item_mapping = new EntityMapping();
+
 			// training data
-			Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
+			training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 			recommender.SetCollaborativeData(training_data.First, training_data.Second);
 
 			// relevant items
 			if (! relevant_items_file.Equals(String.Empty) )
-				relevant_items = new HashSet<int>( Utils.ReadIntegers( Path.Combine(data_dir, relevant_items_file) ) );
+				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.NonEmptyRowIDs;
 
@@ -187,7 +189,7 @@ namespace Mapping
 				}
 
 			// test data
-            Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+            test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 			TimeSpan seconds;
 
@@ -222,9 +224,7 @@ namespace Mapping
 			Console.Write("mapping_time " + seconds + " ");
 
 			if (!no_eval)
-			{
 				seconds = EvaluateRecommender(recommender, test_data.First, training_data.First);
-			}
 			Console.WriteLine();
 		}
 
@@ -287,17 +287,39 @@ namespace Mapping
 			engine.num_iter_mapping   = parameters.GetRemoveInt32( "num_iter_mapping",   engine.num_iter_mapping);
 			return engine;
 		}
-		
+
 		static void DisplayResults(Dictionary<string, double> result) {
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			Console.Write("AUC {0} prec@5 {1} prec@10 {2} MAP {3} NDCG {4}",
 			              result["AUC"].ToString(ni),
 			              result["prec@5"].ToString(ni),
 			              result["prec@10"].ToString(ni),
 			              result["MAP"].ToString(ni),
 			              result["NDCG"].ToString(ni));
-		}		
+		}
+
+		static void DisplayDataStats()
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			// training data stats
+			int num_users = training_data.First.NonEmptyRowIDs.Count;
+			int num_items = training_data.Second.NonEmptyRowIDs.Count;
+			int matrix_size = num_users * num_items;
+			int empty_size  = matrix_size - training_data.First.NumberOfEntries;
+			double sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+			// test data stats
+			num_users = test_data.First.NonEmptyRowIDs.Count;
+			num_items = test_data.Second.NonEmptyRowIDs.Count;
+			matrix_size = num_users * num_items;
+			empty_size  = matrix_size - test_data.First.NumberOfEntries;
+			sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		}
 	}
 }
