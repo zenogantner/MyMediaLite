@@ -31,10 +31,8 @@ namespace MyMediaLite.rating_predictor
 	/// <summary>
 	/// Matrix factorization engine with explicit user and item bias.
 	/// </summary>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
-		// TODO make one MF class for both ItemRecommender and RatingPredictor (which need to be turned into interfaces for that ...)
 		// TODO think about de-activating/separating regularization for the user and item bias
 
 		/// <inheritdoc />
@@ -43,8 +41,8 @@ namespace MyMediaLite.rating_predictor
 			// init feature matrices
 	       	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
 	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
-	       	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
-	       	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
+	       	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);
 			if (num_features < 2)
 				throw new ArgumentException("num_features must be >= 2");
         	this.user_feature.SetColumnToOneValue(0, 1);
@@ -119,8 +117,12 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("biased-matrix-factorization num_features={0}, regularization={1}, learn_rate={2}, num_iter={3}, init_f_mean={4}, init_f_stdev={5}",
-				                 num_features, regularization, learn_rate, NumIter, init_f_mean, init_f_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return String.Format(ni,
+			                     "biased-matrix-factorization num_features={0}, regularization={1}, learn_rate={2}, num_iter={3}, init_mean={4}, init_stdev={5}",
+				                 NumFeatures, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }

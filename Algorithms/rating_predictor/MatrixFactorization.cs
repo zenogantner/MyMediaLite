@@ -48,19 +48,59 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>The bias (global average)</summary>
         protected double bias;
 
-        /// <summary>Number of latent features</summary>
-        public int num_features = 10;
+		/// <summary>Mean of the normal distribution used to initialize the features</summary>
+		public double InitMean { get; set; }
+
+        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
+		public double InitStdev {
+			get {
+				return this.init_stdev;
+			}
+			set {
+				init_stdev = value;
+			}
+		}
+        private double init_stdev = 0.1;
+
         /// <summary>Learn rate</summary>
-        public double learn_rate = 0.01;
+		public double LearnRate {
+			get {
+				return this.learn_rate;
+			}
+			set {
+				learn_rate = value;
+			}
+		}
+        /// <summary>Learn rate</summary>
+        protected double learn_rate = 0.01;		
+		
+        /// <summary>Number of latent features</summary>
+		public int NumFeatures {
+			get {
+				return this.num_features;
+			}
+			set {
+				num_features = value;
+			}
+		}
+        /// <summary>Number of latent features</summary>
+        protected int num_features = 10;				
+
         /// <summary>Regularization parameter</summary>
-        public double regularization = 0.015;
-	    /// <summary>Mean of the normal distribution used to initialize the features</summary>
-        public double init_f_mean = 0;
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
-        public double init_f_stdev = 0.1;
-        /// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get { return num_iter; } set { num_iter = value; } }
+		public double Regularization {
+			get {
+				return this.regularization;
+			}
+			set {
+				regularization = value;
+			}
+		}
+        /// <summary>Regularization parameter</summary>	
+        protected double regularization = 0.015;		
+
         private int num_iter = 30;
+		/// <summary>Number of iterations over the training data</summary>
+		public int NumIter { get { return num_iter; } set { num_iter = value; } }
 
         /// <inheritdoc />
         public override void Train()
@@ -68,8 +108,8 @@ namespace MyMediaLite.rating_predictor
 			// init feature matrices
 	       	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
 	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
-	       	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
-	       	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
+	       	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);
 
             // learn model parameters
             bias = ratings.Average;
@@ -94,7 +134,7 @@ namespace MyMediaLite.rating_predictor
         /// <param name="user_id">the user ID</param>
         public void RetrainUser(int user_id)
         {
-            MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
+            MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
             LearnFeatures(ratings.ByUser[(int)user_id], true, false);
         }
 
@@ -102,7 +142,7 @@ namespace MyMediaLite.rating_predictor
         /// <param name="item_id">the item ID</param>
         public void RetrainItem(int item_id)
         {
-            MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
+            MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
             LearnFeatures(ratings.ByItem[(int)item_id], false, true);
         }
 
@@ -217,7 +257,7 @@ namespace MyMediaLite.rating_predictor
 			{
             	base.AddUser(user_id);
 				user_feature.AddRows(user_id + 1);
-            	MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
+            	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
 			}
         }
 
@@ -228,7 +268,7 @@ namespace MyMediaLite.rating_predictor
 			{
             	base.AddItem(item_id);
 				item_feature.AddRows(item_id + 1);
-            	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
+            	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
 			}
         }
 
@@ -352,8 +392,12 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_f_mean={4} init_f_stdev={5}",
-				                 num_features, regularization, learn_rate, num_iter, init_f_mean, init_f_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';						
+			
+			return String.Format(ni,
+			                     "matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
+				                 NumFeatures, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
     }
 }
