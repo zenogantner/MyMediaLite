@@ -341,16 +341,19 @@ namespace MyMediaLite.data_type
 		}
 
 		/// <summary>
-		/// Compute the Frobenius norm (sum of squared entries) of a matrix
+		/// Compute the Frobenius norm (square root of the sum of squared entries) of a matrix
 		/// </summary>
+		/// <remarks>
+		/// See http://en.wikipedia.org/wiki/Matrix_norm
+		/// </remarks>
 		/// <param name="matrix">the matrix</param>
 		/// <returns>the Frobenius norm of the matrix</returns>
 		static public double FrobeniusNorm(Matrix<double> matrix)
 		{
-			double result = 0;
+			double squared_entry_sum = 0;
 			for (int x = 0; x < matrix.dim1 * matrix.dim2; x++)
-				result += Math.Pow(matrix.data[x], 2);
-			return result;
+				squared_entry_sum += Math.Pow(matrix.data[x], 2);
+			return Math.Sqrt(squared_entry_sum);
 		}
 
 		/// <summary>
