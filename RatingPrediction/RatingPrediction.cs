@@ -149,7 +149,7 @@ namespace RatingPrediction
 					recommender = InitMatrixFactorization(parameters, biased_mf);
 					break;
 				case "SocialMF":
-					recommender = InitMatrixFactorization(parameters, social_mf); // TODO setup social regularization
+					recommender = InitMatrixFactorization(parameters, social_mf);
 					break;
 				case "user-knn-pearson":
 				case "user-kNN-pearson":
@@ -239,7 +239,7 @@ namespace RatingPrediction
 			recommender.MaxRatingValue = max_rating;
 			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue));
 
-			// TODO DisplayStats
+			DisplayDataStats(training_data, test_data);
 
 			if (find_iter != 0)
 			{
@@ -408,5 +408,27 @@ namespace RatingPrediction
 		{
 			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]));
 		}
+		
+		static void DisplayDataStats(RatingData training_data, RatingData test_data)
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			// training data stats
+			int num_users = training_data.MaxUserID + 1;
+			int num_items = training_data.MaxItemID + 1;
+			int matrix_size = num_users * num_items;
+			int empty_size  = matrix_size - training_data.Count;
+			double sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+			// test data stats
+			num_users = test_data.MaxUserID + 1;
+			num_items = test_data.MaxUserID + 1;
+			matrix_size = num_users * num_items;
+			empty_size  = matrix_size - test_data.Count;
+			sparsity = (double) 100 * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		}		
 	}
 }
