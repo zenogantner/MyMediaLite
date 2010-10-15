@@ -91,6 +91,7 @@ namespace RatingPrediction
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
 			Console.WriteLine("    - find_iter=STEP");
 			Console.WriteLine("    - max_iter=N");
+			Console.WriteLine("    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM");
 			Console.WriteLine("    - compute_fit=BOOL");
 
 			Environment.Exit(exit_code);
@@ -118,6 +119,7 @@ namespace RatingPrediction
 			int find_iter               = parameters.GetRemoveInt32(  "find_iter", 0);
 			int max_iter                = parameters.GetRemoveInt32(  "max_iter", 500);
 			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
+			double epsilon              = parameters.GetRemoveDouble( "epsilon", 0);
 
 			// collaborative data characteristics
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
@@ -260,6 +262,7 @@ namespace RatingPrediction
 				List<double> training_time_stats = new List<double>();
 				List<double> fit_time_stats      = new List<double>();
 				List<double> eval_time_stats     = new List<double>();
+				List<double> rmse_eval_stats     = new List<double>();
 
 				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
@@ -280,13 +283,23 @@ namespace RatingPrediction
 							Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 						}
 
+						Dictionary<string, double> results = null;
 						t = Utils.MeasureTime(delegate() {
-							DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
+							results = RatingEval.EvaluateRated(recommender, test_data);
+							DisplayResults(results);
+							rmse_eval_stats.Add(results["RMSE"]);
 							Console.WriteLine(" " + i);
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
+						
+						if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
+						{
+							Console.Error.WriteLine(string.Format(ni, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
+							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
+							break;
+						}						
 					}
 				} // for
 				Console.Out.Flush();

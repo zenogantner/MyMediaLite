@@ -12,7 +12,8 @@
          - allow input from STDIN and output to STDOUT
 	 - nicer time output for both demo programs
          - nicer result output for both demo programs
-	 - rating prediction program: save model earlier
+	 - rating prediction: save model earlier
+         - rating prediction: option to stop iterating if there is no progress
          - always output '.'-separated floating point numbers, independent
            of the current locale.
 	interface changes:
