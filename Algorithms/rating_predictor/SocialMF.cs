@@ -122,7 +122,7 @@ namespace MyMediaLite.rating_predictor
 			// I.3 social network regularization
 			for (int u = 0; u < user_feature_gradient.dim1; u++)
 			{
-
+				// see eq. (13) in the paper
 				double[] sum_neighbor  = new double[num_features];
 				int      num_neighbors = user_neighbors[u].Count;
 				foreach (int v in user_neighbors[u])
@@ -131,6 +131,18 @@ namespace MyMediaLite.rating_predictor
 				if (num_neighbors != 0)
 					for (int f = 2; f < num_features; f++) // ignore fixed/bias parts
 						user_feature_gradient[u, f] += social_regularization * (user_feature[u, f] - sum_neighbor[f] / num_neighbors);
+				foreach (int v in user_neighbors[u])
+				{
+					for (int f = 2; f < num_features; f++) // ignore fixed/bias parts
+					{
+						double diff = 0;
+						foreach (int w in user_neighbors[v])
+							diff -= user_feature[w, f];
+						diff = diff / user_neighbors[v].Count;
+						diff += user_feature[v, f];
+						user_feature_gradient[u, f] -= social_regularization * diff / num_neighbors;
+					}
+				}
 			}		
 			
 			// II. apply gradient descent step
