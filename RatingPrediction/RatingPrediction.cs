@@ -420,8 +420,8 @@ namespace RatingPrediction
 			// training data stats
 			int num_users = training_data.MaxUserID + 1; // TODO get correct data ...
 			int num_items = training_data.MaxItemID + 1;
-			int matrix_size = num_users * num_items;
-			int empty_size  = matrix_size - training_data.Count;
+			long matrix_size = num_users * num_items;
+			long empty_size  = matrix_size - training_data.Count;
 			Console.WriteLine("matrix {0} empty {1}", matrix_size, empty_size);
 			double sparsity = (double) 100 * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
