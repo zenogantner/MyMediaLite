@@ -31,7 +31,6 @@ using MyMediaLite.util;
 namespace MyMediaLite.eval
 {
     /// <summary>Evaluation class</summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public static class RatingEval
     {
 		/// <summary>
@@ -45,38 +44,48 @@ namespace MyMediaLite.eval
 				return new HashSet<string>(measures);
 			}
 		}		
+
 		
         /// <summary>
         /// Evaluates a rating predictor for RMSE and MAE.
         /// </summary>
+        // <remarks>
+        // Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.
+        // </remarks>
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
         /// <returns>a Dictionary containing the evaluation results</returns>
         static public Dictionary<string, double> EvaluateRated(RatingPredictor engine, RatingData ratings)
 		{
             double rmse = 0;
-            double mae = 0;
-            int cnt = 0;
+            double mae  = 0;
 
+			//HashSet<int> users = new HashSet<int>();
+			//HashSet<int> items = new HashSet<int>();
+			
             foreach (RatingEvent r in ratings)
             {
                 double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
 
 				rmse += error * error;
                 mae  += Math.Abs(error);
-                cnt++;
+				
+				//users.Add(r.user_id);
+				//items.Add(r.item_id);
             }
-            mae  = mae / cnt;
-            rmse = Math.Sqrt(rmse / cnt);
+            mae  = mae / ratings.Count;
+            rmse = Math.Sqrt(rmse / ratings.Count);
 
 			if (Double.IsNaN(rmse))
-				Console.WriteLine("RMSE is NaN!");
+				Console.Error.WriteLine("RMSE is NaN!");
 			if (Double.IsNaN(mae))
-				Console.WriteLine("MAE is NaN!");
+				Console.Error.WriteLine("MAE is NaN!");
 
 			Dictionary<string, double> result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
 			result.Add("MAE", mae);
+			//result.Add("num_users", users.Count);
+			//result.Add("num_items", items.Count);
 			return result;
         }
 	}

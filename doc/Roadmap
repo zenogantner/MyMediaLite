@@ -1,7 +1,7 @@
 TODO list
 ---------
 Recommender functionality
- - (*) allow new user evaluation for item prediction
+ - allow new user evaluation for item prediction
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
  - support for non-binary attributes: real, nominal, textual descriptions
@@ -38,6 +38,7 @@ Architecture
    - allow lazy iteration
    - allow random and randomized access
    - allow creating splits for cross-validation w/o duplicating data
+   - (maybe) get num_users, num_items, max_user_id, max_item_id
  - rewrite rating data structures
    - implement easy interface (see above)
    - store in one list (as values, not references!)
@@ -67,3 +68,4 @@ Misc
    - approximate AUC
    - sample precision@N
  - rewrite MF techniques using vector/matrix abstractions
+ - MF: use random ordering for each iteration of SGD

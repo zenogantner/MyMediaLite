@@ -86,14 +86,16 @@ namespace MyMediaLite.rating_predictor
 						double delta_u = gradient_common * i_f;
 						if (f != 1)
 							delta_u -= regularization * u_f;
-						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
+						//MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u); // TODO check whether Inc is really necessary speed-wise
+						user_feature[u, f] += learn_rate * delta_u;
 					}
                     if (update_item && f != 1)
 					{
 						double delta_i = gradient_common * u_f;
 						if (f != 0)
 							delta_i -= regularization * i_f;
-						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
+						//MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
+						item_feature[i, f] += learn_rate * delta_i;
 					}
                 }
             }

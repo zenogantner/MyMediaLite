@@ -161,23 +161,23 @@ namespace MyMediaLite.rating_predictor
 						double diff = 0;
 						foreach (int w in user_neighbors[v])
 							diff -= user_feature[w, f];
-						diff = diff / user_neighbors[v].Count;
+						if (user_neighbors[v].Count != 0)
+							diff = diff / user_neighbors[v].Count;
 						diff += user_feature[v, f];
-						user_feature_gradient[u, f] -= social_regularization * diff / num_neighbors;
+						if (num_neighbors != 0)
+							user_feature_gradient[u, f] -= social_regularization * diff / num_neighbors;
 					}
 				}
 			}		
 			
-			Console.Error.WriteLine("apply ...");
-			
 			// II. apply gradient descent step
 			for (int u = 0; u < user_feature_gradient.dim1; u++)
 				for (int f = 2; f < num_features; f++)
-					MatrixUtils.Inc(user_feature, u, f, user_feature_gradient[u, f] * -learn_rate);
+					MatrixUtils.Inc(user_feature, u, f, user_feature_gradient[u, f] * learn_rate);
 			
 			for (int i = 0; i < item_feature_gradient.dim1; i++)
 				for (int f = 2; f < num_features; f++)
-					MatrixUtils.Inc(item_feature, i, f, item_feature_gradient[i, f] * -learn_rate);
+					MatrixUtils.Inc(item_feature, i, f, item_feature_gradient[i, f] * learn_rate);
 		}
 		
 		private void IterateSGD(Ratings ratings, bool update_user, bool update_item)
@@ -212,9 +212,11 @@ namespace MyMediaLite.rating_predictor
 						double diff = 0;
 						foreach (int w in user_neighbors[v])
 							diff -= user_feature[w, f];
-						diff = diff / user_neighbors[v].Count;
+						if (user_neighbors[v].Count != 0)
+							diff = diff / user_neighbors[v].Count;
 						diff += user_feature[v, f];
-						sum_neighbors[f] -= diff / num_neighbors;
+						if (num_neighbors != 0)
+							sum_neighbors[f] -= diff / num_neighbors;
 					}
 				}
 				

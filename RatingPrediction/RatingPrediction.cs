@@ -195,7 +195,7 @@ namespace RatingPrediction
 				Usage("Either training or test data, not both, can be read from STDIN.");
 
 			// TODO check for the existence of files before starting to load all of them
-			
+
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
@@ -293,13 +293,13 @@ namespace RatingPrediction
 						eval_time_stats.Add(t.TotalSeconds);
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
-						
+
 						if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 						{
 							Console.Error.WriteLine(string.Format(ni, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
 							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
 							break;
-						}						
+						}
 					}
 				} // for
 				Console.Out.Flush();
@@ -376,7 +376,7 @@ namespace RatingPrediction
 			mf.Regularization = parameters.GetRemoveDouble("regularization", mf.Regularization);
 			mf.LearnRate      = parameters.GetRemoveDouble("lr",             mf.LearnRate);
 			mf.LearnRate      = parameters.GetRemoveDouble("learn_rate",     mf.LearnRate);
-			
+
 			if (mf is SocialMF)
 			{
 				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_reg",            ((SocialMF)mf).SocialRegularization);
@@ -406,29 +406,33 @@ namespace RatingPrediction
 
 		static void DisplayResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}", result["RMSE"], result["MAE"]));
+//			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} num_users {2} num_items {3}",
+//			                            result["RMSE"], result["MAE"], result["num_users"], result["num_items"]));
+			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}",
+			                            result["RMSE"], result["MAE"]));
 		}
-		
+
 		static void DisplayDataStats(RatingData training_data, RatingData test_data)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			// training data stats
-			int num_users = training_data.MaxUserID + 1;
+			int num_users = training_data.MaxUserID + 1; // TODO get correct data ...
 			int num_items = training_data.MaxItemID + 1;
 			int matrix_size = num_users * num_items;
 			int empty_size  = matrix_size - training_data.Count;
+			Console.WriteLine("matrix {0} empty {1}", matrix_size, empty_size);
 			double sparsity = (double) 100 * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
 			num_users = test_data.MaxUserID + 1;
-			num_items = test_data.MaxUserID + 1;
+			num_items = test_data.MaxItemID + 1;
 			matrix_size = num_users * num_items;
 			empty_size  = matrix_size - test_data.Count;
 			sparsity = (double) 100 * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
-		}		
+		}
 	}
 }
