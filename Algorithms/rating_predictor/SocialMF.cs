@@ -153,7 +153,7 @@ namespace MyMediaLite.rating_predictor
 						sum_neighbor[f] += user_feature[v, f];
 				if (num_neighbors != 0)
 					for (int f = 2; f < num_features; f++) // ignore fixed/bias parts
-						user_feature_gradient[u, f] += social_regularization * (user_feature[u, f] - sum_neighbor[f] / num_neighbors);
+						MatrixUtils.Inc(user_feature_gradient, u, f, social_regularization * (user_feature[u, f] - sum_neighbor[f] / num_neighbors));
 				foreach (int v in user_neighbors[u])
 				{
 					for (int f = 2; f < num_features; f++) // ignore fixed/bias parts
@@ -165,7 +165,7 @@ namespace MyMediaLite.rating_predictor
 							diff = diff / user_neighbors[v].Count;
 						diff += user_feature[v, f];
 						if (num_neighbors != 0)
-							user_feature_gradient[u, f] -= social_regularization * diff / num_neighbors;
+							MatrixUtils.Inc(user_feature_gradient, u, f, social_regularization * diff / num_neighbors);
 					}
 				}
 			}		
