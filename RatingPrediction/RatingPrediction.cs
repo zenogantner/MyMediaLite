@@ -37,7 +37,11 @@ namespace RatingPrediction
 	{
 		static NumberFormatInfo ni = new NumberFormatInfo();
 
+		static RatingData training_data;
+		static RatingData test_data;
+
 		// recommender engines
+		static MyMediaLite.rating_predictor.Memory recommender = null;
 		static MatrixFactorization        mf = new MatrixFactorization();
 		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
 		static MatrixFactorization social_mf = new SocialMF();
@@ -96,7 +100,7 @@ namespace RatingPrediction
 			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
 			Console.WriteLine("    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM");
 			Console.WriteLine("    - rmse_cutoff=NUM            abort if RMSE is above NUM");
-			Console.WriteLine("    - mae_cutoff=NUM             abort if MAE is above NUM");			
+			Console.WriteLine("    - mae_cutoff=NUM             abort if MAE is above NUM");
 			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
 
 			Environment.Exit(exit_code);
@@ -150,7 +154,6 @@ namespace RatingPrediction
 				MyMediaLite.util.Random.InitInstance(random_seed);
 
 			// set correct recommender
-			MyMediaLite.rating_predictor.Memory recommender = null;
 			switch (method)
 			{
 				case "matrix-factorization":
@@ -205,80 +208,23 @@ namespace RatingPrediction
 			if (training_file.Equals("-") && testfile.Equals("-"))
 				Usage("Either training or test data, not both, can be read from STDIN.");
 
-			// TODO check for the existence of files before starting to load all of them
-
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
 
-			// read training data
-			RatingData training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
-			recommender.Ratings = training_data;
-
-			// user attributes
-			if (recommender is UserAttributeAwareRecommender)
-				if (user_attributes_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_attributes=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
-					Console.WriteLine("{0} user attributes", attr_data.Second);
-				}
-
-			// item attributes
-			if (recommender is ItemAttributeAwareRecommender)
-				if (item_attributes_file.Equals(string.Empty) )
-				{
-					Usage("Recommender expects item_attributes=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
-					Console.WriteLine("{0} item attributes", attr_data.Second);
-				}
-
-			// user relation
-			if (recommender is UserRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_relation=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
-					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
-					Console.WriteLine("Relation over {0} users", relation_data.Second);
-				}
-
-			// item relation
-			if (recommender is ItemRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects item_relation=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
-					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
-					Console.WriteLine("Relation over {0} items", relation_data.Second);
-				}
-
-			// read test data
-			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+			// load all the data
+			TimeSpan loading_time = Utils.MeasureTime(delegate() {
+				LoadData(data_dir, training_file, testfile, min_rating, max_rating,
+				         user_mapping, item_mapping, user_attributes_file, item_attributes_file,
+				         user_relation_file, item_relation_file);
+			});
+			Console.WriteLine(string.Format(ni, "loading_time {0}", loading_time));
 
 			recommender.MinRatingValue = min_rating;
 			recommender.MaxRatingValue = max_rating;
 			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue));
 
-			DisplayDataStats(training_data, test_data);
+			DisplayDataStats();
 
 			if (find_iter != 0)
 			{
@@ -305,31 +251,31 @@ namespace RatingPrediction
 
 				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
-					TimeSpan t = Utils.MeasureTime(delegate() {
+					TimeSpan time = Utils.MeasureTime(delegate() {
 						iterative_recommender.Iterate();
 					});
-					training_time_stats.Add(t.TotalSeconds);
+					training_time_stats.Add(time.TotalSeconds);
 
 					if (i % find_iter == 0)
 					{
 						if (compute_fit)
 						{
 							double fit = 0;
-							t = Utils.MeasureTime(delegate() {
+							time = Utils.MeasureTime(delegate() {
 								fit = iterative_recommender.ComputeFit();
 							});
-							fit_time_stats.Add(t.TotalSeconds);
+							fit_time_stats.Add(time.TotalSeconds);
 							Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 						}
 
 						Dictionary<string, double> results = null;
-						t = Utils.MeasureTime(delegate() {
+						time = Utils.MeasureTime(delegate() {
 							results = RatingEval.EvaluateRated(recommender, test_data);
 							DisplayResults(results);
 							rmse_eval_stats.Add(results["RMSE"]);
 							Console.WriteLine(" " + i);
 						});
-						eval_time_stats.Add(t.TotalSeconds);
+						eval_time_stats.Add(time.TotalSeconds);
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
 
@@ -343,7 +289,7 @@ namespace RatingPrediction
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
 								break;
-						}						
+						}
 					}
 				} // for
 				Console.Out.Flush();
@@ -410,6 +356,79 @@ namespace RatingPrediction
 			}
 		}
 
+        static void LoadData (string data_dir,
+		              string training_file, string testfile,
+		              double min_rating, double max_rating,
+		              EntityMapping user_mapping, EntityMapping item_mapping,
+		              string user_attributes_file, string item_attributes_file,
+		              string user_relation_file, string item_relation_file)
+		{
+			// TODO check for the existence of files before starting to load all of them
+
+			// read training data
+			training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			recommender.Ratings = training_data;
+
+			// user attributes
+			if (recommender is UserAttributeAwareRecommender)
+				if (user_attributes_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_attributes=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					Console.WriteLine("{0} user attributes", attr_data.Second);
+				}
+
+			// item attributes
+			if (recommender is ItemAttributeAwareRecommender)
+				if (item_attributes_file.Equals(string.Empty) )
+				{
+					Usage("Recommender expects item_attributes=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					Console.WriteLine("{0} item attributes", attr_data.Second);
+				}
+
+			// user relation
+			if (recommender is UserRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
+					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
+					Console.WriteLine("relation over {0} users", relation_data.Second);
+				}
+
+			// item relation
+			if (recommender is ItemRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects item_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
+					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
+					Console.WriteLine("relation over {0} items", relation_data.Second);
+				}
+
+			// read test data
+			test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+		}
+
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
@@ -456,7 +475,7 @@ namespace RatingPrediction
 			                            result["RMSE"], result["MAE"]));
 		}
 
-		static void DisplayDataStats(RatingData training_data, RatingData test_data)
+		static void DisplayDataStats()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';

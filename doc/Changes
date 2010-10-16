@@ -19,6 +19,9 @@
          - rating prediction: option to stop iterating if there is no progress
          - always output '.'-separated floating point numbers, independent
            of the current locale.
+         - better documentation of arguments
+         - rating prediction: MAE and RMSE cutoff values for iteration search
+         - give out data loading time
 	interface changes:
 	 - use IterativeModel interface in rating prediction program
 	 - consistent parameters for RatingData constructor

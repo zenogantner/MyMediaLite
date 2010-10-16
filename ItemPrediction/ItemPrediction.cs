@@ -96,7 +96,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
 			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
-			Console.WriteLine("    - max_iter=N                 perform at most N iterations");			
+			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
 			Console.WriteLine("    - auc_cutoff=NUM             abort if AUC is below NUM");
 			Console.WriteLine("    - prec_cutoff=NUM            abort if prec@5 is below NUM");
 			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
@@ -216,82 +216,16 @@ namespace MyMediaLite
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
 
-			// training data
-			training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
-
-			// relevant items
-			if (! relevant_items_file.Equals(string.Empty) )
-				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-			else
-				relevant_items = training_data.Second.NonEmptyRowIDs;
-
-			if (recommender != random)
-				((Memory)recommender).SetCollaborativeData(training_data.First, training_data.Second);
-
-			// user attributes
-			if (recommender is UserAttributeAwareRecommender)
-				if (user_attributes_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_attributes=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
-					Console.WriteLine("{0} user attributes", attr_data.Second);
-				}
-
-			// item attributes
-			if (recommender is ItemAttributeAwareRecommender)
-				if (item_attributes_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects item_attributes=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
-					Console.WriteLine("{0} item attributes", attr_data.Second);
-				}
-
-			// user relation
-			if (recommender is UserRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_relation=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
-					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
-					Console.WriteLine("Relation over {0} users", relation_data.Second);
-				}
-
-			// item relation
-			if (recommender is ItemRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects item_relation=FILE.");
-				}
-				else
-				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
-					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
-					Console.WriteLine("Relation over {0} items", relation_data.Second);
-				}
-
-			// test data
-            test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+			// load all the data
+			TimeSpan loading_time = Utils.MeasureTime(delegate() {
+				LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
+			});
+			Console.WriteLine(string.Format(ni, "loading_time {0}", loading_time));
 
 			DisplayDataStats();
 
 			TimeSpan time_span;
 
-			// TODO give out time for each iteration
 			if (find_iter != 0)
 			{
 				IterativeModel iterative_recommender = (IterativeModel) recommender;
@@ -443,7 +377,84 @@ namespace MyMediaLite
 			EngineStorage.SaveModel(recommender, data_dir, save_model_file);
 		}
 
-		// undo the void thing ...
+        static void LoadData(string data_dir, string trainfile, string testfile,
+		                     EntityMapping user_mapping, EntityMapping item_mapping,
+		                     string relevant_items_file,
+		                     string user_attributes_file, string item_attributes_file,
+		                     string user_relation_file, string item_relation_file)
+		{
+			// training data
+			training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
+
+			// relevant items
+			if (! relevant_items_file.Equals(string.Empty) )
+				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			else
+				relevant_items = training_data.Second.NonEmptyRowIDs;
+
+			if (recommender != random)
+				((Memory)recommender).SetCollaborativeData(training_data.First, training_data.Second);
+
+			// user attributes
+			if (recommender is UserAttributeAwareRecommender)
+				if (user_attributes_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_attributes=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					Console.WriteLine("{0} user attributes", attr_data.Second);
+				}
+
+			// item attributes
+			if (recommender is ItemAttributeAwareRecommender)
+				if (item_attributes_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects item_attributes=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					Console.WriteLine("{0} item attributes", attr_data.Second);
+				}
+
+			// user relation
+			if (recommender is UserRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
+					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
+					Console.WriteLine("relation over {0} users", relation_data.Second);
+				}
+
+			// item relation
+			if (recommender is ItemRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects item_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
+					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
+					Console.WriteLine("relation over {0} items", relation_data.Second);
+				}
+
+			// test data
+	        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+		}
+
 		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
 			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
