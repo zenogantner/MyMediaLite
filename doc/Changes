@@ -5,7 +5,8 @@
            MyMediaLite command-line tools.
          - MAP (mean average precision) for item recommender evaluation
          - API documentation in XML (generated from the inline XML docs)
-         - implemented SocialMF by Jamali+Ester 2010
+         - new interface UserRelationAwareRecommender
+         - SocialMF by Jamali+Ester 2010
         engine changes:
          - added global bias term to BiasedMatrixFactorization
         changes to the command-line programs:
@@ -21,7 +22,7 @@
 	 - consistent parameters for RatingData constructor
 	 - SparseBooleanMatrix now allows [x, y] and [x] access, has 
            properties instead of GetXXX() methods
-         - Matrix now allos [x, y] access
+         - Matrix now allows [x, y] access
          - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
            now both are completely property-based
 	misc:

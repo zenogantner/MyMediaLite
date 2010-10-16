@@ -69,13 +69,13 @@ namespace MyMediaLite
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + wrmf);
 			Console.WriteLine("    - " + bprmf);
-			Console.WriteLine("    - " + bpr_linear + " (needs item_attributes)");
+			Console.WriteLine("    - " + bpr_linear + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + iknn);
-			Console.WriteLine("    - " + iaknn + " (needs item_attributes)");
+			Console.WriteLine("    - " + iaknn      + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + uknn);
 			Console.WriteLine("    - " + wuknn);
-			Console.WriteLine("    - " + uaknn + " (needs user_attributes)");
-			Console.WriteLine("    - " + svm + " (needs item_attributes)");
+			Console.WriteLine("    - " + uaknn      + " (needs user_attributes=FILE)");
+			Console.WriteLine("    - " + svm        + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + mp);
 			Console.WriteLine("    - " + random);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
@@ -84,6 +84,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - random_seed=N");
 			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
 			Console.WriteLine("    - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
+			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
 			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
@@ -130,9 +131,9 @@ namespace MyMediaLite
 			string load_model_file        = parameters.GetRemoveString( "load_model");
 			int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
 			bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
-			string predict_items_file     = parameters.GetRemoveString( "predict_items_file", String.Empty);
+			string predict_items_file     = parameters.GetRemoveString( "predict_items_file", string.Empty);
 			int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
-			string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", String.Empty);
+			string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
 
 			// main data files and method
 			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
@@ -213,7 +214,7 @@ namespace MyMediaLite
 			training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
 
 			// relevant items
-			if (! relevant_items_file.Equals(String.Empty) )
+			if (! relevant_items_file.Equals(string.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.NonEmptyRowIDs;
@@ -223,7 +224,7 @@ namespace MyMediaLite
 
 			// user attributes
 			if (recommender is UserAttributeAwareRecommender)
-				if (user_attributes_file.Equals(String.Empty))
+				if (user_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_attributes=FILE.");
 				}
@@ -237,7 +238,7 @@ namespace MyMediaLite
 
 			// item attributes
 			if (recommender is ItemAttributeAwareRecommender)
-				if (item_attributes_file.Equals(String.Empty))
+				if (item_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects item_attributes=FILE.");
 				}
@@ -262,7 +263,7 @@ namespace MyMediaLite
 				IterativeModel iterative_recommender = (IterativeModel) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
-				if (load_model_file.Equals(String.Empty))
+				if (load_model_file.Equals(string.Empty))
 					iterative_recommender.Train();
 				else
 					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
@@ -344,7 +345,7 @@ namespace MyMediaLite
 			}
 			else
 			{
-				if (load_model_file.Equals(String.Empty))
+				if (load_model_file.Equals(string.Empty))
 				{
 					Console.Write(recommender.ToString() + " ");
 					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
@@ -357,9 +358,9 @@ namespace MyMediaLite
 					// TODO is this the right time to load the model?
 				}
 
-				if (!predict_items_file.Equals(String.Empty))
+				if (!predict_items_file.Equals(string.Empty))
 				{
-					if (predict_for_users_file.Equals(String.Empty))
+					if (predict_for_users_file.Equals(string.Empty))
 						time_span = Utils.MeasureTime( delegate()
 					    	{
 						    	eval.ItemPrediction.WritePredictions(

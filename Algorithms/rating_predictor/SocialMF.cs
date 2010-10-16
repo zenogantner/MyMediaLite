@@ -36,7 +36,7 @@ namespace MyMediaLite.rating_predictor
     ///  A matrix factorization technique with trust propagation for recommendation in social networks
     ///  RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
 	/// </remarks>
-	public class SocialMF : BiasedMatrixFactorization, UserAttributeAwareRecommender
+	public class SocialMF : BiasedMatrixFactorization, UserRelationAwareRecommender
 	{
         /// <summary>Social network regularization constant</summary>
 		public double SocialRegularization {
@@ -55,7 +55,7 @@ namespace MyMediaLite.rating_predictor
 		public bool StochasticLearning { get; set; }
 		
 		/// <inheritdoc />
-		public SparseBooleanMatrix UserAttributes
+		public SparseBooleanMatrix UserRelation
 		{
 			set
 			{
@@ -65,14 +65,14 @@ namespace MyMediaLite.rating_predictor
 		}
 		private SparseBooleanMatrix user_neighbors;
 		
-		/// <inheritdoc />
-		public int NumUserAttributes { get; set; }
-
+		/// <summary>the number of users</summary>
+		public int NumUsers { get; set; }
+		
 		/// <inheritdoc />
         public override void Train()
 		{
 			// init feature matrices
-	       	user_feature = new Matrix<double>(Math.Max(ratings.MaxUserID + 1, NumUserAttributes), num_features);
+	       	user_feature = new Matrix<double>(NumUsers, num_features);
 	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
 	       	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev);
 	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);

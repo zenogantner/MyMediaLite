@@ -66,12 +66,12 @@ namespace RatingPrediction
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + mf);
 			Console.WriteLine("    - " + biased_mf);
-			Console.WriteLine("    - " + social_mf);
+			Console.WriteLine("    - " + social_mf + " (needs user_relations=FILE)");
 			Console.WriteLine("    - " + uknn_p);
 			Console.WriteLine("    - " + uknn_c);
 			Console.WriteLine("    - " + iknn_p);
 			Console.WriteLine("    - " + iknn_c);
-			Console.WriteLine("    - " + iaknn + " (needs item_attributes)");
+			Console.WriteLine("    - " + iaknn     + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + uib);
 			Console.WriteLine("    - " + ga);
 			Console.WriteLine("    - " + ua);
@@ -81,7 +81,9 @@ namespace RatingPrediction
 			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
 			Console.WriteLine("    - random_seed=N              ");
 			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
+			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
 			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
+			Console.WriteLine("    - user_relations=FILE        file containing user relation information");			
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
 			Console.WriteLine("    - min_rating=NUM             ");
@@ -125,10 +127,13 @@ namespace RatingPrediction
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
 			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
 
-			// other arguments
+			// data arguments
 			string data_dir             = parameters.GetRemoveString( "data_dir");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
+			string user_relations_file  = parameters.GetRemoveString( "user_relations");
+			
+			// other arguments
 			string save_model_file      = parameters.GetRemoveString( "save_model");
 			string load_model_file      = parameters.GetRemoveString( "load_model");
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed",  -1);
@@ -206,7 +211,7 @@ namespace RatingPrediction
 
 			// user attributes
 			if (recommender is UserAttributeAwareRecommender)
-				if (user_attributes_file.Equals(String.Empty))
+				if (user_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_attributes=FILE.");
 				}
@@ -232,6 +237,20 @@ namespace RatingPrediction
 					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
 
+			// user relations
+			if (recommender is UserRelationAwareRecommender)
+				if (user_relations_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_relations=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
+					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
+					Console.WriteLine("Relation over {0} users", relation_data.Second);
+				}			
+			
 			// read test data
 			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 
@@ -423,7 +442,7 @@ namespace RatingPrediction
 			long matrix_size = num_users * num_items;
 			long empty_size  = matrix_size - training_data.Count;
 			Console.WriteLine("matrix {0} empty {1}", matrix_size, empty_size);
-			double sparsity = (double) 100 * empty_size / matrix_size;
+			double sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
@@ -431,7 +450,7 @@ namespace RatingPrediction
 			num_items = test_data.MaxItemID + 1;
 			matrix_size = num_users * num_items;
 			empty_size  = matrix_size - test_data.Count;
-			sparsity = (double) 100 * empty_size / matrix_size;
+			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
 	}

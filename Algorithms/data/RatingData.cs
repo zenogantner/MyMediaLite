@@ -110,6 +110,17 @@ namespace MyMediaLite.data
 		}
 
 		/// <summary>
+		/// Shuffle the order of the rating events
+		/// </summary>
+		/// <remarks>
+		/// Fisher-Yates shuffle
+		/// </remarks>		
+		public void Shuffle()
+		{
+			all.Shuffle();
+		}
+		
+		/// <summary>
 		/// Returns an enumerator for use in foreach loops
 		/// </summary>
 		/// <returns>

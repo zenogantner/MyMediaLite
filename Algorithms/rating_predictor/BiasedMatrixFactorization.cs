@@ -59,6 +59,7 @@ namespace MyMediaLite.rating_predictor
 		{
 			double rating_range_size = MaxRatingValue - MinRatingValue;
 
+			ratings.Shuffle();
 			foreach (RatingEvent rating in ratings)
             {
             	int u = rating.user_id;

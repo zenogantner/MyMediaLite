@@ -26,20 +26,20 @@ using MyMediaLite.util;
 namespace MyMediaLite.io
 {
 	/// <summary>
-	/// Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects.
+	/// Class that offers static methods to read (binary) relation over entities into SparseBooleanMatrix objects.
 	///
 	/// The expected (sparse) line format is:
-	/// ENTITY_ID whitespace ATTRIBUTE_ID
-	/// for attributes that are set.
+	/// ENTITY_ID whitespace ENTITY_ID
+	/// for the relations that hold.
 	/// </summary>
-	public class AttributeData
+	public class RelationData
 	{
 		/// <summary>
 		/// Read binary attribute data from file
 		/// </summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the attribute data and the number of attributes</returns>
+		/// <returns>the relation data and the number of entities</returns>
 		static public Pair<SparseBooleanMatrix, int> Read(string filename, EntityMapping mapping)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
@@ -49,15 +49,15 @@ namespace MyMediaLite.io
 		}
 
 		/// <summary>
-		/// Read binary attribute data from file
+		/// Read binary relation data from file
 		/// </summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the attribute data and the number of attributes</returns>
+		/// <returns>the relation data and the number of entities</returns>
 		static public Pair<SparseBooleanMatrix, int> Read(StreamReader reader, EntityMapping mapping)
 		{
 			SparseBooleanMatrix matrix = new SparseBooleanMatrix();
-			int max_attr_id = 0;
+			int max_entity_id = 0;
 
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -78,14 +78,14 @@ namespace MyMediaLite.io
 				if (tokens.Length != 2)
 					throw new IOException("Expected exactly two columns: " + line);
 
-				int entity_id = mapping.ToInternalID(int.Parse(tokens[0]));
-				int attr_id   = int.Parse(tokens[1]);
+				int entity1_id = mapping.ToInternalID(int.Parse(tokens[0]));
+				int entity2_id = mapping.ToInternalID(int.Parse(tokens[1]));
 
-               	matrix[entity_id, attr_id] = true;
-				max_attr_id = Math.Max(max_attr_id, attr_id);
+               	matrix[entity1_id, entity2_id] = true;
+				max_entity_id = Math.Max(max_entity_id, entity2_id);
 			}
 
-			return new Pair<SparseBooleanMatrix, int>(matrix, max_attr_id + 1);
+			return new Pair<SparseBooleanMatrix, int>(matrix, max_entity_id + 1);
 		}
 	}
 }

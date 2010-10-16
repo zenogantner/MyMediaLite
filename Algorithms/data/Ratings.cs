@@ -18,6 +18,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MyMediaLite.util;
 
 namespace MyMediaLite.data
 {
@@ -38,6 +39,26 @@ namespace MyMediaLite.data
 				return ratingList[index];
 			}
 		}		
+		
+		/// <summary>
+		/// Shuffle the order of the rating events
+		/// </summary>
+		/// <remarks>
+		/// Fisher-Yates shuffle
+		/// </remarks>
+		public void Shuffle()
+		{
+			// TODO move generic implementation to a library
+			Random random = MyMediaLite.util.Random.GetInstance();			
+			for (int i = ratingList.Count - 1; i >= 0; i--)
+			{
+				int r = random.Next(0, i + 1);
+
+				RatingEvent tmp = ratingList[i];
+				ratingList[i] = ratingList[r];
+				ratingList[r] = tmp;
+			}			
+		}
 		
 		/// <summary>
 		/// Number of ratings in the collection
