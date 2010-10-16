@@ -127,6 +127,7 @@
     <Compile Include="rating_predictor\SocialMF.cs" />
     <Compile Include="io\RelationData.cs" />
     <Compile Include="UserRelationAwareRecommender.cs" />
+    <Compile Include="ItemRelationAwareRecommender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

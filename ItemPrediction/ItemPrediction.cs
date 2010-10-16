@@ -86,6 +86,8 @@ namespace MyMediaLite
 			Console.WriteLine("    - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
 			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
 			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
+			Console.WriteLine("    - user_relation=FILE         file containing user relation information");
+			Console.WriteLine("    - item_relation=FILE         file containing item relation information");
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
 			Console.WriteLine("    - no_eval=BOOL               do not evaluate");
@@ -122,11 +124,15 @@ namespace MyMediaLite
 			double prec_cutoff            = parameters.GetRemoveDouble( "prec_cutoff");
 			bool compute_fit              = parameters.GetRemoveBool(   "compute_fit", false);
 
-			// other parameters
+			// data parameters
 			string data_dir               = parameters.GetRemoveString( "data_dir");
 			string relevant_items_file    = parameters.GetRemoveString( "relevant_items");
-			string item_attributes_file   = parameters.GetRemoveString( "item_attributes");
 			string user_attributes_file   = parameters.GetRemoveString( "user_attributes");
+			string item_attributes_file   = parameters.GetRemoveString( "item_attributes");
+			string user_relation_file     = parameters.GetRemoveString( "user_relation");
+			string item_relation_file     = parameters.GetRemoveString( "item_relation");
+
+			// other parameters
 			string save_model_file        = parameters.GetRemoveString( "save_model");
 			string load_model_file        = parameters.GetRemoveString( "load_model");
 			int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
@@ -248,6 +254,34 @@ namespace MyMediaLite
 					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
 					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 					Console.WriteLine("{0} item attributes", attr_data.Second);
+				}
+
+			// user relation
+			if (recommender is UserRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects user_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
+					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
+					Console.WriteLine("Relation over {0} users", relation_data.Second);
+				}
+
+			// item relation
+			if (recommender is ItemRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects item_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
+					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
+					Console.WriteLine("Relation over {0} items", relation_data.Second);
 				}
 
 			// test data
@@ -471,8 +505,8 @@ namespace MyMediaLite
 		static void DisplayDataStats()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			// training data stats
 			int num_users = training_data.First.NonEmptyRowIDs.Count;
 			int num_items = training_data.Second.NonEmptyRowIDs.Count;

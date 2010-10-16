@@ -83,7 +83,8 @@ namespace RatingPrediction
 			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
 			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
 			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
-			Console.WriteLine("    - user_relations=FILE        file containing user relation information");			
+			Console.WriteLine("    - user_relation=FILE         file containing user relation information");
+			Console.WriteLine("    - item_relation=FILE         file containing item relation information");
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
 			Console.WriteLine("    - min_rating=NUM             ");
@@ -132,7 +133,8 @@ namespace RatingPrediction
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 			string user_relation_file   = parameters.GetRemoveString( "user_relation");
-			
+			string item_relation_file   = parameters.GetRemoveString( "item_relation");
+
 			// other arguments
 			string save_model_file      = parameters.GetRemoveString( "save_model");
 			string load_model_file      = parameters.GetRemoveString( "load_model");
@@ -249,8 +251,22 @@ namespace RatingPrediction
 					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
 					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
 					Console.WriteLine("Relation over {0} users", relation_data.Second);
-				}			
-			
+				}
+
+			// item relation
+			if (recommender is ItemRelationAwareRecommender)
+				if (user_relation_file.Equals(string.Empty))
+				{
+					Usage("Recommender expects item_relation=FILE.");
+				}
+				else
+				{
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
+					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
+					Console.WriteLine("Relation over {0} items", relation_data.Second);
+				}
+
 			// read test data
 			RatingData test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 

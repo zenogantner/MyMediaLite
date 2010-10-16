@@ -5,7 +5,9 @@
            MyMediaLite command-line tools.
          - MAP (mean average precision) for item recommender evaluation
          - API documentation in XML (generated from the inline XML docs)
-         - new interface UserRelationAwareRecommender
+         - support recommenders that use relations over users and/or items
+           using the interfaces UserRelationAwareRecommender and
+           ItemRelationAwareRecommender
          - SocialMF by Jamali+Ester 2010
         engine changes:
          - added global bias term to BiasedMatrixFactorization
