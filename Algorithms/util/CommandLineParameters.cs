@@ -48,7 +48,7 @@ namespace MyMediaLite.util
 			this.dict = new Dictionary<string, string>();
 			for (int i = start; i < args.Length; i++)
 			{
-				if (args[i].Equals(String.Empty))
+				if (args[i].Equals(string.Empty))
 					continue;
 
 				string[] pair = args[i].Split('=');
@@ -61,7 +61,7 @@ namespace MyMediaLite.util
 				if (dict.ContainsKey(arg_name))
 					throw new ArgumentException(arg_name + " is used twice as an argument.");
 
-				if (arg_value.Equals(String.Empty))
+				if (arg_value.Equals(string.Empty))
 				    throw new ArgumentException(arg_name + " has an empty value.");
 
 				if (arg_name.Equals("option_file"))
@@ -224,7 +224,7 @@ namespace MyMediaLite.util
 		/// <returns>the parameter value related to key, an empty string if it does not exist</returns>
 		public string GetRemoveString(string key)
 		{
-			return GetRemoveString(key, String.Empty);
+			return GetRemoveString(key, string.Empty);
 		}
 
 		/// <summary>
@@ -273,7 +273,7 @@ namespace MyMediaLite.util
 				while (!reader.EndOfStream)
 				{
 		           	string line = reader.ReadLine();
-					if (line.Trim().Equals(String.Empty))
+					if (line.Trim().Equals(string.Empty))
 						continue;
 
 		            string[] tokens = line.Split(':');
@@ -283,7 +283,7 @@ namespace MyMediaLite.util
 					string arg_name  = tokens[0].Trim();
 					string arg_value = tokens[1].Trim();
 
-					if (arg_value.Equals(String.Empty))
+					if (arg_value.Equals(string.Empty))
 					    throw new ArgumentException(arg_name + " has an empty value.");
 
 					if (!dict.ContainsKey(arg_name)) // command line overrides argument file

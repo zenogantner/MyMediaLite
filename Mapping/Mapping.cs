@@ -144,7 +144,7 @@ namespace Mapping
 					recommender = InitBPR_MF_UserMapping(bprmf_user_map_bpr, parameters);
 					break;
 				default:
-					Usage(String.Format("Unknown method: '{0}'", method));
+					Usage(string.Format("Unknown method: '{0}'", method));
 					break;
 			}
 
@@ -160,14 +160,14 @@ namespace Mapping
 			recommender.SetCollaborativeData(training_data.First, training_data.Second);
 
 			// relevant items
-			if (! relevant_items_file.Equals(String.Empty) )
+			if (! relevant_items_file.Equals(string.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.NonEmptyRowIDs;
 
 			// user attributes
 			if (recommender is UserAttributeAwareRecommender)
-				if (user_attributes_file.Equals(String.Empty))
+				if (user_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_attributes.");
 				}
@@ -180,7 +180,7 @@ namespace Mapping
 
 			// item attributes
 			if (recommender is ItemAttributeAwareRecommender)
-				if (item_attributes_file.Equals(String.Empty))
+				if (item_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects item_attributes.");
 				}

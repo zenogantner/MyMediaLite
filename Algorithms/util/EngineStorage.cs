@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 
+
 namespace MyMediaLite.util
 {
 	/// <summary>
@@ -34,7 +35,7 @@ namespace MyMediaLite.util
 		/// <param name="file">the filename (may include relative paths)</param>
 		public static void SaveModel(RecommenderEngine engine, string data_dir, string file)
 		{
-			if (file.Equals(String.Empty))
+			if (file.Equals(string.Empty))
 				return;
 
 			string filename = Path.Combine(data_dir, file);
@@ -51,7 +52,7 @@ namespace MyMediaLite.util
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
 		public static void SaveModel(RecommenderEngine engine, string data_dir, string filename, int iteration)
 		{
-			if (filename.Equals(String.Empty))
+			if (filename.Equals(string.Empty))
 				return;
 
 			SaveModel(engine, data_dir, filename + "-it-" + iteration);
@@ -65,7 +66,7 @@ namespace MyMediaLite.util
 		/// <param name="filename">the filename template</param>
 		public static void LoadModel(RecommenderEngine engine, string data_dir, string filename)
 		{
-			if (filename.Equals(String.Empty))
+			if (filename.Equals(string.Empty))
 				return;
 
 			filename = Path.Combine(data_dir, filename);

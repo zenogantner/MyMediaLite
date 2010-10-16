@@ -195,7 +195,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
+			return string.Format("user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
 		}
     }
 }

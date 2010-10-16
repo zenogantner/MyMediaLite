@@ -104,7 +104,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_f_mean={8}, init_f_stdev={9}",
+			return string.Format("BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_f_mean={8}, init_f_stdev={9}",
 				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, C, Gamma, init_f_mean, init_f_stdev);
 		}
 

@@ -124,7 +124,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, mapping_feature_bias={9}, init_f_mean={10}, init_f_stdev={11}",
+			return string.Format("BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, mapping_feature_bias={9}, init_f_mean={10}, init_f_stdev={11}",
 				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, mapping_feature_bias, init_f_mean, init_f_stdev);
 		}
 

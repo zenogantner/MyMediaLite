@@ -346,7 +346,7 @@ namespace MyMediaLite.rating_predictor
         	    int num_items         = System.Int32.Parse(numbers[0]);
             	int num_item_features = System.Int32.Parse(numbers[1]);
             	if (num_user_features != num_item_features)
-                	throw new Exception(String.Format("Number of user and item features must match.", num_user_features, num_item_features));
+                	throw new Exception(string.Format("Number of user and item features must match.", num_user_features, num_item_features));
 
             	Matrix<double> item_feature = new Matrix<double>(num_items, num_item_features);
 
@@ -397,7 +397,7 @@ namespace MyMediaLite.rating_predictor
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';						
 			
-			return String.Format(ni,
+			return string.Format(ni,
 			                     "matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
 				                 NumFeatures, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}

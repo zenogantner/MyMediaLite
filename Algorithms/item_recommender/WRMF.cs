@@ -147,7 +147,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return String.Format("WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_f_mean={4} init_f_stdev={5}",
+			return string.Format("WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_f_mean={4} init_f_stdev={5}",
 				                 num_features, regularization, c_pos, NumIter, init_f_mean, init_f_stdev);
 		}
     }

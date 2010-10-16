@@ -299,7 +299,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return String.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_f_mean={4} init_f_stdev={5}",
+			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_f_mean={4} init_f_stdev={5}",
 								  reg, NumIter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
 		}
 

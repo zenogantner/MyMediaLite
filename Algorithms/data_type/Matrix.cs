@@ -133,7 +133,7 @@ namespace MyMediaLite.data_type
 		{
 			// TODO speed up using Array.Copy()?
 			if (row.Length != this.dim2)
-				throw new ArgumentException(String.Format("Array length ({0}) must equal number of columns ({1}",
+				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
 				                                          row.Length, this.dim2));
 
 			for (int j = 0; j < this.dim2; j++)
@@ -148,7 +148,7 @@ namespace MyMediaLite.data_type
 		public void SetColumn(int j, T[] column)
 		{
 			if (column.Length != this.dim1)
-				throw new ArgumentException(String.Format("Array length ({0}) must equal number of columns ({1}",
+				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
 				                                          column.Length, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
