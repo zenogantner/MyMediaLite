@@ -521,17 +521,17 @@ namespace MyMediaLite
 			// training data stats
 			int num_users = training_data.First.NonEmptyRowIDs.Count;
 			int num_items = training_data.Second.NonEmptyRowIDs.Count;
-			long matrix_size = num_users * num_items;
-			long empty_size  = matrix_size - training_data.First.NumberOfEntries;
-			double sparsity = (double) 100 * empty_size / matrix_size;
+			long matrix_size = (long) num_users * num_items;
+			long empty_size  = (long) matrix_size - training_data.First.NumberOfEntries;
+			double sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
 			num_users = test_data.First.NonEmptyRowIDs.Count;
 			num_items = test_data.Second.NonEmptyRowIDs.Count;
-			matrix_size = num_users * num_items;
-			empty_size  = matrix_size - test_data.First.NumberOfEntries;
-			sparsity = (double) 100 * empty_size / matrix_size;
+			matrix_size = (long) num_users * num_items;
+			empty_size  = (long) matrix_size - test_data.First.NumberOfEntries;
+			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
 	}
