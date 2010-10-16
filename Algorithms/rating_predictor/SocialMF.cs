@@ -254,7 +254,7 @@ namespace MyMediaLite.rating_predictor
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
-			return String.Format(ni,
+			return string.Format(ni,
 			                     "SocialMF num_features={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} stochastic={5} init_mean={6} init_stdev={7}",
 				                 NumFeatures, Regularization, SocialRegularization, LearnRate, NumIter, StochasticLearning, InitMean, InitStdev);
 		}

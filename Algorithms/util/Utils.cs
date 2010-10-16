@@ -22,6 +22,9 @@ using System.IO;
 
 namespace MyMediaLite.util
 {
+	/// <summary>
+	/// Class containing utility functions
+	/// </summary>
 	public static class Utils
 	{
 		public static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs unhandled_event)
@@ -39,6 +42,12 @@ namespace MyMediaLite.util
 		}
 
 		// TODO add memory constraints and a replacement strategy
+		/// <summary>
+		/// Memoize a function
+		/// </summary>
+		/// <param name="f">The function to memoize
+		/// </param>
+		/// <returns>a version of the function that remembers past function results</returns>
 		public static Func<A, R> Memoize<A, R>(this Func<A, R> f)
 		{
   			var map = new Dictionary<A, R>();
@@ -53,7 +62,20 @@ namespace MyMediaLite.util
     		};
 		}
 
+		/// <summary>
+		/// Delegate definition necessary to define MeasureTim
+		/// </summary>
 		public delegate void task();
+		
+		/// <summary>
+		/// Measure how long an action takes
+		/// </summary>
+		/// <param name="t">
+		/// A <see cref="task"/> defining the action to be measured
+		/// </param>
+		/// <returns>
+		/// The <see cref="TimeSpan"/> it takes to perform the action
+		/// </returns>
 		public static TimeSpan MeasureTime(task t)
 		{
 			DateTime startTime = DateTime.Now;
@@ -62,6 +84,21 @@ namespace MyMediaLite.util
 		}
 
 		// TODO only works for strings, not for regexes, do proper implementations
+		/// <summary>
+		/// Split a string
+		/// </summary>
+		/// <param name="str">
+		/// the string to be split
+		/// </param>
+		/// <param name="regex">
+		/// the separator (warning: currently not a regex)
+		/// </param>
+		/// <param name="max_fields">
+		/// the maximum number of fields
+		/// </param>
+		/// <returns>
+		/// the components the string was split into
+		/// </returns>
 		public static string[] Split(string str, string regex, int max_fields)
 		{
 			string[] fields = System.Text.RegularExpressions.Regex.Split(str, regex);
@@ -78,7 +115,16 @@ namespace MyMediaLite.util
 			return fields;
 		}
 
-		public static List<int> ReadIntegers(StreamReader reader)
+		/// <summary>
+		/// Read a list of integers from a StreamReader
+		/// </summary>
+		/// <param name="reader">
+		/// the <see cref="StreamReader"/> to be read from
+		/// </param>
+		/// <returns>
+		/// a list of integers
+		/// </returns>
+		public static IList<int> ReadIntegers(StreamReader reader)
 		{
 			List<int> numbers = new List<int>();
 
@@ -91,7 +137,16 @@ namespace MyMediaLite.util
 			return numbers;
 		}
 
-		public static List<int> ReadIntegers(string filename)
+		/// <summary>
+		/// Read a list of integers from a file
+		/// </summary>
+		/// <param name="filename">
+		/// the name of the file to be read from
+		/// </param>
+		/// <returns>
+		/// a list of integers
+		/// </returns>
+		public static IList<int> ReadIntegers(string filename)
 		{
 			using ( StreamReader reader = new StreamReader(filename) )
 			{
