@@ -245,7 +245,7 @@ namespace RatingPrediction
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
 					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
 					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
 					Console.WriteLine("Relation over {0} users", relation_data.Second);
