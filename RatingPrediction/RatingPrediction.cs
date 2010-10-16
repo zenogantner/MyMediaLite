@@ -66,7 +66,7 @@ namespace RatingPrediction
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
 			Console.WriteLine("    - " + mf);
 			Console.WriteLine("    - " + biased_mf);
-			Console.WriteLine("    - " + social_mf + " (needs user_relations=FILE)");
+			Console.WriteLine("    - " + social_mf + " (needs user_relation=FILE)");
 			Console.WriteLine("    - " + uknn_p);
 			Console.WriteLine("    - " + uknn_c);
 			Console.WriteLine("    - " + iknn_p);
@@ -131,7 +131,7 @@ namespace RatingPrediction
 			string data_dir             = parameters.GetRemoveString( "data_dir");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
-			string user_relations_file  = parameters.GetRemoveString( "user_relations");
+			string user_relation_file   = parameters.GetRemoveString( "user_relation");
 			
 			// other arguments
 			string save_model_file      = parameters.GetRemoveString( "save_model");
@@ -237,11 +237,11 @@ namespace RatingPrediction
 					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
 
-			// user relations
+			// user relation
 			if (recommender is UserRelationAwareRecommender)
-				if (user_relations_file.Equals(string.Empty))
+				if (user_relation_file.Equals(string.Empty))
 				{
-					Usage("Recommender expects user_relations=FILE.");
+					Usage("Recommender expects user_relation=FILE.");
 				}
 				else
 				{
