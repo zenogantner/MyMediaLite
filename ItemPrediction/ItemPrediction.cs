@@ -95,11 +95,11 @@ namespace MyMediaLite
 			Console.WriteLine("    - predict_items_num=N        predict N items per user (needs predict_items_file)");
 			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
-			Console.WriteLine("    - find_iter=STEP");
-			Console.WriteLine("    - max_iter=N");
-			Console.WriteLine("    - auc_cutoff=F");
-			Console.WriteLine("    - prec_cutoff=F");
-			Console.WriteLine("    - compute_fit=BOOL");
+			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
+			Console.WriteLine("    - max_iter=N                 perform at most N iterations");			
+			Console.WriteLine("    - auc_cutoff=NUM             abort if AUC is below NUM");
+			Console.WriteLine("    - prec_cutoff=NUM            abort if prec@5 is below NUM");
+			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
 			Environment.Exit(exit_code);
 		}
 

@@ -92,10 +92,12 @@ namespace RatingPrediction
 			Console.WriteLine("    - no_eval=BOOL               ");
 			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to STDOUT");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
-			Console.WriteLine("    - find_iter=STEP");
-			Console.WriteLine("    - max_iter=N");
+			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
+			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
 			Console.WriteLine("    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM");
-			Console.WriteLine("    - compute_fit=BOOL");
+			Console.WriteLine("    - rmse_cutoff=NUM            abort if RMSE is above NUM");
+			Console.WriteLine("    - mae_cutoff=NUM             abort if MAE is above NUM");			
+			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
 
 			Environment.Exit(exit_code);
 		}
@@ -119,10 +121,12 @@ namespace RatingPrediction
 			catch (ArgumentException e) { Usage(e.Message);			}
 
 			// arguments for iteration search
-			int find_iter               = parameters.GetRemoveInt32(  "find_iter", 0);
-			int max_iter                = parameters.GetRemoveInt32(  "max_iter", 500);
+			int find_iter               = parameters.GetRemoveInt32(  "find_iter",   0);
+			int max_iter                = parameters.GetRemoveInt32(  "max_iter",    500);
 			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
-			double epsilon              = parameters.GetRemoveDouble( "epsilon", 0);
+			double epsilon              = parameters.GetRemoveDouble( "epsilon",     0);
+			double rmse_cutoff          = parameters.GetRemoveDouble( "rmse_cutoff", double.MaxValue);
+			double mae_cutoff           = parameters.GetRemoveDouble( "mae_cutoff",  double.MaxValue);
 
 			// collaborative data characteristics
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
@@ -335,6 +339,11 @@ namespace RatingPrediction
 							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
 							break;
 						}
+						if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
+						{
+								Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
+								break;
+						}						
 					}
 				} // for
 				Console.Out.Flush();
