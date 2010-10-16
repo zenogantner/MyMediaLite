@@ -1,3 +1,7 @@
-MF, 10 features on Netflix
+biased-matrix-factorization, 10 features on Netflix
   iteration_time: min=58.03, max=58.19, avg=58.07
   eval_time: min=0.37, max=0.37, avg=0.37
+
+biased-matrix-factorization, 30 features on Netflix (with shuffling after each iteration)
+  iteration_time: min=300.88, max=307.69, avg=306.69
+  eval_time: min=0.93, max=0.95, avg=0.93
