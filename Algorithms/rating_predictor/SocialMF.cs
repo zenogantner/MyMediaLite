@@ -82,6 +82,8 @@ namespace MyMediaLite.rating_predictor
 			this.item_feature.SetColumnToOneValue(1, 1);
 
             // learn model parameters
+			if (StochasticLearning)
+				ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
             bias = Math.Log( (ratings.Average - MinRatingValue) / (MaxRatingValue - ratings.Average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);

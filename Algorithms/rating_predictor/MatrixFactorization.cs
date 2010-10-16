@@ -114,6 +114,7 @@ namespace MyMediaLite.rating_predictor
 	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);
 
             // learn model parameters
+			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
             bias = ratings.Average;
             LearnFeatures(ratings.All, true, true);
 
