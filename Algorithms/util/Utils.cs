@@ -153,5 +153,26 @@ namespace MyMediaLite.util
 				return ReadIntegers(reader);
 			}
 		}
+		
+		/// <summary>
+		/// Shuffle a list in-place
+		/// </summary>
+		/// <remarks>
+		/// Fisher-Yates shuffle, see
+		/// http://en.wikipedia.org/wiki/Fisher–Yates_shuffle
+		/// </remarks>
+		public static void Shuffle<T>(IList<T> list)
+		{
+			Random random = MyMediaLite.util.Random.GetInstance();			
+			for (int i = list.Count - 1; i >= 0; i--)
+			{
+				int r = random.Next(0, i + 1);
+
+				T tmp = list[i];
+				list[i] = list[r];
+				list[r] = tmp;
+			}			
+		}
+		
 	}
 }

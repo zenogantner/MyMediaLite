@@ -48,16 +48,7 @@ namespace MyMediaLite.data
 		/// </remarks>
 		public void Shuffle()
 		{
-			// TODO move generic implementation to a library
-			Random random = MyMediaLite.util.Random.GetInstance();			
-			for (int i = ratingList.Count - 1; i >= 0; i--)
-			{
-				int r = random.Next(0, i + 1);
-
-				RatingEvent tmp = ratingList[i];
-				ratingList[i] = ratingList[r];
-				ratingList[r] = tmp;
-			}			
+			Utils.Shuffle<RatingEvent>(ratingList);
 		}
 		
 		/// <summary>
