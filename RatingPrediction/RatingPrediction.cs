@@ -37,6 +37,7 @@ namespace RatingPrediction
 	{
 		static NumberFormatInfo ni = new NumberFormatInfo();
 
+		// data sets
 		static RatingData training_data;
 		static RatingData test_data;
 
@@ -55,6 +56,14 @@ namespace RatingPrediction
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
 
+		static bool compute_fit;
+
+		// time statistics
+		static List<double> training_time_stats = new List<double>();
+		static List<double> fit_time_stats      = new List<double>();
+		static List<double> eval_time_stats     = new List<double>();
+		static List<double> rmse_eval_stats     = new List<double>();
+		
 		static void Usage(string message)
 		{
 			Console.WriteLine(message);
@@ -109,6 +118,7 @@ namespace RatingPrediction
         public static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
+			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
 
 			// check number of command line parameters
@@ -125,12 +135,12 @@ namespace RatingPrediction
 			catch (ArgumentException e) { Usage(e.Message);			}
 
 			// arguments for iteration search
-			int find_iter               = parameters.GetRemoveInt32(  "find_iter",   0);
-			int max_iter                = parameters.GetRemoveInt32(  "max_iter",    500);
-			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
-			double epsilon              = parameters.GetRemoveDouble( "epsilon",     0);
-			double rmse_cutoff          = parameters.GetRemoveDouble( "rmse_cutoff", double.MaxValue);
-			double mae_cutoff           = parameters.GetRemoveDouble( "mae_cutoff",  double.MaxValue);
+			int find_iter      = parameters.GetRemoveInt32(  "find_iter",   0);
+			int max_iter       = parameters.GetRemoveInt32(  "max_iter",    500);
+			compute_fit        = parameters.GetRemoveBool(   "compute_fit", false);
+			double epsilon     = parameters.GetRemoveDouble( "epsilon",     0);
+			double rmse_cutoff = parameters.GetRemoveDouble( "rmse_cutoff", double.MaxValue);
+			double mae_cutoff  = parameters.GetRemoveDouble( "mae_cutoff",  double.MaxValue);
 
 			// collaborative data characteristics
 			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
@@ -218,7 +228,7 @@ namespace RatingPrediction
 				         user_mapping, item_mapping, user_attributes_file, item_attributes_file,
 				         user_relation_file, item_relation_file);
 			});
-			Console.WriteLine(string.Format(ni, "loading_time {0}", loading_time));
+			Console.WriteLine("loading_time {0}", loading_time.TotalSeconds);
 
 			recommender.MinRatingValue = min_rating;
 			recommender.MaxRatingValue = max_rating;
@@ -243,11 +253,6 @@ namespace RatingPrediction
 
 				DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
 				Console.WriteLine(" " + iterative_recommender.NumIter);
-
-				List<double> training_time_stats = new List<double>();
-				List<double> fit_time_stats      = new List<double>();
-				List<double> eval_time_stats     = new List<double>();
-				List<double> rmse_eval_stats     = new List<double>();
 
 				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
@@ -292,26 +297,9 @@ namespace RatingPrediction
 						}
 					}
 				} // for
-				Console.Out.Flush();
 
-				if (training_time_stats.Count > 0)
-					Console.Error.WriteLine(
-						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-					);
-				if (eval_time_stats.Count > 0)
-					Console.Error.WriteLine(
-						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-					);
-				if (compute_fit)
-					if (fit_time_stats.Count > 0)
-						Console.Error.WriteLine(
-							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-						);
+				DisplayIterationStats();
 				EngineStorage.SaveModel(recommender, data_dir, save_model_file);
-				Console.Error.Flush();
 			}
 			else
 			{
@@ -429,6 +417,11 @@ namespace RatingPrediction
 			test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 		}
 
+		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
+		{
+				DisplayIterationStats();
+		}
+		
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
@@ -496,6 +489,25 @@ namespace RatingPrediction
 			empty_size  = (long) matrix_size - test_data.Count;
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		}
+		
+		static void DisplayIterationStats()
+		{
+			if (training_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+		            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
+				);
+			if (eval_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+		            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+				);
+			if (compute_fit && fit_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
+				);			
 		}
 	}
 }

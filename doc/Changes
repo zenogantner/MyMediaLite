@@ -22,6 +22,7 @@
          - better documentation of arguments
          - rating prediction: MAE and RMSE cutoff values for iteration search
          - give out data loading time
+         - give out iteration statistics even if program stopped with Ctrl-C
 	interface changes:
 	 - use IterativeModel interface in rating prediction program
 	 - consistent parameters for RatingData constructor

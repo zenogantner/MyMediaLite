@@ -54,6 +54,13 @@ namespace MyMediaLite
 		static BPR_Linear              bpr_linear = new BPR_Linear();
 		static ItemAttributeSVM        svm        = new ItemAttributeSVM();
 
+		static bool compute_fit;
+		
+		// time statistics
+		static List<double> training_time_stats = new List<double>();
+		static List<double> fit_time_stats      = new List<double>();
+		static List<double> eval_time_stats     = new List<double>();		
+		
 		static void Usage(string message)
 		{
 			Console.WriteLine(message);
@@ -106,6 +113,7 @@ namespace MyMediaLite
         public static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(util.Handlers.UnhandledExceptionHandler);
+			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
 
 			// check number of command line parameters
@@ -122,7 +130,7 @@ namespace MyMediaLite
 			int max_iter                  = parameters.GetRemoveInt32(  "max_iter", 500);
 			double auc_cutoff             = parameters.GetRemoveDouble( "auc_cutoff");
 			double prec_cutoff            = parameters.GetRemoveDouble( "prec_cutoff");
-			bool compute_fit              = parameters.GetRemoveBool(   "compute_fit", false);
+			compute_fit                   = parameters.GetRemoveBool(   "compute_fit", false);
 
 			// data parameters
 			string data_dir               = parameters.GetRemoveString( "data_dir");
@@ -220,7 +228,7 @@ namespace MyMediaLite
 			TimeSpan loading_time = Utils.MeasureTime(delegate() {
 				LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
 			});
-			Console.WriteLine(string.Format(ni, "loading_time {0}", loading_time));
+			Console.WriteLine("loading_time {0}", loading_time.TotalSeconds);
 
 			DisplayDataStats();
 
@@ -455,6 +463,11 @@ namespace MyMediaLite
 	        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
 		}
 
+		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
+		{
+			DisplayIterationStats();
+		}		
+		
 		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
 			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
@@ -534,5 +547,24 @@ namespace MyMediaLite
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
+		
+		static void DisplayIterationStats()
+		{
+			if (training_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+		            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
+				);
+			if (eval_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+		            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+				);
+			if (compute_fit && fit_time_stats.Count > 0)
+				Console.Error.WriteLine(
+					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
+				);			
+		}		
 	}
 }
