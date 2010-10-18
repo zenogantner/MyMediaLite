@@ -56,13 +56,13 @@ namespace RatingPrediction
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
 
-		static bool compute_fit;
-
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
 		static List<double> fit_time_stats      = new List<double>();
 		static List<double> eval_time_stats     = new List<double>();
 		static List<double> rmse_eval_stats     = new List<double>();
+
+		static bool compute_fit;
 		
 		static void Usage(string message)
 		{
@@ -228,7 +228,7 @@ namespace RatingPrediction
 				         user_mapping, item_mapping, user_attributes_file, item_attributes_file,
 				         user_relation_file, item_relation_file);
 			});
-			Console.WriteLine("loading_time {0}", loading_time.TotalSeconds);
+			Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
 			recommender.MinRatingValue = min_rating;
 			recommender.MaxRatingValue = max_rating;
@@ -421,7 +421,7 @@ namespace RatingPrediction
 		{
 				DisplayIterationStats();
 		}
-		
+
 		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
 		{
 			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
@@ -490,7 +490,7 @@ namespace RatingPrediction
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
-		
+
 		static void DisplayIterationStats()
 		{
 			if (training_time_stats.Count > 0)
@@ -507,7 +507,7 @@ namespace RatingPrediction
 				Console.Error.WriteLine(
 					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-				);			
+				);
 		}
 	}
 }

@@ -55,12 +55,12 @@ namespace MyMediaLite
 		static ItemAttributeSVM        svm        = new ItemAttributeSVM();
 
 		static bool compute_fit;
-		
+
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
 		static List<double> fit_time_stats      = new List<double>();
-		static List<double> eval_time_stats     = new List<double>();		
-		
+		static List<double> eval_time_stats     = new List<double>();
+
 		static void Usage(string message)
 		{
 			Console.WriteLine(message);
@@ -228,7 +228,7 @@ namespace MyMediaLite
 			TimeSpan loading_time = Utils.MeasureTime(delegate() {
 				LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
 			});
-			Console.WriteLine("loading_time {0}", loading_time.TotalSeconds);
+			Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
 			DisplayDataStats();
 
@@ -466,8 +466,8 @@ namespace MyMediaLite
 		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 		{
 			DisplayIterationStats();
-		}		
-		
+		}
+
 		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
 			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
@@ -547,7 +547,7 @@ namespace MyMediaLite
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 		}
-		
+
 		static void DisplayIterationStats()
 		{
 			if (training_time_stats.Count > 0)
@@ -564,7 +564,7 @@ namespace MyMediaLite
 				Console.Error.WriteLine(
 					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-				);			
-		}		
+				);
+		}
 	}
 }
