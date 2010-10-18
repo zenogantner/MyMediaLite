@@ -48,9 +48,9 @@ namespace MyMediaLite.correlation
 			Pearson cm;
 			int num_entities = 0;
 			if (entity_type.Equals(EntityType.USER))
-				num_entities = ratings.MaxUserID;
+				num_entities = ratings.MaxUserID + 1;
 			else if (entity_type.Equals(EntityType.ITEM))
-				num_entities = ratings.MaxItemID;
+				num_entities = ratings.MaxItemID + 1;
 			else
 				throw new ArgumentException("Unknown entity type: " + entity_type);
 
@@ -119,6 +119,8 @@ namespace MyMediaLite.correlation
 			return (float) pmcc * (n / (n + shrinkage));
 		}
 
+		// TODO compute everything with ~ one pass over the training data
+		
 		/// <summary>
 		/// Compute correlations for given ratings
 		/// </summary>
@@ -133,7 +135,7 @@ namespace MyMediaLite.correlation
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
 
 			// compute Pearson product-moment correlation coefficients for all entity pairs
-			Console.Error.Write("Computation of Pearson correlation for {0} entities... ", num_entities);
+			Console.Error.Write("Computing Pearson correlation for {0} entities... ", num_entities);
 			for (int i = 0; i < num_entities; i++)
 			{
 				if (i % 100 == 99)
