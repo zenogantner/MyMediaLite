@@ -25,6 +25,7 @@ namespace MyMediaLite.data_type
     /// <summary>
     /// Sparse representation of a boolean matrix.
     /// Fast row-wise access is possible.
+    /// Indexes are zero-based.
     /// </summary>
     public class SparseBooleanMatrix
     {
