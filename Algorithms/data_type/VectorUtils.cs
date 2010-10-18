@@ -38,10 +38,10 @@ namespace MyMediaLite.data_type
 		/// </returns>
 		public static double EuclideanNorm(ICollection<double> vector)
 		{
-			double norm = 0;
+			double sum = 0;
 			foreach (double v in vector)
-				norm += Math.Pow(v, 2);
-			return norm;
+				sum += Math.Pow(v, 2);
+			return Math.Sqrt(sum);
 		}
 
 		/// <summary>
