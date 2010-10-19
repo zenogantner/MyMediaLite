@@ -1,0 +1,13 @@
+[%
+  links = {
+     zeno          => { url => 'http://ismll.de/personen/gantner_en.html',       title => 'Zeno Gantner' }
+     steffen       => { url => 'http://ismll.de/personen/rendle_en.html',        title => 'Steffen Rendle' }
+     christoph     => { url => 'http://ismll.de/personen/freudenthaler_en.html', title => 'Christoph Freudenthaler' }
+     mymedia       => { url => 'http://www.mymediaproject.org/'                  title => 'Dynamic Personalization of Multimedia (MyMedia)' }
+     fp7           => { url => 'http://ec.europa.eu/research/fp7/index_en.cfm',  title => 'European Commission 7th Framework Programme' }
+     free_software => { url => 'http://www.gnu.org/philosophy/free-sw.html',     title => 'free software' }
+     open_source   => { url => 'http://www.opensource.org/docs/osd',             title => 'open source software' }
+     gpl           => { url => 'http://www.gnu.org/licenses/gpl.html',           title => 'GNU General Public License (GPL)' }
+  }
+%]
+<a href="[% links.$link.url %]">[% links.$link.title %]</a>

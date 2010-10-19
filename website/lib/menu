@@ -1,0 +1,14 @@
+[% menu_entries = [
+     { url => 'index.html',               title => 'Home' }
+     { url => 'features.html',            title => 'Features' }
+     { url => 'download/index.html',      title => 'Download' }
+     { url => 'documentation/index.html', title => 'Documentation' }
+     { url => 'examples/index.html',      title => 'Examples' }
+     { url => 'links.html',               title => 'Links' }
+] %]
+
+<ul id="navigation">
+[%  FOREACH entry IN menu_entries %]
+  <li><a href="[% prefix %][% entry.url %]">[% entry.title %]</a></li>
+[%  END %]
+</ul>
