@@ -25,8 +25,11 @@
      r             => { url => 'http://www.r-project.org/',                      title => 'R' }
      iridium       => { url => 'http://www.mathdotnet.com/Iridium.aspx',         title => 'Math.NET Iridium' }
      libsvmdotnet  => { url => 'http://www.matthewajohnson.org/software/svm.html', title => 'SVM.NET' }
-     mymediaframework => { url => 'http://mymediaproject.codeplex.com/', title => 'MyMedia Framework' }
-     ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx', title => 'User Centric Media Cluster' }
+     mymediaframework => { url => 'http://mymediaproject.codeplex.com/',         title => 'MyMedia Framework' }
+     ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx',         title => 'User Centric Media Cluster' }
+     email         => { url => 'mailto:mymedialite@ismll.de',                    title => 'mymedialite@ismll.de' }
+     mymedia_email => { url => 'mailto:info@mymediaproject.org',                 title => 'info@mymediaproject.org' }
+     source_code   => { url => 'http://gitorious.org/mymedialite/mymedialite',   title => 'http://gitorious.org/mymedialite/mymedialite' }     
   }
 %]
 <a href="[% links.$link.url %]">[% links.$link.title %]</a>

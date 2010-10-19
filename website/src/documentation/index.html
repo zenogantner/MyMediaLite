@@ -1,0 +1,43 @@
+[%
+  title='MyMediaLite: Documentation'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+  <h2>Howtos</h2>
+  <ul>
+    <li>How to use the command line programs</li>
+    <li>How to use a recommender engine</li>
+    <li>How to implement a new recommender engine</li>
+    <!-- <li>How to use MyMediaLite from IronPython</li> -->
+  </ul>
+  
+  <a href="api/index.html"><h2>API Documentation</h2></a>
+  
+  <h2>Frequently Asked Questions (FAQ)</h2>
+  <h3>What are the differences between MyMediaLite and the [% INCLUDE link link='mymediaframework' %]?</h3>
+  <p>
+  <ol>
+    <li>MyMediaLite is free and open source software, published under the terms of GPLv3, whereas
+        the MyMedia Framework is only available for non-commercial uses.</li>
+    <li>MyMediaLite is, as the name says, leaner and simpler and carries less overhead, in particular:
+       <ul>
+         <li>it does not presuppose special database schemas</li>
+         <li>it does not have a database connector</li>
+         <li>it contains a different set of recommender algorithms (even though there is big overlap)</li>
+         <li>it does not contain advanced features such as complex engines, recommender flows, (not yet) filters, etc.</li>
+       </ul>
+    </li>
+  </ol>
+  </p>
+</div>
+
+[% INCLUDE footer %]

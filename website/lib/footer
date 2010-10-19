@@ -1,5 +1,5 @@
 <p id="bottom">
-  <a href="contact.html">Contact</a>
+  <a href="[% prefix %]contact.html">Contact</a>
 </p>
 
 </body></html>

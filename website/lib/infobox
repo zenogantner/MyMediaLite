@@ -2,7 +2,7 @@
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
   Version 0.04 is out:
-  <a href="">Announcement</a>,
+  <a href="[% prefix %]news/index.html#0.04">announcement</a>,
   <a href="[% prefix %]download/index.html">download</a>.
 </p>
 </div>

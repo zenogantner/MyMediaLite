@@ -1,0 +1,31 @@
+[%
+  title='MyMediaLite: News'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+  <a name="0.04"><h2>MyMediaLite 0.04 has been released</h2></a>
+  <p>
+    <b>October 20, 2010.</b>
+    The new release ships many bug fixes, improvements, and some new features:
+    <ul>
+      <li>Support for recommender engines that use relations over users and/or items.
+          To demonstrate the new interfaces, we implemented SocialMF, based on the
+          ACM RecSys 2010 Best Paper by Jamali and Ester.</li>
+      <li>Additional measure for item prediction evaluation: mean average precision (MAP)</li>
+    </ul>
+    See the Changes file for more details.
+    
+    Download.
+  </p>
+</div>
+
+[% INCLUDE footer %]

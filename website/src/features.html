@@ -1,0 +1,68 @@
+[%
+  title='MyMediaLite: Features'
+  prefix='' 
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+  <p>
+    MyMediaLite is a lightweight, multi-purpose library of recommender system algorithms.
+  </p>
+
+  <p>
+    It addresses the <b>two most common scenarios in collaborative filtering</b>:
+    <ul>
+      <li>rating prediction (e.g. on a scale of 1 to 5 stars), and</li>
+      <li>item prediction from implicit feedback (e.g. from clicks or purchase actions).</li>
+    </ul>
+  </p>
+
+  <p>
+    MyMediaLite gives you a <b>choice</b> of many recommendation methods:
+    <ul>
+      <li>dozens of different recommender engines
+      <li>methods can use collaborative and attribute/content data</li>
+    </ul>
+  </p>
+  	
+  <p>
+    <b>Ready to use:</b>
+    <ul>
+	<li>MyMediaLite includes evaluation routines for rating prediction and item prediction;
+            it can measure MAE, RMSE, AUC, prec@N, MAP, NDCG.</li>
+	<li>It also comes with command line tools for both tasks that read a simple text-based input format.</li>
+    </ul>
+  </p>
+  
+  <p>
+    MyMediaLite is <b>compact:</b> The core library has a size of about 85KB.
+  </p>
+  
+  <p>
+    <b>Portability:</b> Written in C#, for the .NET platform;
+	      runs on every architecture supported by [% INCLUDE link link='mono' %]:
+	      Linux, Windows, Mac OS X.
+  </p>	   
+  
+  <p>
+    <b>Freedom:</b> MyMediaLite is [% INCLUDE link link='free_software' %]/[% INCLUDE link link='open_source' %].
+    It can be used, modified, and distributed under the terms of the [% INCLUDE link link='gpl' %].
+  </p>
+	      
+  <p>
+    Additional features:
+    <ul>
+      <li><b>Serialization:</b> save and reload recommender engine models</li>
+      <li><b>Real-time online updates</b> for many recommender engines</li>
+    </ul>
+  </p>
+</div>
+
+[% INCLUDE footer %]
