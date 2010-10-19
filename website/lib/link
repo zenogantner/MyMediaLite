@@ -8,6 +8,25 @@
      free_software => { url => 'http://www.gnu.org/philosophy/free-sw.html',     title => 'free software' }
      open_source   => { url => 'http://www.opensource.org/docs/osd',             title => 'open source software' }
      gpl           => { url => 'http://www.gnu.org/licenses/gpl.html',           title => 'GNU General Public License (GPL)' }
+     mono          => { url => 'http://www.mono-project.com',                    title => 'Mono' }
+     monodevelop   => { url => 'http://monodevelop.com/',                        title => 'MonoDevelop' }
+     tt            => { url => 'http://template-toolkit.org',                    title => 'Template Toolkit' }
+     gitorious     => { url => 'http://gitorious.org/',                          title => 'Gitorious' }
+     nunit         => { url => 'http://nunit.org/',                              title => 'NUnit' }
+     mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
+     easyrec       => { url => 'http://easyrec.org/',                            title => 'easyrec' }
+     duine         => { url => 'http://www.duineframework.org/',                 title => 'Duine' }
+     cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
+     mloss         => { url => 'http://mloss.org',                               title => 'mloss.org' }
+     vw            => { url => 'http://hunch.net/~vw/',                          title => 'Vowpal Wabbit' }
+     liblinear     => { url => 'http://www.csie.ntu.edu.tw/~cjlin/liblinear/',   title => 'LIBLINEAR' }
+     libsvm        => { url => 'http://www.csie.ntu.edu.tw/~cjlin/libsvm/',      title => 'LIBSVM' }
+     weka          => { url => 'http://www.cs.waikato.ac.nz/ml/weka/',           title => 'Weka' }
+     r             => { url => 'http://www.r-project.org/',                      title => 'R' }
+     iridium       => { url => 'http://www.mathdotnet.com/Iridium.aspx',         title => 'Math.NET Iridium' }
+     libsvmdotnet  => { url => 'http://www.matthewajohnson.org/software/svm.html', title => 'SVM.NET' }
+     mymediaframework => { url => 'http://mymediaproject.codeplex.com/', title => 'MyMedia Framework' }
+     ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx', title => 'User Centric Media Cluster' }
   }
 %]
 <a href="[% links.$link.url %]">[% links.$link.title %]</a>

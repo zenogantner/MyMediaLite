@@ -6,6 +6,7 @@ monodoc:
 htmldoc:
 	mdoc-export-html doc/monodoc/ -o doc/html --template doc/doctemplate.xsl
 
+.PHONY: apidoc
 apidoc: monodoc htmldoc
 
 view-apidoc:
@@ -18,5 +19,10 @@ flyer:
 	cd doc/flyer
 	pdflatex mymedialite-flyer.tex
 
+.PHONY: view-flyer
 view-flyer:
 	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf
+
+ .PHONY: website
+website:
+	ttree -s website/src/ -d website/public_html/ -c website/lib/ -l website/lib/ -r -f config --post_chomp -a

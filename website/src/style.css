@@ -131,9 +131,7 @@ div#rightcolumn div {
     border: 1px dashed silver;
 }
 
-
 div#content {
-/*    margin: 0 12em 1em 16em;*/
     margin: 0 12em 1em 11em;
     padding: 0 1em;
     border: 1px dashed silver;
@@ -154,16 +152,20 @@ div#content p {
     margin: 1em 0;
 }
 div#content a:link {
-    color: #2072ba;
+    color: #2072ba; /* MyMedia blue */
 }
 div#content a:visited {
-    color: #2072ba;
+    color: #2072ba; /* MyMedia blue */
 }
 div#content a:hover {
-    color: #08d374;
+    color: #08d374; /* MyMedia cyan */
 }
 div#content a:active {
     color: white; background-color: gray;
+}
+
+div#highlight {
+    color: #08d374; /* MyMedia cyan */
 }
 
 p#bottom {
