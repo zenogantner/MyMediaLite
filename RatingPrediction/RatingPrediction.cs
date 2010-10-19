@@ -493,20 +493,23 @@ namespace RatingPrediction
 		static void DisplayIterationStats()
 		{
 			if (training_time_stats.Count > 0)
-				Console.Error.WriteLine(
+				Console.Error.WriteLine(string.Format(
+				    ni,
 					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 		            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-				);
+				));
 			if (eval_time_stats.Count > 0)
-				Console.Error.WriteLine(
+				Console.Error.WriteLine(string.Format(
+				    ni,
 					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 		            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-				);
+				));
 			if (compute_fit && fit_time_stats.Count > 0)
-				Console.Error.WriteLine(
+				Console.Error.WriteLine(string.Format(
+				    ni,
 					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-				);
+				));
 		}
 	}
 }
