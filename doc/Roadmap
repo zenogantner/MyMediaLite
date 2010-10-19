@@ -28,6 +28,7 @@ Recommender functionality
  - add more content-based routines (using Lemur?)
  - evaluation
    - support evaluation protocols w/ repeated events
+ - item-to-item recommendation
 Data types
  - data types: introduce more properties
  - data type: symmetric matrix
@@ -69,4 +70,4 @@ Misc
    - approximate AUC
    - sample precision@N
  - rewrite MF techniques using vector/matrix abstractions
- - MF: use random ordering for each iteration of SGD
+ - faster reading of text files

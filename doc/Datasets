@@ -1,11 +1,36 @@
 Datasets and suitable hyperparameters
 -------------------------------------
 
-Netflix (evaluation on the probe subset)
-
-biased-matrix-factorization (0.03)
-  num_features=30 learn_rate=0.005 regularization=0.02 num_iter=? => RMSE 0.9210
+I. Netflix (evaluation on the probe subset)
 
 biased-matrix-factorization (0.04)
-  num_features=30 learn_rate=0.005 regularization=0.02 num_iter=? => RMSE 0.9182
+  num_features=30 learn_rate=0.005 regularization=0.02 num_iter=?  => RMSE 0.9182
+  num_features=50 learn_rate=0.005 regularization=0.02 num_iter=?  => RMSE 0.9202
+  num_features=50 learn_rate=0.005 regularization=0.04 num_iter=113 => RMSE 0.9180
 
+
+II. MovieLens 1M (on a random 80-20 split)
+
+user-item-baseline (reg_u=25 reg_i=10)
+  RMSE 0.9113 MAE 0.72264
+
+item-attribute-kNN (k=inf reg_u=25 reg_i=10)
+  RMSE 0.8966 MAE 0.7066
+  
+user-kNN-pearson (k=inf shrinkage=10 reg_u=25 reg_i=10)
+
+item-kNN-pearson
+  k=inf shrinkage=10 reg_u=25 reg_i=10 => RMSE 0.8866
+
+biased-matrix-factorization
+  num_features=10 regularization=0.015 learn_rate=0.01 num_iter=40  => RMSE 0.8570
+  num_features=20 regularization=0.055 learn_rate=0.01 num_iter=200 => RMSE 0.8530
+  num_features=40 regularization=0.055 learn_rate=0.01 num_iter=??  => 
+
+III. MovieLens 100k
+
+
+IV. MoviePilot (CAMRa challenge Christmas split)
+
+biased-matrix-factorization
+  num_features=30 regularization=25 learn_rate=0.00003 num_iter=25  => RMSE 16.5
