@@ -25,7 +25,10 @@ item-kNN-pearson
 biased-matrix-factorization
   num_features=10 regularization=0.015 learn_rate=0.01 num_iter=40  => RMSE 0.8570
   num_features=20 regularization=0.055 learn_rate=0.01 num_iter=200 => RMSE 0.8530
-  num_features=40 regularization=0.055 learn_rate=0.01 num_iter=??  => 
+  num_features=40 regularization=0.055 learn_rate=0.01 num_iter=73  => RMSE 0.8526
+  num_features=60 regularization=0.055 learn_rate=0.01 num_iter=92  => RMSE 0.8521
+  num_features=80 regularization=0.055 learn_rate=0.01 num_iter=75  => RMSE 0.8504
+  num_features=80 regularization=0.05  learn_rate=0.01 num_iter=75  => RMSE 0.8504
 
 III. MovieLens 100k
 

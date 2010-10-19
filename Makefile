@@ -4,7 +4,7 @@ EDITOR=editor
 monodoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
 htmldoc:
-	mdoc-export-html doc/monodoc/ -o doc/html --template doc/doctemplate.xsl
+	mdoc-export-html doc/monodoc/ -o website/public_html/api --template doc/doctemplate.xsl
 
 .PHONY: apidoc
 apidoc: monodoc htmldoc
