@@ -11,12 +11,45 @@
 
 [% INCLUDE infobox %]
 
+[% PROCESS datasets %]
+
 <div id="content">
   <h2>Datasets</h2>
   
   <h3>Netflix</h3>
+  <p>
+    RMSE on the <it>probe</it> dataset:
+    <table border="1">
+      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      [% FOREACH entry IN netflix_data %]
+        <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
   
   <h3>MovieLens 1M</h3>
+  <p>
+   Results on a random 80-20 split:
+    <table border="1">
+      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      [% FOREACH entry IN ml1m_data %]
+        <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+
+  <!--
+  <h3>MovieLens 100k</h3>
+  <p>
+    Results on the <it>u1</it> split:
+    <table border="1">
+      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      [% FOREACH entry IN ml100k_data %]
+      <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+  -->
    
   <h2>Academic Research using MyMediaLite</h2>
   <p>
