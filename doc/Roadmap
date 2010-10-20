@@ -8,7 +8,7 @@ Recommender functionality
  - support for more relation types: weighted, ternary, multiple relations
  - additional engines (?)
    - non-negative matrix factorization
-   - matrix factorization learned with alternating least squares
+   - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
    - MF with Euclidean Embeddings
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
@@ -71,3 +71,4 @@ Misc
    - sample precision@N
  - rewrite MF techniques using vector/matrix abstractions
  - faster reading of text files
+ - put website and flyer into different git repositories

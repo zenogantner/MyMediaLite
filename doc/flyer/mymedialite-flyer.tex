@@ -57,8 +57,8 @@
 MyMediaLite is a lightweight, multi-purpose library
 of recommender system algorithms.
 It addresses the two most common scenarios in collaborative filtering:
-rating prediction (e.g. on a scale of 1 to 5 stars)
-and item prediction from implicit feedback (e.g. from clicks or purchase actions).
+\textbf{rating prediction} (e.g. on a scale of 1 to 5 stars)
+and \textbf{item prediction from implicit feedback} (e.g. from clicks or purchase actions).
 
 \begin{center}
 	\url{http://ismll.de/mymedialite/}
@@ -74,20 +74,20 @@ and item prediction from implicit feedback (e.g. from clicks or purchase actions
 			\item Dozens of different recommender engines (see list on this flyer),
 			\item methods can use collaborative and attribute/content data.
 		\end{itemize}
-	\item \textbf{Serialization:} save and reload recommender engine models.
-	\item \textbf{Real-time online updates} for most models.
 	\item \textbf{Ready to use:}
 		\begin{itemize}
 			\item Includes evaluation routines for rating and item prediction;
 			      quality measures MAE, RMSE, AUC, prec@N, MAP, NDCG; and
 			\item command line tools that read a simple text-based input format.
 		\end{itemize}
-	\item \textbf{Compact:} Core library is 85KB ``big''.
+	\item \textbf{Compact:} Core library less than 100 KB ``big''.
 	\item \textbf{Portable:} Written in C\#, for the .NET platform;
 	      runs on every architecture where \href{www.mono-project.com}{Mono} works:
 	      Linux, Windows, Mac OS X.
 	\item \textbf{Free:} Free/Open Source software, distributed under the terms of the
 	      GNU General Public License (GPL).
+	\item \textbf{Serialization:} save and reload recommender engine models.
+	\item \textbf{Real-time online updates} for most models.
 \end{itemize}
 
 \newpage
@@ -106,12 +106,12 @@ and item prediction from implicit feedback (e.g. from clicks or purchase actions
 
 \subsection{Developers}
 \begin{itemize}
-	\item Add recommender system technologies to your software.
+	\item Add recommender system technologies to your software or website.
 \end{itemize}
 
 \subsection{Students}
 \begin{itemize}
-	\item See how typical recommender system methods are implement.
+	\item See how typical recommender system methods are implemented.
 	\item Use MyMediaLite as a basis for you school projects.
 \end{itemize}
 
@@ -149,6 +149,7 @@ Very often this information is positive-only,
 i.e. we know users like the products they buy, but we cannot easily assume
 that they do not like everything they have not (yet) bought.
 
+<!-- TODO different picture -->
 \begin{center}
 	\includegraphics[width=7.0cm]{fig/interpretation_single.pdf}
 \end{center}
@@ -172,7 +173,7 @@ Rating Prediction
 Item Prediction
 \begin{itemize}
 	\item random
-	\item most popular Iiem
+	\item most popular item
 	\item linear content-based model optimized for Bayesian Personalized Ranking (BPR-Linear)
 	\item k-nearest neighbor (kNN):
 		\begin{itemize}
