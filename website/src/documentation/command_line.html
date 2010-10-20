@@ -12,32 +12,139 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+<p>
+MyMediaLite is mainly a library, meant to be used by other applications.<br/>
+We provide two command-line tools that offer much of MyMediaLite's functionality.
+They allow you to find out how MyMediaLite can deal with a dataset without having
+to integrate the library in your application or having to develop your own program.
+</p>
 <h2>Rating Prediction</h2>
 <p>
-  The programs included with MyMediaLite expect the data to be in a simple text format:
+  The programs expect the data to be in a simple text format:
   <pre>
   user_id item_id rating
   </pre>
   where user_id and item_id are integers referring to users and items, respectively,
   and rating is a floating-point number expressing how much a user likes an item.
   The whitespace between the values can contain an arbitrary number of space and tab characters.
-  If there are more than three columns, all additional columns will be ignored.
+  If there are more than three columns, all additional columns willsc be ignored.
 
-  An small example dataset:
+  A small example dataset:
   <pre>
-    1       1       5
-    1       2       3
-    1       3       4
-    1       4       3
-    1       5       3
-    1       7       4
+  1       1       5
+  1       2       3
+  1       3       4
+  1       4       3
+  1       5       3
+  1       7       4
   </pre>
+  </p>
+    
+  <p>
+    The general usage of the rating prediction program is as follows:
+    <pre>
+    mono --debug RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGS] [OPTIONS]
+    </pre>
+    METHOD is the recommender engine to use, which will be trained using the contents
+    of TRAINING_FILE. The engine will then predict the data in TEST_FILE, and the program
+    will display the RMSE (root mean square error) and MAE (mean absolute error) of the
+    predictions.
+  </p>
+  <!-- TODO footnote about 'mono --debug' -->
+  
+  <p>
+    If you call RatingPrediction.exe without arguments, it will provide a list of recommender engines
+    to choose from, plus their arguments and further options.
+  </p>
+  
+  <p>
+    You can <a href="http://www.grouplens.org/node/73">download the MovieLens 100k ratings dataset from the
+    GroupLens Research website</a> and unzip it to have something to play with.
+  </p>
+  
+  <p>
+    To try out a simple baseline method on the data, you just need to enter
+    <pre>
+    mono --debug RatingPrediction.exe u1.base u1.test user-average
+    </pre>
+    which should give a result like
+    <pre>
+    user-average training_time 00:00:00.000098 RMSE 1.063 MAE 0.85019 testing_time 00:00:00.032326
+    </pre>
+  </p>
 
-  The general usage of the rating prediction program is as follows:
-  <pre>
-  RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
-  </pre>
-</p>
+  <p>
+    To use a more advanced recommender engine, enter
+    <pre>
+    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization
+    </pre>
+    which yields better result than the user average:
+    <pre>
+    biased-matrix-factorization num_features=10 regularization=0.015 learn_rate=0.01 num_iter=30
+                                init_mean=0 init_stdev=0.1
+    training_time 00:00:03.3575780 RMSE 0.96108 MAE 0.75124 testing_time 00:00:00.0159740
+    </pre>
+    The key-value pairs after the method name represent arguments to the recommender engine
+    that may be modified to get even better results. For instance, we could use more latent features
+    per user and item, which leads to a more complex (and hopefully more accurate) model:
+    <pre>
+    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20
+    ...
+    ... RMSE 0.98029 MAE 0.76558
+    </pre>
+    Wait a second The RMSE actually got worse!<br/>
+    This may be because we do not train our model with the optimal arguments.
+    One thing to look at is the number of iterations.
+    If we iterate for too long, the learning process overfits the training data,
+    which means the resulting model does not generalize well to predict unknown future data.
+    The options <tt>find_iter=A</tt>, <tt>num_iter=B</tt> and <tt>max_iter=C</tt> help us
+    to find the right number of iterations. Togehter, the three options mean
+    &quot;From iteration B on, give out the evaluation results on the test set every A iterations,
+    until you reach iteration C.&quot;
+    <pre>
+    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20 find_iter=1 max_iter=25 num_iter=0
+    ...
+    RMSE 1.17083 MAE 0.96918 0
+    RMSE 1.01383 MAE 0.8143 1
+    RMSE 0.98742 MAE 0.78742 2
+    RMSE 0.97672 MAE 0.77668 3
+    RMSE 0.9709 MAE 0.77078 4
+    RMSE 0.96723 MAE 0.76702 5
+    RMSE 0.96466 MAE 0.76442 6
+    RMSE 0.96269 MAE 0.76241 7
+    RMSE 0.96104 MAE 0.76069 8
+    RMSE 0.95958 MAE 0.75917 9
+    RMSE 0.95825 MAE 0.75783 10
+    RMSE 0.95711 MAE 0.75667 11
+    RMSE 0.95626 MAE 0.75569 12
+    RMSE 0.95578 MAE 0.75501 13
+    RMSE 0.95573 MAE 0.75467 14
+    RMSE 0.95611 MAE 0.75467 15
+    RMSE 0.9569 MAE 0.75499 16
+    RMSE 0.95802 MAE 0.75551 17
+    RMSE 0.95942 MAE 0.75623 18
+    RMSE 0.96102 MAE 0.7571 19
+    RMSE 0.96277 MAE 0.75806 20
+    RMSE 0.96463 MAE 0.75909 21
+    RMSE 0.96656 MAE 0.76017 22
+    RMSE 0.96852 MAE 0.7613 23
+    RMSE 0.9705 MAE 0.76246 24
+    RMSE 0.97247 MAE 0.76364 25    
+    </pre>
+    This means that we should probably set <tt>num_iter</tt> to around 15 to get better results.
+  </p>
+  
+  <p>
+    <b>Warning:</b>
+    Depending on the recommender engine used, the choice of arguments (hyperparameters) may be crucial to
+    the engine's performance.
+    Sometimes you may find suitable values by playing a bit with the arguments, starting from their default
+    values. However, there is no guarantee that this will work!
+    You should use a principled approach to find good hyperparameters, e.g. cross-validation and grid search.
+  </p>
+
+  <!-- TODO document load/save -->
+  <!-- TODO document cutoff techniques -->
 
 <h2>Item Prediction from Implicit Feedback</h2>
 <p>
@@ -49,7 +156,60 @@
   The third column in the data files may be omitted. If it is present, it will be ignored.
   
   <pre>ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]</pre>
+  
+  Example:
+  <pre>
+  1       1
+  1       2
+  1       3
+  1       4
+  1       5
+  1       7
+  </pre>
 </p>
+
+  <p>
+  Instead of RMSE and MAP, the evaluation measures are now prec@N (precision at N), AUC (area under the ROC curve),
+  MAP (mean average precision), and NDCG (normalized discounted cumulative gain).
+  </p>
+  
+  <p>
+  Let us start again with some baseline methods, <tt>random</tt> and <tt>most-popular</tt>:
+  <pre>
+  mono --debug ItemPrediction.exe u1.base u1.test random
+  random training_time 00:00:00.0001040
+    AUC 0.49924 prec@5 0.02789 prec@10 0.02898 MAP 0.00122 NDCG 0.37214
+    num_users 459 num_items 1650 testing_time 00:00:02.7115540  
+  
+  mono --debug ItemPrediction.exe u1.base u1.test most-popular
+  most-popular training_time 00:00:00.0015710
+    AUC 0.8543 prec@5 0.322 prec@10 0.30458 MAP 0.02187 NDCG 0.57038
+    num_users 459 num_items 1650 testing_time 00:00:02.3813790
+  </pre>
+  </p>
+  
+  <p>
+  User-based collaborative filtering:
+  <pre>
+  mono --debug ItemPrediction.exe u1.base  u1.test user-knn
+  user-kNN k=80 training_time 00:00:05.6057200
+    AUC 0.91682 prec@5 0.52505 prec@10 0.46776 MAP 0.06482 NDCG 0.68793
+    num_users 459 num_items 1650 testing_time 00:00:08.8362840
+  </pre>
+  </p>
+  
+  <p>  
+  Note that the item prediction evaluation usually takes longer than the rating prediction evaluation,
+  because for each user, scores for every relevant item (possibly all items) have to be computed.
+  You can restrict the number of predictions to be made using the options <tt>predict_for_users=FILE</tt>
+  and <tt>relevant_items=FILE</tt> to save time.
+  </p>
+  
+  <p>
+  The item prediction program supports the same options (<tt>find_iter=N</tt> etc.)
+  for iteratively trained recommender engines like <tt>BPR-MF</tt> and <tt>WR-MF</tt>.
+  </p>
+  
 </div>
 
 [% INCLUDE footer %]
