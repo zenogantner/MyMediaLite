@@ -1,0 +1,55 @@
+[%
+  title='MyMediaLite: How to use the command line programs'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+<h2>Rating Prediction</h2>
+<p>
+  The programs included with MyMediaLite expect the data to be in a simple text format:
+  <pre>
+  user_id item_id rating
+  </pre>
+  where user_id and item_id are integers referring to users and items, respectively,
+  and rating is a floating-point number expressing how much a user likes an item.
+  The whitespace between the values can contain an arbitrary number of space and tab characters.
+  If there are more than three columns, all additional columns will be ignored.
+
+  An small example dataset:
+  <pre>
+    1       1       5
+    1       2       3
+    1       3       4
+    1       4       3
+    1       5       3
+    1       7       4
+  </pre>
+
+  The general usage of the rating prediction program is as follows:
+  <pre>
+  RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+  </pre>
+</p>
+
+<h2>Item Prediction from Implicit Feedback</h2>
+<p>
+  The item prediction program behaves similarly to the rating prediction program,
+  so we concentrate on the differences here.
+</p>
+
+<p>
+  The third column in the data files may be omitted. If it is present, it will be ignored.
+  
+  <pre>ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]</pre>
+</p>
+</div>
+
+[% INCLUDE footer %]

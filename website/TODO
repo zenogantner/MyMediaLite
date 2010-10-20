@@ -4,3 +4,4 @@
  - API doc (integrated w/ website design)
    - via templates?
  - rename files, e.g. from download/index.html to download.html
+ - add item prediction results to the examples page

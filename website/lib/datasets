@@ -5,7 +5,7 @@
      { engine => 'user-item-baseline',          hp => 'reg_u=25 reg_i=10',                                                 rmse => '0.9113', mae => '0.7226' }
      { engine => 'user-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                              rmse => '', mae => '' }
      { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                              rmse => '0.8866', mae => '' }
-     { engine => 'item-attribute-kNN',          hp => 'k=inf reg_u=25 reg_i=10',                                           rmse => '0.8966', mae => '0.7066' }
+     { engine => 'item-attribute-kNN',          hp => 'k=80 reg_u=25 reg_i=10',                                            rmse => '0.8958', mae => '0.7056' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=10 regularization=0.015 learn_rate=0.01 num_iter=40',  rmse => '0.8570', mae => '' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=20 regularization=0.055 learn_rate=0.01 num_iter=200', rmse => '0.8530', mae => '' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=40 regularization=0.055 learn_rate=0.01 num_iter=73',  rmse => '0.8526', mae => '' }
