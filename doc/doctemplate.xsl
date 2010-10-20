@@ -253,7 +253,6 @@
             <xsl:text>Signature</xsl:text>
           </a>
         </p>
-        <!--
         <p>
           <a>
             <xsl:attribute name="href">
@@ -263,7 +262,6 @@
             <xsl:text>Remarks</xsl:text>
           </a>
         </p>
-        -->
         <p>
           <a href="#Members">Members</a>
         </p>
@@ -320,7 +318,6 @@
   </xsl:template>
 
   <xsl:template name="create-default-remarks">
-    <!--
     <div class="Remarks">
       <xsl:if test="count(Remarks/@id) &gt; 0">
         <xsl:attribute name="id">
@@ -329,7 +326,6 @@
       </xsl:if>
       <xsl:apply-templates select="Remarks/node()" />
     </div>
-    -->
   </xsl:template>
 
   <xsl:template name="create-default-members">
