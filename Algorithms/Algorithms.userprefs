@@ -7,7 +7,6 @@
       <File FileName="eval/ItemPredictionEval.cs" Line="54" Column="66" />
       <File FileName="../RatingExperiment/RatingExperiment.cs" Line="186" Column="31" />
       <File FileName="data/RatingData.cs" Line="92" Column="28" />
-      <File FileName="data/EntityMapping (Kopie).cs" Line="28" Column="39" />
       <File FileName="data_type/SparseMatrix.cs" Line="38" Column="33" />
       <File FileName="data_type/Matrix.cs" Line="30" Column="1" />
     </Files>

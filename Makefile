@@ -4,7 +4,7 @@ EDITOR=editor
 monodoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
 htmldoc:
-	mdoc-export-html doc/monodoc/ -o website/public_html/api --template doc/doctemplate.xsl
+	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api --template doc/doctemplate.xsl
 
 .PHONY: apidoc
 apidoc: monodoc htmldoc
@@ -16,12 +16,14 @@ edit-apidoc-stylesheet:
 	${EDITOR} doc/doctemplate.xsl
 
 flyer:
-	cd doc/flyer
-	pdflatex mymedialite-flyer.tex
+	cd doc/flyer; pdflatex mymedialite-flyer.tex
+
+edit-flyer:
+	${EDITOR} doc/flyer/mymedialite-flyer.tex
 
 .PHONY: view-flyer
 view-flyer:
-	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf
+	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf &
 
  .PHONY: website
 website:
