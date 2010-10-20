@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../Mapping/Mapping.cs" ctype="Workbench">
     <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="77" Column="97" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="74" Column="95" />
-      <File FileName="../Mapping/Mapping.cs" Line="56" Column="3" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="87" Column="36" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="93" Column="49" />
+      <File FileName="../Mapping/Mapping.cs" Line="42" Column="37" />
       <File FileName="eval/ItemPredictionEval.cs" Line="54" Column="66" />
       <File FileName="../RatingExperiment/RatingExperiment.cs" Line="186" Column="31" />
       <File FileName="data/RatingData.cs" Line="92" Column="28" />
@@ -18,10 +18,10 @@
             <Node name="data_type" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
           </Node>
-          <Node name="ItemPrediction" expanded="True">
-            <Node name="ItemPrediction.cs" selected="True" />
+          <Node name="ItemPrediction" expanded="True" />
+          <Node name="Mapping" expanded="True">
+            <Node name="Mapping.cs" selected="True" />
           </Node>
-          <Node name="Mapping" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
           <Node name="RatingPrediction" expanded="True" />
         </State>
