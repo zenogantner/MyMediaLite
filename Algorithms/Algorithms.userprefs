@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="data_type/SparseMatrix.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
     <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="341" Column="1" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="64" Column="3" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="77" Column="97" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="74" Column="95" />
       <File FileName="../Mapping/Mapping.cs" Line="56" Column="3" />
       <File FileName="eval/ItemPredictionEval.cs" Line="54" Column="66" />
       <File FileName="../RatingExperiment/RatingExperiment.cs" Line="186" Column="31" />
@@ -13,12 +13,14 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Algorithms" expanded="True" selected="True">
+          <Node name="Algorithms" expanded="True">
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
           </Node>
-          <Node name="ItemPrediction" expanded="True" />
+          <Node name="ItemPrediction" expanded="True">
+            <Node name="ItemPrediction.cs" selected="True" />
+          </Node>
           <Node name="Mapping" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
           <Node name="RatingPrediction" expanded="True" />
