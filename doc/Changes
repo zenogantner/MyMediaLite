@@ -1,4 +1,4 @@
-0.04	2010-10-??
+0.04	2010-10-21
 	new features:
          - Map user/item IDs to internal IDs on the fly. That makes it
            unnecessary to convert datasets before using them with the
