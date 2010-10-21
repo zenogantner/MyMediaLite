@@ -1,0 +1,52 @@
+0.04	2010-10-21
+	new features:
+         - Map user/item IDs to internal IDs on the fly. That makes it
+           unnecessary to convert datasets before using them with the
+           MyMediaLite command-line tools.
+         - MAP (mean average precision) for item recommender evaluation
+         - API documentation in XML (generated from the inline XML docs)
+         - support recommenders that use relations over users and/or items
+           using the interfaces UserRelationAwareRecommender and
+           ItemRelationAwareRecommender
+         - SocialMF by Jamali+Ester 2010
+        engine changes:
+         - added global bias term to BiasedMatrixFactorization
+        changes to the command-line programs:
+         - allow input from STDIN and output to STDOUT
+	 - nicer time output for both demo programs
+         - nicer result output for both demo programs
+	 - rating prediction: save model earlier
+         - rating prediction: option to stop iterating if there is no progress
+         - always output '.'-separated floating point numbers, independent
+           of the current locale.
+         - better documentation of arguments
+         - rating prediction: MAE and RMSE cutoff values for iteration search
+         - give out data loading time
+         - give out iteration statistics even if program stopped with Ctrl-C
+	interface changes:
+	 - use IterativeModel interface in rating prediction program
+	 - consistent parameters for RatingData constructor
+	 - SparseBooleanMatrix now allows [x, y] and [x] access, has 
+           properties instead of GetXXX() methods
+         - Matrix now allows [x, y] access
+         - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
+           now both are completely property-based
+	misc:
+         - code clean-up and bug fixes
+
+0.03	2010-09-29
+	fix some crashes in both demo programs
+	add initial pre-release test suite
+	allow lower case names for all engines
+	some code clean-up
+	introduced interface IterativeModel
+
+0.02	2010-09-27
+	save some memory
+	fix an argument bug in the command line programs
+	nicer find_iter output in rating prediction command line program
+	add a flyer for the RecSys 2010 demo session
+        finalize README
+
+0.01	2010-09-24
+	Initial release
