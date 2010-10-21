@@ -210,11 +210,13 @@ namespace MyMediaLite.rating_predictor
             return result;
         }
 
+		// TODO: use user/item bias for prediction for unknown entities
+		
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
 		///
 		/// If the user or the item are not known to the engine, the global average is returned.
-		/// To avoid this behavior for unknown entities, use CanPredictRating() to check before.
+		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>

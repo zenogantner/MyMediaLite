@@ -29,7 +29,6 @@ namespace MyMediaLite.item_recommender
     /// <summary>
     /// Abstract class for matrix factorization based item predictors
     /// </summary>
-    /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
     public abstract class MF : Memory, IterativeModel
     {
         /// <summary>User feature matrix</summary>
@@ -78,7 +77,7 @@ namespace MyMediaLite.item_recommender
 		/// Predict the weight for a given user-item combination.
 		///
 		/// If the user or the item are not known to the engine, zero is returned.
-		/// To avoid this behavior for unknown entities, use CanPredictRating() to check before.
+		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>

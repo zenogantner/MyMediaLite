@@ -84,9 +84,7 @@ namespace MyMediaLite.data_type
 			{
 				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
 				for (int i = 0; i < rows.Count; i++)
-				{
 					return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
-				}
 				return return_list;
 			}
 		}
@@ -201,10 +199,8 @@ namespace MyMediaLite.data_type
 		{
 			SparseBooleanMatrix transpose = new SparseBooleanMatrix();
 			for (int i = 0; i < rows.Count; i++)
-			{
 				foreach (int j in this[i])
 					transpose[j, i] = true;
-			}
 			return transpose;
 		}
 

@@ -65,6 +65,23 @@ namespace MyMediaLite.data_type
 				this[x][y] = value;
 			}
 		}
+		
+		/// <summary>
+		/// The non-empty rows of the matrix (the ones that contain at least one non-zero entry),
+		/// with their IDs
+		/// </summary>
+		public IList<KeyValuePair<int, Dictionary<int, T>>> NonEmptyRows
+		{
+			get
+			{
+				var return_list = new List<KeyValuePair<int, Dictionary<int, T>>>();
+				for (int i = 0; i < data.Count; i++)
+					if (data[i].Count > 0)
+						return_list.Add(new KeyValuePair<int, Dictionary<int, T>>(i, data[i]));
+				return return_list;
+			}
+		}
+		
 	}
 }
 
