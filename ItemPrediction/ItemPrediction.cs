@@ -98,14 +98,14 @@ namespace MyMediaLite
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
 			Console.WriteLine("    - no_eval=BOOL               do not evaluate");
-			Console.WriteLine("    - predict_items_file=FILE    write predictions to FILE");
+			Console.WriteLine("    - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
 			Console.WriteLine("    - predict_items_num=N        predict N items per user (needs predict_items_file)");
 			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
 			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
 			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
 			Console.WriteLine("    - auc_cutoff=NUM             abort if AUC is below NUM");
-			Console.WriteLine("    - prec_cutoff=NUM            abort if prec@5 is below NUM");
+			Console.WriteLine("    - prec5_cutoff=NUM           abort if prec@5 is below NUM");
 			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
 			Environment.Exit(exit_code);
 		}
@@ -122,14 +122,14 @@ namespace MyMediaLite
 
 			// read command line parameters
 			CommandLineParameters parameters = null;
-			try	{ parameters = new CommandLineParameters(args, 3);	}
-			catch (ArgumentException e)	{ Usage(e.Message);  		}
+			try	{ parameters = new CommandLineParameters(args, 3); }
+			catch (ArgumentException e)	{ Usage(e.Message);  	   }
 
 			// variables for iteration search
 			int find_iter                 = parameters.GetRemoveInt32(  "find_iter", 0);
 			int max_iter                  = parameters.GetRemoveInt32(  "max_iter", 500);
 			double auc_cutoff             = parameters.GetRemoveDouble( "auc_cutoff");
-			double prec_cutoff            = parameters.GetRemoveDouble( "prec_cutoff");
+			double prec5_cutoff           = parameters.GetRemoveDouble( "prec5_cutoff");
 			compute_fit                   = parameters.GetRemoveBool(   "compute_fit", false);
 
 			// data parameters
@@ -291,7 +291,7 @@ namespace MyMediaLite
 
 						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
 
-						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec_cutoff)
+						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
 								Console.Error.WriteLine("DONE");
@@ -472,8 +472,8 @@ namespace MyMediaLite
 		{
 			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
 			engine.num_features   = parameters.GetRemoveInt32( "num_features",   engine.num_features);
-   			engine.init_f_mean    = parameters.GetRemoveDouble("init_f_mean",    engine.init_f_mean);
-   			engine.init_f_stdev   = parameters.GetRemoveDouble("init_f_stdev",   engine.init_f_stdev);
+   			engine.init_mean    = parameters.GetRemoveDouble("init_f_mean",    engine.init_mean);
+   			engine.init_stdev   = parameters.GetRemoveDouble("init_f_stdev",   engine.init_stdev);
 			engine.regularization = parameters.GetRemoveDouble("reg",            engine.regularization);
 			engine.regularization = parameters.GetRemoveDouble("regularization", engine.regularization);
 			engine.c_pos          = parameters.GetRemoveDouble("c_pos",          engine.c_pos);
@@ -485,8 +485,8 @@ namespace MyMediaLite
 		{
 			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
 			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_features);
-			engine.init_f_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_f_mean);
-			engine.init_f_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_f_stdev);
+			engine.init_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_mean);
+			engine.init_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_stdev);
 			engine.reg_u        = parameters.GetRemoveDouble("reg",   engine.reg_u);
 			engine.reg_i        = parameters.GetRemoveDouble("reg",   engine.reg_i);
 			engine.reg_j        = parameters.GetRemoveDouble("reg",   engine.reg_j);
@@ -504,8 +504,8 @@ namespace MyMediaLite
 		static void InitBPR_Linear(BPR_Linear engine, CommandLineParameters parameters)
 		{
 			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
-			engine.init_f_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_f_mean);
-			engine.init_f_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_f_stdev);
+			engine.init_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_mean);
+			engine.init_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_stdev);
 			engine.reg          = parameters.GetRemoveDouble("reg",          engine.reg);
 			engine.learn_rate   = parameters.GetRemoveDouble("lr",           engine.learn_rate);
 			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate",   engine.learn_rate);

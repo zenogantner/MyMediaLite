@@ -1,4 +1,16 @@
-0.05	2010-10-
+0.05	2010-11-
+	engines:
+         - more fixes to ensure locale-independent output of '.' as floating
+           point separator
+         - MF and linear  engines for item prediction: rename init_f_mean to
+           init_mean and init_f_stdev to init_stdev
+         - return hyperparameter values in ItemAttributeSVM.ToString()
+        command-line programs
+         - improved usage information
+         - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
+	misc:
+         - code clean-ups
+         - more XML API documentation
 
 0.04	2010-10-21
 	new features:

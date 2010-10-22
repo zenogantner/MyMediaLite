@@ -252,8 +252,8 @@ namespace Mapping
 
 		static BPRMF_ItemMapping InitBPR_MF_ItemMapping(BPRMF_ItemMapping engine, CommandLineParameters parameters)
 		{
-			engine.init_f_mean          = parameters.GetRemoveDouble("init_f_mean",          engine.init_f_mean);
-			engine.init_f_stdev         = parameters.GetRemoveDouble("init_f_stdev",         engine.init_f_stdev);
+			engine.init_mean          = parameters.GetRemoveDouble("init_f_mean",          engine.init_mean);
+			engine.init_stdev         = parameters.GetRemoveDouble("init_f_stdev",         engine.init_stdev);
 			engine.reg_mapping          = parameters.GetRemoveDouble("reg_mapping",          engine.reg_mapping);
 			engine.learn_rate_mapping   = parameters.GetRemoveDouble("learn_rate_mapping",   engine.learn_rate_mapping);
 			engine.num_iter_mapping     = parameters.GetRemoveInt32( "num_iter_mapping",     engine.num_iter_mapping);
@@ -280,8 +280,8 @@ namespace Mapping
 
 		static BPRMF_Mapping InitBPR_MF_UserMapping(BPRMF_Mapping engine, CommandLineParameters parameters)
 		{
-			engine.init_f_mean        = parameters.GetRemoveDouble("init_f_mean",        engine.init_f_mean);
-			engine.init_f_stdev       = parameters.GetRemoveDouble("init_f_stdev",       engine.init_f_stdev);
+			engine.init_mean        = parameters.GetRemoveDouble("init_f_mean",        engine.init_mean);
+			engine.init_stdev       = parameters.GetRemoveDouble("init_f_stdev",       engine.init_stdev);
 			engine.reg_mapping        = parameters.GetRemoveDouble("reg_mapping",        engine.reg_mapping);
 			engine.learn_rate_mapping = parameters.GetRemoveDouble("learn_rate_mapping", engine.learn_rate_mapping);
 			engine.num_iter_mapping   = parameters.GetRemoveInt32( "num_iter_mapping",   engine.num_iter_mapping);

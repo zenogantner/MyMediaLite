@@ -69,6 +69,7 @@ Misc
  - faster evaluation routines
    - approximate AUC
    - sample precision@N
+ - online update evaluation
  - rewrite MF techniques using vector/matrix abstractions
  - faster reading of text files
  - put website and flyer into different git repositories
