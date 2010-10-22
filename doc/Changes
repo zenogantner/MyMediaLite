@@ -4,7 +4,8 @@
            point separator
          - MF and linear  engines for item prediction: rename init_f_mean to
            init_mean and init_f_stdev to init_stdev
-         - return hyperparameter values in ItemAttributeSVM.ToString()
+         - return hyperparameter values in ItemAttributeSVM.ToString() and all
+           kNN engines
         command-line programs
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'

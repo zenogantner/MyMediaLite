@@ -37,7 +37,6 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-			Console.WriteLine("Starting training ...");
 			correlation = Cosine.Create(data_user);
 
 			int num_users = MaxUserID + 1;
