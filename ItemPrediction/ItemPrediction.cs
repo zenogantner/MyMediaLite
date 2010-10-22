@@ -101,7 +101,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
 			Console.WriteLine("    - predict_items_num=N        predict N items per user (needs predict_items_file)");
 			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
-			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
+			Console.WriteLine("  - options for finding the right number of iterations (MF methods and BPR-Linear)");
 			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
 			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
 			Console.WriteLine("    - auc_cutoff=NUM             abort if AUC is below NUM");
@@ -166,7 +166,7 @@ namespace MyMediaLite
 					InitWRMF(wrmf, parameters);
 					break;
 
-			case "BPR-MF":
+                case "BPR-MF":
 				case "bpr-mf":
 					InitBPRMF(bprmf, parameters);
 					break;
