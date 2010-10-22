@@ -1,6 +1,12 @@
 PDF_VIEWER=evince
 EDITOR=editor
 
+todo:
+	ack TODO
+	ack NotImplementedException
+	ack TODO | wc -l
+	ack NotImplementedException | wc -l
+
 monodoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
 htmldoc:
