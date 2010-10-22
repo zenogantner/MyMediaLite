@@ -50,7 +50,10 @@ Architecture
  - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
  - generate manual from XML/inline documentation
- - parameterize types: user and item IDs, prediction values (in C++ port)
+ - parameterize types:
+   - user and item IDs
+   - stored ratings
+   - prediction values (in C++ port)
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
    - more correlation measures (Jaccard index)

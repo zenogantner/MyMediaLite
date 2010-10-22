@@ -7,7 +7,7 @@ We apologize to both camps for this heresy.
 4. Namespace names below MyMedia are written in lower_case.
 5. Field variables, local variables, and method parameters are written in
    lower_case.
-6. Properties with default accessors are defined in one line.
+6. It is okay to define simple properties in one line.
 7. 'using' declarations start with the 'System' namespaces, followed by all
    other namespaces. Those two groups of declarations are internally sorted
    by alphabet.
@@ -16,6 +16,7 @@ We apologize to both camps for this heresy.
    value always comes first.
 10. One file per externally used class
 11. Prefer interface types for method arguments and return types.
+
 
 this.p vs. p
 
