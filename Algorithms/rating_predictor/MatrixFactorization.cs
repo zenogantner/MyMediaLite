@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 //
 // This file is part of MyMediaLite.
 //
@@ -38,7 +38,6 @@ namespace MyMediaLite.rating_predictor
     /// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
     /// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
     /// </remarks>
-    /// <author>Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, University of Hildesheim</author>
     public class MatrixFactorization : Memory, IterativeModel
     {
 		/// <summary>Matrix containing the latent user features</summary>
@@ -55,55 +54,30 @@ namespace MyMediaLite.rating_predictor
 
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
 		public double InitStdev {
-			get {
-				return this.init_stdev;
-			}
-			set {
-				init_stdev = value;
-			}
+			get { return this.init_stdev; }
+			set { init_stdev = value;     }
 		}
         private double init_stdev = 0.1;
 
         /// <summary>Learn rate</summary>
-		public double LearnRate {
-			get {
-				return this.learn_rate;
-			}
-			set {
-				learn_rate = value;
-			}
-		}
+		public double LearnRate { get { return this.learn_rate; } set { learn_rate = value; } }
         /// <summary>Learn rate</summary>
         protected double learn_rate = 0.01;		
 		
         /// <summary>Number of latent features</summary>
-		public int NumFeatures {
-			get {
-				return this.num_features;
-			}
-			set {
-				num_features = value;
-			}
-		}
+		public int NumFeatures { get { return num_features; } set { num_features = value; }	}
         /// <summary>Number of latent features</summary>
         protected int num_features = 10;				
 
         /// <summary>Regularization parameter</summary>
-		public double Regularization {
-			get {
-				return this.regularization;
-			}
-			set {
-				regularization = value;
-			}
-		}
+		public double Regularization { get { return regularization; } set { regularization = value; } }
         /// <summary>Regularization parameter</summary>	
         protected double regularization = 0.015;		
 
-        private int num_iter = 30;
 		/// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-
+        private int num_iter = 30;
+		
         /// <inheritdoc />
         public override void Train()
         {
@@ -163,7 +137,6 @@ namespace MyMediaLite.rating_predictor
                 int i = rating.item_id;
 
                 double p = Predict(u, i, false);
-
 				double err = rating.rating - p;
 
                  // Adjust features, factor by factor
@@ -214,10 +187,11 @@ namespace MyMediaLite.rating_predictor
 		
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
-		///
+		/// </summary>
+		/// <remarks>
 		/// If the user or the item are not known to the engine, the global average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
-		/// </summary>
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>

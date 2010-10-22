@@ -1,5 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
+    <Files>
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="109" Column="110" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="104" Column="90" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
@@ -13,12 +17,12 @@
             <Node name="item_recommender" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
           </Node>
-          <Node name="ItemPrediction" expanded="True" />
+          <Node name="ItemPrediction" expanded="True">
+            <Node name="ItemPrediction.cs" selected="True" />
+          </Node>
           <Node name="Mapping" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
-          <Node name="RatingPrediction" expanded="True">
-            <Node name="RatingPrediction.cs" selected="True" />
-          </Node>
+          <Node name="RatingPrediction" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

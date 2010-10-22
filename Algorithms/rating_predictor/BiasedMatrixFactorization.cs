@@ -88,8 +88,8 @@ namespace MyMediaLite.rating_predictor
 						if (f != 1)
 							delta_u -= regularization * u_f;
 						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
-						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30)
-						//user_feature[u, f] += learn_rate * delta_u;
+						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
+						//    user_feature[u, f] += learn_rate * delta_u;
 					}
                     if (update_item && f != 1)
 					{
@@ -97,7 +97,7 @@ namespace MyMediaLite.rating_predictor
 						if (f != 0)
 							delta_i -= regularization * i_f;
 						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
-						//item_feature[i, f] += learn_rate * delta_i;
+						// item_feature[i, f] += learn_rate * delta_i;
 					}
                 }
             }
