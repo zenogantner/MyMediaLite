@@ -44,11 +44,11 @@ MyMediaLite item prediction; usage:
     - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)
     - predict_items_num=N        predict N items per user (needs predict_items_file)
     - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)
-  - options for finding the right number of iterations (MF methods)
+  - options for finding the right number of iterations (MF methods and BPR-Linear)
     - find_iter=N                give out statistics every N iterations
     - max_iter=N                 perform at most N iterations
     - auc_cutoff=NUM             abort if AUC is below NUM
-    - prec_cutoff=NUM            abort if prec@5 is below NUM
+    - prec5_cutoff=NUM           abort if prec@5 is below NUM
     - compute_fit=BOOL           display fit on training data every find_iter iterations
 </pre>
 </div>

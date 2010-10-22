@@ -1,7 +1,6 @@
 [% netflix_data = [
      { engine => 'biased-matrix-factorization', hp => 'num_features=50 learn_rate=0.005 regularization=0.04 num_iter=113', rmse => '0.9180' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=80 learn_rate=0.005 regularization=0.04 num_iter=123', rmse => '0.9173' mae => '0.7137' }
-
    ]
    ml1m_data = [
      { engine => 'user-item-baseline',          hp => 'reg_u=25 reg_i=10',                                                 rmse => '0.9113', mae => '0.7226' }
@@ -14,6 +13,9 @@
      { engine => 'biased-matrix-factorization', hp => 'num_features=60 regularization=0.055 learn_rate=0.01 num_iter=92',  rmse => '0.8521', mae => '' }          
      { engine => 'biased-matrix-factorization', hp => 'num_features=80 regularization=0.055 learn_rate=0.01 num_iter=75',  rmse => '0.8504', mae => '' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=120 regularization=0.05  learn_rate=0.01 num_iter=75', rmse => '0.8505', mae => '' }
+   ]
+   ml100k = [
+     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2', rmse => '0.9558', mae => '0.7564' }
    ]
    camra_mp_xmas_data = [
      { engine => 'biased-matrix-factorization', hp => 'num_features=30 regularization=25  learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
