@@ -1,0 +1,57 @@
+[%
+  title='MyMediaLite: Item Prediction Tool'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+<pre>
+MyMediaLite rating prediction; usage:
+ RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+  - methods:
+    - matrix-factorization
+    - biased-matrix-factorization
+    - SocialMF (needs user_relation=FILE)
+    - user-kNN-pearson
+    - user-kNN-cosine
+    - item-kNN-pearson
+    - item-kNN-cosine
+    - item-attribute-kNN (needs item_attributes=FILE)
+    - user-item-baseline
+    - global-average
+    - user-average
+    - item-average
+  - method ARGUMENTS have the form name=value
+  - general OPTIONS have the form name=value
+    - option_file=FILE           read options from FILE (line format KEY: VALUE)
+    - random_seed=N              
+    - data_dir=DIR               load all files from DIR
+    - user_attributes=FILE       file containing user attribute information
+    - item_attributes=FILE       file containing item attribute information
+    - user_relation=FILE         file containing user relation information
+    - item_relation=FILE         file containing item relation information
+    - save_model=FILE            save computed model to FILE
+    - load_model=FILE            load model from FILE
+    - min_rating=NUM             
+    - max_rating=NUM             
+    - no_eval=BOOL               
+    - predict_ratings_file=FILE  write the rating predictions to FILE ('-' for STDOUT)
+  - options for finding the right number of iterations (MF methods)
+    - find_iter=N                give out statistics every N iterations
+    - max_iter=N                 perform at most N iterations
+    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
+    - rmse_cutoff=NUM            abort if RMSE is above NUM
+    - mae_cutoff=NUM             abort if MAE is above NUM
+    - compute_fit=BOOL           display fit on training data every find_iter iterations
+</pre>
+</div>
+
+[% INCLUDE footer %]
