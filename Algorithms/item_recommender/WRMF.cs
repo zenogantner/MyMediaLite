@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using MyMediaLite.data_type;
@@ -79,7 +80,6 @@ namespace MyMediaLite.item_recommender
             // (1) create HH in O(f^2|I|)
             // HH is symmetric
             for (int f_1 = 0; f_1 < num_features; f_1++)
-            {
                 for (int f_2 = 0; f_2 < num_features; f_2++)
                 {
                     double d = 0;
@@ -87,8 +87,6 @@ namespace MyMediaLite.item_recommender
                         d += H[i, f_1] * H[i, f_2];
                     HH[f_1, f_2] = d;
                 }
-
-            }
             // (2) optimize all U
             // HCIH is symmetric
             for (int u = 0; u < W.dim1; u++)
@@ -96,7 +94,6 @@ namespace MyMediaLite.item_recommender
                 HashSet<int> row = data[u];
                 // create HCIH in O(f^2|S_u|)
                 for (int f_1 = 0; f_1 < num_features; f_1++)
-                {
                     for (int f_2 = 0; f_2 < num_features; f_2++)
                     {
                         double d = 0;
@@ -104,7 +101,6 @@ namespace MyMediaLite.item_recommender
                             d += H[i, f_1] * H[i, f_2] * (c_pos - 1);
                         HCIH[f_1, f_2] = d;
                     }
-                }
                 // create HCp in O(f|S_u|)
                 for (int f = 0; f < num_features; f++)
                 {
@@ -117,7 +113,6 @@ namespace MyMediaLite.item_recommender
                 // m is symmetric
                 // the inverse m_inv is symmetric
                 for (int f_1 = 0; f_1 < num_features; f_1++)
-                {
                     for (int f_2 = 0; f_2 < num_features; f_2++)
                     {
                         double d = HH[f_1, f_2] + HCIH[f_1, f_2];
@@ -125,7 +120,6 @@ namespace MyMediaLite.item_recommender
                             d += regularization;
                         m[f_1, f_2] = d;
                     }
-                }
                 m_inv = m.Inverse();
                 // write back optimal W
                 for (int f = 0; f < num_features; f++)
@@ -141,14 +135,17 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override double ComputeFit()
 		{
-			return 0;
+			return 0; // TODO implement
 		}
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format("WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_f_mean={4} init_f_stdev={5}",
-				                 num_features, regularization, c_pos, NumIter, init_f_mean, init_f_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';						
+			
+			return string.Format(ni, "WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
+				                 num_features, regularization, c_pos, NumIter, init_mean, init_stdev);
 		}
     }
 }

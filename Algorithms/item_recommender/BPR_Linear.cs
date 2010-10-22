@@ -58,9 +58,9 @@ namespace MyMediaLite.item_recommender
         /// <summary>Regularization parameter</summary>
         public double reg = 0.015;
 		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
-        public double init_f_mean = 0;
+        public double init_mean = 0;
         /// <summary>standard deviation of the normal distribution used to initialize the features</summary>
-        public double init_f_stdev = 0.1;
+        public double init_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
 		private int num_iter = 10;
@@ -108,7 +108,7 @@ namespace MyMediaLite.item_recommender
 			}
 
         	item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
-        	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_f_mean, init_f_stdev);
+        	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
 
 			for (int i = 0; i < NumIter; i++)
 			{
@@ -299,8 +299,11 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_f_mean={4} init_f_stdev={5}",
-								  reg, NumIter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
+								  reg, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
 		}
 
 	}

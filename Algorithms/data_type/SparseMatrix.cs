@@ -19,6 +19,8 @@
 
 using System;
 using System.Collections.Generic;
+using MyMediaLite.util;
+
 
 namespace MyMediaLite.data_type
 {
@@ -81,6 +83,22 @@ namespace MyMediaLite.data_type
 				return return_list;
 			}
 		}
+		
+		/// <summary>
+		/// The row and column IDs of non-empty entries in the matrix.
+		/// </summary>
+		public IList<Pair<int, int>> NonEmptyEntryIDs
+		{
+			get
+			{
+				var return_list = new List<Pair<int, int>>();
+				IList<KeyValuePair<int, Dictionary<int, T>>> nonEmptyRows;
+				foreach (var id_row in this.NonEmptyRows)
+					foreach (var col_id in id_row.Value.Keys)
+						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
+				return return_list;
+			}
+		}		
 		
 	}
 }

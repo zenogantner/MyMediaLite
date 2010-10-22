@@ -1,29 +1,24 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../Mapping/Mapping.cs" ctype="Workbench">
-    <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="87" Column="36" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="93" Column="49" />
-      <File FileName="../Mapping/Mapping.cs" Line="42" Column="37" />
-      <File FileName="eval/ItemPredictionEval.cs" Line="54" Column="66" />
-      <File FileName="../RatingExperiment/RatingExperiment.cs" Line="186" Column="31" />
-      <File FileName="data/RatingData.cs" Line="92" Column="28" />
-      <File FileName="data_type/SparseMatrix.cs" Line="38" Column="33" />
-      <File FileName="data_type/Matrix.cs" Line="30" Column="1" />
-    </Files>
+  <MonoDevelop.Ide.Workbench ctype="Workbench">
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Algorithms" expanded="True">
             <Node name="data" expanded="True" />
             <Node name="data_type" expanded="True" />
+            <Node name="eval" expanded="True" />
+            <Node name="experimental" expanded="True">
+              <Node name="rating_prediction" expanded="True" />
+            </Node>
+            <Node name="item_recommender" expanded="True" />
             <Node name="rating_predictor" expanded="True" />
           </Node>
           <Node name="ItemPrediction" expanded="True" />
-          <Node name="Mapping" expanded="True">
-            <Node name="Mapping.cs" selected="True" />
-          </Node>
+          <Node name="Mapping" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
-          <Node name="RatingPrediction" expanded="True" />
+          <Node name="RatingPrediction" expanded="True">
+            <Node name="RatingPrediction.cs" selected="True" />
+          </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">

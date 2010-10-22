@@ -39,9 +39,9 @@ namespace MyMediaLite.item_recommender
         /// <summary>Number of features</summary>
         public int num_features = 10;
         /// <summary>Mean of the normal distribution used to initialize the features</summary>
-        public double init_f_mean = 0;
+        public double init_mean = 0;
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
-        public double init_f_stdev = 0.1;
+        public double init_stdev = 0.1;
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
         private int num_iter = 30;
@@ -52,8 +52,8 @@ namespace MyMediaLite.item_recommender
 			user_feature = new Matrix<double>(MaxUserID + 1, num_features);
         	item_feature = new Matrix<double>(MaxItemID + 1, num_features);
 
-            MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev);
-        	MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev);
+            MatrixUtils.InitNormal(user_feature, init_mean, init_stdev);
+        	MatrixUtils.InitNormal(item_feature, init_mean, init_stdev);
 
 			for (int i = 0; i < num_iter; i++)
 				Iterate();
@@ -104,7 +104,6 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void SaveModel(string fileName)
 		{
-			// TODO replace by System.Globalization.CultureInfo.InvariantCulture ?
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
@@ -157,9 +156,7 @@ namespace MyMediaLite.item_recommender
             	int num_items = System.Int32.Parse(numbers[0]);
 				dim2 = System.Int32.Parse(numbers[1]);
 				if (dim2 != num_features)
-            	{
 					throw new Exception("dim2 of item_feature must be feature_count");
-				}
 				Matrix<double> item_feature = new Matrix<double>(num_items, dim2);
 
             	while (!reader.EndOfStream)

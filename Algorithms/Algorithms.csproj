@@ -128,6 +128,7 @@
     <Compile Include="io\RelationData.cs" />
     <Compile Include="UserRelationAwareRecommender.cs" />
     <Compile Include="ItemRelationAwareRecommender.cs" />
+    <Compile Include="experimental\rating_prediction\SlopeOne.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -149,6 +150,7 @@
     <Folder Include="experimental\" />
     <Folder Include="experimental\attr_to_feature\" />
     <Folder Include="ensemble\" />
+    <Folder Include="experimental\rating_prediction\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\SVM\SVM.csproj">

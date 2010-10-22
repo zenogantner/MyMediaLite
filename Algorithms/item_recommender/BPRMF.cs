@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using MyMediaLite.data_type;
@@ -266,7 +267,7 @@ namespace MyMediaLite.item_recommender
 			if (user_id > MaxUserID)
 			{
 				user_feature.AddRows(user_id + 1);
-				MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
+				MatrixUtils.InitNormal(user_feature, init_mean, init_stdev, user_id);
 			}
 
 			base.AddUser(user_id);
@@ -278,7 +279,7 @@ namespace MyMediaLite.item_recommender
 			if (item_id > MaxItemID)
 			{
 				item_feature.AddRows(item_id + 1);
-				MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
+				MatrixUtils.InitNormal(item_feature, init_mean, init_stdev, item_id);
 			}
 
 			base.AddItem(item_id);
@@ -315,7 +316,7 @@ namespace MyMediaLite.item_recommender
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.InitNormal(user_feature, init_f_mean, init_f_stdev, user_id);
+			MatrixUtils.InitNormal(user_feature, init_mean, init_stdev, user_id);
 
 			HashSet<int> user_items = data_user[user_id];
 			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
@@ -329,7 +330,7 @@ namespace MyMediaLite.item_recommender
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.InitNormal(item_feature, init_f_mean, init_f_stdev, item_id);
+			MatrixUtils.InitNormal(item_feature, init_mean, init_stdev, item_id);
 
 			int num_pos_events = data_user.NumberOfEntries;
 			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
@@ -370,13 +371,12 @@ namespace MyMediaLite.item_recommender
 				{
 					int item_id = prediction[i];
 
-					if (test_items.Contains(item_id)) {
+					if (test_items.Contains(item_id))
 						num_pos_above++;
-					} else {
+					else
 						num_correct_pairs += num_pos_above;
-					}
 				}
-				double user_auc = ((double)num_correct_pairs) / num_eval_pairs;
+				double user_auc = (double) num_correct_pairs / num_eval_pairs;
 				sum_auc += user_auc;
 				num_user++;
 			}
@@ -439,8 +439,11 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("BPR-MF num_features={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_f_mean={8} init_f_stdev={9}",
-			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, init_f_mean, init_f_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format(ni, "BPR-MF num_features={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
+			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
 		}
 	}
 }

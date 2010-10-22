@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.correlation;
+using System.Globalization;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using SVM;
@@ -40,10 +40,16 @@ namespace MyMediaLite.item_recommender
 	    public int NumItemAttributes { get;	set; }
 
 		// TODO turn into properties
+		/// <summary>
+		/// C hyperparameter
+		/// </summary>
 		public double C     = 1;
+		/// <summary>
+		/// Gamma parameter for RBF kernel
+		/// </summary>
 		public double Gamma = (double) 1 / 500; // usually: 1 / num_features
 
-		protected SVM.Model[] models;
+		private SVM.Model[] models;
 
         /// <inheritdoc />
         public override void Train()
@@ -74,7 +80,7 @@ namespace MyMediaLite.item_recommender
         }
 
 		// TODO share this among different classes
-		protected Node[] CreateNodes(int item_id)
+		private Node[] CreateNodes(int item_id)
 		{
 			// create attribute representation digestible by LIBSVM
 			HashSet<int> attributes = this.ItemAttributes[item_id];
@@ -108,7 +114,10 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
 		public override string ToString()
 		{
-			return "item-attribute-SVM"; // TODO add hyperparameters
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';						
+			
+			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", C, Gamma);
 		}
 	}
 }

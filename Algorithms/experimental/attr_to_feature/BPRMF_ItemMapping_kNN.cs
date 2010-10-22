@@ -79,7 +79,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_f_mean={7}, init_f_stdev={8}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_f_mean, init_f_stdev);
+				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev);
 		}
 
 	}
