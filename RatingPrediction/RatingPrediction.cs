@@ -25,6 +25,7 @@ using MyMediaLite;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.eval;
+using MyMediaLite.experimental.rating_prediction;
 using MyMediaLite.io;
 using MyMediaLite.rating_predictor;
 using MyMediaLite.util;
@@ -55,6 +56,7 @@ namespace RatingPrediction
 		static GlobalAverage        ga = new GlobalAverage();
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
+		static SlopeOne      slope_one = new SlopeOne();
 
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
@@ -89,6 +91,7 @@ namespace RatingPrediction
 			Console.WriteLine("    - " + ga);
 			Console.WriteLine("    - " + ua);
 			Console.WriteLine("    - " + ia);
+			Console.WriteLine("    - " + slope_one);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
 			Console.WriteLine("  - general OPTIONS have the form name=value");
 			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
@@ -103,7 +106,7 @@ namespace RatingPrediction
 			Console.WriteLine("    - min_rating=NUM             ");
 			Console.WriteLine("    - max_rating=NUM             ");
 			Console.WriteLine("    - no_eval=BOOL               ");
-			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to STDOUT");
+			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
 			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
 			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
@@ -206,6 +209,9 @@ namespace RatingPrediction
 					break;
 				case "item-average":
 					recommender = ia;
+					break;
+				case "slope-one":
+					recommender = slope_one;
 					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
