@@ -1,8 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../ItemPrediction/ItemPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="rating_predictor/BiasedMatrixFactorization.cs" ctype="Workbench">
     <Files>
       <File FileName="../RatingPrediction/RatingPrediction.cs" Line="109" Column="110" />
       <File FileName="../ItemPrediction/ItemPrediction.cs" Line="104" Column="90" />
+      <File FileName="rating_predictor/BiasedMatrixFactorization.cs" Line="1" Column="1" />
+      <File FileName="rating_predictor/MatrixFactorization.cs" Line="233" Column="17" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,12 +17,13 @@
               <Node name="rating_prediction" expanded="True" />
             </Node>
             <Node name="item_recommender" expanded="True" />
-            <Node name="rating_predictor" expanded="True" />
+            <Node name="rating_predictor" expanded="True">
+              <Node name="BiasedMatrixFactorization.cs" selected="True" />
+            </Node>
           </Node>
-          <Node name="ItemPrediction" expanded="True">
-            <Node name="ItemPrediction.cs" selected="True" />
-          </Node>
+          <Node name="ItemPrediction" expanded="True" />
           <Node name="Mapping" expanded="True" />
+          <Node name="RatingDemo" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
           <Node name="RatingPrediction" expanded="True" />
         </State>

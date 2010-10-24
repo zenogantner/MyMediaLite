@@ -200,7 +200,7 @@ namespace MyMediaLite.eval
 
 	            hit_count++;
 
-				avg_prec_sum += hit_count / (i + 1 - left_out);
+				avg_prec_sum += (double) hit_count / (i + 1 - left_out);
             }
 
 			if (hit_count != 0)
