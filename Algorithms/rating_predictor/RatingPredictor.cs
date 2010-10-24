@@ -30,6 +30,18 @@ namespace MyMediaLite.rating_predictor
     /// <author>Steffen Rendle, University of Hildesheim</author>
     public abstract class RatingPredictor : RecommenderEngine
     {
+        /// <summary>
+        /// Gets or sets the max rating value.
+        /// </summary>
+        /// <value>The max rating value.</value>
+        public virtual double MaxRatingValue { get { return max_rating_value; } set { max_rating_value = value; } }
+
+        /// <summary>
+        /// Gets or sets the min rating value.
+        /// </summary>
+        /// <value>The min rating value.</value>
+        public virtual double MinRatingValue { get { return min_rating_value;  } set { min_rating_value = value; } }
+		
         /// <inheritdoc />
 		public abstract bool CanPredict(int user_id, int item_id);
 		/// <inheritdoc />
@@ -54,9 +66,9 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public abstract void LoadModel(string filePath);
         /// <inheritdoc />
-        protected double max_data_value;
+        protected double max_rating_value;
         /// <inheritdoc />
-        protected double min_data_value;
+        protected double min_rating_value;
 
         /// <inheritdoc />
         public abstract void Train();
@@ -68,25 +80,5 @@ namespace MyMediaLite.rating_predictor
 		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
 		/// </remarks>
 		public abstract override string ToString();
-
-        /// <summary>
-        /// Gets or sets the max rating value.
-        /// </summary>
-        /// <value>The max rating value.</value>
-        public virtual double MaxRatingValue
-        {
-            get { return this.max_data_value;  }
-            set { this.max_data_value = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the min rating value.
-        /// </summary>
-        /// <value>The min rating value.</value>
-        public virtual double MinRatingValue
-        {
-            get { return this.min_data_value;  }
-            set { this.min_data_value = value; }
-        }
     }
 }

@@ -40,7 +40,7 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>
 		/// Number of neighbors to take into account for predictions
 		/// </summary>
-		public uint k          = uint.MaxValue;
+		public uint k = uint.MaxValue;
 		/// <summary>
 		/// Shrinkage parameter
 		/// </summary>

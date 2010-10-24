@@ -27,9 +27,9 @@ namespace MyMediaLite.rating_predictor
 	public abstract class Memory : RatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
-		public int MaxUserID  { get; protected set;	}
+		public int MaxUserID  { get; set;	}
 		/// <summary>Maximum item ID</summary>
-		public int MaxItemID  {	get; protected set; }
+		public int MaxItemID  {	get; set; }
 
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings

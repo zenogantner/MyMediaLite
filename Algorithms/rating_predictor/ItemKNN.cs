@@ -46,14 +46,18 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
+		/// <summary>
+		/// Get positively correlated entities
+		/// </summary>
 		protected Func<int, IList<int>> GetPositivelyCorrelatedEntities;
 
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
-		///
+		/// </summary>
+		/// <remarks>
 		/// If the user or the item are not known to the engine, a suitable average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
-		/// </summary>
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
@@ -64,10 +68,11 @@ namespace MyMediaLite.rating_predictor
             if (item_id < 0)
                 throw new ArgumentException("item is unknown: " + item_id);			
 
-            if ((user_id > MaxUserID) || (item_id > MaxItemID))
+            if ((user_id > MaxUserID) || (item_id > correlation.dim1 - 1))
                 return base.Predict(user_id, item_id);			
 			
-			// TODO think about also including negatively correlated entities
+			//Console.Error.WriteLine("item {0} maximum item ID {1}", item_id, MaxItemID);
+			
 			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
 
 			double sum = 0;
@@ -87,10 +92,7 @@ namespace MyMediaLite.rating_predictor
 
 			double result = base.Predict(user_id, item_id);
 			if (weight_sum != 0)
-			{
-				double modification = sum / weight_sum;
-				result += modification;
-			}
+				result += sum / weight_sum;
 
 			if (result > MaxRatingValue)
 				result = MaxRatingValue;

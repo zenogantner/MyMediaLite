@@ -57,8 +57,8 @@ namespace MyMediaLite.correlation
 			}
 			cm.ComputeCorrelations(vectors);
 			return cm;
-		}		
-		
+		}
+
 		/// <inheritdoc />
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{

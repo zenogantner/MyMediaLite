@@ -26,13 +26,13 @@ namespace MyMediaLite.rating_predictor
 {
 	/// <summary>
 	/// Attribute-aware item-based kNN recommender.
-	/// 
+	///
 	/// This engine does NOT support online updates.
 	/// </summary>
 	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
 	{
 		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes			
+		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set
@@ -40,9 +40,9 @@ namespace MyMediaLite.rating_predictor
 				this.item_attributes = value;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
 			}
-		}		
+		}
 		private SparseBooleanMatrix item_attributes;
-		
+
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
