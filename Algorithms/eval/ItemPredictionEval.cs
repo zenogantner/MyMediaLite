@@ -170,7 +170,7 @@ namespace MyMediaLite.eval
 		/// <returns>the MAP for the given data</returns>
 		public static double MAP(int[] ranked_items, ICollection<int> correct_items)
 		{
-			return MAP(ranked_items, correct_items);
+			return MAP(ranked_items, correct_items, new HashSet<int>());
 		}
 
 		/// <summary>
@@ -217,7 +217,7 @@ namespace MyMediaLite.eval
 		/// <returns>the NDCG for the given data</returns>
 		public static double NDCG(int[] ranked_items, ICollection<int> correct_items)
 		{
-			return NDCG(ranked_items, correct_items);
+			return NDCG(ranked_items, correct_items, new HashSet<int>());
 		}
 
 		/// <summary>
@@ -262,7 +262,7 @@ namespace MyMediaLite.eval
 		/// <returns>the precision@N for the given data</returns>
 		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, int n)
 		{
-			return PrecisionAt(ranked_items, correct_items, n);
+			return PrecisionAt(ranked_items, correct_items, new HashSet<int>(), n);
 		}
 
 		/// <summary>
