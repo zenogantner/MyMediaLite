@@ -52,7 +52,7 @@ namespace MyMediaLite.eval
         /// The evaluation measures are listed in the ItemPredictionMeasures property.
         /// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
         /// and the number of items that were taken into account.
-        /// 
+        ///
         /// Literature:
         ///   C. Manning, P. Raghavan, H. Schütze
         ///   Introduction to Information Retrieval,
@@ -88,7 +88,7 @@ namespace MyMediaLite.eval
 
 				// the number of items that are really relevant for this user
                 int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
-				
+
 				// skip all users that have 0 or #relevant_items test items
 				if (test_items.Count == 0)
 					continue;

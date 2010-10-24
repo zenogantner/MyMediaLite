@@ -30,7 +30,7 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-			this.correlation = Pearson.Create(ratings, EntityType.ITEM, shrinkage);
+			this.correlation = Pearson.Create(ratings, EntityType.ITEM, Shrinkage);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
@@ -40,14 +40,14 @@ namespace MyMediaLite.rating_predictor
 			base.RetrainUser(item_id);
 			if (UpdateItems)
 				for (int i = 0; i <= MaxItemID; i++)
-					correlation[item_id, i] = Pearson.ComputeCorrelation(ratings.ByItem[item_id], ratings.ByItem[i], EntityType.ITEM, item_id, i, shrinkage);;
+					correlation[item_id, i] = Pearson.ComputeCorrelation(ratings.ByItem[item_id], ratings.ByItem[i], EntityType.ITEM, item_id, i, Shrinkage);;
 		}
 
         /// <inheritdoc />
 		public override string ToString()
 		{
 			return string.Format("item-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
-			                     k == uint.MaxValue ? "inf" : k.ToString(), shrinkage, reg_u, reg_i);
+			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, reg_u, reg_i);
 		}
 	}
 }

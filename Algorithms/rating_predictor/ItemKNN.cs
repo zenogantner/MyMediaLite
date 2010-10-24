@@ -71,13 +71,11 @@ namespace MyMediaLite.rating_predictor
             if ((user_id > MaxUserID) || (item_id > correlation.dim1 - 1))
                 return base.Predict(user_id, item_id);			
 			
-			//Console.Error.WriteLine("item {0} maximum item ID {1}", item_id, MaxItemID);
-			
 			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = k;
+			uint neighbors = K;
 			foreach (int item_id2 in relevant_items)
 				if (data_item[item_id2, user_id])
 				{

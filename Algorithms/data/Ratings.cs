@@ -29,6 +29,16 @@ namespace MyMediaLite.data
         private double sum_rating = 0;
 
 		/// <summary>
+		/// Number of ratings in the collection
+		/// </summary>
+        public int Count { get { return ratingList.Count; }	}
+
+		/// <summary>
+		/// The average (mean) rating in the collection
+		/// </summary>
+		public double Average {	get { return sum_rating / Count; } }
+
+		/// <summary>
 		/// Access an event in the collection directly via an index
 		/// </summary>
 		/// <param name="index">
@@ -38,8 +48,8 @@ namespace MyMediaLite.data
 			get {
 				return ratingList[index];
 			}
-		}		
-		
+		}
+
 		/// <summary>
 		/// Shuffle the order of the rating events
 		/// </summary>
@@ -50,22 +60,6 @@ namespace MyMediaLite.data
 		{
 			Utils.Shuffle<RatingEvent>(ratingList);
 		}
-		
-		/// <summary>
-		/// Number of ratings in the collection
-		/// </summary>
-        public int Count
-		{
-			get { return ratingList.Count; }
-		}
-
-		/// <summary>
-		/// The average (mean) rating in the collection
-		/// </summary>
-		public double Average
-		{
-			get { return sum_rating / Count; }
-		}
 
 		/// <inheritdoc />
 		public IEnumerator GetEnumerator()
@@ -75,7 +69,7 @@ namespace MyMediaLite.data
 
 		/// <summary>
 		/// Add a rating event to the collection.
-		/// 
+		///
 		/// Also updates the statistics.
 		/// </summary>
 		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
@@ -99,7 +93,7 @@ namespace MyMediaLite.data
 
 		/// <summary>
 		/// Remove a rating from the collection.
-		/// 
+		///
 		/// Also updates the statistics.
 		/// </summary>
 		/// <param name="rating">the rating event to remove</param>
@@ -143,7 +137,7 @@ namespace MyMediaLite.data
 		/// </summary>
 		/// <returns>
 		/// a collection of numerical item IDs
-		/// </returns>		
+		/// </returns>
 		public HashSet<int> GetItems()
 		{
 			HashSet<int> items = new HashSet<int>();

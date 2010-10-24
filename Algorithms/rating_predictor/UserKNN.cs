@@ -69,7 +69,7 @@ namespace MyMediaLite.rating_predictor
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = k;
+			uint neighbors = K;
 			foreach (int user_id2 in relevant_users)
 			{
 				if (data_user[user_id2, item_id])

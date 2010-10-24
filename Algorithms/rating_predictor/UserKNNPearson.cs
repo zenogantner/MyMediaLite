@@ -31,7 +31,7 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
         {
 			base.Train();
-			this.correlation = Pearson.Create(ratings, EntityType.USER, shrinkage);
+			this.correlation = Pearson.Create(ratings, EntityType.USER, Shrinkage);
         }
 
 		/// <inheritdoc />
@@ -40,14 +40,14 @@ namespace MyMediaLite.rating_predictor
 			base.RetrainUser(user_id);
 			if (UpdateUsers)
 				for (int i = 0; i <= MaxUserID; i++)
-					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, shrinkage);
+					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, Shrinkage);
 		}
 
         /// <inheritdoc />
 		public override string ToString()
 		{
 			return string.Format("user-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
-			                     k == uint.MaxValue ? "inf" : k.ToString(), shrinkage, reg_u, reg_i);
+			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, reg_u, reg_i);
 		}
 	}
 }

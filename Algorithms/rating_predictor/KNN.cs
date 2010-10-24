@@ -39,12 +39,15 @@ namespace MyMediaLite.rating_predictor
 	{
 		/// <summary>
 		/// Number of neighbors to take into account for predictions
-		/// </summary>
-		public uint k = uint.MaxValue;
+		/// </summary>		
+		public uint K { get { return k;	} set {	k = value; } }
+		private uint k = uint.MaxValue;		
+
 		/// <summary>
 		/// Shrinkage parameter
-		/// </summary>
-		public float shrinkage = 10;
+		/// </summary>		
+		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
+		private float shrinkage = 10;
 
         /// <summary>
         /// Correlation matrix over some kind of entity
