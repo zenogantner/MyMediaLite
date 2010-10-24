@@ -65,7 +65,7 @@ namespace RatingPrediction
 		static List<double> rmse_eval_stats     = new List<double>();
 
 		static bool compute_fit;
-		
+
 		static void Usage(string message)
 		{
 			Console.WriteLine(message);
@@ -468,8 +468,6 @@ namespace RatingPrediction
 
 		static void DisplayResults(Dictionary<string, double> result)
 		{
-//			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} num_users {2} num_items {3}",
-//			                            result["RMSE"], result["MAE"], result["num_users"], result["num_items"]));
 			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}",
 			                            result["RMSE"], result["MAE"]));
 		}
@@ -480,16 +478,16 @@ namespace RatingPrediction
 			ni.NumberDecimalDigits = '.';
 
 			// training data stats
-			int num_users = training_data.MaxUserID + 1; // TODO get correct data ...
-			int num_items = training_data.MaxItemID + 1;
+			int num_users = training_data.All.GetUsers().Count;
+			int num_items = training_data.All.GetItems().Count;
 			long matrix_size = (long) num_users * num_items;
 			long empty_size  = (long) matrix_size - training_data.Count;
 			double sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
-			num_users = test_data.MaxUserID + 1;
-			num_items = test_data.MaxItemID + 1;
+			num_users = test_data.All.GetUsers().Count;;
+			num_items = test_data.All.GetItems().Count;;
 			matrix_size = (long) num_users * num_items;
 			empty_size  = (long) matrix_size - test_data.Count;
 			sparsity = (double) 100L * empty_size / matrix_size;
