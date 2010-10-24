@@ -6,6 +6,8 @@
            init_mean and init_f_stdev to init_stdev
          - return hyperparameter values in ItemAttributeSVM.ToString() and all
            kNN engines
+         - fix bug that caused crashes with new users/items for user/item knn
+           rating prediction engines
         command-line programs
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
