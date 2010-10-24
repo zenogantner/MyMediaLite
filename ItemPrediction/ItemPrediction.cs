@@ -470,10 +470,10 @@ namespace MyMediaLite
 
 		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
 		{
-			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",        engine.NumIter);
+			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",       engine.NumIter);
 			engine.num_features   = parameters.GetRemoveInt32( "num_features",   engine.num_features);
-   			engine.init_mean    = parameters.GetRemoveDouble("init_f_mean",    engine.init_mean);
-   			engine.init_stdev   = parameters.GetRemoveDouble("init_f_stdev",   engine.init_stdev);
+   			engine.init_mean      = parameters.GetRemoveDouble("init_mean",      engine.init_mean);
+   			engine.init_stdev     = parameters.GetRemoveDouble("init_stdev",     engine.init_stdev);
 			engine.regularization = parameters.GetRemoveDouble("reg",            engine.regularization);
 			engine.regularization = parameters.GetRemoveDouble("regularization", engine.regularization);
 			engine.c_pos          = parameters.GetRemoveDouble("c_pos",          engine.c_pos);
@@ -485,8 +485,8 @@ namespace MyMediaLite
 		{
 			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
 			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_features);
-			engine.init_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_mean);
-			engine.init_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_stdev);
+			engine.init_mean    = parameters.GetRemoveDouble("init_mean",    engine.init_mean);
+			engine.init_stdev   = parameters.GetRemoveDouble("init_stdev",   engine.init_stdev);
 			engine.reg_u        = parameters.GetRemoveDouble("reg",   engine.reg_u);
 			engine.reg_i        = parameters.GetRemoveDouble("reg",   engine.reg_i);
 			engine.reg_j        = parameters.GetRemoveDouble("reg",   engine.reg_j);
@@ -504,8 +504,8 @@ namespace MyMediaLite
 		static void InitBPR_Linear(BPR_Linear engine, CommandLineParameters parameters)
 		{
 			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
-			engine.init_mean  = parameters.GetRemoveDouble("init_f_mean",  engine.init_mean);
-			engine.init_stdev = parameters.GetRemoveDouble("init_f_stdev", engine.init_stdev);
+			engine.init_mean  = parameters.GetRemoveDouble(  "init_mean",  engine.init_mean);
+			engine.init_stdev = parameters.GetRemoveDouble(  "init_stdev", engine.init_stdev);
 			engine.reg          = parameters.GetRemoveDouble("reg",          engine.reg);
 			engine.learn_rate   = parameters.GetRemoveDouble("lr",           engine.learn_rate);
 			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate",   engine.learn_rate);
