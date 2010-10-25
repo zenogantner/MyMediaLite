@@ -254,10 +254,6 @@ namespace MyMediaLite
 				DisplayResults(result);
 				Console.WriteLine(" " + iterative_recommender.NumIter);
 
-				List<double> training_time_stats = new List<double>();
-				List<double> fit_time_stats      = new List<double>();
-				List<double> eval_time_stats     = new List<double>();
-
 				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 				{
 					TimeSpan t = Utils.MeasureTime(delegate() {
@@ -299,25 +295,8 @@ namespace MyMediaLite
 						}
 					}
 				} // for
-				Console.Out.Flush();
-
-				if (training_time_stats.Count > 0)
-					Console.Error.WriteLine(
-						"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-					);
-				if (eval_time_stats.Count > 0)
-					Console.Error.WriteLine(
-						"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-					);
-				if (compute_fit)
-					if (fit_time_stats.Count > 0)
-						Console.Error.WriteLine(
-							"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-			            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-						);
-				Console.Error.Flush();
+				
+				DisplayIterationStats();
 			}
 			else
 			{
@@ -550,6 +529,8 @@ namespace MyMediaLite
 
 		static void DisplayIterationStats()
 		{
+			Console.Error.WriteLine("iteration stats:");
+			
 			if (training_time_stats.Count > 0)
 				Console.Error.WriteLine(string.Format(
 				    ni,
