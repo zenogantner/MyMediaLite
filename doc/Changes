@@ -8,9 +8,15 @@
            kNN engines
          - fix bug that caused crashes with new users/items for user/item knn
            rating prediction engines
+         - kNN: do not store hyperparameter values in model files (consistent
+           with the other engines)
         command-line programs
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
+         - item prediction: fix iteration statistics display
+        evaluation
+          - correct computation of AUC if there are irrelevant items in the
+            test set
 	misc:
          - code clean-ups
          - more XML API documentation

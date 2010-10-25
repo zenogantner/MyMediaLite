@@ -29,6 +29,7 @@ Recommender functionality
  - evaluation
    - support evaluation protocols w/ repeated events
  - item-to-item recommendation
+ - consider to store the hyperparameters in the model files as well
 Data types
  - data types: introduce more properties
  - data type: symmetric matrix
@@ -56,7 +57,8 @@ Architecture
    - prediction values (in C++ port)
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
-   - more correlation measures (Jaccard index)
+   - more correlation/similarity measures (Jaccard index)
+   - user-defined similarities
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 

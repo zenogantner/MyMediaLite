@@ -21,9 +21,9 @@
      { engine => 'biased-matrix-factorization', hp => 'num_features=30 regularization=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
    ]
    camra_mp_mood_data = [
-     { engine => 'global-average',              hp => '',                                                                 rmse => '20.41', mae => '15.84' }
-     { engine => 'user-average',                hp => '',                                                                 rmse => '20.97', mae => '15.77' }
-     { engine => 'item-average',                hp => '',                                                                 rmse => '17.68', mae => '13.21' }
-     { engine => 'user-item-baseline',          hp => 'reg_u=150 reg_i=2',                                                rmse => '17.40', mae => '12.88' }
-     { engine => 'biased-matrix-factorization', hp => 'num_features=30 regularization=25 learn_rate=0.00003 num_iter=12', rmse => '16.96', mae => '12.43' }
+     { engine => 'global-average',              hp => '',                                                                  rmse => '20.41', mae => '15.84' }
+     { engine => 'user-average',                hp => '',                                                                  rmse => '20.97', mae => '15.77' }
+     { engine => 'item-average',                hp => '',                                                                  rmse => '17.68', mae => '13.21' }
+     { engine => 'user-item-baseline',          hp => 'reg_u=150 reg_i=2',                                                 rmse => '17.40', mae => '12.88' }
+     { engine => 'biased-matrix-factorization', hp => 'num_features=30 regularization=50 learn_rate=0.00003 num_iter=133', rmse => '16.86', mae => '12.41' }
 ] %]

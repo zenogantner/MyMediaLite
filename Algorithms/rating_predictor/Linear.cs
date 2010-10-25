@@ -32,7 +32,6 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// This engine does support online updates.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class GlobalAverage : Memory
     {
         /// <inheritdoc />
@@ -55,6 +54,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{
+			// TODO
 			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
 				writer.WriteLine("All information you need is easily available in the rating data.");
 		}
@@ -62,6 +62,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override void LoadModel(string filePath)
 		{
+			// TODO
 			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
 			}
@@ -83,7 +84,6 @@ namespace MyMediaLite.rating_predictor
     /// Abstract class that uses an average (by entity) rating value for predictions.
     /// This engine does support online updates.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public abstract class EntityAverage : Memory
     {
 		/// <inheritdoc />
@@ -94,6 +94,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{
+			// TODO
 			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
 				writer.WriteLine("All information you need is easily available in the rating data.");
 		}
@@ -101,6 +102,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override void LoadModel(string filePath)
 		{
+			// TODO
 			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
 			}
@@ -111,7 +113,6 @@ namespace MyMediaLite.rating_predictor
     /// Uses the average rating value of a user for predictions.
     /// This engine does support online updates.
     /// </summary>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
     public class UserAverage : EntityAverage
     {
         /// <inheritdoc />

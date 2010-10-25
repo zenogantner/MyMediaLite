@@ -450,18 +450,22 @@ namespace RatingPrediction
 
 		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
 		{
-			knn.K = parameters.GetRemoveUInt32("k",         knn.K);  // TODO handle "inf"
-			knn.Shrinkage = parameters.GetRemoveFloat( "shrinkage", knn.Shrinkage);
-			knn.reg_i     = parameters.GetRemoveDouble("reg_i",     knn.reg_i);
-			knn.reg_u     = parameters.GetRemoveDouble("reg_u",     knn.reg_u);
+			knn.K = parameters.GetRemoveUInt32("k", knn.K);  // TODO handle "inf"
+			knn.RegI = parameters.GetRemoveDouble("reg_i", knn.RegI);
+			knn.RegU = parameters.GetRemoveDouble("reg_u", knn.RegU);
 
+			if (knn is UserKNNPearson)
+				((UserKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((UserKNNPearson)knn).Shrinkage);
+			if (knn is ItemKNNPearson)
+				((ItemKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((ItemKNNPearson)knn).Shrinkage);
+			
 			return knn;
 		}
 
 		static Memory InitUIB(CommandLineParameters parameters)
 		{
-			uib.reg_i = parameters.GetRemoveDouble("reg_i", uib.reg_i);
-			uib.reg_u = parameters.GetRemoveDouble("reg_u", uib.reg_u);
+			uib.RegI = parameters.GetRemoveDouble("reg_i", uib.RegI);
+			uib.RegU = parameters.GetRemoveDouble("reg_u", uib.RegU);
 
 			return uib;
 		}
