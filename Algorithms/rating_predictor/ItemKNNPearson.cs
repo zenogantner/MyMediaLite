@@ -26,6 +26,10 @@ namespace MyMediaLite.rating_predictor
 	/// <summary>Item-based kNN with pearson correlation</summary>
 	public class ItemKNNPearson : ItemKNN
 	{
+		/// <summary>Shrinkage parameter</summary>
+		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
+		private float shrinkage = 10;
+
         /// <inheritdoc />
         public override void Train()
         {

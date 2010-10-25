@@ -27,6 +27,10 @@ namespace MyMediaLite.rating_predictor
 	/// </summary>
 	public class UserKNNPearson : UserKNN
 	{
+		/// <summary>Shrinkage parameter</summary>		
+		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
+		private float shrinkage = 10;
+		
         /// <inheritdoc />
         public override void Train()
         {

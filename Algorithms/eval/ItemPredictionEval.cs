@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
@@ -85,25 +85,27 @@ namespace MyMediaLite.eval
             {
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
+				HashSet<int> correct_items = new HashSet<int>(test_items.Intersect(relevant_items));
 
 				// the number of items that are really relevant for this user
                 int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
 
 				// skip all users that have 0 or #relevant_items test items
-				if (test_items.Count == 0)
+				if (correct_items.Count == 0)
 					continue;
-				if (num_eval_items - test_items.Count == 0)
+				if (num_eval_items - correct_items.Count == 0)
 					continue;
 
 				num_users++;
 				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
 
-				auc_sum     += AUC(prediction, test_items, train[user_id]);
-				map_sum     += MAP(prediction, test_items, train[user_id]);
-				ndcg_sum    += NDCG(prediction, test_items, train[user_id]);
-				prec_5_sum  += PrecisionAt(prediction, test_items, train[user_id],  5);
-				prec_10_sum += PrecisionAt(prediction, test_items, train[user_id], 10);
-				prec_15_sum += PrecisionAt(prediction, test_items, train[user_id], 15);
+
+				auc_sum     += AUC(prediction, correct_items, train[user_id]);
+				map_sum     += MAP(prediction, correct_items, train[user_id]);
+				ndcg_sum    += NDCG(prediction, correct_items, train[user_id]);
+				prec_5_sum  += PrecisionAt(prediction, correct_items, train[user_id],  5);
+				prec_10_sum += PrecisionAt(prediction, correct_items, train[user_id], 10);
+				prec_15_sum += PrecisionAt(prediction, correct_items, train[user_id], 15);
 
                 if (prediction.Length != relevant_items.Count)
                     throw new Exception("Not all items have been ranked.");

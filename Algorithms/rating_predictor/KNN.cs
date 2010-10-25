@@ -23,9 +23,8 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
+	/// <summary>Base class for rating predictors that use some kind of kNN</summary>
 	/// <remarks>
-	/// Base class for rating predictors that use some kind of kNN
-	///
 	/// The method is described in section 2.2 of
 	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009
@@ -34,7 +33,6 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// <seealso cref="item_recommender.KNN"/>
 	/// </remarks>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
 	public abstract class KNN : UserItemBaseline
 	{
 		/// <summary>
@@ -42,12 +40,6 @@ namespace MyMediaLite.rating_predictor
 		/// </summary>		
 		public uint K { get { return k;	} set {	k = value; } }
 		private uint k = uint.MaxValue;		
-
-		/// <summary>
-		/// Shrinkage parameter
-		/// </summary>		
-		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
-		private float shrinkage = 10;
 
         /// <summary>
         /// Correlation matrix over some kind of entity
@@ -62,7 +54,6 @@ namespace MyMediaLite.rating_predictor
 
 			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
 			{
-				writer.WriteLine("shrinkage {0}", this.shrinkage.ToString(ni));
 				correlation.Write(writer);
 			}
 		}
@@ -75,14 +66,10 @@ namespace MyMediaLite.rating_predictor
 
             using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
 			{
-				string[] numbers = reader.ReadLine().Split(' ');
-				float shrinkage  = float.Parse(numbers[1], ni);
-
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 
 				base.Train(); // train baseline model
 				this.correlation = new Cosine(correlation);
-				this.shrinkage = shrinkage;
 			}
 		}
 	}
