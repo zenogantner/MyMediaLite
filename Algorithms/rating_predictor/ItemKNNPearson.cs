@@ -51,7 +51,7 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			return string.Format("item-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, reg_u, reg_i);
+			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
 		}
 	}
 }

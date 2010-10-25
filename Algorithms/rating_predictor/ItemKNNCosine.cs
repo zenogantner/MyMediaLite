@@ -46,7 +46,7 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			return string.Format("item-kNN-cosine k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), reg_u, reg_i);
+			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
 }

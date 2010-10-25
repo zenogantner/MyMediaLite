@@ -29,7 +29,8 @@ namespace MyMediaLite.rating_predictor
 {
 	// TODO: run CV internally in order to find suitable hyperparameters
 
-    /// <summary>
+	/// <summary>baseline method for rating prediction</summary>
+    /// <remarks>
     /// Uses the average rating value, plus a regularized user and item bias
     /// for prediction.
     ///
@@ -38,17 +39,22 @@ namespace MyMediaLite.rating_predictor
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009
 	///
 	/// This engine supports online updates.
-    /// </summary>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
+    /// </remarks>
     public class UserItemBaseline : Memory
     {
 		/// <summary>Regularization parameter for the user biases</summary>
-		public double reg_u = 25;
-		/// <summary>Regularization parameter for the item biases</summary>
-		public double reg_i = 10;
+		public double RegU { get { return reg_u; } set { reg_u = value; }
+		}
+		private double reg_u = 25;
 
-		// TODO should be part of the interface of all update-able engines ...
+		/// <summary>Regularization parameter for the item biases</summary>
+		public double RegI { get { return reg_i; } set { reg_i = value; } }
+		private double reg_i = 10;
+
+		/// <summary>true if users shall be updated when doing online updates</summary>
         public bool UpdateUsers { get; set; }
+
+		/// <summary>true if items shall be updated when doing online updates</summary>
         public bool UpdateItems { get; set; }
 
 		private double global_average;
