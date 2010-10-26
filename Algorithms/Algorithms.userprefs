@@ -1,19 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="../RatingPrediction/RatingPrediction.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="rating_predictor/Linear.cs" ctype="Workbench">
     <Files>
-      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="453" Column="9" />
-      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="519" Column="78" />
-      <File FileName="eval/ItemPredictionEval.cs" Line="163" Column="1" />
-      <File FileName="data/Ratings.cs" Line="39" Column="63" />
-      <File FileName="rating_predictor/KNN.cs" Line="16" Column="73" />
-      <File FileName="rating_predictor/ItemKNN.cs" Line="70" Column="1" />
-      <File FileName="rating_predictor/ItemAttributeKNN.cs" Line="61" Column="55" />
-      <File FileName="rating_predictor/UserKNN.cs" Line="72" Column="23" />
-      <File FileName="rating_predictor/UserAttributeKNN.cs" Line="59" Column="55" />
-      <File FileName="rating_predictor/ItemKNNCosine.cs" Line="33" Column="9" />
-      <File FileName="rating_predictor/ItemKNNPearson.cs" Line="50" Column="69" />
-      <File FileName="rating_predictor/UserKNNPearson.cs" Line="50" Column="26" />
-      <File FileName="rating_predictor/UserKNNCosine.cs" Line="49" Column="55" />
+      <File FileName="../RatingPrediction/RatingPrediction.cs" Line="467" Column="12" />
+      <File FileName="../ItemPrediction/ItemPrediction.cs" Line="25" Column="29" />
+      <File FileName="eval/ItemPredictionEval.cs" Line="1" Column="37" />
+      <File FileName="rating_predictor/ItemKNN.cs" Line="16" Column="73" />
+      <File FileName="rating_predictor/ItemKNNCosine.cs" Line="49" Column="69" />
+      <File FileName="rating_predictor/ItemKNNPearson.cs" Line="54" Column="80" />
+      <File FileName="rating_predictor/KNN.cs" Line="35" Column="16" />
+      <File FileName="rating_predictor/UserKNNPearson.cs" Line="54" Column="80" />
+      <File FileName="rating_predictor/UserItemBaseline.cs" Line="52" Column="29" />
+      <File FileName="rating_predictor/Memory.cs" Line="39" Column="25" />
+      <File FileName="rating_predictor/ItemAttributeKNN.cs" Line="61" Column="78" />
+      <File FileName="rating_predictor/UserAttributeKNN.cs" Line="59" Column="69" />
+      <File FileName="rating_predictor/UserKNNCosine.cs" Line="49" Column="69" />
+      <File FileName="rating_predictor/Linear.cs" Line="105" Column="11" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -28,15 +29,15 @@
             </Node>
             <Node name="io" expanded="True" />
             <Node name="item_recommender" expanded="True" />
-            <Node name="rating_predictor" expanded="True" />
+            <Node name="rating_predictor" expanded="True">
+              <Node name="Linear.cs" selected="True" />
+            </Node>
           </Node>
           <Node name="ItemPrediction" expanded="True" />
           <Node name="Mapping" expanded="True" />
           <Node name="RatingDemo" expanded="True" />
           <Node name="RatingExperiment" expanded="True" />
-          <Node name="RatingPrediction" expanded="True">
-            <Node name="RatingPrediction.cs" selected="True" />
-          </Node>
+          <Node name="RatingPrediction" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

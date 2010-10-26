@@ -31,13 +31,9 @@ namespace MyMediaLite.data_type
     {
         /// <summary>Data array: data is stored in columns.</summary>
         public T[] data;
-        /// <summary>
-        /// Dimension 1, the number of rows
-        /// </summary>
+        /// <summary>Dimension 1, the number of rows</summary>
         public int dim1;
-        /// <summary>
-        /// Dimension 2, the number of columns
-        /// </summary>
+        /// <summary>Dimension 2, the number of columns</summary>
         public int dim2;
 
 		/// <summary>True if the matrix is symmetric, false otherwise</summary>
@@ -60,6 +56,11 @@ namespace MyMediaLite.data_type
         /// <param name="dim2">the number of columns</param>
         public Matrix(int dim1, int dim2)
         {
+			if (dim1 < 1)
+				throw new ArgumentException("dim1 must be at least 1");
+			if (dim2 < 1)
+				throw new ArgumentException("dim2 must be at least 1");
+			
             this.dim1 = dim1;
             this.dim2 = dim2;
             data = new T[dim1 * dim2];

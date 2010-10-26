@@ -35,8 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\usr\lib\mono\gac\System.Core\3.5.0.0__b77a5c561934e089\System.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

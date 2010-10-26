@@ -1,28 +1,45 @@
 We use a blending of guidelines that are used in the C# and Java communities.
 We apologize to both camps for this heresy.
 
+Naming
 1. Class, interface, method and property names are written in CamelCase.
 2. Interface names have a preceding 'I'.
 3. Enum values are written in UPPER_CASE.
 4. Namespace names below MyMedia are written in lower_case.
 5. Field variables, local variables, and method parameters are written in
    lower_case.
+
+Properties
 6. It is okay to define simple properties in one line.
+
+Using
 7. 'using' declarations start with the 'System' namespaces, followed by all
    other namespaces. Those two groups of declarations are internally sorted
    by alphabet.
 8. After the 'using' declarations, there are two empty lines.
-9. If there are minimum and maximum values as method parameters, the minimum
-   value always comes first.
-10. One file per externally used class
-11. Prefer interface types for method arguments and return types.
 
+Class definitions
+9. One file per externally used class
 
-this.p vs. p
+Methods
+10. Prefer interface types for method arguments and return types.
+
+Spacing
+11. There must be a space between if, for(each), while and the next parenthesis.
+12. There is no space between a method name and the parenthesis.
+13. There must be spaces around binary operators like =, +, /, +=, ==, etc.
+14. There are no spaces between unary operators like ++, --, etc and the variable
+    they modify.
+15. There is no space between the datatype and the [] in array declarations.
+16. Use a space (or newline) after a comma, semicolon, or curly brace.
+
+Curly braces
+16. Do not use curly braces for simple if, for(each), and while statements.
 
 Specific standards for ordering (in argument lists, data formats)
 a. user_id, item_id, rating, date/time
 b. training_data, test_data
 c. row, column, value
+d. min, max
 
 TODO: add more, discuss, group

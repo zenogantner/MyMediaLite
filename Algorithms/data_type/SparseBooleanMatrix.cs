@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-//using System.IO;
 
 
 namespace MyMediaLite.data_type
@@ -148,14 +147,17 @@ namespace MyMediaLite.data_type
 		/// <param name="y">the column ID</param>
 		public void RemoveColumn(int y)
 		{
-			foreach (var row in rows)
-				foreach (int col_id in row)
+			for (int row_id = 0; row_id < rows.Count; row_id++)
+			{
+				var cols = new List<int>(rows[row_id]);
+				foreach (int col_id in cols)
 				{
 					if (col_id >= y)
-						row.Remove(y);
+						rows[row_id].Remove(y);
 					if (col_id > y)
-						row.Add(col_id - 1);
+						rows[row_id].Add(col_id - 1);
 				}
+			}
 		}
 
 		/// <summary>
@@ -164,16 +166,17 @@ namespace MyMediaLite.data_type
 		/// <param name="delete_columns">an array with column IDs</param>
 		public void RemoveColumn(int[] delete_columns)
 		{
-			foreach (var row in rows)
+			for (int row_id = 0; row_id < rows.Count; row_id++)
 			{
-				foreach (int col_id in row)
+				var cols = new List<int>(rows[row_id]);
+				foreach (int col_id in cols)
 				{
 					int decrease_by = 0;
 					foreach (int y in delete_columns)
 					{
 						if (col_id == y)
 						{
-							row.Remove(y);
+							rows[row_id].Remove(y);
 							goto NEXT_COL; // poor man's labeled continue
 						}
 						if (col_id > y)
@@ -181,12 +184,12 @@ namespace MyMediaLite.data_type
 					}
 
 					// decrement column ID
-					row.Remove(col_id);
-					row.Add(col_id - decrease_by);
+					rows[row_id].Remove(col_id);
+					rows[row_id].Add(col_id - decrease_by);
 
 					NEXT_COL:;
-				} //COL
-			} //ROW
+				}
+			}
 		}
 
 		/// <summary>
