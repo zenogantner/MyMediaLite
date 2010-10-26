@@ -175,10 +175,10 @@ namespace MyMediaLite.rating_predictor
 
             if (bound)
 			{
-                if (result > MaxRatingValue)
-					result = MaxRatingValue;
-                if (result < MinRatingValue)
-					result = MinRatingValue;
+                if (result > MaxRating)
+					result = MaxRating;
+                if (result < MinRating)
+					result = MinRating;
             }
             return result;
         }

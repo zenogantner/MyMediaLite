@@ -84,7 +84,7 @@ namespace MyMediaLite.rating_predictor
             // learn model parameters
 			if (StochasticLearning)
 				ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-            bias = Math.Log( (ratings.Average - MinRatingValue) / (MaxRatingValue - ratings.Average) );
+            bias = Math.Log( (ratings.Average - MinRating) / (MaxRating - ratings.Average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);
 		}		
@@ -105,7 +105,7 @@ namespace MyMediaLite.rating_predictor
 			Matrix<double> item_feature_gradient = new Matrix<double>(item_feature.dim1, item_feature.dim2);
 
 			// I.1 prediction error
-			double rating_range_size = MaxRatingValue - MinRatingValue;
+			double rating_range_size = MaxRating - MinRating;
 			foreach (RatingEvent rating in ratings)
             {
             	int u = rating.user_id;
@@ -117,7 +117,7 @@ namespace MyMediaLite.rating_predictor
     	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));				
 
-                double prediction = MinRatingValue + sig_dot * rating_range_size;
+                double prediction = MinRating + sig_dot * rating_range_size;
 				double error      = rating.rating - prediction;				
 				
 				double gradient_common = error * sig_dot * (1 - sig_dot) * rating_range_size;
@@ -184,7 +184,7 @@ namespace MyMediaLite.rating_predictor
 		
 		private void IterateSGD(Ratings ratings, bool update_user, bool update_item)
 		{
-			double rating_range_size = MaxRatingValue - MinRatingValue;
+			double rating_range_size = MaxRating - MinRating;
 
 			foreach (RatingEvent rating in ratings)
             {
@@ -196,7 +196,7 @@ namespace MyMediaLite.rating_predictor
     	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
-                double prediction = MinRatingValue + sig_dot * rating_range_size;
+                double prediction = MinRating + sig_dot * rating_range_size;
 				double error      = rating.rating - prediction;
 
 				double gradient_common = error * sig_dot * (1 - sig_dot) * rating_range_size;

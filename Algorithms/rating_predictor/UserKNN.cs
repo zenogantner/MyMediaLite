@@ -91,10 +91,10 @@ namespace MyMediaLite.rating_predictor
 				result += modification;
 			}
 
-			if (result > MaxRatingValue)
-				result = MaxRatingValue;
-            if (result < MinRatingValue)
-				result = MinRatingValue;
+			if (result > MaxRating)
+				result = MaxRating;
+            if (result < MinRating)
+				result = MinRating;
 			return result;
         }
 

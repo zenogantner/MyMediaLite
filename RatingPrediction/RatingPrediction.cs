@@ -236,9 +236,9 @@ namespace RatingPrediction
 			});
 			Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
-			recommender.MinRatingValue = min_rating;
-			recommender.MaxRatingValue = max_rating;
-			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRatingValue, recommender.MaxRatingValue));
+			recommender.MinRating = min_rating;
+			recommender.MaxRating = max_rating;
+			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 			DisplayDataStats();
 

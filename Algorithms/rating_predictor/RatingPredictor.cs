@@ -34,13 +34,13 @@ namespace MyMediaLite.rating_predictor
         /// Gets or sets the max rating value.
         /// </summary>
         /// <value>The max rating value.</value>
-        public virtual double MaxRatingValue { get { return max_rating_value; } set { max_rating_value = value; } }
+        public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
 
         /// <summary>
         /// Gets or sets the min rating value.
         /// </summary>
         /// <value>The min rating value.</value>
-        public virtual double MinRatingValue { get { return min_rating_value;  } set { min_rating_value = value; } }
+        public virtual double MinRating { get { return min_rating;  } set { min_rating = value; } }
 		
         /// <inheritdoc />
 		public abstract bool CanPredict(int user_id, int item_id);
@@ -66,9 +66,9 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public abstract void LoadModel(string filePath);
         /// <inheritdoc />
-        protected double max_rating_value;
+        protected double max_rating;
         /// <inheritdoc />
-        protected double min_rating_value;
+        protected double min_rating;
 
         /// <inheritdoc />
         public abstract void Train();

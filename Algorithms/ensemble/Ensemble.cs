@@ -72,7 +72,7 @@ namespace MyMediaLite.ensemble
                 this.max_rating_value = value;
 				foreach (RecommenderEngine engine in engines)
 					if (engine is RatingPredictor)
-						((RatingPredictor)engine).MaxRatingValue = value;
+						((RatingPredictor)engine).MaxRating = value;
             }
         }
 
@@ -91,7 +91,7 @@ namespace MyMediaLite.ensemble
                 this.min_rating_value = value;
 				foreach (RecommenderEngine engine in engines)
 					if (engine is RatingPredictor)
-						((RatingPredictor)engine).MinRatingValue = value;
+						((RatingPredictor)engine).MinRating = value;
 
             }
         }

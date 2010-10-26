@@ -50,7 +50,7 @@ namespace MyMediaLite.rating_predictor
 
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-            bias = Math.Log( (ratings.Average - MinRatingValue) / (MaxRatingValue - ratings.Average) );
+            bias = Math.Log( (ratings.Average - MinRating) / (MaxRating - ratings.Average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);
 		}
@@ -58,7 +58,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
-			double rating_range_size = MaxRatingValue - MinRatingValue;
+			double rating_range_size = MaxRating - MinRating;
 
 			foreach (RatingEvent rating in ratings)
             {
@@ -71,7 +71,7 @@ namespace MyMediaLite.rating_predictor
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double r = rating.rating;
-                double p = MinRatingValue + sig_dot * rating_range_size;
+                double p = MinRating + sig_dot * rating_range_size;
 				double err = r - p;
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
@@ -107,7 +107,7 @@ namespace MyMediaLite.rating_predictor
         public override double Predict(int user_id, int item_id)
         {
             if (user_id >= user_feature.dim1 || item_id >= item_feature.dim1)
-				return MinRatingValue + ( 1 / (1 + Math.Exp(-bias)) ) * (MaxRatingValue - MinRatingValue);;
+				return MinRating + ( 1 / (1 + Math.Exp(-bias)) ) * (MaxRating - MinRating);;
 
 			double dot_product = bias;
 
@@ -115,7 +115,7 @@ namespace MyMediaLite.rating_predictor
             for (int f = 0; f < num_features; f++)
                 dot_product += user_feature[user_id, f] * item_feature[item_id, f];
 
-			return MinRatingValue + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRatingValue - MinRatingValue);
+			return MinRating + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRating - MinRating);
         }
 
 		/// <inheritdoc />

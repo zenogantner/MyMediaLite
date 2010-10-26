@@ -99,10 +99,10 @@ namespace MyMediaLite.rating_predictor
 			double item_bias = (item_id <= MaxItemID && item_id >= 0) ? item_biases[item_id] : 0;
 			double result = global_average + user_bias + item_bias;
 
-			if (result > MaxRatingValue)
-				result = MaxRatingValue;
-            if (result < MinRatingValue)
-				result = MinRatingValue;
+			if (result > MaxRating)
+				result = MaxRating;
+            if (result < MinRating)
+				result = MinRating;
 
 			return result;
         }
