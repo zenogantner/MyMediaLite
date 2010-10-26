@@ -10,6 +10,9 @@
            rating prediction engines
          - kNN: do not store hyperparameter values in model files (consistent
            with the other engines)
+         - RatingPredictor: shorter property names:
+           - MinRatingValue -> MinRating
+           - MaxRatingValue -> MaxRating    
         command-line programs
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
