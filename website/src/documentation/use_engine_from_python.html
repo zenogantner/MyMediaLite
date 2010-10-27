@@ -48,11 +48,10 @@
   import clr
   clr.AddReference("Algorithms.dll")
   import MyMediaLite
-  import MyMediaLite.data_type
   import MyMediaLite.data      
-  import MyMediaLite.rating_prediction  
-  import MyMediaLite.io
   import MyMediaLite.eval      
+  import MyMediaLite.io
+  import MyMediaLite.rating_prediction  
 
   min_rating = 1
   max_rating = 5
@@ -73,7 +72,7 @@
   MyMediaLite.eval.RatingEval.EvaluateRated(recommender, test_data)
   
   # make a prediction for a certain user and item
-  MyMediaLite.eval.RatingEval.EvaluateRated(recommender, test_data)
+  recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
   </pre>
   </p>
 

@@ -34,3 +34,6 @@ view-flyer:
  .PHONY: website
 website:
 	ttree -s website/src/ -d website/public_html/ -c website/lib/ -l website/lib/ -r -f config --post_chomp -a
+
+copy-website:
+	cp -r website/public_html/* ${HOME}/homepage/public_html/mymedialite/
