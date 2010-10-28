@@ -244,9 +244,9 @@ namespace RatingPrediction
 
 			if (find_iter != 0)
 			{
-				if ( !(recommender is IterativeModel) )
+				if ( !(recommender is IIterativeModel) )
 					Usage("Only iterative recommender engines support find_iter.");
-				IterativeModel iterative_recommender = (MatrixFactorization) recommender;
+				IIterativeModel iterative_recommender = (MatrixFactorization) recommender;
 				Console.WriteLine(recommender.ToString() + " ");
 
 				if (load_model_file.Equals(string.Empty))
@@ -364,7 +364,7 @@ namespace RatingPrediction
 			recommender.Ratings = training_data;
 
 			// user attributes
-			if (recommender is UserAttributeAwareRecommender)
+			if (recommender is IUserAttributeAwareRecommender)
 				if (user_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_attributes=FILE.");
@@ -372,13 +372,13 @@ namespace RatingPrediction
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					((IUserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((IUserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
 					Console.WriteLine("{0} user attributes", attr_data.Second);
 				}
 
 			// item attributes
-			if (recommender is ItemAttributeAwareRecommender)
+			if (recommender is IItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(string.Empty) )
 				{
 					Usage("Recommender expects item_attributes=FILE.");
@@ -386,13 +386,13 @@ namespace RatingPrediction
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((IItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 					Console.WriteLine("{0} item attributes", attr_data.Second);
 				}
 
 			// user relation
-			if (recommender is UserRelationAwareRecommender)
+			if (recommender is IUserRelationAwareRecommender)
 				if (user_relation_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_relation=FILE.");
@@ -400,13 +400,13 @@ namespace RatingPrediction
 				else
 				{
 					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					((UserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
-					((UserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
+					((IUserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
+					((IUserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
 					Console.WriteLine("relation over {0} users", relation_data.Second);
 				}
 
 			// item relation
-			if (recommender is ItemRelationAwareRecommender)
+			if (recommender is IItemRelationAwareRecommender)
 				if (user_relation_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects item_relation=FILE.");
@@ -414,8 +414,8 @@ namespace RatingPrediction
 				else
 				{
 					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					((ItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
-					((ItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
+					((IItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
+					((IItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
 					Console.WriteLine("relation over {0} items", relation_data.Second);
 				}
 
@@ -458,7 +458,7 @@ namespace RatingPrediction
 				((UserKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((UserKNNPearson)knn).Shrinkage);
 			if (knn is ItemKNNPearson)
 				((ItemKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((ItemKNNPearson)knn).Shrinkage);
-			
+
 			return knn;
 		}
 

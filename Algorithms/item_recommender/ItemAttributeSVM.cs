@@ -31,7 +31,7 @@ namespace MyMediaLite.item_recommender
     /// <remarks>
     /// This engine does not support online updates.
     /// </remarks>
-    public class ItemAttributeSVM : Memory, ItemAttributeAwareRecommender
+    public class ItemAttributeSVM : Memory, IItemAttributeAwareRecommender
     {
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes { get; set; }

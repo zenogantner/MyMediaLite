@@ -33,7 +33,7 @@ namespace MyMediaLite.util
 		/// <param name="engine">the engine to store</param>
 		/// <param name="data_dir">data directory prefix</param>
 		/// <param name="file">the filename (may include relative paths)</param>
-		public static void SaveModel(RecommenderEngine engine, string data_dir, string file)
+		public static void SaveModel(IRecommenderEngine engine, string data_dir, string file)
 		{
 			if (file.Equals(string.Empty))
 				return;
@@ -46,11 +46,11 @@ namespace MyMediaLite.util
 		/// <summary>
 		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
 		/// </summary>
-		/// <param name="engine">the <see cref="RecommenderEngine"/> to save</param>
+		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="data_dir">the directory where the file will  be stored</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
-		public static void SaveModel(RecommenderEngine engine, string data_dir, string filename, int iteration)
+		public static void SaveModel(IRecommenderEngine engine, string data_dir, string filename, int iteration)
 		{
 			if (filename.Equals(string.Empty))
 				return;
@@ -61,10 +61,10 @@ namespace MyMediaLite.util
 		/// <summary>
 		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
 		/// </summary>
-		/// <param name="engine">the <see cref="RecommenderEngine"/> to save</param>
+		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="data_dir">the directory where the file will  be stored</param>
 		/// <param name="filename">the filename template</param>
-		public static void LoadModel(RecommenderEngine engine, string data_dir, string filename)
+		public static void LoadModel(IRecommenderEngine engine, string data_dir, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;

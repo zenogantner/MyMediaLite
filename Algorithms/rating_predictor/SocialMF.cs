@@ -36,7 +36,7 @@ namespace MyMediaLite.rating_predictor
     ///  A matrix factorization technique with trust propagation for recommendation in social networks
     ///  RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
 	/// </remarks>
-	public class SocialMF : BiasedMatrixFactorization, UserRelationAwareRecommender
+	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
         /// <summary>Social network regularization constant</summary>
 		public double SocialRegularization {

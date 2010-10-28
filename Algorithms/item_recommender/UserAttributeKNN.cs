@@ -28,7 +28,7 @@ namespace MyMediaLite.item_recommender
     ///
     /// This engine does not support online updates.
     /// </remarks>
-    public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
+    public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
     {
 		/// <inheritdoc />
 		public SparseBooleanMatrix UserAttributes

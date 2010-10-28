@@ -30,7 +30,7 @@ namespace MyMediaLite.item_recommender
     /// This engine does not support online updates.
     /// </remarks>
     /// <author>Zeno Gantner, University of Hildesheim</author>
-    public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
+    public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
     {
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes { get; set; }

@@ -71,12 +71,21 @@ namespace MyMediaLite.util
 			}
 		}
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="parameters">
+		/// a dictionary containing the parameters as key-value pairs
+		/// </param>
 		public CommandLineParameters(Dictionary<string,string> parameters)
 		{
 			this.dict = parameters;
 			this.ni.NumberDecimalDigits = '.';
 		}
 
+		/// <summary>
+		/// The number of key-value pairs
+		/// </summary>
 		public int Count {
 			get { return dict.Count; }
 		}

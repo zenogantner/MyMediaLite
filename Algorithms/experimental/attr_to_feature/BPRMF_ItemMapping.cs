@@ -27,7 +27,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
-	public class BPRMF_ItemMapping : BPRMF_Mapping, ItemAttributeAwareRecommender
+	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes			

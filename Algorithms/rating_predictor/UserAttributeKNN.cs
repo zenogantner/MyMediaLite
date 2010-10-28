@@ -29,7 +29,7 @@ namespace MyMediaLite.rating_predictor
 	/// <summary>
 	/// This engine does NOT support online updates.
 	/// </summary>
-	public class UserAttributeKNN : UserKNN, UserAttributeAwareRecommender
+	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
 		/// <inheritdoc />
 		public SparseBooleanMatrix UserAttributes

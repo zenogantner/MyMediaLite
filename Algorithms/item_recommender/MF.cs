@@ -29,7 +29,7 @@ namespace MyMediaLite.item_recommender
     /// <summary>
     /// Abstract class for matrix factorization based item predictors
     /// </summary>
-    public abstract class MF : Memory, IterativeModel
+    public abstract class MF : Memory, IIterativeModel
     {
         /// <summary>User feature matrix</summary>
         protected Matrix<double> user_feature;

@@ -36,7 +36,7 @@ namespace MyMediaLite.item_recommender
     ///
     /// This engine does not support online updates.
 	/// </summary>
-	public class BPR_Linear : Memory, ItemAttributeAwareRecommender, IterativeModel
+	public class BPR_Linear : Memory, IItemAttributeAwareRecommender, IIterativeModel
 	{
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes			

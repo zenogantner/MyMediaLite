@@ -166,7 +166,7 @@ namespace Mapping
 				relevant_items = training_data.Second.NonEmptyRowIDs;
 
 			// user attributes
-			if (recommender is UserAttributeAwareRecommender)
+			if (recommender is IUserAttributeAwareRecommender)
 				if (user_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects user_attributes.");
@@ -174,12 +174,12 @@ namespace Mapping
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((UserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((UserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
+					((IUserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
+					((IUserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
 				}
 
 			// item attributes
-			if (recommender is ItemAttributeAwareRecommender)
+			if (recommender is IItemAttributeAwareRecommender)
 				if (item_attributes_file.Equals(string.Empty))
 				{
 					Usage("Recommender expects item_attributes.");
@@ -187,8 +187,8 @@ namespace Mapping
 				else
 				{
 					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((ItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((ItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
+					((IItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
 				}
 
 			// test data

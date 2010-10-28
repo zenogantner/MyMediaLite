@@ -21,7 +21,7 @@ namespace MyMediaLite.item_recommender
     /// Abstract class for item recommenders
     /// </summary>
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
-    public abstract class ItemRecommender : RecommenderEngine
+    public abstract class ItemRecommender : IRecommenderEngine
     {
         /// <inheritdoc />
         public abstract double Predict(int user_id, int item_id);

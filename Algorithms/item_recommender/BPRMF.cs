@@ -34,7 +34,7 @@ namespace MyMediaLite.item_recommender
 	/// in UAI 2009
 	/// </summary>
 	/// <author>Zeno Gantner, Christoph Freudenthaler, University of Hildesheim</author>
-	public class BPRMF : MF, IterativeModel
+	public class BPRMF : MF, IIterativeModel
 	{
 		/// <summary>
 		/// Use the first item feature as a bias term if set to true

@@ -29,7 +29,7 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// This engine does NOT support online updates.
 	/// </summary>
-	public class ItemAttributeKNN : ItemKNN, ItemAttributeAwareRecommender
+	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
 		/// <inheritdoc />
 		public SparseBooleanMatrix ItemAttributes

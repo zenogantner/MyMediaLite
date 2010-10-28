@@ -28,7 +28,7 @@ namespace MyMediaLite.rating_predictor
     /// Abstract class for rating predictors
     /// </summary>
     /// <author>Steffen Rendle, University of Hildesheim</author>
-    public abstract class RatingPredictor : RecommenderEngine
+    public abstract class RatingPredictor : IRecommenderEngine
     {
         /// <summary>
         /// Gets or sets the max rating value.
