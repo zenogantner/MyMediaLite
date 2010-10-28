@@ -77,6 +77,14 @@ namespace MyMediaLite.correlation
 		/// <summary>
 		/// Create a CorrelationMatrix from the lines of a StreamReader
 		/// </summary>
+		/// <remarks>
+		/// In the first line, we expect to be the number of entities.
+		/// All the other lines have the format
+		/// <pre>
+		///   EntityID1 EntityID2 Correlation
+		/// </pre>
+		/// where EntityID1 and EntityID2 are non-negative integers and Correlation is a floating point number.
+		/// </remarks>
 		/// <param name="reader">the StreamReader to read from</param>
 		static public CorrelationMatrix ReadCorrelationMatrix(StreamReader reader)
 		{
@@ -93,15 +101,15 @@ namespace MyMediaLite.correlation
 
 			while (! reader.EndOfStream)
 			{
-				string[] numbers = reader.ReadLine().Split(' ');
+				string[] numbers = reader.ReadLine().Split(' '); // TODO more flexible file format (any whitespace)
 				int i = Int32.Parse(numbers[0]);
 				int j = Int32.Parse(numbers[1]);
 				float c = Single.Parse(numbers[2], ni);
 
 				if (i >= num_entities)
-					throw new Exception("i = " + i);
+					throw new Exception("Entity ID is too big: i = " + i);
 				if (j >= num_entities)
-					throw new Exception("i = " + i);
+					throw new Exception("Entity ID is too big: j = " + j);
 
 				cm[i, j] = c;
 			}

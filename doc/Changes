@@ -21,7 +21,8 @@
           - correct computation of AUC if there are irrelevant items in the
             test set
 	misc:
-         - added unit tests for basic data types (Christina Lichtenthäler)
+         - added unit tests for some basic data types (Christina Lichtenthäler)
+         - improved exception handling in CorrelationMatrix
          - code clean-ups
          - more XML API documentation
 
