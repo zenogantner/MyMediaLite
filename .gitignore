@@ -7,3 +7,4 @@ bin
 *.tar.gz
 *.userprefs
 *.pidb
+test-results

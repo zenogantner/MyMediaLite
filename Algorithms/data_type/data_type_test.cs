@@ -24,9 +24,7 @@ using NUnit.Framework;
 
 namespace MyMediaLite
 {
-	/// <summary>
-	/// Class for testing the data_type classes
-	/// </summary>
+	/// <summary>Testing the data_type classes</summary>
 	[TestFixture()]
 	public class data_type_test
 	{
@@ -34,7 +32,7 @@ namespace MyMediaLite
 		/// Unit test of Matrix.GetRow()
 		/// and Matrix.SetRow()
 		/// </summary>
-		[Test()] public void GetRow ()
+		[Test()] public void GetRow()
 		{
 			Matrix<int> testMatrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
@@ -46,7 +44,7 @@ namespace MyMediaLite
 		/// Unit test of Matrix.GetColumn()
 		/// and Matrix.SetColumn()
 		/// </summary>
-		[Test()] public void GetColumn ()
+		[Test()] public void GetColumn()
 		{
 			Matrix<int> testMatrix = new Matrix<int>(5, 5);
 			int[] column = { 1, 2, 3, 4, 5 };
@@ -374,11 +372,11 @@ namespace MyMediaLite
 
 			SparseBooleanMatrix overlapMatrix = new SparseBooleanMatrix();
 			overlapMatrix[2, 1] = true;
-			overlapMatrix[2, 5] = true; //same entry
+			overlapMatrix[2, 5] = true; // same entry
 			overlapMatrix[4, 4] = true;
-			overlapMatrix[4, 6] = true; //same entry
+			overlapMatrix[4, 6] = true; // same entry
 			overlapMatrix[5, 2] = true;
-			overlapMatrix[5, 5] = true; //same entry
+			overlapMatrix[5, 5] = true; // same entry
 
 			Assert.AreEqual(3, testMatrix.Overlap(overlapMatrix));
 

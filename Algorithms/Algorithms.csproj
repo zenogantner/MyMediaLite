@@ -136,7 +136,6 @@
     <Compile Include="ItemRelationAwareRecommender.cs" />
     <Compile Include="experimental\rating_prediction\SlopeOne.cs" />
     <Compile Include="data_type\data_type_test.cs" />
-    <Compile Include="data_type\data_typeTest.cs" />
     <Compile Include="data\data_test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

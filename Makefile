@@ -7,6 +7,9 @@ todo:
 	ack TODO | wc -l
 	ack NotImplementedException | wc -l
 
+gendarme:
+	gendarme --severity critical+ RatingPrediction/bin/Debug/*.dll
+
 monodoc:
 	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
 htmldoc:
