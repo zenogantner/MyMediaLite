@@ -5,3 +5,5 @@
 *.tmp
 bin
 *.tar.gz
+*.userprefs
+*.pidb
