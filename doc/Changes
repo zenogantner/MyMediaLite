@@ -12,7 +12,8 @@
            with the other engines)
          - RatingPredictor: shorter property names:
            - MinRatingValue -> MinRating
-           - MaxRatingValue -> MaxRating    
+           - MaxRatingValue -> MaxRating
+         - interface names now all start with 'I'
         command-line programs
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
@@ -25,6 +26,7 @@
          - improved exception handling in CorrelationMatrix
          - code clean-ups
          - more XML API documentation
+         - added IronPython example
 
 0.04	2010-10-21
 	new features:

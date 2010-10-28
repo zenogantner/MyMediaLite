@@ -66,13 +66,14 @@
   recommender = MyMediaLite.rating_predictor.UserItemBaseline()
   recommender.MinRating = min_rating
   recommender.MaxRating = max_rating
+  recommender.Ratings = training_data  
   recommender.Train()
   
   # measure the accuracy on the test data set
-  MyMediaLite.eval.RatingEval.EvaluateRated(recommender, test_data)
+  print MyMediaLite.eval.RatingEval.EvaluateRated(recommender, test_data)
   
   # make a prediction for a certain user and item
-  recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
+  print recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
   </pre>
   </p>
 
