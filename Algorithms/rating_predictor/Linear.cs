@@ -35,9 +35,7 @@ namespace MyMediaLite.rating_predictor
     public class GlobalAverage : Memory
     {
         /// <inheritdoc />
-        public override void Train()
-        {
-        }
+        public override void Train() { }
 
         /// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)

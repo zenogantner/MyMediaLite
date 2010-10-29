@@ -18,6 +18,7 @@
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
          - item prediction: fix iteration statistics display
+         - rating prediction: display correct number of users and items
         evaluation
           - correct computation of AUC if there are irrelevant items in the
             test set

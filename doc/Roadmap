@@ -63,7 +63,7 @@ Architecture
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
- - provide bindings for languages like Python, Ruby, Perl
+ - provide bindings for languages like Java, Ruby, Perl, Clojure, Scala
  - use Parallel.ForEach for item recommender evaluation
    - as soon as Mono 2.8 is more widely available
  - Java port

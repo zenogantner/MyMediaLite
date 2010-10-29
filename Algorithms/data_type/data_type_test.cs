@@ -205,7 +205,6 @@ namespace MyMediaLite
 				testMatrixfalse.SetRow(i, row);
 			var testMatrixtrue = new Matrix<double>(5, 5);
 			double[] row2 = { 1, 2, 3, 4, 5 };
-			//row2[3] /= 0;
 			for (int i = 0; i < 5; i++)
 				testMatrixtrue.SetRow(i, row2);
 

@@ -39,14 +39,7 @@ namespace MyMediaLite.rating_predictor
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
         /// <summary>Social network regularization constant</summary>
-		public double SocialRegularization {
-			get {
-				return this.social_regularization;
-			}
-			set {
-				social_regularization = value;
-			}
-		}		
+		public double SocialRegularization { get { return social_regularization;	} set {	social_regularization = value; } }		
         private double social_regularization = 1;		
 
 		/// <summary>
