@@ -83,8 +83,8 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void SetColumnToOneValue()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);;
-			int[] row = { 1, 2, 3, 4, 5};
+			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			int[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				testMatrix.SetRow(i, row);
 			testMatrix.SetColumnToOneValue(3, 10);

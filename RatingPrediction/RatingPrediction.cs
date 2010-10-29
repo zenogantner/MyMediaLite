@@ -490,8 +490,8 @@ namespace RatingPrediction
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
-			num_users = test_data.All.GetUsers().Count;;
-			num_items = test_data.All.GetItems().Count;;
+			num_users = test_data.All.GetUsers().Count;
+			num_items = test_data.All.GetItems().Count;
 			matrix_size = (long) num_users * num_items;
 			empty_size  = (long) matrix_size - test_data.Count;
 			sparsity = (double) 100L * empty_size / matrix_size;

@@ -107,7 +107,7 @@ namespace MyMediaLite.rating_predictor
         public override double Predict(int user_id, int item_id)
         {
             if (user_id >= user_feature.dim1 || item_id >= item_feature.dim1)
-				return MinRating + ( 1 / (1 + Math.Exp(-bias)) ) * (MaxRating - MinRating);;
+				return MinRating + ( 1 / (1 + Math.Exp(-bias)) ) * (MaxRating - MinRating);
 
 			double dot_product = bias;
 
