@@ -25,12 +25,22 @@ namespace MyMediaLite.data
 	/// <summary>Class representing a collection of ratings in a particular order</summary>
     public class Ratings
     {
-        private List<RatingEvent> ratingList = new List<RatingEvent>();
+        private List<RatingEvent> rating_list = new List<RatingEvent>();
 
-		/// <summary>
-		/// Number of ratings in the collection
-		/// </summary>
-        public int Count { get { return ratingList.Count; }	}
+		/// <summary>Number of ratings in the collection</summary>
+        public int Count { get { return rating_list.Count; }	}
+
+		/// <summary>Average rating value in the collection</summary>
+		public double Average
+		{
+			get
+			{
+				double sum = 0;
+				foreach (RatingEvent r in rating_list)
+					sum += r.rating;
+				return sum / rating_list.Count;
+			}
+		}
 
 		/// <summary>
 		/// Access an event in the collection directly via an index
@@ -40,8 +50,9 @@ namespace MyMediaLite.data
 		/// </param>
 		public RatingEvent this [int index]
 		{
-			get {
-				return ratingList[index];
+			get
+			{
+				return rating_list[index];
 			}
 		}
 
@@ -53,13 +64,13 @@ namespace MyMediaLite.data
 		/// </remarks>
 		public void Shuffle()
 		{
-			Utils.Shuffle<RatingEvent>(ratingList);
+			Utils.Shuffle<RatingEvent>(rating_list);
 		}
 
 		/// <inheritdoc />
 		public IEnumerator GetEnumerator()
 		{
-			return ratingList.GetEnumerator();
+			return rating_list.GetEnumerator();
 		}
 
 		/// <summary>
@@ -68,7 +79,7 @@ namespace MyMediaLite.data
 		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
 		public void AddRating(RatingEvent rating)
         {
-            ratingList.Add(rating);
+            rating_list.Add(rating);
         }
 
 		/// <summary>
@@ -77,7 +88,7 @@ namespace MyMediaLite.data
 		/// <param name="rating">the rating event to remove</param>
         public void RemoveRating(RatingEvent rating)
         {
-            ratingList.Remove(rating);
+            rating_list.Remove(rating);
         }
 
 		/// <summary>
@@ -88,7 +99,7 @@ namespace MyMediaLite.data
 		/// <returns>the rating event corresponding to the given user and item, null otherwise</returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {
-            foreach (RatingEvent rating in ratingList)
+            foreach (RatingEvent rating in rating_list)
                 if ((rating.user_id == user_id) && (rating.item_id == item_id))
                     return rating;
             return null;
@@ -103,7 +114,7 @@ namespace MyMediaLite.data
 		public HashSet<int> GetUsers()
 		{
 			HashSet<int> users = new HashSet<int>();
-			foreach (RatingEvent rating in ratingList)
+			foreach (RatingEvent rating in rating_list)
 				users.Add(rating.user_id);
 			return users;
 		}
@@ -118,7 +129,7 @@ namespace MyMediaLite.data
 		public HashSet<int> GetItems()
 		{
 			HashSet<int> items = new HashSet<int>();
-			foreach (RatingEvent rating in ratingList)
+			foreach (RatingEvent rating in rating_list)
 				items.Add(rating.item_id);
 			return items;
 		}

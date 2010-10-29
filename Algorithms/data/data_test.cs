@@ -182,6 +182,22 @@ namespace MyMediaLite
 		}
 
 		/// <summary>
+		/// Unit test of Ratings.Average
+		/// </summary>
+		[Test()]
+		public void RatingsAverage()
+		{
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
+			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+
+			Assert.AreEqual(0.3, test_ratings.Average);
+		}
+
+		/// <summary>
 		/// Unit test of Ratings.Count
 		/// </summary>
 		[Test()]

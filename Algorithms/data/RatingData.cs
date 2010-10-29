@@ -38,6 +38,9 @@ namespace MyMediaLite.data
 		/// </summary>
         public Ratings All { get { return all; } }
 
+		/// <summary>Average rating value in the collection</summary>
+		public double Average { get { return all.Average; } }
+
 		/// <summary>
 		/// Ratings by user
 		/// </summary>
@@ -73,7 +76,7 @@ namespace MyMediaLite.data
 		/// </summary>
 		public int MaxUserID { get { return max_user_id; } }
 		private int max_user_id = 0;
-		
+
 		/// <summary>
 		/// The maximum item ID in the ratings
 		/// </summary>
@@ -81,8 +84,8 @@ namespace MyMediaLite.data
 		private int max_item_id = 0;
 
 		/// <summary>The number of ratings in the collection</summary>
-		public int Count { get { return all.Count; } }		
-		
+		public int Count { get { return all.Count; } }
+
 		private void InitByUser()
 		{
 			this.byUser = new List<Ratings>();
@@ -108,12 +111,12 @@ namespace MyMediaLite.data
 		/// </summary>
 		/// <remarks>
 		/// Fisher-Yates shuffle
-		/// </remarks>		
+		/// </remarks>
 		public void Shuffle()
 		{
 			all.Shuffle();
 		}
-		
+
 		/// <summary>
 		/// Returns an enumerator for use in foreach loops
 		/// </summary>
@@ -211,7 +214,7 @@ namespace MyMediaLite.data
         public void RemoveUser(int user_id)
         {
 			List<RatingEvent> remove_list = new List<RatingEvent>();
-            
+
             if (byUser != null)
 			{
 				foreach (RatingEvent r in ByUser[user_id])
@@ -230,9 +233,9 @@ namespace MyMediaLite.data
 						if (r.user_id == user_id)
 							remove_list.Add(r);
 			}
-			
+
 			foreach (var r in remove_list)
-				RemoveRating(r);			
+				RemoveRating(r);
         }
 
 		/// <summary>
@@ -244,7 +247,7 @@ namespace MyMediaLite.data
         public void RemoveItem(int item_id)
         {
 			List<RatingEvent> remove_list = new List<RatingEvent>();
-            
+
 			if (byItem != null)
                 foreach (RatingEvent r in ByItem[item_id])
                     remove_list.Add(r);
@@ -261,7 +264,7 @@ namespace MyMediaLite.data
 						if (r.item_id == item_id)
 					        remove_list.Add(r);
 			}
-			
+
 			foreach (var r in remove_list)
 				RemoveRating(r);
         }

@@ -89,11 +89,7 @@ namespace MyMediaLite.rating_predictor
 
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-
-			foreach (RatingEvent r in Ratings.All)
-				bias += r.rating;
-			bias /= Ratings.All.Count;
-			
+			bias = Ratings.All.Average;
             LearnFeatures(ratings.All, true, true);
 
 			// check for NaN in the model
