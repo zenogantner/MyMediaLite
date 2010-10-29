@@ -29,13 +29,21 @@ namespace MyMediaLite.rating_predictor
 {
     /// <summary>
     /// Uses the average rating value over all ratings for prediction.
-	///
-	/// This engine does support online updates.
     /// </summary>
+    /// <remarks>
+    /// This engine does NOT support online updates.
+    /// </remarks>
     public class GlobalAverage : Memory
     {
+		private double global_average = 0;		
+		
         /// <inheritdoc />
-        public override void Train() { }
+        public override void Train()
+		{
+			foreach (RatingEvent r in Ratings.All)
+				global_average += r.rating;
+			global_average /= Ratings.All.Count;			
+		}
 
         /// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)
@@ -46,7 +54,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            return ratings.Average;
+            return global_average;
         }
 
 		/// <inheritdoc />
@@ -66,12 +74,8 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <summary>
-		/// returns the name of the method
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
+		/// <summary>returns the name of the method</summary>
+		/// <returns>A <see cref="System.String"/></returns>
 		public override string ToString()
 		{
 			return "global-average";
@@ -80,14 +84,17 @@ namespace MyMediaLite.rating_predictor
 
     /// <summary>
     /// Abstract class that uses an average (by entity) rating value for predictions.
-    /// This engine does support online updates.
     /// </summary>
+    /// <remarks>
+    /// This engine does NOT support online updates.
+    /// </remarks>
     public abstract class EntityAverage : Memory
     {
-		/// <inheritdoc />
-        public override void Train()
-        {
-        }
+		/// <summary>The average rating for each entity</summary>
+		protected List<double> entity_averages = new List<double>();
+
+		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
+		protected double global_average = 0;
 
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)
@@ -109,10 +116,33 @@ namespace MyMediaLite.rating_predictor
 
     /// <summary>
     /// Uses the average rating value of a user for predictions.
-    /// This engine does support online updates.
     /// </summary>
+    /// <remarks>
+    /// This engine does NOT support online updates.
+    /// </remarks>
     public class UserAverage : EntityAverage
     {
+		/// <inheritdoc />
+        public override void Train()
+        {
+			List<int> rating_counts = new List<int>();
+
+			foreach (RatingEvent r in Ratings.All)
+			{
+				rating_counts[r.user_id]++;
+				entity_averages[r.user_id] += r.rating;
+				global_average += r.rating;
+			}
+
+			global_average /= Ratings.All.Count;
+
+			for (int i = 0; i < entity_averages.Count; i++)
+				if (rating_counts[i] != 0)
+					entity_averages[i] /= rating_counts[i];
+				else
+					entity_averages[i] = global_average;
+        }
+
         /// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)
 		{
@@ -122,10 +152,10 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id < MaxUserID && ratings.ByUser[user_id].Count != 0)
-                return ratings.ByUser[user_id].Average;
-            else
-				return ratings.Average;
+            if (user_id <= MaxUserID)
+                return entity_averages[user_id];
+			else
+				return global_average;
         }
 
 		/// <inheritdoc />
@@ -137,11 +167,33 @@ namespace MyMediaLite.rating_predictor
 
     /// <summary>
     /// Uses the average rating value of an item for prediction.
-    /// This engine does support online updates.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    /// <remarks>
+    /// This engine does NOT support online updates.
+    /// </remarks>
     public class ItemAverage : EntityAverage
     {
+		/// <inheritdoc />
+        public override void Train()
+        {
+			List<int> rating_counts = new List<int>();
+
+			foreach (RatingEvent r in Ratings.All)
+			{
+				rating_counts[r.item_id]++;
+				entity_averages[r.item_id] += r.rating;
+				global_average += r.rating;
+			}
+
+			global_average /= Ratings.All.Count;
+
+			for (int i = 0; i < entity_averages.Count; i++)
+				if (rating_counts[i] != 0)
+					entity_averages[i] /= rating_counts[i];
+				else
+					entity_averages[i] = global_average;
+        }
+
         /// <inheritdoc />
 		public override bool CanPredict(int user_id, int item_id)
 		{
@@ -151,10 +203,10 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (item_id < MaxItemID && ratings.ByItem[item_id].Count != 0)
-                return ratings.ByItem[item_id].Average;
+            if (item_id <= MaxItemID)
+                return entity_averages[item_id];
 			else
-				return ratings.Average;
+				return global_average;
         }
 
 		/// <inheritdoc />

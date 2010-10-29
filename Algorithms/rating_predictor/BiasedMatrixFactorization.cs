@@ -50,7 +50,14 @@ namespace MyMediaLite.rating_predictor
 
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-            bias = Math.Log( (ratings.Average - MinRating) / (MaxRating - ratings.Average) );
+			
+			// compute global average
+			double global_average = 0;
+			foreach (RatingEvent r in Ratings.All)
+				global_average += r.rating;
+			global_average /= Ratings.All.Count;
+			
+            bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);
 		}

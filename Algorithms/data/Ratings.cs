@@ -26,7 +26,6 @@ namespace MyMediaLite.data
     public class Ratings
     {
         private List<RatingEvent> ratingList = new List<RatingEvent>();
-        private double sum_rating = 0;
 
 		/// <summary>
 		/// Number of ratings in the collection
@@ -34,17 +33,13 @@ namespace MyMediaLite.data
         public int Count { get { return ratingList.Count; }	}
 
 		/// <summary>
-		/// The average (mean) rating in the collection
-		/// </summary>
-		public double Average {	get { return sum_rating / Count; } }
-
-		/// <summary>
 		/// Access an event in the collection directly via an index
 		/// </summary>
 		/// <param name="index">
 		/// the index
 		/// </param>
-		public RatingEvent this [int index] {
+		public RatingEvent this [int index]
+		{
 			get {
 				return ratingList[index];
 			}
@@ -69,38 +64,20 @@ namespace MyMediaLite.data
 
 		/// <summary>
 		/// Add a rating event to the collection.
-		///
-		/// Also updates the statistics.
 		/// </summary>
 		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
 		public void AddRating(RatingEvent rating)
         {
-            sum_rating += rating.rating;
             ratingList.Add(rating);
         }
 
 		/// <summary>
-		/// Change a rating event in the collection.
-		///
-		/// Only updates the statistics, it is assumed that the value is modified through other means afterwards.
-		/// </summary>
-		/// <param name="rating">a rating event</param>
-		/// <param name="new_rating">the new rating value</param>
-		public void ChangeRating(RatingEvent rating, double new_rating)
-        {
-            sum_rating += new_rating - rating.rating;
-        }
-
-		/// <summary>
 		/// Remove a rating from the collection.
-		///
-		/// Also updates the statistics.
 		/// </summary>
 		/// <param name="rating">the rating event to remove</param>
         public void RemoveRating(RatingEvent rating)
         {
             ratingList.Remove(rating);
-            sum_rating -= rating.rating;
         }
 
 		/// <summary>

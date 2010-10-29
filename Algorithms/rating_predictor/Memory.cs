@@ -74,7 +74,7 @@ namespace MyMediaLite.rating_predictor
             RatingEvent r = ratings.FindRating(user_id, item_id);
             if (r == null)
                 throw new Exception("Rating not found");
-            ratings.ChangeRating(r, rating);
+            r.rating = rating;
         }
 
         /// <inheritdoc/>

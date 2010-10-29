@@ -41,7 +41,7 @@ namespace MyMediaLite
 		/// </summary>
 		public void RatingDataMaxUserIDIemUserID()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -60,7 +60,7 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingDataAddRating()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -82,7 +82,7 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingDataRemoveRating()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -107,7 +107,7 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingDataRemoveUser()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -127,7 +127,7 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingDataRemoveItem()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -142,33 +142,12 @@ namespace MyMediaLite
 		}
 
 		/// <summary>
-		/// Unit Test of RatingData.ChangeRating(RatingEvent rating, double new_rating)
-		/// </summary>
-		[Test()]
-		public void RatingDataChangeRating()
-		{
-			RatingData testRatingData = new RatingData();
-			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
-			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
-			RatingEvent changeRating = new RatingEvent(2, 4, 0.2);
-			testRatingData.AddRating(changeRating);
-			testRatingData.AddRating(new RatingEvent(2, 2, 0.6));
-			testRatingData.AddRating(new RatingEvent(2, 5, 0.4));
-			testRatingData.AddRating(new RatingEvent(3, 4, 0.2));
-			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
-
-			Assert.AreEqual(0.2, testRatingData.All.FindRating(2, 4).rating);
-			testRatingData.ChangeRating(changeRating, 0.4);
-			Assert.AreEqual(0.4, testRatingData.All.FindRating(2, 4).rating);
-		}
-
-		/// <summary>
 		/// Unit Test of RatingData.FindRating(int user_id, int item_id)
 		/// </summary>
 		[Test()]
 		public void RatingDataFindRating()
 		{
-			RatingData testRatingData = new RatingData();
+			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
 			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
 			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
@@ -189,16 +168,16 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingsShuffle()
 		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(2, 2, 0.4));
-			testRatings.AddRating(new RatingEvent(2, 5, 0.5));
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
+			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			testRatings.Shuffle ();
+			test_ratings.Shuffle ();
 			// at least one rating must change his position
-			Assert.IsTrue (testRatings[0].rating != 0.1 || testRatings[1].rating != 0.2 || testRatings[2].rating != 0.3 || testRatings[3].rating != 0.4 || testRatings[4].rating != 0.5);
+			Assert.IsTrue (test_ratings[0].rating != 0.1 || test_ratings[1].rating != 0.2 || test_ratings[2].rating != 0.3 || test_ratings[3].rating != 0.4 || test_ratings[4].rating != 0.5);
 
 		}
 
@@ -208,49 +187,14 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingsCount()
 		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(2, 2, 0.4));
-			testRatings.AddRating(new RatingEvent(2, 5, 0.5));
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
+			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			Assert.AreEqual(5, testRatings.Count);
-		}
-
-		/// <summary>
-		/// Unit test of Ratings.Average
-		/// </summary>
-		[Test()]
-		public void RatingsAverage()
-		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(2, 2, 0.4));
-			testRatings.AddRating(new RatingEvent(2, 5, 0.5));
-
-			Assert.AreEqual(0.3, testRatings.Average);
-		}
-
-		/// <summary>
-		/// Unit test of Ratings.ChangeRating(RatingEvent rating, double new_rating)
-		/// </summary>
-		[Test()]
-		public void RatingsChangeRating()
-		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(2, 2, 0.4));
-			RatingEvent changeRating = new RatingEvent(2, 5, 0.5);
-			testRatings.AddRating(changeRating);
-
-			Assert.AreEqual(0.5, testRatings.FindRating(2, 5).rating);
-			testRatings.ChangeRating(changeRating, 0.2);
-			Assert.AreEqual(0.2, testRatings.FindRating(2, 5).rating);
+			Assert.AreEqual(5, test_ratings.Count);
 		}
 
 		/// <summary>
@@ -259,16 +203,16 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingsRemoveRating()
 		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(2, 2, 0.4));
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
 			RatingEvent removeRating = new RatingEvent(2, 5, 0.5);
-			testRatings.AddRating(removeRating);
+			test_ratings.AddRating(removeRating);
 
-			testRatings.RemoveRating(removeRating);
-			Assert.IsNull(testRatings.FindRating(2, 5));
+			test_ratings.RemoveRating(removeRating);
+			Assert.IsNull(test_ratings.FindRating(2, 5));
 		}
 
 		/// <summary>
@@ -277,14 +221,14 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingsGetUsers()
 		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(5, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 5, 0.5));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(4, 2, 0.4));
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
 
-			HashSet<int> users = testRatings.GetUsers ();
+			HashSet<int> users = test_ratings.GetUsers ();
 			int[] usersTest = new int[5];
 			users.CopyTo (usersTest);
 			Assert.AreEqual(usersTest[0], 1);
@@ -299,14 +243,14 @@ namespace MyMediaLite
 		[Test()]
 		public void RatingsGetItems()
 		{
-			Ratings testRatings = new Ratings();
-			testRatings.AddRating(new RatingEvent(1, 4, 0.1));
-			testRatings.AddRating(new RatingEvent(5, 8, 0.2));
-			testRatings.AddRating(new RatingEvent(2, 4, 0.3));
-			testRatings.AddRating(new RatingEvent(4, 2, 0.4));
-			testRatings.AddRating(new RatingEvent(2, 5, 0.5));
+			var test_ratings = new Ratings();
+			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
+			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
+			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
+			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
+			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			HashSet<int> items = testRatings.GetItems();
+			HashSet<int> items = test_ratings.GetItems();
 			int[] itemsTest = new int[5];
 			items.CopyTo (itemsTest);
 			Assert.AreEqual(itemsTest[0], 4);

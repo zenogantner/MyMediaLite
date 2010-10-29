@@ -22,15 +22,14 @@ using System.Linq;
 
 namespace MyMediaLite.data
 {
+	/// <summary>Data storage for rating data</summary>
     /// <remarks>
-    /// Data storage for rating data.
     /// The rating events are accessible in user-wise, item-wise and unsorted triple-wise order.
     ///
     /// In order to save memory, the object initially stores only the unsorted ratings.
     /// If at some point user or item-wise access is needed, the underlying data structures
     /// are transparently created on-the-fly.
     /// </remarks>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class RatingData
     {
         private Ratings all = new Ratings();
@@ -81,11 +80,6 @@ namespace MyMediaLite.data
 		public int MaxItemID { get { return max_item_id; } }
 		private int max_item_id = 0;
 
-		/// <summary>
-		/// The average rating value in the collection
-		/// </summary>
-		public double Average { get { return all.Average; } }
-		
 		/// <summary>The number of ratings in the collection</summary>
 		public int Count { get { return all.Count; } }		
 		
@@ -216,11 +210,29 @@ namespace MyMediaLite.data
 		/// </param>
         public void RemoveUser(int user_id)
         {
+			List<RatingEvent> remove_list = new List<RatingEvent>();
+            
             if (byUser != null)
+			{
 				foreach (RatingEvent r in ByUser[user_id])
-                    RemoveRating(r);
-            else if ((byItem != null) || (all != null))
-                throw new Exception("Data storage is out of sync.");
+                    remove_list.Add(r);
+			}
+            else if (all != null)
+			{
+                foreach (RatingEvent r in all)
+					if (r.user_id == user_id)
+						remove_list.Add(r);
+			}
+			else if (byItem != null)
+			{
+				foreach (Ratings ratings in byItem)
+					foreach  (RatingEvent r in ratings)
+						if (r.user_id == user_id)
+							remove_list.Add(r);
+			}
+			
+			foreach (var r in remove_list)
+				RemoveRating(r);			
         }
 
 		/// <summary>
@@ -231,32 +243,27 @@ namespace MyMediaLite.data
 		/// </param>
         public void RemoveItem(int item_id)
         {
-            if (byItem != null)
+			List<RatingEvent> remove_list = new List<RatingEvent>();
+            
+			if (byItem != null)
                 foreach (RatingEvent r in ByItem[item_id])
-                    RemoveRating(r);
-            else if ((byUser != null) || (all != null))
-                throw new Exception("Data storage is out of sync.");
-        }
-
-		/// <summary>
-		/// Change a rating value in the collection
-		/// </summary>
-		/// <param name="rating">
-		/// the rating event
-		/// </param>
-		/// <param name="new_rating">
-		/// the new rating value
-		/// </param>
-        public void ChangeRating(RatingEvent rating, double new_rating)
-        {
-            if ((byUser != null) && (rating.user_id < byUser.Count))
-                byUser[(int)rating.user_id].ChangeRating(rating, new_rating);
-            if ((byItem != null) && (rating.item_id < byItem.Count))
-                byItem[(int)rating.item_id].ChangeRating(rating, new_rating);
-            if ((all != null))
-                all.ChangeRating(rating, new_rating);
-
-            rating.rating = new_rating;
+                    remove_list.Add(r);
+            else if (all != null)
+			{
+                foreach (RatingEvent r in all)
+					if (r.item_id == item_id)
+            	        remove_list.Add(r);
+			}
+			else if (byUser != null)
+			{
+				foreach (Ratings ratings in byUser)
+					foreach  (RatingEvent r in ratings)
+						if (r.item_id == item_id)
+					        remove_list.Add(r);
+			}
+			
+			foreach (var r in remove_list)
+				RemoveRating(r);
         }
 
 		/// <summary>
