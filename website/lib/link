@@ -18,6 +18,7 @@
      duine         => { url => 'http://www.duineframework.org/',                 title => 'Duine' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
+     multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
      mloss         => { url => 'http://mloss.org',                               title => 'mloss.org' }
      vw            => { url => 'http://hunch.net/~vw/',                          title => 'Vowpal Wabbit' }
      liblinear     => { url => 'http://www.csie.ntu.edu.tw/~cjlin/liblinear/',   title => 'LIBLINEAR' }
