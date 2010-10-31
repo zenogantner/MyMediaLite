@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "Algorithms.csproj", "{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLite", "MyMediaLite.csproj", "{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemPrediction", "..\ItemPrediction\ItemPrediction.csproj", "{2BDEB89C-FF19-44F1-B345-25630B6C3A5D}"
 EndProject
@@ -51,7 +51,7 @@ Global
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Algorithms.csproj
+		StartupItem = MyMediaLite.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @// Copyright (C) 2010 Zeno Gantner\n//\n// This file is part of MyMediaLite.\n//\n// MyMediaLite is free software: you can redistribute it and/or modify\n// it under the terms of the GNU General Public License as published by\n// the Free Software Foundation, either version 3 of the License, or\n// (at your option) any later version.\n//\n// MyMediaLite is distributed in the hope that it will be useful,\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n// GNU General Public License for more details.\n//\n//  You should have received a copy of the GNU General Public License\n//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.\n\n
