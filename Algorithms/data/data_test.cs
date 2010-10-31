@@ -69,9 +69,9 @@ namespace MyMediaLite
 			testRatingData.AddRating(new RatingEvent(3, 7, 0.2));
 			testRatingData.AddRating(new RatingEvent(6, 3, 0.3));
 
-			Assert.AreEqual(0.4, testRatingData.All.FindRating(2, 5).rating);
-			Assert.AreEqual(0.3, testRatingData.All.FindRating(1, 4).rating);
-			Assert.AreEqual(0.3, testRatingData.All.FindRating(6, 3).rating);
+			Assert.AreEqual(0.4f, testRatingData.All.FindRating(2, 5).rating);
+			Assert.AreEqual(0.3f, testRatingData.All.FindRating(1, 4).rating);
+			Assert.AreEqual(0.3f, testRatingData.All.FindRating(6, 3).rating);
 		}
 
 		//AddUser and AddItem could not be tested
@@ -94,7 +94,7 @@ namespace MyMediaLite
 			RatingEvent removeEvent2 = new RatingEvent(6, 3, 0.3);
 			testRatingData.AddRating(removeEvent2);
 
-			Assert.AreEqual(0.4, testRatingData.All.FindRating(2, 5).rating);
+			Assert.AreEqual(0.4f, testRatingData.All.FindRating(2, 5).rating);
 			testRatingData.RemoveRating(removeEvent);
 			testRatingData.RemoveRating(removeEvent2);
 			Assert.IsNull(testRatingData.All.FindRating(2, 5));
@@ -116,7 +116,7 @@ namespace MyMediaLite
 			testRatingData.AddRating(new RatingEvent(3, 7, 0.2));
 			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
 
-			Assert.AreEqual(0.4, testRatingData.All.FindRating(2, 5).rating);
+			Assert.AreEqual(0.4f, testRatingData.All.FindRating(2, 5).rating);
 			testRatingData.RemoveUser (2);
 			Assert.IsNull(testRatingData.All.FindRating(2, 5));
 		}
@@ -136,7 +136,7 @@ namespace MyMediaLite
 			testRatingData.AddRating(new RatingEvent(3, 4, 0.2));
 			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
 
-			Assert.AreEqual(0.2, testRatingData.All.FindRating(2, 4).rating);
+			Assert.AreEqual(0.2f, testRatingData.All.FindRating(2, 4).rating);
 			testRatingData.RemoveItem (4);
 			Assert.IsNull(testRatingData.All.FindRating(2, 4));
 		}
@@ -157,9 +157,9 @@ namespace MyMediaLite
 			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
 			testRatingData.AddRating(new RatingEvent(6, 3, 0.3));
 
-			Assert.AreEqual(0.2, testRatingData.All.FindRating(2, 4).rating);
-			Assert.AreEqual(0.3, testRatingData.All.FindRating(3, 3).rating);
-			Assert.AreEqual(0.3, testRatingData.All.FindRating(6, 3).rating);
+			Assert.AreEqual(0.2f, testRatingData.All.FindRating(2, 4).rating);
+			Assert.AreEqual(0.3f, testRatingData.All.FindRating(3, 3).rating);
+			Assert.AreEqual(0.3f, testRatingData.All.FindRating(6, 3).rating);
 		}
 
 		/// <summary>
@@ -194,7 +194,7 @@ namespace MyMediaLite
 			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
 			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			Assert.AreEqual(0.3, test_ratings.Average);
+			Assert.AreEqual(0.3f, test_ratings.Average, 0.0001f);
 		}
 
 		/// <summary>

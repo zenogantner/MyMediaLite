@@ -96,7 +96,7 @@ namespace MyMediaLite.data
 		/// </summary>
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="item_id">the numerical ID of the item</param>
-		/// <returns>the rating event corresponding to the given user and item, null otherwise</returns>
+		/// <returns>the rating event corresponding to the given user and item, null if such a rating does not exist</returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {
             foreach (RatingEvent rating in rating_list)

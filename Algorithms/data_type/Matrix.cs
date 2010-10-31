@@ -56,10 +56,10 @@ namespace MyMediaLite.data_type
         /// <param name="dim2">the number of columns</param>
         public Matrix(int dim1, int dim2)
         {
-			if (dim1 < 1)
-				throw new ArgumentException("dim1 must be at least 1");
-			if (dim2 < 1)
-				throw new ArgumentException("dim2 must be at least 1");
+			if (dim1 < 0)
+				throw new ArgumentException("dim1 must be at least 0");
+			if (dim2 < 0)
+				throw new ArgumentException("dim2 must be at least 0");
 			
             this.dim1 = dim1;
             this.dim2 = dim2;
@@ -305,6 +305,9 @@ namespace MyMediaLite.data_type
 		/// <returns>the average</returns>
 		static public double ColumnAverage(Matrix<double> matrix, int col)
 		{
+			if (matrix.dim1 == 0)
+				throw new Exception("Cannot compute average of 0 entries.");			
+			
 			double sum = 0;
 
 			for (int x = 0; x < matrix.dim1; x++)
@@ -321,6 +324,9 @@ namespace MyMediaLite.data_type
 		/// <returns>the average</returns>
 		static public double RowAverage(Matrix<double> matrix, int row)
 		{
+			if (matrix.dim2 == 0)
+				throw new Exception("Cannot compute average of 0 entries.");
+			
 			double sum = 0;
 
 			for (int y = 0; y < matrix.dim2; y++)

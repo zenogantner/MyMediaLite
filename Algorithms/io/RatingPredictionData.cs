@@ -78,20 +78,18 @@ namespace MyMediaLite.io
 				if (tokens.Length < 2)
 					throw new IOException("Expected at least two columns: " + line);
 
-                RatingEvent rating = new RatingEvent();
+                var rating = new RatingEvent();
                 rating.user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
                 rating.item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
                 rating.rating = double.Parse(tokens[2], ni);
 
 				if (!out_of_range_warning_issued)
-				{
 					if (rating.rating > max_rating || rating.rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
 						                        min_rating, max_rating, rating.rating, rating.user_id, rating.item_id);
 						out_of_range_warning_issued = true;
 					}
-				}
 
                 ratings.AddRating(rating);
             }

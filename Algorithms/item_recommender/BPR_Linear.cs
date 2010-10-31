@@ -28,54 +28,60 @@ using MyMediaLite.util;
 namespace MyMediaLite.item_recommender
 {
 	/// <summary>
-	/// Linear model optimized for BPR.
-	///
+	/// Linear model optimized for BPR
+	/// </summary>
+	/// <remarks>
 	/// Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme (2010):
     /// Learning Attribute-to-Feature Mappings for Cold-start Recommendations
     /// in IEEE International Conference on Data Mining (ICDM 2010), Sydney, Australia.
     ///
     /// This engine does not support online updates.
-	/// </summary>
+	/// </remarks>
 	public class BPR_Linear : Memory, IItemAttributeAwareRecommender, IIterativeModel
 	{
 		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes			
-		{
-			set
-			{
-				this.item_attributes = value;
-				// TODO check whether there is a match between num. of items here and in the collaborative data
-			}
-		}		
+		public SparseBooleanMatrix ItemAttributes {	set	{ this.item_attributes = value;	} }		
 		private SparseBooleanMatrix item_attributes;
 		
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
 	    /// <summary>Item attribute weights</summary>
-        protected Matrix<double> item_attribute_weight_by_user;
+        Matrix<double> item_attribute_weight_by_user;
 
-        /// <summary>Regularization parameter</summary>
-        public double reg = 0.015;
-		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
-        public double init_mean = 0;
-        /// <summary>standard deviation of the normal distribution used to initialize the features</summary>
-        public double init_stdev = 0.1;
-        /// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-		private int num_iter = 10;
 
-		/// <summary>Learning rate alpha</summary>
-		public double learn_rate = 0.05;
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
 
 		private System.Random random;
-
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		bool fast_sampling = false;
+
+        /// <summary>Number of iterations over the training data</summary>
+		public int NumIter { get { return num_iter; } set { num_iter = value; } }
+		private int num_iter = 10;		
+		
 		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int fast_sampling_memory_limit = 1024;
+		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; }	}
+		int fast_sampling_memory_limit = 1024;
+	
+ 		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>		
+		public double InitMean { get { return init_mean; } set { init_mean = value; } }
+	    double init_mean = 0;
+
+		/// <summary>standard deviation of the normal distribution used to initialize the features</summary>	
+		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
+        double init_stdev = 0.1;		
+
+		/// <summary>Learning rate alpha</summary>
+		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
+		double learn_rate = 0.05;		
+
+        /// <summary>Regularization parameter</summary>		
+		public double Regularization { get { return regularization; }	set { regularization = value; } }
+        double regularization = 0.015;
+		
+
 		/// <summary>support data structure for fast sampling</summary>
 		int[][] user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
@@ -208,13 +214,13 @@ namespace MyMediaLite.item_recommender
 			foreach (int a in attr_i_over_j)
 			{
 				double w_uf = item_attribute_weight_by_user[u, a];
-				double uf_update = 1 / (1 + Math.Exp(x_uij)) - reg * w_uf;
+				double uf_update = 1 / (1 + Math.Exp(x_uij)) - regularization * w_uf;
 				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 			foreach (int a in attr_j_over_i)
 			{
 				double w_uf = item_attribute_weight_by_user[u, a];
-				double uf_update = -1 / (1 + Math.Exp(x_uij)) - reg * w_uf;
+				double uf_update = -1 / (1 + Math.Exp(x_uij)) - regularization * w_uf;
 				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 		}
@@ -303,7 +309,7 @@ namespace MyMediaLite.item_recommender
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
-								  reg, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
+								  regularization, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
 		}
 
 	}

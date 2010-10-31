@@ -32,12 +32,12 @@ namespace MyMediaLite.data
     /// </remarks>
     public class RatingData
     {
-        private Ratings all = new Ratings();
 		/// <summary>
 		/// All ratings
 		/// </summary>
         public Ratings All { get { return all; } }
-
+        private Ratings all = new Ratings();
+		
 		/// <summary>Average rating value in the collection</summary>
 		public double Average { get { return all.Average; } }
 
@@ -164,30 +164,19 @@ namespace MyMediaLite.data
         public void AddUser(int user_id)
         {
             if (byUser != null)
-            {
                 while (user_id >= byUser.Count)
-                {
-                    Ratings ratings = new Ratings();
-                    byUser.Add(ratings);
-                }
-            }
+                    byUser.Add(new Ratings());
         }
+
 		/// <summary>
 		/// Add an item - reserve resources for a new item
 		/// </summary>
-		/// <param name="item_id">
-		/// the item ID
-		/// </param>
+		/// <param name="item_id">the item ID</param>
         public void AddItem(int item_id)
         {
             if (byItem != null)
-            {
                 while (item_id >= byItem.Count)
-                {
-                    Ratings ratings = new Ratings();
-                    byItem.Add(ratings);
-                }
-            }
+                    byItem.Add(new Ratings());
         }
 
 		/// <summary>
@@ -279,7 +268,7 @@ namespace MyMediaLite.data
 		/// the numerical ID of the user
 		/// </param>
 		/// <returns>
-		/// the rating event corresponding to the given user and item
+		/// the rating event corresponding to the given user and item, null if it is not found
 		/// </returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {

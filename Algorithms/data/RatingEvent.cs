@@ -21,20 +21,15 @@ namespace MyMediaLite.data
 	/// Representation of a rating event, consisting of a user ID, an item ID,
 	/// and the value of the rating.
 	/// </summary>
-	/// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class RatingEvent
     {
-		/// <summary>
-		/// The user ID
-		/// </summary>
+		/// <summary>the user ID</summary>
         public int user_id;
-		/// <summary>
-		/// The item ID
-		/// </summary>
+		
+		/// <summary>the item ID</summary>
         public int item_id;
-		/// <summary>
-		/// The rating value
-		/// </summary>
+		
+		/// <summary>the rating value</summary>
         public double rating;
 
 		/// <summary>
@@ -53,6 +48,6 @@ namespace MyMediaLite.data
 			this.user_id = user_id;
 			this.item_id = item_id;
 			this.rating  = rating;
-		}
+		}		
     }
 }

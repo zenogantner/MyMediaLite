@@ -123,7 +123,7 @@ namespace RatingPrediction
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
-
+			
 			// check number of command line parameters
 			if (args.Length < 3)
 				Usage("Not enough arguments.");
@@ -439,6 +439,12 @@ namespace RatingPrediction
 			mf.LearnRate      = parameters.GetRemoveDouble("lr",             mf.LearnRate);
 			mf.LearnRate      = parameters.GetRemoveDouble("learn_rate",     mf.LearnRate);
 
+			if (mf is BiasedMatrixFactorization)
+			{
+				((BiasedMatrixFactorization)mf).BiasRegularization = parameters.GetRemoveDouble("bias_regularization", ((BiasedMatrixFactorization)mf).BiasRegularization);
+			    ((BiasedMatrixFactorization)mf).BiasRegularization = parameters.GetRemoveDouble("bias_reg",            ((BiasedMatrixFactorization)mf).BiasRegularization);
+			}
+				
 			if (mf is SocialMF)
 			{
 				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_reg",            ((SocialMF)mf).SocialRegularization);

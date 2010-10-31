@@ -27,7 +27,7 @@ namespace MyMediaLite.rating_predictor
 	public abstract class Memory : RatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
-		public int MaxUserID  { get; set;	}
+		public int MaxUserID  { get; set; }
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 
@@ -47,8 +47,7 @@ namespace MyMediaLite.rating_predictor
 		}
 
 		/// <summary>
-		/// public in order to allow more fine-grained access by some programs, e.g. for finding the right number
-		/// of iterations w/ MatrixFactorization
+		/// rating data
 		/// </summary>
 		protected RatingData ratings;
 
@@ -61,11 +60,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc/>
         public override void AddRating(int user_id, int item_id, double rating)
         {
-            RatingEvent r = new RatingEvent();
-            r.user_id = user_id;
-            r.item_id = item_id;
-            r.rating = rating;
-            ratings.AddRating(r);
+            ratings.AddRating(new RatingEvent(user_id, item_id, rating));
         }
 
         /// <inheritdoc/>

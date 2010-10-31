@@ -84,7 +84,7 @@ namespace MyMediaLite.rating_predictor
 				global_average += r.rating;
 			global_average /= Ratings.All.Count;
 			
-            bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
+            global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);			
 		}
@@ -112,7 +112,7 @@ namespace MyMediaLite.rating_predictor
                 int i = rating.item_id;
 
 				// prediction
-				double dot_product = bias;
+				double dot_product = global_bias;
 	            for (int f = 0; f < num_features; f++)
     	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));				
@@ -191,7 +191,7 @@ namespace MyMediaLite.rating_predictor
             	int u = rating.user_id;
                 int i = rating.item_id;
 
-				double dot_product = bias;
+				double dot_product = global_bias;
 	            for (int f = 0; f < num_features; f++)
     	            dot_product += user_feature[u, f] * item_feature[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));

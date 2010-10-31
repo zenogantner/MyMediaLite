@@ -47,7 +47,7 @@ namespace MyMediaLite.rating_predictor
         protected Matrix<double> item_feature;
 		
 		/// <summary>The bias (global average)</summary>
-        protected double bias;
+        protected double global_bias;
 
 		/// <summary>Mean of the normal distribution used to initialize the features</summary>
 		public double InitMean { get; set; }
@@ -89,7 +89,7 @@ namespace MyMediaLite.rating_predictor
 
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-			bias = Ratings.All.Average;
+			global_bias = Ratings.All.Average;
             LearnFeatures(ratings.All, true, true);
 
 			// check for NaN in the model
@@ -167,7 +167,7 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         protected double Predict(int user_id, int item_id, bool bound)
         {
-            double result = bias;
+            double result = global_bias;
 
             // U*V
             for (int f = 0; f < num_features; f++)
@@ -198,9 +198,9 @@ namespace MyMediaLite.rating_predictor
         public override double Predict(int user_id, int item_id)
         {
             if (user_id >= user_feature.dim1)
-				return bias;
+				return global_bias;
             if (item_id >= item_feature.dim1)
-				return bias;
+				return global_bias;
 
             return Predict(user_id, item_id, true);
         }
@@ -277,7 +277,7 @@ namespace MyMediaLite.rating_predictor
 
 			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
 			{
-            	writer.WriteLine(bias.ToString(ni));
+            	writer.WriteLine(global_bias.ToString(ni));
 
             	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
             	for (int i = 0; i < user_feature.dim1; i++)
@@ -346,7 +346,7 @@ namespace MyMediaLite.rating_predictor
 				this.MaxItemID = num_items - 1;
 
             	// assign new model
-            	this.bias = bias;
+            	this.global_bias = bias;
 				if (this.num_features != num_user_features)
 				{
 					Console.Error.WriteLine("Set num_features to {0}", num_user_features);
