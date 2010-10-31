@@ -145,8 +145,8 @@ namespace MyMediaLite.rating_predictor
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni,
-			                     "biased-matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
-				                 NumFeatures, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+			                     "biased-matrix-factorization num_features={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
+				                 NumFeatures, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }
