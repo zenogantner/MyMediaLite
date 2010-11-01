@@ -27,6 +27,15 @@ namespace MyMediaLite.util
 	/// </summary>
 	public static class Utils
 	{
+		/// <summary>
+		/// Install a handler for unhandled exceptions
+		/// </summary>
+		/// <param name="sender">
+		/// A <see cref="System.Object"/>
+		/// </param>
+		/// <param name="unhandled_event">
+		/// A <see cref="UnhandledExceptionEventArgs"/>
+		/// </param>
 		public static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs unhandled_event)
 		{
 			try
@@ -63,7 +72,7 @@ namespace MyMediaLite.util
 		}
 
 		/// <summary>
-		/// Delegate definition necessary to define MeasureTim
+		/// Delegate definition necessary to define MeasureTime
 		/// </summary>
 		public delegate void task();
 		
