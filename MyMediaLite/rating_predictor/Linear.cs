@@ -129,6 +129,11 @@ namespace MyMediaLite.rating_predictor
 
 			foreach (RatingEvent r in Ratings.All)
 			{
+				if (rating_counts.Count <= r.user_id)
+				{
+					rating_counts.Insert(r.user_id, 0);
+					entity_averages.Insert(r.user_id, 0);
+				}
 				rating_counts[r.user_id]++;
 				entity_averages[r.user_id] += r.rating;
 				global_average += r.rating;
@@ -180,6 +185,11 @@ namespace MyMediaLite.rating_predictor
 
 			foreach (RatingEvent r in Ratings.All)
 			{
+				if (rating_counts.Count <= r.item_id)
+				{
+					rating_counts.Insert(r.item_id, 0);
+					entity_averages.Insert(r.item_id, 0);
+				}				
 				rating_counts[r.item_id]++;
 				entity_averages[r.item_id] += r.rating;
 				global_average += r.rating;
