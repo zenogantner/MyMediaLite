@@ -12,6 +12,7 @@
      monodevelop   => { url => 'http://monodevelop.com/',                        title => 'MonoDevelop' }
      tt            => { url => 'http://template-toolkit.org',                    title => 'Template Toolkit' }
      gitorious     => { url => 'http://gitorious.org/',                          title => 'Gitorious' }
+     git           => { url => 'http://git-scm.com/',                            title => 'git' }
      nunit         => { url => 'http://nunit.org/',                              title => 'NUnit' }
      mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
      easyrec       => { url => 'http://easyrec.org/',                            title => 'easyrec' }
