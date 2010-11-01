@@ -171,36 +171,36 @@ namespace RatingPrediction
 			switch (method)
 			{
 				case "matrix-factorization":
-					recommender = Engine.Configure(parameters, mf, Usage);
+					recommender = Engine.Configure(mf, parameters, Usage);
 					break;
 				case "biased-matrix-factorization":
-					recommender = Engine.Configure(parameters, biased_mf, Usage);
+					recommender = Engine.Configure(biased_mf, parameters, Usage);
 					break;
 				case "SocialMF":
-					recommender = Engine.Configure(parameters, social_mf, Usage);
+					recommender = Engine.Configure(social_mf, parameters, Usage);
 					break;
 				case "user-knn-pearson":
 				case "user-kNN-pearson":
-					recommender = Engine.Configure(parameters, uknn_p, Usage);
+					recommender = Engine.Configure(uknn_p, parameters, Usage);
 					break;
 				case "user-knn-cosine":
 				case "user-kNN-cosine":
-					recommender = Engine.Configure(parameters, uknn_c, Usage);
+					recommender = Engine.Configure(uknn_c, parameters, Usage);
 					break;
 				case "item-knn-pearson":
 				case "item-kNN-pearson":
-					recommender = Engine.Configure(parameters, iknn_p, Usage);
+					recommender = Engine.Configure(iknn_p, parameters, Usage);
 					break;
 				case "item-knn-cosine":
 				case "item-kNN-cosine":
-					recommender = Engine.Configure(parameters, iknn_c, Usage);
+					recommender = Engine.Configure(iknn_c, parameters, Usage);
 					break;
 				case "item-attribute-knn":
 				case "item-attribute-kNN":
-					recommender = Engine.Configure(parameters, iaknn, Usage);
+					recommender = Engine.Configure(iaknn, parameters, Usage);
 					break;
 				case "user-item-baseline":
-					recommender = Engine.Configure(parameters, uib, Usage);
+					recommender = Engine.Configure(uib, parameters, Usage);
 					break;
 				case "global-average":
 					recommender = ga;
@@ -220,8 +220,6 @@ namespace RatingPrediction
 			}
 
 			// check command-line parameters
-			//if (parameters.CheckForLeftovers())
-			//	Usage(-1);
 			if (training_file.Equals("-") && testfile.Equals("-"))
 				Usage("Either training or test data, not both, can be read from STDIN.");
 

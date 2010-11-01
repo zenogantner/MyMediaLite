@@ -145,7 +145,7 @@ namespace MyMediaLite.item_recommender
 			ni.NumberDecimalDigits = '.';						
 			
 			return string.Format(ni, "WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-				                 num_features, regularization, c_pos, NumIter, init_mean, init_stdev);
+				                 num_features, regularization, c_pos, NumIter, InitMean, InitStdev);
 		}
     }
 }

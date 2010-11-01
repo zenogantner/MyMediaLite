@@ -36,27 +36,46 @@ namespace MyMediaLite.item_recommender
 	/// <author>Zeno Gantner, Christoph Freudenthaler, University of Hildesheim</author>
 	public class BPRMF : MF, IIterativeModel
 	{
-		/// <summary>
-		/// Use the first item feature as a bias term if set to true
-		/// </summary>
-		public bool item_bias = false;
+		/// <summary>Fast, but memory-intensive sampling</summary>
+		protected bool fast_sampling = false;
+		
+		/// <summary>Fast sampling memory limit, in MiB</summary>		
+		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
+		/// <summary>Fast sampling memory limit, in MiB</summary>
+		protected int fast_sampling_memory_limit = 1024;
+		
+		/// <summary>Use the first item feature as a bias term if set to true</summary>
+		public bool ItemBias { get { return item_bias; } set { item_bias = value; }	}
+		/// <summary>Use the first item feature as a bias term if set to true</summary>
+		protected bool item_bias = false;
 
-		/// <summary>Regularization parameter for user factors</summary>
-		public double reg_u = 0.0025;
-		/// <summary>Regularization parameter for positive item factors</summary>
-		public double reg_i = 0.0025;
-		/// <summary>Regularization parameter for negative item factors</summary>
-		public double reg_j = 0.00025;
-		/// <summary>Learning rate alpha</summary>
-		public double learn_rate = 0.05;
+		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
+		public int IterationLength { get { return iteration_length; } set { iteration_length = value; }	}
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
 
-		/// <summary>Fast, but memory-intensive sampling</summary>
-		protected bool fast_sampling = false;
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int fast_sampling_memory_limit = 1024;
-		/// <summary>support data structure for fast sampling</summary>
+		/// <summary>Learning rate alpha</summary>		
+		public double LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
+		/// <summary>Learning rate alpha</summary>
+		protected double learn_rate = 0.05;
+
+		/// <summary>Regularization parameter for positive item factors</summary>
+		public double RegI { get { return reg_i; } set { reg_i = value;	} }
+		/// <summary>Regularization parameter for positive item factors</summary>
+		protected double reg_i = 0.0025;
+
+		/// <summary>Regularization parameter for negative item factors</summary>		
+		public double RegJ { get { return reg_j; } set { reg_j = value; } }
+		/// <summary>Regularization parameter for negative item factors</summary>
+		protected double reg_j = 0.00025;
+
+		/// <summary>Regularization parameter for user factors</summary>
+		public double RegU { get { return reg_u; } set { reg_u = value; } }
+		/// <summary>Regularization parameter for user factors</summary>
+		protected double reg_u = 0.0025;
+		
+
+/// <summary>support data structure for fast sampling</summary>
 		protected List<int[]> user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
 		protected List<int[]> user_neg_items;
@@ -267,7 +286,7 @@ namespace MyMediaLite.item_recommender
 			if (user_id > MaxUserID)
 			{
 				user_feature.AddRows(user_id + 1);
-				MatrixUtils.InitNormal(user_feature, init_mean, init_stdev, user_id);
+				MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
 			}
 
 			base.AddUser(user_id);
@@ -279,7 +298,7 @@ namespace MyMediaLite.item_recommender
 			if (item_id > MaxItemID)
 			{
 				item_feature.AddRows(item_id + 1);
-				MatrixUtils.InitNormal(item_feature, init_mean, init_stdev, item_id);
+				MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
 			}
 
 			base.AddItem(item_id);
@@ -316,7 +335,7 @@ namespace MyMediaLite.item_recommender
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.InitNormal(user_feature, init_mean, init_stdev, user_id);
+			MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
 
 			HashSet<int> user_items = data_user[user_id];
 			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
@@ -330,7 +349,7 @@ namespace MyMediaLite.item_recommender
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.InitNormal(item_feature, init_mean, init_stdev, item_id);
+			MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
 
 			int num_pos_events = data_user.NumberOfEntries;
 			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
@@ -443,7 +462,7 @@ namespace MyMediaLite.item_recommender
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni, "BPR-MF num_features={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
-			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
+			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
 }

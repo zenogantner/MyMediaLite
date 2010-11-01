@@ -163,41 +163,41 @@ namespace MyMediaLite
 				case "WR-MF":
 				case "wr-mf":
 					compute_fit = false; // deactivate as long it is not implemented
-					InitWRMF(wrmf, parameters);
+					recommender = Engine.Configure(wrmf, parameters, Usage);
 					break;
 
                 case "BPR-MF":
 				case "bpr-mf":
-					InitBPRMF(bprmf, parameters);
+					recommender = Engine.Configure(bprmf, parameters, Usage);
 					break;
 				case "BPR-Linear":
 				case "bpr-linear":
-					InitBPR_Linear(bpr_linear, parameters);
+					recommender = Engine.Configure(bpr_linear, parameters, Usage);
 					break;
 				case "item-knn":
 			    case "item-kNN":
 				case "item-KNN":
-					InitKNN(iknn, parameters);
+					recommender = Engine.Configure(iknn, parameters, Usage);
 					break;
 				case "item-attribute-knn":
 				case "item-attribute-kNN":
 				case "item-attribute-KNN":
-					InitKNN(iaknn, parameters);
+					recommender = Engine.Configure(iaknn, parameters, Usage);
 					break;
 				case "user-knn":
 				case "user-kNN":
 				case "user-KNN":
-					InitKNN(uknn, parameters);
+					recommender = Engine.Configure(uknn, parameters, Usage);
 					break;
 				case "weighted-user-knn":
 				case "weighted-user-kNN":
 				case "weighted-user-KNN":
-					InitKNN(wuknn, parameters);
+					recommender = Engine.Configure(wuknn, parameters, Usage);
 					break;
 				case "user-attribute-knn":
 				case "user-attribute-kNN":
 				case "user-attribute-KNN":
-					InitKNN(uaknn, parameters);
+					recommender = Engine.Configure(uaknn, parameters, Usage);
 					break;
 				case "item-attribute-svm":
 					recommender = svm;
@@ -215,8 +215,6 @@ namespace MyMediaLite
 			}
 
 			// check command-line parameters
-			if (parameters.CheckForLeftovers())
-				Usage(-1);
 			if (trainfile.Equals("-") && testfile.Equals("-"))
 				Usage("Either training OR test data, not both, can be read from STDIN.");
 
@@ -445,59 +443,6 @@ namespace MyMediaLite
 		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 		{
 			DisplayIterationStats();
-		}
-
-		static void InitWRMF(WRMF engine, CommandLineParameters parameters)
-		{
-			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",       engine.NumIter);
-			engine.num_features   = parameters.GetRemoveInt32( "num_features",   engine.num_features);
-   			engine.init_mean      = parameters.GetRemoveDouble("init_mean",      engine.init_mean);
-   			engine.init_stdev     = parameters.GetRemoveDouble("init_stdev",     engine.init_stdev);
-			engine.regularization = parameters.GetRemoveDouble("reg",            engine.regularization);
-			engine.regularization = parameters.GetRemoveDouble("regularization", engine.regularization);
-			engine.c_pos          = parameters.GetRemoveDouble("c_pos",          engine.c_pos);
-
-			recommender = engine;
-		}
-
-		static void InitBPRMF(BPRMF engine, CommandLineParameters parameters)
-		{
-			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
-			engine.num_features = parameters.GetRemoveInt32( "num_features", engine.num_features);
-			engine.init_mean    = parameters.GetRemoveDouble("init_mean",    engine.init_mean);
-			engine.init_stdev   = parameters.GetRemoveDouble("init_stdev",   engine.init_stdev);
-			engine.reg_u        = parameters.GetRemoveDouble("reg",   engine.reg_u);
-			engine.reg_i        = parameters.GetRemoveDouble("reg",   engine.reg_i);
-			engine.reg_j        = parameters.GetRemoveDouble("reg",   engine.reg_j);
-			engine.reg_u        = parameters.GetRemoveDouble("reg_u", engine.reg_u);
-			engine.reg_i        = parameters.GetRemoveDouble("reg_i", engine.reg_i);
-			engine.reg_j        = parameters.GetRemoveDouble("reg_j", engine.reg_j);
-			engine.learn_rate   = parameters.GetRemoveDouble("lr",         engine.learn_rate);
-			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate", engine.learn_rate);
-			engine.fast_sampling_memory_limit = parameters.GetRemoveInt32( "fast_sampling_memory_limit", engine.fast_sampling_memory_limit);
-			engine.item_bias    = parameters.GetRemoveBool(  "item_bias", engine.item_bias);
-
-			recommender = engine;
-		}
-
-		static void InitBPR_Linear(BPR_Linear engine, CommandLineParameters parameters)
-		{
-			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",  engine.NumIter);
-			engine.InitMean       = parameters.GetRemoveDouble(  "init_mean",  engine.InitMean);
-			engine.InitStdev      = parameters.GetRemoveDouble(  "init_stdev", engine.InitStdev);
-			engine.Regularization = parameters.GetRemoveDouble("reg",      engine.Regularization);
-			engine.LearnRate      = parameters.GetRemoveDouble("lr",           engine.LearnRate);
-			engine.LearnRate      = parameters.GetRemoveDouble("learn_rate",   engine.LearnRate);
-			engine.FastSamplingMemoryLimit = parameters.GetRemoveInt32( "fast_sampling_memory_limit", engine.FastSamplingMemoryLimit);
-
-			recommender = engine;
-		}
-
-		static void InitKNN(KNN engine, CommandLineParameters parameters)
-		{
-			engine.k = parameters.GetRemoveUInt32( "k", engine.k); // TODO handle "inf"
-
-			recommender = engine;
 		}
 
 		static void DisplayResults(Dictionary<string, double> result) {

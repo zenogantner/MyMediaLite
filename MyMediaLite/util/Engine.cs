@@ -126,11 +126,11 @@ namespace MyMediaLite.util
 		/// <summary>
 		/// Configure a recommender engine
 		/// </summary>
-		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="engine">the recommender engine to configure</param>
+		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
 		/// <returns>the configured recommender engine</returns>
-		public static T Configure<T>(Dictionary<string, string> parameters, T engine, takes_string report_error)
+		public static T Configure<T>(T engine, Dictionary<string, string> parameters, takes_string report_error)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';

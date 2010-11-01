@@ -36,15 +36,24 @@ namespace MyMediaLite.item_recommender
         /// <summary>Item feature matrix</summary>
         protected Matrix<double> item_feature;
 
-        /// <summary>Number of features</summary>
-        public int num_features = 10;
         /// <summary>Mean of the normal distribution used to initialize the features</summary>
-        public double init_mean = 0;
+		public double InitMean { get { return init_mean; } set { init_mean = value;	} }
+        /// <summary>Mean of the normal distribution used to initialize the features</summary>
+        protected double init_mean = 0;
+
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
-        public double init_stdev = 0.1;
-        /// <summary>Number of iterations over the training data</summary>
+		public double InitStdev { get {	return init_stdev; } set { init_stdev = value; } }
+        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
+        protected double init_stdev = 0.1;
+
+        /// <summary>Number of features</summary>
+		public int NumFeatures { get { return num_features;	} set { num_features = value; }	}
+        /// <summary>Number of features</summary>
+        protected int num_features = 10;
+
+		/// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-        private int num_iter = 30;
+        int num_iter = 30;
 
         /// <inheritdoc />
         public override void Train()
@@ -107,7 +116,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(fileName, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(fileName, GetType()) )
 			{
 				// TODO move matrix reading and writing to the MatrixUtils class
             	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
@@ -129,7 +138,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filePath, GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = System.Int32.Parse(numbers[0]);
@@ -175,8 +184,8 @@ namespace MyMediaLite.item_recommender
 				}
 
 				// fix MaxUserID and MaxItemID - our model does not know more
-				this.MaxUserID = num_users - 1;
-				this.MaxItemID = num_items - 1;
+				MaxUserID = num_users - 1;
+				MaxItemID = num_items - 1;
 
             	// assign new model
 				if (this.num_features != num_features)
