@@ -2,3 +2,5 @@ If Mono is properly set up on your system, it will be enough to call
 the included programs with "mono RatingPrediction.exe" and
 "mono ItemPrediction.exe". This will display the usage information.
 
+On Windows, just use "ItemPrediction.exe" and "RatingPrediction.exe"
+in the command line.

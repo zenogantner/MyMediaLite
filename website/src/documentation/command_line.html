@@ -43,8 +43,9 @@ to integrate the library in your application or having to develop your own progr
   <p>
     The general <a href="rating_prediction.html">usage of the rating prediction program</a> is as follows:
     <pre>
-    mono --debug RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGS] [OPTIONS]
+    mono RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGS] [OPTIONS]
     </pre>
+    If you use Windows, just leave out the <tt>mono</tt>.
     METHOD is the recommender engine to use, which will be trained using the contents
     of TRAINING_FILE. The engine will then predict the data in TEST_FILE, and the program
     will display the RMSE (root mean square error) and MAE (mean absolute error) of the
@@ -67,7 +68,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     To try out a simple baseline method on the data, you just need to enter
     <pre>
-    mono --debug RatingPrediction.exe u1.base u1.test user-average
+    mono RatingPrediction.exe u1.base u1.test user-average
     </pre>
     which should give a result like
     <pre>
@@ -78,7 +79,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     To use a more advanced recommender engine, enter
     <pre>
-    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization
+    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization
     </pre>
     which yields better result than the user average:
     <pre>
@@ -90,7 +91,7 @@ to integrate the library in your application or having to develop your own progr
     that may be modified to get even better results. For instance, we could use more latent features
     per user and item, which leads to a more complex (and hopefully more accurate) model:
     <pre>
-    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20
+    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20
     ...
     ... RMSE 0.98029 MAE 0.76558
     </pre>
@@ -104,7 +105,7 @@ to integrate the library in your application or having to develop your own progr
     &quot;From iteration B on, give out the evaluation results on the test set every A iterations,
     until you reach iteration C.&quot;
     <pre>
-    mono --debug RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20 find_iter=1 max_iter=25 num_iter=0
+    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20 find_iter=1 max_iter=25 num_iter=0
     ...
     RMSE 1.17083 MAE 0.96918 0
     RMSE 1.01383 MAE 0.8143 1
@@ -155,7 +156,7 @@ to integrate the library in your application or having to develop your own progr
 </p>
 
 <p>
-  <pre>ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]</pre>
+  <pre>mono ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]</pre>
 </p>
 
 <p>
@@ -164,6 +165,7 @@ to integrate the library in your application or having to develop your own progr
     if you call ItemPrediction.exe without arguments, it will provide a list of recommender engines
     to choose from, plus their arguments and further options.
   </a>
+  If you use Windows, leave out the <tt>mono</tt> in the call above.
 </p>
 
 <p>
@@ -190,12 +192,12 @@ to integrate the library in your application or having to develop your own progr
   <p>
   Let us start again with some baseline methods, <tt>random</tt> and <tt>most-popular</tt>:
   <pre>
-  mono --debug ItemPrediction.exe u1.base u1.test random
+  mono ItemPrediction.exe u1.base u1.test random
   random training_time 00:00:00.0001040
     AUC 0.49924 prec@5 0.02789 prec@10 0.02898 MAP 0.00122 NDCG 0.37214
     num_users 459 num_items 1650 testing_time 00:00:02.7115540  
   
-  mono --debug ItemPrediction.exe u1.base u1.test most-popular
+  mono ItemPrediction.exe u1.base u1.test most-popular
   most-popular training_time 00:00:00.0015710
     AUC 0.8543 prec@5 0.322 prec@10 0.30458 MAP 0.02187 NDCG 0.57038
     num_users 459 num_items 1650 testing_time 00:00:02.3813790
@@ -205,7 +207,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
   User-based collaborative filtering:
   <pre>
-  mono --debug ItemPrediction.exe u1.base  u1.test user-knn
+  mono ItemPrediction.exe u1.base  u1.test user-knn
   user-kNN k=80 training_time 00:00:05.6057200
     AUC 0.91682 prec@5 0.52505 prec@10 0.46776 MAP 0.06482 NDCG 0.68793
     num_users 459 num_items 1650 testing_time 00:00:08.8362840
