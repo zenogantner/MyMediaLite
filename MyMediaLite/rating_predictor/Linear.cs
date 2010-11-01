@@ -61,7 +61,7 @@ namespace MyMediaLite.rating_predictor
 		public override void SaveModel(string filePath)
 		{
 			// TODO
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 				writer.WriteLine("All information you need is easily available in the rating data.");
 		}
 
@@ -69,7 +69,7 @@ namespace MyMediaLite.rating_predictor
 		public override void LoadModel(string filePath)
 		{
 			// TODO
-			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 			}
 		}
@@ -100,7 +100,7 @@ namespace MyMediaLite.rating_predictor
 		public override void SaveModel(string filePath)
 		{
 			// TODO
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 				writer.WriteLine("All information you need is easily available in the rating data.");
 		}
 
@@ -108,7 +108,7 @@ namespace MyMediaLite.rating_predictor
 		public override void LoadModel(string filePath)
 		{
 			// TODO
-			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 			}
 		}

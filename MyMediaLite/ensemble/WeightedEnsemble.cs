@@ -69,7 +69,7 @@ namespace MyMediaLite.ensemble
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
 				writer.WriteLine(engines.Count);
 				for (int i = 0; i < engines.Count; i++)
@@ -86,7 +86,7 @@ namespace MyMediaLite.ensemble
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 
 				int numberOfComponents = System.Int32.Parse(reader.ReadLine());

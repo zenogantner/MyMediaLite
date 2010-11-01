@@ -1,4 +1,5 @@
 0.05	2010-11-
+        rename the library from 'Algorithms' to 'MyMediaLite'
 	engines:
          - more fixes to ensure locale-independent output of '.' as floating
            point separator
@@ -17,6 +18,7 @@
          - BiasedMatrixFactorization: model biases explicitly, allow separate
            regularization
         command-line programs
+         - rating prediction: configure recommender engines via reflection
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
          - item prediction: fix iteration statistics display
@@ -25,11 +27,13 @@
           - correct computation of AUC if there are irrelevant items in the
             test set
 	misc:
-         - added unit tests for some basic data types (Christina Lichtenthäler)
+         - add unit tests for some basic data types (Christina Lichtenthäler)
          - improved exception handling in CorrelationMatrix
+         - rename util.EngineStorage class to util.Engines, because it now
+           contains different utility methods, not just for storing
          - code clean-ups
          - more XML API documentation
-         - added IronPython example
+         - add IronPython example
 
 0.04	2010-10-21
 	new features:

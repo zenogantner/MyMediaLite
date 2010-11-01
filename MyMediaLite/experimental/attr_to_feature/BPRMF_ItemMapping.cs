@@ -123,6 +123,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
+		/// <summary>
+		/// Perform one iteration of the mapping learning process
+		/// </summary>
 		public override void iterate_mapping()
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
@@ -151,6 +154,12 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
+		/// <summary>
+		/// Compute the fit of the mapping
+		/// </summary>
+		/// <returns>
+		/// an array of doubles containing the RMSE on the training data for each latent factor
+		/// </returns>
 		protected double[] ComputeMappingFit()
 		{
 			double rmse    = 0;

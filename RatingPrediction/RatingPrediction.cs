@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MyMediaLite;
 using MyMediaLite.data;
@@ -170,36 +171,36 @@ namespace RatingPrediction
 			switch (method)
 			{
 				case "matrix-factorization":
-					recommender = InitMatrixFactorization(parameters, mf);
+					recommender = Engine.Configure(parameters, mf, Usage);
 					break;
 				case "biased-matrix-factorization":
-					recommender = InitMatrixFactorization(parameters, biased_mf);
+					recommender = Engine.Configure(parameters, biased_mf, Usage);
 					break;
 				case "SocialMF":
-					recommender = InitMatrixFactorization(parameters, social_mf);
+					recommender = Engine.Configure(parameters, social_mf, Usage);
 					break;
 				case "user-knn-pearson":
 				case "user-kNN-pearson":
-					recommender = InitKNN(parameters, uknn_p);
+					recommender = Engine.Configure(parameters, uknn_p, Usage);
 					break;
 				case "user-knn-cosine":
 				case "user-kNN-cosine":
-					recommender = InitKNN(parameters, uknn_c);
+					recommender = Engine.Configure(parameters, uknn_c, Usage);
 					break;
 				case "item-knn-pearson":
 				case "item-kNN-pearson":
-					recommender = InitKNN(parameters, iknn_p);
+					recommender = Engine.Configure(parameters, iknn_p, Usage);
 					break;
 				case "item-knn-cosine":
 				case "item-kNN-cosine":
-					recommender = InitKNN(parameters, iknn_c);
+					recommender = Engine.Configure(parameters, iknn_c, Usage);
 					break;
 				case "item-attribute-knn":
 				case "item-attribute-kNN":
-					recommender = InitKNN(parameters, iaknn);
+					recommender = Engine.Configure(parameters, iaknn, Usage);
 					break;
 				case "user-item-baseline":
-					recommender = InitUIB(parameters);
+					recommender = Engine.Configure(parameters, uib, Usage);
 					break;
 				case "global-average":
 					recommender = ga;
@@ -219,8 +220,8 @@ namespace RatingPrediction
 			}
 
 			// check command-line parameters
-			if (parameters.CheckForLeftovers())
-				Usage(-1);
+			//if (parameters.CheckForLeftovers())
+			//	Usage(-1);
 			if (training_file.Equals("-") && testfile.Equals("-"))
 				Usage("Either training or test data, not both, can be read from STDIN.");
 
@@ -252,7 +253,7 @@ namespace RatingPrediction
 				if (load_model_file.Equals(string.Empty))
 					recommender.Train();
 				else
-					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
+					Engine.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -288,7 +289,7 @@ namespace RatingPrediction
 						});
 						eval_time_stats.Add(time.TotalSeconds);
 
-						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
+						Engine.SaveModel(recommender, data_dir, save_model_file, i);
 
 						if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 						{
@@ -305,7 +306,7 @@ namespace RatingPrediction
 				} // for
 
 				DisplayIterationStats();
-				EngineStorage.SaveModel(recommender, data_dir, save_model_file);
+				Engine.SaveModel(recommender, data_dir, save_model_file);
 			}
 			else
 			{
@@ -316,11 +317,11 @@ namespace RatingPrediction
 					Console.Write(recommender.ToString() + " ");
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
             		Console.Write("training_time " + seconds + " ");
-					EngineStorage.SaveModel(recommender, data_dir, save_model_file);
+					Engine.SaveModel(recommender, data_dir, save_model_file);
 				}
 				else
 				{
-					EngineStorage.LoadModel(recommender, data_dir, load_model_file);
+					Engine.LoadModel(recommender, data_dir, load_model_file);
 					Console.Write(recommender.ToString() + " ");
 				}
 
@@ -428,54 +429,6 @@ namespace RatingPrediction
 				DisplayIterationStats();
 		}
 
-		static Memory InitMatrixFactorization(CommandLineParameters parameters, MatrixFactorization mf)
-		{
-			mf.NumIter        = parameters.GetRemoveInt32( "num_iter",       mf.NumIter);
-			mf.NumFeatures    = parameters.GetRemoveInt32( "num_features",   mf.NumFeatures);
-   			mf.InitMean       = parameters.GetRemoveDouble("init_mean",      mf.InitMean);
-   			mf.InitStdev      = parameters.GetRemoveDouble("init_stdev",     mf.InitStdev);
-			mf.Regularization = parameters.GetRemoveDouble("reg",            mf.Regularization);
-			mf.Regularization = parameters.GetRemoveDouble("regularization", mf.Regularization);
-			mf.LearnRate      = parameters.GetRemoveDouble("lr",             mf.LearnRate);
-			mf.LearnRate      = parameters.GetRemoveDouble("learn_rate",     mf.LearnRate);
-
-			if (mf is BiasedMatrixFactorization)
-			{
-				((BiasedMatrixFactorization)mf).BiasRegularization = parameters.GetRemoveDouble("bias_regularization", ((BiasedMatrixFactorization)mf).BiasRegularization);
-			    ((BiasedMatrixFactorization)mf).BiasRegularization = parameters.GetRemoveDouble("bias_reg",            ((BiasedMatrixFactorization)mf).BiasRegularization);
-			}
-				
-			if (mf is SocialMF)
-			{
-				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_reg",            ((SocialMF)mf).SocialRegularization);
-				((SocialMF)mf).SocialRegularization = parameters.GetRemoveDouble("social_regularization", ((SocialMF)mf).SocialRegularization);
-				((SocialMF)mf).StochasticLearning   = parameters.GetRemoveBool(  "stochastic",            ((SocialMF)mf).StochasticLearning);
-			}
-			return mf;
-		}
-
-		static Memory InitKNN(CommandLineParameters parameters, KNN knn)
-		{
-			knn.K = parameters.GetRemoveUInt32("k", knn.K);  // TODO handle "inf"
-			knn.RegI = parameters.GetRemoveDouble("reg_i", knn.RegI);
-			knn.RegU = parameters.GetRemoveDouble("reg_u", knn.RegU);
-
-			if (knn is UserKNNPearson)
-				((UserKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((UserKNNPearson)knn).Shrinkage);
-			if (knn is ItemKNNPearson)
-				((ItemKNNPearson)knn).Shrinkage = parameters.GetRemoveFloat( "shrinkage", ((ItemKNNPearson)knn).Shrinkage);
-
-			return knn;
-		}
-
-		static Memory InitUIB(CommandLineParameters parameters)
-		{
-			uib.RegI = parameters.GetRemoveDouble("reg_i", uib.RegI);
-			uib.RegU = parameters.GetRemoveDouble("reg_u", uib.RegU);
-
-			return uib;
-		}
-
 		static void DisplayResults(Dictionary<string, double> result)
 		{
 			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}",
@@ -484,9 +437,6 @@ namespace RatingPrediction
 
 		static void DisplayDataStats()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			// training data stats
 			int num_users = training_data.All.GetUsers().Count;
 			int num_items = training_data.All.GetItems().Count;

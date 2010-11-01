@@ -41,7 +41,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
 				correlation.Write(writer);
 			}
@@ -50,7 +50,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void LoadModel(string filePath)
 		{
-			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 				this.correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 			}

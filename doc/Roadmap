@@ -35,7 +35,6 @@ Data types
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
- - rename Algorithms.dll to MyMediaLite.dll
  - integrate with easyrec JavaScript API http://easyrec.org/ 
  - interface(s) for recommenders that support online updates
  - define an easy interface for rating data access
@@ -81,3 +80,4 @@ Misc
  - put website and flyer into different git repositories
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
+ - API html doc

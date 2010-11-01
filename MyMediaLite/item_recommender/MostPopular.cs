@@ -83,7 +83,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
 				foreach (int key in view_count.Keys)
 					writer.WriteLine(key + " " + view_count[key]);
@@ -93,7 +93,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 		public override void LoadModel(string filePath)
 		{
-			using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 				view_count = new Dictionary<int, int>();
 				while (! reader.EndOfStream)

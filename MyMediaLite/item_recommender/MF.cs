@@ -107,7 +107,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = EngineStorage.GetWriter(fileName, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(fileName, this.GetType()) )
 			{
 				// TODO move matrix reading and writing to the MatrixUtils class
             	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
@@ -129,7 +129,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = System.Int32.Parse(numbers[0]);

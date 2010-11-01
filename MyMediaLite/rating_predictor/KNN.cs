@@ -52,7 +52,7 @@ namespace MyMediaLite.rating_predictor
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
 				correlation.Write(writer);
 			}
@@ -64,7 +64,7 @@ namespace MyMediaLite.rating_predictor
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

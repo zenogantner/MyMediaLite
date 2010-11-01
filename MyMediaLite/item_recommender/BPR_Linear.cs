@@ -252,7 +252,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
 				writer.WriteLine(item_attribute_weight_by_user.dim1 + " " + item_attribute_weight_by_user.dim2);
 				for (int i = 0; i < item_attribute_weight_by_user.dim1; i++)
@@ -267,7 +267,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = Int32.Parse(numbers[0]);

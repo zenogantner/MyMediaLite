@@ -275,7 +275,7 @@ namespace MyMediaLite.rating_predictor
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = EngineStorage.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 
@@ -297,7 +297,7 @@ namespace MyMediaLite.rating_predictor
             NumberFormatInfo ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = EngineStorage.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 

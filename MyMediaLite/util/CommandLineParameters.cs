@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -27,13 +28,8 @@ namespace MyMediaLite.util
 	/// <summary>
 	/// Class for command line argument processing
 	/// </summary>
-	public class CommandLineParameters
+	public class CommandLineParameters : Dictionary<string, string>
 	{
-		/// <summary>
-		/// Object to store the key/value pairs
-		/// </summary>
-		protected Dictionary<string, string> dict;
-
 		private NumberFormatInfo ni = new NumberFormatInfo();
 
 		/// <summary>
@@ -45,7 +41,6 @@ namespace MyMediaLite.util
 		/// <param name="start">ignore all parameters before this position</param>
 		public CommandLineParameters(string[] args, int start)
 		{
-			this.dict = new Dictionary<string, string>();
 			for (int i = start; i < args.Length; i++)
 			{
 				if (args[i].Equals(string.Empty))
@@ -58,16 +53,16 @@ namespace MyMediaLite.util
 				string arg_name  = pair[0];
 				string arg_value = pair[1];
 
-				if (dict.ContainsKey(arg_name))
+				if (this.ContainsKey(arg_name))
 					throw new ArgumentException(arg_name + " is used twice as an argument.");
 
 				if (arg_value.Equals(string.Empty))
 				    throw new ArgumentException(arg_name + " has an empty value.");
 
 				if (arg_name.Equals("option_file"))
-					AddArgumentsFromFile(dict, arg_value);
+					AddArgumentsFromFile(arg_value);
 				else
-					dict.Add(arg_name, arg_value);
+					this.Add(arg_name, arg_value);
 			}
 		}
 
@@ -77,19 +72,11 @@ namespace MyMediaLite.util
 		/// <param name="parameters">
 		/// a dictionary containing the parameters as key-value pairs
 		/// </param>
-		public CommandLineParameters(Dictionary<string,string> parameters)
+		public CommandLineParameters(Dictionary<string,string> parameters) : base(parameters)
 		{
-			this.dict = parameters;
 			this.ni.NumberDecimalDigits = '.';
 		}
-
-		/// <summary>
-		/// The number of key-value pairs
-		/// </summary>
-		public int Count {
-			get { return dict.Count; }
-		}
-
+		
 		/// <summary>
 		/// Check for parameters that have not been processed yet
 		/// </summary>
@@ -98,9 +85,9 @@ namespace MyMediaLite.util
 		/// </returns>
 		public bool CheckForLeftovers()
 		{
-			if (dict.Count != 0)
+			if (this.Count != 0)
 			{
-				Console.WriteLine("Unknown argument '{0}'", dict.Keys.First());
+				Console.WriteLine("Unknown argument '{0}'", this.Keys.First());
 				return true;
 			}
 			return false;
@@ -113,10 +100,10 @@ namespace MyMediaLite.util
 
 		public int GetRemoveInt32(string key, int dvalue)
 		{
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 			{
-				int value = int.Parse(dict[key]);
-				dict.Remove(key);
+				int value = int.Parse(this[key]);
+				this.Remove(key);
 				return value;
 			}
 			else
@@ -133,27 +120,38 @@ namespace MyMediaLite.util
 		public IList<int> GetRemoveInt32List(string key, char sep)
 		{
 			List<int> result_list = new List<int>();
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 			{
-				string[] numbers = dict[key].Split(sep);
-				dict.Remove(key);
+				string[] numbers = this[key].Split(sep);
+				this.Remove(key);
 				foreach (string s in numbers)
 					result_list.Add(int.Parse(s));
 			}
 			return result_list;
 		}
 
+		/// <summary>
+		/// Get and remove an unsigned integer
+		/// </summary>
+		/// <param name="key">the parameter name</param>
+		/// <returns>the value of the unsigned integer parameter, zero if it is not found</returns>
 		public uint GetRemoveUInt32(string key)
 		{
 			return GetRemoveUInt32(key, 0);
 		}
 
+		/// <summary>
+		/// Get and remove an unsigned integer
+		/// </summary>
+		/// <param name="key">the parameter name</param>
+		/// <param name="dvalue">the default value of the parameter</param>
+		/// <returns>the value of the unsigned integer parameter, dvalue if it is not found</returns>
 		public uint GetRemoveUInt32(string key, uint dvalue)
 		{
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 			{
-				uint value = uint.Parse(dict[key]);
-				dict.Remove(key);
+				uint value = uint.Parse(this[key]);
+				this.Remove(key);
 				return value;
 			}
 			else
@@ -178,16 +176,16 @@ namespace MyMediaLite.util
 		{
 			ni.NumberDecimalDigits = '.';
 
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 				try
 				{
-					double value = double.Parse(dict[key], ni);
-					dict.Remove(key);
+					double value = double.Parse(this[key], ni);
+					this.Remove(key);
 					return value;
 				}
 				catch (FormatException)
 				{
-					Console.Error.WriteLine("'{0}'", dict[key]);
+					Console.Error.WriteLine("'{0}'", this[key]);
 					throw;
 				}
 			else
@@ -210,16 +208,16 @@ namespace MyMediaLite.util
 		{
 			ni.NumberDecimalDigits = '.';
 
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 				try
 				{
-					float value = float.Parse(dict[key], ni);
-					dict.Remove(key);
+					float value = float.Parse(this[key], ni);
+					this.Remove(key);
 					return value;
 				}
 				catch (FormatException)
 				{
-					Console.Error.WriteLine("'{0}'", dict[key]);
+					Console.Error.WriteLine("'{0}'", this[key]);
 					throw;
 				}
 			else
@@ -244,10 +242,10 @@ namespace MyMediaLite.util
 		/// <returns>the parameter value related to key, the default value if it does not exist</returns>		
 		public string GetRemoveString(string key, string dvalue)
 		{
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 			{
-				string value = dict[key];
-				dict.Remove(key);
+				string value = this[key];
+				this.Remove(key);
 				return value;
 			}
 			else
@@ -263,10 +261,10 @@ namespace MyMediaLite.util
 
 		public bool GetRemoveBool(string key, bool dvalue)
 		{
-			if (dict.ContainsKey(key))
+			if (this.ContainsKey(key))
 			{
-				bool value = bool.Parse(dict[key]);
-				dict.Remove(key);
+				bool value = bool.Parse(this[key]);
+				this.Remove(key);
 				return value;
 			}
 			else
@@ -275,7 +273,7 @@ namespace MyMediaLite.util
 			}
 		}
 
-		protected void AddArgumentsFromFile(Dictionary<string, string> dict, string filename)
+		protected void AddArgumentsFromFile(string filename)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
 			{
@@ -295,8 +293,8 @@ namespace MyMediaLite.util
 					if (arg_value.Equals(string.Empty))
 					    throw new ArgumentException(arg_name + " has an empty value.");
 
-					if (!dict.ContainsKey(arg_name)) // command line overrides argument file
-						dict.Add(arg_name, arg_value);
+					if (!this.ContainsKey(arg_name)) // command line overrides argument file
+						this.Add(arg_name, arg_value);
 				}
 			}
 		}
