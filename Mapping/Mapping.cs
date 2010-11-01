@@ -196,7 +196,7 @@ namespace Mapping
 
 			TimeSpan seconds;
 
-			EngineStorage.LoadModel(recommender, data_dir, load_model_file);
+			Engine.LoadModel(recommender, data_dir, load_model_file);
 
 			Console.Write(recommender.ToString() + " ");
 

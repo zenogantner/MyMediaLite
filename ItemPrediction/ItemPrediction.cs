@@ -242,7 +242,7 @@ namespace MyMediaLite
 				if (load_model_file.Equals(string.Empty))
 					iterative_recommender.Train();
 				else
-					EngineStorage.LoadModel(iterative_recommender, data_dir, load_model_file);
+					Engine.LoadModel(iterative_recommender, data_dir, load_model_file);
 
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -285,7 +285,7 @@ namespace MyMediaLite
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
-						EngineStorage.SaveModel(recommender, data_dir, save_model_file, i);
+						Engine.SaveModel(recommender, data_dir, save_model_file, i);
 
 						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 						{
@@ -308,7 +308,7 @@ namespace MyMediaLite
 				}
 				else
 				{
-					EngineStorage.LoadModel(recommender, data_dir, load_model_file);
+					Engine.LoadModel(recommender, data_dir, load_model_file);
 					Console.Write(recommender.ToString() + " ");
 					// TODO is this the right time to load the model?
 				}
@@ -361,7 +361,7 @@ namespace MyMediaLite
 				}
 				Console.WriteLine();
 			}
-			EngineStorage.SaveModel(recommender, data_dir, save_model_file);
+			Engine.SaveModel(recommender, data_dir, save_model_file);
 		}
 
         static void LoadData(string data_dir, string trainfile, string testfile,
@@ -507,9 +507,6 @@ namespace MyMediaLite
 
 		static void DisplayDataStats()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			// training data stats
 			int num_users = training_data.First.NonEmptyRowIDs.Count;
 			int num_items = training_data.Second.NonEmptyRowIDs.Count;
