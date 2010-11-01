@@ -211,9 +211,9 @@ namespace RatingPrediction
 				case "item-average":
 					recommender = ia;
 					break;
-				case "slope-one":
-					recommender = slope_one;
-					break;
+//				case "slope-one":
+//					recommender = slope_one;
+//					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
 					break;
@@ -339,7 +339,7 @@ namespace RatingPrediction
 					seconds = Utils.MeasureTime(
 				    	delegate() {
 							Console.WriteLine();
-							MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, predict_ratings_file);
+							MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
 						}
 					);
 					Console.Error.Write("predicting_time " + seconds);

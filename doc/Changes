@@ -1,4 +1,4 @@
-0.05	2010-11-
+0.05	2010-11-02
         rename the library from 'Algorithms' to 'MyMediaLite'
 	engines:
          - more fixes to ensure locale-independent output of '.' as floating
@@ -18,7 +18,9 @@
          - BiasedMatrixFactorization: model biases explicitly, allow separate
            regularization
         command-line programs
-         - rating prediction: configure recommender engines via reflection
+         - rating prediction: map internal user/item IDs back to the original
+           ones (this bug was found and reported by Thorsten Angermann)
+         - configure recommender engines via reflection
          - improved usage information
          - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
          - item prediction: fix iteration statistics display
@@ -33,7 +35,7 @@
            contains different utility methods, not just for storing
          - code clean-ups
          - more XML API documentation
-         - add IronPython example
+         - add IronPython examples
 
 0.04	2010-10-21
 	new features:

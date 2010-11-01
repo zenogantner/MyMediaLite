@@ -31,28 +31,43 @@ namespace MyMediaLite.eval
         /// <summary>Rates a given set of instances</summary>
         /// <param name="engine">rating prediction engine</param>
         /// <param name="ratings">test cases</param>
+		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
         /// <param name="writer">the TextWriter to write the predictions to</param>
-        public static void WritePredictions(RatingPredictor engine, RatingData ratings, TextWriter writer)
+        public static void WritePredictions(
+			RatingPredictor engine,
+		    RatingData ratings,
+		    EntityMapping user_mapping, EntityMapping item_mapping,		                                    
+		    TextWriter writer)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			foreach (RatingEvent r in ratings)
-				writer.WriteLine("{0}\t{1}\t{2}", r.user_id, r.item_id, engine.Predict(r.user_id, r.item_id).ToString(ni));
+				writer.WriteLine("{0}\t{1}\t{2}",
+				                 user_mapping.ToOriginalID(r.user_id),
+				                 item_mapping.ToOriginalID(r.item_id),
+				                 engine.Predict(r.user_id, r.item_id).ToString(ni));
         }
 
         /// <summary>Rates a given set of instances</summary>
         /// <param name="engine">rating prediction engine</param>
         /// <param name="ratings">test cases</param>
+		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
         /// <param name="filename">the name of the file to write the predictions to</param>
-        public static void WritePredictions(RatingPredictor engine, RatingData ratings, string filename)
+        public static void WritePredictions(
+			RatingPredictor engine,
+		    RatingData ratings,
+		    EntityMapping user_mapping, EntityMapping item_mapping,
+		    string filename)
 		{
 			if (filename.Equals("-"))
-				WritePredictions(engine, ratings, Console.Out);
+				WritePredictions(engine, ratings, user_mapping, item_mapping, Console.Out);
 			else
 				using ( StreamWriter writer = new StreamWriter(filename) )
 				{
-					WritePredictions(engine, ratings, writer);
+					WritePredictions(engine, ratings, user_mapping, item_mapping, writer);
 				}
         }
 	}

@@ -252,8 +252,8 @@ namespace Mapping
 
 		static BPRMF_ItemMapping InitBPR_MF_ItemMapping(BPRMF_ItemMapping engine, CommandLineParameters parameters)
 		{
-			engine.init_mean          = parameters.GetRemoveDouble("init_f_mean",          engine.init_mean);
-			engine.init_stdev         = parameters.GetRemoveDouble("init_f_stdev",         engine.init_stdev);
+			engine.InitMean          = parameters.GetRemoveDouble("init_f_mean",          engine.InitMean);
+			engine.InitStdev         = parameters.GetRemoveDouble("init_f_stdev",         engine.InitStdev);
 			engine.reg_mapping          = parameters.GetRemoveDouble("reg_mapping",          engine.reg_mapping);
 			engine.learn_rate_mapping   = parameters.GetRemoveDouble("learn_rate_mapping",   engine.learn_rate_mapping);
 			engine.num_iter_mapping     = parameters.GetRemoveInt32( "num_iter_mapping",     engine.num_iter_mapping);
@@ -280,8 +280,8 @@ namespace Mapping
 
 		static BPRMF_Mapping InitBPR_MF_UserMapping(BPRMF_Mapping engine, CommandLineParameters parameters)
 		{
-			engine.init_mean        = parameters.GetRemoveDouble("init_f_mean",        engine.init_mean);
-			engine.init_stdev       = parameters.GetRemoveDouble("init_f_stdev",       engine.init_stdev);
+			engine.InitMean        = parameters.GetRemoveDouble("init_f_mean",        engine.InitMean);
+			engine.InitStdev       = parameters.GetRemoveDouble("init_f_stdev",       engine.InitStdev);
 			engine.reg_mapping        = parameters.GetRemoveDouble("reg_mapping",        engine.reg_mapping);
 			engine.learn_rate_mapping = parameters.GetRemoveDouble("learn_rate_mapping", engine.learn_rate_mapping);
 			engine.num_iter_mapping   = parameters.GetRemoveInt32( "num_iter_mapping",   engine.num_iter_mapping);
@@ -292,9 +292,6 @@ namespace Mapping
 		}
 
 		static void DisplayResults(Dictionary<string, double> result) {
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
 			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
