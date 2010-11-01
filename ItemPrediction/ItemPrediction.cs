@@ -482,13 +482,13 @@ namespace MyMediaLite
 
 		static void InitBPR_Linear(BPR_Linear engine, CommandLineParameters parameters)
 		{
-			engine.NumIter      = parameters.GetRemoveInt32( "num_iter",     engine.NumIter);
-			engine.init_mean  = parameters.GetRemoveDouble(  "init_mean",  engine.init_mean);
-			engine.init_stdev = parameters.GetRemoveDouble(  "init_stdev", engine.init_stdev);
-			engine.reg          = parameters.GetRemoveDouble("reg",          engine.reg);
-			engine.learn_rate   = parameters.GetRemoveDouble("lr",           engine.learn_rate);
-			engine.learn_rate   = parameters.GetRemoveDouble("learn_rate",   engine.learn_rate);
-			engine.fast_sampling_memory_limit = parameters.GetRemoveInt32( "fast_sampling_memory_limit", engine.fast_sampling_memory_limit);
+			engine.NumIter        = parameters.GetRemoveInt32( "num_iter",  engine.NumIter);
+			engine.InitMean       = parameters.GetRemoveDouble(  "init_mean",  engine.InitMean);
+			engine.InitStdev      = parameters.GetRemoveDouble(  "init_stdev", engine.InitStdev);
+			engine.Regularization = parameters.GetRemoveDouble("reg",      engine.Regularization);
+			engine.LearnRate      = parameters.GetRemoveDouble("lr",           engine.LearnRate);
+			engine.LearnRate      = parameters.GetRemoveDouble("learn_rate",   engine.LearnRate);
+			engine.FastSamplingMemoryLimit = parameters.GetRemoveInt32( "fast_sampling_memory_limit", engine.FastSamplingMemoryLimit);
 
 			recommender = engine;
 		}
