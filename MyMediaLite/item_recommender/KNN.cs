@@ -22,20 +22,17 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <remarks>
-	/// Base class for item recommenders that use some kind of kNN
-	/// </remarks>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
+	/// <summary>
+	/// Base class for item recommenders that use some kind of kNN model
+	/// </summary>
 	public abstract class KNN : Memory
 	{
-		/// <summary>
-		/// The number of neighbors to take into account for prediction
-		/// </summary>
-		public uint k = 80; // TODO make it a property that checks whether changes are allowed after training ...
-
-        /// <summary>
-        /// Correlation matrix over some kind of entity
-        /// </summary>
+		/// <summary>The number of neighbors to take into account for prediction</summary>
+		public uint K {	get { return k;	} set {	k = value; } }
+		/// <summary>The number of neighbors to take into account for prediction</summary>
+		protected uint k = 80;
+		
+        /// <summary>Correlation matrix over some kind of entity</summary>
         protected CorrelationMatrix correlation;
 
 		/// <inheritdoc />

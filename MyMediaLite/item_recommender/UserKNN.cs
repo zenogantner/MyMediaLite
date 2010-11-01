@@ -23,10 +23,12 @@ namespace MyMediaLite.item_recommender
 {
     /// <summary>
     /// k-nearest neighbor user-based collaborative filtering using cosine-similarity
+    /// </summary>
+    /// <remarks>
     /// k=inf equals most-popular.
     ///
     /// This engine does not support online updates.
-    /// </summary>
+	/// </remarks>
     public class UserKNN : KNN
     {
 		/// <summary>

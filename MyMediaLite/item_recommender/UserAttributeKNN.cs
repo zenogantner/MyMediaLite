@@ -22,10 +22,10 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <remarks>
+	/// <summary>
     /// k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes
-    /// k=\infty.
-    ///
+    /// </summary>
+	/// <remarks>
     /// This engine does not support online updates.
     /// </remarks>
     public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
@@ -40,7 +40,6 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 		private SparseBooleanMatrix user_attributes;
-
 
 		/// <inheritdoc />
 		public int NumUserAttributes { get; set; }		
