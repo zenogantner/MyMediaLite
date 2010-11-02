@@ -13,10 +13,7 @@
      { engine => 'biased-matrix-factorization', hp => 'num_features=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=110', rmse => '0.8521', mae => '0.6739' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=40 bias_reg=0.001 regularization=0.050 learn_rate=0.01 num_iter=60',  rmse => '0.8519', mae => '0.6742' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=60 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=110', rmse => '0.8519', mae => '0.6748' }
-     { engine => 'biased-matrix-factorization', hp => 'num_features=80 regularization=0.055 learn_rate=0.01 num_iter=75',  rmse => '0.8504', mae => '' }
-     { engine => 'biased-matrix-factorization', hp => 'num_features=120 regularization=0.050  learn_rate=0.01 num_iter=75', rmse => '0.8505', mae => '' }
-
-     { engine => 'biased-matrix-factorization', hp => 'num_features=120 bias_reg=0.001 regularization=0.050  learn_rate=0.01 num_iter=120', rmse => '0.8510', mae => '0.6743' }
+     { engine => 'biased-matrix-factorization', hp => 'num_features=80 bias_reg=0.01  regularization=0.055 learn_rate=0.01 num_iter=80',  rmse => '0.8508', mae => '0.6747' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=120 bias_reg=0.001 regularization=0.055  learn_rate=0.01 num_iter=90', rmse => '0.8507', mae => '0.6749' }
    ]
    ml100k = [
