@@ -11,7 +11,7 @@ gendarme:
 	gendarme --severity critical+ RatingPrediction/bin/Debug/*.dll
 
 monodoc:
-	mdoc update -i Algorithms/bin/Debug/Algorithms.xml -o doc/monodoc/ Algorithms/bin/Debug/Algorithms.dll
+	mdoc update -i MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ MyMediaLite/bin/Debug/MyMediaLite.dll
 htmldoc:
 	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api --template doc/doctemplate.xsl
 
