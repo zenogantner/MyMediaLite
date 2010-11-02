@@ -48,9 +48,9 @@ Architecture
    - create special index data structures on demand
  - redesign/rewrite implicit feedback data structures
  - user and item IDs should be unsigned integers
- - command line programs: load/configure engines via reflection
  - Makefile-based build system (find dependencies automagically?)
- - generate manual from XML/inline documentation
+ - automated release management
+ - generate HTML API docs and manual from XML/inline documentation
  - parameterize types:
    - user and item IDs
    - stored ratings
@@ -80,4 +80,3 @@ Misc
  - put website and flyer into different git repositories
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
- - API html doc (including bibliography handling)
