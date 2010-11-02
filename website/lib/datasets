@@ -1,6 +1,6 @@
 [% netflix_data = [
-     { engine => 'biased-matrix-factorization', hp => 'num_features=50 learn_rate=0.005 regularization=0.04  num_iter=113', rmse => '0.9180' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=0  learn_rate=0.005 bias_reg=0.0001 regularization=0.035 num_iter=25', rmse => '0.9830' mae => '0.7710' }
+     { engine => 'biased-matrix-factorization', hp => 'num_features=50 learn_rate=0.005 bias_regularization=0.0001 regularization=0.035  num_iter=90', rmse => '0.9175', mae => '0.7135' }
      { engine => 'biased-matrix-factorization', hp => 'num_features=80 learn_rate=0.005 regularization=0.035 num_iter=26', rmse => '0.9169' mae => '0.7126' }
    ]
    ml1m_data = [
