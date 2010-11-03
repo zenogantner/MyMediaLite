@@ -205,7 +205,10 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format("user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format(ni, "user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
 		}
     }
 }
