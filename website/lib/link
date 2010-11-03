@@ -20,6 +20,8 @@
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
+     cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'            title => 'Collection Workflow Integration System' }
+     filmaster     => { url => 'http://filmaster.com/'                           title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                               title => 'mloss.org' }
      vw            => { url => 'http://hunch.net/~vw/',                          title => 'Vowpal Wabbit' }
      liblinear     => { url => 'http://www.csie.ntu.edu.tw/~cjlin/liblinear/',   title => 'LIBLINEAR' }
