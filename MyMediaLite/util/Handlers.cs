@@ -19,6 +19,7 @@ namespace MyMediaLite.util
 		{
 			try
 			{
+				Console.Error.WriteLine("An uncaught exception occured. Please send a bug report to mymedialite@ismll.de");
 				Exception e = (Exception)unhandled_event.ExceptionObject;
 				Console.Error.WriteLine(e.Message + e.StackTrace);
 			}
