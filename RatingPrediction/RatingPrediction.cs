@@ -123,7 +123,7 @@ namespace RatingPrediction
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
-			
+
 			// check number of command line parameters
 			if (args.Length < 3)
 				Usage("Not enough arguments.");

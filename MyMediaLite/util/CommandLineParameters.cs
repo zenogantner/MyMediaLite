@@ -25,9 +25,8 @@ using System.Linq;
 
 namespace MyMediaLite.util
 {
-	/// <summary>
-	/// Class for command line argument processing
-	/// </summary>
+	/// <summary>Class for command line argument processing</summary>
+	[Serializable]
 	public class CommandLineParameters : Dictionary<string, string>
 	{
 		private NumberFormatInfo ni = new NumberFormatInfo();

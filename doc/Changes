@@ -1,15 +1,20 @@
 0.06    2010-11-
-	engines:
+	engines
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
         interfaces
          - new interface ILatentFactorModel
+	command-line programs
+         - exception handler: encourage users to file bug reports
         misc
          - code clean-ups
          - minor documentation improvements
+         - development: improved 'make gendarme' and 'make todo'
+         - The core library and the command-line programs now do not contain
+           any critical issues that Gendarme would complain about.
 
 0.05	2010-11-02
         rename the library from 'Algorithms' to 'MyMediaLite'
-	engines:
+	engines
          - more fixes to ensure locale-independent output of '.' as floating
            point separator
          - MF and linear  engines for item prediction: rename init_f_mean to

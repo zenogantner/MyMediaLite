@@ -1,5 +1,6 @@
 PDF_VIEWER=evince
 EDITOR=editor
+GENDARME_OPTIONS=--quiet --severity critical+
 
 todo:
 	ack --type=csharp TODO
@@ -10,10 +11,11 @@ todo:
 	ack --type=csharp NotImplementedException | wc -l
 
 gendarme:
-	gendarme --severity critical+ RatingPrediction/bin/Debug/*.exe
-	gendarme --severity critical+ ItemPrediction/bin/Debug/*.exe
-	gendarme --severity critical+ Mapping/bin/Debug/*.exe
-	gendarme --severity critical+ RatingPrediction/bin/Debug/*.dll
+	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ItemPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} Mapping/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/MyMediaLite.dll
+	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/SVM.dll
 
 monodoc:
 	mdoc update -i MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ MyMediaLite/bin/Debug/MyMediaLite.dll
