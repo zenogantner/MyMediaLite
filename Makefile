@@ -10,6 +10,9 @@ todo:
 	ack --type=csharp NotImplementedException | wc -l
 
 gendarme:
+	gendarme --severity critical+ RatingPrediction/bin/Debug/*.exe
+	gendarme --severity critical+ ItemPrediction/bin/Debug/*.exe
+	gendarme --severity critical+ Mapping/bin/Debug/*.exe
 	gendarme --severity critical+ RatingPrediction/bin/Debug/*.dll
 
 monodoc:
