@@ -26,7 +26,6 @@ namespace MyMediaLite.data_type
     /// The data is stored in row-major mode.
     /// Indexes are zero-based.
     /// </remarks>
-    /// <typeparam name="T"></typeparam>
     public class Matrix<T>
     {
         /// <summary>Data array: data is stored in columns.</summary>
@@ -48,7 +47,7 @@ namespace MyMediaLite.data_type
 				return true;
 			}
 		}
-		
+
         /// <summary>Initializes a new instance of the Matrix class</summary>
         /// <param name="dim1">the number of rows</param>
         /// <param name="dim2">the number of columns</param>
@@ -58,7 +57,7 @@ namespace MyMediaLite.data_type
 				throw new ArgumentException("dim1 must be at least 0");
 			if (dim2 < 0)
 				throw new ArgumentException("dim2 must be at least 0");
-			
+
             this.dim1 = dim1;
             this.dim2 = dim2;
             data = new T[dim1 * dim2];
@@ -298,8 +297,8 @@ namespace MyMediaLite.data_type
 		static public double ColumnAverage(Matrix<double> matrix, int col)
 		{
 			if (matrix.dim1 == 0)
-				throw new Exception("Cannot compute average of 0 entries.");			
-			
+				throw new Exception("Cannot compute average of 0 entries.");
+
 			double sum = 0;
 
 			for (int x = 0; x < matrix.dim1; x++)
@@ -318,7 +317,7 @@ namespace MyMediaLite.data_type
 		{
 			if (matrix.dim2 == 0)
 				throw new Exception("Cannot compute average of 0 entries.");
-			
+
 			double sum = 0;
 
 			for (int y = 0; y < matrix.dim2; y++)

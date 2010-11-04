@@ -33,8 +33,7 @@ namespace MyMediaLite
 		/// </summary>
 		/// <param name="entity_type">the entity type</param>
 		/// <param name="id">the ID of the entity</param>
-		/// <returns>an array of doubles that describes the entity in the model
-		/// </returns>
+		/// <returns>an array of doubles that describes the entity in the model</returns>
 		double[] GetLatentFactors(EntityType entity_type, int id);
 	}
 }
