@@ -200,6 +200,7 @@ namespace MyMediaLite
 					recommender = Engine.Configure(uaknn, parameters, Usage);
 					break;
 				case "item-attribute-svm":
+				case "item-attribute-SVM":
 					recommender = svm;
 					break;
 				case "most-popular":

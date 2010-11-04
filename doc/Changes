@@ -1,3 +1,7 @@
+0.06    2010-11-
+	engines:
+         - encapsulate hyperparameters of ItemAttributeSVM
+
 0.05	2010-11-02
         rename the library from 'Algorithms' to 'MyMediaLite'
 	engines:

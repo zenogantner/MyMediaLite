@@ -39,16 +39,14 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc />
 	    public int NumItemAttributes { get;	set; }
 
-		// TODO turn into properties
-		/// <summary>
-		/// C hyperparameter
-		/// </summary>
-		public double C     = 1;
-		/// <summary>
-		/// Gamma parameter for RBF kernel
-		/// </summary>
-		public double Gamma = (double) 1 / 500; // usually: 1 / num_features
+		/// <summary>C hyperparameter</summary>
+		public double C { get { return c; } set { c = value; } }
+		double c = 1;
 
+		/// <summary>Gamma parameter for RBF kernel</summary>		
+		public double Gamma { get {	return gamma; }	set { gamma = value; } }
+		double gamma = (double) 1 / 500;
+		
 		private SVM.Model[] models;
 
         /// <inheritdoc />
@@ -63,8 +61,8 @@ namespace MyMediaLite.item_recommender
 			Parameter svm_parameters = new Parameter();
 			svm_parameters.SvmType = SvmType.EPSILON_SVR;
 			//svm_parameters.SvmType = SvmType.NU_SVR;
-			svm_parameters.C     = this.C;
-			svm_parameters.Gamma = this.Gamma;
+			svm_parameters.C     = this.c;
+			svm_parameters.Gamma = this.gamma;
 
 			// user-wise training
 			models = new Model[num_users];
@@ -117,7 +115,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';						
 			
-			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", C, Gamma);
+			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", c, gamma);
 		}
 	}
 }
