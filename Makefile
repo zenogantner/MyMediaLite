@@ -2,12 +2,12 @@ PDF_VIEWER=evince
 EDITOR=editor
 
 todo:
-	ack TODO
-        ack FIXME
-	ack NotImplementedException
-	ack TODO | wc -l
-        ack FIXME | wc -l
-	ack NotImplementedException | wc -l
+	ack --type=csharp TODO
+	ack --type=csharp FIXME
+	ack --type=csharp NotImplementedException
+	ack --type=csharp TODO | wc -l
+	ack --type=csharp FIXME | wc -l
+	ack --type=csharp NotImplementedException | wc -l
 
 gendarme:
 	gendarme --severity critical+ RatingPrediction/bin/Debug/*.dll
