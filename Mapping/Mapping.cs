@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
+//using System.Text;
 using MyMediaLite;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -212,7 +212,7 @@ namespace Mapping
 					recommender.num_iter_mapping = 1;
 					for (int i = 0; i < num_iter; i++, i++)
 					{
-						recommender.iterate_mapping();
+						recommender.IterateMapping();
 						Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 					}
 					recommender.num_iter_mapping = num_iter; // restore
