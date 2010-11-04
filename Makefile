@@ -3,8 +3,10 @@ EDITOR=editor
 
 todo:
 	ack TODO
+        ack FIXME
 	ack NotImplementedException
 	ack TODO | wc -l
+        ack FIXME | wc -l
 	ack NotImplementedException | wc -l
 
 gendarme:
