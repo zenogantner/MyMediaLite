@@ -21,6 +21,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
+using MyMediaLite.taxonomy;
 using MyMediaLite.util;
 
 
@@ -38,7 +39,7 @@ namespace MyMediaLite.rating_predictor
     /// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
     /// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
     /// </remarks>
-    public class MatrixFactorization : Memory, IIterativeModel
+    public class MatrixFactorization : Memory, IIterativeModel, ILatentFactorModel
     {
 		/// <summary>Matrix containing the latent user factors</summary>
         protected Matrix<double> user_factors;
@@ -180,7 +181,7 @@ namespace MyMediaLite.rating_predictor
             return result;
         }
 
-		// TODO: use user/item bias for prediction for unknown entities
+		// TODO use user/item bias for prediction for unknown entities
 		
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
@@ -266,6 +267,40 @@ namespace MyMediaLite.rating_predictor
             item_factors.SetRowToOneValue(item_id, 0);
         }
 
+		/// <inheritdoc />
+		public double[] GetLatentFactors(EntityType entity_type, int id)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					if (id < user_factors.dim1)
+						return user_factors.GetRow(id);
+					else
+						throw new ArgumentException("Unknown user: " + id);
+				case EntityType.ITEM:
+					if (id < item_factors.dim1)
+						return item_factors.GetRow(id);
+					else
+						throw new ArgumentException("Unknown item: " + id);
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}
+
+		/// <inheritdoc />
+		public Matrix<double> GetLatentFactors(EntityType entity_type)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					return user_factors;
+				case EntityType.ITEM:
+					return item_factors;
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}				
+		
         /// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{

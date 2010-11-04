@@ -64,9 +64,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
-				{
-					iterate_mapping();
-				}
+					IterateMapping();
 				old_attribute_to_feature[h] = new Matrix<double>(attribute_to_feature);
 				old_rmse_per_feature[h] = ComputeMappingFit();
 			}
@@ -78,16 +76,12 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			// find best feature mappings:
 			for (int i = 0; i < num_init_mapping; i++)
-			{
 				for (int j = 0; j < num_factors; j++)
-				{
 					if (old_rmse_per_feature[i][j] < min_rmse_per_feature[j])
 					{
 						min_rmse_per_feature[j] = old_rmse_per_feature[i][j];
 						best_feature_init[j]   = i;
 					}
-				}
-			}
 
 			// set the best weight combinations for each feature mapping
 			for (int i = 0; i < num_factors; i++)
@@ -126,7 +120,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <summary>
 		/// Perform one iteration of the mapping learning process
 		/// </summary>
-		public override void iterate_mapping()
+		public override void IterateMapping()
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
 

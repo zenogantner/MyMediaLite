@@ -120,6 +120,20 @@ namespace MyMediaLite.item_recommender
 					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
 			}
 		}
+
+		/// <inheritdoc />
+		public Matrix<double> GetLatentFactors(EntityType entity_type)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					return user_factors;
+				case EntityType.ITEM:
+					return item_factors;
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}		
 		
 		/// <inheritdoc />
 		public override void SaveModel(string fileName)

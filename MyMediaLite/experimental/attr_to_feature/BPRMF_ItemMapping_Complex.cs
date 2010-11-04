@@ -47,7 +47,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
 			for (int i = 0; i < num_iter_mapping; i++)
 			{
-				iterate_mapping();
+				IterateMapping();
 				//ComputeMappingFit();
 				//Console.Error.WriteLine("iteration {0} fit {1,0:0.#####} ", i, ComputeFit());
 			}
@@ -67,7 +67,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
-		public override void iterate_mapping()
+		public override void IterateMapping()
 		{
 			Console.Error.Write(".");
 

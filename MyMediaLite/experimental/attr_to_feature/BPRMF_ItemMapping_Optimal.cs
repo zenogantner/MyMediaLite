@@ -45,13 +45,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
-				iterate_mapping();
+				IterateMapping();
 
 			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
 		}
 
 		/// <inheritdoc />
-		public override void iterate_mapping()
+		public override void IterateMapping()
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
 

@@ -22,22 +22,18 @@ using MyMediaLite.item_recommender;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
-	// TODO: think again about composition instead of derivation
-	// TODO: implement load/store
-	// TODO: supports only binary attributes; implement also nominal/"integer" attributes
-
 	public abstract class BPRMF_Mapping : BPRMF
 	{
 		public double learn_rate_mapping = 0.01;
 		public int num_iter_mapping = 10;
-		public int num_init_mapping = 5;   // TODO make it a parameter
+		public int num_init_mapping = 5;
 		public double reg_mapping = 0.1;
 
 		// includes bias
 		protected Matrix<double> attribute_to_feature;
 
 		public abstract void LearnAttributeToFactorMapping();
-		public abstract void iterate_mapping();
+		public abstract void IterateMapping();
 	}
 }
 

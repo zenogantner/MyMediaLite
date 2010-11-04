@@ -44,11 +44,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 			for (int i = 0; i < num_iter_mapping; i++)
 			{
 				//Console.Error.WriteLine("before iteration {0} fit {1,0:0.#####} ", i, ComputeFit());
-				iterate_mapping();
+				IterateMapping();
 			}
 		}
 
-		public override void iterate_mapping()
+		public override void IterateMapping()
 		{
 
 			int num_pos_events = data_user.NumberOfEntries;

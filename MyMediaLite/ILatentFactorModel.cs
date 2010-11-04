@@ -18,6 +18,7 @@
 // 
 
 using System;
+using MyMediaLite.data_type;
 using MyMediaLite.taxonomy;
 
 
@@ -28,12 +29,15 @@ namespace MyMediaLite
 	/// </summary>
 	public interface ILatentFactorModel
 	{
-		/// <summary>
-		/// Get the latent factors that describe the entity in the latent factor model
-		/// </summary>
+		/// <summary>Get the latent factors that describe an entity in the latent factor model</summary>
 		/// <param name="entity_type">the entity type</param>
 		/// <param name="id">the ID of the entity</param>
 		/// <returns>an array of doubles that describes the entity in the model</returns>
 		double[] GetLatentFactors(EntityType entity_type, int id);
+
+		/// <summary>Get the latent factors that describe all entities of one type in the latent factor model</summary>
+		/// <param name="entity_type">the entity type</param>
+		/// <returns>the matrix of all latent factors of the given entity type in the model</returns>
+		Matrix<double> GetLatentFactors(EntityType entity_type);
 	}
 }

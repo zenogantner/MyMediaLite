@@ -84,7 +84,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				{
 					if (i % 5000 == 0)
 						ComputeMappingFit();
-					iterate_mapping();
+					IterateMapping();
 				}
 				ComputeMappingFit();
 
@@ -124,7 +124,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			ComputeMappingFit();
 		}
 
-		public override void iterate_mapping()
+		public override void IterateMapping()
 		{
 			// stochastic gradient descent
 			int user_id = SampleUserWithAttributes();
