@@ -17,10 +17,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data_type;
-using MyMediaLite.util;
+
 
 namespace MyMediaLite.item_recommender
 {
@@ -34,7 +32,7 @@ namespace MyMediaLite.item_recommender
 		public int MaxUserID  { get; protected set;	}
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; protected set; }
-		
+
         /// <summary>
         /// Implicit feedback, user-wise
         /// </summary>

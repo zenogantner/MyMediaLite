@@ -15,12 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MyMediaLite.util;
-
 
 namespace MyMediaLite.rating_predictor
 {
@@ -41,7 +35,7 @@ namespace MyMediaLite.rating_predictor
         /// </summary>
         /// <value>The min rating value.</value>
         public virtual double MinRating { get { return min_rating;  } set { min_rating = value; } }
-		
+
         /// <inheritdoc />
 		public abstract bool CanPredict(int user_id, int item_id);
 		/// <inheritdoc />

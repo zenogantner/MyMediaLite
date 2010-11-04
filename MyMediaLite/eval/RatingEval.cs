@@ -18,14 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data;
-using MyMediaLite.data_type;
 using MyMediaLite.rating_predictor;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
 
 
 namespace MyMediaLite.eval
@@ -36,16 +30,16 @@ namespace MyMediaLite.eval
 		/// <summary>
 		/// the evaluation measures for rating prediction offered by the class
 		/// </summary>
-		static public ICollection<string> RatingPredictionMeasures			
+		static public ICollection<string> RatingPredictionMeasures
 		{
 			get
 			{
 				string[] measures = { "RMSE", "MAE" };
 				return new HashSet<string>(measures);
 			}
-		}		
+		}
 
-		
+
         /// <summary>
         /// Evaluates a rating predictor for RMSE and MAE.
         /// </summary>
@@ -62,14 +56,14 @@ namespace MyMediaLite.eval
 
 			//HashSet<int> users = new HashSet<int>();
 			//HashSet<int> items = new HashSet<int>();
-			
+
             foreach (RatingEvent r in ratings)
             {
                 double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
 
 				rmse += error * error;
                 mae  += Math.Abs(error);
-				
+
 				//users.Add(r.user_id);
 				//items.Add(r.item_id);
             }

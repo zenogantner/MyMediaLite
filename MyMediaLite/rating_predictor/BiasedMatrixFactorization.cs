@@ -18,12 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
-using MyMediaLite.util;
 
 
 namespace MyMediaLite.rating_predictor

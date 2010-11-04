@@ -19,8 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data;
 using MyMediaLite.util;
 
@@ -35,14 +33,14 @@ namespace MyMediaLite.rating_predictor
     /// </remarks>
     public class GlobalAverage : Memory
     {
-		private double global_average = 0;		
-		
+		private double global_average = 0;
+
         /// <inheritdoc />
         public override void Train()
 		{
 			foreach (RatingEvent r in Ratings.All)
 				global_average += r.rating;
-			global_average /= Ratings.All.Count;			
+			global_average /= Ratings.All.Count;
 		}
 
         /// <inheritdoc />
@@ -189,7 +187,7 @@ namespace MyMediaLite.rating_predictor
 				{
 					rating_counts.Insert(r.item_id, 0);
 					entity_averages.Insert(r.item_id, 0);
-				}				
+				}
 				rating_counts[r.item_id]++;
 				entity_averages[r.item_id] += r.rating;
 				global_average += r.rating;

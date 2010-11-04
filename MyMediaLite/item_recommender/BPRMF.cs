@@ -19,10 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using MyMediaLite.data_type;
 using MyMediaLite.eval;
-using MyMediaLite.util;
 
 
 namespace MyMediaLite.item_recommender

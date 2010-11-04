@@ -16,16 +16,13 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace MyMediaLite.util
 {
     /// <summary>
     /// Drawing random values from a normal distibuted using a simple rejection method.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class Random : System.Random
     {
         private static Random instance = null;

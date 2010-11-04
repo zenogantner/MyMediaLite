@@ -3,6 +3,9 @@
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
         interfaces
          - new interface ILatentFactorModel
+        misc
+         - code clean-ups
+         - minor documentation improvements
 
 0.05	2010-11-02
         rename the library from 'Algorithms' to 'MyMediaLite'

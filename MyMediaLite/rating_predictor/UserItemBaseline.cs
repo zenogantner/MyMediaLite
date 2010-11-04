@@ -16,18 +16,15 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data;
 using MyMediaLite.util;
 
 
 namespace MyMediaLite.rating_predictor
 {
-	// TODO: run CV internally in order to find suitable hyperparameters
+	// TODO run CV internally in order to find suitable hyperparameters
 
 	/// <summary>baseline method for rating prediction</summary>
     /// <remarks>
@@ -68,7 +65,7 @@ namespace MyMediaLite.rating_predictor
 			foreach (RatingEvent r in Ratings.All)
 				global_average += r.rating;
 			global_average /= Ratings.All.Count;
-			
+
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
 
@@ -206,8 +203,8 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni, "user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
 		}
     }

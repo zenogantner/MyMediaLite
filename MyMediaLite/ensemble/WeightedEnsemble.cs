@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using MyMediaLite.rating_predictor;
 using MyMediaLite.util;
 
@@ -37,10 +36,10 @@ namespace MyMediaLite.ensemble
     {
 		// TODO add an AddEngine routine
 
-        /// <summary>
-        /// List of weights.
-        /// </summary>
+        /// <summary>List of component weights</summary>
         public List<double> weights = new List<double>();
+
+		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
 
         /// <inheritdoc />
