@@ -27,6 +27,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
+	/// <summary>Simple matrix factorization class</summary>
     /// <remarks>
     /// Factorizing the observed rating values using a feature matrix for users and one for items.
     /// This class can update the factorization online.
@@ -40,11 +41,11 @@ namespace MyMediaLite.rating_predictor
     /// </remarks>
     public class MatrixFactorization : Memory, IIterativeModel
     {
-		/// <summary>Matrix containing the latent user features</summary>
-        protected Matrix<double> user_feature;
+		/// <summary>Matrix containing the latent user factors</summary>
+        protected Matrix<double> user_factors;
 		
-		/// <summary>Matrix containing the latent item features</summary>
-        protected Matrix<double> item_feature;
+		/// <summary>Matrix containing the latent item factors</summary>
+        protected Matrix<double> item_factors;
 		
 		/// <summary>The bias (global average)</summary>
         protected double global_bias;
@@ -53,21 +54,18 @@ namespace MyMediaLite.rating_predictor
 		public double InitMean { get; set; }
 
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
-		public double InitStdev {
-			get { return this.init_stdev; }
-			set { init_stdev = value;     }
-		}
+		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
         private double init_stdev = 0.1;
 
         /// <summary>Learn rate</summary>
-		public double LearnRate { get { return this.learn_rate; } set { learn_rate = value; } }
+		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
         /// <summary>Learn rate</summary>
         protected double learn_rate = 0.01;		
 		
         /// <summary>Number of latent features</summary>
-		public int NumFeatures { get { return num_features; } set { num_features = value; }	}
+		public int NumFactors { get { return num_factors; } set { num_factors = value; }	}
         /// <summary>Number of latent features</summary>
-        protected int num_features = 10;				
+        protected int num_factors = 10;				
 
         /// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; } set { regularization = value; } }
@@ -81,11 +79,11 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override void Train()
         {
-			// init feature matrices
-	       	user_feature = new Matrix<double>(ratings.MaxUserID + 1, num_features);
-	       	item_feature = new Matrix<double>(ratings.MaxItemID + 1, num_features);
-	       	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev);
-	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);
+			// init factor matrices
+	       	user_factors = new Matrix<double>(ratings.MaxUserID + 1, num_factors);
+	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
+	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
@@ -93,9 +91,9 @@ namespace MyMediaLite.rating_predictor
             LearnFeatures(ratings.All, true, true);
 
 			// check for NaN in the model
-			if (MatrixUtils.ContainsNaN(user_feature))
+			if (MatrixUtils.ContainsNaN(user_factors))
 				throw new ArithmeticException("user_feature contains NaN");
-			if (MatrixUtils.ContainsNaN(item_feature))
+			if (MatrixUtils.ContainsNaN(item_factors))
 				throw new ArithmeticException("item_feature contains NaN");
         }
 
@@ -111,7 +109,7 @@ namespace MyMediaLite.rating_predictor
         /// <param name="user_id">the user ID</param>
         public void RetrainUser(int user_id)
         {
-            MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
+            MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
             LearnFeatures(ratings.ByUser[(int)user_id], true, false);
         }
 
@@ -119,7 +117,7 @@ namespace MyMediaLite.rating_predictor
         /// <param name="item_id">the item ID</param>
         public void RetrainItem(int item_id)
         {
-            MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
+            MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
             LearnFeatures(ratings.ByItem[(int)item_id], false, true);
         }
 
@@ -140,10 +138,10 @@ namespace MyMediaLite.rating_predictor
 				double err = rating.rating - p;
 
                  // Adjust features, factor by factor
-                 for (int f = 0; f < num_features; f++)
+                 for (int f = 0; f < num_factors; f++)
                  {
-                 	double u_f = user_feature[u, f];
-                    double i_f = item_feature[i, f];
+                 	double u_f = user_factors[u, f];
+                    double i_f = item_factors[i, f];
 
 					// compute feature updates
                     double delta_u = (err * i_f - regularization * u_f);
@@ -151,9 +149,9 @@ namespace MyMediaLite.rating_predictor
 
 					// if necessary, apply updates
                     if (update_user)
-						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
+						MatrixUtils.Inc(user_factors, u, f, learn_rate * delta_u);
                     if (update_item)
-						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
+						MatrixUtils.Inc(item_factors, i, f, learn_rate * delta_i);
                  }
             }
 		}
@@ -170,8 +168,8 @@ namespace MyMediaLite.rating_predictor
             double result = global_bias;
 
             // U*V
-            for (int f = 0; f < num_features; f++)
-                result += user_feature[user_id, f] * item_feature[item_id, f];
+            for (int f = 0; f < num_factors; f++)
+                result += user_factors[user_id, f] * item_factors[item_id, f];
 
             if (bound)
 			{
@@ -197,9 +195,9 @@ namespace MyMediaLite.rating_predictor
 		/// <returns>the predicted rating</returns>
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id >= user_feature.dim1)
+            if (user_id >= user_factors.dim1)
 				return global_bias;
-            if (item_id >= item_feature.dim1)
+            if (item_id >= item_factors.dim1)
 				return global_bias;
 
             return Predict(user_id, item_id, true);
@@ -235,8 +233,8 @@ namespace MyMediaLite.rating_predictor
 			if (user_id > MaxUserID)
 			{
             	base.AddUser(user_id);
-				user_feature.AddRows(user_id + 1);
-            	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
+				user_factors.AddRows(user_id + 1);
+            	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 			}
         }
 
@@ -246,8 +244,8 @@ namespace MyMediaLite.rating_predictor
 			if (item_id > MaxItemID)
 			{
             	base.AddItem(item_id);
-				item_feature.AddRows(item_id + 1);
-            	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
+				item_factors.AddRows(item_id + 1);
+            	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 			}
         }
 
@@ -257,7 +255,7 @@ namespace MyMediaLite.rating_predictor
             base.RemoveUser(user_id);
 
 			// set user features to zero
-            user_feature.SetRowToOneValue(user_id, 0);
+            user_factors.SetRowToOneValue(user_id, 0);
         }
 
         /// <inheritdoc/>
@@ -266,7 +264,7 @@ namespace MyMediaLite.rating_predictor
             base.RemoveItem(item_id);
 
 			// set item features to zero
-            item_feature.SetRowToOneValue(item_id, 0);
+            item_factors.SetRowToOneValue(item_id, 0);
         }
 
         /// <inheritdoc />
@@ -279,15 +277,15 @@ namespace MyMediaLite.rating_predictor
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 
-            	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
-            	for (int i = 0; i < user_feature.dim1; i++)
-                	for (int j = 0; j < user_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + user_feature[i, j].ToString(ni));
+            	writer.WriteLine(user_factors.dim1 + " " + user_factors.dim2);
+            	for (int i = 0; i < user_factors.dim1; i++)
+                	for (int j = 0; j < user_factors.dim2; j++)
+                    	writer.WriteLine(i + " " + j + " " + user_factors[i, j].ToString(ni));
 
-            	writer.WriteLine(item_feature.dim1 + " " + item_feature.dim2);
-            	for (int i = 0; i < item_feature.dim1; i++)
-                	for (int j = 0; j < item_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + item_feature[i, j].ToString(ni));
+            	writer.WriteLine(item_factors.dim1 + " " + item_factors.dim2);
+            	for (int i = 0; i < item_factors.dim1; i++)
+                	for (int j = 0; j < item_factors.dim2; j++)
+                    	writer.WriteLine(i + " " + j + " " + item_factors[i, j].ToString(ni));
 			}
 		}
 
@@ -347,13 +345,13 @@ namespace MyMediaLite.rating_predictor
 
             	// assign new model
             	this.global_bias = bias;
-				if (this.num_features != num_user_features)
+				if (this.num_factors != num_user_features)
 				{
 					Console.Error.WriteLine("Set num_features to {0}", num_user_features);
-            		this.num_features = num_user_features;
+            		this.num_factors = num_user_features;
 				}
-            	this.user_feature = user_feature;
-            	this.item_feature = item_feature;
+            	this.user_factors = user_feature;
+            	this.item_factors = item_feature;
 			}
         }
 
@@ -376,7 +374,7 @@ namespace MyMediaLite.rating_predictor
 			
 			return string.Format(ni,
 			                     "matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
-				                 NumFeatures, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+				                 NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
     }
 }

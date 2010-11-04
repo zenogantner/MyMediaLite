@@ -100,7 +100,7 @@ namespace MyMediaLite.item_recommender
 		{
 			int num_pos_events = data_user.NumberOfEntries;
 
-			user_feature.SetColumnToOneValue(0, 1.0);
+			user_factors.SetColumnToOneValue(0, 1.0);
 
 			for (int i = 0; i < num_pos_events * iteration_length; i++)
 			{
@@ -211,45 +211,45 @@ namespace MyMediaLite.item_recommender
 			if (item_bias)
 			{
 				start_feature = 1;
-				double w_uf = user_feature[u, 0];
-				double h_if = item_feature[i, 0];
-				double h_jf = item_feature[j, 0];
+				double w_uf = user_factors[u, 0];
+				double h_if = item_factors[i, 0];
+				double h_jf = item_factors[j, 0];
 
 				if (update_i)
 				{
 					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
-					item_feature[i, 0] = h_if + learn_rate * if_update;
+					item_factors[i, 0] = h_if + learn_rate * if_update;
 				}
 
 				if (update_j)
 				{
 					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
-					item_feature[j, 0] = h_jf + learn_rate * jf_update;
+					item_factors[j, 0] = h_jf + learn_rate * jf_update;
 				}
 			}
 
-			for (int f = start_feature; f < num_features; f++)
+			for (int f = start_feature; f < num_factors; f++)
 			{
-				double w_uf = user_feature[u, f];
-				double h_if = item_feature[i, f];
-				double h_jf = item_feature[j, f];
+				double w_uf = user_factors[u, f];
+				double h_if = item_factors[i, f];
+				double h_jf = item_factors[j, f];
 
 				if (update_u)
 				{
 					double uf_update = (h_if - h_jf) / (1 + Math.Exp(x_uij)) - reg_u * w_uf;
-					user_feature[u, f] = w_uf + learn_rate * uf_update;
+					user_factors[u, f] = w_uf + learn_rate * uf_update;
 				}
 
 				if (update_i)
 				{
 					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
-					item_feature[i, f] = h_if + learn_rate * if_update;
+					item_factors[i, f] = h_if + learn_rate * if_update;
 				}
 
 				if (update_j)
 				{
 					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
-					item_feature[j, f] = h_jf + learn_rate * jf_update;
+					item_factors[j, f] = h_jf + learn_rate * jf_update;
 				}
 			}
 		}
@@ -285,8 +285,8 @@ namespace MyMediaLite.item_recommender
 		{
 			if (user_id > MaxUserID)
 			{
-				user_feature.AddRows(user_id + 1);
-				MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
+				user_factors.AddRows(user_id + 1);
+				MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 			}
 
 			base.AddUser(user_id);
@@ -297,8 +297,8 @@ namespace MyMediaLite.item_recommender
 		{
 			if (item_id > MaxItemID)
 			{
-				item_feature.AddRows(item_id + 1);
-				MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
+				item_factors.AddRows(item_id + 1);
+				MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 			}
 
 			base.AddItem(item_id);
@@ -316,7 +316,7 @@ namespace MyMediaLite.item_recommender
 			}
 
 			// set user features to zero
-			user_feature.SetRowToOneValue(user_id, 0);
+			user_factors.SetRowToOneValue(user_id, 0);
 		}
 
 		/// <inheritdoc/>
@@ -328,14 +328,14 @@ namespace MyMediaLite.item_recommender
 			//      (however: not needed if all feedback events have been removed properly before)
 
 			// set item features to zero
-			item_feature.SetRowToOneValue(item_id, 0);
+			item_factors.SetRowToOneValue(item_id, 0);
 		}
 
 		/// <summary>Retrain the features of a given user</summary>
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.InitNormal(user_feature, InitMean, InitStdev, user_id);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 
 			HashSet<int> user_items = data_user[user_id];
 			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
@@ -349,7 +349,7 @@ namespace MyMediaLite.item_recommender
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.InitNormal(item_feature, InitMean, InitStdev, item_id);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 
 			int num_pos_events = data_user.NumberOfEntries;
 			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
@@ -462,7 +462,7 @@ namespace MyMediaLite.item_recommender
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni, "BPR-MF num_features={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
-			                     num_features, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
+			                     num_factors, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
 }

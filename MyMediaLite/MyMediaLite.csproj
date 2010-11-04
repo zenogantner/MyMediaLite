@@ -136,7 +136,7 @@
     <Compile Include="IUserRelationAwareRecommender.cs" />
     <Compile Include="IItemRelationAwareRecommender.cs" />
     <Compile Include="util\Engine.cs" />
-    <Compile Include="IMatrixFactorization.cs" />
+    <Compile Include="ILatentFactorModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

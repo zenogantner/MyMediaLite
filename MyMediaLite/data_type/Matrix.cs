@@ -21,11 +21,11 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.data_type
 {
-    /// <summary>
-    /// Class for storing dense matrices.
+    /// <summary>Class for storing dense matrices</summary>
+    /// <remarks>
     /// The data is stored in row-major mode.
     /// Indexes are zero-based.
-    /// </summary>
+    /// </remarks>
     /// <typeparam name="T"></typeparam>
     public class Matrix<T>
     {
@@ -49,9 +49,7 @@ namespace MyMediaLite.data_type
 			}
 		}
 		
-        /// <summary>
-        /// Initializes a new instance of the Matrix class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the Matrix class</summary>
         /// <param name="dim1">the number of rows</param>
         /// <param name="dim2">the number of columns</param>
         public Matrix(int dim1, int dim2)
@@ -98,9 +96,7 @@ namespace MyMediaLite.data_type
         	}
 		}
 
-		/// <summary>
-		/// Returns a copy of the i-th row of the matrix
-		/// </summary>
+		/// <summary>Returns a copy of the i-th row of the matrix</summary>
 		/// <param name="i">the row ID</param>
 		/// <returns>A <see cref="T[]"/> containing the row data</returns>
 		public T[] GetRow(int i)
@@ -112,9 +108,7 @@ namespace MyMediaLite.data_type
 			return row;
 		}
 
-		/// <summary>
-		/// Returns a copy of the j-th column of the matrix
-		/// </summary>
+		/// <summary>Returns a copy of the j-th column of the matrix</summary>
 		/// <param name="j">the column ID</param>
 		/// <returns><see cref="T[]"/> containing the column data</returns>
 		public T[] GetColumn(int j)
@@ -125,9 +119,7 @@ namespace MyMediaLite.data_type
 			return column;
 		}
 
-		/// <summary>
-		/// Sets the values of the i-th row to the values in a given array
-		/// </summary>
+		/// <summary>Sets the values of the i-th row to the values in a given array</summary>
 		/// <param name="i">the row ID</param>
 		/// <param name="row">A <see cref="T[]"/> of length dim1</param>
 		public void SetRow(int i, T[] row)

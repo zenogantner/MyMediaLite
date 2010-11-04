@@ -57,7 +57,7 @@ Architecture
    - prediction values (in C++ port)
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
-   - more correlation/similarity measures (Jaccard index)
+   - more correlation/similarity measures (e.g. Jaccard index)
    - user-defined similarities
  - generic optimization interface and algorithms (compare Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
@@ -71,6 +71,7 @@ Architecture
  - GPU support
  - support for distributed computing
  - webservice interface
+ - move unit tests out of main library
 Misc
  - faster evaluation routines
    - approximate AUC

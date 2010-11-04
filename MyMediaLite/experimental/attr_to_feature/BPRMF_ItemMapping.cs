@@ -50,7 +50,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-feature weight matrix
-			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_features);
+			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_factors);
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
@@ -71,15 +71,15 @@ namespace MyMediaLite.experimental.attr_to_feature
 				old_rmse_per_feature[h] = ComputeMappingFit();
 			}
 
-			double[] min_rmse_per_feature = new double[num_features];
-			for (int i = 0; i < num_features; i++)
+			double[] min_rmse_per_feature = new double[num_factors];
+			for (int i = 0; i < num_factors; i++)
 				min_rmse_per_feature[i] = Double.MaxValue;
-			int[] best_feature_init       = new int[num_features];
+			int[] best_feature_init       = new int[num_factors];
 
 			// find best feature mappings:
 			for (int i = 0; i < num_init_mapping; i++)
 			{
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 				{
 					if (old_rmse_per_feature[i][j] < min_rmse_per_feature[j])
 					{
@@ -90,7 +90,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 
 			// set the best weight combinations for each feature mapping
-			for (int i = 0; i < num_features; i++)
+			for (int i = 0; i < num_factors; i++)
 			{
 				Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
 
@@ -135,9 +135,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			double[] est_features = MapToLatentFeatureSpace(item_id);
 
-			for (int j = 0; j < num_features; j++) {
+			for (int j = 0; j < num_factors; j++) {
 				// TODO: do we need an absolute term here???
-				double diff = est_features[j] - item_feature[item_id, j];
+				double diff = est_features[j] - item_factors[item_id, j];
 				if (diff > 0)
 				{
 					foreach (int attribute in item_attributes[item_id])
@@ -164,7 +164,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			double rmse    = 0;
 			double penalty = 0;
-			double[] rmse_and_penalty_per_feature = new double[num_features];
+			double[] rmse_and_penalty_per_feature = new double[num_factors];
 
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
@@ -177,9 +177,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 				num_items++;
 
 				double[] est_features = MapToLatentFeatureSpace(i);
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 				{
-					double error    = Math.Pow(est_features[j] - item_feature[i, j], 2);
+					double error    = Math.Pow(est_features[j] - item_factors[i, j], 2);
 					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
@@ -187,13 +187,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 				}
 			}
 
-			for (int i = 0; i < num_features; i++)
+			for (int i = 0; i < num_factors; i++)
 			{
 				rmse_and_penalty_per_feature[i] = (double) rmse_and_penalty_per_feature[i] / num_items;
 				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_feature[i]);
 			}
-			rmse    = (double) rmse    / (num_features * num_items);
-			penalty = (double) penalty / (num_features * num_items);
+			rmse    = (double) rmse    / (num_factors * num_items);
+			penalty = (double) penalty / (num_factors * num_items);
 			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
 
 			return rmse_and_penalty_per_feature;
@@ -211,13 +211,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			HashSet<int> item_attributes = this.item_attributes[item_id];
 
-			double[] feature_representation = new double[num_features];
-			for (int j = 0; j < num_features; j++)
+			double[] feature_representation = new double[num_factors];
+			for (int j = 0; j < num_factors; j++)
 				// bias
 				feature_representation[j] = attribute_to_feature[NumItemAttributes, j];
 
 			foreach (int i in item_attributes)
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
@@ -226,26 +226,26 @@ namespace MyMediaLite.experimental.attr_to_feature
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id >= user_feature.dim1))
+            if ((user_id < 0) || (user_id >= user_factors.dim1))
             {
                 //Console.Error.WriteLine("user is unknown: " + user_id);
 				return double.MinValue;
             }
-            if ((item_id < 0) || (item_id >= item_feature.dim1))
+            if ((item_id < 0) || (item_id >= item_factors.dim1))
             {
                 //Console.Error.WriteLine("item is unknown: " + item_id);
 				return double.MinValue;
             }
 
 			double[] est_features = MapToLatentFeatureSpace(item_id);
-            return MatrixUtils.RowScalarProduct(user_feature, user_id, est_features);
+            return MatrixUtils.RowScalarProduct(user_factors, user_id, est_features);
         }
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-ItemMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev);
+				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev);
 		}
 
 	}

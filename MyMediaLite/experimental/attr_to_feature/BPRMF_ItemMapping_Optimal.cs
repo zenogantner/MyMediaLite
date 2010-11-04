@@ -32,16 +32,16 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		public override void LearnAttributeToFactorMapping()
 		{
-			this.feature_bias = new double[num_features];
+			this.feature_bias = new double[num_factors];
 			if (this.mapping_feature_bias)
-				for (int i = 0; i < num_features; i++)
+				for (int i = 0; i < num_factors; i++)
 				{
-					feature_bias[i] = MatrixUtils.ColumnAverage(item_feature, i);
+					feature_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
 					Console.Error.WriteLine("fb {0}: {1}", i, feature_bias[i]);
 				}
 
 
-			attribute_to_feature = new Matrix<double>(NumItemAttributes, num_features);
+			attribute_to_feature = new Matrix<double>(NumItemAttributes, num_factors);
 			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
@@ -78,9 +78,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 			HashSet<int> attr_j_over_i = new HashSet<int>(attr_j);
 			attr_j_over_i.ExceptWith(attr_i);
 
-			for (int f = 0; f < num_features; f++)
+			for (int f = 0; f < num_factors; f++)
 			{
-				double w_uf = user_feature[u, f];
+				double w_uf = user_factors[u, f];
 
 				// update attribute-feature parameter for features which are different between the items
 				foreach (int a in attr_i_over_j)
@@ -102,14 +102,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
 			HashSet<int> attributes = this.item_attributes[item_id];
-			double[] feature_representation = new double[num_features];
+			double[] feature_representation = new double[num_factors];
 
 			if (this.mapping_feature_bias)
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 					feature_representation[j] = feature_bias[j];
 
 			foreach (int i in attributes)
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
@@ -125,7 +125,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, mapping_feature_bias={9}, init_f_mean={10}, init_f_stdev={11}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, mapping_feature_bias, init_mean, init_stdev);
+				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, mapping_feature_bias, init_mean, init_stdev);
 		}
 
 	}

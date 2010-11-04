@@ -46,10 +46,10 @@ namespace MyMediaLite.rating_predictor
         public override void Train()
 		{
 			// init feature matrices
-	       	user_feature = new Matrix<double>(MaxUserID + 1, num_features);
-	       	item_feature = new Matrix<double>(MaxItemID + 1, num_features);
-	       	MatrixUtils.InitNormal(user_feature, InitMean, InitStdev);
-	       	MatrixUtils.InitNormal(item_feature, InitMean, InitStdev);
+	       	user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
+	       	item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
+	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 
 			// TODO use a Vector datatype
 			user_bias = new double[MaxUserID + 1];
@@ -85,8 +85,8 @@ namespace MyMediaLite.rating_predictor
                 int i = rating.item_id;
 
 				double dot_product = global_bias + user_bias[u] + item_bias[i];
-	            for (int f = 0; f < num_features; f++)
-    	            dot_product += user_feature[u, f] * item_feature[i, f];
+	            for (int f = 0; f < num_factors; f++)
+    	            dot_product += user_factors[u, f] * item_factors[i, f];
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
                 double p = MinRating + sig_dot * rating_range_size;
@@ -101,22 +101,22 @@ namespace MyMediaLite.rating_predictor
 					item_bias[i] += learn_rate * (gradient_common - bias_regularization * item_bias[i]);
 				
 				// Adjust latent features
-                for (int f = 0; f < num_features; f++)
+                for (int f = 0; f < num_factors; f++)
                 {
-                 	double u_f = user_feature[u, f];
-                    double i_f = item_feature[i, f];
+                 	double u_f = user_factors[u, f];
+                    double i_f = item_factors[i, f];
 
                     if (update_user)
 					{
 						double delta_u = gradient_common * i_f - regularization * u_f;
-						MatrixUtils.Inc(user_feature, u, f, learn_rate * delta_u);
+						MatrixUtils.Inc(user_factors, u, f, learn_rate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
 						//    user_feature[u, f] += learn_rate * delta_u;
 					}
                     if (update_item)
 					{
 						double delta_i = gradient_common * u_f - regularization * i_f;
-						MatrixUtils.Inc(item_feature, i, f, learn_rate * delta_i);
+						MatrixUtils.Inc(item_factors, i, f, learn_rate * delta_i);
 						// item_feature[i, f] += learn_rate * delta_i;
 					}
                 }
@@ -126,14 +126,14 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public override double Predict(int user_id, int item_id)
         {
-            if (user_id >= user_feature.dim1 || item_id >= item_feature.dim1)
+            if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return MinRating + ( 1 / (1 + Math.Exp(-global_bias)) ) * (MaxRating - MinRating);
 
 			double dot_product = global_bias + user_bias[user_id] + item_bias[item_id];
 
             // U*V
-            for (int f = 0; f < num_features; f++)
-                dot_product += user_feature[user_id, f] * item_feature[item_id, f];
+            for (int f = 0; f < num_factors; f++)
+                dot_product += user_factors[user_id, f] * item_factors[item_id, f];
 
 			return MinRating + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRating - MinRating);
         }
@@ -146,7 +146,7 @@ namespace MyMediaLite.rating_predictor
 			
 			return string.Format(ni,
 			                     "biased-matrix-factorization num_features={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
-				                 NumFeatures, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+				                 NumFactors, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }

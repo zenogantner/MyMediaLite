@@ -21,20 +21,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MyMediaLite.data_type;
+using MyMediaLite.taxonomy;
 using MyMediaLite.util;
 
 
 namespace MyMediaLite.item_recommender
 {
-    /// <summary>
-    /// Abstract class for matrix factorization based item predictors
-    /// </summary>
-    public abstract class MF : Memory, IIterativeModel
+    /// <summary>Abstract class for matrix factorization based item predictors</summary>
+    public abstract class MF : Memory, IIterativeModel, ILatentFactorModel
     {
-        /// <summary>User feature matrix</summary>
-        protected Matrix<double> user_feature;
-        /// <summary>Item feature matrix</summary>
-        protected Matrix<double> item_feature;
+        /// <summary>Latent user factor matrix</summary>
+        protected Matrix<double> user_factors;
+        /// <summary>Latent item factor matrix</summary>
+        protected Matrix<double> item_factors;
 
         /// <summary>Mean of the normal distribution used to initialize the features</summary>
 		public double InitMean { get { return init_mean; } set { init_mean = value;	} }
@@ -46,10 +45,10 @@ namespace MyMediaLite.item_recommender
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
         protected double init_stdev = 0.1;
 
-        /// <summary>Number of features</summary>
-		public int NumFeatures { get { return num_features;	} set { num_features = value; }	}
-        /// <summary>Number of features</summary>
-        protected int num_features = 10;
+        /// <summary>Number of latent factors per user/item</summary>
+		public int NumFactors { get { return num_factors; } set { num_factors = value; } }
+        /// <summary>Number of latent factors per user/item</summary>
+        protected int num_factors = 10;
 
 		/// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
@@ -58,28 +57,22 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc />
         public override void Train()
         {
-			user_feature = new Matrix<double>(MaxUserID + 1, num_features);
-        	item_feature = new Matrix<double>(MaxItemID + 1, num_features);
+			user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
+        	item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
 
-            MatrixUtils.InitNormal(user_feature, init_mean, init_stdev);
-        	MatrixUtils.InitNormal(item_feature, init_mean, init_stdev);
+            MatrixUtils.InitNormal(user_factors, init_mean, init_stdev);
+        	MatrixUtils.InitNormal(item_factors, init_mean, init_stdev);
 
 			for (int i = 0; i < num_iter; i++)
 				Iterate();
         }
 
-		/// <summary>
-		/// Iterate once over the data
-		/// </summary>
+		/// <summary>Iterate once over the data</summary>
 		/// <returns>true if training should be aborted</returns>
 		public abstract void Iterate();
 
-		/// <summary>
-		/// Computes the fit (optimization criterion) on the training data
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.Double"/> representing the fit
-		/// </returns>
+		/// <summary>Computes the fit (optimization criterion) on the training data</summary>
+		/// <returns>a double representing the fit, lower is better</returns>
 		public abstract double ComputeFit();
 
 		/// <summary>
@@ -93,23 +86,43 @@ namespace MyMediaLite.item_recommender
 		/// <returns>the predicted weight</returns>
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id >= user_feature.dim1))
+            if ((user_id < 0) || (user_id >= user_factors.dim1))
             {
                 Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
             }
-            if ((item_id < 0) || (item_id >= item_feature.dim1))
+            if ((item_id < 0) || (item_id >= item_factors.dim1))
             {
                 Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
             }
 
             double result = 0;
-            for (int f = 0; f < num_features; f++)
-                result += user_feature[user_id, f] * item_feature[item_id, f];
+            for (int f = 0; f < num_factors; f++)
+                result += user_factors[user_id, f] * item_factors[item_id, f];
             return result;
         }
 
+		/// <inheritdoc />
+		public double[] GetLatentFactors(EntityType entity_type, int id)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					if (id < user_factors.dim1)
+						return user_factors.GetRow(id);
+					else
+						throw new ArgumentException("Unknown user: " + id);
+				case EntityType.ITEM:
+					if (id < item_factors.dim1)
+						return item_factors.GetRow(id);
+					else
+						throw new ArgumentException("Unknown item: " + id);
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}
+		
 		/// <inheritdoc />
 		public override void SaveModel(string fileName)
 		{
@@ -119,15 +132,15 @@ namespace MyMediaLite.item_recommender
 			using ( StreamWriter writer = Engine.GetWriter(fileName, GetType()) )
 			{
 				// TODO move matrix reading and writing to the MatrixUtils class
-            	writer.WriteLine(user_feature.dim1 + " " + user_feature.dim2);
-            	for (int i = 0; i < user_feature.dim1; i++)
-                	for (int j = 0; j < user_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + user_feature[i, j].ToString(ni));
+            	writer.WriteLine(user_factors.dim1 + " " + user_factors.dim2);
+            	for (int i = 0; i < user_factors.dim1; i++)
+                	for (int j = 0; j < user_factors.dim2; j++)
+                    	writer.WriteLine(i + " " + j + " " + user_factors[i, j].ToString(ni));
 
-            	writer.WriteLine(item_feature.dim1 + " " + item_feature.dim2);
-            	for (int i = 0; i < item_feature.dim1; i++)
-                	for (int j = 0; j < item_feature.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + item_feature[i, j].ToString(ni));
+            	writer.WriteLine(item_factors.dim1 + " " + item_factors.dim2);
+            	for (int i = 0; i < item_factors.dim1; i++)
+                	for (int j = 0; j < item_factors.dim2; j++)
+                    	writer.WriteLine(i + " " + j + " " + item_factors[i, j].ToString(ni));
 			}
 		}
 
@@ -188,13 +201,13 @@ namespace MyMediaLite.item_recommender
 				MaxItemID = num_items - 1;
 
             	// assign new model
-				if (this.num_features != num_features)
+				if (this.num_factors != num_features)
 				{
 					Console.Error.WriteLine("Set num_features to {0}", num_features);
-            		this.num_features = num_features;
+            		this.num_factors = num_features;
 				}
-            	this.user_feature = user_feature;
-            	this.item_feature = item_feature;
+            	this.user_factors = user_feature;
+            	this.item_factors = item_feature;
 			}
         }
     }

@@ -46,7 +46,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
-			double[] item_features = new double[num_features];
+			double[] item_features = new double[num_factors];
 
 			IList<int> relevant_items = item_correlation.GetPositivelyCorrelatedEntities(item_id);
 
@@ -54,21 +54,21 @@ namespace MyMediaLite.experimental.attr_to_feature
 			uint neighbors =  k;
 			foreach (int item_id2 in relevant_items)
 			{
-				if (item_id2 >= item_feature.dim1) // check whether item is in training data
+				if (item_id2 >= item_factors.dim1) // check whether item is in training data
 					continue;
 				if (data_item[item_id2].Count == 0)
 					continue;
 
 				double weight = item_correlation[item_id, item_id2];
 				weight_sum += weight;
-				for (int f = 0; f < num_features; f++)
-					item_features[f] += weight * item_feature[item_id2, f];
+				for (int f = 0; f < num_factors; f++)
+					item_features[f] += weight * item_factors[item_id2, f];
 
 				if (--neighbors == 0)
 					break;
 			}
 
-			for (int f = 0; f < num_features; f++)
+			for (int f = 0; f < num_factors; f++)
 				item_features[f] /= weight_sum;
 
 			return item_features;
@@ -79,7 +79,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_f_mean={7}, init_f_stdev={8}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev);
+				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev);
 		}
 
 	}

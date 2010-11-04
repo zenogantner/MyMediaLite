@@ -18,10 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using MyMediaLite.data_type;
-using MyMediaLite.util;
 
 
 namespace MyMediaLite.item_recommender
@@ -45,21 +42,20 @@ namespace MyMediaLite.item_recommender
     /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
     public class WRMF : MF
     {
-        /// <summary>
-        /// Regularization parameter
-        /// </summary>
-        public double regularization = 0.015;
-        /// <summary>
-        /// C position: the weight/confidence that is put on positive observations
-        /// </summary>
-        public double c_pos = 1;
+        /// <summary>C position: the weight/confidence that is put on positive observations</summary>
+		public double CPos { get { return c_pos; } set { c_pos = value;	} }
+        double c_pos = 1;
+
+        /// <summary>Regularization parameter</summary>
+		public double Regularization { get { return regularization;	} set {	regularization = value;	} }
+        double regularization = 0.015;
 
 		/// <inheritdoc />
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
-        	optimize(data_user, user_feature, item_feature);
-            optimize(data_item, item_feature, user_feature);
+        	optimize(data_user, user_factors, item_factors);
+            optimize(data_item, item_factors, user_factors);
 		}
 
         /// <summary>
@@ -70,17 +66,17 @@ namespace MyMediaLite.item_recommender
         /// <param name="H">The H.</param>
         protected void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
         {
-            Matrix<double> HH   = new Matrix<double>(num_features, num_features);
-            Matrix<double> HCIH = new Matrix<double>(num_features, num_features);
-            double[] HCp = new double[num_features];
+            Matrix<double> HH   = new Matrix<double>(num_factors, num_factors);
+            Matrix<double> HCIH = new Matrix<double>(num_factors, num_factors);
+            double[] HCp = new double[num_factors];
 
-            MathNet.Numerics.LinearAlgebra.Matrix m = new MathNet.Numerics.LinearAlgebra.Matrix(num_features, num_features);
+            MathNet.Numerics.LinearAlgebra.Matrix m = new MathNet.Numerics.LinearAlgebra.Matrix(num_factors, num_factors);
             MathNet.Numerics.LinearAlgebra.Matrix m_inv;
 
             // (1) create HH in O(f^2|I|)
             // HH is symmetric
-            for (int f_1 = 0; f_1 < num_features; f_1++)
-                for (int f_2 = 0; f_2 < num_features; f_2++)
+            for (int f_1 = 0; f_1 < num_factors; f_1++)
+                for (int f_2 = 0; f_2 < num_factors; f_2++)
                 {
                     double d = 0;
                     for (int i = 0; i < H.dim1; i++)
@@ -93,8 +89,8 @@ namespace MyMediaLite.item_recommender
             {
                 HashSet<int> row = data[u];
                 // create HCIH in O(f^2|S_u|)
-                for (int f_1 = 0; f_1 < num_features; f_1++)
-                    for (int f_2 = 0; f_2 < num_features; f_2++)
+                for (int f_1 = 0; f_1 < num_factors; f_1++)
+                    for (int f_2 = 0; f_2 < num_factors; f_2++)
                     {
                         double d = 0;
                         foreach (int i in row)
@@ -102,7 +98,7 @@ namespace MyMediaLite.item_recommender
                         HCIH[f_1, f_2] = d;
                     }
                 // create HCp in O(f|S_u|)
-                for (int f = 0; f < num_features; f++)
+                for (int f = 0; f < num_factors; f++)
                 {
                     double d = 0;
                     foreach (int i in row)
@@ -112,8 +108,8 @@ namespace MyMediaLite.item_recommender
                 // create m = HH + HCp + gamma*I
                 // m is symmetric
                 // the inverse m_inv is symmetric
-                for (int f_1 = 0; f_1 < num_features; f_1++)
-                    for (int f_2 = 0; f_2 < num_features; f_2++)
+                for (int f_1 = 0; f_1 < num_factors; f_1++)
+                    for (int f_2 = 0; f_2 < num_factors; f_2++)
                     {
                         double d = HH[f_1, f_2] + HCIH[f_1, f_2];
                         if (f_1 == f_2)
@@ -122,10 +118,10 @@ namespace MyMediaLite.item_recommender
                     }
                 m_inv = m.Inverse();
                 // write back optimal W
-                for (int f = 0; f < num_features; f++)
+                for (int f = 0; f < num_factors; f++)
                 {
                     double d = 0;
-                    for (int f_2 = 0; f_2 < num_features; f_2++)
+                    for (int f_2 = 0; f_2 < num_factors; f_2++)
                         d += m_inv[f, f_2] * HCp[f_2];
                     W[u, f] = d;
                 }
@@ -142,10 +138,10 @@ namespace MyMediaLite.item_recommender
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';						
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni, "WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-				                 num_features, regularization, c_pos, NumIter, InitMean, InitStdev);
+				                 num_factors, regularization, c_pos, NumIter, InitMean, InitStdev);
 		}
     }
 }

@@ -33,7 +33,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-feature weight matrix
-			attribute_to_feature = new Matrix<double>(NumUserAttributes, num_features);
+			attribute_to_feature = new Matrix<double>(NumUserAttributes, num_factors);
 
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
@@ -67,9 +67,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			HashSet<int> attr_u = user_attributes[u];
 
-			for (int f = 0; f < num_features; f++)
+			for (int f = 0; f < num_factors; f++)
 			{
-				double diff = item_feature[i, f] - item_feature[j, f];
+				double diff = item_factors[i, f] - item_factors[j, f];
 
 				foreach (int a in attr_u)
 				{
@@ -83,10 +83,10 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		protected override double[] MapUserToLatentFeatureSpace(HashSet<int> user_attributes)
 		{
-			double[] feature_representation = new double[num_features];
+			double[] feature_representation = new double[num_factors];
 
 			foreach (int i in user_attributes)
-				for (int j = 0; j < num_features; j++)
+				for (int j = 0; j < num_factors; j++)
 					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
@@ -96,7 +96,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-UserMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev);
+				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev);
 		}
 
 	}

@@ -62,14 +62,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 			svm_parameters.C     = this.C;
 			svm_parameters.Gamma = this.Gamma;
 
-			models = new Model[num_features];
-			for (int f = 0; f < num_features; f++)
+			models = new Model[num_factors];
+			for (int f = 0; f < num_factors; f++)
 			{
 				double[] targets = new double[svm_features.Count];
 				for (int i = 0; i < svm_features.Count; i++)
 				{
 					int item_id = relevant_items[i];
-					targets[i] = item_feature[item_id, f];
+					targets[i] = item_factors[item_id, f];
 				}
 
 				Problem svm_problem = new Problem(svm_features.Count, targets, svm_features_array, NumItemAttributes - 1);
@@ -82,9 +82,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
-			double[] item_features = new double[num_features];
+			double[] item_features = new double[num_factors];
 
-			for (int f = 0; f < num_features; f++)
+			for (int f = 0; f < num_factors; f++)
 				item_features[f] = SVM.Prediction.Predict(models[f], CreateNodes(item_id));
 
 			return item_features;
@@ -105,7 +105,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			return string.Format("BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_f_mean={8}, init_f_stdev={9}",
-				                 num_features, reg_u, reg_i, reg_j, NumIter, learn_rate, C, Gamma, init_mean, init_stdev);
+				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, C, Gamma, init_mean, init_stdev);
 		}
 
 	}
