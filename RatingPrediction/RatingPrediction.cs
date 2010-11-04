@@ -118,7 +118,7 @@ namespace RatingPrediction
 			Environment.Exit(exit_code);
 		}
 
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);

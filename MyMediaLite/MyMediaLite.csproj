@@ -56,7 +56,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="correlation\Pearson.cs" />
     <Compile Include="correlation\CorrelationMatrix.cs" />
     <Compile Include="correlation\Cosine.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="util\Engine.cs" />
     <Compile Include="ILatentFactorModel.cs" />
     <Compile Include="experimental\attr_to_feature\IAttributeToFactors.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -160,6 +160,7 @@
     <Folder Include="experimental\attr_to_feature\" />
     <Folder Include="ensemble\" />
     <Folder Include="experimental\rating_prediction\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\SVM\SVM.csproj">

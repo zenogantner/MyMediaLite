@@ -40,7 +40,7 @@ namespace MyMediaLite.item_recommender
 
         /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
 		public double InitStdev { get {	return init_stdev; } set { init_stdev = value; } }
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
+        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
         protected double init_stdev = 0.1;
 
         /// <summary>Number of latent factors per user/item</summary>
@@ -133,8 +133,8 @@ namespace MyMediaLite.item_recommender
 				default:
 					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
 			}
-		}		
-		
+		}
+
 		/// <inheritdoc />
 		public override void SaveModel(string fileName)
 		{
