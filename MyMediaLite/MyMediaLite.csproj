@@ -7,7 +7,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
     <SignAssembly>true</SignAssembly>
@@ -160,7 +159,6 @@
     <Folder Include="experimental\attr_to_feature\" />
     <Folder Include="ensemble\" />
     <Folder Include="experimental\rating_prediction\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\SVM\SVM.csproj">
