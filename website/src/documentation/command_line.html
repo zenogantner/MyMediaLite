@@ -83,7 +83,7 @@ to integrate the library in your application or having to develop your own progr
     </pre>
     which yields better result than the user average:
     <pre>
-    biased-matrix-factorization num_features=10 regularization=0.015 learn_rate=0.01 num_iter=30
+    biased-matrix-factorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30
                                 init_mean=0 init_stdev=0.1
     training_time 00:00:03.3575780 RMSE 0.96108 MAE 0.75124 testing_time 00:00:00.0159740
     </pre>
@@ -91,7 +91,7 @@ to integrate the library in your application or having to develop your own progr
     that may be modified to get even better results. For instance, we could use more latent features
     per user and item, which leads to a more complex (and hopefully more accurate) model:
     <pre>
-    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20
+    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_factors=20
     ...
     ... RMSE 0.98029 MAE 0.76558
     </pre>
@@ -105,7 +105,7 @@ to integrate the library in your application or having to develop your own progr
     &quot;From iteration B on, give out the evaluation results on the test set every A iterations,
     until you reach iteration C.&quot;
     <pre>
-    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_features=20 find_iter=1 max_iter=25 num_iter=0
+    mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization num_factors=20 find_iter=1 max_iter=25 num_iter=0
     ...
     RMSE 1.17083 MAE 0.96918 0
     RMSE 1.01383 MAE 0.8143 1
