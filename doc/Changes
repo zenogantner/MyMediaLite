@@ -2,7 +2,7 @@
 	engines
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
         interfaces
-         - new interface ILatentFactorModel
+         - new interfaces ILatentFactorModel and IAttributeToFactors
 	command-line programs
          - exception handler: encourage users to file bug reports
         misc

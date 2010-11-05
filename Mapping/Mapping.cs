@@ -298,9 +298,6 @@ namespace Mapping
 		
 		static void DisplayDataStats()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			// training data stats
 			int num_users = training_data.First.NonEmptyRowIDs.Count;
 			int num_items = training_data.Second.NonEmptyRowIDs.Count;

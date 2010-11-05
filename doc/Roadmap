@@ -82,3 +82,4 @@ Misc
  - put website and flyer into different git repositories
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
+ - document how to set up C# development environment for Ubuntu, Debian, etc.
