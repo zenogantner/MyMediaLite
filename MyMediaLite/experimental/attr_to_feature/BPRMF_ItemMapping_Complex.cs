@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.data_type;
 using MyMediaLite.item_recommender;
@@ -169,8 +170,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format("BPR-MF-ItemMapping-Complex num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_features={9}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_features, init_mean, init_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';						
+			
+			return string.Format(
+				ni,
+				"BPR-MF-ItemMapping-Complex num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_features={9}, init_mean={9}, init_stdev={10}",
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_features, init_mean, init_stdev
+			);
 		}
 
 	}

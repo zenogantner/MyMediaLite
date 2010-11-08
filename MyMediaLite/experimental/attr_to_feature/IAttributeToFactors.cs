@@ -31,14 +31,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 	public interface IAttributeToFactors
 	{
 		/// <summary>Learn mapping from an attribute space to a latent factor space</summary>
-		void LearnAttributeToFactorMapping(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features);
+		void LearnAttributeToFactorMapping(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features, Object dataset);
 
 		/// <summary>Compute the component-wise fits on the given latent factors</summary>
-		double[] ComputeComponentFit(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features);		
+		double[] ComputeComponentFit(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features);
 
 		/// <summary>Compute the overall fit on the given latent factors</summary>
-		double ComputeOverallFit(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features);		
-		
+		double ComputeOverallFit(SparseBooleanMatrix binary_attributes, Matrix<double> latent_features, Object dataset);
+
 		/// <summary>Map from the attribute space to the factor space</summary>
 		double[] Map(HashSet<int> attributes);
 	}

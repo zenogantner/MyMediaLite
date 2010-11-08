@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -44,9 +45,17 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }		
 		
+		/// <summary>
+		/// use a bias term for each mapping
+		/// </summary>
 		public bool mapping_feature_bias = false;
+		
+		/// <summary>
+		/// array to store the bias for each mapping
+		/// </summary>
 		protected double[] feature_bias;
 
+		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-feature weight matrix
@@ -222,12 +231,12 @@ namespace MyMediaLite.experimental.attr_to_feature
         {
             if ((user_id < 0) || (user_id >= user_factors.dim1))
             {
-                //Console.Error.WriteLine("user is unknown: " + user_id);
+                Console.Error.WriteLine("user is unknown: " + user_id);
 				return double.MinValue;
             }
             if ((item_id < 0) || (item_id >= item_factors.dim1))
             {
-                //Console.Error.WriteLine("item is unknown: " + item_id);
+                Console.Error.WriteLine("item is unknown: " + item_id);
 				return double.MinValue;
             }
 
@@ -238,8 +247,14 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format("BPR-MF-ItemMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_f_mean={9}, init_f_stdev={10}",
-				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+			
+			return string.Format(
+				ni,
+			    "BPR-MF-ItemMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
+			);
 		}
 
 	}

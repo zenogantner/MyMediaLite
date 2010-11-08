@@ -54,9 +54,11 @@ namespace MyMediaLite.eval
         /// and the number of items that were taken into account.
         ///
         /// Literature:
-        ///   C. Manning, P. Raghavan, H. Schütze
-        ///   Introduction to Information Retrieval,
-        ///   Cambridge University Press, 2008
+        /// <book>
+        ///   <author>C. Manning</author> <author>P. Raghavan</author> <author>H. Schütze</author>
+        ///   <title>Introduction to Information Retrieval</title>
+        ///   <publisher>Cambridge University Press</publisher> <year>2008</year>
+        /// </book>
 		/// </remarks>
         /// <param name="engine">Item recommender engine</param>
         /// <param name="test">test cases</param>
