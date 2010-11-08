@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.correlation;
 using MyMediaLite.item_recommender;
@@ -26,10 +27,9 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
-	// TODO: store model (for debugging)
-
 	public class BPRMF_ItemMapping_kNN : BPRMF_ItemMapping
 	{
+		/// <summary>Number of neighbors to be used for mapping</summary>
 		public uint k = uint.MaxValue;
 
 		protected CorrelationMatrix item_correlation;
@@ -72,14 +72,19 @@ namespace MyMediaLite.experimental.attr_to_feature
 				item_features[f] /= weight_sum;
 
 			return item_features;
-
 		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_f_mean={7}, init_f_stdev={8}",
-				                 num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev);
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format(
+				ni,
+				"BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_mean={7}, init_stdev={8}",
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev
+			);
 		}
 
 	}

@@ -43,39 +43,39 @@ namespace MyMediaLite.rating_predictor
     {
 		/// <summary>Matrix containing the latent user factors</summary>
         protected Matrix<double> user_factors;
-		
+
 		/// <summary>Matrix containing the latent item factors</summary>
         protected Matrix<double> item_factors;
-		
+
 		/// <summary>The bias (global average)</summary>
         protected double global_bias;
 
 		/// <summary>Mean of the normal distribution used to initialize the features</summary>
 		public double InitMean { get; set; }
 
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>		
+        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
 		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
         private double init_stdev = 0.1;
 
         /// <summary>Learn rate</summary>
 		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
         /// <summary>Learn rate</summary>
-        protected double learn_rate = 0.01;		
-		
+        protected double learn_rate = 0.01;
+
         /// <summary>Number of latent features</summary>
 		public int NumFactors { get { return num_factors; } set { num_factors = value; }	}
         /// <summary>Number of latent features</summary>
-        protected int num_factors = 10;				
+        protected int num_factors = 10;
 
         /// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; } set { regularization = value; } }
-        /// <summary>Regularization parameter</summary>	
-        protected double regularization = 0.015;		
+        /// <summary>Regularization parameter</summary>
+        protected double regularization = 0.015;
 
 		/// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
         private int num_iter = 30;
-		
+
         /// <inheritdoc />
         public override void Train()
         {
@@ -182,7 +182,7 @@ namespace MyMediaLite.rating_predictor
         }
 
 		// TODO use user/item bias for prediction for unknown entities
-		
+
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
 		/// </summary>
@@ -299,8 +299,28 @@ namespace MyMediaLite.rating_predictor
 				default:
 					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
 			}
-		}				
-		
+		}
+
+		/// <inheritdoc />
+		public virtual double[] GetEntityBiases(EntityType entity_type)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					return new double[MaxUserID + 1];
+				case EntityType.ITEM:
+					return new double[MaxItemID + 1];
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}
+
+		/// <inheritdoc />
+		public double GetGlobalBias()
+		{
+			return global_bias;
+		}
+
         /// <inheritdoc />
 		public override void SaveModel(string filePath)
 		{
@@ -404,8 +424,8 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';						
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni,
 			                     "matrix-factorization num_features={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
 				                 NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);

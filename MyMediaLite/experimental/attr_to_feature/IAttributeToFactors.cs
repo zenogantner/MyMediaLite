@@ -25,9 +25,6 @@ using MyMediaLite.data_type;
 namespace MyMediaLite.experimental.attr_to_feature
 {
 	/// <summary>Interface for attribute-to-factor mappings</summary>
-	/// <remarks>
-	///
-	/// </remarks>
 	public interface IAttributeToFactors
 	{
 		/// <summary>Learn mapping from an attribute space to a latent factor space</summary>
@@ -41,6 +38,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		/// <summary>Map from the attribute space to the factor space</summary>
 		double[] Map(HashSet<int> attributes);
+		
+		/// <summary>Estimate the entity bias from the attributes</summary>
+		double EstimateBias(HashSet<int> attributes);
 	}
 }
 

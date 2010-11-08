@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
+using MyMediaLite.taxonomy;
 
 
 namespace MyMediaLite.rating_predictor
@@ -134,6 +135,20 @@ namespace MyMediaLite.rating_predictor
 			return MinRating + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRating - MinRating);
         }
 
+		/// <inheritdoc />
+		public override double[] GetEntityBiases(EntityType entity_type)
+		{
+			switch (entity_type)
+			{
+				case EntityType.USER:
+					return user_bias;
+				case EntityType.ITEM:
+					return item_bias;
+				default:
+					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
+			}
+		}		
+		
 		/// <inheritdoc />
 		public override string ToString()
 		{
