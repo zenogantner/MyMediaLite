@@ -57,16 +57,16 @@ namespace MyMediaLite.rating_predictor
 		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
         private double init_stdev = 0.1;
 
-        /// <summary>Learn rate</summary>
-		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
-        /// <summary>Learn rate</summary>
-        protected double learn_rate = 0.01;
-
         /// <summary>Number of latent features</summary>
 		public int NumFactors { get { return num_factors; } set { num_factors = value; }	}
         /// <summary>Number of latent features</summary>
         protected int num_factors = 10;
 
+        /// <summary>Learn rate</summary>
+		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
+        /// <summary>Learn rate</summary>
+        protected double learn_rate = 0.01;		
+		
         /// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; } set { regularization = value; } }
         /// <summary>Regularization parameter</summary>
