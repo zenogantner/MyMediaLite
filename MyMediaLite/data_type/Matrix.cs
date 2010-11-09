@@ -35,6 +35,9 @@ namespace MyMediaLite.data_type
         /// <summary>Dimension 2, the number of columns</summary>
         public int dim2;
 
+		// TODO IMatrix interface
+		// TODO properties NumberOfRows NumberOfColumns
+		
 		/// <summary>True if the matrix is symmetric, false otherwise</summary>
 		public virtual bool IsSymmetric
 		{

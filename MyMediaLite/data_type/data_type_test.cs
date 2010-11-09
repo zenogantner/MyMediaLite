@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Tina Lichtenthäler
+// Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -232,9 +232,7 @@ namespace MyMediaLite
 			// TODO test contents
 		}
 
-		/// <summary>
-		/// Unit test of SparseBooleanMatrix.NonEmptyRowIDs
-		/// </summary>
+		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRowIDs</summary>
 		[Test()] public void NonEmptyRowIDs()
 		{
 			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
@@ -256,9 +254,7 @@ namespace MyMediaLite
 			Assert.IsFalse(rowIDsEnum.MoveNext());
 		}
 
-		/// <summary>
-		/// Unit test of SparseBooleanMatrix.NumberOfRows
-		/// </summary>
+		/// <summary>Unit test of SparseBooleanMatrix.NumberOfRows</summary>
 		[Test()] public void NumberOfRows()
 		{
 			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
@@ -270,9 +266,19 @@ namespace MyMediaLite
 			Assert.AreEqual(5, testMatrix.NumberOfRows);
 		}
 
-		/// <summary>
-		/// Unit test of SparseBooleanMatrix.NumberOfEntries
-		/// </summary>
+		/// <summary>Unit test of SparseBooleanMatrix.NumberOfColumns</summary>
+		[Test()] public void NumberOfColumns()
+		{
+			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+			{
+				testMatrix[i, 1]= true;
+				testMatrix[i, 4]= true;
+			}
+			Assert.AreEqual(5, testMatrix.NumberOfColumns);
+		}
+		
+		/// <summary>Unit test of SparseBooleanMatrix.NumberOfEntries</summary>
 		[Test()] public void NumberOfEntries()
 		{
 			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
@@ -285,9 +291,7 @@ namespace MyMediaLite
 			Assert.AreEqual(3, testMatrix.NumberOfEntries);
 		}
 
-		/// <summary>
-		/// Unit test of SparseBooleanMatrix.RemoveColumn(int y)
-		/// </summary>
+		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int y)</summary>
 		[Test()] public void RemoveColumn()
 		{
 			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();

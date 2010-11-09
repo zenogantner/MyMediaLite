@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace MyMediaLite.data_type
@@ -123,11 +124,21 @@ namespace MyMediaLite.data_type
 			}
 		}
 
-		/// <summary>
-		/// The number of rows in the matrix
-		/// </summary>
+		/// <summary>The number of rows in the matrix</summary>
 		public int NumberOfRows	{ get { return rows.Count; } }
 
+		/// <summary>The number of columns in the matrix</summary>
+		public int NumberOfColumns {
+			get
+			{
+				int max_column_id = -1;
+				foreach (var row in rows)
+					max_column_id = Math.Max(max_column_id, row.Max());
+				
+				return max_column_id + 1;
+			}
+		}		
+		
 		/// <summary>The number of (true) entries</summary>
 		public int NumberOfEntries
 		{

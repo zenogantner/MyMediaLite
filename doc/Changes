@@ -5,6 +5,8 @@
          - new interfaces ILatentFactorModel and IAttributeToFactors
 	command-line programs
          - exception handler: encourage users to file bug reports
+        data types
+         - added property NumberOfColumns to SparseBooleanMatrix
         misc
          - code clean-ups
          - minor documentation improvements
