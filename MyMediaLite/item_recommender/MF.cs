@@ -52,7 +52,7 @@ namespace MyMediaLite.item_recommender
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
         int num_iter = 30;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
@@ -75,10 +75,11 @@ namespace MyMediaLite.item_recommender
 
 		/// <summary>
 		/// Predict the weight for a given user-item combination.
-		///
+		/// </summary>
+		/// <remarks>
 		/// If the user or the item are not known to the engine, zero is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
-		/// </summary>
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted weight</returns>
@@ -101,7 +102,7 @@ namespace MyMediaLite.item_recommender
             return result;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public virtual double[] GetLatentFactors(EntityType entity_type, int id)
 		{
 			switch (entity_type)
@@ -121,7 +122,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public Matrix<double> GetLatentFactors(EntityType entity_type)
 		{
 			switch (entity_type)
@@ -135,7 +136,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public virtual double[] GetEntityBiases(EntityType entity_type)
 		{
 			switch (entity_type)
@@ -149,13 +150,13 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public double GetGlobalBias()
 		{
 			return 0;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string fileName)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -177,7 +178,7 @@ namespace MyMediaLite.item_recommender
 		}
 
 		// TODO share code with MatrixFactorization
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

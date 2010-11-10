@@ -24,15 +24,11 @@ namespace MyMediaLite.rating_predictor
     /// <author>Steffen Rendle, University of Hildesheim</author>
     public abstract class RatingPredictor : IRecommenderEngine
     {
-        /// <summary>
-        /// Gets or sets the max rating value.
-        /// </summary>
+        /// <summary>Gets or sets the max rating value</summary>
         /// <value>The max rating value.</value>
         public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
 
-        /// <summary>
-        /// Gets or sets the min rating value.
-        /// </summary>
+        /// <summary>Gets or sets the min rating value</summary>
         /// <value>The min rating value.</value>
         public virtual double MinRating { get { return min_rating;  } set { min_rating = value; } }
 
@@ -67,11 +63,9 @@ namespace MyMediaLite.rating_predictor
         /// <inheritdoc />
         public abstract void Train();
 
-		/// <summary>
-		/// Return a string representation of the engine
-		/// </summary>
+		/// <summary>Return a string representation of the engine</summary>
 		/// <remarks>
-		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
+		/// ToString() method of recommender engines should list all hyperparameters, separated by space characters.
 		/// </remarks>
 		public abstract override string ToString();
     }

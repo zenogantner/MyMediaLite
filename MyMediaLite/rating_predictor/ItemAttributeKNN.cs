@@ -26,9 +26,10 @@ namespace MyMediaLite.rating_predictor
 {
 	/// <summary>
 	/// Attribute-aware item-based kNN recommender.
-	///
-	/// This engine does NOT support online updates.
 	/// </summary>
+	/// <remarks>
+	/// This engine does NOT support online updates.
+	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
 		/// <inheritdoc />

@@ -33,23 +33,23 @@ namespace MyMediaLite.item_recommender
     /// </remarks>
     public class ItemAttributeSVM : Memory, IItemAttributeAwareRecommender
     {
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes { get; set; }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>C hyperparameter</summary>
 		public double C { get { return c; } set { c = value; } }
 		double c = 1;
 
-		/// <summary>Gamma parameter for RBF kernel</summary>		
+		/// <summary>Gamma parameter for RBF kernel</summary>
 		public double Gamma { get {	return gamma; }	set { gamma = value; } }
 		double gamma = (double) 1 / 500;
-		
+
 		private SVM.Model[] models;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			int num_users = data_user.NumberOfRows;
@@ -89,7 +89,7 @@ namespace MyMediaLite.item_recommender
 			return item_svm_data;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
 			// TODO speed improvement: do not create nodes on the fly
@@ -97,24 +97,24 @@ namespace MyMediaLite.item_recommender
 			// TODO make sure we return score, not class
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
 			throw new NotImplementedException();
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
 			throw new NotImplementedException();
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';						
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", c, gamma);
 		}
 	}

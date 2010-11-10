@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -24,20 +24,19 @@ namespace MyMediaLite.item_recommender
 {
 	/// <summary>
     /// k-nearest neighbor item-based collaborative filtering using cosine-similarity
-    /// k=\infty.
-    ///
-    /// This engine does not support online updates.
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+    /// <remarks>
+    /// This engine does not support online updates.
+	/// </remarks>
     public class ItemKNN : KNN
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			correlation = Cosine.Create(data_item);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id > MaxUserID))
@@ -48,7 +47,7 @@ namespace MyMediaLite.item_recommender
 			return correlation.SumUp(item_id, data_user[user_id]);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("item-kNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());

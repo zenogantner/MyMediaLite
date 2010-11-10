@@ -3,6 +3,7 @@
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
         interfaces
          - new interfaces ILatentFactorModel and IAttributeToFactors
+         - new interface IItemRecommender (instead of abstract class)
 	command-line programs
          - exception handler: encourage users to file bug reports
         data types

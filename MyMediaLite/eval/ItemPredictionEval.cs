@@ -66,7 +66,7 @@ namespace MyMediaLite.eval
         /// <param name="relevant_items">a collection of integers with all relevant items</param>
         /// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> EvaluateItemRecommender(
-			ItemRecommender engine,
+			IItemRecommender engine,
 			SparseBooleanMatrix test,
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items)

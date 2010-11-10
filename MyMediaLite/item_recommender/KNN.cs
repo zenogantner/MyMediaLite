@@ -22,9 +22,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <summary>
-	/// Base class for item recommenders that use some kind of kNN model
-	/// </summary>
+	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
 	public abstract class KNN : Memory
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>

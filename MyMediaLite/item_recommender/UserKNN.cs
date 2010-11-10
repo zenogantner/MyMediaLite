@@ -36,7 +36,7 @@ namespace MyMediaLite.item_recommender
 		/// </summary>
 		protected int[][] nearest_neighbors;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			correlation = Cosine.Create(data_user);
@@ -48,7 +48,7 @@ namespace MyMediaLite.item_recommender
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id > MaxUserID))
@@ -65,7 +65,7 @@ namespace MyMediaLite.item_recommender
 			return (double) count / k;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("user-kNN k={0}",

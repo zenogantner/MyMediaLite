@@ -25,25 +25,33 @@ namespace MyMediaLite.item_recommender
     /// <summary>
     /// Abstract item recommender class, that loads the training data into two sparse matrices: one column-wise and one row-wise
     /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
-    public abstract class Memory : ItemRecommender
+    public abstract class Memory : IItemRecommender
     {
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID  { get; protected set;	}
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; protected set; }
 
-        /// <summary>
-        /// Implicit feedback, user-wise
-        /// </summary>
+        /// <summary>Implicit feedback, user-wise</summary>
         protected SparseBooleanMatrix data_user;
-        /// <summary>
-        /// Implicit feedback, item-wise
-        /// </summary>
+
+		/// <summary>Implicit feedback, item-wise</summary>
         protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc/>
-		public override void AddFeedback(int user_id, int item_id)
+		public abstract double Predict(int user_id, int item_id);
+
+		/// <inheritdoc/>
+		public abstract void Train();
+
+		/// <inheritdoc/>
+		public abstract void LoadModel(string filename);
+
+		/// <inheritdoc/>
+		public abstract void SaveModel(string filename);
+
+		/// <inheritdoc/>
+		public virtual void AddFeedback(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID)
 				throw new ArgumentException("Unknown user " + user_id + ". Add it before inserting event data.");
@@ -58,7 +66,7 @@ namespace MyMediaLite.item_recommender
 		}
 
 		/// <inheritdoc/>
-		public override void RemoveFeedback(int user_id, int item_id)
+		public virtual void RemoveFeedback(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID)
 				throw new ArgumentException("Unknown user " + user_id);
@@ -73,21 +81,21 @@ namespace MyMediaLite.item_recommender
 		}
 
 		/// <inheritdoc/>
-		public override void AddUser(int user_id)
+		public virtual void AddUser(int user_id)
 		{
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
 		}
 
 		/// <inheritdoc/>
-		public override void AddItem(int item_id)
+		public virtual void AddItem(int item_id)
 		{
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
 		}
 
 		/// <inheritdoc/>
-		public override void RemoveUser(int user_id)
+		public virtual void RemoveUser(int user_id)
 		{
 			// remove all mentions of this user from data structures
 			HashSet<int> user_items = data_user[user_id];
@@ -100,7 +108,7 @@ namespace MyMediaLite.item_recommender
 		}
 
 		/// <inheritdoc/>
-		public override void RemoveItem(int item_id)
+		public virtual void RemoveItem(int item_id)
 		{
 			// remove all mentions of this item from data structures
 			HashSet<int> item_users = data_item[item_id];
@@ -121,5 +129,4 @@ namespace MyMediaLite.item_recommender
 			this.MaxItemID = item_users.NumberOfRows - 1;
 		}
     }
-
 }

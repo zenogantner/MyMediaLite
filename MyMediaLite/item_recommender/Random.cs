@@ -22,28 +22,45 @@ namespace MyMediaLite.item_recommender
 	/// <summary>
     /// Random predictions. Engine for use as experimental baseline.
     /// </summary>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
-    public class Random : ItemRecommender
+    public class Random : IItemRecommender
     {
         /// <inheritdoc />
-        public override void Train() { }
+        public void Train() { }
 
         /// <inheritdoc />
-		public override double Predict(int user_id, int item_id)
+		public double Predict(int user_id, int item_id)
 		{
 			return util.Random.GetInstance().NextDouble();
 		}
 
+		/// <inheritdoc/>
+		public virtual void AddFeedback(int user_id, int item_id) { }
+
+		/// <inheritdoc/>
+		public virtual void RemoveFeedback(int user_id, int item_id) { }
+
+		/// <inheritdoc/>
+		public virtual void AddUser(int user_id) { }
+
+		/// <inheritdoc/>
+		public virtual void AddItem(int item_id) { }
+
+		/// <inheritdoc/>
+		public virtual void RemoveUser(int user_id) { }
+
+		/// <inheritdoc/>
+		public virtual void RemoveItem(int item_id) { }
+
         /// <inheritdoc />
-		public override void SaveModel(string filePath)
+		public void SaveModel(string filePath)
 		{
-			throw new NotImplementedException();
+			// do nothing
 		}
 
         /// <inheritdoc />
-		public override void LoadModel(string filePath)
+		public void LoadModel(string filePath)
 		{
-			throw new NotImplementedException();
+			// do nothing
 		}
 
 		/// <inheritdoc />

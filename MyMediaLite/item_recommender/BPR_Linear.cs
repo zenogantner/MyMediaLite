@@ -40,9 +40,9 @@ namespace MyMediaLite.item_recommender
 	public class BPR_Linear : Memory, IItemAttributeAwareRecommender, IIterativeModel
 	{
 		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes {	set	{ this.item_attributes = value;	} }		
+		public SparseBooleanMatrix ItemAttributes {	set	{ this.item_attributes = value;	} }
 		private SparseBooleanMatrix item_attributes;
-		
+
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
@@ -59,28 +59,27 @@ namespace MyMediaLite.item_recommender
 
         /// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-		private int num_iter = 10;		
-		
+		private int num_iter = 10;
+
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; }	}
 		int fast_sampling_memory_limit = 1024;
-	
- 		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>		
+
+ 		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
 		public double InitMean { get { return init_mean; } set { init_mean = value; } }
 	    double init_mean = 0;
 
-		/// <summary>standard deviation of the normal distribution used to initialize the features</summary>	
+		/// <summary>standard deviation of the normal distribution used to initialize the features</summary>
 		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
-        double init_stdev = 0.1;		
+        double init_stdev = 0.1;
 
 		/// <summary>Learning rate alpha</summary>
 		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
-		double learn_rate = 0.05;		
+		double learn_rate = 0.05;
 
-        /// <summary>Regularization parameter</summary>		
+        /// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; }	set { regularization = value; } }
         double regularization = 0.015;
-		
 
 		/// <summary>support data structure for fast sampling</summary>
 		int[][] user_pos_items;
@@ -306,8 +305,8 @@ namespace MyMediaLite.item_recommender
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
 								  regularization, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
 		}

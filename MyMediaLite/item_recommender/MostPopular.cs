@@ -25,19 +25,14 @@ namespace MyMediaLite.item_recommender
 {
     /// <summary>
     /// Most-popular item recommender. Items are weighted by how often they have been seen in the past.
+    /// </summary>
+    /// <remarks>
     /// This method is not personalized.
     /// This engine does not support online updates.
-    /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+	/// </remarks>
     public class MostPopular : Memory
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MostPopular"/> class.
-        /// </summary>
-        public MostPopular() { }
-        /// <summary>
-        /// View count
-        /// </summary>
+        /// <summary>View count</summary>
         protected Dictionary<int, int> view_count = new Dictionary<int, int>();
 
         /// <inheritdoc />
@@ -90,7 +85,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
@@ -106,12 +101,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <summary>
-		/// returns the name of the method
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/>
-		/// </returns>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "most-popular";

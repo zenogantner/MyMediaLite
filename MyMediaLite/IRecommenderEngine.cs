@@ -20,9 +20,6 @@ namespace MyMediaLite
     /// <summary>
     /// Generic interface for simple recommender engines.
     /// </summary>
-    /// <remarks>
-    /// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
-    /// </remarks>
     public interface IRecommenderEngine
     {
 		/// <summary>
@@ -55,5 +52,12 @@ namespace MyMediaLite
 		/// </summary>
 		/// <param name="filename">the name of the file to read from</param>
 		void LoadModel(string filename);
+		
+		/// <summary>Return a string representation of the engine</summary>
+		/// <remarks>
+		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
+		/// </remarks>
+		string ToString();		
+		
    }
 }
