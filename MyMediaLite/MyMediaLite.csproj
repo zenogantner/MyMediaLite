@@ -94,8 +94,6 @@
     <Compile Include="io\RatingPredictionData.cs" />
     <Compile Include="taxonomy\EntityType.cs" />
     <Compile Include="rating_predictor\RatingPredictor.cs" />
-    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping.cs" />
-    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping_Optimal.cs" />
     <Compile Include="experimental\attr_to_feature\BPRMF_Mapping.cs" />
     <Compile Include="util\Triple.cs" />
     <Compile Include="eval\RatingEval.cs" />
@@ -129,13 +127,15 @@
     <Compile Include="IItemRelationAwareRecommender.cs" />
     <Compile Include="util\Engine.cs" />
     <Compile Include="ILatentFactorModel.cs" />
-    <Compile Include="experimental\attr_to_feature\IAttributeToFactors.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="experimental\attr_to_feature\LeastSquareMapping.cs" />
-    <Compile Include="experimental\attr_to_feature\IMappingPredictor.cs" />
     <Compile Include="item_recommender\IItemRecommender.cs" />
-    <Compile Include="experimental\attr_to_feature\IAttributeToFactorsTrainer.cs" />
-    <Compile Include="experimental\attr_to_feature\AttributeToFactors.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_Complex.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_kNN.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_Optimal.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_ItemMapping_SVR.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping.cs" />
+    <Compile Include="experimental\attr_to_feature\BPRMF_UserMapping_Optimal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

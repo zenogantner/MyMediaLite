@@ -59,7 +59,7 @@ Architecture
    - non-weighted kNN
    - more correlation/similarity measures (e.g. Jaccard index)
    - user-defined similarities
- - generic optimization interface and algorithms (compare Mallet)
+ - generic optimization interface and algorithms (like Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
  - provide bindings for languages like Java, Ruby, Perl, Clojure, Scala
@@ -72,6 +72,7 @@ Architecture
  - support for distributed computing
  - webservice interface
  - move unit tests out of main library
+ - use one repository per component, instead of having everything in one repository
 Misc
  - faster evaluation routines
    - approximate AUC

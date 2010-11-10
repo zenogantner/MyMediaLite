@@ -41,7 +41,7 @@ namespace MyMediaLite
 		static NumberFormatInfo ni = new NumberFormatInfo();
 
 		// recommender engines
-		static ItemRecommender recommender = null;
+		static IItemRecommender recommender = null;
 		static KNN                     iknn       = new ItemKNN();
 		static KNN                     iaknn      = new ItemAttributeKNN();
 		static KNN                     uknn       = new UserKNN();
