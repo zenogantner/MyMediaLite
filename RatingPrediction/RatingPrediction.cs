@@ -210,9 +210,6 @@ namespace RatingPrediction
 				case "item-average":
 					recommender = ia;
 					break;
-//				case "slope-one":
-//					recommender = slope_one;
-//					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
 					break;
