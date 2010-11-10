@@ -132,9 +132,10 @@
     <Compile Include="experimental\attr_to_feature\IAttributeToFactors.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="experimental\attr_to_feature\LeastSquareMapping.cs" />
-    <Compile Include="experimental\attr_to_feature\ItemMappingPredictor.cs" />
     <Compile Include="experimental\attr_to_feature\IMappingPredictor.cs" />
     <Compile Include="item_recommender\IItemRecommender.cs" />
+    <Compile Include="experimental\attr_to_feature\IAttributeToFactorsTrainer.cs" />
+    <Compile Include="experimental\attr_to_feature\AttributeToFactors.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -169,7 +170,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <StandardHeader Text="Copyright (C) 2010 Zeno Gantner&#xA;&#xA;This file is part of MyMediaLite.&#xA;&#xA;MyMediaLite is free software: you can redistribute it and/or modify&#xA;it under the terms of the GNU General Public License as published by&#xA;the Free Software Foundation, either version 3 of the License, or&#xA;(at your option) any later version.&#xA;&#xA;MyMediaLite is distributed in the hope that it will be useful,&#xA;but WITHOUT ANY WARRANTY; without even the implied warranty of&#xA;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xA;GNU General Public License for more details.&#xA;&#xA;You should have received a copy of the GNU General Public License&#xA;along with MyMediaLite.  If not, see &lt;http://www.gnu.org/licenses/&gt;.&#xA;&#xA;" inheritsSet="Apache2License" />
+          <StandardHeader Text="Copyright (C) 2010 Zeno Gantner&#xA;&#xA;This file is part of MyMediaLite.&#xA;&#xA;MyMediaLite is free software: you can redistribute it and/or modify&#xA;it under the terms of the GNU General Public License as published by&#xA;the Free Software Foundation, either version 3 of the License, or&#xA;(at your option) any later version.&#xA;&#xA;MyMediaLite is distributed in the hope that it will be useful,&#xA;but WITHOUT ANY WARRANTY; without even the implied warranty of&#xA;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xA;GNU General Public License for more details.&#xA;&#xA;You should have received a copy of the GNU General Public License&#xA;along with MyMediaLite.  If not, see &lt;http://www.gnu.org/licenses/&gt;." inheritsSet="Apache2License" />
         </Policies>
       </Properties>
     </MonoDevelop>
