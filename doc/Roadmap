@@ -50,7 +50,6 @@ Architecture
  - user and item IDs should be unsigned integers
  - Makefile-based build system (find dependencies automagically?)
  - automated release management
- - generate HTML API docs and manual from XML/inline documentation
  - parameterize types:
    - user and item IDs
    - stored ratings
@@ -80,7 +79,10 @@ Misc
  - online update evaluation
  - rewrite MF techniques using vector/matrix abstractions
  - faster reading of text files
- - put website and flyer into different git repositories
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
+Documentation/website
+ - document attribute-aware recommenders: using and implementing
  - document how to set up C# development environment for Ubuntu, Debian, etc.
+ - put website and flyer into different git repositories
+ - generate HTML API docs and manual from XML/inline documentation
