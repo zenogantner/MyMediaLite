@@ -17,6 +17,7 @@
      mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
      easyrec       => { url => 'http://easyrec.org/',                            title => 'easyrec' }
      duine         => { url => 'http://www.duineframework.org/',                 title => 'Duine' }
+     reclab        => { url => 'http://code.richrelevance.com/reclab-core/',     title => 'RecLab' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
