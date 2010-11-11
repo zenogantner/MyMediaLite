@@ -24,22 +24,33 @@ using MyMediaLite.data_type;
 namespace MyMediaLite.item_recommender
 {
     /// <summary>
-    /// Weighted matrix factorization method proposed by Hu et al. and Pan et al.:
-    ///
-    /// Y. Hu, Y. Koren, and C. Volinsky:
-    /// Collaborative filtering for implicit feedback datasets.
-    /// In IEEE International Conference on Data Mining (ICDM 2008), pages 263--272, 2008.
-    ///
-    /// R. Pan, Y.Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, and Q. Yang:
-    /// One-class collaborative filtering.
-    /// In IEEE International Conference on Data Mining (ICDM 2008), pages 502--511, 2008.
-    ///
+    /// Weighted matrix factorization method proposed by Hu et al. and Pan et al.
+    /// </summary>
+    /// <remarks>
+    /// <inproceedings>
+    ///   <author>Y. Hu</author> <author>Y. Koren</author> <author>C. Volinsky</author>
+    ///   <title>Collaborative filtering for implicit feedback datasets</title>
+    ///   <booktitle>IEEE International Conference on Data Mining (ICDM 2008)</booktitle>
+    ///   <year>2008</year>
+    /// </inproceedings>
+    /// 
+    /// <inproceedings>
+    ///   <author>R. Pan</author>
+    ///   <author>Y. Zhou</author>
+    ///   <author>B. Cao</author>
+    ///   <author>N. N. Liu</author>
+    ///   <author>R. M. Lukose</author>
+    ///   <author>M. Scholz</author>
+    ///   <author>Q. Yang</author>
+    ///   <title>One-class collaborative filtering</title>
+    ///   <booktitle>IEEE International Conference on Data Mining (ICDM 2008)</booktitle>
+    ///   <year>2008</year>
+    /// </inproceedings>
     /// We use the fast computation method proposed by Hu et al. and we allow a global
     /// weight to penalize observed/unobserved values.
     ///
     /// This engine does not support online updates.
-    /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, University of Hildesheim</author>
+	/// </remarks>
     public class WRMF : MF
     {
         /// <summary>C position: the weight/confidence that is put on positive observations</summary>
@@ -50,7 +61,7 @@ namespace MyMediaLite.item_recommender
 		public double Regularization { get { return regularization;	} set {	regularization = value;	} }
         double regularization = 0.015;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
@@ -128,20 +139,20 @@ namespace MyMediaLite.item_recommender
             }
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override double ComputeFit()
 		{
-			return 0; // TODO implement
+			return -1; // TODO implement
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni, "WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-				                 num_factors, regularization, c_pos, NumIter, InitMean, InitStdev);
+				                 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdev);
 		}
     }
 }

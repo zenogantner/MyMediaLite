@@ -18,49 +18,44 @@
 
 namespace MyMediaLite.rating_predictor
 {
-    /// <summary>
-    /// Abstract class for rating predictors
-    /// </summary>
-    /// <author>Steffen Rendle, University of Hildesheim</author>
+    /// <summary>Abstract class for rating predictors</summary>
     public abstract class RatingPredictor : IRecommenderEngine
     {
-        /// <summary>Gets or sets the max rating value</summary>
-        /// <value>The max rating value.</value>
+        /// <summary>The max rating value</summary>
         public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
+        /// <summary>The max rating value</summary>
+        protected double max_rating;
 
-        /// <summary>Gets or sets the min rating value</summary>
-        /// <value>The min rating value.</value>
+		/// <summary>The min rating value</summary>
         public virtual double MinRating { get { return min_rating;  } set { min_rating = value; } }
+	    /// <summary>The min rating value</summary>
+	    protected double min_rating;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public abstract bool CanPredict(int user_id, int item_id);
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public abstract double Predict(int user_id, int item_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void AddRating(int user_id, int item_id, double rating) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void UpdateRating(int user_id, int item_id, double rating) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void RemoveRating(int user_id, int item_id) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void AddUser(int user_id) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void AddItem(int item_id) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void RemoveUser(int user_id) { }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void RemoveItem(int item_id) { }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public abstract void SaveModel(string filePath);
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public abstract void LoadModel(string filePath);
-        /// <inheritdoc />
-        protected double max_rating;
-        /// <inheritdoc />
-        protected double min_rating;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public abstract void Train();
 
 		/// <summary>Return a string representation of the engine</summary>

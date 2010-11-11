@@ -30,9 +30,10 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes			
 		{
+			get { return this.item_attributes; }
 			set
 			{
 				this.item_attributes = value;
@@ -227,7 +228,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return feature_representation;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id >= user_factors.dim1))
@@ -240,7 +241,7 @@ namespace MyMediaLite.experimental.attr_to_feature
             return MatrixUtils.RowScalarProduct(user_factors, user_id, est_features);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

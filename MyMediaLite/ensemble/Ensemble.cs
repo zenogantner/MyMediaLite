@@ -24,10 +24,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.ensemble
 {
-	/// <summary>
-    /// Abtract class for combining several prediction methods.
-    /// </summary>
-    /// <author>Steffen Rendle, University of Hildesheim</author>
+	/// <summary>Abtract class for combining several prediction methods</summary>
     public abstract class Ensemble : IRecommenderEngine
 	{
         /// <summary>
@@ -37,22 +34,6 @@ namespace MyMediaLite.ensemble
 
         private double max_rating_value = 5;
         private double min_rating_value = 1;
-
-		/// <inheritdoc />
-		public abstract double Predict(int user_id, int item_id);
-
-		/// <inheritdoc />
-		public abstract void SaveModel(string filePath);
-		/// <inheritdoc />
-		public abstract void LoadModel(string filePath);
-
-        /// <inheritdoc />
-        public virtual void Train()
-        {
-            foreach (IRecommenderEngine engine in engines)
-                engine.Train();
-        }
-
 
         /// <summary>
         /// Gets or sets the max rating value
@@ -91,6 +72,21 @@ namespace MyMediaLite.ensemble
 						((RatingPredictor)engine).MinRating = value;
 
             }
+        }		
+		
+		/// <inheritdoc/>
+		public abstract double Predict(int user_id, int item_id);
+
+		/// <inheritdoc/>
+		public abstract void SaveModel(string filePath);
+		/// <inheritdoc/>
+		public abstract void LoadModel(string filePath);
+
+        /// <inheritdoc/>
+        public virtual void Train()
+        {
+            foreach (IRecommenderEngine engine in engines)
+                engine.Train();
         }
     }
 }

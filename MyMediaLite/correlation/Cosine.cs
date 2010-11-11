@@ -28,10 +28,10 @@ namespace MyMediaLite.correlation
 	/// </summary>
 	public class Cosine : CorrelationMatrix
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public Cosine(int num_entities) : base(num_entities) { }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.dim1)
 		{
 			this.data = correlation_matrix.data;
@@ -59,7 +59,7 @@ namespace MyMediaLite.correlation
 			return cm;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
 			Console.Error.Write("Computation of cosine similarity for {0} entities... ", num_entities);
@@ -85,14 +85,14 @@ namespace MyMediaLite.correlation
 			Console.Error.WriteLine();
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;
             foreach (int k in vector_j)
             	if (vector_i.Contains(k))
 	            	cntr++;
-            return  (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
+            return (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
 		}
 	}
 }

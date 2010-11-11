@@ -40,14 +40,14 @@ namespace MyMediaLite.data_type
 			this.weight  = weight;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public int CompareTo(Object o)
         {
 			WeightedItem otherItem = o as WeightedItem;
             return this.weight.CompareTo(otherItem.weight);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override bool Equals(Object o)
 		{
 			if (o == null)
@@ -57,7 +57,7 @@ namespace MyMediaLite.data_type
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public bool Equals(WeightedItem otherItem)
 		{
 			if (otherItem == null)
@@ -66,7 +66,7 @@ namespace MyMediaLite.data_type
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override int GetHashCode()
 		{
 			return weight.GetHashCode();

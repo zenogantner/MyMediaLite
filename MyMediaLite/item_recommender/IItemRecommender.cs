@@ -20,17 +20,17 @@ namespace MyMediaLite.item_recommender
     /// <summary>Interface for item recommenders</summary>
     public interface IItemRecommender : IRecommenderEngine
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void AddFeedback(int user_id, int item_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void RemoveFeedback(int user_id, int item_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void AddUser(int user_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void AddItem(int item_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void RemoveUser(int user_id);
-        /// <inheritdoc />
+        /// <inheritdoc/>
         void RemoveItem(int item_id);
     }
 }

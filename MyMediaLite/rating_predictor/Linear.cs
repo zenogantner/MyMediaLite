@@ -25,6 +25,8 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
+	// TODO split up file by classes
+
     /// <summary>
     /// Uses the average rating value over all ratings for prediction.
     /// </summary>
@@ -35,7 +37,7 @@ namespace MyMediaLite.rating_predictor
     {
 		private double global_average = 0;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
 		{
 			foreach (RatingEvent r in Ratings.All)
@@ -43,33 +45,30 @@ namespace MyMediaLite.rating_predictor
 			global_average /= Ratings.All.Count;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return true;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             return global_average;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
-			// TODO
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-				writer.WriteLine("All information you need is easily available in the rating data.");
+				throw new NotImplementedException();
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
-			// TODO
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
-			{
-			}
+				throw new NotImplementedException();
 		}
 
 		/// <summary>returns the name of the method</summary>
@@ -94,21 +93,18 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected double global_average = 0;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
-			// TODO
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-				writer.WriteLine("All information you need is easily available in the rating data.");
+				throw new NotImplementedException();
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
-			// TODO
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
-			{
-			}
+				throw new NotImplementedException();
 		}
     }
 
@@ -120,7 +116,7 @@ namespace MyMediaLite.rating_predictor
     /// </remarks>
     public class UserAverage : EntityAverage
     {
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override void Train()
         {
 			List<int> rating_counts = new List<int>();
@@ -146,13 +142,13 @@ namespace MyMediaLite.rating_predictor
 					entity_averages[i] = global_average;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (user_id <= MaxUserID);
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if (user_id <= MaxUserID)
@@ -161,7 +157,7 @@ namespace MyMediaLite.rating_predictor
 				return global_average;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "user-average";
@@ -176,7 +172,7 @@ namespace MyMediaLite.rating_predictor
     /// </remarks>
     public class ItemAverage : EntityAverage
     {
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override void Train()
         {
 			List<int> rating_counts = new List<int>();
@@ -202,13 +198,13 @@ namespace MyMediaLite.rating_predictor
 					entity_averages[i] = global_average;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (item_id <= MaxItemID);
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if (item_id <= MaxItemID)
@@ -217,7 +213,7 @@ namespace MyMediaLite.rating_predictor
 				return global_average;
         }
 
-		/// <inheritdoc />
+	/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "item-average";

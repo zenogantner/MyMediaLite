@@ -80,7 +80,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
 			double[] item_features = new double[num_factors];
@@ -102,12 +102,12 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return item_svm_data;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';						
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(
 				ni,
 				"BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_mean={8}, init_stdev={9}",

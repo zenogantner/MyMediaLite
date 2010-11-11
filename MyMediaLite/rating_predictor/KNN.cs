@@ -21,13 +21,18 @@ using System.IO;
 using MyMediaLite.correlation;
 using MyMediaLite.util;
 
+
 namespace MyMediaLite.rating_predictor
 {
 	/// <summary>Base class for rating predictors that use some kind of kNN</summary>
 	/// <remarks>
 	/// The method is described in section 2.2 of
-	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
-	/// Transactions on Knowledge Discovery from Data (TKDD), 2009
+	/// <article>
+	///   <author>Yehuda Koren</author>
+	///   <title>Factor in the Neighbors: Scalable and Accurate Collaborative Filtering</title>
+	///   <journal>Transactions on Knowledge Discovery from Data (TKDD)</journal>
+	///   <year>2009</year>
+	/// </article>
 	///
 	/// This engine does NOT support online updates.
 	///
@@ -41,12 +46,10 @@ namespace MyMediaLite.rating_predictor
 		public uint K { get { return k;	} set {	k = value; } }
 		private uint k = uint.MaxValue;		
 
-        /// <summary>
-        /// Correlation matrix over some kind of entity
-        /// </summary>
+        /// <summary>Correlation matrix over some kind of entity</summary>
         protected CorrelationMatrix correlation;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -58,7 +61,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

@@ -35,14 +35,14 @@ namespace MyMediaLite.item_recommender
         /// <summary>View count</summary>
         protected Dictionary<int, int> view_count = new Dictionary<int, int>();
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
             for (int i = 0; i <= MaxItemID; i++)
                 view_count[i] = this.data_item[i].Count;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             int cnt = 0;
@@ -52,7 +52,7 @@ namespace MyMediaLite.item_recommender
                 return 0;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void RemoveItem (int item_id)
 		{
 			view_count.Remove(item_id);
@@ -75,7 +75,7 @@ namespace MyMediaLite.item_recommender
         	view_count[item_id]--;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )

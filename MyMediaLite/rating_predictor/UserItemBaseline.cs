@@ -32,8 +32,12 @@ namespace MyMediaLite.rating_predictor
     /// for prediction.
     ///
 	/// The method is described in section 2.1 of
-	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
-	/// Transactions on Knowledge Discovery from Data (TKDD), 2009
+	/// <article>
+	///   <author>Yehuda Koren</author>
+	///   <title>Factor in the Neighbors: Scalable and Accurate Collaborative Filtering</title>
+	///   <journal>Transactions on Knowledge Discovery from Data (TKDD)</journal>
+	///   <year>2009</year>
+	/// </article>
 	///
 	/// This engine supports online updates.
     /// </remarks>
@@ -58,7 +62,7 @@ namespace MyMediaLite.rating_predictor
 		private double[] user_biases;
 		private double[] item_biases;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			// compute global average
@@ -93,7 +97,7 @@ namespace MyMediaLite.rating_predictor
 					user_biases[u] = user_biases[u] / (reg_u + user_ratings_count[u]);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
 			double user_bias = (user_id <= MaxUserID && user_id >= 0) ? user_biases[user_id] : 0;
@@ -108,7 +112,7 @@ namespace MyMediaLite.rating_predictor
 			return result;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected virtual void RetrainUser(int user_id)
 		{
 			if (UpdateUsers)
@@ -120,7 +124,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected virtual void RetrainItem(int item_id)
 		{
 			if (UpdateItems)
@@ -180,7 +184,7 @@ namespace MyMediaLite.rating_predictor
 			}
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
@@ -189,7 +193,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
@@ -199,7 +203,7 @@ namespace MyMediaLite.rating_predictor
 			Train();
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

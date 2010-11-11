@@ -25,7 +25,7 @@ namespace MyMediaLite.rating_predictor
 	/// <summary>Item-based kNN with cosine similarity</summary>
 	public class ItemKNNCosine : ItemKNN
 	{
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			base.Train();
@@ -33,7 +33,7 @@ namespace MyMediaLite.rating_predictor
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override void RetrainItem(int item_id)
 		{
 			base.RetrainUser(item_id);
@@ -42,7 +42,7 @@ namespace MyMediaLite.rating_predictor
 					correlation[item_id, i] = Cosine.ComputeCorrelation(data_item[item_id], data_item[i]);
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("item-kNN-cosine k={0} reg_u={1} reg_i={2}",

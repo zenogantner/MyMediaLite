@@ -26,12 +26,13 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
+	/// <summary>kNN recommender engine based on user attributes</summary>
+	/// <remarks>
 	/// This engine does NOT support online updates.
-	/// </summary>
+	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
 			set
@@ -43,17 +44,17 @@ namespace MyMediaLite.rating_predictor
 		}
 		private SparseBooleanMatrix user_attributes;
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			base.Train();
 			this.correlation = Cosine.Create(user_attributes);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("user-attribute-kNN k={0} reg_u={1} reg_i={2}",

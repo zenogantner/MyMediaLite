@@ -249,7 +249,7 @@ namespace MyMediaLite.item_recommender
             return result;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -264,7 +264,7 @@ namespace MyMediaLite.item_recommender
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

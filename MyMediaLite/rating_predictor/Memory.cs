@@ -51,7 +51,7 @@ namespace MyMediaLite.rating_predictor
 		/// </summary>
 		protected RatingData ratings;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);

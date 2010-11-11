@@ -25,9 +25,7 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// Matrix factorization engine with explicit user and item bias.
-	/// </summary>
+	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
 		/// <summary>
@@ -39,7 +37,7 @@ namespace MyMediaLite.rating_predictor
 		double[] user_bias;
 		double[] item_bias;
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override void Train()
 		{
 			// init feature matrices
@@ -48,7 +46,6 @@ namespace MyMediaLite.rating_predictor
 	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
 	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 
-			// TODO use a Vector datatype
 			user_bias = new double[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
 				user_bias[u] = MyMediaLite.util.Random.GetInstance().NextNormal(InitMean, InitStdev);
@@ -71,7 +68,7 @@ namespace MyMediaLite.rating_predictor
 				Iterate(ratings.All, true, true);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRating - MinRating;
@@ -120,7 +117,7 @@ namespace MyMediaLite.rating_predictor
             }
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
@@ -135,7 +132,7 @@ namespace MyMediaLite.rating_predictor
 			return MinRating + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRating - MinRating);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override double[] GetEntityBiases(EntityType entity_type)
 		{
 			switch (entity_type)
@@ -149,7 +146,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}		
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

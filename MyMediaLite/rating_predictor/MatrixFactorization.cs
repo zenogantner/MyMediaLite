@@ -76,7 +76,7 @@ namespace MyMediaLite.rating_predictor
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
         private int num_iter = 30;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			// init factor matrices
@@ -97,7 +97,7 @@ namespace MyMediaLite.rating_predictor
 				throw new ArithmeticException("item_feature contains NaN");
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public virtual void Iterate()
 		{
 			Iterate(ratings.All, true, true);
@@ -162,7 +162,7 @@ namespace MyMediaLite.rating_predictor
 				Iterate(ratings, update_user, update_item);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected double Predict(int user_id, int item_id, bool bound)
         {
             double result = global_bias;
@@ -180,8 +180,6 @@ namespace MyMediaLite.rating_predictor
             }
             return result;
         }
-
-		// TODO use user/item bias for prediction for unknown entities
 
 		/// <summary>
 		/// Predict the rating of a given user for a given item.
@@ -267,7 +265,7 @@ namespace MyMediaLite.rating_predictor
             item_factors.SetRowToOneValue(item_id, 0);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public double[] GetLatentFactors(EntityType entity_type, int id)
 		{
 			switch (entity_type)
@@ -287,7 +285,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public Matrix<double> GetLatentFactors(EntityType entity_type)
 		{
 			switch (entity_type)
@@ -301,7 +299,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public virtual double[] GetEntityBiases(EntityType entity_type)
 		{
 			switch (entity_type)
@@ -315,13 +313,13 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public double GetGlobalBias()
 		{
 			return global_bias;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -343,7 +341,7 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
         {
             NumberFormatInfo ni = new NumberFormatInfo();
@@ -420,7 +418,7 @@ namespace MyMediaLite.rating_predictor
 			return Math.Sqrt((double) rmse_sum / ratings.Count);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

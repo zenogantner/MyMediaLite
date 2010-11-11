@@ -23,10 +23,8 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// This engine supports online updates.
-	/// </summary>
-	/// <author>Zeno Gantner, University of Hildesheim</author>
+	/// <summary>User-based kNN engine</summary>
+	/// <remarks>This engine supports online updates.</remarks>
 	public abstract class UserKNN : KNN
 	{
 		/// <summary>
@@ -34,7 +32,7 @@ namespace MyMediaLite.rating_predictor
 		/// </summary>
 		protected SparseBooleanMatrix data_user;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override RatingData Ratings
 		{
 			set
@@ -60,11 +58,11 @@ namespace MyMediaLite.rating_predictor
             if (user_id < 0)
                 throw new ArgumentException("user is unknown: " + user_id);
             if (item_id < 0)
-                throw new ArgumentException("item is unknown: " + item_id);			
-			
+                throw new ArgumentException("item is unknown: " + item_id);
+
             if ((user_id > correlation.dim1 - 1) || (item_id > MaxItemID))
                 return base.Predict(user_id, item_id);
-					
+
 			IList<int> relevant_users = correlation.GetPositivelyCorrelatedEntities(user_id);
 
 			double sum = 0;

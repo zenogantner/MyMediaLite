@@ -19,15 +19,13 @@ using System;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <summary>
-    /// Random predictions. Engine for use as experimental baseline.
-    /// </summary>
+	/// <summary>Random predictions. Engine for use as experimental baseline.</summary>
     public class Random : IItemRecommender
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Train() { }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public double Predict(int user_id, int item_id)
 		{
 			return util.Random.GetInstance().NextDouble();
@@ -51,19 +49,19 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public virtual void RemoveItem(int item_id) { }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public void SaveModel(string filePath)
 		{
 			// do nothing
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public void LoadModel(string filePath)
 		{
 			// do nothing
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "random";

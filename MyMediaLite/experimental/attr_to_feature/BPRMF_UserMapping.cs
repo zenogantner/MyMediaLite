@@ -64,6 +64,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
+		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-feature weight matrix
@@ -125,6 +126,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			ComputeMappingFit();
 		}
 
+		/// <inheritdoc/>
 		public override void IterateMapping()
 		{
 			// stochastic gradient descent

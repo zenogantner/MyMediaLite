@@ -68,6 +68,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
+		/// <inheritdoc/>
 		public override void IterateMapping()
 		{
 			Console.Error.Write(".");
@@ -82,7 +83,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
-		// TODO: ADD IN THRESHOLD FUNCTION!!
+		// TODO ADD IN THRESHOLD FUNCTION!!
 		protected virtual void UpdateMappingFeatures(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
@@ -162,17 +163,17 @@ namespace MyMediaLite.experimental.attr_to_feature
 				for (int j = 0; j < num_factors; j++)
 					for (int k = 0; k < num_hidden_features; k++)
 						feature_representation[j] += attribute_to_feature[i, k] * output_layer[k, j];
-			// TODO: ADD IN THRESHOLD FUNCTION
+			// TODO ADD IN THRESHOLD FUNCTION
 
 			return feature_representation;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';						
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(
 				ni,
 				"BPR-MF-ItemMapping-Complex num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_features={9}, init_mean={9}, init_stdev={10}",

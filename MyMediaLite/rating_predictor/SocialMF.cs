@@ -23,13 +23,14 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// Social-network-aware matrix factorization
-	/// </summary>
+	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>
-	///  Mohsen Jamali, Martin Ester
-    ///  A matrix factorization technique with trust propagation for recommendation in social networks
-    ///  RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
+	/// <inproceedings>
+	///   <author>Mohsen Jamali</author> <author>Martin Ester</author>
+    ///   <title>A matrix factorization technique with trust propagation for recommendation in social networks</title>
+    ///   <booktitle>RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems</booktitle>
+    ///   <year>2010</year>
+    /// </inproceedings>
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
@@ -42,7 +43,7 @@ namespace MyMediaLite.rating_predictor
 		/// </summary>
 		public bool StochasticLearning { get; set; }
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix UserRelation
 		{
 			set
@@ -56,7 +57,7 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>the number of users</summary>
 		public int NumUsers { get; set; }
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override void Train()
 		{
 			// init feature matrices
@@ -84,7 +85,7 @@ namespace MyMediaLite.rating_predictor
 				Iterate(ratings.All, true, true);			
 		}
 		
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			if (StochasticLearning)
@@ -245,7 +246,7 @@ namespace MyMediaLite.rating_predictor
             }
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

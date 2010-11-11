@@ -26,15 +26,13 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.ensemble
 {
-    /// <summary>
-    /// Combining several predictors with a weighted ensemble.
+    /// <summary>Combining several predictors with a weighted ensemble</summary>
+    /// <remarks>
     /// This engine does not support online updates.
-    /// </summary>
-    /// <author>Steffen Rendle, Zeno Gantner, Christoph Freundenthaler,
-    ///         University of Hildesheim</author>
+    /// </remarks>
     public class WeightedEnsemble : Ensemble
     {
-		// TODO add an AddEngine routine
+		// TODO add an AddEngine method
 
         /// <summary>List of component weights</summary>
         public List<double> weights = new List<double>();
@@ -42,7 +40,7 @@ namespace MyMediaLite.ensemble
 		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
             foreach (var engine in this.engines)
@@ -51,7 +49,7 @@ namespace MyMediaLite.ensemble
 			this.weight_sum = weights.Sum();
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
 			double result = 0;
@@ -62,7 +60,7 @@ namespace MyMediaLite.ensemble
             return (double) result / weight_sum;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -79,7 +77,7 @@ namespace MyMediaLite.ensemble
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
@@ -90,7 +88,7 @@ namespace MyMediaLite.ensemble
 
 				int numberOfComponents = System.Int32.Parse(reader.ReadLine());
 
-				List<double>                weights = new List<double>();
+				List<double>              weights = new List<double>();
 				List<IRecommenderEngine> engines = new List<IRecommenderEngine>();
 
 				for (int i = 0; i < numberOfComponents; i++)

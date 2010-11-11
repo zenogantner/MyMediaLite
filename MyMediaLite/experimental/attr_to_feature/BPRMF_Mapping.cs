@@ -32,7 +32,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 		// includes bias
 		protected Matrix<double> attribute_to_feature;
 
+		/// <summary>Learn the mapping</summary>
 		public abstract void LearnAttributeToFactorMapping();
+		/// <summary>Perform one iteration of the mapping training</summary>
 		public abstract void IterateMapping();
 	}
 }

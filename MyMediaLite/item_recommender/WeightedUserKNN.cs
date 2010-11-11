@@ -22,12 +22,13 @@ namespace MyMediaLite.item_recommender
 {
     /// <summary>
     /// Weighted k-nearest neighbor user-based collaborative filtering using cosine-similarity
-    ///
-    /// This engine does not support online updates.
     /// </summary>
+    /// <remarks>
+    /// This engine does not support online updates.
+	/// </remarks>
     public class WeightedUserKNN : UserKNN
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id > MaxUserID))
@@ -49,7 +50,7 @@ namespace MyMediaLite.item_recommender
 			}
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("weighted-user-kNN k={0}",

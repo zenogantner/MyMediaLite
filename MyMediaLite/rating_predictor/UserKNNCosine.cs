@@ -21,19 +21,17 @@ using MyMediaLite.correlation;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// User-based kNN with cosine similarity
-	/// </summary>
+	/// <summary>User-based kNN with cosine similarity</summary>
 	public class UserKNNCosine : UserKNN
 	{
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			base.Train();
 			this.correlation = Cosine.Create(data_user);
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override void RetrainUser(int user_id)
 		{
 			base.RetrainUser(user_id);
@@ -42,7 +40,7 @@ namespace MyMediaLite.rating_predictor
 					correlation[user_id, i] = Cosine.ComputeCorrelation(data_user[user_id], data_user[i]);
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("user-kNN-cosine k={0} reg_u={1} reg_i={2}",

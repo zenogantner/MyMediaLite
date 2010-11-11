@@ -30,7 +30,7 @@ namespace MyMediaLite.item_recommender
     /// </remarks>
     public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
     {
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
 			set
@@ -42,10 +42,10 @@ namespace MyMediaLite.item_recommender
 		}
 		private SparseBooleanMatrix user_attributes;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }		
 		
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			correlation = Cosine.Create(user_attributes);
@@ -58,7 +58,7 @@ namespace MyMediaLite.item_recommender
 			Console.WriteLine("MaxUserID: {0}", MaxUserID);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("user-attribute-kNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());

@@ -30,7 +30,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public class BPRMF_ItemMapping_Optimal : BPRMF_ItemMapping
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.feature_bias = new double[num_factors];
@@ -51,7 +51,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override void IterateMapping()
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
@@ -99,7 +99,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override double[] __MapToLatentFeatureSpace(int item_id)
 		{
 			HashSet<int> attributes = this.item_attributes[item_id];
@@ -116,18 +116,18 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return feature_representation;
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		protected override double[] MapToLatentFeatureSpace(int item_id)
 		{
 			return _MapToLatentFeatureSpace(item_id);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(
 				ni,
 				"BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, mapping_feature_bias={9}, init_mean={10}, init_stdev={11}",

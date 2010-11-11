@@ -67,7 +67,7 @@ namespace MyMediaLite.data
 			Utils.Shuffle<RatingEvent>(rating_list);
 		}
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public IEnumerator GetEnumerator()
 		{
 			return rating_list.GetEnumerator();
