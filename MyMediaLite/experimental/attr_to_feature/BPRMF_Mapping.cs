@@ -24,11 +24,18 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public abstract class BPRMF_Mapping : BPRMF
 	{
-		public double learn_rate_mapping = 0.01;
-		public int num_iter_mapping = 10;
-		public int num_init_mapping = 5;
-		public double reg_mapping = 0.1;
-
+		public double LearnRateMapping { get { return learn_rate_mapping; } set { learn_rate_mapping = value; } }
+		protected double learn_rate_mapping = 0.01;
+		
+		public int NumInitMapping {	get { return num_init_mapping; } set { num_init_mapping = value; } }
+		protected int num_init_mapping = 5;
+		
+		public int NumIterMapping { get { return this.num_iter_mapping; } set { num_iter_mapping = value; } }
+		protected int num_iter_mapping = 10;
+		
+		public double RegMapping { get { return this.reg_mapping; } set { reg_mapping = value; } }
+		protected double reg_mapping = 0.1;
+		
 		// includes bias
 		protected Matrix<double> attribute_to_feature;
 
