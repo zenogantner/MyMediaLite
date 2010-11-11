@@ -29,19 +29,20 @@ namespace MyMediaLite.experimental.attr_to_feature
 {
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
 			set
 			{
 				this.user_attributes = value;
-				// TODO check whether there is a match between num. of users here and in the collaborative data
+				this.NumUserAttributes = user_attributes.NumberOfColumns;
+				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
 			}
 		}
 		/// <summary>The matrix storing the user attributes</summary>
 		protected SparseBooleanMatrix user_attributes;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
 
 		/// <summary>
@@ -205,7 +206,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return feature_representation;
 		}
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
 			HashSet<int> attributes = user_attributes[user_id];
@@ -217,7 +218,7 @@ namespace MyMediaLite.experimental.attr_to_feature
             return result;
         }
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();

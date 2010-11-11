@@ -27,20 +27,19 @@ namespace MyMediaLite.io
 {
 	/// <summary>
 	/// Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects.
-	///
+	/// </summary>
+	/// <remarks>
 	/// The expected (sparse) line format is:
 	/// ENTITY_ID whitespace ATTRIBUTE_ID
 	/// for attributes that are set.
-	/// </summary>
+	/// </remarks>
 	public class AttributeData
 	{
-		/// <summary>
-		/// Read binary attribute data from file
-		/// </summary>
+		/// <summary>Read binary attribute data from file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the attribute data and the number of attributes</returns>
-		static public Pair<SparseBooleanMatrix, int> Read(string filename, EntityMapping mapping)
+		/// <returns>the attribute data</returns>
+		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
 		{
             using ( StreamReader reader = new StreamReader(filename) )
 			{
@@ -48,13 +47,11 @@ namespace MyMediaLite.io
 			}
 		}
 
-		/// <summary>
-		/// Read binary attribute data from file
-		/// </summary>
+		/// <summary>Read binary attribute data from file</summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the attribute data and the number of attributes</returns>
-		static public Pair<SparseBooleanMatrix, int> Read(StreamReader reader, EntityMapping mapping)
+		/// <returns>the attribute data</returns>
+		static public SparseBooleanMatrix Read(StreamReader reader, EntityMapping mapping)
 		{
 			SparseBooleanMatrix matrix = new SparseBooleanMatrix();
 			int max_attr_id = 0;
@@ -85,7 +82,7 @@ namespace MyMediaLite.io
 				max_attr_id = Math.Max(max_attr_id, attr_id);
 			}
 
-			return new Pair<SparseBooleanMatrix, int>(matrix, max_attr_id + 1);
+			return matrix;
 		}
 	}
 }

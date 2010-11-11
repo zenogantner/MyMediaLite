@@ -36,7 +36,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 			set
 			{
 				this.item_attributes = value;
-				// TODO check whether there is a match between num. of items here and in the collaborative data
+				this.NumItemAttributes = item_attributes.NumberOfColumns;
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
 			}
 		}
 		/// <summary>The matrix storing the item attributes</summary>
@@ -141,7 +142,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			for (int j = 0; j < num_factors; j++) {
 				// TODO: do we need an absolute term here???
 				double diff = est_features[j] - item_factors[item_id, j];
-				if (diff > 0)
+				if (diff != 0)
 				{
 					foreach (int attribute in item_attributes[item_id])
 					{
@@ -232,11 +233,6 @@ namespace MyMediaLite.experimental.attr_to_feature
             if ((user_id < 0) || (user_id >= user_factors.dim1))
             {
                 Console.Error.WriteLine("user is unknown: " + user_id);
-				return double.MinValue;
-            }
-            if ((item_id < 0) || (item_id >= item_factors.dim1))
-            {
-                Console.Error.WriteLine("item is unknown: " + item_id);
 				return double.MinValue;
             }
 

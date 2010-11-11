@@ -29,12 +29,10 @@ namespace MyMediaLite.io
 	/// </summary>
 	public class ItemRecommenderData
 	{
-		/// <summary>
-		/// Read in implicit feedback data from a file
-		/// </summary>
-		/// <param name="filename">
-		/// name of the file to be read from, "-" if STDIN
-		/// </param>
+		// TODO don't return pair, use .Transpose() instead inside of item_recommender.Memory; don't forget to adapt Python/C# examples on website
+		
+		/// <summary>Read in implicit feedback data from a file</summary>
+		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
 		/// <param name="user_mapping">
 		/// user <see cref="EntityMapping"/> object
 		/// </param>

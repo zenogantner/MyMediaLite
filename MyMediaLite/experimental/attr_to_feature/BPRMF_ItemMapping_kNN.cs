@@ -35,7 +35,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		protected CorrelationMatrix item_correlation;
 
 
-		// HACK: make it protected after implementation is completed
+		// HACK make it protected after implementation is completed
 		public override void LearnAttributeToFactorMapping()
 		{
 			Cosine cosine_correlation = new Cosine(MaxItemID + 1);

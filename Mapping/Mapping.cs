@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-//using System.Text;
 using MyMediaLite;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
@@ -33,18 +32,29 @@ using MyMediaLite.util;
 namespace Mapping
 {
 	/// <summary>
-	/// Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
-    /// Learning Attribute-to-Feature Mappings for Cold-start Recommendations
-    /// Proceedings of the 10th IEEE International Conference on Data Mining (ICDM 2010), Sydney, Australia.
 	/// </summary>
+	/// <remarks>
+	/// <inproceedings>
+	///   <author>Zeno Gantner</author>
+	///   <author>Lucas Drumond</author>
+	///   <author>Christoph Freudenthaler</author>
+	///   <author>Steffen Rendle</author>
+	///   <author>Lars Schmidt-Thieme</author>
+    ///   <title>Learning Attribute-to-Feature Mappings for Cold-start Recommendations</title>
+    ///   <booktitle>IEEE International Conference on Data Mining (ICDM 2010)</booktitle>
+    ///   <location>Sydney, Australia</location>
+    ///   <year>2010</year>
+    /// </inproceedings>
+	/// </remarks>
 	public class Mapping
 	{
-		static NumberFormatInfo ni = new NumberFormatInfo();		
-		
+		static NumberFormatInfo ni = new NumberFormatInfo();
+
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
 		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
 		static ICollection<int> relevant_items;
 
+		static BPRMF_Mapping recommender;
 		static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
 		static BPRMF_ItemMapping_Optimal bprmf_map_bpr = new BPRMF_ItemMapping_Optimal();
 		static BPRMF_ItemMapping bprmf_map_com         = new BPRMF_ItemMapping_Complex();
@@ -89,7 +99,7 @@ namespace Mapping
         {
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			ni.NumberDecimalDigits = '.';
-			
+
 			// check number of command line parameters
 			if (args.Length < 4)
 				Usage("Not enough arguments.");
@@ -119,7 +129,6 @@ namespace Mapping
 			string method    = args[3];
 
 			// set correct recommender
-			BPRMF_Mapping recommender = null;
 			switch (method)
 			{   // TODO shorter names
 				case "BPR-MF-ItemMapping":
@@ -167,29 +176,21 @@ namespace Mapping
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
+			{
 				if (user_attributes_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_attributes.");
-				}
+					Usage("Recommender expects user_attributes=FILE.");
 				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((IUserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((IUserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
-				}
+					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			}
 
 			// item attributes
 			if (recommender is IItemAttributeAwareRecommender)
+			{
 				if (item_attributes_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects item_attributes.");
-				}
+					Usage("Recommender expects item_attributes=FILE.");
 				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((IItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((IItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
-				}
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+			}
 
 			// test data
             test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
@@ -197,6 +198,8 @@ namespace Mapping
 			TimeSpan seconds;
 
 			Engine.LoadModel(recommender, data_dir, load_model_file);
+
+			DisplayDataStats();
 
 			Console.Write(recommender.ToString() + " ");
 
@@ -295,7 +298,7 @@ namespace Mapping
 			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
 			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
-		
+
 		static void DisplayDataStats()
 		{
 			// training data stats
@@ -313,6 +316,12 @@ namespace Mapping
 			empty_size  = matrix_size - test_data.First.NumberOfEntries;
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+			// attribute stats
+			if (recommender is IUserAttributeAwareRecommender)
+				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+			if (recommender is IItemAttributeAwareRecommender)
+				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
 		}
 	}
 }

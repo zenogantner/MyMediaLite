@@ -34,8 +34,18 @@ namespace MyMediaLite.item_recommender
     public class ItemAttributeSVM : Memory, IItemAttributeAwareRecommender
     {
 		/// <inheritdoc/>
-		public SparseBooleanMatrix ItemAttributes { get; set; }
-
+		public SparseBooleanMatrix ItemAttributes
+		{
+			get { return this.item_attributes; }
+			set
+			{
+				this.item_attributes = value;
+				this.NumItemAttributes = item_attributes.NumberOfColumns;
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+			}
+		}
+		private SparseBooleanMatrix item_attributes;		
+		
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 

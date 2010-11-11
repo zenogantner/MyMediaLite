@@ -36,6 +36,7 @@ namespace MyMediaLite.item_recommender
 			set
 			{
 				this.user_attributes = value;
+				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
 			}
 		}

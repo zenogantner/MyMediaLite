@@ -383,31 +383,21 @@ namespace MyMediaLite
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
+			{
 				if (user_attributes_file.Equals(string.Empty))
-				{
 					Usage("Recommender expects user_attributes=FILE.");
-				}
 				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-					((IUserAttributeAwareRecommender)recommender).UserAttributes    = attr_data.First;
-					((IUserAttributeAwareRecommender)recommender).NumUserAttributes = attr_data.Second;
-					Console.WriteLine("{0} user attributes", attr_data.Second);
-				}
+					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			}
 
 			// item attributes
 			if (recommender is IItemAttributeAwareRecommender)
+			{
 				if (item_attributes_file.Equals(string.Empty))
-				{
 					Usage("Recommender expects item_attributes=FILE.");
-				}
 				else
-				{
-					Pair<SparseBooleanMatrix, int> attr_data = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-					((IItemAttributeAwareRecommender)recommender).ItemAttributes    = attr_data.First;
-					((IItemAttributeAwareRecommender)recommender).NumItemAttributes = attr_data.Second;
-					Console.WriteLine("{0} item attributes", attr_data.Second);
-				}
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+			}
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
@@ -468,6 +458,12 @@ namespace MyMediaLite
 			empty_size  = (long) matrix_size - test_data.First.NumberOfEntries;
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+			// attribute stats
+			if (recommender is IUserAttributeAwareRecommender)
+				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+			if (recommender is IItemAttributeAwareRecommender)
+				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
 		}
 
 		static void DisplayIterationStats()

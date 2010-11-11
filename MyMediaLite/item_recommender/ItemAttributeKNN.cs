@@ -23,28 +23,38 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.item_recommender
 {
-    /// <remarks>
+
+	/// <summary>
     /// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
-    /// k=\infty.
-    ///
+    /// </summary>
+    /// <remarks>
     /// This engine does not support online updates.
     /// </remarks>
-    /// <author>Zeno Gantner, University of Hildesheim</author>
     public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
     {
-		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes { get; set; }
+		/// <inheritdoc/>
+		public SparseBooleanMatrix ItemAttributes
+		{
+			get { return this.item_attributes; }			
+			set
+			{
+				this.item_attributes = value;
+				this.NumItemAttributes = item_attributes.NumberOfColumns;
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+			}
+		}
+		private SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Train()
         {
 			this.correlation = Cosine.Create(ItemAttributes);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("item-attribute-kNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());

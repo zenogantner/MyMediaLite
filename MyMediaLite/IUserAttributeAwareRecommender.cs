@@ -17,6 +17,7 @@
 
 using MyMediaLite.data_type;
 
+
 namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take binary user attributes into account</summary>

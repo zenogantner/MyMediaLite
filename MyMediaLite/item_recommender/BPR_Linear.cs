@@ -31,16 +31,21 @@ namespace MyMediaLite.item_recommender
 	/// Linear model optimized for BPR
 	/// </summary>
 	/// <remarks>
-	/// Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme (2010):
-    /// Learning Attribute-to-Feature Mappings for Cold-start Recommendations
-    /// in IEEE International Conference on Data Mining (ICDM 2010), Sydney, Australia.
-    ///
     /// This engine does not support online updates.
 	/// </remarks>
 	public class BPR_Linear : Memory, IItemAttributeAwareRecommender, IIterativeModel
 	{
-		/// <inheritdoc />
-		public SparseBooleanMatrix ItemAttributes {	set	{ this.item_attributes = value;	} }
+		/// <inheritdoc/>
+		public SparseBooleanMatrix ItemAttributes
+		{
+			get { return this.item_attributes; }
+			set
+			{
+				this.item_attributes = value;
+				this.NumItemAttributes = item_attributes.NumberOfColumns;
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+			}
+		}
 		private SparseBooleanMatrix item_attributes;
 
 		/// <inheritdoc/>
@@ -48,7 +53,6 @@ namespace MyMediaLite.item_recommender
 
 	    /// <summary>Item attribute weights</summary>
         Matrix<double> item_attribute_weight_by_user;
-
 
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
