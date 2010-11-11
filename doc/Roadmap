@@ -72,6 +72,8 @@ Architecture
  - webservice interface
  - move unit tests out of main library
  - use one repository per component, instead of having everything in one repository
+ - consider using simulated multiple inheritance for the attribute-based recommenders:
+   http://www.codeproject.com/KB/architecture/smip.aspx
 Misc
  - faster evaluation routines
    - approximate AUC

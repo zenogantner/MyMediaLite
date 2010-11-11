@@ -24,9 +24,7 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.correlation
 {
-	/// <summary>
-	/// Correlation class for Pearson correlation.
-	/// </summary>
+	/// <summary>Correlation class for Pearson correlation</summary>
 	public class Pearson : CorrelationMatrix
 	{
 		/// <summary>shrinkage parameter</summary>
@@ -68,7 +66,7 @@ namespace MyMediaLite.correlation
 			return cm;
 		}		
 
-		/// <inheritdoc />
+		/// <inheritdoc/>
 		public static float ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
@@ -118,12 +116,8 @@ namespace MyMediaLite.correlation
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
 			return (float) pmcc * (n / (n + shrinkage));
 		}
-
-		// TODO compute everything with ~ one pass over the training data
 		
-		/// <summary>
-		/// Compute correlations for given ratings
-		/// </summary>
+		/// <summary>Compute correlations for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		public override void ComputeCorrelations(RatingData ratings, EntityType entity_type)
@@ -146,10 +140,10 @@ namespace MyMediaLite.correlation
 				this[i, i] = 1;
 
 				for (int j = i + 1; j < num_entities; j++)
-				{
 					this[i, j] = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
-				}
 			}
+			
+			Console.Error.WriteLine();
 		}
 	}
 }
