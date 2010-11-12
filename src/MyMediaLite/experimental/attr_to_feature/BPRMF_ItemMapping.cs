@@ -49,7 +49,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 	    public int NumItemAttributes { get;	set; }		
 
 		/// <summary>use a bias term for each mapping</summary>
-		public bool mapping_feature_bias = false;
+		public bool mapping_feature_bias = true;
 		
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;

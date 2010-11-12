@@ -127,7 +127,6 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				int item_id = random.Next(0, MaxItemID + 1);
 				HashSet<int> item_users = data_item[item_id];
-				HashSet<int> item_attrs = item_attributes[item_id];
 				if (item_users.Count == 0)
 					continue;
 				return item_id;

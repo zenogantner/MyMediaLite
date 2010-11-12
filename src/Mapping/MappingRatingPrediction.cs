@@ -179,8 +179,6 @@ namespace MyMediaLite
 
 			Console.Write(recommender.ToString() + " ");
 
-			Console.WriteLine("max_user_id={0}, max_item_id={1}", recommender.MaxUserID, recommender.MaxItemID);
-
 			if (compute_fit)
 			{
 				seconds = Utils.MeasureTime( delegate() {
