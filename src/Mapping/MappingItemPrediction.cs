@@ -29,7 +29,7 @@ using MyMediaLite.io;
 using MyMediaLite.util;
 
 
-namespace Mapping
+namespace MyMediaLite
 {
 	/// <summary>
 	/// </summary>

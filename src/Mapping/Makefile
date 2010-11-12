@@ -69,7 +69,8 @@ MAPPING = $(BUILD_DIR)/mapping
 
 FILES =  \
 	AssemblyInfo.cs \
-	Mapping.cs 
+	MappingItemPrediction.cs \
+	MappingRatingPrediction.cs 
 
 DATA_FILES = 
 
@@ -80,6 +81,7 @@ EXTRAS = \
 
 REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll \
+	-pkg:mono-nunit \
 	System.Core
 
 DLL_REFERENCES = 

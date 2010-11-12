@@ -29,11 +29,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mapping.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="MappingItemPrediction.cs" />
+    <Compile Include="MappingRatingPrediction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core">
+    </Reference>
+    <Reference Include="nunit.framework">
+      <Package>mono-nunit</Package>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
