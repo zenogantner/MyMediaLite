@@ -3,10 +3,10 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 
 todo:
-	ack --type=csharp TODO
-	ack --type=csharp FIXME
-	ack --type=csharp HACK
-	ack --type=csharp NotImplementedException
+	ack --type=csharp TODO;  echo
+	ack --type=csharp FIXME; echo
+	ack --type=csharp HACK;  echo
+	ack --type=csharp NotImplementedException; echo
 	ack --type=csharp TODO  | wc -l
 	ack --type=csharp FIXME | wc -l
 	ack --type=csharp HACK  | wc -l
