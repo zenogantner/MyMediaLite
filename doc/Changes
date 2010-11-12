@@ -7,6 +7,8 @@
          - new interface IItemRecommender (instead of abstract class)
          - simplified interface of io.AttributeData
          - added property NumberOfColumns to SparseBooleanMatrix
+         - automagic engine configuration: proper handling of read-only
+           properties
 	command-line programs
          - exception handler: encourage users to file bug reports
          - check again for unknown program parameters

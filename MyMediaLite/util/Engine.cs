@@ -144,13 +144,15 @@ namespace MyMediaLite.util
 			foreach (var key in new List<string>(parameters.Keys))
 			{
 				string param_name = NormalizeName(key);
-				//Console.WriteLine("Looking at {0}", param_name);
 				foreach (string property_name in property_names)
 				{
 					if (NormalizeName(property_name).StartsWith(param_name))
 					{
 						var property = type.GetProperty(property_name);
-						//Console.WriteLine("property: {0}, {1}", property.Name, property.PropertyType);
+						
+						if (property.GetSetMethod() == null)
+							goto NEXT_PROPERTY; // poor man's labeled break ...
+						
 						switch (property.PropertyType.ToString())
 						{
 							case "System.Double":
@@ -175,6 +177,9 @@ namespace MyMediaLite.util
 						parameters.Remove(key);
 						goto NEXT_KEY; // poor man's labeled break ...
 					}
+					
+					NEXT_PROPERTY:
+					Console.Write(""); // the C# compiler wants some statement here
 				}
 				
 				report_error(string.Format("Engine {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
