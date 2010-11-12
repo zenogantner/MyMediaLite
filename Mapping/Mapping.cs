@@ -130,27 +130,27 @@ namespace Mapping
 
 			// set correct recommender
 			switch (method)
-			{   // TODO shorter names
+			{
 				case "BPR-MF-ItemMapping":
-					recommender = InitBPR_MF_ItemMapping(bprmf_map, parameters);
+					recommender = Engine.Configure(bprmf_map, parameters, Usage);
 					break;
 				case "BPR-MF-ItemMapping-Optimal":
-					recommender = InitBPR_MF_ItemMapping(bprmf_map_bpr, parameters);
+					recommender = Engine.Configure(bprmf_map_bpr, parameters, Usage);
 					break;
 				case "BPR-MF-ItemMapping-Complex":
-					recommender = InitBPR_MF_ItemMapping(bprmf_map_com, parameters);
+					recommender = Engine.Configure(bprmf_map_com, parameters, Usage);
 					break;
 				case "BPR-MF-ItemMapping-kNN":
-					recommender = InitBPR_MF_ItemMapping(bprmf_map_knn, parameters);
+					recommender = Engine.Configure(bprmf_map_knn, parameters, Usage);
 					break;
 				case "BPR-MF-ItemMapping-SVR":
-					recommender = InitBPR_MF_ItemMapping(bprmf_map_svr, parameters);
+					recommender = Engine.Configure(bprmf_map_svr, parameters, Usage);
 					break;
 				case "BPR-MF-UserMapping":
-					recommender = InitBPR_MF_UserMapping(bprmf_user_map, parameters);
+					recommender = Engine.Configure(bprmf_user_map, parameters, Usage);
 					break;
 				case "BPR-MF-UserMapping-Optimal":
-					recommender = InitBPR_MF_UserMapping(bprmf_user_map_bpr, parameters);
+					recommender = Engine.Configure(bprmf_user_map_bpr, parameters, Usage);
 					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
@@ -206,19 +206,19 @@ namespace Mapping
 			if (compute_fit)
 			{
 				seconds = Utils.MeasureTime( delegate() {
-					int num_iter = recommender.num_iter_mapping;
-					recommender.num_iter_mapping = 0;
+					int num_iter = recommender.NumIterMapping;
+					recommender.NumIterMapping = 0;
 					recommender.LearnAttributeToFactorMapping();
 					Console.Error.WriteLine();
 					Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
 
-					recommender.num_iter_mapping = 1;
+					recommender.NumIterMapping = 1;
 					for (int i = 0; i < num_iter; i++, i++)
 					{
 						recommender.IterateMapping();
 						Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 					}
-					recommender.num_iter_mapping = num_iter; // restore
+					recommender.NumIterMapping = num_iter; // restore
 		    	} );
 			}
 			else
@@ -251,47 +251,6 @@ namespace Mapping
 			Console.Write(" testing " + seconds);
 
 			return seconds;
-		}
-
-		static BPRMF_ItemMapping InitBPR_MF_ItemMapping(BPRMF_ItemMapping engine, CommandLineParameters parameters)
-		{
-			engine.InitMean          = parameters.GetRemoveDouble("init_f_mean",          engine.InitMean);
-			engine.InitStdev         = parameters.GetRemoveDouble("init_f_stdev",         engine.InitStdev);
-			engine.reg_mapping          = parameters.GetRemoveDouble("reg_mapping",          engine.reg_mapping);
-			engine.learn_rate_mapping   = parameters.GetRemoveDouble("learn_rate_mapping",   engine.learn_rate_mapping);
-			engine.num_iter_mapping     = parameters.GetRemoveInt32( "num_iter_mapping",     engine.num_iter_mapping);
-			engine.mapping_feature_bias = parameters.GetRemoveBool(  "mapping_feature_bias", engine.mapping_feature_bias);
-
-			if (engine is BPRMF_ItemMapping_Complex)
-			{
-				var map_engine                 = (BPRMF_ItemMapping_Complex)engine;
-				map_engine.num_hidden_features = parameters.GetRemoveInt32("num_hidden_features", map_engine.num_hidden_features);
-			}
-			if (engine is BPRMF_ItemMapping_kNN)
-			{
-				var map_engine = (BPRMF_ItemMapping_kNN)engine;
-				map_engine.k   = parameters.GetRemoveUInt32("k", map_engine.k);
-			}
-			if (engine is BPRMF_ItemMapping_SVR)
-			{
-				var map_engine     = (BPRMF_ItemMapping_SVR)engine;
-				map_engine.C       = parameters.GetRemoveDouble("c",     map_engine.C);
-				map_engine.Gamma   = parameters.GetRemoveDouble("gamma", map_engine.Gamma);
-			}
-			return engine;
-		}
-
-		static BPRMF_Mapping InitBPR_MF_UserMapping(BPRMF_Mapping engine, CommandLineParameters parameters)
-		{
-			engine.InitMean        = parameters.GetRemoveDouble("init_f_mean",        engine.InitMean);
-			engine.InitStdev       = parameters.GetRemoveDouble("init_f_stdev",       engine.InitStdev);
-			engine.reg_mapping        = parameters.GetRemoveDouble("reg_mapping",        engine.reg_mapping);
-			engine.learn_rate_mapping = parameters.GetRemoveDouble("learn_rate_mapping", engine.learn_rate_mapping);
-			engine.num_iter_mapping   = parameters.GetRemoveInt32( "num_iter_mapping",   engine.num_iter_mapping);
-			engine.reg_mapping        = parameters.GetRemoveDouble("reg_mapping",        engine.reg_mapping);
-			engine.learn_rate_mapping = parameters.GetRemoveDouble("learn_rate_mapping", engine.learn_rate_mapping);
-			engine.num_iter_mapping   = parameters.GetRemoveInt32( "num_iter_mapping",   engine.num_iter_mapping);
-			return engine;
 		}
 
 		static void DisplayResults(Dictionary<string, double> result) {

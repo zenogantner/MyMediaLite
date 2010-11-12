@@ -24,16 +24,23 @@ using MyMediaLite.item_recommender;
 using MyMediaLite.util;
 using SVM;
 
+
 namespace MyMediaLite.experimental.attr_to_feature
 {
+	/// <summary>BPR-MF with item mapping learned by support-vector regression (SVR)</summary>
 	public class BPRMF_ItemMapping_SVR : BPRMF_ItemMapping
 	{
-		public double C     = 1;
-		public double Gamma = (double) 1 / 500; // usually: 1 / num_features
+		/// <summary>C hyperparameter for the SVM</summary>
+		public double C { get { return c; } set { c = value; } }
+		double c = 1;
 
-		protected SVM.Model[] models;
+		/// <summary>Gamma parameter for RBF kernel</summary>
+		public double Gamma { get { return gamma; } set { gamma = value; } }
+		double gamma = (double) 1 / 500; // usually: 1 / num_features
 
-		// HACK: make it protected after implementation is completed
+		SVM.Model[] models;
+
+		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
 			//Console.Error.WriteLine("map-svr with {0} attributes ...", num_item_attributes);
@@ -60,8 +67,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 			Parameter svm_parameters = new Parameter();
 			svm_parameters.SvmType = SvmType.EPSILON_SVR;
 			//svm_parameters.SvmType = SvmType.NU_SVR;
-			svm_parameters.C     = this.C;
-			svm_parameters.Gamma = this.Gamma;
+			svm_parameters.C     = this.c;
+			svm_parameters.Gamma = this.gamma;
 
 			models = new Model[num_factors];
 			for (int f = 0; f < num_factors; f++)
@@ -111,7 +118,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			return string.Format(
 				ni,
 				"BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_mean={8}, init_stdev={9}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, C, Gamma, init_mean, init_stdev
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, init_mean, init_stdev
 			);
 		}
 

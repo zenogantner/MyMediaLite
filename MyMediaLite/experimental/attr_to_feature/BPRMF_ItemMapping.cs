@@ -28,6 +28,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
+	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
 		/// <inheritdoc/>
@@ -46,15 +47,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 		
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }		
-		
-		/// <summary>
-		/// use a bias term for each mapping
-		/// </summary>
+
+		/// <summary>use a bias term for each mapping</summary>
 		public bool mapping_feature_bias = false;
 		
-		/// <summary>
-		/// array to store the bias for each mapping
-		/// </summary>
+		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
 
 		/// <inheritdoc/>

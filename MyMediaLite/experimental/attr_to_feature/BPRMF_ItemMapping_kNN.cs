@@ -27,15 +27,16 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
+	/// <summary>BPR-MF with item mapping learned by kNN</summary>
 	public class BPRMF_ItemMapping_kNN : BPRMF_ItemMapping
 	{
 		/// <summary>Number of neighbors to be used for mapping</summary>
-		public uint k = uint.MaxValue;
+		public uint K { get { return k; } set { k = value; } }
+		uint k = uint.MaxValue;
 
-		protected CorrelationMatrix item_correlation;
+		CorrelationMatrix item_correlation;
 
-
-		// HACK make it protected after implementation is completed
+		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
 			Cosine cosine_correlation = new Cosine(MaxItemID + 1);
@@ -78,8 +79,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(
 				ni,
 				"BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_mean={7}, init_stdev={8}",

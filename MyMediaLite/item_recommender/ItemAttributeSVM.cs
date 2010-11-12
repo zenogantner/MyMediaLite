@@ -49,7 +49,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
-		/// <summary>C hyperparameter</summary>
+		/// <summary>C hyperparameter for the SVM</summary>
 		public double C { get { return c; } set { c = value; } }
 		double c = 1;
 
