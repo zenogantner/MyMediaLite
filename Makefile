@@ -1,26 +1,41 @@
 PDF_VIEWER=evince
 EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
+SRC_DIR=src
+
+all:
+	cd ${SRC_DIR} && make all
+
+clean:
+	cd ${SRC_DIR} && make clean
+	rm -rf doc/monodoc/*
+	rm -rf website/public_html/*
+
+install:
+	cd ${SRC_DIR} && make install
+
+install:
+	cd ${SRC_DIR} && make uninstall
 
 todo:
-	ack --type=csharp TODO;  echo
-	ack --type=csharp FIXME; echo
-	ack --type=csharp HACK;  echo
-	ack --type=csharp NotImplementedException; echo
-	ack --type=csharp TODO  | wc -l
-	ack --type=csharp FIXME | wc -l
-	ack --type=csharp HACK  | wc -l
-	ack --type=csharp NotImplementedException | wc -l
+	ack --type=csharp TODO                    ${SRC_DIR}; echo
+	ack --type=csharp FIXME                   ${SRC_DIR}; echo
+	ack --type=csharp HACK                    ${SRC_DIR}; echo
+	ack --type=csharp NotImplementedException ${SRC_DIR}; echo
+	ack --type=csharp TODO                    ${SRC_DIR} | wc -l
+	ack --type=csharp FIXME                   ${SRC_DIR} | wc -l
+	ack --type=csharp HACK                    ${SRC_DIR} | wc -l
+	ack --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
 gendarme:
-	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ItemPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} Mapping/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/MyMediaLite.dll
-	gendarme ${GENDARME_OPTIONS} RatingPrediction/bin/Debug/SVM.dll
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/ItemPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/SVM.dll
 
 monodoc:
-	mdoc update -i MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ MyMediaLite/bin/Debug/MyMediaLite.dll
+	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 htmldoc:
 	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api --template doc/doctemplate.xsl
 
