@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\MathNet\MathNet.Iridium.dll</HintPath>
+      <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -165,7 +165,7 @@
     <Folder Include="experimental\item_prediction\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lib\SVM\SVM.csproj">
+    <ProjectReference Include="..\SVM\SVM.csproj">
       <Project>{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}</Project>
       <Name>SVM</Name>
     </ProjectReference>

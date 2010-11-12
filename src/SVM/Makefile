@@ -4,7 +4,7 @@ EXTRA_DIST =  Makefile
 # Warning: This is an automatically generated file, do not edit!
 
 srcdir=.
-top_srcdir=../..
+top_srcdir=..
 
 include $(top_srcdir)/config.make
 
@@ -49,23 +49,23 @@ RESGEN=resgen2
 
 SVM_PC = $(BUILD_DIR)/svm.pc
 
-FILES =  \
+FILES = \
 	Cache.cs \
-	GaussianTransform.cs \
 	IRangeTransform.cs \
 	Kernel.cs \
+	ParameterSelection.cs \
+	Properties/AssemblyInfo.cs \
 	Model.cs \
 	Node.cs \
 	Parameter.cs \
-	ParameterSelection.cs \
-	PerformanceEvaluator.cs \
-	PrecomputedKernel.cs \
 	Prediction.cs \
 	Problem.cs \
-	Properties/AssemblyInfo.cs \
 	RangeTransform.cs \
+	GaussianTransform.cs \
 	Scaling.cs \
 	Solver.cs \
+	PerformanceEvaluator.cs \
+	PrecomputedKernel.cs \
 	SVMExtensions.cs \
 	TemporaryCulture.cs \
 	Training.cs 
