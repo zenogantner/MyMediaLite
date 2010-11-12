@@ -143,7 +143,9 @@ FILES = \
 	experimental/attr_to_feature/BPRMF_ItemMapping_Optimal.cs \
 	experimental/attr_to_feature/BPRMF_ItemMapping_SVR.cs \
 	experimental/attr_to_feature/BPRMF_UserMapping.cs \
-	experimental/attr_to_feature/BPRMF_UserMapping_Optimal.cs 
+	experimental/attr_to_feature/BPRMF_UserMapping_Optimal.cs \
+	experimental/attr_to_feature/MF_Mapping.cs \
+	experimental/attr_to_feature/MF_ItemMapping.cs 
 
 DATA_FILES = 
 
@@ -161,7 +163,6 @@ EXTRAS = \
 	experimental \
 	experimental/attr_to_feature \
 	ensemble \
-	experimental/rating_prediction \
 	experimental/item_prediction \
 	mymedialite.pc.in 
 

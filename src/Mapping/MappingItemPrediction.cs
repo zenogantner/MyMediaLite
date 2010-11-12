@@ -46,7 +46,7 @@ namespace MyMediaLite
     ///   <year>2010</year>
     /// </inproceedings>
 	/// </remarks>
-	public class Mapping
+	public class MappingItemPrediction
 	{
 		static NumberFormatInfo ni = new NumberFormatInfo();
 

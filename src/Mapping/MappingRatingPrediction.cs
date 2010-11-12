@@ -39,18 +39,15 @@ namespace MyMediaLite
 	{
 		static NumberFormatInfo ni = new NumberFormatInfo();
 
-		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
-		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
-		static ICollection<int> relevant_items;
+		// data sets
+		static RatingData training_data;
+		static RatingData test_data;
 
-		static BPRMF_Mapping recommender;
-		static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
-		static BPRMF_ItemMapping_Optimal bprmf_map_bpr = new BPRMF_ItemMapping_Optimal();
-		static BPRMF_ItemMapping bprmf_map_com         = new BPRMF_ItemMapping_Complex();
-		static BPRMF_ItemMapping bprmf_map_knn         = new BPRMF_ItemMapping_kNN();
-		static BPRMF_ItemMapping bprmf_map_svr         = new BPRMF_ItemMapping_SVR();
-		static BPRMF_Mapping bprmf_user_map            = new BPRMF_UserMapping();
-		static BPRMF_Mapping bprmf_user_map_bpr        = new BPRMF_UserMapping_Optimal();
+		static MF_Mapping recommender;
+		static MF_ItemMapping mf_map             = new MF_ItemMapping();
+		//static MF_ItemMapping_Optimal mf_map_opt = new MF_ItemMapping_Optimal();
+		//static MF_ItemMapping mf_map_knn         = new MF_ItemMapping_kNN();
+		//static MF_ItemMapping mf_map_svr         = new MF_ItemMapping_SVR();
 
 		static void Usage(string message)
 		{
@@ -63,21 +60,19 @@ namespace MyMediaLite
 			Console.WriteLine("MyMediaLite attribute mapping for item prediction; usage:");
 			Console.WriteLine(" Mapping.exe TRAINING_FILE TEST_FILE MODEL_FILE METHOD [ARGUMENTS] [OPTIONS]");
 			Console.WriteLine("  - methods (plus arguments and their defaults):");
-			Console.WriteLine("    - " + bprmf_map     + " (needs item_attributes)");
-			Console.WriteLine("    - " + bprmf_map_bpr + " (needs item_attributes)");
-			Console.WriteLine("    - " + bprmf_map_com + " (needs item_attributes)");
-			Console.WriteLine("    - " + bprmf_map_knn + " (needs item_attributes)");
-			Console.WriteLine("    - " + bprmf_map_svr + " (needs item_attributes)");
-			Console.WriteLine("    - " + bprmf_user_map     + " (needs user_attributes)");
-			Console.WriteLine("    - " + bprmf_user_map_bpr + " (needs user_attributes)");
+			Console.WriteLine("    - " + mf_map     + " (needs item_attributes)");
+			//Console.WriteLine("    - " + mf_map_opt + " (needs item_attributes)");
+			//Console.WriteLine("    - " + mf_map_knn + " (needs item_attributes)");
+			//Console.WriteLine("    - " + mf_map_svr + " (needs item_attributes)");
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
 			Console.WriteLine("  - general OPTIONS have the form name=value");
 			Console.WriteLine("    - random_seed=N");
 			Console.WriteLine("    - data_dir=DIR           load all files from DIR");
-			Console.WriteLine("    - relevant_items=FILE    use only item in the given file for evaluation");
 			Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");
 			Console.WriteLine("    - user_attributes=FILE   file containing user attribute information");
 			//Console.WriteLine("    - save_mappings=FILE     save computed mapping model to FILE");
+			Console.WriteLine("    - min_rating=NUM         the smallest valid rating value");
+			Console.WriteLine("    - max_rating=NUM         the greatest valid rating value");
 			Console.WriteLine("    - no_eval=BOOL           don't evaluate, only run the mapping");
 			Console.WriteLine("    - compute_fit=N          compute fit every N iterations");
 
@@ -98,9 +93,12 @@ namespace MyMediaLite
 			try	{ parameters = new CommandLineParameters(args, 4);	}
 			catch (ArgumentException e)	{ Usage(e.Message); 		}
 
+			// collaborative data characteristics
+			double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
+			double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
+
 			// other parameters
 			string data_dir             = parameters.GetRemoveString( "data_dir");
-			string relevant_items_file  = parameters.GetRemoveString( "relevant_items");
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 			//string save_mapping_file    = parameters.GetRemoveString( "save_model");
@@ -120,27 +118,18 @@ namespace MyMediaLite
 			// set correct recommender
 			switch (method)
 			{
-				case "BPR-MF-ItemMapping":
-					recommender = Engine.Configure(bprmf_map, parameters, Usage);
+				case "MF-ItemMapping":
+					recommender = Engine.Configure(mf_map, parameters, Usage);
 					break;
-				case "BPR-MF-ItemMapping-Optimal":
-					recommender = Engine.Configure(bprmf_map_bpr, parameters, Usage);
-					break;
-				case "BPR-MF-ItemMapping-Complex":
-					recommender = Engine.Configure(bprmf_map_com, parameters, Usage);
-					break;
-				case "BPR-MF-ItemMapping-kNN":
-					recommender = Engine.Configure(bprmf_map_knn, parameters, Usage);
-					break;
-				case "BPR-MF-ItemMapping-SVR":
-					recommender = Engine.Configure(bprmf_map_svr, parameters, Usage);
-					break;
-				case "BPR-MF-UserMapping":
-					recommender = Engine.Configure(bprmf_user_map, parameters, Usage);
-					break;
-				case "BPR-MF-UserMapping-Optimal":
-					recommender = Engine.Configure(bprmf_user_map_bpr, parameters, Usage);
-					break;
+//				case "MF-ItemMapping-Optimal":
+//					recommender = Engine.Configure(mf_map_opt, parameters, Usage);
+//					break;
+//				case "BPR-MF-ItemMapping-kNN":
+//					recommender = Engine.Configure(mf_map_knn, parameters, Usage);
+//					break;
+//				case "BPR-MF-ItemMapping-SVR":
+//					recommender = Engine.Configure(mf_map_svr, parameters, Usage);
+//					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
 					break;
@@ -154,16 +143,9 @@ namespace MyMediaLite
 			EntityMapping item_mapping = new EntityMapping();
 
 			// training data
-			training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
-			recommender.SetCollaborativeData(training_data.First, training_data.Second);
+			training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
+			recommender.Ratings = training_data;
 
-
-			// relevant items
-			if (! relevant_items_file.Equals(string.Empty) )
-				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-			else
-				relevant_items = training_data.Second.NonEmptyRowIDs;
-			
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
 			{
@@ -183,22 +165,22 @@ namespace MyMediaLite
 			}
 
 			// test data
-            test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
-						
+            test_data = RatingPredictionData.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
+
 			TimeSpan seconds;
 
 			Engine.LoadModel(recommender, data_dir, load_model_file);
 
 			// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 			recommender.MaxUserID = user_mapping.InternalIDs.Max();
-			recommender.MaxItemID = item_mapping.InternalIDs.Max();			
-			
+			recommender.MaxItemID = item_mapping.InternalIDs.Max();
+
 			DisplayDataStats();
 
 			Console.Write(recommender.ToString() + " ");
 
-			Console.WriteLine("max_user_id={0}, max_item_id={1}", recommender.MaxUserID, recommender.MaxItemID);			
-			
+			Console.WriteLine("max_user_id={0}, max_item_id={1}", recommender.MaxUserID, recommender.MaxItemID);
+
 			if (compute_fit)
 			{
 				seconds = Utils.MeasureTime( delegate() {
@@ -226,22 +208,17 @@ namespace MyMediaLite
 			Console.Write("mapping_time " + seconds + " ");
 
 			if (!no_eval)
-				seconds = EvaluateRecommender(recommender, test_data.First, training_data.First);
+				seconds = EvaluateRecommender(recommender);
 			Console.WriteLine();
 		}
 
-        static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, SparseBooleanMatrix test_user_items, SparseBooleanMatrix train_user_items)
+        static TimeSpan EvaluateRecommender(MF_Mapping recommender)
 		{
 			Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
-		    		var result = ItemPredictionEval.EvaluateItemRecommender(
-	                                recommender,
-									test_user_items,
-            	                    train_user_items,
-                	                relevant_items
-				    );
+		    		var result = RatingEval.EvaluateRated(recommender, test_data);
 					DisplayResults(result);
 		    	} );
 			Console.Write(" testing " + seconds);
@@ -257,18 +234,18 @@ namespace MyMediaLite
 		static void DisplayDataStats()
 		{
 			// training data stats
-			int num_users = training_data.First.NonEmptyRowIDs.Count;
-			int num_items = training_data.Second.NonEmptyRowIDs.Count;
+			int num_users = training_data.All.GetUsers().Count;
+			int num_items = training_data.All.GetItems().Count;
 			long matrix_size = (long) num_users * num_items;
-			long empty_size  = (long) matrix_size - training_data.First.NumberOfEntries;
+			long empty_size  = (long) matrix_size - training_data.Count;
 			double sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
-			num_users = test_data.First.NonEmptyRowIDs.Count;
-			num_items = test_data.Second.NonEmptyRowIDs.Count;
-			matrix_size = num_users * num_items;
-			empty_size  = matrix_size - test_data.First.NumberOfEntries;
+			num_users = test_data.All.GetUsers().Count;
+			num_items = test_data.All.GetItems().Count;
+			matrix_size = (long) num_users * num_items;
+			empty_size  = (long) matrix_size - test_data.Count;
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 

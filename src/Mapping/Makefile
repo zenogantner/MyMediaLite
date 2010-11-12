@@ -10,7 +10,7 @@ include $(top_srcdir)/config.make
 
 ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG" "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Debug/Mapping.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
@@ -19,10 +19,12 @@ PROJECT_REFERENCES =  \
 BUILD_DIR = bin/Debug
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
+MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
+MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MAPPING_EXE_MDB_SOURCE=bin/Debug/Mapping.exe.mdb
 MAPPING_EXE_MDB=$(BUILD_DIR)/Mapping.exe.mdb
 
@@ -30,7 +32,7 @@ endif
 
 ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Release/Mapping.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
@@ -39,9 +41,10 @@ PROJECT_REFERENCES =  \
 BUILD_DIR = bin/Release
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
+MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+MYMEDIALITE_DLL_MDB=
 MAPPING_EXE_MDB=
 
 endif
@@ -51,9 +54,10 @@ SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
 	$(MYMEDIALITE_DLL) \
+	$(MATHNET_IRIDIUM_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
-	$(MATHNET_IRIDIUM_DLL) \
+	$(MYMEDIALITE_DLL_MDB) \
 	$(MAPPING_EXE_MDB)  
 
 BINARIES = \
@@ -63,13 +67,13 @@ BINARIES = \
 RESGEN=resgen2
 
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
-SVM_DLL = $(BUILD_DIR)/SVM.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
+SVM_DLL = $(BUILD_DIR)/SVM.dll
 MAPPING = $(BUILD_DIR)/mapping
 
-FILES =  \
-	AssemblyInfo.cs \
+FILES = \
 	MappingItemPrediction.cs \
+	AssemblyInfo.cs \
 	MappingRatingPrediction.cs 
 
 DATA_FILES = 
@@ -80,9 +84,8 @@ EXTRAS = \
 	mapping.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	-pkg:mono-nunit \
-	System.Core
+	System.Core \
+	-pkg:mono-nunit
 
 DLL_REFERENCES = 
 
@@ -97,9 +100,10 @@ include $(top_srcdir)/Makefile.include
 
 
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL))
+$(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
-$(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
+$(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
 $(eval $(call emit-deploy-wrapper,MAPPING,mapping,x))
 
 
@@ -124,9 +128,10 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MAPPING_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
 	$(call cp,$(MAPPING),$(DESTDIR)$(bindir))
@@ -138,9 +143,10 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MAPPING_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MAPPING),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)

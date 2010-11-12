@@ -28,9 +28,12 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.experimental.attr_to_feature
 {
-	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
-	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
+	/// <summary>biased MF with item mapping learned by regularized least-squares regression</summary>
+	public class MF_ItemMapping : MF_Mapping, IItemAttributeAwareRecommender
 	{
+		/// <summary>Who has rated what? item-wise</summary>
+        protected SparseBooleanMatrix data_item;
+		
 		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes			
 		{
@@ -54,9 +57,18 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
 
+		protected System.Random random;
+		
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
+			random = util.Random.GetInstance();
+
+			// create helper data structure
+			data_item = new SparseBooleanMatrix();
+			foreach (RatingEvent r in Ratings.All)
+				data_item[r.item_id, r.user_id] = true;
+			
 			// create attribute-to-feature weight matrix
 			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_factors);
 			// store the results of the different runs in the following array
@@ -68,7 +80,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
+				MatrixUtils.InitNormal(attribute_to_feature, InitMean, InitStdev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
@@ -243,8 +255,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 			
 			return string.Format(
 				ni,
-			    "BPR-MF-ItemMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
+			    "MF-ItemMapping num_features={0}, regularization={1}, num_iter={2}, learn_rate={3}, reg_mapping={4}, num_iter_mapping={5}, learn_rate_mapping={6}, init_mean={7}, init_stdev={8}",
+				num_factors, Regularization, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}
 

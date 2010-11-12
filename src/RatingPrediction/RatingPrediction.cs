@@ -100,8 +100,8 @@ namespace RatingPrediction
 			Console.WriteLine("    - item_relation=FILE         file containing item relation information");
 			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
 			Console.WriteLine("    - load_model=FILE            load model from FILE");
-			Console.WriteLine("    - min_rating=NUM             ");
-			Console.WriteLine("    - max_rating=NUM             ");
+			Console.WriteLine("    - min_rating=NUM             the smallest valid rating value");
+			Console.WriteLine("    - max_rating=NUM             the greatest valid rating value");
 			Console.WriteLine("    - no_eval=BOOL               ");
 			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)");
 			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");

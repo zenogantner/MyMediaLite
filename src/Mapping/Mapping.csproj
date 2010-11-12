@@ -11,6 +11,7 @@
     <AssemblyName>Mapping</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ReleaseVersion>0.6</ReleaseVersion>
+    <StartupObject>MyMediaLite.MappingItemPrediction</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

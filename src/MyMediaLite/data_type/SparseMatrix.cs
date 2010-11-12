@@ -90,7 +90,6 @@ namespace MyMediaLite.data_type
 			get
 			{
 				var return_list = new List<Pair<int, int>>();
-				IList<KeyValuePair<int, Dictionary<int, T>>> nonEmptyRows;
 				foreach (var id_row in this.NonEmptyRows)
 					foreach (var col_id in id_row.Value.Keys)
 						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
