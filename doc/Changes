@@ -7,14 +7,14 @@
          - new interface IItemRecommender (instead of abstract class)
          - simplified interface of io.AttributeData
          - added property NumberOfColumns to SparseBooleanMatrix
-         - automagic engine configuration: proper handling of read-only
-           properties
 	command-line programs
          - exception handler: encourage users to file bug reports
          - check again for unknown program parameters
         misc
          - code clean-ups
          - minor documentation improvements
+         - automagic engine configuration: proper handling of read-only
+           properties
          - development: improved 'make gendarme' and 'make todo'
          - The core library and the command-line programs now do not contain
            any critical issues that Gendarme would complain about.
