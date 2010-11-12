@@ -3,14 +3,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2BDEB89C-FF19-44F1-B345-25630B6C3A5D}</ProjectGuid>
+    <ProjectGuid>{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AssemblyName>ItemPrediction</AssemblyName>
+    <RootNamespace>RatingPrediction</RootNamespace>
+    <AssemblyName>RatingPrediction</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <RootNamespace>MyMediaLite</RootNamespace>
-    <StartupObject>MyMediaLite.ItemPrediction</StartupObject>
     <ReleaseVersion>0.6</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -21,8 +20,7 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>ml1m-train.txt ml1m-test.txt most-popular data_dir=/home/mrg/MyMedia/trunk/WP4/Samples/Data</Commandlineparameters>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Commandlineparameters>../../../../Data/ml1m-train-10000.txt ../../../../Data/ml1m-test.txt user-kNN load_model=r-uknn.txt k=50 no_eval=true</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -30,17 +28,15 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>ml1m-train.txt ml1m-test.txt most-popular data_dir=/home/mrg/MyMedia/trunk/WP4/Samples/Data</Commandlineparameters>
-    <ConsolePause>false</ConsolePause>
-    <PlatformTarget>x86</PlatformTarget>
+    <Commandlineparameters>ml1m-train.txt ml1m-test.txt matrix-factorization data_dir=/home/mrg/MyMedia/trunk/WP4/Samples/Data regularization=0.05 num_features=8</Commandlineparameters>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Core">
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RatingPrediction.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ItemPrediction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -49,4 +45,19 @@
       <Name>MyMediaLite</Name>
     </ProjectReference>
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile" SyncReferences="true">
+          <BuildFilesVar Sync="true" Name="FILES" />
+          <DeployFilesVar />
+          <ResourcesVar Sync="true" Name="RESOURCES" />
+          <OthersVar />
+          <GacRefVar Sync="true" Name="REFERENCES" />
+          <AsmRefVar Sync="true" Name="REFERENCES" />
+          <ProjectRefVar Sync="true" Name="REFERENCES" />
+        </MonoDevelop.Autotools.MakefileInfo>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>
