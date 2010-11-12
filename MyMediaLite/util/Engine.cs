@@ -141,7 +141,7 @@ namespace MyMediaLite.util
 				property_names.Add(p.Name);
 			property_names.Sort();
 			
-			foreach (var key in parameters.Keys)
+			foreach (var key in new List<string>(parameters.Keys))
 			{
 				string param_name = NormalizeName(key);
 				//Console.WriteLine("Looking at {0}", param_name);
@@ -172,6 +172,7 @@ namespace MyMediaLite.util
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
 								break;
 						}
+						parameters.Remove(key);
 						goto NEXT_KEY; // poor man's labeled break ...
 					}
 				}
@@ -179,7 +180,7 @@ namespace MyMediaLite.util
 				report_error(string.Format("Engine {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
 				
 				NEXT_KEY:
-				Console.Write("");
+				Console.Write(""); // the C# compiler wants some statement here
 			}
 			
 			return engine;

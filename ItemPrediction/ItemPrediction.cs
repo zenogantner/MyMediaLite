@@ -215,6 +215,9 @@ namespace MyMediaLite
 					break;
 			}
 
+			if (parameters.CheckForLeftovers())
+				Usage(-1);
+
 			// check command-line parameters
 			if (trainfile.Equals("-") && testfile.Equals("-"))
 				Usage("Either training OR test data, not both, can be read from STDIN.");

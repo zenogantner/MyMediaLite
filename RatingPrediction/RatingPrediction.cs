@@ -212,6 +212,9 @@ namespace RatingPrediction
 					break;
 			}
 
+			if (parameters.CheckForLeftovers())
+				Usage(-1);
+
 			// check command-line parameters
 			if (training_file.Equals("-") && testfile.Equals("-"))
 				Usage("Either training or test data, not both, can be read from STDIN.");

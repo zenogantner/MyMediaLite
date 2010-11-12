@@ -9,6 +9,7 @@
          - added property NumberOfColumns to SparseBooleanMatrix
 	command-line programs
          - exception handler: encourage users to file bug reports
+         - check again for unknown program parameters
         misc
          - code clean-ups
          - minor documentation improvements
