@@ -67,9 +67,9 @@ SVM_DLL = $(BUILD_DIR)/SVM.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 RATINGPREDICTION = $(BUILD_DIR)/ratingprediction
 
-FILES = \
-	RatingPrediction.cs \
-	AssemblyInfo.cs 
+FILES =  \
+	AssemblyInfo.cs \
+	RatingPrediction.cs 
 
 DATA_FILES = 
 
@@ -79,6 +79,7 @@ EXTRAS = \
 	ratingprediction.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System \
 	System.Core
 

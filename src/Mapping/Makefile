@@ -67,9 +67,9 @@ SVM_DLL = $(BUILD_DIR)/SVM.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 MAPPING = $(BUILD_DIR)/mapping
 
-FILES = \
-	Mapping.cs \
-	AssemblyInfo.cs 
+FILES =  \
+	AssemblyInfo.cs \
+	Mapping.cs 
 
 DATA_FILES = 
 
@@ -79,6 +79,7 @@ EXTRAS = \
 	mapping.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core
 
 DLL_REFERENCES = 

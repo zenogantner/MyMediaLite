@@ -67,7 +67,7 @@ SVM_DLL = $(BUILD_DIR)/SVM.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 ITEMPREDICTION = $(BUILD_DIR)/itemprediction
 
-FILES = \
+FILES =  \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -79,6 +79,7 @@ EXTRAS = \
 	itemprediction.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core
 
 DLL_REFERENCES = 
