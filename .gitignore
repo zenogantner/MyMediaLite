@@ -8,3 +8,4 @@ bin
 *.userprefs
 *.pidb
 test-results
+*.log
