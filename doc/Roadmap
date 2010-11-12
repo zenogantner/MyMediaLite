@@ -48,7 +48,6 @@ Architecture
    - create special index data structures on demand
  - redesign/rewrite implicit feedback data structures
  - user and item IDs should be unsigned integers
- - Makefile-based build system (find dependencies automagically?)
  - automated release management
  - parameterize types:
    - user and item IDs
