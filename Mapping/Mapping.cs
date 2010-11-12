@@ -212,7 +212,6 @@ namespace Mapping
 			
 			if (compute_fit)
 			{
-
 				seconds = Utils.MeasureTime( delegate() {
 					int num_iter = recommender.NumIterMapping;
 					recommender.NumIterMapping = 0;

@@ -138,9 +138,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 			double[] est_features = MapToLatentFeatureSpace(item_id);
 
 			for (int j = 0; j < num_factors; j++) {
-				// TODO: do we need an absolute term here???
+				// TODO do we need an absolute term here???
 				double diff = est_features[j] - item_factors[item_id, j];
-				if (diff != 0)
+				if (diff > 0)
 				{
 					foreach (int attribute in item_attributes[item_id])
 					{

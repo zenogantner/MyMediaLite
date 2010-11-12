@@ -43,7 +43,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Algorithms\MyMediaLite.csproj">
+    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
       <Project>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
