@@ -168,12 +168,13 @@ namespace Mapping
 			training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 			recommender.SetCollaborativeData(training_data.First, training_data.Second);
 
+
 			// relevant items
 			if (! relevant_items_file.Equals(string.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.NonEmptyRowIDs;
-
+			
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
 			{
@@ -194,17 +195,24 @@ namespace Mapping
 
 			// test data
             test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
-
+						
 			TimeSpan seconds;
 
 			Engine.LoadModel(recommender, data_dir, load_model_file);
 
+			// set the maximum user and item IDs in the recommender - this is important for the cold start use case
+			recommender.MaxUserID = user_mapping.InternalIDs.Max();
+			recommender.MaxItemID = item_mapping.InternalIDs.Max();			
+			
 			DisplayDataStats();
 
 			Console.Write(recommender.ToString() + " ");
 
+			Console.WriteLine("max_user_id={0}, max_item_id={1}", recommender.MaxUserID, recommender.MaxItemID);			
+			
 			if (compute_fit)
 			{
+
 				seconds = Utils.MeasureTime( delegate() {
 					int num_iter = recommender.NumIterMapping;
 					recommender.NumIterMapping = 0;

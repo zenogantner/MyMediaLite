@@ -27,11 +27,19 @@ namespace MyMediaLite.item_recommender
 {
 	/// <summary>
 	/// Matrix factorization model for item prediction optimized using BPR-Opt;
-	/// Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, and Lars Schmidt-Thieme:
-	/// BPR: Bayesian Personalized Ranking from Implicit Feedback.
-	/// in UAI 2009
 	/// </summary>
-	/// <author>Zeno Gantner, Christoph Freudenthaler, University of Hildesheim</author>
+	/// <remarks>
+	/// <inproceedings>
+    ///   <author>Steffen Rendle</author>
+    ///   <author>Christoph Freudenthaler</author>
+    ///   <author>Zeno Gantner</author>
+    ///   <author>Lars Schmidt-Thieme</author>
+    ///   <title>BPR: Bayesian Personalized Ranking from Implicit Feedback</title>
+    ///   <booktitle>Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009)</booktitle>
+    ///   <location>Montreal, Canada</location>
+    ///   <year>2009</year>
+    /// </inproceedings>
+	/// </remarks>
 	public class BPRMF : MF, IIterativeModel
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
@@ -72,8 +80,7 @@ namespace MyMediaLite.item_recommender
 		/// <summary>Regularization parameter for user factors</summary>
 		protected double reg_u = 0.0025;
 		
-
-/// <summary>support data structure for fast sampling</summary>
+		/// <summary>support data structure for fast sampling</summary>
 		protected List<int[]> user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
 		protected List<int[]> user_neg_items;
@@ -107,8 +114,6 @@ namespace MyMediaLite.item_recommender
 				UpdateFeatures(user_id, item_id_1, item_id_2, true, true, true);
 			}
 		}
-
-		// TODO move all sampling code to a class UserItemSampler
 
 		/// <summary>Sample another item, given the first one and the user</summary>
 		/// <param name="u">the user ID</param>

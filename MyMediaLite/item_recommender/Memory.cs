@@ -28,9 +28,9 @@ namespace MyMediaLite.item_recommender
     public abstract class Memory : IItemRecommender
     {
 		/// <summary>Maximum user ID</summary>
-		public int MaxUserID  { get; protected set;	}
+		public int MaxUserID  { get; set;	}
 		/// <summary>Maximum item ID</summary>
-		public int MaxItemID  {	get; protected set; }
+		public int MaxItemID  {	get; set; }
 
         /// <summary>Implicit feedback, user-wise</summary>
         protected SparseBooleanMatrix data_user;
