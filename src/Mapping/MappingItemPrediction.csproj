@@ -11,7 +11,6 @@
     <AssemblyName>Mapping</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ReleaseVersion>0.6</ReleaseVersion>
-    <StartupObject>MyMediaLite.MappingItemPrediction</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,12 +31,20 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MappingItemPrediction.cs" />
-    <Compile Include="MappingRatingPrediction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core">
     </Reference>
     <Reference Include="nunit.framework">
+      <Package>mono-nunit</Package>
+    </Reference>
+    <Reference Include="nunit.core, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>mono-nunit</Package>
+    </Reference>
+    <Reference Include="nunit.util, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>mono-nunit</Package>
+    </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Package>mono-nunit</Package>
     </Reference>
   </ItemGroup>
@@ -51,6 +58,7 @@
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
+        <Deployment.LinuxDeployData scriptName="mapping_item_prediction" />
         <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile" SyncReferences="true">
           <BuildFilesVar Sync="true" Name="FILES" />
           <DeployFilesVar />

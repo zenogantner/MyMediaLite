@@ -12,10 +12,10 @@ include $(top_srcdir)/rules.make
 
 #Warning: This is an automatically generated file, do not edit!
 ifeq ($(CONFIG),DEBUG)
- SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction Mapping
+ SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction Mapping MappingRatingPrediction
 endif
 ifeq ($(CONFIG),RELEASE)
- SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction Mapping
+ SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction Mapping MappingRatingPrediction
 endif
 
 

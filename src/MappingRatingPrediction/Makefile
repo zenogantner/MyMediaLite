@@ -11,7 +11,7 @@ include $(top_srcdir)/config.make
 ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
-ASSEMBLY = bin/Debug/Mapping.exe
+ASSEMBLY = bin/Debug/MappingRatingPrediction.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
@@ -25,15 +25,15 @@ SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
-MAPPING_EXE_MDB_SOURCE=bin/Debug/Mapping.exe.mdb
-MAPPING_EXE_MDB=$(BUILD_DIR)/Mapping.exe.mdb
+MAPPINGRATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/MappingRatingPrediction.exe.mdb
+MAPPINGRATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/MappingRatingPrediction.exe.mdb
 
 endif
 
 ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
-ASSEMBLY = bin/Release/Mapping.exe
+ASSEMBLY = bin/Release/MappingRatingPrediction.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
@@ -45,7 +45,7 @@ MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
-MAPPING_EXE_MDB=
+MAPPINGRATINGPREDICTION_EXE_MDB=
 
 endif
 
@@ -58,10 +58,10 @@ PROGRAMFILES = \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
 	$(MYMEDIALITE_DLL_MDB) \
-	$(MAPPING_EXE_MDB)  
+	$(MAPPINGRATINGPREDICTION_EXE_MDB)  
 
 BINARIES = \
-	$(MAPPING_ITEM_PREDICTION)  
+	$(MAPPING_RATING_PREDICTION)  
 
 
 RESGEN=resgen2
@@ -69,22 +69,22 @@ RESGEN=resgen2
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-MAPPING_ITEM_PREDICTION = $(BUILD_DIR)/mapping_item_prediction
+MAPPING_RATING_PREDICTION = $(BUILD_DIR)/mapping_rating_prediction
 
 FILES = \
 	AssemblyInfo.cs \
-	MappingItemPrediction.cs 
+	MappingRatingPrediction.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	mapping_item_prediction.in 
+	mapping_rating_prediction.in 
 
 REFERENCES =  \
-	System.Core \
-	-pkg:mono-nunit
+	System \
+	System.Core
 
 DLL_REFERENCES = 
 
@@ -103,7 +103,7 @@ $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,MAPPING_ITEM_PREDICTION,mapping_item_prediction,x))
+$(eval $(call emit-deploy-wrapper,MAPPING_RATING_PREDICTION,mapping_rating_prediction,x))
 
 
 $(eval $(call emit_resgen_targets))
@@ -131,9 +131,9 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MAPPING_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MAPPINGRATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(MAPPING_ITEM_PREDICTION),$(DESTDIR)$(bindir))
+	$(call cp,$(MAPPING_RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -146,8 +146,8 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MAPPING_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MAPPING_ITEM_PREDICTION),$(DESTDIR)$(bindir))
+	$(call rm,$(MAPPINGRATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MAPPING_RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

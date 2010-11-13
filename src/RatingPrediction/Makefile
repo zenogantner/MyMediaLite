@@ -61,7 +61,7 @@ PROGRAMFILES = \
 	$(RATINGPREDICTION_EXE_MDB)  
 
 BINARIES = \
-	$(RATINGPREDICTION)  
+	$(RATING_PREDICTION)  
 
 
 RESGEN=resgen2
@@ -69,7 +69,7 @@ RESGEN=resgen2
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-RATINGPREDICTION = $(BUILD_DIR)/ratingprediction
+RATING_PREDICTION = $(BUILD_DIR)/rating_prediction
 
 FILES = \
 	RatingPrediction.cs \
@@ -80,7 +80,7 @@ DATA_FILES =
 RESOURCES = 
 
 EXTRAS = \
-	ratingprediction.in 
+	rating_prediction.in 
 
 REFERENCES =  \
 	System \
@@ -103,7 +103,7 @@ $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,RATINGPREDICTION,ratingprediction,x))
+$(eval $(call emit-deploy-wrapper,RATING_PREDICTION,rating_prediction,x))
 
 
 $(eval $(call emit_resgen_targets))
@@ -133,7 +133,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(RATINGPREDICTION),$(DESTDIR)$(bindir))
+	$(call cp,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -147,7 +147,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(RATINGPREDICTION),$(DESTDIR)$(bindir))
+	$(call rm,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

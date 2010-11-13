@@ -61,7 +61,7 @@ PROGRAMFILES = \
 	$(ITEMPREDICTION_EXE_MDB)  
 
 BINARIES = \
-	$(ITEMPREDICTION)  
+	$(ITEM_PREDICTION)  
 
 
 RESGEN=resgen2
@@ -69,7 +69,7 @@ RESGEN=resgen2
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-ITEMPREDICTION = $(BUILD_DIR)/itemprediction
+ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
 FILES = \
 	AssemblyInfo.cs \
@@ -80,7 +80,7 @@ DATA_FILES =
 RESOURCES = 
 
 EXTRAS = \
-	itemprediction.in 
+	item_prediction.in 
 
 REFERENCES =  \
 	System.Core
@@ -102,7 +102,7 @@ $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,ITEMPREDICTION,itemprediction,x))
+$(eval $(call emit-deploy-wrapper,ITEM_PREDICTION,item_prediction,x))
 
 
 $(eval $(call emit_resgen_targets))
@@ -132,7 +132,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ITEMPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(ITEMPREDICTION),$(DESTDIR)$(bindir))
+	$(call cp,$(ITEM_PREDICTION),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -146,7 +146,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ITEMPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(ITEMPREDICTION),$(DESTDIR)$(bindir))
+	$(call rm,$(ITEM_PREDICTION),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

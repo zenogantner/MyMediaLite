@@ -133,9 +133,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			}
 		}
 
-		/// <summary>
-		/// Perform one iteration of the mapping learning process
-		/// </summary>
+		/// <summary>Perform one iteration of the mapping learning process</summary>
 		public override void IterateMapping()
 		{
 			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training

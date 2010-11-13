@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "RatingP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "SVM\SVM.csproj", "{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapping", "Mapping\Mapping.csproj", "{7ECAE320-D318-4000-B3F1-E481488D150D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemPrediction", "Mapping\MappingItemPrediction.csproj", "{7ECAE320-D318-4000-B3F1-E481488D150D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "MappingRatingPrediction\MappingRatingPrediction.csproj", "{8C64FEFA-40FB-4F30-8689-D568C4E398B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C64FEFA-40FB-4F30-8689-D568C4E398B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C64FEFA-40FB-4F30-8689-D568C4E398B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C64FEFA-40FB-4F30-8689-D568C4E398B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C64FEFA-40FB-4F30-8689-D568C4E398B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.ActiveCfg = Release|Any CPU

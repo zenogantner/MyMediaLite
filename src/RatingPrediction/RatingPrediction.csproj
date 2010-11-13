@@ -48,6 +48,7 @@
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
+        <Deployment.LinuxDeployData scriptName="rating_prediction" />
         <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile" SyncReferences="true">
           <BuildFilesVar Sync="true" Name="FILES" />
           <DeployFilesVar />
