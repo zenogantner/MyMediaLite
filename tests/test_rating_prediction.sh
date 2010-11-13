@@ -2,14 +2,12 @@
 
 # don't expect this to work, this is (currently) for internal testing purposes
 
-# TODO test save/store
-
 LANG=C
 PROGRAM="mono --debug RatingPrediction.exe"
 
 echo "This will take about 5 minutes"
 
-cd RatingPrediction/bin/Debug
+cd src/RatingPrediction/bin/Debug
 
 echo "MovieLens 1M"
 echo "------------"

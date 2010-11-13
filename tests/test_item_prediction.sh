@@ -11,7 +11,7 @@ PROGRAM="mono --debug ItemPrediction.exe"
 echo "This may take about 15 minutes"
 echo "Do not take the results serious - we do not use the best hyperparameters here"
 
-cd ItemPrediction/bin/Debug
+cd src/ItemPrediction/bin/Debug
 
 echo "MovieLens 100K"
 echo "--------------"
