@@ -65,8 +65,8 @@ namespace MyMediaLite.rating_predictor
         /// <summary>Learn rate</summary>
 		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
         /// <summary>Learn rate</summary>
-        protected double learn_rate = 0.01;		
-		
+        protected double learn_rate = 0.01;
+
         /// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; } set { regularization = value; } }
         /// <summary>Regularization parameter</summary>
@@ -328,16 +328,8 @@ namespace MyMediaLite.rating_predictor
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
-
-            	writer.WriteLine(user_factors.dim1 + " " + user_factors.dim2);
-            	for (int i = 0; i < user_factors.dim1; i++)
-                	for (int j = 0; j < user_factors.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + user_factors[i, j].ToString(ni));
-
-            	writer.WriteLine(item_factors.dim1 + " " + item_factors.dim2);
-            	for (int i = 0; i < item_factors.dim1; i++)
-                	for (int j = 0; j < item_factors.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + item_factors[i, j].ToString(ni));
+				MatrixUtils.WriteMatrix(writer, user_factors);
+				MatrixUtils.WriteMatrix(writer, item_factors);
 			}
 		}
 
@@ -351,46 +343,13 @@ namespace MyMediaLite.rating_predictor
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
-            	string[] numbers = reader.ReadLine().Split(' ');
-            	int num_users         = System.Int32.Parse(numbers[0]);
-            	int num_user_features = System.Int32.Parse(numbers[1]);
-            	Matrix<double> user_feature = new Matrix<double>(num_users, num_user_features);
+				Matrix<double> user_feature = MatrixUtils.ReadMatrix(reader);
+            	Matrix<double> item_feature = MatrixUtils.ReadMatrix(reader);
 
-            	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
-            	{
-                	int i = System.Int32.Parse(numbers[0]);
-                	int j = System.Int32.Parse(numbers[1]);
-                	double v = System.Double.Parse(numbers[2], ni);
-
-                	if (i >= num_users)
-	                    throw new Exception("i = " + i);
-	                if (j >= num_user_features)
-	                    throw new Exception("j = " + j);
-
-	                user_feature[i, j] = v;
-    	        }
-
-        	    int num_items         = System.Int32.Parse(numbers[0]);
-            	int num_item_features = System.Int32.Parse(numbers[1]);
-            	if (num_user_features != num_item_features)
-                	throw new Exception(string.Format("Number of user and item features must match.", num_user_features, num_item_features));
-
-            	Matrix<double> item_feature = new Matrix<double>(num_items, num_item_features);
-
-            	while (!reader.EndOfStream)
-            	{
-                	numbers = reader.ReadLine().Split(' ');
-                	int i = System.Int32.Parse(numbers[0]);
-                	int j = System.Int32.Parse(numbers[1]);
-                	double v = System.Double.Parse(numbers[2], ni);
-
-                	if (i >= num_items)
-                    	throw new Exception("i = " + i);
-	                if (j >= num_item_features)
-	                    throw new Exception("j = " + j);
-
-	                item_feature[i, j] = v;
-    	        }
+				if (user_feature.dim2 != item_feature.dim2)
+                	throw new Exception(
+									string.Format("Number of user and item features must match: {0} != {1}",
+					                              user_feature.dim2, item_feature.dim2));
 
 				this.MaxUserID = num_users - 1;
 				this.MaxItemID = num_items - 1;

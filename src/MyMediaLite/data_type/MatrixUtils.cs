@@ -16,16 +16,52 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Globalization;
+using System.IO;
 using MyMediaLite.util;
 
 
 namespace MyMediaLite.data_type
 {
-    /// <summary>
-    /// Utilities to work with matrices.
-    /// </summary>
+    /// <summary>Utilities to work with matrices</summary>
     public class MatrixUtils
     {
+		static public void WriteMatrix(StreamWriter writer, Matrix<double> matrix)
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+        	writer.WriteLine(matrix.dim1 + " " + matrix.dim2);
+        	for (int i = 0; i < matrix.dim1; i++)
+            	for (int j = 0; j < matrix.dim2; j++)
+                	writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(ni));
+		}
+
+		static public Matrix<double> ReadMatrix(TextReader reader)
+		{
+        	string[] numbers = reader.ReadLine().Split(' ');
+        	int dim1 = int.Parse(numbers[0]);
+        	int dim2 = int.Parse(numbers[1]);
+
+			var matrix = new Matrix<double>(dim1, dim2);
+
+        	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
+        	{
+            	int i = System.Int32.Parse(numbers[0]);
+            	int j = System.Int32.Parse(numbers[1]);
+            	double v = System.Double.Parse(numbers[2], ni);
+
+            	if (i >= dim1)
+                    throw new IOException("i = " + i + " >= " + dim1);
+                if (j >= dim2)
+                    throw new IOException("j = " + j + " >= " + dim2);
+
+                matrix[i, j] = v;
+	        }
+
+			return matrix;
+		}
+
         /// <summary>
         /// Initializes one row of a double matrix with normal distributed (Gaussian) noise
         /// </summary>
