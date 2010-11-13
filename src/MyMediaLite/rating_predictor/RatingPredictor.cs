@@ -27,7 +27,7 @@ namespace MyMediaLite.rating_predictor
         protected double max_rating;
 
 		/// <summary>The min rating value</summary>
-        public virtual double MinRating { get { return min_rating;  } set { min_rating = value; } }
+        public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
 	    /// <summary>The min rating value</summary>
 	    protected double min_rating;
 

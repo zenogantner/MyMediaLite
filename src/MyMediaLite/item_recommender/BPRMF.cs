@@ -341,7 +341,8 @@ namespace MyMediaLite.item_recommender
 			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 
 			HashSet<int> user_items = data_user[user_id];
-			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++) {
+			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++)
+			{
 				int item_id_1, item_id_2;
 				SampleItemPair(user_id, out item_id_1, out item_id_2);
 				UpdateFeatures(user_id, item_id_1, item_id_2, true, false, false);

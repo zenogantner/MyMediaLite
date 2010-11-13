@@ -183,7 +183,8 @@ namespace MyMediaLite.data_type
                 for (int y = 0; y < matrix.dim2; y++)
                     if ( Double.IsNaN(matrix[x, y]) )
 						nan_counter++;
-			if (nan_counter > 0) {
+			if (nan_counter > 0)
+			{
 				Console.Error.WriteLine("Number of NaNs: " + nan_counter);
 				return true;
 			}

@@ -135,7 +135,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 			HashSet<int> attributes = user_attributes[user_id];
 			double[] est_features = MapUserToLatentFeatureSpace(attributes);
 
-			for (int j = 0; j < num_factors; j++) {
+			for (int j = 0; j < num_factors; j++)
+			{
 				// TODO: do we need an absolute term here???
 				double diff = est_features[j] - user_factors[user_id, j];
 				if (diff > 0)
