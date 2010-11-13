@@ -72,6 +72,7 @@ Architecture
  - webservice interface
  - move unit tests out of main library
  - use one repository per component, instead of having everything in one repository
+ - store models via reflection (can save a lot of code)
  - consider using simulated multiple inheritance for the attribute-based recommenders:
    http://www.codeproject.com/KB/architecture/smip.aspx
 Misc
