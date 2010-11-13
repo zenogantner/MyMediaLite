@@ -14,7 +14,7 @@ clean:
 install:
 	cd ${SRC_DIR} && make install
 
-install:
+uninstall:
 	cd ${SRC_DIR} && make uninstall
 
 todo:
