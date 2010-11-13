@@ -4,6 +4,9 @@
 	engines
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
          - print newline after Pearson correlation is computed
+         - support LoadModel() and SaveModel() for biased MF
+         - simpler LoadModel() and SaveModel() for all matrix factorization
+           engines
         interfaces
          - new interfaces ILatentFactorModel and IAttributeToFactors
          - new interface IItemRecommender (instead of abstract class)
@@ -18,6 +21,7 @@
          - automagic engine configuration: proper handling of read-only
            properties
          - development: improved 'make gendarme' and 'make todo'
+         - add more test cases (e.g. for LoadModel() and SaveModel())
          - The core library and the command-line programs now do not contain
            any critical issues that Gendarme would complain about.
 

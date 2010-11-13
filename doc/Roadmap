@@ -5,6 +5,7 @@ Recommender functionality
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
  - support for non-binary attributes: real, nominal, textual descriptions
+ - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
  - additional engines (?)
    - non-negative matrix factorization
