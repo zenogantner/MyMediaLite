@@ -22,7 +22,7 @@ Recommender functionality
    - restricted boltzmann machines
  - time-aware rating and item prediction
    - timeSVD++
- - new engine types: TagRecommender, ContextAwareRecommender
+ - new engine types: TagRecommender, ContextAwareRecommender, SequentialRecommender
  - ranking ensembles
  - stacking ensembles
  - ensembles for new users/new items
