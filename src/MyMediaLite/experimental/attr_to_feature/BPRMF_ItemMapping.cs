@@ -48,9 +48,6 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }		
 
-		/// <summary>use a bias term for each mapping</summary>
-		public bool mapping_feature_bias = true;
-		
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
 
@@ -82,7 +79,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				min_rmse_per_feature[i] = Double.MaxValue;
 			int[] best_feature_init       = new int[num_factors];
 
-			// find best feature mappings:
+			// find best feature mappings
 			for (int i = 0; i < num_init_mapping; i++)
 				for (int j = 0; j < num_factors; j++)
 					if (old_rmse_per_feature[i][j] < min_rmse_per_feature[j])
@@ -115,7 +112,6 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				int item_id = random.Next(0, MaxItemID + 1);
 				HashSet<int> item_users = data_item[item_id];
-				HashSet<int> item_attrs = item_attributes[item_id];
 				if (item_users.Count == 0)
 					continue;
 				return item_id;

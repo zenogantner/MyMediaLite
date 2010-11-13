@@ -51,12 +51,10 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }		
 
-		/// <summary>use a bias term for each mapping</summary>
-		public bool mapping_feature_bias = false;
-		
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
 
+		/// <summary>random number generator</summary>
 		protected System.Random random;
 		
 		/// <inheritdoc/>
@@ -70,7 +68,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 				data_item[r.item_id, r.user_id] = true;
 			
 			// create attribute-to-feature weight matrix
-			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_factors);
+			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			// account for regression bias term, and the item bias that we want to model
+			
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
@@ -89,22 +89,22 @@ namespace MyMediaLite.experimental.attr_to_feature
 				old_rmse_per_feature[h] = ComputeMappingFit();
 			}
 
-			double[] min_rmse_per_feature = new double[num_factors];
-			for (int i = 0; i < num_factors; i++)
+			double[] min_rmse_per_feature = new double[num_factors + 1];
+			for (int i = 0; i <= num_factors; i++)
 				min_rmse_per_feature[i] = Double.MaxValue;
-			int[] best_feature_init       = new int[num_factors];
+			int[] best_feature_init       = new int[num_factors + 1];
 
 			// find best feature mappings:
 			for (int i = 0; i < num_init_mapping; i++)
-				for (int j = 0; j < num_factors; j++)
+				for (int j = 0; j <= num_factors; j++)
 					if (old_rmse_per_feature[i][j] < min_rmse_per_feature[j])
 					{
 						min_rmse_per_feature[j] = old_rmse_per_feature[i][j];
-						best_feature_init[j]   = i;
+						best_feature_init[j]    = i;
 					}
 
 			// set the best weight combinations for each feature mapping
-			for (int i = 0; i < num_factors; i++)
+			for (int i = 0; i <= num_factors; i++)
 			{
 				Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
 
@@ -160,19 +160,31 @@ namespace MyMediaLite.experimental.attr_to_feature
 					MatrixUtils.Inc(attribute_to_feature, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
 			}
+			
+			// item bias part
+			double bias_diff = est_features[num_factors] - item_bias[item_id];
+			if (bias_diff > 0)
+			{
+				foreach (int attribute in item_attributes[item_id])
+				{
+					double w = attribute_to_feature[attribute, num_factors];
+					double deriv = bias_diff * w + reg_mapping * w;
+					MatrixUtils.Inc(attribute_to_feature, attribute, num_factors, learn_rate_mapping * -deriv);
+				}
+				// bias term
+				double w_bias = attribute_to_feature[NumItemAttributes, num_factors];
+				double deriv_bias = bias_diff * w_bias + reg_mapping * w_bias;
+				MatrixUtils.Inc(attribute_to_feature, NumItemAttributes, num_factors, learn_rate_mapping * -deriv_bias);
+			}
 		}
 
-		/// <summary>
-		/// Compute the fit of the mapping
-		/// </summary>
-		/// <returns>
-		/// an array of doubles containing the RMSE on the training data for each latent factor
-		/// </returns>
+		/// <summary>Compute the fit of the mapping</summary>
+		/// <returns>an array of doubles containing the RMSE on the training data for each latent factor</returns>
 		protected double[] ComputeMappingFit()
 		{
 			double rmse    = 0;
 			double penalty = 0;
-			double[] rmse_and_penalty_per_feature = new double[num_factors];
+			double[] rmse_and_penalty_per_feature = new double[num_factors + 1];
 
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
@@ -185,7 +197,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 				num_items++;
 
 				double[] est_features = MapToLatentFeatureSpace(i);
-				for (int j = 0; j < num_factors; j++)
+				for (int j = 0; j <= num_factors; j++)
 				{
 					double error    = Math.Pow(est_features[j] - item_factors[i, j], 2);
 					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
@@ -195,13 +207,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 				}
 			}
 
-			for (int i = 0; i < num_factors; i++)
+			for (int i = 0; i <= num_factors; i++)
 			{
 				rmse_and_penalty_per_feature[i] = (double) rmse_and_penalty_per_feature[i] / num_items;
 				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_feature[i]);
 			}
-			rmse    = (double) rmse    / (num_factors * num_items);
-			penalty = (double) penalty / (num_factors * num_items);
+			rmse    = (double) rmse    / ((num_factors + 1) * num_items);
+			penalty = (double) penalty / ((num_factors + 1) * num_items);
 			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
 
 			return rmse_and_penalty_per_feature;
@@ -219,13 +231,15 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			HashSet<int> item_attributes = this.item_attributes[item_id];
 
-			double[] feature_representation = new double[num_factors];
-			for (int j = 0; j < num_factors; j++)
-				// bias
+			double[] feature_representation = new double[num_factors + 1];
+			
+			// regression bias
+			for (int j = 0; j <= num_factors; j++)
 				feature_representation[j] = attribute_to_feature[NumItemAttributes, j];
 
+			// estimate latent features
 			foreach (int i in item_attributes)
-				for (int j = 0; j < num_factors; j++)
+				for (int j = 0; j <= num_factors; j++)
 					feature_representation[j] += attribute_to_feature[i, j];
 
 			return feature_representation;
@@ -241,7 +255,15 @@ namespace MyMediaLite.experimental.attr_to_feature
             }
 
 			double[] est_features = MapToLatentFeatureSpace(item_id);
-            return MatrixUtils.RowScalarProduct(user_factors, user_id, est_features);
+			double[] latent_factors = new double[num_factors];
+			
+			Array.Copy(est_features, latent_factors, num_factors);
+			
+            return
+				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
+				+ user_bias[user_id]
+				+ est_features[num_factors] // estimated item bias
+				+ global_bias;
         }
 
 		/// <inheritdoc/>

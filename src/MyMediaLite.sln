@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "RatingP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "SVM\SVM.csproj", "{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemPrediction", "Mapping\MappingItemPrediction.csproj", "{7ECAE320-D318-4000-B3F1-E481488D150D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemPrediction", "MappingItemPrediction\MappingItemPrediction.csproj", "{7ECAE320-D318-4000-B3F1-E481488D150D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "MappingRatingPrediction\MappingRatingPrediction.csproj", "{8C64FEFA-40FB-4F30-8689-D568C4E398B4}"
 EndProject

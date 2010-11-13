@@ -34,8 +34,10 @@ namespace MyMediaLite.rating_predictor
 		public double BiasRegularization { get { return bias_regularization; } set { bias_regularization = value; } }
 		double bias_regularization = 0;
 
-		double[] user_bias;
-		double[] item_bias;
+		/// <summary>the user biases</summary>
+		protected double[] user_bias;
+		/// <summary>the item biases</summary>
+		protected double[] item_bias;
 		
 		/// <inheritdoc/>
         public override void Train()

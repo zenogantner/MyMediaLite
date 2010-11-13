@@ -34,13 +34,12 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.feature_bias = new double[num_factors];
-			if (this.mapping_feature_bias)
-				for (int i = 0; i < num_factors; i++)
-				{
-					feature_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
-					Console.Error.WriteLine("fb {0}: {1}", i, feature_bias[i]);
-				}
 
+			for (int i = 0; i < num_factors; i++)
+			{
+				feature_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
+				Console.Error.WriteLine("fb {0}: {1}", i, feature_bias[i]);
+			}
 
 			attribute_to_feature = new Matrix<double>(NumItemAttributes, num_factors);
 			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
@@ -58,7 +57,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			int num_pos_events = data_user.NumberOfEntries;
 
-			for (int i = 0; i < num_pos_events / 250; i++) // TODO: think about using another number here ...
+			for (int i = 0; i < num_pos_events / 250; i++) // TODO think about using another number here ...
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
@@ -105,9 +104,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 			HashSet<int> attributes = this.item_attributes[item_id];
 			double[] feature_representation = new double[num_factors];
 
-			if (this.mapping_feature_bias)
-				for (int j = 0; j < num_factors; j++)
-					feature_representation[j] = feature_bias[j];
+			for (int j = 0; j < num_factors; j++)
+				feature_representation[j] = feature_bias[j];
 
 			foreach (int i in attributes)
 				for (int j = 0; j < num_factors; j++)
@@ -130,8 +128,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, mapping_feature_bias={9}, init_mean={10}, init_stdev={11}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, mapping_feature_bias, init_mean, init_stdev
+				"BPR-MF-ItemMapping-Optimal num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
 			);
 		}
 
