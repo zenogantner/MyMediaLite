@@ -18,9 +18,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.taxonomy;
+using MyMediaLite.util;
 
 
 namespace MyMediaLite.rating_predictor
@@ -147,6 +149,72 @@ namespace MyMediaLite.rating_predictor
 					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
 			}
 		}		
+		
+        /// <inheritdoc/>
+		public override void SaveModel(string filePath)
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			{
+            	writer.WriteLine(global_bias.ToString(ni));
+				VectorUtils.WriteVector(writer, user_bias);
+				MatrixUtils.WriteMatrix(writer, user_factors);
+				VectorUtils.WriteVector(writer, item_bias);
+				MatrixUtils.WriteMatrix(writer, item_factors);
+			}
+		}
+
+		/// <inheritdoc/>
+		public override void LoadModel(string filePath)
+        {
+            NumberFormatInfo ni = new NumberFormatInfo();
+            ni.NumberDecimalDigits = '.';
+
+            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+			{
+            	double bias = System.Double.Parse(reader.ReadLine(), ni);
+
+				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
+				Matrix<double> user_feature   = MatrixUtils.ReadMatrix(reader);
+				ICollection<double> item_bias = VectorUtils.ReadVector(reader);
+            	Matrix<double> item_feature   = MatrixUtils.ReadMatrix(reader);
+
+				if (user_feature.dim2 != item_feature.dim2)
+                	throw new IOException(
+								  string.Format(
+					                  "Number of user and item factors must match: {0} != {1}",
+					                  user_feature.dim2, item_feature.dim2));
+				if (user_bias.Count != user_feature.dim1)
+					throw new IOException(
+					              string.Format(
+					                  "Number of users must be the same for biases and factors: {0} != {1}",
+					                  user_bias.Count, user_feature.dim1));
+				if (item_bias.Count != item_feature.dim1)
+					throw new IOException(
+					              string.Format(
+					                  "Number of items must be the same for biases and factors: {0} != {1}",
+					                  item_bias.Count, item_feature.dim1));				
+				
+				this.MaxUserID = user_feature.dim1 - 1;
+				this.MaxItemID = item_feature.dim1 - 1;
+
+            	// assign new model
+            	this.global_bias = bias;
+				if (this.num_factors != user_feature.dim2)
+				{
+					Console.Error.WriteLine("Set num_factors to {0}", user_feature.dim1);
+            		this.num_factors = user_feature.dim1;
+				}
+            	this.user_factors = user_feature;
+            	this.item_factors = item_feature;
+				this.user_bias = new double[user_factors.dim1];
+				user_bias.CopyTo(this.user_bias, 0);
+				this.item_bias = new double[item_factors.dim1];
+				item_bias.CopyTo(this.item_bias, 0);
+			}
+        }
 		
 		/// <inheritdoc/>
 		public override string ToString()

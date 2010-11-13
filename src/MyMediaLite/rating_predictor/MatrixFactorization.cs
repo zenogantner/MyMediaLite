@@ -351,15 +351,15 @@ namespace MyMediaLite.rating_predictor
 									string.Format("Number of user and item features must match: {0} != {1}",
 					                              user_feature.dim2, item_feature.dim2));
 
-				this.MaxUserID = num_users - 1;
-				this.MaxItemID = num_items - 1;
+				this.MaxUserID = user_feature.dim1 - 1;
+				this.MaxItemID = item_feature.dim1 - 1;
 
             	// assign new model
             	this.global_bias = bias;
-				if (this.num_factors != num_user_features)
+				if (this.num_factors != user_feature.dim2)
 				{
-					Console.Error.WriteLine("Set num_features to {0}", num_user_features);
-            		this.num_factors = num_user_features;
+					Console.Error.WriteLine("Set num_factors to {0}", user_feature.dim1);
+            		this.num_factors = user_feature.dim1;
 				}
             	this.user_factors = user_feature;
             	this.item_factors = item_feature;

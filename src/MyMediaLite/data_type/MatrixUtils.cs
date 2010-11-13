@@ -35,14 +35,18 @@ namespace MyMediaLite.data_type
         	for (int i = 0; i < matrix.dim1; i++)
             	for (int j = 0; j < matrix.dim2; j++)
                 	writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(ni));
+			writer.WriteLine();
 		}
 
 		static public Matrix<double> ReadMatrix(TextReader reader)
 		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+			
         	string[] numbers = reader.ReadLine().Split(' ');
         	int dim1 = int.Parse(numbers[0]);
         	int dim2 = int.Parse(numbers[1]);
-
+			
 			var matrix = new Matrix<double>(dim1, dim2);
 
         	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)

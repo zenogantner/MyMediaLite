@@ -17,25 +17,54 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+
 
 namespace MyMediaLite.data_type
 {
-	// TODO move some of the similarity measures/norms/distances here
-
-	/// <summary>
-	/// Tools for vector-like data
-	/// </summary>
+	/// <summary>Tools for vector-like data</summary>
 	public class VectorUtils
 	{
-		/// <summary>
-		/// Compute the Euclidean norm of a collection of doubles
-		/// </summary>
-		/// <param name="vector">
-		/// the vector to compute the norm for
-		/// </param>
-		/// <returns>
-		/// the Euclidean norm of the vector
-		/// </returns>
+		static public void WriteVector(StreamWriter writer, ICollection<double> vector)
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+        	writer.WriteLine(vector.Count);
+        	foreach (var v in vector)
+               	writer.WriteLine(v.ToString(ni));
+			
+			writer.WriteLine();
+		}
+
+		static public ICollection<double> ReadVector(TextReader reader)
+		{
+			NumberFormatInfo ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+        	int dim = int.Parse(reader.ReadLine());
+
+			var vector = new double[dim];
+
+			string[] numbers;
+			int i = 0;
+        	while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
+        	{
+            	double v = System.Double.Parse(numbers[0], ni);
+
+            	if (i >= dim)
+                    throw new IOException("i = " + i + " >= " + dim);
+
+                vector[i++] = v;
+	        }
+
+			return vector;
+		}		
+		
+		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
+		/// <param name="vector">the vector to compute the norm for</param>
+		/// <returns>the Euclidean norm of the vector</returns>
 		public static double EuclideanNorm(ICollection<double> vector)
 		{
 			double sum = 0;

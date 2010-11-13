@@ -8,7 +8,9 @@ echo "This will take about 5 minutes"
 
 cd src/RatingPrediction/bin/Debug
 
-for method in user-item-baseline matrix-factorization biased-matrix-factorization user-average item-average
+# load/save currently not supported: global-average user-average item-average
+
+for method in user-item-baseline matrix-factorization biased-matrix-factorization
 do
      echo $PROGRAM u1.base u1.test $method save_model=tmp.model
           $PROGRAM u1.base u1.test $method save_model=tmp.model | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
