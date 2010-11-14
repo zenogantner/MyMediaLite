@@ -7,6 +7,7 @@
          - support LoadModel() and SaveModel() for biased MF
          - simpler LoadModel() and SaveModel() for all matrix factorization
            engines
+         - fix LoadModel() and SaveModel() for item prediction kNN engines
         interfaces
          - new interfaces ILatentFactorModel and IAttributeToFactors
          - new interface IItemRecommender (instead of abstract class)
