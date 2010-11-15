@@ -23,9 +23,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-    /// <summary>
-    /// k-nearest neighbor user-based collaborative filtering using cosine-similarity
-    /// </summary>
+    /// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity (unweighted)</summary>
     /// <remarks>
     /// k=inf equals most-popular.
     ///

@@ -22,7 +22,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <summary>k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
+	/// <summary>Weighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
     /// <remarks>
     /// This engine does not support online updates.
 	/// </remarks>
