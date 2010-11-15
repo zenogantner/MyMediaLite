@@ -33,7 +33,7 @@ namespace MyMediaLite.item_recommender
         {
             if ((user_id < 0) || (user_id > MaxUserID))
                 throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
+            if ((item_id < 0) || (item_id >= nearest_neighbors.Length))
                 throw new ArgumentException("item is unknown: " + item_id);
 
 			if (k == UInt32.MaxValue)

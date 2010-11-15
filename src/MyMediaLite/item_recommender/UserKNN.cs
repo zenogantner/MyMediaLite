@@ -45,7 +45,7 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
-            if ((user_id < 0) || (user_id > MaxUserID))
+            if ((user_id < 0) || (user_id >= nearest_neighbors.Length))
                 throw new ArgumentException("User is unknown: " + user_id);
             if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("Item is unknown: " + item_id);

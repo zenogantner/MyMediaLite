@@ -54,8 +54,6 @@ namespace MyMediaLite.item_recommender
 			nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
-			
-			Console.WriteLine("MaxUserID: {0}", MaxUserID);
         }
 
         /// <inheritdoc/>
