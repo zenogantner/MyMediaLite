@@ -63,90 +63,91 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 
-FILES =  \
-	AssemblyInfo.cs \
+FILES = \
+	correlation/Pearson.cs \
 	correlation/CorrelationMatrix.cs \
 	correlation/Cosine.cs \
-	correlation/Pearson.cs \
-	data/data_test.cs \
-	data/EntityMapping.cs \
-	data/RatingData.cs \
-	data/RatingEvent.cs \
-	data/Ratings.cs \
-	data_type/data_type_test.cs \
 	data_type/Matrix.cs \
-	data_type/MatrixUtils.cs \
 	data_type/SparseBooleanMatrix.cs \
-	data_type/SparseMatrix.cs \
-	data_type/SparseVector.cs \
 	data_type/VectorUtils.cs \
 	data_type/WeightedItem.cs \
-	ensemble/Ensemble.cs \
-	ensemble/WeightedEnsemble.cs \
-	eval/ItemPrediction.cs \
-	eval/ItemPredictionEval.cs \
-	eval/RatingEval.cs \
-	eval/RatingPrediction.cs \
-	experimental/attr_to_feature/BPRMF_ItemMapping.cs \
-	experimental/attr_to_feature/BPRMF_ItemMapping_Complex.cs \
-	experimental/attr_to_feature/BPRMF_ItemMapping_kNN.cs \
-	experimental/attr_to_feature/BPRMF_ItemMapping_Optimal.cs \
-	experimental/attr_to_feature/BPRMF_ItemMapping_SVR.cs \
-	experimental/attr_to_feature/BPRMF_Mapping.cs \
-	experimental/attr_to_feature/BPRMF_UserMapping.cs \
-	experimental/attr_to_feature/BPRMF_UserMapping_Optimal.cs \
-	experimental/attr_to_feature/MF_ItemMapping.cs \
-	experimental/attr_to_feature/MF_Mapping.cs \
-	IItemAttributeAwareRecommender.cs \
-	IItemRelationAwareRecommender.cs \
-	IIterativeModel.cs \
-	ILatentFactorModel.cs \
-	io/AttributeData.cs \
-	io/ItemRecommenderData.cs \
-	io/RatingPredictionData.cs \
-	io/RelationData.cs \
-	IRecommenderEngine.cs \
 	item_recommender/BPR_Linear.cs \
+	rating_predictor/ItemAttributeKNN.cs \
 	item_recommender/BPRMF.cs \
-	item_recommender/IItemRecommender.cs \
+	item_recommender/Random.cs \
 	item_recommender/ItemAttributeKNN.cs \
-	item_recommender/ItemAttributeSVM.cs \
 	item_recommender/ItemKNN.cs \
 	item_recommender/KNN.cs \
 	item_recommender/Memory.cs \
 	item_recommender/MF.cs \
 	item_recommender/MostPopular.cs \
-	item_recommender/Random.cs \
-	item_recommender/UserAttributeKNN.cs \
 	item_recommender/UserKNN.cs \
-	item_recommender/WeightedUserKNN.cs \
 	item_recommender/WRMF.cs \
-	IUserAttributeAwareRecommender.cs \
-	IUserRelationAwareRecommender.cs \
-	rating_predictor/BiasedMatrixFactorization.cs \
-	rating_predictor/ItemAttributeKNN.cs \
+	rating_predictor/MatrixFactorization.cs \
 	rating_predictor/ItemKNN.cs \
-	rating_predictor/ItemKNNCosine.cs \
-	rating_predictor/ItemKNNPearson.cs \
 	rating_predictor/KNN.cs \
 	rating_predictor/Linear.cs \
-	rating_predictor/MatrixFactorization.cs \
 	rating_predictor/Memory.cs \
-	rating_predictor/RatingPredictor.cs \
-	rating_predictor/SocialMF.cs \
 	rating_predictor/UserAttributeKNN.cs \
 	rating_predictor/UserItemBaseline.cs \
 	rating_predictor/UserKNN.cs \
-	rating_predictor/UserKNNCosine.cs \
-	rating_predictor/UserKNNPearson.cs \
-	taxonomy/EntityType.cs \
-	util/CommandLineParameters.cs \
-	util/Engine.cs \
-	util/Handlers.cs \
-	util/Pair.cs \
 	util/Random.cs \
+	item_recommender/UserAttributeKNN.cs \
+	util/CommandLineParameters.cs \
+	util/Handlers.cs \
+	util/Utils.cs \
+	io/ItemRecommenderData.cs \
+	util/Pair.cs \
+	data/RatingData.cs \
+	io/AttributeData.cs \
+	io/RatingPredictionData.cs \
+	taxonomy/EntityType.cs \
+	rating_predictor/RatingPredictor.cs \
+	experimental/attr_to_feature/BPRMF_Mapping.cs \
 	util/Triple.cs \
-	util/Utils.cs 
+	eval/RatingEval.cs \
+	data/RatingEvent.cs \
+	data/Ratings.cs \
+	rating_predictor/BiasedMatrixFactorization.cs \
+	data/EntityMapping.cs \
+	eval/ItemPrediction.cs \
+	eval/RatingPrediction.cs \
+	rating_predictor/ItemKNNCosine.cs \
+	rating_predictor/ItemKNNPearson.cs \
+	rating_predictor/UserKNNPearson.cs \
+	rating_predictor/UserKNNCosine.cs \
+	item_recommender/WeightedUserKNN.cs \
+	eval/ItemPredictionEval.cs \
+	ensemble/Ensemble.cs \
+	ensemble/WeightedEnsemble.cs \
+	item_recommender/ItemAttributeSVM.cs \
+	data_type/SparseMatrix.cs \
+	data_type/SparseVector.cs \
+	rating_predictor/SocialMF.cs \
+	io/RelationData.cs \
+	data_type/data_type_test.cs \
+	data/data_test.cs \
+	IItemAttributeAwareRecommender.cs \
+	IUserAttributeAwareRecommender.cs \
+	IRecommenderEngine.cs \
+	IIterativeModel.cs \
+	IUserRelationAwareRecommender.cs \
+	IItemRelationAwareRecommender.cs \
+	util/Engine.cs \
+	ILatentFactorModel.cs \
+	AssemblyInfo.cs \
+	item_recommender/IItemRecommender.cs \
+	experimental/attr_to_feature/BPRMF_ItemMapping.cs \
+	experimental/attr_to_feature/BPRMF_ItemMapping_Complex.cs \
+	experimental/attr_to_feature/BPRMF_ItemMapping_kNN.cs \
+	experimental/attr_to_feature/BPRMF_ItemMapping_Optimal.cs \
+	experimental/attr_to_feature/BPRMF_ItemMapping_SVR.cs \
+	experimental/attr_to_feature/BPRMF_UserMapping.cs \
+	experimental/attr_to_feature/BPRMF_UserMapping_Optimal.cs \
+	experimental/attr_to_feature/MF_Mapping.cs \
+	experimental/attr_to_feature/MF_ItemMapping.cs \
+	data_type/MatrixUtils.cs \
+	item_recommender/WeightedItemKNN.cs 
 
 DATA_FILES = 
 
@@ -168,13 +169,11 @@ EXTRAS = \
 	mymedialite.pc.in 
 
 REFERENCES =  \
-	../../lib/MathNet/MathNet.Iridium.dll \
-	../SVM/bin/Debug/SVM.dll \
-	-pkg:mono-nunit \
 	System \
 	System.Core \
+	System.Data.DataSetExtensions \
 	System.Data \
-	System.Data.DataSetExtensions
+	-pkg:mono-nunit
 
 DLL_REFERENCES =  \
 	../../lib/MathNet/MathNet.Iridium.dll

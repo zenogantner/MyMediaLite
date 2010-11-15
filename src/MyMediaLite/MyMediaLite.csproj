@@ -143,6 +143,7 @@
     <Compile Include="experimental\attr_to_feature\MF_Mapping.cs" />
     <Compile Include="experimental\attr_to_feature\MF_ItemMapping.cs" />
     <Compile Include="data_type\MatrixUtils.cs" />
+    <Compile Include="item_recommender\WeightedItemKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -33,11 +33,6 @@ namespace MyMediaLite.item_recommender
 	/// </remarks>
     public class UserKNN : KNN
     {
-		/// <summary>
-		/// Precomputed nearest neighbors
-		/// </summary>
-		protected int[][] nearest_neighbors;
-
         /// <inheritdoc/>
         public override void Train()
         {
@@ -65,46 +60,6 @@ namespace MyMediaLite.item_recommender
 			}
 			return (double) count / k;
         }
-
-		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
-		{
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-			{
-				writer.WriteLine(nearest_neighbors.Length);
-				foreach (int[] nn in nearest_neighbors)
-				{
-					writer.Write(nn[0]);
-					for (int i = 1; i < nn.Length; i++)
-					 	writer.Write(" {0}", nn[i]);
-					writer.WriteLine();
-				}
-
-				correlation.Write(writer);
-			}
-		}
-
-		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
-		{
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
-			{
-				int num_users = int.Parse(reader.ReadLine());
-				int[][] nearest_neighbors = new int[num_users][];
-				for (int u = 0; u < nearest_neighbors.Length; u++)
-				{
-					string[] numbers = reader.ReadLine().Split(' ');
-
-					nearest_neighbors[u] = new int[numbers.Length];
-					for (int i = 0; i < numbers.Length; i++)
-						nearest_neighbors[u][i] = int.Parse(numbers[i]);
-				}
-
-				this.correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
-				this.k = (uint) nearest_neighbors[0].Length; // TODO add warning if we have a different k
-				this.nearest_neighbors = nearest_neighbors;
-			}
-		}
 
 		/// <inheritdoc/>
 		public override string ToString()

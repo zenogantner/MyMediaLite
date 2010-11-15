@@ -16,15 +16,17 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using MyMediaLite.correlation;
+using MyMediaLite.util;
 
 
 namespace MyMediaLite.item_recommender
 {
-    /// <summary>Weighted k-nearest neighbor user-based collaborative filtering using cosine-similarity</summary>
+	/// <summary>k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
     /// <remarks>
     /// This engine does not support online updates.
 	/// </remarks>
-    public class WeightedUserKNN : UserKNN
+    public class WeightedItemKNN : ItemKNN
     {
         /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
@@ -36,14 +38,14 @@ namespace MyMediaLite.item_recommender
 
 			if (k == UInt32.MaxValue)
 			{
-				return correlation.SumUp(user_id, data_item[item_id]);
+				return correlation.SumUp(item_id, data_user[user_id]);
 			}
 			else
 			{
 				double result = 0;
-				foreach (int neighbor in nearest_neighbors[user_id])
-					if (data_user[neighbor, item_id])
-						result += correlation[user_id, neighbor];
+				foreach (int neighbor in nearest_neighbors[item_id])
+					if (data_item[neighbor, user_id])
+						result += correlation[item_id, neighbor];
 				return result;
 			}
         }
@@ -51,8 +53,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("weighted-user-kNN k={0}",
-			                     k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("item-kNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }

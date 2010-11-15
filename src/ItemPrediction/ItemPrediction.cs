@@ -43,6 +43,7 @@ namespace MyMediaLite
 		// recommender engines
 		static IItemRecommender recommender = null;
 		static KNN                     iknn       = new ItemKNN();
+		static KNN                     wiknn      = new WeightedItemKNN();
 		static KNN                     iaknn      = new ItemAttributeKNN();
 		static KNN                     uknn       = new UserKNN();
 		static KNN                     wuknn      = new WeightedUserKNN();
@@ -78,6 +79,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - " + bprmf);
 			Console.WriteLine("    - " + bpr_linear + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + iknn);
+			Console.WriteLine("    - " + wiknn);
 			Console.WriteLine("    - " + iaknn      + " (needs item_attributes=FILE)");
 			Console.WriteLine("    - " + uknn);
 			Console.WriteLine("    - " + wuknn);
@@ -178,6 +180,11 @@ namespace MyMediaLite
 			    case "item-kNN":
 				case "item-KNN":
 					recommender = Engine.Configure(iknn, parameters, Usage);
+					break;
+				case "weighted-item-knn":
+			    case "weighted-item-kNN":
+				case "weighted-item-KNN":
+					recommender = Engine.Configure(wiknn, parameters, Usage);
 					break;
 				case "item-attribute-knn":
 				case "item-attribute-kNN":

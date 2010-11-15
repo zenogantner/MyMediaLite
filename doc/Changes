@@ -10,6 +10,8 @@
          - simpler LoadModel() and SaveModel() for all matrix factorization
            engines
          - fix LoadModel() and SaveModel() for item prediction kNN engines
+         - differentiate between weighted and unweighted item-based kNN for
+           item prediction
         interfaces
          - new interfaces ILatentFactorModel and IAttributeToFactors
          - new interface IItemRecommender (instead of abstract class)

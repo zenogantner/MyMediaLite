@@ -22,9 +22,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.item_recommender
 {
-	/// <summary>
-    /// k-nearest neighbor item-based collaborative filtering using cosine-similarity
-    /// </summary>
+	/// <summary>k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
     /// <remarks>
     /// This engine does not support online updates.
 	/// </remarks>
@@ -34,6 +32,11 @@ namespace MyMediaLite.item_recommender
         public override void Train()
         {
 			correlation = Cosine.Create(data_item);
+
+			int num_items = MaxItemID + 1;
+			nearest_neighbors = new int[num_items][];
+			for (int i = 0; i < num_items; i++)
+				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
         }
 
         /// <inheritdoc/>
@@ -44,7 +47,13 @@ namespace MyMediaLite.item_recommender
             if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("item is unknown: " + item_id);
 
-			return correlation.SumUp(item_id, data_user[user_id]);
+			int count = 0;
+			foreach (int neighbor in nearest_neighbors[item_id])
+			{
+				if (data_user[neighbor, user_id])
+					count++;
+			}
+			return (double) count / k;
         }
 
 		/// <inheritdoc/>

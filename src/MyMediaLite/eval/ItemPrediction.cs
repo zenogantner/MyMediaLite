@@ -182,7 +182,7 @@ namespace MyMediaLite.eval
 				if (prediction_count == num_predictions)
 					break;
 			}
-			writer.WriteLine();
+			writer.WriteLine();	
 		}
 
 		/// <summary>
