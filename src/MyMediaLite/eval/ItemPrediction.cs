@@ -161,25 +161,28 @@ namespace MyMediaLite.eval
             foreach (int item_id in relevant_items)
                 score_list.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
 
-			score_list.Sort(); // TODO actually a heap would be enough
+			score_list.Sort();
 			score_list.Reverse();
 
 			int prediction_count = 0;
 
+			writer.Write("{0}\t", user_mapping.ToOriginalID(user_id));
 			foreach (var wi in score_list)
-			{
-				// TODO move up the ignore_items check
+			{				
 				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
 				{
-					writer.WriteLine("{0}\t{1}\t{2}",
-					                 user_mapping.ToOriginalID(user_id), item_mapping.ToOriginalID(wi.item_id),
-					                 wi.weight.ToString(ni));
+					if (prediction_count == 0)
+					    writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
+					else
+						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
+					
 					prediction_count++;
 				}
 
 				if (prediction_count == num_predictions)
 					break;
 			}
+			writer.WriteLine();
 		}
 
 		/// <summary>

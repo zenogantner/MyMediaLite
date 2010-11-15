@@ -22,6 +22,7 @@ using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.util;
 
+
 namespace MyMediaLite.io
 {
 	/// <summary>
@@ -78,7 +79,7 @@ namespace MyMediaLite.io
         	SparseBooleanMatrix item_users = new SparseBooleanMatrix();
 
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
-			char[] split_chars = new char[]{ '\t', ' ' };
+			char[] split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
 			while ( (line = reader.ReadLine()) != null )

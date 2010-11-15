@@ -1,6 +1,8 @@
 0.06    2010-11-
-        major bugfixes in the attribute-to-factor mapping framework (ICDM 2010)
         Makefile-based build system allows compilation without IDE
+        also read comma-separated text files (Mahout compatibility)
+        export Mahout-compatible item predictions
+        usable attribute-to-factor mapping framework (ICDM 2010)
 	engines
          - encapsulate hyperparameters of ItemAttributeSVM and WRMF
          - print newline after Pearson correlation is computed
