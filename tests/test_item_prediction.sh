@@ -2,16 +2,24 @@
 
 # don't expect this to work, this is (currently) for internal testing purposes
 
-# TODO test save/store
-# TODO use revant_items
+# TODO use relevant_items
 
-LANG=C
 PROGRAM="mono --debug ItemPrediction.exe"
+THIS_DIR=`pwd`/tests
 
 echo "This may take about 15 minutes"
 echo "Do not take the results serious - we do not use the best hyperparameters here"
 
 cd src/ItemPrediction/bin/Debug
+
+echo "Tiny example dataset"
+echo "--------------------"
+
+for method in item-kNN weighted-item-kNN user-kNN weighted-user-kNN
+do
+	echo $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
+	     #$PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
+done
 
 echo "MovieLens 100K"
 echo "--------------"
@@ -29,7 +37,7 @@ do
 	     $PROGRAM u1.base u1.test $method
 done
 
-for method in item-kNN user-kNN weighted-user-kNN
+for method in item-kNN weighted-item-kNN user-kNN weighted-user-kNN
 do
 	echo $PROGRAM u1.base u1.test $method k=20
 	     $PROGRAM u1.base u1.test $method k=20

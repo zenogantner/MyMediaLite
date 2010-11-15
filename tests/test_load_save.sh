@@ -2,7 +2,7 @@
 
 # don't expect this to work, this is (currently) for internal testing purposes
 
-# TODO test ALL engines
+# TODO test ALL engines: attribute-aware, averages, etc.
 
 PROGRAM="mono --debug RatingPrediction.exe"
 
@@ -51,7 +51,7 @@ do
      diff output1.txt output2.txt
 done
 
-for method in user-kNN item-kNN weighted-user-kNN
+for method in user-kNN item-kNN weighted-user-kNN weighted-item-kNN
 do
      echo $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model
 	  $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
