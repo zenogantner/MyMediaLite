@@ -7,11 +7,12 @@
 PROGRAM="mono --debug ItemPrediction.exe"
 THIS_DIR=`pwd`/tests
 
-echo "This may take about 15 minutes"
+echo "This may take about 15 minutes ..."
 echo "Do not take the results serious - we do not use the best hyperparameters here"
 
 cd src/ItemPrediction/bin/Debug
 
+echo ""
 echo "Tiny example dataset"
 echo "--------------------"
 
@@ -21,6 +22,7 @@ do
 	     $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
 done
 
+echo ""
 echo "MovieLens 100K"
 echo "--------------"
 
@@ -43,6 +45,7 @@ do
 	     $PROGRAM u1.base u1.test $method k=20
 done
 
+echo ""
 echo "MovieLens 1M"
 echo "------------"
 

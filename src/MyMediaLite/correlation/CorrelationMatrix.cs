@@ -45,9 +45,7 @@ namespace MyMediaLite.correlation
         	}
 		}
 
-		/// <summary>
-		/// Creates a CorrelationMatrix object for a given number of entities
-		/// </summary>
+		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
 		/// <param name="num_entities">number of entities</param>
 		public CorrelationMatrix(int num_entities) : base(num_entities, num_entities)
 		{
@@ -107,9 +105,9 @@ namespace MyMediaLite.correlation
 				float c = Single.Parse(numbers[2], ni);
 
 				if (i >= num_entities)
-					throw new Exception("Entity ID is too big: i = " + i);
+					throw new IOException("Entity ID is too big: i = " + i);
 				if (j >= num_entities)
-					throw new Exception("Entity ID is too big: j = " + j);
+					throw new IOException("Entity ID is too big: j = " + j);
 
 				cm[i, j] = c;
 			}
@@ -213,9 +211,7 @@ namespace MyMediaLite.correlation
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Compute the correlations from an implicit feedback, positive-only dataset
-		/// </summary>
+		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
 		public virtual void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{

@@ -8,6 +8,7 @@ PROGRAM="mono --debug RatingPrediction.exe"
 
 echo "This will take about 10 minutes ..."
 
+echo ""
 echo "rating prediction engines"
 echo "-------------------------"
 
@@ -24,7 +25,7 @@ do
      diff output1.txt output2.txt
 done
 
-for method in user-kNN-pearson user-kNN-cosine item-kNN-pearson item-kNN-cosine
+for method in user-kNN-cosine item-kNN-cosine
 do
      echo $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model
 	  $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -33,8 +34,18 @@ do
      diff output1.txt output2.txt
 done
 
+for method in user-kNN-pearson item-kNN-pearson
+do
+     echo $PROGRAM u1.base u1.test $method k=20 shrinkage=10 save_model=tmp.model
+	  $PROGRAM u1.base u1.test $method k=20 shrinkage=10 save_model=tmp.model | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
+     echo $PROGRAM u1.base u1.test $method k=20 shrinkage=10 load_model=tmp.model
+	  $PROGRAM u1.base u1.test $method k=20 shrinkage=10 load_model=tmp.model | perl -pe "s/\w+ing_time \S+ ?//g" > output2.txt
+     diff output1.txt output2.txt
+done
+
 rm tmp.model output1.txt output2.txt
 
+echo ""
 echo "item prediction engines"
 echo "-----------------------"
 

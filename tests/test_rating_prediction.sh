@@ -3,12 +3,13 @@
 # don't expect this to work, this is (currently) for internal testing purposes
 
 LANG=C
-PROGRAM="mono --debug RatingPrediction.exe"
+PROGRAM="mono --debug RatingPrediction.exe ..."
 
 echo "This will take about 5 minutes"
 
 cd src/RatingPrediction/bin/Debug
 
+echo ""
 echo "MovieLens 1M"
 echo "------------"
 
@@ -30,6 +31,8 @@ do
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20
 done
 
+
+echo ""
 echo "MovieLens 100K"
 echo "--------------"
 
