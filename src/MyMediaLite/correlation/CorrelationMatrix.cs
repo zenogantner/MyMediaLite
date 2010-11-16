@@ -38,6 +38,7 @@ namespace MyMediaLite.correlation
 		/// <inheritdoc/>
         public override float this [int i, int j]
         {
+			get { return data[i * dim2 + j]; }
 			set
         	{
             	data[i * dim2 + j] = value;
