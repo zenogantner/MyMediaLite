@@ -38,14 +38,14 @@ namespace MyMediaLite.item_recommender
 			{
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
-				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
+				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
 			}
 		}
 		private SparseBooleanMatrix user_attributes;
 
 		/// <inheritdoc/>
-		public int NumUserAttributes { get; set; }		
-		
+		public int NumUserAttributes { get; set; }
+
         /// <inheritdoc/>
         public override void Train()
         {

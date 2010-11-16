@@ -174,7 +174,7 @@ namespace MyMediaLite
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.Second.NonEmptyRowIDs;
-			
+
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
 			{
@@ -195,15 +195,15 @@ namespace MyMediaLite
 
 			// test data
             test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
-						
+
 			TimeSpan seconds;
 
 			Engine.LoadModel(recommender, data_dir, load_model_file);
 
 			// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 			recommender.MaxUserID = user_mapping.InternalIDs.Max();
-			recommender.MaxItemID = item_mapping.InternalIDs.Max();			
-			
+			recommender.MaxItemID = item_mapping.InternalIDs.Max();
+
 			DisplayDataStats();
 
 			Console.Write(recommender.ToString() + " ");
@@ -284,9 +284,13 @@ namespace MyMediaLite
 
 			// attribute stats
 			if (recommender is IUserAttributeAwareRecommender)
-				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+				Console.WriteLine("{0} user attributes for {1} users",
+				                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
+				                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
 			if (recommender is IItemAttributeAwareRecommender)
-				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
+				Console.WriteLine("{0} item attributes for {1} items",
+				                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
+				                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
 		}
 	}
 }

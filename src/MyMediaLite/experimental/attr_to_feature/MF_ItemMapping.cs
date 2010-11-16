@@ -33,30 +33,30 @@ namespace MyMediaLite.experimental.attr_to_feature
 	{
 		/// <summary>Who has rated what? item-wise</summary>
         protected SparseBooleanMatrix data_item;
-		
+
 		/// <inheritdoc/>
-		public SparseBooleanMatrix ItemAttributes			
+		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set
 			{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
-				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
 		/// <summary>The matrix storing the item attributes</summary>
 		protected SparseBooleanMatrix item_attributes;
-		
+
 		/// <inheritdoc/>
-	    public int NumItemAttributes { get;	set; }		
+	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
 
 		/// <summary>random number generator</summary>
 		protected System.Random random;
-		
+
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
@@ -66,11 +66,11 @@ namespace MyMediaLite.experimental.attr_to_feature
 			data_item = new SparseBooleanMatrix();
 			foreach (RatingEvent r in Ratings.All)
 				data_item[r.item_id, r.user_id] = true;
-			
+
 			// create attribute-to-feature weight matrix
 			attribute_to_feature = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
 			// account for regression bias term, and the item bias that we want to model
-			
+
 			// store the results of the different runs in the following array
 			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
 
@@ -160,7 +160,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 					MatrixUtils.Inc(attribute_to_feature, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
 			}
-			
+
 			// item bias part
 			double bias_diff = est_features[num_factors] - item_bias[item_id];
 			if (bias_diff > 0)
@@ -232,7 +232,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			HashSet<int> item_attributes = this.item_attributes[item_id];
 
 			double[] feature_representation = new double[num_factors + 1];
-			
+
 			// regression bias
 			for (int j = 0; j <= num_factors; j++)
 				feature_representation[j] = attribute_to_feature[NumItemAttributes, j];
@@ -256,9 +256,9 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			double[] est_features = MapToLatentFeatureSpace(item_id);
 			double[] latent_factors = new double[num_factors];
-			
+
 			Array.Copy(est_features, latent_factors, num_factors);
-			
+
             return
 				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
 				+ user_bias[user_id]
@@ -271,7 +271,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			return string.Format(
 				ni,
 			    "MF-ItemMapping num_features={0}, regularization={1}, num_iter={2}, learn_rate={3}, reg_mapping={4}, num_iter_mapping={5}, learn_rate_mapping={6}, init_mean={7}, init_stdev={8}",

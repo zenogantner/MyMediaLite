@@ -50,7 +50,7 @@ namespace MyMediaLite.rating_predictor
 			set
 			{
 				this.user_neighbors = value;
-				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows);
+				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
 			}
 		}
 		private SparseBooleanMatrix user_neighbors;

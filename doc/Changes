@@ -12,11 +12,13 @@
          - fix LoadModel() and SaveModel() for item prediction kNN engines
          - differentiate between weighted and unweighted item-based kNN for
            item prediction
+         - fix off-by-one error in attribute-aware engines
         interfaces
          - new interfaces ILatentFactorModel and IAttributeToFactors
          - new interface IItemRecommender (instead of abstract class)
          - simplified interface of io.AttributeData
          - added property NumberOfColumns to SparseBooleanMatrix
+         - attibute-aware engines: attributes now also have getters
 	command-line programs
          - exception handler: encourage users to file bug reports
          - check again for unknown program parameters

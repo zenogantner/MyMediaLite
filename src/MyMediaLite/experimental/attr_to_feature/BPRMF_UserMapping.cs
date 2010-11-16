@@ -37,7 +37,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 			{
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
-				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
+				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
 			}
 		}
 		/// <summary>The matrix storing the user attributes</summary>

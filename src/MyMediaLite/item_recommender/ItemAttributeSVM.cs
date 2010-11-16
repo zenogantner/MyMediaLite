@@ -41,7 +41,7 @@ namespace MyMediaLite.item_recommender
 			{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
-				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
 		private SparseBooleanMatrix item_attributes;		

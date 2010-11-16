@@ -32,21 +32,21 @@ namespace MyMediaLite.experimental.attr_to_feature
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
 		/// <inheritdoc/>
-		public SparseBooleanMatrix ItemAttributes			
+		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set
 			{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
-				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows);
+				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
 		/// <summary>The matrix storing the item attributes</summary>
 		protected SparseBooleanMatrix item_attributes;
-		
+
 		/// <inheritdoc/>
-	    public int NumItemAttributes { get;	set; }		
+	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] feature_bias;
@@ -236,7 +236,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			return string.Format(
 				ni,
 			    "BPR-MF-ItemMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
