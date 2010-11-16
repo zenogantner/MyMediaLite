@@ -121,8 +121,6 @@
     <Compile Include="data_type\SparseVector.cs" />
     <Compile Include="rating_predictor\SocialMF.cs" />
     <Compile Include="io\RelationData.cs" />
-    <Compile Include="data_type\data_type_test.cs" />
-    <Compile Include="data\data_test.cs" />
     <Compile Include="IItemAttributeAwareRecommender.cs" />
     <Compile Include="IUserAttributeAwareRecommender.cs" />
     <Compile Include="IRecommenderEngine.cs" />
