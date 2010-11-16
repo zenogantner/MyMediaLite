@@ -472,9 +472,13 @@ namespace MyMediaLite
 
 			// attribute stats
 			if (recommender is IUserAttributeAwareRecommender)
-				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+				Console.WriteLine("{0} user attributes for {1} users",
+				                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
+				                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
 			if (recommender is IItemAttributeAwareRecommender)
-				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
+				Console.WriteLine("{0} item attributes for {1} items",
+				                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
+				                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
 		}
 
 		static void DisplayIterationStats()

@@ -33,6 +33,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
+			get { return this.user_attributes; }
 			set
 			{
 				this.user_attributes = value;

@@ -23,9 +23,9 @@ namespace MyMediaLite
 	public interface IUserRelationAwareRecommender : IRecommenderEngine
 	{
 		/// <summary>The binary user relation</summary>
-		SparseBooleanMatrix UserRelation { set; }
-		
+		SparseBooleanMatrix UserRelation { get; set; }
+
 		/// <summary>Number of users</summary>
-	    int NumUsers { get; set; }		
+	    int NumUsers { get; set; }
 	}
 }

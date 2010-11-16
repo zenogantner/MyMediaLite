@@ -27,6 +27,6 @@ namespace MyMediaLite
 	    int NumUserAttributes { get; set; }
 
 		/// <summary>The binary user attributes</summary>
-		SparseBooleanMatrix UserAttributes { set; }
+		SparseBooleanMatrix UserAttributes { get; set; }
 	}
 }

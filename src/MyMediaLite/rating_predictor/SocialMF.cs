@@ -35,17 +35,18 @@ namespace MyMediaLite.rating_predictor
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
         /// <summary>Social network regularization constant</summary>
-		public double SocialRegularization { get { return social_regularization;	} set {	social_regularization = value; } }		
-        private double social_regularization = 1;		
+		public double SocialRegularization { get { return social_regularization;	} set {	social_regularization = value; } }
+        private double social_regularization = 1;
 
 		/// <summary>
 		/// Use stochastic gradient descent instead of batch gradient descent
 		/// </summary>
 		public bool StochasticLearning { get; set; }
-		
+
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserRelation
 		{
+			get { return this.user_neighbors; }
 			set
 			{
 				this.user_neighbors = value;
@@ -53,10 +54,10 @@ namespace MyMediaLite.rating_predictor
 			}
 		}
 		private SparseBooleanMatrix user_neighbors;
-		
+
 		/// <summary>the number of users</summary>
 		public int NumUsers { get; set; }
-		
+
 		/// <inheritdoc/>
         public override void Train()
 		{
@@ -73,18 +74,18 @@ namespace MyMediaLite.rating_predictor
             // learn model parameters
 			if (StochasticLearning)
 				ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-            
+
 			// compute global average
 			double global_average = 0;
 			foreach (RatingEvent r in Ratings.All)
 				global_average += r.rating;
 			global_average /= Ratings.All.Count;
-			
+
             global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
-				Iterate(ratings.All, true, true);			
+				Iterate(ratings.All, true, true);
 		}
-		
+
 		/// <inheritdoc/>
 		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
@@ -93,7 +94,7 @@ namespace MyMediaLite.rating_predictor
 			else
 				IterateBatch();
 		}
-		
+
 		private void IterateBatch()
 		{
 			// I. compute gradients
@@ -111,13 +112,13 @@ namespace MyMediaLite.rating_predictor
 				double dot_product = global_bias;
 	            for (int f = 0; f < num_factors; f++)
     	            dot_product += user_factors[u, f] * item_factors[i, f];
-				double sig_dot = 1 / (1 + Math.Exp(-dot_product));				
+				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
                 double prediction = MinRating + sig_dot * rating_range_size;
-				double error      = rating.rating - prediction;				
-				
+				double error      = rating.rating - prediction;
+
 				double gradient_common = error * sig_dot * (1 - sig_dot) * rating_range_size;
-				
+
 				// add up error gradient
                 for (int f = 0; f < num_factors; f++)
                 {
@@ -130,16 +131,16 @@ namespace MyMediaLite.rating_predictor
 						MatrixUtils.Inc(item_feature_gradient, i, f, gradient_common * u_f);
                 }
 			}
-			
+
 			// I.2 L2 regularization
 			for (int u = 0; u < user_feature_gradient.dim1; u++)
 				for (int f = 2; f < num_factors; f++)
 					MatrixUtils.Inc(user_feature_gradient, u, f, user_factors[u, f] * regularization);
-			
+
 			for (int i = 0; i < item_feature_gradient.dim1; i++)
 				for (int f = 2; f < num_factors; f++)
 					MatrixUtils.Inc(item_feature_gradient, i, f, item_factors[i, f] * regularization);
-			
+
 			// I.3 social network regularization
 			for (int u = 0; u < user_feature_gradient.dim1; u++)
 			{
@@ -166,18 +167,18 @@ namespace MyMediaLite.rating_predictor
 							MatrixUtils.Inc(user_feature_gradient, u, f, social_regularization * diff / num_neighbors);
 					}
 				}
-			}		
-			
+			}
+
 			// II. apply gradient descent step
 			for (int u = 0; u < user_feature_gradient.dim1; u++)
 				for (int f = 2; f < num_factors; f++)
 					MatrixUtils.Inc(user_factors, u, f, user_feature_gradient[u, f] * learn_rate);
-			
+
 			for (int i = 0; i < item_feature_gradient.dim1; i++)
 				for (int f = 2; f < num_factors; f++)
 					MatrixUtils.Inc(item_factors, i, f, item_feature_gradient[i, f] * learn_rate);
 		}
-		
+
 		private void IterateSGD(Ratings ratings, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRating - MinRating;
@@ -217,7 +218,7 @@ namespace MyMediaLite.rating_predictor
 							sum_neighbors[f] -= diff / num_neighbors;
 					}
 				}
-				
+
 				// Adjust features
                 for (int f = 0; f < num_factors; f++)
                 {
@@ -250,8 +251,8 @@ namespace MyMediaLite.rating_predictor
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni,
 			                     "SocialMF num_features={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} stochastic={5} init_mean={6} init_stdev={7}",
 				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, StochasticLearning, InitMean, InitStdev);

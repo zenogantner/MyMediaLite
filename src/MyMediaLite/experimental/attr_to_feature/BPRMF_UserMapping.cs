@@ -32,6 +32,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
+			get { return this.user_attributes; }
 			set
 			{
 				this.user_attributes = value;
@@ -225,8 +226,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 		public override string ToString()
 		{
 			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(
 				ni,
 				"BPR-MF-UserMapping num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",

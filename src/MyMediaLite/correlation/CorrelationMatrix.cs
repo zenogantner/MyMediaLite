@@ -195,7 +195,17 @@ namespace MyMediaLite.correlation
 				entities.Add(i);
 
 			entities.Remove(entity_id);
-			entities.Sort(delegate(int i, int j) { return this[j, entity_id].CompareTo(this[i, entity_id]); });
+			entities.Sort(delegate(int i, int j) {
+				try
+				{
+					return this[j, entity_id].CompareTo(this[i, entity_id]);
+				}
+				catch (Exception)
+				{
+					Console.Error.WriteLine("{0}, {1}, {2}", i, j, entity_id);
+					throw;
+				}
+			});
 
 			if (k > entities.Count)
 				return entities.GetRange(0, (int) k).ToArray();

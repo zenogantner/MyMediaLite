@@ -35,15 +35,16 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
+			get { return this.user_attributes; }
 			set
 			{
 				this.user_attributes = value;
-				this.NumUserAttributes = user_attributes.NumberOfColumns;				
+				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows);
 			}
 		}
 		private SparseBooleanMatrix user_attributes;
-		
+
 		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
 

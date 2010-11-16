@@ -23,8 +23,8 @@ namespace MyMediaLite
 	public interface IItemRelationAwareRecommender : IRecommenderEngine
 	{
 		/// <summary>The binary item relation</summary>
-		SparseBooleanMatrix ItemRelation { set; }
-		
+		SparseBooleanMatrix ItemRelation { get; set; }
+
 		/// <summary>Number of items</summary>
 	    int NumItems { get; set; }
 	}
