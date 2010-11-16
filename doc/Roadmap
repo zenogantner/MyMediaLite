@@ -7,7 +7,8 @@ Recommender functionality
  - support for non-binary attributes: real, nominal, textual descriptions
  - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
- - additional engines (?)
+ - additional engines
+   - classical item-to-item recommendation
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
@@ -87,5 +88,6 @@ Misc
 Documentation/website
  - document attribute-aware recommenders: using and implementing
  - document how to set up C# development environment for Ubuntu, Debian, etc.
+ - document using MyMediaLite from F#, implementing engines in F#
  - put website and flyer into different git repositories
  - generate HTML API docs and manual from XML/inline documentation
