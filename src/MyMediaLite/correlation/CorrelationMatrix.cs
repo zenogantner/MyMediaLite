@@ -95,7 +95,7 @@ namespace MyMediaLite.correlation
 			for (int i = 0; i < num_entities; i++)
 				cm[i, i] = 1;
 
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			while (! reader.EndOfStream)
@@ -124,7 +124,7 @@ namespace MyMediaLite.correlation
 		/// </param>
 		public void Write(StreamWriter writer)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			writer.WriteLine(num_entities);
@@ -173,7 +173,7 @@ namespace MyMediaLite.correlation
 		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
 		public IList<int> GetPositivelyCorrelatedEntities(int entity_id)
 		{
-			List<int> result = new List<int>();
+			var result = new List<int>();
 			for (int i = 0; i < num_entities; i++)
 				if (this[i, entity_id] > 0)
 					result.Add(i);
@@ -189,7 +189,7 @@ namespace MyMediaLite.correlation
 		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
 		public int[] GetNearestNeighbors(int entity_id, uint k)
 		{
-			List<int> entities = new List<int>();
+			var entities = new List<int>();
 			for (int i = 0; i < num_entities; i++)
 				entities.Add(i);
 

@@ -26,7 +26,7 @@ using MyMediaLite.taxonomy;
 using MyMediaLite.data;
 
 
-namespace MyMediaLite
+namespace MyMediaLiteTest
 {
 	/// <summary>Class for testing the correlation classes with NUnit</summary>
 	[TestFixture()]

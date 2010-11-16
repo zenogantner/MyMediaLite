@@ -10,7 +10,7 @@ include $(top_srcdir)/config.make
 
 ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG" "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Debug/Mapping.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
@@ -32,7 +32,7 @@ endif
 
 ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Release/Mapping.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
@@ -71,7 +71,7 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MAPPING_ITEM_PREDICTION = $(BUILD_DIR)/mapping_item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	MappingItemPrediction.cs 
 
@@ -83,7 +83,6 @@ EXTRAS = \
 	mapping_item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core
 
 DLL_REFERENCES = 

@@ -4,7 +4,7 @@ PACKAGE=mymedialite
 prefix=/usr/local
 config=DEBUG
 configurations=" DEBUG RELEASE DEFAULT"
-common_packages=" mono-nunit;2.4.7"
+common_packages=" nunit;2.4.7"
 
 
 usage ()

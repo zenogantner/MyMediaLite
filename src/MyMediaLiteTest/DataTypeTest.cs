@@ -22,7 +22,7 @@ using MyMediaLite.data_type;
 using NUnit.Framework;
 
 
-namespace MyMediaLite
+namespace MyMediaLiteTest
 {
 	/// <summary>Testing the data_type classes</summary>
 	[TestFixture()]
@@ -34,10 +34,10 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void GetRow()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
-			testMatrix.SetRow(3, row);
-			Assert.AreEqual(testMatrix.GetRow(3), row);
+			matrix.SetRow(3, row);
+			Assert.AreEqual(matrix.GetRow(3), row);
 		}
 
 		/// <summary>
@@ -46,10 +46,10 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void GetColumn()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			var matrix = new Matrix<int>(5, 5);
 			int[] column = { 1, 2, 3, 4, 5 };
-			testMatrix.SetColumn(3, column);
-			Assert.AreEqual(testMatrix.GetColumn(3), column);
+			matrix.SetColumn(3, column);
+			Assert.AreEqual(matrix.GetColumn(3), column);
 		}
 
 		/// <summary>
@@ -57,10 +57,10 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Init()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 2, 2, 2, 2, 2 };
-			testMatrix.Init(2);
-			Assert.AreEqual(testMatrix.GetRow(2), row);
+			matrix.Init(2);
+			Assert.AreEqual(matrix.GetRow(2), row);
 		}
 
 		/// <summary>
@@ -68,13 +68,13 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void SetRowToOneValue()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
-			testMatrix.SetRowToOneValue(3, 10);
+				matrix.SetRow(i, row);
+			matrix.SetRowToOneValue(3, 10);
 			int[] testrow = { 10, 10, 10, 10, 10 };
-			Assert.AreEqual(testrow, testMatrix.GetRow(3));
+			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
 
 
@@ -83,13 +83,13 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void SetColumnToOneValue()
 		{
-			Matrix<int> testMatrix = new Matrix<int>(5, 5);
+			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
-			testMatrix.SetColumnToOneValue(3, 10);
+				matrix.SetRow(i, row);
+			matrix.SetColumnToOneValue(3, 10);
 			int[] testcolumn = { 10, 10, 10, 10, 10 };
-			Assert.AreEqual(testcolumn, testMatrix.GetColumn(3));
+			Assert.AreEqual(testcolumn, matrix.GetColumn(3));
 		}
 
 
@@ -99,12 +99,12 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Inc()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
-			MatrixUtils.Inc(testMatrix, 3, 4, 2.5);
-			Assert.AreEqual(7.5, testMatrix[3, 4]);
+				matrix.SetRow(i, row);
+			MatrixUtils.Inc(matrix, 3, 4, 2.5);
+			Assert.AreEqual(7.5, matrix[3, 4]);
 		}
 
 
@@ -113,17 +113,17 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Inc2()
 		{
-			var testMatrix1 = new Matrix<double>(5, 5);
+			var matrix1 = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix1.SetRow(i, row);
+				matrix1.SetRow(i, row);
 
-			var testMatrix2 = new Matrix<double>(5, 5);
+			var matrix2 = new Matrix<double>(5, 5);
 			for (int i = 0; i < 5; i++)
-				testMatrix2.SetRow(i, row);
+				matrix2.SetRow(i, row);
 			double[] testrow = {2, 4, 6, 8, 10};
-			MatrixUtils.Inc(testMatrix1, testMatrix2);
-			Assert.AreEqual(testrow, testMatrix1.GetRow(2));
+			MatrixUtils.Inc(matrix1, matrix2);
+			Assert.AreEqual(testrow, matrix1.GetRow(2));
 
 		}
 
@@ -132,12 +132,12 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void ColumnAverage()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
-			Assert.AreEqual(2.0, MatrixUtils.ColumnAverage(testMatrix, 1));
-			Assert.AreEqual(5.0, MatrixUtils.ColumnAverage(testMatrix, 4));
+				matrix.SetRow(i, row);
+			Assert.AreEqual(2.0, MatrixUtils.ColumnAverage(matrix, 1));
+			Assert.AreEqual(5.0, MatrixUtils.ColumnAverage(matrix, 4));
 		}
 
 		/// <summary>
@@ -145,12 +145,12 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void RowAverage()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
-			Assert.AreEqual(3.0, MatrixUtils.RowAverage(testMatrix, 1));
-			Assert.AreEqual(3.0, MatrixUtils.RowAverage(testMatrix, 4));
+				matrix.SetRow(i, row);
+			Assert.AreEqual(3.0, MatrixUtils.RowAverage(matrix, 1));
+			Assert.AreEqual(3.0, MatrixUtils.RowAverage(matrix, 4));
 		}
 
 		/// <summary>
@@ -158,13 +158,13 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Multiply()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i<5; i++)
-				testMatrix.SetRow(i, row);
-			MatrixUtils.Multiply(testMatrix, 2.5);
+				matrix.SetRow(i, row);
+			MatrixUtils.Multiply(matrix, 2.5);
 			double[] testrow = { 2.5, 5, 7.5, 10, 12.5 };
-			Assert.AreEqual(testrow, testMatrix.GetRow(3));
+			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
 
 		/// <summary>
@@ -172,12 +172,12 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void FrobeniusNorm()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
+				matrix.SetRow(i, row);
 			double result =Math.Sqrt(275.0);
-			Assert.AreEqual(result,MatrixUtils.FrobeniusNorm(testMatrix));
+			Assert.AreEqual(result,MatrixUtils.FrobeniusNorm(matrix));
 		}
 
 		/// <summary>
@@ -185,13 +185,13 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void RowScalarProduct()
 		{
-			var testMatrix = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrix.SetRow(i, row);
+				matrix.SetRow(i, row);
 			double[] vector = { 1, 2, 3, 4, 5 };
 			double result = 55;
-			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(testMatrix, 2, vector));
+			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(matrix, 2, vector));
 		}
 
 		/// <summary>
@@ -199,18 +199,18 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void ContainsNaN()
 		{
-			var testMatrixfalse = new Matrix<double>(5, 5);
+			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrixfalse.SetRow(i, row);
-			var testMatrixtrue = new Matrix<double>(5, 5);
+				matrix.SetRow(i, row);
+			var matrixtrue = new Matrix<double>(5, 5);
 			double[] row2 = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				testMatrixtrue.SetRow(i, row2);
+				matrixtrue.SetRow(i, row2);
 
-			Assert.IsFalse(MatrixUtils.ContainsNaN(testMatrixfalse));
-			// TODO insert Nan in testMatrix
-			// Assert.IsTrue(MatrixUtils.ContainsNaN(testMatrixtrue));
+			Assert.IsFalse(MatrixUtils.ContainsNaN(matrix));
+			// TODO insert Nan in matrix
+			// Assert.IsTrue(MatrixUtils.ContainsNaN(matrixtrue));
 		}
 
 		/// <summary>
@@ -218,15 +218,15 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void NonEmptyRows()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 				if (i != 2)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= true;
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
 				}
-			Assert.IsTrue(testMatrix[0, 1]);
-			IList<KeyValuePair<int, HashSet<int>>> nonEmptyRows = testMatrix.NonEmptyRows;
+			Assert.IsTrue(matrix[0, 1]);
+			IList<KeyValuePair<int, HashSet<int>>> nonEmptyRows = matrix.NonEmptyRows;
 			Assert.AreEqual(4, nonEmptyRows.Count);
 
 			// TODO test contents
@@ -235,14 +235,14 @@ namespace MyMediaLite
 		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRowIDs</summary>
 		[Test()] public void NonEmptyRowIDs()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 				if (i != 2 && i !=3)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= true;
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
 				}
-			ICollection<int> rowIDs = testMatrix.NonEmptyRowIDs;
+			ICollection<int> rowIDs = matrix.NonEmptyRowIDs;
 			IEnumerator <int> rowIDsEnum = rowIDs.GetEnumerator();
 			rowIDsEnum.MoveNext();
 			Assert.AreEqual(0, rowIDsEnum.Current);
@@ -257,58 +257,58 @@ namespace MyMediaLite
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfRows</summary>
 		[Test()] public void NumberOfRows()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 			{
-				testMatrix[i, 1]= true;
-				testMatrix[i, 4]= true;
+				matrix[i, 1]= true;
+				matrix[i, 4]= true;
 			}
-			Assert.AreEqual(5, testMatrix.NumberOfRows);
+			Assert.AreEqual(5, matrix.NumberOfRows);
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfColumns</summary>
 		[Test()] public void NumberOfColumns()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 			{
-				testMatrix[i, 1]= true;
-				testMatrix[i, 4]= true;
+				matrix[i, 1]= true;
+				matrix[i, 4]= true;
 			}
-			Assert.AreEqual(5, testMatrix.NumberOfColumns);
+			Assert.AreEqual(5, matrix.NumberOfColumns);
 		}
 		
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfEntries</summary>
 		[Test()] public void NumberOfEntries()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 				if (i != 2 && i != 4)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= false;
+					matrix[i, 1]= true;
+					matrix[i, 4]= false;
 				}
-			Assert.AreEqual(3, testMatrix.NumberOfEntries);
+			Assert.AreEqual(3, matrix.NumberOfEntries);
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int y)</summary>
 		[Test()] public void RemoveColumn()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
 				if (i != 2 && i != 4)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= true;
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
 				}
-			testMatrix[2, 2] = true;
+			matrix[2, 2] = true;
 
-			testMatrix.RemoveColumn(2);
+			matrix.RemoveColumn(2);
 
-			Assert.IsTrue(testMatrix[0, 3]);
-			Assert.IsTrue(testMatrix[1, 3]);
-			Assert.IsTrue(testMatrix[3, 3]);
-			Assert.IsTrue(testMatrix[1, 1]);
+			Assert.IsTrue(matrix[0, 3]);
+			Assert.IsTrue(matrix[1, 3]);
+			Assert.IsTrue(matrix[3, 3]);
+			Assert.IsTrue(matrix[1, 1]);
 		}
 
 		/// <summary>
@@ -316,24 +316,24 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void RemoveColumns()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 7; i++)
 				if(i != 2 && i != 4)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= true;
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
 				}
-			testMatrix[2, 2] = true;
-			testMatrix[2, 5] = true;
-			testMatrix[4, 3] = true;
+			matrix[2, 2] = true;
+			matrix[2, 5] = true;
+			matrix[4, 3] = true;
 			int[] delete_columns = {2, 4};
-			testMatrix.RemoveColumn(delete_columns);
+			matrix.RemoveColumn(delete_columns);
 
 			// test the new columns
-			Assert.IsTrue(testMatrix[4, 2]);
-			Assert.IsTrue(testMatrix[2, 3]);
-			Assert.IsFalse(testMatrix[1, 3]);
-			Assert.IsFalse(testMatrix[4, 3]);
+			Assert.IsTrue(matrix[4, 2]);
+			Assert.IsTrue(matrix[2, 3]);
+			Assert.IsFalse(matrix[1, 3]);
+			Assert.IsFalse(matrix[4, 3]);
 		}
 
 		/// <summary>
@@ -341,18 +341,18 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Transpose()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
+			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 7; i++)
 				if(i != 2 && i != 4)
 				{
-					testMatrix[i, 1]= true;
-					testMatrix[i, 4]= true;
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
 				}
-			testMatrix[2, 2] = true;
-			testMatrix[2, 5] = true;
-			testMatrix[4, 3] = true;
+			matrix[2, 2] = true;
+			matrix[2, 5] = true;
+			matrix[4, 3] = true;
 			// transpose the matrix
-			SparseBooleanMatrix transposedMatrix = testMatrix.Transpose();
+			SparseBooleanMatrix transposedMatrix = matrix.Transpose();
 			// test the transposed matrix
 			Assert.IsTrue(transposedMatrix[1,0]);
 			Assert.IsTrue(transposedMatrix[4, 6]);
@@ -365,13 +365,13 @@ namespace MyMediaLite
 		/// </summary>
 		[Test()] public void Overlap()
 		{
-			SparseBooleanMatrix testMatrix = new SparseBooleanMatrix();
-			testMatrix[2, 2] = true;
-			testMatrix[2, 5] = true;
-			testMatrix[4, 3] = true;
-			testMatrix[4, 6] = true;
-			testMatrix[5, 1] = true;
-			testMatrix[5, 5] = true;
+			var matrix = new SparseBooleanMatrix();
+			matrix[2, 2] = true;
+			matrix[2, 5] = true;
+			matrix[4, 3] = true;
+			matrix[4, 6] = true;
+			matrix[5, 1] = true;
+			matrix[5, 5] = true;
 
 			SparseBooleanMatrix overlapMatrix = new SparseBooleanMatrix();
 			overlapMatrix[2, 1] = true;
@@ -381,7 +381,7 @@ namespace MyMediaLite
 			overlapMatrix[5, 2] = true;
 			overlapMatrix[5, 5] = true; // same entry
 
-			Assert.AreEqual(3, testMatrix.Overlap(overlapMatrix));
+			Assert.AreEqual(3, matrix.Overlap(overlapMatrix));
 
 		}
 

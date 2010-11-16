@@ -21,7 +21,7 @@ using MyMediaLite.data;
 using NUnit.Framework;
 
 
-namespace MyMediaLite
+namespace MyMediaLiteTest
 {
 	/// <summary>Testing the data classes</summary>
 	[TestFixture()]
@@ -41,17 +41,17 @@ namespace MyMediaLite
 		/// </summary>
 		public void RatingDataMaxUserIDIemUserID()
 		{
-			var testRatingData = new RatingData();
-			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
-			testRatingData.AddRating(new RatingEvent(1, 8, 0.2));
-			testRatingData.AddRating(new RatingEvent(2, 4, 0.2));
-			testRatingData.AddRating(new RatingEvent(2, 2, 0.6));
-			testRatingData.AddRating(new RatingEvent(2, 5, 0.4));
-			testRatingData.AddRating(new RatingEvent(3, 7, 0.2));
-			testRatingData.AddRating(new RatingEvent(6, 3, 0.3));
+			var rating_data = new RatingData();
+			rating_data.AddRating(new RatingEvent(1, 4, 0.3));
+			rating_data.AddRating(new RatingEvent(1, 8, 0.2));
+			rating_data.AddRating(new RatingEvent(2, 4, 0.2));
+			rating_data.AddRating(new RatingEvent(2, 2, 0.6));
+			rating_data.AddRating(new RatingEvent(2, 5, 0.4));
+			rating_data.AddRating(new RatingEvent(3, 7, 0.2));
+			rating_data.AddRating(new RatingEvent(6, 3, 0.3));
 
-			Assert.AreEqual(6, testRatingData.MaxUserID);
-			Assert.AreEqual(8, testRatingData.MaxItemID);
+			Assert.AreEqual(6, rating_data.MaxUserID);
+			Assert.AreEqual(8, rating_data.MaxItemID);
 		}
 
 		/// <summary>
