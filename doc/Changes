@@ -29,6 +29,7 @@
            properties
          - development: improved 'make gendarme' and 'make todo'
          - add more test cases (e.g. for LoadModel() and SaveModel())
+         - separate test code from production code
          - The core library and the command-line programs now do not contain
            any critical issues that Gendarme would complain about.
 

@@ -169,7 +169,6 @@ EXTRAS = \
 REFERENCES =  \
 	../../lib/MathNet/MathNet.Iridium.dll \
 	../SVM/bin/Debug/SVM.dll \
-	-pkg:mono-nunit \
 	System \
 	System.Core \
 	System.Data \

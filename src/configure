@@ -3,7 +3,7 @@ VERSION=0.6
 PACKAGE=mymedialite
 prefix=/usr/local
 config=DEBUG
-configurations=" DEBUG RELEASE"
+configurations=" DEBUG RELEASE DEFAULT"
 common_packages=" mono-nunit;2.4.7"
 
 

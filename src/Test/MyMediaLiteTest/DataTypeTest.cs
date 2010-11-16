@@ -26,7 +26,7 @@ namespace MyMediaLite
 {
 	/// <summary>Testing the data_type classes</summary>
 	[TestFixture()]
-	public class data_type_test
+	public class DataTypeTest
 	{
 		/// <summary>
 		/// Unit test of Matrix.GetRow()
