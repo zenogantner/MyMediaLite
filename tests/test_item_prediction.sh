@@ -18,7 +18,7 @@ echo "--------------------"
 for method in item-kNN weighted-item-kNN user-kNN weighted-user-kNN
 do
 	echo $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
-	     #$PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
+	     $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
 done
 
 echo "MovieLens 100K"
