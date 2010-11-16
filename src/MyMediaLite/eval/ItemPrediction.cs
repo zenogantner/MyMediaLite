@@ -166,23 +166,23 @@ namespace MyMediaLite.eval
 
 			int prediction_count = 0;
 
-			writer.Write("{0}\t", user_mapping.ToOriginalID(user_id));
+			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
 			foreach (var wi in score_list)
-			{				
+			{
 				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
 				{
 					if (prediction_count == 0)
 					    writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
 					else
 						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
-					
+
 					prediction_count++;
 				}
 
 				if (prediction_count == num_predictions)
 					break;
 			}
-			writer.WriteLine();	
+			writer.WriteLine("]");
 		}
 
 		/// <summary>
