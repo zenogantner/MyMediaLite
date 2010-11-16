@@ -8,7 +8,7 @@ Recommender functionality
  - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
  - additional engines
-   - classical item-to-item recommendation
+   - item-to-item CF (Linden et al., 2003)
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
@@ -16,7 +16,6 @@ Recommender functionality
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
    - Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
-   - item-to-item CF (Linden et al., 2003)
    - attribute-based engines using LIBSVM
    - Bayesian Probabilistic Matrix Factorization http://www.mit.edu/~rsalakhu/BPMF.html
    - Content-boosted CF http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.73.8546&rep=rep1&type=pdf
@@ -91,3 +90,4 @@ Documentation/website
  - document using MyMediaLite from F#, implementing engines in F#
  - put website and flyer into different git repositories
  - generate HTML API docs and manual from XML/inline documentation
+ - glossary where we explain commonly used terms

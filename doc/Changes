@@ -24,7 +24,7 @@
          - check again for unknown program parameters
         misc
          - code clean-ups
-         - minor documentation improvements
+         - documentation improvements in many places
          - automagic engine configuration: proper handling of read-only
            properties
          - development: improved 'make gendarme' and 'make todo'
