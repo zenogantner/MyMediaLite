@@ -4,9 +4,9 @@
         - export Mahout-compatible item predictions
         - attribute-to-factor mapping framework (ICDM 2010)
         - automated release management
-        - added script to download MovieLens data & set up testing environment
+        - add shell/Perl cripts to download MovieLens and IMDB data
         - tests should now run on every Unix computer
-        - added tests to both the binary and the source package
+        - add tests to both the binary and the source package
 	- engines
           - encapsulate hyperparameters of ItemAttributeSVM and WRMF
           - print newline after Pearson correlation is computed
@@ -20,8 +20,8 @@
         - interfaces
           - new interfaces ILatentFactorModel and IAttributeToFactors
           - new interface IItemRecommender (instead of abstract class)
-          - simplified interface of io.AttributeData
-          - added property NumberOfColumns to SparseBooleanMatrix
+          - simplify interface of io.AttributeData
+          - add property NumberOfColumns to SparseBooleanMatrix
           - attibute-aware engines: attributes now also have getters
 	- command-line programs
           - exception handler: encourage users to file bug reports
@@ -31,7 +31,7 @@
           - documentation improvements in many places
           - automagic engine configuration: proper handling of read-only
             properties
-          - development: improved 'make gendarme' and 'make todo'
+          - development: improve 'make gendarme' and 'make todo'
           - add more test cases (e.g. for LoadModel() and SaveModel())
           - separate test code from production code
           - The core library and the command-line programs now do not contain
@@ -60,7 +60,7 @@
           - rating prediction: map internal user/item IDs back to the original
             ones (this bug was found and reported by Thorsten Angermann)
           - configure recommender engines via reflection
-          - improved usage information
+          - improve usage information
           - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
           - item prediction: fix iteration statistics display
           - rating prediction: display correct number of users and items
@@ -69,7 +69,7 @@
              test set
 	- misc:
           - add unit tests for some basic data types (Christina Lichtenthäler)
-          - improved exception handling in CorrelationMatrix
+          - improve exception handling in CorrelationMatrix
           - rename util.EngineStorage class to util.Engines, because it now
             contains different utility methods, not just for storing
           - code clean-ups
@@ -88,7 +88,7 @@
            ItemRelationAwareRecommender
           - SocialMF by Jamali+Ester 2010
         - engine changes:
-          - added global bias term to BiasedMatrixFactorization
+          - add global bias term to BiasedMatrixFactorization
         - command-line programs:
           - allow input from STDIN and output to STDOUT
 	  - nicer time output for both demo programs
