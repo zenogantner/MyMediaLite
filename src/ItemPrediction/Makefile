@@ -63,7 +63,7 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
-FILES = \
+FILES =  \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -75,6 +75,7 @@ EXTRAS = \
 	item_prediction.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core
 
 DLL_REFERENCES = 
