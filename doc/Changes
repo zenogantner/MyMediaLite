@@ -1,12 +1,11 @@
 0.06    2010-11-17
         - Makefile-based build system allows compilation without IDE
+        - automated release management
         - also read comma-separated text files (like Mahout)
         - export Mahout-compatible item predictions
         - attribute-to-factor mapping framework (ICDM 2010)
-        - automated release management
         - add shell/Perl cripts to download MovieLens and IMDB data
         - tests should now run on every Unix computer
-        - add tests to both the binary and the source package
 	- engines
           - encapsulate hyperparameters of ItemAttributeSVM and WRMF
           - print newline after Pearson correlation is computed
