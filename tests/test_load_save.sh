@@ -4,12 +4,14 @@
 
 # TODO test ALL engines: attribute-aware, averages, etc.
 
-PROGRAM="mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe"
-DATA_DIR=data/ml100k
+PROGRAM="mono --debug RatingPrediction.exe"
+DATA_DIR=../../../../data/ml100k
+
+cd src/RatingPrediction/bin/Debug/
 
 echo "This will take about 10 minutes ..."
 
-echo ""
+echo
 echo "rating prediction engines"
 echo "-------------------------"
 
@@ -44,11 +46,13 @@ done
 
 rm tmp.model output1.txt output2.txt
 
-echo ""
+echo
 echo "item prediction engines"
 echo "-----------------------"
 
-PROGRAM="mono --debug src/ItemPrediction/bin/Debug/ItemPrediction.exe"
+PROGRAM="mono --debug ItemPrediction.exe"
+
+cd ../../../ItemPrediction/bin/Debug/
 
 for method in wr-mf bpr-mf most-popular
 do
@@ -67,3 +71,5 @@ do
 	  $PROGRAM u1.base u1.test $method k=20 load_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output2.txt
      diff output1.txt output2.txt
 done
+
+cd ../../../../

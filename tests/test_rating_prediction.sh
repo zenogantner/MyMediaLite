@@ -48,3 +48,5 @@ do
 	echo $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR
 	     $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR
 done
+
+cd ../../../../
