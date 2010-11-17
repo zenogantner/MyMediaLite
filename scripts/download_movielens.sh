@@ -27,7 +27,7 @@ rm ml-data.tar.gz million-ml-data.tar.gz
 ../scripts/ml1m_user_attributes.pl ml1m/users.dat > ml1m/user-attributes-nozip.txt
 
 # create evaluation splits for MovieLens 1M
-../scripts/crossvalidation.pl --k=5 --filename=ml1m/ml1m ml1m/ratings.dat --suffix=.txt
+../scripts/import_dataset.pl --separator=:: ml1m/ratings.dat | ../scripts/crossvalidation.pl --k=5 --filename=ml1m/ml1m --suffix=.txt
 ../scripts/user_cold_start.pl ml1m/ratings.dat --separator=:: --filename=ml1m/ml1m-new-user --k=5 --suffix=.txt
 
 cd ..

@@ -36,6 +36,7 @@ Data types
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
+ - test suite should also run for purely binary installation
  - integrate with easyrec JavaScript API http://easyrec.org/ 
  - interface(s) for recommenders that support online updates
  - define an easy interface for rating data access
@@ -60,7 +61,7 @@ Architecture
  - generic optimization interface and algorithms (like Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
- - provide bindings for languages like Java, Ruby, Perl, Clojure, Scala
+ - provide bindings for languages like Java, Ruby, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - consider having upper case namespaces so that we can support IronRuby
  - use Parallel.ForEach for item recommender evaluation
    - as soon as Mono 2.8 is more widely available

@@ -2,7 +2,7 @@
 
 # don't expect this to work, this is (currently) for internal testing purposes
 
-PROGRAM="mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe"
+PROGRAM="mono --debug RatingPrediction.exe"
 
 echo "This will take about 5 minutes ..."
 
@@ -10,7 +10,9 @@ echo ""
 echo "MovieLens 1M"
 echo "------------"
 
-DATA_DIR=data/ml1m
+DATA_DIR=../../../../data/ml1m
+
+cd src/RatingPrediction/bin/Debug/
 
 for method in matrix-factorization biased-matrix-factorization
 do
@@ -35,7 +37,7 @@ echo ""
 echo "MovieLens 100K"
 echo "--------------"
 
-DATA_DIR=data/ml100k
+DATA_DIR=../../../../data/ml100k
 
 method=user-item-baseline
 echo $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
