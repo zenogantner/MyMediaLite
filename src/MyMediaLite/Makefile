@@ -163,6 +163,7 @@ EXTRAS = \
 	mymedialite.pc.in 
 
 REFERENCES =  \
+	../../lib/MathNet/MathNet.Iridium.dll \
 	../SVM/bin/Debug/SVM.dll \
 	System \
 	System.Core \

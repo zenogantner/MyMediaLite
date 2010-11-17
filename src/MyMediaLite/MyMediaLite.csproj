@@ -42,6 +42,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="correlation\Pearson.cs" />
