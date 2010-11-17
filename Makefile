@@ -3,7 +3,9 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
+VERSION=0.06
 
+.PHONY: add configure clean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package testsuite release download-movielens
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -14,12 +16,42 @@ clean:
 	cd ${SRC_DIR} && make clean
 	rm -rf doc/monodoc/*
 	rm -rf website/public_html/*
+	rm *.tar.gz
 
 install:
 	cd ${SRC_DIR} && make install
 
 uninstall:
 	cd ${SRC_DIR} && make uninstall
+
+binary-package:
+
+source-package:
+
+testsuite:
+	tests/test_rating_prediction.sh
+	tests/test_item_prediction.sh
+	tests/test_load_save.sh
+
+release: clean all testsuite binary-package source-package
+	head doc/Changes
+	git status
+	echo "Checklist:"
+	echo "1. Check the output of the test suite"
+	echo "2. Check the output of 'git status' above - is everything in the repository?"
+	echo "3. Version numbers"
+	echo "3a. Have you set the VERSION string in the Makefile to the new version? Current setting is ${VERSION}."
+	echo "3b. Check above if the version number and date (tomorrow) are set correctly in the Changes file"
+	echo "4. Check the contents of the source code package"
+	echo "5. Check the contents of the binary package"
+	echo "6. Create the release announcement"
+	echo "7. Commit the website changes"
+	echo "8. Copy announcement to the website"
+
+download-movielens:
+	wget --output-document=ml-data.tar.gz         http://www.grouplens.org/system/files/ml-data.tar__0.gz
+	wget --output-document=million-ml-data.tar.gz http://www.grouplens.org/system/files/million-ml-data.tar__0.gz
+	
 
 todo:
 	ack --type=csharp TODO                    ${SRC_DIR}; echo
@@ -40,17 +72,11 @@ gendarme:
 
 monodoc:
 	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-htmldoc:
+htmldoc: monodoc
 	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api --template doc/doctemplate.xsl
 
-.PHONY: apidoc
-apidoc: monodoc htmldoc
-
-view-apidoc:
+view-htmldoc:
 	x-www-browser doc/html/index.html
-
-edit-apidoc-stylesheet:
-	${EDITOR} doc/doctemplate.xsl
 
 flyer:
 	cd doc/flyer; pdflatex mymedialite-flyer.tex

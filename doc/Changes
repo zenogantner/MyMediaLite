@@ -1,4 +1,4 @@
-0.06    2010-11-
+0.06    2010-11-18
         Makefile-based build system allows compilation without IDE
         also read comma-separated text files (Mahout compatibility)
         export Mahout-compatible item predictions
