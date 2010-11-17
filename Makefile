@@ -49,13 +49,7 @@ release: clean all testsuite binary-package source-package
 	echo "8. Copy announcement to the website"
 
 download-movielens:
-	#wget --output-document=data/ml-data.tar.gz         http://www.grouplens.org/system/files/ml-data.tar__0.gz
-	#wget --output-document=data/million-ml-data.tar.gz http://www.grouplens.org/system/files/million-ml-data.tar__0.gz
-	cd data && tar -zxf ml-data.tar.gz
-	mv data/ml-data data/ml100k
-	cd data && tar -zxf million-ml-data.tar.gz
-	mkdir data/ml1m
-	cd data && mv README movies.dat ratings.dat users.dat ml1m
+	scripts/download_movielens.sh
 
 todo:
 	ack --type=csharp TODO                    ${SRC_DIR}; echo
