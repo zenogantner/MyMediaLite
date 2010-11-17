@@ -72,4 +72,6 @@ do
      diff output1.txt output2.txt
 done
 
+rm tmp.model output1.txt output2.txt
+
 cd ../../../../

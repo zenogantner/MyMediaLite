@@ -5,7 +5,7 @@ SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
 VERSION=0.06
 
-.PHONY: add configure clean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package testsuite release download-movielens copy-packages-website
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package testsuite release download-movielens copy-packages-website
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -16,7 +16,12 @@ clean:
 	cd ${SRC_DIR} && make clean
 	rm -rf doc/monodoc/*
 	rm -rf website/public_html/*
-	rm *.tar.gz
+	rm -f src/*/bin/Debug/*
+	rm -f src/*/bin/Release/*
+	rm -rf MyMediaLite-*
+
+veryclean: clean
+	rm -f *.tar.gz
 
 install:
 	cd ${SRC_DIR} && make install
@@ -26,26 +31,29 @@ uninstall:
 
 binary-package:
 	mkdir MyMediaLite-${VERSION}
-	cp -r doc MyMediaLite-${VERSION}
-	rm -rf MyMediaLite-${VERSION}/flyer MyMediaLite-${VERSION}/manual  MyMediaLite-${VERSION}/CodingStandards
+	mkdir MyMediaLite-${VERSION}/doc
+	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/Roadmap MyMediaLite-${VERSION}/doc
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	mkdir MyMediaLite-${VERSION}/data
+	#mkdir MyMediaLite-${VERSION}/data
 	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.dll MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.mdb MyMediaLite-${VERSION}
 	cp src/RatingPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
 	cp src/MappingItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
+	rm -rf MyMediaLite-${VERSION}
 
 source-package: clean
 	mkdir MyMediaLite-${VERSION}.src
-	cp -r doc MyMediaLite-${VERSION}.src
+	mkdir MyMediaLite-${VERSION}.src/doc
+	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/Roadmap MyMediaLite-${VERSION}.src/doc
 	rm -rf MyMediaLite-${VERSION}.src/flyer MyMediaLite-${VERSION}.src/manual
 	cp -r src examples scripts tests MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data
 	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
+	rm -rf MyMediaLite-${VERSION}.src
 
 testsuite:
 	tests/test_rating_prediction.sh
