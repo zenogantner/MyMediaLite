@@ -2,9 +2,13 @@ PDF_VIEWER=evince
 EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
+CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
 
-all:
+all: configure
 	cd ${SRC_DIR} && make all
+
+configure:
+	cd ${SRC_DIR} && ./configure ${CONFIGURE_OPTIONS}
 
 clean:
 	cd ${SRC_DIR} && make clean

@@ -1,5 +1,5 @@
 
-EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll
+EXTRA_DIST =  rules.make configure Makefile.include
 
 all: all-recursive
 
@@ -12,13 +12,13 @@ include $(top_srcdir)/rules.make
 
 #Warning: This is an automatically generated file, do not edit!
 ifeq ($(CONFIG),DEBUG)
- SUBDIRS =  SVM MyMediaLiteTest MyMediaLite ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
+ SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
 ifeq ($(CONFIG),RELEASE)
- SUBDIRS =  SVM MyMediaLiteTest MyMediaLite ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
+ SUBDIRS =  SVM MyMediaLite ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
 ifeq ($(CONFIG),DEFAULT)
- SUBDIRS =  MyMediaLiteTest
+ SUBDIRS = 
 endif
 
 

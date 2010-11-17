@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemPrediction", "Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "MappingRatingPrediction\MappingRatingPrediction.csproj", "{8C64FEFA-40FB-4F30-8689-D568C4E398B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteTest", "MyMediaLiteTest\MyMediaLiteTest.csproj", "{BF080B4A-B4BD-48B1-AE57-A67505F655BE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,12 +40,6 @@ Global
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Default|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Default|Any CPU.Build.0 = Debug|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
