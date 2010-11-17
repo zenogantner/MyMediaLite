@@ -19,6 +19,8 @@ mv README movies.dat ratings.dat users.dat ml1m
 # remove downloaded archives
 rm ml-data.tar.gz million-ml-data.tar.gz
 
-# create attribute files
+# create attribute files for MovieLens 1M
+../scripts/ml1m_genres.pl ml1m/movies.dat > ml1m/item-attributes-genres.txt
+../scripts/ml1m_user_attributes.pl ml1m/users.dat > ml1m/user-attributes-nozip.txt
 
 cd ..

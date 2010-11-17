@@ -18,7 +18,7 @@
 #  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 # ml1m_user_attributes.pl --help
-# ml1m_user_attributes.pl users.dat > user-attributes-all.txt
+# ml1m_user_attributes.pl users.dat > user-attributes-nozip.txt
 
 use strict;
 use warnings;
