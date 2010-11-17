@@ -4,7 +4,7 @@
 
 # TODO test ALL engines: attribute-aware, averages, etc.
 
-PROGRAM="mono --debug RatingPrediction.exe"
+PROGRAM="mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe"
 DATA_DIR=data/ml100k
 
 echo "This will take about 10 minutes ..."
@@ -12,8 +12,6 @@ echo "This will take about 10 minutes ..."
 echo ""
 echo "rating prediction engines"
 echo "-------------------------"
-
-cd src/RatingPrediction/bin/Debug
 
 # load/save currently not supported: global-average user-average item-average
 
@@ -50,9 +48,7 @@ echo ""
 echo "item prediction engines"
 echo "-----------------------"
 
-PROGRAM="mono --debug ItemPrediction.exe"
-
-cd ../../../ItemPrediction/bin/Debug
+PROGRAM="mono --debug src/ItemPrediction/bin/Debug/ItemPrediction.exe"
 
 for method in wr-mf bpr-mf most-popular
 do

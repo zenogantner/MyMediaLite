@@ -2,11 +2,9 @@
 
 # don't expect this to work, this is (currently) for internal testing purposes
 
-PROGRAM="mono --debug RatingPrediction.exe"
+PROGRAM="mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe"
 
 echo "This will take about 5 minutes ..."
-
-cd src/RatingPrediction/bin/Debug
 
 echo ""
 echo "MovieLens 1M"

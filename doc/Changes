@@ -36,6 +36,8 @@
           - separate test code from production code
           - The core library and the command-line programs now do not contain
             any critical issues that Gendarme would complain about.
+          - add Perl script to create k-fold CV dataset splits,
+            and for generating cold-start evaluation scenarions
 
 0.05	2010-11-02
         - rename the library from 'Algorithms' to 'MyMediaLite'

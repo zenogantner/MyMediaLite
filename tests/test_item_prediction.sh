@@ -4,13 +4,11 @@
 
 # TODO use relevant_items
 
-PROGRAM="mono --debug ItemPrediction.exe"
+PROGRAM="mono --debug ItemPrediction/bin/Debug/ItemPrediction.exe"
 THIS_DIR=`pwd`/tests
 
 echo "This may take about 15 minutes ..."
 echo "Do not take the results serious - we do not use the best hyperparameters here"
-
-cd src/ItemPrediction/bin/Debug
 
 echo ""
 echo "Tiny example dataset"

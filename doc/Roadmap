@@ -5,7 +5,7 @@ Recommender functionality
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
  - support for non-binary attributes: real, nominal, textual descriptions
- - directly support MovieLens u.item and u.user files
+ - directly support MovieLens u.item and u.user files and MovieLens 1M data format
  - support for more relation types: weighted, ternary, multiple relations
  - additional engines
    - item-to-item CF (Linden et al., 2003)
@@ -48,8 +48,7 @@ Architecture
    - store in one list (as values, not references!)
    - create special index data structures on demand
  - redesign/rewrite implicit feedback data structures
- - user and item IDs should be unsigned integers
- - automated release management
+ - user and item IDs should be unsigned integers, not signed integers
  - parameterize types:
    - user and item IDs
    - stored ratings
@@ -88,6 +87,5 @@ Documentation/website
  - document attribute-aware recommenders: using and implementing
  - document how to set up C# development environment for Ubuntu, Debian, etc.
  - document using MyMediaLite from F#, implementing engines in F#
- - put website and flyer into different git repositories
  - generate HTML API docs and manual from XML/inline documentation
  - glossary where we explain commonly used terms
