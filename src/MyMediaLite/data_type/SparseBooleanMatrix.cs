@@ -133,7 +133,8 @@ namespace MyMediaLite.data_type
 			{
 				int max_column_id = -1;
 				foreach (var row in rows)
-					max_column_id = Math.Max(max_column_id, row.Max());
+					if (row.Count > 0)
+						max_column_id = Math.Max(max_column_id, row.Max());
 				
 				return max_column_id + 1;
 			}
