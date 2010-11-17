@@ -20,8 +20,8 @@ done
 
 for method in user-item-baseline global-average user-average item-average
 do
-	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
-	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method data_dir=$DATA_DIR
+	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method data_dir=$DATA_DIR
 done
 
 for method in item-attribute-knn
