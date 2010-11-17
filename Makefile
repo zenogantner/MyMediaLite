@@ -110,4 +110,4 @@ copy-website:
 	cp -r website/public_html/* ${HOME}/homepage/public_html/mymedialite/
 
 copy-packages-website:
-	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz ${HOME}/homepage/public_html/mymedialite/
+	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz ${HOME}/homepage/public_html/mymedialite/download
