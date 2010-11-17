@@ -72,7 +72,7 @@ namespace MyMediaLite.item_recommender
 
 				this.correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 				this.k = (uint) nearest_neighbors[0].Length;
-				this.nearest_neighbors = nearest_neighbors; System.Console.Error.WriteLine("SET");
+				this.nearest_neighbors = nearest_neighbors;
 			}
 		}
 	}
