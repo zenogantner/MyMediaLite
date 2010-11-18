@@ -14,6 +14,7 @@ configure:
 
 clean:
 	cd ${SRC_DIR} && make clean
+	cd examples/csharp && make clean
 	rm -rf doc/monodoc/*
 	rm -rf website/public_html/*
 	rm -f src/*/bin/Debug/*
@@ -35,7 +36,6 @@ binary-package:
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/Roadmap MyMediaLite-${VERSION}/doc
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	#mkdir MyMediaLite-${VERSION}/data
 	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.dll MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.mdb MyMediaLite-${VERSION}
