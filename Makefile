@@ -55,7 +55,7 @@ source-package: clean
 	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
 	rm -rf MyMediaLite-${VERSION}.src
 
-testsuite:
+testsuite: all
 	time tests/test_rating_prediction.sh
 	time tests/test_item_prediction.sh
 	time tests/test_load_save.sh
