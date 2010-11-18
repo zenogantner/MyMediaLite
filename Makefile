@@ -5,7 +5,7 @@ SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
 VERSION=0.07
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package testsuite release download-movielens copy-packages-website
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -30,7 +30,7 @@ install:
 uninstall:
 	cd ${SRC_DIR} && make uninstall
 
-binary-package:
+binary-package: all
 	mkdir MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/doc
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/Roadmap MyMediaLite-${VERSION}/doc
@@ -55,12 +55,12 @@ source-package: clean
 	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
 	rm -rf MyMediaLite-${VERSION}.src
 
-testsuite: all
+test: all
 	time tests/test_rating_prediction.sh
 	time tests/test_item_prediction.sh
 	time tests/test_load_save.sh
 
-release: clean all testsuite binary-package source-package
+release: test binary-package source-package
 	head doc/Changes
 	git status
 	cp doc/Changes website/src/download
@@ -109,7 +109,7 @@ view-flyer:
 website:
 	ttree -s website/src/ -d website/public_html/ -c website/lib/ -l website/lib/ -r -f config --post_chomp -a
 
-copy-website:
+copy-website: website
 	cp -r website/public_html/* ${HOME}/homepage/public_html/mymedialite/
 
 copy-packages-website:
