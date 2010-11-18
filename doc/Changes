@@ -1,3 +1,11 @@
+0.07	2010-11-18
+	- Bugfix release. You only need to upgrade if you encounter problems
+          with the issues mentioned below.
+	- fix some tiny errors in the Makefile
+	- fix an error in the MovieLens download script
+	- command line tools: ignore data_dir for save_model and load_model
+	- small documentation updates
+
 0.06    2010-11-17
         - Makefile-based build system allows compilation without IDE
         - automated release management

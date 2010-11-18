@@ -32,13 +32,12 @@ my $K        = 10;
 
 GetOptions(
 	   'help'          => \(my $help        = 0),
-	   'file-suffix=s' => \(my $file_suffix = $SUFFIX),
+	   'suffix=s'      => \(my $file_suffix = $SUFFIX),
 	   'filename=s'    => \(my $file_name   = $FILENAME),
 	   'k=i'           => \(my $k           = $K),
 	   'filter-file=s' => \(my $filter_file = ''),
 	   'separator=s'   => \(my $separator = '\\s+'),
 	  ) or usage(-1);
-# TODO: add --target-dir
 
 usage(0) if $help;
 

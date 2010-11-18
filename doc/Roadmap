@@ -1,7 +1,7 @@
 TODO list
 ---------
 Recommender functionality
- - allow new user evaluation for item prediction
+ - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
    - result diversification (Ziegler)
  - support for non-binary attributes: real, nominal, textual descriptions
@@ -23,12 +23,19 @@ Recommender functionality
  - time-aware rating and item prediction
    - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender, SequentialRecommender
- - ranking ensembles
- - stacking ensembles
- - ensembles for new users/new items
+ - ensembles
+   - ranking ensembles
+   - stacking ensembles
+   - ensembles for new users/new items
  - add more content-based routines (using Lemur?)
  - evaluation
+   - allow new user evaluation for item prediction
+   - support different CV protocols: leave-one-out, leave-one-out-per-user, k-fold CV, chronological splits, user-/item-stratified CV
    - support evaluation protocols w/ repeated events
+   - faster evaluation routines
+     - approximate AUC
+     - sample precision@N
+   - online update evaluation
  - item-to-item recommendation
  - consider to store the hyperparameters in the model files as well
 Data types
@@ -76,10 +83,6 @@ Architecture
  - consider using simulated multiple inheritance for the attribute-based recommenders:
    http://www.codeproject.com/KB/architecture/smip.aspx
 Misc
- - faster evaluation routines
-   - approximate AUC
-   - sample precision@N
- - online update evaluation
  - rewrite MF techniques using vector/matrix abstractions
  - faster reading of text files
  - get rid of min_rating and max_rating

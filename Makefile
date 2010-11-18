@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
-VERSION=0.06
+VERSION=0.07
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package testsuite release download-movielens copy-packages-website
 all: configure
@@ -66,7 +66,10 @@ release: clean all testsuite binary-package source-package
 	cp doc/Changes website/src/download
 	cat doc/ReleaseChecklist
 
-download-movielens:
+data:
+	mkdir data/
+
+download-movielens: data
 	scripts/download_movielens.sh
 
 todo:
