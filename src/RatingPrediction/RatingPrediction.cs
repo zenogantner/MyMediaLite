@@ -247,7 +247,7 @@ namespace RatingPrediction
 				if (load_model_file.Equals(string.Empty))
 					recommender.Train();
 				else
-					Engine.LoadModel(iterative_recommender, data_dir, load_model_file);
+					Engine.LoadModel(iterative_recommender, load_model_file);
 
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -283,7 +283,7 @@ namespace RatingPrediction
 						});
 						eval_time_stats.Add(time.TotalSeconds);
 
-						Engine.SaveModel(recommender, data_dir, save_model_file, i);
+						Engine.SaveModel(recommender, save_model_file, i);
 
 						if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 						{
@@ -300,7 +300,7 @@ namespace RatingPrediction
 				} // for
 
 				DisplayIterationStats();
-				Engine.SaveModel(recommender, data_dir, save_model_file);
+				Engine.SaveModel(recommender, save_model_file);
 			}
 			else
 			{
@@ -311,11 +311,11 @@ namespace RatingPrediction
 					Console.Write(recommender.ToString() + " ");
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
             		Console.Write("training_time " + seconds + " ");
-					Engine.SaveModel(recommender, data_dir, save_model_file);
+					Engine.SaveModel(recommender, save_model_file);
 				}
 				else
 				{
-					Engine.LoadModel(recommender, data_dir, load_model_file);
+					Engine.LoadModel(recommender, load_model_file);
 					Console.Write(recommender.ToString() + " ");
 				}
 

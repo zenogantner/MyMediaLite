@@ -23,7 +23,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>Item-based kNN with pearson correlation</summary>
+	/// <summary>Weighted item-based kNN with pearson correlation</summary>
 	public class ItemKNNPearson : ItemKNN
 	{
 		/// <summary>Shrinkage parameter</summary>

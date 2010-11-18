@@ -24,9 +24,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// Attribute-aware item-based kNN recommender.
-	/// </summary>
+	/// <summary>Attribute-aware weighted item-based kNN recommender</summary>
 	/// <remarks>
 	/// This engine does NOT support online updates.
 	/// </remarks>

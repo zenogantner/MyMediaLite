@@ -23,7 +23,7 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>User-based kNN engine</summary>
+	/// <summary>Weighted user-based kNN engine</summary>
 	/// <remarks>This engine supports online updates.</remarks>
 	public abstract class UserKNN : KNN
 	{

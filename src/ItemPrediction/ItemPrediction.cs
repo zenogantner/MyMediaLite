@@ -251,7 +251,7 @@ namespace MyMediaLite
 				if (load_model_file.Equals(string.Empty))
 					iterative_recommender.Train();
 				else
-					Engine.LoadModel(iterative_recommender, data_dir, load_model_file);
+					Engine.LoadModel(iterative_recommender, load_model_file);
 
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -294,7 +294,7 @@ namespace MyMediaLite
 						});
 						eval_time_stats.Add(t.TotalSeconds);
 
-						Engine.SaveModel(recommender, data_dir, save_model_file, i);
+						Engine.SaveModel(recommender, save_model_file, i);
 
 						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 						{
@@ -317,7 +317,7 @@ namespace MyMediaLite
 				}
 				else
 				{
-					Engine.LoadModel(recommender, data_dir, load_model_file);
+					Engine.LoadModel(recommender, load_model_file);
 					Console.Write(recommender.ToString() + " ");
 					// TODO is this the right time to load the model?
 				}
@@ -370,7 +370,7 @@ namespace MyMediaLite
 				}
 				Console.WriteLine();
 			}
-			Engine.SaveModel(recommender, data_dir, save_model_file);
+			Engine.SaveModel(recommender, save_model_file);
 		}
 
         static void LoadData(string data_dir, string trainfile, string testfile,

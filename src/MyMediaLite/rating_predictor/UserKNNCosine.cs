@@ -21,7 +21,7 @@ using MyMediaLite.correlation;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>User-based kNN with cosine similarity</summary>
+	/// <summary>Weighted user-based kNN with cosine similarity</summary>
 	public class UserKNNCosine : UserKNN
 	{
         /// <inheritdoc/>

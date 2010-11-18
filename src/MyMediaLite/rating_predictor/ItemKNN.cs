@@ -24,7 +24,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>Item-based kNN engine</summary>
+	/// <summary>Weighted item-based kNN engine</summary>
 	/// <remarks>This engine supports online updates.</remarks>
 	public abstract class ItemKNN : KNN
 	{

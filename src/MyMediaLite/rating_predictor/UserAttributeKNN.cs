@@ -26,7 +26,7 @@ using MyMediaLite.data_type;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>kNN recommender engine based on user attributes</summary>
+	/// <summary>Weighted kNN recommender engine based on user attributes</summary>
 	/// <remarks>
 	/// This engine does NOT support online updates.
 	/// </remarks>

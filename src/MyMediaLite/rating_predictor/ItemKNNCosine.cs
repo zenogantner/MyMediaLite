@@ -22,7 +22,7 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>Item-based kNN with cosine similarity</summary>
+	/// <summary>Weighted item-based kNN with cosine similarity</summary>
 	public class ItemKNNCosine : ItemKNN
 	{
         /// <inheritdoc/>

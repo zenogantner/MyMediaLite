@@ -23,26 +23,23 @@ using System.IO;
 
 namespace MyMediaLite.util
 {
-	/// <summary>
-	/// Helper class with utility methods for recommender engines
-	/// </summary>
+	/// <summary>Helper class with utility methods for recommender engines</summary>
 	/// <remarks>
 	/// Contains methods for storing and loading engine models, and for configuring engines.
 	/// </remarks>
 	public class Engine
 	{
-		/// <summary>
+		/// <summary>Save the model parameters of a recommender engine to a file</summary>
+		/// <remarks>
 		/// Does not save if file is an empty string
-		/// </summary>
+		/// </remarks>
 		/// <param name="engine">the engine to store</param>
-		/// <param name="data_dir">data directory prefix</param>
-		/// <param name="file">the filename (may include relative paths)</param>
-		public static void SaveModel(IRecommenderEngine engine, string data_dir, string file)
+		/// <param name="filename">the filename (may include relative paths)</param>
+		public static void SaveModel(IRecommenderEngine engine, string filename)
 		{
-			if (file.Equals(string.Empty))
+			if (filename.Equals(string.Empty))
 				return;
 
-			string filename = Path.Combine(data_dir, file);
 			Console.Error.WriteLine("Save model to {0}", filename);
 			engine.SaveModel(filename);
 		}
@@ -51,29 +48,26 @@ namespace MyMediaLite.util
 		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
 		/// </summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
-		/// <param name="data_dir">the directory where the file will  be stored</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
-		public static void SaveModel(IRecommenderEngine engine, string data_dir, string filename, int iteration)
+		public static void SaveModel(IRecommenderEngine engine, string filename, int iteration)
 		{
 			if (filename.Equals(string.Empty))
 				return;
 
-			SaveModel(engine, data_dir, filename + "-it-" + iteration);
+			SaveModel(engine, filename + "-it-" + iteration);
 		}
 
 		/// <summary>
-		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
+		/// Load the model parameters of a recommender engine (in a given iteration of the training) from a file
 		/// </summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
-		/// <param name="data_dir">the directory where the file will  be stored</param>
 		/// <param name="filename">the filename template</param>
-		public static void LoadModel(IRecommenderEngine engine, string data_dir, string filename)
+		public static void LoadModel(IRecommenderEngine engine, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;
 
-			filename = Path.Combine(data_dir, filename);
 			Console.Error.WriteLine("Load model from {0}", filename);
 			engine.LoadModel(filename);
 		}
@@ -97,9 +91,7 @@ namespace MyMediaLite.util
 			return reader;
 		}
 
-		/// <summary>
-		/// Get a writer object to save the model parameters of a recommender engine
-		/// </summary>
+		/// <summary>Get a writer object to save the model parameters of a recommender engine</summary>
 		/// <param name="filename">the filename of the model file</param>
 		/// <param name="engine_type">the engine type</param>
 		/// <returns>a <see cref="StreamWriter"/></returns>
@@ -109,7 +101,7 @@ namespace MyMediaLite.util
 			writer.WriteLine(engine_type);
 			return writer;
 		}
-		
+
 		static string NormalizeName(string s)
 		{
 			int underscore_position;
@@ -117,12 +109,10 @@ namespace MyMediaLite.util
 				s = s.Remove(underscore_position, 1);
 			return s.ToUpperInvariant();
 		}
-		
-		/// <summary>
-		/// Delegate definition necessary to define ConfigureEngine
-		/// </summary>
+
+		/// <summary>Delegate definition necessary to define ConfigureEngine</summary>
 		public delegate void takes_string(string s);
-		
+
 		/// <summary>
 		/// Configure a recommender engine
 		/// </summary>
@@ -134,13 +124,13 @@ namespace MyMediaLite.util
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			Type type = engine.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
 				property_names.Add(p.Name);
 			property_names.Sort();
-			
+
 			foreach (var key in new List<string>(parameters.Keys))
 			{
 				string param_name = NormalizeName(key);
@@ -149,10 +139,10 @@ namespace MyMediaLite.util
 					if (NormalizeName(property_name).StartsWith(param_name))
 					{
 						var property = type.GetProperty(property_name);
-						
+
 						if (property.GetSetMethod() == null)
 							goto NEXT_PROPERTY; // poor man's labeled break ...
-						
+
 						switch (property.PropertyType.ToString())
 						{
 							case "System.Double":
@@ -169,7 +159,7 @@ namespace MyMediaLite.util
 								break;
 							case "System.Boolean":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
-								break;							
+								break;
 							default:
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
 								break;
@@ -177,19 +167,18 @@ namespace MyMediaLite.util
 						parameters.Remove(key);
 						goto NEXT_KEY; // poor man's labeled break ...
 					}
-					
+
 					NEXT_PROPERTY:
 					Console.Write(""); // the C# compiler wants some statement here
 				}
-				
+
 				report_error(string.Format("Engine {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
-				
+
 				NEXT_KEY:
 				Console.Write(""); // the C# compiler wants some statement here
 			}
-			
+
 			return engine;
 		}
-		
 	}
 }

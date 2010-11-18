@@ -169,7 +169,7 @@ namespace MyMediaLite
 
 			TimeSpan seconds;
 
-			Engine.LoadModel(recommender, data_dir, load_model_file);
+			Engine.LoadModel(recommender, load_model_file);
 
 			// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 			recommender.MaxUserID = user_mapping.InternalIDs.Max();

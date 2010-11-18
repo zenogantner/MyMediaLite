@@ -22,9 +22,7 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite.rating_predictor
 {
-	/// <summary>
-	/// user-based kNN with Pearson correlation
-	/// </summary>
+	/// <summary>Weighted user-based kNN with Pearson correlation</summary>
 	public class UserKNNPearson : UserKNN
 	{
 		/// <summary>Shrinkage parameter</summary>		
