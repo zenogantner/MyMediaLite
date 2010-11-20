@@ -2,6 +2,11 @@
 
 # to be run from the root directory of MyMediaLite
 
+echo "The MovieLens dataset is for NON-COMMERCIAL use only."
+echo "Refer to the README file for the details of the usage license."
+echo "Hit enter to continue, Ctrl-C to abort."
+read DUMMY
+
 echo "This may take a while ..."
 echo
 
