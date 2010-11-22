@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG)
+ifeq ($(CONFIG),DEBUG_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG;TRACE"
 ASSEMBLY = bin/Debug/MyMediaLite.dll
@@ -18,7 +18,6 @@ PROJECT_REFERENCES =  \
 	../SVM/bin/Debug/SVM.dll
 BUILD_DIR = bin/Debug/
 
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
@@ -27,7 +26,7 @@ MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE)
+ifeq ($(CONFIG),RELEASE_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:3 -optimize+ "-define:TRACE"
 ASSEMBLY = bin/Release/MyMediaLite.dll
@@ -37,7 +36,6 @@ PROJECT_REFERENCES =  \
 	../SVM/bin/Release/SVM.dll
 BUILD_DIR = bin/Release/
 
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
@@ -48,7 +46,6 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
-	$(MATHNET_IRIDIUM_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
 	$(MYMEDIALITE_DLL_MDB)  
@@ -59,7 +56,6 @@ LINUX_PKGCONFIG = \
 
 RESGEN=resgen2
 
-MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 
@@ -174,8 +170,7 @@ REFERENCES =  \
 	System.Data \
 	System.Data.DataSetExtensions
 
-DLL_REFERENCES =  \
-	../../lib/MathNet/MathNet.Iridium.dll
+DLL_REFERENCES = 
 
 CLEANFILES = $(PROGRAMFILES) $(LINUX_PKGCONFIG) 
 
@@ -187,7 +182,6 @@ include $(top_srcdir)/Makefile.include
 
 
 
-$(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-wrapper,MYMEDIALITE_PC,mymedialite.pc))
@@ -213,7 +207,6 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -226,7 +219,6 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))

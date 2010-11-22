@@ -1,6 +1,7 @@
 0.08	2010-12-?
         - add information about ML's non-commercial use license to the download
           script
+	- Makefiles, unit tests, and MonoDevelop finally work together nicely
 
 
 0.07	2010-11-18

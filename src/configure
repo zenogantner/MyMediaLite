@@ -1,10 +1,10 @@
 #!/bin/bash
-VERSION=0.6
+VERSION=0.7
 PACKAGE=mymedialite
 prefix=/usr/local
-config=DEBUG
-configurations=" DEBUG RELEASE DEFAULT"
-common_packages=""
+config=DEBUG_X86
+configurations=" DEBUG_X86 RELEASE_X86"
+common_packages=" mono-nunit;2.4.7"
 
 
 usage ()

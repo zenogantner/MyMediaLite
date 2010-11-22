@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG)
+ifeq ($(CONFIG),DEBUG_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG" "-main:MyMediaLite.ItemPrediction"
 ASSEMBLY = bin/Debug/ItemPrediction.exe
@@ -19,7 +19,6 @@ PROJECT_REFERENCES =  \
 BUILD_DIR = bin/Debug
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
@@ -30,7 +29,7 @@ ITEMPREDICTION_EXE_MDB=$(BUILD_DIR)/ItemPrediction.exe.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE)
+ifeq ($(CONFIG),RELEASE_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-main:MyMediaLite.ItemPrediction"
 ASSEMBLY = bin/Release/ItemPrediction.exe
@@ -41,7 +40,6 @@ PROJECT_REFERENCES =  \
 BUILD_DIR = bin/Release
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
-MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
@@ -54,7 +52,6 @@ SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
 	$(MYMEDIALITE_DLL) \
-	$(MATHNET_IRIDIUM_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
 	$(MYMEDIALITE_DLL_MDB) \
@@ -67,11 +64,10 @@ BINARIES = \
 RESGEN=resgen2
 
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
-MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -83,7 +79,6 @@ EXTRAS = \
 	item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core
 
 DLL_REFERENCES = 
@@ -99,7 +94,6 @@ include $(top_srcdir)/Makefile.include
 
 
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL))
-$(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
@@ -127,7 +121,6 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -142,7 +135,6 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))

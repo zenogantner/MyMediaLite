@@ -1,0 +1,6 @@
+Name: MyMediaLiteTest
+Description: MyMediaLiteTest
+Version: 0.7
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/MyMediaLiteTest.dll

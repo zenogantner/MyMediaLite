@@ -1,6 +1,6 @@
 Name: SVM
 Description: SVM
-Version: 0.6
+Version: 0.7
 
 Requires: 
 Libs: -r:/usr/local/lib/mymedialite/SVM.dll
