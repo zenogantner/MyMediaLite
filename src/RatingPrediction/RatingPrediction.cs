@@ -231,6 +231,7 @@ namespace RatingPrediction
 			});
 			Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
+			// TODO move that into the engine functionality (set from data)
 			recommender.MinRating = min_rating;
 			recommender.MaxRating = max_rating;
 			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));

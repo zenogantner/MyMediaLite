@@ -127,13 +127,13 @@ namespace MyMediaLite.rating_predictor
             if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return MinRating + ( 1 / (1 + Math.Exp(-global_bias)) ) * (MaxRating - MinRating);
 
-			double dot_product = global_bias + user_bias[user_id] + item_bias[item_id];
+			double score = global_bias + user_bias[user_id] + item_bias[item_id];
 
             // U*V
             for (int f = 0; f < num_factors; f++)
-                dot_product += user_factors[user_id, f] * item_factors[item_id, f];
+                score += user_factors[user_id, f] * item_factors[item_id, f];
 
-			return MinRating + ( 1 / (1 + Math.Exp(-dot_product)) ) * (MaxRating - MinRating);
+			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
         }
 
 		/// <inheritdoc/>
@@ -223,7 +223,7 @@ namespace MyMediaLite.rating_predictor
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni,
-			                     "biased-matrix-factorization num_features={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
+			                     "biased-matrix-factorization num_factors={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
 				                 NumFactors, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}

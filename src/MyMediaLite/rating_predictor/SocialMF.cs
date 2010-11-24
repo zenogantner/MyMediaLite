@@ -66,10 +66,6 @@ namespace MyMediaLite.rating_predictor
 	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
 	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
 	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
-			if (num_factors < 2)
-				throw new ArgumentException("num_features must be >= 2");
-        	this.user_factors.SetColumnToOneValue(0, 1);
-			this.item_factors.SetColumnToOneValue(1, 1);
 
             // learn model parameters
 			if (StochasticLearning)
@@ -254,7 +250,7 @@ namespace MyMediaLite.rating_predictor
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "SocialMF num_features={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} stochastic={5} init_mean={6} init_stdev={7}",
+			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} stochastic={5} init_mean={6} init_stdev={7}",
 				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, StochasticLearning, InitMean, InitStdev);
 		}
 	}

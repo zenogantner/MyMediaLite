@@ -192,7 +192,7 @@ namespace MyMediaLite.item_recommender
 
 				MaxUserID = num_users - 1;
 				Matrix<double> user_feature = new Matrix<double>(num_users, dim2);
-				int num_features = dim2;
+				int num_factors = dim2;
 
             	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
             	{
@@ -202,15 +202,15 @@ namespace MyMediaLite.item_recommender
 
                 	if (i >= num_users)
 						throw new Exception(string.Format("Invalid user ID {0} is greater than {1}.", i, num_users - 1));
-					if (j >= num_features)
-						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_features - 1));
+					if (j >= num_factors)
+						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_factors - 1));
 
                 	user_feature[i, j] = v;
 				}
 
             	int num_items = System.Int32.Parse(numbers[0]);
 				dim2 = System.Int32.Parse(numbers[1]);
-				if (dim2 != num_features)
+				if (dim2 != num_factors)
 					throw new Exception("dim2 of item_feature must be feature_count");
 				Matrix<double> item_feature = new Matrix<double>(num_items, dim2);
 
@@ -223,8 +223,8 @@ namespace MyMediaLite.item_recommender
 
                 	if (i >= num_items)
 						throw new Exception(string.Format("Invalid item ID {0} is greater than {1}.", i, num_items - 1));
-					if (j >= num_features)
-						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_features - 1));
+					if (j >= num_factors)
+						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_factors - 1));
 
 					item_feature[i, j] = v;
 				}
@@ -234,10 +234,10 @@ namespace MyMediaLite.item_recommender
 				MaxItemID = num_items - 1;
 
             	// assign new model
-				if (this.num_factors != num_features)
+				if (this.num_factors != num_factors)
 				{
-					Console.Error.WriteLine("Set num_features to {0}", num_features);
-            		this.num_factors = num_features;
+					Console.Error.WriteLine("Set num_factors to {0}", num_factors);
+            		this.num_factors = num_factors;
 				}
             	this.user_factors = user_feature;
             	this.item_factors = item_feature;

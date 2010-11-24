@@ -182,6 +182,8 @@ namespace MyMediaLite.experimental.attr_to_feature
 		/// <returns>an array of doubles containing the RMSE on the training data for each latent factor</returns>
 		protected double[] ComputeMappingFit()
 		{
+			Console.Error.WriteLine("min = {0}, max = {1}", MinRating, MaxRating);
+			
 			double rmse    = 0;
 			double penalty = 0;
 			double[] rmse_and_penalty_per_feature = new double[num_factors + 1];
@@ -197,14 +199,22 @@ namespace MyMediaLite.experimental.attr_to_feature
 				num_items++;
 
 				double[] est_features = MapToLatentFeatureSpace(i);
-				for (int j = 0; j <= num_factors; j++)
+				double error, reg_term;
+				for (int j = 0; j < num_factors; j++)
 				{
-					double error    = Math.Pow(est_features[j] - item_factors[i, j], 2);
-					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
+					error    = Math.Pow(est_features[j] - item_factors[i, j], 2);
+					reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
 					rmse_and_penalty_per_feature[j] += error + reg_term;
 				}
+				
+				// error term for item bias term
+				error    = Math.Pow(est_features[num_factors] - item_bias[i], 2);
+				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(num_factors)), 2);
+				rmse    += error;
+				penalty += reg_term;
+				rmse_and_penalty_per_feature[num_factors] += error + reg_term;
 			}
 
 			for (int i = 0; i <= num_factors; i++)
@@ -259,11 +269,13 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			Array.Copy(est_features, latent_factors, num_factors);
 
-            return
+            double score =
 				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
 				+ user_bias[user_id]
 				+ est_features[num_factors] // estimated item bias
 				+ global_bias;
+			
+			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);			
         }
 
 		/// <inheritdoc/>
@@ -274,7 +286,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			return string.Format(
 				ni,
-			    "MF-ItemMapping num_features={0}, regularization={1}, num_iter={2}, learn_rate={3}, reg_mapping={4}, num_iter_mapping={5}, learn_rate_mapping={6}, init_mean={7}, init_stdev={8}",
+			    "MF-ItemMapping num_factors={0}, regularization={1}, num_iter={2}, learn_rate={3}, reg_mapping={4}, num_iter_mapping={5}, learn_rate_mapping={6}, init_mean={7}, init_stdev={8}",
 				num_factors, Regularization, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}

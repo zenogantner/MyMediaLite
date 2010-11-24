@@ -84,7 +84,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-kNN num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_mean={7}, init_stdev={8}",
+				"BPR-MF-ItemMapping-kNN num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_mean={7}, init_stdev={8}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev
 			);
 		}

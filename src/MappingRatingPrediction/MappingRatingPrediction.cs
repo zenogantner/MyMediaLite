@@ -44,7 +44,7 @@ namespace MyMediaLite
 		static RatingData test_data;
 
 		static MF_Mapping recommender;
-		static MF_ItemMapping mf_map             = new MF_ItemMapping();
+		static MF_ItemMapping mf_map = new MF_ItemMapping();
 		//static MF_ItemMapping_Optimal mf_map_opt = new MF_ItemMapping_Optimal();
 		//static MF_ItemMapping mf_map_knn         = new MF_ItemMapping_kNN();
 		//static MF_ItemMapping mf_map_svr         = new MF_ItemMapping_SVR();
@@ -67,7 +67,7 @@ namespace MyMediaLite
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");
 			Console.WriteLine("  - general OPTIONS have the form name=value");
 			Console.WriteLine("    - random_seed=N");
-			Console.WriteLine("    - data_dir=DIR           load all files from DIR");
+			Console.WriteLine("    - data_dir=DIR           load all data files from DIR");
 			Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");
 			Console.WriteLine("    - user_attributes=FILE   file containing user attribute information");
 			//Console.WriteLine("    - save_mappings=FILE     save computed mapping model to FILE");
@@ -75,6 +75,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - max_rating=NUM         the greatest valid rating value");
 			Console.WriteLine("    - no_eval=BOOL           don't evaluate, only run the mapping");
 			Console.WriteLine("    - compute_fit=N          compute fit every N iterations");
+			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)");			
 
 			Environment.Exit (exit_code);
 		}
@@ -99,12 +100,14 @@ namespace MyMediaLite
 
 			// other parameters
 			string data_dir             = parameters.GetRemoveString( "data_dir");
+			//Console.Error.WriteLine("data_dir " + data_dir);
 			string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 			string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 			//string save_mapping_file    = parameters.GetRemoveString( "save_model");
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed", -1);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval", false);
 			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
+			string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
 
 			if (random_seed != -1)
 				MyMediaLite.util.Random.InitInstance(random_seed);
@@ -138,6 +141,8 @@ namespace MyMediaLite
 			if (parameters.CheckForLeftovers())
 				Usage(-1);
 
+			// TODO move loading into its own method
+			
 			// ID mapping objects
 			EntityMapping user_mapping = new EntityMapping();
 			EntityMapping item_mapping = new EntityMapping();
@@ -175,6 +180,11 @@ namespace MyMediaLite
 			recommender.MaxUserID = user_mapping.InternalIDs.Max();
 			recommender.MaxItemID = item_mapping.InternalIDs.Max();
 
+			// TODO move that into the engine functionality (set from data)
+			recommender.MinRating = min_rating;
+			recommender.MaxRating = max_rating;
+			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));			
+			
 			DisplayDataStats();
 
 			Console.Write(recommender.ToString() + " ");
@@ -208,6 +218,18 @@ namespace MyMediaLite
 			if (!no_eval)
 				seconds = EvaluateRecommender(recommender);
 			Console.WriteLine();
+			
+			if (!predict_ratings_file.Equals(string.Empty))
+			{	
+				seconds = Utils.MeasureTime(
+			    	delegate() {
+						Console.WriteLine();
+						MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+					}
+				);
+				Console.Error.WriteLine("predicting_time " + seconds);
+			}
+			
 		}
 
         static TimeSpan EvaluateRecommender(MF_Mapping recommender)

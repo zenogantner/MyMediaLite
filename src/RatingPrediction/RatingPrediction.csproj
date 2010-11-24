@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>../../../../Data/ml1m-train-10000.txt ../../../../Data/ml1m-test.txt user-kNN load_model=r-uknn.txt k=50 no_eval=true</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -28,7 +27,6 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Commandlineparameters>ml1m-train.txt ml1m-test.txt matrix-factorization data_dir=/home/mrg/MyMedia/trunk/WP4/Samples/Data regularization=0.05 num_features=8</Commandlineparameters>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

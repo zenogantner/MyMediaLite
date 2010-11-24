@@ -36,7 +36,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 		/// <summary>Gamma parameter for RBF kernel</summary>
 		public double Gamma { get { return gamma; } set { gamma = value; } }
-		double gamma = (double) 1 / 500; // usually: 1 / num_features
+		double gamma = (double) 1 / 500;
 
 		SVM.Model[] models;
 
@@ -117,7 +117,7 @@ namespace MyMediaLite.experimental.attr_to_feature
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-SVR num_features={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_mean={8}, init_stdev={9}",
+				"BPR-MF-ItemMapping-SVR num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_mean={8}, init_stdev={9}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, init_mean, init_stdev
 			);
 		}

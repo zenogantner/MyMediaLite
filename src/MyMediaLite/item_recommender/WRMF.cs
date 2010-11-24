@@ -151,7 +151,7 @@ namespace MyMediaLite.item_recommender
 			NumberFormatInfo ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "WR-MF num_features={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
+			return string.Format(ni, "WR-MF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
 				                 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdev);
 		}
     }
