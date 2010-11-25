@@ -20,7 +20,7 @@ namespace ItemPrediction
 
 			// set up the recommender
 			var recommender = new MostPopular();
-			recommender.SetCollaborativeData(training_data.First, training_data.Second);
+			recommender.SetCollaborativeData(training_data);
 			recommender.Train();
 
 			// measure the accuracy on the test data set

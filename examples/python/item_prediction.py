@@ -13,11 +13,11 @@ test_data = MyMediaLite.io.ItemRecommenderData.Read("u1.test", user_mapping, ite
 
 # set up the recommender
 recommender = MyMediaLite.item_recommender.MostPopular()
-recommender.SetCollaborativeData(training_data.First, training_data.Second);
+recommender.SetCollaborativeData(training_data);
 recommender.Train()
 
 # measure the accuracy on the test data set
-print MyMediaLite.eval.ItemPredictionEval.EvaluateItemRecommender(recommender, test_data.First, training_data.First, relevant_items)
+print MyMediaLite.eval.ItemPredictionEval.EvaluateItemRecommender(recommender, test_data, training_data, relevant_items)
 
 # make a prediction for a certain user and item
 print recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
