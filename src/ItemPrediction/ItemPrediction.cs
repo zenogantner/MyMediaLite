@@ -386,7 +386,7 @@ namespace MyMediaLite
 			if (! relevant_items_file.Equals(string.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
-				relevant_items = training_data.Transpose().NonEmptyColumnIDs;
+				relevant_items = training_data.NonEmptyColumnIDs;
 
 			if (recommender != random)
 				((Memory)recommender).SetCollaborativeData(training_data);
@@ -452,7 +452,7 @@ namespace MyMediaLite
 		{
 			// training data stats
 			int num_users = training_data.NonEmptyRowIDs.Count;
-			int num_items = training_data.Transpose().NonEmptyColumnIDs.Count;
+			int num_items = training_data.NonEmptyColumnIDs.Count;
 			long matrix_size = (long) num_users * num_items;
 			long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
 			double sparsity = (double) 100L * empty_size / matrix_size;
@@ -460,7 +460,7 @@ namespace MyMediaLite
 
 			// test data stats
 			num_users = test_data.NonEmptyRowIDs.Count;
-			num_items = test_data.Transpose().NonEmptyColumnIDs.Count;
+			num_items = test_data.NonEmptyColumnIDs.Count;
 			matrix_size = (long) num_users * num_items;
 			empty_size  = (long) matrix_size - test_data.NumberOfEntries;
 			sparsity = (double) 100L * empty_size / matrix_size;

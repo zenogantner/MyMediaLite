@@ -127,7 +127,8 @@ namespace MyMediaLite.item_recommender
 		{
             this.data_user = user_items;
             this.data_item = user_items.Transpose();
-			this.MaxUserID = Math.Max(MaxUserID, data_user.NonEmptyRowIDs.Max());
+			
+			this.MaxUserID = Math.Max(MaxUserID, data_user.NonEmptyRowIDs.Max());			
 			this.MaxItemID = Math.Max(MaxItemID, data_item.NonEmptyRowIDs.Max());
 		}
     }
