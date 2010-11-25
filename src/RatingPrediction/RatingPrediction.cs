@@ -73,44 +73,46 @@ namespace RatingPrediction
 
 		static void Usage(int exit_code)
 		{
-			Console.WriteLine("MyMediaLite rating prediction; usage:");
-			Console.WriteLine(" RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
-			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
-			Console.WriteLine("  - methods (plus arguments and their defaults):");
-			Console.WriteLine("    - " + mf);
-			Console.WriteLine("    - " + biased_mf);
-			Console.WriteLine("    - " + social_mf + " (needs user_relation=FILE)");
-			Console.WriteLine("    - " + uknn_p);
-			Console.WriteLine("    - " + uknn_c);
-			Console.WriteLine("    - " + iknn_p);
-			Console.WriteLine("    - " + iknn_c);
-			Console.WriteLine("    - " + iaknn     + " (needs item_attributes=FILE)");
-			Console.WriteLine("    - " + uib);
-			Console.WriteLine("    - " + ga);
-			Console.WriteLine("    - " + ua);
-			Console.WriteLine("    - " + ia);
-			Console.WriteLine("  - method ARGUMENTS have the form name=value");
-			Console.WriteLine("  - general OPTIONS have the form name=value");
-			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
-			Console.WriteLine("    - random_seed=N              ");
-			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
-			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
-			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
-			Console.WriteLine("    - user_relation=FILE         file containing user relation information");
-			Console.WriteLine("    - item_relation=FILE         file containing item relation information");
-			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
-			Console.WriteLine("    - load_model=FILE            load model from FILE");
-			Console.WriteLine("    - min_rating=NUM             the smallest valid rating value");
-			Console.WriteLine("    - max_rating=NUM             the greatest valid rating value");
-			Console.WriteLine("    - no_eval=BOOL               ");
-			Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)");
-			Console.WriteLine("  - options for finding the right number of iterations (MF methods)");
-			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
-			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
-			Console.WriteLine("    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM");
-			Console.WriteLine("    - rmse_cutoff=NUM            abort if RMSE is above NUM");
-			Console.WriteLine("    - mae_cutoff=NUM             abort if MAE is above NUM");
-			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
+			Console.WriteLine(@"
+MyMediaLite rating prediction; usage:
+ RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+  - methods (plus arguments and their defaults):
+    - {0}
+    - {1}
+    - {2} (needs user_relation=FILE)
+    - {3}
+    - {4}
+    - {5}
+    - {6}
+    - {7} (needs item_attributes=FILE)
+    - {8}
+    - {9}
+    - {10}
+    - {11}
+  - method ARGUMENTS have the form name=value
+  - general OPTIONS have the form name=value
+    - option_file=FILE           read options from FILE (line format KEY: VALUE)
+    - random_seed=N              set random seed to N
+    - data_dir=DIR               load all files from DIR
+    - user_attributes=FILE       file containing user attribute information
+    - item_attributes=FILE       file containing item attribute information
+    - user_relation=FILE         file containing user relation information
+    - item_relation=FILE         file containing item relation information
+    - save_model=FILE            save computed model to FILE
+    - load_model=FILE            load model from FILE
+    - min_rating=NUM             the smallest valid rating value
+    - max_rating=NUM             the greatest valid rating value
+    - no_eval=BOOL               do not evaluate
+    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+  - options for finding the right number of iterations (MF methods)
+    - find_iter=N                give out statistics every N iterations
+    - max_iter=N                 perform at most N iterations
+    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
+    - rmse_cutoff=NUM            abort if RMSE is above NUM
+    - mae_cutoff=NUM             abort if MAE is above NUM
+    - compute_fit=BOOL           display fit on training data every find_iter iterations",
+			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia);
 
 			Environment.Exit(exit_code);
 		}
@@ -127,8 +129,8 @@ namespace RatingPrediction
 
 			// read command line parameters
 			string training_file = args[0];
-			string testfile  = args[1];
-			string method    = args[2];
+			string testfile      = args[1];
+			string method        = args[2];
 
 			CommandLineParameters parameters = null;
 			try	{ parameters = new CommandLineParameters(args, 3);	}
@@ -220,8 +222,8 @@ namespace RatingPrediction
 				Usage("Either training or test data, not both, can be read from STDIN.");
 
 			// ID mapping objects
-			EntityMapping user_mapping = new EntityMapping();
-			EntityMapping item_mapping = new EntityMapping();
+			var user_mapping = new EntityMapping();
+			var item_mapping = new EntityMapping();
 
 			// load all the data
 			TimeSpan loading_time = Utils.MeasureTime(delegate() {
@@ -385,7 +387,7 @@ namespace RatingPrediction
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					var relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
 					((IUserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
 					((IUserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
 					Console.WriteLine("relation over {0} users", relation_data.Second);
@@ -399,7 +401,7 @@ namespace RatingPrediction
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					var relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
 					((IItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
 					((IItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
 					Console.WriteLine("relation over {0} items", relation_data.Second);
