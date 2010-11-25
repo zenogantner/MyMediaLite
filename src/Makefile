@@ -1,5 +1,5 @@
 
-EXTRA_DIST =  rules.make configure Makefile.include
+EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll
 
 all: all-recursive
 

@@ -25,7 +25,7 @@ using MyMediaLite.util;
 using SVM;
 
 
-namespace MyMediaLite.experimental.attr_to_feature
+namespace MyMediaLite.experimental.attr_to_factor
 {
 	/// <summary>BPR-MF with item mapping learned by support-vector regression (SVR)</summary>
 	public class BPRMF_ItemMapping_SVR : BPRMF_ItemMapping

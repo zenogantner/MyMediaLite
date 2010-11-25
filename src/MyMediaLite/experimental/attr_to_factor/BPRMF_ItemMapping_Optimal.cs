@@ -26,7 +26,7 @@ using MyMediaLite.item_recommender;
 using MyMediaLite.util;
 
 
-namespace MyMediaLite.experimental.attr_to_feature
+namespace MyMediaLite.experimental.attr_to_factor
 {
 	public class BPRMF_ItemMapping_Optimal : BPRMF_ItemMapping
 	{

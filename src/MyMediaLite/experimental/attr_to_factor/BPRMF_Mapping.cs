@@ -17,13 +17,13 @@
 
 using MyMediaLite;
 using MyMediaLite.data_type;
-using MyMediaLite.rating_predictor;
+using MyMediaLite.item_recommender;
 
 
-namespace MyMediaLite.experimental.attr_to_feature
+namespace MyMediaLite.experimental.attr_to_factor
 {
-	/// <summary>Base class for biased MF plus attribute-to-factor mapping</summary>
-	public abstract class MF_Mapping : BiasedMatrixFactorization
+	/// <summary>Base class for BPR-MF plus attribute-to-factor mapping</summary>
+	public abstract class BPRMF_Mapping : BPRMF
 	{
 		/// <summary>The learn rate for training the mapping functions</summary>
 		public double LearnRateMapping { get { return learn_rate_mapping; } set { learn_rate_mapping = value; } }

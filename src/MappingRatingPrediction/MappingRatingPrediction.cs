@@ -24,7 +24,7 @@ using MyMediaLite;
 using MyMediaLite.data;
 using MyMediaLite.data_type;
 using MyMediaLite.eval;
-using MyMediaLite.experimental.attr_to_feature;
+using MyMediaLite.experimental.attr_to_factor;
 using MyMediaLite.io;
 using MyMediaLite.util;
 

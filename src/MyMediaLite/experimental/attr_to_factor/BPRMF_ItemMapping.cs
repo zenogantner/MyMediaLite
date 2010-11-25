@@ -26,7 +26,7 @@ using MyMediaLite.item_recommender;
 using MyMediaLite.util;
 
 
-namespace MyMediaLite.experimental.attr_to_feature
+namespace MyMediaLite.experimental.attr_to_factor
 {
 	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender

@@ -26,7 +26,7 @@ using MyMediaLite.item_recommender;
 using MyMediaLite.util;
 
 
-namespace MyMediaLite.experimental.attr_to_feature
+namespace MyMediaLite.experimental.attr_to_factor
 {
 	/// <summary>biased MF with item mapping learned by regularized least-squares regression</summary>
 	public class MF_ItemMapping : MF_Mapping, IItemAttributeAwareRecommender

@@ -50,9 +50,9 @@ namespace MyMediaLite.item_recommender
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
 		
-		/// <summary>Use the first item feature as a bias term if set to true</summary>
+		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
 		public bool ItemBias { get { return item_bias; } set { item_bias = value; }	}
-		/// <summary>Use the first item feature as a bias term if set to true</summary>
+		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
 		protected bool item_bias = false;
 
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
@@ -111,7 +111,7 @@ namespace MyMediaLite.item_recommender
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
-				UpdateFeatures(user_id, item_id_1, item_id_2, true, true, true);
+				UpdateFactors(user_id, item_id_1, item_id_2, true, true, true);
 			}
 		}
 
@@ -198,22 +198,22 @@ namespace MyMediaLite.item_recommender
 			SampleItemPair(u, out i, out j);
 		}
 
-		/// <summary>Update features according to the stochastic gradient descent update rule</summary>
+		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
 		/// <param name="u">the user ID</param>
 		/// <param name="i">the ID of the first item</param>
 		/// <param name="j">the ID of the second item</param>
-		/// <param name="update_u">if true, update the user features</param>
-		/// <param name="update_i">if true, update the features of the first item</param>
-		/// <param name="update_j">if true, update the features of the second item</param>
-		protected virtual void UpdateFeatures(int u, int i, int j, bool update_u, bool update_i, bool update_j)
+		/// <param name="update_u">if true, update the user latent factors</param>
+		/// <param name="update_i">if true, update the latent factors of the first item</param>
+		/// <param name="update_j">if true, update the latent factors of the second item</param>
+		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			int start_feature = 0;
+			int start_factor = 0;
 
 			if (item_bias)
 			{
-				start_feature = 1;
+				start_factor = 1;
 				double w_uf = user_factors[u, 0];
 				double h_if = item_factors[i, 0];
 				double h_jf = item_factors[j, 0];
@@ -231,7 +231,7 @@ namespace MyMediaLite.item_recommender
 				}
 			}
 
-			for (int f = start_feature; f < num_factors; f++)
+			for (int f = start_factor; f < num_factors; f++)
 			{
 				double w_uf = user_factors[u, f];
 				double h_if = item_factors[i, f];
@@ -318,7 +318,7 @@ namespace MyMediaLite.item_recommender
 				user_neg_items[user_id] = null;
 			}
 
-			// set user features to zero
+			// set user latent factors to zero
 			user_factors.SetRowToOneValue(user_id, 0);
 		}
 
@@ -330,11 +330,11 @@ namespace MyMediaLite.item_recommender
 			// TODO remove from fast sampling data structures
 			//      (however: not needed if all feedback events have been removed properly before)
 
-			// set item features to zero
+			// set item latent factors to zero
 			item_factors.SetRowToOneValue(item_id, 0);
 		}
 
-		/// <summary>Retrain the features of a given user</summary>
+		/// <summary>Retrain the latent factors of a given user</summary>
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
@@ -345,11 +345,11 @@ namespace MyMediaLite.item_recommender
 			{
 				int item_id_1, item_id_2;
 				SampleItemPair(user_id, out item_id_1, out item_id_2);
-				UpdateFeatures(user_id, item_id_1, item_id_2, true, false, false);
+				UpdateFactors(user_id, item_id_1, item_id_2, true, false, false);
 			}
 		}
 
-		/// <summary>Retrain the features of a given item</summary>
+		/// <summary>Retrain the latent factors of a given item</summary>
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
@@ -364,9 +364,9 @@ namespace MyMediaLite.item_recommender
 				bool item_is_positive = SampleOtherItem(user_id, item_id, out other_item_id);
 
 				if (item_is_positive)
-					UpdateFeatures(user_id, item_id, other_item_id, false, true, false);
+					UpdateFactors(user_id, item_id, other_item_id, false, true, false);
 				else
-					UpdateFeatures(user_id, other_item_id, item_id, false, false, true);
+					UpdateFactors(user_id, other_item_id, item_id, false, false, true);
 			}
 		}
 
