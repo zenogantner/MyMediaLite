@@ -41,7 +41,7 @@ namespace MyMediaLite.io
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
 		{
-            using ( StreamReader reader = new StreamReader(filename) )
+            using ( var reader = new StreamReader(filename) )
 			{
 				return Read(reader, mapping);
 			}
@@ -53,13 +53,12 @@ namespace MyMediaLite.io
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(StreamReader reader, EntityMapping mapping)
 		{
-			SparseBooleanMatrix matrix = new SparseBooleanMatrix();
-			int max_attr_id = 0;
+			var matrix = new SparseBooleanMatrix();
 
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 			
-			char[] split_chars = new char[]{ '\t', ' ' };
+			var split_chars = new char[]{ '\t', ' ' };
 			string line;
 
 			while (!reader.EndOfStream)
@@ -79,7 +78,6 @@ namespace MyMediaLite.io
 				int attr_id   = int.Parse(tokens[1]);
 
                	matrix[entity_id, attr_id] = true;
-				max_attr_id = Math.Max(max_attr_id, attr_id);
 			}
 
 			return matrix;

@@ -30,61 +30,40 @@ namespace MyMediaLite.io
 	/// </summary>
 	public class ItemRecommenderData
 	{
-		// TODO don't return pair, use .Transpose() instead inside of item_recommender.Memory; don't forget to adapt Python/C# examples on website
-		
 		/// <summary>Read in implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
-		/// <param name="user_mapping">
-		/// user <see cref="EntityMapping"/> object
-		/// </param>
-		/// <param name="item_mapping">
-		/// item <see cref="EntityMapping"/> object
-		/// </param>
+		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
 		/// <returns>
-		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
+		/// a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data
 		/// </returns>
-		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(string filename,
-		                                                                  EntityMapping user_mapping,
-		                                                                  EntityMapping item_mapping)
+		static public SparseBooleanMatrix Read(string filename, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
 			else
-            	using ( StreamReader reader = new StreamReader(filename) )
+            	using ( var reader = new StreamReader(filename) )
 				{
 					return Read(reader, user_mapping, item_mapping);
 				}
 		}
 
-		/// <summary>
-		/// Read in implicit feedback data from a TextReader
-		/// </summary>
-		/// <param name="reader">
-		/// the TextReader to be read from
-		/// </param>
-		/// <param name="user_mapping">
-		/// user <see cref="EntityMapping"/> object
-		/// </param>
-		/// <param name="item_mapping">
-		/// item <see cref="EntityMapping"/> object
-		/// </param>
-		/// <returns>
-		/// Two <see cref="SparseBooleanMatrix"/> objects, one with the user-wise collaborative data, one with the item-wise
-		/// </returns>
-		static public Pair<SparseBooleanMatrix, SparseBooleanMatrix> Read(TextReader reader,
-		                                                                  EntityMapping user_mapping,
-		                                                                  EntityMapping item_mapping)
+		/// <summary>Read in implicit feedback data from a TextReader</summary>
+		/// <param name="reader">the TextReader to be read from</param>
+		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
+		/// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
+		static public SparseBooleanMatrix Read(TextReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-	        SparseBooleanMatrix user_items = new SparseBooleanMatrix();
-        	SparseBooleanMatrix item_users = new SparseBooleanMatrix();
+	        var user_items = new SparseBooleanMatrix();
 
-			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
-			char[] split_chars = new char[]{ '\t', ' ', ',' };
+			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
+			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
 			while ( (line = reader.ReadLine()) != null )
 			{
-				if (line.Trim().Equals(string.Empty))
+				if (line.Trim().Length == 0)
 					continue;
 
 	            string[] tokens = line.Split(split_chars);
@@ -96,11 +75,9 @@ namespace MyMediaLite.io
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
                	user_items[user_id, item_id] = true;
-               	item_users[item_id, user_id] = true;
 			}
 
-			return new Pair<SparseBooleanMatrix, SparseBooleanMatrix>(user_items, item_users);
+			return user_items;
 		}
 	}
 }
-

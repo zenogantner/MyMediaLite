@@ -107,9 +107,7 @@ namespace MyMediaLite.data_type
 			}
 		}
 
-		/// <summary>
-		/// The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)
-		/// </summary>
+		/// <summary>The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)</summary>
 		public ICollection<int> NonEmptyRowIDs
 		{
 			get
@@ -124,6 +122,23 @@ namespace MyMediaLite.data_type
 			}
 		}
 
+		// TODO add unit test
+		/// <summary>The IDs of the non-empty columns in the matrix (the ones that contain at least one true entry)</summary>
+		public ICollection<int> NonEmptyColumnIDs
+		{
+			get
+			{
+				HashSet<int> col_ids = new HashSet<int>();
+
+				// iterate over the complete data structure to find column IDs
+				for (int i = 0; i < rows.Count; i++)
+					foreach (int id in rows[i])
+						col_ids.Add(id);
+
+				return col_ids;
+			}
+		}		
+		
 		/// <summary>The number of rows in the matrix</summary>
 		public int NumberOfRows	{ get { return rows.Count; } }
 
@@ -212,7 +227,7 @@ namespace MyMediaLite.data_type
 		/// </returns>
 		public SparseBooleanMatrix Transpose()
 		{
-			SparseBooleanMatrix transpose = new SparseBooleanMatrix();
+			var transpose = new SparseBooleanMatrix();
 			for (int i = 0; i < rows.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;

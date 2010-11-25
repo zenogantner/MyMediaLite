@@ -50,8 +50,8 @@ namespace MyMediaLite
 	{
 		static NumberFormatInfo ni = new NumberFormatInfo();
 
-		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> training_data;
-		static Pair<SparseBooleanMatrix, SparseBooleanMatrix> test_data;
+		static SparseBooleanMatrix training_data;
+		static SparseBooleanMatrix test_data;
 		static ICollection<int> relevant_items;
 
 		static BPRMF_Mapping recommender;
@@ -161,19 +161,18 @@ namespace MyMediaLite
 				Usage(-1);
 
 			// ID mapping objects
-			EntityMapping user_mapping = new EntityMapping();
-			EntityMapping item_mapping = new EntityMapping();
+			var user_mapping = new EntityMapping();
+			var item_mapping = new EntityMapping();
 
 			// training data
 			training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
-			recommender.SetCollaborativeData(training_data.First, training_data.Second);
-
+			recommender.SetCollaborativeData(training_data, training_data.Transpose());
 
 			// relevant items
 			if (! relevant_items_file.Equals(string.Empty) )
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
-				relevant_items = training_data.Second.NonEmptyRowIDs;
+				relevant_items = training_data.NonEmptyColumnIDs;
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
@@ -235,7 +234,7 @@ namespace MyMediaLite
 			Console.Write("mapping_time " + seconds + " ");
 
 			if (!no_eval)
-				seconds = EvaluateRecommender(recommender, test_data.First, training_data.First);
+				seconds = EvaluateRecommender(recommender, test_data, training_data);
 			Console.WriteLine();
 		}
 
@@ -267,18 +266,18 @@ namespace MyMediaLite
 		static void DisplayDataStats()
 		{
 			// training data stats
-			int num_users = training_data.First.NonEmptyRowIDs.Count;
-			int num_items = training_data.Second.NonEmptyRowIDs.Count;
+			int num_users = training_data.NonEmptyRowIDs.Count;
+			int num_items = training_data.Transpose().NonEmptyColumnIDs.Count;
 			long matrix_size = (long) num_users * num_items;
-			long empty_size  = (long) matrix_size - training_data.First.NumberOfEntries;
+			long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
 			double sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 			// test data stats
-			num_users = test_data.First.NonEmptyRowIDs.Count;
-			num_items = test_data.Second.NonEmptyRowIDs.Count;
-			matrix_size = num_users * num_items;
-			empty_size  = matrix_size - test_data.First.NumberOfEntries;
+			num_users = test_data.NonEmptyRowIDs.Count;
+			num_items = test_data.Transpose().NonEmptyColumnIDs.Count;
+			matrix_size = (long) num_users * num_items;
+			empty_size  = (long) matrix_size - test_data.NumberOfEntries;
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
