@@ -36,7 +36,6 @@ Recommender functionality
      - approximate AUC
      - sample precision@N
    - online update evaluation
- - item-to-item recommendation
  - consider to store the hyperparameters in the model files as well
 Data types
  - data types: introduce more properties
@@ -64,6 +63,7 @@ Architecture
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
    - more correlation/similarity measures (e.g. Jaccard index)
+   - combine arbitrary similarity matrices
    - user-defined similarities
  - generic optimization interface and algorithms (like Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
