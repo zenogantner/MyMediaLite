@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.data_type;
 
 
@@ -120,13 +121,14 @@ namespace MyMediaLite.item_recommender
 				MaxItemID--;
 		}
 
-		/// <inheritdoc/>
-		public void SetCollaborativeData(SparseBooleanMatrix user_items, SparseBooleanMatrix item_users)
+		
+		// TODO document
+		public void SetCollaborativeData(SparseBooleanMatrix user_items)
 		{
             this.data_user = user_items;
-            this.data_item = item_users;
-			this.MaxUserID = user_items.NumberOfRows - 1;
-			this.MaxItemID = item_users.NumberOfRows - 1;
+            this.data_item = user_items.Transpose();
+			this.MaxUserID = Math.Max(MaxUserID, data_user.NonEmptyRowIDs.Max());
+			this.MaxItemID = Math.Max(MaxItemID, data_item.NonEmptyRowIDs.Max());
 		}
     }
 }

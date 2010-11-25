@@ -166,7 +166,7 @@ namespace MyMediaLite
 
 			// training data
 			training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
-			recommender.SetCollaborativeData(training_data, training_data.Transpose());
+			recommender.SetCollaborativeData(training_data);
 
 			// relevant items
 			if (! relevant_items_file.Equals(string.Empty) )
