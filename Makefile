@@ -2,7 +2,7 @@ PDF_VIEWER=evince
 EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
-CONFIGURE_OPTIONS=--prefix=/usr/local --config=DEBUG
+CONFIGURE_OPTIONS=--prefix=/usr/local
 VERSION=0.07
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
@@ -85,7 +85,8 @@ todo:
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/ItemPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingRatingPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingItemPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/SVM.dll
 
