@@ -1,10 +1,8 @@
 #!/bin/sh -e
 
-# don't expect this to work, this is (currently) for internal testing purposes
-
 PROGRAM="mono --debug RatingPrediction.exe"
 
-echo "This will take about 5 minutes ..."
+echo "This will take about 7 minutes ..."
 
 echo ""
 echo "MovieLens 1M"
@@ -19,6 +17,14 @@ do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
 done
+
+touch $DATA_DIR/empty
+for method in SocialMF
+do
+	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=15 num_iter=1 learn_rate=0.005 compute_fit=true social_reg=0 data_dir=$DATA_DIR user_relation=empty
+	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=15 num_iter=1 learn_rate=0.005 compute_fit=true social_reg=0 data_dir=$DATA_DIR user_relation=empty
+done
+rm $DATA_DIR/empty
 
 for method in user-item-baseline global-average user-average item-average
 do

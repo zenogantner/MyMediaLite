@@ -1,7 +1,5 @@
 #!/bin/sh -e
 
-# don't expect this to work, this is (currently) for internal testing purposes
-
 # TODO use relevant_items
 
 PROGRAM="mono --debug ItemPrediction.exe"
