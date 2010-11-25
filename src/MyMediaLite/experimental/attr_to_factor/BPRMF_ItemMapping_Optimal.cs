@@ -33,27 +33,27 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			this.feature_bias = new double[num_factors];
+			this.factor_bias = new double[num_factors];
 
 			for (int i = 0; i < num_factors; i++)
 			{
-				feature_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
-				Console.Error.WriteLine("fb {0}: {1}", i, feature_bias[i]);
+				factor_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
+				Console.Error.WriteLine("fb {0}: {1}", i, factor_bias[i]);
 			}
 
-			attribute_to_feature = new Matrix<double>(NumItemAttributes, num_factors);
-			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
+			attribute_to_factor = new Matrix<double>(NumItemAttributes, num_factors);
+			MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();
 
-			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
 		/// <inheritdoc/>
 		public override void IterateMapping()
 		{
-			_MapToLatentFeatureSpace = __MapToLatentFeatureSpace; // make sure we don't memoize during training
+			_MapToLatentFactorSpace = __MapToLatentFactorSpace; // make sure we don't memoize during training
 
 			int num_pos_events = data_user.NumberOfEntries;
 
@@ -61,11 +61,11 @@ namespace MyMediaLite.experimental.attr_to_factor
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
-				UpdateMappingFeatures(user_id, item_id_1, item_id_2);
+				UpdateMappingFactors(user_id, item_id_1, item_id_2);
 			}
 		}
 
-		protected virtual void UpdateMappingFeatures(int u, int i, int j)
+		protected virtual void UpdateMappingFactors(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
@@ -73,57 +73,57 @@ namespace MyMediaLite.experimental.attr_to_factor
 			HashSet<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
-			HashSet<int> attr_i_over_j = new HashSet<int>(attr_i);
+			var attr_i_over_j = new HashSet<int>(attr_i);
 			attr_i_over_j.ExceptWith(attr_j);
-			HashSet<int> attr_j_over_i = new HashSet<int>(attr_j);
+			var attr_j_over_i = new HashSet<int>(attr_j);
 			attr_j_over_i.ExceptWith(attr_i);
 
 			for (int f = 0; f < num_factors; f++)
 			{
 				double w_uf = user_factors[u, f];
 
-				// update attribute-feature parameter for features which are different between the items
+				// update attribute-factor parameter for latent factors which are different between the items
 				foreach (int a in attr_i_over_j)
 				{
-					double m_af = attribute_to_feature[a, f];
+					double m_af = attribute_to_factor[a, f];
 					double update = w_uf / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
+					attribute_to_factor[a, f] = m_af + learn_rate_mapping * update;
 				}
 				foreach (int a in attr_j_over_i)
 				{
-					double m_af = attribute_to_feature[a, f];
+					double m_af = attribute_to_factor[a, f];
 					double update = -w_uf / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
+					attribute_to_factor[a, f] = m_af + learn_rate_mapping * update;
 				}
 			}
 		}
 
 		/// <inheritdoc/>
-		protected override double[] __MapToLatentFeatureSpace(int item_id)
+		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
 			HashSet<int> attributes = this.item_attributes[item_id];
-			double[] feature_representation = new double[num_factors];
+			var factor_representation = new double[num_factors];
 
 			for (int j = 0; j < num_factors; j++)
-				feature_representation[j] = feature_bias[j];
+				factor_representation[j] = factor_bias[j];
 
 			foreach (int i in attributes)
 				for (int j = 0; j < num_factors; j++)
-					feature_representation[j] += attribute_to_feature[i, j];
+					factor_representation[j] += attribute_to_factor[i, j];
 
-			return feature_representation;
+			return factor_representation;
 		}
 
 		/// <inheritdoc/>
-		protected override double[] MapToLatentFeatureSpace(int item_id)
+		protected override double[] MapToLatentFactorSpace(int item_id)
 		{
-			return _MapToLatentFeatureSpace(item_id);
+			return _MapToLatentFactorSpace(item_id);
 		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(

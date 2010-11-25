@@ -44,7 +44,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc/>
         public override void Train()
 		{
-			// init feature matrices
+			// init factor matrices
 	       	user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
 	       	item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
 	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
@@ -98,7 +98,7 @@ namespace MyMediaLite.rating_predictor
 				if (update_item)
 					item_bias[i] += learn_rate * (gradient_common - bias_regularization * item_bias[i]);
 				
-				// Adjust latent features
+				// Adjust latent factors
                 for (int f = 0; f < num_factors; f++)
                 {
                  	double u_f = user_factors[u, f];
@@ -109,13 +109,13 @@ namespace MyMediaLite.rating_predictor
 						double delta_u = gradient_common * i_f - regularization * u_f;
 						MatrixUtils.Inc(user_factors, u, f, learn_rate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
-						//    user_feature[u, f] += learn_rate * delta_u;
+						//    user_factors[u, f] += learn_rate * delta_u;
 					}
                     if (update_item)
 					{
 						double delta_i = gradient_common * u_f - regularization * i_f;
 						MatrixUtils.Inc(item_factors, i, f, learn_rate * delta_i);
-						// item_feature[i, f] += learn_rate * delta_i;
+						// item_factors[i, f] += learn_rate * delta_i;
 					}
                 }
             }
@@ -177,38 +177,38 @@ namespace MyMediaLite.rating_predictor
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
 				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
-				Matrix<double> user_feature   = MatrixUtils.ReadMatrix(reader);
+				Matrix<double> user_factors   = MatrixUtils.ReadMatrix(reader);
 				ICollection<double> item_bias = VectorUtils.ReadVector(reader);
-            	Matrix<double> item_feature   = MatrixUtils.ReadMatrix(reader);
+            	Matrix<double> item_factors   = MatrixUtils.ReadMatrix(reader);
 
-				if (user_feature.dim2 != item_feature.dim2)
+				if (user_factors.dim2 != item_factors.dim2)
                 	throw new IOException(
 								  string.Format(
 					                  "Number of user and item factors must match: {0} != {1}",
-					                  user_feature.dim2, item_feature.dim2));
-				if (user_bias.Count != user_feature.dim1)
+					                  user_factors.dim2, item_factors.dim2));
+				if (user_bias.Count != user_factors.dim1)
 					throw new IOException(
 					              string.Format(
 					                  "Number of users must be the same for biases and factors: {0} != {1}",
-					                  user_bias.Count, user_feature.dim1));
-				if (item_bias.Count != item_feature.dim1)
+					                  user_bias.Count, user_factors.dim1));
+				if (item_bias.Count != item_factors.dim1)
 					throw new IOException(
 					              string.Format(
 					                  "Number of items must be the same for biases and factors: {0} != {1}",
-					                  item_bias.Count, item_feature.dim1));				
+					                  item_bias.Count, item_factors.dim1));				
 				
-				this.MaxUserID = user_feature.dim1 - 1;
-				this.MaxItemID = item_feature.dim1 - 1;
+				this.MaxUserID = user_factors.dim1 - 1;
+				this.MaxItemID = item_factors.dim1 - 1;
 
             	// assign new model
             	this.global_bias = bias;
-				if (this.num_factors != user_feature.dim2)
+				if (this.num_factors != user_factors.dim2)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_feature.dim1);
-            		this.num_factors = user_feature.dim1;
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
+            		this.num_factors = user_factors.dim1;
 				}
-            	this.user_factors = user_feature;
-            	this.item_factors = item_feature;
+            	this.user_factors = user_factors;
+            	this.item_factors = item_factors;
 				this.user_bias = new double[user_factors.dim1];
 				user_bias.CopyTo(this.user_bias, 0);
 				this.item_bias = new double[item_factors.dim1];
@@ -219,7 +219,7 @@ namespace MyMediaLite.rating_predictor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni,

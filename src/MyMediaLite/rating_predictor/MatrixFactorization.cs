@@ -29,7 +29,7 @@ namespace MyMediaLite.rating_predictor
 {
 	/// <summary>Simple matrix factorization class</summary>
     /// <remarks>
-    /// Factorizing the observed rating values using a feature matrix for users and one for items.
+    /// Factorizing the observed rating values using a factor matrix for users and one for items.
     /// This class can update the factorization online.
     ///
     /// After training, an ArithmeticException is thrown if there are NaN values in the model.
@@ -50,16 +50,16 @@ namespace MyMediaLite.rating_predictor
 		/// <summary>The bias (global average)</summary>
         protected double global_bias;
 
-		/// <summary>Mean of the normal distribution used to initialize the features</summary>
+		/// <summary>Mean of the normal distribution used to initialize the factors</summary>
 		public double InitMean { get; set; }
 
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
+        /// <summary>Standard deviation of the normal distribution used to initialize the factors</summary>
 		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
         private double init_stdev = 0.1;
 
-        /// <summary>Number of latent features</summary>
+        /// <summary>Number of latent factors</summary>
 		public int NumFactors { get { return num_factors; } set { num_factors = value; }	}
-        /// <summary>Number of latent features</summary>
+        /// <summary>Number of latent factors</summary>
         protected int num_factors = 10;
 
         /// <summary>Learn rate</summary>
@@ -88,13 +88,13 @@ namespace MyMediaLite.rating_predictor
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
 			global_bias = Ratings.All.Average;
-            LearnFeatures(ratings.All, true, true);
+            LearnFactors(ratings.All, true, true);
 
 			// check for NaN in the model
 			if (MatrixUtils.ContainsNaN(user_factors))
-				throw new ArithmeticException("user_feature contains NaN");
+				throw new ArithmeticException("user_factors contains NaN");
 			if (MatrixUtils.ContainsNaN(item_factors))
-				throw new ArithmeticException("item_feature contains NaN");
+				throw new ArithmeticException("item_factors contains NaN");
         }
 
 		/// <inheritdoc/>
@@ -103,30 +103,28 @@ namespace MyMediaLite.rating_predictor
 			Iterate(ratings.All, true, true);
 		}
 
-        /// <summary>
-        /// Updates the latent features on a user
-        /// </summary>
+        /// <summary>Updates the latent factors on a user</summary>
         /// <param name="user_id">the user ID</param>
         public void RetrainUser(int user_id)
         {
             MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
-            LearnFeatures(ratings.ByUser[(int)user_id], true, false);
+            LearnFactors(ratings.ByUser[(int)user_id], true, false);
         }
 
-        /// <summary>Updates the latent features of an item</summary>
+        /// <summary>Updates the latent factors of an item</summary>
         /// <param name="item_id">the item ID</param>
         public void RetrainItem(int item_id)
         {
             MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
-            LearnFeatures(ratings.ByItem[(int)item_id], false, true);
+            LearnFactors(ratings.ByItem[(int)item_id], false, true);
         }
 
 		/// <summary>
-		/// Iterate once over rating data and adjust corresponding features (stochastic gradient descent).
+		/// Iterate once over rating data and adjust corresponding factors (stochastic gradient descent).
 		/// </summary>
 		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
-		/// <param name="update_user">true if user features to be updated</param>
-		/// <param name="update_item">true if item features to be updated</param>
+		/// <param name="update_user">true if user factors to be updated</param>
+		/// <param name="update_item">true if item factors to be updated</param>
 		protected virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
 		{
 			foreach (RatingEvent rating in ratings)
@@ -137,13 +135,13 @@ namespace MyMediaLite.rating_predictor
                 double p = Predict(u, i, false);
 				double err = rating.rating - p;
 
-                 // Adjust features, factor by factor
+                 // Adjust factors
                  for (int f = 0; f < num_factors; f++)
                  {
                  	double u_f = user_factors[u, f];
                     double i_f = item_factors[i, f];
 
-					// compute feature updates
+					// compute factor updates
                     double delta_u = (err * i_f - regularization * u_f);
                     double delta_i = (err * u_f - regularization * i_f);
 
@@ -156,7 +154,7 @@ namespace MyMediaLite.rating_predictor
             }
 		}
 
-        private void LearnFeatures(Ratings ratings, bool update_user, bool update_item)
+        private void LearnFactors(Ratings ratings, bool update_user, bool update_item)
         {
             for (int current_iter = 0; current_iter < num_iter; current_iter++)
 				Iterate(ratings, update_user, update_item);
@@ -252,7 +250,7 @@ namespace MyMediaLite.rating_predictor
         {
             base.RemoveUser(user_id);
 
-			// set user features to zero
+			// set user factors to zero
             user_factors.SetRowToOneValue(user_id, 0);
         }
 
@@ -261,7 +259,7 @@ namespace MyMediaLite.rating_predictor
         {
             base.RemoveItem(item_id);
 
-			// set item features to zero
+			// set item factors to zero
             item_factors.SetRowToOneValue(item_id, 0);
         }
 
@@ -343,26 +341,26 @@ namespace MyMediaLite.rating_predictor
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
-				Matrix<double> user_feature = MatrixUtils.ReadMatrix(reader);
-            	Matrix<double> item_feature = MatrixUtils.ReadMatrix(reader);
+				Matrix<double> user_factors = MatrixUtils.ReadMatrix(reader);
+            	Matrix<double> item_factors = MatrixUtils.ReadMatrix(reader);
 
-				if (user_feature.dim2 != item_feature.dim2)
+				if (user_factors.dim2 != item_factors.dim2)
                 	throw new Exception(
-									string.Format("Number of user and item features must match: {0} != {1}",
-					                              user_feature.dim2, item_feature.dim2));
+									string.Format("Number of user and item factors must match: {0} != {1}",
+					                              user_factors.dim2, item_factors.dim2));
 
-				this.MaxUserID = user_feature.dim1 - 1;
-				this.MaxItemID = item_feature.dim1 - 1;
+				this.MaxUserID = user_factors.dim1 - 1;
+				this.MaxItemID = item_factors.dim1 - 1;
 
             	// assign new model
             	this.global_bias = bias;
-				if (this.num_factors != user_feature.dim2)
+				if (this.num_factors != user_factors.dim2)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_feature.dim1);
-            		this.num_factors = user_feature.dim1;
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
+            		this.num_factors = user_factors.dim1;
 				}
-            	this.user_factors = user_feature;
-            	this.item_factors = item_feature;
+            	this.user_factors = user_factors;
+            	this.item_factors = item_factors;
 			}
         }
 

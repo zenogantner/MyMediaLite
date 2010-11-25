@@ -68,19 +68,19 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			// create attribute-to-feature weight matrix
-			attribute_to_feature = new Matrix<double>(NumUserAttributes + 1, num_factors);
+			// create attribute-to-factor weight matrix
+			attribute_to_factor = new Matrix<double>(NumUserAttributes + 1, num_factors);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 			// store the results of the different runs in the following array
-			Matrix<double>[] old_attribute_to_feature = new Matrix<double>[num_init_mapping];
+			Matrix<double>[] old_attribute_to_factor = new Matrix<double>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxUserID);
 
-			double[][] old_rmse_per_feature = new double[num_init_mapping][];
+			double[][] old_rmse_per_factor = new double[num_init_mapping][];
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
+				MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxUserID; i++)
@@ -91,35 +91,35 @@ namespace MyMediaLite.experimental.attr_to_factor
 				}
 				ComputeMappingFit();
 
-				old_attribute_to_feature[h] = new Matrix<double>(attribute_to_feature);
-				old_rmse_per_feature[h] = ComputeMappingFit();
+				old_attribute_to_factor[h] = new Matrix<double>(attribute_to_factor);
+				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 
-			double[] min_rmse_per_feature = new double[num_factors];
+			double[] min_rmse_per_factor = new double[num_factors];
 			for (int i = 0; i < num_factors; i++)
-				min_rmse_per_feature[i] = System.Double.MaxValue;
-			int[] best_feature_init       = new int[num_factors];
+				min_rmse_per_factor[i] = System.Double.MaxValue;
+			int[] best_factor_init       = new int[num_factors];
 
-			// find best feature mappings:
+			// find best factor mappings:
 			for (int i = 0; i < num_init_mapping; i++)
 			{
 				for (int j = 0; j < num_factors; j++)
 				{
-					if (old_rmse_per_feature[i][j] < min_rmse_per_feature[j])
+					if (old_rmse_per_factor[i][j] < min_rmse_per_factor[j])
 					{
-						min_rmse_per_feature[j] = old_rmse_per_feature[i][j];
-						best_feature_init[j]   = i;
+						min_rmse_per_factor[j] = old_rmse_per_factor[i][j];
+						best_factor_init[j]   = i;
 					}
 				}
 			}
 
-			// set the best weight combinations for each feature mapping
+			// set the best weight combinations for each factor mapping
 			for (int i = 0; i < num_factors; i++)
 			{
-				Console.Error.WriteLine("Feature {0}, pick {1}", i, best_feature_init[i]);
+				Console.Error.WriteLine("Factor {0}, pick {1}", i, best_factor_init[i]);
 
-				attribute_to_feature.SetColumn(i,
-					old_attribute_to_feature[best_feature_init[i]].GetColumn(i)
+				attribute_to_factor.SetColumn(i,
+					old_attribute_to_factor[best_factor_init[i]].GetColumn(i)
 				);
 			}
 
@@ -134,24 +134,24 @@ namespace MyMediaLite.experimental.attr_to_factor
 			int user_id = SampleUserWithAttributes();
 
 			HashSet<int> attributes = user_attributes[user_id];
-			double[] est_features = MapUserToLatentFeatureSpace(attributes);
+			double[] est_factors = MapUserToLatentFactorSpace(attributes);
 
 			for (int j = 0; j < num_factors; j++)
 			{
 				// TODO: do we need an absolute term here???
-				double diff = est_features[j] - user_factors[user_id, j];
+				double diff = est_factors[j] - user_factors[user_id, j];
 				if (diff > 0)
 				{
 					foreach (int attribute in attributes)
 					{
-						double w = attribute_to_feature[attribute, j];
+						double w = attribute_to_factor[attribute, j];
 						double deriv = diff * w + reg_mapping * w;
-						MatrixUtils.Inc(attribute_to_feature, attribute, j, learn_rate_mapping * -deriv);
+						MatrixUtils.Inc(attribute_to_factor, attribute, j, learn_rate_mapping * -deriv);
 					}
 					// bias term
-					double w_bias = attribute_to_feature[NumUserAttributes, j];
+					double w_bias = attribute_to_factor[NumUserAttributes, j];
 					double deriv_bias = diff * w_bias + reg_mapping * w_bias;
-					MatrixUtils.Inc(attribute_to_feature, NumUserAttributes, j, learn_rate_mapping * -deriv_bias);
+					MatrixUtils.Inc(attribute_to_factor, NumUserAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
 			}
 		}
@@ -160,7 +160,7 @@ namespace MyMediaLite.experimental.attr_to_factor
 		{
 			double rmse    = 0;
 			double penalty = 0;
-			double[] rmse_and_penalty_per_feature = new double[num_factors];
+			double[] rmse_and_penalty_per_factor = new double[num_factors];
 
 			int num_users = 0;
 			for (int i = 0; i < MaxUserID + 1; i++)
@@ -173,52 +173,52 @@ namespace MyMediaLite.experimental.attr_to_factor
 				num_users++;
 
 				HashSet<int> attributes = user_attributes[i];
-				double[] est_features = MapUserToLatentFeatureSpace(attributes);
+				double[] est_factors = MapUserToLatentFactorSpace(attributes);
 				for (int j = 0; j < num_factors; j++)
 				{
-					double error    = Math.Pow(est_features[j] - user_factors[i, j], 2);
-					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_feature.GetColumn(j));
+					double error    = Math.Pow(est_factors[j] - user_factors[i, j], 2);
+					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
-					rmse_and_penalty_per_feature[j] += error + reg_term;
+					rmse_and_penalty_per_factor[j] += error + reg_term;
 				}
 			}
 
 			for (int i = 0; i < num_factors; i++)
 			{
-				rmse_and_penalty_per_feature[i] = (double) rmse_and_penalty_per_feature[i] / num_users;
-				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_feature[i]);
+				rmse_and_penalty_per_factor[i] = (double) rmse_and_penalty_per_factor[i] / num_users;
+				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_factor[i]);
 			}
 			rmse    = (double) rmse    / (num_factors * num_users);
 			penalty = (double) penalty / (num_factors * num_users);
 			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
 
-			return rmse_and_penalty_per_feature;
+			return rmse_and_penalty_per_factor;
 		}
 
-		protected virtual double[] MapUserToLatentFeatureSpace(HashSet<int> user_attributes)
+		protected virtual double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
 		{
-			double[] feature_representation = new double[num_factors];
+			double[] factor_representation = new double[num_factors];
 			for (int j = 0; j < num_factors; j++)
 				// bias
-				feature_representation[j] = attribute_to_feature[NumUserAttributes, j];
+				factor_representation[j] = attribute_to_factor[NumUserAttributes, j];
 
 			foreach (int i in user_attributes)
 				for (int j = 0; j < num_factors; j++)
-					feature_representation[j] += attribute_to_feature[i, j];
+					factor_representation[j] += attribute_to_factor[i, j];
 
-			return feature_representation;
+			return factor_representation;
 		}
 
         /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
 			HashSet<int> attributes = user_attributes[user_id];
-			double[] est_features = MapUserToLatentFeatureSpace(attributes);
+			double[] est_factors = MapUserToLatentFactorSpace(attributes);
 
             double result = 0;
             for (int f = 0; f < num_factors; f++)
-                result += item_factors[item_id, f] * est_features[f];
+                result += item_factors[item_id, f] * est_factors[f];
             return result;
         }
 

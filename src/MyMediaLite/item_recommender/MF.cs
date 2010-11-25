@@ -33,14 +33,14 @@ namespace MyMediaLite.item_recommender
         /// <summary>Latent item factor matrix</summary>
         protected Matrix<double> item_factors;
 
-        /// <summary>Mean of the normal distribution used to initialize the features</summary>
+        /// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
 		public double InitMean { get { return init_mean; } set { init_mean = value;	} }
-        /// <summary>Mean of the normal distribution used to initialize the features</summary>
+        /// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
         protected double init_mean = 0;
 
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
+        /// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
 		public double InitStdev { get {	return init_stdev; } set { init_stdev = value; } }
-        /// <summary>Standard deviation of the normal distribution used to initialize the features</summary>
+        /// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
         protected double init_stdev = 0.1;
 
         /// <summary>Number of latent factors per user/item</summary>
@@ -181,17 +181,17 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filePath, GetType()) )
+            using ( var reader = Engine.GetReader(filePath, GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = System.Int32.Parse(numbers[0]);
 				int dim2 = System.Int32.Parse(numbers[1]);
 
 				MaxUserID = num_users - 1;
-				Matrix<double> user_feature = new Matrix<double>(num_users, dim2);
+				var user_factors = new Matrix<double>(num_users, dim2);
 				int num_factors = dim2;
 
             	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
@@ -203,16 +203,16 @@ namespace MyMediaLite.item_recommender
                 	if (i >= num_users)
 						throw new Exception(string.Format("Invalid user ID {0} is greater than {1}.", i, num_users - 1));
 					if (j >= num_factors)
-						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_factors - 1));
+						throw new Exception(string.Format("Invalid latent factor ID {0} is greater than {1}.", j, num_factors - 1));
 
-                	user_feature[i, j] = v;
+                	user_factors[i, j] = v;
 				}
 
             	int num_items = System.Int32.Parse(numbers[0]);
 				dim2 = System.Int32.Parse(numbers[1]);
 				if (dim2 != num_factors)
-					throw new Exception("dim2 of item_feature must be feature_count");
-				Matrix<double> item_feature = new Matrix<double>(num_items, dim2);
+					throw new Exception("dim2 of item_factors must be num_factors");
+				var item_factors = new Matrix<double>(num_items, dim2);
 
             	while (!reader.EndOfStream)
             	{
@@ -224,9 +224,9 @@ namespace MyMediaLite.item_recommender
                 	if (i >= num_items)
 						throw new Exception(string.Format("Invalid item ID {0} is greater than {1}.", i, num_items - 1));
 					if (j >= num_factors)
-						throw new Exception(string.Format("Invalid feature ID {0} is greater than {1}.", j, num_factors - 1));
+						throw new Exception(string.Format("Invalid latent factor ID {0} is greater than {1}.", j, num_factors - 1));
 
-					item_feature[i, j] = v;
+					item_factors[i, j] = v;
 				}
 
 				// fix MaxUserID and MaxItemID - our model does not know more
@@ -239,8 +239,8 @@ namespace MyMediaLite.item_recommender
 					Console.Error.WriteLine("Set num_factors to {0}", num_factors);
             		this.num_factors = num_factors;
 				}
-            	this.user_factors = user_feature;
-            	this.item_factors = item_feature;
+            	this.user_factors = user_factors;
+            	this.item_factors = item_factors;
 			}
         }
     }

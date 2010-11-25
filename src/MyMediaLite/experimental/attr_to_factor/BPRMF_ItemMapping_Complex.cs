@@ -29,20 +29,20 @@ namespace MyMediaLite.experimental.attr_to_factor
 {
 	public class BPRMF_ItemMapping_Complex : BPRMF_ItemMapping
 	{
-		public int num_hidden_features = 80;
-		protected Matrix<double> output_layer;
+		public int num_hidden_factors = 80;
 
+		protected Matrix<double> output_layer;
 
 		public override void LearnAttributeToFactorMapping()
 		{
-			attribute_to_feature = new Matrix<double>(NumItemAttributes, num_hidden_features); // TODO: change name
-			output_layer         = new Matrix<double>(num_hidden_features, num_factors);
+			attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors); // TODO change name
+			output_layer        = new Matrix<double>(num_hidden_factors, num_factors);
 
 			Console.Error.WriteLine("BPR-MULTILAYER-MAP training");
 			Console.Error.WriteLine("num_item_attributes=" + NumItemAttributes);
-			Console.Error.WriteLine("num_hidden_features=" + num_hidden_features);
+			Console.Error.WriteLine("num_hidden_factors=" + num_hidden_factors);
 
-			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
+			MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
 			MatrixUtils.InitNormal(output_layer, init_mean, init_stdev);
 
 			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
@@ -53,18 +53,18 @@ namespace MyMediaLite.experimental.attr_to_factor
 				//Console.Error.WriteLine("iteration {0} fit {1,0:0.#####} ", i, ComputeFit());
 			}
 
-			// set item_features to the mapped ones:                     // TODO: put into a separate method
+			// set item_factors to the mapped ones:                     // TODO: put into a separate method
 			for (int item_id = 0; item_id < MaxItemID + 1; item_id++)
 			{
 				HashSet<int> attributes = item_attributes[item_id];
 
-				// only map features for items where we know attributes
+				// only map factors for items where we know attributes
 				if (attributes.Count == 0)
 					continue;
 
-				double[] est_features = MapToLatentFeatureSpace(item_id);
+				double[] est_factors = MapToLatentFactorSpace(item_id);
 
-				item_factors.SetRow(item_id, est_features);
+				item_factors.SetRow(item_id, est_factors);
 			}
 		}
 
@@ -79,12 +79,12 @@ namespace MyMediaLite.experimental.attr_to_factor
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
-				UpdateMappingFeatures(user_id, item_id_1, item_id_2);
+				UpdateMappingFactors(user_id, item_id_1, item_id_2);
 			}
 		}
 
 		// TODO ADD IN THRESHOLD FUNCTION!!
-		protected virtual void UpdateMappingFeatures(int u, int i, int j)
+		protected virtual void UpdateMappingFactors(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
@@ -92,13 +92,13 @@ namespace MyMediaLite.experimental.attr_to_factor
 			HashSet<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
-			HashSet<int> attr_i_over_j = new HashSet<int>(attr_i);
+			var attr_i_over_j = new HashSet<int>(attr_i);
 			attr_i_over_j.ExceptWith(attr_j);
-			HashSet<int> attr_j_over_i = new HashSet<int>(attr_j);
+			var attr_j_over_i = new HashSet<int>(attr_j);
 			attr_j_over_i.ExceptWith(attr_i);
 
 			// update hidden layer - m1_AB
-			for (int b = 0; b < num_hidden_features; b++)
+			for (int b = 0; b < num_hidden_factors; b++)
 			{
 				foreach (int a in attr_i_over_j)
 				{
@@ -109,9 +109,9 @@ namespace MyMediaLite.experimental.attr_to_factor
 						double m2_bf = output_layer[b, f];
 						sum += w_uf * m2_bf;
 					}
-					double m1_ab = attribute_to_feature[a, b];
+					double m1_ab = attribute_to_factor[a, b];
 					double update = sum / (1 + Math.Exp(x_uij)) - reg_mapping * m1_ab;
-					attribute_to_feature[a, b] = m1_ab + learn_rate_mapping * update;
+					attribute_to_factor[a, b] = m1_ab + learn_rate_mapping * update;
 				}
 
 				foreach (int a in attr_j_over_i)
@@ -123,14 +123,14 @@ namespace MyMediaLite.experimental.attr_to_factor
 						double m2_bf = output_layer[b, f];
 						sum -= w_uf * m2_bf;
 					}
-					double m1_ab = attribute_to_feature[a, b];
+					double m1_ab = attribute_to_factor[a, b];
 					double update = sum / (1 + Math.Exp(x_uij)) - reg_mapping * m1_ab;
-					attribute_to_feature[a, b] = m1_ab + learn_rate_mapping * update;
+					attribute_to_factor[a, b] = m1_ab + learn_rate_mapping * update;
 				}
 			}
 
 			// update output layer - m2_BF
-			for (int b = 0; b < num_hidden_features; b++)
+			for (int b = 0; b < num_hidden_factors; b++)
 			{
 				for (int f = 0; f < num_factors; f++)
 				{
@@ -139,12 +139,12 @@ namespace MyMediaLite.experimental.attr_to_factor
 					double sum = 0;
 					foreach (int a in attr_i_over_j)
 					{
-						double m1_ab = attribute_to_feature[a, b];
+						double m1_ab = attribute_to_factor[a, b];
 						sum += w_uf * m1_ab;
 					}
 					foreach (int a in attr_j_over_i)
 					{
-						double m1_ab = attribute_to_feature[a, b];
+						double m1_ab = attribute_to_factor[a, b];
 						sum -= w_uf * m1_ab;
 					}
 					double m2_bf = output_layer[b, f];
@@ -154,30 +154,30 @@ namespace MyMediaLite.experimental.attr_to_factor
 			}
 		}
 
-		protected override double[] MapToLatentFeatureSpace(int item_id)
+		protected override double[] MapToLatentFactorSpace(int item_id)
 		{
 			HashSet<int> attributes = this.item_attributes[item_id];
-			double[] feature_representation = new double[num_factors];
+			var factor_representation = new double[num_factors];
 
 			foreach (int i in attributes)
 				for (int j = 0; j < num_factors; j++)
-					for (int k = 0; k < num_hidden_features; k++)
-						feature_representation[j] += attribute_to_feature[i, k] * output_layer[k, j];
+					for (int k = 0; k < num_hidden_factors; k++)
+						factor_representation[j] += attribute_to_factor[i, k] * output_layer[k, j];
 			// TODO ADD IN THRESHOLD FUNCTION
 
-			return feature_representation;
+			return factor_representation;
 		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-Complex num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_features={9}, init_mean={9}, init_stdev={10}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_features, init_mean, init_stdev
+				"BPR-MF-ItemMapping-Complex num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_factors={9}, init_mean={9}, init_stdev={10}",
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_factors, init_mean, init_stdev
 			);
 		}
 

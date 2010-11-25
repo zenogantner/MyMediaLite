@@ -31,20 +31,16 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			// create attribute-to-feature weight matrix
-			attribute_to_feature = new Matrix<double>(NumUserAttributes, num_factors);
+			// create attribute-to-factor weight matrix
+			attribute_to_factor = new Matrix<double>(NumUserAttributes, num_factors);
 
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 
-			MatrixUtils.InitNormal(attribute_to_feature, init_mean, init_stdev);
+			MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
 
-			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
 			for (int i = 0; i < num_iter_mapping; i++)
-			{
-				//Console.Error.WriteLine("before iteration {0} fit {1,0:0.#####} ", i, ComputeFit());
 				IterateMapping();
-			}
 		}
 
 		/// <inheritdoc/>
@@ -57,11 +53,11 @@ namespace MyMediaLite.experimental.attr_to_factor
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
-				UpdateMappingFeatures(user_id, item_id_1, item_id_2);
+				UpdateMappingFactors(user_id, item_id_1, item_id_2);
 			}
 		}
 
-		protected virtual void UpdateMappingFeatures(int u, int i, int j)
+		protected virtual void UpdateMappingFactors(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
@@ -73,29 +69,29 @@ namespace MyMediaLite.experimental.attr_to_factor
 
 				foreach (int a in attr_u)
 				{
-					double m_af = attribute_to_feature[a, f];
+					double m_af = attribute_to_factor[a, f];
 					double update = diff / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_feature[a, f] = m_af + learn_rate_mapping * update;
+					attribute_to_factor[a, f] = m_af + learn_rate_mapping * update;
 				}
 			}
 		}
 
 		/// <inheritdoc/>
-		protected override double[] MapUserToLatentFeatureSpace(HashSet<int> user_attributes)
+		protected override double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
 		{
-			double[] feature_representation = new double[num_factors];
+			var factor_representation = new double[num_factors];
 
 			foreach (int i in user_attributes)
 				for (int j = 0; j < num_factors; j++)
-					feature_representation[j] += attribute_to_feature[i, j];
+					factor_representation[j] += attribute_to_factor[i, j];
 
-			return feature_representation;
+			return factor_representation;
 		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(

@@ -43,10 +43,8 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			//Console.Error.WriteLine("map-svr with {0} attributes ...", num_item_attributes);
-
-			List<Node[]> svm_features = new List<Node[]>();
-			List<int> relevant_items  = new List<int>();
+			var svm_features = new List<Node[]>();
+			var relevant_items  = new List<int>();
 			for (int i = 0; i < MaxItemID + 1; i++)
 			{
 				// ignore items w/o collaborative data
@@ -59,12 +57,11 @@ namespace MyMediaLite.experimental.attr_to_factor
 				svm_features.Add( CreateNodes(i) );
 				relevant_items.Add(i);
 			}
-			//Console.Error.WriteLine("{0} training examples", svm_features.Count);
 
 			// TODO proper random seed initialization
 
 			Node[][] svm_features_array = svm_features.ToArray();
-			Parameter svm_parameters = new Parameter();
+			var svm_parameters = new Parameter();
 			svm_parameters.SvmType = SvmType.EPSILON_SVR;
 			//svm_parameters.SvmType = SvmType.NU_SVR;
 			svm_parameters.C     = this.c;
@@ -84,25 +81,25 @@ namespace MyMediaLite.experimental.attr_to_factor
 				models[f] = SVM.Training.Train(svm_problem, svm_parameters);
 			}
 
-			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
 		/// <inheritdoc/>
-		protected override double[] __MapToLatentFeatureSpace(int item_id)
+		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
-			double[] item_features = new double[num_factors];
+			var item_factors = new double[num_factors];
 
 			for (int f = 0; f < num_factors; f++)
-				item_features[f] = SVM.Prediction.Predict(models[f], CreateNodes(item_id));
+				item_factors[f] = SVM.Prediction.Predict(models[f], CreateNodes(item_id));
 
-			return item_features;
+			return item_factors;
 		}
 
 		protected Node[] CreateNodes(int item_id)
 		{
 			// create attribute representation digestible by LIBSVM
 			HashSet<int> attributes = this.item_attributes[item_id];
-			Node[] item_svm_data = new Node[attributes.Count];
+			var item_svm_data = new Node[attributes.Count];
 			int counter = 0;
 			foreach (int attr in attributes)
 				item_svm_data[counter++] = new Node(attr, 1.0);
@@ -112,7 +109,7 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(

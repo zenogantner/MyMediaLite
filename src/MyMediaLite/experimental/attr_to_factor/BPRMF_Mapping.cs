@@ -47,9 +47,9 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <summary>regularization constant for the mapping</summary>
 		protected double reg_mapping = 0.1;
 		
-		/// <summary>The matrix representing the attribute-to-feature mapping</summary>
+		/// <summary>The matrix representing the attribute-to-factor mapping</summary>
 		/// <remarks>includes bias</remarks>
-		protected Matrix<double> attribute_to_feature;
+		protected Matrix<double> attribute_to_factor;
 
 		/// <summary>Learn the mapping</summary>
 		public abstract void LearnAttributeToFactorMapping();

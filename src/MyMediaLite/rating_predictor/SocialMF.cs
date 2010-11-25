@@ -179,7 +179,7 @@ namespace MyMediaLite.rating_predictor
 							user_bias_gradient[u] -= social_regularization * trust_v * diff / num_neighbors;
 					}				
 				
-				// latent feature part
+				// latent factor part
 				foreach (int v in user_neighbors[u])
                 	for (int f = 0; f < num_factors; f++)
 						sum_neighbors[f] += user_factors[v, f];

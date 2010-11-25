@@ -43,12 +43,12 @@ namespace MyMediaLite.experimental.attr_to_factor
 			Console.Error.WriteLine("training with max_item_id={0}", MaxItemID);
 			cosine_correlation.ComputeCorrelations(item_attributes);
 			this.item_correlation = cosine_correlation;
-			_MapToLatentFeatureSpace = Utils.Memoize<int, double[]>(__MapToLatentFeatureSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
-		protected override double[] __MapToLatentFeatureSpace(int item_id)
+		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
-			double[] item_features = new double[num_factors];
+			var est_factors = new double[num_factors];
 
 			IList<int> relevant_items = item_correlation.GetPositivelyCorrelatedEntities(item_id);
 
@@ -64,22 +64,22 @@ namespace MyMediaLite.experimental.attr_to_factor
 				double weight = item_correlation[item_id, item_id2];
 				weight_sum += weight;
 				for (int f = 0; f < num_factors; f++)
-					item_features[f] += weight * item_factors[item_id2, f];
+					est_factors[f] += weight * item_factors[item_id2, f];
 
 				if (--neighbors == 0)
 					break;
 			}
 
 			for (int f = 0; f < num_factors; f++)
-				item_features[f] /= weight_sum;
+				est_factors[f] /= weight_sum;
 
-			return item_features;
+			return est_factors;
 		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(
