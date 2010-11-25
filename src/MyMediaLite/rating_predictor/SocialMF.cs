@@ -55,32 +55,35 @@ namespace MyMediaLite.rating_predictor
 			{
 				this.user_neighbors = value;
 				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
+				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
 			}
 		}
 		private SparseBooleanMatrix user_neighbors;
 
 		/// <summary>the number of users</summary>
-		public int NumUsers { get; set; }
+		public int NumUsers { get { return MaxUserID + 1; } }
 
 		/// <inheritdoc/>
         public override void Train()
 		{
-			// init feature matrices
+			// init latent factor matrices
 	       	user_factors = new Matrix<double>(NumUsers, num_factors);
 	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
 	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
 	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
-
-            // learn model parameters
-			//if (StochasticLearning)
-			//	ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-
+			// init biases
+			user_bias = new double[NumUsers];
+			item_bias = new double[ratings.MaxItemID + 1];
+			
+			Console.Error.WriteLine("num_users={0}, num_items={1}", NumUsers, item_bias.Length);
+			
 			// compute global average
 			double global_average = 0;
 			foreach (RatingEvent r in Ratings.All)
 				global_average += r.rating;
 			global_average /= Ratings.All.Count;
 
+			// learn model parameters
             global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.All, true, true);
@@ -108,7 +111,9 @@ namespace MyMediaLite.rating_predictor
                 int i = rating.item_id;
 
 				// prediction
-				double score = global_bias + user_bias[u] + item_bias[i];
+				double score = global_bias;
+				score += user_bias[u];
+				score += item_bias[i];
 	            for (int f = 0; f < num_factors; f++)
     	            score += user_factors[u, f] * item_factors[i, f];
 				double sig_score = 1 / (1 + Math.Exp(-score));
@@ -220,7 +225,7 @@ namespace MyMediaLite.rating_predictor
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} init_mean={6} init_stdev={7}",
+			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
 				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
