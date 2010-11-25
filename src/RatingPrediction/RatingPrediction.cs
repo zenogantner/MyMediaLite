@@ -387,10 +387,8 @@ MyMediaLite rating prediction; usage:
 				}
 				else
 				{
-					var relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					((IUserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
-					((IUserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
-					Console.WriteLine("relation over {0} users", relation_data.Second);
+					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
 				}
 
 			// item relation
@@ -401,10 +399,8 @@ MyMediaLite rating prediction; usage:
 				}
 				else
 				{
-					var relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					((IItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
-					((IItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
-					Console.WriteLine("relation over {0} items", relation_data.Second);
+					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 				}
 
 			// read test data
@@ -413,7 +409,7 @@ MyMediaLite rating prediction; usage:
 
 		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 		{
-				DisplayIterationStats();
+			DisplayIterationStats();
 		}
 
 		static void DisplayResults(Dictionary<string, double> result)

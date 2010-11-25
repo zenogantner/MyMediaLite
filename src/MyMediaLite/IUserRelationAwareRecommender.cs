@@ -26,6 +26,6 @@ namespace MyMediaLite
 		SparseBooleanMatrix UserRelation { get; set; }
 
 		/// <summary>Number of users</summary>
-	    int NumUsers { get; set; }
+	    int NumUsers { get; }
 	}
 }

@@ -417,10 +417,8 @@ namespace MyMediaLite
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					((IUserRelationAwareRecommender)recommender).UserRelation = relation_data.First;
-					((IUserRelationAwareRecommender)recommender).NumUsers     = relation_data.Second;
-					Console.WriteLine("relation over {0} users", relation_data.Second);
+					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
 				}
 
 			// item relation
@@ -431,12 +429,10 @@ namespace MyMediaLite
 				}
 				else
 				{
-					Pair<SparseBooleanMatrix, int> relation_data = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					((IItemRelationAwareRecommender)recommender).ItemRelation = relation_data.First;
-					((IItemRelationAwareRecommender)recommender).NumItems     = relation_data.Second;
-					Console.WriteLine("relation over {0} items", relation_data.Second);
+					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 				}
-
+			
 			// test data
 	        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
 		}

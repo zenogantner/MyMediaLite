@@ -39,10 +39,10 @@ namespace MyMediaLite.io
 		/// </summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the relation data and the number of entities</returns>
-		static public Pair<SparseBooleanMatrix, int> Read(string filename, EntityMapping mapping)
+		/// <returns>the relation data</returns>
+		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
 		{
-            using ( StreamReader reader = new StreamReader(filename) )
+            using ( var reader = new StreamReader(filename) )
 			{
 				return Read(reader, mapping);
 			}
@@ -53,13 +53,12 @@ namespace MyMediaLite.io
 		/// </summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
-		/// <returns>the relation data and the number of entities</returns>
-		static public Pair<SparseBooleanMatrix, int> Read(StreamReader reader, EntityMapping mapping)
+		/// <returns>the relation data</returns>
+		static public SparseBooleanMatrix Read(StreamReader reader, EntityMapping mapping)
 		{
-			SparseBooleanMatrix matrix = new SparseBooleanMatrix();
-			int max_entity_id = 0;
-
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var matrix = new SparseBooleanMatrix();
+			
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 			
 			char[] split_chars = new char[]{ '\t', ' ' };
@@ -82,10 +81,9 @@ namespace MyMediaLite.io
 				int entity2_id = mapping.ToInternalID(int.Parse(tokens[1]));
 
                	matrix[entity1_id, entity2_id] = true;
-				max_entity_id = Math.Max(max_entity_id, entity2_id);
 			}
 
-			return new Pair<SparseBooleanMatrix, int>(matrix, max_entity_id + 1);
+			return matrix;
 		}
 	}
 }
