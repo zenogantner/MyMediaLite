@@ -181,6 +181,8 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
+			// TODO use library functions
+			
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 

@@ -348,7 +348,7 @@ MyMediaLite rating prediction; usage:
 			}
 		}
 
-        static void LoadData (string data_dir,
+        static void LoadData(string data_dir,
 		              string training_file, string testfile,
 		              double min_rating, double max_rating,
 		              EntityMapping user_mapping, EntityMapping item_mapping,
