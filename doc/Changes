@@ -7,6 +7,7 @@
           the documentation (thank you Artus for pointing this out)
         - simplify io.RelationData and io.ItemRecommenderData
 	- rename namespace 'attr_to_feature' to 'attr_to_factor'
+	- LoadModel() of MF methods: assign correct number of factors
 
 0.07	2010-11-18
 	- Bugfix release. You only need to upgrade if you encounter problems
