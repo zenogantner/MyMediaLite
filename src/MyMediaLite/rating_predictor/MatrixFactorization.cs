@@ -357,7 +357,7 @@ namespace MyMediaLite.rating_predictor
 				if (this.num_factors != user_factors.dim2)
 				{
 					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
-            		this.num_factors = user_factors.dim1;
+            		this.num_factors = user_factors.dim2;
 				}
             	this.user_factors = user_factors;
             	this.item_factors = item_factors;
