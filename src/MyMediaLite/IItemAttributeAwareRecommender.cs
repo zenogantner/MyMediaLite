@@ -21,12 +21,15 @@ using MyMediaLite.data_type;
 namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take binary item attributes into account</summary>
+	/// <remarks></remarks>
 	public interface IItemAttributeAwareRecommender : IRecommenderEngine
 	{
-		/// <summary>Number of binary item attributes</summary>
+		/// <value>an integer stating the number of attributes</value>
+		/// <remarks></remarks>
 	    int NumItemAttributes { get; set; }
 
-		/// <summary>The binary item attributes</summary>
+		/// <value>The binary item attributes</value>
+		/// <remarks></remarks>
 		SparseBooleanMatrix ItemAttributes { get; set; }
 	}
 }

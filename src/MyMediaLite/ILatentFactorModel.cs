@@ -21,28 +21,31 @@ using MyMediaLite.taxonomy;
 
 namespace MyMediaLite
 {
-	/// <summary>
-	/// Interface for latent factor models like matrix factorization
-	/// </summary>
+	/// <summary>Interface for latent factor models like matrix factorization</summary>
+	/// <remarks></remarks>
 	public interface ILatentFactorModel
 	{
 		/// <summary>Get the latent factors that describe an entity in the latent factor model</summary>
+		/// <remarks></remarks>
 		/// <param name="entity_type">the entity type</param>
 		/// <param name="id">the ID of the entity</param>
 		/// <returns>an array of doubles that describes the entity in the model</returns>
 		double[] GetLatentFactors(EntityType entity_type, int id);
 
 		/// <summary>Get the latent factors that describe all entities of one type in the latent factor model</summary>
+		/// <remarks></remarks>
 		/// <param name="entity_type">the entity type</param>
 		/// <returns>the matrix of all latent factors of the given entity type in the model</returns>
 		Matrix<double> GetLatentFactors(EntityType entity_type);
-		
+
 		/// <summary>Get the bias terms for a given entity type</summary>
+		/// <remarks></remarks>
 		/// <param name="entity_type">the entity type</param>
 		/// <returns>an array of doubles containing the entity biases, all values are 0 if there are no bias terms in the model</returns>
 		double[] GetEntityBiases(EntityType entity_type);
-		
+
 		/// <summary>Get the global bias</summary>
+		/// <remarks></remarks>
 		/// <returns>the global bias, 0 if it does not exist</returns>
 		double GetGlobalBias();
 	}

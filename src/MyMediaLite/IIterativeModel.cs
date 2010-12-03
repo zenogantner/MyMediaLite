@@ -17,18 +17,20 @@
 
 namespace MyMediaLite
 {
-	/// <summary>
-	/// Interface representing iteratively trained models
-	/// </summary>
+	/// <summary>Interface representing iteratively trained models</summary>
+	/// <remarks></remarks>
 	public interface IIterativeModel : IRecommenderEngine
 	{
-		/// <summary>Number of iterations to run the training</summary>
+		/// <value>Number of iterations to run the training</value>
+		/// <remarks></remarks>
 		int NumIter { get; set; }
+
 		/// <summary>Run one iteration (= pass over the training data)</summary>
+		/// <remarks></remarks>
 		void Iterate();
-		/// <summary>
-		/// Compute the fit on the training data
-		/// </summary>
+
+		/// <summary>Compute the fit on the training data</summary>
+		/// <remarks></remarks>
 		/// <returns>
 		/// the fit on the training data according to the optimization criterion; -1 if not implemented
 		/// </returns>

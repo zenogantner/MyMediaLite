@@ -20,12 +20,15 @@ using MyMediaLite.data_type;
 namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take a binary relation over items into account</summary>
+	/// <remarks></remarks>
 	public interface IItemRelationAwareRecommender : IRecommenderEngine
 	{
-		/// <summary>The binary item relation</summary>
+		/// <value>The binary item relation</value>
+		/// <remarks></remarks>
 		SparseBooleanMatrix ItemRelation { get; set; }
 
-		/// <summary>Number of items</summary>
+		/// <value>Number of items</value>
+		/// <remarks></remarks>
 	    int NumItems { get; set; }
 	}
 }

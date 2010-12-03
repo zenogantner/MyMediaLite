@@ -17,47 +17,36 @@
 
 namespace MyMediaLite
 {
-    /// <summary>
-    /// Generic interface for simple recommender engines.
-    /// </summary>
-    public interface IRecommenderEngine
+    /// <summary>Generic interface for simple recommender engines</summary>
+	/// <remarks></remarks>
+	public interface IRecommenderEngine
     {
-		/// <summary>
-		/// Predict rating or score for a given user-item combination
-		/// </summary>
-		/// <param name="user_id">
-		/// the user ID
-		/// </param>
-		/// <param name="item_id">
-		/// the item ID
-		/// </param>
-		/// <returns>
-		/// the predicted score/rating for the given user-item combination
-		/// </returns>
+		/// <summary>Predict rating or score for a given user-item combination</summary>
+		/// <remarks></remarks>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <returns>the predicted score/rating for the given user-item combination</returns>
         double Predict(int user_id, int item_id);
 
-		/// <summary>
-		/// Learn the model parameters of the engine from the training data
-		/// </summary>
+		/// <summary>Learn the model parameters of the engine from the training data</summary>
+		/// <remarks></remarks>
         void Train();
 
-		/// <summary>
-		/// Save the model parameters to a file
-		/// </summary>
+		/// <summary>Save the model parameters to a file</summary>
+		/// <remarks></remarks>
 		/// <param name="filename">the name of the file to write to</param>
 		void SaveModel(string filename);
 
-		/// <summary>
-		/// Get the model parameters from a file
-		/// </summary>
+		/// <summary>Get the model parameters from a file</summary>
+		/// <remarks></remarks>
 		/// <param name="filename">the name of the file to read from</param>
 		void LoadModel(string filename);
-		
+
 		/// <summary>Return a string representation of the engine</summary>
 		/// <remarks>
 		/// The ToString() method of recommender engines should list all hyperparameters, separated by space characters.
 		/// </remarks>
-		string ToString();		
-		
+		string ToString();
+
    }
 }

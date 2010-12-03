@@ -162,9 +162,9 @@ EXTRAS = \
 	data \
 	taxonomy \
 	experimental \
-	experimental/attr_to_factor \
 	ensemble \
 	experimental/item_prediction \
+	experimental/attr_to_factor \
 	mymedialite.pc.in 
 
 REFERENCES =  \

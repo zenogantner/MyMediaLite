@@ -26,6 +26,7 @@ namespace MyMediaLite.data_type
     /// The data is stored in row-major mode.
     /// Indexes are zero-based.
     /// </remarks>
+    /// <typeparam name="T">the type of the matrix entries</typeparam>
     public class Matrix<T>
     {
         /// <summary>Data array: data is stored in columns.</summary>
@@ -66,9 +67,7 @@ namespace MyMediaLite.data_type
             data = new T[dim1 * dim2];
         }
 
-        /// <summary>
-        /// Copy constructor. Creates a deep copy of the given matrix.
-        /// </summary>
+        /// <summary>Copy constructor. Creates a deep copy of the given matrix.</summary>
         /// <param name="matrix">the matrix to be copied</param>
         public Matrix(Matrix<T> matrix)
         {
@@ -135,11 +134,11 @@ namespace MyMediaLite.data_type
 				this[i, j] = row[j];
 		}
 
-		/// <summary>
-		/// Sets the values of the j-th column to the values in a given array
-		/// </summary>
+		// TODO there seems to be a mdoc bug processing the following XML doc. Report it.
+		
+		/// <summary>Sets the values of the j-th column to the values in a given array</summary>
 		/// <param name="j">the column ID</param>
-		/// <param name="column">A <see cref="T[]"/> of length dim2</param>
+		/// <param name="column">A T[] of length dim2</param>
 		public void SetColumn(int j, T[] column)
 		{
 			if (column.Length != this.dim1)
@@ -150,9 +149,7 @@ namespace MyMediaLite.data_type
 				this[i, j] = column[i];
 		}
 
-		/// <summary>
-        /// Init the matrix with a default value
-        /// </summary>
+		/// <summary>Init the matrix with a default value</summary>
         /// <param name="d">the default value</param>
         public void Init(T d)
         {
@@ -160,11 +157,11 @@ namespace MyMediaLite.data_type
                 data[i] = d;
         }
 
-        /// <summary>
-        /// Enlarges the matrix to num_rows rows.
+        /// <summary>Enlarges the matrix to num_rows rows</summary>
+        /// <remarks>
         /// Do nothing if num_rows is less than dim1.
         /// The new entries are filled with zeros.
-        /// </summary>
+        /// </remarks>
         /// <param name="num_rows">the minimum number of rows</param>
         public void AddRows(int num_rows)
         {
@@ -180,11 +177,10 @@ namespace MyMediaLite.data_type
             }
         }
 
-        /// <summary>
-        /// Grows the matrix to the requested size, if necessary
-		///
+        /// <summary>Grows the matrix to the requested size, if necessary</summary>
+        /// <remarks>
 		/// The new entries are filled with zeros.
-        /// </summary>
+		/// </remarks>
         /// <param name="num_rows">the minimum number of rows</param>
         /// <param name="num_cols">the minimum number of columns</param>
         public void Grow(int num_rows, int num_cols)
@@ -204,9 +200,7 @@ namespace MyMediaLite.data_type
 			}
         }
 
-		/// <summary>
-		/// Sets an entire row to a specified value
-		/// </summary>
+		/// <summary>Sets an entire row to a specified value</summary>
 		/// <param name="v">the value to be used</param>
 		/// <param name="i">the row ID</param>
         public void SetRowToOneValue(int i, T v)

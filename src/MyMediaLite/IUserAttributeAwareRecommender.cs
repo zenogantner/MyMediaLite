@@ -21,12 +21,15 @@ using MyMediaLite.data_type;
 namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take binary user attributes into account</summary>
+	/// <remarks></remarks>
 	public interface IUserAttributeAwareRecommender : IRecommenderEngine
 	{
-		/// <summary>Number of binary user attributes</summary>
+		/// <value>Number of binary user attributes</value>
+		/// <remarks></remarks>
 	    int NumUserAttributes { get; set; }
 
-		/// <summary>The binary user attributes</summary>
+		/// <value>The binary user attributes</value>
+		/// <remarks></remarks>
 		SparseBooleanMatrix UserAttributes { get; set; }
 	}
 }
