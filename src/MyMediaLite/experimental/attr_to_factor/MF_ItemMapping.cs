@@ -112,8 +112,6 @@ namespace MyMediaLite.experimental.attr_to_factor
 					old_attribute_to_factor[best_factor_init[i]].GetColumn(i)
 				);
 			}
-
-			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
 		/// <summary>
@@ -136,8 +134,6 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <summary>Perform one iteration of the mapping learning process</summary>
 		public override void IterateMapping()
 		{
-			_MapToLatentFactorSpace = __MapToLatentFactorSpace; // make sure we don't memoize during training
-
 			// stochastic gradient descent
 			int item_id = SampleItem();
 
@@ -229,18 +225,8 @@ namespace MyMediaLite.experimental.attr_to_factor
 			return rmse_and_penalty_per_factor;
 		}
 
-		protected Func<int, double[]> _MapToLatentFactorSpace;
-
 		protected virtual double[] MapToLatentFactorSpace(int item_id)
 		{
-			return _MapToLatentFactorSpace(item_id);
-		}
-
-
-		protected virtual double[] __MapToLatentFactorSpace(int item_id)
-		{
-			HashSet<int> item_attributes = this.item_attributes[item_id];
-
 			double[] factor_representation = new double[num_factors + 1];
 
 			// regression bias
@@ -248,7 +234,7 @@ namespace MyMediaLite.experimental.attr_to_factor
 				factor_representation[j] = attribute_to_factor[NumItemAttributes, j];
 
 			// estimate latent factors
-			foreach (int i in item_attributes)
+			foreach (int i in item_attributes[item_id])
 				for (int j = 0; j <= num_factors; j++)
 					factor_representation[j] += attribute_to_factor[i, j];
 

@@ -26,21 +26,55 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
+			attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);			
+			
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();			
 		}
 		
+		/// <summary>One (stochastic) pass over the training data</summary>
 		public override void IterateMapping()
 		{
 			var factor_bias_gradient         = new double[factor_bias.Length];
 			var attribute_to_factor_gradient = new Matrix<double>(attribute_to_factor.dim1, attribute_to_factor.dim2);
+
+			var item_latent_factors = new double[MaxItemID + 1][];
+			var item_est_bias       = new double[MaxItemID + 1];
 			
-			// 0. compute current error
+			// 1. estimate factors for all items
+			for (int i = 0; i <= MaxItemID; i++)
+			{
+				// estimate factors
+				double[] est_factors = MapToLatentFactorSpace(item_id);
+				Array.Copy(est_factors, item_latent_factors[i], num_factors);
+				item_est_bias[i] = est_factors[num_factors];
+			}
 			
-			// 1. compute gradients
-			//
+			// 2. compute gradients
+			foreach (var r in Ratings.All)
+			{
+		        double score =
+					MatrixUtils.RowScalarProduct(user_factors, r.user_id, item_latent_factors[r.item_id])
+					+ user_bias[r.user_id]
+					+ item_est_bias[r.item_id] // estimated item bias
+					+ global_bias;
+				
+				double sig_score = 1 / (1 + Math.Exp(-score));
+
+                double p = MinRating + sig_score * rating_range_size;
+				double err = rating.rating - p;
+
+				double gradient_common = err * sig_score * (1 - sig_score) * rating_range_size;
+				
+				foreach (int a in ItemAttributes[r.item_id])
+				{
+					for (int f = 0; f < attr_to_factor.dim2; f++)
+						attribute_to_factor_gradient[a, f] += gradient_common *  ;
+				}
+			}
 			
-			// 2. gradient descent step
+			// 3. gradient descent step
 		}
 	}
 }
