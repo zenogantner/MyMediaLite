@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local
-VERSION=0.07
+VERSION=0.08
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
 all: configure
@@ -92,11 +92,12 @@ gendarme:
 
 monodoc:
 	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+
 htmldoc: monodoc
-	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api --template doc/doctemplate.xsl
+	mdoc-export-html doc/monodoc/ -o website/public_html/documentation/api
 
 view-htmldoc:
-	x-www-browser doc/html/index.html
+	x-www-browser file://website/public_html/documentation/api/index.html
 
 flyer:
 	cd doc/flyer; pdflatex mymedialite-flyer.tex
