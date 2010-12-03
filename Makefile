@@ -4,7 +4,8 @@ GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local
 VERSION=0.08
-HTML_DOC_DIR=website/public_html/documentation/api
+HTML_MDOC_DIR=website/public_html/documentation/mdoc
+HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
 all: configure
@@ -95,11 +96,19 @@ monodoc:
 	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 
 htmldoc: monodoc
-	mdoc-export-html doc/monodoc/ -o ${HTML_DOC_DIR} --template=doc/htmldoc-template.xsl
-	perl -e "use File::Slurp; \$$f = read_file '${HTML_DOC_DIR}/index.html'; \$$f =~ s/\n.+?\n.+?experimental.+?\n.+?\n.+?\n.+?\n.+//; print \$$f;" > tmp.html && cat tmp.html > ${HTML_DOC_DIR}/index.html && rm tmp.html
+	mdoc-export-html doc/monodoc/ -o ${HTML_MDOC_DIR} --template=doc/htmldoc-template.xsl
+	perl -e "use File::Slurp; \$$f = read_file '${HTML_MDOC_DIR}/index.html'; \$$f =~ s/\n.+?\n.+?experimental.+?\n.+?\n.+?\n.+?\n.+//; print \$$f;" > tmp.html && cat tmp.html > ${HTML_MDOC_DIR}/index.html && rm tmp.html
 
 view-htmldoc:
-	x-www-browser file://${HTML_DOC_DIR}/index.html
+	x-www-browser file://${HTML_MDOC_DIR}/index.html
+
+doxygen:
+	cd doc/ && doxygen
+	cp -r doc/doxygen ${HTML_DOXYGEN_DIR}
+
+view-htmldoc:
+	x-www-browser file://${HTML_DOXYGEN_DIR}/index.html
+
 
 flyer:
 	cd doc/flyer; pdflatex mymedialite-flyer.tex
