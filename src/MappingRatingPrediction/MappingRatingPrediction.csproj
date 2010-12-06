@@ -10,7 +10,7 @@
     <RootNamespace>MappingRatingPrediction</RootNamespace>
     <AssemblyName>MappingRatingPrediction</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.7</ReleaseVersion>
+    <ReleaseVersion>0.8</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +42,10 @@
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
       <Project>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</Project>
       <Name>MyMediaLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
+      <Project>{750EE318-9B7E-4825-8E42-5D9ABDD6E050}</Project>
+      <Name>MyMediaLiteExperimental</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

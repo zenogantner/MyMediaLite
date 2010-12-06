@@ -11,7 +11,7 @@
     <AssemblyName>MyMediaLite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ReleaseVersion>0.7</ReleaseVersion>
+    <ReleaseVersion>0.8</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,17 +120,6 @@
     <Compile Include="item_recommender\IItemRecommender.cs" />
     <Compile Include="data_type\MatrixUtils.cs" />
     <Compile Include="item_recommender\WeightedItemKNN.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_Mapping.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_ItemMapping.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_ItemMapping_Complex.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_ItemMapping_kNN.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_ItemMapping_SVR.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_UserMapping.cs" />
-    <Compile Include="experimental\attr_to_factor\BPRMF_UserMapping_Optimal.cs" />
-    <Compile Include="experimental\attr_to_factor\MF_Mapping.cs" />
-    <Compile Include="experimental\attr_to_factor\MF_ItemMapping.cs" />
-    <Compile Include="experimental\attr_to_factor\MF_Item_Mapping_Optimal.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -149,10 +138,7 @@
     <Folder Include="io\" />
     <Folder Include="data\" />
     <Folder Include="taxonomy\" />
-    <Folder Include="experimental\" />
     <Folder Include="ensemble\" />
-    <Folder Include="experimental\item_prediction\" />
-    <Folder Include="experimental\attr_to_factor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SVM\SVM.csproj">

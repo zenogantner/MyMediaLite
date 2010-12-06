@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemPrediction", "Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "MappingRatingPrediction\MappingRatingPrediction.csproj", "{8C64FEFA-40FB-4F30-8689-D568C4E398B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteExperimental", "MyMediaLiteExperimental\MyMediaLiteExperimental.csproj", "{750EE318-9B7E-4825-8E42-5D9ABDD6E050}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -29,6 +31,10 @@ Global
 		{2BDEB89C-FF19-44F1-B345-25630B6C3A5D}.Debug|x86.Build.0 = Debug|Any CPU
 		{2BDEB89C-FF19-44F1-B345-25630B6C3A5D}.Release|x86.ActiveCfg = Release|Any CPU
 		{2BDEB89C-FF19-44F1-B345-25630B6C3A5D}.Release|x86.Build.0 = Release|Any CPU
+		{750EE318-9B7E-4825-8E42-5D9ABDD6E050}.Debug|x86.ActiveCfg = Debug|x86
+		{750EE318-9B7E-4825-8E42-5D9ABDD6E050}.Debug|x86.Build.0 = Debug|x86
+		{750EE318-9B7E-4825-8E42-5D9ABDD6E050}.Release|x86.ActiveCfg = Release|x86
+		{750EE318-9B7E-4825-8E42-5D9ABDD6E050}.Release|x86.Build.0 = Release|x86
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Debug|x86.Build.0 = Debug|Any CPU
 		{7ECAE320-D318-4000-B3F1-E481488D150D}.Release|x86.ActiveCfg = Release|Any CPU
@@ -67,6 +73,6 @@ Global
 		$4.MessageStyle = $5
 		$5.LineAlign = 0
 		$4.inheritsSet = Mono
-		version = 0.7
+		version = 0.8
 	EndGlobalSection
 EndGlobal
