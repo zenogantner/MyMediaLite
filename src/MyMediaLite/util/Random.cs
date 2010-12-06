@@ -20,29 +20,21 @@ using System;
 
 namespace MyMediaLite.util
 {
-    /// <summary>
-    /// Drawing random values from a normal distibuted using a simple rejection method.
-    /// </summary>
+    /// <summary>Draws random values from a normal distibuted using a simple rejection method</summary>
     public class Random : System.Random
     {
         private static Random instance = null;
 
-		/// <summary>
-		/// Default constructor
-		/// </summary>
+		/// <summary>Default constructor</summary>
 		public Random() : base() { }
 
-		/// <summary>
-		/// Creates a Random object initialized with a seed
-		/// </summary>
+		/// <summary>Creates a Random object initialized with a seed</summary>
 		/// <param name="seed">
 		/// A <see cref="System.Int32"/> for initializing the random number generator
 		/// </param>
 		public Random(int seed) : base(seed) { }
 
-		/// <summary>
-		/// Initializes the instance with a given random seed.
-		/// </summary>
+		/// <summary>Initializes the instance with a given random seed</summary>
 		/// <param name="seed">a seed value</param>
 		public static void InitInstance(int seed)
 		{
@@ -50,26 +42,19 @@ namespace MyMediaLite.util
             instance = new Random(seed);
 		}
 
-        /// <summary>
-        /// Gets the instance.
-        /// If it does not exist yet, it will be created.
-        /// </summary>
+        /// <summary>Gets the instance. If it does not exist yet, it will be created.</summary>
         /// <returns>the singleton instance</returns>
         public static Random GetInstance()
         {
             if (instance == null)
-            {
                 instance = new Random();
-            }
             return instance;
         }
 
         private double sqrt_e_div_2_pi = Math.Sqrt(Math.E / (2 * Math.PI));
 
-		/// <summary>
-        /// Nexts the exp.
-        /// </summary>
-        /// <param name="lambda">The lambda.</param>
+		/// <summary>Nexts the exp</summary>
+        /// <param name="lambda"></param>
         /// <returns></returns>
         public double NextExp(double lambda)
         {
@@ -77,10 +62,8 @@ namespace MyMediaLite.util
             return -(1 / lambda) * Math.Log(1 - u, Math.E);
         }
 
-        /// <summary>
-        /// Nexts the normal.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>Get the next number from the standard normal distribution</summary>
+        /// <returns>a random number drawn from the standard normal distribution</returns>
         public double NextNormal()
         {
             double y;
@@ -89,24 +72,18 @@ namespace MyMediaLite.util
             {
                 double u = this.NextDouble();
                 x = this.NextExp(1);
-                y = 2*u*sqrt_e_div_2_pi*Math.Exp(-x);
-            } while (y< (2/(2*Math.PI))*Math.Exp(-0.5*x*x));
+                y = 2 * u * sqrt_e_div_2_pi * Math.Exp(-x);
+            } while ( y < (2 / (2 * Math.PI)) * Math.Exp(-0.5 * x * x));
             if (this.NextDouble() < 0.5)
-            {
                 return x;
-            }
             else
-            {
                 return -x;
-            }
         }
 
-		/// <summary>
-        /// Nexts the normal.
-        /// </summary>
-        /// <param name="mean">The mean.</param>
-        /// <param name="stdev">The stdev.</param>
-        /// <returns></returns>
+		/// <summary>Draw the next number from a normal distribution</summary>
+        /// <param name="mean">mean of the Gaussian</param>
+        /// <param name="stdev">standard deviation of the Gaussian</param>
+        /// <returns>a random number drawn from a normal distribution with the given mean and standard deviation</returns>
         public double NextNormal(double mean, double stdev)
         {
             return mean + stdev * NextNormal();
