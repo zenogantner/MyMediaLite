@@ -11,3 +11,4 @@ test-results
 *.log
 ml100k
 ml1m
+doxygen

@@ -6,6 +6,7 @@ CONFIGURE_OPTIONS=--prefix=/usr/local
 VERSION=0.08
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
+HTML_IMMDOC_DIR=website/public_html/documentation/immdoc
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
 all: configure
@@ -95,19 +96,25 @@ gendarme:
 monodoc:
 	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 
-htmldoc: monodoc
+mdoc-html: monodoc
 	mdoc-export-html doc/monodoc/ -o ${HTML_MDOC_DIR} --template=doc/htmldoc-template.xsl
 	perl -e "use File::Slurp; \$$f = read_file '${HTML_MDOC_DIR}/index.html'; \$$f =~ s/\n.+?\n.+?experimental.+?\n.+?\n.+?\n.+?\n.+//; print \$$f;" > tmp.html && cat tmp.html > ${HTML_MDOC_DIR}/index.html && rm tmp.html
 
-view-htmldoc:
+view-mdoc:
 	x-www-browser file://${HTML_MDOC_DIR}/index.html
 
 doxygen:
 	cd doc/ && doxygen
-	cp -r doc/doxygen ${HTML_DOXYGEN_DIR}
+	cp -r doc/doxygen/html/* ${HTML_DOXYGEN_DIR}
 
-view-htmldoc:
+view-doxygen:
 	x-www-browser file://${HTML_DOXYGEN_DIR}/index.html
+
+immdoc:
+	mono --debug ~/Desktop/ImmDocNet.exe -vl:3 -ForceDelete -pn:MyMediaLite -od:${HTML_IMMDOC_DIR} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+
+view-immdoc:
+	x-www-browser file://${HTML_IMMDOC_DIR}/index.html
 
 
 flyer:
