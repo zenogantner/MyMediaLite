@@ -73,14 +73,14 @@ namespace MyMediaLite.correlation
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter</param>
-		public static float ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
+		public static float ComputeCorrelation(Ratings ratings1, Ratings ratings2, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
 				return 1;
 
 			// get common ratings for the two entities
-			HashSet<int> e1 = entity_type == EntityType.USER ? ratings_1.GetItems() : ratings_1.GetUsers();
-			HashSet<int> e2 = entity_type == EntityType.USER ? ratings_2.GetItems() : ratings_2.GetUsers();
+			HashSet<int> e1 = entity_type == EntityType.USER ? ratings1.GetItems() : ratings1.GetUsers();
+			HashSet<int> e2 = entity_type == EntityType.USER ? ratings2.GetItems() : ratings2.GetUsers();
 
 			e1.IntersectWith(e2);
 
@@ -100,13 +100,13 @@ namespace MyMediaLite.correlation
 				double rating_i = 0; double rating_j = 0;
 				if (entity_type == EntityType.USER)
 				{
-					rating_i = ratings_1.FindRating(i, other_entity_id).rating;
-					rating_j = ratings_2.FindRating(j, other_entity_id).rating;
+					rating_i = ratings1.FindRating(i, other_entity_id).rating;
+					rating_j = ratings2.FindRating(j, other_entity_id).rating;
 				}
 				else
 				{
-					rating_i = ratings_1.FindRating(other_entity_id, i).rating;
-					rating_j = ratings_2.FindRating(other_entity_id, j).rating;
+					rating_i = ratings1.FindRating(other_entity_id, i).rating;
+					rating_j = ratings2.FindRating(other_entity_id, j).rating;
 				}
 
 				// update sums

@@ -66,7 +66,6 @@ namespace MyMediaLite.item_recommender
         }
 
 		/// <summary>Iterate once over the data</summary>
-		/// <returns>true if training should be aborted</returns>
 		public abstract void Iterate();
 
 		/// <summary>Computes the fit (optimization criterion) on the training data</summary>

@@ -111,11 +111,11 @@ view-doxygen:
 	x-www-browser file://${HTML_DOXYGEN_DIR}/index.html
 
 immdoc:
-	mono --debug ~/Desktop/ImmDocNet.exe -vl:3 -ForceDelete -pn:MyMediaLite -od:${HTML_IMMDOC_DIR} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	mono --debug ~/Desktop/ImmDocNet.exe -vl:3 -ForceDelete -IncludePrivateMembers -pn:MyMediaLite -od:doc/immdoc ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	cp -r doc/immdoc/* ${HTML_IMMDOC_DIR}
 
 view-immdoc:
 	x-www-browser file://${HTML_IMMDOC_DIR}/index.html
-
 
 flyer:
 	cd doc/flyer; pdflatex mymedialite-flyer.tex
