@@ -63,6 +63,7 @@ Architecture
  - nicer, more generic structure for kNN engines
    - non-weighted kNN
    - more correlation/similarity measures (e.g. Jaccard index)
+     - rename to Similarity (instead of Correlation)?
    - combine arbitrary similarity matrices
    - user-defined similarities
  - generic optimization interface and algorithms (like Mallet)

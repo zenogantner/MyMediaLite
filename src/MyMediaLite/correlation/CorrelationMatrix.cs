@@ -32,10 +32,12 @@ namespace MyMediaLite.correlation
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
-		/// <inheritdoc/>
+		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
 
-		/// <inheritdoc/>
+		/// <value></value>
+		/// <param name="i"></param>
+		/// <param name="j"></param>
         public override float this [int i, int j]
         {
 			get { return data[i * dim2 + j]; }
@@ -53,9 +55,8 @@ namespace MyMediaLite.correlation
 			this.num_entities = num_entities;
 		}
 
-		/// <summary>
-		/// Create a correlation matrix, give out useful warning if there is not enough memory
-		/// </summary>
+		/// <summary>Creates a correlation matrix</summary>
+		/// <remarks>Gives out a useful warning if there is not enough memory</remarks>
 		/// <param name="num_entities">the number of entities</param>
 		/// <returns>the correlation matrix</returns>
 		static public CorrelationMatrix Create(int num_entities)
@@ -73,9 +74,7 @@ namespace MyMediaLite.correlation
 			return cm;
 		}
 
-		/// <summary>
-		/// Create a CorrelationMatrix from the lines of a StreamReader
-		/// </summary>
+		/// <summary>Creates a CorrelationMatrix from the lines of a StreamReader</summary>
 		/// <remarks>
 		/// In the first line, we expect to be the number of entities.
 		/// All the other lines have the format
@@ -97,10 +96,12 @@ namespace MyMediaLite.correlation
 
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
+			
+			var split_chars = new char[]{ '\t', ' ', ',' };
 
 			while (! reader.EndOfStream)
 			{
-				string[] numbers = reader.ReadLine().Split(' '); // TODO more flexible file format (any whitespace)
+				string[] numbers = reader.ReadLine().Split(split_chars);
 				int i = Int32.Parse(numbers[0]);
 				int j = Int32.Parse(numbers[1]);
 				float c = Single.Parse(numbers[2], ni);
@@ -131,26 +132,23 @@ namespace MyMediaLite.correlation
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
 				{
-					float val = this[i,j];
+					float val = this[i, j];
 					if (val != 0)
 						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
 				}
 		}
 
-		/// <summary>
-		/// Add an entity to the CorrelationMatrix by growing it to the requested size.
-		///
+		/// <summary>Add an entity to the CorrelationMatrix by growing it to the requested size.</summary>
+		/// <remarks>
 		/// Note that you still have to correctly compute and set the entity's correlation values
-		/// </summary>
+		/// </remarks>
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		public void AddEntity(int entity_id)
 		{
 			this.Grow(entity_id + 1, entity_id + 1);
 		}
 
-		/// <summary>
-		/// Sum up the correlations between a given entity and the entities in a collection
-		/// </summary>
+		/// <summary>Sum up the correlations between a given entity and the entities in a collection</summary>
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		/// <param name="entities">a collection containing the numerical IDs of the entities to compare to</param>
 		/// <returns>the correlation sum</returns>
@@ -202,9 +200,7 @@ namespace MyMediaLite.correlation
 				return entities.ToArray();
 		}
 
-		/// <summary>
-		/// Compute the correlations for a given entity type from a rating dataset
-		/// </summary>
+		/// <summary>Compute the correlations for a given entity type from a rating dataset</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
 		public virtual void ComputeCorrelations(RatingData ratings, EntityType entity_type)

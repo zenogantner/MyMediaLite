@@ -25,10 +25,12 @@ namespace MyMediaLite
 	public interface IItemAttributeAwareRecommender : IRecommenderEngine
 	{
 		/// <value>an integer stating the number of attributes</value>
+		/// <summary></summary>
 		/// <remarks></remarks>
 	    int NumItemAttributes { get; set; }
 
 		/// <value>The binary item attributes</value>
+		/// <summary></summary>
 		/// <remarks></remarks>
 		SparseBooleanMatrix ItemAttributes { get; set; }
 	}

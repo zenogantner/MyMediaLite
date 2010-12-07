@@ -23,23 +23,21 @@ using MyMediaLite.util;
 
 namespace MyMediaLite.correlation
 {
-	/// <summary>
-	/// Class for storing cosine similarities
-	/// </summary>
+	/// <summary>Class for storing cosine similarities</summary>
 	public class Cosine : CorrelationMatrix
 	{
-		/// <inheritdoc/>
+		/// <summary>Creates an object of type Cosine</summary>
+		/// <param name="num_entities">the number of entities</param>
 		public Cosine(int num_entities) : base(num_entities) { }
 
-		/// <inheritdoc/>
+		/// <summary>Copy constructor. Creates an object of type Cosine from an existing one.</summary>
+		/// <param name ="correlation_matrix">the correlation matrix to copy</param>
 		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.dim1)
 		{
 			this.data = correlation_matrix.data;
 		}
 
-		/// <summary>
-		/// Create a Cosine similarity matrix from given data
-		/// </summary>
+		/// <summary>Creates a Cosine similarity matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
 		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
@@ -85,7 +83,10 @@ namespace MyMediaLite.correlation
 			Console.Error.WriteLine();
 		}
 
-		/// <inheritdoc/>
+		/// <summary>Computes the cosine similarity of two binary vectors</summary>
+		/// <param name="vector_i">the first vector</param>
+		/// <param name="vector_j">the second vector</param>
+		/// <returns>the cosine similarity between the two vectors</returns>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;

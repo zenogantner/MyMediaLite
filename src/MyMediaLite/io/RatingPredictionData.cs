@@ -65,7 +65,7 @@ namespace MyMediaLite.io
 
 			bool out_of_range_warning_issued = false;
 			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
-			char[] split_chars = new char[]{ '\t', ' ' };
+			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
 			while ( (line = reader.ReadLine()) != null )

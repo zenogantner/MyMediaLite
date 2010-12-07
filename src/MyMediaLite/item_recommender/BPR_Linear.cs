@@ -51,14 +51,14 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 
-	    /// <summary>Item attribute weights</summary>
+	    // Item attribute weights
         private Matrix<double> item_attribute_weight_by_user;
 
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
 
 		private System.Random random;
-		/// <summary>Fast, but memory-intensive sampling</summary>
+		// Fast, but memory-intensive sampling
 		private bool fast_sampling = false;
 
         /// <summary>Number of iterations over the training data</summary>
@@ -85,9 +85,9 @@ namespace MyMediaLite.item_recommender
 		public double Regularization { get { return regularization; }	set { regularization = value; } }
         double regularization = 0.015;
 
-		/// <summary>support data structure for fast sampling</summary>
+		// support data structure for fast sampling
 		private int[][] user_pos_items;
-		/// <summary>support data structure for fast sampling</summary>
+		// support data structure for fast sampling
 		private int[][] user_neg_items;
 
 		/// <inheritdoc/>

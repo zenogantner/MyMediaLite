@@ -7,6 +7,7 @@ VERSION=0.08
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 HTML_IMMDOC_DIR=website/public_html/documentation/immdoc
+IMMDOC=mono --debug ${HOME}/src/immdoc/Src/ImmDocNet/ImmDocNet/bin/Debug/ImmDocNet.exe
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website
 all: configure
@@ -111,7 +112,7 @@ view-doxygen:
 	x-www-browser file://${HTML_DOXYGEN_DIR}/index.html
 
 immdoc:
-	mono --debug ~/Desktop/ImmDocNet.exe -vl:3 -ForceDelete -IncludePrivateMembers -pn:MyMediaLite -od:doc/immdoc ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	${IMMDOC} -vl:3 -ForceDelete -pn:MyMediaLite -od:doc/immdoc ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 	cp -r doc/immdoc/* ${HTML_IMMDOC_DIR}
 
 view-immdoc:

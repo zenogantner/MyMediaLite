@@ -26,9 +26,12 @@ namespace MyMediaLite.data_type
 	/// <summary>Tools for vector-like data</summary>
 	public class VectorUtils
 	{
+		/// <summary>Write a collection of doubles to a streamwriter</summary>
+		/// <param name="writer">a <see cref="StreamWriter"/></param>
+		/// <param name="vector">a collection of double values</param>
 		static public void WriteVector(StreamWriter writer, ICollection<double> vector)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
         	writer.WriteLine(vector.Count);
@@ -38,9 +41,12 @@ namespace MyMediaLite.data_type
 			writer.WriteLine();
 		}
 
+		/// <summary>Read a collection of doubles from a TextReader object</summary>
+		/// <param name="reader">the <see cref="TextReader"/> to read from</param>		
+		/// <returns>a collection of double values</returns>
 		static public ICollection<double> ReadVector(TextReader reader)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
         	int dim = int.Parse(reader.ReadLine());
@@ -73,12 +79,8 @@ namespace MyMediaLite.data_type
 			return Math.Sqrt(sum);
 		}
 
-		/// <summary>
-		/// Initialize a collection of doubles with values from a normal distribution
-		/// </summary>
-		/// <param name="vector">
-		/// the vector to initialize
-		/// </param>
+		/// <summary>Initialize a collection of doubles with values from a normal distribution</summary>
+		/// <param name="vector">the vector to initialize</param>
 		/// <param name="mean">the mean of the normal distribution</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
         static public void InitNormal(IList<double> vector, double mean, double stdev)

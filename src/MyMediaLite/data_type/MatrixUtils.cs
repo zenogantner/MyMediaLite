@@ -26,9 +26,12 @@ namespace MyMediaLite.data_type
     /// <summary>Utilities to work with matrices</summary>
     public class MatrixUtils
     {
+		/// <summary>Write a matrix to a StreamWriter object</summary>
+		/// <param name="writer">a <see cref="StreamWriter"/></param>
+		/// <param name="matrix">the matrix of doubles to write out</param>
 		static public void WriteMatrix(StreamWriter writer, Matrix<double> matrix)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
         	writer.WriteLine(matrix.dim1 + " " + matrix.dim2);
@@ -38,9 +41,12 @@ namespace MyMediaLite.data_type
 			writer.WriteLine();
 		}
 
+		/// <summary>Read a matrix from a TextReader object</summary>
+		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
+		/// <returns>a matrix of doubles</returns>
 		static public Matrix<double> ReadMatrix(TextReader reader)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 			
         	string[] numbers = reader.ReadLine().Split(' ');
@@ -66,9 +72,7 @@ namespace MyMediaLite.data_type
 			return matrix;
 		}
 
-        /// <summary>
-        /// Initializes one row of a double matrix with normal distributed (Gaussian) noise
-        /// </summary>
+        /// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
         /// <param name="matrix">the matrix to initialize</param>
         /// <param name="mean">the mean of the normal distribution drawn from</param>
         /// <param name="stdev">the standard deviation of the normal distribution</param>

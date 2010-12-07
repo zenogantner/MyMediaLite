@@ -122,7 +122,8 @@ namespace MyMediaLite.item_recommender
 		}
 
 		
-		// TODO document
+		/// <summary>Set the collaborative training data</summary>
+		/// <param name="user_items">a <see cref="SparseBooleanMatrix"/> that where a user (rows) has interacted with an item (columns)</param>
 		public void SetCollaborativeData(SparseBooleanMatrix user_items)
 		{
             this.data_user = user_items;
