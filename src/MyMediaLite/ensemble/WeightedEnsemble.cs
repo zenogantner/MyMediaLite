@@ -20,8 +20,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MyMediaLite.rating_predictor;
-using MyMediaLite.util;
+using MyMediaLite.RatingPredictor;
+using MyMediaLite.Util;
 
 
 namespace MyMediaLite.ensemble

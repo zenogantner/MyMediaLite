@@ -18,9 +18,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MyMediaLite.util;
+using MyMediaLite.Util;
 
-namespace MyMediaLite.data
+namespace MyMediaLite.Data
 {
 	/// <summary>Class representing a collection of ratings in a particular order</summary>
     public class Ratings

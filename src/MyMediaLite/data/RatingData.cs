@@ -20,7 +20,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyMediaLite.data
+
+namespace MyMediaLite.Data
 {
 	/// <summary>Data storage for rating data</summary>
     /// <remarks>

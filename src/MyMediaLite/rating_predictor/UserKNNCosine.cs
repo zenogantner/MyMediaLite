@@ -16,10 +16,10 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using MyMediaLite.correlation;
+using MyMediaLite.Correlation;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted user-based kNN with cosine similarity</summary>
 	public class UserKNNCosine : UserKNN

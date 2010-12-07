@@ -17,12 +17,12 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.data_type;
-using MyMediaLite.data;
-using MyMediaLite.util;
+using MyMediaLite.DataType;
+using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted item-based kNN engine</summary>
 	/// <remarks>This engine supports online updates.</remarks>

@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>
     /// Class for storing sparse vectors.

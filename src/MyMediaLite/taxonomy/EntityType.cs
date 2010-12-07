@@ -15,7 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace MyMediaLite.taxonomy
+namespace MyMediaLite.Taxonomy
 {
 	/// <summary>Type to refer to different kinds of entities like users and items</summary>
 	public enum EntityType

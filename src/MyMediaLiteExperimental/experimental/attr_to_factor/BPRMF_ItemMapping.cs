@@ -20,13 +20,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender

@@ -18,10 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyMediaLite.data_type;
+using MyMediaLite.DataType;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
     /// <summary>
     /// Abstract item recommender class, that loads the training data into two sparse matrices: one column-wise and one row-wise

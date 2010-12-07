@@ -20,13 +20,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	/// <summary>biased MF with item mapping learned by regularized least-squares regression</summary>
 	public class MF_ItemMapping : MF_Mapping, IItemAttributeAwareRecommender
@@ -60,7 +60,7 @@ namespace MyMediaLite.experimental.attr_to_factor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			random = util.Random.GetInstance();
+			random = Util.Random.GetInstance();
 
 			// create helper data structure
 			data_item = new SparseBooleanMatrix();

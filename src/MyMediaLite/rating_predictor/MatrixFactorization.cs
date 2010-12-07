@@ -19,13 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Simple matrix factorization class</summary>
     /// <remarks>

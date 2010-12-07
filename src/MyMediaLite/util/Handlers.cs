@@ -4,7 +4,7 @@
 using System;
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>Class containing handler functions, e.g. exception handlers</summary>
 	public static class Handlers

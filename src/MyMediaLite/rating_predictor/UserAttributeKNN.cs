@@ -19,12 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.correlation;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
+using MyMediaLite.Correlation;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted kNN recommender engine based on user attributes</summary>
 	/// <remarks>

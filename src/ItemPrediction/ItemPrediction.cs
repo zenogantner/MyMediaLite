@@ -21,12 +21,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.eval;
-using MyMediaLite.io;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Eval;
+using MyMediaLite.IO;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.Util;
 
 
 namespace MyMediaLite
@@ -51,7 +51,7 @@ namespace MyMediaLite
 		static MostPopular             mp         = new MostPopular();
 		static WRMF                    wrmf       = new WRMF();
 		static BPRMF                   bprmf      = new BPRMF();
-		static item_recommender.Random random     = new item_recommender.Random();
+		static ItemRecommender.Random  random     = new ItemRecommender.Random();
 		static BPR_Linear              bpr_linear = new BPR_Linear();
 		static ItemAttributeSVM        svm        = new ItemAttributeSVM();
 
@@ -114,7 +114,7 @@ namespace MyMediaLite
 
         public static void Main(string[] args)
         {
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(util.Handlers.UnhandledExceptionHandler);
+			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Util.Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
 
@@ -157,7 +157,7 @@ namespace MyMediaLite
 			string method    = args[2];
 
 			if (random_seed != -1)
-				util.Random.InitInstance(random_seed);
+				Util.Random.InitInstance(random_seed);
 
 			// set requested recommender
 			switch (method)
@@ -327,7 +327,7 @@ namespace MyMediaLite
 					if (predict_for_users_file.Equals(string.Empty))
 						time_span = Utils.MeasureTime( delegate()
 					    	{
-						    	eval.ItemPrediction.WritePredictions(
+						    	Eval.ItemPrediction.WritePredictions(
 							    	recommender,
 							        training_data,
 							        relevant_items, predict_items_number,
@@ -340,7 +340,7 @@ namespace MyMediaLite
 					else
 						time_span = Utils.MeasureTime( delegate()
 					    	{
-						    	eval.ItemPrediction.WritePredictions(
+						    	Eval.ItemPrediction.WritePredictions(
 							    	recommender,
 							        training_data,
 							        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),

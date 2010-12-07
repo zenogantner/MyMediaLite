@@ -19,12 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data_type;
-using MyMediaLite.data;
-using MyMediaLite.taxonomy;
+using MyMediaLite.DataType;
+using MyMediaLite.Data;
+using MyMediaLite.Taxonomy;
 
 
-namespace MyMediaLite.correlation
+namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class CorrelationMatrix : Matrix<float>
@@ -35,9 +35,7 @@ namespace MyMediaLite.correlation
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
 
-		/// <value></value>
-		/// <param name="i"></param>
-		/// <param name="j"></param>
+		/// <inheritdoc/>
         public override float this [int i, int j]
         {
 			get { return data[i * dim2 + j]; }

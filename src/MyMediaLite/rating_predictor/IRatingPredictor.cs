@@ -15,15 +15,26 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace MyMediaLite.ItemRecommender
+
+namespace MyMediaLite.RatingPredictor
 {
-    /// <summary>Interface for item recommenders</summary>
-    public interface IItemRecommender : IRecommenderEngine
+    /// <summary>interface for rating predictors</summary>
+    public interface IRatingPredictor : IRecommenderEngine
     {
+        /// <summary>The max rating value</summary>
+        double MaxRating { get; set; }
+        
+		/// <summary>The min rating value</summary>
+        double MinRating { get; set; }
+
         /// <inheritdoc/>
-        void AddFeedback(int user_id, int item_id);
+		bool CanPredict(int user_id, int item_id);
         /// <inheritdoc/>
-        void RemoveFeedback(int user_id, int item_id);
+        void AddRating(int user_id, int item_id, double rating);
+        /// <inheritdoc/>
+        void UpdateRating(int user_id, int item_id, double rating);
+        /// <inheritdoc/>
+        void RemoveRating(int user_id, int item_id);
         /// <inheritdoc/>
         void AddUser(int user_id);
         /// <inheritdoc/>

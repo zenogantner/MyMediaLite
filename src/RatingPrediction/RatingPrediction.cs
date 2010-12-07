@@ -22,12 +22,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.eval;
-using MyMediaLite.io;
-using MyMediaLite.rating_predictor;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Eval;
+using MyMediaLite.IO;
+using MyMediaLite.RatingPredictor;
+using MyMediaLite.Util;
 
 
 namespace RatingPrediction
@@ -42,7 +42,7 @@ namespace RatingPrediction
 		static RatingData test_data;
 
 		// recommender engines
-		static MyMediaLite.rating_predictor.Memory recommender = null;
+		static MyMediaLite.RatingPredictor.Memory recommender = null;
 		static MatrixFactorization        mf = new MatrixFactorization();
 		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
 		static MatrixFactorization social_mf = new SocialMF();
@@ -163,7 +163,7 @@ MyMediaLite rating prediction; usage:
 			string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
 
 			if (random_seed != -1)
-				MyMediaLite.util.Random.InitInstance(random_seed);
+				MyMediaLite.Util.Random.InitInstance(random_seed);
 
 			// set correct recommender
 			switch (method)

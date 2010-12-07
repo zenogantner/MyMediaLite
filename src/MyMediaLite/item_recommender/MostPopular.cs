@@ -18,10 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MyMediaLite.util;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
     /// <summary>
     /// Most-popular item recommender. Items are weighted by how often they have been seen in the past.

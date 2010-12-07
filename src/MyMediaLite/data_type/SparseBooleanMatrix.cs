@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>
     /// Sparse representation of a boolean matrix.

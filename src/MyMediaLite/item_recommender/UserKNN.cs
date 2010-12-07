@@ -17,11 +17,11 @@
 
 using System;
 using System.IO;
-using MyMediaLite.correlation;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
     /// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity (unweighted)</summary>
     /// <remarks>

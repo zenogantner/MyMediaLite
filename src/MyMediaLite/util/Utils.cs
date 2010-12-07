@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>
 	/// Class containing utility functions
@@ -172,7 +172,7 @@ namespace MyMediaLite.util
 		/// </remarks>
 		public static void Shuffle<T>(IList<T> list)
 		{
-			Random random = MyMediaLite.util.Random.GetInstance();			
+			Random random = MyMediaLite.Util.Random.GetInstance();			
 			for (int i = list.Count - 1; i >= 0; i--)
 			{
 				int r = random.Next(0, i + 1);

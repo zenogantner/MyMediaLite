@@ -18,11 +18,11 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.io
+namespace MyMediaLite.IO
 {
 	/// <summary>
 	/// Class that offers static methods for reading in rating data

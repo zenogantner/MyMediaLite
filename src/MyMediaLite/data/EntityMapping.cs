@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace MyMediaLite.data
+namespace MyMediaLite.Data
 {
 	/// <summary>
 	/// Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering

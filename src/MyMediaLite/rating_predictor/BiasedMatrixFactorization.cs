@@ -19,13 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
 	public class BiasedMatrixFactorization : MatrixFactorization
@@ -52,10 +52,10 @@ namespace MyMediaLite.rating_predictor
 
 			user_bias = new double[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
-				user_bias[u] = MyMediaLite.util.Random.GetInstance().NextNormal(InitMean, InitStdev);
+				user_bias[u] = Util.Random.GetInstance().NextNormal(InitMean, InitStdev);
 			item_bias = new double[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
-				item_bias[i] = MyMediaLite.util.Random.GetInstance().NextNormal(InitMean, InitStdev);
+				item_bias[i] = Util.Random.GetInstance().NextNormal(InitMean, InitStdev);
 			
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item

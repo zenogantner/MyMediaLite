@@ -18,11 +18,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MyMediaLite.data;
-using MyMediaLite.rating_predictor;
+using MyMediaLite.Data;
+using MyMediaLite.RatingPredictor;
 
 
-namespace MyMediaLite.eval
+namespace MyMediaLite.Eval
 {
     /// <summary>Evaluation class</summary>
     public static class RatingEval
@@ -49,7 +49,7 @@ namespace MyMediaLite.eval
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
         /// <returns>a Dictionary containing the evaluation results</returns>
-        static public Dictionary<string, double> EvaluateRated(RatingPredictor engine, RatingData ratings)
+        static public Dictionary<string, double> EvaluateRated(IRatingPredictor engine, RatingData ratings)
 		{
             double rmse = 0;
             double mae  = 0;

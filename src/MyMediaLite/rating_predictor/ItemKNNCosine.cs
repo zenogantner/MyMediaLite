@@ -16,11 +16,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
-using MyMediaLite.correlation;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted item-based kNN with cosine similarity</summary>
 	public class ItemKNNCosine : ItemKNN

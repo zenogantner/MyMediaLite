@@ -19,11 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	// TODO split up file by classes
 

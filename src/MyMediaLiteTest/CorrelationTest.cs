@@ -20,10 +20,10 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.correlation;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
-using MyMediaLite.data;
+using MyMediaLite.Correlation;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 
 namespace MyMediaLiteTest

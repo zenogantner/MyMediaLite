@@ -16,11 +16,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.IO;
-using MyMediaLite.correlation;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
 	public abstract class KNN : Memory

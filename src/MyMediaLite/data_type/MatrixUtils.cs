@@ -18,10 +18,10 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.util;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>Utilities to work with matrices</summary>
     public class MatrixUtils
@@ -79,7 +79,7 @@ namespace MyMediaLite.data_type
         /// <param name="row">the row to be initialized</param>
         static public void InitNormal(Matrix<double> matrix, double mean, double stdev, int row)
         {
-            var rnd = MyMediaLite.util.Random.GetInstance();
+            var rnd = Util.Random.GetInstance();
             for (int j = 0; j < matrix.dim2; j++)
                 matrix[row, j] = rnd.NextNormal(mean, stdev);
         }
@@ -92,7 +92,7 @@ namespace MyMediaLite.data_type
         /// <param name="stdev">the standard deviation of the normal distribution</param>
         static public void InitNormal(Matrix<double> matrix, double mean, double stdev)
         {
-            var rnd = MyMediaLite.util.Random.GetInstance();
+            var rnd = Util.Random.GetInstance();
             for (int i = 0; i < matrix.dim1; i++)
                 for (int j = 0; j < matrix.dim2; j++)
                     matrix[i, j] = rnd.NextNormal(mean, stdev);

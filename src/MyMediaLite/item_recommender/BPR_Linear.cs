@@ -20,12 +20,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
 	/// Linear model optimized for BPR
@@ -93,7 +93,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			random = util.Random.GetInstance();
+			random = Util.Random.GetInstance();
 
 			// prepare fast sampling, if necessary
 			int support_data_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);

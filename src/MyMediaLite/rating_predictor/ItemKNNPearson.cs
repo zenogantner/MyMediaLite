@@ -16,12 +16,12 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
-using MyMediaLite.correlation;
-using MyMediaLite.taxonomy;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.Taxonomy;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted item-based kNN with pearson correlation</summary>
 	public class ItemKNNPearson : ItemKNN

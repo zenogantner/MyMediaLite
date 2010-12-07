@@ -18,11 +18,11 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.correlation;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Base class for rating predictors that use some kind of kNN</summary>
 	/// <remarks>
@@ -36,7 +36,7 @@ namespace MyMediaLite.rating_predictor
 	///
 	/// This engine does NOT support online updates.
 	///
-	/// <seealso cref="item_recommender.KNN"/>
+	/// <seealso cref="ItemRecommender.KNN"/>
 	/// </remarks>
 	public abstract class KNN : UserItemBaseline
 	{

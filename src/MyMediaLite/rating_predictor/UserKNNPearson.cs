@@ -15,12 +15,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using MyMediaLite.correlation;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
+using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted user-based kNN with Pearson correlation</summary>
 	public class UserKNNPearson : UserKNN

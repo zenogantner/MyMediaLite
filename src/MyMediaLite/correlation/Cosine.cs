@@ -17,11 +17,11 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.data_type;
-using MyMediaLite.util;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.correlation
+namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for storing cosine similarities</summary>
 	public class Cosine : CorrelationMatrix

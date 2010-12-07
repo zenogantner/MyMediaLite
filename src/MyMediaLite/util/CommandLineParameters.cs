@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>Class for command line argument processing</summary>
 	[Serializable]

@@ -20,13 +20,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.eval
+namespace MyMediaLite.Eval
 {
     /// <summary>Class that contains static methods for item prediction</summary>
     public static class ItemPrediction

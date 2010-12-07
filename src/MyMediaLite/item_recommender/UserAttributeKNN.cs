@@ -16,11 +16,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using MyMediaLite.correlation;
-using MyMediaLite.data_type;
+using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
     /// k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes

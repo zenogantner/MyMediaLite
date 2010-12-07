@@ -17,12 +17,12 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.correlation;
-using MyMediaLite.data_type;
-using MyMediaLite.util;
+using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Attribute-aware weighted item-based kNN recommender</summary>
 	/// <remarks>

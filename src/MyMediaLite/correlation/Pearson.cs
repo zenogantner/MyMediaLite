@@ -17,12 +17,12 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 
-namespace MyMediaLite.correlation
+namespace MyMediaLite.Correlation
 {
 	/// <summary>Correlation class for Pearson correlation</summary>
 	public class Pearson : CorrelationMatrix

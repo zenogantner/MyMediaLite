@@ -18,8 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MyMediaLite.rating_predictor;
-using MyMediaLite.util;
+using MyMediaLite.RatingPredictor;
+using MyMediaLite.Util;
 
 
 namespace MyMediaLite.ensemble
@@ -49,8 +49,8 @@ namespace MyMediaLite.ensemble
             {
                 this.max_rating_value = value;
 				foreach (IRecommenderEngine engine in engines)
-					if (engine is RatingPredictor)
-						((RatingPredictor)engine).MaxRating = value;
+					if (engine is IRatingPredictor)
+						((IRatingPredictor)engine).MaxRating = value;
             }
         }
 
@@ -68,8 +68,8 @@ namespace MyMediaLite.ensemble
             {
                 this.min_rating_value = value;
 				foreach (IRecommenderEngine engine in engines)
-					if (engine is RatingPredictor)
-						((RatingPredictor)engine).MinRating = value;
+					if (engine is IRatingPredictor)
+						((IRatingPredictor)engine).MinRating = value;
 
             }
         }		

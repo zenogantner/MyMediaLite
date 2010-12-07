@@ -16,11 +16,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using MyMediaLite;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	/// <summary>Base class for BPR-MF plus attribute-to-factor mapping</summary>
 	public abstract class BPRMF_Mapping : BPRMF

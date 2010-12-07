@@ -21,12 +21,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using MyMediaLite;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
-using MyMediaLite.util;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	public class BPRMF_ItemMapping_Optimal : BPRMF_ItemMapping
 	{

@@ -2,7 +2,7 @@
 // Its content is in the public domain.
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>Generic triple class</summary>
 	public class Triple<T, U, V>

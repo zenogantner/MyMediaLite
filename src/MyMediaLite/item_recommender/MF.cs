@@ -18,12 +18,12 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data_type;
-using MyMediaLite.taxonomy;
-using MyMediaLite.util;
+using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
     /// <summary>Abstract class for matrix factorization based item predictors</summary>
     public abstract class MF : Memory, IIterativeModel, ILatentFactorModel

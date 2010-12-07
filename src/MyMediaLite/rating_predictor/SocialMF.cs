@@ -17,11 +17,11 @@
 
 using System;
 using System.Globalization;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
 
-namespace MyMediaLite.rating_predictor
+namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>

@@ -16,11 +16,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using MyMediaLite;
-using MyMediaLite.data_type;
-using MyMediaLite.rating_predictor;
+using MyMediaLite.DataType;
+using MyMediaLite.RatingPredictor;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	/// <summary>Base class for biased MF plus attribute-to-factor mapping</summary>
 	public abstract class MF_Mapping : BiasedMatrixFactorization

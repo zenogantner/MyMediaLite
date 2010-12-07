@@ -20,12 +20,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
 
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{

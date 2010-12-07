@@ -17,10 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using MyMediaLite.util;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>
     /// Class for storing sparse matrices.

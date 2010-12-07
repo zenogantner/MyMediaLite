@@ -18,7 +18,7 @@
 using System;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>Weighted items class</summary>
     public class WeightedItem : IComparable

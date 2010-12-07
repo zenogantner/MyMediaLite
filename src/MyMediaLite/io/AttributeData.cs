@@ -18,12 +18,12 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.io
+namespace MyMediaLite.IO
 {
 	/// <summary>
 	/// Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects.

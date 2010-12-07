@@ -18,8 +18,8 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.rating_predictor;
+using MyMediaLite.Data;
+using MyMediaLite.RatingPredictor;
 
 
 namespace MyMediaLite.eval
@@ -34,7 +34,7 @@ namespace MyMediaLite.eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
         /// <param name="writer">the TextWriter to write the predictions to</param>
         public static void WritePredictions(
-			RatingPredictor engine,
+			IRatingPredictor engine,
 		    RatingData ratings,
 		    EntityMapping user_mapping, EntityMapping item_mapping,		                                    
 		    TextWriter writer)
@@ -56,7 +56,7 @@ namespace MyMediaLite.eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
         /// <param name="filename">the name of the file to write the predictions to</param>
         public static void WritePredictions(
-			RatingPredictor engine,
+			IRatingPredictor engine,
 		    RatingData ratings,
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 		    string filename)

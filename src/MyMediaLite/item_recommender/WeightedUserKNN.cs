@@ -18,7 +18,7 @@
 using System;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
     /// <summary>Weighted k-nearest neighbor user-based collaborative filtering using cosine-similarity</summary>
     /// <remarks>

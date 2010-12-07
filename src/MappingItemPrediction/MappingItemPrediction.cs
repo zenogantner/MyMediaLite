@@ -21,12 +21,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.eval;
-using MyMediaLite.experimental.attr_to_factor;
-using MyMediaLite.io;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Eval;
+using MyMediaLite.Experimental.AttrToFactor;
+using MyMediaLite.IO;
+using MyMediaLite.Util;
 
 
 namespace MyMediaLite
@@ -120,7 +120,7 @@ namespace MyMediaLite
 			bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
 
 			if (random_seed != -1)
-				MyMediaLite.util.Random.InitInstance(random_seed);
+				Util.Random.InitInstance(random_seed);
 
 			// main data files and method
 			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);

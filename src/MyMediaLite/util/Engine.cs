@@ -21,7 +21,7 @@ using System.Globalization;
 using System.IO;
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>Helper class with utility methods for recommender engines</summary>
 	/// <remarks>

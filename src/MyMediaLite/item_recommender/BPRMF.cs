@@ -19,11 +19,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MyMediaLite.data_type;
-using MyMediaLite.eval;
+using MyMediaLite.DataType;
+using MyMediaLite.Eval;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
 	/// Matrix factorization model for item prediction optimized using BPR-Opt;
@@ -91,7 +91,7 @@ namespace MyMediaLite.item_recommender
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			random = util.Random.GetInstance();
+			random = Util.Random.GetInstance();
 			CheckSampling();
 
 			base.Train();
@@ -456,7 +456,7 @@ namespace MyMediaLite.item_recommender
 		public override void LoadModel(string filePath)
 		{
 			base.LoadModel(filePath);
-			random = util.Random.GetInstance();
+			random = Util.Random.GetInstance();
 		}
 
 		/// <inheritdoc/>

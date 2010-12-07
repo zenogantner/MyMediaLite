@@ -21,7 +21,7 @@ using System.Globalization;
 using System.IO;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
 	/// <summary>Tools for vector-like data</summary>
 	public class VectorUtils
@@ -85,7 +85,7 @@ namespace MyMediaLite.data_type
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
         static public void InitNormal(IList<double> vector, double mean, double stdev)
         {
-            var rnd = MyMediaLite.util.Random.GetInstance();
+            var rnd = MyMediaLite.Util.Random.GetInstance();
             for (int i = 0; i < vector.Count; i++)
             	vector[i] = rnd.NextNormal(mean, stdev);
         }

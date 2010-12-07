@@ -20,14 +20,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.item_recommender;
-using MyMediaLite.rating_predictor;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommender;
+using MyMediaLite.RatingPredictor;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.eval
+namespace MyMediaLite.Eval
 {
     /// <summary>Evaluation class</summary>
     public static class ItemPredictionEval

@@ -18,12 +18,12 @@
 using System;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
-using MyMediaLite.util;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.io
+namespace MyMediaLite.IO
 {
 	/// <summary>
 	/// Class that contains static methods for reading in implicit feedback data for ItemRecommender engines

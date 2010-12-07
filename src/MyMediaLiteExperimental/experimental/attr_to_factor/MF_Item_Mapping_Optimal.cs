@@ -16,10 +16,10 @@
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
-namespace MyMediaLite.experimental.attr_to_factor
+namespace MyMediaLite.Experimental.AttrToFactor
 {
 	public class MF_Item_Mapping_Optimal : MF_ItemMapping
 	{

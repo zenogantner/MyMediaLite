@@ -17,7 +17,8 @@
 
 using System;
 
-namespace MyMediaLite.item_recommender
+
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>Random predictions. Engine for use as experimental baseline.</summary>
     public class Random : IItemRecommender
@@ -28,7 +29,7 @@ namespace MyMediaLite.item_recommender
         /// <inheritdoc/>
 		public double Predict(int user_id, int item_id)
 		{
-			return util.Random.GetInstance().NextDouble();
+			return Util.Random.GetInstance().NextDouble();
 		}
 
 		/// <inheritdoc/>

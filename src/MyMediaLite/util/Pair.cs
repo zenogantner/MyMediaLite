@@ -2,7 +2,7 @@
 // Its content is in the public domain.
 
 
-namespace MyMediaLite.util
+namespace MyMediaLite.Util
 {
 	/// <summary>Generic pair class</summary>
 	public class Pair<T, U>

@@ -18,12 +18,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MyMediaLite.data;
-using MyMediaLite.data_type;
+using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using SVM;
 
 
-namespace MyMediaLite.item_recommender
+namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
 	/// Content-based filtering using one support-vector machine per user

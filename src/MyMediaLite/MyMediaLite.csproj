@@ -86,7 +86,6 @@
     <Compile Include="io\AttributeData.cs" />
     <Compile Include="io\RatingPredictionData.cs" />
     <Compile Include="taxonomy\EntityType.cs" />
-    <Compile Include="rating_predictor\RatingPredictor.cs" />
     <Compile Include="util\Triple.cs" />
     <Compile Include="eval\RatingEval.cs" />
     <Compile Include="data\RatingEvent.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="item_recommender\IItemRecommender.cs" />
     <Compile Include="data_type\MatrixUtils.cs" />
     <Compile Include="item_recommender\WeightedItemKNN.cs" />
+    <Compile Include="rating_predictor\IRatingPredictor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,10 +16,10 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using MyMediaLite.util;
+using MyMediaLite.Util;
 
 
-namespace MyMediaLite.data_type
+namespace MyMediaLite.DataType
 {
     /// <summary>Class for storing dense matrices</summary>
     /// <remarks>
@@ -39,7 +39,7 @@ namespace MyMediaLite.data_type
 		// TODO IMatrix interface
 		// TODO properties NumberOfRows NumberOfColumns
 
-		/// <summary>True if the matrix is symmetric, false otherwise</summary>
+		/// <value>True if the matrix is symmetric, false otherwise</value>
 		public virtual bool IsSymmetric
 		{
 			get
@@ -77,7 +77,7 @@ namespace MyMediaLite.data_type
 			matrix.data.CopyTo(this.data, 0);
 		}
 
-        /// <summary>The value at (i,j)</summary>
+        /// <value>The value at (i,j)</value>
         /// <param name="i">the row ID</param>
         /// <param name="j">the column ID</param>
         public virtual T this [int i, int j]

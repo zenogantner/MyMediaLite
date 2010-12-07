@@ -18,7 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using MyMediaLite.data_type;
+using MyMediaLite.DataType;
 using NUnit.Framework;
 
 

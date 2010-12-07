@@ -15,7 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace MyMediaLite.data
+namespace MyMediaLite.Data
 {
 	/// <summary>
 	/// Representation of a rating event, consisting of a user ID, an item ID,
