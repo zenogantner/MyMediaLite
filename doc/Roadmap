@@ -69,8 +69,8 @@ Architecture
  - generic optimization interface and algorithms (like Mallet)
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress 
- - provide bindings for languages like Java, Ruby, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
-   - consider having upper case namespaces so that we can support IronRuby
+ - provide bindings+examples for languages like Java, F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
+   - JavaScrip -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
  - use Parallel.ForEach for item recommender evaluation
    - as soon as Mono 2.8 is more widely available
  - Java port
