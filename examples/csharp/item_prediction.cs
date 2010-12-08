@@ -1,9 +1,9 @@
 using System;
 using MyMediaLite;
-using MyMediaLite.data;
-using MyMediaLite.eval;
-using MyMediaLite.io;
-using MyMediaLite.item_recommender;
+using MyMediaLite.Data;
+using MyMediaLite.Eval;
+using MyMediaLite.IO;
+using MyMediaLite.ItemRecommender;
 
 namespace ItemPrediction
 {
@@ -24,7 +24,7 @@ namespace ItemPrediction
 			recommender.Train();
 
 			// measure the accuracy on the test data set
-			var results = ItemPredictionEval.EvaluateItemRecommender(recommender, test_data.First, training_data.First, relevant_items);
+			var results = ItemPredictionEval.EvaluateItemRecommender(recommender, test_data, training_data, relevant_items);
 			Console.WriteLine("AUC={0}", results["AUC"]);
 
 			// make a prediction for a certain user and item
