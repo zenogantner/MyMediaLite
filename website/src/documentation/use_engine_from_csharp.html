@@ -22,102 +22,29 @@
       <li><a href="http://gitorious.org/mymedialite/mymedialite/blobs/master/RatingPrediction/RatingPrediction.cs">RatingPrediction.cs</a>
     </ul>
   </p>
-  
+
   <h2>Simpler examples</h2>
   <p>
     In the following, we show how to first set up recommender engines in C#, and then use them to make predictions.
   </p>
-  
+
   <p>
+    <!-- TODO also include this automatically -->
     To use the following examples,
     <a href="http://www.grouplens.org/node/73">download the MovieLens 100k ratings dataset from the
     GroupLens Research website</a> and unzip it.
     <br/>
     Of course you can also use your own data ;-)
-  </p>  
-  
+  </p>
+
   <h3>Rating Prediction</h3>
   <p>
-  <pre>
-  using System;
-  using MyMediaLite;
-  using MyMediaLite.data;
-  using MyMediaLite.eval;
-  using MyMediaLite.io;
-  using MyMediaLite.rating_predictor;
-
-  namespace RatingPrediction
-  {
-    public class RatingPrediction
-    {
-      public static void Main(string[] args)
-      {
-        double min_rating = 1;
-        double max_rating = 5;
-                          
-        // load the data
-        var user_mapping = new EntityMapping();
-        var item_mapping = new EntityMapping();
-        var training_data = RatingPredictionData.Read(args[0], min_rating, max_rating, user_mapping, item_mapping);
-        var test_data = RatingPredictionData.Read(args[1], min_rating, max_rating, user_mapping, item_mapping);
-
-        // set up the recommender
-        var recommender = new UserItemBaseline();
-        recommender.MinRating = min_rating;
-        recommender.MaxRating = max_rating;
-        recommender.Ratings = training_data;
-        recommender.Train();
-
-        // measure the accuracy on the test data set
-        var results = RatingEval.EvaluateRated(recommender, test_data);
-        Console.WriteLine("RMSE={0} MAE={1}", results["RMSE"], results["MAE"]);
-
-        // make a prediction for a certain user and item
-        Console.WriteLine(recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1)));
-      }
-    }
-  }
-  </pre>
+  <pre>[% INSERT 'rating_prediction.cs' %]</pre>
   </p>
 
   <h3>Item Prediction from Implicit Feedback</h3>
   <p>
-  <pre>
-  using System;
-  using MyMediaLite;
-  using MyMediaLite.data;
-  using MyMediaLite.eval;
-  using MyMediaLite.io;
-  using MyMediaLite.item_recommender;
-
-  namespace ItemPrediction
-  {
-    public class ItemPrediction
-    {
-      public static void Main(string[] args)
-      {
-        // load the data
-        var user_mapping = new EntityMapping();
-        var item_mapping = new EntityMapping();
-        var training_data = ItemRecommenderData.Read("u1.base", user_mapping, item_mapping);
-        var relevant_items = item_mapping.InternalIDs;
-        var test_data = ItemRecommenderData.Read("u1.test", user_mapping, item_mapping);
-
-        // set up the recommender
-        var recommender = new MostPopular();
-        recommender.SetCollaborativeData(training_data);
-        recommender.Train();
-
-        // measure the accuracy on the test data set
-        var results = ItemPredictionEval.EvaluateItemRecommender(recommender, test_data, training_data, relevant_items);
-        Console.WriteLine("AUC={0}", results["AUC"]);
-
-        // make a prediction for a certain user and item
-        Console.WriteLine(recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1)));
-      }
-    }
-  }  
-  </pre>
+  <pre>[% INSERT 'item_prediction.cs' %]</pre>
   </p>
 </div>
 

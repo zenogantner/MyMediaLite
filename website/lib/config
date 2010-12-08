@@ -1,1 +1,2 @@
 copy = \.(gif|png|jpg|pdf)$ 
+relative

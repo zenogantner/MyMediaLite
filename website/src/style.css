@@ -51,8 +51,9 @@ a:active {
 }
 
 ul#navigation {
-    font-size: 1em; /* 0.83em; */
-    float: left; width: 10em; /* 18em; */
+    font-size: 1em;
+    float: left;
+    width: 9em;
     margin: 0 0 1.2em; padding: 0;
     border: 1px dashed silver;
 }
@@ -66,17 +67,17 @@ ul#navigation a {
     font-weight: bold;
 }
 ul#navigation a:link {
-    color: #2072ba; /* background-color: #eee */;
+    color: #2072ba;
 }
 ul#navigation a:visited {
-    color: #2072ba; /* background-color: #eee */;
+    color: #2072ba;
 }
 ul#navigation a:hover {
     color: #08d374;
     background-color: white;
 }
 ul#navigation a:active {
-    color: white; /* background-color: gray */;
+    color: white;
 }
 ul#navigation li ul {
     margin: 0 0 0 0.5em; padding: 0;
@@ -85,7 +86,7 @@ ul#navigation li ul li {
     margin: 0.1em 0;
     font-size: 0.83em;
 }
-* html ul#navigation li ul li {  /* Korrektur für IE 5.x */
+* html ul#navigation li ul li {  /* for IE 5.x */
     margin-left: 1em;
     ma\rgin-left: 0;
 }
@@ -94,7 +95,6 @@ div#infobox {
     font-size: 0.9em;
     float: right; width: 12em;
     margin: 0 0 1.1em; padding: 0;
-    /* background-color: #eee; */
     border: 1px dashed silver;
 }
 
@@ -132,12 +132,12 @@ div#rightcolumn div {
 }
 
 div#content {
-    margin: 0 12em 1em 11em;
+    margin: 0 11.5em 1em 10em;
     padding: 0 1em;
     border: 1px dashed silver;
 }
 * html div#content {
-    height: 1em;  /* Workaround gegen den 3-Pixel-Bug des Internet Explorer bis Version 6 */
+    height: 1em;  /* workaround for the 3 pixel bug of Internet Explorer until version 6 */
 }
 div#content h2 {
     font-size: 1.2em;
@@ -174,4 +174,8 @@ p#bottom {
     margin: 0; padding: 0.1em;
     text-align: center;
     background-color: white; border: none;
+}
+
+div#content pre {
+    overflow: auto;
 }

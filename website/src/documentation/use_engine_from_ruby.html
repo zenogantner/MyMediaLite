@@ -1,6 +1,7 @@
 [%
-  title='MyMediaLite: How to use a recommender engine in Python'
+  title='MyMediaLite: How to use a recommender engine in Ruby'
   prefix='../'
+  RELATIVE=1
 %]
 
 [% INCLUDE header %]
@@ -13,7 +14,7 @@
 
 <div id="content">
   <p>
-     On this page, we show how to first set up recommender engines in Python,
+     On this page, we show how to first set up recommender engines in Ruby,
      and then use them to make predictions.
   </p>
   
@@ -25,31 +26,31 @@
     Of course you can also use your own data ;-)
   </p>  
   
-  <h2>IronPython</h2>
+  <h2>IronRuby</h2>
   
   <p>
-  [% INCLUDE link link='ironpython' %] lets you run Python programs on the .NET platform.
+  [% INCLUDE link link='ironruby' %] lets you run Ruby programs on the .NET platform.
   It also lets you use .NET libraries (<tt>.dll</tt>s) like MyMediaLite.
   </p>
   
   <p>
-    To run a program with IronPython, type <tt>ipy program.py</tt> in the command line,
-    where <tt>program.py</tt> is your program.
+    To run a program with IronRuby, type <tt>ir program.rb</tt> in the command line,
+    where <tt>program.rb</tt> is your program.
   </p>
   
   <p>
-    You may also enter just <tt>ipy</tt>, so that you can use IronPython's REPL interactively.
+    You may also enter just <tt>ir</tt>, so that you can use IronRuby's REPL interactively.
   </p>
   
   <h2>Rating Prediction</h2>
   <p>
   <!-- TODO syntax highlighting -->
-  <pre>[% INSERT 'rating_prediction.py' %]</pre>
+  <pre>[% INSERT 'rating_prediction.rb' %]</pre>
   </p>
 
   <h2>Item Prediction from Implicit Feedback</h2>
   <p>
-  <pre>[% INSERT 'item_prediction.py' %]</pre>
+  <pre>[% INSERT 'item_prediction.rb' %]</pre>
   </p>
 </div>
 
