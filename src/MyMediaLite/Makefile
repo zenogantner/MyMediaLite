@@ -63,14 +63,11 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 
-FILES = \
-	IItemAttributeAwareRecommender.cs \
-	IUserAttributeAwareRecommender.cs \
-	IRecommenderEngine.cs \
-	IIterativeModel.cs \
-	IUserRelationAwareRecommender.cs \
-	IItemRelationAwareRecommender.cs \
+FILES =  \
 	AssemblyInfo.cs \
+	Correlation/CorrelationMatrix.cs \
+	Correlation/Cosine.cs \
+	Correlation/Pearson.cs \
 	Data/EntityMapping.cs \
 	Data/RatingData.cs \
 	Data/RatingEvent.cs \
@@ -88,10 +85,14 @@ FILES = \
 	Eval/ItemPredictionEval.cs \
 	Eval/RatingEval.cs \
 	Eval/RatingPrediction.cs \
+	IItemAttributeAwareRecommender.cs \
+	IItemRelationAwareRecommender.cs \
+	IIterativeModel.cs \
 	IO/AttributeData.cs \
 	IO/ItemRecommenderData.cs \
 	IO/RatingPredictionData.cs \
 	IO/RelationData.cs \
+	IRecommenderEngine.cs \
 	ItemRecommender/BPR_Linear.cs \
 	ItemRecommender/BPRMF.cs \
 	ItemRecommender/IItemRecommender.cs \
@@ -108,6 +109,8 @@ FILES = \
 	ItemRecommender/WeightedItemKNN.cs \
 	ItemRecommender/WeightedUserKNN.cs \
 	ItemRecommender/WRMF.cs \
+	IUserAttributeAwareRecommender.cs \
+	IUserRelationAwareRecommender.cs \
 	RatingPredictor/BiasedMatrixFactorization.cs \
 	RatingPredictor/IRatingPredictor.cs \
 	RatingPredictor/ItemAttributeKNN.cs \
@@ -131,10 +134,7 @@ FILES = \
 	Util/Pair.cs \
 	Util/Random.cs \
 	Util/Triple.cs \
-	Util/Utils.cs \
-	Correlation/CorrelationMatrix.cs \
-	Correlation/Cosine.cs \
-	Correlation/Pearson.cs 
+	Util/Utils.cs 
 
 DATA_FILES = 
 
@@ -154,10 +154,12 @@ EXTRAS = \
 	mymedialite.pc.in 
 
 REFERENCES =  \
+	../../lib/MathNet/MathNet.Iridium.dll \
+	../SVM/bin/Debug/SVM.dll \
 	System \
 	System.Core \
-	System.Data.DataSetExtensions \
-	System.Data
+	System.Data \
+	System.Data.DataSetExtensions
 
 DLL_REFERENCES =  \
 	../../lib/MathNet/MathNet.Iridium.dll

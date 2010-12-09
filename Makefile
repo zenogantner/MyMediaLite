@@ -22,15 +22,13 @@ clean:
 	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
 	rm -rf doc/monodoc/*
-	rm -rf doc/immdoc/*
 	rm -rf doc/doxygen/*
-	rm -rf website/public_html/*
-	rm -f src/*/bin/Debug/*
-	rm -f src/*/bin/Release/*
-	rm -rf MyMediaLite-*
+	rm -rf MyMediaLite-*/
 
 veryclean: clean
 	rm -f *.tar.gz
+	rm -rf doc/immdoc/*
+	rm -rf website/public_html/*
 
 install:
 	cd ${SRC_DIR} && make install
@@ -43,7 +41,7 @@ binary-package: all
 	mkdir MyMediaLite-${VERSION}/doc
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
 	mkdir MyMediaLite-${VERSION}/doc/api
-	cp -r doc/immdoc MyMediaLite-${VERSION}/doc/api
+	cp -r doc/immdoc/* MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
@@ -59,7 +57,7 @@ source-package: clean
 	mkdir MyMediaLite-${VERSION}.src/doc
 	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
 	mkdir MyMediaLite-${VERSION}.src/doc/api
-	cp -r doc/immdoc MyMediaLite-${VERSION}/doc/api
+	cp -r doc/immdoc/* MyMediaLite-${VERSION}.src/doc/api
 	cp -r src examples scripts tests MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data
