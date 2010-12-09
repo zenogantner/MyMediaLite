@@ -21,6 +21,8 @@ configure:
 clean:
 	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
+	rm -rf ${SRC_DIR}/*/bin/Debug/*
+	rm -rf ${SRC_DIR}/*/bin/Release/*	
 	rm -rf doc/monodoc/*
 	rm -rf doc/doxygen/*
 	rm -rf MyMediaLite-*/
