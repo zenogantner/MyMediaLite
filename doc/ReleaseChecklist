@@ -9,8 +9,9 @@ release checklist:
 5. Run 'make release'
 6. Check the contents of the source code package
 7. Check the contents of the binary package
-8. Create the release announcement
-9. Add the new version to the website
-10. Commit the website changes
-11. Create a git tag
-12. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
+8. Re-create the API documentation
+9. Create the release announcement
+10. Add the new version to the website
+11. Commit the website changes
+12. Create a git tag
+13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'

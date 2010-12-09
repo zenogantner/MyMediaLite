@@ -5,7 +5,7 @@
 	- the number of factors (per entity) for matrix factorization models is
           now consistently called num_factors, both in the code as well as in
           the documentation (thank you Artus for pointing this out)
-        - simplify io.RelationData and io.ItemRecommenderData
+        - simplify IO.RelationData and IO.ItemRecommenderData
 	- rename namespace 'attr_to_feature' to 'AttrToFactor'
 	- LoadModel() of MF methods: assign correct number of factors
 	- move experimental code into its own project
