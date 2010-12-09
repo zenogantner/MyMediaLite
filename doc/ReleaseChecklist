@@ -1,10 +1,11 @@
 release checklist:
 1. Check the output of the test suite
 2. Check the output of the example programs
-3. Check the output of 'git status' - is everything in the repository?
-4. Version numbers
-4a. Have you set the VERSION string in the Makefile to the new version?
-4b. Check above if the version number and date are set correctly in the Changes file
+3. Version numbers
+3a. Have you set the VERSION string in the Makefile to the new version?
+3b. Check if the version number and date are set correctly in the Changes file
+3c. Check if the version number is correctly set in the MonoDevelop project
+4. Check the output of 'git status' - is everything in the repository?
 5. Run 'make release'
 6. Check the contents of the source code package
 7. Check the contents of the binary package
