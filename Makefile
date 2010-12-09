@@ -11,7 +11,7 @@ IMMDOC=mono --debug ${HOME}/src/immdoc/Src/ImmDocNet/ImmDocNet/bin/Debug/ImmDocN
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc htmldoc view-htmldoc flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html imdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -22,6 +22,8 @@ clean:
 	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
 	rm -rf doc/monodoc/*
+	rm -rf doc/immdoc/*
+	rm -rf doc/doxygen/*
 	rm -rf website/public_html/*
 	rm -f src/*/bin/Debug/*
 	rm -f src/*/bin/Release/*
@@ -120,6 +122,7 @@ view-mdoc:
 
 doxygen:
 	cd doc/ && doxygen
+	mkdir -p ${HTML_DOXYGEN_DIR}
 	cp -r doc/doxygen/html/* ${HTML_DOXYGEN_DIR}
 
 view-doxygen:
@@ -127,6 +130,7 @@ view-doxygen:
 
 immdoc:
 	${IMMDOC} -vl:3 -ForceDelete -pn:MyMediaLite -od:doc/immdoc ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	mkdir -p ${HTML_IMMDOC_DIR}
 	cp -r doc/immdoc/* ${HTML_IMMDOC_DIR}
 
 view-immdoc:
