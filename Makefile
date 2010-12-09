@@ -41,7 +41,8 @@ uninstall:
 binary-package: all
 	mkdir MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/doc
-	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/Roadmap MyMediaLite-${VERSION}/doc
+	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
+	cp -r doc/immdoc MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
@@ -55,8 +56,8 @@ binary-package: all
 source-package: clean
 	mkdir MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/doc
-	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/Roadmap MyMediaLite-${VERSION}.src/doc
-	rm -rf MyMediaLite-${VERSION}.src/flyer MyMediaLite-${VERSION}.src/manual
+	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
+	cp -r doc/immdoc MyMediaLite-${VERSION}/doc/api
 	cp -r src examples scripts tests MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data

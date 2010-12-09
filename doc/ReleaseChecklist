@@ -6,10 +6,10 @@ release checklist:
 3b. Check if the version number and date are set correctly in the Changes file
 3c. Check if the version number is correctly set in the MonoDevelop project
 4. Check the output of 'git status' - is everything in the repository?
-5. Run 'make release'
-6. Check the contents of the source code package
-7. Check the contents of the binary package
-8. Re-create the API documentation
+5. Re-create the API documentation
+6. Run 'make release'
+7. Check the contents of the source code package
+8. Check the contents of the binary package
 9. Create the release announcement
 10. Add the new version to the website
 11. Commit the website changes
