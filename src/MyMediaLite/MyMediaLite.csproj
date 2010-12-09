@@ -56,70 +56,70 @@
     <Compile Include="IItemRelationAwareRecommender.cs" />
     <Compile Include="ILatentFactorModel.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Correlation\Pearson.cs" />
-    <Compile Include="Correlation\CorrelationMatrix.cs" />
-    <Compile Include="Correlation\Cosine.cs" />
+    <Compile Include="Data\EntityMapping.cs" />
+    <Compile Include="Data\RatingData.cs" />
+    <Compile Include="Data\RatingEvent.cs" />
+    <Compile Include="Data\Ratings.cs" />
     <Compile Include="DataType\Matrix.cs" />
+    <Compile Include="DataType\MatrixUtils.cs" />
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
+    <Compile Include="DataType\SparseMatrix.cs" />
+    <Compile Include="DataType\SparseVector.cs" />
     <Compile Include="DataType\VectorUtils.cs" />
     <Compile Include="DataType\WeightedItem.cs" />
+    <Compile Include="Ensemble\Ensemble.cs" />
+    <Compile Include="Ensemble\WeightedEnsemble.cs" />
+    <Compile Include="Eval\ItemPrediction.cs" />
+    <Compile Include="Eval\ItemPredictionEval.cs" />
+    <Compile Include="Eval\RatingEval.cs" />
+    <Compile Include="Eval\RatingPrediction.cs" />
+    <Compile Include="IO\AttributeData.cs" />
+    <Compile Include="IO\ItemRecommenderData.cs" />
+    <Compile Include="IO\RatingPredictionData.cs" />
+    <Compile Include="IO\RelationData.cs" />
     <Compile Include="ItemRecommender\BPR_Linear.cs" />
-    <Compile Include="RatingPredictor\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommender\BPRMF.cs" />
-    <Compile Include="ItemRecommender\Random.cs" />
+    <Compile Include="ItemRecommender\IItemRecommender.cs" />
     <Compile Include="ItemRecommender\ItemAttributeKNN.cs" />
+    <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommender\ItemKNN.cs" />
     <Compile Include="ItemRecommender\KNN.cs" />
     <Compile Include="ItemRecommender\Memory.cs" />
     <Compile Include="ItemRecommender\MF.cs" />
     <Compile Include="ItemRecommender\MostPopular.cs" />
+    <Compile Include="ItemRecommender\Random.cs" />
+    <Compile Include="ItemRecommender\UserAttributeKNN.cs" />
     <Compile Include="ItemRecommender\UserKNN.cs" />
+    <Compile Include="ItemRecommender\WeightedItemKNN.cs" />
+    <Compile Include="ItemRecommender\WeightedUserKNN.cs" />
     <Compile Include="ItemRecommender\WRMF.cs" />
-    <Compile Include="RatingPredictor\MatrixFactorization.cs" />
+    <Compile Include="RatingPredictor\BiasedMatrixFactorization.cs" />
+    <Compile Include="RatingPredictor\IRatingPredictor.cs" />
+    <Compile Include="RatingPredictor\ItemAttributeKNN.cs" />
     <Compile Include="RatingPredictor\ItemKNN.cs" />
+    <Compile Include="RatingPredictor\ItemKNNCosine.cs" />
+    <Compile Include="RatingPredictor\ItemKNNPearson.cs" />
     <Compile Include="RatingPredictor\KNN.cs" />
     <Compile Include="RatingPredictor\Linear.cs" />
+    <Compile Include="RatingPredictor\MatrixFactorization.cs" />
     <Compile Include="RatingPredictor\Memory.cs" />
+    <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="RatingPredictor\UserAttributeKNN.cs" />
     <Compile Include="RatingPredictor\UserItemBaseline.cs" />
     <Compile Include="RatingPredictor\UserKNN.cs" />
-    <Compile Include="Util\Random.cs" />
-    <Compile Include="ItemRecommender\UserAttributeKNN.cs" />
-    <Compile Include="Util\CommandLineParameters.cs" />
-    <Compile Include="Util\Handlers.cs" />
-    <Compile Include="Util\Utils.cs" />
-    <Compile Include="IO\ItemRecommenderData.cs" />
-    <Compile Include="Util\Pair.cs" />
-    <Compile Include="Data\RatingData.cs" />
-    <Compile Include="IO\AttributeData.cs" />
-    <Compile Include="IO\RatingPredictionData.cs" />
-    <Compile Include="Taxonomy\EntityType.cs" />
-    <Compile Include="Util\Triple.cs" />
-    <Compile Include="Eval\RatingEval.cs" />
-    <Compile Include="Data\RatingEvent.cs" />
-    <Compile Include="Data\Ratings.cs" />
-    <Compile Include="RatingPredictor\BiasedMatrixFactorization.cs" />
-    <Compile Include="Data\EntityMapping.cs" />
-    <Compile Include="Eval\ItemPrediction.cs" />
-    <Compile Include="Eval\RatingPrediction.cs" />
-    <Compile Include="RatingPredictor\ItemKNNCosine.cs" />
-    <Compile Include="RatingPredictor\ItemKNNPearson.cs" />
-    <Compile Include="RatingPredictor\UserKNNPearson.cs" />
     <Compile Include="RatingPredictor\UserKNNCosine.cs" />
-    <Compile Include="ItemRecommender\WeightedUserKNN.cs" />
-    <Compile Include="Eval\ItemPredictionEval.cs" />
-    <Compile Include="Ensemble\Ensemble.cs" />
-    <Compile Include="Ensemble\WeightedEnsemble.cs" />
-    <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
-    <Compile Include="DataType\SparseMatrix.cs" />
-    <Compile Include="DataType\SparseVector.cs" />
-    <Compile Include="RatingPredictor\SocialMF.cs" />
-    <Compile Include="IO\RelationData.cs" />
+    <Compile Include="RatingPredictor\UserKNNPearson.cs" />
+    <Compile Include="Taxonomy\EntityType.cs" />
+    <Compile Include="Util\CommandLineParameters.cs" />
     <Compile Include="Util\Engine.cs" />
-    <Compile Include="ItemRecommender\IItemRecommender.cs" />
-    <Compile Include="DataType\MatrixUtils.cs" />
-    <Compile Include="ItemRecommender\WeightedItemKNN.cs" />
-    <Compile Include="RatingPredictor\IRatingPredictor.cs" />
+    <Compile Include="Util\Handlers.cs" />
+    <Compile Include="Util\Pair.cs" />
+    <Compile Include="Util\Random.cs" />
+    <Compile Include="Util\Triple.cs" />
+    <Compile Include="Util\Utils.cs" />
+    <Compile Include="Correlation\CorrelationMatrix.cs" />
+    <Compile Include="Correlation\Cosine.cs" />
+    <Compile Include="Correlation\Pearson.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -130,6 +130,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Folder Include="Correlation\" />
     <Folder Include="ItemRecommender\" />
     <Folder Include="RatingPredictor\" />
     <Folder Include="Eval\" />
@@ -152,7 +153,7 @@
         <Policies>
           <StandardHeader Text="Copyright (C) 2010 Zeno Gantner&#xA;&#xA;This file is part of MyMediaLite.&#xA;&#xA;MyMediaLite is free software: you can redistribute it and/or modify&#xA;it under the terms of the GNU General Public License as published by&#xA;the Free Software Foundation, either version 3 of the License, or&#xA;(at your option) any later version.&#xA;&#xA;MyMediaLite is distributed in the hope that it will be useful,&#xA;but WITHOUT ANY WARRANTY; without even the implied warranty of&#xA;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xA;GNU General Public License for more details.&#xA;&#xA;You should have received a copy of the GNU General Public License&#xA;along with MyMediaLite.  If not, see &lt;http://www.gnu.org/licenses/&gt;." inheritsSet="Apache2License" />
         </Policies>
-        <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile" SyncReferences="true">
+        <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="true" RelativeMakefileName="Makefile" SyncReferences="true">
           <BuildFilesVar Sync="true" Name="FILES" />
           <DeployFilesVar />
           <ResourcesVar Sync="true" Name="RESOURCES" />

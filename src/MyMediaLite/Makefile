@@ -65,106 +65,92 @@ MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 
 FILES =  \
 	AssemblyInfo.cs \
-	correlation/CorrelationMatrix.cs \
-	correlation/Cosine.cs \
-	correlation/Pearson.cs \
-	data/EntityMapping.cs \
-	data/RatingData.cs \
-	data/RatingEvent.cs \
-	data/Ratings.cs \
-	data_type/Matrix.cs \
-	data_type/MatrixUtils.cs \
-	data_type/SparseBooleanMatrix.cs \
-	data_type/SparseMatrix.cs \
-	data_type/SparseVector.cs \
-	data_type/VectorUtils.cs \
-	data_type/WeightedItem.cs \
-	ensemble/Ensemble.cs \
-	ensemble/WeightedEnsemble.cs \
-	eval/ItemPrediction.cs \
-	eval/ItemPredictionEval.cs \
-	eval/RatingEval.cs \
-	eval/RatingPrediction.cs \
-	experimental/attr_to_factor/BPRMF_ItemMapping.cs \
-	experimental/attr_to_factor/BPRMF_ItemMapping_Complex.cs \
-	experimental/attr_to_factor/BPRMF_ItemMapping_kNN.cs \
-	experimental/attr_to_factor/BPRMF_ItemMapping_Optimal.cs \
-	experimental/attr_to_factor/BPRMF_ItemMapping_SVR.cs \
-	experimental/attr_to_factor/BPRMF_Mapping.cs \
-	experimental/attr_to_factor/BPRMF_UserMapping.cs \
-	experimental/attr_to_factor/BPRMF_UserMapping_Optimal.cs \
-	experimental/attr_to_factor/MF_Item_Mapping_Optimal.cs \
-	experimental/attr_to_factor/MF_ItemMapping.cs \
-	experimental/attr_to_factor/MF_Mapping.cs \
+	Correlation/CorrelationMatrix.cs \
+	Correlation/Cosine.cs \
+	Correlation/Pearson.cs \
+	Data/EntityMapping.cs \
+	Data/RatingData.cs \
+	Data/RatingEvent.cs \
+	Data/Ratings.cs \
+	DataType/Matrix.cs \
+	DataType/MatrixUtils.cs \
+	DataType/SparseBooleanMatrix.cs \
+	DataType/SparseMatrix.cs \
+	DataType/SparseVector.cs \
+	DataType/VectorUtils.cs \
+	DataType/WeightedItem.cs \
+	Ensemble/Ensemble.cs \
+	Ensemble/WeightedEnsemble.cs \
+	Eval/ItemPrediction.cs \
+	Eval/ItemPredictionEval.cs \
+	Eval/RatingEval.cs \
+	Eval/RatingPrediction.cs \
 	IItemAttributeAwareRecommender.cs \
 	IItemRelationAwareRecommender.cs \
 	IIterativeModel.cs \
 	ILatentFactorModel.cs \
-	io/AttributeData.cs \
-	io/ItemRecommenderData.cs \
-	io/RatingPredictionData.cs \
-	io/RelationData.cs \
+	IO/AttributeData.cs \
+	IO/ItemRecommenderData.cs \
+	IO/RatingPredictionData.cs \
+	IO/RelationData.cs \
 	IRecommenderEngine.cs \
-	item_recommender/BPR_Linear.cs \
-	item_recommender/BPRMF.cs \
-	item_recommender/IItemRecommender.cs \
-	item_recommender/ItemAttributeKNN.cs \
-	item_recommender/ItemAttributeSVM.cs \
-	item_recommender/ItemKNN.cs \
-	item_recommender/KNN.cs \
-	item_recommender/Memory.cs \
-	item_recommender/MF.cs \
-	item_recommender/MostPopular.cs \
-	item_recommender/Random.cs \
-	item_recommender/UserAttributeKNN.cs \
-	item_recommender/UserKNN.cs \
-	item_recommender/WeightedItemKNN.cs \
-	item_recommender/WeightedUserKNN.cs \
-	item_recommender/WRMF.cs \
+	ItemRecommender/BPR_Linear.cs \
+	ItemRecommender/BPRMF.cs \
+	ItemRecommender/IItemRecommender.cs \
+	ItemRecommender/ItemAttributeKNN.cs \
+	ItemRecommender/ItemAttributeSVM.cs \
+	ItemRecommender/ItemKNN.cs \
+	ItemRecommender/KNN.cs \
+	ItemRecommender/Memory.cs \
+	ItemRecommender/MF.cs \
+	ItemRecommender/MostPopular.cs \
+	ItemRecommender/Random.cs \
+	ItemRecommender/UserAttributeKNN.cs \
+	ItemRecommender/UserKNN.cs \
+	ItemRecommender/WeightedItemKNN.cs \
+	ItemRecommender/WeightedUserKNN.cs \
+	ItemRecommender/WRMF.cs \
 	IUserAttributeAwareRecommender.cs \
 	IUserRelationAwareRecommender.cs \
-	rating_predictor/BiasedMatrixFactorization.cs \
-	rating_predictor/ItemAttributeKNN.cs \
-	rating_predictor/ItemKNN.cs \
-	rating_predictor/ItemKNNCosine.cs \
-	rating_predictor/ItemKNNPearson.cs \
-	rating_predictor/KNN.cs \
-	rating_predictor/Linear.cs \
-	rating_predictor/MatrixFactorization.cs \
-	rating_predictor/Memory.cs \
-	rating_predictor/RatingPredictor.cs \
-	rating_predictor/SocialMF.cs \
-	rating_predictor/UserAttributeKNN.cs \
-	rating_predictor/UserItemBaseline.cs \
-	rating_predictor/UserKNN.cs \
-	rating_predictor/UserKNNCosine.cs \
-	rating_predictor/UserKNNPearson.cs \
-	taxonomy/EntityType.cs \
-	util/CommandLineParameters.cs \
-	util/Engine.cs \
-	util/Handlers.cs \
-	util/Pair.cs \
-	util/Random.cs \
-	util/Triple.cs \
-	util/Utils.cs 
+	RatingPredictor/BiasedMatrixFactorization.cs \
+	RatingPredictor/IRatingPredictor.cs \
+	RatingPredictor/ItemAttributeKNN.cs \
+	RatingPredictor/ItemKNN.cs \
+	RatingPredictor/ItemKNNCosine.cs \
+	RatingPredictor/ItemKNNPearson.cs \
+	RatingPredictor/KNN.cs \
+	RatingPredictor/Linear.cs \
+	RatingPredictor/MatrixFactorization.cs \
+	RatingPredictor/Memory.cs \
+	RatingPredictor/SocialMF.cs \
+	RatingPredictor/UserAttributeKNN.cs \
+	RatingPredictor/UserItemBaseline.cs \
+	RatingPredictor/UserKNN.cs \
+	RatingPredictor/UserKNNCosine.cs \
+	RatingPredictor/UserKNNPearson.cs \
+	Taxonomy/EntityType.cs \
+	Util/CommandLineParameters.cs \
+	Util/Engine.cs \
+	Util/Handlers.cs \
+	Util/Pair.cs \
+	Util/Random.cs \
+	Util/Triple.cs \
+	Util/Utils.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	item_recommender \
-	rating_predictor \
-	eval \
-	data_type \
-	util \
-	io \
-	data \
-	taxonomy \
-	experimental \
-	ensemble \
-	experimental/item_prediction \
-	experimental/attr_to_factor \
+	ItemRecommender \
+	RatingPredictor \
+	Eval \
+	DataType \
+	Util \
+	IO \
+	Data \
+	Taxonomy \
+	Ensemble \
 	mymedialite.pc.in 
 
 REFERENCES =  \

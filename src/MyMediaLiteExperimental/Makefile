@@ -11,47 +11,41 @@ include $(top_srcdir)/config.make
 ifeq ($(CONFIG),DEBUG_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
-ASSEMBLY = bin/Debug/MappingRatingPrediction.exe
+ASSEMBLY = bin/Debug/MyMediaLiteExperimental.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
-COMPILE_TARGET = exe
+COMPILE_TARGET = library
 PROJECT_REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
+	../SVM/bin/Debug/SVM.dll
 BUILD_DIR = bin/Debug
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
-SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
-MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
-MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
-MAPPINGRATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/MappingRatingPrediction.exe.mdb
-MAPPINGRATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/MappingRatingPrediction.exe.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=bin/Debug/MyMediaLiteExperimental.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 
 endif
 
 ifeq ($(CONFIG),RELEASE_X86)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
-ASSEMBLY = bin/Release/MappingRatingPrediction.exe
+ASSEMBLY = bin/Release/MyMediaLiteExperimental.dll
 ASSEMBLY_MDB = 
-COMPILE_TARGET = exe
+COMPILE_TARGET = library
 PROJECT_REFERENCES =  \
 	../MyMediaLite/bin/Release/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
+	../SVM/bin/Release/SVM.dll
 BUILD_DIR = bin/Release
 
-MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
+MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
-SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
-SVM_DLL_MDB=
-MYMEDIALITE_DLL_MDB=
-MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
-MAPPINGRATINGPREDICTION_EXE_MDB=
+SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
+SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
+MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=
 
 endif
 
@@ -64,12 +58,10 @@ PROGRAMFILES = \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
 	$(MYMEDIALITE_DLL_MDB) \
-	$(MYMEDIALITEEXPERIMENTAL_DLL) \
-	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB) \
-	$(MAPPINGRATINGPREDICTION_EXE_MDB)  
+	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB)  
 
-BINARIES = \
-	$(MAPPING_RATING_PREDICTION)  
+LINUX_PKGCONFIG = \
+	$(MYMEDIALITEEXPERIMENTAL_PC)  
 
 
 RESGEN=resgen2
@@ -77,31 +69,42 @@ RESGEN=resgen2
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB = $(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
-MAPPING_RATING_PREDICTION = $(BUILD_DIR)/mapping_rating_prediction
+SVM_DLL_MDB = $(BUILD_DIR)/SVM.dll.mdb
+MYMEDIALITE_DLL_MDB = $(BUILD_DIR)/MyMediaLite.dll.mdb
+MYMEDIALITEEXPERIMENTAL_PC = $(BUILD_DIR)/mymedialiteexperimental.pc
 
 FILES = \
-	AssemblyInfo.cs \
-	MappingRatingPrediction.cs 
+	Experimental/AttrToFactor/BPRMF_Mapping.cs \
+	Experimental/AttrToFactor/BPRMF_ItemMapping.cs \
+	Experimental/AttrToFactor/BPRMF_ItemMapping_Complex.cs \
+	Experimental/AttrToFactor/BPRMF_ItemMapping_kNN.cs \
+	Experimental/AttrToFactor/BPRMF_ItemMapping_Optimal.cs \
+	Experimental/AttrToFactor/BPRMF_ItemMapping_SVR.cs \
+	Experimental/AttrToFactor/BPRMF_UserMapping.cs \
+	Experimental/AttrToFactor/BPRMF_UserMapping_Optimal.cs \
+	Experimental/AttrToFactor/MF_Mapping.cs \
+	Experimental/AttrToFactor/MF_ItemMapping.cs \
+	Experimental/AttrToFactor/MF_Item_Mapping_Optimal.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	mapping_rating_prediction.in 
+	Experimental \
+	Experimental/AttrToFactor \
+	mymedialiteexperimental.pc.in 
 
 REFERENCES =  \
-	System \
-	System.Core
+	System.Core \
+	System
 
 DLL_REFERENCES = 
 
-CLEANFILES = $(PROGRAMFILES) $(BINARIES) 
+CLEANFILES = $(PROGRAMFILES) $(LINUX_PKGCONFIG) 
 
 #Targets
-all: $(ASSEMBLY) $(PROGRAMFILES) $(BINARIES)  $(top_srcdir)/config.make
+all: $(ASSEMBLY) $(PROGRAMFILES) $(LINUX_PKGCONFIG)  $(top_srcdir)/config.make
 
 include $(top_srcdir)/Makefile.include
 #include $(srcdir)/custom-hooks.make
@@ -113,9 +116,7 @@ $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
-$(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL))
-$(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,MAPPING_RATING_PREDICTION,mapping_rating_prediction,x))
+$(eval $(call emit-deploy-wrapper,MYMEDIALITEEXPERIMENTAL_PC,mymedialiteexperimental.pc))
 
 
 $(eval $(call emit_resgen_targets))
@@ -143,11 +144,9 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MAPPINGRATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(MAPPING_RATING_PREDICTION),$(DESTDIR)$(bindir))
+	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
+	$(call cp,$(MYMEDIALITEEXPERIMENTAL_PC),$(DESTDIR)$(libdir)/pkgconfig)
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -160,10 +159,8 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MAPPINGRATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MAPPING_RATING_PREDICTION),$(DESTDIR)$(bindir))
+	$(call rm,$(MYMEDIALITEEXPERIMENTAL_PC),$(DESTDIR)$(libdir)/pkgconfig)
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

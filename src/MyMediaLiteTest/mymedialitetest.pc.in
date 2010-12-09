@@ -1,6 +1,6 @@
 Name: MyMediaLiteTest
 Description: MyMediaLiteTest
-Version: 0.7
+Version: 0.8
 
 Requires: 
 Libs: -r:@expanded_libdir@/@PACKAGE@/MyMediaLiteTest.dll
