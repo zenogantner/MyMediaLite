@@ -88,7 +88,6 @@ FILES =  \
 	IItemAttributeAwareRecommender.cs \
 	IItemRelationAwareRecommender.cs \
 	IIterativeModel.cs \
-	ILatentFactorModel.cs \
 	IO/AttributeData.cs \
 	IO/ItemRecommenderData.cs \
 	IO/RatingPredictionData.cs \

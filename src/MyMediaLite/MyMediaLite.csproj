@@ -54,7 +54,6 @@
     <Compile Include="IIterativeModel.cs" />
     <Compile Include="IUserRelationAwareRecommender.cs" />
     <Compile Include="IItemRelationAwareRecommender.cs" />
-    <Compile Include="ILatentFactorModel.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Data\EntityMapping.cs" />
     <Compile Include="Data\RatingData.cs" />

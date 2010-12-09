@@ -1,4 +1,4 @@
-0.08	2010-12-?
+0.08	2010-12-09
         - add information about ML's non-commercial use license to the download
           script
 	- Makefiles, unit tests, and MonoDevelop finally work together nicely
@@ -14,6 +14,7 @@
         - add IronRuby examples
         - rename namespace from 'my_namespace' to 'MyNamespace' to follow the
           .NET platform habits; it also allows us to support IronRuby
+	- removed the interface ILatentFactorModel
 
 0.07	2010-11-18
 	- Bugfix release. You only need to upgrade if you encounter problems
@@ -42,7 +43,7 @@
             item prediction
           - fix off-by-one error in attribute-aware engines
         - interfaces
-          - new interfaces ILatentFactorModel and IAttributeToFactors
+          - new interfaces ILatentFactorModel
           - new interface IItemRecommender (instead of abstract class)
           - simplify interface of io.AttributeData
           - add property NumberOfColumns to SparseBooleanMatrix

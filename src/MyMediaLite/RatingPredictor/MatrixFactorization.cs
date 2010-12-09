@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPredictor
     /// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
     /// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
     /// </remarks>
-    public class MatrixFactorization : Memory, IIterativeModel, ILatentFactorModel
+    public class MatrixFactorization : Memory, IIterativeModel
     {
 		/// <summary>Matrix containing the latent user factors</summary>
         protected Matrix<double> user_factors;
