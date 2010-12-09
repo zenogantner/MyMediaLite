@@ -1,8 +1,8 @@
 <div id="infobox">
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
-  Version 0.07 is out:
-  <a href="[% prefix %]news/index.html#0.07">announcement</a>,
+  Version 0.08 is out:
+  <a href="[% prefix %]news/index.html#0.08">announcement</a>,
   <a href="[% prefix %]download/index.html">download</a>.
 </p>
 </div>

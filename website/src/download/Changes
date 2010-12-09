@@ -1,3 +1,21 @@
+0.08	2010-12-09
+        - add information about ML's non-commercial use license to the download
+          script
+	- Makefiles, unit tests, and MonoDevelop finally work together nicely
+	- the number of factors (per entity) for matrix factorization models is
+          now consistently called num_factors, both in the code as well as in
+          the documentation (thank you Artus for pointing this out)
+        - simplify IO.RelationData and IO.ItemRecommenderData
+	- rename namespace 'attr_to_feature' to 'AttrToFactor'
+	- LoadModel() of MF methods: assign correct number of factors
+	- move experimental code into its own project
+	- add three different kinds of API documentation generators for HTML:
+	  mdoc (included with Mono), Doxygen, and ImmDoc.NET
+        - add IronRuby examples
+        - rename namespace from 'my_namespace' to 'MyNamespace' to follow the
+          .NET platform habits; it also allows us to support IronRuby
+	- removed the interface ILatentFactorModel
+
 0.07	2010-11-18
 	- Bugfix release. You only need to upgrade if you encounter problems
           with the issues mentioned below.
@@ -25,7 +43,7 @@
             item prediction
           - fix off-by-one error in attribute-aware engines
         - interfaces
-          - new interfaces ILatentFactorModel and IAttributeToFactors
+          - new interfaces ILatentFactorModel
           - new interface IItemRecommender (instead of abstract class)
           - simplify interface of io.AttributeData
           - add property NumberOfColumns to SparseBooleanMatrix
