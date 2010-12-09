@@ -1,13 +1,15 @@
 release checklist:
 1. Check the output of the test suite
-2. Check the output of 'git status' above - is everything in the repository?
-3. Version numbers
-3a. Have you set the VERSION string in the Makefile to the new version?
-3b. Check above if the version number and date are set correctly in the Changes file
-4. Check the contents of the source code package
-5. Check the contents of the binary package
-6. Create the release announcement
-7. Add the new version to the website
-8. Commit the website changes
-9. Create a git tag
-10. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
+2. Check the output of the example programs
+3. Check the output of 'git status' - is everything in the repository?
+4. Version numbers
+4a. Have you set the VERSION string in the Makefile to the new version?
+4b. Check above if the version number and date are set correctly in the Changes file
+5. Run 'make release'
+6. Check the contents of the source code package
+7. Check the contents of the binary package
+8. Create the release announcement
+9. Add the new version to the website
+10. Commit the website changes
+11. Create a git tag
+12. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'

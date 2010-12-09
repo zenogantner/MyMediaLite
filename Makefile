@@ -66,11 +66,15 @@ test: all
 	time tests/test_item_prediction.sh
 	time tests/test_load_save.sh
 
-release: test binary-package source-package
+release: binary-package source-package
 	head doc/Changes
 	git status
 	cp doc/Changes website/src/download
 	cat doc/ReleaseChecklist
+
+example-csharp:
+	cd examples/csharp && make
+	cd examples/csharp && make run
 
 example-python:
 	cd data/ml100k && ipy ../../examples/python/rating_prediction.py
