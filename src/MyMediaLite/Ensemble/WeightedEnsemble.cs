@@ -53,17 +53,17 @@ namespace MyMediaLite.ensemble
         public override double Predict(int user_id, int item_id)
         {
 			double result = 0;
-			{
-            	for (int i = 0; i < engines.Count; i++)
-                	result += weights[i] * engines[i].Predict(user_id, item_id);
-			}
+
+			for (int i = 0; i < engines.Count; i++)
+               	result += weights[i] * engines[i].Predict(user_id, item_id);
+
             return (double) result / weight_sum;
         }
 
 		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
@@ -80,7 +80,7 @@ namespace MyMediaLite.ensemble
 		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )

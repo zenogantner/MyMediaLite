@@ -266,7 +266,7 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
@@ -280,7 +280,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
         {
-            NumberFormatInfo ni = new NumberFormatInfo();
+            var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
             using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
@@ -324,7 +324,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,

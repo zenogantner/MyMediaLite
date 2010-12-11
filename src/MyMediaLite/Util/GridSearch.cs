@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace MyMediaLite.Util
 	{
 		// TODO implement first for rating prediction, then for item prediction
 		//      generalize also to FindMaximum
+		
+		// TODO use delegates or boolean flag to be able to use fit on the test data as a criterion
 		
 		public static double FindMinimum(string evaluation_measure,		                                 
 		                                 string hyperparameter_name,
@@ -46,6 +49,19 @@ namespace MyMediaLite.Util
 			}
 						
 			return eval_results.Min();
+		}
+		
+		public static double FindMinimumExponential(string evaluation_measure,		                                 
+		                                 		    string hyperparameter_name,
+		                                 		    double[] hyperparameter_values,
+		                                            double basis,
+		                                 		    RatingPredictor.Memory engine,
+		                                 		    ISplit<RatingData> split)
+		{
+			for (int i = 0; i < hyperparameter_values.Length; i++)
+				hyperparameter_values[i] = Math.Pow(basis, hyperparameter_values[i]);
+
+			return FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, engine, split);
 		}
 		
 		public static double FindMinimum(string evaluation_measure,

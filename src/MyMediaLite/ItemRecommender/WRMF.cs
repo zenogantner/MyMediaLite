@@ -77,11 +77,11 @@ namespace MyMediaLite.ItemRecommender
         /// <param name="H">The H.</param>
         protected void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
         {
-            Matrix<double> HH   = new Matrix<double>(num_factors, num_factors);
-            Matrix<double> HCIH = new Matrix<double>(num_factors, num_factors);
-            double[] HCp = new double[num_factors];
+            var HH   = new Matrix<double>(num_factors, num_factors);
+            var HCIH = new Matrix<double>(num_factors, num_factors);
+            var HCp = new double[num_factors];
 
-            MathNet.Numerics.LinearAlgebra.Matrix m = new MathNet.Numerics.LinearAlgebra.Matrix(num_factors, num_factors);
+            var m = new MathNet.Numerics.LinearAlgebra.Matrix(num_factors, num_factors);
             MathNet.Numerics.LinearAlgebra.Matrix m_inv;
 
             // (1) create HH in O(f^2|I|)
@@ -142,13 +142,13 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override double ComputeFit()
 		{
-			return -1; // TODO implement
+			return -1; // TODO get rid of this method
 		}
-
+		
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni, "WR-MF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",

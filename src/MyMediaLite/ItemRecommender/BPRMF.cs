@@ -44,12 +44,12 @@ namespace MyMediaLite.ItemRecommender
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
-		
-		/// <summary>Fast sampling memory limit, in MiB</summary>		
+
+		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
-		
+
 		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
 		public bool ItemBias { get { return item_bias; } set { item_bias = value; }	}
 		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
@@ -60,7 +60,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
 
-		/// <summary>Learning rate alpha</summary>		
+		/// <summary>Learning rate alpha</summary>
 		public double LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
 		/// <summary>Learning rate alpha</summary>
 		protected double learn_rate = 0.05;
@@ -70,7 +70,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <summary>Regularization parameter for positive item factors</summary>
 		protected double reg_i = 0.0025;
 
-		/// <summary>Regularization parameter for negative item factors</summary>		
+		/// <summary>Regularization parameter for negative item factors</summary>
 		public double RegJ { get { return reg_j; } set { reg_j = value; } }
 		/// <summary>Regularization parameter for negative item factors</summary>
 		protected double reg_j = 0.00025;
@@ -79,7 +79,7 @@ namespace MyMediaLite.ItemRecommender
 		public double RegU { get { return reg_u; } set { reg_u = value; } }
 		/// <summary>Regularization parameter for user factors</summary>
 		protected double reg_u = 0.0025;
-		
+
 		/// <summary>support data structure for fast sampling</summary>
 		protected List<int[]> user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
@@ -462,9 +462,9 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni, "BPR-MF num_factors={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
 			                     num_factors, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
 		}

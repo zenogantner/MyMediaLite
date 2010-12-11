@@ -65,7 +65,7 @@ namespace MyMediaLite.ItemRecommender
 			int num_users = data_user.NumberOfRows;
 			int num_items = data_item.NumberOfRows;
 
-			List<Node[]> svm_features = new List<Node[]>();
+			var svm_features = new List<Node[]>();
 
 			Node[][] svm_features_array = svm_features.ToArray();
 			Parameter svm_parameters = new Parameter();
@@ -122,7 +122,7 @@ namespace MyMediaLite.ItemRecommender
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", c, gamma);

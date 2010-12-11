@@ -104,7 +104,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override void SaveModel(string fileName)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			using ( StreamWriter writer = Engine.GetWriter(fileName, GetType()) )

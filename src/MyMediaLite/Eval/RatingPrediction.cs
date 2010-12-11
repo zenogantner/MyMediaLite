@@ -39,7 +39,7 @@ namespace MyMediaLite.eval
 		    EntityMapping user_mapping, EntityMapping item_mapping,		                                    
 		    TextWriter writer)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			foreach (RatingEvent r in ratings)

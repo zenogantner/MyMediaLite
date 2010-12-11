@@ -140,7 +140,7 @@ namespace MyMediaLite.Util
 		/// <returns>the values of the parameter if it exists, the default otherwise</returns>
 		public IList<int> GetRemoveInt32List(string key, char sep)
 		{
-			List<int> result_list = new List<int>();
+			var result_list = new List<int>();
 			if (this.ContainsKey(key))
 			{
 				string[] numbers = this[key].Split(sep);

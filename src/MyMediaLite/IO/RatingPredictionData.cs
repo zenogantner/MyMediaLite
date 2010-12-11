@@ -64,7 +64,7 @@ namespace MyMediaLite.IO
 		    RatingData ratings = new RatingData();
 
 			bool out_of_range_warning_issued = false;
-			NumberFormatInfo ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
+			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 

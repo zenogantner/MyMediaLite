@@ -182,7 +182,7 @@ namespace MyMediaLite.Experimental.AttrToFactor
 			
 			double rmse    = 0;
 			double penalty = 0;
-			double[] rmse_and_penalty_per_factor = new double[num_factors + 1];
+			var rmse_and_penalty_per_factor = new double[num_factors + 1];
 
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
@@ -267,7 +267,7 @@ namespace MyMediaLite.Experimental.AttrToFactor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(

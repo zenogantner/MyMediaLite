@@ -72,11 +72,11 @@ namespace MyMediaLite.Experimental.AttrToFactor
 			attribute_to_factor = new Matrix<double>(NumUserAttributes + 1, num_factors);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 			// store the results of the different runs in the following array
-			Matrix<double>[] old_attribute_to_factor = new Matrix<double>[num_init_mapping];
+			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxUserID);
 
-			double[][] old_rmse_per_factor = new double[num_init_mapping][];
+			var old_rmse_per_factor = new double[num_init_mapping][];
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
@@ -225,7 +225,7 @@ namespace MyMediaLite.Experimental.AttrToFactor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(

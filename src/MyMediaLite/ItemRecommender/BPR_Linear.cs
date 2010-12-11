@@ -209,9 +209,9 @@ namespace MyMediaLite.ItemRecommender
 			HashSet<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
-			HashSet<int> attr_i_over_j = new HashSet<int>(attr_i);
+			var attr_i_over_j = new HashSet<int>(attr_i);
 			attr_i_over_j.ExceptWith(attr_j);
-			HashSet<int> attr_j_over_i = new HashSet<int>(attr_j);
+			var attr_j_over_i = new HashSet<int>(attr_j);
 			attr_j_over_i.ExceptWith(attr_i);
 
 			foreach (int a in attr_i_over_j)
@@ -252,7 +252,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
@@ -267,7 +267,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override void LoadModel(string filePath)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
             using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
@@ -308,7 +308,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",

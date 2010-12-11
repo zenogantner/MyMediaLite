@@ -105,7 +105,7 @@ namespace MyMediaLite.Eval
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
-			List<int> relevant_users = new List<int>(user_mapping.InternalIDs);
+			var relevant_users = new List<int>(user_mapping.InternalIDs);
 			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
@@ -154,10 +154,10 @@ namespace MyMediaLite.Eval
 		    EntityMapping user_mapping, EntityMapping item_mapping,
 		    TextWriter writer)
 		{
-			NumberFormatInfo ni = new NumberFormatInfo();
+			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            List<WeightedItem> score_list = new List<WeightedItem>();
+            var score_list = new List<WeightedItem>();
             foreach (int item_id in relevant_items)
                 score_list.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
 
@@ -185,23 +185,21 @@ namespace MyMediaLite.Eval
 			writer.WriteLine("]");
 		}
 
-		/// <summary>
-		/// predict items for a specific users
-		/// </summary>
+		/// <summary>predict items for a specific users</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> object to use for the predictions</param>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="max_item_id">the maximum item ID</param>
 		/// <returns>a list sorted list of item IDs</returns>
 		static public int[] PredictItems(IRecommenderEngine engine, int user_id, int max_item_id)
 		{
-            List<WeightedItem> result = new List<WeightedItem>();
+            var result = new List<WeightedItem>();
             for (int item_id = 0; item_id < max_item_id + 1; item_id++)
                 result.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
 
 			result.Sort();
 			result.Reverse();
 
-            int[] return_array = new int[max_item_id + 1];
+            var return_array = new int[max_item_id + 1];
             for (int i = 0; i < return_array.Length; i++)
             	return_array[i] = result[i].item_id;
 
@@ -217,7 +215,7 @@ namespace MyMediaLite.Eval
 		/// <returns>an ordered list of items, the most likely item first</returns>
 		static public int[] PredictItems(IRecommenderEngine engine, int user_id, ICollection<int> relevant_items)
 		{
-            List<WeightedItem> result = new List<WeightedItem>();
+            var result = new List<WeightedItem>();
 
             foreach (int item_id in relevant_items)
                 result.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
@@ -225,7 +223,7 @@ namespace MyMediaLite.Eval
 			result.Sort();
 			result.Reverse();
 
-            int[] return_array = new int[result.Count];
+            var return_array = new int[result.Count];
             for (int i = 0; i < return_array.Length; i++)
             	return_array[i] = result[i].item_id;
             return return_array;

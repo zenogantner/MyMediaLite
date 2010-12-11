@@ -40,12 +40,10 @@ namespace MyMediaLite.Eval
 		}
 
 
-        /// <summary>
-        /// Evaluates a rating predictor for RMSE and MAE.
-        /// </summary>
-        // <remarks>
-        // Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.
-        // </remarks>
+        /// <summary>Evaluates a rating predictor for RMSE and MAE</summary>
+        /// <remarks>
+        /// Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.
+        /// </remarks>
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
         /// <returns>a Dictionary containing the evaluation results</returns>
