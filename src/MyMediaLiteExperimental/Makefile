@@ -74,25 +74,24 @@ MYMEDIALITE_DLL_MDB = $(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_PC = $(BUILD_DIR)/mymedialiteexperimental.pc
 
 FILES = \
-	Experimental/AttrToFactor/BPRMF_Mapping.cs \
-	Experimental/AttrToFactor/BPRMF_ItemMapping.cs \
-	Experimental/AttrToFactor/BPRMF_ItemMapping_Complex.cs \
-	Experimental/AttrToFactor/BPRMF_ItemMapping_kNN.cs \
-	Experimental/AttrToFactor/BPRMF_ItemMapping_Optimal.cs \
-	Experimental/AttrToFactor/BPRMF_ItemMapping_SVR.cs \
-	Experimental/AttrToFactor/BPRMF_UserMapping.cs \
-	Experimental/AttrToFactor/BPRMF_UserMapping_Optimal.cs \
-	Experimental/AttrToFactor/MF_Mapping.cs \
-	Experimental/AttrToFactor/MF_ItemMapping.cs \
-	Experimental/AttrToFactor/MF_Item_Mapping_Optimal.cs 
+	AttrToFactor/BPRMF_Mapping.cs \
+	AttrToFactor/BPRMF_ItemMapping.cs \
+	AttrToFactor/BPRMF_ItemMapping_Complex.cs \
+	AttrToFactor/BPRMF_ItemMapping_kNN.cs \
+	AttrToFactor/BPRMF_ItemMapping_Optimal.cs \
+	AttrToFactor/BPRMF_ItemMapping_SVR.cs \
+	AttrToFactor/BPRMF_UserMapping.cs \
+	AttrToFactor/BPRMF_UserMapping_Optimal.cs \
+	AttrToFactor/MF_Mapping.cs \
+	AttrToFactor/MF_ItemMapping.cs \
+	AttrToFactor/MF_Item_Mapping_Optimal.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	Experimental \
-	Experimental/AttrToFactor \
+	AttrToFactor \
 	mymedialiteexperimental.pc.in 
 
 REFERENCES =  \

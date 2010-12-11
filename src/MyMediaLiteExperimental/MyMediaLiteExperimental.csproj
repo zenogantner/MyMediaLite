@@ -33,21 +33,21 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Experimental\AttrToFactor\BPRMF_Mapping.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_ItemMapping.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_ItemMapping_kNN.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_ItemMapping_SVR.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_UserMapping.cs" />
-    <Compile Include="Experimental\AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
-    <Compile Include="Experimental\AttrToFactor\MF_Mapping.cs" />
-    <Compile Include="Experimental\AttrToFactor\MF_ItemMapping.cs" />
-    <Compile Include="Experimental\AttrToFactor\MF_Item_Mapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_kNN.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_SVR.cs" />
+    <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\MF_Mapping.cs" />
+    <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
+    <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Experimental\" />
-    <Folder Include="Experimental\AttrToFactor\" />
+    <Folder Include="AttrToFactor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

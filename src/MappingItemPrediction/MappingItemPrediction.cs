@@ -24,7 +24,7 @@ using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
-using MyMediaLite.Experimental.AttrToFactor;
+using MyMediaLite.AttrToFactor;
 using MyMediaLite.IO;
 using MyMediaLite.Util;
 

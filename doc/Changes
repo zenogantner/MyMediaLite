@@ -1,4 +1,7 @@
 0.09	2010-12-??
+        - get rid of 'Experimental' namespace
+        - add initial support for dataset splits, cross-validation, and
+          hyperparameter search
 
 0.08	2010-12-09
         - add information about ML's non-commercial use license to the download

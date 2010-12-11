@@ -71,10 +71,10 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
-FILES =  \
-	CorrelationTest.cs \
+FILES = \
+	DataTypeTest.cs \
 	DataTest.cs \
-	DataTypeTest.cs 
+	CorrelationTest.cs 
 
 DATA_FILES = 
 
@@ -84,7 +84,6 @@ EXTRAS = \
 	mymedialitetest.pc.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:mono-nunit \
 	System.Core
 
