@@ -317,6 +317,7 @@ MyMediaLite rating prediction; usage:
 						var split = new RatingCrossValidationSplit(training_data, cross_validation);
 						RatingEval.EvaluateOnSplit(recommender, split);
 						no_eval = true;
+						recommender.Ratings = training_data;
 					}
 					else
 					{
