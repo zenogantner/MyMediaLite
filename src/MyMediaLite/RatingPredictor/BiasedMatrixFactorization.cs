@@ -135,20 +135,6 @@ namespace MyMediaLite.RatingPredictor
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
         }
-
-		/// <inheritdoc/>
-		public override double[] GetEntityBiases(EntityType entity_type)
-		{
-			switch (entity_type)
-			{
-				case EntityType.USER:
-					return user_bias;
-				case EntityType.ITEM:
-					return item_bias;
-				default:
-					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
-			}
-		}		
 		
         /// <inheritdoc/>
 		public override void SaveModel(string filePath)

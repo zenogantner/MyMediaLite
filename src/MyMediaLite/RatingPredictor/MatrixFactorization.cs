@@ -263,60 +263,6 @@ namespace MyMediaLite.RatingPredictor
             item_factors.SetRowToOneValue(item_id, 0);
         }
 
-		/// <inheritdoc/>
-		public double[] GetLatentFactors(EntityType entity_type, int id)
-		{
-			switch (entity_type)
-			{
-				case EntityType.USER:
-					if (id < user_factors.dim1)
-						return user_factors.GetRow(id);
-					else
-						throw new ArgumentException("Unknown user: " + id);
-				case EntityType.ITEM:
-					if (id < item_factors.dim1)
-						return item_factors.GetRow(id);
-					else
-						throw new ArgumentException("Unknown item: " + id);
-				default:
-					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
-			}
-		}
-
-		/// <inheritdoc/>
-		public Matrix<double> GetLatentFactors(EntityType entity_type)
-		{
-			switch (entity_type)
-			{
-				case EntityType.USER:
-					return user_factors;
-				case EntityType.ITEM:
-					return item_factors;
-				default:
-					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
-			}
-		}
-
-		/// <inheritdoc/>
-		public virtual double[] GetEntityBiases(EntityType entity_type)
-		{
-			switch (entity_type)
-			{
-				case EntityType.USER:
-					return new double[MaxUserID + 1];
-				case EntityType.ITEM:
-					return new double[MaxItemID + 1];
-				default:
-					throw new ArgumentException("Model does not contain entities of type " + entity_type.ToString());
-			}
-		}
-
-		/// <inheritdoc/>
-		public double GetGlobalBias()
-		{
-			return global_bias;
-		}
-
         /// <inheritdoc/>
 		public override void SaveModel(string filePath)
 		{
