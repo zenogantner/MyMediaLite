@@ -64,7 +64,7 @@ namespace MyMediaLite.DataType
 
             this.dim1 = dim1;
             this.dim2 = dim2;
-            data = new T[dim1 * dim2];
+            this.data = new T[dim1 * dim2];
         }
 
         /// <summary>Copy constructor. Creates a deep copy of the given matrix.</summary>
@@ -73,7 +73,7 @@ namespace MyMediaLite.DataType
         {
         	this.dim1 = matrix.dim1;
         	this.dim2 = matrix.dim2;
-        	data = new T[this.dim1 * this.dim2];
+        	this.data = new T[this.dim1 * this.dim2];
 			matrix.data.CopyTo(this.data, 0);
 		}
 
@@ -168,7 +168,7 @@ namespace MyMediaLite.DataType
             if (num_rows > dim1)
             {
 				// create new data structure
-                T[] data_new = new T[num_rows * dim2];
+                var data_new = new T[num_rows * dim2];
                 data.CopyTo(data_new, 0);
 
 				// replace old data structure
@@ -188,7 +188,7 @@ namespace MyMediaLite.DataType
 			if (num_rows > dim1 || num_cols > dim2)
 			{
 				// create new data structure
-				T[] new_data = new T[num_rows * num_cols];
+				var new_data = new T[num_rows * num_cols];
 				for (int i = 0; i < dim1; i++)
 					for (int j = 0; j < dim2; j++)
 						new_data[i * num_cols + j] = this[i, j];

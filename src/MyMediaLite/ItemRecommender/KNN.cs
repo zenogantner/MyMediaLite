@@ -60,7 +60,7 @@ namespace MyMediaLite.ItemRecommender
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 				int num_users = int.Parse(reader.ReadLine());
-				int[][] nearest_neighbors = new int[num_users][];
+				var nearest_neighbors = new int[num_users][];
 				for (int u = 0; u < nearest_neighbors.Length; u++)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');

@@ -311,7 +311,7 @@ namespace MyMediaLite.Util
 		/// <param name="filename">the name of the text file</param>
 		protected void AddArgumentsFromFile(string filename)
 		{
-            using ( StreamReader reader = new StreamReader(filename) )
+            using ( var reader = new StreamReader(filename) )
 			{
 				while (!reader.EndOfStream)
 				{

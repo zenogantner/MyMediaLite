@@ -105,8 +105,9 @@ todo:
 	ack --type=csharp HACK                    ${SRC_DIR} | wc -l
 	ack --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
+## TODO create regex with less false positives
 check-for-unnecessary-type-declarations:
-	ack "new" src/ | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw
+	ack --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
 
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe

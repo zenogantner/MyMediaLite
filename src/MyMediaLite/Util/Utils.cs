@@ -157,7 +157,7 @@ namespace MyMediaLite.Util
 		/// </returns>
 		public static IList<int> ReadIntegers(string filename)
 		{
-			using ( StreamReader reader = new StreamReader(filename) )
+			using ( var reader = new StreamReader(filename) )
 			{
 				return ReadIntegers(reader);
 			}

@@ -90,7 +90,7 @@ namespace MyMediaLite.ItemRecommender
 		{
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
-				view_count = new Dictionary<int, int>();
+				this.view_count = new Dictionary<int, int>();
 				while (! reader.EndOfStream)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');

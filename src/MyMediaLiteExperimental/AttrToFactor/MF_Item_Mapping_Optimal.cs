@@ -27,7 +27,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
 			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);			
 			
 			for (int i = 0; i < num_iter_mapping; i++)

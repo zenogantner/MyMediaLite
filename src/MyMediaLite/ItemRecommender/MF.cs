@@ -55,8 +55,8 @@ namespace MyMediaLite.ItemRecommender
         /// <inheritdoc/>
         public override void Train()
         {
-			user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
-        	item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
+			this.user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
+        	this.item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
 
             MatrixUtils.InitNormal(user_factors, init_mean, init_stdev);
         	MatrixUtils.InitNormal(item_factors, init_mean, init_stdev);

@@ -54,7 +54,7 @@ namespace MyMediaLite.Eval
 			if (filename.Equals("-"))
 				WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
-				using ( StreamWriter writer = new StreamWriter(filename) )
+				using ( var writer = new StreamWriter(filename) )
 				{
 					WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 				}
@@ -81,7 +81,7 @@ namespace MyMediaLite.Eval
 			if (filename.Equals("-"))
 				WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
-				using ( StreamWriter writer = new StreamWriter(filename) )
+				using ( var writer = new StreamWriter(filename) )
 				{
 					WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 				}

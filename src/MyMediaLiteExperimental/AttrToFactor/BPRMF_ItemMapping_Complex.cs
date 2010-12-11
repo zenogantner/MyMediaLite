@@ -34,8 +34,8 @@ namespace MyMediaLite.AttrToFactor
 
 		public override void LearnAttributeToFactorMapping()
 		{
-			attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors); // TODO change name
-			output_layer        = new Matrix<double>(num_hidden_factors, num_factors);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors); // TODO change name
+			this.output_layer        = new Matrix<double>(num_hidden_factors, num_factors);
 
 			Console.Error.WriteLine("BPR-MULTILAYER-MAP training");
 			Console.Error.WriteLine("num_item_attributes=" + NumItemAttributes);

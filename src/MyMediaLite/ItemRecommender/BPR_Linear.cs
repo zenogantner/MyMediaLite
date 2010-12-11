@@ -102,13 +102,13 @@ namespace MyMediaLite.ItemRecommender
 			{
 				fast_sampling = true;
 
-				user_pos_items = new int[MaxUserID + 1][];
-				user_neg_items = new int[MaxUserID + 1][];
+				this.user_pos_items = new int[MaxUserID + 1][];
+				this.user_neg_items = new int[MaxUserID + 1][];
 				for (int u = 0; u < MaxUserID + 1; u++)
 				{
-					List<int> pos_list = new List<int>(data_user[u]);
+					var pos_list = new List<int>(data_user[u]);
 					user_pos_items[u] = pos_list.ToArray();
-					List<int> neg_list = new List<int>();
+					var neg_list = new List<int>();
 					for (int i = 0; i < MaxItemID; i++)
 						if (!data_user[u].Contains(i) && data_item[i].Count != 0)
 							neg_list.Add(i);
@@ -116,7 +116,7 @@ namespace MyMediaLite.ItemRecommender
 				}
 			}
 
-        	item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
+        	this.item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
         	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
 
 			for (int i = 0; i < NumIter; i++)
@@ -277,7 +277,7 @@ namespace MyMediaLite.ItemRecommender
 				int dim2 = Int32.Parse(numbers[1]);
 
 				MaxUserID = num_users - 1;
-				Matrix<double> matrix = new Matrix<double>(num_users, dim2);
+				var matrix = new Matrix<double>(num_users, dim2);
 				int num_item_attributes = dim2;
 
             	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)

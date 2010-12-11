@@ -34,7 +34,7 @@ namespace MyMediaLite.ItemRecommender
 			correlation = Cosine.Create(data_item);
 
 			int num_items = MaxItemID + 1;
-			nearest_neighbors = new int[num_items][];
+			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
         }
@@ -49,10 +49,9 @@ namespace MyMediaLite.ItemRecommender
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[item_id])
-			{
 				if (data_user[neighbor, user_id])
 					count++;
-			}
+
 			return (double) count / k;
         }
 

@@ -69,7 +69,7 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-factor weight matrix
-			attribute_to_factor = new Matrix<double>(NumUserAttributes + 1, num_factors);
+			this.attribute_to_factor = new Matrix<double>(NumUserAttributes + 1, num_factors);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 			// store the results of the different runs in the following array
 			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
@@ -95,10 +95,10 @@ namespace MyMediaLite.AttrToFactor
 				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 
-			double[] min_rmse_per_factor = new double[num_factors];
+			var min_rmse_per_factor = new double[num_factors];
 			for (int i = 0; i < num_factors; i++)
 				min_rmse_per_factor[i] = System.Double.MaxValue;
-			int[] best_factor_init       = new int[num_factors];
+			var best_factor_init = new int[num_factors];
 
 			// find best factor mappings:
 			for (int i = 0; i < num_init_mapping; i++)
@@ -138,7 +138,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int j = 0; j < num_factors; j++)
 			{
-				// TODO: do we need an absolute term here???
+				// TODO do we need an absolute term here???
 				double diff = est_factors[j] - user_factors[user_id, j];
 				if (diff > 0)
 				{

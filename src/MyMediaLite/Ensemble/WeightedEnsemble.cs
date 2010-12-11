@@ -88,8 +88,8 @@ namespace MyMediaLite.ensemble
 
 				int numberOfComponents = System.Int32.Parse(reader.ReadLine());
 
-				List<double>              weights = new List<double>();
-				List<IRecommenderEngine> engines = new List<IRecommenderEngine>();
+				var weights = new List<double>();
+				var engines = new List<IRecommenderEngine>();
 
 				for (int i = 0; i < numberOfComponents; i++)
 				{

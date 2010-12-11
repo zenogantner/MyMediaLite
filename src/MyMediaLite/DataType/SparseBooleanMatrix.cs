@@ -112,7 +112,7 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
-				HashSet<int> row_ids = new HashSet<int>();
+				var row_ids = new HashSet<int>();
 
 				for (int i = 0; i < rows.Count; i++)
 					if (rows[i].Count > 0)
@@ -128,7 +128,7 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
-				HashSet<int> col_ids = new HashSet<int>();
+				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
 				for (int i = 0; i < rows.Count; i++)

@@ -81,7 +81,7 @@ namespace MyMediaLite.Util
 		/// <returns>a <see cref="StreamReader"/></returns>
 		public static StreamReader GetReader(string filename, System.Type engine_type)
 		{
-            StreamReader reader = new StreamReader(filename);
+            var reader = new StreamReader(filename);
 
 			if (reader.EndOfStream)
 				throw new IOException("Unexpected end of file " + filename);
@@ -98,7 +98,7 @@ namespace MyMediaLite.Util
 		/// <returns>a <see cref="StreamWriter"/></returns>
 		public static StreamWriter GetWriter(string filename, System.Type engine_type)
 		{
-			StreamWriter writer = new StreamWriter(filename);
+			var writer = new StreamWriter(filename);
 			writer.WriteLine(engine_type);
 			return writer;
 		}

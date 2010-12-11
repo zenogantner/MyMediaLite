@@ -63,20 +63,20 @@ namespace MyMediaLite.AttrToFactor
 			random = Util.Random.GetInstance();
 
 			// create helper data structure
-			data_item = new SparseBooleanMatrix();
+			this.data_item = new SparseBooleanMatrix();
 			foreach (RatingEvent r in Ratings.All)
 				data_item[r.item_id, r.user_id] = true;
 
 			// create attribute-to-factor weight matrix
-			attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
 			// account for regression bias term, and the item bias that we want to model
 
 			// store the results of the different runs in the following array
-			Matrix<double>[] old_attribute_to_factor = new Matrix<double>[num_init_mapping];
+			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
 
-			double[][] old_rmse_per_factor = new double[num_init_mapping][];
+			var old_rmse_per_factor = new double[num_init_mapping][];
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
@@ -89,10 +89,10 @@ namespace MyMediaLite.AttrToFactor
 				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 
-			double[] min_rmse_per_factor = new double[num_factors + 1];
+			var min_rmse_per_factor = new double[num_factors + 1];
 			for (int i = 0; i <= num_factors; i++)
 				min_rmse_per_factor[i] = Double.MaxValue;
-			int[] best_factor_init       = new int[num_factors + 1];
+			var best_factor_init       = new int[num_factors + 1];
 
 			// find best factor mappings:
 			for (int i = 0; i < num_init_mapping; i++)
@@ -227,7 +227,7 @@ namespace MyMediaLite.AttrToFactor
 
 		protected virtual double[] MapToLatentFactorSpace(int item_id)
 		{
-			double[] factor_representation = new double[num_factors + 1];
+			var factor_representation = new double[num_factors + 1];
 
 			// regression bias
 			for (int j = 0; j <= num_factors; j++)
@@ -251,7 +251,7 @@ namespace MyMediaLite.AttrToFactor
             }
 
 			double[] est_factors = MapToLatentFactorSpace(item_id);
-			double[] latent_factors = new double[num_factors];
+			var latent_factors = new double[num_factors];
 
 			Array.Copy(est_factors, latent_factors, num_factors);
 

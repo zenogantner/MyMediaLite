@@ -73,7 +73,7 @@ namespace MyMediaLite.Eval
 			if (Double.IsNaN(mae))
 				Console.Error.WriteLine("MAE is NaN!");
 
-			Dictionary<string, double> result = new Dictionary<string, double>();
+			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
 			result.Add("MAE", mae);
 			//result.Add("num_users", users.Count);
@@ -96,7 +96,7 @@ namespace MyMediaLite.Eval
 				Console.Error.WriteLine(results["RMSE"]);
 			}
 			
-			Dictionary<string, double> result = new Dictionary<string, double>();
+			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse_sum / split.NumberOfFolds);
 			result.Add("MAE", mae_sum / split.NumberOfFolds);
 			

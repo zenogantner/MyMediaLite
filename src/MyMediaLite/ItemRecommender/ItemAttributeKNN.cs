@@ -54,7 +54,7 @@ namespace MyMediaLite.ItemRecommender
 			this.correlation = Cosine.Create(ItemAttributes);
 			
 			int num_items = MaxItemID + 1;
-			nearest_neighbors = new int[num_items][];
+			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
         }

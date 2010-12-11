@@ -415,9 +415,9 @@ namespace MyMediaLite.ItemRecommender
 			while (u >= user_neg_items.Count)
 				user_neg_items.Add(null);
 
-			List<int> pos_list = new List<int>(data_user[u]);
+			var pos_list = new List<int>(data_user[u]);
 			user_pos_items[u] = pos_list.ToArray();
-			List<int> neg_list = new List<int>();
+			var neg_list = new List<int>();
 			for (int i = 0; i < MaxItemID; i++)
 				if (! data_user[u, i])
 					neg_list.Add(i);
@@ -438,8 +438,8 @@ namespace MyMediaLite.ItemRecommender
 					{
 						fast_sampling = true;
 
-						user_pos_items = new List<int[]>(MaxUserID + 1);
-						user_neg_items = new List<int[]>(MaxUserID + 1);
+						this.user_pos_items = new List<int[]>(MaxUserID + 1);
+						this.user_neg_items = new List<int[]>(MaxUserID + 1);
 						for (int u = 0; u < MaxUserID + 1; u++)
 							CreateFastSamplingData(u);
 					}

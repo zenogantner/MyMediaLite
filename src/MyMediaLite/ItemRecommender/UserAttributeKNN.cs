@@ -52,7 +52,7 @@ namespace MyMediaLite.ItemRecommender
 			correlation = Cosine.Create(user_attributes);
 
 			int num_users = user_attributes.NumberOfRows;
-			nearest_neighbors = new int[num_users][];
+			this.nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }

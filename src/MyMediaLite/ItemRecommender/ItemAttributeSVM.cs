@@ -68,17 +68,17 @@ namespace MyMediaLite.ItemRecommender
 			var svm_features = new List<Node[]>();
 
 			Node[][] svm_features_array = svm_features.ToArray();
-			Parameter svm_parameters = new Parameter();
+			var svm_parameters = new Parameter();
 			svm_parameters.SvmType = SvmType.EPSILON_SVR;
 			//svm_parameters.SvmType = SvmType.NU_SVR;
 			svm_parameters.C     = this.c;
 			svm_parameters.Gamma = this.gamma;
 
 			// user-wise training
-			models = new Model[num_users];
+			this.models = new Model[num_users];
 			for (int u = 0; u < num_users; u++)
 			{
-				double[] targets = new double[num_items];
+				var targets = new double[num_items];
 				for (int i = 0; i < num_items; i++)
 					targets[i] = data_user[u, i] ? 1 : 0;
 
@@ -92,7 +92,7 @@ namespace MyMediaLite.ItemRecommender
 		{
 			// create attribute representation digestible by LIBSVM
 			HashSet<int> attributes = this.ItemAttributes[item_id];
-			Node[] item_svm_data = new Node[attributes.Count];
+			var item_svm_data = new Node[attributes.Count];
 			int counter = 0;
 			foreach (int attr in attributes)
 				item_svm_data[counter++] = new Node(attr, 1.0);

@@ -55,9 +55,9 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-latent factor weight matrix
-			attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors);
 			// store the results of the different runs in the following array
-			Matrix<double>[] old_attribute_to_factor = new Matrix<double>[num_init_mapping];
+			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
 
@@ -85,7 +85,7 @@ namespace MyMediaLite.AttrToFactor
 					if (old_rmse_per_factor[i][j] < min_rmse_per_factor[j])
 					{
 						min_rmse_per_factor[j] = old_rmse_per_factor[i][j];
-						best_factor_init[j]   = i;
+						best_factor_init[j] = i;
 					}
 
 			// set the best weight combinations for each factor mapping
@@ -159,7 +159,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			double rmse    = 0;
 			double penalty = 0;
-			double[] rmse_and_penalty_per_factor = new double[num_factors];
+			var rmse_and_penalty_per_factor = new double[num_factors];
 
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
@@ -206,7 +206,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			HashSet<int> item_attributes = this.item_attributes[item_id];
 
-			double[] factor_representation = new double[num_factors];
+			var factor_representation = new double[num_factors];
 			for (int j = 0; j < num_factors; j++)
 				// bias
 				factor_representation[j] = attribute_to_factor[NumItemAttributes, j];

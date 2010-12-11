@@ -87,7 +87,7 @@ namespace MyMediaLite.Eval
             {
                 int user_id = user.Key;
                 HashSet<int> test_items = user.Value;
-				HashSet<int> correct_items = new HashSet<int>(test_items.Intersect(relevant_items));
+				var correct_items = new HashSet<int>(test_items.Intersect(relevant_items));
 
 				// the number of items that are really relevant for this user
                 int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
@@ -113,7 +113,7 @@ namespace MyMediaLite.Eval
                     throw new Exception("Not all items have been ranked.");
 			}
 
-			Dictionary<string, double> result = new Dictionary<string, double>();
+			var result = new Dictionary<string, double>();
 			result.Add("AUC",     auc_sum / num_users);
 			result.Add("MAP",     map_sum / num_users);
 			result.Add("NDCG",    ndcg_sum / num_users);
