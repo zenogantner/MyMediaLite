@@ -33,9 +33,7 @@ namespace MyMediaLite.Data
     /// </remarks>
     public class RatingData
     {
-		/// <summary>
-		/// All ratings
-		/// </summary>
+		/// <summary>All ratings</summary>
         public Ratings All { get { return all; } }
         private Ratings all = new Ratings();
 		
@@ -57,9 +55,7 @@ namespace MyMediaLite.Data
 		}
 		private List<Ratings> byUser = null;
 
-		/// <summary>
-		/// Ratings by item
-		/// </summary>
+		/// <summary>Ratings by item</summary>
 		public List<Ratings> ByItem
 		{
 			get
@@ -72,9 +68,7 @@ namespace MyMediaLite.Data
 		}
 		private List<Ratings> byItem = null;
 
-		/// <summary>
-		/// The maximum user ID in the ratings
-		/// </summary>
+		/// <summary>The maximum user ID in the ratings</summary>
 		public int MaxUserID { get { return max_user_id; } }
 		private int max_user_id = 0;
 
@@ -107,9 +101,7 @@ namespace MyMediaLite.Data
             }
 		}
 
-		/// <summary>
-		/// Shuffle the order of the rating events
-		/// </summary>
+		/// <summary>Shuffle the order of the rating events</summary>
 		/// <remarks>
 		/// Fisher-Yates shuffle
 		/// </remarks>
@@ -118,9 +110,7 @@ namespace MyMediaLite.Data
 			all.Shuffle();
 		}
 
-		/// <summary>
-		/// Returns an enumerator for use in foreach loops
-		/// </summary>
+		/// <summary>Returns an enumerator for use in foreach loops</summary>
 		/// <returns>
 		/// A <see cref="IEnumerator"/> containing the elements of this.All
 		/// </returns>
@@ -129,12 +119,8 @@ namespace MyMediaLite.Data
 			return all.GetEnumerator();
 		}
 
-		/// <summary>
-		/// Add a rating event to the collection
-		/// </summary>
-		/// <param name="rating">
-		/// the rating event
-		/// </param>
+		/// <summary>Add a rating event to the collection</summary>
+		/// <param name="rating">the rating event</param>
         public void AddRating(RatingEvent rating)
         {
             if (byUser != null)
@@ -156,12 +142,8 @@ namespace MyMediaLite.Data
 				max_item_id = rating.item_id;
         }
 
-		/// <summary>
-		/// Add a user - reserve resources for a new user
-		/// </summary>
-		/// <param name="user_id">
-		/// the user ID
-		/// </param>
+		/// <summary>Add a user - reserve resources for a new user</summary>
+		/// <param name="user_id">the user ID</param>
         public void AddUser(int user_id)
         {
             if (byUser != null)
@@ -169,9 +151,7 @@ namespace MyMediaLite.Data
                     byUser.Add(new Ratings());
         }
 
-		/// <summary>
-		/// Add an item - reserve resources for a new item
-		/// </summary>
+		/// <summary>Add an item - reserve resources for a new item</summary>
 		/// <param name="item_id">the item ID</param>
         public void AddItem(int item_id)
         {
@@ -180,9 +160,7 @@ namespace MyMediaLite.Data
                     byItem.Add(new Ratings());
         }
 
-		/// <summary>
-		/// Remove a rating from the collection
-		/// </summary>
+		/// <summary>Remove a rating from the collection</summary>
 		/// <param name="rating">
 		/// </param>
         public void RemoveRating(RatingEvent rating)
@@ -195,12 +173,8 @@ namespace MyMediaLite.Data
                 all.RemoveRating(rating);
         }
 
-		/// <summary>
-		/// Remove a user and all their ratings from the collection
-		/// </summary>
-		/// <param name="user_id">
-		/// the numerical ID of the user
-		/// </param>
+		/// <summary>Remove a user and all their ratings from the collection</summary>
+		/// <param name="user_id">the numerical ID of the user</param>
         public void RemoveUser(int user_id)
         {
 			List<RatingEvent> remove_list = new List<RatingEvent>();
@@ -259,15 +233,9 @@ namespace MyMediaLite.Data
 				RemoveRating(r);
         }
 
-		/// <summary>
-		/// Find the rating value for a given user and item
-		/// </summary>
-		/// <param name="user_id">
-		/// the numerical ID of the user
-		/// </param>
-		/// <param name="item_id">
-		/// the numerical ID of the user
-		/// </param>
+		/// <summary>Find the rating value for a given user and item</summary>
+		/// <param name="user_id">the numerical ID of the user</param>
+		/// <param name="item_id">the numerical ID of the user</param>
 		/// <returns>
 		/// the rating event corresponding to the given user and item, null if it is not found
 		/// </returns>

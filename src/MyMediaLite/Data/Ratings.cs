@@ -42,23 +42,13 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <summary>
-		/// Access an event in the collection directly via an index
-		/// </summary>
+		/// <summary>Access an event in the collection directly via an index</summary>
 		/// <param name="index">
 		/// the index
 		/// </param>
-		public RatingEvent this [int index]
-		{
-			get
-			{
-				return rating_list[index];
-			}
-		}
+		public RatingEvent this [int index] { get { return rating_list[index]; } }
 
-		/// <summary>
-		/// Shuffle the order of the rating events
-		/// </summary>
+		/// <summary>Shuffle the order of the rating events</summary>
 		/// <remarks>
 		/// Fisher-Yates shuffle
 		/// </remarks>
@@ -105,12 +95,8 @@ namespace MyMediaLite.Data
             return null;
         }
 
-		/// <summary>
-		/// Get the users in the rating collection
-		/// </summary>
-		/// <returns>
-		/// a collection of numerical user IDs
-		/// </returns>
+		/// <summary>Get the users in the rating collection</summary>
+		/// <returns>a collection of numerical user IDs</returns>
 		public HashSet<int> GetUsers()
 		{
 			HashSet<int> users = new HashSet<int>();
@@ -118,7 +104,7 @@ namespace MyMediaLite.Data
 				users.Add(rating.user_id);
 			return users;
 		}
-		// TODO use ISet as soon as we support Mono 2.8
+		// TODO use ISet when we support Mono 2.8
 
 		/// <summary>
 		/// Get the items in the rating collection
