@@ -244,7 +244,7 @@ namespace MyMediaLite
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
-		    		var result = ItemPredictionEval.EvaluateItemRecommender(
+		    		var result = ItemPredictionEval.Evaluate(
 	                                recommender,
 									test_user_items,
             	                    train_user_items,

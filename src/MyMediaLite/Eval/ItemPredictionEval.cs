@@ -65,7 +65,7 @@ namespace MyMediaLite.Eval
         /// <param name="train">training data</param>
         /// <param name="relevant_items">a collection of integers with all relevant items</param>
         /// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateItemRecommender(
+		static public Dictionary<string, double> Evaluate(
 			IItemRecommender engine,
 			SparseBooleanMatrix test,
 			SparseBooleanMatrix train,

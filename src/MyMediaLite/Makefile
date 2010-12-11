@@ -69,6 +69,8 @@ FILES =  \
 	Correlation/Cosine.cs \
 	Correlation/Pearson.cs \
 	Data/EntityMapping.cs \
+	Data/ISplit.cs \
+	Data/RatingCrossValidationSplit.cs \
 	Data/RatingData.cs \
 	Data/RatingEvent.cs \
 	Data/Ratings.cs \

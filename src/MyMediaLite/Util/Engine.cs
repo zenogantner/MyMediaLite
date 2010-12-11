@@ -113,9 +113,7 @@ namespace MyMediaLite.Util
 		/// <summary>Delegate definition necessary to define ConfigureEngine</summary>
 		public delegate void takes_string(string s);
 
-		/// <summary>
-		/// Configure a recommender engine
-		/// </summary>
+		/// <summary>Configure a recommender engine</summary>
 		/// <param name="engine">the recommender engine to configure</param>
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
@@ -180,5 +178,73 @@ namespace MyMediaLite.Util
 
 			return engine;
 		}
+		
+		/*
+		/// <summary>Configure a recommender engine</summary>
+		/// <param name="engine">the recommender engine to configure</param>
+		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
+		/// <param name="report_error">void function that takes a string for error reporting</param>
+		/// <returns>the configured recommender engine</returns>
+		public static T SetProperty<T>(T engine, Dictionary<string, string> parameters, takes_string report_error)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			Type type = engine.GetType();
+			var property_names = new List<string>();
+			foreach (var p in type.GetProperties())
+				property_names.Add(p.Name);
+			property_names.Sort();
+
+			foreach (var key in new List<string>(parameters.Keys))
+			{
+				string param_name = NormalizeName(key);
+				foreach (string property_name in property_names)
+				{
+					if (NormalizeName(property_name).StartsWith(param_name))
+					{
+						var property = type.GetProperty(property_name);
+
+						if (property.GetSetMethod() == null)
+							goto NEXT_PROPERTY; // poor man's labeled break ...
+
+						switch (property.PropertyType.ToString())
+						{
+							case "System.Double":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(parameters[key], ni) });
+								break;
+							case "System.Float":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
+								break;
+							case "System.Int32":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
+								break;
+							case "System.UInt32":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
+								break;
+							case "System.Boolean":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
+								break;
+							default:
+								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
+								break;
+						}
+						parameters.Remove(key);
+						goto NEXT_KEY; // poor man's labeled break ...
+					}
+
+					NEXT_PROPERTY:
+					Console.Write(""); // the C# compiler wants some statement here
+				}
+
+				report_error(string.Format("Engine {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
+
+				NEXT_KEY:
+				Console.Write(""); // the C# compiler wants some statement here
+			}
+
+			return engine;
+		}
+				 */
 	}
 }

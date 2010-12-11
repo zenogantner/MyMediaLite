@@ -256,7 +256,7 @@ namespace MyMediaLite
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-				var result = ItemPredictionEval.EvaluateItemRecommender(recommender,
+				var result = ItemPredictionEval.Evaluate(recommender,
 				                                 test_data,
 					                             training_data,
 					                             relevant_items);
@@ -283,7 +283,7 @@ namespace MyMediaLite
 						}
 
 						t = Utils.MeasureTime(delegate() {
-							result = ItemPredictionEval.EvaluateItemRecommender(
+							result = ItemPredictionEval.Evaluate(
 								recommender,
 							    test_data,
 								training_data,
@@ -357,7 +357,7 @@ namespace MyMediaLite
 				{
 					time_span = Utils.MeasureTime( delegate()
 				    	{
-					    	var result = ItemPredictionEval.EvaluateItemRecommender(
+					    	var result = ItemPredictionEval.Evaluate(
 						    	recommender,
 								test_data,
 					            training_data,

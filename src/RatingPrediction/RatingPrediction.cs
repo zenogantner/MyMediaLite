@@ -161,6 +161,7 @@ MyMediaLite rating prediction; usage:
 			int random_seed             = parameters.GetRemoveInt32(  "random_seed",  -1);
 			bool no_eval                = parameters.GetRemoveBool(   "no_eval",      false);
 			string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
+			int cross_validation        = parameters.GetRemoveInt32(  "cross_validation", 0);
 
 			if (random_seed != -1)
 				MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -255,7 +256,7 @@ MyMediaLite rating prediction; usage:
 				if (compute_fit)
 					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-				DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
+				DisplayResults(RatingEval.Evaluate(recommender, test_data));
 				Console.WriteLine(" " + iterative_recommender.NumIter);
 
 				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -279,7 +280,7 @@ MyMediaLite rating prediction; usage:
 
 						Dictionary<string, double> results = null;
 						time = Utils.MeasureTime(delegate() {
-							results = RatingEval.EvaluateRated(recommender, test_data);
+							results = RatingEval.Evaluate(recommender, test_data);
 							DisplayResults(results);
 							rmse_eval_stats.Add(results["RMSE"]);
 							Console.WriteLine(" " + i);
@@ -311,10 +312,19 @@ MyMediaLite rating prediction; usage:
 
 				if (load_model_file.Equals(string.Empty))
 				{
-					Console.Write(recommender.ToString() + " ");
-					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
-            		Console.Write("training_time " + seconds + " ");
-					Engine.SaveModel(recommender, save_model_file);
+					if (cross_validation > 0)
+					{
+						var split = new RatingCrossValidationSplit(training_data, cross_validation);
+						RatingEval.EvaluateOnSplit(recommender, split);
+						no_eval = true;
+					}
+					else
+					{
+						Console.Write(recommender.ToString() + " ");
+						seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+            			Console.Write("training_time " + seconds + " ");
+						Engine.SaveModel(recommender, save_model_file);
+					}
 				}
 				else
 				{
@@ -327,7 +337,7 @@ MyMediaLite rating prediction; usage:
 					seconds = Utils.MeasureTime(
 				    	delegate()
 					    {
-							DisplayResults(RatingEval.EvaluateRated(recommender, test_data));
+							DisplayResults(RatingEval.Evaluate(recommender, test_data));
 						}
 					);
 					Console.Write(" testing_time " + seconds);

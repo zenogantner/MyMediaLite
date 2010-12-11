@@ -238,7 +238,7 @@ namespace MyMediaLite
 
 			TimeSpan seconds = Utils.MeasureTime( delegate()
 		    	{
-		    		var result = RatingEval.EvaluateRated(recommender, test_data);
+		    		var result = RatingEval.Evaluate(recommender, test_data);
 					DisplayResults(result);
 		    	} );
 			Console.Write(" testing " + seconds);

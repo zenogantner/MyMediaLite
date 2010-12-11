@@ -49,7 +49,7 @@ namespace MyMediaLite.Eval
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
         /// <returns>a Dictionary containing the evaluation results</returns>
-        static public Dictionary<string, double> EvaluateRated(IRatingPredictor engine, RatingData ratings)
+        static public Dictionary<string, double> Evaluate(IRatingPredictor engine, RatingData ratings)
 		{
             double rmse = 0;
             double mae  = 0;
@@ -82,5 +82,27 @@ namespace MyMediaLite.Eval
 			//result.Add("num_items", items.Count);
 			return result;
         }
+		
+		static public Dictionary<string, double> EvaluateOnSplit(Memory engine, ISplit<RatingData> split)
+		{
+			double rmse_sum = 0;
+			double mae_sum  = 0;
+			
+			for (int i = 0; i < split.NumberOfFolds; i++)
+			{
+				engine.Ratings = split.Train[i];
+				engine.Train();
+				var results = Evaluate(engine, split.Test[i]);
+				rmse_sum += results["RMSE"];
+				mae_sum += results["MAE"];
+				Console.Error.WriteLine(results["RMSE"]);
+			}
+			
+			Dictionary<string, double> result = new Dictionary<string, double>();
+			result.Add("RMSE", rmse_sum / split.NumberOfFolds);
+			result.Add("MAE", mae_sum / split.NumberOfFolds);
+			
+			return result;
+		}
 	}
 }
