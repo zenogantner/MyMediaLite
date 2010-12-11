@@ -11,7 +11,7 @@ IMMDOC=mono --debug ${HOME}/src/immdoc/Src/ImmDocNet/ImmDocNet/bin/Debug/ImmDocN
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html imdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html imdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -104,6 +104,9 @@ todo:
 	ack --type=csharp FIXME                   ${SRC_DIR} | wc -l
 	ack --type=csharp HACK                    ${SRC_DIR} | wc -l
 	ack --type=csharp NotImplementedException ${SRC_DIR} | wc -l
+
+check-for-unnecessary-type-declarations:
+	ack "new" src/ | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw
 
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe
