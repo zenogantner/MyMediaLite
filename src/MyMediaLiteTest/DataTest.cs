@@ -36,9 +36,7 @@ namespace MyMediaLiteTest
 			// TODO
 		}
 
-		/// <summary>
-		/// Unit Test of RatingData.MaxUserID and RatingData.MaxItemID
-		/// </summary>
+		/// <summary>Unit Test of RatingData.MaxUserID and RatingData.MaxItemID</summary>
 		public void RatingDataMaxUserIDIemUserID()
 		{
 			var rating_data = new RatingData();
@@ -117,7 +115,7 @@ namespace MyMediaLiteTest
 			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
 
 			Assert.AreEqual(0.4, testRatingData.All.FindRating(2, 5).rating);
-			testRatingData.RemoveUser (2);
+			testRatingData.RemoveUser(2);
 			Assert.IsNull(testRatingData.All.FindRating(2, 5));
 		}
 
@@ -137,7 +135,7 @@ namespace MyMediaLiteTest
 			testRatingData.AddRating(new RatingEvent(3, 3, 0.3));
 
 			Assert.AreEqual(0.2, testRatingData.All.FindRating(2, 4).rating);
-			testRatingData.RemoveItem (4);
+			testRatingData.RemoveItem(4);
 			Assert.IsNull(testRatingData.All.FindRating(2, 4));
 		}
 
@@ -175,9 +173,9 @@ namespace MyMediaLiteTest
 			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
 			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			test_ratings.Shuffle ();
+			test_ratings.Shuffle();
 			// at least one rating must change his position
-			Assert.IsTrue (test_ratings[0].rating != 0.1 || test_ratings[1].rating != 0.2 || test_ratings[2].rating != 0.3 || test_ratings[3].rating != 0.4 || test_ratings[4].rating != 0.5);
+			Assert.IsTrue(test_ratings[0].rating != 0.1 || test_ratings[1].rating != 0.2 || test_ratings[2].rating != 0.3 || test_ratings[3].rating != 0.4 || test_ratings[4].rating != 0.5);
 
 		}
 
@@ -231,9 +229,7 @@ namespace MyMediaLiteTest
 			Assert.IsNull(test_ratings.FindRating(2, 5));
 		}
 
-		/// <summary>
-		/// Unit Test of Ratings.GetUsers()
-		/// </summary>
+		/// <summary>Unit Test of Ratings.GetUsers()</summary>
 		[Test()]
 		public void RatingsGetUsers()
 		{
@@ -244,13 +240,11 @@ namespace MyMediaLiteTest
 			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
 			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
 
-			HashSet<int> users = test_ratings.GetUsers ();
-			int[] usersTest = new int[5];
-			users.CopyTo (usersTest);
-			Assert.AreEqual(usersTest[0], 1);
-			Assert.AreEqual(usersTest[1], 5);
-			Assert.AreEqual(usersTest[2], 2);
-			Assert.AreEqual(usersTest[3], 4);
+			HashSet<int> users = test_ratings.GetUsers();
+			Assert.Contains(1, users);
+			Assert.Contains(2, users);
+			Assert.Contains(4, users);
+			Assert.Contains(5, users);
 		}
 
 		/// <summary>
@@ -268,7 +262,7 @@ namespace MyMediaLiteTest
 
 			HashSet<int> items = test_ratings.GetItems();
 			int[] itemsTest = new int[5];
-			items.CopyTo (itemsTest);
+			items.CopyTo(itemsTest);
 			Assert.AreEqual(itemsTest[0], 4);
 			Assert.AreEqual(itemsTest[1], 8);
 			Assert.AreEqual(itemsTest[2], 2);
