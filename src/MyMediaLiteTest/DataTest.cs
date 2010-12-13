@@ -261,12 +261,10 @@ namespace MyMediaLiteTest
 			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
 			HashSet<int> items = test_ratings.GetItems();
-			int[] itemsTest = new int[5];
-			items.CopyTo(itemsTest);
-			Assert.AreEqual(itemsTest[0], 4);
-			Assert.AreEqual(itemsTest[1], 8);
-			Assert.AreEqual(itemsTest[2], 2);
-			Assert.AreEqual(itemsTest[3], 5);
+			Assert.Contains(2, items);
+			Assert.Contains(4, items);
+			Assert.Contains(5, items);
+			Assert.Contains(8, items);
 		}
 	}
 }
