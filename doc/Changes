@@ -1,4 +1,4 @@
-0.09	2010-12-??
+0.09	2011-01-??
         - get rid of 'Experimental' namespace
         - add initial support for dataset splits, cross-validation, and
           hyperparameter search

@@ -72,4 +72,9 @@
       <Name>MyMediaLite</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataType\" />
+    <Folder Include="Data\" />
+    <Folder Include="Correlation\" />
+  </ItemGroup>
 </Project>

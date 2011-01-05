@@ -18,6 +18,7 @@
    ]
    ml100k = [
      { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2', rmse => '0.9558', mae => '0.7564' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=30', rmse => '0.9394', mae => '0.7401' }
    ]
    camra_mp_xmas_data = [
      { engine => 'biased-matrix-factorization', hp => 'num_factors=30 regularization=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }

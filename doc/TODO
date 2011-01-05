@@ -20,6 +20,7 @@ Recommender functionality
    - Bayesian Probabilistic Matrix Factorization http://www.mit.edu/~rsalakhu/BPMF.html
    - Content-boosted CF http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.73.8546&rep=rep1&type=pdf
    - restricted boltzmann machines
+   - http://jmlr.csail.mit.edu/papers/v11/seldin10a.html
  - time-aware rating and item prediction
    - timeSVD++
  - new engine types: TagRecommender, ContextAwareRecommender, SequentialRecommender
