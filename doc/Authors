@@ -10,6 +10,9 @@ help with BPR-MF engine
 Christina Lichtenthäler, University of Hildesheim
 unit tests and other testing
 
+Artus Krohn-Grimberghe, University of Hildesheim
+routines for reading in data sets from SQL databases
+
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
 under the grant agreement no. 215006.

@@ -1,4 +1,5 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
 //
@@ -21,22 +22,19 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
+using System.Data.Common;
 
 
 namespace MyMediaLite.IO
 {
-	/// <summary>
-	/// Class that contains static methods for reading in implicit feedback data for ItemRecommender engines
-	/// </summary>
-	public class ItemRecommenderData
+	/// <summary>Class that contains static methods for reading in implicit feedback data for ItemRecommender engines</summary>
+	public class ItemRecommenderData // TODO consider renaming to ImplicitFeedback
 	{
 		/// <summary>Read in implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
 		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-		/// <returns>
-		/// a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data
-		/// </returns>
+		/// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
 		static public SparseBooleanMatrix Read(string filename, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
@@ -79,5 +77,28 @@ namespace MyMediaLite.IO
 
 			return user_items;
 		}
+
+        /// <summary>Read in implicit feedback data from a database</summary>
+		/// <param name="reader">the DbDataReader to be read from</param>
+        /// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
+        /// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
+        /// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
+        static public SparseBooleanMatrix Read(DbDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+        {
+            var user_items = new SparseBooleanMatrix();
+
+            if (reader.FieldCount < 2)
+                throw new IOException("Expected at least two columns.");
+
+            while (reader.Read())
+            {
+                int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
+                int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+
+                user_items[user_id, item_id] = true;
+            }
+
+            return user_items;
+        }
 	}
 }

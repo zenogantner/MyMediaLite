@@ -34,9 +34,7 @@ namespace MyMediaLite.IO
 	/// </summary>
 	public class RelationData
 	{
-		/// <summary>
-		/// Read binary attribute data from file
-		/// </summary>
+		/// <summary>Read binary attribute data from file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the relation data</returns>
@@ -48,9 +46,7 @@ namespace MyMediaLite.IO
 			}
 		}
 
-		/// <summary>
-		/// Read binary relation data from file
-		/// </summary>
+		/// <summary>Read binary relation data from file</summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the relation data</returns>

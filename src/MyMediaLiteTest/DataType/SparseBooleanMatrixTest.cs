@@ -90,7 +90,7 @@ namespace MyMediaLiteTest
 			}
 			Assert.AreEqual(5, matrix.NumberOfColumns);
 		}
-		
+
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfEntries</summary>
 		[Test()] public void NumberOfEntries()
 		{
