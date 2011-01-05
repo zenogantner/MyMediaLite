@@ -2,7 +2,7 @@
         - get rid of 'Experimental' namespace
         - add initial support for dataset splits, cross-validation, and
           hyperparameter search
-        - add database support (by Artus Krohn-Grimberghe)
+        - add database and IDataReader support (by Artus Krohn-Grimberghe)
         - bug fix in rating data reading routine: expect at least three columns
 
 0.08	2010-12-09

@@ -43,9 +43,6 @@ Data types
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
- - consider using CsvReader class, so that we can implement our data reading
-   routines against the IDataReader interface
-   - http://www.codeproject.com/KB/database/CsvReader.aspx
  - test suite should also run for purely binary installation
  - integrate with easyrec JavaScript API http://easyrec.org/ 
  - interface(s) for recommenders that support online updates
@@ -85,6 +82,9 @@ Architecture
  - store models via reflection (can save a lot of code)
  - consider using simulated multiple inheritance for the attribute-based recommenders:
    http://www.codeproject.com/KB/architecture/smip.aspx
+ - consider using the CsvReader class in the programs, so that we can get rid
+   of our home-grown CSV reader stuff (possibly not worth the trouble)
+   - http://www.codeproject.com/KB/database/CsvReader.aspx
 Misc
  - rewrite MF techniques using vector/matrix abstractions
  - faster reading of text files

@@ -17,7 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Data.Common;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -90,15 +90,15 @@ namespace MyMediaLite.IO
 			return ratings;
         }
 
-        /// <summary>Read in rating data from a database</summary>
-		/// <param name="reader">the <see cref="DbDataReader"/> to read from</param>
+        /// <summary>Read in rating data from an IDataReader, e.g. a database via DbDataReader</summary>
+		/// <param name="reader">the <see cref="IDataReader"/> to read from</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public RatingData
-            Read(DbDataReader reader, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+            Read(IDataReader reader, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
         {
             RatingData ratings = new RatingData();
 

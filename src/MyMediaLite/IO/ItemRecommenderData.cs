@@ -17,7 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Data.Common;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -76,12 +76,12 @@ namespace MyMediaLite.IO
 			return user_items;
 		}
 
-        /// <summary>Read in implicit feedback data from a database</summary>
-		/// <param name="reader">the DbDataReader to be read from</param>
+        /// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
+		/// <param name="reader">the IDataReader to be read from</param>
         /// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
         /// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
         /// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
-        static public SparseBooleanMatrix Read(DbDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+        static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
         {
             var user_items = new SparseBooleanMatrix();
 

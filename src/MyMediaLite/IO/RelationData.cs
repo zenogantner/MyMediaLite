@@ -16,7 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Data.Common;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -81,11 +81,11 @@ namespace MyMediaLite.IO
 			return matrix;
 		}
 		
-		/// <summary>Read binary relation data from database</summary>
-		/// <param name="reader">a DbDataReader to be read from</param>
+		/// <summary>Read binary relation data from an IDataReader, e.g. a database via DbDataReader</summary>
+		/// <param name="reader">an IDataReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the relation data</returns>
-		static public SparseBooleanMatrix Read(DbDataReader reader, EntityMapping mapping)
+		static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping mapping)
 		{
             if (reader.FieldCount < 2)
                 throw new IOException("Expected at least two columns.");			
