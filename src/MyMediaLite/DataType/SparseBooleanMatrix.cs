@@ -54,9 +54,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>
-		/// Indexer to access the rows of the matrix
-		/// </summary>
+		/// <summary>Indexer to access the rows of the matrix</summary>
 		/// <param name="x">
 		/// the row ID
 		/// </param>
@@ -75,9 +73,8 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>
-		/// The rows of the matrix, with their IDs
-		/// </summary>
+		/// <summary>The rows of the matrix, with their IDs</summary>
+		/// <value>The rows of the matrix, with their IDs</value>
 		public IList<KeyValuePair<int, HashSet<int>>> Rows
 		{
 			get
@@ -89,10 +86,8 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>
-		/// The non-empty rows of the matrix (the ones that contain at least one true entry),
-		/// with their IDs
-		/// </summary>
+		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
+		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
 		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
 		{
 			get
@@ -108,6 +103,7 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)</summary>
+		/// <value>The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)</value>
 		public ICollection<int> NonEmptyRowIDs
 		{
 			get
@@ -124,6 +120,7 @@ namespace MyMediaLite.DataType
 
 		// TODO add unit test
 		/// <summary>The IDs of the non-empty columns in the matrix (the ones that contain at least one true entry)</summary>
+		/// <value>The IDs of the non-empty columns in the matrix (the ones that contain at least one true entry)</value>
 		public ICollection<int> NonEmptyColumnIDs
 		{
 			get
@@ -140,9 +137,11 @@ namespace MyMediaLite.DataType
 		}		
 		
 		/// <summary>The number of rows in the matrix</summary>
+		/// <value>The number of rows in the matrix</value>
 		public int NumberOfRows	{ get { return rows.Count; } }
 
 		/// <summary>The number of columns in the matrix</summary>
+		/// <value>The number of columns in the matrix</value>
 		public int NumberOfColumns {
 			get
 			{
@@ -156,6 +155,7 @@ namespace MyMediaLite.DataType
 		}		
 		
 		/// <summary>The number of (true) entries</summary>
+		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
 			get
@@ -163,7 +163,6 @@ namespace MyMediaLite.DataType
 				int n = 0;
 				foreach (var row in rows)
 					n += row.Count;
-	
 				return n;
 			}
 		}		
