@@ -29,7 +29,7 @@ namespace MyMediaLiteTest
 	public class MatrixUtilsTest
 	{
 		/// <summary>Unit test of MatrixUtils.Inc(Matrix&lt;double&gt; matrix, int i, int j, double v)</summary>
-		[Test()] public void Inc()
+		[Test()] public void TestInc()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -40,7 +40,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.Inc(Matrix&lt;double&gt; matrix1, Matrix&lt;double&gt; matrix2)</summary>
-		[Test()] public void Inc2()
+		[Test()] public void TestInc2()
 		{
 			var matrix1 = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -56,7 +56,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.ColumnAverage(Matrix&lt;double&gt; matrix, int col)</summary>
-		[Test()] public void ColumnAverage()
+		[Test()] public void TestColumnAverage()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -67,7 +67,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.RowAverage(Matrix&lt;double&gt; matrix, int row)</summary>
-		[Test()] public void RowAverage()
+		[Test()] public void TestRowAverage()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -78,7 +78,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.Multiply(Matrix&lt;double&gt; matrix, double d)</summary>
-		[Test()] public void Multiply()
+		[Test()] public void TestMultiply()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -90,7 +90,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.FrobeniusNorm(Matrix&lt;double&gt; matrix)</summary>
-		[Test()] public void FrobeniusNorm()
+		[Test()] public void TestFrobeniusNorm()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -101,7 +101,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.RowScalarProduct(Matrix&lt;double&gt; matrix, int i, double[] vector)</summary>
-		[Test()] public void RowScalarProduct()
+		[Test()] public void TestRowScalarProduct()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -113,7 +113,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of MatrixUtils.ContainsNaN(Matrix&lt;double&gt; matrix)</summary>
-		[Test()] public void ContainsNaN()
+		[Test()] public void TestContainsNaN()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };

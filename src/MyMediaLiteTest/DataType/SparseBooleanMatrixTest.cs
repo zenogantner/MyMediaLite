@@ -29,7 +29,7 @@ namespace MyMediaLiteTest
 	public class SparseBooleanMatrixTest
 	{
 		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRows</summary>
-		[Test()] public void NonEmptyRows()
+		[Test()] public void TestNonEmptyRows()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -46,7 +46,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRowIDs</summary>
-		[Test()] public void NonEmptyRowIDs()
+		[Test()] public void TestNonEmptyRowIDs()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -68,7 +68,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfRows</summary>
-		[Test()] public void NumberOfRows()
+		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -80,7 +80,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfColumns</summary>
-		[Test()] public void NumberOfColumns()
+		[Test()] public void TestNumberOfColumns()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -92,7 +92,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.NumberOfEntries</summary>
-		[Test()] public void NumberOfEntries()
+		[Test()] public void TestNumberOfEntries()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -105,7 +105,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int y)</summary>
-		[Test()] public void RemoveColumn()
+		[Test()] public void TestRemoveColumn()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
@@ -125,7 +125,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int[] delete_columns)</summary>
-		[Test()] public void RemoveColumns()
+		[Test()] public void TestRemoveColumns()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 7; i++)
@@ -148,7 +148,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit tests for SparseBooleanMatrix.Transpose()</summary>
-		[Test()] public void Transpose()
+		[Test()] public void TestTranspose()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 7; i++)
@@ -170,7 +170,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of SparseBooleanMatrix.Overlap(SparseBooleanMatrix s)</summary>
-		[Test()] public void Overlap()
+		[Test()] public void TestOverlap()
 		{
 			var matrix = new SparseBooleanMatrix();
 			matrix[2, 2] = true;
@@ -180,7 +180,7 @@ namespace MyMediaLiteTest
 			matrix[5, 1] = true;
 			matrix[5, 5] = true;
 
-			SparseBooleanMatrix overlapMatrix = new SparseBooleanMatrix();
+			var overlapMatrix = new SparseBooleanMatrix();
 			overlapMatrix[2, 1] = true;
 			overlapMatrix[2, 5] = true; // same entry
 			overlapMatrix[4, 4] = true;
@@ -193,9 +193,9 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test for VectorUtils.EuclideanNorm(ICollection&lt;double&gt; vector)</summary>
-		[Test()] public void EuclideanNorm()
+		[Test()] public void TestEuclideanNorm()
 		{
-			List<double> testVector = new List<double>();
+			var testVector = new List<double>();
 			testVector.Add(2);
 			testVector.Add(5);
 			testVector.Add(3);

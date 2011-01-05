@@ -27,19 +27,10 @@ namespace MyMediaLiteTest
 {
 	/// <summary>Testing the data classes</summary>
 	[TestFixture()]
-	public class DataTest
+	public class RatingDataTest
 	{
-		/// <summary>
-		/// Unit test of  EntityMapping.ToOriginalID(int internal_id)
-		/// </summary>
-		[Test()]
-		public void ToOriginalID()
-		{
-			// TODO
-		}
-
 		/// <summary>Unit Test of RatingData.MaxUserID and RatingData.MaxItemID</summary>
-		public void RatingDataMaxUserIDIemUserID()
+		public void TestMaxUserIDItemID()
 		{
 			var rating_data = new RatingData();
 			rating_data.AddRating(new RatingEvent(1, 4, 0.3));
@@ -54,11 +45,9 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(8, rating_data.MaxItemID);
 		}
 
-		/// <summary>
-		/// Unit test of RatingData.AddRating(RatingEvent rating)
-		/// </summary>
+		/// <summary>Unit test of RatingData.AddRating(RatingEvent rating)</summary>
 		[Test()]
-		public void RatingDataAddRating()
+		public void TestAddRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -74,13 +63,11 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0.3, testRatingData.All.FindRating(6, 3).rating);
 		}
 
-		//AddUser and AddItem could not be tested
+		// AddUser and AddItem could not be tested
 
-		/// <summary>
-		/// Unit test of RatingData.RemoveRating(RatingEvent rating)
-		/// </summary>
+		/// <summary>Unit test of RatingData.RemoveRating(RatingEvent rating)</summary>
 		[Test()]
-		public void RatingDataRemoveRating()
+		public void TestRemoveRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -101,11 +88,9 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(6, 3));
 		}
 
-		/// <summary>
-		/// Unit Test of RatingData.RemoveUser(int user_id)
-		/// </summary>
+		/// <summary>Unit test of RatingData.RemoveUser(int user_id)</summary>
 		[Test()]
-		public void RatingDataRemoveUser()
+		public void TestRemoveUser()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -121,11 +106,9 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(2, 5));
 		}
 
-		/// <summary>
-		/// Unit test of RatingData.RemoveItem(int item_id)
-		/// </summary>
+		/// <summary>Unit test of RatingData.RemoveItem(int item_id)</summary>
 		[Test()]
-		public void RatingDataRemoveItem()
+		public void TestRemoveItem()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -141,11 +124,9 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(2, 4));
 		}
 
-		/// <summary>
-		/// Unit Test of RatingData.FindRating(int user_id, int item_id)
-		/// </summary>
+		/// <summary>Unit test of RatingData.FindRating(int user_id, int item_id)</summary>
 		[Test()]
-		public void RatingDataFindRating()
+		public void TestFindRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -161,113 +142,5 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0.3, testRatingData.All.FindRating(3, 3).rating);
 			Assert.AreEqual(0.3, testRatingData.All.FindRating(6, 3).rating);
 		}
-
-		/// <summary>
-		/// Unit Test of Ratings.Shuffle()
-		/// </summary>
-		[Test()]
-		public void RatingsShuffle()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-
-			test_ratings.Shuffle();
-			// at least one rating must change his position
-			Assert.IsTrue(test_ratings[0].rating != 0.1 || test_ratings[1].rating != 0.2 || test_ratings[2].rating != 0.3 || test_ratings[3].rating != 0.4 || test_ratings[4].rating != 0.5);
-
-		}
-
-		/// <summary>
-		/// Unit test of Ratings.Average
-		/// </summary>
-		[Test()]
-		public void RatingsAverage()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-
-			Assert.AreEqual(0.3f, test_ratings.Average, 0.0001f);
-		}
-
-		/// <summary>
-		/// Unit test of Ratings.Count
-		/// </summary>
-		[Test()]
-		public void RatingsCount()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-
-			Assert.AreEqual(5, test_ratings.Count);
-		}
-
-		/// <summary>
-		/// Unit test of Ratings.RemoveRating(RatingEvent rating)
-		/// </summary>
-		[Test()]
-		public void RatingsRemoveRating()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			RatingEvent removeRating = new RatingEvent(2, 5, 0.5);
-			test_ratings.AddRating(removeRating);
-
-			test_ratings.RemoveRating(removeRating);
-			Assert.IsNull(test_ratings.FindRating(2, 5));
-		}
-
-		/// <summary>Unit Test of Ratings.GetUsers()</summary>
-		[Test()]
-		public void RatingsGetUsers()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
-
-			List<int> user_list = test_ratings.GetUsers().ToList();
-			Assert.Contains(1, user_list);
-			Assert.Contains(2, user_list);
-			Assert.Contains(4, user_list);
-			Assert.Contains(5, user_list);
-		}
-
-		/// <summary>
-		/// Unit Test of Ratings.GetItems()
-		/// </summary>
-		[Test()]
-		public void RatingsGetItems()
-		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-
-			List<int> item_list = test_ratings.GetItems().ToList();
-			Assert.Contains(2, item_list);
-			Assert.Contains(4, item_list);
-			Assert.Contains(5, item_list);
-			Assert.Contains(8, item_list);
-		}
 	}
 }
-

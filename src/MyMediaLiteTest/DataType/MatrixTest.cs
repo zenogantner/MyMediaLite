@@ -29,7 +29,7 @@ namespace MyMediaLiteTest
 	public class MatrixTest
 	{
 		/// <summary>Unit test of Matrix.GetRow() and Matrix.SetRow()</summary>
-		[Test()] public void GetRow()
+		[Test()] public void TestGetRow()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
@@ -38,7 +38,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of Matrix.GetColumn() and Matrix.SetColumn()</summary>
-		[Test()] public void GetColumn()
+		[Test()] public void TestGetColumn()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] column = { 1, 2, 3, 4, 5 };
@@ -47,7 +47,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of Matrix.Init(T d)</summary>
-		[Test()] public void Init()
+		[Test()] public void TestInit()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 2, 2, 2, 2, 2 };
@@ -56,7 +56,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of Matrix.SetRowToOneValue(int i, T v)</summary>
-		[Test()] public void SetRowToOneValue()
+		[Test()] public void TestSetRowToOneValue()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
@@ -68,7 +68,7 @@ namespace MyMediaLiteTest
 		}
 
 		/// <summary>Unit test of Matrix.SetColumnToOneValue(int j, T v)</summary>
-		[Test()] public void SetColumnToOneValue()
+		[Test()] public void TestSetColumnToOneValue()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };

@@ -28,14 +28,14 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Class for testing the correlation classes with NUnit</summary>
+	/// <summary>Class for testing the CorrelationMatrix class</summary>
 	[TestFixture()]
-	public class CorrelationTest
+	public class CorrelationMatrixTest
 	{
 
 		/// <summary>Unit test of CorrelationMatrix.ReadCorrelationMatrix(StreamReader reader)</summary>
 		[Test()]
-		public void CorrelationMatrixReadCorrelationMatrix()
+		public void TestReadCorrelationMatrix()
 		{
 			// create test object
 			const string filename = "correlation_matrix.txt";
@@ -75,7 +75,7 @@ namespace MyMediaLiteTest
 
 		/// <summary>Unit test of CorrelationMatrix.Write(StreamWriter writer)</summary>
 		[Test()]
-		public void CorrelationMatrixWrite()
+		public void TestWrite()
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(3);
@@ -119,7 +119,7 @@ namespace MyMediaLiteTest
 
 		/// <summary>Unit test of CorrelationMatrix.AddEntity(int entity_id)</summary>
 		[Test()]
-		public void CorrelationMatrixAddEntity()
+		public void TestAddEntity()
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(4);
@@ -140,7 +140,7 @@ namespace MyMediaLiteTest
 
 		/// <summary>Unit test of CorrelationMatrix.SumUp()</summary>
 		[Test()]
-		public void CorrelationMatrixSumUp()
+		public void TestSumUp()
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(4);
@@ -161,7 +161,7 @@ namespace MyMediaLiteTest
 
 		/// <summary>Unit test of CorrelationMatrix.GetPositivelyCorrelatedEntities(int entity_id)</summary>
 		[Test()]
-		public void CorrelationMatrixGetPositivelyCorrelatedEntities()
+		public void TestGetPositivelyCorrelatedEntities()
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(4);
@@ -188,7 +188,7 @@ namespace MyMediaLiteTest
 
 		/// <summary>Unit test of CorrelationMatrix.GetNearestNeighbors(int entity_id, uint k)</summary>
 		[Test()]
-		public void CorrelationMatrixGetNearestNeighbors()
+		public void TestGetNearestNeighbors()
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(4);
@@ -206,124 +206,6 @@ namespace MyMediaLiteTest
 			int[] nn_test = matrix.GetNearestNeighbors(2, 2);
 			int[] nn_sol = { 1, 3 };
 			Assert.AreEqual(nn_sol, nn_test);
-		}
-
-		/// <summary>Unit test of Cosine.CorrelationMatrix Create(SparseBooleanMatrix vectors)</summary>
-		[Test()]
-		public void CosineCreate()
-		{
-			// create test objects
-			var sparse_boolean_matrix = new SparseBooleanMatrix();
-			sparse_boolean_matrix[0, 1] = true;
-			sparse_boolean_matrix[0, 4] = true;
-			sparse_boolean_matrix[1, 0] = true;
-			sparse_boolean_matrix[1, 2] = true;
-			sparse_boolean_matrix[1, 4] = true;
-			sparse_boolean_matrix[3, 1] = true;
-			sparse_boolean_matrix[3, 3] = true;
-			sparse_boolean_matrix[3, 4] = true;
-			// test
-			var correlation_matrix = Cosine.Create(sparse_boolean_matrix);
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[0, 1], 4));
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[1, 0], 4));
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(correlation_matrix[1, 3], 4));
-		}
-
-		/// <summary>Unit test of Cosine.ComputeCorrelations(SparseBooleanMatrix entity_data)</summary>
-		[Test()]
-		public void CosineComputeCorrelations()
-		{
-			// create test objects
-			var sparse_boolean_matrix = new SparseBooleanMatrix();
-			sparse_boolean_matrix[0, 1] = true;
-			sparse_boolean_matrix[0, 4] = true;
-			sparse_boolean_matrix[1, 0] = true;
-			sparse_boolean_matrix[1, 2] = true;
-			sparse_boolean_matrix[1, 4] = true;
-			sparse_boolean_matrix[3, 1] = true;
-			sparse_boolean_matrix[3, 3] = true;
-			sparse_boolean_matrix[3, 4] = true;
-			// test
-			var cosine = new Cosine(5);
-			cosine.ComputeCorrelations(sparse_boolean_matrix);
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[0, 1], 4));
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[1, 0], 4));
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(cosine[1, 3], 4));
-		}
-
-		/// <summary>Unit test of Cosine.ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)</summary>
-		[Test()]
-		public void CosineComputeCorrelation()
-		{
-			// create test objects
-			var vector1 = new HashSet<int>();
-			vector1.Add(0);
-			vector1.Add(2);
-			vector1.Add(4);
-			var vector2 = new HashSet<int>();
-			vector2.Add(1);
-			vector2.Add(3);
-			vector2.Add(4);
-			// test
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(Cosine.ComputeCorrelation(vector1, vector2), 4));
-		}
-
-		/// <summary>Unit test of Pearson.Create(RatingData ratings, EntityType entity_type, float shrinkage)</summary>
-		[Test()]
-		public void PearsonCreate()
-		{
-			// create test objects
-			var rating_data = new RatingData();
-			rating_data.AddRating(new RatingEvent(0, 1, 0.3));
-			rating_data.AddRating(new RatingEvent(0, 2, 0.6));
-			rating_data.AddRating(new RatingEvent(0, 4, 0.2));
-			rating_data.AddRating(new RatingEvent(1, 3, 0.4));
-			rating_data.AddRating(new RatingEvent(1, 4, 0.2));
-			rating_data.AddRating(new RatingEvent(2, 0, 0.1));
-			rating_data.AddRating(new RatingEvent(2, 1, 0.3));
-			// test
-			var pearson = Pearson.Create(rating_data, EntityType.USER, 0f);
-			Assert.AreEqual(0, pearson[0, 1]);
-		}
-
-		/// <summary>
-		/// Unit test of Pearson.ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
-		/// </summary>
-		[Test()]
-		public void PearsonComputeCorrelation()
-		{
-			// create test objects
-			var rating1 = new Ratings();
-			var rating2 = new Ratings();
-			rating1.AddRating(new RatingEvent(0, 1, 0.3));
-			rating1.AddRating(new RatingEvent(0, 4, 0.2));
-			rating2.AddRating(new RatingEvent(1, 2, 0.6));
-			rating2.AddRating(new RatingEvent(1, 3, 0.4));
-			rating2.AddRating(new RatingEvent(1, 4, 0.2));
-
-			// test
-			Assert.AreEqual(0, Pearson.ComputeCorrelation(rating1, rating2, EntityType.USER, 0, 1, 0));
-		}
-
-		/// <summary>Unit test of Pearson.ComputeCorrelations(RatingData ratings, EntityType entity_type)</summary>
-		[Test()]
-		public void PearsonComputeCorrelations()
-		{
-			// create test objects
-			var pearson = new Pearson(3);
-			var rating_data = new RatingData();
-			rating_data.AddRating(new RatingEvent(0, 1, 0.3));
-			rating_data.AddRating(new RatingEvent(0, 2, 0.6));
-			rating_data.AddRating(new RatingEvent(0, 4, 0.2));
-			rating_data.AddRating(new RatingEvent(1, 3, 0.4));
-			rating_data.AddRating(new RatingEvent(1, 4, 0.2));
-			rating_data.AddRating(new RatingEvent(2, 0, 0.1));
-			rating_data.AddRating(new RatingEvent(2, 1, 0.3));
-			// test
-			pearson.shrinkage = 0;
-			pearson.ComputeCorrelations(rating_data, EntityType.USER);
-
-			Assert.AreEqual(0, pearson[0, 2]);
 		}
 	}
 }
