@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Christina Lichtenthäler
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
@@ -240,11 +242,11 @@ namespace MyMediaLiteTest
 			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
 			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
 
-			HashSet<int> users = test_ratings.GetUsers();
-			Assert.Contains(1, users);
-			Assert.Contains(2, users);
-			Assert.Contains(4, users);
-			Assert.Contains(5, users);
+			List<int> user_list = test_ratings.GetUsers().ToList();
+			Assert.Contains(1, user_list);
+			Assert.Contains(2, user_list);
+			Assert.Contains(4, user_list);
+			Assert.Contains(5, user_list);
 		}
 
 		/// <summary>
@@ -260,11 +262,11 @@ namespace MyMediaLiteTest
 			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
 			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
 
-			HashSet<int> items = test_ratings.GetItems();
-			Assert.Contains(2, items);
-			Assert.Contains(4, items);
-			Assert.Contains(5, items);
-			Assert.Contains(8, items);
+			List<int> item_list = test_ratings.GetItems().ToList();
+			Assert.Contains(2, item_list);
+			Assert.Contains(4, item_list);
+			Assert.Contains(5, item_list);
+			Assert.Contains(8, item_list);
 		}
 	}
 }
