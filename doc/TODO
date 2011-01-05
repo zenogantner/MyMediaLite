@@ -43,6 +43,9 @@ Data types
  - data type: symmetric matrix
  - profile+optimize data types
 Architecture
+ - consider using CsvReader class, so that we can implement our data reading
+   routines against the IDataReader interface
+   - http://www.codeproject.com/KB/database/CsvReader.aspx
  - test suite should also run for purely binary installation
  - integrate with easyrec JavaScript API http://easyrec.org/ 
  - interface(s) for recommenders that support online updates

@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -25,9 +26,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>
-	/// Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects.
-	/// </summary>
+	/// <summary>Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects</summary>
 	/// <remarks>
 	/// The expected (sparse) line format is:
 	/// ENTITY_ID whitespace ATTRIBUTE_ID
@@ -35,19 +34,17 @@ namespace MyMediaLite.IO
 	/// </remarks>
 	public class AttributeData
 	{
-		/// <summary>Read binary attribute data from file</summary>
+		/// <summary>Read binary attribute data from a file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
 		{
             using ( var reader = new StreamReader(filename) )
-			{
 				return Read(reader, mapping);
-			}
 		}
 
-		/// <summary>Read binary attribute data from file</summary>
+		/// <summary>Read binary attribute data from a StreamReader</summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
@@ -82,5 +79,27 @@ namespace MyMediaLite.IO
 
 			return matrix;
 		}
+		
+		/// <summary>Read binary attribute data from a database</summary>
+		/// <param name="reader">a DbDataReader to be read from</param>
+		/// <param name="mapping">the mapping object for the given entity type</param>
+		/// <returns>the attribute data</returns>
+		static public SparseBooleanMatrix Read(DbDataReader reader, EntityMapping mapping)
+		{
+            if (reader.FieldCount < 2)
+                throw new IOException("Expected at least two columns.");			
+			
+			var matrix = new SparseBooleanMatrix();
+
+			while (!reader.Read())
+			{
+				int entity_id = mapping.ToInternalID(reader.GetInt32(0));
+				int attr_id   = reader.GetInt32(1);
+
+               	matrix[entity_id, attr_id] = true;
+			}
+
+			return matrix;
+		}		
 	}
 }
