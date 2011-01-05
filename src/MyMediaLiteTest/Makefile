@@ -72,9 +72,12 @@ SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
 FILES =  \
-	CorrelationTest.cs \
-	DataTest.cs \
-	DataTypeTest.cs 
+	Correlation/CorrelationTest.cs \
+	Data/DataTest.cs \
+	DataType/MatrixTest.cs \
+	DataType/MatrixUtilsTest.cs \
+	DataType/SparseBooleanMatrixTest.cs \
+	DataType/VectorUtilsTest.cs 
 
 DATA_FILES = 
 
