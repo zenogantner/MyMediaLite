@@ -1,5 +1,3 @@
-TODO list
----------
 Recommender functionality
  - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
@@ -72,12 +70,10 @@ Architecture
     - debug, info, warn; progress 
  - use Parallel.ForEach for item recommender evaluation
    - as soon as Mono 2.8 is more widely available
- - Java port
  - multi-core support
  - GPU support
  - support for distributed computing
  - webservice interface
- - move unit tests out of main library
  - use one repository per component, instead of having everything in one repository
  - store models via reflection (can save a lot of code)
  - consider using simulated multiple inheritance for the attribute-based recommenders:
