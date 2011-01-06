@@ -1,4 +1,12 @@
 <div id="infobox">
+<p>
+  <script type="text/javascript" src="http://www.ohloh.net/p/485704/widgets/project_users_logo.js"></script>      
+</p>
+
+<p>
+  <br/>
+</p>
+
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
   Version 0.08 is out:
@@ -6,3 +14,5 @@
   <a href="[% prefix %]download/index.html">download</a>.
 </p>
 </div>
+
+
