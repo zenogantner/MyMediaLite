@@ -46,7 +46,6 @@
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Experimental\" />
     <Folder Include="AttrToFactor\" />
   </ItemGroup>
   <ItemGroup>
