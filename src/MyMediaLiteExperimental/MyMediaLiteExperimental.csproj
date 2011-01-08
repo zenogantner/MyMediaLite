@@ -44,9 +44,13 @@
     <Compile Include="AttrToFactor\MF_Mapping.cs" />
     <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
+    <Compile Include="RatingPredictor\SocialMF.cs" />
+    <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
+    <Folder Include="RatingPredictor\" />
+    <Folder Include="ItemRecommender\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

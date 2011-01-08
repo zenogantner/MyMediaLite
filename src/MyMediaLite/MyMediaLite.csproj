@@ -80,7 +80,6 @@
     <Compile Include="ItemRecommender\BPRMF.cs" />
     <Compile Include="ItemRecommender\IItemRecommender.cs" />
     <Compile Include="ItemRecommender\ItemAttributeKNN.cs" />
-    <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommender\ItemKNN.cs" />
     <Compile Include="ItemRecommender\KNN.cs" />
     <Compile Include="ItemRecommender\Memory.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="RatingPredictor\Linear.cs" />
     <Compile Include="RatingPredictor\MatrixFactorization.cs" />
     <Compile Include="RatingPredictor\Memory.cs" />
-    <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="RatingPredictor\UserAttributeKNN.cs" />
     <Compile Include="RatingPredictor\UserItemBaseline.cs" />
     <Compile Include="RatingPredictor\UserKNN.cs" />
