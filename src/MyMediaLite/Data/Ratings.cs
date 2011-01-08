@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Util;
 
+
 namespace MyMediaLite.Data
 {
 	/// <summary>Class representing a collection of ratings in a particular order</summary>

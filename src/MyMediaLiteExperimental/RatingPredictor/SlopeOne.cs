@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 
 
@@ -30,17 +31,40 @@ namespace MyMediaLite.RatingPredictor
 	/// </remarks>
 	public class SlopeOne : Memory
 	{
+		// TODO implement CanPredict and ToString
+		
 		// TODO use an array here (we assume our item IDs to be dense ...
   		private Dictionary<int, Dictionary<int, double>> diff_matrix;
   		private Dictionary<int, Dictionary<int, int>> freq_matrix;
 		
+		private double global_average;
+		
 		public override double Predict(int user_id, int item_id)
 		{
-			return 0;
+			var user_ratings = Ratings.ByUser[user_id];
+			
+			double prediction = 0.0;
+			int frequency = 0;
+			
+			// TODO make this faster
+		    foreach (int i in user_ratings.GetItems())
+       			try
+				{
+       				double newval = ( diff_matrix[item_id][i] + user_ratings.FindRating(user_id, i).rating ) * freq_matrix[item_id][i];
+       				prediction += newval;
+       				frequency += freq_matrix[item_id][i];
+       			} catch (KeyNotFoundException) {}	
+
+			if (frequency == 0)
+				return global_average;
+			
+    		return (double) prediction / frequency;
 		}
 		
 		public override void Train()
 		{
+			global_average = Ratings.Average;
+			
 			// create data structure
     		diff_matrix = new Dictionary<int ,Dictionary<int, double>>();
     		freq_matrix = new Dictionary<int ,Dictionary<int, int>>();
@@ -57,18 +81,23 @@ namespace MyMediaLite.RatingPredictor
 	        		foreach (RatingEvent r2 in user_ratings)
 					{
 	          			if (!freq_matrix[r.item_id].ContainsKey(r2.item_id))
+						{
 							freq_matrix[r.item_id][r2.item_id] = 0;
-	          			if (!diff_matrix[r.item_id].ContainsKey(r2.item_id))
-	            			diff_matrix[r.item_id][r2.item_id] = 0.0;
-
+	          				diff_matrix[r.item_id][r2.item_id] = 0.0;
+						}
+							
 	          			freq_matrix[r.item_id][r2.item_id] += 1;
 	          			diff_matrix[r.item_id][r2.item_id] += r.rating - r2.rating;
 	        		}
       			}
     		}
-			foreach (int j in diff_matrix.Keys)
-				foreach (int i in diff_matrix[j].Keys)
-					diff_matrix[j][i] /= freq_matrix[j][i];
+			var relevant_items = diff_matrix.Keys.ToList();
+			foreach (int i in relevant_items)
+			{
+				var relevant_items2 = diff_matrix[i].Keys.ToList();
+				foreach (int j in relevant_items2)
+					diff_matrix[i][j] /= freq_matrix[i][j];
+			}
 		}
 
 		public override void LoadModel(string file)
