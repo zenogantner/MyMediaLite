@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -34,15 +35,16 @@ namespace MyMediaLite.Eval
 		{
 			get
 			{
-				string[] measures = { "RMSE", "MAE" };
+				string[] measures = { "RMSE", "MAE", "NMAE" };
 				return new HashSet<string>(measures);
 			}
 		}
 
 
-        /// <summary>Evaluates a rating predictor for RMSE and MAE</summary>
+        /// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
         /// <remarks>
-        /// Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.
+        /// <!--Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.-->
+        /// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
         /// </remarks>
         /// <param name="engine">Rating prediction engine</param>
         /// <param name="ratings">Test cases</param>
@@ -75,7 +77,8 @@ namespace MyMediaLite.Eval
 
 			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
-			result.Add("MAE", mae);
+			result.Add("MAE",  mae);
+			result.Add("NMAE", mae / (engine.MaxRating - engine.MinRating));
 			//result.Add("num_users", users.Count);
 			//result.Add("num_items", items.Count);
 			return result;

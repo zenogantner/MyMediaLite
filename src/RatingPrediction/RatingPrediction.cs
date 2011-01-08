@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -425,8 +425,8 @@ MyMediaLite rating prediction; usage:
 
 		static void DisplayResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}",
-			                            result["RMSE"], result["MAE"]));
+			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
+			                            result["RMSE"], result["MAE"], result["NMAE"]));
 		}
 
 		static void DisplayDataStats()

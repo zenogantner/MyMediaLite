@@ -5,6 +5,7 @@
         - add database and IDataReader support (by Artus Krohn-Grimberghe)
         - bug fix in rating data reading routine: expect at least three columns
         - split up unit tests: one file per tested class
+	- add evaluation measure normalized mean absolute error (NMAE)
 
 0.08	2010-12-09
         - add information about ML's non-commercial use license to the download

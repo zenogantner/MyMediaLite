@@ -44,6 +44,8 @@ Architecture
  - test suite should also run for purely binary installation
  - integrate with easyrec JavaScript API http://easyrec.org/ 
  - interface(s) for recommenders that support online updates
+ - implement features similar to the Strands web service API
+   - http://recommender.strands.com/developers/
  - define an easy interface for rating data access
    - allow lazy iteration
    - allow random and randomized access
