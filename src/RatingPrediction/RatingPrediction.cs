@@ -55,6 +55,7 @@ namespace RatingPrediction
 		static GlobalAverage        ga = new GlobalAverage();
 		static UserAverage          ua = new UserAverage();
 		static ItemAverage          ia = new ItemAverage();
+		static SlopeOne      slope_one = new SlopeOne();
 
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
@@ -80,7 +81,7 @@ MyMediaLite rating prediction; usage:
   - methods (plus arguments and their defaults):
     - {0}
     - {1}
-    - {2} (needs user_relation=FILE)
+    - {2} (needs user_relation=FILE) **experimental**
     - {3}
     - {4}
     - {5}
@@ -90,6 +91,7 @@ MyMediaLite rating prediction; usage:
     - {9}
     - {10}
     - {11}
+    - {12} **experimental**
   - method ARGUMENTS have the form name=value
   - general OPTIONS have the form name=value
     - option_file=FILE           read options from FILE (line format KEY: VALUE)
@@ -112,7 +114,7 @@ MyMediaLite rating prediction; usage:
     - rmse_cutoff=NUM            abort if RMSE is above NUM
     - mae_cutoff=NUM             abort if MAE is above NUM
     - compute_fit=BOOL           display fit on training data every find_iter iterations",
-			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia);
+			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia, slope_one);
 
 			Environment.Exit(exit_code);
 		}
@@ -209,6 +211,9 @@ MyMediaLite rating prediction; usage:
 					break;
 				case "item-average":
 					recommender = ia;
+					break;
+				case "slope-one":
+					recommender = slope_one;
 					break;
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));

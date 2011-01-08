@@ -84,7 +84,7 @@ namespace MyMediaLite
 			Console.WriteLine("    - " + uknn);
 			Console.WriteLine("    - " + wuknn);
 			Console.WriteLine("    - " + uaknn      + " (needs user_attributes=FILE)");
-			Console.WriteLine("    - " + svm        + " (needs item_attributes=FILE)");
+			Console.WriteLine("    - " + svm        + " (needs item_attributes=FILE) **experimental**");
 			Console.WriteLine("    - " + mp);
 			Console.WriteLine("    - " + random);
 			Console.WriteLine("  - method ARGUMENTS have the form name=value");

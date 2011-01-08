@@ -119,7 +119,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
         public override void Train()
         {
-			List<int> rating_counts = new List<int>();
+			var rating_counts = new List<int>();
 
 			foreach (RatingEvent r in Ratings.All)
 			{
@@ -175,7 +175,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
         public override void Train()
         {
-			List<int> rating_counts = new List<int>();
+			var rating_counts = new List<int>();
 
 			foreach (RatingEvent r in Ratings.All)
 			{
