@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -22,11 +22,11 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.DataType
 {
-    /// <summary>
-    /// Class for storing sparse matrices.
+    /// <summary>Class for storing sparse matrices</summary>
+    /// <remarks>
     /// The data is stored in row-major mode.
     /// Indexes are zero-based.
-    /// </summary>
+    /// </remarks>
     /// <typeparam name="T"></typeparam>	
     public class SparseMatrix<T> where T:new()
     {
