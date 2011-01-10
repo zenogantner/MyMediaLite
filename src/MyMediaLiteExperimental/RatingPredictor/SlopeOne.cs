@@ -16,17 +16,18 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Globalization;
+using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 
 namespace MyMediaLite.RatingPredictor
 {
-	/// <summary>
-	/// Weighted Slope One
-	/// </summary>
+	/// <summary>Frequency-weighted Slope-One rating prediction</summary>
 	/// <remarks>
-	/// see http://www.daniel-lemire.com/fr/documents/publications/SlopeOne.java
+	/// http://www.daniel-lemire.com/fr/documents/publications/SlopeOne.java
 	/// </remarks>
 	public class SlopeOne : Memory
 	{
@@ -106,13 +107,36 @@ namespace MyMediaLite.RatingPredictor
 		public override void LoadModel(string file)
 		{
 			InitModel();
-			throw new NotImplementedException();
+
+            var ni = new NumberFormatInfo();
+            ni.NumberDecimalDigits = '.';
+			
+            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+			{
+            	double global_average = Double.Parse(reader.ReadLine(), ni);
+				
+				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
+            	var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
+
+            	// assign new model
+            	this.global_average = global_average;
+            	this.diff_matrix = diff_matrix;
+            	this.freq_matrix = freq_matrix;
+			}
 		}
 
 		/// <inheritdoc/>
 		public override void SaveModel(string file)
 		{
-			throw new NotImplementedException();
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
+			{
+            	writer.WriteLine(global_average.ToString(ni));
+				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix);
+				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix);
+			}
 		}
 
 		/// <inheritdoc/>

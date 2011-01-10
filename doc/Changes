@@ -1,12 +1,15 @@
 0.09	2011-01-??
-        - get rid of 'Experimental' namespace
+        - add database and IDataReader support (by Artus Krohn-Grimberghe)
+        - add Slope-One rating prediction engine
+        - get rid of 'Experimental' namespace, experimental engine now reside
+          in their own project
         - add initial support for dataset splits, cross-validation, and
           hyperparameter search
-        - add database and IDataReader support (by Artus Krohn-Grimberghe)
         - bug fix in rating data reading routine: expect at least three columns
         - split up unit tests: one file per tested class
 	- add evaluation measure normalized mean absolute error (NMAE)
-        - add Slope-One rating prediction engine
+        - add IMatrix interface for both sparse and dense matrices
+        - improve SparseMatrix implementation
 
 0.08	2010-12-09
         - add information about ML's non-commercial use license to the download

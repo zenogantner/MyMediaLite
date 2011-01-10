@@ -48,7 +48,6 @@ Architecture
    - implement features similar to the Strands web service API
      - http://recommender.strands.com/developers/
  - internal APIs
-   - IMatrix interface, implemented by Matrix _and_ SparseMatrix types; share IO code between those
    - interface(s) for recommenders that support online updates
    - define an easy interface for rating data access
      - allow lazy iteration
