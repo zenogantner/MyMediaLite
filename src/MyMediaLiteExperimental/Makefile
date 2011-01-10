@@ -84,7 +84,10 @@ FILES = \
 	AttrToFactor/BPRMF_UserMapping_Optimal.cs \
 	AttrToFactor/MF_Mapping.cs \
 	AttrToFactor/MF_ItemMapping.cs \
-	AttrToFactor/MF_Item_Mapping_Optimal.cs 
+	AttrToFactor/MF_Item_Mapping_Optimal.cs \
+	RatingPredictor/SocialMF.cs \
+	ItemRecommender/ItemAttributeSVM.cs \
+	RatingPredictor/SlopeOne.cs 
 
 DATA_FILES = 
 
@@ -92,6 +95,8 @@ RESOURCES =
 
 EXTRAS = \
 	AttrToFactor \
+	RatingPredictor \
+	ItemRecommender \
 	mymedialiteexperimental.pc.in 
 
 REFERENCES =  \
