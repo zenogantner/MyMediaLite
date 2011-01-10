@@ -38,54 +38,66 @@ Recommender functionality
  - consider to store the hyperparameters in the model files as well
 Data types
  - data types: introduce more properties
- - data type: symmetric matrix
+ - data type: symmetric matrix (vs. CorrelationMatrix)
  - profile+optimize data types
 Architecture
- - test suite should also run for purely binary installation
- - integrate with easyrec JavaScript API http://easyrec.org/ 
- - interface(s) for recommenders that support online updates
- - implement features similar to the Strands web service API
-   - http://recommender.strands.com/developers/
- - define an easy interface for rating data access
-   - allow lazy iteration
-   - allow random and randomized access
-   - allow creating splits for cross-validation w/o duplicating data
-   - (maybe) get num_users, num_items, max_user_id, max_item_id
- - rewrite rating data structures
-   - implement easy interface (see above)
-   - store in one list (as values, not references!)
-   - create special index data structures on demand
- - redesign/rewrite implicit feedback data structures
- - user and item IDs should be unsigned integers, not signed integers
- - parameterize types:
-   - user and item IDs
-   - stored ratings
-   - prediction values (in C++ port)
- - nicer, more generic structure for kNN engines
-   - non-weighted kNN
-   - more correlation/similarity measures (e.g. Jaccard index)
-     - rename to Similarity (instead of Correlation)?
-   - combine arbitrary similarity matrices
-   - user-defined similarities
- - generic optimization interface and algorithms (like Mallet)
+ - tests/integration
+   - test suite should also run for purely binary installation
+ - web APIs
+   - integrate with easyrec JavaScript API http://easyrec.org/ 
+   - implement features similar to the Strands web service API
+     - http://recommender.strands.com/developers/
+ - internal APIs
+   - IMatrix interface, implemented by Matrix _and_ SparseMatrix types; share IO code between those
+   - interface(s) for recommenders that support online updates
+   - define an easy interface for rating data access
+     - allow lazy iteration
+     - allow random and randomized access
+     - allow creating splits for cross-validation w/o duplicating data
+     - (maybe) get num_users, num_items, max_user_id, max_item_id
+   - user and item IDs should be unsigned integers, not signed integers
+   - generic optimization interface and algorithms (like Mallet)
+   - consider using simulated multiple inheritance for the attribute-based recommenders:
+     http://www.codeproject.com/KB/architecture/smip.aspx
+ - data structures
+   - rewrite rating data structures
+     - implement easy interface (see above)
+     - store in one list (as values, not references!)
+     - create special index data structures on demand
+   - redesign/rewrite implicit feedback data structures
+   - parameterize types:
+     - user and item IDs
+     - stored ratings
+     - prediction values (in C++ port)
+ - engines
+   - nicer, more generic structure for kNN engines
+     - non-weighted kNN
+     - more correlation/similarity measures (e.g. Jaccard index)
+       - rename to Similarity (instead of Correlation)?
+     - combine arbitrary similarity matrices
+     - user-defined similarities
+   - slope-one
+       - different weighting schemes
+ - distributed/parallel computing
+   - use Parallel.ForEach for item recommender evaluation
+     - as soon as Mono 2.8 is more widely available
+   - multi-core support
+   - GPU support
+   - support for distributed computing
+     - check out http://code.google.com/p/qizmt/ and http://mapsharp.codeplex.com/
+ - source code organization
+   - use one repository per component, instead of having everything in one repository
+ - IO+storage
+   - allow storage of models in database in addition to text files
+   - store models via reflection (can save a lot of code)
+   - faster reading of text files
+   - consider using the CsvReader class in the programs, so that we can get rid
+     of our home-grown CSV reader stuff (possibly not worth the trouble)
+     - http://www.codeproject.com/KB/database/CsvReader.aspx
  - add a simple logging mechanism (interface with 4 delegates):
-    - debug, info, warn; progress 
- - use Parallel.ForEach for item recommender evaluation
-   - as soon as Mono 2.8 is more widely available
- - multi-core support
- - GPU support
- - support for distributed computing
- - webservice interface
- - use one repository per component, instead of having everything in one repository
- - store models via reflection (can save a lot of code)
- - consider using simulated multiple inheritance for the attribute-based recommenders:
-   http://www.codeproject.com/KB/architecture/smip.aspx
- - consider using the CsvReader class in the programs, so that we can get rid
-   of our home-grown CSV reader stuff (possibly not worth the trouble)
-   - http://www.codeproject.com/KB/database/CsvReader.aspx
-Misc
+    - debug, info, warn; progress
+Misc features
  - rewrite MF techniques using vector/matrix abstractions
- - faster reading of text files
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
