@@ -16,10 +16,8 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
 
 namespace MyMediaLite.RatingPredictor
@@ -28,13 +26,12 @@ namespace MyMediaLite.RatingPredictor
 	/// Weighted Slope One
 	/// </summary>
 	/// <remarks>
-	/// http://www.daniel-lemire.com/fr/documents/publications/SlopeOne.java
+	/// see http://www.daniel-lemire.com/fr/documents/publications/SlopeOne.java
 	/// </remarks>
 	public class SlopeOne : Memory
 	{
-		// TODO use SparseMatrix<double> and SparseMatrix<int>
-  		private Dictionary<int, double>[] diff_matrix;
-  		private Dictionary<int, int>[] freq_matrix;
+  		private SparseMatrix<double> diff_matrix;
+  		private SparseMatrix<int> freq_matrix;
 
 		private double global_average;
 
@@ -61,10 +58,10 @@ namespace MyMediaLite.RatingPredictor
 
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
 			{
-				int f;
-				if (freq_matrix[item_id].TryGetValue(r.item_id, out f))
+				int f = freq_matrix[item_id, r.item_id];
+				if (f != 0)
 				{
-					prediction += ( diff_matrix[item_id][r.item_id] + r.rating ) * f;
+					prediction += ( diff_matrix[item_id, r.item_id] + r.rating ) * f;
 					frequency += f;
 				}
 			}
@@ -85,23 +82,14 @@ namespace MyMediaLite.RatingPredictor
 				foreach (RatingEvent r in user_ratings)
 	        		foreach (RatingEvent r2 in user_ratings)
 					{
-	          			if (!freq_matrix[r.item_id].ContainsKey(r2.item_id))
-						{
-							freq_matrix[r.item_id][r2.item_id] = 0;
-	          				diff_matrix[r.item_id][r2.item_id] = 0.0;
-						}
-
-	          			freq_matrix[r.item_id][r2.item_id] += 1;
-	          			diff_matrix[r.item_id][r2.item_id] += r.rating - r2.rating;
+	          			freq_matrix[r.item_id, r2.item_id] += 1;
+	          			diff_matrix[r.item_id, r2.item_id] += r.rating - r2.rating;
 	        		}
 
 			// compute average differences
 			for (int i = 0; i <= MaxItemID; i++)
-			{
-				//var relevant_items = diff_matrix[i].Keys.ToList();
-				foreach (int j in diff_matrix[i].Keys.ToList())
-					diff_matrix[i][j] /= freq_matrix[i][j];
-			}
+				foreach (int j in freq_matrix[i].Keys)
+					diff_matrix[i, j] /= freq_matrix[i, j];
 		}
 
 		private void InitModel()
@@ -110,13 +98,8 @@ namespace MyMediaLite.RatingPredictor
 			global_average = Ratings.Average;
 
 			// create data structure
-    		diff_matrix = new Dictionary<int, double>[MaxItemID + 1];
-    		freq_matrix = new Dictionary<int, int>[MaxItemID + 1];
-    		for (int i = 0; i <= MaxItemID; i++)
-			{
-      			diff_matrix[i] = new Dictionary<int, double>();
-      			freq_matrix[i] = new Dictionary<int, int>();
-			}
+    		diff_matrix = new SparseMatrix<double>(MaxItemID + 1);
+    		freq_matrix = new SparseMatrix<int>(MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>
