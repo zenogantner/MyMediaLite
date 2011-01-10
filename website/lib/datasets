@@ -5,6 +5,7 @@
    ]
    ml1m_data = [
      { engine => 'user-item-baseline',          hp => 'reg_u=25 reg_i=10',                                                 rmse => '0.9113', mae => '0.7226' }
+     { engine => 'slope-one',                   hp => '',                                                                  rmse => '0.9032', mae => '0.7131', nmae => '0.1783' }
      { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                              rmse => '0.9193', mae => '0.7221' }
      { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                              rmse => '0.8866', mae => '' }
      { engine => 'item-attribute-kNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                            rmse => '0.8958', mae => '0.7056' }
@@ -17,7 +18,8 @@
      { engine => 'biased-matrix-factorization', hp => 'num_factors=120 bias_reg=0.001 regularization=0.055  learn_rate=0.01 num_iter=90', rmse => '0.8507', mae => '0.6749' }
    ]
    ml100k = [
-     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2', rmse => '0.9558', mae => '0.7564' }
+     { engine => 'slope-one',                   hp => '',                                                                               rmse => '0.9530', mae => '0.7496', nmae => '0.1874'  }
+     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2',                                                                rmse => '0.9558', mae => '0.7564' }
      { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=30', rmse => '0.9394', mae => '0.7401' }
    ]
    camra_mp_xmas_data = [
