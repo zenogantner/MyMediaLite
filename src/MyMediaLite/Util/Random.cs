@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,9 +30,7 @@ namespace MyMediaLite.Util
 		public Random() : base() { }
 
 		/// <summary>Creates a Random object initialized with a seed</summary>
-		/// <param name="seed">
-		/// A <see cref="System.Int32"/> for initializing the random number generator
-		/// </param>
+		/// <param name="seed">An integer for initializing the random number generator</param>
 		public Random(int seed) : base(seed) { }
 
 		/// <summary>Initializes the instance with a given random seed</summary>

@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner, Christoph Freudenthaler
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -127,15 +128,15 @@ namespace MyMediaLite.ItemRecommender
 		public override void LoadModel(string filePath)
 		{
 			// TODO use library functions
-			
+
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
             using ( var reader = Engine.GetReader(filePath, GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
-				int num_users = System.Int32.Parse(numbers[0]);
-				int dim2 = System.Int32.Parse(numbers[1]);
+				int num_users = Int32.Parse(numbers[0]);
+				int dim2 = Int32.Parse(numbers[1]);
 
 				MaxUserID = num_users - 1;
 				var user_factors = new Matrix<double>(num_users, dim2);
@@ -143,9 +144,9 @@ namespace MyMediaLite.ItemRecommender
 
             	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
             	{
-					int i = System.Int32.Parse(numbers[0]);
-					int j = System.Int32.Parse(numbers[1]);
-					double v = System.Double.Parse(numbers[2], ni);
+					int i = Int32.Parse(numbers[0]);
+					int j = Int32.Parse(numbers[1]);
+					double v = Double.Parse(numbers[2], ni);
 
                 	if (i >= num_users)
 						throw new Exception(string.Format("Invalid user ID {0} is greater than {1}.", i, num_users - 1));
@@ -155,8 +156,8 @@ namespace MyMediaLite.ItemRecommender
                 	user_factors[i, j] = v;
 				}
 
-            	int num_items = System.Int32.Parse(numbers[0]);
-				dim2 = System.Int32.Parse(numbers[1]);
+            	int num_items = Int32.Parse(numbers[0]);
+				dim2 = Int32.Parse(numbers[1]);
 				if (dim2 != num_factors)
 					throw new Exception("dim2 of item_factors must be num_factors");
 				var item_factors = new Matrix<double>(num_items, dim2);
@@ -164,9 +165,9 @@ namespace MyMediaLite.ItemRecommender
             	while (!reader.EndOfStream)
             	{
 					numbers = reader.ReadLine().Split(' ');
-					int i = System.Int32.Parse(numbers[0]);
-					int j = System.Int32.Parse(numbers[1]);
-					double v = System.Double.Parse(numbers[2], ni);
+					int i = Int32.Parse(numbers[0]);
+					int j = Int32.Parse(numbers[1]);
+					double v = Double.Parse(numbers[2], ni);
 
                 	if (i >= num_items)
 						throw new Exception(string.Format("Invalid item ID {0} is greater than {1}.", i, num_items - 1));

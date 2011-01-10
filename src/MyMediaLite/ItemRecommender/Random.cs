@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +20,7 @@ using System;
 
 namespace MyMediaLite.ItemRecommender
 {
-	/// <summary>Random predictions. Engine for use as experimental baseline.</summary>
+	/// <summary>Random prediction engine for use as experimental baseline</summary>
     public class Random : IItemRecommender
     {
         /// <inheritdoc/>

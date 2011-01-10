@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
@@ -62,9 +63,7 @@ namespace MyMediaLite.ItemRecommender
         public override void AddFeedback(int user_id, int item_id)
         {
 			if (!view_count.ContainsKey(item_id))
-            {
-                view_count[item_id] = 0;
-            }
+     	       view_count[item_id] = 0;
 
 			view_count[item_id]++;
         }
@@ -79,10 +78,8 @@ namespace MyMediaLite.ItemRecommender
 		public override void SaveModel(string filePath)
 		{
 			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-			{
 				foreach (int key in view_count.Keys)
 					writer.WriteLine(key + " " + view_count[key]);
-			}
 		}
 
 		/// <inheritdoc/>
@@ -94,8 +91,8 @@ namespace MyMediaLite.ItemRecommender
 				while (! reader.EndOfStream)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');
-					int key   = System.Int32.Parse(numbers[0]);
-					int count = System.Int32.Parse(numbers[1]);
+					int key   = Int32.Parse(numbers[0]);
+					int count = Int32.Parse(numbers[1]);
 			 		view_count[key] = count;
 				}
 			}

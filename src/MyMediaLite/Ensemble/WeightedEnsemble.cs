@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -86,7 +87,7 @@ namespace MyMediaLite.ensemble
 			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
 			{
 
-				int numberOfComponents = System.Int32.Parse(reader.ReadLine());
+				int numberOfComponents = Int32.Parse(reader.ReadLine());
 
 				var weights = new List<double>();
 				var engines = new List<IRecommenderEngine>();
@@ -99,7 +100,7 @@ namespace MyMediaLite.ensemble
 					engines.Add( (IRecommenderEngine) Activator.CreateInstance(t) );
 					engines[i].LoadModel("model-" + i + ".txt");
 
-					// TODO make sure the engines get their data FIXME
+					// make sure the engines get their data FIXME
 
 					weights.Add(System.Double.Parse(data[1], ni));
 				}
