@@ -27,72 +27,78 @@ namespace MyMediaLite.DataType
     /// The data is stored in row-major mode.
     /// Indexes are zero-based.
     /// </remarks>
-    /// <typeparam name="T"></typeparam>	
+    /// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
     public class SparseMatrix<T> where T:new()
     {
-		private Dictionary<int, Dictionary<int, T>> data = new Dictionary<int, Dictionary<int, T>>();
-		
-		/// <summary>
-		/// Get a row of the matrix
-		/// </summary>
+		// TODO create unit tests for this class
+
+		private List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
+
+		/// <summary>Create a sparse matrix with a given number of rows</summary>
+		/// <param name="num_rows">the number of rows</param>
+		public SparseMatrix(int num_rows)
+		{
+			for (int i = 0; i < num_rows; i++)
+				row_list.Add( new Dictionary<int, T>() );
+		}
+
+		/// <summary>Get a row of the matrix</summary>
 		/// <param name="x">the row ID</param>
-		public Dictionary<int, T> this [int x] {
+		public Dictionary<int, T> this [int x]
+		{
 			get {
-	            Dictionary<int, T> result;
-	            if (!data.TryGetValue(x, out result))
-				{
-	                result = new Dictionary<int, T>();
-	                data.Add(x, result);
-	            }
-	            return result;
+	            if (x >= row_list.Count)
+	                return new Dictionary<int, T>();
+	            else return row_list[x];
 			}
 		}
-		
+
 		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
-		public T this [int x, int y] {
-			get {
+		public T this [int x, int y]
+		{
+			get	{
 				T result;
-	            if (this[x].TryGetValue(y, out result))
+				if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
 					return result;
 				else
 					return new T();
 			}
 			set {
-				this[x][y] = value;
+				if (x >= row_list.Count)
+					for (int i = row_list.Count; i <= x; i++)
+						row_list.Add( new Dictionary<int, T>() );
+
+				row_list[x][y] = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// The non-empty rows of the matrix (the ones that contain at least one non-zero entry),
 		/// with their IDs
 		/// </summary>
 		public IList<KeyValuePair<int, Dictionary<int, T>>> NonEmptyRows
 		{
-			get
-			{
+			get	{
 				var return_list = new List<KeyValuePair<int, Dictionary<int, T>>>();
-				for (int i = 0; i < data.Count; i++)
-					if (data[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, Dictionary<int, T>>(i, data[i]));
+				for (int i = 0; i < row_list.Count; i++)
+					if (row_list[i].Count > 0)
+						return_list.Add(new KeyValuePair<int, Dictionary<int, T>>(i, row_list[i]));
 				return return_list;
 			}
 		}
-		
+
 		/// <summary>The row and column IDs of non-empty entries in the matrix</summary>
 		public IList<Pair<int, int>> NonEmptyEntryIDs
 		{
-			get
-			{
+			get	{
 				var return_list = new List<Pair<int, int>>();
 				foreach (var id_row in this.NonEmptyRows)
 					foreach (var col_id in id_row.Value.Keys)
 						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
 				return return_list;
 			}
-		}		
-		
+		}
 	}
 }
-
