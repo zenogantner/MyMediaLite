@@ -272,8 +272,8 @@ namespace MyMediaLite.RatingPredictor
 			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
-				MatrixUtils.WriteMatrix(writer, user_factors);
-				MatrixUtils.WriteMatrix(writer, item_factors);
+				IMatrixUtils.WriteMatrix(writer, user_factors);
+				IMatrixUtils.WriteMatrix(writer, item_factors);
 			}
 		}
 
@@ -287,8 +287,8 @@ namespace MyMediaLite.RatingPredictor
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
-				Matrix<double> user_factors = MatrixUtils.ReadMatrix(reader);
-            	Matrix<double> item_factors = MatrixUtils.ReadMatrix(reader);
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.user_factors);
+            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.item_factors);
 
 				if (user_factors.dim2 != item_factors.dim2)
                 	throw new Exception(

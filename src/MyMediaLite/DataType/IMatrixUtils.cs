@@ -111,10 +111,10 @@ namespace MyMediaLite.DataType
 			return matrix;
 		}
 
-		/// <summary>Read a matrix from a TextReader object</summary>
+		/// <summary>Read a matrix of integers from a TextReader object</summary>
 		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
 		/// <param name="example_matrix">matrix of the type of matrix to create</param>
-		/// <returns>a matrix of doubles</returns>
+		/// <returns>a matrix of integers</returns>
 		static public IMatrix<int> ReadMatrix(TextReader reader, IMatrix<int> example_matrix)
 		{
         	string[] numbers = reader.ReadLine().Split(' ');

@@ -147,9 +147,9 @@ namespace MyMediaLite.RatingPredictor
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 				VectorUtils.WriteVector(writer, user_bias);
-				MatrixUtils.WriteMatrix(writer, user_factors);
+				IMatrixUtils.WriteMatrix(writer, user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
-				MatrixUtils.WriteMatrix(writer, item_factors);
+				IMatrixUtils.WriteMatrix(writer, item_factors);
 			}
 		}
 
@@ -164,9 +164,9 @@ namespace MyMediaLite.RatingPredictor
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
 				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
-				Matrix<double> user_factors   = MatrixUtils.ReadMatrix(reader);
-				ICollection<double> item_bias = VectorUtils.ReadVector(reader);
-            	Matrix<double> item_factors   = MatrixUtils.ReadMatrix(reader);
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.user_factors);				
+				ICollection<double> item_bias = VectorUtils.ReadVector(reader);				
+            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.item_factors);
 
 				if (user_factors.dim2 != item_factors.dim2)
                 	throw new IOException(

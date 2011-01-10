@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,52 +27,6 @@ namespace MyMediaLite.DataType
     /// <summary>Utilities to work with matrices</summary>
     public class MatrixUtils
     {
-		/// <summary>Write a matrix to a StreamWriter object</summary>
-		/// <param name="writer">a <see cref="StreamWriter"/></param>
-		/// <param name="matrix">the matrix of doubles to write out</param>
-		static public void WriteMatrix(StreamWriter writer, Matrix<double> matrix)
-		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-        	writer.WriteLine(matrix.dim1 + " " + matrix.dim2);
-        	for (int i = 0; i < matrix.dim1; i++)
-            	for (int j = 0; j < matrix.dim2; j++)
-                	writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(ni));
-			writer.WriteLine();
-		}
-
-		/// <summary>Read a matrix from a TextReader object</summary>
-		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
-		/// <returns>a matrix of doubles</returns>
-		static public Matrix<double> ReadMatrix(TextReader reader)
-		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-			
-        	string[] numbers = reader.ReadLine().Split(' ');
-        	int dim1 = int.Parse(numbers[0]);
-        	int dim2 = int.Parse(numbers[1]);
-			
-			var matrix = new Matrix<double>(dim1, dim2);
-
-        	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
-        	{
-            	int i = System.Int32.Parse(numbers[0]);
-            	int j = System.Int32.Parse(numbers[1]);
-            	double v = System.Double.Parse(numbers[2], ni);
-
-            	if (i >= dim1)
-                    throw new IOException("i = " + i + " >= " + dim1);
-                if (j >= dim2)
-                    throw new IOException("j = " + j + " >= " + dim2);
-
-                matrix[i, j] = v;
-	        }
-
-			return matrix;
-		}
-
         /// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
         /// <param name="matrix">the matrix to initialize</param>
         /// <param name="mean">the mean of the normal distribution drawn from</param>
