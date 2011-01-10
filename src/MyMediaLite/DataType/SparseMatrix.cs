@@ -48,9 +48,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 		
-		/// <summary>
-		/// Access the elements of the sparse matrix
-		/// </summary>
+		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
 		public T this [int x, int y] {
@@ -82,9 +80,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 		
-		/// <summary>
-		/// The row and column IDs of non-empty entries in the matrix.
-		/// </summary>
+		/// <summary>The row and column IDs of non-empty entries in the matrix</summary>
 		public IList<Pair<int, int>> NonEmptyEntryIDs
 		{
 			get
