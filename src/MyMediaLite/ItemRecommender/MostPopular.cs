@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Steffen Rendle
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -75,17 +75,17 @@ namespace MyMediaLite.ItemRecommender
 		}
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
 				foreach (int key in view_count.Keys)
 					writer.WriteLine(key + " " + view_count[key]);
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
 				this.view_count = new Dictionary<int, int>();
 				while (! reader.EndOfStream)

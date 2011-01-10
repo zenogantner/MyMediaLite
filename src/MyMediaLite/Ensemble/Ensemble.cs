@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -78,9 +79,9 @@ namespace MyMediaLite.ensemble
 		public abstract double Predict(int user_id, int item_id);
 
 		/// <inheritdoc/>
-		public abstract void SaveModel(string filePath);
+		public abstract void SaveModel(string file);
 		/// <inheritdoc/>
-		public abstract void LoadModel(string filePath);
+		public abstract void LoadModel(string file);
 
         /// <inheritdoc/>
         public virtual void Train()

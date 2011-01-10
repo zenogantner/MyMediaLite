@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -265,12 +265,12 @@ namespace MyMediaLite.ItemRecommender
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = Int32.Parse(numbers[0]);
@@ -279,7 +279,7 @@ namespace MyMediaLite.ItemRecommender
 				MaxUserID = num_users - 1;
 				var matrix = new Matrix<double>(num_users, dim2);
 				int num_item_attributes = dim2;
-
+				// TODO use library function
             	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
             	{
 					int i = Int32.Parse(numbers[0]);

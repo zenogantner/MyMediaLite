@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -137,12 +138,12 @@ namespace MyMediaLite.RatingPredictor
         }
 		
         /// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 				VectorUtils.WriteVector(writer, user_bias);
@@ -153,12 +154,12 @@ namespace MyMediaLite.RatingPredictor
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
         {
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 

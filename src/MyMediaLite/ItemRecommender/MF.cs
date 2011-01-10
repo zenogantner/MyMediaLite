@@ -103,12 +103,12 @@ namespace MyMediaLite.ItemRecommender
         }
 
 		/// <inheritdoc/>
-		public override void SaveModel(string fileName)
+		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(fileName, GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(file, GetType()) )
 			{
 				// TODO move matrix reading and writing to the MatrixUtils class
             	writer.WriteLine(user_factors.dim1 + " " + user_factors.dim2);
@@ -125,14 +125,14 @@ namespace MyMediaLite.ItemRecommender
 
 		// TODO share code with MatrixFactorization
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string file)
 		{
 			// TODO use library functions
 
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            using ( var reader = Engine.GetReader(filePath, GetType()) )
+            using ( var reader = Engine.GetReader(file, GetType()) )
 			{
             	string[] numbers = reader.ReadLine().Split(' ');
 				int num_users = Int32.Parse(numbers[0]);

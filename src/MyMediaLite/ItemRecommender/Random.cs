@@ -15,8 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-
 
 namespace MyMediaLite.ItemRecommender
 {
@@ -51,13 +49,13 @@ namespace MyMediaLite.ItemRecommender
 		public virtual void RemoveItem(int item_id) { }
 
         /// <inheritdoc/>
-		public void SaveModel(string filePath)
+		public void SaveModel(string filename)
 		{
 			// do nothing
 		}
 
         /// <inheritdoc/>
-		public void LoadModel(string filePath)
+		public void LoadModel(string filename)
 		{
 			// do nothing
 		}

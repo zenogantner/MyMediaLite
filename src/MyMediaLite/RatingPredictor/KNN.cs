@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -50,24 +50,16 @@ namespace MyMediaLite.RatingPredictor
         protected CorrelationMatrix correlation;
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-			{
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
-			}
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

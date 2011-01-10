@@ -264,12 +264,12 @@ namespace MyMediaLite.RatingPredictor
         }
 
         /// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 				MatrixUtils.WriteMatrix(writer, user_factors);
@@ -278,12 +278,12 @@ namespace MyMediaLite.RatingPredictor
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string file)
         {
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 

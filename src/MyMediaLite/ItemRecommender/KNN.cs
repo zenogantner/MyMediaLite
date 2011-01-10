@@ -37,9 +37,9 @@ namespace MyMediaLite.ItemRecommender
         protected CorrelationMatrix correlation;
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(nearest_neighbors.Length);
 				foreach (int[] nn in nearest_neighbors)
@@ -55,9 +55,9 @@ namespace MyMediaLite.ItemRecommender
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
 				int num_users = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_users][];

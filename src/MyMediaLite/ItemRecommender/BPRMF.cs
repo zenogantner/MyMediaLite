@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Christoph Freudenthaler
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -453,9 +454,9 @@ namespace MyMediaLite.ItemRecommender
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
-			base.LoadModel(filePath);
+			base.LoadModel(filename);
 			random = Util.Random.GetInstance();
 		}
 

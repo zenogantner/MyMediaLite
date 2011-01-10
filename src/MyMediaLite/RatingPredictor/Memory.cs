@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -68,10 +69,10 @@ namespace MyMediaLite.RatingPredictor
         public abstract void Train();		
 		
 		/// <inheritdoc/>
-		public abstract void SaveModel(string filePath);
+		public abstract void SaveModel(string filename);
 
 		/// <inheritdoc/>
-		public abstract void LoadModel(string filePath);
+		public abstract void LoadModel(string filename);
 
 		/// <inheritdoc/>
 		public virtual bool CanPredict(int user_id, int item_id)

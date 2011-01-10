@@ -62,12 +62,12 @@ namespace MyMediaLite.ensemble
         }
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(engines.Count);
 				for (int i = 0; i < engines.Count; i++)
@@ -79,12 +79,12 @@ namespace MyMediaLite.ensemble
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string file)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
 
 				int numberOfComponents = Int32.Parse(reader.ReadLine());

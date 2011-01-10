@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -58,17 +59,15 @@ namespace MyMediaLite.RatingPredictor
         }
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-				throw new NotImplementedException();
+			// do nothing
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
-				throw new NotImplementedException();
+			Train();
 		}
 
 		/// <summary>returns the name of the method</summary>
@@ -94,17 +93,15 @@ namespace MyMediaLite.RatingPredictor
 		protected double global_average = 0;
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-				throw new NotImplementedException();
+			// do nothing
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Engine.GetReader(filePath, this.GetType()) )
-				throw new NotImplementedException();
+			Train();
 		}
     }
 

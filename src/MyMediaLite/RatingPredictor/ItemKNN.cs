@@ -130,9 +130,9 @@ namespace MyMediaLite.RatingPredictor
         }
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filePath)
+		public override void LoadModel(string filename)
 		{
-			base.LoadModel(filePath);
+			base.LoadModel(filename);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
 		}
 	}
