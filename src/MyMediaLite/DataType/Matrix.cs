@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,7 +28,7 @@ namespace MyMediaLite.DataType
     /// Indexes are zero-based.
     /// </remarks>
     /// <typeparam name="T">the type of the matrix entries</typeparam>
-    public class Matrix<T>
+    public class Matrix<T> : IMatrix<T>
     {
         /// <summary>Data array: data is stored in columns.</summary>
         public T[] data;
@@ -36,9 +37,7 @@ namespace MyMediaLite.DataType
         /// <summary>Dimension 2, the number of columns</summary>
         public int dim2;
 
-		// TODO IMatrix interface
-		// TODO properties NumberOfRows NumberOfColumns
-
+		/// <summary>True if the matrix is symmetric, false otherwise</summary>
 		/// <value>True if the matrix is symmetric, false otherwise</value>
 		public virtual bool IsSymmetric
 		{
@@ -51,6 +50,12 @@ namespace MyMediaLite.DataType
 				return true;
 			}
 		}
+
+		/// <inheritdoc/>
+		public int NumberOfRows { get { return dim1; } }
+
+		/// <inheritdoc/>
+		public int NumberOfColumns { get { return dim2; } }
 
         /// <summary>Initializes a new instance of the Matrix class</summary>
         /// <param name="dim1">the number of rows</param>
@@ -77,6 +82,13 @@ namespace MyMediaLite.DataType
 			matrix.data.CopyTo(this.data, 0);
 		}
 
+		/// <inheritdoc/>
+		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
+		{
+			return new Matrix<T>(num_rows, num_columns);
+		}
+
+        /// <summary>The value at (i,j)</summary>
         /// <value>The value at (i,j)</value>
         /// <param name="i">the row ID</param>
         /// <param name="j">the column ID</param>
@@ -134,8 +146,6 @@ namespace MyMediaLite.DataType
 				this[i, j] = row[j];
 		}
 
-		// TODO there seems to be a mdoc bug processing the following XML doc. Report it.
-		
 		/// <summary>Sets the values of the j-th column to the values in a given array</summary>
 		/// <param name="j">the column ID</param>
 		/// <param name="column">A T[] of length dim2</param>

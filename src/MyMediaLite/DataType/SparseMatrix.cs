@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Util;
 
 
@@ -28,11 +29,24 @@ namespace MyMediaLite.DataType
     /// Indexes are zero-based.
     /// </remarks>
     /// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
-    public class SparseMatrix<T> where T:new()
+    public class SparseMatrix<T> : IMatrix<T> where T:new()
     {
 		// TODO create unit tests for this class
 
 		private List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
+
+		/// <inheritdoc/>
+		public int NumberOfRows { get { return row_list.Count; } }
+
+		/// <inheritdoc/>
+		public int NumberOfColumns {
+			get {
+				int max_col_id = 0;
+				foreach (var row in row_list)
+					max_col_id = Math.Max(max_col_id, row.Keys.Max());
+				return max_col_id + 1;
+			}
+		}
 
 		/// <summary>Create a sparse matrix with a given number of rows</summary>
 		/// <param name="num_rows">the number of rows</param>
@@ -40,6 +54,12 @@ namespace MyMediaLite.DataType
 		{
 			for (int i = 0; i < num_rows; i++)
 				row_list.Add( new Dictionary<int, T>() );
+		}
+
+		/// <inheritdoc/>
+		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
+		{
+			return new SparseMatrix<T>(num_rows);
 		}
 
 		/// <summary>Get a row of the matrix</summary>
