@@ -129,6 +129,7 @@ namespace MyMediaLite.Util
 				property_names.Add(p.Name);
 			property_names.Sort();
 
+			// TODO consider using SetProperty
 			foreach (var key in new List<string>(parameters.Keys))
 			{
 				string param_name = NormalizeName(key);
@@ -152,7 +153,7 @@ namespace MyMediaLite.Util
 							case "System.Int32":
 								if (parameters[key].Equals("inf"))
 									property.GetSetMethod().Invoke(engine, new Object[] { int.MaxValue });
-								else							
+								else
 						    		property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
 								break;
 							case "System.UInt32":
@@ -184,7 +185,11 @@ namespace MyMediaLite.Util
 
 			return engine;
 		}
-		
+
+		/// <summary>Sets a property of a MyMediaLite recommender engine</summary>
+		/// <param name="engine">An <see cref="IRecommenderEngine"/></param>
+		/// <param name="key">the name of the property (case insensitive)</param>
+		/// <param name="val">the string representation of the value</param>
 		public static void SetProperty(IRecommenderEngine engine, string key, string val)
 		{
 			var ni = new NumberFormatInfo();
@@ -211,7 +216,7 @@ namespace MyMediaLite.Util
 						case "System.Double":
 					    	property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(val, ni) });
 							break;
-						case "System.Float":
+						case "System.Single":
 					    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(val, ni) });
 							break;
 						case "System.Int32":

@@ -27,6 +27,7 @@ SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
+MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
 RATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/RatingPrediction.exe.mdb
 RATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/RatingPrediction.exe.mdb
 
@@ -49,6 +50,7 @@ SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
+MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
 RATINGPREDICTION_EXE_MDB=
 
 endif
@@ -63,6 +65,7 @@ PROGRAMFILES = \
 	$(SVM_DLL_MDB) \
 	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITEEXPERIMENTAL_DLL) \
+	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB) \
 	$(RATINGPREDICTION_EXE_MDB)  
 
 BINARIES = \
@@ -75,6 +78,7 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
+MYMEDIALITEEXPERIMENTAL_DLL_MDB = $(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 RATING_PREDICTION = $(BUILD_DIR)/rating_prediction
 
 FILES = \
@@ -110,6 +114,7 @@ $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL))
+$(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL_MDB))
 $(eval $(call emit-deploy-wrapper,RATING_PREDICTION,rating_prediction,x))
 
 
@@ -139,6 +144,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
 	$(call cp,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
@@ -155,6 +161,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
