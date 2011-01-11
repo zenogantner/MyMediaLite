@@ -6,6 +6,7 @@
             columns
         - engines
           - add Slope-One rating prediction engine
+          - fix configuration bug that affected parameters of type float
         - evaluation
           - initial support for dataset splits, cross-validation, and
             hyperparameter search

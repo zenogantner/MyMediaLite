@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite;
-
 
 namespace MyMediaLite.Util
 {
@@ -147,7 +146,7 @@ namespace MyMediaLite.Util
 							case "System.Double":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(parameters[key], ni) });
 								break;
-							case "System.Float":
+							case "System.Single":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
 								break;
 							case "System.Int32":
