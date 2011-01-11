@@ -150,10 +150,16 @@ namespace MyMediaLite.Util
 						    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
 								break;
 							case "System.Int32":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
+								if (parameters[key].Equals("inf"))
+									property.GetSetMethod().Invoke(engine, new Object[] { int.MaxValue });
+								else							
+						    		property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
 								break;
 							case "System.UInt32":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
+								if (parameters[key].Equals("inf"))
+									property.GetSetMethod().Invoke(engine, new Object[] { uint.MaxValue });
+								else
+						    		property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
 								break;
 							case "System.Boolean":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });

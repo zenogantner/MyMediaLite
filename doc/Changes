@@ -7,6 +7,8 @@
         - engines
           - add Slope-One rating prediction engine
           - fix configuration bug that affected parameters of type float
+          - engine configuration: interpret string "inf" as MaxValue for
+            signed and unsigned integers
         - evaluation
           - initial support for dataset splits, cross-validation, and
             hyperparameter search
