@@ -106,6 +106,8 @@ MyMediaLite rating prediction; usage:
     - max_rating=NUM             the greatest valid rating value
     - no_eval=BOOL               do not evaluate
     - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+    - cross_validation=K         perform k-fold crossvalidation on the training data
+                                 (ignores the test data)
   - options for finding the right number of iterations (MF methods)
     - find_iter=N                give out statistics every N iterations
     - max_iter=N                 perform at most N iterations
@@ -316,18 +318,20 @@ MyMediaLite rating prediction; usage:
 
 				if (load_model_file.Equals(string.Empty))
 				{
+					Console.Write(recommender.ToString());
 					if (cross_validation > 0)
 					{
+						Console.WriteLine();
 						var split = new RatingCrossValidationSplit(training_data, cross_validation);
-						RatingEval.EvaluateOnSplit(recommender, split);
+						var results = RatingEval.EvaluateOnSplit(recommender, split);
+						DisplayResults(results);
 						no_eval = true;
 						recommender.Ratings = training_data;
 					}
 					else
 					{
-						Console.Write(recommender.ToString() + " ");
 						seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
-            			Console.Write("training_time " + seconds + " ");
+            			Console.Write(" training_time " + seconds + " ");
 						Engine.SaveModel(recommender, save_model_file);
 					}
 				}

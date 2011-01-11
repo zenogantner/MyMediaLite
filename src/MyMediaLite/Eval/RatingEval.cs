@@ -19,18 +19,16 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPredictor;
-
 
 namespace MyMediaLite.Eval
 {
     /// <summary>Evaluation class</summary>
     public static class RatingEval
     {
-		/// <summary>
-		/// the evaluation measures for rating prediction offered by the class
-		/// </summary>
+		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
 		static public ICollection<string> RatingPredictionMeasures
 		{
 			get
@@ -39,7 +37,6 @@ namespace MyMediaLite.Eval
 				return new HashSet<string>(measures);
 			}
 		}
-
 
         /// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
         /// <remarks>
@@ -84,26 +81,34 @@ namespace MyMediaLite.Eval
 			return result;
         }
 		
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="engine">a rating prediction engine</param>
+		/// <param name="split">a rating dataset split</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(Memory engine, ISplit<RatingData> split)
 		{
-			double rmse_sum = 0;
-			double mae_sum  = 0;
+            var ni = new NumberFormatInfo();
+            ni.NumberDecimalDigits = '.';
+			
+			var avg_results = new Dictionary<string, double>();
+			foreach (var key in RatingPredictionMeasures)
+				avg_results[key] = 0;
 			
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
 				engine.Ratings = split.Train[i];
 				engine.Train();
-				var results = Evaluate(engine, split.Test[i]);
-				rmse_sum += results["RMSE"];
-				mae_sum += results["MAE"];
-				Console.Error.WriteLine(results["RMSE"]);
+				var fold_results = Evaluate(engine, split.Test[i]);
+				
+				foreach (var key in fold_results.Keys)
+					avg_results[key] += fold_results[key];
+				Console.Error.WriteLine("fold {0}, RMSE {1}, MAE {2}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
 			}
 			
-			var result = new Dictionary<string, double>();
-			result.Add("RMSE", rmse_sum / split.NumberOfFolds);
-			result.Add("MAE", mae_sum / split.NumberOfFolds);
+			foreach (var key in avg_results.Keys.ToList())
+				avg_results[key] /= split.NumberOfFolds;
 			
-			return result;
+			return avg_results;
 		}
 	}
 }

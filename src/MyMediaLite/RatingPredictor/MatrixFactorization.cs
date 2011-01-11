@@ -24,7 +24,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Simple matrix factorization class</summary>
@@ -142,8 +141,8 @@ namespace MyMediaLite.RatingPredictor
                     double i_f = item_factors[i, f];
 
 					// compute factor updates
-                    double delta_u = (err * i_f - regularization * u_f);
-                    double delta_i = (err * u_f - regularization * i_f);
+                    double delta_u = err * i_f - regularization * u_f;
+                    double delta_i = err * u_f - regularization * i_f;
 
 					// if necessary, apply updates
                     if (update_user)
