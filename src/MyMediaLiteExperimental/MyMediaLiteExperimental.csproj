@@ -47,11 +47,13 @@
     <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="RatingPredictor\SlopeOne.cs" />
+    <Compile Include="Util\GridSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
     <Folder Include="RatingPredictor\" />
     <Folder Include="ItemRecommender\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

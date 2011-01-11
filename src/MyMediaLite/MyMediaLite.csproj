@@ -119,7 +119,6 @@
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Data\ISplit.cs" />
     <Compile Include="Data\RatingCrossValidationSplit.cs" />
-    <Compile Include="Util\GridSearch.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\IMatrixUtils.cs" />
   </ItemGroup>
