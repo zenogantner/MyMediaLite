@@ -18,7 +18,7 @@ Using
 7. 'using' declarations start with the 'System' namespaces, followed by all
    other namespaces. Those two groups of declarations are internally sorted
    by alphabet.
-8. After the 'using' declarations, there are two empty lines.
+8. After the 'using' declarations, there is one empty line.
 
 Class definitions
 9. One file per externally used class

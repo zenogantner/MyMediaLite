@@ -3,7 +3,6 @@
 
 using System;
 
-
 namespace MyMediaLite.Util
 {
 	/// <summary>Class containing handler functions, e.g. exception handlers</summary>
@@ -29,7 +28,5 @@ namespace MyMediaLite.Util
 				Environment.Exit(-1);
 			}
 		}
-
 	}
 }
-

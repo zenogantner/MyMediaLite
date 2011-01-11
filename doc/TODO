@@ -36,6 +36,7 @@ Recommender functionality
      - sample precision@N
    - online update evaluation
  - consider to store the hyperparameters in the model files as well
+ - prediction certainty output
 Data types
  - data types: introduce more properties
  - data type: symmetric matrix (vs. CorrelationMatrix)

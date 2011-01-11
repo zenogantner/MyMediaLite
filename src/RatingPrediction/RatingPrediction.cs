@@ -29,7 +29,6 @@ using MyMediaLite.IO;
 using MyMediaLite.RatingPredictor;
 using MyMediaLite.Util;
 
-
 namespace RatingPrediction
 {
 	/// <summary>Rating prediction program, see Usage() method for more information</summary>
