@@ -97,6 +97,7 @@ Architecture
  - add a simple logging mechanism (interface with 4 delegates):
     - debug, info, warn; progress
 Misc features
+ - use --param for command-line parameters
  - rewrite MF techniques using vector/matrix abstractions
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.

@@ -2,29 +2,39 @@
 // Its content is in the public domain.
 
 using System;
+using System.IO;
 
 namespace MyMediaLite.Util
 {
 	/// <summary>Class containing handler functions, e.g. exception handlers</summary>
 	public static class Handlers
 	{
-		/// <summary>
-		/// React to an unhandled exceptions by giving out the error message and the stack trace,
-		/// and then terminating the program.
-		/// </summary>
+		/// <summary>React to an unhandled exceptions</summary>
+		/// <remarks>
+		/// Give out the error message and the stack trace, then terminate the program.
+		/// FileNotFoundExceptions get special treatment.
+		/// </remarks>
 		/// <param name="sender">the sender of the exception</param>
 		/// <param name="unhandled_event">the arguments of the unhandled exception</param>
 		public static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs unhandled_event)
 		{
 			try
 			{
+				Exception e = (Exception) unhandled_event.ExceptionObject;
+
+				if (e is FileNotFoundException)
+				{
+					var file_not_found_exception = (FileNotFoundException) e;
+					Console.Error.WriteLine("Could not find file " + file_not_found_exception.FileName);
+					Environment.Exit(-1);
+				}			
+											
 				Console.Error.WriteLine("An uncaught exception occured. Please send a bug report to mymedialite@ismll.de");
-				Exception e = (Exception)unhandled_event.ExceptionObject;
 				Console.Error.WriteLine(e.Message + e.StackTrace);
+				Console.Error.WriteLine ("Terminate on unhandled exception.");
 			}
 			finally
 			{
-				Console.Error.WriteLine ("Terminate on unhandled exception.");
 				Environment.Exit(-1);
 			}
 		}
