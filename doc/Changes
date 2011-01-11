@@ -6,6 +6,7 @@
             columns
         - engines
           - add Slope-One rating prediction engine
+          - weighted-item-kNN: fix ToString() method
           - fix configuration bug that affected parameters of type float
           - engine configuration: interpret string "inf" as MaxValue for
             signed and unsigned integers
