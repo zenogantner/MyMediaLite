@@ -132,8 +132,8 @@ namespace MyMediaLite.Correlation
 
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 			
-			var sums         = new double[num_entities]; // TODO compute
-			var squared_sums = new double[num_entities]; // TODO compute
+			var sums         = new double[num_entities];
+			var squared_sums = new double[num_entities];
 			var frequencies  = new SparseMatrix<int>(num_entities);
 			
 			foreach (var other_entity_ratings in ratings_by_entity)
