@@ -14,6 +14,7 @@
           - initial support for dataset splits, cross-validation, and
             hyperparameter search
 	  - add evaluation measure normalized mean absolute error (NMAE)
+          - shorter method names for RatingEval and ItemRecommenderEval
         - data types
           - add IMatrix interface for both sparse and dense matrices
           - improve SparseMatrix implementation
