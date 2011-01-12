@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -286,8 +287,8 @@ namespace MyMediaLite.RatingPredictor
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
-				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.user_factors);
-            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.item_factors);
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
                 	throw new Exception(
