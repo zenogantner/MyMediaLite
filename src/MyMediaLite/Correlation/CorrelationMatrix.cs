@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -22,7 +22,6 @@ using System.IO;
 using MyMediaLite.DataType;
 using MyMediaLite.Data;
 using MyMediaLite.Taxonomy;
-
 
 namespace MyMediaLite.Correlation
 {

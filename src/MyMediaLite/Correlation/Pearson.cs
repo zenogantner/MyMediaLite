@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	{
 		/// <summary>shrinkage parameter</summary>
 		public float shrinkage = 10;
-		
+
 		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
@@ -63,7 +63,7 @@ namespace MyMediaLite.Correlation
 			cm.shrinkage = shrinkage;
 			cm.ComputeCorrelations(ratings, entity_type);
 			return cm;
-		}		
+		}
 
 		/// <summary>Compute correlations between two entities for given ratings</summary>
 		/// <param name="ratings1">the rating data for entity 1</param>
@@ -121,7 +121,7 @@ namespace MyMediaLite.Correlation
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
 			return (float) pmcc * (n / (n + shrinkage));
 		}
-		
+
 		/// <summary>Compute correlations for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
@@ -131,52 +131,75 @@ namespace MyMediaLite.Correlation
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
-			
-			var sums         = new double[num_entities];
-			var squared_sums = new double[num_entities];
-			var frequencies  = new SparseMatrix<int>(num_entities);
-			
+
+			// pass 1 - compute rating averages
+			var rating_averages = new double[num_entities];
+			var rating_counts   = new uint[num_entities];
+			foreach (RatingEvent r in ratings)
+			{
+				int x = (entity_type == EntityType.USER) ? r.user_id : r.item_id;
+				rating_averages[x] += r.rating;
+				rating_counts[x]++;
+			}
+			for (int i = 0; i < num_entities; i++)
+				rating_averages[i] /= rating_counts[i];
+
+			// pass 2 - compute standard deviations and denominator
+			var frequencies = new SparseMatrix<int>(num_entities);
+			var std_deviations = new double[num_entities];
+
 			foreach (var other_entity_ratings in ratings_by_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];
 					int x = (entity_type == EntityType.USER) ? r1.user_id : r1.item_id;
-					
-					// update entity-wise sums
-					sums[x]         += r1.rating;
-					squared_sums[x] += r1.rating * r1.rating;
-				
-					// update pairwise scalar product and frequency
+
+					// update standard deviation sum
+					std_deviations[x] += Math.Pow(rating_averages[x] * r1.rating, 2);
+
+					// update denominator
 	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
 					{
 						var r2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
-					
+
+						double update = (r1.rating - rating_averages[x]) * (r2.rating - rating_averages[y]);
+
 						if (x < y)
 						{
-							this.data[x * dim2 + y] += (float) (r1.rating * r2.rating);
+							this.data[x * dim2 + y] += (float) update;
 	          				frequencies[x, y] += 1;
 						}
 						else
 						{
-							this.data[y * dim2 + y] += (float) (r1.rating * r2.rating);
-	          				frequencies[y, x] += 1;						
+							this.data[y * dim2 + y] += (float) update;
+	          				frequencies[y, x] += 1;
 						}
 	        		}
 				}
-			
+
+			// get standard deviation
+			for (int i = 0; i< num_entities; i++)
+				std_deviations[i] = Math.Sqrt(std_deviations[i]);
+
+			// set the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
-			
+
+			// set the other non-zero values
 			foreach (var index_pair in frequencies.NonEmptyEntryIDs)
 			{
 				int x = index_pair.First;
 				int y = index_pair.Second;
 				int n = frequencies[x, y];
-				double numerator   = frequencies[x, y] * this[x, y];
-				double denominator = Math.Sqrt(n * squared_sums[x] - sums[x] * sums[x]) * Math.Sqrt(n * squared_sums[y] - sums[y] * sums[y]);
+				
+				if (n < 2)
+					continue;
+				
+				double numerator   = this[x, y];
+				double denominator = std_deviations[x] * std_deviations[y];
 				double pmcc = numerator / denominator;
-				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));				
+				this[x, y] = (float) pmcc * (n / (n + shrinkage));
 			}
 		}
 	}

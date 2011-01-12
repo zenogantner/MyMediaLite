@@ -21,7 +21,6 @@ using System.IO;
 using System.Reflection;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.DataType
 {
     /// <summary>Utilities to work with matrices</summary>
