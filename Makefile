@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local
-VERSION=0.08
+VERSION=0.09
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 HTML_IMMDOC_DIR=website/public_html/documentation/immdoc
@@ -11,7 +11,7 @@ IMMDOC=mono --debug ${HOME}/src/immdoc/Src/ImmDocNet/ImmDocNet/bin/Debug/ImmDocN
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html imdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html immdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
 all: configure
 	cd ${SRC_DIR} && make all
 

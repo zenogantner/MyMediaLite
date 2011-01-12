@@ -1,4 +1,8 @@
-0.09	2011-01-??
+0.10	2011-??-??
+	- engines
+          - kNN-based engines are now much faster and consume less memory
+
+0.09	2011-01-12
 	- IO
           - add database and IDataReader support (by Artus Krohn-Grimberghe)
           - graceful handling of FileNotExceptions
@@ -6,6 +10,7 @@
             columns
         - engines
           - add Slope-One rating prediction engine
+          - weighted-item-kNN: fix ToString() method
           - fix configuration bug that affected parameters of type float
           - engine configuration: interpret string "inf" as MaxValue for
             signed and unsigned integers
@@ -13,6 +18,7 @@
           - initial support for dataset splits, cross-validation, and
             hyperparameter search
 	  - add evaluation measure normalized mean absolute error (NMAE)
+          - shorter method names for RatingEval and ItemRecommenderEval
         - data types
           - add IMatrix interface for both sparse and dense matrices
           - improve SparseMatrix implementation

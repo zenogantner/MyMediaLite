@@ -24,7 +24,7 @@ namespace ItemPrediction
 			recommender.Train();
 
 			// measure the accuracy on the test data set
-			var results = ItemPredictionEval.EvaluateItemRecommender(recommender, test_data, training_data, relevant_items);
+			var results = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_items);
 			Console.WriteLine("AUC={0}", results["AUC"]);
 
 			// make a prediction for a certain user and item

@@ -26,7 +26,6 @@ using MyMediaLite.ItemRecommender;
 using MyMediaLite.RatingPredictor;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.Eval
 {
     /// <summary>Evaluation class</summary>

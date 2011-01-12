@@ -87,7 +87,8 @@ FILES = \
 	AttrToFactor/MF_Item_Mapping_Optimal.cs \
 	RatingPredictor/SocialMF.cs \
 	ItemRecommender/ItemAttributeSVM.cs \
-	RatingPredictor/SlopeOne.cs 
+	RatingPredictor/SlopeOne.cs \
+	Util/GridSearch.cs 
 
 DATA_FILES = 
 

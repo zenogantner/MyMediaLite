@@ -11,7 +11,7 @@
     <AssemblyName>MyMediaLite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ReleaseVersion>0.8</ReleaseVersion>
+    <ReleaseVersion>0.9</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,7 +119,6 @@
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Data\ISplit.cs" />
     <Compile Include="Data\RatingCrossValidationSplit.cs" />
-    <Compile Include="Util\GridSearch.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\IMatrixUtils.cs" />
   </ItemGroup>

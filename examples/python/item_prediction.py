@@ -17,7 +17,7 @@ recommender.SetCollaborativeData(training_data);
 recommender.Train()
 
 # measure the accuracy on the test data set
-print MyMediaLite.Eval.ItemPredictionEval.EvaluateItemRecommender(recommender, test_data, training_data, relevant_items)
+print MyMediaLite.Eval.ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_items)
 
 # make a prediction for a certain user and item
 print recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))

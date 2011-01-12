@@ -25,7 +25,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
@@ -41,7 +40,7 @@ namespace MyMediaLite.RatingPredictor
 		protected double[] user_bias;
 		/// <summary>the item biases</summary>
 		protected double[] item_bias;
-		
+
 		/// <inheritdoc/>
         public override void Train()
 		{
@@ -57,10 +56,10 @@ namespace MyMediaLite.RatingPredictor
 			item_bias = new double[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
 				item_bias[i] = Util.Random.GetInstance().NextNormal(InitMean, InitStdev);
-			
+
             // learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-			
+
 			// compute global average
 			double global_average = 0;
 			foreach (RatingEvent r in Ratings.All)
@@ -98,7 +97,7 @@ namespace MyMediaLite.RatingPredictor
 					user_bias[u] += learn_rate * (gradient_common - bias_regularization * user_bias[u]);
 				if (update_item)
 					item_bias[i] += learn_rate * (gradient_common - bias_regularization * item_bias[i]);
-				
+
 				// Adjust latent factors
                 for (int f = 0; f < num_factors; f++)
                 {
@@ -136,7 +135,7 @@ namespace MyMediaLite.RatingPredictor
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
         }
-		
+
         /// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
@@ -164,9 +163,9 @@ namespace MyMediaLite.RatingPredictor
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 
 				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
-				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.user_factors);				
-				ICollection<double> item_bias = VectorUtils.ReadVector(reader);				
-            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, this.item_factors);
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+				ICollection<double> item_bias = VectorUtils.ReadVector(reader);
+            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
                 	throw new IOException(
@@ -182,8 +181,8 @@ namespace MyMediaLite.RatingPredictor
 					throw new IOException(
 					              string.Format(
 					                  "Number of items must be the same for biases and factors: {0} != {1}",
-					                  item_bias.Count, item_factors.dim1));				
-				
+					                  item_bias.Count, item_factors.dim1));
+
 				this.MaxUserID = user_factors.dim1 - 1;
 				this.MaxItemID = item_factors.dim1 - 1;
 
@@ -202,13 +201,13 @@ namespace MyMediaLite.RatingPredictor
 				item_bias.CopyTo(this.item_bias, 0);
 			}
         }
-		
+
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni,
 			                     "biased-matrix-factorization num_factors={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
 				                 NumFactors, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);

@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -19,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
-
 
 namespace MyMediaLite.Correlation
 {
@@ -60,6 +60,7 @@ namespace MyMediaLite.Correlation
 		/// <inheritdoc/>
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
+			/*
 			Console.Error.Write("Computation of cosine similarity for {0} entities... ", num_entities);
 
             for (int i = 0; i < num_entities; i++)
@@ -81,6 +82,8 @@ namespace MyMediaLite.Correlation
 			}
 
 			Console.Error.WriteLine();
+			*/
+			
 		}
 
 		/// <summary>Computes the cosine similarity of two binary vectors</summary>

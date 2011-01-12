@@ -22,7 +22,6 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Frequency-weighted Slope-One rating prediction</summary>
