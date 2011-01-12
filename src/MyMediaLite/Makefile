@@ -135,7 +135,6 @@ FILES = \
 	Correlation/Pearson.cs \
 	Data/ISplit.cs \
 	Data/RatingCrossValidationSplit.cs \
-	Util/GridSearch.cs \
 	DataType/IMatrix.cs \
 	DataType/IMatrixUtils.cs 
 
