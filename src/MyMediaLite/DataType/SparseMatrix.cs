@@ -33,7 +33,7 @@ namespace MyMediaLite.DataType
     {
 		// TODO create unit tests for this class
 
-		private List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
+		List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
 
 		/// <inheritdoc/>
 		public int NumberOfRows { get { return row_list.Count; } }

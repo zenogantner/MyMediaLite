@@ -33,7 +33,7 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Copy constructor. Creates an object of type Cosine from an existing one.</summary>
 		/// <param name ="correlation_matrix">the correlation matrix to copy</param>
-		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.dim1)
+		public Cosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.NumberOfRows)
 		{
 			this.data = correlation_matrix.data;
 		}
@@ -61,30 +61,6 @@ namespace MyMediaLite.Correlation
 		/// <inheritdoc/>
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
-			/*
-			Console.Error.Write("Computation of cosine similarity for {0} entities... ", num_entities);
-
-            for (int i = 0; i < num_entities; i++)
-			{
-				this[i, i] = 1;
-                if (entity_data[i].Count == 0)
-                    continue;
-
-			    HashSet<int> attributes_i = entity_data[i];
-
-				if (i % 100 == 99)
-					Console.Error.Write(".");
-				if (i % 5000 == 4999)
-					Console.Error.WriteLine("{0}/{1}", i, num_entities);
-
-				for (int j = i + 1; j < num_entities; j++)
-                    if (entity_data[j].Count > 0)
-						this[i, j] = ComputeCorrelation(attributes_i, entity_data[j]);
-			}
-
-			Console.Error.WriteLine();
-			*/
-			
 			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...
 			
 			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows);

@@ -68,7 +68,7 @@ namespace MyMediaLite.RatingPredictor
             if (item_id < 0)
                 throw new ArgumentException("item is unknown: " + item_id);
 
-            if ((user_id > MaxUserID) || (item_id > correlation.dim1 - 1))
+            if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
                 return base.Predict(user_id, item_id);
 
 			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
