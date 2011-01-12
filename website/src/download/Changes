@@ -1,3 +1,28 @@
+0.09	2011-01-12
+	- IO
+          - add database and IDataReader support (by Artus Krohn-Grimberghe)
+          - graceful handling of FileNotExceptions
+          - bug fix in rating data reading routine: expect at least three
+            columns
+        - engines
+          - add Slope-One rating prediction engine
+          - weighted-item-kNN: fix ToString() method
+          - fix configuration bug that affected parameters of type float
+          - engine configuration: interpret string "inf" as MaxValue for
+            signed and unsigned integers
+        - evaluation
+          - initial support for dataset splits, cross-validation, and
+            hyperparameter search
+	  - add evaluation measure normalized mean absolute error (NMAE)
+          - shorter method names for RatingEval and ItemRecommenderEval
+        - data types
+          - add IMatrix interface for both sparse and dense matrices
+          - improve SparseMatrix implementation
+        - source code structure
+          - split up unit tests: one file per tested class
+          - get rid of 'Experimental' namespace, experimental engine now reside
+            in their own project
+
 0.08	2010-12-09
         - add information about ML's non-commercial use license to the download
           script

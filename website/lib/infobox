@@ -9,8 +9,8 @@
 
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
-  Version 0.08 is out:
-  <a href="[% prefix %]news/index.html#0.08">announcement</a>,
+  Version 0.09 is out:
+  <a href="[% prefix %]news/index.html#0.09">announcement</a>,
   <a href="[% prefix %]download/index.html">download</a>.
 </p>
 </div>
