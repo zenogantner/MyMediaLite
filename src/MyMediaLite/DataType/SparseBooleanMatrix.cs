@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -19,34 +20,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace MyMediaLite.DataType
 {
-    /// <summary>
-    /// Sparse representation of a boolean matrix.
+    /// <summary>Sparse representation of a boolean matrix</summary>
+    /// <remarks>
     /// Fast row-wise access is possible.
     /// Indexes are zero-based.
-    /// </summary>
-    public class SparseBooleanMatrix
+    /// </remarks>
+    public class SparseBooleanMatrix : IMatrix<bool>
     {
 		private List<HashSet<int>> rows = new List<HashSet<int>>();
 
-		/// <summary>
-		/// Indexer to access the elements of the matrix
-		/// </summary>
+		/// <summary>Indexer to access the elements of the matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
 		public bool this [int x, int y]
 		{
-			get
-			{
+			get	{
 	            if (x < rows.Count)
 	                return rows[x].Contains(y);
 				else
 					return false;
 			}
-			set
-			{
+			set	{
 				if (value)
             		this[x].Add(y);
 				else
@@ -54,10 +50,14 @@ namespace MyMediaLite.DataType
 			}
 		}
 
+		/// <inheritdoc/>
+		public IMatrix<bool> CreateMatrix(int x, int y)
+		{
+			return new SparseBooleanMatrix();
+		}
+		
 		/// <summary>Indexer to access the rows of the matrix</summary>
-		/// <param name="x">
-		/// the row ID
-		/// </param>
+		/// <param name="x">the row ID</param>
 		public HashSet<int> this [int x]
 		{
 			get
@@ -69,7 +69,7 @@ namespace MyMediaLite.DataType
 			}
 			set
 			{
-				rows[x] = value;
+				rows[x] = value; // TODO think about getting rid of this
 			}
 		}
 
@@ -167,9 +167,7 @@ namespace MyMediaLite.DataType
 			}
 		}		
 		
-		/// <summary>
-		/// Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.
-		/// </summary>
+		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.</summary>
 		/// <param name="y">the column ID</param>
 		public void RemoveColumn(int y)
 		{

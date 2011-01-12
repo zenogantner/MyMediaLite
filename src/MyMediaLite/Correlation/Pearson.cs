@@ -84,7 +84,10 @@ namespace MyMediaLite.Correlation
 			e1.IntersectWith(e2);
 
 			int n = e1.Count;
-			if (n < 2)
+			
+			Console.WriteLine("compare computation {0}, {1} : {2}", i, j, n);
+			
+			if (n < 2) // TODO reconsider this
 				return 0;
 
 			// single-pass variant
@@ -96,7 +99,8 @@ namespace MyMediaLite.Correlation
 			foreach (int other_entity_id in e1)
 			{
 				// get ratings
-				double rating_i = 0; double rating_j = 0;
+				double rating_i = 0;
+				double rating_j = 0;
 				if (entity_type == EntityType.USER)
 				{
 					rating_i = ratings1.FindRating(i, other_entity_id).rating;
@@ -115,10 +119,15 @@ namespace MyMediaLite.Correlation
 				ii_sum += rating_i * rating_i;
 				jj_sum += rating_j * rating_j;
 			}
+				
 			double denominator = Math.Sqrt((n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum));
+			
 			if (denominator == 0)
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
+			
+			Console.WriteLine("ij_sum * n - i_sum * j_sum = {0} * {1} - {2} * {3} = {4}", ij_sum, n, i_sum, j_sum, n * ij_sum - i_sum * j_sum);			
+			
 			return (float) pmcc * (n / (n + shrinkage));
 		}
 
@@ -132,74 +141,85 @@ namespace MyMediaLite.Correlation
 
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 
-			// pass 1 - compute rating averages
-			var rating_averages = new double[num_entities];
-			var rating_counts   = new uint[num_entities];
-			foreach (RatingEvent r in ratings)
-			{
-				int x = (entity_type == EntityType.USER) ? r.user_id : r.item_id;
-				rating_averages[x] += r.rating;
-				rating_counts[x]++;
-			}
-			for (int i = 0; i < num_entities; i++)
-				rating_averages[i] /= rating_counts[i];
-
-			// pass 2 - compute standard deviations and denominator
-			var frequencies = new SparseMatrix<int>(num_entities);
-			var std_deviations = new double[num_entities];
-
+			var freqs   = new SparseMatrix<int>(num_entities);
+			var i_sums  = new SparseMatrix<double>(num_entities);
+			var j_sums  = new SparseMatrix<double>(num_entities);
+			var ij_sums = new SparseMatrix<double>(num_entities);			
+			var ii_sums = new SparseMatrix<double>(num_entities);			
+			var jj_sums = new SparseMatrix<double>(num_entities);			
+		
 			foreach (var other_entity_ratings in ratings_by_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];
 					int x = (entity_type == EntityType.USER) ? r1.user_id : r1.item_id;
 
-					// update standard deviation sum
-					std_deviations[x] += Math.Pow(rating_averages[x] * r1.rating, 2);
-
-					// update denominator
+					// update pairwise scalar product and frequency
 	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
 					{
 						var r2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
 
-						double update = (r1.rating - rating_averages[x]) * (r2.rating - rating_averages[y]);
+						// ensure x < y
+						if (x > y)
+						{
+							int tmp = x;
+							x = y;
+							y = tmp;
+						}
 
-						if (x < y)
-						{
-							this.data[x * dim2 + y] += (float) update;
-	          				frequencies[x, y] += 1;
-						}
-						else
-						{
-							this.data[y * dim2 + y] += (float) update;
-	          				frequencies[y, x] += 1;
-						}
+						freqs[x, y]   += 1;
+						i_sums[x, y]  += r1.rating;
+						j_sums[x, y]  += r2.rating;
+						ij_sums[x, y] += r1.rating * r2.rating;
+						ii_sums[x, y] += r1.rating * r1.rating;
+						jj_sums[x, y] += r2.rating * r2.rating;
 	        		}
 				}
-
-			// get standard deviation
-			for (int i = 0; i< num_entities; i++)
-				std_deviations[i] = Math.Sqrt(std_deviations[i]);
-
-			// set the diagonal of the correlation matrix
+			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// set the other non-zero values
-			foreach (var index_pair in frequencies.NonEmptyEntryIDs)
+			// fill the entries with interactions
+			foreach (var index_pair in freqs.NonEmptyEntryIDs)
 			{
 				int x = index_pair.First;
 				int y = index_pair.Second;
-				int n = frequencies[x, y];
-				
-				if (n < 2)
+				int n = freqs[x, y];
+				if (x == 0 && y == 1)
+					Console.WriteLine("{0}, {1} : {2}", x, y, n);
+
+				if (n < 2) // TODO reconsider this
+				{
+					this[x, y] = 0;
 					continue;
+				}
+
+				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
 				
-				double numerator   = this[x, y];
-				double denominator = std_deviations[x] * std_deviations[y];
+				if (x == 0 && y == 1)
+					Console.WriteLine("this[x,y] * n - sums[x] * sums[y] = {0} * {1} - {2} * {3} = {4}", this[x,y], n, i_sums[x, y], j_sums[x, y], numerator);
+				
+				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] *j_sums[x, y]) );
+				if (denominator == 0)
+				{
+					this[x, y] = 0;
+					continue;
+				}
+					
 				double pmcc = numerator / denominator;
-				this[x, y] = (float) pmcc * (n / (n + shrinkage));
+
+				if (x == 0 && y == 1)
+					Console.WriteLine("{0}/{1} = {2}", numerator, denominator, pmcc);
+
+				
+				if (x == 0 && y == 1)
+				{
+					float pmcc2 = ComputeCorrelation(ratings.ByUser[x], ratings.ByUser[y], entity_type, x, y, shrinkage);
+					Console.WriteLine("compare with {0}", pmcc2);
+				}
+				
+				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
 			}
 		}
 	}
