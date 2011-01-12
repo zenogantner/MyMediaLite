@@ -60,6 +60,7 @@ namespace MyMediaLite.Correlation
 		/// <inheritdoc/>
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
+			/*
 			Console.Error.Write("Computation of cosine similarity for {0} entities... ", num_entities);
 
             for (int i = 0; i < num_entities; i++)
@@ -81,6 +82,8 @@ namespace MyMediaLite.Correlation
 			}
 
 			Console.Error.WriteLine();
+			*/
+			
 		}
 
 		/// <summary>Computes the cosine similarity of two binary vectors</summary>

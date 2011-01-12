@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
-
 
 namespace MyMediaLite.Correlation
 {
@@ -131,25 +130,54 @@ namespace MyMediaLite.Correlation
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			int num_entities = this.dim1;
-			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByUser : ratings.ByItem;
-
-			// compute Pearson product-moment correlation coefficients for all entity pairs
-			Console.Error.Write("Computing Pearson correlation for {0} entities... ", num_entities);
-			for (int i = 0; i < num_entities; i++)
-			{
-				if (i % 100 == 99)
-					Console.Error.Write(".");
-				if (i % 4000 == 3999)
-					Console.Error.WriteLine("{0}/{1}", i, num_entities);
-
-				this[i, i] = 1;
-
-				for (int j = i + 1; j < num_entities; j++)
-					this[i, j] = ComputeCorrelation(ratings_by_entity[i], ratings_by_entity[j], entity_type, i, j, shrinkage);
-			}
+			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 			
-			Console.Error.WriteLine();
+			var sums         = new double[num_entities]; // TODO compute
+			var squared_sums = new double[num_entities]; // TODO compute
+			var frequencies  = new SparseMatrix<int>(num_entities);
+			
+			foreach (var other_entity_ratings in ratings_by_entity)
+				for (int i = 0; i < other_entity_ratings.Count; i++)
+				{
+					var r1 = other_entity_ratings[i];
+					int x = (entity_type == EntityType.USER) ? r1.user_id : r1.item_id;
+					
+					// update entity-wise sums
+					sums[x]         += r1.rating;
+					squared_sums[x] += r1.rating * r1.rating;
+				
+					// update pairwise scalar product and frequency
+	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
+					{
+						var r2 = other_entity_ratings[j];
+						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
+					
+						if (x < y)
+						{
+							this.data[x * dim2 + y] += (float) (r1.rating * r2.rating);
+	          				frequencies[x, y] += 1;
+						}
+						else
+						{
+							this.data[y * dim2 + y] += (float) (r1.rating * r2.rating);
+	          				frequencies[y, x] += 1;						
+						}
+	        		}
+				}
+			
+			for (int i = 0; i < num_entities; i++)
+				this[i, i] = 1;
+			
+			foreach (var index_pair in frequencies.NonEmptyEntryIDs)
+			{
+				int x = index_pair.First;
+				int y = index_pair.Second;
+				int n = frequencies[x, y];
+				double numerator   = frequencies[x, y] * this[x, y];
+				double denominator = Math.Sqrt(n * squared_sums[x] - sums[x] * sums[x]) * Math.Sqrt(n * squared_sums[y] - sums[y] * sums[y]);
+				double pmcc = numerator / denominator;
+				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));				
+			}
 		}
 	}
 }

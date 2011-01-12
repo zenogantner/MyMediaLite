@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,16 +20,13 @@ using System.Collections.Generic;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted user-based kNN engine</summary>
 	/// <remarks>This engine supports online updates.</remarks>
 	public abstract class UserKNN : KNN
 	{
-		/// <summary>
-		/// boolean matrix indicating which user rated which item
-		/// </summary>
+		/// <summary>boolean matrix indicating which user rated which item</summary>
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc/>
@@ -44,12 +41,11 @@ namespace MyMediaLite.RatingPredictor
 			}
 		}
 
-		/// <summary>
-		/// Predict the rating of a given user for a given item.
-		///
+		/// <summary>Predict the rating of a given user for a given item</summary>
+		/// <remarks>
 		/// If the user or the item are not known to the engine, a suitable average rating is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
-		/// </summary>
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
