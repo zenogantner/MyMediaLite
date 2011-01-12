@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	{
 		/// <summary>shrinkage parameter</summary>
 		public float shrinkage = 10;
-		
+
 		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
@@ -63,7 +63,7 @@ namespace MyMediaLite.Correlation
 			cm.shrinkage = shrinkage;
 			cm.ComputeCorrelations(ratings, entity_type);
 			return cm;
-		}		
+		}
 
 		/// <summary>Compute correlations between two entities for given ratings</summary>
 		/// <param name="ratings1">the rating data for entity 1</param>
@@ -84,7 +84,10 @@ namespace MyMediaLite.Correlation
 			e1.IntersectWith(e2);
 
 			int n = e1.Count;
-			if (n < 2)
+			
+			Console.WriteLine("compare computation {0}, {1} : {2}", i, j, n);
+			
+			if (n < 2) // TODO reconsider this
 				return 0;
 
 			// single-pass variant
@@ -96,7 +99,8 @@ namespace MyMediaLite.Correlation
 			foreach (int other_entity_id in e1)
 			{
 				// get ratings
-				double rating_i = 0; double rating_j = 0;
+				double rating_i = 0;
+				double rating_j = 0;
 				if (entity_type == EntityType.USER)
 				{
 					rating_i = ratings1.FindRating(i, other_entity_id).rating;
@@ -115,13 +119,18 @@ namespace MyMediaLite.Correlation
 				ii_sum += rating_i * rating_i;
 				jj_sum += rating_j * rating_j;
 			}
+				
 			double denominator = Math.Sqrt((n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum));
+			
 			if (denominator == 0)
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
+			
+			Console.WriteLine("ij_sum * n - i_sum * j_sum = {0} * {1} - {2} * {3} = {4}", ij_sum, n, i_sum, j_sum, n * ij_sum - i_sum * j_sum);			
+			
 			return (float) pmcc * (n / (n + shrinkage));
 		}
-		
+
 		/// <summary>Compute correlations for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
@@ -131,52 +140,86 @@ namespace MyMediaLite.Correlation
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
-			
-			var sums         = new double[num_entities]; // TODO compute
-			var squared_sums = new double[num_entities]; // TODO compute
-			var frequencies  = new SparseMatrix<int>(num_entities);
-			
+
+			var freqs   = new SparseMatrix<int>(num_entities);
+			var i_sums  = new SparseMatrix<double>(num_entities);
+			var j_sums  = new SparseMatrix<double>(num_entities);
+			var ij_sums = new SparseMatrix<double>(num_entities);			
+			var ii_sums = new SparseMatrix<double>(num_entities);			
+			var jj_sums = new SparseMatrix<double>(num_entities);			
+		
 			foreach (var other_entity_ratings in ratings_by_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];
 					int x = (entity_type == EntityType.USER) ? r1.user_id : r1.item_id;
-					
-					// update entity-wise sums
-					sums[x]         += r1.rating;
-					squared_sums[x] += r1.rating * r1.rating;
-				
+
 					// update pairwise scalar product and frequency
 	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
 					{
 						var r2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
-					
-						if (x < y)
+
+						// ensure x < y
+						if (x > y)
 						{
-							this.data[x * dim2 + y] += (float) (r1.rating * r2.rating);
-	          				frequencies[x, y] += 1;
+							int tmp = x;
+							x = y;
+							y = tmp;
 						}
-						else
-						{
-							this.data[y * dim2 + y] += (float) (r1.rating * r2.rating);
-	          				frequencies[y, x] += 1;						
-						}
+
+						freqs[x, y]   += 1;
+						i_sums[x, y]  += r1.rating;
+						j_sums[x, y]  += r2.rating;
+						ij_sums[x, y] += r1.rating * r2.rating;
+						ii_sums[x, y] += r1.rating * r1.rating;
+						jj_sums[x, y] += r2.rating * r2.rating;
 	        		}
 				}
-			
+
+			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 			
-			foreach (var index_pair in frequencies.NonEmptyEntryIDs)
+			foreach (var index_pair in freqs.NonEmptyEntryIDs)
 			{
 				int x = index_pair.First;
 				int y = index_pair.Second;
-				int n = frequencies[x, y];
-				double numerator   = frequencies[x, y] * this[x, y];
-				double denominator = Math.Sqrt(n * squared_sums[x] - sums[x] * sums[x]) * Math.Sqrt(n * squared_sums[y] - sums[y] * sums[y]);
+				int n = freqs[x, y];
+				if (x == 0 && y == 1)
+					Console.WriteLine("{0}, {1} : {2}", x, y, n);
+
+				if (n < 2) // TODO reconsider this
+				{
+					this[x, y] = 0;
+					continue;
+				}
+
+				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
+				
+				if (x == 0 && y == 1)
+					Console.WriteLine("this[x,y] * n - sums[x] * sums[y] = {0} * {1} - {2} * {3} = {4}", this[x,y], n, i_sums[x, y], j_sums[x, y], numerator);
+				
+				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] *j_sums[x, y]) );
+				if (denominator == 0)
+				{
+					this[x, y] = 0;
+					continue;
+				}
+					
 				double pmcc = numerator / denominator;
-				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));				
+
+				if (x == 0 && y == 1)
+					Console.WriteLine("{0}/{1} = {2}", numerator, denominator, pmcc);
+
+				
+				if (x == 0 && y == 1)
+				{
+					float pmcc2 = ComputeCorrelation(ratings.ByUser[x], ratings.ByUser[y], entity_type, x, y, shrinkage);
+					Console.WriteLine("compare with {0}", pmcc2);
+				}
+				
+				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
 			}
 		}
 	}
