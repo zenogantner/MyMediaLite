@@ -6,12 +6,13 @@ release checklist:
 3b. Check if the version number and date are set correctly in the Changes file
 3c. Check if the version number is correctly set in the MonoDevelop project
 4. Check the output of 'git status' - is everything in the repository?
-5. Re-create the API documentation
-6. Run 'make release'
-7. Check the contents of the source code package
-8. Check the contents of the binary package
-9. Create the release announcement
-10. Add the new version to the website
-11. Commit the website changes
-12. Create a git tag: 'git tag -a v0.XX -m "release 0.XX"'
-13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
+5. Rebuild everything
+6. Re-create the API documentation
+7. Run 'make release' (not much happens here)
+8. Check the contents of the source code package
+9. Check the contents of the binary package
+10. Create the release announcement
+11. Add the new version to the website
+12. Commit the website changes
+13. Create a git tag: 'git tag -a v0.XX -m "release 0.XX"'
+14. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'

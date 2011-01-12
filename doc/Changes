@@ -1,4 +1,4 @@
-0.09	2011-01-??
+0.09	2011-01-12
 	- IO
           - add database and IDataReader support (by Artus Krohn-Grimberghe)
           - graceful handling of FileNotExceptions

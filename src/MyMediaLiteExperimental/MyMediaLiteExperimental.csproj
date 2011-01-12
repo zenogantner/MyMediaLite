@@ -8,7 +8,7 @@
     <ProjectGuid>{750EE318-9B7E-4825-8E42-5D9ABDD6E050}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLiteExperimental</RootNamespace>
-    <ReleaseVersion>0.8</ReleaseVersion>
+    <ReleaseVersion>0.9</ReleaseVersion>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
