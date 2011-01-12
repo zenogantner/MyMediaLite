@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,9 +18,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
-
 
 namespace MyMediaLite.Correlation
 {
@@ -84,6 +85,49 @@ namespace MyMediaLite.Correlation
 			Console.Error.WriteLine();
 			*/
 			
+			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...
+			
+			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows);
+			
+			// go over all (other) entities
+			foreach (var row_id in transpose.NonEmptyRowIDs)
+			{
+				var row = transpose[row_id].ToList();
+				
+				for (int i = 0; i < row.Count; i++)
+				{
+					int x = row[i];
+					
+					for (int j = i + 1; j < row.Count; j++)
+					{
+						int y = row[j];
+						
+						// ensure x < y
+						if (x > y)
+						{
+							int tmp = x;
+							x = y;
+							y = tmp;
+						}
+
+						overlap[x, y]++;
+					}
+				}
+			}
+			
+			// the diagonal of the correlation matrix
+			for (int i = 0; i < num_entities; i++)
+				this[i, i] = 1;
+
+			// compute cosine
+			foreach (var index_pair in overlap.NonEmptyEntryIDs)
+			{
+				int x = index_pair.First;
+				int y = index_pair.Second;
+				
+				this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data[x].Count * entity_data[y].Count));
+			}
+						
 		}
 
 		/// <summary>Computes the cosine similarity of two binary vectors</summary>

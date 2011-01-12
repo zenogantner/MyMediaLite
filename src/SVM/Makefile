@@ -49,23 +49,23 @@ RESGEN=resgen2
 
 SVM_PC = $(BUILD_DIR)/svm.pc
 
-FILES = \
+FILES =  \
 	Cache.cs \
+	GaussianTransform.cs \
 	IRangeTransform.cs \
 	Kernel.cs \
-	ParameterSelection.cs \
-	Properties/AssemblyInfo.cs \
 	Model.cs \
 	Node.cs \
 	Parameter.cs \
-	Prediction.cs \
-	Problem.cs \
-	RangeTransform.cs \
-	GaussianTransform.cs \
-	Scaling.cs \
-	Solver.cs \
+	ParameterSelection.cs \
 	PerformanceEvaluator.cs \
 	PrecomputedKernel.cs \
+	Prediction.cs \
+	Problem.cs \
+	Properties/AssemblyInfo.cs \
+	RangeTransform.cs \
+	Scaling.cs \
+	Solver.cs \
 	SVMExtensions.cs \
 	TemporaryCulture.cs \
 	Training.cs 

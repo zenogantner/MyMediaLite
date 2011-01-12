@@ -180,7 +180,8 @@ namespace MyMediaLite.Correlation
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
-			
+
+			// fill the entries with interactions
 			foreach (var index_pair in freqs.NonEmptyEntryIDs)
 			{
 				int x = index_pair.First;
