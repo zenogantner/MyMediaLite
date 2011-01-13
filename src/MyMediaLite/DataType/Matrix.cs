@@ -19,7 +19,6 @@
 using System;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.DataType
 {
     /// <summary>Class for storing dense matrices</summary>
@@ -37,8 +36,7 @@ namespace MyMediaLite.DataType
         /// <summary>Dimension 2, the number of columns</summary>
         public int dim2;
 
-		/// <summary>True if the matrix is symmetric, false otherwise</summary>
-		/// <value>True if the matrix is symmetric, false otherwise</value>
+		/// <inheritdoc/>
 		public virtual bool IsSymmetric
 		{
 			get

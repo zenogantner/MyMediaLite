@@ -17,7 +17,6 @@
 
 using System;
 
-
 namespace MyMediaLite.DataType
 {
 	/// <summary>Generic interface for matrix data types</summary>
@@ -36,6 +35,10 @@ namespace MyMediaLite.DataType
 		/// <summary>The number of columns of the matrix</summary>
 		/// <value>The number of columns of the matrix</value>
 		int NumberOfColumns { get; }
+
+		/// <summary>True if the matrix is symmetric, false otherwise</summary>
+		/// <value>True if the matrix is symmetric, false otherwise</value>
+		bool IsSymmetric { get; }
 
 		/// <summary>Create a matrix with a given number of rows and columns</summary>
 		/// <param name="num_rows">the number of rows</param>

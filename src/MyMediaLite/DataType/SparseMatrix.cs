@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.DataType
 {
     /// <summary>Class for storing sparse matrices</summary>
@@ -33,13 +32,33 @@ namespace MyMediaLite.DataType
     {
 		// TODO create unit tests for this class
 
-		List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
+		/// <summary>List that stores the rows of the matrix</summary>
+		protected List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
 
+		/// <inheritdoc/>
+		public virtual bool IsSymmetric
+		{
+			get
+			{
+				for (int i = 0; i < row_list.Count; i++)
+					foreach (var j in row_list[i].Keys)
+					{
+						if (i > j)
+							continue; // check every pair only once
+						
+						if (! this[i, j].Equals(this[j, i]))
+							return false;
+					}
+				return true;
+			}
+		}
+		
 		/// <inheritdoc/>
 		public int NumberOfRows { get { return row_list.Count; } }
 
 		/// <inheritdoc/>
-		public int NumberOfColumns {
+		public int NumberOfColumns
+		{
 			get {
 				int max_col_id = 0;
 				foreach (var row in row_list)
@@ -76,7 +95,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
-		public T this [int x, int y]
+		public virtual T this [int x, int y]
 		{
 			get	{
 				T result;

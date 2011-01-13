@@ -3,6 +3,8 @@
           - kNN-based engines are now much faster and consume less memory
         - data types
           - SparseBooleanMatrix now implements IMatrix<bool>
+          - new type SymmetricSparseMatrix
+          - IMatrix<T>: new property IsSymmetric
 
 0.09	2011-01-12
 	- IO

@@ -29,7 +29,7 @@ namespace MyMediaLite.DataType
     /// </remarks>
     public class SparseBooleanMatrix : IMatrix<bool>
     {
-		private List<HashSet<int>> rows = new List<HashSet<int>>();
+		private List<HashSet<int>> row_list = new List<HashSet<int>>();
 
 		/// <summary>Indexer to access the elements of the matrix</summary>
 		/// <param name="x">the row ID</param>
@@ -37,8 +37,8 @@ namespace MyMediaLite.DataType
 		public bool this [int x, int y]
 		{
 			get	{
-	            if (x < rows.Count)
-	                return rows[x].Contains(y);
+	            if (x < row_list.Count)
+	                return row_list[x].Contains(y);
 				else
 					return false;
 			}
@@ -51,6 +51,24 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <inheritdoc/>
+		public virtual bool IsSymmetric
+		{
+			get
+			{
+				for (int i = 0; i < row_list.Count; i++)
+					foreach (var j in row_list[i])
+					{
+						if (i > j)
+							continue; // check every pair only once
+						
+						if (!this[j, i])
+							return false;
+					}
+				return true;
+			}
+		}		
+		
+		/// <inheritdoc/>
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
 			return new SparseBooleanMatrix();
@@ -62,14 +80,14 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
-	            if (x >= rows.Count)
-					for (int i = rows.Count; i <= x; i++)
-        	        	rows.Add(new HashSet<int>());
-				return rows[x];
+	            if (x >= row_list.Count)
+					for (int i = row_list.Count; i <= x; i++)
+        	        	row_list.Add(new HashSet<int>());
+				return row_list[x];
 			}
 			set
 			{
-				rows[x] = value; // TODO think about getting rid of this
+				row_list[x] = value; // TODO think about getting rid of this
 			}
 		}
 
@@ -80,8 +98,8 @@ namespace MyMediaLite.DataType
 			get
 			{
 				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
-				for (int i = 0; i < rows.Count; i++)
-					return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
+				for (int i = 0; i < row_list.Count; i++)
+					return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
 				return return_list;
 			}
 		}
@@ -93,10 +111,10 @@ namespace MyMediaLite.DataType
 			get
 			{
 				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
-				for (int i = 0; i < rows.Count; i++)
+				for (int i = 0; i < row_list.Count; i++)
 				{
-					if (rows[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, rows[i]));
+					if (row_list[i].Count > 0)
+						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
 				}
 				return return_list;
 			}
@@ -110,8 +128,8 @@ namespace MyMediaLite.DataType
 			{
 				var row_ids = new HashSet<int>();
 
-				for (int i = 0; i < rows.Count; i++)
-					if (rows[i].Count > 0)
+				for (int i = 0; i < row_list.Count; i++)
+					if (row_list[i].Count > 0)
 						row_ids.Add(i);
 
 				return row_ids;
@@ -128,8 +146,8 @@ namespace MyMediaLite.DataType
 				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
-				for (int i = 0; i < rows.Count; i++)
-					foreach (int id in rows[i])
+				for (int i = 0; i < row_list.Count; i++)
+					foreach (int id in row_list[i])
 						col_ids.Add(id);
 
 				return col_ids;
@@ -138,7 +156,7 @@ namespace MyMediaLite.DataType
 		
 		/// <summary>The number of rows in the matrix</summary>
 		/// <value>The number of rows in the matrix</value>
-		public int NumberOfRows	{ get { return rows.Count; } }
+		public int NumberOfRows	{ get { return row_list.Count; } }
 
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>
@@ -146,7 +164,7 @@ namespace MyMediaLite.DataType
 			get
 			{
 				int max_column_id = -1;
-				foreach (var row in rows)
+				foreach (var row in row_list)
 					if (row.Count > 0)
 						max_column_id = Math.Max(max_column_id, row.Max());
 				
@@ -161,7 +179,7 @@ namespace MyMediaLite.DataType
 			get
 			{
 				int n = 0;
-				foreach (var row in rows)
+				foreach (var row in row_list)
 					n += row.Count;
 				return n;
 			}
@@ -171,15 +189,15 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public void RemoveColumn(int y)
 		{
-			for (int row_id = 0; row_id < rows.Count; row_id++)
+			for (int row_id = 0; row_id < row_list.Count; row_id++)
 			{
-				var cols = new List<int>(rows[row_id]);
+				var cols = new List<int>(row_list[row_id]);
 				foreach (int col_id in cols)
 				{
 					if (col_id >= y)
-						rows[row_id].Remove(y);
+						row_list[row_id].Remove(y);
 					if (col_id > y)
-						rows[row_id].Add(col_id - 1);
+						row_list[row_id].Add(col_id - 1);
 				}
 			}
 		}
@@ -190,9 +208,9 @@ namespace MyMediaLite.DataType
 		/// <param name="delete_columns">an array with column IDs</param>
 		public void RemoveColumn(int[] delete_columns)
 		{
-			for (int row_id = 0; row_id < rows.Count; row_id++)
+			for (int row_id = 0; row_id < row_list.Count; row_id++)
 			{
-				var cols = new List<int>(rows[row_id]);
+				var cols = new List<int>(row_list[row_id]);
 				foreach (int col_id in cols)
 				{
 					int decrease_by = 0;
@@ -200,7 +218,7 @@ namespace MyMediaLite.DataType
 					{
 						if (col_id == y)
 						{
-							rows[row_id].Remove(y);
+							row_list[row_id].Remove(y);
 							goto NEXT_COL; // poor man's labeled continue
 						}
 						if (col_id > y)
@@ -208,8 +226,8 @@ namespace MyMediaLite.DataType
 					}
 
 					// decrement column ID
-					rows[row_id].Remove(col_id);
-					rows[row_id].Add(col_id - decrease_by);
+					row_list[row_id].Remove(col_id);
+					row_list[row_id].Add(col_id - decrease_by);
 
 					NEXT_COL:;
 				}
@@ -225,7 +243,7 @@ namespace MyMediaLite.DataType
 		public SparseBooleanMatrix Transpose()
 		{
 			var transpose = new SparseBooleanMatrix();
-			for (int i = 0; i < rows.Count; i++)
+			for (int i = 0; i < row_list.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;
 			return transpose;
@@ -244,8 +262,8 @@ namespace MyMediaLite.DataType
 		{
 			int c = 0;
 
-			for (int i = 0; i < rows.Count; i++)
-				foreach (int j in rows[i])
+			for (int i = 0; i < row_list.Count; i++)
+				foreach (int j in row_list[i])
 					if (s[i, j])
 						c++;
 
