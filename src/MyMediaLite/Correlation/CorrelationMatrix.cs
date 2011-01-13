@@ -39,8 +39,7 @@ namespace MyMediaLite.Correlation
         public override float this [int i, int j]
         {
 			get { return data[i * dim2 + j]; }
-			set
-        	{
+			set	{
             	data[i * dim2 + j] = value;
             	data[j * dim2 + i] = value;
         	}
@@ -115,14 +114,12 @@ namespace MyMediaLite.Correlation
 
 			return cm;
 		}
-
-		/// <summary>
-		/// Write out the correlations to a StreamWriter
-		/// </summary>
+		
+		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>
 		/// </param>
-		public void Write(StreamWriter writer)
+		public void Write(StreamWriter writer) // TODO use library routine instead
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';

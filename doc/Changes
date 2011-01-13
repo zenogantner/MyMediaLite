@@ -5,6 +5,7 @@
           - SparseBooleanMatrix now implements IMatrix<bool>
           - new type SymmetricSparseMatrix
           - IMatrix<T>: new property IsSymmetric
+          - Matrix<T>: faster computation of IsSymmetric
 
 0.09	2011-01-12
 	- IO

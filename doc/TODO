@@ -42,6 +42,7 @@ Data types
  - data types: introduce more properties
  - data type: symmetric matrix (vs. CorrelationMatrix)
  - profile+optimize data types
+ - implement sparse matrices based on binary search
 Architecture
  - tests/integration
    - test suite should also run for purely binary installation

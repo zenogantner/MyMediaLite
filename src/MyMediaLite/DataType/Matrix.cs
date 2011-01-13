@@ -41,6 +41,8 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
+				if (dim1 != dim2)
+					return false;
 				for (int i = 0; i < dim1; i++)
 					for (int j = i + 1; j < dim2; j++)
 						if (!this[i, j].Equals(this[j, i]))
