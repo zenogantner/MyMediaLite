@@ -24,7 +24,6 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>

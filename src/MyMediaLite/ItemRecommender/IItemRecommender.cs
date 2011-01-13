@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +21,12 @@ namespace MyMediaLite.ItemRecommender
     /// <summary>Interface for item recommenders</summary>
     public interface IItemRecommender : IRecommenderEngine
     {
-        /// <inheritdoc/>
+		// <summary>Check if the engine can produce meaningful recommendations for a given user</summary>
+		// <param name="user_id">the user ID</param>
+		// <returns>true if the engine can produce recommendations for the given user, false otherwise</returns>
+		// bool CanPredict(int user_id);
+        
+		/// <inheritdoc/>
         void AddFeedback(int user_id, int item_id);
         /// <inheritdoc/>
         void RemoveFeedback(int user_id, int item_id);
