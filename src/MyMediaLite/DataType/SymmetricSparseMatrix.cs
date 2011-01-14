@@ -68,6 +68,6 @@ namespace MyMediaLite.DataType
 		
 		/// <summary>Create a symmetric sparse matrix with a given number of rows</summary>
 		/// <param name="num_rows">the number of rows</param>		
-		public SymmetricSparseMatrix(int num_rows) : base(num_rows) { }
+		public SymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
 	}
 }

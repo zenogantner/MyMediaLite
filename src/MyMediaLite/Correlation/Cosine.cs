@@ -63,7 +63,7 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...
 			
-			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows);
+			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
 			
 			// go over all (other) entities
 			foreach (var row_id in transpose.NonEmptyRowIDs)

@@ -40,6 +40,8 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
+				if (NumberOfRows != NumberOfColumns)
+					return false;
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i].Keys)
 					{
@@ -57,28 +59,22 @@ namespace MyMediaLite.DataType
 		public int NumberOfRows { get { return row_list.Count; } }
 
 		/// <inheritdoc/>
-		public int NumberOfColumns
-		{
-			get {
-				int max_col_id = 0;
-				foreach (var row in row_list)
-					max_col_id = Math.Max(max_col_id, row.Keys.Max());
-				return max_col_id + 1;
-			}
-		}
+		public int NumberOfColumns { get; private set; }
 
 		/// <summary>Create a sparse matrix with a given number of rows</summary>
 		/// <param name="num_rows">the number of rows</param>
-		public SparseMatrix(int num_rows)
+		/// <param name="num_cols">the number of columns</param>
+		public SparseMatrix(int num_rows, int num_cols)
 		{
 			for (int i = 0; i < num_rows; i++)
 				row_list.Add( new Dictionary<int, T>() );
+			NumberOfColumns = num_cols;
 		}
 
 		/// <inheritdoc/>
 		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
-			return new SparseMatrix<T>(num_rows);
+			return new SparseMatrix<T>(num_rows, num_columns);
 		}
 
 		/// <summary>Get a row of the matrix</summary>

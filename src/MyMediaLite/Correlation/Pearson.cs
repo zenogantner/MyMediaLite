@@ -84,9 +84,9 @@ namespace MyMediaLite.Correlation
 			e1.IntersectWith(e2);
 
 			int n = e1.Count;
-			
+
 			Console.WriteLine("compare computation {0}, {1} : {2}", i, j, n);
-			
+
 			if (n < 2) // TODO reconsider this
 				return 0;
 
@@ -119,15 +119,15 @@ namespace MyMediaLite.Correlation
 				ii_sum += rating_i * rating_i;
 				jj_sum += rating_j * rating_j;
 			}
-				
+
 			double denominator = Math.Sqrt((n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum));
-			
+
 			if (denominator == 0)
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
-			
-			Console.WriteLine("ij_sum * n - i_sum * j_sum = {0} * {1} - {2} * {3} = {4}", ij_sum, n, i_sum, j_sum, n * ij_sum - i_sum * j_sum);			
-			
+
+			Console.WriteLine("ij_sum * n - i_sum * j_sum = {0} * {1} - {2} * {3} = {4}", ij_sum, n, i_sum, j_sum, n * ij_sum - i_sum * j_sum);
+
 			return (float) pmcc * (n / (n + shrinkage));
 		}
 
@@ -141,13 +141,13 @@ namespace MyMediaLite.Correlation
 
 			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 
-			var freqs   = new SparseMatrix<int>(num_entities);
-			var i_sums  = new SparseMatrix<double>(num_entities);
-			var j_sums  = new SparseMatrix<double>(num_entities);
-			var ij_sums = new SparseMatrix<double>(num_entities);			
-			var ii_sums = new SparseMatrix<double>(num_entities);			
-			var jj_sums = new SparseMatrix<double>(num_entities);			
-		
+			var freqs   = new SparseMatrix<int>(num_entities, num_entities);
+			var i_sums  = new SparseMatrix<double>(num_entities, num_entities);
+			var j_sums  = new SparseMatrix<double>(num_entities, num_entities);
+			var ij_sums = new SparseMatrix<double>(num_entities, num_entities);
+			var ii_sums = new SparseMatrix<double>(num_entities, num_entities);
+			var jj_sums = new SparseMatrix<double>(num_entities, num_entities);
+
 			foreach (var other_entity_ratings in ratings_by_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
@@ -196,29 +196,29 @@ namespace MyMediaLite.Correlation
 				}
 
 				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
-				
+
 				if (x == 0 && y == 1)
 					Console.WriteLine("this[x,y] * n - sums[x] * sums[y] = {0} * {1} - {2} * {3} = {4}", this[x,y], n, i_sums[x, y], j_sums[x, y], numerator);
-				
+
 				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] *j_sums[x, y]) );
 				if (denominator == 0)
 				{
 					this[x, y] = 0;
 					continue;
 				}
-					
+
 				double pmcc = numerator / denominator;
 
 				if (x == 0 && y == 1)
 					Console.WriteLine("{0}/{1} = {2}", numerator, denominator, pmcc);
 
-				
+
 				if (x == 0 && y == 1)
 				{
 					float pmcc2 = ComputeCorrelation(ratings.ByUser[x], ratings.ByUser[y], entity_type, x, y, shrinkage);
 					Console.WriteLine("compare with {0}", pmcc2);
 				}
-				
+
 				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
 			}
 		}
