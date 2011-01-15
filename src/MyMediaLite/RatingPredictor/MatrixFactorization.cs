@@ -17,12 +17,10 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Taxonomy;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPredictor
@@ -119,9 +117,7 @@ namespace MyMediaLite.RatingPredictor
             LearnFactors(ratings.ByItem[(int)item_id], false, true);
         }
 
-		/// <summary>
-		/// Iterate once over rating data and adjust corresponding factors (stochastic gradient descent).
-		/// </summary>
+		/// <summary>Iterate once over rating data and adjust corresponding factors (stochastic gradient descent)</summary>
 		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
 		/// <param name="update_user">true if user factors to be updated</param>
 		/// <param name="update_item">true if item factors to be updated</param>
@@ -262,12 +258,12 @@ namespace MyMediaLite.RatingPredictor
         }
 
         /// <inheritdoc/>
-		public override void SaveModel(string file)
+		public override void SaveModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 				IMatrixUtils.WriteMatrix(writer, user_factors);
@@ -276,12 +272,12 @@ namespace MyMediaLite.RatingPredictor
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string file)
+		public override void LoadModel(string filename)
         {
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 

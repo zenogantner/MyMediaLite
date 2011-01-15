@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,23 +18,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
-using MyMediaLite.RatingPredictor;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
     /// <summary>Evaluation class</summary>
     public static class ItemPredictionEval
     {
-		/// <summary>
-		/// the evaluation measures for item prediction offered by the class
-		/// </summary>
+		/// <summary>the evaluation measures for item prediction offered by the class</summary>
 		static public ICollection<string> ItemPredictionMeasures
 		{
 			get
@@ -43,9 +37,7 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-        /// <summary>
-        /// Evaluation for rankings of item recommenders.
-        /// </summary>
+        /// <summary>Evaluation for rankings of item recommenders</summary>
         /// <remarks>
         /// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
         /// The evaluation measures are listed in the ItemPredictionMeasures property.
@@ -53,11 +45,7 @@ namespace MyMediaLite.Eval
         /// and the number of items that were taken into account.
         ///
         /// Literature:
-        /// <book>
-        ///   <author>C. Manning</author> <author>P. Raghavan</author> <author>H. Schütze</author>
-        ///   <title>Introduction to Information Retrieval</title>
-        ///   <publisher>Cambridge University Press</publisher> <year>2008</year>
-        /// </book>
+        ///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
 		/// </remarks>
         /// <param name="engine">Item recommender engine</param>
         /// <param name="test">test cases</param>
@@ -125,9 +113,7 @@ namespace MyMediaLite.Eval
 			return result;
         }
 
-		/// <summary>
-		/// Compute the area under the ROC curve (AUC) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the AUC for the given data</returns>
@@ -136,9 +122,7 @@ namespace MyMediaLite.Eval
 			return AUC(ranked_items, correct_items, new HashSet<int>());
 		}
 
-		/// <summary>
-		/// Compute the area under the ROC curve (AUC) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
@@ -165,9 +149,7 @@ namespace MyMediaLite.Eval
                 return ((double) num_correct_pairs) / num_eval_pairs;
 		}
 
-		/// <summary>
-		/// Compute the mean average precision (MAP) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the mean average precision (MAP) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the MAP for the given data</returns>
@@ -176,9 +158,7 @@ namespace MyMediaLite.Eval
 			return MAP(ranked_items, correct_items, new HashSet<int>());
 		}
 
-		/// <summary>
-		/// Compute the mean average precision (MAP) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the mean average precision (MAP) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
@@ -212,9 +192,7 @@ namespace MyMediaLite.Eval
 				return 0;
 		}
 
-		/// <summary>
-		/// Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the NDCG for the given data</returns>
@@ -223,9 +201,7 @@ namespace MyMediaLite.Eval
 			return NDCG(ranked_items, correct_items, new HashSet<int>());
 		}
 
-		/// <summary>
-		/// Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
@@ -256,9 +232,7 @@ namespace MyMediaLite.Eval
             return dcg / idcg;
 		}
 
-		/// <summary>
-		/// Compute the precision@N of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the precision@N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="n">the cutoff position in the list</param>
@@ -268,9 +242,7 @@ namespace MyMediaLite.Eval
 			return PrecisionAt(ranked_items, correct_items, new HashSet<int>(), n);
 		}
 
-		/// <summary>
-		/// Compute the precision@N of a list of ranked items.
-		/// </summary>
+		/// <summary>Compute the precision@N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>

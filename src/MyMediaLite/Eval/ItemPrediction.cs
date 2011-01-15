@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -19,12 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
-using MyMediaLite.Util;
-
 
 namespace MyMediaLite.Eval
 {
@@ -33,9 +31,7 @@ namespace MyMediaLite.Eval
     {
 		// TODO there are too many different versions of this method interface - we should simplify the API
 
-		/// <summary>
-		/// Write item predictions (scores) for all users to a file
-		/// </summary>
+		/// <summary>Write item predictions (scores) for all users to a file</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
@@ -134,9 +130,7 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		/// <summary>
-		/// Write item predictions (scores) to a TextWriter object
-		/// </summary>
+		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
 		/// <param name="user_id">the ID of the user to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
@@ -206,9 +200,7 @@ namespace MyMediaLite.Eval
             return return_array;
 		}
 
-		/// <summary>
-		/// Predict items for a given user
-		/// </summary>
+		/// <summary>Predict items for a given user</summary>
 		/// <param name="engine">the recommender engine to use</param>
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="relevant_items">a collection of numerical IDs of relevant items</param>

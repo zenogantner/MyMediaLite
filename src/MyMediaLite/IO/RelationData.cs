@@ -23,19 +23,17 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.IO
 {
-	/// <summary>
-	/// Class that offers static methods to read (binary) relation over entities into SparseBooleanMatrix objects.
-	///
-	/// The expected (sparse) line format is:
-	/// ENTITY_ID whitespace ENTITY_ID
-	/// for the relations that hold.
-	/// </summary>
+	/// <summary>Class that offers static methods to read (binary) relation over entities into SparseBooleanMatrix objects</summary>
 	public class RelationData
 	{
 		/// <summary>Read binary attribute data from file</summary>
+		/// <remarks>
+		/// The expected (sparse) line format is:
+		/// ENTITY_ID whitespace ENTITY_ID
+		/// for the relations that hold.
+		/// </remarks>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the relation data</returns>
@@ -46,23 +44,28 @@ namespace MyMediaLite.IO
 		}
 
 		/// <summary>Read binary relation data from file</summary>
+		/// <remarks>
+		/// The expected (sparse) line format is:
+		/// ENTITY_ID whitespace ENTITY_ID
+		/// for the relations that hold.
+		/// </remarks>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the relation data</returns>
 		static public SparseBooleanMatrix Read(StreamReader reader, EntityMapping mapping)
 		{
 			var matrix = new SparseBooleanMatrix();
-			
+
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			char[] split_chars = new char[]{ '\t', ' ' };
 			string line;
 
 			while (!reader.EndOfStream)
 			{
 	           	line = reader.ReadLine();
-				
+
 				// ignore empty lines
 				if (line.Trim().Equals(string.Empty))
 					continue;
@@ -80,7 +83,7 @@ namespace MyMediaLite.IO
 
 			return matrix;
 		}
-		
+
 		/// <summary>Read binary relation data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">an IDataReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
@@ -88,10 +91,10 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping mapping)
 		{
             if (reader.FieldCount < 2)
-                throw new IOException("Expected at least two columns.");			
-			
-			var matrix = new SparseBooleanMatrix();			
-			
+                throw new IOException("Expected at least two columns.");
+
+			var matrix = new SparseBooleanMatrix();
+
 			while (!reader.Read())
 			{
 				int entity1_id = mapping.ToInternalID(reader.GetInt32(0));
@@ -101,6 +104,6 @@ namespace MyMediaLite.IO
 			}
 
 			return matrix;
-		}		
+		}
 	}
 }

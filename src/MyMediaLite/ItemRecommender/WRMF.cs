@@ -20,32 +20,17 @@ using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite.ItemRecommender
 {
-    /// <summary>
-    /// Weighted matrix factorization method proposed by Hu et al. and Pan et al.
-    /// </summary>
+    /// <summary>Weighted matrix factorization method proposed by Hu et al. and Pan et al.</summary>
     /// <remarks>
-    /// <inproceedings>
-    ///   <author>Y. Hu</author> <author>Y. Koren</author> <author>C. Volinsky</author>
-    ///   <title>Collaborative filtering for implicit feedback datasets</title>
-    ///   <booktitle>IEEE International Conference on Data Mining (ICDM 2008)</booktitle>
-    ///   <year>2008</year>
-    /// </inproceedings>
+    ///   Y. Hu Y. Koren C. Volinsky: Collaborative filtering for implicit feedback datasets,
+    ///   IEEE International Conference on Data Mining (ICDM), 2008
     /// 
-    /// <inproceedings>
-    ///   <author>R. Pan</author>
-    ///   <author>Y. Zhou</author>
-    ///   <author>B. Cao</author>
-    ///   <author>N. N. Liu</author>
-    ///   <author>R. M. Lukose</author>
-    ///   <author>M. Scholz</author>
-    ///   <author>Q. Yang</author>
-    ///   <title>One-class collaborative filtering</title>
-    ///   <booktitle>IEEE International Conference on Data Mining (ICDM 2008)</booktitle>
-    ///   <year>2008</year>
-    /// </inproceedings>
+    ///   R. Pan, Y. Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, Q. Yang:
+    ///   One-class collaborative filtering,
+    ///   IEEE International Conference on Data Mining (ICDM), 2008
+    /// 
     /// We use the fast computation method proposed by Hu et al. and we allow a global
     /// weight to penalize observed/unobserved values.
     ///
@@ -69,9 +54,7 @@ namespace MyMediaLite.ItemRecommender
             optimize(data_item, item_factors, user_factors);
 		}
 
-        /// <summary>
-        /// Optimizes the specified data.
-        /// </summary>
+        /// <summary>Optimizes the specified data</summary>
         /// <param name="data">The data.</param>
         /// <param name="W">The W.</param>
         /// <param name="H">The H.</param>
@@ -142,7 +125,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override double ComputeFit()
 		{
-			return -1; // TODO get rid of this method
+			return -1;
 		}
 		
 		/// <inheritdoc/>

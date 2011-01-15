@@ -22,7 +22,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 
-
 namespace MyMediaLite.Util
 {
 	/// <summary>Class for command line argument processing</summary>
@@ -31,12 +30,8 @@ namespace MyMediaLite.Util
 	{
 		private NumberFormatInfo ni = new NumberFormatInfo();
 
-		/// <summary>
-		/// Create a CommandLineParameters object
-		/// </summary>
-		/// <param name="args">
-		/// a list of strings that contains the command line parameters
-		/// </param>
+		/// <summary>Create a CommandLineParameters object</summary>
+		/// <param name="args">a list of strings that contains the command line parameters</param>
 		/// <param name="start">ignore all parameters before this position</param>
 		public CommandLineParameters(string[] args, int start)
 		{
@@ -65,23 +60,15 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="parameters">
-		/// a dictionary containing the parameters as key-value pairs
-		/// </param>
+		/// <summary>Constructor</summary>
+		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		public CommandLineParameters(Dictionary<string,string> parameters) : base(parameters)
 		{
 			this.ni.NumberDecimalDigits = '.';
 		}
 
-		/// <summary>
-		/// Check for parameters that have not been processed yet
-		/// </summary>
-		/// <returns>
-		/// true if there are leftovers
-		/// </returns>
+		/// <summary>Check for parameters that have not been processed yet</summary>
+		/// <returns>true if there are leftovers</returns>
 		public bool CheckForLeftovers()
 		{
 			if (this.Count != 0)
@@ -92,9 +79,7 @@ namespace MyMediaLite.Util
 			return false;
 		}
 
-		/// <summary>
-		/// Get the value of an integer parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the value of an integer parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <returns>the value of the parameter if it exists, 0 otherwise</returns>
 		public int GetRemoveInt32(string key)
@@ -102,9 +87,7 @@ namespace MyMediaLite.Util
 			return GetRemoveInt32(key, 0);
 		}
 
-		/// <summary>
-		/// Get the value of an integer parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the value of an integer parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <param name="dvalue">the default value of the parameter</param>
 		/// <returns>the value of the parameter if it exists, the default otherwise</returns>
@@ -122,9 +105,7 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>
-		/// Get the values of an integer list parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the values of an integer list parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <returns>the values of the parameter if it exists, an empty list otherwise</returns>
 		public IList<int> GetRemoveInt32List(string key)
@@ -132,9 +113,7 @@ namespace MyMediaLite.Util
 			return GetRemoveInt32List(key, ' ');
 		}
 
-		/// <summary>
-		/// Get the values of an integer list parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the values of an integer list parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <param name="sep">the separator character used to split the string representation of the list</param>
 		/// <returns>the values of the parameter if it exists, the default otherwise</returns>
@@ -151,9 +130,7 @@ namespace MyMediaLite.Util
 			return result_list;
 		}
 
-		/// <summary>
-		/// Get and remove an unsigned integer
-		/// </summary>
+		/// <summary>Get and remove an unsigned integer</summary>
 		/// <param name="key">the parameter name</param>
 		/// <returns>the value of the unsigned integer parameter, zero if it is not found</returns>
 		public uint GetRemoveUInt32(string key)
@@ -161,9 +138,7 @@ namespace MyMediaLite.Util
 			return GetRemoveUInt32(key, 0);
 		}
 
-		/// <summary>
-		/// Get and remove an unsigned integer
-		/// </summary>
+		/// <summary>Get and remove an unsigned integer</summary>
 		/// <param name="key">the parameter name</param>
 		/// <param name="dvalue">the default value of the parameter</param>
 		/// <returns>the value of the unsigned integer parameter, dvalue if it is not found</returns>
@@ -245,9 +220,7 @@ namespace MyMediaLite.Util
 				return dvalue;
 		}
 
-		/// <summary>
-		/// Get a string parameter
-		/// </summary>
+		/// <summary>Get a string parameter</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <returns>the parameter value related to key, an empty string if it does not exist</returns>
 		public string GetRemoveString(string key)
@@ -255,9 +228,7 @@ namespace MyMediaLite.Util
 			return GetRemoveString(key, string.Empty);
 		}
 
-		/// <summary>
-		/// Get a string parameter
-		/// </summary>
+		/// <summary>Get a string parameter</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <param name="dvalue">the default value</param>
 		/// <returns>the parameter value related to key, the default value if it does not exist</returns>
@@ -275,9 +246,7 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>
-		/// Get the value of a boolean parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the value of a boolean parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <returns>the value of the parameter if it exists, false otherwise</returns>
 		public bool GetRemoveBool(string key)
@@ -285,9 +254,7 @@ namespace MyMediaLite.Util
 			return GetRemoveBool(key, false);
 		}
 
-		/// <summary>
-		/// Get the value of a boolean parameter from the collection and remove the corresponding key-value pair
-		/// </summary>
+		/// <summary>Get the value of a boolean parameter from the collection and remove the corresponding key-value pair</summary>
 		/// <param name="key">the name of the parameter</param>
 		/// <param name="dvalue">the default value of the parameter</param>
 		/// <returns>the value of the parameter if it exists, the default otherwise</returns>
@@ -305,9 +272,7 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>
-		/// Add key-value pairs from a text file to the collection
-		/// </summary>
+		/// <summary>Add key-value pairs from a text file to the collection</summary>
 		/// <param name="filename">the name of the text file</param>
 		protected void AddArgumentsFromFile(string filename)
 		{

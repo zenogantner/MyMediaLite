@@ -44,9 +44,7 @@ namespace MyMediaLite.Util
 			engine.SaveModel(filename);
 		}
 
-		/// <summary>
-		/// Save the model parameters of a recommender engine (in a given iteration of the training) to a file
-		/// </summary>
+		/// <summary>Save the model parameters of a recommender engine (in a given iteration of the training) to a file</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
@@ -58,9 +56,7 @@ namespace MyMediaLite.Util
 			SaveModel(engine, filename + "-it-" + iteration);
 		}
 
-		/// <summary>
-		/// Load the model parameters of a recommender engine (in a given iteration of the training) from a file
-		/// </summary>
+		/// <summary>Load the model parameters of a recommender engine (in a given iteration of the training) from a file</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		public static void LoadModel(IRecommenderEngine engine, string filename)
@@ -72,9 +68,7 @@ namespace MyMediaLite.Util
 			engine.LoadModel(filename);
 		}
 
-		/// <summary>
-		/// Get a reader object to read in model parameters of a recommender engine
-		/// </summary>
+		/// <summary>Get a reader object to read in model parameters of a recommender engine</summary>
 		/// <param name="filename">the filename of the model file</param>
 		/// <param name="engine_type">the expected engine type</param>
 		/// <returns>a <see cref="StreamReader"/></returns>
