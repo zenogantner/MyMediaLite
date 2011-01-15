@@ -96,6 +96,7 @@ namespace MyMediaLite.DataType
         {
 			get
 			{
+				// TODO deactivate in production code
         		if (i >= this.dim1)
         			throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
 				if (j >= this.dim2)

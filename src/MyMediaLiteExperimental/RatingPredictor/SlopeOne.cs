@@ -98,8 +98,8 @@ namespace MyMediaLite.RatingPredictor
 			global_average = Ratings.Average;
 
 			// create data structure
-    		diff_matrix = new SparseMatrix<double>(MaxItemID + 1);
-    		freq_matrix = new SparseMatrix<int>(MaxItemID + 1);
+    		diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
+    		freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>

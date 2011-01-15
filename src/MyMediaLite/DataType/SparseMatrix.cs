@@ -30,8 +30,6 @@ namespace MyMediaLite.DataType
     /// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
     public class SparseMatrix<T> : IMatrix<T> where T:new()
     {
-		// TODO create unit tests for this class
-
 		/// <summary>List that stores the rows of the matrix</summary>
 		protected List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
 

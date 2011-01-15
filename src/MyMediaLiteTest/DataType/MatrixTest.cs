@@ -21,41 +21,38 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the Matrix class</summary>
 	[TestFixture()]
 	public class MatrixTest
 	{
-		/// <summary>Unit test of Matrix.GetRow() and Matrix.SetRow()</summary>
 		[Test()] public void TestGetRow()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
 			matrix.SetRow(3, row);
-			Assert.AreEqual(matrix.GetRow(3), row);
+			Assert.AreEqual(row, matrix.GetRow(3));
+			Assert.AreEqual(0, matrix[0, 0]);
+			Assert.AreEqual(1, matrix[3, 0]);
 		}
 
-		/// <summary>Unit test of Matrix.GetColumn() and Matrix.SetColumn()</summary>
 		[Test()] public void TestGetColumn()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] column = { 1, 2, 3, 4, 5 };
 			matrix.SetColumn(3, column);
-			Assert.AreEqual(matrix.GetColumn(3), column);
+			Assert.AreEqual(column, matrix.GetColumn(3));
 		}
 
-		/// <summary>Unit test of Matrix.Init(T d)</summary>
 		[Test()] public void TestInit()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 2, 2, 2, 2, 2 };
 			matrix.Init(2);
-			Assert.AreEqual(matrix.GetRow(2), row);
+			Assert.AreEqual(row, matrix.GetRow(2));
 		}
 
-		/// <summary>Unit test of Matrix.SetRowToOneValue(int i, T v)</summary>
 		[Test()] public void TestSetRowToOneValue()
 		{
 			var matrix = new Matrix<int>(5, 5);
@@ -67,7 +64,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
 
-		/// <summary>Unit test of Matrix.SetColumnToOneValue(int j, T v)</summary>
 		[Test()] public void TestSetColumnToOneValue()
 		{
 			var matrix = new Matrix<int>(5, 5);

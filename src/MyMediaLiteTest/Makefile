@@ -77,6 +77,7 @@ FILES =  \
 	DataType/MatrixTest.cs \
 	DataType/MatrixUtilsTest.cs \
 	DataType/SparseBooleanMatrixTest.cs \
+	DataType/SparseMatrixTest.cs \
 	DataType/VectorUtilsTest.cs 
 
 DATA_FILES = 
