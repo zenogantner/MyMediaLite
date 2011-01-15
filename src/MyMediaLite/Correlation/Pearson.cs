@@ -85,8 +85,6 @@ namespace MyMediaLite.Correlation
 
 			int n = e1.Count;
 
-			Console.WriteLine("compare computation {0}, {1} : {2}", i, j, n);
-
 			if (n < 2) // TODO reconsider this
 				return 0;
 
@@ -125,8 +123,6 @@ namespace MyMediaLite.Correlation
 			if (denominator == 0)
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
-
-			Console.WriteLine("ij_sum * n - i_sum * j_sum = {0} * {1} - {2} * {3} = {4}", ij_sum, n, i_sum, j_sum, n * ij_sum - i_sum * j_sum);
 
 			return (float) pmcc * (n / (n + shrinkage));
 		}
@@ -186,8 +182,6 @@ namespace MyMediaLite.Correlation
 				int x = index_pair.First;
 				int y = index_pair.Second;
 				int n = freqs[x, y];
-				if (x == 0 && y == 1)
-					Console.WriteLine("{0}, {1} : {2}", x, y, n);
 
 				if (n < 2) // TODO reconsider this
 				{
@@ -197,9 +191,6 @@ namespace MyMediaLite.Correlation
 
 				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
 
-				if (x == 0 && y == 1)
-					Console.WriteLine("this[x,y] * n - sums[x] * sums[y] = {0} * {1} - {2} * {3} = {4}", this[x,y], n, i_sums[x, y], j_sums[x, y], numerator);
-
 				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] *j_sums[x, y]) );
 				if (denominator == 0)
 				{
@@ -208,17 +199,6 @@ namespace MyMediaLite.Correlation
 				}
 
 				double pmcc = numerator / denominator;
-
-				if (x == 0 && y == 1)
-					Console.WriteLine("{0}/{1} = {2}", numerator, denominator, pmcc);
-
-
-				if (x == 0 && y == 1)
-				{
-					float pmcc2 = ComputeCorrelation(ratings.ByUser[x], ratings.ByUser[y], entity_type, x, y, shrinkage);
-					Console.WriteLine("compare with {0}", pmcc2);
-				}
-
 				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
 			}
 		}
