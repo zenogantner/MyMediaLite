@@ -37,6 +37,9 @@ Spacing
 
 Curly braces
 16. Do not use curly braces for simple if, for(each), and while statements.
+17. Use a newline before the opening curly brace of a namespace, a class definition,
+    a method definition, a property definition, or an if statement or a loop.
+18. Opening curly braces of getters and setters are in the same line as 'get' and 'set'.
 
 Specific standards for ordering (in argument lists, data formats)
 a. user_id, item_id, rating, date/time
