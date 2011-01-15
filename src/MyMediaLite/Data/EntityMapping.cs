@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -18,25 +18,21 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace MyMediaLite.Data
 {
-	/// <summary>
-	/// Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering
-	/// </summary>
+	/// <summary>Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
 	public class EntityMapping
 	{
-		/// <summary>
-		/// Contains the mapping from the original (external) IDs to the internal IDs.
-		///
-		/// Never, to repeat NEVER, delete entries from that dictionary!
-		/// </summary>
+		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
+		/// <remarks>
+		/// Never, to repeat NEVER, delete entries from this dictionary!
+		/// </remarks>
 		protected Dictionary<int, int> original_to_internal = new Dictionary<int, int>();
-		/// <summary>
-		/// Contains the mapping from the internal IDs to the original (external) IDs
-		///
-		/// Never, to repeat NEVER, delete entries from that dictionary!
-		/// </summary>
+
+		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
+		/// <remarks>
+		/// Never, to repeat NEVER, delete entries from this dictionary!
+		/// </remarks>
 		protected Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
 
 		/// <summary>all original (external) entity IDs</summary>
@@ -51,10 +47,7 @@ namespace MyMediaLite.Data
 			get { return internal_to_original.Keys; }
 		}
 
-		/// <summary>
-		/// Get original (external) ID of a given entity.
-		/// If the given internal ID is unknown, throw an exception.
-		/// </summary>
+		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
 		/// <returns>the original (external) ID of the entitiy</returns>
 		public int ToOriginalID(int internal_id)
@@ -66,10 +59,7 @@ namespace MyMediaLite.Data
 				throw new ArgumentException("Unknown internal ID: " + internal_id);
 		}
 
-		/// <summary>
-		/// Get internal ID of a given entity.
-		/// If the given external ID is unknown, create a new internal ID for it and store the mapping.
-		/// </summary>
+		/// <summary>Get internal ID of a given entity. If the given external ID is unknown, create a new internal ID for it and store the mapping.</summary>
 		/// <param name="original_id">the original (external) ID of the entity</param>
 		/// <returns>the internal ID of the entitiy</returns>
 		public int ToInternalID(int original_id)
@@ -84,35 +74,23 @@ namespace MyMediaLite.Data
 			return internal_id;
 		}
 
-		/// <summary>
-		/// Get original (external) IDs of a list of given entities.
-		/// </summary>
-		/// <param name="internal_id_list">
-		/// the list of internal IDs
-		/// </param>
-		/// <returns>
-		/// the list of original (external) IDs
-		/// </returns>
+		/// <summary>Get original (external) IDs of a list of given entities</summary>
+		/// <param name="internal_id_list">the list of internal IDs</param>
+		/// <returns>the list of original (external) IDs</returns>
 		public IList<int> ToOriginalID(IList<int> internal_id_list)
 		{
-			List<int> result = new List<int>(internal_id_list.Count);
+			var result = new List<int>(internal_id_list.Count);
 			foreach (int id in internal_id_list)
 				result.Add(ToOriginalID(id));
 			return result;
 		}
 
-		/// <summary>
-		/// Get internal IDs of a list of given entities.
-		/// </summary>
-		/// <param name="original_id_list">
-		/// the list of original (external) IDs
-		/// </param>
-		/// <returns>
-		/// a list of internal IDs
-		/// </returns>
+		/// <summary>Get internal IDs of a list of given entities</summary>
+		/// <param name="original_id_list">the list of original (external) IDs</param>
+		/// <returns>a list of internal IDs</returns>
 		public IList<int> ToInternalID(IList<int> original_id_list)
 		{
-			List<int> result = new List<int>(original_id_list.Count);
+			var result = new List<int>(original_id_list.Count);
 			foreach (int id in original_id_list)
 				result.Add(ToInternalID(id));
 			return result;

@@ -23,14 +23,9 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
-	// TODO split up file by classes
-
-    /// <summary>
-    /// Uses the average rating value over all ratings for prediction.
-    /// </summary>
+    /// <summary>Uses the average rating value over all ratings for prediction</summary>
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
@@ -78,9 +73,7 @@ namespace MyMediaLite.RatingPredictor
 		}
     }
 
-    /// <summary>
-    /// Abstract class that uses an average (by entity) rating value for predictions.
-    /// </summary>
+    /// <summary>Abstract class that uses an average (by entity) rating value for predictions</summary>
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
@@ -105,9 +98,7 @@ namespace MyMediaLite.RatingPredictor
 		}
     }
 
-    /// <summary>
-    /// Uses the average rating value of a user for predictions.
-    /// </summary>
+    /// <summary>Uses the average rating value of a user for predictions</summary>
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
@@ -161,9 +152,7 @@ namespace MyMediaLite.RatingPredictor
 		}
     }
 
-    /// <summary>
-    /// Uses the average rating value of an item for prediction.
-    /// </summary>
+    /// <summary>Uses the average rating value of an item for prediction</summary>
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
@@ -210,7 +199,7 @@ namespace MyMediaLite.RatingPredictor
 				return global_average;
         }
 
-	/// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "item-average";

@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,23 +21,19 @@ using MyMediaLite.DataType;
 using MyMediaLite.Data;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted item-based kNN engine</summary>
 	/// <remarks>This engine supports online updates.</remarks>
 	public abstract class ItemKNN : KNN
 	{
-		/// <summary>
-		/// Matrix indicating which item was rated by which user
-		/// </summary>
+		/// <summary>Matrix indicating which item was rated by which user</summary>
 		protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc/>
 		public override RatingData Ratings
 		{
-			set
-			{
+			set {
 				base.Ratings = value;
 
 	            data_item = new SparseBooleanMatrix();
@@ -46,14 +42,10 @@ namespace MyMediaLite.RatingPredictor
 			}
 		}
 
-		/// <summary>
-		/// Get positively correlated entities
-		/// </summary>
+		/// <summary>Get positively correlated entities</summary>
 		protected Func<int, IList<int>> GetPositivelyCorrelatedEntities;
 
-		/// <summary>
-		/// Predict the rating of a given user for a given item.
-		/// </summary>
+		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
 		/// If the user or the item are not known to the engine, a suitable average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.

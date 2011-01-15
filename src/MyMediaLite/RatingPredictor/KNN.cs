@@ -21,7 +21,6 @@ using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Base class for rating predictors that use some kind of kNN</summary>
@@ -40,9 +39,7 @@ namespace MyMediaLite.RatingPredictor
 	/// </remarks>
 	public abstract class KNN : UserItemBaseline
 	{
-		/// <summary>
-		/// Number of neighbors to take into account for predictions
-		/// </summary>		
+		/// <summary>Number of neighbors to take into account for predictions</summary>		
 		public uint K { get { return k;	} set {	k = value; } }
 		private uint k = uint.MaxValue;		
 

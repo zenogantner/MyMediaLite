@@ -30,9 +30,7 @@ namespace MyMediaLite.RatingPredictor
 	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
-		/// <summary>
-		/// Regularization constant for the bias terms
-		/// </summary>
+		/// <summary>Regularization constant for the bias terms</summary>
 		public double BiasRegularization { get { return bias_regularization; } set { bias_regularization = value; } }
 		double bias_regularization = 0;
 

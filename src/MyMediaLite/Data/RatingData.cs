@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +21,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace MyMediaLite.Data
 {
 	/// <summary>Data storage for rating data</summary>
@@ -36,17 +36,14 @@ namespace MyMediaLite.Data
 		/// <summary>All ratings</summary>
         public Ratings All { get { return all; } }
         private Ratings all = new Ratings();
-		
+
 		/// <summary>Average rating value in the collection</summary>
 		public double Average { get { return all.Average; } }
 
-		/// <summary>
-		/// Ratings by user
-		/// </summary>
+		/// <summary>Ratings by user</summary>
 		public List<Ratings> ByUser
 		{
-			get
-			{
+			get {
 				if (this.byUser == null)
 					InitByUser();
 
@@ -58,8 +55,7 @@ namespace MyMediaLite.Data
 		/// <summary>Ratings by item</summary>
 		public List<Ratings> ByItem
 		{
-			get
-			{
+			get {
 				if (this.byItem == null)
 					InitByItem();
 
@@ -72,9 +68,7 @@ namespace MyMediaLite.Data
 		public int MaxUserID { get { return max_user_id; } }
 		private int max_user_id = 0;
 
-		/// <summary>
-		/// The maximum item ID in the ratings
-		/// </summary>
+		/// <summary>The maximum item ID in the ratings</summary>
 		public int MaxItemID { get { return max_item_id; } }
 		private int max_item_id = 0;
 
@@ -177,7 +171,7 @@ namespace MyMediaLite.Data
 		/// <param name="user_id">the numerical ID of the user</param>
         public void RemoveUser(int user_id)
         {
-			List<RatingEvent> remove_list = new List<RatingEvent>();
+			var remove_list = new List<RatingEvent>();
 
             if (byUser != null)
 			{
@@ -202,15 +196,11 @@ namespace MyMediaLite.Data
 				RemoveRating(r);
         }
 
-		/// <summary>
-		/// Remove an item and all its ratings from the collection
-		/// </summary>
-		/// <param name="item_id">
-		/// the numerical ID of the item
-		/// </param>
+		/// <summary>Remove an item and all its ratings from the collection</summary>
+		/// <param name="item_id">the numerical ID of the item</param>
         public void RemoveItem(int item_id)
         {
-			List<RatingEvent> remove_list = new List<RatingEvent>();
+			var remove_list = new List<RatingEvent>();
 
 			if (byItem != null)
                 foreach (RatingEvent r in ByItem[item_id])

@@ -19,12 +19,9 @@
 using System;
 using MyMediaLite.Data;
 
-
 namespace MyMediaLite.RatingPredictor
 {
-	/// <summary>
-	/// Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)
-	/// </summary>
+	/// <summary>Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)</summary>
 	public abstract class Memory : IRatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
@@ -45,29 +42,25 @@ namespace MyMediaLite.RatingPredictor
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings
 		{
-			get
-			{
+			get {
 				return this.ratings;
 			}
-			set
-			{
+			set {
 				this.ratings = value;
 				MaxUserID = ratings.MaxUserID;
 				MaxItemID = ratings.MaxItemID;
 			}
 		}
 
-		/// <summary>
-		/// rating data
-		/// </summary>
+		/// <summary>rating data</summary>
 		protected RatingData ratings;
 
 		/// <inheritdoc/>
         public abstract double Predict(int user_id, int item_id);
 
         /// <inheritdoc/>
-        public abstract void Train();		
-		
+        public abstract void Train();
+
 		/// <inheritdoc/>
 		public abstract void SaveModel(string filename);
 

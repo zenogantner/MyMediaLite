@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.Data
 {
 	/// <summary>Class representing a collection of ratings in a particular order</summary>
@@ -34,8 +34,7 @@ namespace MyMediaLite.Data
 		/// <summary>Average rating value in the collection</summary>
 		public double Average
 		{
-			get
-			{
+			get {
 				double sum = 0;
 				foreach (RatingEvent r in rating_list)
 					sum += r.rating;
@@ -44,9 +43,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <summary>Access an event in the collection directly via an index</summary>
-		/// <param name="index">
-		/// the index
-		/// </param>
+		/// <param name="index">the index</param>
 		public RatingEvent this [int index] { get { return rating_list[index]; } }
 
 		/// <summary>Shuffle the order of the rating events</summary>
@@ -64,27 +61,21 @@ namespace MyMediaLite.Data
 			return rating_list.GetEnumerator();
 		}
 
-		/// <summary>
-		/// Add a rating event to the collection.
-		/// </summary>
+		/// <summary>Add a rating event to the collection</summary>
 		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
 		public void AddRating(RatingEvent rating)
         {
             rating_list.Add(rating);
         }
 
-		/// <summary>
-		/// Remove a rating from the collection.
-		/// </summary>
+		/// <summary>Remove a rating from the collection</summary>
 		/// <param name="rating">the rating event to remove</param>
         public void RemoveRating(RatingEvent rating)
         {
             rating_list.Remove(rating);
         }
 
-		/// <summary>
-		/// Find a rating for a given user and item
-		/// </summary>
+		/// <summary>Find a rating for a given user and item</summary>
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="item_id">the numerical ID of the item</param>
 		/// <returns>the rating event corresponding to the given user and item, null if such a rating does not exist</returns>
@@ -107,12 +98,8 @@ namespace MyMediaLite.Data
 		}
 		// TODO use ISet when we support Mono 2.8
 
-		/// <summary>
-		/// Get the items in the rating collection
-		/// </summary>
-		/// <returns>
-		/// a collection of numerical item IDs
-		/// </returns>
+		/// <summary>Get the items in the rating collection</summary>
+		/// <returns>a collection of numerical item IDs</returns>
 		public HashSet<int> GetItems()
 		{
 			HashSet<int> items = new HashSet<int>();
