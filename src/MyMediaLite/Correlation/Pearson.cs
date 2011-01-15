@@ -33,9 +33,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="num_entities">the number of entities</param>
 		public Pearson(int num_entities) : base(num_entities) { }
 
-		/// <summary>
-		/// Create a Pearson correlation matrix from given data
-		/// </summary>
+		/// <summary>Create a Pearson correlation matrix from given data</summary>
 		/// <param name="ratings">the ratings data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="shrinkage">a shrinkage parameter</param>

@@ -179,9 +179,7 @@ namespace MyMediaLite.RatingPredictor
             return result;
         }
 
-		/// <summary>
-		/// Predict the rating of a given user for a given item.
-		/// </summary>
+		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
 		/// If the user or the item are not known to the engine, the global average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
@@ -290,20 +288,20 @@ namespace MyMediaLite.RatingPredictor
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
             	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
-				if (user_factors.dim2 != item_factors.dim2)
+				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
                 	throw new Exception(
 									string.Format("Number of user and item factors must match: {0} != {1}",
-					                              user_factors.dim2, item_factors.dim2));
+					                              user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 
-				this.MaxUserID = user_factors.dim1 - 1;
-				this.MaxItemID = item_factors.dim1 - 1;
+				this.MaxUserID = user_factors.NumberOfRows - 1;
+				this.MaxItemID = item_factors.NumberOfRows - 1;
 
             	// assign new model
             	this.global_bias = bias;
-				if (this.num_factors != user_factors.dim2)
+				if (this.num_factors != user_factors.NumberOfColumns)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
-            		this.num_factors = user_factors.dim2;
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
+            		this.num_factors = user_factors.NumberOfColumns;
 				}
             	this.user_factors = user_factors;
             	this.item_factors = item_factors;

@@ -136,7 +136,8 @@ FILES = \
 	Data/ISplit.cs \
 	Data/RatingCrossValidationSplit.cs \
 	DataType/IMatrix.cs \
-	DataType/IMatrixUtils.cs 
+	DataType/IMatrixUtils.cs \
+	DataType/SymmetricSparseMatrix.cs 
 
 DATA_FILES = 
 

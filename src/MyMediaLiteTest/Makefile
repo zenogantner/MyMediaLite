@@ -23,6 +23,8 @@ MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
+MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
+MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITETEST_DLL_MDB_SOURCE=bin/Debug/MyMediaLiteTest.dll.mdb
 MYMEDIALITETEST_DLL_MDB=$(BUILD_DIR)/MyMediaLiteTest.dll.mdb
 
@@ -42,6 +44,7 @@ MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
+MYMEDIALITE_DLL_MDB=
 MYMEDIALITETEST_DLL_MDB=
 
 endif
@@ -54,6 +57,7 @@ PROGRAMFILES = \
 	$(MATHNET_IRIDIUM_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
+	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITETEST_DLL_MDB)  
 
 LINUX_PKGCONFIG = \
@@ -67,19 +71,19 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
-FILES =  \
-	Correlation/CorrelationMatrixTest.cs \
-	Correlation/CosineTest.cs \
-	Correlation/PearsonTest.cs \
-	Data/EntityMappingTest.cs \
-	Data/RatingDataTest.cs \
+FILES = \
 	Data/RatingsTest.cs \
-	DataType/MatrixTest.cs \
-	DataType/MatrixUtilsTest.cs \
+	Correlation/CorrelationMatrixTest.cs \
 	DataType/SparseBooleanMatrixTest.cs \
+	DataType/MatrixTest.cs \
+	DataType/VectorUtilsTest.cs \
+	DataType/MatrixUtilsTest.cs \
+	Data/RatingDataTest.cs \
+	Data/EntityMappingTest.cs \
+	Correlation/PearsonTest.cs \
+	Correlation/CosineTest.cs \
 	DataType/SparseMatrixTest.cs \
-	DataType/SymmetricSparseMatrixTest.cs \
-	DataType/VectorUtilsTest.cs 
+	DataType/SymmetricSparseMatrixTest.cs 
 
 DATA_FILES = 
 
@@ -92,7 +96,6 @@ EXTRAS = \
 	mymedialitetest.pc.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:mono-nunit \
 	System.Core
 
@@ -112,6 +115,7 @@ $(eval $(call emit-deploy-target,MYMEDIALITE_DLL))
 $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
+$(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
 $(eval $(call emit-deploy-wrapper,MYMEDIALITETEST_PC,mymedialitetest.pc))
 
 
@@ -139,6 +143,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITETEST_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
 	$(call cp,$(MYMEDIALITETEST_PC),$(DESTDIR)$(libdir)/pkgconfig)
@@ -153,6 +158,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITETEST_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITETEST_PC),$(DESTDIR)$(libdir)/pkgconfig)
 	make post-uninstall-local-hook prefix=$(prefix)

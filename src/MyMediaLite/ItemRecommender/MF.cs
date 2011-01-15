@@ -23,7 +23,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ItemRecommender
 {
     /// <summary>Abstract class for matrix factorization based item predictors</summary>
@@ -102,90 +101,43 @@ namespace MyMediaLite.ItemRecommender
             return result;
         }
 
-		/// <inheritdoc/>
+        /// <inheritdoc/>
 		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(file, GetType()) )
+			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
-				// TODO move matrix reading and writing to the MatrixUtils class
-            	writer.WriteLine(user_factors.dim1 + " " + user_factors.dim2);
-            	for (int i = 0; i < user_factors.dim1; i++)
-                	for (int j = 0; j < user_factors.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + user_factors[i, j].ToString(ni));
-
-            	writer.WriteLine(item_factors.dim1 + " " + item_factors.dim2);
-            	for (int i = 0; i < item_factors.dim1; i++)
-                	for (int j = 0; j < item_factors.dim2; j++)
-                    	writer.WriteLine(i + " " + j + " " + item_factors[i, j].ToString(ni));
+				IMatrixUtils.WriteMatrix(writer, user_factors);
+				IMatrixUtils.WriteMatrix(writer, item_factors);
 			}
 		}
 
-		// TODO share code with MatrixFactorization
 		/// <inheritdoc/>
 		public override void LoadModel(string file)
-		{
-			// TODO use library functions
+        {
+            var ni = new NumberFormatInfo();
+            ni.NumberDecimalDigits = '.';
 
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-            using ( var reader = Engine.GetReader(file, GetType()) )
+            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
-            	string[] numbers = reader.ReadLine().Split(' ');
-				int num_users = Int32.Parse(numbers[0]);
-				int dim2 = Int32.Parse(numbers[1]);
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+            	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
-				MaxUserID = num_users - 1;
-				var user_factors = new Matrix<double>(num_users, dim2);
-				int num_factors = dim2;
+				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
+                	throw new Exception(
+									string.Format("Number of user and item factors must match: {0} != {1}",
+					                              user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 
-            	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
-            	{
-					int i = Int32.Parse(numbers[0]);
-					int j = Int32.Parse(numbers[1]);
-					double v = Double.Parse(numbers[2], ni);
-
-                	if (i >= num_users)
-						throw new Exception(string.Format("Invalid user ID {0} is greater than {1}.", i, num_users - 1));
-					if (j >= num_factors)
-						throw new Exception(string.Format("Invalid latent factor ID {0} is greater than {1}.", j, num_factors - 1));
-
-                	user_factors[i, j] = v;
-				}
-
-            	int num_items = Int32.Parse(numbers[0]);
-				dim2 = Int32.Parse(numbers[1]);
-				if (dim2 != num_factors)
-					throw new Exception("dim2 of item_factors must be num_factors");
-				var item_factors = new Matrix<double>(num_items, dim2);
-
-            	while (!reader.EndOfStream)
-            	{
-					numbers = reader.ReadLine().Split(' ');
-					int i = Int32.Parse(numbers[0]);
-					int j = Int32.Parse(numbers[1]);
-					double v = Double.Parse(numbers[2], ni);
-
-                	if (i >= num_items)
-						throw new Exception(string.Format("Invalid item ID {0} is greater than {1}.", i, num_items - 1));
-					if (j >= num_factors)
-						throw new Exception(string.Format("Invalid latent factor ID {0} is greater than {1}.", j, num_factors - 1));
-
-					item_factors[i, j] = v;
-				}
-
-				// fix MaxUserID and MaxItemID - our model does not know more
-				MaxUserID = num_users - 1;
-				MaxItemID = num_items - 1;
+				this.MaxUserID = user_factors.NumberOfRows - 1;
+				this.MaxItemID = item_factors.NumberOfRows - 1;
 
             	// assign new model
-				if (this.num_factors != num_factors)
+				if (this.num_factors != user_factors.NumberOfColumns)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", num_factors);
-            		this.num_factors = num_factors;
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
+            		this.num_factors = user_factors.NumberOfColumns;
 				}
             	this.user_factors = user_factors;
             	this.item_factors = item_factors;
