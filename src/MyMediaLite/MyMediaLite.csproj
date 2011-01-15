@@ -98,7 +98,6 @@
     <Compile Include="RatingPredictor\ItemKNNCosine.cs" />
     <Compile Include="RatingPredictor\ItemKNNPearson.cs" />
     <Compile Include="RatingPredictor\KNN.cs" />
-    <Compile Include="RatingPredictor\Linear.cs" />
     <Compile Include="RatingPredictor\MatrixFactorization.cs" />
     <Compile Include="RatingPredictor\Memory.cs" />
     <Compile Include="RatingPredictor\UserAttributeKNN.cs" />
@@ -122,6 +121,10 @@
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\IMatrixUtils.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
+    <Compile Include="RatingPredictor\EntityAverage.cs" />
+    <Compile Include="RatingPredictor\GlobalAverage.cs" />
+    <Compile Include="RatingPredictor\UserAverage.cs" />
+    <Compile Include="RatingPredictor\ItemAverage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
