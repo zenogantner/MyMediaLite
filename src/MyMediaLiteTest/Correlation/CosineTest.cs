@@ -25,16 +25,13 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 
-
 namespace MyMediaLiteTest
 {
-	/// <summary>Class for testing the Cosine classes</summary>
+	/// <summary>Class for testing the Cosine class</summary>
 	[TestFixture()]
 	public class CosineTest
 	{
-		/// <summary>Unit test of Cosine.CorrelationMatrix Create(SparseBooleanMatrix vectors)</summary>
-		[Test()]
-		public void TestCreate()
+		[Test()] public void TestCreate()
 		{
 			// create test objects
 			var sparse_boolean_matrix = new SparseBooleanMatrix();
@@ -53,9 +50,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(correlation_matrix[1, 3], 4));
 		}
 
-		/// <summary>Unit test of Cosine.ComputeCorrelations(SparseBooleanMatrix entity_data)</summary>
-		[Test()]
-		public void TestComputeCorrelations()
+		[Test()] public void TestComputeCorrelations()
 		{
 			// create test objects
 			var sparse_boolean_matrix = new SparseBooleanMatrix();
@@ -75,9 +70,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(cosine[1, 3], 4));
 		}
 
-		/// <summary>Unit test of Cosine.ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)</summary>
-		[Test()]
-		public void TestComputeCorrelation()
+		[Test()] public void TestComputeCorrelation()
 		{
 			// create test objects
 			var vector1 = new HashSet<int>();

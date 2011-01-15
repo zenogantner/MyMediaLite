@@ -21,14 +21,12 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the SparseBooleanMatrix class</summary>
 	[TestFixture()]
 	public class SparseBooleanMatrixTest
 	{
-		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRows</summary>
 		[Test()] public void TestNonEmptyRows()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -45,7 +43,6 @@ namespace MyMediaLiteTest
 			// TODO test contents
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.NonEmptyRowIDs</summary>
 		[Test()] public void TestNonEmptyRowIDs()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -67,7 +64,6 @@ namespace MyMediaLiteTest
 			Assert.IsFalse(rowIDsEnum.MoveNext());
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.NumberOfRows</summary>
 		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -79,7 +75,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5, matrix.NumberOfRows);
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.NumberOfColumns</summary>
 		[Test()] public void TestNumberOfColumns()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -91,7 +86,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5, matrix.NumberOfColumns);
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.NumberOfEntries</summary>
 		[Test()] public void TestNumberOfEntries()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -104,7 +98,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(3, matrix.NumberOfEntries);
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int y)</summary>
 		[Test()] public void TestRemoveColumn()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -124,7 +117,6 @@ namespace MyMediaLiteTest
 			Assert.IsTrue(matrix[1, 1]);
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.RemoveColumn(int[] delete_columns)</summary>
 		[Test()] public void TestRemoveColumns()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -147,7 +139,6 @@ namespace MyMediaLiteTest
 			Assert.IsFalse(matrix[4, 3]);
 		}
 
-		/// <summary>Unit tests for SparseBooleanMatrix.Transpose()</summary>
 		[Test()] public void TestTranspose()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -169,7 +160,6 @@ namespace MyMediaLiteTest
 			Assert.IsFalse(transposedMatrix[5, 4]);
 		}
 
-		/// <summary>Unit test of SparseBooleanMatrix.Overlap(SparseBooleanMatrix s)</summary>
 		[Test()] public void TestOverlap()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -190,20 +180,6 @@ namespace MyMediaLiteTest
 
 			Assert.AreEqual(3, matrix.Overlap(overlapMatrix));
 
-		}
-
-		/// <summary>Unit test for VectorUtils.EuclideanNorm(ICollection&lt;double&gt; vector)</summary>
-		[Test()] public void TestEuclideanNorm()
-		{
-			var testVector = new List<double>();
-			testVector.Add(2);
-			testVector.Add(5);
-			testVector.Add(3);
-			testVector.Add(7);
-			testVector.Add(5);
-			testVector.Add(3);
-			double result = 11;
-			Assert.AreEqual(result, VectorUtils.EuclideanNorm(testVector));
 		}
 	}
 }

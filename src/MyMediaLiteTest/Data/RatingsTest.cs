@@ -22,16 +22,13 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the Ratings class</summary>
 	[TestFixture()]
 	public class RatingsTest
 	{
-		/// <summary>Unit test of Ratings.Shuffle()</summary>
-		[Test()]
-		public void TestShuffle()
+		[Test()] public void TestShuffle()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
@@ -46,9 +43,7 @@ namespace MyMediaLiteTest
 			// TODO this is a wrong assumption!
 		}
 
-		/// <summary>Unit test of Ratings.Average</summary>
-		[Test()]
-		public void TestAverage()
+		[Test()] public void TestAverage()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
@@ -60,9 +55,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0.3f, test_ratings.Average, 0.0001f);
 		}
 
-		/// <summary>Unit test of Ratings.Count</summary>
-		[Test()]
-		public void TestCount()
+		[Test()] public void TestCount()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
@@ -74,9 +67,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5, test_ratings.Count);
 		}
 
-		/// <summary>Unit test of Ratings.RemoveRating(RatingEvent rating)</summary>
-		[Test()]
-		public void TestRemoveRating()
+		[Test()] public void TestRemoveRating()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
@@ -90,9 +81,7 @@ namespace MyMediaLiteTest
 			Assert.IsNull(test_ratings.FindRating(2, 5));
 		}
 
-		/// <summary>Unit test of Ratings.GetUsers()</summary>
-		[Test()]
-		public void TestGetUsers()
+		[Test()] public void TestGetUsers()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
@@ -108,9 +97,7 @@ namespace MyMediaLiteTest
 			Assert.Contains(5, user_list);
 		}
 
-		/// <summary>Unit test of Ratings.GetItems()</summary>
-		[Test()]
-		public void TestGetItems()
+		[Test()] public void TestGetItems()
 		{
 			var test_ratings = new Ratings();
 			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));

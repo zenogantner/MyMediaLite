@@ -21,14 +21,12 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the EntityMapping class</summary>
 	[TestFixture()]
 	public class EntityMappingTest
 	{
-		/// <summary>Unit test of  EntityMapping.ToOriginalID(int internal_id)</summary>
 		[Test()]
 		public void TestToOriginalID()
 		{

@@ -21,14 +21,12 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the MatrixUtils class</summary>
 	[TestFixture()]
 	public class MatrixUtilsTest
 	{
-		/// <summary>Unit test of MatrixUtils.Inc(Matrix&lt;double&gt; matrix, int i, int j, double v)</summary>
 		[Test()] public void TestInc()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -39,7 +37,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(7.5, matrix[3, 4]);
 		}
 
-		/// <summary>Unit test of MatrixUtils.Inc(Matrix&lt;double&gt; matrix1, Matrix&lt;double&gt; matrix2)</summary>
 		[Test()] public void TestInc2()
 		{
 			var matrix1 = new Matrix<double>(5, 5);
@@ -55,7 +52,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(testrow, matrix1.GetRow(2));
 		}
 
-		/// <summary>Unit test of MatrixUtils.ColumnAverage(Matrix&lt;double&gt; matrix, int col)</summary>
 		[Test()] public void TestColumnAverage()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -66,7 +62,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5.0, MatrixUtils.ColumnAverage(matrix, 4));
 		}
 
-		/// <summary>Unit test of MatrixUtils.RowAverage(Matrix&lt;double&gt; matrix, int row)</summary>
 		[Test()] public void TestRowAverage()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -77,7 +72,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(3.0, MatrixUtils.RowAverage(matrix, 4));
 		}
 
-		/// <summary>Unit test of MatrixUtils.Multiply(Matrix&lt;double&gt; matrix, double d)</summary>
 		[Test()] public void TestMultiply()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -89,7 +83,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
 
-		/// <summary>Unit test of MatrixUtils.FrobeniusNorm(Matrix&lt;double&gt; matrix)</summary>
 		[Test()] public void TestFrobeniusNorm()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -100,7 +93,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(result,MatrixUtils.FrobeniusNorm(matrix));
 		}
 
-		/// <summary>Unit test of MatrixUtils.RowScalarProduct(Matrix&lt;double&gt; matrix, int i, double[] vector)</summary>
 		[Test()] public void TestRowScalarProduct()
 		{
 			var matrix = new Matrix<double>(5, 5);
@@ -112,21 +104,17 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(matrix, 2, vector));
 		}
 
-		/// <summary>Unit test of MatrixUtils.ContainsNaN(Matrix&lt;double&gt; matrix)</summary>
 		[Test()] public void TestContainsNaN()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			var matrixtrue = new Matrix<double>(5, 5);
-			double[] row2 = { 1, 2, 3, 4, 5 };
-			for (int i = 0; i < 5; i++)
-				matrixtrue.SetRow(i, row2);
-
+			
 			Assert.IsFalse(MatrixUtils.ContainsNaN(matrix));
-			// TODO insert Nan in matrix
-			// Assert.IsTrue(MatrixUtils.ContainsNaN(matrixtrue));
+
+			matrix[1, 1] = double.NaN;			
+			Assert.IsTrue(MatrixUtils.ContainsNaN(matrix));
 		}
 	}
 }

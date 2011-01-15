@@ -22,15 +22,13 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Testing the data classes</summary>
 	[TestFixture()]
 	public class RatingDataTest
 	{
-		/// <summary>Unit Test of RatingData.MaxUserID and RatingData.MaxItemID</summary>
-		public void TestMaxUserIDItemID()
+		[Test()] public void TestMaxUserIDItemID()
 		{
 			var rating_data = new RatingData();
 			rating_data.AddRating(new RatingEvent(1, 4, 0.3));
@@ -45,9 +43,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(8, rating_data.MaxItemID);
 		}
 
-		/// <summary>Unit test of RatingData.AddRating(RatingEvent rating)</summary>
-		[Test()]
-		public void TestAddRating()
+		[Test()] public void TestAddRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -63,11 +59,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0.3, testRatingData.All.FindRating(6, 3).rating);
 		}
 
-		// AddUser and AddItem could not be tested
-
-		/// <summary>Unit test of RatingData.RemoveRating(RatingEvent rating)</summary>
-		[Test()]
-		public void TestRemoveRating()
+		[Test()] public void TestRemoveRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -88,9 +80,7 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(6, 3));
 		}
 
-		/// <summary>Unit test of RatingData.RemoveUser(int user_id)</summary>
-		[Test()]
-		public void TestRemoveUser()
+		[Test()] public void TestRemoveUser()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -106,9 +96,7 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(2, 5));
 		}
 
-		/// <summary>Unit test of RatingData.RemoveItem(int item_id)</summary>
-		[Test()]
-		public void TestRemoveItem()
+		[Test()] public void TestRemoveItem()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));
@@ -124,9 +112,7 @@ namespace MyMediaLiteTest
 			Assert.IsNull(testRatingData.All.FindRating(2, 4));
 		}
 
-		/// <summary>Unit test of RatingData.FindRating(int user_id, int item_id)</summary>
-		[Test()]
-		public void TestFindRating()
+		[Test()] public void TestFindRating()
 		{
 			var testRatingData = new RatingData();
 			testRatingData.AddRating(new RatingEvent(1, 4, 0.3));

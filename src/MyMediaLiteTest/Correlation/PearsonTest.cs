@@ -25,16 +25,13 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 
-
 namespace MyMediaLiteTest
 {
 	/// <summary>Class for testing the Pearson class</summary>
 	[TestFixture()]
 	public class PearsonTest
 	{
-		/// <summary>Unit test of Pearson.Create(RatingData ratings, EntityType entity_type, float shrinkage)</summary>
-		[Test()]
-		public void TestCreate()
+		[Test()] public void TestCreate()
 		{
 			// create test objects
 			var rating_data = new RatingData();
@@ -50,11 +47,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, pearson[0, 1]);
 		}
 
-		/// <summary>
-		/// Unit test of Pearson.ComputeCorrelation(Ratings ratings_1, Ratings ratings_2, EntityType entity_type, int i, int j, float shrinkage)
-		/// </summary>
-		[Test()]
-		public void TestComputeCorrelation()
+		[Test()] public void TestComputeCorrelation()
 		{
 			// create test objects
 			var rating1 = new Ratings();
@@ -69,9 +62,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, Pearson.ComputeCorrelation(rating1, rating2, EntityType.USER, 0, 1, 0));
 		}
 
-		/// <summary>Unit test of Pearson.ComputeCorrelations(RatingData ratings, EntityType entity_type)</summary>
-		[Test()]
-		public void TestComputeCorrelations()
+		[Test()] public void TestComputeCorrelations()
 		{
 			// create test objects
 			var pearson = new Pearson(3);
