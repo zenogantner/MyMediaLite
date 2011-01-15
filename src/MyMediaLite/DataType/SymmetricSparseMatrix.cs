@@ -21,6 +21,11 @@ using System.Collections.Generic;
 namespace MyMediaLite.DataType
 {
 	/// <summary>a symmetric sparse matrix; consumes less memory</summary>
+	/// <remarks>
+	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and
+	/// NonEmptyRows properties: these contain only the entries with x &gt; y,
+	/// but not their symmetric counterparts.
+	/// </remarks>
 	public class SymmetricSparseMatrix<T> : SparseMatrix<T> where T:new()
 	{
 		/// <summary>Access the elements of the sparse matrix</summary>
@@ -29,7 +34,7 @@ namespace MyMediaLite.DataType
 		public override T this [int x, int y]
 		{
 			get	{
-				// ensure x < y
+				// ensure x <= y
 				if (x > y)
 				{
 					int tmp = x;
@@ -44,7 +49,7 @@ namespace MyMediaLite.DataType
 					return new T();
 			}
 			set {
-				// ensure x < y
+				// ensure x <= y
 				if (x > y)
 				{
 					int tmp = x;
@@ -67,5 +72,13 @@ namespace MyMediaLite.DataType
 		/// <summary>Create a symmetric sparse matrix with a given number of rows</summary>
 		/// <param name="num_rows">the number of rows</param>		
 		public SymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
+		
+		/// <inheritdoc/>
+		public override IMatrix<T> CreateMatrix(int num_rows, int num_columns)
+		{
+			if (num_rows != num_columns)
+				throw new ArgumentException("Symmetric matrices must have the same number of rows and columns.");
+			return new SymmetricSparseMatrix<T>(num_rows);
+		}		
 	}
 }

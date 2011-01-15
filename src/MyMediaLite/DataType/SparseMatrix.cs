@@ -70,7 +70,7 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <inheritdoc/>
-		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
+		public virtual IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
 			return new SparseMatrix<T>(num_rows, num_columns);
 		}

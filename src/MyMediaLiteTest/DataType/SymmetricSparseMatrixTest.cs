@@ -68,7 +68,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, matrix .NonEmptyRows.Count);
 
 			matrix [3, 1] = 1.0;
-			Assert.AreEqual(2, matrix.NonEmptyRows.Count);
+			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
 		}
 
 		[Test()] public void TestNonEmptyEntryIDs()
@@ -77,7 +77,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
 
 			matrix[3, 1] = 1.0;
-			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
+			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
 		}
 	}
 }

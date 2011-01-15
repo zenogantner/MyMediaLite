@@ -109,11 +109,11 @@ namespace MyMediaLite.RatingPredictor
 
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
-			
+
             using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
             	double global_average = Double.Parse(reader.ReadLine(), ni);
-				
+
 				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
             	var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
 
