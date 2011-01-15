@@ -39,8 +39,7 @@ namespace MyMediaLite.DataType
 		/// <inheritdoc/>
 		public virtual bool IsSymmetric
 		{
-			get
-			{
+			get {
 				if (dim1 != dim2)
 					return false;
 				for (int i = 0; i < dim1; i++)
@@ -88,10 +87,7 @@ namespace MyMediaLite.DataType
 			return new Matrix<T>(num_rows, num_columns);
 		}
 
-        /// <summary>The value at (i,j)</summary>
-        /// <value>The value at (i,j)</value>
-        /// <param name="i">the row ID</param>
-        /// <param name="j">the column ID</param>
+		/// <inheritdoc/>
         public virtual T this [int i, int j]
         {
 			get

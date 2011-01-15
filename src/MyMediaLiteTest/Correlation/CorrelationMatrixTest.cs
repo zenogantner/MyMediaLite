@@ -1,4 +1,5 @@
 // Copyright(C) 2010 Christina Lichtenthäler
+// Copyright(C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,16 +32,12 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class CorrelationMatrixTest
 	{
-
-		/// <summary>Unit test of CorrelationMatrix.ReadCorrelationMatrix(StreamReader reader)</summary>
 		[Test()]
 		public void TestReadCorrelationMatrix()
 		{
 			// create test object
 			const string filename = "correlation_matrix.txt";
 			var writer = new StreamWriter(filename);
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
 			writer.WriteLine(3);
 			writer.WriteLine("0 1 0.1");
 			writer.WriteLine("0 2 0.2");
@@ -49,30 +46,28 @@ namespace MyMediaLiteTest
 
 			var reader = new StreamReader(filename);
 			var corr_matrix = CorrelationMatrix.ReadCorrelationMatrix(reader);
-			//test textfile:
-			//3
-			//0 1 0.1
-			//0 2 0.2
-			//1 2 0.3
 			Assert.AreEqual(1f,   corr_matrix[0, 0]);
-			Assert.AreEqual(0.1f, corr_matrix[0, 1]);
-			Assert.AreEqual(0.2f, corr_matrix[0, 2]);
-			Assert.AreEqual(0.1f, corr_matrix[1, 0]);
 			Assert.AreEqual(1f,   corr_matrix[1, 1]);
-			Assert.AreEqual(0.3f, corr_matrix[1, 2]);
-			Assert.AreEqual(0.2f, corr_matrix[2, 0]);
-			Assert.AreEqual(0.3f, corr_matrix[2, 1]);
 			Assert.AreEqual(1f,   corr_matrix[2, 2]);
+			
+			Assert.AreEqual(0.1f, corr_matrix[0, 1]);
+			Assert.AreEqual(0.1f, corr_matrix[1, 0]);			
+			
+			Assert.AreEqual(0.2f, corr_matrix[0, 2]);
+			Assert.AreEqual(0.2f, corr_matrix[2, 0]);
+
+			Assert.AreEqual(0.3f, corr_matrix[1, 2]);
+			Assert.AreEqual(0.3f, corr_matrix[2, 1]);
+
 
 			// TODO test Exception
 			// test with wrong format
 
 			// close streams an delete the text file
 			reader.Close();
-			File.Delete(filename);
+			//File.Delete(filename);
 		}
 
-		/// <summary>Unit test of CorrelationMatrix.Write(StreamWriter writer)</summary>
 		[Test()]
 		public void TestWrite()
 		{
@@ -113,10 +108,9 @@ namespace MyMediaLiteTest
 			// close streams and delete the text file
 			reader1.Close();
 			reader2.Close();
-			File.Delete(filename);
+			//File.Delete(filename);
 		}
 
-		/// <summary>Unit test of CorrelationMatrix.AddEntity(int entity_id)</summary>
 		[Test()]
 		public void TestAddEntity()
 		{
@@ -137,7 +131,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5, matrix.dim1);
 		}
 
-		/// <summary>Unit test of CorrelationMatrix.SumUp()</summary>
 		[Test()]
 		public void TestSumUp()
 		{
@@ -158,7 +151,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(5, matrix.dim1);
 		}
 
-		/// <summary>Unit test of CorrelationMatrix.GetPositivelyCorrelatedEntities(int entity_id)</summary>
 		[Test()]
 		public void TestGetPositivelyCorrelatedEntities()
 		{
@@ -185,7 +177,6 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(pos_cor_entities, cor_entities);
 		}
 
-		/// <summary>Unit test of CorrelationMatrix.GetNearestNeighbors(int entity_id, uint k)</summary>
 		[Test()]
 		public void TestGetNearestNeighbors()
 		{

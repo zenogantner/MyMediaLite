@@ -35,7 +35,6 @@ namespace MyMediaLite.Correlation
 		public override bool IsSymmetric { get { return true; } }
 
 		/// <inheritdoc/>
-		/*
         public override float this [int i, int j]
         {
 			get { return data[i * dim2 + j]; }
@@ -44,7 +43,6 @@ namespace MyMediaLite.Correlation
             	data[j * dim2 + i] = value;
         	}
 		}
-		*/
 
 		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
 		/// <param name="num_entities">number of entities</param>
@@ -129,7 +127,7 @@ namespace MyMediaLite.Correlation
 				for (int j = i + 1; j < num_entities; j++)
 				{
 					float val = this[i, j];
-					if (val != 0)
+					if (val != 0f)
 						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
 				}
 		}
@@ -141,7 +139,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		public void AddEntity(int entity_id)
 		{
-			//this.Grow(entity_id + 1, entity_id + 1);
+			this.Grow(entity_id + 1, entity_id + 1);
 		}
 
 		/// <summary>Sum up the correlations between a given entity and the entities in a collection</summary>
@@ -160,9 +158,7 @@ namespace MyMediaLite.Correlation
 			return result;
 		}
 
-		/// <summary>
-		/// Get all entities that are positively correlated to an entity, sorted by correlation
-		/// </summary>
+		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
 		/// <param name="entity_id">the entity ID</param>
 		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
 		public IList<int> GetPositivelyCorrelatedEntities(int entity_id)
