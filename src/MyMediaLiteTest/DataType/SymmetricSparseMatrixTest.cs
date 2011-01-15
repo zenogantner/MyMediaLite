@@ -16,73 +16,68 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Tests for the SparseMatrix<T> class</summary>
+	/// <summary>Tests for the SymmetricSparseMatrix<T> class</summary>
 	[TestFixture()]
-	public class SparseMatrixTest
+	public class SymmetricSparseMatrixTest
 	{
+		[Test()] public void TestSymmetricity()
+		{
+			var matrix = new SymmetricSparseMatrix<double>(5);
+			matrix[1, 3] = 1.0;
+
+			Assert.AreEqual(1.0, matrix[3, 1]);
+		}
+
 		[Test()] public void TestIsSymmetric()
 		{
-			var matrix1 = new SparseMatrix<double>(3, 5);
-			Assert.IsFalse(matrix1.IsSymmetric);
-			
-			var matrix2 = new SparseMatrix<double>(5, 5);
-			Assert.IsTrue(matrix2.IsSymmetric);
-			
-			matrix2[1, 3] = 1.0;
-			Assert.IsFalse(matrix2.IsSymmetric);
-			
-			matrix2[3, 1] = 1.0;
-			Assert.IsTrue(matrix2.IsSymmetric);
+			var matrix = new SymmetricSparseMatrix<double>(5);
+			Assert.IsTrue(matrix.IsSymmetric);
+
+			matrix[1, 3] = 1.0;
+			Assert.IsTrue(matrix.IsSymmetric);
 		}
-		
+
 		[Test()] public void TestNumberOfRows()
 		{
-			var matrix = new SparseMatrix<double>(3, 5);
+			var matrix = new SymmetricSparseMatrix<double>(3);
 			Assert.AreEqual(3, matrix.NumberOfRows);
 		}
-		
+
 		[Test()] public void TestNumberOfColumns()
 		{
-			var matrix = new SparseMatrix<double>(3, 5);
-			Assert.AreEqual(5, matrix.NumberOfColumns);
+			var matrix = new SymmetricSparseMatrix<double>(3);
+			Assert.AreEqual(3, matrix.NumberOfColumns);
 		}
-		
+
 		[Test()] public void TestCreateMatrix()
 		{
-			var matrix1 = new SparseMatrix<double>(3, 5);
+			var matrix1 = new SymmetricSparseMatrix<double>(5);
 			var matrix2 = matrix1.CreateMatrix(4, 4);
 			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
 		}
-		
+
 		[Test()] public void TestNonEmptyRows()
 		{
-			var matrix  = new SparseMatrix<double>(3, 5);
+			var matrix  = new SymmetricSparseMatrix<double>(5);
 			Assert.AreEqual(0, matrix .NonEmptyRows.Count);
-			
+
 			matrix [3, 1] = 1.0;
-			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
-			Assert.AreEqual(3, matrix .NonEmptyRows[0].Key);
+			Assert.AreEqual(2, matrix.NonEmptyRows.Count);
 		}
-		
+
 		[Test()] public void TestNonEmptyEntryIDs()
 		{
-			var matrix = new SparseMatrix<double>(3, 5);
+			var matrix = new SymmetricSparseMatrix<double>(5);
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
-			
+
 			matrix[3, 1] = 1.0;
-			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
-			foreach (var pair in matrix.NonEmptyEntryIDs)
-			{
-				Assert.AreEqual(3, pair.First);
-				Assert.AreEqual(1, pair.Second);
-			}
+			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
 		}
 	}
 }

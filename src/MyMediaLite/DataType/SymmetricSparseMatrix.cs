@@ -23,8 +23,6 @@ namespace MyMediaLite.DataType
 	/// <summary>a symmetric sparse matrix; consumes less memory</summary>
 	public class SymmetricSparseMatrix<T> : SparseMatrix<T> where T:new()
 	{
-		// TODO add unit tests for this class
-		
 		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
