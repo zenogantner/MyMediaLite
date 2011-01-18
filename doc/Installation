@@ -1,8 +1,9 @@
 System Requirements:
- - Mono or another recent .NET runtime
+ - Mono 2.6.x or another recent .NET runtime
+ - NUnit
 
 Instructions:
  - For building from source, we recommend to use MonoDevelop.
- - If you have the binary package, just copy the contents of the bin/ directory
-   to wherever you want and run the programs from there.
+ - If you have the binary package, just copy its contents to wherever you
+   want and run the programs from there.
 

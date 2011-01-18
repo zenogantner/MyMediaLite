@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System.Core">
     </Reference>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

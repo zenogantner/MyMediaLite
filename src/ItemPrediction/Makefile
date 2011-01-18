@@ -95,7 +95,8 @@ EXTRAS = \
 REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
-	System.Core
+	System.Core \
+	System.Data
 
 DLL_REFERENCES = 
 
