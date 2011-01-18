@@ -1,7 +1,6 @@
 Recommender functionality
  - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
-   - result diversification (Ziegler)
  - support for non-binary attributes: real, nominal, textual descriptions
  - directly support MovieLens u.item and u.user files and MovieLens 1M data format
  - support for more relation types: weighted, ternary, multiple relations
@@ -48,8 +47,7 @@ Architecture
    - test suite should also run for purely binary installation
  - web APIs
    - integrate with easyrec JavaScript API http://easyrec.org/ 
-   - implement features similar to the Strands web service API
-     - http://recommender.strands.com/developers/
+   - implement features similar to the Strands web service API or Hunch
  - internal APIs
    - interface(s) for recommenders that support online updates
    - define an easy interface for rating data access

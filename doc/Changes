@@ -6,6 +6,10 @@
           - new type SymmetricSparseMatrix
           - IMatrix<T>: new property IsSymmetric
           - Matrix<T>: faster computation of IsSymmetric
+          - move WeightedItem from DataType to Data
+        - add unit tests for SparseMatrix<T>
+        - add sequential diversification (Ziegler et al.) to experimental
+          section
 
 0.09	2011-01-12
 	- IO
