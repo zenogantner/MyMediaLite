@@ -1,6 +1,8 @@
 0.10	2011-??-??
 	- engines
           - kNN-based engines are now much faster and consume less memory
+          - add BiPolarSlopeOne engine
+          - move SlopeOne engine to the stable code
         - data types
           - SparseBooleanMatrix now implements IMatrix<bool>
           - new type SymmetricSparseMatrix
