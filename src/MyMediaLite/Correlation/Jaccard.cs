@@ -65,35 +65,30 @@ namespace MyMediaLite.Correlation
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...
-			
+
 			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
-			
+
 			// go over all (other) entities
 			foreach (var row_id in transpose.NonEmptyRowIDs)
 			{
 				var row = transpose[row_id].ToList();
-				
+
 				for (int i = 0; i < row.Count; i++)
 				{
 					int x = row[i];
-					
+
 					for (int j = i + 1; j < row.Count; j++)
 					{
 						int y = row[j];
-						
-						// ensure x < y
-						if (x > y)
-						{
-							int tmp = x;
-							x = y;
-							y = tmp;
-						}
 
-						overlap[x, y]++;
+						if (x < y)
+							overlap[x, y]++;
+						else
+							overlap[y, x]++;
 					}
 				}
 			}
-			
+
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
@@ -103,10 +98,10 @@ namespace MyMediaLite.Correlation
 			{
 				int x = index_pair.First;
 				int y = index_pair.Second;
-				
+
 				this[x, y] = (float) (overlap[x, y] / (entity_data[x].Count + entity_data[y].Count - overlap[x, y]));
 			}
-						
+
 		}
 
 		/// <summary>Computes the Jaccard index of two binary vectors</summary>

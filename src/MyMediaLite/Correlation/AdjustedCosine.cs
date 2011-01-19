@@ -81,27 +81,27 @@ namespace MyMediaLite.Correlation
 
 			Ratings ratings1 = entity_type == EntityType.USER ? ratings.ByUser[i] : ratings.ByItem[i];
 			Ratings ratings2 = entity_type == EntityType.USER ? ratings.ByUser[j] : ratings.ByItem[j];
-			
+
 			// get common ratings for the two entities
 			HashSet<int> e1 = entity_type == EntityType.USER ? ratings1.GetItems() : ratings1.GetUsers();
 			HashSet<int> e2 = entity_type == EntityType.USER ? ratings2.GetItems() : ratings2.GetUsers();
 
 			e1.IntersectWith(e2);
-			
+
 			int n = e1.Count;
 			if (n < 2)
-				return 0;			
+				return 0;
 
-			List<Ratings> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;			
-			
+			List<Ratings> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
+
 			double sum_ij = 0;
 			double sum_ii = 0;
 			double sum_jj = 0;
-			
+
 			foreach (int other_entity_id in e1)
 			{
 				double average_rating = ratings_by_other_entity[other_entity_id].Average;
-				
+
 				// get ratings
 				double r1 = 0;
 				double r2 = 0;
@@ -118,7 +118,7 @@ namespace MyMediaLite.Correlation
 
 				double dev_i = r1 - average_rating;
 				double dev_j = r2 - average_rating;
-								
+
 				// update sums
 				sum_ij += dev_i * dev_j;
 				sum_ii += dev_i * dev_i;
@@ -152,7 +152,7 @@ namespace MyMediaLite.Correlation
 			foreach (var other_entity_ratings in ratings_by_other_entity)
 			{
 				double average_rating = other_entity_ratings.Average;
-				
+
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];
@@ -164,27 +164,29 @@ namespace MyMediaLite.Correlation
 						var r2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
 
-						// ensure x < y
-						if (x > y)
-						{
-							int tmp = x;
-							x = y;
-							y = tmp;
-						}
-
 						// compute deviations from mean
 						double dev_i = r1.rating - average_rating;
 						double dev_j = r2.rating - average_rating;
-						
+
 						// update sums
-						freqs[x, y]  += 1;
-						sum_ij[x, y] += dev_i * dev_j;
-						sum_ii[x, y] += dev_i * dev_i;
-						sum_jj[x, y] += dev_j * dev_j;						
+						if (x < y)
+						{
+							freqs[x, y]  += 1;
+							sum_ij[x, y] += dev_i * dev_j;
+							sum_ii[x, y] += dev_i * dev_i;
+							sum_jj[x, y] += dev_j * dev_j;
+						}
+						else
+						{
+							freqs[y, x]  += 1;
+							sum_ij[y, x] += dev_i * dev_j;
+							sum_ii[y, x] += dev_i * dev_i;
+							sum_jj[y, x] += dev_j * dev_j;
+						}
 	        		}
 				}
 			}
-			
+
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;

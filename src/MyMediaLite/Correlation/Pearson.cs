@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -77,12 +78,12 @@ namespace MyMediaLite.Correlation
 			if (i == j)
 				return 1;
 
-			Ratings ratings1 = entity_type == EntityType.USER ? ratings.ByUser[i] : ratings.ByItem[i];
-			Ratings ratings2 = entity_type == EntityType.USER ? ratings.ByUser[j] : ratings.ByItem[j];			
-			
+			Ratings ratings1 = (entity_type == EntityType.USER) ? ratings.ByUser[i] : ratings.ByItem[i];
+			Ratings ratings2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
+
 			// get common ratings for the two entities
-			HashSet<int> e1 = entity_type == EntityType.USER ? ratings1.GetItems() : ratings1.GetUsers();
-			HashSet<int> e2 = entity_type == EntityType.USER ? ratings2.GetItems() : ratings2.GetUsers();
+			HashSet<int> e1 = (entity_type == EntityType.USER) ? ratings1.GetItems() : ratings1.GetUsers();
+			HashSet<int> e2 = (entity_type == EntityType.USER) ? ratings2.GetItems() : ratings2.GetUsers();
 
 			e1.IntersectWith(e2);
 
@@ -120,7 +121,7 @@ namespace MyMediaLite.Correlation
 				jj_sum += r2 * r2;
 			}
 
-			double denominator = Math.Sqrt((n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum));
+			double denominator = Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
 
 			if (denominator == 0)
 				return 0;
@@ -146,7 +147,7 @@ namespace MyMediaLite.Correlation
 			var ii_sums = new SparseMatrix<double>(num_entities, num_entities);
 			var jj_sums = new SparseMatrix<double>(num_entities, num_entities);
 
-			foreach (var other_entity_ratings in ratings_by_other_entity)
+			foreach (Ratings other_entity_ratings in ratings_by_other_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];
@@ -158,22 +159,28 @@ namespace MyMediaLite.Correlation
 						var r2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
 
-						// ensure x < y
-						if (x > y)
+						// update sums
+						if (x < y)
 						{
-							int tmp = x;
-							x = y;
-							y = tmp;
+							freqs[x, y]   += 1;
+							i_sums[x, y]  += r1.rating;
+							j_sums[x, y]  += r2.rating;
+							ij_sums[x, y] += r1.rating * r2.rating;
+							ii_sums[x, y] += r1.rating * r1.rating;
+							jj_sums[x, y] += r2.rating * r2.rating;
 						}
-
-						freqs[x, y]   += 1;
-						i_sums[x, y]  += r1.rating;
-						j_sums[x, y]  += r2.rating;
-						ij_sums[x, y] += r1.rating * r2.rating;
-						ii_sums[x, y] += r1.rating * r1.rating;
-						jj_sums[x, y] += r2.rating * r2.rating;
+						else
+						{
+							freqs[y, x]   += 1;
+							i_sums[y, x]  += r1.rating;
+							j_sums[y, x]  += r2.rating;
+							ij_sums[y, x] += r1.rating * r2.rating;
+							ii_sums[y, x] += r1.rating * r1.rating;
+							jj_sums[y, x] += r2.rating * r2.rating;
+						}
 	        		}
 				}
+
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
@@ -181,29 +188,27 @@ namespace MyMediaLite.Correlation
 			// fill the entries with interactions
 			foreach (var index_pair in freqs.NonEmptyEntryIDs)
 			{
-				int x = index_pair.First;
-				int y = index_pair.Second;
-				int n = freqs[x, y];
+				int i = index_pair.First;
+				int j = index_pair.Second;
+				int n = freqs[i, j];
 
-				if (n < 2) // TODO reconsider this
+				if (n < 2)
 				{
-					this[x, y] = 0;
+					this[i, j] = 0;
 					continue;
 				}
 
-				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
+				double numerator = ij_sums[i, j] * n - i_sums[i, j] * j_sums[i, j];
 
-				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] * j_sums[x, y]) );
+				double denominator = Math.Sqrt( (n * ii_sums[i, j] - i_sums[i, j] * i_sums[i, j]) * (n * jj_sums[i, j] - j_sums[i, j] * j_sums[i, j]) );
 				if (denominator == 0)
 				{
-					this[x, y] = 0;
+					this[i, j] = 0;
 					continue;
 				}
 
 				double pmcc = numerator / denominator;
-				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
-				
-				// TODO remove
+				this[i, j] = (float) (pmcc * (n / (n + shrinkage)));
 			}
 		}
 	}
