@@ -19,7 +19,6 @@ using System;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>

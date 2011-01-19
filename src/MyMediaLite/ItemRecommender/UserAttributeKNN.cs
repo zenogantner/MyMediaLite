@@ -19,7 +19,6 @@ using System;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>

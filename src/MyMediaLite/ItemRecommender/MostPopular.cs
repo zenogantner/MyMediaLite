@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.IO;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ItemRecommender
 {
     /// <summary>

@@ -19,7 +19,6 @@ using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
@@ -29,10 +28,10 @@ namespace MyMediaLite.ItemRecommender
 		public uint K {	get { return k;	} set {	k = value; } }
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
-		
+
 		/// <summary>Precomputed nearest neighbors</summary>
 		protected int[][] nearest_neighbors;
-		
+
         /// <summary>Correlation matrix over some kind of entity</summary>
         protected CorrelationMatrix correlation;
 

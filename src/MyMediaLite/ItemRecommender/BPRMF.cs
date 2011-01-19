@@ -23,7 +23,6 @@ using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
