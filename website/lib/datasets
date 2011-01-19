@@ -26,6 +26,8 @@
      { engine => 'bipolar-slope-one',           hp => '',                                                                    rmse => '0.973', mae => '0.748', name => '0.1869' }
      { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                rmse => '0.922', mae => '0.727', nmae => '0.1818' }
      { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                rmse => '0.922', mae => '0.723', nmae => '0.1808' }
+     { engine => 'user-kNN-cosine'              hp => 'k=30 reg_u=25 reg_i=10'                                               rmse => '0.939', mae => '0.739', name => '0.1848' }
+     { engine => 'item-kNN-cosine'              hp => 'k=30 reg_u=25 reg_i=10'                                               rmse => '0.920', mae => '0.722', name => '0.1806' }
      { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 reg=0.055 learn_rate=0.01 num_iter=30', rmse => '0.926', mae => '0.730', nmae => '0.1826' }
    ]
    camra_mp_xmas_data = [
