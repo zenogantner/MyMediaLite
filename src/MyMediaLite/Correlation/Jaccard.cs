@@ -24,24 +24,24 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Class for storing cosine similarities</summary>
+	/// <summary>Class for storing the Jaccard index</summary>
 	/// <remarks>
-	/// http://en.wikipedia.org/wiki/Cosine_similarity
+	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public class BinaryCosine : CorrelationMatrix
+	public class Jaccard : CorrelationMatrix
 	{
-		/// <summary>Creates an object of type Cosine</summary>
+		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public BinaryCosine(int num_entities) : base(num_entities) { }
+		public Jaccard(int num_entities) : base(num_entities) { }
 
-		/// <summary>Copy constructor. Creates an object of type Cosine from an existing correlation matrix</summary>
+		/// <summary>Copy constructor. Creates an object of type Jaccard from an existing correlation matrix</summary>
 		/// <param name ="correlation_matrix">the correlation matrix to copy</param>
-		public BinaryCosine(CorrelationMatrix correlation_matrix) : base(correlation_matrix.NumberOfRows)
+		public Jaccard(CorrelationMatrix correlation_matrix) : base(correlation_matrix.NumberOfRows)
 		{
 			this.data = correlation_matrix.data;
 		}
 
-		/// <summary>Creates a Cosine similarity matrix from given data</summary>
+		/// <summary>Creates a Jaccard index matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
 		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
@@ -50,7 +50,7 @@ namespace MyMediaLite.Correlation
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
-				cm = new BinaryCosine(num_entities);
+				cm = new Jaccard(num_entities);
 			}
 			catch (OverflowException)
 			{
@@ -98,18 +98,18 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// compute cosine
+			// compute Jaccard index
 			foreach (var index_pair in overlap.NonEmptyEntryIDs)
 			{
 				int x = index_pair.First;
 				int y = index_pair.Second;
 				
-				this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data[x].Count * entity_data[y].Count));
+				this[x, y] = (float) (overlap[x, y] / (entity_data[x].Count + entity_data[y].Count - overlap[x, y]));
 			}
 						
 		}
 
-		/// <summary>Computes the cosine similarity of two binary vectors</summary>
+		/// <summary>Computes the Jaccard index of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>
 		/// <returns>the cosine similarity between the two vectors</returns>
@@ -119,7 +119,7 @@ namespace MyMediaLite.Correlation
             foreach (int k in vector_j)
             	if (vector_i.Contains(k))
 	            	cntr++;
-            return (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
+            return (float) ( cntr / (vector_i.Count + vector_j.Count - cntr) );
 		}
 	}
 }
