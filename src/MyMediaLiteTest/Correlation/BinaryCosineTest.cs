@@ -27,9 +27,9 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Class for testing the Cosine class</summary>
+	/// <summary>Class for testing the BinaryCosine class</summary>
 	[TestFixture()]
-	public class CosineTest
+	public class BinaryCosineTest
 	{
 		[Test()] public void TestCreate()
 		{

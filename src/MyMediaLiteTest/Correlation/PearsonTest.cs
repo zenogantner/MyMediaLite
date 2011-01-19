@@ -1,4 +1,5 @@
 // Copyright(C) 2010 Christina Lichtenthäler
+// Copyright(C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -23,6 +24,7 @@ using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.IO;
 using MyMediaLite.Taxonomy;
 
 namespace MyMediaLiteTest
@@ -49,17 +51,16 @@ namespace MyMediaLiteTest
 
 		[Test()] public void TestComputeCorrelation()
 		{
-			// create test objects
-			var rating1 = new Ratings();
-			var rating2 = new Ratings();
-			rating1.AddRating(new RatingEvent(0, 1, 0.3));
-			rating1.AddRating(new RatingEvent(0, 4, 0.2));
-			rating2.AddRating(new RatingEvent(1, 2, 0.6));
-			rating2.AddRating(new RatingEvent(1, 3, 0.4));
-			rating2.AddRating(new RatingEvent(1, 4, 0.2));
+			// create test objects	
+			var ratings = new RatingData();
+			ratings.AddRating(new RatingEvent(0, 1, 0.3));
+			ratings.AddRating(new RatingEvent(0, 4, 0.2));
+			ratings.AddRating(new RatingEvent(1, 2, 0.6));
+			ratings.AddRating(new RatingEvent(1, 3, 0.4));
+			ratings.AddRating(new RatingEvent(1, 4, 0.2));
 
 			// test
-			Assert.AreEqual(0, Pearson.ComputeCorrelation(rating1, rating2, EntityType.USER, 0, 1, 0));
+			Assert.AreEqual(0, Pearson.ComputeCorrelation(ratings, EntityType.USER, 0, 1, 0));
 		}
 
 		[Test()] public void TestComputeCorrelations()
@@ -79,6 +80,16 @@ namespace MyMediaLiteTest
 			pearson.ComputeCorrelations(rating_data, EntityType.USER);
 
 			Assert.AreEqual(0, pearson[0, 2]);
+		}
+		
+		[Test()] public void TestComputeCorrelations2()
+		{
+			// load data from disk
+			var user_mapping = new EntityMapping();
+			var item_mapping = new EntityMapping();
+			var ratings = RatingPredictionData.Read("../../../../data/ml100k/u1.base", 1, 5, user_mapping, item_mapping);
+						
+			Assert.AreEqual(-0.02855815f, Pearson.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311, 200f), 0.00001);			
 		}
 	}
 }
