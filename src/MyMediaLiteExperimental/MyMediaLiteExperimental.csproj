@@ -49,6 +49,7 @@
     <Compile Include="RatingPredictor\SlopeOne.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
+    <Compile Include="RatingPredictor\BiPolarSlopeOne.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

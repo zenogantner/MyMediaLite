@@ -166,11 +166,11 @@ namespace MyMediaLite.RatingPredictor
                 result += user_factors[user_id, f] * item_factors[item_id, f];
 
             if (bound)
-			{
+			{   // TODO move such a thing into the evaluation code
                 if (result > MaxRating)
-					result = MaxRating;
+					return MaxRating;
                 if (result < MinRating)
-					result = MinRating;
+					return MinRating;
             }
             return result;
         }

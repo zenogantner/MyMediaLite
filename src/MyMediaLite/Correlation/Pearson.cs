@@ -67,8 +67,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		/// <summary>Compute correlations between two entities for given ratings</summary>
-		/// <param name="ratings1">the rating data for entity 1</param>
-		/// <param name="ratings2">the rating data for entity 2</param>
+		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>

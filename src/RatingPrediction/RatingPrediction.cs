@@ -45,16 +45,17 @@ namespace RatingPrediction
 		static MatrixFactorization        mf = new MatrixFactorization();
 		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
 		static MatrixFactorization social_mf = new SocialMF();
-		static UserKNNCosine    uknn_c = new UserKNNCosine();
-		static UserKNNPearson   uknn_p = new UserKNNPearson();
-		static ItemKNNCosine    iknn_c = new ItemKNNCosine();
-		static ItemKNNPearson   iknn_p = new ItemKNNPearson();
-		static ItemAttributeKNN  iaknn = new ItemAttributeKNN();
-		static UserItemBaseline    uib = new UserItemBaseline();
-		static GlobalAverage        ga = new GlobalAverage();
-		static UserAverage          ua = new UserAverage();
-		static ItemAverage          ia = new ItemAverage();
-		static SlopeOne      slope_one = new SlopeOne();
+		static UserKNNCosine          uknn_c = new UserKNNCosine();
+		static UserKNNPearson         uknn_p = new UserKNNPearson();
+		static ItemKNNCosine          iknn_c = new ItemKNNCosine();
+		static ItemKNNPearson         iknn_p = new ItemKNNPearson();
+		static ItemAttributeKNN        iaknn = new ItemAttributeKNN();
+		static UserItemBaseline          uib = new UserItemBaseline();
+		static GlobalAverage              ga = new GlobalAverage();
+		static UserAverage                ua = new UserAverage();
+		static ItemAverage                ia = new ItemAverage();
+		static SlopeOne            slope_one = new SlopeOne();
+		static BiPolarSlopeOne bipolar_slope_one = new BiPolarSlopeOne();
 
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
@@ -91,6 +92,7 @@ MyMediaLite rating prediction; usage:
     - {10}
     - {11}
     - {12} **experimental**
+    - {13} **experimental**
   - method ARGUMENTS have the form name=value
   - general OPTIONS have the form name=value
     - option_file=FILE           read options from FILE (line format KEY: VALUE)
@@ -115,7 +117,7 @@ MyMediaLite rating prediction; usage:
     - rmse_cutoff=NUM            abort if RMSE is above NUM
     - mae_cutoff=NUM             abort if MAE is above NUM
     - compute_fit=BOOL           display fit on training data every find_iter iterations",
-			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia, slope_one);
+			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia, slope_one, bipolar_slope_one);
 
 			Environment.Exit(exit_code);
 		}
@@ -216,6 +218,9 @@ MyMediaLite rating prediction; usage:
 				case "slope-one":
 					recommender = slope_one;
 					break;
+				case "bipolar-slope-one":
+					recommender = bipolar_slope_one;
+					break;				
 				default:
 					Usage(string.Format("Unknown method: '{0}'", method));
 					break;

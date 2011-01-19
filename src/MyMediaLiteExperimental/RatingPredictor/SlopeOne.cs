@@ -30,6 +30,8 @@ namespace MyMediaLite.RatingPredictor
 	/// Slope One Predictors for Online Rating-Based Collaborative Filtering.
 	/// SIAM Data Mining (SDM 2005)
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
+	/// 
+	/// This engine does NOT support online updates. They would be easy to implement, though.
 	/// </remarks>
 	public class SlopeOne : Memory
 	{
@@ -45,9 +47,10 @@ namespace MyMediaLite.RatingPredictor
 				return false;
 			if (item_id > MaxItemID)
 				return false;
-			if (freq_matrix[item_id].Count == 0)
-				return false;
-			return true;
+			foreach (RatingEvent r in Ratings.ByUser[user_id])
+				if (freq_matrix[item_id, r.item_id] != 0)
+					return true;
+			return false;
 		}
 
 		/// <inheritdoc/>
