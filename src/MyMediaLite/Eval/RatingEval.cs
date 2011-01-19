@@ -80,7 +80,7 @@ namespace MyMediaLite.Eval
 			//result.Add("num_items", items.Count);
 			return result;
         }
-		
+
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="engine">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>
@@ -89,25 +89,25 @@ namespace MyMediaLite.Eval
 		{
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
-			
+
 			var avg_results = new Dictionary<string, double>();
 			foreach (var key in RatingPredictionMeasures)
 				avg_results[key] = 0;
-			
+
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
 				engine.Ratings = split.Train[i];
-				engine.Train();
+				engine.Train(); // TODO measure time
 				var fold_results = Evaluate(engine, split.Test[i]);
-				
+
 				foreach (var key in fold_results.Keys)
 					avg_results[key] += fold_results[key];
 				Console.Error.WriteLine("fold {0}, RMSE {1}, MAE {2}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
 			}
-			
+
 			foreach (var key in avg_results.Keys.ToList())
 				avg_results[key] /= split.NumberOfFolds;
-			
+
 			return avg_results;
 		}
 	}

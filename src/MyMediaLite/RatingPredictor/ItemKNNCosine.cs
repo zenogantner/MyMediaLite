@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted item-based kNN with cosine similarity</summary>

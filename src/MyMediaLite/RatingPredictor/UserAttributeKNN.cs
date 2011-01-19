@@ -23,7 +23,6 @@ using MyMediaLite.Correlation;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Weighted kNN recommender engine based on user attributes</summary>

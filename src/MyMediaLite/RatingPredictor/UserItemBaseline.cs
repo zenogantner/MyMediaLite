@@ -21,7 +21,6 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	// TODO run CV internally in order to find suitable hyperparameters
