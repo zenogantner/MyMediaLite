@@ -52,7 +52,7 @@ namespace MyMediaLite.RatingPredictor
         public override void Train()
         {
 			base.Train();
-			this.correlation = Cosine.Create(user_attributes);
+			this.correlation = BinaryCosine.Create(user_attributes);
         }
 
         /// <inheritdoc/>

@@ -34,7 +34,7 @@ namespace MyMediaLite.ItemRecommender
         /// <inheritdoc/>
         public override void Train()
         {
-			this.correlation = Cosine.Create(data_user);
+			this.correlation = BinaryCosine.Create(data_user);
 
 			int num_users = MaxUserID + 1;
 			this.nearest_neighbors = new int[num_users][];

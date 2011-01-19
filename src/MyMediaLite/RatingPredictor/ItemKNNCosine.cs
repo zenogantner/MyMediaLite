@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPredictor
         public override void Train()
         {
 			base.Train();
-			this.correlation = Cosine.Create(data_item);
+			this.correlation = BinaryCosine.Create(data_item);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
         }
 
@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPredictor
 			base.RetrainUser(item_id);
 			if (UpdateItems)
 				for (int i = 0; i <= MaxItemID; i++)
-					correlation[item_id, i] = Cosine.ComputeCorrelation(data_item[item_id], data_item[i]);
+					correlation[item_id, i] = BinaryCosine.ComputeCorrelation(data_item[item_id], data_item[i]);
 		}
 
         /// <inheritdoc/>

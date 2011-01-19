@@ -113,7 +113,6 @@
     <Compile Include="Util\Triple.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="Correlation\CorrelationMatrix.cs" />
-    <Compile Include="Correlation\Cosine.cs" />
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Data\ISplit.cs" />
     <Compile Include="Data\RatingCrossValidationSplit.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="RatingPredictor\UserAverage.cs" />
     <Compile Include="RatingPredictor\ItemAverage.cs" />
     <Compile Include="Data\WeightedItem.cs" />
+    <Compile Include="Correlation\BinaryCosine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -61,7 +61,7 @@ namespace MyMediaLite.RatingPredictor
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 
 				base.Train(); // train baseline model
-				this.correlation = new Cosine(correlation);
+				this.correlation = new BinaryCosine(correlation);
 			}
 		}
 	}

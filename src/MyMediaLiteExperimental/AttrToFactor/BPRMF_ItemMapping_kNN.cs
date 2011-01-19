@@ -39,7 +39,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			Cosine cosine_correlation = new Cosine(MaxItemID + 1);
+			BinaryCosine cosine_correlation = new BinaryCosine(MaxItemID + 1);
 			Console.Error.WriteLine("training with max_item_id={0}", MaxItemID);
 			cosine_correlation.ComputeCorrelations(item_attributes);
 			this.item_correlation = cosine_correlation;

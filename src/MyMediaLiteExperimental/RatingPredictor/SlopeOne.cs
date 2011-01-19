@@ -26,7 +26,10 @@ namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Frequency-weighted Slope-One rating prediction</summary>
 	/// <remarks>
-	/// http://www.daniel-lemire.com/fr/documents/publications/SlopeOne.java
+	/// Daniel Lemire, Anna Maclachlan:
+	/// Slope One Predictors for Online Rating-Based Collaborative Filtering.
+	/// SIAM Data Mining (SDM 2005)
+	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
 	/// </remarks>
 	public class SlopeOne : Memory
 	{

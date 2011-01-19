@@ -44,7 +44,7 @@ namespace MyMediaLiteTest
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
 			// test
-			var correlation_matrix = Cosine.Create(sparse_boolean_matrix);
+			var correlation_matrix = BinaryCosine.Create(sparse_boolean_matrix);
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[0, 1], 4));
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[1, 0], 4));
 			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(correlation_matrix[1, 3], 4));
@@ -63,7 +63,7 @@ namespace MyMediaLiteTest
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
 			// test
-			var cosine = new Cosine(5);
+			var cosine = new BinaryCosine(5);
 			cosine.ComputeCorrelations(sparse_boolean_matrix);
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[0, 1], 4));
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[1, 0], 4));
@@ -82,7 +82,7 @@ namespace MyMediaLiteTest
 			vector2.Add(3);
 			vector2.Add(4);
 			// test
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(Cosine.ComputeCorrelation(vector1, vector2), 4));
+			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(BinaryCosine.ComputeCorrelation(vector1, vector2), 4));
 		}
 	}
 }
