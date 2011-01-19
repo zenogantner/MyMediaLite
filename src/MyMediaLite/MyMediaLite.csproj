@@ -127,6 +127,8 @@
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\AdjustedCosine.cs" />
+    <Compile Include="RatingPredictor\BiPolarSlopeOne.cs" />
+    <Compile Include="RatingPredictor\SlopeOne.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

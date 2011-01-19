@@ -46,10 +46,8 @@
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
     <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
-    <Compile Include="RatingPredictor\SlopeOne.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="RatingPredictor\BiPolarSlopeOne.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

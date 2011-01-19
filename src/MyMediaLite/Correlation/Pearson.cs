@@ -193,7 +193,7 @@ namespace MyMediaLite.Correlation
 
 				double numerator = ij_sums[x, y] * n - i_sums[x, y] * j_sums[x, y];
 
-				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] *j_sums[x, y]) );
+				double denominator = Math.Sqrt( (n * ii_sums[x, y] - i_sums[x, y] * i_sums[x, y]) * (n * jj_sums[x, y] - j_sums[x, y] * j_sums[x, y]) );
 				if (denominator == 0)
 				{
 					this[x, y] = 0;
@@ -202,6 +202,8 @@ namespace MyMediaLite.Correlation
 
 				double pmcc = numerator / denominator;
 				this[x, y] = (float) (pmcc * (n / (n + shrinkage)));
+				
+				// TODO remove
 			}
 		}
 	}

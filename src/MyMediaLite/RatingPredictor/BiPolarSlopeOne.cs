@@ -68,8 +68,6 @@ namespace MyMediaLite.RatingPredictor
 			double prediction = 0.0;
 			int frequencies = 0;
 
-			// TODO use weighting between like and dislike, and learn it from the ratings
-
 			double user_avg = Ratings.ByUser[user_id].Average;
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
 				if (r.rating > user_avg)
