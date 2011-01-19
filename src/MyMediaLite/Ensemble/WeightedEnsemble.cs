@@ -24,7 +24,6 @@ using System.Linq;
 using MyMediaLite.RatingPredictor;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ensemble
 {
     /// <summary>Combining several predictors with a weighted ensemble</summary>

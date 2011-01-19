@@ -21,7 +21,6 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPredictor;
 
-
 namespace MyMediaLite.eval
 {
 	/// <summary>Class that contains static methods for rating prediction</summary>

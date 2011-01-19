@@ -23,7 +23,6 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects</summary>

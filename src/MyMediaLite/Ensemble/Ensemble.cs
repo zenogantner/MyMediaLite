@@ -22,7 +22,6 @@ using System.Globalization;
 using MyMediaLite.RatingPredictor;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>

@@ -18,7 +18,6 @@
 
 using System;
 
-
 namespace MyMediaLite.Util
 {
     /// <summary>Draws random values from a normal distibuted using a simple rejection method</summary>
