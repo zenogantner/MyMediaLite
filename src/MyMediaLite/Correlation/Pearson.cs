@@ -24,6 +24,9 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Correlation class for Pearson correlation</summary>
+	/// <remarks>
+	/// http://en.wikipedia.org/wiki/Pearson_correlation
+	/// </remarks>
 	public class Pearson : CorrelationMatrix
 	{
 		/// <summary>shrinkage parameter</summary>
@@ -70,11 +73,14 @@ namespace MyMediaLite.Correlation
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter</param>
-		public static float ComputeCorrelation(Ratings ratings1, Ratings ratings2, EntityType entity_type, int i, int j, float shrinkage)
+		public static float ComputeCorrelation(RatingData ratings, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
 				return 1;
 
+			Ratings ratings1 = entity_type == EntityType.USER ? ratings.ByUser[i] : ratings.ByItem[i];
+			Ratings ratings2 = entity_type == EntityType.USER ? ratings.ByUser[j] : ratings.ByItem[j];			
+			
 			// get common ratings for the two entities
 			HashSet<int> e1 = entity_type == EntityType.USER ? ratings1.GetItems() : ratings1.GetUsers();
 			HashSet<int> e2 = entity_type == EntityType.USER ? ratings2.GetItems() : ratings2.GetUsers();
@@ -82,8 +88,7 @@ namespace MyMediaLite.Correlation
 			e1.IntersectWith(e2);
 
 			int n = e1.Count;
-
-			if (n < 2) // TODO reconsider this
+			if (n < 2)
 				return 0;
 
 			// single-pass variant
@@ -95,25 +100,25 @@ namespace MyMediaLite.Correlation
 			foreach (int other_entity_id in e1)
 			{
 				// get ratings
-				double rating_i = 0;
-				double rating_j = 0;
+				double r1 = 0;
+				double r2 = 0;
 				if (entity_type == EntityType.USER)
 				{
-					rating_i = ratings1.FindRating(i, other_entity_id).rating;
-					rating_j = ratings2.FindRating(j, other_entity_id).rating;
+					r1 = ratings1.FindRating(i, other_entity_id).rating;
+					r2 = ratings2.FindRating(j, other_entity_id).rating;
 				}
 				else
 				{
-					rating_i = ratings1.FindRating(other_entity_id, i).rating;
-					rating_j = ratings2.FindRating(other_entity_id, j).rating;
+					r1 = ratings1.FindRating(other_entity_id, i).rating;
+					r2 = ratings2.FindRating(other_entity_id, j).rating;
 				}
 
 				// update sums
-				i_sum  += rating_i;
-				j_sum  += rating_j;
-				ij_sum += rating_i * rating_j;
-				ii_sum += rating_i * rating_i;
-				jj_sum += rating_j * rating_j;
+				i_sum  += r1;
+				j_sum  += r2;
+				ij_sum += r1 * r2;
+				ii_sum += r1 * r1;
+				jj_sum += r2 * r2;
 			}
 
 			double denominator = Math.Sqrt((n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum));
@@ -133,7 +138,7 @@ namespace MyMediaLite.Correlation
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			List<Ratings> ratings_by_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
+			List<Ratings> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 
 			var freqs   = new SparseMatrix<int>(num_entities, num_entities);
 			var i_sums  = new SparseMatrix<double>(num_entities, num_entities);
@@ -142,7 +147,7 @@ namespace MyMediaLite.Correlation
 			var ii_sums = new SparseMatrix<double>(num_entities, num_entities);
 			var jj_sums = new SparseMatrix<double>(num_entities, num_entities);
 
-			foreach (var other_entity_ratings in ratings_by_entity)
+			foreach (var other_entity_ratings in ratings_by_other_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
 					var r1 = other_entity_ratings[i];

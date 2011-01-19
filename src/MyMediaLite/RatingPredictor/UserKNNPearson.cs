@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPredictor
 			base.RetrainUser(user_id);
 			if (UpdateUsers)
 				for (int i = 0; i <= MaxUserID; i++)
-					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings.ByUser[user_id], ratings.ByUser[i], EntityType.USER, user_id, i, Shrinkage);
+					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings, EntityType.USER, user_id, i, Shrinkage);
 		}
 
         /// <inheritdoc/>
