@@ -17,7 +17,7 @@ echo "-------------------------"
 
 # load/save currently not supported: global-average user-average item-average
 
-for method in user-item-baseline slope-one matrix-factorization biased-matrix-factorization
+for method in user-item-baseline slope-one bipolar-slope-one matrix-factorization biased-matrix-factorization
 do
      echo $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR
           $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt

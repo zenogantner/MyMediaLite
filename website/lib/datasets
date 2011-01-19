@@ -1,36 +1,40 @@
 [% netflix_data = [
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=0  learn_rate=0.005 bias_reg=0.0001 regularization=0.035 num_iter=25', rmse => '0.9830' mae => '0.7710' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=50 learn_rate=0.005 bias_regularization=0.0001 regularization=0.035  num_iter=90', rmse => '0.9175', mae => '0.7135' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=80 learn_rate=0.005 regularization=0.035 num_iter=26', rmse => '0.9169' mae => '0.7126' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=0  learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=25', rmse => '0.9830' mae => '0.7710' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=50 learn_rate=0.005 bias_reg=0.0001 reg=0.035  num_iter=90', rmse => '0.9175', mae => '0.7135' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=80 learn_rate=0.005 reg=0.035 num_iter=26', rmse => '0.9169' mae => '0.7126' }
    ]
    ml1m_data = [
-     { engine => 'user-item-baseline',          hp => 'reg_u=25 reg_i=10',                                                 rmse => '0.9113', mae => '0.7226' }
-     { engine => 'slope-one',                   hp => '',                                                                  rmse => '0.9032', mae => '0.7131', nmae => '0.1783' }
-     { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                              rmse => '0.9193', mae => '0.7221' }
-     { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                              rmse => '0.8866', mae => '' }
-     { engine => 'item-attribute-kNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                            rmse => '0.8958', mae => '0.7056' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',  rmse => '0.8554', mae => '0.6744' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=10 bias_reg=0.001 regularization=0.045 learn_rate=0.01 num_iter=66',  rmse => '0.8534', mae => '0.6742' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=110', rmse => '0.8521', mae => '0.6739' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=40 bias_reg=0.001 regularization=0.050 learn_rate=0.01 num_iter=60',  rmse => '0.8519', mae => '0.6742' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=60 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=110', rmse => '0.8519', mae => '0.6748' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=80 bias_reg=0.01  regularization=0.055 learn_rate=0.01 num_iter=80',  rmse => '0.8508', mae => '0.6747' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=120 bias_reg=0.001 regularization=0.055  learn_rate=0.01 num_iter=90', rmse => '0.8507', mae => '0.6749' }
+     { engine => 'user-item-baseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.9113', mae => '0.7226' }
+     { engine => 'slope-one',                   hp => '',                                                                      rmse => '0.9032', mae => '0.7131', nmae => '0.1783' }
+     { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                  rmse => '0.9193', mae => '0.7221' }
+     { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8866', mae => '' }
+     { engine => 'item-attribute-kNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                                rmse => '0.8958', mae => '0.7056' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=6  bias_reg=0.001 reg=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.8554', mae => '0.6744' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=10 bias_reg=0.001 reg=0.045 learn_rate=0.01 num_iter=66',   rmse => '0.8534', mae => '0.6742' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 reg=0.055 learn_rate=0.01 num_iter=110',  rmse => '0.8521', mae => '0.6739' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=40 bias_reg=0.001 reg=0.050 learn_rate=0.01 num_iter=60',   rmse => '0.8519', mae => '0.6742' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=60 bias_reg=0.001 reg=0.055 learn_rate=0.01 num_iter=110',  rmse => '0.8519', mae => '0.6748' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=80 bias_reg=0.01  reg=0.055 learn_rate=0.01 num_iter=80',   rmse => '0.8508', mae => '0.6747' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=120 bias_reg=0.001 reg=0.055  learn_rate=0.01 num_iter=90', rmse => '0.8507', mae => '0.6749' }
+#     { engine => 'slope-one',                   hp => '',                                                                     rmse =>  '0.902', mae => '0.712', nmae => '0.1779' }
+#     commented out results: 5-fold CV
    ]
+   # MovieLens 100k, 5-fold CV with random_seed=1
    ml100k = [
-     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2',                                                                rmse => '0.941', mae => '0.744', nmae => '0.1861' }
-     { engine => 'slope-one',                   hp => '',                                                                               rmse => '0.938', mae => '0.739'  nmae => '0.1847' }
-     { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                           rmse => '0.922', mae => '0.727', nmae => '0.1818' }
-     { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                           rmse => '0.922', mae => '0.723', nmae => '0.1808' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=30', rmse => '0.918', mae => '0.723', nmae => '0.1808' }
+     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2',                                                     rmse => '0.943', mae => '0.746', nmae => '0.1864' }
+     { engine => 'slope-one',                   hp => '',                                                                    rmse => '0.940', mae => '0.740'  nmae => '0.1851' }
+     { engine => 'bipolar-slope-one',           hp => '',                                                                    rmse => '0.973', mae => '0.748', name => '0.1869' }
+     { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                rmse => '0.922', mae => '0.727', nmae => '0.1818' }
+     { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                rmse => '0.922', mae => '0.723', nmae => '0.1808' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 reg=0.055 learn_rate=0.01 num_iter=30', rmse => '0.926', mae => '0.730', nmae => '0.1826' }
    ]
    camra_mp_xmas_data = [
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=30 regularization=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=30 reg=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
    ]
    camra_mp_mood_data = [
-     { engine => 'global-average',              hp => '',                                                                  rmse => '20.41', mae => '15.84' }
-     { engine => 'user-average',                hp => '',                                                                  rmse => '20.97', mae => '15.77' }
-     { engine => 'item-average',                hp => '',                                                                  rmse => '17.68', mae => '13.21' }
-     { engine => 'user-item-baseline',          hp => 'reg_u=150 reg_i=2',                                                 rmse => '17.40', mae => '12.88' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=30 regularization=50 learn_rate=0.00003 num_iter=133', rmse => '16.86', mae => '12.41' }
+     { engine => 'global-average',              hp => '',                                                      rmse => '20.41', mae => '15.84' }
+     { engine => 'user-average',                hp => '',                                                      rmse => '20.97', mae => '15.77' }
+     { engine => 'item-average',                hp => '',                                                      rmse => '17.68', mae => '13.21' }
+     { engine => 'user-item-baseline',          hp => 'reg_u=150 reg_i=2',                                     rmse => '17.40', mae => '12.88' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=30 reg=50 learn_rate=0.00003 num_iter=133', rmse => '16.86', mae => '12.41' }
 ] %]

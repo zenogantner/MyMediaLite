@@ -45,7 +45,7 @@ echo "--------------"
 
 DATA_DIR=../../../../data/ml100k
 
-method=user-item-baseline
+for method in user-item-baseline slope-one bipolar-slope-one
 echo $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
      $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
 
