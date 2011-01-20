@@ -102,7 +102,7 @@ namespace MyMediaLite.Eval
 
 				foreach (var key in fold_results.Keys)
 					avg_results[key] += fold_results[key];
-				Console.Error.WriteLine("fold {0}, RMSE {1}, MAE {2}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
+				Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())

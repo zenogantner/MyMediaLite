@@ -436,6 +436,7 @@ MyMediaLite rating prediction; usage:
 			DisplayIterationStats();
 		}
 
+		// TODO move to a class in the MyMediaLite.Eval namespace
 		static void DisplayResults(Dictionary<string, double> result)
 		{
 			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
