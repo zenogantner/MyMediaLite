@@ -34,6 +34,8 @@ Spacing
     they modify.
 15. There is no space between the datatype and the [] in array declarations.
 16. Use a space (or newline) after a comma, semicolon, or curly brace.
+17. Use tabs for indentation. It's the year 2011, your editor should be able to
+    deal with that.
 
 Curly braces
 16. Do not use curly braces for simple if, for(each), and while statements.
