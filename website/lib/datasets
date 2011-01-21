@@ -21,14 +21,14 @@
    ]
    # MovieLens 100k, 5-fold CV with random_seed=1
    ml100k = [
-     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2',                                                     rmse => '0.943', mae => '0.746', nmae => '0.1864' }
-     { engine => 'slope-one',                   hp => '',                                                                    rmse => '0.940', mae => '0.740'  nmae => '0.1851' }
-     { engine => 'bipolar-slope-one',           hp => '',                                                                    rmse => '0.973', mae => '0.748', name => '0.1869' }
-     { engine => 'item-kNN-pearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                rmse => '0.922', mae => '0.727', nmae => '0.1818' }
-     { engine => 'user-kNN-pearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                rmse => '0.922', mae => '0.723', nmae => '0.1808' }
-     { engine => 'user-kNN-cosine'              hp => 'k=30 reg_u=25 reg_i=10'                                               rmse => '0.939', mae => '0.739', name => '0.1848' }
-     { engine => 'item-kNN-cosine'              hp => 'k=30 reg_u=25 reg_i=10'                                               rmse => '0.920', mae => '0.722', name => '0.1806' }
-     { engine => 'biased-matrix-factorization', hp => 'num_factors=20 bias_reg=0.001 reg=0.055 learn_rate=0.01 num_iter=30', rmse => '0.926', mae => '0.730', nmae => '0.1826' }
+     { engine => 'bipolar-slope-one',           hp => '',                                                                    rmse => '0.971', mae => '0.747', name => '0.1866' }
+     { engine => 'user-item-baseline',          hp => 'reg_u=5 reg_i=2',                                                     rmse => '0.947', mae => '0.754', nmae => '0.1884' }
+     { engine => 'slope-one',                   hp => '',                                                                    rmse => '0.940', mae => '0.741'  nmae => '0.1852' }
+     { engine => 'user-kNN-cosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.937', mae => '0.737', nmae => '0.1842' }
+     { engine => 'user-kNN-pearson',            hp => 'k=60 shrinkage=100 reg_u=12 reg_i=1' ,                                rmse => '0.930', mae => '0.729', nmae => '0.1823' }
+     { engine => 'item-kNN-cosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.924', mae => '0.727', nmae => '0.1817' }
+     { engine => 'item-kNN-pearson',            hp => 'k=40 shrinkage=200 reg_u=12 reg_i=1',                                 rmse => '0.915', mae => '0.717', nmae => '0.1792' }
+     { engine => 'biased-matrix-factorization', hp => 'num_factors=40 bias_reg=0.005 reg=0.1 learn_rate=0.01 num_iter=250',  rmse => '0.913', mae => '0.722', nmae => '0.1804' }
    ]
    camra_mp_xmas_data = [
      { engine => 'biased-matrix-factorization', hp => 'num_factors=30 reg=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
