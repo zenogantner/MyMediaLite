@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+	// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,7 +30,7 @@ namespace MyMediaLite.RatingPredictor
 	/// Slope One Predictors for Online Rating-Based Collaborative Filtering.
 	/// SIAM Data Mining (SDM 2005)
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
-	/// 
+	///
 	/// This engine does NOT support online updates. They would be easy to implement, though.
 	/// </remarks>
 	public class SlopeOne : Memory
@@ -75,7 +75,7 @@ namespace MyMediaLite.RatingPredictor
 			if (frequency == 0)
 				return global_average;
 
-    		return (double) prediction / frequency;
+			return (double) prediction / frequency;
 		}
 
 		/// <inheritdoc/>
@@ -104,8 +104,8 @@ namespace MyMediaLite.RatingPredictor
 			global_average = Ratings.Average;
 
 			// create data structure
-    		diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-    		freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
+			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>
@@ -113,20 +113,20 @@ namespace MyMediaLite.RatingPredictor
 		{
 			InitModel();
 
-            var ni = new NumberFormatInfo();
-            ni.NumberDecimalDigits = '.';
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
-            	double global_average = Double.Parse(reader.ReadLine(), ni);
+				double global_average = Double.Parse(reader.ReadLine(), ni);
 
 				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
-            	var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
+				var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
 
             	// assign new model
-            	this.global_average = global_average;
-            	this.diff_matrix = diff_matrix;
-            	this.freq_matrix = freq_matrix;
+				this.global_average = global_average;
+				this.diff_matrix = diff_matrix;
+				this.freq_matrix = freq_matrix;
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace MyMediaLite.RatingPredictor
 
 			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
-            	writer.WriteLine(global_average.ToString(ni));
+				writer.WriteLine(global_average.ToString(ni));
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix);
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix);
 			}
