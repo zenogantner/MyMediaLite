@@ -1,4 +1,4 @@
-	// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPredictor
 				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
 				var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
 
-            	// assign new model
+				// assign new model
 				this.global_average = global_average;
 				this.diff_matrix = diff_matrix;
 				this.freq_matrix = freq_matrix;

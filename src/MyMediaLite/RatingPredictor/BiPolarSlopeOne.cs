@@ -96,7 +96,7 @@ namespace MyMediaLite.RatingPredictor
 
 			if (result > MaxRating)
 				return MaxRating;
-            if (result < MinRating)
+			if (result < MinRating)
 				return MinRating;
 			return result;
 		}
@@ -111,17 +111,17 @@ namespace MyMediaLite.RatingPredictor
 			{
 				double user_avg = user_ratings.Average;
 				foreach (RatingEvent r in user_ratings)
-	        		foreach (RatingEvent r2 in user_ratings)
+					foreach (RatingEvent r2 in user_ratings)
 						if (r.rating > user_avg && r2.rating > user_avg)
 						{
-	          				freq_matrix_like[r.item_id, r2.item_id] += 1;
-	          				diff_matrix_like[r.item_id, r2.item_id] += r.rating - r2.rating;
-	        			}
+							freq_matrix_like[r.item_id, r2.item_id] += 1;
+							diff_matrix_like[r.item_id, r2.item_id] += r.rating - r2.rating;
+						}
 						else if (r.rating < user_avg && r2.rating < user_avg)
 						{
-	          				freq_matrix_dislike[r.item_id, r2.item_id] += 1;
-	          				diff_matrix_dislike[r.item_id, r2.item_id] += r.rating - r2.rating;
-	        			}
+							freq_matrix_dislike[r.item_id, r2.item_id] += 1;
+							diff_matrix_dislike[r.item_id, r2.item_id] += r.rating - r2.rating;
+						}
 			}
 
 			// compute average differences
@@ -151,24 +151,24 @@ namespace MyMediaLite.RatingPredictor
 		{
 			InitModel();
 
-            var ni = new NumberFormatInfo();
-            ni.NumberDecimalDigits = '.';
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
-            	double global_average = Double.Parse(reader.ReadLine(), ni);
+				double global_average = Double.Parse(reader.ReadLine(), ni);
 
 				var diff_matrix_like = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_like);
-            	var freq_matrix_like = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
+				var freq_matrix_like = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
 				var diff_matrix_dislike = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_dislike);
-            	var freq_matrix_dislike = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_dislike);
+				var freq_matrix_dislike = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_dislike);
 
-            	// assign new model
-            	this.global_average = global_average;
-            	this.diff_matrix_like = diff_matrix_like;
-            	this.freq_matrix_like = freq_matrix_like;
-            	this.diff_matrix_dislike = diff_matrix_dislike;
-            	this.freq_matrix_dislike = freq_matrix_dislike;
+				// assign new model
+				this.global_average = global_average;
+				this.diff_matrix_like = diff_matrix_like;
+				this.freq_matrix_like = freq_matrix_like;
+				this.diff_matrix_dislike = diff_matrix_dislike;
+				this.freq_matrix_dislike = freq_matrix_dislike;
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace MyMediaLite.RatingPredictor
 
 			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
-            	writer.WriteLine(global_average.ToString(ni));
+				writer.WriteLine(global_average.ToString(ni));
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix_like);
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix_like);
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix_dislike);
