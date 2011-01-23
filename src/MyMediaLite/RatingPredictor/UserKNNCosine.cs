@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Globalization;
 using MyMediaLite.Correlation;
 
 namespace MyMediaLite.RatingPredictor
@@ -42,7 +43,11 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("user-kNN-cosine k={0} reg_u={1} reg_i={2}",
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format(ni,
+			                     "user-kNN-cosine k={0} reg_u={1} reg_i={2}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}

@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Globalization;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -47,7 +48,11 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("user-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';			
+			
+			return string.Format(ni,
+			                     "user-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
 		}
 	}

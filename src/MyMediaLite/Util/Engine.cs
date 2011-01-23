@@ -159,6 +159,9 @@ namespace MyMediaLite.Util
 							case "System.Boolean":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
 								break;
+							case "System.String":
+						    	property.GetSetMethod().Invoke(engine, new Object[] { parameters[key] });
+								break;							
 							default:
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
 								break;

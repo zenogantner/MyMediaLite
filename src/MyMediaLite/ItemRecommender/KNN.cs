@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,6 +26,7 @@ namespace MyMediaLite.ItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K {	get { return k;	} set {	k = value; } }
+		
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 

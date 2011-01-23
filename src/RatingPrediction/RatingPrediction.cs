@@ -45,6 +45,7 @@ namespace RatingPrediction
 		static MatrixFactorization        mf = new MatrixFactorization();
 		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
 		static MatrixFactorization social_mf = new SocialMF();
+		static NewKNN                    knn = new NewKNN();
 		static UserKNNCosine          uknn_c = new UserKNNCosine();
 		static UserKNNPearson         uknn_p = new UserKNNPearson();
 		static ItemKNNCosine          iknn_c = new ItemKNNCosine();
@@ -182,6 +183,10 @@ MyMediaLite rating prediction; usage:
 					break;
 				case "SocialMF":
 					recommender = Engine.Configure(social_mf, parameters, Usage);
+					break;
+				case "knn":
+				case "kNN":
+					recommender = Engine.Configure(knn, parameters, Usage);
 					break;
 				case "user-knn-pearson":
 				case "user-kNN-pearson":

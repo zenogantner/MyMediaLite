@@ -83,7 +83,7 @@ namespace MyMediaLite.RatingPredictor
 			double result = base.Predict(user_id, item_id);
 			if (weight_sum != 0)
 				result += sum / weight_sum;
-
+ 
 			if (result > MaxRating)
 				result = MaxRating;
             if (result < MinRating)
