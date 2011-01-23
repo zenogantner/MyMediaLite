@@ -191,20 +191,5 @@ namespace MyMediaLite.Correlation
 			else
 				return entities.ToArray();
 		}
-
-		/// <summary>Compute the correlations for a given entity type from a rating dataset</summary>
-		/// <param name="ratings">the rating data</param>
-		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
-		public virtual void ComputeCorrelations(RatingData ratings, EntityType entity_type)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
-		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
-		public virtual void ComputeCorrelations(SparseBooleanMatrix entity_data)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

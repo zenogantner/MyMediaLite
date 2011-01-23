@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public class Jaccard : CorrelationMatrix
+	public class Jaccard : BinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -46,7 +46,7 @@ namespace MyMediaLite.Correlation
 		/// <returns>the similarity matrix based on the data</returns>
 		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
 		{
-			CorrelationMatrix cm;
+			BinaryDataCorrelationMatrix cm;
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
