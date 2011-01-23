@@ -102,6 +102,7 @@ Misc features
  - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
+ - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing
  - (*) document how to set up C# development environment for Ubuntu, Debian, etc.
  - document using MyMediaLite from other languages, implementing engines in other languages

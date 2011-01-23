@@ -12,8 +12,11 @@
         - add unit tests for SparseMatrix<T>
         - add sequential diversification (Ziegler et al.) to experimental
           section
-        - rename Correlation.Cosine to CorrelationBinaryCosine
-        - add Correlation.Jaccard and Correlation.AdjustedCosine
+        - correlation matrices
+          - distinguish between different kinds of data: binary data and
+            real-valued rating vectors
+          - rename Correlation.Cosine to CorrelationBinaryCosine
+          - add Correlation.Jaccard and Correlation.AdjustedCosine
 
 0.09	2011-01-12
 	- IO
