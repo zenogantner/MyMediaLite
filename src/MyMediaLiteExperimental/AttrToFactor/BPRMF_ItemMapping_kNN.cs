@@ -24,7 +24,6 @@ using MyMediaLite.Correlation;
 using MyMediaLite.ItemRecommender;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by kNN</summary>

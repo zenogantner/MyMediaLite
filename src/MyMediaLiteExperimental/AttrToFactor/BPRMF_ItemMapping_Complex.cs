@@ -23,7 +23,6 @@ using MyMediaLite;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	public class BPRMF_ItemMapping_Complex : BPRMF_ItemMapping

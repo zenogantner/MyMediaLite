@@ -24,7 +24,6 @@ using MyMediaLite.ItemRecommender;
 using MyMediaLite.Util;
 using SVM;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by support-vector regression (SVR)</summary>

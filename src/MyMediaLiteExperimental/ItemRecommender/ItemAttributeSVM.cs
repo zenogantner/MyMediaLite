@@ -22,7 +22,6 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using SVM;
 
-
 namespace MyMediaLite.ItemRecommender
 {
 	/// <summary>
@@ -44,8 +43,8 @@ namespace MyMediaLite.ItemRecommender
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
-		private SparseBooleanMatrix item_attributes;		
-		
+		private SparseBooleanMatrix item_attributes;
+
 		/// <inheritdoc/>
 	    public int NumItemAttributes { get;	set; }
 

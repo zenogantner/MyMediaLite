@@ -20,13 +20,12 @@ using System.Globalization;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite.RatingPredictor
 {
 	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>
 	/// This implementation assumes a binary and symmetrical trust network.
-	/// 
+	///
 	/// <inproceedings>
 	///   <author>Mohsen Jamali</author> <author>Martin Ester</author>
     ///   <title>A matrix factorization technique with trust propagation for recommendation in social networks</title>
@@ -74,9 +73,9 @@ namespace MyMediaLite.RatingPredictor
 			// init biases
 			user_bias = new double[NumUsers];
 			item_bias = new double[ratings.MaxItemID + 1];
-			
+
 			Console.Error.WriteLine("num_users={0}, num_items={1}", NumUsers, item_bias.Length);
-			
+
 			// compute global average
 			double global_average = 0;
 			foreach (RatingEvent r in Ratings.All)
@@ -158,7 +157,7 @@ namespace MyMediaLite.RatingPredictor
 				double[] sum_neighbors    = new double[num_factors];
 				double bias_sum_neighbors = 0;
 				int      num_neighbors    = user_neighbors[u].Count;
-				
+
 				// user bias part
 				foreach (int v in user_neighbors[u])
 					bias_sum_neighbors += user_bias[v];
@@ -171,14 +170,14 @@ namespace MyMediaLite.RatingPredictor
 						double diff = 0;
 						foreach (int w in user_neighbors[v])
 							diff -= user_bias[w];
-	
+
 						diff = diff * trust_v;
 						diff += user_bias[v];
-						
+
 						if (num_neighbors != 0)
 							user_bias_gradient[u] -= social_regularization * trust_v * diff / num_neighbors;
-					}				
-				
+					}
+
 				// latent factor part
 				foreach (int v in user_neighbors[u])
                 	for (int f = 0; f < num_factors; f++)
@@ -189,7 +188,7 @@ namespace MyMediaLite.RatingPredictor
 				foreach (int v in user_neighbors[u])
 					if (user_neighbors[v].Count != 0)
 					{
-						double trust_v = (double) 1 / user_neighbors[v].Count;					
+						double trust_v = (double) 1 / user_neighbors[v].Count;
 						for (int f = 0; f < num_factors; f++)
 						{
 							double diff = 0;
@@ -212,7 +211,7 @@ namespace MyMediaLite.RatingPredictor
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
-				item_bias[i] += item_bias_gradient[i] * learn_rate;				
+				item_bias[i] += item_bias_gradient[i] * learn_rate;
 				for (int f = 2; f < num_factors; f++)
 					MatrixUtils.Inc(item_factors, i, f, item_factors_gradient[i, f] * learn_rate);
 			}

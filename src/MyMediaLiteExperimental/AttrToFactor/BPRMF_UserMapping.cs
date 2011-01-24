@@ -24,7 +24,6 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender

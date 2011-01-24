@@ -19,7 +19,6 @@ using MyMediaLite;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPredictor;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>Base class for biased MF plus attribute-to-factor mapping</summary>
@@ -29,24 +28,24 @@ namespace MyMediaLite.AttrToFactor
 		public double LearnRateMapping { get { return learn_rate_mapping; } set { learn_rate_mapping = value; } }
 		/// <summary>The learn rate for training the mapping functions</summary>
 		protected double learn_rate_mapping = 0.01;
-		
+
 		/// <summary>number of times the regression is computed (to avoid local minima)</summary>
 		/// <remarks>may be ignored by the engine</remarks>
 		public int NumInitMapping {	get { return num_init_mapping; } set { num_init_mapping = value; } }
 		/// <summary>number of times the regression is computed (to avoid local minima)</summary>
 		/// <remarks>may be ignored by the engine</remarks>
-		protected int num_init_mapping = 5;		
-		
+		protected int num_init_mapping = 5;
+
 		/// <summary>number of iterations of the mapping training procedure</summary>
 		public int NumIterMapping { get { return this.num_iter_mapping; } set { num_iter_mapping = value; } }
 		/// <summary>number of iterations of the mapping training procedure</summary>
 		protected int num_iter_mapping = 10;
-		
+
 		/// <summary>regularization constant for the mapping</summary>
 		public double RegMapping { get { return this.reg_mapping; } set { reg_mapping = value; } }
 		/// <summary>regularization constant for the mapping</summary>
 		protected double reg_mapping = 0.1;
-		
+
 		/// <summary>The matrix representing the attribute-to-factor mapping</summary>
 		/// <remarks>includes bias</remarks>
 		protected Matrix<double> attribute_to_factor;

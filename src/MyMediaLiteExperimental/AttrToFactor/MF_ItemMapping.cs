@@ -25,7 +25,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>biased MF with item mapping learned by regularized least-squares regression</summary>
@@ -179,7 +178,7 @@ namespace MyMediaLite.AttrToFactor
 		protected double[] ComputeMappingFit()
 		{
 			Console.Error.WriteLine("min = {0}, max = {1}", MinRating, MaxRating);
-			
+
 			double rmse    = 0;
 			double penalty = 0;
 			var rmse_and_penalty_per_factor = new double[num_factors + 1];
@@ -204,7 +203,7 @@ namespace MyMediaLite.AttrToFactor
 					penalty += reg_term;
 					rmse_and_penalty_per_factor[j] += error + reg_term;
 				}
-				
+
 				// error term for item bias term
 				error    = Math.Pow(est_factors[num_factors] - item_bias[i], 2);
 				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(num_factors)), 2);
@@ -260,8 +259,8 @@ namespace MyMediaLite.AttrToFactor
 				+ user_bias[user_id]
 				+ est_factors[num_factors] // estimated item bias
 				+ global_bias;
-			
-			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);			
+
+			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
         }
 
 		/// <inheritdoc/>

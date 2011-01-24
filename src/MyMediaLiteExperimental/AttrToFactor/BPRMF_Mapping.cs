@@ -19,7 +19,6 @@ using MyMediaLite;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>Base class for BPR-MF plus attribute-to-factor mapping</summary>

@@ -25,7 +25,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommender;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.AttrToFactor
 {
 	public class BPRMF_ItemMapping_Optimal : BPRMF_ItemMapping
