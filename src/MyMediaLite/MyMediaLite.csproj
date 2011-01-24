@@ -131,7 +131,6 @@
     <Compile Include="RatingPredictor\SlopeOne.cs" />
     <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
     <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
-    <Compile Include="RatingPredictor\NewKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

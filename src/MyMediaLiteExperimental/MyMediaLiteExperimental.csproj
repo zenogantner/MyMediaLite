@@ -48,6 +48,7 @@
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
+    <Compile Include="RatingPredictor\NewKNN.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
