@@ -57,7 +57,7 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("user-attribute-kNN k={0} reg_u={1} reg_i={2}",
+			return string.Format("UserAttributeKNN k={0} reg_u={1} reg_i={2}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}

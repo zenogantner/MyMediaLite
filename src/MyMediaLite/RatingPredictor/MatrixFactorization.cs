@@ -322,7 +322,7 @@ namespace MyMediaLite.RatingPredictor
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "matrix-factorization num_factors={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
+			                     "MatrixFactorization num_factors={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
 				                 NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
     }

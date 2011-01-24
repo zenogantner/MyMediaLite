@@ -52,7 +52,7 @@ namespace MyMediaLite.RatingPredictor
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni,
-			                     "user-kNN-pearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
+			                     "UserKNNPearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
 		}
 	}

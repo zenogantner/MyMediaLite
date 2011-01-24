@@ -64,7 +64,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <returns>A <see cref="System.String"/></returns>
 		public override string ToString()
 		{
-			return "global-average";
+			return "GlobalAverage";
 		}
     }
 }

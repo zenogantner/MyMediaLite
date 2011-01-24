@@ -92,8 +92,8 @@ MyMediaLite rating prediction; usage:
     - {9}
     - {10}
     - {11}
-    - {12} **experimental**
-    - {13} **experimental**
+    - {12}
+    - {13}
   - method ARGUMENTS have the form name=value
   - general OPTIONS have the form name=value
     - option_file=FILE           read options from FILE (line format KEY: VALUE)
@@ -172,63 +172,16 @@ MyMediaLite rating prediction; usage:
 			if (random_seed != -1)
 				MyMediaLite.Util.Random.InitInstance(random_seed);
 
-			// set correct recommender
-			switch (method)
+			try
 			{
-				case "matrix-factorization":
-					recommender = Engine.Configure(mf, parameters, Usage);
-					break;
-				case "biased-matrix-factorization":
-					recommender = Engine.Configure(biased_mf, parameters, Usage);
-					break;
-				case "SocialMF":
-					recommender = Engine.Configure(social_mf, parameters, Usage);
-					break;
-				case "knn":
-				case "kNN":
-					recommender = Engine.Configure(knn, parameters, Usage);
-					break;
-				case "user-knn-pearson":
-				case "user-kNN-pearson":
-					recommender = Engine.Configure(uknn_p, parameters, Usage);
-					break;
-				case "user-knn-cosine":
-				case "user-kNN-cosine":
-					recommender = Engine.Configure(uknn_c, parameters, Usage);
-					break;
-				case "item-knn-pearson":
-				case "item-kNN-pearson":
-					recommender = Engine.Configure(iknn_p, parameters, Usage);
-					break;
-				case "item-knn-cosine":
-				case "item-kNN-cosine":
-					recommender = Engine.Configure(iknn_c, parameters, Usage);
-					break;
-				case "item-attribute-knn":
-				case "item-attribute-kNN":
-					recommender = Engine.Configure(iaknn, parameters, Usage);
-					break;
-				case "user-item-baseline":
-					recommender = Engine.Configure(uib, parameters, Usage);
-					break;
-				case "global-average":
-					recommender = ga;
-					break;
-				case "user-average":
-					recommender = ua;
-					break;
-				case "item-average":
-					recommender = ia;
-					break;
-				case "slope-one":
-					recommender = slope_one;
-					break;
-				case "bipolar-slope-one":
-					recommender = bipolar_slope_one;
-					break;				
-				default:
-					Usage(string.Format("Unknown method: '{0}'", method));
-					break;
+				recommender = Engine.Configure(
+				                Engine.CreateRatingPredictor(method),
+				                parameters, Usage
+				              );
+			}
+			catch (Exception e)
+			{
+				Usage(string.Format("Unknown method: '{0}'", method));
 			}
 
 			if (parameters.CheckForLeftovers())

@@ -208,7 +208,7 @@ namespace MyMediaLite.RatingPredictor
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "user-item-baseline reg_u={0} reg_i={1}", reg_u, reg_i);
+			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1}", reg_u, reg_i);
 		}
     }
 }

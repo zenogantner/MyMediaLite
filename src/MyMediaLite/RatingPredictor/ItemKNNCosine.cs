@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -44,7 +44,7 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("item-kNN-cosine k={0} reg_u={1} reg_i={2}",
+			return string.Format("ItemKNNCosine k={0} reg_u={1} reg_i={2}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}

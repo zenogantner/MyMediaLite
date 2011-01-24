@@ -71,7 +71,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return "user-average";
+			return "UserAverage";
 		}
     }
 }

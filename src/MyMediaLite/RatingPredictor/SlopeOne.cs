@@ -147,7 +147,7 @@ namespace MyMediaLite.RatingPredictor
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			 return "slope-one";
+			 return "SlopeOne";
 		}
 	}
 }

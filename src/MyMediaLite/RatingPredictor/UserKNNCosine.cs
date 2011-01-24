@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPredictor
 			ni.NumberDecimalDigits = '.';			
 			
 			return string.Format(ni,
-			                     "user-kNN-cosine k={0} reg_u={1} reg_i={2}",
+			                     "UserKNNCosine k={0} reg_u={1} reg_i={2}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
