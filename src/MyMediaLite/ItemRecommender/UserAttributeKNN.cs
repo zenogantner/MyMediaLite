@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -59,7 +59,7 @@ namespace MyMediaLite.ItemRecommender
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("user-attribute-kNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("UserAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }

@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,11 +27,11 @@ namespace MyMediaLite.ItemRecommender
     /// <remarks>
     ///   Y. Hu Y. Koren C. Volinsky: Collaborative filtering for implicit feedback datasets,
     ///   IEEE International Conference on Data Mining (ICDM), 2008
-    /// 
+    ///
     ///   R. Pan, Y. Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, Q. Yang:
     ///   One-class collaborative filtering,
     ///   IEEE International Conference on Data Mining (ICDM), 2008
-    /// 
+    ///
     /// We use the fast computation method proposed by Hu et al. and we allow a global
     /// weight to penalize observed/unobserved values.
     ///
@@ -127,14 +128,14 @@ namespace MyMediaLite.ItemRecommender
 		{
 			return -1;
 		}
-		
+
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "WR-MF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
+			return string.Format(ni, "WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
 				                 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdev);
 		}
     }

@@ -158,67 +158,16 @@ namespace MyMediaLite
 			if (random_seed != -1)
 				Util.Random.InitInstance(random_seed);
 
-			// set requested recommender
-			switch (method)
+			try
 			{
-				case "WR-MF":
-				case "wr-mf":
-					compute_fit = false; // deactivate as long it is not implemented
-					recommender = Engine.Configure(wrmf, parameters, Usage);
-					break;
-
-                case "BPR-MF":
-				case "bpr-mf":
-					recommender = Engine.Configure(bprmf, parameters, Usage);
-					break;
-				case "BPR-Linear":
-				case "bpr-linear":
-					recommender = Engine.Configure(bpr_linear, parameters, Usage);
-					break;
-				case "item-knn":
-			    case "item-kNN":
-				case "item-KNN":
-					recommender = Engine.Configure(iknn, parameters, Usage);
-					break;
-				case "weighted-item-knn":
-			    case "weighted-item-kNN":
-				case "weighted-item-KNN":
-					recommender = Engine.Configure(wiknn, parameters, Usage);
-					break;
-				case "item-attribute-knn":
-				case "item-attribute-kNN":
-				case "item-attribute-KNN":
-					recommender = Engine.Configure(iaknn, parameters, Usage);
-					break;
-				case "user-knn":
-				case "user-kNN":
-				case "user-KNN":
-					recommender = Engine.Configure(uknn, parameters, Usage);
-					break;
-				case "weighted-user-knn":
-				case "weighted-user-kNN":
-				case "weighted-user-KNN":
-					recommender = Engine.Configure(wuknn, parameters, Usage);
-					break;
-				case "user-attribute-knn":
-				case "user-attribute-kNN":
-				case "user-attribute-KNN":
-					recommender = Engine.Configure(uaknn, parameters, Usage);
-					break;
-				case "item-attribute-svm":
-				case "item-attribute-SVM":
-					recommender = svm;
-					break;
-				case "most-popular":
-					recommender = mp;
-					break;
-				case "random":
-					recommender = random;
-					break;
-				default:
-					Console.WriteLine("Unknown method: '{0}'", method);
-					Usage(-1);
-					break;
+				recommender = Engine.Configure(
+				                Engine.CreateItemRecommender(method),
+				                parameters, Usage
+				              );
+			}
+			catch (Exception e)
+			{
+				Usage(string.Format("Unknown method: '{0}'", method));
 			}
 
 			if (parameters.CheckForLeftovers())
@@ -431,7 +380,7 @@ namespace MyMediaLite
 					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
 					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 				}
-			
+
 			// test data
 	        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
 		}

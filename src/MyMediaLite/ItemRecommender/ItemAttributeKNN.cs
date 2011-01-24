@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -22,7 +22,6 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommender
 {
-
 	/// <summary>
     /// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
     /// </summary>
@@ -34,9 +33,8 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes
 		{
-			get { return this.item_attributes; }			
-			set
-			{
+			get { return this.item_attributes; }
+			set	{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
@@ -51,7 +49,7 @@ namespace MyMediaLite.ItemRecommender
         public override void Train()
         {
 			this.correlation = BinaryCosine.Create(ItemAttributes);
-			
+
 			int num_items = MaxItemID + 1;
 			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
@@ -61,7 +59,7 @@ namespace MyMediaLite.ItemRecommender
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("item-attribute-kNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("ItemAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
 	}
 }

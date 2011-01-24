@@ -23,10 +23,10 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommender
 {
-    /// <summary>
-    /// Most-popular item recommender. Items are weighted by how often they have been seen in the past.
-    /// </summary>
+    /// <summary>Most-popular item recommender</summary>
     /// <remarks>
+    /// Items are weighted by how often they have been seen in the past.
+    ///
     /// This method is not personalized.
     /// This engine does not support online updates.
 	/// </remarks>
@@ -100,7 +100,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return "most-popular";
+			return "MostPopular";
 		}
     }
 }

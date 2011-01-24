@@ -38,8 +38,7 @@ namespace MyMediaLite.ItemRecommender
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set
-			{
+			set	{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
@@ -310,7 +309,7 @@ namespace MyMediaLite.ItemRecommender
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format("BPR-Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
+			return string.Format("BPRLinear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
 								  regularization, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
 		}
 

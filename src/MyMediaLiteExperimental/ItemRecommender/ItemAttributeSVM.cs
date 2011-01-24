@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -124,7 +124,7 @@ namespace MyMediaLite.ItemRecommender
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "item-attribute-SVM C={0} Gamma={1}", c, gamma);
+			return string.Format(ni, "ItemAttributeSVM C={0} Gamma={1}", c, gamma);
 		}
 	}
 }

@@ -46,11 +46,11 @@ namespace MyMediaLite.RatingPredictor
 	{
 		// TODO add possibility of _not_ using weights
 
-		/// <summary>Shrinkage parameter</summary>		
+		/// <summary>Shrinkage parameter</summary>
 		public float Shrinkage { get; set; }
-		
+
 		public string Similarity { get; set; }
-		
+
 		public EntityType Entity { get; set; }
 
 		/// <summary>Number of neighbors to take into account for predictions</summary>
@@ -72,13 +72,13 @@ namespace MyMediaLite.RatingPredictor
 		private void CreateSimilarityMatrix(string typename)
 		{
 			Type type = Type.GetType("MyMediaLite.Correlation." + typename, true);
-			
+
 			if (type.IsSubclassOf(typeof(CorrelationMatrix)))
 				correlation = (CorrelationMatrix) type.GetConstructor(new Type[] { typeof(int) } ).Invoke( new object[] { Entity == EntityType.USER ? MaxUserID + 1 : MaxItemID + 1 });
 			else
 				throw new Exception(typename + " is not a subclass of CorrelationMatrix");
 		}
-		
+
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
 		/// If the user or the item are not known to the engine, a suitable average rating is returned.
@@ -156,7 +156,7 @@ namespace MyMediaLite.RatingPredictor
 			base.Train();
 
 			CreateSimilarityMatrix(Similarity);
-			
+
 			if (correlation is RatingCorrelationMatrix)
 				((RatingCorrelationMatrix) correlation).ComputeCorrelations(ratings, Entity);
 
@@ -204,7 +204,7 @@ namespace MyMediaLite.RatingPredictor
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "kNN k={0} entity_type={1}, similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
+			                     "KNN k={0} entity_type={1}, similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Entity, Similarity, Shrinkage, RegU, RegI);
 		}
 	}

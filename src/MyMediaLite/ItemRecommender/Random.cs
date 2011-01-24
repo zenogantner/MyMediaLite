@@ -62,7 +62,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return "random";
+			return "Random";
 		}
 	}
 }

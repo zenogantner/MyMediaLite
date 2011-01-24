@@ -25,7 +25,7 @@ namespace MyMediaLite.ItemRecommender
 		// <param name="user_id">the user ID</param>
 		// <returns>true if the engine can produce recommendations for the given user, false otherwise</returns>
 		// bool CanPredict(int user_id);
-        
+
 		/// <inheritdoc/>
         void AddFeedback(int user_id, int item_id);
         /// <inheritdoc/>

@@ -51,7 +51,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("weighted-user-kNN k={0}",
+			return string.Format("WeightedUserKNN k={0}",
 			                     k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }

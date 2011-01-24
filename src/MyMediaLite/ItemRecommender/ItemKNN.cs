@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -57,7 +58,7 @@ namespace MyMediaLite.ItemRecommender
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("item-kNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("ItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }
