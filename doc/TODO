@@ -99,7 +99,6 @@ Architecture
 Misc features
  - use --param for command-line parameters
  - rewrite MF techniques using vector/matrix abstractions
- - get rid of min_rating and max_rating
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
  - add flyer to homepage (main page)

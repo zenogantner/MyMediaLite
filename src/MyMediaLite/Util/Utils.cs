@@ -120,9 +120,17 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		public static Type[] GetTypesInNamespace(Assembly assembly, string name_space)
+		/// <summary>Get all types of a namespace</summary>
+		/// <param name="name_space">a string describing the namespace</param>
+		/// <returns>an array of Type objects</returns>
+		public static Type[] GetTypesInNamespace(string name_space)
 		{
-    		return assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)).ToArray();
+			var types = new List<Type>();
+			
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+				types.AddRange( assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)) );
+			
+			return types.ToArray();
 		}
 	}
 }

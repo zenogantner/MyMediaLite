@@ -299,18 +299,17 @@ namespace MyMediaLite.Util
 		{
 			var result = new List<string>();
 
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies() )
-				foreach (Type type in Utils.GetTypesInNamespace(assembly, prefix))
-					if (!type.IsAbstract && type.IsSubclassOf(Type.GetType(prefix + ".Memory")))
-					{
-						IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
+			foreach (Type type in Utils.GetTypesInNamespace(prefix))
+				if (!type.IsAbstract && type.IsSubclassOf(Type.GetType(prefix + ".Memory")))
+				{
+					IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
 
-						string description = recommender.ToString();
-						string needs = Engine.Needs(recommender);
-						if (needs.Length > 0)
-							description += " (needs " + needs + ")";
-						result.Add(description);
-					}
+					string description = recommender.ToString();
+					string needs = Engine.Needs(recommender);
+					if (needs.Length > 0)
+						description += " (needs " + needs + ")";
+					result.Add(description);
+				}
 
 			return result.ToArray();
 		}

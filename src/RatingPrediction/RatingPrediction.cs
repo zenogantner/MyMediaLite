@@ -162,7 +162,7 @@ MyMediaLite rating prediction
 				                parameters, Usage
 				              );
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				Usage(string.Format("Unknown method: '{0}'", method));
 			}
