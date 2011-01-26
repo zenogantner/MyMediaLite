@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MyMediaLite;
 using MyMediaLite.Data;
@@ -105,7 +106,7 @@ MyMediaLite rating prediction
         static void Main(string[] args)
         {
 			// TODO load w/o absolute path
-			Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/RatingPrediction/bin/Debug/MyMediaLiteExperimental.dll");			
+			Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/RatingPrediction/bin/Debug/MyMediaLiteExperimental.dll");
 			
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
