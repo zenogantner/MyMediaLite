@@ -30,7 +30,7 @@ namespace MyMediaLite.ItemRecommendation
     /// This method is not personalized.
     /// This engine does not support online updates.
 	/// </remarks>
-    public class MostPopular : Memory
+    public class MostPopular : ItemRecommender
     {
         /// <summary>View count</summary>
         protected Dictionary<int, int> view_count = new Dictionary<int, int>();

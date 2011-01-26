@@ -1,4 +1,7 @@
 0.10	2011-??-??
+        - API changes
+          - rename namespace ItemRecommender to ItemRecommendation
+          - rename Memory to ItemRecommender
         - command-line programs
           - find and load engines via reflection
           - engine names are now CamelCase (exactly their class names)

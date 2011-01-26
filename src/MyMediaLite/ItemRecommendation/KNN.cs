@@ -22,7 +22,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
-	public abstract class KNN : Memory
+	public abstract class KNN : ItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K {	get { return k;	} set {	k = value; } }

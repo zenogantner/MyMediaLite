@@ -26,7 +26,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ItemRecommendation
 {
     /// <summary>Abstract class for matrix factorization based item predictors</summary>
-    public abstract class MF : Memory, IIterativeModel
+    public abstract class MF : ItemRecommender, IIterativeModel
     {
         /// <summary>Latent user factor matrix</summary>
         protected Matrix<double> user_factors;

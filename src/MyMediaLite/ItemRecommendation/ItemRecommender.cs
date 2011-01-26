@@ -23,13 +23,16 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-    /// <summary>
-    /// Abstract item recommender class, that loads the training data into two sparse matrices: one column-wise and one row-wise
-    /// </summary>
-    public abstract class Memory : IItemRecommender
+    /// <summary>Abstract item recommender class that loads the training data into memory</summary>
+    /// <remarks>
+    /// The data is stored in two sparse matrices:
+    /// one column-wise and one row-wise
+    /// </remarks>
+    public abstract class ItemRecommender : IItemRecommender
     {
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID  { get; set;	}
+		
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 

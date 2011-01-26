@@ -102,7 +102,6 @@
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
     <Compile Include="ItemRecommendation\KNN.cs" />
-    <Compile Include="ItemRecommendation\Memory.cs" />
     <Compile Include="ItemRecommendation\MF.cs" />
     <Compile Include="ItemRecommendation\MostPopular.cs" />
     <Compile Include="ItemRecommendation\Random.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="RatingPrediction\ItemAverage.cs" />
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
     <Compile Include="RatingPrediction\SlopeOne.cs" />
+    <Compile Include="ItemRecommendation\ItemRecommender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

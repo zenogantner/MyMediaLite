@@ -325,7 +325,7 @@ namespace MyMediaLite
 				relevant_items = training_data.NonEmptyColumnIDs;
 
 			if (! (recommender is ItemRecommendation.Random))
-				((Memory)recommender).SetCollaborativeData(training_data);
+				((ItemRecommender)recommender).SetCollaborativeData(training_data);
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
