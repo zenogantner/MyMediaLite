@@ -16,25 +16,25 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using MyMediaLite.Correlation;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
-namespace MyMediaLite.RatingPredictor
+namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Attribute-aware weighted item-based kNN recommender</summary>
-	/// <remarks>
-	/// This engine does NOT support online updates.
-	/// </remarks>
-	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
-	{
+	/// <summary>
+    /// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
+    /// </summary>
+    /// <remarks>
+    /// This engine does not support online updates.
+    /// </remarks>
+    public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
+    {
 		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set
-			{
+			set	{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
@@ -48,17 +48,18 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
         public override void Train()
         {
-			base.Train();
 			this.correlation = BinaryCosine.Create(ItemAttributes);
-			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
+
+			int num_items = MaxItemID + 1;
+			this.nearest_neighbors = new int[num_items][];
+			for (int i = 0; i < num_items; i++)
+				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
         }
 
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("ItemAttributeKNN k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+			return string.Format("ItemAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
 	}
-
 }

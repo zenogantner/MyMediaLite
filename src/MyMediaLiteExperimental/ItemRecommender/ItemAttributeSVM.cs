@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using SVM;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
 	/// Content-based filtering using one support-vector machine per user

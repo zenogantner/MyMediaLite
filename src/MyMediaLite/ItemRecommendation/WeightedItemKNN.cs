@@ -20,45 +20,40 @@ using System;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
+	/// <summary>Weighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
     /// <remarks>
     /// This engine does not support online updates.
 	/// </remarks>
-    public class ItemKNN : KNN
+    public class WeightedItemKNN : ItemKNN
     {
-        /// <inheritdoc/>
-        public override void Train()
-        {
-			correlation = BinaryCosine.Create(data_item);
-
-			int num_items = MaxItemID + 1;
-			this.nearest_neighbors = new int[num_items][];
-			for (int i = 0; i < num_items; i++)
-				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
-        }
-
         /// <inheritdoc/>
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id > MaxUserID))
                 throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
+            if ((item_id < 0) || (item_id >= nearest_neighbors.Length))
                 throw new ArgumentException("item is unknown: " + item_id);
 
-			int count = 0;
-			foreach (int neighbor in nearest_neighbors[item_id])
-				if (data_user[neighbor, user_id])
-					count++;
-
-			return (double) count / k;
+			if (k == UInt32.MaxValue)
+			{
+				return correlation.SumUp(item_id, data_user[user_id]);
+			}
+			else
+			{
+				double result = 0;
+				foreach (int neighbor in nearest_neighbors[item_id])
+					if (data_item[neighbor, user_id])
+						result += correlation[item_id, neighbor];
+				return result;
+			}
         }
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("ItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("WeightedItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
     }
 }

@@ -23,7 +23,7 @@ using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
     /// <summary>Abstract class for matrix factorization based item predictors</summary>
     public abstract class MF : Memory, IIterativeModel

@@ -75,35 +75,6 @@
     <Compile Include="IO\ItemRecommenderData.cs" />
     <Compile Include="IO\RatingPredictionData.cs" />
     <Compile Include="IO\RelationData.cs" />
-    <Compile Include="ItemRecommender\BPR_Linear.cs" />
-    <Compile Include="ItemRecommender\BPRMF.cs" />
-    <Compile Include="ItemRecommender\IItemRecommender.cs" />
-    <Compile Include="ItemRecommender\ItemAttributeKNN.cs" />
-    <Compile Include="ItemRecommender\ItemKNN.cs" />
-    <Compile Include="ItemRecommender\KNN.cs" />
-    <Compile Include="ItemRecommender\Memory.cs" />
-    <Compile Include="ItemRecommender\MF.cs" />
-    <Compile Include="ItemRecommender\MostPopular.cs" />
-    <Compile Include="ItemRecommender\Random.cs" />
-    <Compile Include="ItemRecommender\UserAttributeKNN.cs" />
-    <Compile Include="ItemRecommender\UserKNN.cs" />
-    <Compile Include="ItemRecommender\WeightedItemKNN.cs" />
-    <Compile Include="ItemRecommender\WeightedUserKNN.cs" />
-    <Compile Include="ItemRecommender\WRMF.cs" />
-    <Compile Include="RatingPredictor\BiasedMatrixFactorization.cs" />
-    <Compile Include="RatingPredictor\IRatingPredictor.cs" />
-    <Compile Include="RatingPredictor\ItemAttributeKNN.cs" />
-    <Compile Include="RatingPredictor\ItemKNN.cs" />
-    <Compile Include="RatingPredictor\ItemKNNCosine.cs" />
-    <Compile Include="RatingPredictor\ItemKNNPearson.cs" />
-    <Compile Include="RatingPredictor\KNN.cs" />
-    <Compile Include="RatingPredictor\MatrixFactorization.cs" />
-    <Compile Include="RatingPredictor\Memory.cs" />
-    <Compile Include="RatingPredictor\UserAttributeKNN.cs" />
-    <Compile Include="RatingPredictor\UserItemBaseline.cs" />
-    <Compile Include="RatingPredictor\UserKNN.cs" />
-    <Compile Include="RatingPredictor\UserKNNCosine.cs" />
-    <Compile Include="RatingPredictor\UserKNNPearson.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="Util\CommandLineParameters.cs" />
     <Compile Include="Util\Engine.cs" />
@@ -119,18 +90,47 @@
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\IMatrixUtils.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
-    <Compile Include="RatingPredictor\EntityAverage.cs" />
-    <Compile Include="RatingPredictor\GlobalAverage.cs" />
-    <Compile Include="RatingPredictor\UserAverage.cs" />
-    <Compile Include="RatingPredictor\ItemAverage.cs" />
     <Compile Include="Data\WeightedItem.cs" />
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\AdjustedCosine.cs" />
-    <Compile Include="RatingPredictor\BiPolarSlopeOne.cs" />
-    <Compile Include="RatingPredictor\SlopeOne.cs" />
     <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
     <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
+    <Compile Include="ItemRecommendation\BPR_Linear.cs" />
+    <Compile Include="ItemRecommendation\BPRMF.cs" />
+    <Compile Include="ItemRecommendation\IItemRecommender.cs" />
+    <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
+    <Compile Include="ItemRecommendation\ItemKNN.cs" />
+    <Compile Include="ItemRecommendation\KNN.cs" />
+    <Compile Include="ItemRecommendation\Memory.cs" />
+    <Compile Include="ItemRecommendation\MF.cs" />
+    <Compile Include="ItemRecommendation\MostPopular.cs" />
+    <Compile Include="ItemRecommendation\Random.cs" />
+    <Compile Include="ItemRecommendation\UserAttributeKNN.cs" />
+    <Compile Include="ItemRecommendation\UserKNN.cs" />
+    <Compile Include="ItemRecommendation\WeightedItemKNN.cs" />
+    <Compile Include="ItemRecommendation\WeightedUserKNN.cs" />
+    <Compile Include="ItemRecommendation\WRMF.cs" />
+    <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\IRatingPredictor.cs" />
+    <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
+    <Compile Include="RatingPrediction\ItemKNN.cs" />
+    <Compile Include="RatingPrediction\ItemKNNCosine.cs" />
+    <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
+    <Compile Include="RatingPrediction\KNN.cs" />
+    <Compile Include="RatingPrediction\MatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\Memory.cs" />
+    <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
+    <Compile Include="RatingPrediction\UserItemBaseline.cs" />
+    <Compile Include="RatingPrediction\UserKNN.cs" />
+    <Compile Include="RatingPrediction\UserKNNCosine.cs" />
+    <Compile Include="RatingPrediction\UserKNNPearson.cs" />
+    <Compile Include="RatingPrediction\EntityAverage.cs" />
+    <Compile Include="RatingPrediction\GlobalAverage.cs" />
+    <Compile Include="RatingPrediction\UserAverage.cs" />
+    <Compile Include="RatingPrediction\ItemAverage.cs" />
+    <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
+    <Compile Include="RatingPrediction\SlopeOne.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -142,8 +142,6 @@
   -->
   <ItemGroup>
     <Folder Include="Correlation\" />
-    <Folder Include="ItemRecommender\" />
-    <Folder Include="RatingPredictor\" />
     <Folder Include="Eval\" />
     <Folder Include="DataType\" />
     <Folder Include="Util\" />
@@ -151,6 +149,8 @@
     <Folder Include="Data\" />
     <Folder Include="Taxonomy\" />
     <Folder Include="Ensemble\" />
+    <Folder Include="ItemRecommendation\" />
+    <Folder Include="RatingPrediction\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SVM\SVM.csproj">

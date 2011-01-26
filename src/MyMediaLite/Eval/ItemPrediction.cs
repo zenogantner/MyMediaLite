@@ -22,7 +22,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.ItemRecommender;
+using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
 {

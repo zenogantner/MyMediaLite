@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
-using MyMediaLite.ItemRecommender;
+using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
 using SVM;
 

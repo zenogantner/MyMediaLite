@@ -26,7 +26,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
-using MyMediaLite.ItemRecommender;
+using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
 
 namespace MyMediaLite
@@ -324,7 +324,7 @@ namespace MyMediaLite
 			else
 				relevant_items = training_data.NonEmptyColumnIDs;
 
-			if (! (recommender is ItemRecommender.Random))
+			if (! (recommender is ItemRecommendation.Random))
 				((Memory)recommender).SetCollaborativeData(training_data);
 
 			// user attributes

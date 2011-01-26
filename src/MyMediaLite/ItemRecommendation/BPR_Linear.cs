@@ -24,7 +24,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
 	/// Linear model optimized for BPR

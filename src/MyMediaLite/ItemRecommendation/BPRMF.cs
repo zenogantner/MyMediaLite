@@ -23,7 +23,7 @@ using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
 	/// Matrix factorization model for item prediction optimized using BPR-Opt;

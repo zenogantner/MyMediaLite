@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.DataType;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
     /// <summary>Weighted matrix factorization method proposed by Hu et al. and Pan et al.</summary>
     /// <remarks>

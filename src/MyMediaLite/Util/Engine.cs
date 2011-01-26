@@ -256,7 +256,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>an item recommender object of type typename</returns>
-		public static ItemRecommender.Memory CreateItemRecommender(string typename)
+		public static ItemRecommendation.Memory CreateItemRecommender(string typename)
 		{
 			Type type = Type.GetType("MyMediaLite.ItemRecommender." + typename, true);
 			return CreateItemRecommender(type);
@@ -265,10 +265,10 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender engine from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>an item recommender object of type type</returns>
-		public static ItemRecommender.Memory CreateItemRecommender(Type type)
+		public static ItemRecommendation.Memory CreateItemRecommender(Type type)
 		{
-			if (type.IsSubclassOf(typeof(ItemRecommender.Memory)))
-				return (ItemRecommender.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(ItemRecommendation.Memory)))
+				return (ItemRecommendation.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommender.Memory");
 		}

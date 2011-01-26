@@ -19,7 +19,7 @@ using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.ItemRecommender
+namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
 	public abstract class KNN : Memory

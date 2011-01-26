@@ -16,21 +16,19 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using MyMediaLite.Correlation;
-using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-namespace MyMediaLite.RatingPredictor
+namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Weighted kNN recommender engine based on user attributes</summary>
+	/// <summary>
+    /// k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes
+    /// </summary>
 	/// <remarks>
-	/// This engine does NOT support online updates.
-	/// </remarks>
-	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
-	{
+    /// This engine does not support online updates.
+    /// </remarks>
+    public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
+    {
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
@@ -50,17 +48,18 @@ namespace MyMediaLite.RatingPredictor
         /// <inheritdoc/>
         public override void Train()
         {
-			base.Train();
-			this.correlation = BinaryCosine.Create(user_attributes);
+			correlation = BinaryCosine.Create(user_attributes);
+
+			int num_users = user_attributes.NumberOfRows;
+			this.nearest_neighbors = new int[num_users][];
+			for (int u = 0; u < num_users; u++)
+				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
         }
 
         /// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Format("UserAttributeKNN k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+			return string.Format("UserAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
-	}
-
+    }
 }
-
