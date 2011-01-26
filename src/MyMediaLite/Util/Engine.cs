@@ -299,10 +299,9 @@ namespace MyMediaLite.Util
 		{
 			var result = new List<string>();
 
-			// TODO check all loaded assemblies
-			foreach (Assembly assembly in new Assembly[] { Assembly.GetAssembly(typeof(IRecommenderEngine)) } )
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies() )
 				foreach (Type type in Utils.GetTypesInNamespace(assembly, prefix))
-					if (type.IsSubclassOf(Type.GetType(prefix + ".Memory")) && !type.IsAbstract)
+					if (!type.IsAbstract && type.IsSubclassOf(Type.GetType(prefix + ".Memory")))
 					{
 						IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
 

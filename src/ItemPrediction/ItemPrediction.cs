@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -64,11 +65,11 @@ namespace MyMediaLite
 			Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
 			Console.WriteLine("   methods (plus arguments and their defaults):");
 			Console.WriteLine();
-			
+
 			Console.Write("   - ");
 			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommender")));
 			// TODO add random
-			
+
 			Console.WriteLine("  method ARGUMENTS have the form name=value");
 			Console.WriteLine();
 			Console.WriteLine("  general OPTIONS have the form name=value");
@@ -97,6 +98,9 @@ namespace MyMediaLite
 
         public static void Main(string[] args)
         {
+			// TODO load w/o absolute path
+			Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/ItemPrediction/bin/Debug/MyMediaLiteExperimental.dll");
+
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Util.Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
