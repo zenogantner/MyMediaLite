@@ -42,21 +42,6 @@ namespace RatingPrediction
 
 		// recommender engines
 		static MyMediaLite.RatingPredictor.Memory recommender = null;
-		static MatrixFactorization        mf = new MatrixFactorization();
-		static MatrixFactorization biased_mf = new BiasedMatrixFactorization();
-		static MatrixFactorization social_mf = new SocialMF();
-		static NewKNN                    knn = new NewKNN();
-		static UserKNNCosine          uknn_c = new UserKNNCosine();
-		static UserKNNPearson         uknn_p = new UserKNNPearson();
-		static ItemKNNCosine          iknn_c = new ItemKNNCosine();
-		static ItemKNNPearson         iknn_p = new ItemKNNPearson();
-		static ItemAttributeKNN        iaknn = new ItemAttributeKNN();
-		static UserItemBaseline          uib = new UserItemBaseline();
-		static GlobalAverage              ga = new GlobalAverage();
-		static UserAverage                ua = new UserAverage();
-		static ItemAverage                ia = new ItemAverage();
-		static SlopeOne            slope_one = new SlopeOne();
-		static BiPolarSlopeOne bipolar_slope_one = new BiPolarSlopeOne();
 
 		// time statistics
 		static List<double> training_time_stats = new List<double>();
@@ -76,49 +61,43 @@ namespace RatingPrediction
 		static void Usage(int exit_code)
 		{
 			Console.WriteLine(@"
-MyMediaLite rating prediction; usage:
- RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
-    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-  - methods (plus arguments and their defaults):
-    - {0}
-    - {1}
-    - {2} (needs user_relation=FILE) **experimental**
-    - {3}
-    - {4}
-    - {5}
-    - {6}
-    - {7} (needs item_attributes=FILE)
-    - {8}
-    - {9}
-    - {10}
-    - {11}
-    - {12}
-    - {13}
-  - method ARGUMENTS have the form name=value
-  - general OPTIONS have the form name=value
-    - option_file=FILE           read options from FILE (line format KEY: VALUE)
-    - random_seed=N              set random seed to N
-    - data_dir=DIR               load all files from DIR
-    - user_attributes=FILE       file containing user attribute information
-    - item_attributes=FILE       file containing item attribute information
-    - user_relation=FILE         file containing user relation information
-    - item_relation=FILE         file containing item relation information
-    - save_model=FILE            save computed model to FILE
-    - load_model=FILE            load model from FILE
-    - min_rating=NUM             the smallest valid rating value
-    - max_rating=NUM             the greatest valid rating value
-    - no_eval=BOOL               do not evaluate
-    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
-    - cross_validation=K         perform k-fold crossvalidation on the training data
+MyMediaLite rating prediction
+
+ usage:  RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+
+  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+
+  methods (plus arguments and their defaults):");
+
+			Console.Write("   - ");
+			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.RatingPredictor")));
+
+			Console.WriteLine(@"method ARGUMENTS have the form name=value
+
+  general OPTIONS have the form name=value
+   - option_file=FILE           read options from FILE (line format KEY: VALUE)
+   - random_seed=N              set random seed to N
+   - data_dir=DIR               load all files from DIR
+   - user_attributes=FILE       file containing user attribute information
+   - item_attributes=FILE       file containing item attribute information
+   - user_relation=FILE         file containing user relation information
+   - item_relation=FILE         file containing item relation information
+   - save_model=FILE            save computed model to FILE
+   - load_model=FILE            load model from FILE
+   - min_rating=NUM             the smallest valid rating value
+   - max_rating=NUM             the greatest valid rating value
+   - no_eval=BOOL               do not evaluate
+   - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+   - cross_validation=K         perform k-fold crossvalidation on the training data
                                  (ignores the test data)
-  - options for finding the right number of iterations (MF methods)
-    - find_iter=N                give out statistics every N iterations
-    - max_iter=N                 perform at most N iterations
-    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
-    - rmse_cutoff=NUM            abort if RMSE is above NUM
-    - mae_cutoff=NUM             abort if MAE is above NUM
-    - compute_fit=BOOL           display fit on training data every find_iter iterations",
-			                   mf, biased_mf, social_mf, uknn_p, uknn_c, iknn_p, iknn_c, iaknn, uib, ga, ua, ia, slope_one, bipolar_slope_one);
+
+  options for finding the right number of iterations (MF methods)
+   - find_iter=N                give out statistics every N iterations
+   - max_iter=N                 perform at most N iterations
+   - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
+   - rmse_cutoff=NUM            abort if RMSE is above NUM
+   - mae_cutoff=NUM             abort if MAE is above NUM
+   - compute_fit=BOOL           display fit on training data every find_iter iterations");
 
 			Environment.Exit(exit_code);
 		}

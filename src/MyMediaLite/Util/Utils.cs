@@ -18,6 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace MyMediaLite.Util
 {
@@ -116,6 +118,11 @@ namespace MyMediaLite.Util
 				list[i] = list[r];
 				list[r] = tmp;
 			}
+		}
+
+		public static Type[] GetTypesInNamespace(Assembly assembly, string name_space)
+		{
+    		return assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)).ToArray();
 		}
 	}
 }

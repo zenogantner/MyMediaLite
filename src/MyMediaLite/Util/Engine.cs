@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using MyMediaLite;
 
 namespace MyMediaLite.Util
@@ -161,7 +162,7 @@ namespace MyMediaLite.Util
 								break;
 							case "System.String":
 						    	property.GetSetMethod().Invoke(engine, new Object[] { parameters[key] });
-								break;							
+								break;
 							default:
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
 								break;
@@ -231,19 +232,26 @@ namespace MyMediaLite.Util
 				}
 			}
 		}
-		
+
 		/// <summary>Create a rating prediction engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>a rating recommender object of type typename</returns>
 		public static RatingPredictor.Memory CreateRatingPredictor(string typename)
 		{
 			Type type = Type.GetType("MyMediaLite.RatingPredictor." + typename, true);
-			
+			return CreateRatingPredictor(type);
+		}
+
+		/// <summary>Create a rating prediction engine from a type object</summary>
+		/// <param name="type">the type object</param>
+		/// <returns>a rating recommender object of type type</returns>
+		public static RatingPredictor.Memory CreateRatingPredictor(Type type)
+		{
 			if (type.IsSubclassOf(typeof(RatingPredictor.Memory)))
 				return (RatingPredictor.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(typename + " is not a subclass of MyMediaLite.RatingPredcitor.Memory");
-		}		
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPredcitor.Memory");
+		}
 
 		/// <summary>Create an item recommender engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
@@ -251,11 +259,58 @@ namespace MyMediaLite.Util
 		public static ItemRecommender.Memory CreateItemRecommender(string typename)
 		{
 			Type type = Type.GetType("MyMediaLite.ItemRecommender." + typename, true);
-			
+			return CreateItemRecommender(type);
+		}
+
+		/// <summary>Create an item recommender engine from a type object</summary>
+		/// <param name="type">the type object</param>
+		/// <returns>an item recommender object of type type</returns>
+		public static ItemRecommender.Memory CreateItemRecommender(Type type)
+		{
 			if (type.IsSubclassOf(typeof(ItemRecommender.Memory)))
 				return (ItemRecommender.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(typename + " is not a subclass of MyMediaLite.ItemRecommender.Memory");
-		}		
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommender.Memory");
+		}
+
+		/// <summary>Describes the kind of data needed by this engine</summary>
+		/// <param name="recommender">a recommender engine</param>
+		/// <returns>a string containing the additional datafiles needed for training this engine</returns>
+		public static string Needs(IRecommenderEngine recommender)
+		{
+			// determine necessary data
+			var needs = new List<string>();
+			if (recommender is IUserRelationAwareRecommender)
+				needs.Add("user_relation=FILE");
+			if (recommender is IItemRelationAwareRecommender)
+				needs.Add("item_relation=FILE");
+			if (recommender is IUserAttributeAwareRecommender)
+				needs.Add("user_attributes=FILE");
+			if (recommender is IItemAttributeAwareRecommender)
+				needs.Add("item_attributes=FILE");
+
+			return string.Join(", ", needs.ToArray());
+		}
+
+		public static string[] List(string prefix)
+		{
+			var result = new List<string>();
+
+			// TODO check all loaded assemblies
+			foreach (Assembly assembly in new Assembly[] { Assembly.GetAssembly(typeof(IRecommenderEngine)) } )
+				foreach (Type type in Utils.GetTypesInNamespace(assembly, prefix))
+					if (type.IsSubclassOf(Type.GetType(prefix + ".Memory")) && !type.IsAbstract)
+					{
+						IRecommenderEngine recommender = Engine.CreateRatingPredictor(type);
+
+						string description = recommender.ToString();
+						string needs = Engine.Needs(recommender);
+						if (needs.Length > 0)
+							description += " (needs " + needs + ")";
+						result.Add(description);
+					}
+
+			return result.ToArray();
+		}
 	}
 }

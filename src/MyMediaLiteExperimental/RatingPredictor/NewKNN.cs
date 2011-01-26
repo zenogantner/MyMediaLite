@@ -204,7 +204,7 @@ namespace MyMediaLite.RatingPredictor
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "KNN k={0} entity_type={1}, similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
+			                     "NewKNN k={0} entity_type={1}, similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Entity, Similarity, Shrinkage, RegU, RegI);
 		}
 	}

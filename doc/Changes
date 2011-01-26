@@ -1,6 +1,6 @@
 0.10	2011-??-??
         - command-line programs
-          - load engines via reflection
+          - find and load engines via reflection
           - engine names are now CamelCase (exactly their class names)
 	- engines
           - kNN-based engines are now much faster and consume less memory
