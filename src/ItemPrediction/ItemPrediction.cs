@@ -41,18 +41,6 @@ namespace MyMediaLite
 
 		// recommender engines
 		static IItemRecommender recommender = null;
-		static KNN                     iknn       = new ItemKNN();
-		static KNN                     wiknn      = new WeightedItemKNN();
-		static KNN                     iaknn      = new ItemAttributeKNN();
-		static KNN                     uknn       = new UserKNN();
-		static KNN                     wuknn      = new WeightedUserKNN();
-		static KNN                     uaknn      = new UserAttributeKNN();
-		static MostPopular             mp         = new MostPopular();
-		static WRMF                    wrmf       = new WRMF();
-		static BPRMF                   bprmf      = new BPRMF();
-		static ItemRecommender.Random  random     = new ItemRecommender.Random();
-		static BPR_Linear              bpr_linear = new BPR_Linear();
-		static ItemAttributeSVM        svm        = new ItemAttributeSVM();
 
 		static bool compute_fit;
 
@@ -70,44 +58,40 @@ namespace MyMediaLite
 
 		static void Usage(int exit_code)
 		{
-			Console.WriteLine("MyMediaLite item prediction; usage:");
-			Console.WriteLine(" ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
-			Console.WriteLine("    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
-			Console.WriteLine("  - methods (plus arguments and their defaults):");
-			Console.WriteLine("    - " + wrmf);
-			Console.WriteLine("    - " + bprmf);
-			Console.WriteLine("    - " + bpr_linear + " (needs item_attributes=FILE)");
-			Console.WriteLine("    - " + iknn);
-			Console.WriteLine("    - " + wiknn);
-			Console.WriteLine("    - " + iaknn      + " (needs item_attributes=FILE)");
-			Console.WriteLine("    - " + uknn);
-			Console.WriteLine("    - " + wuknn);
-			Console.WriteLine("    - " + uaknn      + " (needs user_attributes=FILE)");
-			Console.WriteLine("    - " + svm        + " (needs item_attributes=FILE) **experimental**");
-			Console.WriteLine("    - " + mp);
-			Console.WriteLine("    - " + random);
-			Console.WriteLine("  - method ARGUMENTS have the form name=value");
-			Console.WriteLine("  - general OPTIONS have the form name=value");
-			Console.WriteLine("    - option_file=FILE           read options from FILE (line format KEY: VALUE)");
-			Console.WriteLine("    - random_seed=N");
-			Console.WriteLine("    - data_dir=DIR               load all files from DIR");
-			Console.WriteLine("    - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
-			Console.WriteLine("    - user_attributes=FILE       file containing user attribute information");
-			Console.WriteLine("    - item_attributes=FILE       file containing item attribute information");
-			Console.WriteLine("    - user_relation=FILE         file containing user relation information");
-			Console.WriteLine("    - item_relation=FILE         file containing item relation information");
-			Console.WriteLine("    - save_model=FILE            save computed model to FILE");
-			Console.WriteLine("    - load_model=FILE            load model from FILE");
-			Console.WriteLine("    - no_eval=BOOL               do not evaluate");
-			Console.WriteLine("    - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
-			Console.WriteLine("    - predict_items_num=N        predict N items per user (needs predict_items_file)");
-			Console.WriteLine("    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
-			Console.WriteLine("  - options for finding the right number of iterations (MF methods and BPR-Linear)");
-			Console.WriteLine("    - find_iter=N                give out statistics every N iterations");
-			Console.WriteLine("    - max_iter=N                 perform at most N iterations");
-			Console.WriteLine("    - auc_cutoff=NUM             abort if AUC is below NUM");
-			Console.WriteLine("    - prec5_cutoff=NUM           abort if prec@5 is below NUM");
-			Console.WriteLine("    - compute_fit=BOOL           display fit on training data every find_iter iterations");
+			Console.WriteLine("MyMediaLite item prediction");
+			Console.WriteLine("  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
+			Console.WriteLine();
+			Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
+			Console.WriteLine("   methods (plus arguments and their defaults):");
+			Console.WriteLine();
+			
+			Console.Write("   - ");
+			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommender")));
+			// TODO add random
+			
+			Console.WriteLine("  method ARGUMENTS have the form name=value");
+			Console.WriteLine();
+			Console.WriteLine("  general OPTIONS have the form name=value");
+			Console.WriteLine("   - option_file=FILE           read options from FILE (line format KEY: VALUE)");
+			Console.WriteLine("   - random_seed=N");
+			Console.WriteLine("   - data_dir=DIR               load all files from DIR");
+			Console.WriteLine("   - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
+			Console.WriteLine("   - user_attributes=FILE       file containing user attribute information");
+			Console.WriteLine("   - item_attributes=FILE       file containing item attribute information");
+			Console.WriteLine("   - user_relation=FILE         file containing user relation information");
+			Console.WriteLine("   - item_relation=FILE         file containing item relation information");
+			Console.WriteLine("   - save_model=FILE            save computed model to FILE");
+			Console.WriteLine("   - load_model=FILE            load model from FILE");
+			Console.WriteLine("   - no_eval=BOOL               do not evaluate");
+			Console.WriteLine("   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
+			Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
+			Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
+			Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
+			Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
+			Console.WriteLine("   - max_iter=N                 perform at most N iterations");
+			Console.WriteLine("   - auc_cutoff=NUM             abort if AUC is below NUM");
+			Console.WriteLine("   - prec5_cutoff=NUM           abort if prec@5 is below NUM");
+			Console.WriteLine("   - compute_fit=BOOL           display fit on training data every find_iter iterations");
 			Environment.Exit(exit_code);
 		}
 
@@ -336,7 +320,7 @@ namespace MyMediaLite
 			else
 				relevant_items = training_data.NonEmptyColumnIDs;
 
-			if (recommender != random)
+			if (! (recommender is ItemRecommender.Random))
 				((Memory)recommender).SetCollaborativeData(training_data);
 
 			// user attributes

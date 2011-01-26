@@ -292,6 +292,9 @@ namespace MyMediaLite.Util
 			return string.Join(", ", needs.ToArray());
 		}
 
+		/// <summary>List all recommender engines in a given namespace</summary>
+		/// <param name="prefix">a string representing the namespace</param>
+		/// <returns>an array of strings containing the engine descriptions</returns>
 		public static string[] List(string prefix)
 		{
 			var result = new List<string>();
@@ -301,7 +304,7 @@ namespace MyMediaLite.Util
 				foreach (Type type in Utils.GetTypesInNamespace(assembly, prefix))
 					if (type.IsSubclassOf(Type.GetType(prefix + ".Memory")) && !type.IsAbstract)
 					{
-						IRecommenderEngine recommender = Engine.CreateRatingPredictor(type);
+						IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
 
 						string description = recommender.ToString();
 						string needs = Engine.Needs(recommender);
