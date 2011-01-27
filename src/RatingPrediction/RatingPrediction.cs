@@ -107,7 +107,7 @@ MyMediaLite rating prediction
         {
 			// TODO load w/o absolute path
 			Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/RatingPrediction/bin/Debug/MyMediaLiteExperimental.dll");
-			
+
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 			ni.NumberDecimalDigits = '.';
@@ -155,17 +155,11 @@ MyMediaLite rating prediction
 			if (random_seed != -1)
 				MyMediaLite.Util.Random.InitInstance(random_seed);
 
-			try
-			{
-				recommender = Engine.Configure(
-				                Engine.CreateRatingPredictor(method),
-				                parameters, Usage
-				              );
-			}
-			catch (Exception)
-			{
-				Usage(string.Format("Unknown method: '{0}'", method));
-			}
+			recommender = Engine.CreateRatingPredictor(method);
+			if (recommender == null)
+				Usage(string.Format("Unknown method: '{0}'", method));				
+			
+			Engine.Configure(recommender, parameters, Usage);
 
 			if (parameters.CheckForLeftovers())
 				Usage(-1);

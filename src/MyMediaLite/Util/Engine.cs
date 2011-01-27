@@ -235,11 +235,16 @@ namespace MyMediaLite.Util
 
 		/// <summary>Create a rating prediction engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
-		/// <returns>a rating recommender object of type typename</returns>
+		/// <returns>a rating recommender object of type typename if the engine type is found, null otherwise</returns>
 		public static RatingPredictor.Memory CreateRatingPredictor(string typename)
 		{
-			Type type = Type.GetType("MyMediaLite.RatingPredictor." + typename, true, true);
-			return CreateRatingPredictor(type);
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				Type type = assembly.GetType("MyMediaLite.RatingPredictor." + typename, false, true);
+				if (type != null)
+					return CreateRatingPredictor(type);
+			}
+			return null;
 		}
 
 		/// <summary>Create a rating prediction engine from a type object</summary>
@@ -255,11 +260,16 @@ namespace MyMediaLite.Util
 
 		/// <summary>Create an item recommender engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
-		/// <returns>an item recommender object of type typename</returns>
+		/// <returns>an item recommender object of type typename if the engine type is found, null otherwise</returns>
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(string typename)
 		{
-			Type type = Type.GetType("MyMediaLite.ItemRecommender." + typename, true, true);
-			return CreateItemRecommender(type);
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				Type type = assembly.GetType("MyMediaLite.ItemRecommender." + typename, false, true);
+				if (type != null)
+					return CreateItemRecommender(type);
+			}
+			return null;
 		}
 
 		/// <summary>Create an item recommender engine from a type object</summary>

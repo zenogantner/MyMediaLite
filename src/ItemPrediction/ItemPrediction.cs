@@ -146,17 +146,11 @@ namespace MyMediaLite
 			if (random_seed != -1)
 				Util.Random.InitInstance(random_seed);
 
-			try
-			{
-				recommender = Engine.Configure(
-				                Engine.CreateItemRecommender(method),
-				                parameters, Usage
-				              );
-			}
-			catch (Exception)
-			{
+			recommender = Engine.CreateItemRecommender(method);
+			if (recommender == null)
 				Usage(string.Format("Unknown method: '{0}'", method));
-			}
+
+			Engine.Configure(recommender, parameters, Usage);
 
 			if (parameters.CheckForLeftovers())
 				Usage(-1);

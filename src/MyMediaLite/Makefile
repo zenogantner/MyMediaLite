@@ -81,7 +81,6 @@ FILES = \
 	DataType/SparseMatrix.cs \
 	DataType/SparseVector.cs \
 	DataType/VectorUtils.cs \
-	DataType/WeightedItem.cs \
 	Ensemble/Ensemble.cs \
 	Ensemble/WeightedEnsemble.cs \
 	Eval/ItemPrediction.cs \
@@ -92,36 +91,6 @@ FILES = \
 	IO/ItemRecommenderData.cs \
 	IO/RatingPredictionData.cs \
 	IO/RelationData.cs \
-	ItemRecommender/BPR_Linear.cs \
-	ItemRecommender/BPRMF.cs \
-	ItemRecommender/IItemRecommender.cs \
-	ItemRecommender/ItemAttributeKNN.cs \
-	ItemRecommender/ItemKNN.cs \
-	ItemRecommender/KNN.cs \
-	ItemRecommender/Memory.cs \
-	ItemRecommender/MF.cs \
-	ItemRecommender/MostPopular.cs \
-	ItemRecommender/Random.cs \
-	ItemRecommender/UserAttributeKNN.cs \
-	ItemRecommender/UserKNN.cs \
-	ItemRecommender/WeightedItemKNN.cs \
-	ItemRecommender/WeightedUserKNN.cs \
-	ItemRecommender/WRMF.cs \
-	RatingPredictor/BiasedMatrixFactorization.cs \
-	RatingPredictor/IRatingPredictor.cs \
-	RatingPredictor/ItemAttributeKNN.cs \
-	RatingPredictor/ItemKNN.cs \
-	RatingPredictor/ItemKNNCosine.cs \
-	RatingPredictor/ItemKNNPearson.cs \
-	RatingPredictor/KNN.cs \
-	RatingPredictor/Linear.cs \
-	RatingPredictor/MatrixFactorization.cs \
-	RatingPredictor/Memory.cs \
-	RatingPredictor/UserAttributeKNN.cs \
-	RatingPredictor/UserItemBaseline.cs \
-	RatingPredictor/UserKNN.cs \
-	RatingPredictor/UserKNNCosine.cs \
-	RatingPredictor/UserKNNPearson.cs \
 	Taxonomy/EntityType.cs \
 	Util/CommandLineParameters.cs \
 	Util/Engine.cs \
@@ -131,13 +100,53 @@ FILES = \
 	Util/Triple.cs \
 	Util/Utils.cs \
 	Correlation/CorrelationMatrix.cs \
-	Correlation/Cosine.cs \
 	Correlation/Pearson.cs \
 	Data/ISplit.cs \
 	Data/RatingCrossValidationSplit.cs \
 	DataType/IMatrix.cs \
 	DataType/IMatrixUtils.cs \
-	DataType/SymmetricSparseMatrix.cs 
+	DataType/SymmetricSparseMatrix.cs \
+	Data/WeightedItem.cs \
+	Correlation/BinaryCosine.cs \
+	Correlation/Jaccard.cs \
+	Correlation/AdjustedCosine.cs \
+	Correlation/RatingCorrelationMatrix.cs \
+	Correlation/BinaryDataCorrelationMatrix.cs \
+	ItemRecommendation/BPR_Linear.cs \
+	ItemRecommendation/BPRMF.cs \
+	ItemRecommendation/IItemRecommender.cs \
+	ItemRecommendation/ItemAttributeKNN.cs \
+	ItemRecommendation/ItemKNN.cs \
+	ItemRecommendation/KNN.cs \
+	ItemRecommendation/MF.cs \
+	ItemRecommendation/MostPopular.cs \
+	ItemRecommendation/Random.cs \
+	ItemRecommendation/UserAttributeKNN.cs \
+	ItemRecommendation/UserKNN.cs \
+	ItemRecommendation/WeightedItemKNN.cs \
+	ItemRecommendation/WeightedUserKNN.cs \
+	ItemRecommendation/WRMF.cs \
+	RatingPrediction/BiasedMatrixFactorization.cs \
+	RatingPrediction/IRatingPredictor.cs \
+	RatingPrediction/ItemAttributeKNN.cs \
+	RatingPrediction/ItemKNN.cs \
+	RatingPrediction/ItemKNNCosine.cs \
+	RatingPrediction/ItemKNNPearson.cs \
+	RatingPrediction/KNN.cs \
+	RatingPrediction/MatrixFactorization.cs \
+	RatingPrediction/Memory.cs \
+	RatingPrediction/UserAttributeKNN.cs \
+	RatingPrediction/UserItemBaseline.cs \
+	RatingPrediction/UserKNN.cs \
+	RatingPrediction/UserKNNCosine.cs \
+	RatingPrediction/UserKNNPearson.cs \
+	RatingPrediction/EntityAverage.cs \
+	RatingPrediction/GlobalAverage.cs \
+	RatingPrediction/UserAverage.cs \
+	RatingPrediction/ItemAverage.cs \
+	RatingPrediction/BiPolarSlopeOne.cs \
+	RatingPrediction/SlopeOne.cs \
+	ItemRecommendation/ItemRecommender.cs 
 
 DATA_FILES = 
 
@@ -145,8 +154,6 @@ RESOURCES =
 
 EXTRAS = \
 	Correlation \
-	ItemRecommender \
-	RatingPredictor \
 	Eval \
 	DataType \
 	Util \
@@ -154,6 +161,8 @@ EXTRAS = \
 	Data \
 	Taxonomy \
 	Ensemble \
+	ItemRecommendation \
+	RatingPrediction \
 	mymedialite.pc.in 
 
 REFERENCES =  \

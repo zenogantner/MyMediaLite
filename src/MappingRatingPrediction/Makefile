@@ -94,7 +94,8 @@ EXTRAS = \
 
 REFERENCES =  \
 	System \
-	System.Core
+	System.Core \
+	System.Data
 
 DLL_REFERENCES = 
 

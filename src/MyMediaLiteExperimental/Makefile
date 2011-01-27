@@ -87,8 +87,9 @@ FILES = \
 	AttrToFactor/MF_Item_Mapping_Optimal.cs \
 	RatingPredictor/SocialMF.cs \
 	ItemRecommender/ItemAttributeSVM.cs \
-	RatingPredictor/SlopeOne.cs \
-	Util/GridSearch.cs 
+	Util/GridSearch.cs \
+	Diversification/SequentialDiversification.cs \
+	RatingPredictor/NewKNN.cs 
 
 DATA_FILES = 
 
@@ -99,11 +100,13 @@ EXTRAS = \
 	RatingPredictor \
 	ItemRecommender \
 	Util \
+	Diversification \
 	mymedialiteexperimental.pc.in 
 
 REFERENCES =  \
 	System.Core \
-	System
+	System \
+	System.Data
 
 DLL_REFERENCES = 
 

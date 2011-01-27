@@ -26,9 +26,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>
-	/// Linear model optimized for BPR
-	/// </summary>
+	/// <summary>Linear model optimized for BPR</summary>
 	/// <remarks>
     /// This engine does not support online updates.
 	/// </remarks>

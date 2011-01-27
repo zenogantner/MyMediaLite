@@ -81,7 +81,7 @@ MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 MYMEDIALITEEXPERIMENTAL_DLL_MDB = $(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -93,8 +93,6 @@ EXTRAS = \
 	item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System.Core \
 	System.Data
 
