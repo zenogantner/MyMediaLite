@@ -67,7 +67,7 @@ namespace MyMediaLite
 			Console.WriteLine();
 
 			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommender")));
+			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommendation")));
 			// TODO add random
 
 			Console.WriteLine("  method ARGUMENTS have the form name=value");

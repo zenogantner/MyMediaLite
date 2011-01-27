@@ -21,6 +21,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using MyMediaLite;
+using MyMediaLite.ItemRecommendation;
+using MyMediaLite.RatingPredictor;
 
 namespace MyMediaLite.Util
 {
@@ -255,7 +257,7 @@ namespace MyMediaLite.Util
 			if (type.IsSubclassOf(typeof(RatingPredictor.Memory)))
 				return (RatingPredictor.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPredcitor.Memory");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPredictor.Memory");
 		}
 
 		/// <summary>Create an item recommender engine from the type name</summary>
@@ -265,7 +267,7 @@ namespace MyMediaLite.Util
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				Type type = assembly.GetType("MyMediaLite.ItemRecommender." + typename, false, true);
+				Type type = assembly.GetType("MyMediaLite.ItemRecommendation." + typename, false, true);
 				if (type != null)
 					return CreateItemRecommender(type);
 			}
@@ -280,7 +282,7 @@ namespace MyMediaLite.Util
 			if (type.IsSubclassOf(typeof(ItemRecommendation.ItemRecommender)))
 				return (ItemRecommendation.ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommender.Memory");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommendation");
 		}
 
 		/// <summary>Describes the kind of data needed by this engine</summary>
@@ -310,7 +312,7 @@ namespace MyMediaLite.Util
 			var result = new List<string>();
 
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
-				if (!type.IsAbstract && type.IsSubclassOf(Type.GetType(prefix + ".Memory")))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum)
 				{
 					IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
 

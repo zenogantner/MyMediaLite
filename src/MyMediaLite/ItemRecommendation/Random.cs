@@ -18,43 +18,46 @@
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Random prediction engine for use as experimental baseline</summary>
-    public class Random : IItemRecommender
+	/// <remarks>
+	/// It would not be necessary for Random to inherit from ItemRecommender, but it is done nonetheless for convenience.
+	/// </remarks>
+    public class Random : ItemRecommender
     {
         /// <inheritdoc/>
-        public void Train() { }
+        public override void Train() { }
 
         /// <inheritdoc/>
-		public double Predict(int user_id, int item_id)
+		public override double Predict(int user_id, int item_id)
 		{
 			return Util.Random.GetInstance().NextDouble();
 		}
 
 		/// <inheritdoc/>
-		public virtual void AddFeedback(int user_id, int item_id) { }
+		public override void AddFeedback(int user_id, int item_id) { }
 
 		/// <inheritdoc/>
-		public virtual void RemoveFeedback(int user_id, int item_id) { }
+		public override void RemoveFeedback(int user_id, int item_id) { }
 
 		/// <inheritdoc/>
-		public virtual void AddUser(int user_id) { }
+		public override void AddUser(int user_id) { }
 
 		/// <inheritdoc/>
-		public virtual void AddItem(int item_id) { }
+		public override void AddItem(int item_id) { }
 
 		/// <inheritdoc/>
-		public virtual void RemoveUser(int user_id) { }
+		public override void RemoveUser(int user_id) { }
 
 		/// <inheritdoc/>
-		public virtual void RemoveItem(int item_id) { }
+		public override void RemoveItem(int item_id) { }
 
         /// <inheritdoc/>
-		public void SaveModel(string filename)
+		public override void SaveModel(string filename)
 		{
 			// do nothing
 		}
 
         /// <inheritdoc/>
-		public void LoadModel(string filename)
+		public override void LoadModel(string filename)
 		{
 			// do nothing
 		}
