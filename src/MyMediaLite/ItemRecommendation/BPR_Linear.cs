@@ -154,13 +154,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (fast_sampling)
 			{
-				int rindex;
-
-				rindex = random.Next (0, user_pos_items[u].Length);
-				i = user_pos_items[u][rindex];
-
-				rindex = random.Next (0, user_neg_items[u].Length);
-				j = user_neg_items[u][rindex];
+				i = user_pos_items[u][random.Next(0, user_pos_items[u].Length)];
+				j = user_neg_items[u][random.Next (0, user_neg_items[u].Length)];
 			}
 			else
 			{
@@ -248,52 +243,17 @@ namespace MyMediaLite.ItemRecommendation
         }
 
 		/// <inheritdoc/>
-		public override void SaveModel(string filePath)
+		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			using ( StreamWriter writer = Engine.GetWriter(filePath, this.GetType()) )
-			{
-				writer.WriteLine(item_attribute_weight_by_user.dim1 + " " + item_attribute_weight_by_user.dim2);
-				for (int i = 0; i < item_attribute_weight_by_user.dim1; i++)
-					for (int j = 0; j < item_attribute_weight_by_user.dim2; j++)
-						writer.WriteLine(i + " " + j + " " + item_attribute_weight_by_user[i, j].ToString(ni));
-			}
+			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+				IMatrixUtils.WriteMatrix(writer, item_attribute_weight_by_user);
 		}
 
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
             using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
-			{
-            	string[] numbers = reader.ReadLine().Split(' ');
-				int num_users = Int32.Parse(numbers[0]);
-				int dim2 = Int32.Parse(numbers[1]);
-
-				MaxUserID = num_users - 1;
-				var matrix = new Matrix<double>(num_users, dim2);
-				int num_item_attributes = dim2;
-				// TODO use library function
-            	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
-            	{
-					int i = Int32.Parse(numbers[0]);
-					int j = Int32.Parse(numbers[1]);
-					double v = Double.Parse(numbers[2], ni);
-
-                	if (i >= num_users)
-						throw new Exception(string.Format("Invalid user ID {0} is greater than {1}.", i, num_users - 1));
-					if (j >= num_item_attributes)
-						throw new Exception(string.Format("Invalid weight ID {0} is greater than {1}.", j, num_item_attributes - 1));
-
-                	matrix[i, j] = v;
-				}
-
-				this.item_attribute_weight_by_user = matrix;
-			}
+				this.item_attribute_weight_by_user = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 		}
 
 		/// <inheritdoc/>
@@ -309,8 +269,9 @@ namespace MyMediaLite.ItemRecommendation
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format("BPRLinear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
-								  regularization, NumIter, learn_rate, fast_sampling_memory_limit, init_mean, init_stdev);
+			return string.Format(ni,
+			                     "BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
+								 Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
 		}
 
 	}
