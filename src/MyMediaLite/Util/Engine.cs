@@ -238,7 +238,7 @@ namespace MyMediaLite.Util
 		/// <returns>a rating recommender object of type typename</returns>
 		public static RatingPredictor.Memory CreateRatingPredictor(string typename)
 		{
-			Type type = Type.GetType("MyMediaLite.RatingPredictor." + typename, true);
+			Type type = Type.GetType("MyMediaLite.RatingPredictor." + typename, true, true);
 			return CreateRatingPredictor(type);
 		}
 
@@ -258,7 +258,7 @@ namespace MyMediaLite.Util
 		/// <returns>an item recommender object of type typename</returns>
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(string typename)
 		{
-			Type type = Type.GetType("MyMediaLite.ItemRecommender." + typename, true);
+			Type type = Type.GetType("MyMediaLite.ItemRecommender." + typename, true, true);
 			return CreateItemRecommender(type);
 		}
 
