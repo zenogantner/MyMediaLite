@@ -51,9 +51,7 @@ namespace MyMediaLite.Eval
 				WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-				{
 					WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
-				}
 		}
 
 		/// <summary>Write item predictions (scores) to a file</summary>
@@ -78,9 +76,7 @@ namespace MyMediaLite.Eval
 				WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-				{
 					WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
-				}
 		}
 
 		/// <summary>
