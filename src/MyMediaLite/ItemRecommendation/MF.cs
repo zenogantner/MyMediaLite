@@ -17,7 +17,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Globalization;
 using System.IO;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -104,9 +103,6 @@ namespace MyMediaLite.ItemRecommendation
         /// <inheritdoc/>
 		public override void SaveModel(string file)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
 			{
 				IMatrixUtils.WriteMatrix(writer, user_factors);
@@ -117,9 +113,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void LoadModel(string file)
         {
-            var ni = new NumberFormatInfo();
-            ni.NumberDecimalDigits = '.';
-
             using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
