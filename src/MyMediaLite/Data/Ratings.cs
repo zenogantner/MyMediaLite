@@ -91,7 +91,7 @@ namespace MyMediaLite.Data
 		/// <returns>a collection of numerical user IDs</returns>
 		public HashSet<int> GetUsers()
 		{
-			HashSet<int> users = new HashSet<int>();
+			var users = new HashSet<int>();
 			foreach (RatingEvent rating in rating_list)
 				users.Add(rating.user_id);
 			return users;
@@ -102,7 +102,7 @@ namespace MyMediaLite.Data
 		/// <returns>a collection of numerical item IDs</returns>
 		public HashSet<int> GetItems()
 		{
-			HashSet<int> items = new HashSet<int>();
+			var items = new HashSet<int>();
 			foreach (RatingEvent rating in rating_list)
 				items.Add(rating.item_id);
 			return items;

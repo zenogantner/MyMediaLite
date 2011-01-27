@@ -31,8 +31,7 @@ namespace MyMediaLite.Eval
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
 		static public ICollection<string> RatingPredictionMeasures
 		{
-			get
-			{
+			get	{
 				string[] measures = { "RMSE", "MAE", "NMAE" };
 				return new HashSet<string>(measures);
 			}
@@ -40,7 +39,6 @@ namespace MyMediaLite.Eval
 
         /// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
         /// <remarks>
-        /// <!--Additionally, 'num_users' and 'num_items' report the number of users and items with ratings in the test set.-->
         /// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
         /// </remarks>
         /// <param name="engine">Rating prediction engine</param>
@@ -51,33 +49,20 @@ namespace MyMediaLite.Eval
             double rmse = 0;
             double mae  = 0;
 
-			//HashSet<int> users = new HashSet<int>();
-			//HashSet<int> items = new HashSet<int>();
-
             foreach (RatingEvent r in ratings)
             {
                 double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
 
 				rmse += error * error;
                 mae  += Math.Abs(error);
-
-				//users.Add(r.user_id);
-				//items.Add(r.item_id);
             }
             mae  = mae / ratings.Count;
             rmse = Math.Sqrt(rmse / ratings.Count);
-
-			if (Double.IsNaN(rmse))
-				Console.Error.WriteLine("RMSE is NaN!");
-			if (Double.IsNaN(mae))
-				Console.Error.WriteLine("MAE is NaN!");
 
 			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
 			result.Add("MAE",  mae);
 			result.Add("NMAE", mae / (engine.MaxRating - engine.MinRating));
-			//result.Add("num_users", users.Count);
-			//result.Add("num_items", items.Count);
 			return result;
         }
 

@@ -23,7 +23,6 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods for reading in rating data</summary>
@@ -41,7 +40,7 @@ namespace MyMediaLite.IO
 			if (filename.Equals("-"))
 				return Read(Console.In, min_rating, max_rating, user_mapping, item_mapping);
 			else
-	            using ( StreamReader reader = new StreamReader(filename) )
+	            using ( var reader = new StreamReader(filename) )
 					return Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 		}
 
@@ -55,7 +54,7 @@ namespace MyMediaLite.IO
 		static public RatingData
 			Read(TextReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-		    RatingData ratings = new RatingData();
+		    var ratings = new RatingData();
 
 			bool out_of_range_warning_issued = false;
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
@@ -100,7 +99,7 @@ namespace MyMediaLite.IO
 		static public RatingData
             Read(IDataReader reader, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
         {
-            RatingData ratings = new RatingData();
+            var ratings = new RatingData();
 
             if (reader.FieldCount < 3)
                 throw new IOException("Expected at least three columns.");

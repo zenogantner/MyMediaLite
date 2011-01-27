@@ -160,8 +160,8 @@ namespace MyMediaLite
 				Usage("Either training OR test data, not both, can be read from STDIN.");
 
 			// ID mapping objects
-			EntityMapping user_mapping = new EntityMapping();
-			EntityMapping item_mapping = new EntityMapping();
+			var user_mapping = new EntityMapping();
+			var item_mapping = new EntityMapping();
 
 			// load all the data
 			TimeSpan loading_time = Utils.MeasureTime(delegate() {
