@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# (c) 2009, 2010 by Zeno Gantner
+# (c) 2009, 2010, 2011 by Zeno Gantner
 #
 # This file is part of MyMediaLite.
 #
@@ -24,12 +24,10 @@ use warnings;
 
 use Carp;
 use English qw( -no_match_vars );
-use File::Slurp;
 use Getopt::Long;
 
 GetOptions(
 	   'help'           => \(my $help          = 0),
-	   'separator=s'    => \(my $separator     = '\s+'),
 	   'sparse-output!' => \(my $sparse_output = 1),
 	  ) or usage(-1); ## TODO implement usage
 
@@ -48,7 +46,7 @@ while (<>) {
     chomp $line;
 
     my @fields = split '::', $line;
-    if (@fields != 3) {
+    if (scalar @fields != 3) {
 	croak "Could not parse line: '$line'\n";
     }
 
@@ -56,8 +54,6 @@ while (<>) {
 
     my @movie_genres    = split /\|/, $movie_genres;
     my @movie_genre_ids = map { $genre_id{$_} } @movie_genres;
-    #print "$movie_title => '" . (join ' ', @movie_genre_ids) . "'\n";
-
 
     if ($sparse_output) {
 	foreach my $genre_id (@movie_genre_ids) {
