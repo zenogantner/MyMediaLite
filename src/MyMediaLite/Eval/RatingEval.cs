@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Eval
 {

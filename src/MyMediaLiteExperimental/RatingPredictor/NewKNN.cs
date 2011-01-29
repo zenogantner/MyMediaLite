@@ -26,7 +26,7 @@ using MyMediaLite.DataType;
 using MyMediaLite.Util;
 using MyMediaLite.Taxonomy;
 
-namespace MyMediaLite.RatingPredictor
+namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>kNN-based rating predictors</summary>
 	/// <remarks>

@@ -21,7 +21,7 @@ using System.Globalization;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-namespace MyMediaLite.RatingPredictor
+namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>

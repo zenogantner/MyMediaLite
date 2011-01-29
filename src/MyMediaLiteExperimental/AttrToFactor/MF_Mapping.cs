@@ -17,7 +17,7 @@
 
 using MyMediaLite;
 using MyMediaLite.DataType;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.AttrToFactor
 {

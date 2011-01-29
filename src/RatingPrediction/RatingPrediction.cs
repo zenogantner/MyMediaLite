@@ -27,7 +27,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 namespace RatingPrediction
@@ -42,7 +42,7 @@ namespace RatingPrediction
 		static RatingData test_data;
 
 		// recommender engines
-		static MyMediaLite.RatingPredictor.Memory recommender = null;
+		static MyMediaLite.RatingPrediction.Memory recommender = null;
 
 		// time statistics
 		static List<double> training_time_stats = new List<double>();

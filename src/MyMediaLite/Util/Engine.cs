@@ -22,7 +22,7 @@ using System.IO;
 using System.Reflection;
 using MyMediaLite;
 using MyMediaLite.ItemRecommendation;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
 {
@@ -238,11 +238,11 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating prediction engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>a rating recommender object of type typename if the engine type is found, null otherwise</returns>
-		public static RatingPredictor.Memory CreateRatingPredictor(string typename)
+		public static RatingPrediction.Memory CreateRatingPredictor(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				Type type = assembly.GetType("MyMediaLite.RatingPredictor." + typename, false, true);
+				Type type = assembly.GetType("MyMediaLite.RatingPrediction." + typename, false, true);
 				if (type != null)
 					return CreateRatingPredictor(type);
 			}
@@ -252,12 +252,12 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating prediction engine from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>a rating recommender object of type type</returns>
-		public static RatingPredictor.Memory CreateRatingPredictor(Type type)
+		public static RatingPrediction.Memory CreateRatingPredictor(Type type)
 		{
-			if (type.IsSubclassOf(typeof(RatingPredictor.Memory)))
-				return (RatingPredictor.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(RatingPrediction.Memory)))
+				return (RatingPrediction.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPredictor.Memory");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.Memory");
 		}
 
 		/// <summary>Create an item recommender engine from the type name</summary>

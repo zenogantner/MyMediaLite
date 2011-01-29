@@ -19,7 +19,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.eval
 {

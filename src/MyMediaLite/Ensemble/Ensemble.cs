@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using MyMediaLite.RatingPredictor;
+using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.ensemble
