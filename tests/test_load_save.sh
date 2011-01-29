@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# don't expect this to work, this is (currently) for internal testing purposes
-
 # TODO test ALL engines: attribute-aware, averages, etc.
 
 PROGRAM="mono --debug RatingPrediction.exe"
@@ -17,7 +15,7 @@ echo "-------------------------"
 
 # load/save currently not supported: global-average user-average item-average
 
-for method in user-item-baseline slope-one bipolar-slope-one matrix-factorization biased-matrix-factorization
+for method in UserItemBaseline SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization
 do
      echo $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR
           $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -26,7 +24,7 @@ do
      diff output1.txt output2.txt
 done
 
-for method in user-kNN-cosine item-kNN-cosine
+for method in UserKNNCosine ItemKNNCosine
 do
      echo $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR
 	  $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -35,7 +33,7 @@ do
      diff output1.txt output2.txt
 done
 
-for method in user-kNN-pearson item-kNN-pearson
+for method in UserKNNPearson ItemKNNPearson
 do
      echo $PROGRAM u1.base u1.test $method k=20 shrinkage=10 save_model=tmp.model data_dir=$DATA_DIR
 	  $PROGRAM u1.base u1.test $method k=20 shrinkage=10 save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -54,7 +52,7 @@ PROGRAM="mono --debug ItemPrediction.exe"
 
 cd ../../../ItemPrediction/bin/Debug/
 
-for method in wr-mf bpr-mf most-popular
+for method in WRMF BPRMF MostPopular
 do
      echo $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR
           $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -63,12 +61,21 @@ do
      diff output1.txt output2.txt
 done
 
-for method in user-kNN item-kNN weighted-user-kNN weighted-item-kNN
+for method in UserKNN ItemKNN WeightedUserKNN WeightedItemKNN
 do
      echo $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR
 	  $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
      echo $PROGRAM u1.base u1.test $method k=20 load_model=tmp.model data_dir=$DATA_DIR
 	  $PROGRAM u1.base u1.test $method k=20 load_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output2.txt
+     diff output1.txt output2.txt
+done
+
+for method in BPR_Linear ItemAttributeKNN
+do
+     echo $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR item_attributes=item-attributes-genres.txt
+	  $PROGRAM u1.base u1.test $method k=20 save_model=tmp.model data_dir=$DATA_DIR item_attributes=item-attributes-genres.txt | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
+     echo $PROGRAM u1.base u1.test $method k=20 load_model=tmp.model data_dir=$DATA_DIR item_attributes=item-attributes-genres.txt
+	  $PROGRAM u1.base u1.test $method k=20 load_model=tmp.model data_dir=$DATA_DIR item_attributes=item-attributes-genres.txt | perl -pe "s/\w+ing_time \S+ ?//g" > output2.txt
      diff output1.txt output2.txt
 done
 

@@ -12,7 +12,7 @@ DATA_DIR=../../../../data/ml1m
 
 cd src/RatingPrediction/bin/Debug/
 
-for method in matrix-factorization biased-matrix-factorization
+for method in MatrixFactorization BiasedMatrixFactorization
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
@@ -26,13 +26,13 @@ do
 done
 rm $DATA_DIR/empty
 
-for method in user-item-baseline global-average user-average item-average
+for method in UserItemBaseline GlobalAverage UserAverage ItemAverage
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method data_dir=$DATA_DIR
 done
 
-for method in item-attribute-knn
+for method in ItemAttributeKNN
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20 data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20 data_dir=$DATA_DIR
@@ -45,11 +45,13 @@ echo "--------------"
 
 DATA_DIR=../../../../data/ml100k
 
-for method in user-item-baseline slope-one bipolar-slope-one
-echo $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
-     $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
+for method in UserItemBaseline SlopeOne BipolarSlopeOne
+do
+	echo $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
+	     $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
+done
 
-for method in user-kNN-pearson user-kNN-cosine item-kNN-pearson item-kNN-cosine
+for method in UserKNNPearson UserKNNCosine ItemKNNPearson ItemKNNCosine
 do
 	echo $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR
 	     $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR

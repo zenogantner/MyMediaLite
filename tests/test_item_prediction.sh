@@ -14,7 +14,7 @@ echo
 echo "Tiny example dataset"
 echo "--------------------"
 
-for method in item-kNN weighted-item-kNN user-kNN weighted-user-kNN
+for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
 do
 	echo $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
 	     $PROGRAM $THIS_DIR/example.train $THIS_DIR/example.test $method k=20
@@ -26,20 +26,20 @@ echo "--------------"
 
 DATA_DIR=../../../../data/ml100k
 
-for method in bpr-mf wr-mf
+for method in BPRMF WRMF
 do
 	echo $PROGRAM u1.base u1.test $method find_iter=1 max_iter=5 num_iter=1 data_dir=$DATA_DIR
    	     $PROGRAM u1.base u1.test $method find_iter=1 max_iter=5 num_iter=1 data_dir=$DATA_DIR
 done
 
 
-for method in random most-popular
+for method in Random MostPopular
 do
 	echo $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
 	     $PROGRAM u1.base u1.test $method data_dir=$DATA_DIR
 done
 
-for method in item-kNN weighted-item-kNN user-kNN weighted-user-kNN
+for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
 do
 	echo $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR
 	     $PROGRAM u1.base u1.test $method k=20 data_dir=$DATA_DIR
@@ -51,19 +51,19 @@ echo "------------"
 
 DATA_DIR=../../../../data/ml1m
 
-for method in item-attribute-knn
+for method in ItemAttributeKNN
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20 data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt k=20 data_dir=$DATA_DIR
 done
 
-for method in bpr-linear
+for method in BPR_Linear
 do
 	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt find_iter=1 max_iter=2 num_iter=1 data_dir=$DATA_DIR
 	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method item_attributes=item-attributes-genres.txt find_iter=1 max_iter=2 num_iter=1 data_dir=$DATA_DIR
 done
 
-for method in user-attribute-knn
+for method in UserAttributeKNN
 do
 	echo $PROGRAM ml1m-new-user-0.train.txt ml1m-new-user-0.test.txt $method user_attributes=user-attributes-nozip.txt k=20 data_dir=$DATA_DIR
              $PROGRAM ml1m-new-user-0.train.txt ml1m-new-user-0.test.txt $method user_attributes=user-attributes-nozip.txt k=20 data_dir=$DATA_DIR
