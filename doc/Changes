@@ -23,6 +23,8 @@
             real-valued rating vectors
           - rename Correlation.Cosine to CorrelationBinaryCosine
           - add Correlation.Jaccard and Correlation.AdjustedCosine
+        - data preprocessing scripts
+          - add item genre script for MovieLens 100K
 
 0.09	2011-01-12
 	- IO
