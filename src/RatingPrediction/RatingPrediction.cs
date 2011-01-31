@@ -71,7 +71,7 @@ MyMediaLite rating prediction
   methods (plus arguments and their defaults):");
 
 			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.RatingPredictor")));
+			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.RatingPrediction")));
 
 			Console.WriteLine(@"method ARGUMENTS have the form name=value
 

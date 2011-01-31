@@ -314,7 +314,7 @@ namespace MyMediaLite.Util
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum)
 				{
-					IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPredictor") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
+					IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
 
 					string description = recommender.ToString();
 					string needs = Engine.Needs(recommender);
