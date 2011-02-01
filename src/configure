@@ -2,8 +2,8 @@
 VERSION=0.9
 PACKAGE=mymedialite
 prefix=/usr/local
-config=DEBUG_X86
-configurations=" DEBUG_X86 RELEASE_X86"
+config=DEBUG
+configurations=" DEBUG RELEASE"
 common_packages=" mono-nunit;2.4.7"
 
 

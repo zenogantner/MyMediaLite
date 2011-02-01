@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
 ASSEMBLY = bin/Debug/MyMediaLiteTest.dll
@@ -30,7 +30,7 @@ MYMEDIALITETEST_DLL_MDB=$(BUILD_DIR)/MyMediaLiteTest.dll.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
 ASSEMBLY = bin/Release/MyMediaLiteTest.dll
@@ -71,19 +71,19 @@ MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
-FILES =  \
-	Correlation/BinaryCosineTest.cs \
-	Correlation/CorrelationMatrixTest.cs \
-	Correlation/PearsonTest.cs \
-	Data/EntityMappingTest.cs \
-	Data/RatingDataTest.cs \
+FILES = \
 	Data/RatingsTest.cs \
-	DataType/MatrixTest.cs \
-	DataType/MatrixUtilsTest.cs \
+	Correlation/CorrelationMatrixTest.cs \
 	DataType/SparseBooleanMatrixTest.cs \
+	DataType/MatrixTest.cs \
+	DataType/VectorUtilsTest.cs \
+	DataType/MatrixUtilsTest.cs \
+	Data/RatingDataTest.cs \
+	Data/EntityMappingTest.cs \
+	Correlation/PearsonTest.cs \
 	DataType/SparseMatrixTest.cs \
 	DataType/SymmetricSparseMatrixTest.cs \
-	DataType/VectorUtilsTest.cs 
+	Correlation/BinaryCosineTest.cs 
 
 DATA_FILES = 
 
@@ -96,7 +96,6 @@ EXTRAS = \
 	mymedialitetest.pc.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:mono-nunit \
 	System.Core
 

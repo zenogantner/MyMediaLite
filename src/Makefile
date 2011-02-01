@@ -11,10 +11,10 @@ include $(top_srcdir)/rules.make
 #include $(top_srcdir)/custom-hooks.make
 
 #Warning: This is an automatically generated file, do not edit!
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
  SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
  SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
 

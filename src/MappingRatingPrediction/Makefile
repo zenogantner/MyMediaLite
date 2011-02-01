@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
 ASSEMBLY = bin/Debug/MappingRatingPrediction.exe
@@ -28,12 +28,13 @@ MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 MAPPINGRATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/MappingRatingPrediction.exe.mdb
 MAPPINGRATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/MappingRatingPrediction.exe.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
 ASSEMBLY = bin/Release/MappingRatingPrediction.exe
@@ -49,8 +50,8 @@ MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
-MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=
 MAPPINGRATINGPREDICTION_EXE_MDB=
 
 endif
@@ -78,7 +79,6 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB = $(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 MAPPING_RATING_PREDICTION = $(BUILD_DIR)/mapping_rating_prediction
 
 FILES = \

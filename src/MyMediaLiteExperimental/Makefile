@@ -8,9 +8,9 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG;TRACE"
 ASSEMBLY = bin/Debug/MyMediaLiteExperimental.dll
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = library
@@ -23,15 +23,17 @@ MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
 SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
+SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
+MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=bin/Debug/MyMediaLiteExperimental.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+ "-define:TRACE"
 ASSEMBLY = bin/Release/MyMediaLiteExperimental.dll
 ASSEMBLY_MDB = 
 COMPILE_TARGET = library
@@ -40,11 +42,11 @@ PROJECT_REFERENCES =  \
 	../SVM/bin/Release/SVM.dll
 BUILD_DIR = bin/Release
 
-MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
+MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
-SVM_DLL_SOURCE=../SVM/bin/Debug/SVM.dll
-SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
-MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
+SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
+SVM_DLL_MDB=
+MYMEDIALITE_DLL_MDB=
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=
 
 endif
@@ -69,8 +71,6 @@ RESGEN=resgen2
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-SVM_DLL_MDB = $(BUILD_DIR)/SVM.dll.mdb
-MYMEDIALITE_DLL_MDB = $(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_PC = $(BUILD_DIR)/mymedialiteexperimental.pc
 
 FILES = \

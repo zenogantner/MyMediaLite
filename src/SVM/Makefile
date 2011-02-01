@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -unsafe -warn:4 -optimize- -debug "-define:DEBUG;TRACE"
 ASSEMBLY = bin/Debug/SVM.dll
@@ -22,7 +22,7 @@ SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -unsafe -warn:4 -optimize+ "-define:TRACE"
 ASSEMBLY = bin/Release/SVM.dll
@@ -49,23 +49,23 @@ RESGEN=resgen2
 
 SVM_PC = $(BUILD_DIR)/svm.pc
 
-FILES =  \
+FILES = \
 	Cache.cs \
-	GaussianTransform.cs \
 	IRangeTransform.cs \
 	Kernel.cs \
+	ParameterSelection.cs \
+	Properties/AssemblyInfo.cs \
 	Model.cs \
 	Node.cs \
 	Parameter.cs \
-	ParameterSelection.cs \
-	PerformanceEvaluator.cs \
-	PrecomputedKernel.cs \
 	Prediction.cs \
 	Problem.cs \
-	Properties/AssemblyInfo.cs \
 	RangeTransform.cs \
+	GaussianTransform.cs \
 	Scaling.cs \
 	Solver.cs \
+	PerformanceEvaluator.cs \
+	PrecomputedKernel.cs \
 	SVMExtensions.cs \
 	TemporaryCulture.cs \
 	Training.cs 

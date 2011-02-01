@@ -8,7 +8,7 @@ top_srcdir=..
 
 include $(top_srcdir)/config.make
 
-ifeq ($(CONFIG),DEBUG_X86)
+ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG" "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Debug/Mapping.exe
@@ -28,12 +28,13 @@ MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 MAPPING_EXE_MDB_SOURCE=bin/Debug/Mapping.exe.mdb
 MAPPING_EXE_MDB=$(BUILD_DIR)/Mapping.exe.mdb
 
 endif
 
-ifeq ($(CONFIG),RELEASE_X86)
+ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- "-main:MyMediaLite.MappingItemPrediction"
 ASSEMBLY = bin/Release/Mapping.exe
@@ -49,8 +50,8 @@ MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITE_DLL_MDB=
-MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
+MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
+MYMEDIALITEEXPERIMENTAL_DLL_MDB=
 MAPPING_EXE_MDB=
 
 endif
@@ -78,10 +79,9 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
-MYMEDIALITEEXPERIMENTAL_DLL_MDB = $(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
 MAPPING_ITEM_PREDICTION = $(BUILD_DIR)/mapping_item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	MappingItemPrediction.cs 
 
@@ -93,8 +93,6 @@ EXTRAS = \
 	mapping_item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System.Core \
 	System.Data
 
