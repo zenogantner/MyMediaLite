@@ -12,7 +12,7 @@ relevant_items = item_mapping.InternalIDs
 test_data = MyMediaLite.IO.ItemRecommenderData.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
-recommender = MyMediaLite.ItemRecommender.MostPopular()
+recommender = MyMediaLite.ItemRecommendation.MostPopular()
 recommender.SetCollaborativeData(training_data);
 recommender.Train()
 

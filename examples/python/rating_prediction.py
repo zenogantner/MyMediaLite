@@ -14,7 +14,7 @@ training_data = MyMediaLite.IO.RatingPredictionData.Read("u1.base", min_rating, 
 test_data = MyMediaLite.IO.RatingPredictionData.Read("u1.test", min_rating, max_rating, user_mapping, item_mapping)
 
 # set up the recommender
-recommender = MyMediaLite.RatingPredictor.UserItemBaseline()
+recommender = MyMediaLite.RatingPrediction.UserItemBaseline()
 recommender.MinRating = min_rating
 recommender.MaxRating = max_rating
 recommender.Ratings = training_data
