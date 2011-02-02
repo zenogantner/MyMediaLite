@@ -29,404 +29,400 @@ using MyMediaLite.IO;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
 
-namespace MyMediaLite
+/// <summary>Item prediction program, see Usage() method for more information</summary>
+public class ItemPrediction
 {
-	/// <summary>Item prediction program, see Usage() method for more information</summary>
-	public class ItemPrediction
+	static SparseBooleanMatrix training_data;
+	static SparseBooleanMatrix test_data;
+	static ICollection<int> relevant_items;
+
+	static NumberFormatInfo ni = new NumberFormatInfo();
+
+	// recommender engines
+	static IItemRecommender recommender = null;
+
+	static bool compute_fit;
+
+	// time statistics
+	static List<double> training_time_stats = new List<double>();
+	static List<double> fit_time_stats      = new List<double>();
+	static List<double> eval_time_stats     = new List<double>();
+
+	static void Usage(string message)
 	{
-		static SparseBooleanMatrix training_data;
-		static SparseBooleanMatrix test_data;
-		static ICollection<int> relevant_items;
+		Console.WriteLine(message);
+		Console.WriteLine();
+		Usage(-1);
+	}
 
-		static NumberFormatInfo ni = new NumberFormatInfo();
+	static void Usage(int exit_code)
+	{
+		Console.WriteLine("MyMediaLite item prediction");
+		Console.WriteLine("  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
+		Console.WriteLine();
+		Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
+		Console.WriteLine("   methods (plus arguments and their defaults):");
+		Console.WriteLine();
 
-		// recommender engines
-		static IItemRecommender recommender = null;
+		Console.Write("   - ");
+		Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommendation")));
 
-		static bool compute_fit;
+		Console.WriteLine("  method ARGUMENTS have the form name=value");
+		Console.WriteLine();
+		Console.WriteLine("  general OPTIONS have the form name=value");
+		Console.WriteLine("   - option_file=FILE           read options from FILE (line format KEY: VALUE)");
+		Console.WriteLine("   - random_seed=N");
+		Console.WriteLine("   - data_dir=DIR               load all files from DIR");
+		Console.WriteLine("   - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
+		Console.WriteLine("   - user_attributes=FILE       file containing user attribute information");
+		Console.WriteLine("   - item_attributes=FILE       file containing item attribute information");
+		Console.WriteLine("   - user_relation=FILE         file containing user relation information");
+		Console.WriteLine("   - item_relation=FILE         file containing item relation information");
+		Console.WriteLine("   - save_model=FILE            save computed model to FILE");
+		Console.WriteLine("   - load_model=FILE            load model from FILE");
+		Console.WriteLine("   - no_eval=BOOL               do not evaluate");
+		Console.WriteLine("   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
+		Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
+		Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
+		Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
+		Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
+		Console.WriteLine("   - max_iter=N                 perform at most N iterations");
+		Console.WriteLine("   - auc_cutoff=NUM             abort if AUC is below NUM");
+		Console.WriteLine("   - prec5_cutoff=NUM           abort if prec@5 is below NUM");
+		Console.WriteLine("   - compute_fit=BOOL           display fit on training data every find_iter iterations");
+		Environment.Exit(exit_code);
+	}
 
-		// time statistics
-		static List<double> training_time_stats = new List<double>();
-		static List<double> fit_time_stats      = new List<double>();
-		static List<double> eval_time_stats     = new List<double>();
+    public static void Main(string[] args)
+    {
+		// TODO load w/o absolute path
+		Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/ItemPrediction/bin/Debug/MyMediaLiteExperimental.dll");
 
-		static void Usage(string message)
-		{
-			Console.WriteLine(message);
-			Console.WriteLine();
+		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Util.Handlers.UnhandledExceptionHandler);
+		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
+		ni.NumberDecimalDigits = '.';
+
+		// check number of command line parameters
+		if (args.Length < 3)
+			Usage("Not enough arguments.");
+
+		// read command line parameters
+		CommandLineParameters parameters = null;
+		try	{ parameters = new CommandLineParameters(args, 3); }
+		catch (ArgumentException e)	{ Usage(e.Message);  	   }
+
+		// variables for iteration search
+		int find_iter                 = parameters.GetRemoveInt32(  "find_iter", 0);
+		int max_iter                  = parameters.GetRemoveInt32(  "max_iter", 500);
+		double auc_cutoff             = parameters.GetRemoveDouble( "auc_cutoff");
+		double prec5_cutoff           = parameters.GetRemoveDouble( "prec5_cutoff");
+		compute_fit                   = parameters.GetRemoveBool(   "compute_fit", false);
+
+		// data parameters
+		string data_dir               = parameters.GetRemoveString( "data_dir");
+		string relevant_items_file    = parameters.GetRemoveString( "relevant_items");
+		string user_attributes_file   = parameters.GetRemoveString( "user_attributes");
+		string item_attributes_file   = parameters.GetRemoveString( "item_attributes");
+		string user_relation_file     = parameters.GetRemoveString( "user_relation");
+		string item_relation_file     = parameters.GetRemoveString( "item_relation");
+
+		// other parameters
+		string save_model_file        = parameters.GetRemoveString( "save_model");
+		string load_model_file        = parameters.GetRemoveString( "load_model");
+		int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
+		bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
+		string predict_items_file     = parameters.GetRemoveString( "predict_items_file", string.Empty);
+		int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
+		string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
+
+		// main data files and method
+		string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
+		string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
+		string method    = args[2];
+
+		if (random_seed != -1)
+			Util.Random.InitInstance(random_seed);
+
+		recommender = Engine.CreateItemRecommender(method);
+		if (recommender == null)
+			Usage(string.Format("Unknown method: '{0}'", method));
+
+		Engine.Configure(recommender, parameters, Usage);
+
+		if (parameters.CheckForLeftovers())
 			Usage(-1);
-		}
 
-		static void Usage(int exit_code)
+		// check command-line parameters
+		if (trainfile.Equals("-") && testfile.Equals("-"))
+			Usage("Either training OR test data, not both, can be read from STDIN.");
+
+		// ID mapping objects
+		var user_mapping = new EntityMapping();
+		var item_mapping = new EntityMapping();
+
+		// load all the data
+		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+			LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
+		});
+		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+
+		DisplayDataStats();
+
+		TimeSpan time_span;
+
+		if (find_iter != 0)
 		{
-			Console.WriteLine("MyMediaLite item prediction");
-			Console.WriteLine("  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
-			Console.WriteLine();
-			Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
-			Console.WriteLine("   methods (plus arguments and their defaults):");
-			Console.WriteLine();
+			IIterativeModel iterative_recommender = (IIterativeModel) recommender;
+			Console.WriteLine(recommender.ToString() + " ");
 
-			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommendation")));
-			// TODO add random
+			if (load_model_file.Equals(string.Empty))
+				iterative_recommender.Train();
+			else
+				Engine.LoadModel(iterative_recommender, load_model_file);
 
-			Console.WriteLine("  method ARGUMENTS have the form name=value");
-			Console.WriteLine();
-			Console.WriteLine("  general OPTIONS have the form name=value");
-			Console.WriteLine("   - option_file=FILE           read options from FILE (line format KEY: VALUE)");
-			Console.WriteLine("   - random_seed=N");
-			Console.WriteLine("   - data_dir=DIR               load all files from DIR");
-			Console.WriteLine("   - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
-			Console.WriteLine("   - user_attributes=FILE       file containing user attribute information");
-			Console.WriteLine("   - item_attributes=FILE       file containing item attribute information");
-			Console.WriteLine("   - user_relation=FILE         file containing user relation information");
-			Console.WriteLine("   - item_relation=FILE         file containing item relation information");
-			Console.WriteLine("   - save_model=FILE            save computed model to FILE");
-			Console.WriteLine("   - load_model=FILE            load model from FILE");
-			Console.WriteLine("   - no_eval=BOOL               do not evaluate");
-			Console.WriteLine("   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
-			Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
-			Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
-			Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
-			Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
-			Console.WriteLine("   - max_iter=N                 perform at most N iterations");
-			Console.WriteLine("   - auc_cutoff=NUM             abort if AUC is below NUM");
-			Console.WriteLine("   - prec5_cutoff=NUM           abort if prec@5 is below NUM");
-			Console.WriteLine("   - compute_fit=BOOL           display fit on training data every find_iter iterations");
-			Environment.Exit(exit_code);
-		}
+			if (compute_fit)
+				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-        public static void Main(string[] args)
-        {
-			// TODO load w/o absolute path
-			Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/ItemPrediction/bin/Debug/MyMediaLiteExperimental.dll");
+			var result = ItemPredictionEval.Evaluate(recommender,
+			                                 test_data,
+				                             training_data,
+				                             relevant_items);
+			DisplayResults(result);
+			Console.WriteLine(" " + iterative_recommender.NumIter);
 
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Util.Handlers.UnhandledExceptionHandler);
-			Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
-			ni.NumberDecimalDigits = '.';
-
-			// check number of command line parameters
-			if (args.Length < 3)
-				Usage("Not enough arguments.");
-
-			// read command line parameters
-			CommandLineParameters parameters = null;
-			try	{ parameters = new CommandLineParameters(args, 3); }
-			catch (ArgumentException e)	{ Usage(e.Message);  	   }
-
-			// variables for iteration search
-			int find_iter                 = parameters.GetRemoveInt32(  "find_iter", 0);
-			int max_iter                  = parameters.GetRemoveInt32(  "max_iter", 500);
-			double auc_cutoff             = parameters.GetRemoveDouble( "auc_cutoff");
-			double prec5_cutoff           = parameters.GetRemoveDouble( "prec5_cutoff");
-			compute_fit                   = parameters.GetRemoveBool(   "compute_fit", false);
-
-			// data parameters
-			string data_dir               = parameters.GetRemoveString( "data_dir");
-			string relevant_items_file    = parameters.GetRemoveString( "relevant_items");
-			string user_attributes_file   = parameters.GetRemoveString( "user_attributes");
-			string item_attributes_file   = parameters.GetRemoveString( "item_attributes");
-			string user_relation_file     = parameters.GetRemoveString( "user_relation");
-			string item_relation_file     = parameters.GetRemoveString( "item_relation");
-
-			// other parameters
-			string save_model_file        = parameters.GetRemoveString( "save_model");
-			string load_model_file        = parameters.GetRemoveString( "load_model");
-			int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
-			bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
-			string predict_items_file     = parameters.GetRemoveString( "predict_items_file", string.Empty);
-			int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
-			string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
-
-			// main data files and method
-			string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
-			string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
-			string method    = args[2];
-
-			if (random_seed != -1)
-				Util.Random.InitInstance(random_seed);
-
-			recommender = Engine.CreateItemRecommender(method);
-			if (recommender == null)
-				Usage(string.Format("Unknown method: '{0}'", method));
-
-			Engine.Configure(recommender, parameters, Usage);
-
-			if (parameters.CheckForLeftovers())
-				Usage(-1);
-
-			// check command-line parameters
-			if (trainfile.Equals("-") && testfile.Equals("-"))
-				Usage("Either training OR test data, not both, can be read from STDIN.");
-
-			// ID mapping objects
-			var user_mapping = new EntityMapping();
-			var item_mapping = new EntityMapping();
-
-			// load all the data
-			TimeSpan loading_time = Utils.MeasureTime(delegate() {
-				LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
-			});
-			Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
-
-			DisplayDataStats();
-
-			TimeSpan time_span;
-
-			if (find_iter != 0)
+			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 			{
-				IIterativeModel iterative_recommender = (IIterativeModel) recommender;
-				Console.WriteLine(recommender.ToString() + " ");
+				TimeSpan t = Utils.MeasureTime(delegate() {
+					iterative_recommender.Iterate();
+				});
+				training_time_stats.Add(t.TotalSeconds);
 
-				if (load_model_file.Equals(string.Empty))
-					iterative_recommender.Train();
-				else
-					Engine.LoadModel(iterative_recommender, load_model_file);
-
-				if (compute_fit)
-					Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
-
-				var result = ItemPredictionEval.Evaluate(recommender,
-				                                 test_data,
-					                             training_data,
-					                             relevant_items);
-				DisplayResults(result);
-				Console.WriteLine(" " + iterative_recommender.NumIter);
-
-				for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
+				if (i % find_iter == 0)
 				{
-					TimeSpan t = Utils.MeasureTime(delegate() {
-						iterative_recommender.Iterate();
-					});
-					training_time_stats.Add(t.TotalSeconds);
-
-					if (i % find_iter == 0)
+					if (compute_fit)
 					{
-						if (compute_fit)
-						{
-							double fit = 0;
-							t = Utils.MeasureTime(delegate() {
-								fit = iterative_recommender.ComputeFit();
-							});
-							fit_time_stats.Add(t.TotalSeconds);
-							Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
-						}
-
+						double fit = 0;
 						t = Utils.MeasureTime(delegate() {
-							result = ItemPredictionEval.Evaluate(
-								recommender,
-							    test_data,
-								training_data,
-								relevant_items
-							);
-							DisplayResults(result);
-							Console.WriteLine(" " + i);
+							fit = iterative_recommender.ComputeFit();
 						});
-						eval_time_stats.Add(t.TotalSeconds);
-
-						Engine.SaveModel(recommender, save_model_file, i);
-
-						if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
-						{
-								Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
-								Console.Error.WriteLine("DONE");
-								break;
-						}
+						fit_time_stats.Add(t.TotalSeconds);
+						Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 					}
-				} // for
 
-				DisplayIterationStats();
-			}
-			else
-			{
-				if (load_model_file.Equals(string.Empty))
-				{
-					Console.Write(recommender.ToString() + " ");
-					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
-            		Console.Write("training_time " + time_span + " ");
-				}
-				else
-				{
-					Engine.LoadModel(recommender, load_model_file);
-					Console.Write(recommender.ToString() + " ");
-					// TODO is this the right time to load the model?
-				}
-
-				if (!predict_items_file.Equals(string.Empty))
-				{
-					if (predict_for_users_file.Equals(string.Empty))
-						time_span = Utils.MeasureTime( delegate()
-					    	{
-						    	Eval.ItemPrediction.WritePredictions(
-							    	recommender,
-							        training_data,
-							        relevant_items, predict_items_number,
-							        user_mapping, item_mapping,
-							        predict_items_file
-								);
-								Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
-					    	}
+					t = Utils.MeasureTime(delegate() {
+						result = ItemPredictionEval.Evaluate(
+							recommender,
+						    test_data,
+							training_data,
+							relevant_items
 						);
-					else
-						time_span = Utils.MeasureTime( delegate()
-					    	{
-						    	Eval.ItemPrediction.WritePredictions(
-							    	recommender,
-							        training_data,
-							        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
-							        relevant_items, predict_items_number,
-							        user_mapping, item_mapping,
-							        predict_items_file
-								);
-								Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
-					    	}
-						);
-					Console.Write(" predicting_time " + time_span);
+						DisplayResults(result);
+						Console.WriteLine(" " + i);
+					});
+					eval_time_stats.Add(t.TotalSeconds);
+
+					Engine.SaveModel(recommender, save_model_file, i);
+
+					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
+					{
+							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
+							Console.Error.WriteLine("DONE");
+							break;
+					}
 				}
-				else if (!no_eval)
-				{
-					time_span = Utils.MeasureTime( delegate()
-				    	{
-					    	var result = ItemPredictionEval.Evaluate(
-						    	recommender,
-								test_data,
-					            training_data,
-					            relevant_items
-							);
-							DisplayResults(result);
-				    	}
-					);
-					Console.Write(" testing_time " + time_span);
-				}
-				Console.WriteLine();
-			}
-			Engine.SaveModel(recommender, save_model_file);
-		}
+			} // for
 
-        static void LoadData(string data_dir, string trainfile, string testfile,
-		                     EntityMapping user_mapping, EntityMapping item_mapping,
-		                     string relevant_items_file,
-		                     string user_attributes_file, string item_attributes_file,
-		                     string user_relation_file, string item_relation_file)
-		{
-			// training data
-			training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
-
-			// relevant items
-			if (! relevant_items_file.Equals(string.Empty) )
-				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-			else
-				relevant_items = training_data.NonEmptyColumnIDs;
-
-			if (! (recommender is ItemRecommendation.Random))
-				((ItemRecommender)recommender).SetCollaborativeData(training_data);
-
-			// user attributes
-			if (recommender is IUserAttributeAwareRecommender)
-			{
-				if (user_attributes_file.Equals(string.Empty))
-					Usage("Recommender expects user_attributes=FILE.");
-				else
-					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-			}
-
-			// item attributes
-			if (recommender is IItemAttributeAwareRecommender)
-			{
-				if (item_attributes_file.Equals(string.Empty))
-					Usage("Recommender expects item_attributes=FILE.");
-				else
-					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			}
-
-			// user relation
-			if (recommender is IUserRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects user_relation=FILE.");
-				}
-				else
-				{
-					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
-				}
-
-			// item relation
-			if (recommender is IItemRelationAwareRecommender)
-				if (user_relation_file.Equals(string.Empty))
-				{
-					Usage("Recommender expects item_relation=FILE.");
-				}
-				else
-				{
-					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
-				}
-
-			// test data
-	        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
-		}
-
-		static void AbortHandler(object sender, ConsoleCancelEventArgs args)
-		{
 			DisplayIterationStats();
 		}
-
-		static void DisplayResults(Dictionary<string, double> result)
+		else
 		{
-			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
+			if (load_model_file.Equals(string.Empty))
+			{
+				Console.Write(recommender.ToString() + " ");
+				time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
+        		Console.Write("training_time " + time_span + " ");
+			}
+			else
+			{
+				Engine.LoadModel(recommender, load_model_file);
+				Console.Write(recommender.ToString() + " ");
+				// TODO is this the right time to load the model?
+			}
+
+			if (!predict_items_file.Equals(string.Empty))
+			{
+				if (predict_for_users_file.Equals(string.Empty))
+					time_span = Utils.MeasureTime( delegate()
+				    	{
+					    	Eval.ItemPrediction.WritePredictions(
+						    	recommender,
+						        training_data,
+						        relevant_items, predict_items_number,
+						        user_mapping, item_mapping,
+						        predict_items_file
+							);
+							Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
+				    	}
+					);
+				else
+					time_span = Utils.MeasureTime( delegate()
+				    	{
+					    	Eval.ItemPrediction.WritePredictions(
+						    	recommender,
+						        training_data,
+						        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
+						        relevant_items, predict_items_number,
+						        user_mapping, item_mapping,
+						        predict_items_file
+							);
+							Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
+				    	}
+					);
+				Console.Write(" predicting_time " + time_span);
+			}
+			else if (!no_eval)
+			{
+				time_span = Utils.MeasureTime( delegate()
+			    	{
+				    	var result = ItemPredictionEval.Evaluate(
+					    	recommender,
+							test_data,
+				            training_data,
+				            relevant_items
+						);
+						DisplayResults(result);
+			    	}
+				);
+				Console.Write(" testing_time " + time_span);
+			}
+			Console.WriteLine();
+		}
+		Engine.SaveModel(recommender, save_model_file);
+	}
+
+    static void LoadData(string data_dir, string trainfile, string testfile,
+	                     EntityMapping user_mapping, EntityMapping item_mapping,
+	                     string relevant_items_file,
+	                     string user_attributes_file, string item_attributes_file,
+	                     string user_relation_file, string item_relation_file)
+	{
+		// training data
+		training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
+
+		// relevant items
+		if (! relevant_items_file.Equals(string.Empty) )
+			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+		else
+			relevant_items = training_data.NonEmptyColumnIDs;
+
+		if (! (recommender is ItemRecommendation.Random))
+			((ItemRecommender)recommender).SetCollaborativeData(training_data);
+
+		// user attributes
+		if (recommender is IUserAttributeAwareRecommender)
+		{
+			if (user_attributes_file.Equals(string.Empty))
+				Usage("Recommender expects user_attributes=FILE.");
+			else
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 		}
 
-		static void DisplayDataStats()
+		// item attributes
+		if (recommender is IItemAttributeAwareRecommender)
 		{
-			// training data stats
-			int num_users = training_data.NonEmptyRowIDs.Count;
-			int num_items = training_data.NonEmptyColumnIDs.Count;
-			long matrix_size = (long) num_users * num_items;
-			long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
-			double sparsity = (double) 100L * empty_size / matrix_size;
-			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
-
-			// test data stats
-			num_users = test_data.NonEmptyRowIDs.Count;
-			num_items = test_data.NonEmptyColumnIDs.Count;
-			matrix_size = (long) num_users * num_items;
-			empty_size  = (long) matrix_size - test_data.NumberOfEntries;
-			sparsity = (double) 100L * empty_size / matrix_size;
-			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
-
-			// attribute stats
-			if (recommender is IUserAttributeAwareRecommender)
-				Console.WriteLine("{0} user attributes for {1} users",
-				                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
-				                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
-			if (recommender is IItemAttributeAwareRecommender)
-				Console.WriteLine("{0} item attributes for {1} items",
-				                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
-				                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
+			if (item_attributes_file.Equals(string.Empty))
+				Usage("Recommender expects item_attributes=FILE.");
+			else
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 		}
 
-		static void DisplayIterationStats()
-		{
-			if (training_time_stats.Count > 0)
-				Console.Error.WriteLine(string.Format(
-				    ni,
-					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-		            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-				));
-			if (eval_time_stats.Count > 0)
-				Console.Error.WriteLine(string.Format(
-				    ni,
-					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-		            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-				));
-			if (compute_fit && fit_time_stats.Count > 0)
-				Console.Error.WriteLine(string.Format(
-				    ni,
-					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-	            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-				));
-		}
+		// user relation
+		if (recommender is IUserRelationAwareRecommender)
+			if (user_relation_file.Equals(string.Empty))
+			{
+				Usage("Recommender expects user_relation=FILE.");
+			}
+			else
+			{
+				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+			}
+
+		// item relation
+		if (recommender is IItemRelationAwareRecommender)
+			if (user_relation_file.Equals(string.Empty))
+			{
+				Usage("Recommender expects item_relation=FILE.");
+			}
+			else
+			{
+				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+			}
+
+		// test data
+        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+	}
+
+	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
+	{
+		DisplayIterationStats();
+	}
+
+	static void DisplayResults(Dictionary<string, double> result)
+	{
+		Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+		                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
+	}
+
+	static void DisplayDataStats()
+	{
+		// training data stats
+		int num_users = training_data.NonEmptyRowIDs.Count;
+		int num_items = training_data.NonEmptyColumnIDs.Count;
+		long matrix_size = (long) num_users * num_items;
+		long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
+		double sparsity = (double) 100L * empty_size / matrix_size;
+		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+		// test data stats
+		num_users = test_data.NonEmptyRowIDs.Count;
+		num_items = test_data.NonEmptyColumnIDs.Count;
+		matrix_size = (long) num_users * num_items;
+		empty_size  = (long) matrix_size - test_data.NumberOfEntries;
+		sparsity = (double) 100L * empty_size / matrix_size;
+		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+
+		// attribute stats
+		if (recommender is IUserAttributeAwareRecommender)
+			Console.WriteLine("{0} user attributes for {1} users",
+			                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
+			                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
+		if (recommender is IItemAttributeAwareRecommender)
+			Console.WriteLine("{0} item attributes for {1} items",
+			                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
+			                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
+	}
+
+	static void DisplayIterationStats()
+	{
+		if (training_time_stats.Count > 0)
+			Console.Error.WriteLine(string.Format(
+			    ni,
+				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
+			));
+		if (eval_time_stats.Count > 0)
+			Console.Error.WriteLine(string.Format(
+			    ni,
+				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+			));
+		if (compute_fit && fit_time_stats.Count > 0)
+			Console.Error.WriteLine(string.Format(
+			    ni,
+				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
+			));
 	}
 }
