@@ -9,9 +9,7 @@
 
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
-  Version 0.09 is out:
-  <a href="[% prefix %]news/index.html#0.09">announcement</a>,
-  <a href="[% prefix %]download/index.html">download</a>.
+  You can now <a href="http://twitter.com/mymedialite">follow us on Twitter (<code>@mymedialite</code>)</a> to get the latest updates on MyMediaLite.
 </p>
 </div>
 
