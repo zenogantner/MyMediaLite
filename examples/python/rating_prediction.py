@@ -10,14 +10,14 @@ max_rating = 5
 # load the data
 user_mapping = Data.EntityMapping()
 item_mapping = Data.EntityMapping()
-training_data = IO.RatingPredictionData.Read("u1.base", min_rating, max_rating, user_mapping, item_mapping)
+train_data = IO.RatingPredictionData.Read("u1.base", min_rating, max_rating, user_mapping, item_mapping)
 test_data = IO.RatingPredictionData.Read("u1.test", min_rating, max_rating, user_mapping, item_mapping)
 
 # set up the recommender
 recommender = RatingPrediction.UserItemBaseline()
 recommender.MinRating = min_rating
 recommender.MaxRating = max_rating
-recommender.Ratings = training_data
+recommender.Ratings = train_data
 recommender.Train()
 
 # measure the accuracy on the test data set
