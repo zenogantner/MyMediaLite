@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
@@ -96,9 +97,10 @@ public class ItemPrediction
     public static void Main(string[] args)
     {
 		// TODO load w/o absolute path
-		Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/ItemPrediction/bin/Debug/MyMediaLiteExperimental.dll");
+		Assembly assembly = Assembly.GetExecutingAssembly();
+		Assembly.LoadFile(assembly.Location + "MyMediaLiteExperimental.dll");
 
-		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Util.Handlers.UnhandledExceptionHandler);
+		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 		ni.NumberDecimalDigits = '.';
 
@@ -141,7 +143,7 @@ public class ItemPrediction
 		string method    = args[2];
 
 		if (random_seed != -1)
-			Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		recommender = Engine.CreateItemRecommender(method);
 		if (recommender == null)
@@ -254,7 +256,7 @@ public class ItemPrediction
 				if (predict_for_users_file.Equals(string.Empty))
 					time_span = Utils.MeasureTime( delegate()
 				    	{
-					    	Eval.ItemPrediction.WritePredictions(
+					    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
 						    	recommender,
 						        training_data,
 						        relevant_items, predict_items_number,
@@ -267,7 +269,7 @@ public class ItemPrediction
 				else
 					time_span = Utils.MeasureTime( delegate()
 				    	{
-					    	Eval.ItemPrediction.WritePredictions(
+					    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
 						    	recommender,
 						        training_data,
 						        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
@@ -315,7 +317,7 @@ public class ItemPrediction
 		else
 			relevant_items = training_data.NonEmptyColumnIDs;
 
-		if (! (recommender is ItemRecommendation.Random))
+		if (! (recommender is MyMediaLite.ItemRecommendation.Random))
 			((ItemRecommender)recommender).SetCollaborativeData(training_data);
 
 		// user attributes

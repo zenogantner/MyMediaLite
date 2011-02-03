@@ -124,7 +124,6 @@ FILES = \
 	RatingPrediction/ItemKNNPearson.cs \
 	RatingPrediction/KNN.cs \
 	RatingPrediction/MatrixFactorization.cs \
-	RatingPrediction/Memory.cs \
 	RatingPrediction/UserAttributeKNN.cs \
 	RatingPrediction/UserItemBaseline.cs \
 	RatingPrediction/UserKNN.cs \
@@ -136,7 +135,8 @@ FILES = \
 	RatingPrediction/ItemAverage.cs \
 	RatingPrediction/BiPolarSlopeOne.cs \
 	RatingPrediction/SlopeOne.cs \
-	ItemRecommendation/ItemRecommender.cs 
+	ItemRecommendation/ItemRecommender.cs \
+	RatingPrediction/RatingPredictor.cs 
 
 DATA_FILES = 
 

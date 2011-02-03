@@ -7,10 +7,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RatingPrediction</RootNamespace>
     <AssemblyName>RatingPrediction</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.9</ReleaseVersion>
+    <ReleaseVersion>1.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
