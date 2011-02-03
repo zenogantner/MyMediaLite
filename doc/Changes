@@ -2,6 +2,8 @@
         - API changes
           - rename namespace ItemRecommender to ItemRecommendation
           - rename Memory to ItemRecommender
+          - rename namespace RatingPredictor to RatingPrediction
+          - rename Memory to RatingPredictor
         - command-line programs
           - find and load engines via reflection
           - engine names are now CamelCase (exactly their class names)
