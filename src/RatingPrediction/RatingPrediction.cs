@@ -103,8 +103,8 @@ MyMediaLite rating prediction
 
     static void Main(string[] args)
     {
-		// TODO load w/o absolute path
-		Assembly.LoadFile("/home/mrg/src/MyMediaLite/src/RatingPrediction/bin/Debug/MyMediaLiteExperimental.dll");
+		Assembly assembly = Assembly.GetExecutingAssembly();
+		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);

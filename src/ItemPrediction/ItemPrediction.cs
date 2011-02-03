@@ -96,9 +96,8 @@ public class ItemPrediction
 
     public static void Main(string[] args)
     {
-		// TODO load w/o absolute path
 		Assembly assembly = Assembly.GetExecutingAssembly();
-		Assembly.LoadFile(assembly.Location + "MyMediaLiteExperimental.dll");
+		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
