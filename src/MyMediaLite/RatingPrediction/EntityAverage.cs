@@ -24,7 +24,7 @@ namespace MyMediaLite.RatingPrediction
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
-    public abstract class EntityAverage : Memory
+    public abstract class EntityAverage : RatingPredictor
     {
 		/// <summary>The average rating for each entity</summary>
 		protected List<double> entity_averages = new List<double>();

@@ -118,7 +118,6 @@
     <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
     <Compile Include="RatingPrediction\KNN.cs" />
     <Compile Include="RatingPrediction\MatrixFactorization.cs" />
-    <Compile Include="RatingPrediction\Memory.cs" />
     <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
     <Compile Include="RatingPrediction\UserItemBaseline.cs" />
     <Compile Include="RatingPrediction\UserKNN.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
     <Compile Include="RatingPrediction\SlopeOne.cs" />
     <Compile Include="ItemRecommendation\ItemRecommender.cs" />
+    <Compile Include="RatingPrediction\RatingPredictor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

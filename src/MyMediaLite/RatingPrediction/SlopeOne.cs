@@ -33,13 +33,23 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This engine does NOT support online updates. They would be easy to implement, though.
 	/// </remarks>
-	public class SlopeOne : Memory
+	public class SlopeOne : RatingPredictor
 	{
   		private SparseMatrix<double> diff_matrix;
   		private SparseMatrix<int> freq_matrix;
 
 		private double global_average;
 
+		private void InitModel()
+		{
+			// default value if no prediction can be made
+			global_average = Ratings.Average;
+
+			// create data structure
+			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
+			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+		}
+		
 		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
@@ -96,16 +106,6 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i <= MaxItemID; i++)
 				foreach (int j in freq_matrix[i].Keys)
 					diff_matrix[i, j] /= freq_matrix[i, j];
-		}
-
-		private void InitModel()
-		{
-			// default value if no prediction can be made
-			global_average = Ratings.Average;
-
-			// create data structure
-			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>

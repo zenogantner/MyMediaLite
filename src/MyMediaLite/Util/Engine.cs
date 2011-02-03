@@ -238,7 +238,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating prediction engine from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>a rating recommender object of type typename if the engine type is found, null otherwise</returns>
-		public static RatingPrediction.Memory CreateRatingPredictor(string typename)
+		public static RatingPrediction.RatingPredictor CreateRatingPredictor(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
@@ -252,10 +252,10 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating prediction engine from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>a rating recommender object of type type</returns>
-		public static RatingPrediction.Memory CreateRatingPredictor(Type type)
+		public static RatingPrediction.RatingPredictor CreateRatingPredictor(Type type)
 		{
-			if (type.IsSubclassOf(typeof(RatingPrediction.Memory)))
-				return (RatingPrediction.Memory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(RatingPrediction.RatingPredictor)))
+				return (RatingPrediction.RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.Memory");
 		}

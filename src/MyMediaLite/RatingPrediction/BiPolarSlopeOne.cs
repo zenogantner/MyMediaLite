@@ -33,7 +33,7 @@ namespace MyMediaLite.RatingPrediction
 	/// 
 	/// This engine does NOT support online updates. They would be easy to implement, though.
 	/// </remarks>
-	public class BiPolarSlopeOne : Memory
+	public class BiPolarSlopeOne : RatingPredictor
 	{
   		private SparseMatrix<double> diff_matrix_like;
   		private SparseMatrix<int>    freq_matrix_like;

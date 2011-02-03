@@ -35,7 +35,7 @@ namespace MyMediaLite.Util
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
-		                                 RatingPrediction.Memory engine,
+		                                 RatingPrediction.RatingPredictor engine,
 		                                 ISplit<RatingData> split)
 		{
 			var ni = new NumberFormatInfo();
@@ -54,7 +54,7 @@ namespace MyMediaLite.Util
 		                                 		    string hyperparameter_name,
 		                                 		    double[] hyperparameter_values,
 		                                            double basis,
-		                                 		    RatingPrediction.Memory engine,
+		                                 		    RatingPrediction.RatingPredictor engine,
 		                                 		    ISplit<RatingData> split)
 		{
 			for (int i = 0; i < hyperparameter_values.Length; i++)
@@ -66,7 +66,7 @@ namespace MyMediaLite.Util
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
-		                                 RatingPrediction.Memory engine,
+		                                 RatingPrediction.RatingPredictor engine,
 		                                 int k)
 		{
 			RatingData data = engine.Ratings;

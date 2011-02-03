@@ -24,7 +24,7 @@ namespace MyMediaLite.RatingPrediction
     /// <remarks>
     /// This engine does NOT support online updates.
     /// </remarks>
-    public class GlobalAverage : Memory
+    public class GlobalAverage : RatingPredictor
     {
 		private double global_average = 0;
 

@@ -40,7 +40,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This engine supports online updates.
     /// </remarks>
-    public class UserItemBaseline : Memory
+    public class UserItemBaseline : RatingPredictor
     {
 		/// <summary>Regularization parameter for the user biases</summary>
 		public double RegU { get { return reg_u; } set { reg_u = value; }

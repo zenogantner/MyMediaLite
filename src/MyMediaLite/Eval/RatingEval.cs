@@ -70,7 +70,7 @@ namespace MyMediaLite.Eval
 		/// <param name="engine">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(Memory engine, ISplit<RatingData> split)
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<RatingData> split)
 		{
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';

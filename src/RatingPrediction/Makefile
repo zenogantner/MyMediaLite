@@ -77,9 +77,9 @@ MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 RATING_PREDICTION = $(BUILD_DIR)/rating_prediction
 
-FILES = \
-	RatingPrediction.cs \
-	AssemblyInfo.cs 
+FILES =  \
+	AssemblyInfo.cs \
+	RatingPrediction.cs 
 
 DATA_FILES = 
 
@@ -89,6 +89,8 @@ EXTRAS = \
 	rating_prediction.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
+	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System \
 	System.Core \
 	System.Data

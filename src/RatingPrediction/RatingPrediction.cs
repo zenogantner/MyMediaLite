@@ -40,7 +40,7 @@ public class RatingPrediction
 	static RatingData test_data;
 
 	// recommender engines
-	static MyMediaLite.RatingPrediction.Memory recommender = null;
+	static MyMediaLite.RatingPrediction.RatingPredictor recommender = null;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
