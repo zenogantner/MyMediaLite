@@ -9,14 +9,16 @@ max_rating = 5
 user_mapping = MyMediaLite::Data::EntityMapping.new()
 item_mapping = MyMediaLite::Data::EntityMapping.new()
 
-training_data = MyMediaLite::IO::RatingPredictionData.Read("u1.base", min_rating, max_rating, user_mapping, item_mapping)
-test_data = MyMediaLite::IO::RatingPredictionData.Read("u1.test", min_rating, max_rating, user_mapping, item_mapping)
+train_data = MyMediaLite::IO::RatingPredictionData.Read("u1.base", min_rating, max_rating,
+                                                        user_mapping, item_mapping)
+test_data = MyMediaLite::IO::RatingPredictionData.Read("u1.test", min_rating, max_rating,
+                                                        user_mapping, item_mapping)
 
 # set up the recommender
 recommender = MyMediaLite::RatingPrediction::UserItemBaseline.new()
 recommender.MinRating = min_rating
 recommender.MaxRating = max_rating
-recommender.Ratings = training_data
+recommender.Ratings = train_data
 recommender.Train()
 
 # measure the accuracy on the test data set
