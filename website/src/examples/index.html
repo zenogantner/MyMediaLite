@@ -20,9 +20,9 @@
   <p>
     RMSE on the <it>probe</it> dataset:
     <table border="1">
-      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      <tr> <th>Method</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
       [% FOREACH entry IN netflix_data %]
-        <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+        <tr> <td>[% entry.method %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
       [% END %]
     </table>
   </p>
@@ -31,9 +31,9 @@
   <p>
    Results on a random 80-20 split:
     <table border="1">
-      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      <tr> <th>Method</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
       [% FOREACH entry IN ml1m_data %]
-        <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+        <tr> <td>[% entry.method %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
       [% END %]
     </table>
   </p>
@@ -43,9 +43,9 @@
   <p>
     Results on the <it>u1</it> split:
     <table border="1">
-      <tr> <th>Engine</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
+      <tr> <th>Method</th> <th>Hyperparameters</th> <th>RMSE</th> </tr>
       [% FOREACH entry IN ml100k_data %]
-      <tr> <td>[% entry.engine %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
+      <tr> <td>[% entry.method %]</td> <td>[% entry.hp %]</td> <td>[% entry.rmse %]</td> </tr>
       [% END %]
     </table>
   </p>
