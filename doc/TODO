@@ -90,12 +90,10 @@ Architecture
  - IO+storage
    - allow storage of models in database in addition to text files
    - store models via reflection (can save a lot of code)
-   - faster reading of text files
+   - faster reading of text files (less checks, at user request)
    - consider using the CsvReader class in the programs, so that we can get rid
      of our home-grown CSV reader stuff (possibly not worth the trouble)
      - http://www.codeproject.com/KB/database/CsvReader.aspx
- - add a simple logging mechanism (interface with 4 delegates):
-    - debug, info, warn; progress
 Misc features
  - use --param for command-line parameters
  - rewrite MF techniques using vector/matrix abstractions
