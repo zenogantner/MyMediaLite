@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-
 
 namespace MyMediaLite.DataType
 {
@@ -57,7 +56,7 @@ namespace MyMediaLite.DataType
 			int i = 0;
         	while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
         	{
-            	double v = System.Double.Parse(numbers[0], ni);
+            	var v = double.Parse(numbers[0], ni);
 
             	if (i >= dim)
                     throw new IOException("i = " + i + " >= " + dim);

@@ -96,7 +96,7 @@ namespace MyMediaLite.AttrToFactor
 
 			var min_rmse_per_factor = new double[num_factors];
 			for (int i = 0; i < num_factors; i++)
-				min_rmse_per_factor[i] = System.Double.MaxValue;
+				min_rmse_per_factor[i] = double.MaxValue;
 			var best_factor_init = new int[num_factors];
 
 			// find best factor mappings:

@@ -158,7 +158,7 @@ namespace MyMediaLite.RatingPrediction
 
             using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-            	double bias = System.Double.Parse(reader.ReadLine(), ni);
+            	var bias = double.Parse(reader.ReadLine(), ni);
 
 				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
