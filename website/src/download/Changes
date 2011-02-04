@@ -1,3 +1,34 @@
+0.10	2011-02-04
+        - API changes
+          - rename IRecommenderEngine to IRecommender
+          - rename namespace ItemRecommender to ItemRecommendation
+          - rename Memory to ItemRecommender
+          - rename namespace RatingPredictor to RatingPrediction
+          - rename Memory to RatingPredictor
+        - command-line programs
+          - find and load engines via reflection
+          - engine names are now CamelCase (exactly their class names)
+	- engines
+          - kNN-based engines are now much faster and consume less memory
+          - add BiPolarSlopeOne engine
+          - move SlopeOne engine to the stable code
+        - data types
+          - SparseBooleanMatrix now implements IMatrix<bool>
+          - new type SymmetricSparseMatrix
+          - IMatrix<T>: new property IsSymmetric
+          - Matrix<T>: faster computation of IsSymmetric
+          - move WeightedItem from DataType to Data
+        - add unit tests for SparseMatrix<T>
+        - add sequential diversification (Ziegler et al.) to experimental
+          section
+        - correlation matrices
+          - distinguish between different kinds of data: binary data and
+            real-valued rating vectors
+          - rename Correlation.Cosine to CorrelationBinaryCosine
+          - add Correlation.Jaccard and Correlation.AdjustedCosine
+        - data preprocessing scripts
+          - add item genre script for MovieLens 100K
+
 0.09	2011-01-12
 	- IO
           - add database and IDataReader support (by Artus Krohn-Grimberghe)
