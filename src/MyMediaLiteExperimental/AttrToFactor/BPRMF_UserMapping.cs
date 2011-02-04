@@ -26,14 +26,14 @@ using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.AttrToFactor
 {
+	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for RMSE on the latent factors</summary>
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
-			set
-			{
+			set	{
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
@@ -107,7 +107,7 @@ namespace MyMediaLite.AttrToFactor
 					if (old_rmse_per_factor[i][j] < min_rmse_per_factor[j])
 					{
 						min_rmse_per_factor[j] = old_rmse_per_factor[i][j];
-						best_factor_init[j]   = i;
+						best_factor_init[j]    = i;
 					}
 				}
 			}
@@ -155,6 +155,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
+		/// <inheritdoc/>
 		protected double[] ComputeMappingFit()
 		{
 			double rmse    = 0;
@@ -195,6 +196,7 @@ namespace MyMediaLite.AttrToFactor
 			return rmse_and_penalty_per_factor;
 		}
 
+		/// <summary>map from user attributes to latent factor space</summary>
 		protected virtual double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
 		{
 			double[] factor_representation = new double[num_factors];
@@ -229,7 +231,7 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-				"BPR-MF-UserMapping num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
+				"BPRMF_UserMapping num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} reg_mapping={6} num_iter_mapping={7} learn_rate_mapping={8} init_mean={9} init_stdev={10}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
 			);
 		}

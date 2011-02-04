@@ -21,6 +21,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.AttrToFactor
 {
+	/// <summary>biased MF with item mapping, optimized for RMSE on the ratings</summary>	
 	public class MF_Item_Mapping_Optimal : MF_ItemMapping
 	{
 		/// <inheritdoc/>
@@ -36,7 +37,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>One (stochastic) pass over the training data</summary>
 		public override void IterateMapping()
 		{
-			var factor_bias_gradient         = new double[factor_bias.Length];
+			//var factor_bias_gradient         = new double[factor_bias.Length];
 			var attribute_to_factor_gradient = new Matrix<double>(attribute_to_factor.dim1, attribute_to_factor.dim2);
 
 			var item_latent_factors = new double[MaxItemID + 1][];

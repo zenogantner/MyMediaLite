@@ -53,9 +53,7 @@
     <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_kNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_SVR.cs" />
     <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
     <Compile Include="AttrToFactor\MF_Mapping.cs" />
@@ -66,6 +64,8 @@
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="RatingPredictor\NewKNN.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

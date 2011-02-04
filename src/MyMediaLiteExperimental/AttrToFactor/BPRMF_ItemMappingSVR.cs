@@ -27,7 +27,7 @@ using SVM;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by support-vector regression (SVR)</summary>
-	public class BPRMF_ItemMapping_SVR : BPRMF_ItemMapping
+	public class BPRMF_ItemMappingSVR : BPRMF_ItemMapping
 	{
 		/// <summary>C hyperparameter for the SVM</summary>
 		public double C { get { return c; } set { c = value; } }
@@ -94,7 +94,7 @@ namespace MyMediaLite.AttrToFactor
 			return item_factors;
 		}
 
-		protected Node[] CreateNodes(int item_id)
+		private Node[] CreateNodes(int item_id)
 		{
 			// create attribute representation digestible by LIBSVM
 			HashSet<int> attributes = this.item_attributes[item_id];
@@ -113,7 +113,7 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-SVR num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, c={6}, gamma={7}, init_mean={8}, init_stdev={9}",
+				"BPRMF_ItemMappingSVR num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} c={6} gamma={7} init_mean={8} init_stdev={9}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, init_mean, init_stdev
 			);
 		}

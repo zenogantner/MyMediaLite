@@ -1882,7 +1882,7 @@ namespace SVM
                 svm_group_classes(prob, tmp_nr_class, tmp_label, tmp_start, tmp_count, perm);
 
                 int nr_class = tmp_nr_class[0];
-                int[] label = tmp_label[0];
+                //int[] label = tmp_label[0];
                 int[] start = tmp_start[0];
                 int[] count = tmp_count[0];
 
@@ -2139,7 +2139,7 @@ namespace SVM
 
             // kernel_type, degree
 
-            KernelType kernel_type = param.KernelType;
+            //KernelType kernel_type = param.KernelType;
 
             if (param.Degree < 0)
                 return "degree of polynomial kernel < 0";

@@ -193,14 +193,16 @@ namespace MyMediaLite.AttrToFactor
 			return rmse_and_penalty_per_factor;
 		}
 
+		/// <summary>map to latent factor space (field)</summary>
 		protected Func<int, double[]> _MapToLatentFactorSpace;
 
+		/// <summary>map to latent factor space (method to be called)</summary>
 		protected virtual double[] MapToLatentFactorSpace(int item_id)
 		{
 			return _MapToLatentFactorSpace(item_id);
 		}
 
-
+		/// <summary>map to latent factor space (actual function)</summary>
 		protected virtual double[] __MapToLatentFactorSpace(int item_id)
 		{
 			HashSet<int> item_attributes = this.item_attributes[item_id];
@@ -238,11 +240,9 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-			    "BPR-MF-ItemMapping num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, init_mean={9}, init_stdev={10}",
+			    "BPRMF_ItemMapping num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} reg_mapping={6} num_iter_mapping={7} learn_rate_mapping={8} init_mean={9} init_stdev={10}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
 			);
 		}
-
 	}
 }
-

@@ -40,17 +40,22 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This engine does NOT support online updates.
 	///
-	/// <seealso cref="ItemRecommender.KNN"/>
+	/// <seealso cref="ItemRecommendation.KNN"/>
 	/// </remarks>
 	public class NewKNN : UserItemBaseline
 	{
 		// TODO add possibility of _not_ using weights
 
 		/// <summary>Shrinkage parameter</summary>
+		/// <value>Shrinkage parameter</value>
 		public float Shrinkage { get; set; }
 
+		/// <summary>a string denoting the similarity measure to use</summary>
+		/// <value>a string denoting the similarity measure to use</value>
 		public string Similarity { get; set; }
 
+		/// <summary>The kind of entity to use to build neighborhoods (USER or ITEM)</summary>
+		/// <value>The kind of entity to use to build neighborhoods (USER or ITEM)</value>
 		public EntityType Entity { get; set; }
 
 		/// <summary>Number of neighbors to take into account for predictions</summary>
@@ -61,6 +66,7 @@ namespace MyMediaLite.RatingPrediction
 
 		private SparseBooleanMatrix entity_data = new SparseBooleanMatrix();
 
+		/// <summary>Constructor</summary>
 		public NewKNN()
 		{
 			K = 60;
@@ -204,7 +210,7 @@ namespace MyMediaLite.RatingPrediction
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "NewKNN k={0} entity_type={1}, similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
+			                     "NewKNN k={0} entity_type={1} similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Entity, Similarity, Shrinkage, RegU, RegI);
 		}
 	}

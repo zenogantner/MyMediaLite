@@ -223,6 +223,8 @@ namespace MyMediaLite.AttrToFactor
 			return rmse_and_penalty_per_factor;
 		}
 
+
+		/// <summary>map to latent factor space</summary>
 		protected virtual double[] MapToLatentFactorSpace(int item_id)
 		{
 			var factor_representation = new double[num_factors + 1];
@@ -270,11 +272,10 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-			    "MF-ItemMapping num_factors={0}, regularization={1}, num_iter={2}, learn_rate={3}, reg_mapping={4}, num_iter_mapping={5}, learn_rate_mapping={6}, init_mean={7}, init_stdev={8}",
-				num_factors, Regularization, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+			    "{0} num_factors={1} regularization={2} num_iter={3} learn_rate={4} reg_mapping={5} num_iter_mapping={6} learn_rate_mapping={7} init_mean={8} init_stdev={9}",
+				this.GetType().Name, num_factors, Regularization, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}
-
 	}
 }
 

@@ -51,8 +51,7 @@ namespace MyMediaLite.RatingPrediction
 		public SparseBooleanMatrix UserRelation
 		{
 			get { return this.user_neighbors; }
-			set
-			{
+			set {
 				this.user_neighbors = value;
 				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
 				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);

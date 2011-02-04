@@ -25,6 +25,7 @@ using MyMediaLite.Eval;
 
 namespace MyMediaLite.Util
 {
+	/// <summary>Grid search for finding suitable hyperparameters</summary>
 	public class GridSearch
 	{
 		// TODO implement first for rating prediction, then for item prediction
@@ -32,6 +33,14 @@ namespace MyMediaLite.Util
 
 		// TODO use delegates or boolean flag to be able to use fit on the test data as a criterion
 
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
+		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>
+		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values">the values of the hyperparameter to try out</param>
+		/// <param name="engine">the engine</param>
+		/// <param name="split">the dataset split to use</param>
+		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
@@ -50,6 +59,15 @@ namespace MyMediaLite.Util
 			return eval_results.Min();
 		}
 
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
+		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>
+		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values">the logarithms of the values of the hyperparameter to try out</param>
+		/// <param name="basis">the basis to use for the logarithms</param>
+		/// <param name="engine">the engine</param>
+		/// <param name="split">the dataset split to use</param>
+		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimumExponential(string evaluation_measure,
 		                                 		    string hyperparameter_name,
 		                                 		    double[] hyperparameter_values,
@@ -63,6 +81,14 @@ namespace MyMediaLite.Util
 			return FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, engine, split);
 		}
 
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure using k-fold cross-validation</summary>
+		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>
+		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values">the values of the hyperparameter to try out</param>
+		/// <param name="engine">the engine</param>
+		/// <param name="k">the number of folds to be used for cross-validation</param>
+		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,

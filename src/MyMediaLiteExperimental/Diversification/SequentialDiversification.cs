@@ -33,13 +33,17 @@ namespace MyMediaLite.Diversification
 	{
 		CorrelationMatrix ItemCorrelations { get; set; }
 
+		/// <summary>Constructor</summary>
+		/// <param name="item_correlation">the similarity measure to use for diversification</param>
 		public SequentialDiversification(CorrelationMatrix item_correlation)
 		{
 			ItemCorrelations = item_correlation;
 		}
 
-		// TODO integrate nicely with item prediction infrastructure
-
+		/// <summary>Diversify an item list</summary>
+		/// <param name="item_list">a list of items</param>
+		/// <param name="diversification_parameter">the diversification parameter (higher means more diverse)</param>
+		/// <returns>a list re-ordered to ensure maximum diversity at the top of the list</returns>
 		public IList<int> DiversifySequential(IList<int> item_list, double diversification_parameter)
 		{
 			Trace.Assert(item_list.Count > 0);
@@ -60,7 +64,7 @@ namespace MyMediaLite.Diversification
 				var items_by_diversity = new List<WeightedItem>();
 				foreach (int item_id in item_set)
 				{
-					double similarity = IntraSetSimilarity(item_id, diversified_item_list, ItemCorrelations);
+					double similarity = Similarity(item_id, diversified_item_list, ItemCorrelations);
 					items_by_diversity.Add(new WeightedItem(item_id, similarity));
 				}
 				items_by_diversity.Sort();
@@ -87,8 +91,12 @@ namespace MyMediaLite.Diversification
 
 		// TODO think about moving the next two methods to their own class
 
-		// compute only similarity between the given item and all items in the set - this saves us time!
-		public static double IntraSetSimilarity(int item_id, ICollection<int> items, CorrelationMatrix item_correlation)
+		/// <summary>Compute similarity between one item and a collection of items</summary>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="items">a collection of items</param>
+		/// <param name="item_correlation">the similarity measure to use</param>
+		/// <returns>the similarity between the item and the collection</returns>
+		public static double Similarity(int item_id, ICollection<int> items, CorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			foreach (int other_item_id in items)
@@ -96,7 +104,11 @@ namespace MyMediaLite.Diversification
 			return similarity;
 		}
 
-		public static double IntraSetSimilarity(ICollection<int> items, CorrelationMatrix item_correlation)
+		/// <summary>Compute the intra-set similarity of an item collection</summary>
+		/// <param name="items">a collection of items</param>
+		/// <param name="item_correlation">the similarity measure to use</param>
+		/// <returns>the intra-set similarity of the collection</returns>
+		public static double Similarity(ICollection<int> items, CorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			for (int i = 0; i < items.Count; i++)
@@ -106,5 +118,4 @@ namespace MyMediaLite.Diversification
 			return similarity;
 		}
 	}
-
 }

@@ -27,7 +27,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by kNN</summary>
-	public class BPRMF_ItemMapping_kNN : BPRMF_ItemMapping
+	public class BPRMF_ItemMappingKNN : BPRMF_ItemMapping
 	{
 		/// <summary>Number of neighbors to be used for mapping</summary>
 		public uint K { get { return k; } set { k = value; } }
@@ -45,6 +45,7 @@ namespace MyMediaLite.AttrToFactor
 			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
+		/// <summary>map to latent factor space (actual function)</summary>
 		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
 			var est_factors = new double[num_factors];
@@ -83,7 +84,7 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-				"BPR-MF-ItemMapping-kNN num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, k={6}, init_mean={7}, init_stdev={8}",
+				"BPRMF_ItemMappingKNN num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} k={6} init_mean={7} init_stdev={8}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == UInt32.MaxValue ? "inf" : k.ToString(), init_mean, init_stdev
 			);
 		}

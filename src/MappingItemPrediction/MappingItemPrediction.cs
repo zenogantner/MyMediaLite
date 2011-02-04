@@ -54,8 +54,8 @@ public class MappingItemPrediction
 	static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
 	static BPRMF_ItemMapping_Optimal bprmf_map_bpr = new BPRMF_ItemMapping_Optimal();
 	static BPRMF_ItemMapping bprmf_map_com         = new BPRMF_ItemMapping_Complex();
-	static BPRMF_ItemMapping bprmf_map_knn         = new BPRMF_ItemMapping_kNN();
-	static BPRMF_ItemMapping bprmf_map_svr         = new BPRMF_ItemMapping_SVR();
+	static BPRMF_ItemMapping bprmf_map_knn         = new BPRMF_ItemMappingKNN();
+	static BPRMF_ItemMapping bprmf_map_svr         = new BPRMF_ItemMappingSVR();
 	static BPRMF_Mapping bprmf_user_map            = new BPRMF_UserMapping();
 	static BPRMF_Mapping bprmf_user_map_bpr        = new BPRMF_UserMapping_Optimal();
 
