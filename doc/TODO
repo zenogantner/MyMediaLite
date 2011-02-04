@@ -9,7 +9,6 @@ Recommender functionality
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
-   - MF with Euclidean Embeddings
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
    - Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
