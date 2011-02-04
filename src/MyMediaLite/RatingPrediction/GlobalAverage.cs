@@ -60,8 +60,7 @@ namespace MyMediaLite.RatingPrediction
 			Train();
 		}
 
-		/// <summary>returns the name of the method</summary>
-		/// <returns>A <see cref="System.String"/></returns>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "GlobalAverage";
