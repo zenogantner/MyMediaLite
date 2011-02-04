@@ -8,6 +8,7 @@ release checklist:
 4. Check the output of 'git status' - is everything in the repository?
 5. Rebuild everything
 6. Re-create the API documentation (make apidoc) and visually inspect the results
+6a. Check whether the Doxygen output has the correct version number
 7. Run 'make release' (not much happens here)
 8. Check the contents of the source code package
 9. Check the contents of the binary package
