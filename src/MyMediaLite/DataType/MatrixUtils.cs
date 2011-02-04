@@ -21,7 +21,6 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Util;
 
-
 namespace MyMediaLite.DataType
 {
     /// <summary>Utilities to work with matrices</summary>
@@ -83,9 +82,7 @@ namespace MyMediaLite.DataType
 					matrix1.data[x * dim2 + y] += matrix2.data[x * dim2 + y];
         }
 
-		/// <summary>
-		/// Compute the average value of the entries in a column of a matrix
-		/// </summary>
+		/// <summary>Compute the average value of the entries in a column of a matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="col">the column ID</param>
 		/// <returns>the average</returns>
@@ -102,9 +99,7 @@ namespace MyMediaLite.DataType
 			return sum / matrix.dim1;
 		}
 
-		/// <summary>
-		/// Compute the average value of the entries in a row of a matrix
-		/// </summary>
+		/// <summary>Compute the average value of the entries in a row of a matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="row">the row ID</param>
 		/// <returns>the average</returns>

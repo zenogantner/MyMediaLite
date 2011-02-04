@@ -98,9 +98,9 @@ namespace MyMediaLite.Correlation
 			while (! reader.EndOfStream)
 			{
 				string[] numbers = reader.ReadLine().Split(split_chars);
-				int i = Int32.Parse(numbers[0]);
-				int j = Int32.Parse(numbers[1]);
-				float c = Single.Parse(numbers[2], ni);
+				int i = int.Parse(numbers[0]);
+				int j = int.Parse(numbers[1]);
+				float c = float.Parse(numbers[2], ni);
 
 				if (i >= num_entities)
 					throw new IOException("Entity ID is too big: i = " + i);

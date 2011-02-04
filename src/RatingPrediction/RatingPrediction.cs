@@ -39,8 +39,8 @@ public class RatingPrediction
 	static RatingData training_data;
 	static RatingData test_data;
 
-	// recommender engines
-	static MyMediaLite.RatingPrediction.RatingPredictor recommender = null;
+	// recommenders
+	static RatingPredictor recommender = null;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -178,7 +178,7 @@ MyMediaLite rating prediction
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
-		// TODO move that into the engine functionality (set from data)
+		// TODO move that into the recommender functionality (set from data)
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
@@ -188,7 +188,7 @@ MyMediaLite rating prediction
 		if (find_iter != 0)
 		{
 			if ( !(recommender is IIterativeModel) )
-				Usage("Only iterative recommender engines support find_iter.");
+				Usage("Only iterative recommenders support find_iter.");
 			IIterativeModel iterative_recommender = (MatrixFactorization) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 

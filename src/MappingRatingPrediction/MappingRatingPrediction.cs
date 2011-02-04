@@ -28,8 +28,7 @@ using MyMediaLite.AttrToFactor;
 using MyMediaLite.IO;
 using MyMediaLite.Util;
 
-/// <summary>
-/// </summary>
+/// <summary>Command-line tool: attribute-to-factor mappings for rating prediction</summary>
 /// <remarks>
 /// </remarks>
 public class MappingRatingPrediction
@@ -122,13 +121,13 @@ public class MappingRatingPrediction
 				recommender = Recommender.Configure(mf_map, parameters, Usage);
 				break;
 //				case "MF-ItemMapping-Optimal":
-//					recommender = Engine.Configure(mf_map_opt, parameters, Usage);
+//					recommender = Recommender.Configure(mf_map_opt, parameters, Usage);
 //					break;
 //				case "BPR-MF-ItemMapping-kNN":
-//					recommender = Engine.Configure(mf_map_knn, parameters, Usage);
+//					recommender = Recommender.Configure(mf_map_knn, parameters, Usage);
 //					break;
 //				case "BPR-MF-ItemMapping-SVR":
-//					recommender = Engine.Configure(mf_map_svr, parameters, Usage);
+//					recommender = Recommender.Configure(mf_map_svr, parameters, Usage);
 //					break;
 			default:
 				Usage(string.Format("Unknown method: '{0}'", method));
@@ -177,7 +176,7 @@ public class MappingRatingPrediction
 		recommender.MaxUserID = user_mapping.InternalIDs.Max();
 		recommender.MaxItemID = item_mapping.InternalIDs.Max();
 
-		// TODO move that into the engine functionality (set from data)
+		// TODO move that into the recommender functionality (set from data)
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));

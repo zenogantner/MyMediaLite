@@ -203,8 +203,10 @@ namespace MyMediaLite.Data
 			var remove_list = new List<RatingEvent>();
 
 			if (byItem != null)
+			{
                 foreach (RatingEvent r in ByItem[item_id])
                     remove_list.Add(r);
+			}
             else if (all != null)
 			{
                 foreach (RatingEvent r in all)
@@ -214,7 +216,7 @@ namespace MyMediaLite.Data
 			else if (byUser != null)
 			{
 				foreach (Ratings ratings in byUser)
-					foreach  (RatingEvent r in ratings)
+					foreach (RatingEvent r in ratings)
 						if (r.item_id == item_id)
 					        remove_list.Add(r);
 			}
@@ -231,8 +233,8 @@ namespace MyMediaLite.Data
 		/// </returns>
         public RatingEvent FindRating(int user_id, int item_id)
         {
-            int cnt_user = Int32.MaxValue;
-            int cnt_item = Int32.MaxValue;
+            int cnt_user = int.MaxValue;
+            int cnt_item = int.MaxValue;
             if ((byUser != null) && (byUser.Count > user_id))
                 cnt_user = byUser[(int)user_id].Count;
             if ((byItem != null) && (byItem.Count > item_id))
@@ -242,7 +244,7 @@ namespace MyMediaLite.Data
                 return byUser[(int)user_id].FindRating(user_id, item_id);
 			else if (cnt_user > cnt_item)
                 return byItem[(int)item_id].FindRating(user_id, item_id);
-			else if (cnt_user < Int32.MaxValue)
+			else if (cnt_user < int.MaxValue)
                 return byUser[(int)user_id].FindRating(user_id, item_id);
             else if (all != null)
                 return all.FindRating(user_id, item_id);

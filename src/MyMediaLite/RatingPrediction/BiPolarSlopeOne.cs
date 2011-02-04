@@ -30,7 +30,7 @@ namespace MyMediaLite.RatingPrediction
 	/// Slope One Predictors for Online Rating-Based Collaborative Filtering.
 	/// SIAM Data Mining (SDM 2005)
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
-	/// 
+	///
 	/// This engine does NOT support online updates. They would be easy to implement, though.
 	/// </remarks>
 	public class BiPolarSlopeOne : RatingPredictor
@@ -156,7 +156,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
-				double global_average = Double.Parse(reader.ReadLine(), ni);
+				var global_average = double.Parse(reader.ReadLine(), ni);
 
 				var diff_matrix_like = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_like);
 				var freq_matrix_like = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);

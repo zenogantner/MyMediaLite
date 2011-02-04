@@ -24,11 +24,9 @@ using SVM;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>
-	/// Content-based filtering using one support-vector machine per user
-	/// </summary>
+	/// <summary>Content-based filtering using one support-vector machine (SVM) per user</summary>
     /// <remarks>
-    /// This engine does not support online updates.
+    /// This recommender does not support online updates.
     /// </remarks>
     public class ItemAttributeSVM : ItemRecommender, IItemAttributeAwareRecommender
     {
@@ -36,8 +34,7 @@ namespace MyMediaLite.ItemRecommendation
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set
-			{
+			set {
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);

@@ -21,11 +21,9 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>
-    /// k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes
-    /// </summary>
+	/// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes</summary>
 	/// <remarks>
-    /// This engine does not support online updates.
+    /// This recommender does not support online updates.
     /// </remarks>
     public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
     {
@@ -33,8 +31,7 @@ namespace MyMediaLite.ItemRecommendation
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
-			set
-			{
+			set {
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);

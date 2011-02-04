@@ -38,7 +38,7 @@ namespace MyMediaLite.RatingPrediction
 	///   <year>2009</year>
 	/// </article>
 	///
-	/// This engine does NOT support online updates.
+	/// This recommender does NOT support online updates.
 	///
 	/// <seealso cref="ItemRecommendation.KNN"/>
 	/// </remarks>
@@ -87,7 +87,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the engine, a suitable average rating is returned.
+		/// If the user or the item are not known to the recommender, a suitable average rating is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>

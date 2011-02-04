@@ -22,6 +22,8 @@ using System.Linq;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
+using MyMediaLite.ItemRecommendation;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
 {
@@ -34,17 +36,17 @@ namespace MyMediaLite.Util
 		// TODO use delegates or boolean flag to be able to use fit on the test data as a criterion
 
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
-		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
 		/// <param name="hyperparameter_values">the values of the hyperparameter to try out</param>
-		/// <param name="engine">the engine</param>
+		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
-		                                 RatingPrediction.RatingPredictor engine,
+		                                 RatingPredictor recommender,
 		                                 ISplit<RatingData> split)
 		{
 			var ni = new NumberFormatInfo();
@@ -52,53 +54,53 @@ namespace MyMediaLite.Util
 			var eval_results = new double[hyperparameter_values.Length];
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
-				Recommender.SetProperty(engine, hyperparameter_name, hyperparameter_values[i].ToString(ni));
-				eval_results[i] = RatingEval.EvaluateOnSplit(engine, split)[evaluation_measure];
+				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(ni));
+				eval_results[i] = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
 			}
 
 			return eval_results.Min();
 		}
 
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
-		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
 		/// <param name="hyperparameter_values">the logarithms of the values of the hyperparameter to try out</param>
 		/// <param name="basis">the basis to use for the logarithms</param>
-		/// <param name="engine">the engine</param>
+		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimumExponential(string evaluation_measure,
 		                                 		    string hyperparameter_name,
 		                                 		    double[] hyperparameter_values,
 		                                            double basis,
-		                                 		    RatingPrediction.RatingPredictor engine,
+		                                 		    RatingPrediction.RatingPredictor recommender,
 		                                 		    ISplit<RatingData> split)
 		{
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 				hyperparameter_values[i] = Math.Pow(basis, hyperparameter_values[i]);
 
-			return FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, engine, split);
+			return FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
 		}
 
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure using k-fold cross-validation</summary>
-		/// <remarks>The engine will be set to the best parameter value after calling this method.</remarks>
+		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
 		/// <param name="hyperparameter_values">the values of the hyperparameter to try out</param>
-		/// <param name="engine">the engine</param>
+		/// <param name="recommender">the recommender</param>
 		/// <param name="k">the number of folds to be used for cross-validation</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimum(string evaluation_measure,
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
-		                                 RatingPrediction.RatingPredictor engine,
+		                                 RatingPrediction.RatingPredictor recommender,
 		                                 int k)
 		{
-			RatingData data = engine.Ratings;
+			RatingData data = recommender.Ratings;
 			var split = new RatingCrossValidationSplit(data, k);
-			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, engine, split);
-			engine.Ratings = data;
+			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
+			recommender.Ratings = data;
 			return result;
 		}
 	}

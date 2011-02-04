@@ -26,14 +26,16 @@ namespace MyMediaLite.AttrToFactor
 	{
 		/// <summary>The learn rate for training the mapping functions</summary>
 		public double LearnRateMapping { get { return learn_rate_mapping; } set { learn_rate_mapping = value; } }
+
 		/// <summary>The learn rate for training the mapping functions</summary>
 		protected double learn_rate_mapping = 0.01;
 
 		/// <summary>number of times the regression is computed (to avoid local minima)</summary>
-		/// <remarks>may be ignored by the engine</remarks>
+		/// <remarks>may be ignored by the recommender</remarks>
 		public int NumInitMapping {	get { return num_init_mapping; } set { num_init_mapping = value; } }
+
 		/// <summary>number of times the regression is computed (to avoid local minima)</summary>
-		/// <remarks>may be ignored by the engine</remarks>
+		/// <remarks>may be ignored by the recommender</remarks>
 		protected int num_init_mapping = 5;
 
 		/// <summary>number of iterations of the mapping training procedure</summary>
@@ -52,8 +54,8 @@ namespace MyMediaLite.AttrToFactor
 
 		/// <summary>Learn the mapping</summary>
 		public abstract void LearnAttributeToFactorMapping();
+
 		/// <summary>Perform one iteration of the mapping training</summary>
 		public abstract void IterateMapping();
 	}
 }
-

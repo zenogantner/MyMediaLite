@@ -86,14 +86,15 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				this.view_count = new Dictionary<int, int>();
+				var view_count = new Dictionary<int, int>();
 				while (! reader.EndOfStream)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');
-					int key   = Int32.Parse(numbers[0]);
-					int count = Int32.Parse(numbers[1]);
+					int key   = int.Parse(numbers[0]);
+					int count = int.Parse(numbers[1]);
 			 		view_count[key] = count;
 				}
+				this.view_count = view_count;
 			}
 		}
 

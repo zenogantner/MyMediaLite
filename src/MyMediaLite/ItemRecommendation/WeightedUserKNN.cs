@@ -34,7 +34,7 @@ namespace MyMediaLite.ItemRecommendation
             if ((item_id < 0) || (item_id > MaxItemID))
                 throw new ArgumentException("item is unknown: " + item_id);
 
-			if (k == UInt32.MaxValue)
+			if (k == uint.MaxValue)
 			{
 				return correlation.SumUp(user_id, data_item[item_id]);
 			}

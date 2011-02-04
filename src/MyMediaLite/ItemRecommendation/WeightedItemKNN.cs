@@ -24,7 +24,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
     /// <remarks>
-    /// This engine does not support online updates.
+    /// This recommender does not support online updates.
 	/// </remarks>
     public class WeightedItemKNN : ItemKNN
     {
@@ -36,7 +36,7 @@ namespace MyMediaLite.ItemRecommendation
             if ((item_id < 0) || (item_id >= nearest_neighbors.Length))
                 throw new ArgumentException("item is unknown: " + item_id);
 
-			if (k == UInt32.MaxValue)
+			if (k == uint.MaxValue)
 			{
 				return correlation.SumUp(item_id, data_user[user_id]);
 			}

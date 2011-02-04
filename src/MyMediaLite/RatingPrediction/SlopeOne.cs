@@ -49,7 +49,7 @@ namespace MyMediaLite.RatingPrediction
 			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
 			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
 		}
-		
+
 		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
-				double global_average = Double.Parse(reader.ReadLine(), ni);
+				var global_average = double.Parse(reader.ReadLine(), ni);
 
 				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
 				var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);

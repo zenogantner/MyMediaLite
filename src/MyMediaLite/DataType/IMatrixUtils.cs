@@ -95,9 +95,9 @@ namespace MyMediaLite.DataType
 
         	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
         	{
-            	int i = Int32.Parse(numbers[0]);
-            	int j = Int32.Parse(numbers[1]);
-            	double v = Double.Parse(numbers[2], ni);
+            	int i = int.Parse(numbers[0]);
+            	int j = int.Parse(numbers[1]);
+            	double v = double.Parse(numbers[2], ni);
 
             	if (i >= dim1)
                     throw new IOException("i = " + i + " >= " + dim1);
@@ -124,9 +124,9 @@ namespace MyMediaLite.DataType
 
         	while ((numbers = reader.ReadLine().Split(' ')).Length == 3)
         	{
-            	int i = Int32.Parse(numbers[0]);
-            	int j = Int32.Parse(numbers[1]);
-            	int v = Int32.Parse(numbers[2]);
+            	int i = int.Parse(numbers[0]);
+            	int j = int.Parse(numbers[1]);
+            	int v = int.Parse(numbers[2]);
 
             	if (i >= dim1)
                     throw new IOException("i = " + i + " >= " + dim1);
