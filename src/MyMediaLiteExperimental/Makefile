@@ -77,9 +77,7 @@ FILES = \
 	AttrToFactor/BPRMF_Mapping.cs \
 	AttrToFactor/BPRMF_ItemMapping.cs \
 	AttrToFactor/BPRMF_ItemMapping_Complex.cs \
-	AttrToFactor/BPRMF_ItemMapping_kNN.cs \
 	AttrToFactor/BPRMF_ItemMapping_Optimal.cs \
-	AttrToFactor/BPRMF_ItemMapping_SVR.cs \
 	AttrToFactor/BPRMF_UserMapping.cs \
 	AttrToFactor/BPRMF_UserMapping_Optimal.cs \
 	AttrToFactor/MF_Mapping.cs \
@@ -89,7 +87,9 @@ FILES = \
 	ItemRecommender/ItemAttributeSVM.cs \
 	Util/GridSearch.cs \
 	Diversification/SequentialDiversification.cs \
-	RatingPredictor/NewKNN.cs 
+	RatingPredictor/NewKNN.cs \
+	AttrToFactor/BPRMF_ItemMappingKNN.cs \
+	AttrToFactor/BPRMF_ItemMappingSVR.cs 
 
 DATA_FILES = 
 

@@ -56,7 +56,6 @@ MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 FILES = \
 	IItemAttributeAwareRecommender.cs \
 	IUserAttributeAwareRecommender.cs \
-	IRecommenderEngine.cs \
 	IIterativeModel.cs \
 	IUserRelationAwareRecommender.cs \
 	IItemRelationAwareRecommender.cs \
@@ -83,7 +82,6 @@ FILES = \
 	IO/RelationData.cs \
 	Taxonomy/EntityType.cs \
 	Util/CommandLineParameters.cs \
-	Util/Engine.cs \
 	Util/Handlers.cs \
 	Util/Pair.cs \
 	Util/Random.cs \
@@ -136,7 +134,9 @@ FILES = \
 	RatingPrediction/BiPolarSlopeOne.cs \
 	RatingPrediction/SlopeOne.cs \
 	ItemRecommendation/ItemRecommender.cs \
-	RatingPrediction/RatingPredictor.cs 
+	RatingPrediction/RatingPredictor.cs \
+	IRecommender.cs \
+	Util/Recommender.cs 
 
 DATA_FILES = 
 
