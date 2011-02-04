@@ -1,4 +1,4 @@
-0.10	2011-??-??
+0.10	2011-02-04
         - API changes
           - rename IRecommenderEngine to IRecommender
           - rename namespace ItemRecommender to ItemRecommendation
