@@ -243,14 +243,14 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 				IMatrixUtils.WriteMatrix(writer, item_attribute_weight_by_user);
 		}
 
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 				this.item_attribute_weight_by_user = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 		}
 

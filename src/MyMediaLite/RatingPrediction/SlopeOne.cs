@@ -116,7 +116,7 @@ namespace MyMediaLite.RatingPrediction
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
 				double global_average = Double.Parse(reader.ReadLine(), ni);
 
@@ -136,7 +136,7 @@ namespace MyMediaLite.RatingPrediction
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(ni));
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix);

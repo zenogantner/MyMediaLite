@@ -128,25 +128,25 @@ public class MappingItemPrediction
 		switch (method)
 		{
 			case "BPR-MF-ItemMapping":
-				recommender = Engine.Configure(bprmf_map, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_map, parameters, Usage);
 				break;
 			case "BPR-MF-ItemMapping-Optimal":
-				recommender = Engine.Configure(bprmf_map_bpr, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_map_bpr, parameters, Usage);
 				break;
 			case "BPR-MF-ItemMapping-Complex":
-				recommender = Engine.Configure(bprmf_map_com, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_map_com, parameters, Usage);
 				break;
 			case "BPR-MF-ItemMapping-kNN":
-				recommender = Engine.Configure(bprmf_map_knn, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_map_knn, parameters, Usage);
 				break;
 			case "BPR-MF-ItemMapping-SVR":
-				recommender = Engine.Configure(bprmf_map_svr, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_map_svr, parameters, Usage);
 				break;
 			case "BPR-MF-UserMapping":
-				recommender = Engine.Configure(bprmf_user_map, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_user_map, parameters, Usage);
 				break;
 			case "BPR-MF-UserMapping-Optimal":
-				recommender = Engine.Configure(bprmf_user_map_bpr, parameters, Usage);
+				recommender = Recommender.Configure(bprmf_user_map_bpr, parameters, Usage);
 				break;
 			default:
 				Usage(string.Format("Unknown method: '{0}'", method));
@@ -193,7 +193,7 @@ public class MappingItemPrediction
 
 		TimeSpan seconds;
 
-		Engine.LoadModel(recommender, load_model_file);
+		Recommender.LoadModel(recommender, load_model_file);
 
 		// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 		recommender.MaxUserID = user_mapping.InternalIDs.Max();

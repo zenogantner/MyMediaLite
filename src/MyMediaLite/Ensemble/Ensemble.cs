@@ -30,47 +30,34 @@ namespace MyMediaLite.ensemble
         /// <summary>
         /// List of engines.
         /// </summary>
-        public List<IRecommender> engines = new List<IRecommender>();
+        public List<IRecommender> recommenders = new List<IRecommender>();
 
         private double max_rating_value = 5;
         private double min_rating_value = 1;
 
-        /// <summary>
-        /// Gets or sets the max rating value
-        /// </summary>
+        /// <summary>The max rating value</summary>
         /// <value>The max rating value</value>
         public double MaxRatingValue
         {
-            get
-            {
-                return this.max_rating_value;
-            }
-            set
-            {
+            get { return this.max_rating_value; }
+            set {
                 this.max_rating_value = value;
-				foreach (IRecommender engine in engines)
-					if (engine is IRatingPredictor)
-						((IRatingPredictor)engine).MaxRating = value;
+				foreach (IRecommender recommender in recommenders)
+					if (recommender is IRatingPredictor)
+						((IRatingPredictor)recommender).MaxRating = value;
             }
         }
 
-        /// <summary>
-        /// Gets or sets the min rating value.
-        /// </summary>
-        /// <value>The min rating value.</value>
+        /// <summary>The min rating value</summary>
+        /// <value>The min rating value</value>
         public double MinRatingValue
         {
-            get
-            {
-                return this.min_rating_value;
-            }
-            set
-            {
+            get { return this.min_rating_value; }
+            set {
                 this.min_rating_value = value;
-				foreach (IRecommender engine in engines)
-					if (engine is IRatingPredictor)
-						((IRatingPredictor)engine).MinRating = value;
-
+				foreach (IRecommender recommender in recommenders)
+					if (recommender is IRatingPredictor)
+						((IRatingPredictor)recommender).MinRating = value;
             }
         }		
 		
@@ -85,8 +72,8 @@ namespace MyMediaLite.ensemble
         /// <inheritdoc/>
         public virtual void Train()
         {
-            foreach (IRecommender engine in engines)
-                engine.Train();
+            foreach (IRecommender recommender in recommenders)
+                recommender.Train();
         }
     }
 }

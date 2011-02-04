@@ -26,56 +26,56 @@ using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
 {
-	/// <summary>Helper class with utility methods for recommender engines</summary>
+	/// <summary>Helper class with utility methods for handling recommenders</summary>
 	/// <remarks>
-	/// Contains methods for storing and loading engine models, and for configuring engines.
+	/// Contains methods for storing and loading engine models, and for configuring recommenders.
 	/// </remarks>
-	public class Engine
+	public class Recommender
 	{
-		/// <summary>Save the model parameters of a recommender engine to a file</summary>
+		/// <summary>Save the model parameters of a recommender to a file</summary>
 		/// <remarks>
 		/// Does not save if file is an empty string
 		/// </remarks>
-		/// <param name="engine">the engine to store</param>
+		/// <param name="recommender">the recommender to store</param>
 		/// <param name="filename">the filename (may include relative paths)</param>
-		public static void SaveModel(IRecommender engine, string filename)
+		public static void SaveModel(IRecommender recommender, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;
 
 			Console.Error.WriteLine("Save model to {0}", filename);
-			engine.SaveModel(filename);
+			recommender.SaveModel(filename);
 		}
 
-		/// <summary>Save the model parameters of a recommender engine (in a given iteration of the training) to a file</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
+		/// <summary>Save the model parameters of a recommender (in a given iteration of the training) to a file</summary>
+		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
-		public static void SaveModel(IRecommender engine, string filename, int iteration)
+		public static void SaveModel(IRecommender recommender, string filename, int iteration)
 		{
 			if (filename.Equals(string.Empty))
 				return;
 
-			SaveModel(engine, filename + "-it-" + iteration);
+			SaveModel(recommender, filename + "-it-" + iteration);
 		}
 
-		/// <summary>Load the model parameters of a recommender engine (in a given iteration of the training) from a file</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
+		/// <summary>Load the model parameters of a recommender (in a given iteration of the training) from a file</summary>
+		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
 		/// <param name="filename">the filename template</param>
-		public static void LoadModel(IRecommender engine, string filename)
+		public static void LoadModel(IRecommender recommender, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;
 
 			Console.Error.WriteLine("Load model from {0}", filename);
-			engine.LoadModel(filename);
+			recommender.LoadModel(filename);
 		}
 
-		/// <summary>Get a reader object to read in model parameters of a recommender engine</summary>
+		/// <summary>Get a reader object to read in model parameters of a recommender</summary>
 		/// <param name="filename">the filename of the model file</param>
-		/// <param name="engine_type">the expected engine type</param>
+		/// <param name="recommender_type">the expected recommender type</param>
 		/// <returns>a <see cref="StreamReader"/></returns>
-		public static StreamReader GetReader(string filename, System.Type engine_type)
+		public static StreamReader GetReader(string filename, Type recommender_type)
 		{
             var reader = new StreamReader(filename);
 
@@ -83,8 +83,8 @@ namespace MyMediaLite.Util
 				throw new IOException("Unexpected end of file " + filename);
 
 			string type_name = reader.ReadLine();
-			if (!type_name.Equals(engine_type.ToString()))
-				Console.Error.WriteLine("WARNING: No correct type name: {0}, expected: {1}", type_name, engine_type);
+			if (!type_name.Equals(recommender_type.ToString()))
+				Console.Error.WriteLine("WARNING: No correct type name: {0}, expected: {1}", type_name, recommender_type);
 			return reader;
 		}
 
@@ -92,7 +92,7 @@ namespace MyMediaLite.Util
 		/// <param name="filename">the filename of the model file</param>
 		/// <param name="engine_type">the engine type</param>
 		/// <returns>a <see cref="StreamWriter"/></returns>
-		public static StreamWriter GetWriter(string filename, System.Type engine_type)
+		public static StreamWriter GetWriter(string filename, Type engine_type)
 		{
 			var writer = new StreamWriter(filename);
 			writer.WriteLine(engine_type);
@@ -174,28 +174,28 @@ namespace MyMediaLite.Util
 					}
 
 					NEXT_PROPERTY:
-					Console.Write(""); // the C# compiler wants some statement here
+					Console.Write(string.Empty); // the C# compiler wants some statement here
 				}
 
-				report_error(string.Format("Engine {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
+				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
 
 				NEXT_KEY:
-				Console.Write(""); // the C# compiler wants some statement here
+				Console.Write(string.Empty); // the C# compiler wants some statement here
 			}
 
 			return engine;
 		}
 
 		/// <summary>Sets a property of a MyMediaLite recommender engine</summary>
-		/// <param name="engine">An <see cref="IRecommenderEngine"/></param>
+		/// <param name="recommender">An <see cref="IRecommender"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
-		public static void SetProperty(IRecommender engine, string key, string val)
+		public static void SetProperty(IRecommender recommender, string key, string val)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			Type type = engine.GetType();
+			Type type = recommender.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
 				property_names.Add(p.Name);
@@ -214,19 +214,19 @@ namespace MyMediaLite.Util
 					switch (property.PropertyType.ToString())
 					{
 						case "System.Double":
-					    	property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(val, ni) });
+					    	property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, ni) });
 							break;
 						case "System.Single":
-					    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(val, ni) });
+					    	property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, ni) });
 							break;
 						case "System.Int32":
-					    	property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(val) });
+					    	property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
 							break;
 						case "System.UInt32":
-					    	property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(val) });
+					    	property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
 							break;
 						case "System.Boolean":
-					    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(val) });
+					    	property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
 							break;
 						default:
 							throw new ArgumentException(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
@@ -314,10 +314,10 @@ namespace MyMediaLite.Util
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum)
 				{
-					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Engine.CreateRatingPredictor(type) : (IRecommender) Engine.CreateItemRecommender(type);
+					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Recommender.CreateRatingPredictor(type) : (IRecommender) Recommender.CreateItemRecommender(type);
 
 					string description = recommender.ToString();
-					string needs = Engine.Needs(recommender);
+					string needs = Recommender.Needs(recommender);
 					if (needs.Length > 0)
 						description += " (needs " + needs + ")";
 					result.Add(description);

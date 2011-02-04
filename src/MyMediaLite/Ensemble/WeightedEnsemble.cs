@@ -28,12 +28,10 @@ namespace MyMediaLite.ensemble
 {
     /// <summary>Combining several predictors with a weighted ensemble</summary>
     /// <remarks>
-    /// This engine does not support online updates.
+    /// This recommender does NOT support online updates.
     /// </remarks>
     public class WeightedEnsemble : Ensemble
     {
-		// TODO add an AddEngine method
-
         /// <summary>List of component weights</summary>
         public List<double> weights = new List<double>();
 
@@ -43,8 +41,8 @@ namespace MyMediaLite.ensemble
         /// <inheritdoc/>
         public override void Train()
         {
-            foreach (var engine in this.engines)
-                engine.Train();
+            foreach (var recommender in this.recommenders)
+                recommender.Train();
 
 			this.weight_sum = weights.Sum();
         }
@@ -54,8 +52,8 @@ namespace MyMediaLite.ensemble
         {
 			double result = 0;
 
-			for (int i = 0; i < engines.Count; i++)
-               	result += weights[i] * engines[i].Predict(user_id, item_id);
+			for (int i = 0; i < recommenders.Count; i++)
+               	result += weights[i] * recommenders[i].Predict(user_id, item_id);
 
             return (double) result / weight_sum;
         }
@@ -66,13 +64,13 @@ namespace MyMediaLite.ensemble
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
 			{
-				writer.WriteLine(engines.Count);
-				for (int i = 0; i < engines.Count; i++)
+				writer.WriteLine(recommenders.Count);
+				for (int i = 0; i < recommenders.Count; i++)
 				{
-					engines[i].SaveModel("model-" + i + ".txt");
-					writer.WriteLine(engines[i].GetType() + " " + weights[i].ToString(ni));
+					recommenders[i].SaveModel("model-" + i + ".txt");
+					writer.WriteLine(recommenders[i].GetType() + " " + weights[i].ToString(ni));
 				}
 			}
 		}
@@ -83,29 +81,28 @@ namespace MyMediaLite.ensemble
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
-
-				int numberOfComponents = Int32.Parse(reader.ReadLine());
+				int numberOfComponents = int.Parse(reader.ReadLine());
 
 				var weights = new List<double>();
-				var engines = new List<IRecommender>();
+				var recommenders = new List<IRecommender>();
 
 				for (int i = 0; i < numberOfComponents; i++)
 				{
 					string[] data = reader.ReadLine().Split(' ');
 
-					Type t = System.Type.GetType(data[0]);
-					engines.Add( (IRecommender) Activator.CreateInstance(t) );
-					engines[i].LoadModel("model-" + i + ".txt");
+					Type t = Type.GetType(data[0]);
+					recommenders.Add( (IRecommender) Activator.CreateInstance(t) );
+					recommenders[i].LoadModel("model-" + i + ".txt");
 
-					// make sure the engines get their data FIXME
+					// make sure the recommenders get their data FIXME
 
-					weights.Add(System.Double.Parse(data[1], ni));
+					weights.Add(double.Parse(data[1], ni));
 				}
 
 				this.weights = weights;
-				this.engines = engines;
+				this.recommenders = recommenders;
 			}
 		}
     }

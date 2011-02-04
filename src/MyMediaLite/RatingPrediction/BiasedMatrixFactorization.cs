@@ -140,7 +140,7 @@ namespace MyMediaLite.RatingPrediction
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
             	writer.WriteLine(global_bias.ToString(ni));
 				VectorUtils.WriteVector(writer, user_bias);
@@ -156,7 +156,7 @@ namespace MyMediaLite.RatingPrediction
             var ni = new NumberFormatInfo();
             ni.NumberDecimalDigits = '.';
 
-            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
             	double bias = System.Double.Parse(reader.ReadLine(), ni);
 

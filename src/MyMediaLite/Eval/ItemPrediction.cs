@@ -32,7 +32,7 @@ namespace MyMediaLite.Eval
 		// TODO there are too many different versions of this method interface - we should simplify the API
 
 		/// <summary>Write item predictions (scores) for all users to a file</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
@@ -40,7 +40,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
-			IRecommender engine,
+			IRecommender recommender,
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -48,14 +48,14 @@ namespace MyMediaLite.Eval
 			string filename)
 		{
 			if (filename.Equals("-"))
-				WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
+				WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(engine, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+					WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) to a file</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
@@ -64,7 +64,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
-			IRecommender engine,
+			IRecommender recommender,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
 			ICollection<int> relevant_items,
@@ -73,16 +73,14 @@ namespace MyMediaLite.Eval
 			string filename)
 		{
 			if (filename.Equals("-"))
-				WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
+				WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+					WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
-		/// <summary>
-		/// Write item predictions (scores) for all users to a TextWriter object
-		/// </summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
+		/// <summary>Write item predictions (scores) for all users to a TextWriter object</summary>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
@@ -90,7 +88,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommender engine,
+			IRecommender recommender,
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -98,11 +96,11 @@ namespace MyMediaLite.Eval
 			TextWriter writer)
 		{
 			var relevant_users = new List<int>(user_mapping.InternalIDs);
-			WritePredictions(engine, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+			WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="SparseBooleanMatrix"/> containing the items already observed</param>
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
@@ -111,7 +109,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommender engine,
+			IRecommender recommender,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
 			ICollection<int> relevant_items,
@@ -122,12 +120,12 @@ namespace MyMediaLite.Eval
 			foreach (int user_id in relevant_users)
 			{
 				HashSet<int> ignore_items = train[user_id];
-				WritePredictions(engine, user_id, relevant_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
+				WritePredictions(recommender, user_id, relevant_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
 			}
 		}
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> to use for making the predictions</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="user_id">the ID of the user to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="ignore_items">a list of items for which no predictions should be made</param>
@@ -136,7 +134,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommender engine,
+			IRecommender recommender,
             int user_id,
 		    ICollection<int> relevant_items,
 		    ICollection<int> ignore_items,
@@ -149,7 +147,7 @@ namespace MyMediaLite.Eval
 
             var score_list = new List<WeightedItem>();
             foreach (int item_id in relevant_items)
-                score_list.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
+                score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			score_list.Sort();
 			score_list.Reverse();
@@ -176,15 +174,15 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>predict items for a specific users</summary>
-		/// <param name="engine">the <see cref="IRecommenderEngine"/> object to use for the predictions</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> object to use for the predictions</param>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="max_item_id">the maximum item ID</param>
 		/// <returns>a list sorted list of item IDs</returns>
-		static public int[] PredictItems(IRecommender engine, int user_id, int max_item_id)
+		static public int[] PredictItems(IRecommender recommender, int user_id, int max_item_id)
 		{
             var result = new List<WeightedItem>();
             for (int item_id = 0; item_id < max_item_id + 1; item_id++)
-                result.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
+                result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			result.Sort();
 			result.Reverse();
@@ -197,16 +195,16 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Predict items for a given user</summary>
-		/// <param name="engine">the recommender engine to use</param>
+		/// <param name="recommender">the recommender to use</param>
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="relevant_items">a collection of numerical IDs of relevant items</param>
 		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public int[] PredictItems(IRecommender engine, int user_id, ICollection<int> relevant_items)
+		static public int[] PredictItems(IRecommender recommender, int user_id, ICollection<int> relevant_items)
 		{
             var result = new List<WeightedItem>();
 
             foreach (int item_id in relevant_items)
-                result.Add( new WeightedItem(item_id, engine.Predict(user_id, item_id)));
+                result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			result.Sort();
 			result.Reverse();

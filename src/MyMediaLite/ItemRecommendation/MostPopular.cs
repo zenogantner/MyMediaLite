@@ -76,7 +76,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 				foreach (int key in view_count.Keys)
 					writer.WriteLine(key + " " + view_count[key]);
 		}
@@ -84,7 +84,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				this.view_count = new Dictionary<int, int>();
 				while (! reader.EndOfStream)

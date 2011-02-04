@@ -52,7 +52,7 @@ namespace MyMediaLite.Util
 			var eval_results = new double[hyperparameter_values.Length];
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
-				Engine.SetProperty(engine, hyperparameter_name, hyperparameter_values[i].ToString(ni));
+				Recommender.SetProperty(engine, hyperparameter_name, hyperparameter_values[i].ToString(ni));
 				eval_results[i] = RatingEval.EvaluateOnSplit(engine, split)[evaluation_measure];
 			}
 

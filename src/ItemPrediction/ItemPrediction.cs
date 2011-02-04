@@ -39,7 +39,7 @@ public class ItemPrediction
 
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
-	// recommender engines
+	// recommenders
 	static IItemRecommender recommender = null;
 
 	static bool compute_fit;
@@ -66,7 +66,7 @@ public class ItemPrediction
 		Console.WriteLine();
 
 		Console.Write("   - ");
-		Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.ItemRecommendation")));
+		Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.ItemRecommendation")));
 
 		Console.WriteLine("  method ARGUMENTS have the form name=value");
 		Console.WriteLine();
@@ -144,11 +144,11 @@ public class ItemPrediction
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
-		recommender = Engine.CreateItemRecommender(method);
+		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
 
-		Engine.Configure(recommender, parameters, Usage);
+		Recommender.Configure(recommender, parameters, Usage);
 
 		if (parameters.CheckForLeftovers())
 			Usage(-1);
@@ -179,7 +179,7 @@ public class ItemPrediction
 			if (load_model_file.Equals(string.Empty))
 				iterative_recommender.Train();
 			else
-				Engine.LoadModel(iterative_recommender, load_model_file);
+				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -222,7 +222,7 @@ public class ItemPrediction
 					});
 					eval_time_stats.Add(t.TotalSeconds);
 
-					Engine.SaveModel(recommender, save_model_file, i);
+					Recommender.SaveModel(recommender, save_model_file, i);
 
 					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 					{
@@ -245,7 +245,7 @@ public class ItemPrediction
 			}
 			else
 			{
-				Engine.LoadModel(recommender, load_model_file);
+				Recommender.LoadModel(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 				// TODO is this the right time to load the model?
 			}
@@ -298,7 +298,7 @@ public class ItemPrediction
 			}
 			Console.WriteLine();
 		}
-		Engine.SaveModel(recommender, save_model_file);
+		Recommender.SaveModel(recommender, save_model_file);
 	}
 
     static void LoadData(string data_dir, string trainfile, string testfile,

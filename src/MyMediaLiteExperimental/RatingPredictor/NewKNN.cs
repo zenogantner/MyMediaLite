@@ -186,7 +186,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void SaveModel(string filename)
 		{
 			// TODO extend
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
 		}
 
@@ -194,7 +194,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			// TODO extend
-            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

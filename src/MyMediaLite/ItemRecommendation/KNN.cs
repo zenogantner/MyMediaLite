@@ -39,7 +39,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(nearest_neighbors.Length);
 				foreach (int[] nn in nearest_neighbors)
@@ -57,7 +57,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				int num_users = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_users][];

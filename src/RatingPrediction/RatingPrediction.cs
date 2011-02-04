@@ -69,7 +69,7 @@ MyMediaLite rating prediction
   methods (plus arguments and their defaults):");
 
 			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", Engine.List("MyMediaLite.RatingPrediction")));
+			Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.RatingPrediction")));
 
 			Console.WriteLine(@"method ARGUMENTS have the form name=value
 
@@ -153,11 +153,11 @@ MyMediaLite rating prediction
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
-		recommender = Engine.CreateRatingPredictor(method);
+		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
 
-		Engine.Configure(recommender, parameters, Usage);
+		Recommender.Configure(recommender, parameters, Usage);
 
 		if (parameters.CheckForLeftovers())
 			Usage(-1);
@@ -195,7 +195,7 @@ MyMediaLite rating prediction
 			if (load_model_file.Equals(string.Empty))
 				recommender.Train();
 			else
-				Engine.LoadModel(iterative_recommender, load_model_file);
+				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -231,7 +231,7 @@ MyMediaLite rating prediction
 					});
 					eval_time_stats.Add(time.TotalSeconds);
 
-					Engine.SaveModel(recommender, save_model_file, i);
+					Recommender.SaveModel(recommender, save_model_file, i);
 
 					if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 					{
@@ -248,7 +248,7 @@ MyMediaLite rating prediction
 			} // for
 
 			DisplayIterationStats();
-			Engine.SaveModel(recommender, save_model_file);
+			Recommender.SaveModel(recommender, save_model_file);
 		}
 		else
 		{
@@ -270,12 +270,12 @@ MyMediaLite rating prediction
 				{
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
         			Console.Write(" training_time " + seconds + " ");
-					Engine.SaveModel(recommender, save_model_file);
+					Recommender.SaveModel(recommender, save_model_file);
 				}
 			}
 			else
 			{
-				Engine.LoadModel(recommender, load_model_file);
+				Recommender.LoadModel(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 			}
 

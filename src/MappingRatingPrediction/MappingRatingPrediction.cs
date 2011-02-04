@@ -119,7 +119,7 @@ public class MappingRatingPrediction
 		switch (method)
 		{
 			case "MF-ItemMapping":
-				recommender = Engine.Configure(mf_map, parameters, Usage);
+				recommender = Recommender.Configure(mf_map, parameters, Usage);
 				break;
 //				case "MF-ItemMapping-Optimal":
 //					recommender = Engine.Configure(mf_map_opt, parameters, Usage);
@@ -171,7 +171,7 @@ public class MappingRatingPrediction
 
 		TimeSpan seconds;
 
-		Engine.LoadModel(recommender, load_model_file);
+		Recommender.LoadModel(recommender, load_model_file);
 
 		// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 		recommender.MaxUserID = user_mapping.InternalIDs.Max();

@@ -49,14 +49,14 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
 		}
 
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-            using ( StreamReader reader = Engine.GetReader(filename, this.GetType()) )
+            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

@@ -103,7 +103,7 @@ namespace MyMediaLite.ItemRecommendation
         /// <inheritdoc/>
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Engine.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
 			{
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				IMatrixUtils.WriteMatrix(writer, item_factors);
@@ -113,7 +113,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void LoadModel(string file)
         {
-            using ( StreamReader reader = Engine.GetReader(file, this.GetType()) )
+            using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
             	var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
