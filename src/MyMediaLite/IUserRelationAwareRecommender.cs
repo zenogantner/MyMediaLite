@@ -21,7 +21,7 @@ namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take a binary relation over users into account</summary>
 	/// <remarks></remarks>
-	public interface IUserRelationAwareRecommender : IRecommenderEngine
+	public interface IUserRelationAwareRecommender : IRecommender
 	{
 		/// <value>The binary user relation</value>
 		/// <remarks></remarks>

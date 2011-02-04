@@ -19,7 +19,7 @@ namespace MyMediaLite
 {
 	/// <summary>Interface representing iteratively trained models</summary>
 	/// <remarks></remarks>
-	public interface IIterativeModel : IRecommenderEngine
+	public interface IIterativeModel : IRecommender
 	{
 		/// <value>Number of iterations to run the training</value>
 		/// <remarks></remarks>

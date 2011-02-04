@@ -22,7 +22,7 @@ namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take a binary relation over items into account</summary>
 	/// <remarks></remarks>
-	public interface IItemRelationAwareRecommender : IRecommenderEngine
+	public interface IItemRelationAwareRecommender : IRecommender
 	{
 		/// <value>The binary item relation</value>
 		/// <remarks></remarks>

@@ -25,12 +25,12 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>
-    public abstract class Ensemble : IRecommenderEngine
+    public abstract class Ensemble : IRecommender
 	{
         /// <summary>
         /// List of engines.
         /// </summary>
-        public List<IRecommenderEngine> engines = new List<IRecommenderEngine>();
+        public List<IRecommender> engines = new List<IRecommender>();
 
         private double max_rating_value = 5;
         private double min_rating_value = 1;
@@ -48,7 +48,7 @@ namespace MyMediaLite.ensemble
             set
             {
                 this.max_rating_value = value;
-				foreach (IRecommenderEngine engine in engines)
+				foreach (IRecommender engine in engines)
 					if (engine is IRatingPredictor)
 						((IRatingPredictor)engine).MaxRating = value;
             }
@@ -67,7 +67,7 @@ namespace MyMediaLite.ensemble
             set
             {
                 this.min_rating_value = value;
-				foreach (IRecommenderEngine engine in engines)
+				foreach (IRecommender engine in engines)
 					if (engine is IRatingPredictor)
 						((IRatingPredictor)engine).MinRating = value;
 
@@ -85,7 +85,7 @@ namespace MyMediaLite.ensemble
         /// <inheritdoc/>
         public virtual void Train()
         {
-            foreach (IRecommenderEngine engine in engines)
+            foreach (IRecommender engine in engines)
                 engine.Train();
         }
     }

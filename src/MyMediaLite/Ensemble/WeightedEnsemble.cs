@@ -89,14 +89,14 @@ namespace MyMediaLite.ensemble
 				int numberOfComponents = Int32.Parse(reader.ReadLine());
 
 				var weights = new List<double>();
-				var engines = new List<IRecommenderEngine>();
+				var engines = new List<IRecommender>();
 
 				for (int i = 0; i < numberOfComponents; i++)
 				{
 					string[] data = reader.ReadLine().Split(' ');
 
 					Type t = System.Type.GetType(data[0]);
-					engines.Add( (IRecommenderEngine) Activator.CreateInstance(t) );
+					engines.Add( (IRecommender) Activator.CreateInstance(t) );
 					engines[i].LoadModel("model-" + i + ".txt");
 
 					// make sure the engines get their data FIXME

@@ -1,5 +1,6 @@
 0.10	2011-??-??
         - API changes
+          - rename IRecommenderEngine to IRecommender
           - rename namespace ItemRecommender to ItemRecommendation
           - rename Memory to ItemRecommender
           - rename namespace RatingPredictor to RatingPrediction

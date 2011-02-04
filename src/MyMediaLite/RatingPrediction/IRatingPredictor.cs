@@ -18,7 +18,7 @@
 namespace MyMediaLite.RatingPrediction
 {
     /// <summary>interface for rating predictors</summary>
-    public interface IRatingPredictor : IRecommenderEngine
+    public interface IRatingPredictor : IRecommender
     {
         /// <summary>The max rating value</summary>
         double MaxRating { get; set; }

@@ -22,7 +22,7 @@ namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take binary user attributes into account</summary>
 	/// <remarks></remarks>
-	public interface IUserAttributeAwareRecommender : IRecommenderEngine
+	public interface IUserAttributeAwareRecommender : IRecommender
 	{
 		/// <value>Number of binary user attributes</value>
 		/// <remarks></remarks>

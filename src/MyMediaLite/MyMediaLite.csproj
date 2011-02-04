@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="IItemAttributeAwareRecommender.cs" />
     <Compile Include="IUserAttributeAwareRecommender.cs" />
-    <Compile Include="IRecommenderEngine.cs" />
     <Compile Include="IIterativeModel.cs" />
     <Compile Include="IUserRelationAwareRecommender.cs" />
     <Compile Include="IItemRelationAwareRecommender.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="RatingPrediction\SlopeOne.cs" />
     <Compile Include="ItemRecommendation\ItemRecommender.cs" />
     <Compile Include="RatingPrediction\RatingPredictor.cs" />
+    <Compile Include="IRecommender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

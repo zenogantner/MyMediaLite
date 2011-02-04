@@ -19,7 +19,7 @@
 namespace MyMediaLite.ItemRecommendation
 {
     /// <summary>Interface for item recommenders</summary>
-    public interface IItemRecommender : IRecommenderEngine
+    public interface IItemRecommender : IRecommender
     {
 		// <summary>Check if the engine can produce meaningful recommendations for a given user</summary>
 		// <param name="user_id">the user ID</param>

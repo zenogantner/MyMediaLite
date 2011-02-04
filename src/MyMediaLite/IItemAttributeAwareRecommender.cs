@@ -22,7 +22,7 @@ namespace MyMediaLite
 {
 	/// <summary>Interface for recommender engines that take binary item attributes into account</summary>
 	/// <remarks></remarks>
-	public interface IItemAttributeAwareRecommender : IRecommenderEngine
+	public interface IItemAttributeAwareRecommender : IRecommender
 	{
 		/// <value>an integer stating the number of attributes</value>
 		/// <summary></summary>

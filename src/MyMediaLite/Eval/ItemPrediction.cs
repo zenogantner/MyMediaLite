@@ -40,7 +40,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
-			IRecommenderEngine engine,
+			IRecommender engine,
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -64,7 +64,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
-			IRecommenderEngine engine,
+			IRecommender engine,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
 			ICollection<int> relevant_items,
@@ -90,7 +90,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommenderEngine engine,
+			IRecommender engine,
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -111,7 +111,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommenderEngine engine,
+			IRecommender engine,
 			SparseBooleanMatrix train,
 		    IList<int> relevant_users,
 			ICollection<int> relevant_items,
@@ -136,7 +136,7 @@ namespace MyMediaLite.Eval
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
-			IRecommenderEngine engine,
+			IRecommender engine,
             int user_id,
 		    ICollection<int> relevant_items,
 		    ICollection<int> ignore_items,
@@ -180,7 +180,7 @@ namespace MyMediaLite.Eval
 		/// <param name="user_id">the user ID</param>
 		/// <param name="max_item_id">the maximum item ID</param>
 		/// <returns>a list sorted list of item IDs</returns>
-		static public int[] PredictItems(IRecommenderEngine engine, int user_id, int max_item_id)
+		static public int[] PredictItems(IRecommender engine, int user_id, int max_item_id)
 		{
             var result = new List<WeightedItem>();
             for (int item_id = 0; item_id < max_item_id + 1; item_id++)
@@ -201,7 +201,7 @@ namespace MyMediaLite.Eval
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="relevant_items">a collection of numerical IDs of relevant items</param>
 		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public int[] PredictItems(IRecommenderEngine engine, int user_id, ICollection<int> relevant_items)
+		static public int[] PredictItems(IRecommender engine, int user_id, ICollection<int> relevant_items)
 		{
             var result = new List<WeightedItem>();
 

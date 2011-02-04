@@ -38,7 +38,7 @@ namespace MyMediaLite.Util
 		/// </remarks>
 		/// <param name="engine">the engine to store</param>
 		/// <param name="filename">the filename (may include relative paths)</param>
-		public static void SaveModel(IRecommenderEngine engine, string filename)
+		public static void SaveModel(IRecommender engine, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;
@@ -51,7 +51,7 @@ namespace MyMediaLite.Util
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
-		public static void SaveModel(IRecommenderEngine engine, string filename, int iteration)
+		public static void SaveModel(IRecommender engine, string filename, int iteration)
 		{
 			if (filename.Equals(string.Empty))
 				return;
@@ -62,7 +62,7 @@ namespace MyMediaLite.Util
 		/// <summary>Load the model parameters of a recommender engine (in a given iteration of the training) from a file</summary>
 		/// <param name="engine">the <see cref="IRecommenderEngine"/> to save</param>
 		/// <param name="filename">the filename template</param>
-		public static void LoadModel(IRecommenderEngine engine, string filename)
+		public static void LoadModel(IRecommender engine, string filename)
 		{
 			if (filename.Equals(string.Empty))
 				return;
@@ -190,7 +190,7 @@ namespace MyMediaLite.Util
 		/// <param name="engine">An <see cref="IRecommenderEngine"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
-		public static void SetProperty(IRecommenderEngine engine, string key, string val)
+		public static void SetProperty(IRecommender engine, string key, string val)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -288,7 +288,7 @@ namespace MyMediaLite.Util
 		/// <summary>Describes the kind of data needed by this engine</summary>
 		/// <param name="recommender">a recommender engine</param>
 		/// <returns>a string containing the additional datafiles needed for training this engine</returns>
-		public static string Needs(IRecommenderEngine recommender)
+		public static string Needs(IRecommender recommender)
 		{
 			// determine necessary data
 			var needs = new List<string>();
@@ -314,7 +314,7 @@ namespace MyMediaLite.Util
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum)
 				{
-					IRecommenderEngine recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommenderEngine) Engine.CreateRatingPredictor(type) : (IRecommenderEngine) Engine.CreateItemRecommender(type);
+					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Engine.CreateRatingPredictor(type) : (IRecommender) Engine.CreateItemRecommender(type);
 
 					string description = recommender.ToString();
 					string needs = Engine.Needs(recommender);
