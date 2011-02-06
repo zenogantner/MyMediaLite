@@ -95,6 +95,9 @@ Architecture
      - http://www.codeproject.com/KB/database/CsvReader.aspx
 Misc features
  - use --param for command-line parameters
+   - https://github.com/mono/mono/tree/master/mcs/class/Mono.Options/
+     or
+   - http://www.ndesk.org/Options
  - rewrite MF techniques using vector/matrix abstractions
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
