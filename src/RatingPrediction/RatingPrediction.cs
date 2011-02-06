@@ -279,6 +279,8 @@ MyMediaLite rating prediction
 				Console.Write(recommender.ToString() + " ");
 			}
 
+			Memory.ReportUsage();
+			
 			if (!no_eval)
 			{
 				seconds = Utils.MeasureTime(

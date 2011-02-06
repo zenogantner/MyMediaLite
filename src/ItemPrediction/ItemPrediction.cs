@@ -250,6 +250,8 @@ public class ItemPrediction
 				// TODO is this the right time to load the model?
 			}
 
+			Memory.ReportUsage();
+			
 			if (!predict_items_file.Equals(string.Empty))
 			{
 				if (predict_for_users_file.Equals(string.Empty))
