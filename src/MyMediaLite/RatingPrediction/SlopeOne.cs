@@ -31,7 +31,11 @@ namespace MyMediaLite.RatingPrediction
 	/// SIAM Data Mining (SDM 2005)
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
 	///
-	/// This engine does NOT support online updates. They would be easy to implement, though.
+	/// This recommender does NOT support online updates. They would be easy to implement, though.
+	/// 
+	/// Memory use between float and double difference matrices:
+	/// ml100k: 152 MB vs. 165 MB
+	/// ml1m:   905 MB vs. 980 MB
 	/// </remarks>
 	public class SlopeOne : RatingPredictor
 	{
@@ -99,7 +103,7 @@ namespace MyMediaLite.RatingPrediction
 	        		foreach (RatingEvent r2 in user_ratings)
 					{
 	          			freq_matrix[r.item_id, r2.item_id] += 1;
-	          			diff_matrix[r.item_id, r2.item_id] += r.rating - r2.rating;
+	          			diff_matrix[r.item_id, r2.item_id] += (double) (r.rating - r2.rating);
 	        		}
 
 			// compute average differences

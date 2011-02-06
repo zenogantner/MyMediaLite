@@ -42,9 +42,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings
 		{
-			get {
-				return this.ratings;
-			}
+			get { return this.ratings; }
 			set {
 				this.ratings = value;
 				MaxUserID = ratings.MaxUserID;
