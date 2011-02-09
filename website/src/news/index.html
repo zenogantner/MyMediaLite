@@ -24,7 +24,7 @@
     As always, this is the best version of MyMediaLite ever.
     The most notable changes are support for reading data from SQL databases (and other
     data sources supporting the <code>IDataReader</code> interface), the addition of the
-    <em>Slope One</em> rating prediction engine, and initial support for crossvalidation.
+    <em>Slope One</em> rating predictor, and initial support for crossvalidation.
     <br/>
     See the <a href="[% prefix %]download/Changes">Changes file</a> for more.
     <a href="[% prefix %]download/index.html">Download it.</a>
@@ -87,7 +87,7 @@
     <b>October 21, 2010.</b>
     The <a href="[% prefix %]download/index.html">new release</a> contains many bug fixes, improvements, and some new features:
     <ul>
-      <li>Support for recommender engines that use relations over users and/or items.
+      <li>Support for recommenders that use relations over users and/or items.
           To demonstrate the new interfaces, we implemented SocialMF, based on the
           ACM RecSys 2010 Best Paper by Jamali and Ester.</li>
       <li>Additional measure for item prediction evaluation: mean average precision (MAP)</li>
@@ -124,7 +124,7 @@
     which is often based on simulated users and records of past user behavior.
   </p>
   <p>
-    The method used for the 'Live Evaluation' track was the MyMediaLite engine
+    The method used for the 'Live Evaluation' track was the MyMediaLite recommender
     <a href="http://gitorious.org/mymedialite/mymedialite/blobs/master/Algorithms/item_recommender/BPRMF.cs">BPR-MF</a>,
     matrix factorization optimized for Bayesian Personalized Ranking, described in
     <a href="../../pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf">this UAI 2009 paper</a>.

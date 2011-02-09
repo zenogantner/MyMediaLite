@@ -46,16 +46,15 @@ to integrate the library in your application or having to develop your own progr
     mono RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGS] [OPTIONS]
     </pre>
     If you use Windows, just leave out the <tt>mono</tt>.
-    METHOD is the recommender engine to use, which will be trained using the contents
-    of TRAINING_FILE. The engine will then predict the data in TEST_FILE, and the program
+    METHOD is the recommender to use, which will be trained using the contents
+    of TRAINING_FILE. The recommender will then predict the data in TEST_FILE, and the program
     will display the RMSE (root mean square error) and MAE (mean absolute error) of the
     predictions.
   </p>
-  <!-- TODO footnote about 'mono --debug' -->
   
   <p>
     <a href="rating_prediction.html">
-      If you call RatingPrediction.exe without arguments, it will provide a list of recommender engines
+      If you call RatingPrediction.exe without arguments, it will provide a list of recommenders
       to choose from, plus their arguments and further options.
     </a>
   </p>
@@ -77,7 +76,7 @@ to integrate the library in your application or having to develop your own progr
   </p>
 
   <p>
-    To use a more advanced recommender engine, enter
+    To use a more advanced recommender, enter
     <pre>
     mono RatingPrediction.exe u1.base u1.test biased-matrix-factorization
     </pre>
@@ -87,7 +86,7 @@ to integrate the library in your application or having to develop your own progr
                                 init_mean=0 init_stdev=0.1
     training_time 00:00:03.3575780 RMSE 0.96108 MAE 0.75124 testing_time 00:00:00.0159740
     </pre>
-    The key-value pairs after the method name represent arguments to the recommender engine
+    The key-value pairs after the method name represent arguments to the recommender
     that may be modified to get even better results. For instance, we could use more latent factors
     per user and item, which leads to a more complex (and hopefully more accurate) model:
     <pre>
@@ -139,8 +138,8 @@ to integrate the library in your application or having to develop your own progr
   
   <p>
     <b>Warning:</b>
-    Depending on the recommender engine used, the choice of arguments (hyperparameters) may be crucial to
-    the engine's performance.
+    Depending on the recommender, the choice of arguments (hyperparameters) may be crucial to
+    the recommender's performance.
     Sometimes you may find suitable values by playing a bit with the arguments, starting from their default
     values. However, there is no guarantee that this will work!
     You should use a principled approach to find good hyperparameters, e.g. cross-validation and grid search.
@@ -162,7 +161,7 @@ to integrate the library in your application or having to develop your own progr
 <p>
   Again,
   <a href="item_prediction.html">
-    if you call ItemPrediction.exe without arguments, it will provide a list of recommender engines
+    if you call ItemPrediction.exe without arguments, it will provide a list of recommenders
     to choose from, plus their arguments and further options.
   </a>
   If you use Windows, leave out the <tt>mono</tt> in the call above.
@@ -223,7 +222,7 @@ to integrate the library in your application or having to develop your own progr
   
   <p>
   The item prediction program supports the same options (<tt>find_iter=N</tt> etc.)
-  for iteratively trained recommender engines like <tt>BPR-MF</tt> and <tt>WR-MF</tt>.
+  for iteratively trained recommenders like <tt>BPR-MF</tt> and <tt>WR-MF</tt>.
   </p>
   
 </div>
