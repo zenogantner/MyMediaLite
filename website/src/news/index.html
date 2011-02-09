@@ -12,6 +12,29 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+  <a name="0.10"><h2>MyMediaLite 0.10 has been released</h2></a>
+  <p>
+    <b>February 9, 2011</b>
+    <p>
+    Version 0.10 has been on the server since <a href="http://fosdem.org/2011">FOSDEM</a>, so this announcement is a little bit late.
+    There have been several improvements:
+    <ul>
+      <li>The <a href="[% prefix %]documentation/command_line.html">command-line tools</a> now use reflection to automagically find all relevant recommenders.
+          This means you do not have to modify the command-line tools any more to use your newly implemented recommenders!</li>
+      <li>The kNN-based methods are now faster and consume less memory because they take data sparsity better into account.</li>
+      <li>A method for the diversification of result sets has been added to the experimental section of MyMediaLite.</li>
+      <li>Some namespaces and types have been renamed to have nicer, more intuitive names.</li>
+    </ul>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+    <p>
+    You can have a look at <a href="http://www.slideshare.net/zenogantner/mymedialite">
+    the slides of the MyMediaLite presentation</a> at the <a href="http://www.fosdem.org/2011/schedule/track/data_analytics_devroom">FOSDEM 2011 Data Analytics devroom</a>
+    on <a href="http://www.slideshare.net">SlideShare</a>.
+    </p>
+  </p>
+
   <a name="twitter"><h2>Now on Twitter</h2></a>
   <p>
     <b>February 1, 2011</b>
@@ -32,13 +55,13 @@
 
   <a name="0.08"><h2>MyMediaLite 0.08 has been released</h2></a>
   <p>
-    <b>December 09, 2010.</b>
+    <b>December 9, 2010.</b>
     There have been several changes:
     Most notably, we now have the API documentation
     in the packages and on the website.
     Another programmer-visible change is that our namespaces now have <code>CamelCase</code>
     instead of <code>lower_case</code> names.
-    <a href="../documentation/use_engine_from_ruby.html">This allows MyMediaLite to be called from IronRuby</a>.
+    <a href="../documentation/use_from_ruby.html">This allows MyMediaLite to be called from IronRuby</a>.
     <br/>
     See the <a href="[% prefix %]download/Changes">Changes file</a> for details.
     <a href="[% prefix %]download/index.html">Download it.</a>
@@ -71,14 +94,14 @@
 
   <a name="0.05"><h2>MyMediaLite 0.05 has been released</h2></a>
   <p>
-    <b>November 02, 2010.</b>
+    <b>November 2, 2010.</b>
     The <a href="[% prefix %]download/index.html">new release</a> contains mostly bug fixes
     and improvements under the hood:
     <ul>
       <li>command-line tool: fix the output of rating predictions - map the user/item IDs back to the original IDs
           (reported by Thorsten Angermann)</li>
       <li>unit tests for basic datatypes (Christina Lichtenthäler)</li>
-      <li><a href="../documentation/use_engine_from_python.html">examples for using MyMediaLite with IronPython</a></li>
+      <li><a href="../documentation/use_from_python.html">examples for using MyMediaLite with IronPython</a></li>
     </ul>
   </p>
 

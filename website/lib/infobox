@@ -9,7 +9,7 @@
 
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
-  You can now <a href="http://twitter.com/mymedialite">follow us on Twitter (<code>@mymedialite</code>)</a> to get the latest updates on MyMediaLite.
+  <a href="[% prefix %]news/index.html#0.10">MyMediaLite 0.10 has been released!</a>
 </p>
 </div>
 
