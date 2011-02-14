@@ -58,12 +58,13 @@ public class ItemPrediction
 
 	static void Usage(int exit_code)
 	{
-		Console.WriteLine("MyMediaLite item prediction");
+		Console.WriteLine("MyMediaLite item prediction from implicit feedback");
+		Console.WriteLine();
 		Console.WriteLine("  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
 		Console.WriteLine();
 		Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
-		Console.WriteLine("   methods (plus arguments and their defaults):");
 		Console.WriteLine();
+		Console.WriteLine("   methods (plus arguments and their defaults):");
 
 		Console.Write("   - ");
 		Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.ItemRecommendation")));
@@ -85,6 +86,7 @@ public class ItemPrediction
 		Console.WriteLine("   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
 		Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
 		Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
+		Console.WriteLine();
 		Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
 		Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
 		Console.WriteLine("   - max_iter=N                 perform at most N iterations");
@@ -251,7 +253,7 @@ public class ItemPrediction
 			}
 
 			Memory.ReportUsage();
-			
+
 			if (!predict_items_file.Equals(string.Empty))
 			{
 				if (predict_for_users_file.Equals(string.Empty))
