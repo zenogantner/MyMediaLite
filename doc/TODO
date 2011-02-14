@@ -101,6 +101,7 @@ Misc features
  - rewrite MF techniques using vector/matrix abstractions
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
+ - have documentation for different versions on the website
  - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing
  - (*) document how to set up C# development environment for Ubuntu, Debian, etc.

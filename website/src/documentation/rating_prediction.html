@@ -13,44 +13,53 @@
 
 <div id="content">
 <pre>
-MyMediaLite rating prediction; usage:
- RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
-    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-  - methods:
-    - matrix-factorization
-    - biased-matrix-factorization
-    - SocialMF (needs user_relation=FILE)
-    - user-kNN-pearson
-    - user-kNN-cosine
-    - item-kNN-pearson
-    - item-kNN-cosine
-    - item-attribute-kNN (needs item_attributes=FILE)
-    - user-item-baseline
-    - global-average
-    - user-average
-    - item-average
-  - method ARGUMENTS have the form name=value
-  - general OPTIONS have the form name=value
-    - option_file=FILE           read options from FILE (line format KEY: VALUE)
-    - random_seed=N              
-    - data_dir=DIR               load all files from DIR
-    - user_attributes=FILE       file containing user attribute information
-    - item_attributes=FILE       file containing item attribute information
-    - user_relation=FILE         file containing user relation information
-    - item_relation=FILE         file containing item relation information
-    - save_model=FILE            save computed model to FILE
-    - load_model=FILE            load model from FILE
-    - min_rating=NUM             
-    - max_rating=NUM             
-    - no_eval=BOOL               
-    - predict_ratings_file=FILE  write the rating predictions to FILE ('-' for STDOUT)
-  - options for finding the right number of iterations (MF methods)
-    - find_iter=N                give out statistics every N iterations
-    - max_iter=N                 perform at most N iterations
-    - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
-    - rmse_cutoff=NUM            abort if RMSE is above NUM
-    - mae_cutoff=NUM             abort if MAE is above NUM
-    - compute_fit=BOOL           display fit on training data every find_iter iterations
+MyMediaLite rating prediction
+
+ usage:  RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+
+  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+
+  methods (plus arguments and their defaults):
+   - BiasedMatrixFactorization num_factors=10 bias_regularization=0 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
+   - ItemAttributeKNN k=inf reg_u=25 reg_i=10 (needs item_attributes=FILE)
+   - ItemKNNCosine k=inf reg_u=25 reg_i=10
+   - ItemKNNPearson k=inf shrinkage=10 reg_u=25 reg_i=10
+   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
+   - UserAttributeKNN k=inf reg_u=25 reg_i=10 (needs user_attributes=FILE)
+   - UserItemBaseline reg_u=25 reg_i=10
+   - UserKNNCosine k=inf reg_u=25 reg_i=10
+   - UserKNNPearson k=inf shrinkage=10 reg_u=25 reg_i=10
+   - GlobalAverage
+   - UserAverage
+   - ItemAverage
+   - BipolarSlopeOne
+   - SlopeOne
+method ARGUMENTS have the form name=value
+
+  general OPTIONS have the form name=value
+   - option_file=FILE           read options from FILE (line format KEY: VALUE)
+   - random_seed=N              set random seed to N
+   - data_dir=DIR               load all files from DIR
+   - user_attributes=FILE       file containing user attribute information
+   - item_attributes=FILE       file containing item attribute information
+   - user_relation=FILE         file containing user relation information
+   - item_relation=FILE         file containing item relation information
+   - save_model=FILE            save computed model to FILE
+   - load_model=FILE            load model from FILE
+   - min_rating=NUM             the smallest valid rating value
+   - max_rating=NUM             the greatest valid rating value
+   - no_eval=BOOL               do not evaluate
+   - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+   - cross_validation=K         perform k-fold crossvalidation on the training data
+                                 (ignores the test data)
+
+  options for finding the right number of iterations (MF methods)
+   - find_iter=N                give out statistics every N iterations
+   - max_iter=N                 perform at most N iterations
+   - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
+   - rmse_cutoff=NUM            abort if RMSE is above NUM
+   - mae_cutoff=NUM             abort if MAE is above NUM
+   - compute_fit=BOOL           display fit on training data every find_iter iterations
 </pre>
 </div>
 

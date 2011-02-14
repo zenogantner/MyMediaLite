@@ -13,43 +13,48 @@
 
 <div id="content">
 <pre>
-MyMediaLite item prediction; usage:
- ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
-    - use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-  - methods (plus arguments and their defaults):
-    - WR-MF
-    - BPR-MF
-    - BPR-Linear (needs item_attributes=FILE)
-    - item-kNN
-    - item-attribute-kNN (needs item_attributes=FILE)
-    - user-kNN
-    - weighted-user-kNN
-    - user-attribute-kNN (needs user_attributes=FILE)
-    - item-attribute-SVM (needs item_attributes=FILE)
-    - most-popular
-    - random
-  - method ARGUMENTS have the form name=value
-  - general OPTIONS have the form name=value
-    - option_file=FILE           read options from FILE (line format KEY: VALUE)
-    - random_seed=N
-    - data_dir=DIR               load all files from DIR
-    - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set
-    - user_attributes=FILE       file containing user attribute information
-    - item_attributes=FILE       file containing item attribute information
-    - user_relation=FILE         file containing user relation information
-    - item_relation=FILE         file containing item relation information
-    - save_model=FILE            save computed model to FILE
-    - load_model=FILE            load model from FILE
-    - no_eval=BOOL               do not evaluate
-    - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)
-    - predict_items_num=N        predict N items per user (needs predict_items_file)
-    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)
-  - options for finding the right number of iterations (MF methods and BPR-Linear)
-    - find_iter=N                give out statistics every N iterations
-    - max_iter=N                 perform at most N iterations
-    - auc_cutoff=NUM             abort if AUC is below NUM
-    - prec5_cutoff=NUM           abort if prec@5 is below NUM
-    - compute_fit=BOOL           display fit on training data every find_iter iterations
+MyMediaLite item prediction from implicit feedback
+
+  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+
+   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+   methods (plus arguments and their defaults):
+
+   - ItemAttributeSVM C=1 Gamma=0.002 (needs item_attributes=FILE)
+   - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs item_attributes=FILE)
+   - BPRMF num_factors=10 item_bias=False reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
+   - ItemAttributeKNN k=80 (needs item_attributes=FILE)
+   - ItemKNN k=80
+   - MostPopular
+   - Random
+   - UserAttributeKNN k=80 (needs user_attributes=FILE)
+   - UserKNN k=80
+   - WeightedItemKNN k=80
+   - WeightedUserKNN k=80
+   - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=30 init_mean=0 init_stdev=0.1
+  method ARGUMENTS have the form name=value
+
+  general OPTIONS have the form name=value
+   - option_file=FILE           read options from FILE (line format KEY: VALUE)
+   - random_seed=N
+   - data_dir=DIR               load all files from DIR
+   - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set
+   - user_attributes=FILE       file containing user attribute information
+   - item_attributes=FILE       file containing item attribute information
+   - user_relation=FILE         file containing user relation information
+   - item_relation=FILE         file containing item relation information
+   - save_model=FILE            save computed model to FILE
+   - load_model=FILE            load model from FILE
+   - no_eval=BOOL               do not evaluate
+   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)
+   - predict_items_num=N        predict N items per user (needs predict_items_file)
+   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)
+  options for finding the right number of iterations (MF methods and BPR-Linear)
+   - find_iter=N                give out statistics every N iterations
+   - max_iter=N                 perform at most N iterations
+   - auc_cutoff=NUM             abort if AUC is below NUM
+   - prec5_cutoff=NUM           abort if prec@5 is below NUM
+   - compute_fit=BOOL           display fit on training data every find_iter iterations
 </pre>
 </div>
 
