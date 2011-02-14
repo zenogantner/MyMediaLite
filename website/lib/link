@@ -40,6 +40,8 @@
      source_code   => { url => 'http://gitorious.org/mymedialite/mymedialite',   title => 'http://gitorious.org/mymedialite/mymedialite' }
      ironpython    => { url => 'http://ironpython.net/'                          title => 'IronPython' }
      ironruby      => { url => 'http://ironruby.net/'                            title => 'IronRuby' }
+     recsyswiki    => { url => 'http://recsyswiki.com/'                          title => 'RecSysWiki' }
+     recsysconf    => { url => 'http://recsys.acm.org/'                          title => 'ACM Conference on Recommender Systems' }
   }
 %]
 <a href="[% links.$link.url %]">[% links.$link.title %]</a>

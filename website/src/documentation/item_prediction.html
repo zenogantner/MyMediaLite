@@ -17,9 +17,9 @@ MyMediaLite item prediction from implicit feedback
 
   usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
 
-   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-   methods (plus arguments and their defaults):
-
+  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+  
+  methods (plus arguments and their defaults):
    - ItemAttributeSVM C=1 Gamma=0.002 (needs item_attributes=FILE)
    - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs item_attributes=FILE)
    - BPRMF num_factors=10 item_bias=False reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
@@ -49,6 +49,7 @@ MyMediaLite item prediction from implicit feedback
    - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)
    - predict_items_num=N        predict N items per user (needs predict_items_file)
    - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)
+  
   options for finding the right number of iterations (MF methods and BPR-Linear)
    - find_iter=N                give out statistics every N iterations
    - max_iter=N                 perform at most N iterations
