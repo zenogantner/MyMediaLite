@@ -20,13 +20,13 @@ using System;
 
 namespace MyMediaLite.Data
 {
-    /// <summary>Weighted items class</summary>
-    public class WeightedItem : IComparable
-    {
-        /// <summary>Item ID</summary>
-        public int item_id;
-        /// <summary>Weight</summary>
-        public double weight;
+	/// <summary>Weighted items class</summary>
+	public class WeightedItem : IComparable
+	{
+		/// <summary>Item ID</summary>
+		public int item_id;
+		/// <summary>Weight</summary>
+		public double weight;
 
 		/// <summary>Default constructor</summary>
 		public WeightedItem() {}
@@ -41,11 +41,11 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-        public int CompareTo(Object o)
-        {
+		public int CompareTo(Object o)
+		{
 			var otherItem = o as WeightedItem;
-            return this.weight.CompareTo(otherItem.weight);
-        }
+			return this.weight.CompareTo(otherItem.weight);
+		}
 
 		/// <inheritdoc/>
 		public override bool Equals(Object o)
@@ -57,7 +57,7 @@ namespace MyMediaLite.Data
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public bool Equals(WeightedItem otherItem)
 		{
 			if (otherItem == null)
@@ -66,10 +66,10 @@ namespace MyMediaLite.Data
 			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override int GetHashCode()
 		{
 			return weight.GetHashCode();
 		}
-    }
+	}
 }
