@@ -52,9 +52,9 @@ namespace MyMediaLite.Data
 		/// <returns>the original (external) ID of the entitiy</returns>
 		public int ToOriginalID(int internal_id)
 		{
-            int original_id;
-            if (internal_to_original.TryGetValue(internal_id, out original_id))
-                return original_id;
+			int original_id;
+			if (internal_to_original.TryGetValue(internal_id, out original_id))
+				return original_id;
 			else
 				throw new ArgumentException("Unknown internal ID: " + internal_id);
 		}
@@ -64,9 +64,9 @@ namespace MyMediaLite.Data
 		/// <returns>the internal ID of the entitiy</returns>
 		public int ToInternalID(int original_id)
 		{
-            int internal_id;
-            if (original_to_internal.TryGetValue(original_id, out internal_id))
-                return internal_id;
+			int internal_id;
+			if (original_to_internal.TryGetValue(original_id, out internal_id))
+				return internal_id;
 
 			internal_id = original_to_internal.Count;
 			original_to_internal.Add(original_id, internal_id);
