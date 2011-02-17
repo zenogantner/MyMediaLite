@@ -20,12 +20,12 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.RatingPrediction
 {
-    /// <summary>Abstract class that uses an average (by entity) rating value for predictions</summary>
-    /// <remarks>
-    /// This engine does NOT support online updates.
-    /// </remarks>
-    public abstract class EntityAverage : RatingPredictor
-    {
+	/// <summary>Abstract class that uses an average (by entity) rating value for predictions</summary>
+	/// <remarks>
+	/// This engine does NOT support online updates.
+	/// </remarks>
+	public abstract class EntityAverage : RatingPredictor
+	{
 		/// <summary>The average rating for each entity</summary>
 		protected List<double> entity_averages = new List<double>();
 
@@ -43,5 +43,5 @@ namespace MyMediaLite.RatingPrediction
 		{
 			Train();
 		}
-    }
+	}
 }

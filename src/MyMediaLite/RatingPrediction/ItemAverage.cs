@@ -21,15 +21,15 @@ using MyMediaLite.Data;
 
 namespace MyMediaLite.RatingPrediction
 {
-    /// <summary>Uses the average rating value of an item for prediction</summary>
-    /// <remarks>
-    /// This engine does NOT support online updates.
-    /// </remarks>
-    public class ItemAverage : EntityAverage
-    {
+	/// <summary>Uses the average rating value of an item for prediction</summary>
+	/// <remarks>
+	/// This engine does NOT support online updates.
+	/// </remarks>
+	public class ItemAverage : EntityAverage
+	{
 		/// <inheritdoc/>
-        public override void Train()
-        {
+		public override void Train()
+		{
 			var rating_counts = new List<int>();
 
 			foreach (RatingEvent r in Ratings.All)
@@ -51,27 +51,27 @@ namespace MyMediaLite.RatingPrediction
 					entity_averages[i] /= rating_counts[i];
 				else
 					entity_averages[i] = global_average;
-        }
+		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (item_id <= MaxItemID);
 		}
 
-        /// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            if (item_id <= MaxItemID)
-                return entity_averages[item_id];
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			if (item_id <= MaxItemID)
+				return entity_averages[item_id];
 			else
 				return global_average;
-        }
+		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return "ItemAverage";
 		}
-    }
+	}
 }

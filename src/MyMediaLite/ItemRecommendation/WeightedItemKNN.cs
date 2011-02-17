@@ -23,18 +23,18 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
-    /// <remarks>
-    /// This recommender does not support online updates.
+	/// <remarks>
+	/// This recommender does not support online updates.
 	/// </remarks>
-    public class WeightedItemKNN : ItemKNN
-    {
-        /// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id > MaxUserID))
-                throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id >= nearest_neighbors.Length))
-                throw new ArgumentException("item is unknown: " + item_id);
+	public class WeightedItemKNN : ItemKNN
+	{
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			if ((user_id < 0) || (user_id > MaxUserID))
+				throw new ArgumentException("user is unknown: " + user_id);
+			if ((item_id < 0) || (item_id >= nearest_neighbors.Length))
+				throw new ArgumentException("item is unknown: " + item_id);
 
 			if (k == uint.MaxValue)
 			{
@@ -48,12 +48,12 @@ namespace MyMediaLite.ItemRecommendation
 						result += correlation[item_id, neighbor];
 				return result;
 			}
-        }
+		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("WeightedItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
-    }
+	}
 }

@@ -28,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Linear model optimized for BPR</summary>
 	/// <remarks>
-    /// This engine does not support online updates.
+	/// This engine does not support online updates.
 	/// </remarks>
 	public class BPR_Linear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
@@ -45,10 +45,10 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		/// <inheritdoc/>
-	    public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	set; }
 
-	    // Item attribute weights
-        private Matrix<double> item_attribute_weight_by_user;
+		// Item attribute weights
+		private Matrix<double> item_attribute_weight_by_user;
 
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
@@ -57,7 +57,7 @@ namespace MyMediaLite.ItemRecommendation
 		// Fast, but memory-intensive sampling
 		private bool fast_sampling = false;
 
-        /// <summary>Number of iterations over the training data</summary>
+		/// <summary>Number of iterations over the training data</summary>
 		public int NumIter { get { return num_iter; } set { num_iter = value; } }
 		private int num_iter = 10;
 
@@ -67,19 +67,19 @@ namespace MyMediaLite.ItemRecommendation
 
  		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
 		public double InitMean { get { return init_mean; } set { init_mean = value; } }
-	    double init_mean = 0;
+		double init_mean = 0;
 
 		/// <summary>standard deviation of the normal distribution used to initialize the features</summary>
 		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
-        double init_stdev = 0.1;
+		double init_stdev = 0.1;
 
 		/// <summary>Learning rate alpha</summary>
 		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
 		double learn_rate = 0.05;
 
-        /// <summary>Regularization parameter</summary>
+		/// <summary>Regularization parameter</summary>
 		public double Regularization { get { return regularization; }	set { regularization = value; } }
-        double regularization = 0.015;
+		double regularization = 0.015;
 
 		// support data structure for fast sampling
 		private int[][] user_pos_items;
@@ -112,8 +112,8 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			}
 
-        	this.item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
-        	MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
+			this.item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
+			MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
 
 			for (int i = 0; i < NumIter; i++)
 			{
@@ -220,25 +220,25 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id >= item_attribute_weight_by_user.dim1))
-            {
-                Console.Error.WriteLine("user is unknown: " + user_id);
+		public override double Predict(int user_id, int item_id)
+		{
+			if ((user_id < 0) || (user_id >= item_attribute_weight_by_user.dim1))
+			{
+				Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
-            }
-            if ((item_id < 0) || (item_id > MaxItemID))
-            {
-                Console.Error.WriteLine("item is unknown: " + item_id);
+			}
+			if ((item_id < 0) || (item_id > MaxItemID))
+			{
+				Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
-            }
+			}
 
 			double result = 0;
 			HashSet<int> attributes = this.item_attributes[item_id];
 			foreach (int a in attributes)
 				result += item_attribute_weight_by_user[user_id, a];
-            return result;
-        }
+			return result;
+		}
 
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
@@ -250,7 +250,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 				this.item_attribute_weight_by_user = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 		}
 
@@ -268,7 +268,7 @@ namespace MyMediaLite.ItemRecommendation
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
+								 "BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
 								 Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
 		}
 

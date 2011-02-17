@@ -51,7 +51,7 @@ namespace MyMediaLite.Util
 					throw new ArgumentException(arg_name + " is used twice as an argument.");
 
 				if (arg_value.Equals(string.Empty))
-				    throw new ArgumentException(arg_name + " has an empty value.");
+					throw new ArgumentException(arg_name + " has an empty value.");
 
 				if (arg_name.Equals("option_file"))
 					AddArgumentsFromFile(arg_value);
@@ -276,15 +276,15 @@ namespace MyMediaLite.Util
 		/// <param name="filename">the name of the text file</param>
 		protected void AddArgumentsFromFile(string filename)
 		{
-            using ( var reader = new StreamReader(filename) )
+			using ( var reader = new StreamReader(filename) )
 			{
 				while (!reader.EndOfStream)
 				{
-		           	string line = reader.ReadLine();
+				   	string line = reader.ReadLine();
 					if (line.Trim().Equals(string.Empty))
 						continue;
 
-		            string[] tokens = line.Split(':');
+					string[] tokens = line.Split(':');
 					if (tokens.Length != 2)
 						throw new IOException("Expected format: 'KEY: VALUE':" + line);
 
@@ -292,7 +292,7 @@ namespace MyMediaLite.Util
 					string arg_value = tokens[1].Trim();
 
 					if (arg_value.Equals(string.Empty))
-					    throw new ArgumentException(arg_name + " has an empty value.");
+						throw new ArgumentException(arg_name + " has an empty value.");
 
 					if (!this.ContainsKey(arg_name)) // command line overrides argument file
 						this.Add(arg_name, arg_value);

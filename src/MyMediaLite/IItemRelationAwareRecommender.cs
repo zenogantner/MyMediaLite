@@ -30,6 +30,6 @@ namespace MyMediaLite
 
 		/// <value>Number of items</value>
 		/// <remarks></remarks>
-	    int NumItems { get; set; }
+		int NumItems { get; set; }
 	}
 }

@@ -21,13 +21,13 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.DataType
 {
-    /// <summary>
-    /// Class for storing sparse vectors.
-    /// Indexes are zero-based.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>	
-    public class SparseVector<T> where T:new()
-    {
+	/// <summary>
+	/// Class for storing sparse vectors.
+	/// Indexes are zero-based.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>	
+	public class SparseVector<T> where T:new()
+	{
 		private Dictionary<int, T> data = new Dictionary<int, T>();
 		
 		/// <summary>
@@ -36,9 +36,9 @@ namespace MyMediaLite.DataType
 		/// <param name="x">the index</param>
 		public T this [int x] {
 			get {
-	            T result;
-	            if (data.TryGetValue(x, out result))
-		            return result;
+				T result;
+				if (data.TryGetValue(x, out result))
+					return result;
 				else
 					return new T();
 			}

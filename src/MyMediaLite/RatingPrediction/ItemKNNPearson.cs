@@ -29,13 +29,13 @@ namespace MyMediaLite.RatingPrediction
 		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
 		private float shrinkage = 10;
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			base.Train();
 			this.correlation = Pearson.Create(ratings, EntityType.ITEM, Shrinkage);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
-        }
+		}
 
 		/// <inheritdoc/>
 		protected override void RetrainItem(int item_id)
@@ -46,11 +46,11 @@ namespace MyMediaLite.RatingPrediction
 					correlation[item_id, i] = Pearson.ComputeCorrelation(ratings, EntityType.ITEM, item_id, i, Shrinkage);
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("ItemKNNPearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
+								 K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
 		}
 	}
 }

@@ -33,9 +33,9 @@ namespace MyMediaLite.DataType
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-        	writer.WriteLine(vector.Count);
-        	foreach (var v in vector)
-               	writer.WriteLine(v.ToString(ni));
+			writer.WriteLine(vector.Count);
+			foreach (var v in vector)
+			   	writer.WriteLine(v.ToString(ni));
 			
 			writer.WriteLine();
 		}
@@ -48,21 +48,21 @@ namespace MyMediaLite.DataType
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			
 			
-        	int dim = int.Parse(reader.ReadLine());
+			int dim = int.Parse(reader.ReadLine());
 
 			var vector = new double[dim];
 
 			string[] numbers;
 			int i = 0;
-        	while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
-        	{
-            	var v = double.Parse(numbers[0], ni);
+			while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
+			{
+				var v = double.Parse(numbers[0], ni);
 
-            	if (i >= dim)
-                    throw new IOException("i = " + i + " >= " + dim);
+				if (i >= dim)
+					throw new IOException("i = " + i + " >= " + dim);
 
-                vector[i++] = v;
-	        }
+				vector[i++] = v;
+			}
 
 			return vector;
 		}		
@@ -82,11 +82,11 @@ namespace MyMediaLite.DataType
 		/// <param name="vector">the vector to initialize</param>
 		/// <param name="mean">the mean of the normal distribution</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
-        static public void InitNormal(IList<double> vector, double mean, double stdev)
-        {
-            var rnd = MyMediaLite.Util.Random.GetInstance();
-            for (int i = 0; i < vector.Count; i++)
-            	vector[i] = rnd.NextNormal(mean, stdev);
-        }
+		static public void InitNormal(IList<double> vector, double mean, double stdev)
+		{
+			var rnd = MyMediaLite.Util.Random.GetInstance();
+			for (int i = 0; i < vector.Count; i++)
+				vector[i] = rnd.NextNormal(mean, stdev);
+		}
 	}
 }

@@ -26,9 +26,9 @@ using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
 {
-    /// <summary>Class that contains static methods for item prediction</summary>
-    public static class ItemPrediction
-    {
+	/// <summary>Class that contains static methods for item prediction</summary>
+	public static class ItemPrediction
+	{
 		// TODO there are too many different versions of this method interface - we should simplify the API
 
 		/// <summary>Write item predictions (scores) for all users to a file</summary>
@@ -44,7 +44,7 @@ namespace MyMediaLite.Eval
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
-		    EntityMapping user_mapping, EntityMapping item_mapping,
+			EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
@@ -66,10 +66,10 @@ namespace MyMediaLite.Eval
 		static public void WritePredictions(
 			IRecommender recommender,
 			SparseBooleanMatrix train,
-		    IList<int> relevant_users,
+			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
-		    EntityMapping user_mapping, EntityMapping item_mapping,
+			EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
@@ -92,7 +92,7 @@ namespace MyMediaLite.Eval
 			SparseBooleanMatrix train,
 			ICollection<int> relevant_items,
 			int num_predictions,
-		    EntityMapping user_mapping, EntityMapping item_mapping,
+			EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
 			var relevant_users = new List<int>(user_mapping.InternalIDs);
@@ -111,10 +111,10 @@ namespace MyMediaLite.Eval
 		static public void WritePredictions(
 			IRecommender recommender,
 			SparseBooleanMatrix train,
-		    IList<int> relevant_users,
+			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
-		    EntityMapping user_mapping, EntityMapping item_mapping,
+			EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
 			foreach (int user_id in relevant_users)
@@ -135,19 +135,19 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
-            int user_id,
-		    ICollection<int> relevant_items,
-		    ICollection<int> ignore_items,
+			int user_id,
+			ICollection<int> relevant_items,
+			ICollection<int> ignore_items,
 			int num_predictions,
-		    EntityMapping user_mapping, EntityMapping item_mapping,
-		    TextWriter writer)
+			EntityMapping user_mapping, EntityMapping item_mapping,
+			TextWriter writer)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-            var score_list = new List<WeightedItem>();
-            foreach (int item_id in relevant_items)
-                score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
+			var score_list = new List<WeightedItem>();
+			foreach (int item_id in relevant_items)
+				score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			score_list.Sort();
 			score_list.Reverse();
@@ -160,7 +160,7 @@ namespace MyMediaLite.Eval
 				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
 				{
 					if (prediction_count == 0)
-					    writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
+						writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
 					else
 						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
 
@@ -180,18 +180,18 @@ namespace MyMediaLite.Eval
 		/// <returns>a list sorted list of item IDs</returns>
 		static public int[] PredictItems(IRecommender recommender, int user_id, int max_item_id)
 		{
-            var result = new List<WeightedItem>();
-            for (int item_id = 0; item_id < max_item_id + 1; item_id++)
-                result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
+			var result = new List<WeightedItem>();
+			for (int item_id = 0; item_id < max_item_id + 1; item_id++)
+				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			result.Sort();
 			result.Reverse();
 
-            var return_array = new int[max_item_id + 1];
-            for (int i = 0; i < return_array.Length; i++)
-            	return_array[i] = result[i].item_id;
+			var return_array = new int[max_item_id + 1];
+			for (int i = 0; i < return_array.Length; i++)
+				return_array[i] = result[i].item_id;
 
-            return return_array;
+			return return_array;
 		}
 
 		/// <summary>Predict items for a given user</summary>
@@ -201,18 +201,18 @@ namespace MyMediaLite.Eval
 		/// <returns>an ordered list of items, the most likely item first</returns>
 		static public int[] PredictItems(IRecommender recommender, int user_id, ICollection<int> relevant_items)
 		{
-            var result = new List<WeightedItem>();
+			var result = new List<WeightedItem>();
 
-            foreach (int item_id in relevant_items)
-                result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
+			foreach (int item_id in relevant_items)
+				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			result.Sort();
 			result.Reverse();
 
-            var return_array = new int[result.Count];
-            for (int i = 0; i < return_array.Length; i++)
-            	return_array[i] = result[i].item_id;
-            return return_array;
+			var return_array = new int[result.Count];
+			for (int i = 0; i < return_array.Length; i++)
+				return_array[i] = result[i].item_id;
+			return return_array;
 		}
-    }
+	}
 }

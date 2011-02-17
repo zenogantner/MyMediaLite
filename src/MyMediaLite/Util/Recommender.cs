@@ -77,7 +77,7 @@ namespace MyMediaLite.Util
 		/// <returns>a <see cref="StreamReader"/></returns>
 		public static StreamReader GetReader(string filename, Type recommender_type)
 		{
-            var reader = new StreamReader(filename);
+			var reader = new StreamReader(filename);
 
 			if (reader.EndOfStream)
 				throw new IOException("Unexpected end of file " + filename);
@@ -142,28 +142,28 @@ namespace MyMediaLite.Util
 						switch (property.PropertyType.ToString())
 						{
 							case "System.Double":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(parameters[key], ni) });
 								break;
 							case "System.Single":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
 								break;
 							case "System.Int32":
 								if (parameters[key].Equals("inf"))
 									property.GetSetMethod().Invoke(engine, new Object[] { int.MaxValue });
 								else
-						    		property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
+									property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
 								break;
 							case "System.UInt32":
 								if (parameters[key].Equals("inf"))
 									property.GetSetMethod().Invoke(engine, new Object[] { uint.MaxValue });
 								else
-						    		property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
+									property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
 								break;
 							case "System.Boolean":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
+								property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
 								break;
 							case "System.String":
-						    	property.GetSetMethod().Invoke(engine, new Object[] { parameters[key] });
+								property.GetSetMethod().Invoke(engine, new Object[] { parameters[key] });
 								break;
 							default:
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
@@ -214,19 +214,19 @@ namespace MyMediaLite.Util
 					switch (property.PropertyType.ToString())
 					{
 						case "System.Double":
-					    	property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, ni) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, ni) });
 							break;
 						case "System.Single":
-					    	property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, ni) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, ni) });
 							break;
 						case "System.Int32":
-					    	property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
 							break;
 						case "System.UInt32":
-					    	property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
 							break;
 						case "System.Boolean":
-					    	property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
 							break;
 						default:
 							throw new ArgumentException(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));

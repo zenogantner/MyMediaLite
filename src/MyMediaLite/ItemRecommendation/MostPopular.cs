@@ -23,34 +23,34 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
-    /// <summary>Most-popular item recommender</summary>
-    /// <remarks>
-    /// Items are weighted by how often they have been seen in the past.
-    ///
-    /// This method is not personalized.
-    /// This engine does not support online updates.
+	/// <summary>Most-popular item recommender</summary>
+	/// <remarks>
+	/// Items are weighted by how often they have been seen in the past.
+	///
+	/// This method is not personalized.
+	/// This engine does not support online updates.
 	/// </remarks>
-    public class MostPopular : ItemRecommender
-    {
-        /// <summary>View count</summary>
-        protected Dictionary<int, int> view_count = new Dictionary<int, int>();
-
-        /// <inheritdoc/>
-        public override void Train()
-        {
-            for (int i = 0; i <= MaxItemID; i++)
-                view_count[i] = this.data_item[i].Count;
-        }
+	public class MostPopular : ItemRecommender
+	{
+		/// <summary>View count</summary>
+		protected Dictionary<int, int> view_count = new Dictionary<int, int>();
 
 		/// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            int cnt = 0;
-            if (view_count.TryGetValue(item_id, out cnt))
-                return cnt;
-            else
-                return 0;
-        }
+		public override void Train()
+		{
+			for (int i = 0; i <= MaxItemID; i++)
+				view_count[i] = this.data_item[i].Count;
+		}
+
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			int cnt = 0;
+			if (view_count.TryGetValue(item_id, out cnt))
+				return cnt;
+			else
+				return 0;
+		}
 
 		/// <inheritdoc/>
 		public override void RemoveItem (int item_id)
@@ -59,18 +59,18 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <inheritdoc/>
-        public override void AddFeedback(int user_id, int item_id)
-        {
+		public override void AddFeedback(int user_id, int item_id)
+		{
 			if (!view_count.ContainsKey(item_id))
-     	       view_count[item_id] = 0;
+	 		   view_count[item_id] = 0;
 
 			view_count[item_id]++;
-        }
+		}
 
-        /// <inheritdoc/>
-        public override void RemoveFeedback(int user_id, int item_id)
-        {
-        	view_count[item_id]--;
+		/// <inheritdoc/>
+		public override void RemoveFeedback(int user_id, int item_id)
+		{
+			view_count[item_id]--;
 		}
 
 		/// <inheritdoc/>
@@ -103,5 +103,5 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return "MostPopular";
 		}
-    }
+	}
 }

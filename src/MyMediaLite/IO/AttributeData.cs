@@ -39,7 +39,7 @@ namespace MyMediaLite.IO
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
 		{
-            using ( var reader = new StreamReader(filename) )
+			using ( var reader = new StreamReader(filename) )
 				return Read(reader, mapping);
 		}
 
@@ -59,13 +59,13 @@ namespace MyMediaLite.IO
 
 			while (!reader.EndOfStream)
 			{
-	           	line = reader.ReadLine();
+			   	line = reader.ReadLine();
 				
 				// ignore empty lines
 				if (line.Trim().Equals(string.Empty))
 					continue;
 
-	            string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(split_chars);
 
 				if (tokens.Length != 2)
 					throw new IOException("Expected exactly two columns: " + line);
@@ -73,7 +73,7 @@ namespace MyMediaLite.IO
 				int entity_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int attr_id   = int.Parse(tokens[1]);
 
-               	matrix[entity_id, attr_id] = true;
+			   	matrix[entity_id, attr_id] = true;
 			}
 
 			return matrix;
@@ -85,8 +85,8 @@ namespace MyMediaLite.IO
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping mapping)
 		{
-            if (reader.FieldCount < 2)
-                throw new IOException("Expected at least two columns.");			
+			if (reader.FieldCount < 2)
+				throw new IOException("Expected at least two columns.");			
 			
 			var matrix = new SparseBooleanMatrix();
 
@@ -95,7 +95,7 @@ namespace MyMediaLite.IO
 				int entity_id = mapping.ToInternalID(reader.GetInt32(0));
 				int attr_id   = reader.GetInt32(1);
 
-               	matrix[entity_id, attr_id] = true;
+			   	matrix[entity_id, attr_id] = true;
 			}
 
 			return matrix;

@@ -17,30 +17,30 @@
 
 namespace MyMediaLite.RatingPrediction
 {
-    /// <summary>interface for rating predictors</summary>
-    public interface IRatingPredictor : IRecommender
-    {
-        /// <summary>The max rating value</summary>
-        double MaxRating { get; set; }
-        
+	/// <summary>interface for rating predictors</summary>
+	public interface IRatingPredictor : IRecommender
+	{
+		/// <summary>The max rating value</summary>
+		double MaxRating { get; set; }
+		
 		/// <summary>The min rating value</summary>
-        double MinRating { get; set; }
+		double MinRating { get; set; }
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		bool CanPredict(int user_id, int item_id);
-        /// <inheritdoc/>
-        void AddRating(int user_id, int item_id, double rating);
-        /// <inheritdoc/>
-        void UpdateRating(int user_id, int item_id, double rating);
-        /// <inheritdoc/>
-        void RemoveRating(int user_id, int item_id);
-        /// <inheritdoc/>
-        void AddUser(int user_id);
-        /// <inheritdoc/>
-        void AddItem(int item_id);
-        /// <inheritdoc/>
-        void RemoveUser(int user_id);
-        /// <inheritdoc/>
-        void RemoveItem(int item_id);
-    }
+		/// <inheritdoc/>
+		void AddRating(int user_id, int item_id, double rating);
+		/// <inheritdoc/>
+		void UpdateRating(int user_id, int item_id, double rating);
+		/// <inheritdoc/>
+		void RemoveRating(int user_id, int item_id);
+		/// <inheritdoc/>
+		void AddUser(int user_id);
+		/// <inheritdoc/>
+		void AddItem(int item_id);
+		/// <inheritdoc/>
+		void RemoveUser(int user_id);
+		/// <inheritdoc/>
+		void RemoveItem(int item_id);
+	}
 }

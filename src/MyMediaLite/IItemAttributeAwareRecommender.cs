@@ -27,7 +27,7 @@ namespace MyMediaLite
 		/// <value>an integer stating the number of attributes</value>
 		/// <summary></summary>
 		/// <remarks></remarks>
-	    int NumItemAttributes { get; set; }
+		int NumItemAttributes { get; set; }
 
 		/// <value>The binary item attributes</value>
 		/// <summary></summary>

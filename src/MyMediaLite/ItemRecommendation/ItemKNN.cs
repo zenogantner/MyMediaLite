@@ -23,29 +23,29 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
-    /// <remarks>
-    /// This engine does not support online updates.
+	/// <remarks>
+	/// This engine does not support online updates.
 	/// </remarks>
-    public class ItemKNN : KNN
-    {
-        /// <inheritdoc/>
-        public override void Train()
-        {
+	public class ItemKNN : KNN
+	{
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			correlation = BinaryCosine.Create(data_item);
 
 			int num_items = MaxItemID + 1;
 			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
-        }
+		}
 
-        /// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id > MaxUserID))
-                throw new ArgumentException("user is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
-                throw new ArgumentException("item is unknown: " + item_id);
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			if ((user_id < 0) || (user_id > MaxUserID))
+				throw new ArgumentException("user is unknown: " + user_id);
+			if ((item_id < 0) || (item_id > MaxItemID))
+				throw new ArgumentException("item is unknown: " + item_id);
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[item_id])
@@ -53,12 +53,12 @@ namespace MyMediaLite.ItemRecommendation
 					count++;
 
 			return (double) count / k;
-        }
+		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("ItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
 		}
-    }
+	}
 }

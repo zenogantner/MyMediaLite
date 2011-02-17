@@ -26,37 +26,37 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ensemble
 {
-    /// <summary>Combining several predictors with a weighted ensemble</summary>
-    /// <remarks>
-    /// This recommender does NOT support online updates.
-    /// </remarks>
-    public class WeightedEnsemble : Ensemble
-    {
-        /// <summary>List of component weights</summary>
-        public List<double> weights = new List<double>();
+	/// <summary>Combining several predictors with a weighted ensemble</summary>
+	/// <remarks>
+	/// This recommender does NOT support online updates.
+	/// </remarks>
+	public class WeightedEnsemble : Ensemble
+	{
+		/// <summary>List of component weights</summary>
+		public List<double> weights = new List<double>();
 
 		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
-            foreach (var recommender in this.recommenders)
-                recommender.Train();
+		/// <inheritdoc/>
+		public override void Train()
+		{
+			foreach (var recommender in this.recommenders)
+				recommender.Train();
 
 			this.weight_sum = weights.Sum();
-        }
+		}
 
 		/// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
+		public override double Predict(int user_id, int item_id)
+		{
 			double result = 0;
 
 			for (int i = 0; i < recommenders.Count; i++)
-               	result += weights[i] * recommenders[i].Predict(user_id, item_id);
+			   	result += weights[i] * recommenders[i].Predict(user_id, item_id);
 
-            return (double) result / weight_sum;
-        }
+			return (double) result / weight_sum;
+		}
 
 		/// <inheritdoc/>
 		public override void SaveModel(string file)
@@ -105,5 +105,5 @@ namespace MyMediaLite.ensemble
 				this.recommenders = recommenders;
 			}
 		}
-    }
+	}
 }

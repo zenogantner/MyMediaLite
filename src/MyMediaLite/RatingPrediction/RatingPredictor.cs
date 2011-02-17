@@ -29,15 +29,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 
-        /// <summary>The max rating value</summary>
-        public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
-        /// <summary>The max rating value</summary>
-        protected double max_rating;
+		/// <summary>The max rating value</summary>
+		public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
+		/// <summary>The max rating value</summary>
+		protected double max_rating;
 
 		/// <summary>The min rating value</summary>
-        public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
-	    /// <summary>The min rating value</summary>
-	    protected double min_rating;
+		public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
+		/// <summary>The min rating value</summary>
+		protected double min_rating;
 
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings
@@ -54,10 +54,10 @@ namespace MyMediaLite.RatingPrediction
 		protected RatingData ratings;
 
 		/// <inheritdoc/>
-        public abstract double Predict(int user_id, int item_id);
+		public abstract double Predict(int user_id, int item_id);
 
-        /// <inheritdoc/>
-        public abstract void Train();
+		/// <inheritdoc/>
+		public abstract void Train();
 
 		/// <inheritdoc/>
 		public abstract void SaveModel(string filename);
@@ -71,54 +71,54 @@ namespace MyMediaLite.RatingPrediction
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
 		}
 
-        /// <inheritdoc/>
-        public virtual void AddRating(int user_id, int item_id, double rating)
-        {
-            ratings.AddRating(new RatingEvent(user_id, item_id, rating));
-        }
+		/// <inheritdoc/>
+		public virtual void AddRating(int user_id, int item_id, double rating)
+		{
+			ratings.AddRating(new RatingEvent(user_id, item_id, rating));
+		}
 
-        /// <inheritdoc/>
-        public virtual void UpdateRating(int user_id, int item_id, double rating)
-        {
-            RatingEvent r = ratings.FindRating(user_id, item_id);
-            if (r == null)
-                throw new Exception("Rating not found");
-            r.rating = rating;
-        }
+		/// <inheritdoc/>
+		public virtual void UpdateRating(int user_id, int item_id, double rating)
+		{
+			RatingEvent r = ratings.FindRating(user_id, item_id);
+			if (r == null)
+				throw new Exception("Rating not found");
+			r.rating = rating;
+		}
 
-        /// <inheritdoc/>
-        public virtual void RemoveRating(int user_id, int item_id)
-        {
-            RatingEvent r = ratings.FindRating(user_id, item_id);
-            if (r == null)
-                throw new Exception("Rating not found");
-            ratings.RemoveRating(r);
-        }
+		/// <inheritdoc/>
+		public virtual void RemoveRating(int user_id, int item_id)
+		{
+			RatingEvent r = ratings.FindRating(user_id, item_id);
+			if (r == null)
+				throw new Exception("Rating not found");
+			ratings.RemoveRating(r);
+		}
 
-        /// <inheritdoc/>
-        public virtual void AddUser(int user_id)
-        {
-            ratings.AddUser(user_id);
+		/// <inheritdoc/>
+		public virtual void AddUser(int user_id)
+		{
+			ratings.AddUser(user_id);
 			MaxUserID = Math.Max(MaxUserID, user_id);
-        }
+		}
 
-        /// <inheritdoc/>
-        public virtual void AddItem(int item_id)
-        {
-            ratings.AddItem(item_id);
+		/// <inheritdoc/>
+		public virtual void AddItem(int item_id)
+		{
+			ratings.AddItem(item_id);
 			MaxItemID = Math.Max(MaxItemID, item_id);
-        }
+		}
 
-        /// <inheritdoc/>
-        public virtual void RemoveUser(int user_id)
-        {
-            ratings.RemoveUser(user_id);
-        }
+		/// <inheritdoc/>
+		public virtual void RemoveUser(int user_id)
+		{
+			ratings.RemoveUser(user_id);
+		}
 
-        /// <inheritdoc/>
-        public virtual void RemoveItem(int item_id)
-        {
-            ratings.RemoveItem(item_id);
-        }
+		/// <inheritdoc/>
+		public virtual void RemoveItem(int item_id)
+		{
+			ratings.RemoveItem(item_id);
+		}
 	}
 }

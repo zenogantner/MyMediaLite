@@ -21,12 +21,12 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// It would not be necessary for Random to inherit from ItemRecommender, but it is done nonetheless for convenience.
 	/// </remarks>
-    public class Random : ItemRecommender
-    {
-        /// <inheritdoc/>
-        public override void Train() { }
+	public class Random : ItemRecommender
+	{
+		/// <inheritdoc/>
+		public override void Train() { }
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
 			return Util.Random.GetInstance().NextDouble();
@@ -50,13 +50,13 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void RemoveItem(int item_id) { }
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{
 			// do nothing
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
 			// do nothing

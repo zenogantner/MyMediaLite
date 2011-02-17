@@ -43,21 +43,21 @@ namespace MyMediaLite.RatingPrediction
 		private SparseBooleanMatrix item_attributes;
 
 		/// <inheritdoc/>
-	    public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	set; }
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			base.Train();
 			this.correlation = BinaryCosine.Create(ItemAttributes);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
-        }
+		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("ItemAttributeKNN k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+								 K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
 

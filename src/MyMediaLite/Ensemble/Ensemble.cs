@@ -25,41 +25,41 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>
-    public abstract class Ensemble : IRecommender
+	public abstract class Ensemble : IRecommender
 	{
-        /// <summary>
-        /// List of engines.
-        /// </summary>
-        public List<IRecommender> recommenders = new List<IRecommender>();
+		/// <summary>
+		/// List of engines.
+		/// </summary>
+		public List<IRecommender> recommenders = new List<IRecommender>();
 
-        private double max_rating_value = 5;
-        private double min_rating_value = 1;
+		private double max_rating_value = 5;
+		private double min_rating_value = 1;
 
-        /// <summary>The max rating value</summary>
-        /// <value>The max rating value</value>
-        public double MaxRatingValue
-        {
-            get { return this.max_rating_value; }
-            set {
-                this.max_rating_value = value;
+		/// <summary>The max rating value</summary>
+		/// <value>The max rating value</value>
+		public double MaxRatingValue
+		{
+			get { return this.max_rating_value; }
+			set {
+				this.max_rating_value = value;
 				foreach (IRecommender recommender in recommenders)
 					if (recommender is IRatingPredictor)
 						((IRatingPredictor)recommender).MaxRating = value;
-            }
-        }
+			}
+		}
 
-        /// <summary>The min rating value</summary>
-        /// <value>The min rating value</value>
-        public double MinRatingValue
-        {
-            get { return this.min_rating_value; }
-            set {
-                this.min_rating_value = value;
+		/// <summary>The min rating value</summary>
+		/// <value>The min rating value</value>
+		public double MinRatingValue
+		{
+			get { return this.min_rating_value; }
+			set {
+				this.min_rating_value = value;
 				foreach (IRecommender recommender in recommenders)
 					if (recommender is IRatingPredictor)
 						((IRatingPredictor)recommender).MinRating = value;
-            }
-        }		
+			}
+		}		
 		
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
@@ -69,11 +69,11 @@ namespace MyMediaLite.ensemble
 		/// <inheritdoc/>
 		public abstract void LoadModel(string file);
 
-        /// <inheritdoc/>
-        public virtual void Train()
-        {
-            foreach (IRecommender recommender in recommenders)
-                recommender.Train();
-        }
-    }
+		/// <inheritdoc/>
+		public virtual void Train()
+		{
+			foreach (IRecommender recommender in recommenders)
+				recommender.Train();
+		}
+	}
 }

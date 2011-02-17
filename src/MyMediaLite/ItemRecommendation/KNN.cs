@@ -33,8 +33,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Precomputed nearest neighbors</summary>
 		protected int[][] nearest_neighbors;
 
-        /// <summary>Correlation matrix over some kind of entity</summary>
-        protected CorrelationMatrix correlation;
+		/// <summary>Correlation matrix over some kind of entity</summary>
+		protected CorrelationMatrix correlation;
 
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)

@@ -20,33 +20,33 @@ using MyMediaLite.Data;
 
 namespace MyMediaLite.RatingPrediction
 {
-    /// <summary>Uses the average rating value over all ratings for prediction</summary>
-    /// <remarks>
-    /// This engine does NOT support online updates.
-    /// </remarks>
-    public class GlobalAverage : RatingPredictor
-    {
+	/// <summary>Uses the average rating value over all ratings for prediction</summary>
+	/// <remarks>
+	/// This engine does NOT support online updates.
+	/// </remarks>
+	public class GlobalAverage : RatingPredictor
+	{
 		private double global_average = 0;
 
-        /// <inheritdoc/>
-        public override void Train()
+		/// <inheritdoc/>
+		public override void Train()
 		{
 			foreach (RatingEvent r in Ratings.All)
 				global_average += r.rating;
 			global_average /= Ratings.All.Count;
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return true;
 		}
 
-        /// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            return global_average;
-        }
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			return global_average;
+		}
 
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
@@ -65,5 +65,5 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return "GlobalAverage";
 		}
-    }
+	}
 }

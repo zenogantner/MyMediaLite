@@ -111,10 +111,10 @@ namespace MyMediaLite.Correlation
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;
-            foreach (int k in vector_j)
-            	if (vector_i.Contains(k))
-	            	cntr++;
-            return (float) ( cntr / (vector_i.Count + vector_j.Count - cntr) );
+			foreach (int k in vector_j)
+				if (vector_i.Contains(k))
+					cntr++;
+			return (float) ( cntr / (vector_i.Count + vector_j.Count - cntr) );
 		}
 	}
 }

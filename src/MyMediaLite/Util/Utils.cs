@@ -34,14 +34,14 @@ namespace MyMediaLite.Util
 		{
   			var map = new Dictionary<A, R>();
   			return a =>
-    		{
-      			R value;
-      			if (map.TryGetValue(a, out value))
-        		return value;
-      			value = f(a);
-      			map.Add(a, value);
-      			return value;
-    		};
+			{
+	  			R value;
+	  			if (map.TryGetValue(a, out value))
+				return value;
+	  			value = f(a);
+	  			map.Add(a, value);
+	  			return value;
+			};
 		}
 
 		/// <summary>Delegate definition necessary to define MeasureTime</summary>
@@ -75,7 +75,7 @@ namespace MyMediaLite.Util
 				Array.Copy(fields, return_fields, max_fields - 1);
 				return_fields[max_fields - 1] = String.Join(regex, fields, max_fields - 1, rest_length);
 				return return_fields;
-		    }
+			}
 			return fields;
 		}
 

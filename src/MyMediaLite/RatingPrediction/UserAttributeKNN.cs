@@ -47,18 +47,18 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			base.Train();
 			this.correlation = BinaryCosine.Create(user_attributes);
-        }
+		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("UserAttributeKNN k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+								 K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
 

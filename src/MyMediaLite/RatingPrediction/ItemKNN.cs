@@ -36,9 +36,9 @@ namespace MyMediaLite.RatingPrediction
 			set {
 				base.Ratings = value;
 
-	            data_item = new SparseBooleanMatrix();
+				data_item = new SparseBooleanMatrix();
 				foreach (RatingEvent r in ratings)
-        	       	data_item[r.item_id, r.user_id] = true;
+				   	data_item[r.item_id, r.user_id] = true;
 			}
 		}
 
@@ -53,15 +53,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
-        public override double Predict(int user_id, int item_id)
-        {
-            if (user_id < 0)
-                throw new ArgumentException("user is unknown: " + user_id);
-            if (item_id < 0)
-                throw new ArgumentException("item is unknown: " + item_id);
+		public override double Predict(int user_id, int item_id)
+		{
+			if (user_id < 0)
+				throw new ArgumentException("user is unknown: " + user_id);
+			if (item_id < 0)
+				throw new ArgumentException("item is unknown: " + item_id);
 
-            if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
-                return base.Predict(user_id, item_id);
+			if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
+				return base.Predict(user_id, item_id);
 
 			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
 
@@ -86,40 +86,40 @@ namespace MyMediaLite.RatingPrediction
  
 			if (result > MaxRating)
 				result = MaxRating;
-            if (result < MinRating)
+			if (result < MinRating)
 				result = MinRating;
 			return result;
-        }
+		}
 
-        /// <inheritdoc/>
-        public override void AddRating(int user_id, int item_id, double rating)
-        {
+		/// <inheritdoc/>
+		public override void AddRating(int user_id, int item_id, double rating)
+		{
 			base.AddRating(user_id, item_id, rating);
 			data_item[item_id, user_id] = true;
-            RetrainItem(item_id);
-        }
+			RetrainItem(item_id);
+		}
 
-        /// <inheritdoc/>
-        public override void UpdateRating(int user_id, int item_id, double rating)
-        {
+		/// <inheritdoc/>
+		public override void UpdateRating(int user_id, int item_id, double rating)
+		{
 			base.UpdateRating(user_id, item_id, rating);
-            RetrainItem(item_id);
-        }
+			RetrainItem(item_id);
+		}
 
-        /// <inheritdoc/>
-        public override void RemoveRating(int user_id, int item_id)
-        {
+		/// <inheritdoc/>
+		public override void RemoveRating(int user_id, int item_id)
+		{
 			base.RemoveRating(user_id, item_id);
 			data_item[item_id, user_id] = false;
-            RetrainItem(user_id);
-        }
+			RetrainItem(user_id);
+		}
 
-        /// <inheritdoc/>
-        public override void AddItem(int item_id)
-        {
-            base.AddUser(item_id);
+		/// <inheritdoc/>
+		public override void AddItem(int item_id)
+		{
+			base.AddUser(item_id);
 			correlation.AddEntity(item_id);
-        }
+		}
 
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)

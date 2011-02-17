@@ -23,24 +23,24 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-    /// <summary>Abstract item recommender class that loads the training data into memory</summary>
-    /// <remarks>
-    /// The data is stored in two sparse matrices:
-    /// one column-wise and one row-wise
-    /// </remarks>
-    public abstract class ItemRecommender : IItemRecommender
-    {
+	/// <summary>Abstract item recommender class that loads the training data into memory</summary>
+	/// <remarks>
+	/// The data is stored in two sparse matrices:
+	/// one column-wise and one row-wise
+	/// </remarks>
+	public abstract class ItemRecommender : IItemRecommender
+	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID  { get; set;	}
 		
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 
-        /// <summary>Implicit feedback, user-wise</summary>
-        protected SparseBooleanMatrix data_user;
+		/// <summary>Implicit feedback, user-wise</summary>
+		protected SparseBooleanMatrix data_user;
 
 		/// <summary>Implicit feedback, item-wise</summary>
-        protected SparseBooleanMatrix data_item;
+		protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
@@ -129,11 +129,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_items">a <see cref="SparseBooleanMatrix"/> that where a user (rows) has interacted with an item (columns)</param>
 		public void SetCollaborativeData(SparseBooleanMatrix user_items)
 		{
-            this.data_user = user_items;
-            this.data_item = user_items.Transpose();
+			this.data_user = user_items;
+			this.data_item = user_items.Transpose();
 			
 			this.MaxUserID = Math.Max(MaxUserID, data_user.NonEmptyRowIDs.Max());			
 			this.MaxItemID = Math.Max(MaxItemID, data_item.NonEmptyRowIDs.Max());
 		}
-    }
+	}
 }

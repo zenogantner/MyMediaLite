@@ -19,16 +19,16 @@
 namespace MyMediaLite.Data
 {
 	/// <summary>Representation of a rating event, consisting of a user ID, an item ID, and the value of the rating</summary>
-    public class RatingEvent
-    {
+	public class RatingEvent
+	{
 		/// <summary>the user ID</summary>
-        public int user_id;
+		public int user_id;
 
 		/// <summary>the item ID</summary>
-        public int item_id;
+		public int item_id;
 
 		/// <summary>the rating value</summary>
-        public double rating;
+		public double rating;
 
 		/// <summary>Default constructor</summary>
 		public RatingEvent() { }
@@ -43,5 +43,5 @@ namespace MyMediaLite.Data
 			this.item_id = item_id;
 			this.rating  = rating;
 		}
-    }
+	}
 }

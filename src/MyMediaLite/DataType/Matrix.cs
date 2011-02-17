@@ -21,20 +21,20 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.DataType
 {
-    /// <summary>Class for storing dense matrices</summary>
-    /// <remarks>
-    /// The data is stored in row-major mode.
-    /// Indexes are zero-based.
-    /// </remarks>
-    /// <typeparam name="T">the type of the matrix entries</typeparam>
-    public class Matrix<T> : IMatrix<T>
-    {
-        /// <summary>Data array: data is stored in columns.</summary>
-        public T[] data;
-        /// <summary>Dimension 1, the number of rows</summary>
-        public int dim1;
-        /// <summary>Dimension 2, the number of columns</summary>
-        public int dim2;
+	/// <summary>Class for storing dense matrices</summary>
+	/// <remarks>
+	/// The data is stored in row-major mode.
+	/// Indexes are zero-based.
+	/// </remarks>
+	/// <typeparam name="T">the type of the matrix entries</typeparam>
+	public class Matrix<T> : IMatrix<T>
+	{
+		/// <summary>Data array: data is stored in columns.</summary>
+		public T[] data;
+		/// <summary>Dimension 1, the number of rows</summary>
+		public int dim1;
+		/// <summary>Dimension 2, the number of columns</summary>
+		public int dim2;
 
 		/// <inheritdoc/>
 		public virtual bool IsSymmetric
@@ -56,28 +56,28 @@ namespace MyMediaLite.DataType
 		/// <inheritdoc/>
 		public int NumberOfColumns { get { return dim2; } }
 
-        /// <summary>Initializes a new instance of the Matrix class</summary>
-        /// <param name="dim1">the number of rows</param>
-        /// <param name="dim2">the number of columns</param>
-        public Matrix(int dim1, int dim2)
-        {
+		/// <summary>Initializes a new instance of the Matrix class</summary>
+		/// <param name="dim1">the number of rows</param>
+		/// <param name="dim2">the number of columns</param>
+		public Matrix(int dim1, int dim2)
+		{
 			if (dim1 < 0)
 				throw new ArgumentException("dim1 must be at least 0");
 			if (dim2 < 0)
 				throw new ArgumentException("dim2 must be at least 0");
 
-            this.dim1 = dim1;
-            this.dim2 = dim2;
-            this.data = new T[dim1 * dim2];
-        }
+			this.dim1 = dim1;
+			this.dim2 = dim2;
+			this.data = new T[dim1 * dim2];
+		}
 
-        /// <summary>Copy constructor. Creates a deep copy of the given matrix.</summary>
-        /// <param name="matrix">the matrix to be copied</param>
-        public Matrix(Matrix<T> matrix)
-        {
-        	this.dim1 = matrix.dim1;
-        	this.dim2 = matrix.dim2;
-        	this.data = new T[this.dim1 * this.dim2];
+		/// <summary>Copy constructor. Creates a deep copy of the given matrix.</summary>
+		/// <param name="matrix">the matrix to be copied</param>
+		public Matrix(Matrix<T> matrix)
+		{
+			this.dim1 = matrix.dim1;
+			this.dim2 = matrix.dim2;
+			this.data = new T[this.dim1 * this.dim2];
 			matrix.data.CopyTo(this.data, 0);
 		}
 
@@ -88,22 +88,22 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <inheritdoc/>
-        public virtual T this [int i, int j]
-        {
+		public virtual T this [int i, int j]
+		{
 			get
 			{
 				// TODO deactivate in production code
-        		if (i >= this.dim1)
-        			throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
+				if (i >= this.dim1)
+					throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
 				if (j >= this.dim2)
 					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
 
-            	return data[i * dim2 + j];
+				return data[i * dim2 + j];
 			}
 			set
-        	{
-            	data[i * dim2 + j] = value;
-        	}
+			{
+				data[i * dim2 + j] = value;
+			}
 		}
 
 		/// <summary>Returns a copy of the i-th row of the matrix</summary>
@@ -137,7 +137,7 @@ namespace MyMediaLite.DataType
 			// TODO speed up using Array.Copy()?
 			if (row.Length != this.dim2)
 				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
-				                                          row.Length, this.dim2));
+														  row.Length, this.dim2));
 
 			for (int j = 0; j < this.dim2; j++)
 				this[i, j] = row[j];
@@ -150,48 +150,48 @@ namespace MyMediaLite.DataType
 		{
 			if (column.Length != this.dim1)
 				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
-				                                          column.Length, this.dim1));
+														  column.Length, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
 				this[i, j] = column[i];
 		}
 
 		/// <summary>Init the matrix with a default value</summary>
-        /// <param name="d">the default value</param>
-        public void Init(T d)
-        {
-            for (int i = 0; i < dim1 * dim2; i++)
-                data[i] = d;
-        }
+		/// <param name="d">the default value</param>
+		public void Init(T d)
+		{
+			for (int i = 0; i < dim1 * dim2; i++)
+				data[i] = d;
+		}
 
-        /// <summary>Enlarges the matrix to num_rows rows</summary>
-        /// <remarks>
-        /// Do nothing if num_rows is less than dim1.
-        /// The new entries are filled with zeros.
-        /// </remarks>
-        /// <param name="num_rows">the minimum number of rows</param>
-        public void AddRows(int num_rows)
-        {
-            if (num_rows > dim1)
-            {
-				// create new data structure
-                var data_new = new T[num_rows * dim2];
-                data.CopyTo(data_new, 0);
-
-				// replace old data structure
-                this.dim1 = num_rows;
-                this.data = data_new;
-            }
-        }
-
-        /// <summary>Grows the matrix to the requested size, if necessary</summary>
-        /// <remarks>
+		/// <summary>Enlarges the matrix to num_rows rows</summary>
+		/// <remarks>
+		/// Do nothing if num_rows is less than dim1.
 		/// The new entries are filled with zeros.
 		/// </remarks>
-        /// <param name="num_rows">the minimum number of rows</param>
-        /// <param name="num_cols">the minimum number of columns</param>
-        public void Grow(int num_rows, int num_cols)
-        {
+		/// <param name="num_rows">the minimum number of rows</param>
+		public void AddRows(int num_rows)
+		{
+			if (num_rows > dim1)
+			{
+				// create new data structure
+				var data_new = new T[num_rows * dim2];
+				data.CopyTo(data_new, 0);
+
+				// replace old data structure
+				this.dim1 = num_rows;
+				this.data = data_new;
+			}
+		}
+
+		/// <summary>Grows the matrix to the requested size, if necessary</summary>
+		/// <remarks>
+		/// The new entries are filled with zeros.
+		/// </remarks>
+		/// <param name="num_rows">the minimum number of rows</param>
+		/// <param name="num_cols">the minimum number of columns</param>
+		public void Grow(int num_rows, int num_cols)
+		{
 			if (num_rows > dim1 || num_cols > dim2)
 			{
 				// create new data structure
@@ -205,27 +205,27 @@ namespace MyMediaLite.DataType
 				this.dim2 = num_cols;
 				this.data = new_data;
 			}
-        }
+		}
 
 		/// <summary>Sets an entire row to a specified value</summary>
 		/// <param name="v">the value to be used</param>
 		/// <param name="i">the row ID</param>
-        public void SetRowToOneValue(int i, T v)
-        {
-            for (int j = 0; j < dim2; j++)
-                this[i, j] = v;
-        }
+		public void SetRowToOneValue(int i, T v)
+		{
+			for (int j = 0; j < dim2; j++)
+				this[i, j] = v;
+		}
 
 		/// <summary>
 		/// Sets an entire column to a specified value
 		/// </summary>
 		/// <param name="v">the value to be used</param>
 		/// <param name="j">the column ID</param>
-        public void SetColumnToOneValue(int j, T v)
-        {
-            for (int i = 0; i < dim1; i++)
-                this[i, j] = v;
-        }
+		public void SetColumnToOneValue(int j, T v)
+		{
+			for (int i = 0; i < dim1; i++)
+				this[i, j] = v;
+		}
 
-    }
+	}
 }

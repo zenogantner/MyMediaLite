@@ -43,8 +43,8 @@ namespace MyMediaLite.RatingPrediction
 		public uint K { get { return k;	} set {	k = value; } }
 		private uint k = uint.MaxValue;
 
-        /// <summary>Correlation matrix over some kind of entity</summary>
-        protected CorrelationMatrix correlation;
+		/// <summary>Correlation matrix over some kind of entity</summary>
+		protected CorrelationMatrix correlation;
 
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
@@ -56,7 +56,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override void LoadModel(string filename)
 		{
-            using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

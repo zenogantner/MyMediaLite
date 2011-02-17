@@ -30,15 +30,15 @@ namespace MyMediaLite.ItemRecommendation
 	/// </summary>
 	/// <remarks>
 	/// <inproceedings>
-    ///   <author>Steffen Rendle</author>
-    ///   <author>Christoph Freudenthaler</author>
-    ///   <author>Zeno Gantner</author>
-    ///   <author>Lars Schmidt-Thieme</author>
-    ///   <title>BPR: Bayesian Personalized Ranking from Implicit Feedback</title>
-    ///   <booktitle>Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009)</booktitle>
-    ///   <location>Montreal, Canada</location>
-    ///   <year>2009</year>
-    /// </inproceedings>
+	///   <author>Steffen Rendle</author>
+	///   <author>Christoph Freudenthaler</author>
+	///   <author>Zeno Gantner</author>
+	///   <author>Lars Schmidt-Thieme</author>
+	///   <title>BPR: Bayesian Personalized Ranking from Implicit Feedback</title>
+	///   <booktitle>Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009)</booktitle>
+	///   <location>Montreal, Canada</location>
+	///   <year>2009</year>
+	/// </inproceedings>
 	/// </remarks>
 	public class BPRMF : MF, IIterativeModel
 	{
@@ -466,7 +466,7 @@ namespace MyMediaLite.ItemRecommendation
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni, "BPRMF num_factors={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
-			                     num_factors, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
+								 num_factors, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
 }

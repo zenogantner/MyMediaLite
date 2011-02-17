@@ -23,10 +23,10 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity over the user attibutes</summary>
 	/// <remarks>
-    /// This recommender does not support online updates.
-    /// </remarks>
-    public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
-    {
+	/// This recommender does not support online updates.
+	/// </remarks>
+	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
+	{
 		/// <inheritdoc/>
 		public SparseBooleanMatrix UserAttributes
 		{
@@ -42,21 +42,21 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			correlation = BinaryCosine.Create(user_attributes);
 
 			int num_users = user_attributes.NumberOfRows;
 			this.nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
-        }
+		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("UserAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
-    }
+	}
 }

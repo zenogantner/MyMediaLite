@@ -22,11 +22,11 @@ namespace MyMediaLite.DataType
 	/// <summary>Generic interface for matrix data types</summary>
 	public interface IMatrix<T>
 	{
-        /// <summary>The value at (i,j)</summary>
-        /// <value>The value at (i,j)</value>
-        /// <param name="x">the row ID</param>
-        /// <param name="y">the column ID</param>
-        T this [int x, int y] { get; set; }
+		/// <summary>The value at (i,j)</summary>
+		/// <value>The value at (i,j)</value>
+		/// <param name="x">the row ID</param>
+		/// <param name="y">the column ID</param>
+		T this [int x, int y] { get; set; }
 
 		/// <summary>The number of rows of the matrix</summary>
 		/// <value>The number of rows of the matrix</value>

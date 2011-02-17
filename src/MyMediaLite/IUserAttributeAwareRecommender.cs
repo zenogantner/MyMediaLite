@@ -26,7 +26,7 @@ namespace MyMediaLite
 	{
 		/// <value>Number of binary user attributes</value>
 		/// <remarks></remarks>
-	    int NumUserAttributes { get; set; }
+		int NumUserAttributes { get; set; }
 
 		/// <value>The binary user attributes</value>
 		/// <remarks></remarks>

@@ -22,13 +22,13 @@ using System.Linq;
 
 namespace MyMediaLite.DataType
 {
-    /// <summary>Sparse representation of a boolean matrix</summary>
-    /// <remarks>
-    /// Fast row-wise access is possible.
-    /// Indexes are zero-based.
-    /// </remarks>
-    public class SparseBooleanMatrix : IMatrix<bool>
-    {
+	/// <summary>Sparse representation of a boolean matrix</summary>
+	/// <remarks>
+	/// Fast row-wise access is possible.
+	/// Indexes are zero-based.
+	/// </remarks>
+	public class SparseBooleanMatrix : IMatrix<bool>
+	{
 		private List<HashSet<int>> row_list = new List<HashSet<int>>();
 
 		/// <summary>Indexer to access the elements of the matrix</summary>
@@ -37,16 +37,16 @@ namespace MyMediaLite.DataType
 		public bool this [int x, int y]
 		{
 			get	{
-	            if (x < row_list.Count)
-	                return row_list[x].Contains(y);
+				if (x < row_list.Count)
+					return row_list[x].Contains(y);
 				else
 					return false;
 			}
 			set	{
 				if (value)
-            		this[x].Add(y);
+					this[x].Add(y);
 				else
-            		this[x].Remove(y);
+					this[x].Remove(y);
 			}
 		}
 
@@ -80,9 +80,9 @@ namespace MyMediaLite.DataType
 		{
 			get
 			{
-	            if (x >= row_list.Count)
+				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
-        	        	row_list.Add(new HashSet<int>());
+						row_list.Add(new HashSet<int>());
 				return row_list[x];
 			}
 			set

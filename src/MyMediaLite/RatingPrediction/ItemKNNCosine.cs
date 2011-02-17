@@ -24,13 +24,13 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted item-based kNN with cosine similarity</summary>
 	public class ItemKNNCosine : ItemKNN
 	{
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			base.Train();
 			this.correlation = BinaryCosine.Create(data_item);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
-        }
+		}
 
 		/// <inheritdoc/>
 		protected override void RetrainItem(int item_id)
@@ -41,11 +41,11 @@ namespace MyMediaLite.RatingPrediction
 					correlation[item_id, i] = BinaryCosine.ComputeCorrelation(data_item[item_id], data_item[i]);
 		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("ItemKNNCosine k={0} reg_u={1} reg_i={2}",
-			                     K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+								 K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
 }

@@ -25,9 +25,9 @@ using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Eval
 {
-    /// <summary>Evaluation class</summary>
-    public static class RatingEval
-    {
+	/// <summary>Evaluation class</summary>
+	public static class RatingEval
+	{
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
 		static public ICollection<string> RatingPredictionMeasures
 		{
@@ -37,34 +37,34 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-        /// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
-        /// <remarks>
-        /// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
-        /// </remarks>
-        /// <param name="engine">Rating prediction engine</param>
-        /// <param name="ratings">Test cases</param>
-        /// <returns>a Dictionary containing the evaluation results</returns>
-        static public Dictionary<string, double> Evaluate(IRatingPredictor engine, RatingData ratings)
+		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
+		/// <remarks>
+		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
+		/// </remarks>
+		/// <param name="engine">Rating prediction engine</param>
+		/// <param name="ratings">Test cases</param>
+		/// <returns>a Dictionary containing the evaluation results</returns>
+		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, RatingData ratings)
 		{
-            double rmse = 0;
-            double mae  = 0;
+			double rmse = 0;
+			double mae  = 0;
 
-            foreach (RatingEvent r in ratings)
-            {
-                double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
+			foreach (RatingEvent r in ratings)
+			{
+				double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
 
 				rmse += error * error;
-                mae  += Math.Abs(error);
-            }
-            mae  = mae / ratings.Count;
-            rmse = Math.Sqrt(rmse / ratings.Count);
+				mae  += Math.Abs(error);
+			}
+			mae  = mae / ratings.Count;
+			rmse = Math.Sqrt(rmse / ratings.Count);
 
 			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
 			result.Add("MAE",  mae);
 			result.Add("NMAE", mae / (engine.MaxRating - engine.MinRating));
 			return result;
-        }
+		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="engine">a rating prediction engine</param>
@@ -72,8 +72,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<RatingData> split)
 		{
-            var ni = new NumberFormatInfo();
-            ni.NumberDecimalDigits = '.';
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
 
 			var avg_results = new Dictionary<string, double>();
 			foreach (var key in RatingPredictionMeasures)

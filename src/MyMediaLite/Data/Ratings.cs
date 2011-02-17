@@ -24,12 +24,12 @@ using MyMediaLite.Util;
 namespace MyMediaLite.Data
 {
 	/// <summary>Class representing a collection of ratings in a particular order</summary>
-    public class Ratings
-    {
-        private List<RatingEvent> rating_list = new List<RatingEvent>();
+	public class Ratings
+	{
+		private List<RatingEvent> rating_list = new List<RatingEvent>();
 
 		/// <summary>Number of ratings in the collection</summary>
-        public int Count { get { return rating_list.Count; }	}
+		public int Count { get { return rating_list.Count; }	}
 
 		/// <summary>Average rating value in the collection</summary>
 		public double Average
@@ -64,28 +64,28 @@ namespace MyMediaLite.Data
 		/// <summary>Add a rating event to the collection</summary>
 		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
 		public void AddRating(RatingEvent rating)
-        {
-            rating_list.Add(rating);
-        }
+		{
+			rating_list.Add(rating);
+		}
 
 		/// <summary>Remove a rating from the collection</summary>
 		/// <param name="rating">the rating event to remove</param>
-        public void RemoveRating(RatingEvent rating)
-        {
-            rating_list.Remove(rating);
-        }
+		public void RemoveRating(RatingEvent rating)
+		{
+			rating_list.Remove(rating);
+		}
 
 		/// <summary>Find a rating for a given user and item</summary>
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="item_id">the numerical ID of the item</param>
 		/// <returns>the rating event corresponding to the given user and item, null if such a rating does not exist</returns>
-        public RatingEvent FindRating(int user_id, int item_id)
-        {
-            foreach (RatingEvent rating in rating_list)
-                if ((rating.user_id == user_id) && (rating.item_id == item_id))
-                    return rating;
-            return null;
-        }
+		public RatingEvent FindRating(int user_id, int item_id)
+		{
+			foreach (RatingEvent rating in rating_list)
+				if ((rating.user_id == user_id) && (rating.item_id == item_id))
+					return rating;
+			return null;
+		}
 
 		/// <summary>Get the users in the rating collection</summary>
 		/// <returns>a collection of numerical user IDs</returns>
@@ -107,5 +107,5 @@ namespace MyMediaLite.Data
 				items.Add(rating.item_id);
 			return items;
 		}
-    }
+	}
 }

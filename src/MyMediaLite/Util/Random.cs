@@ -20,10 +20,10 @@ using System;
 
 namespace MyMediaLite.Util
 {
-    /// <summary>Draws random values from a normal distibuted using a simple rejection method</summary>
-    public class Random : System.Random
-    {
-        private static Random instance = null;
+	/// <summary>Draws random values from a normal distibuted using a simple rejection method</summary>
+	public class Random : System.Random
+	{
+		private static Random instance = null;
 
 		/// <summary>Default constructor</summary>
 		public Random() : base() { }
@@ -37,54 +37,54 @@ namespace MyMediaLite.Util
 		public static void InitInstance(int seed)
 		{
 			Console.Error.WriteLine("Set random seed to {0}.", seed);
-            instance = new Random(seed);
+			instance = new Random(seed);
 		}
 
-        /// <summary>Gets the instance. If it does not exist yet, it will be created.</summary>
-        /// <returns>the singleton instance</returns>
-        public static Random GetInstance()
-        {
-            if (instance == null)
-                instance = new Random();
-            return instance;
-        }
+		/// <summary>Gets the instance. If it does not exist yet, it will be created.</summary>
+		/// <returns>the singleton instance</returns>
+		public static Random GetInstance()
+		{
+			if (instance == null)
+				instance = new Random();
+			return instance;
+		}
 
-        private double sqrt_e_div_2_pi = Math.Sqrt(Math.E / (2 * Math.PI));
+		private double sqrt_e_div_2_pi = Math.Sqrt(Math.E / (2 * Math.PI));
 
 		/// <summary>Nexts the exp</summary>
-        /// <param name="lambda"></param>
-        /// <returns></returns>
-        public double NextExp(double lambda)
-        {
-            double u = this.NextDouble();
-            return -(1 / lambda) * Math.Log(1 - u, Math.E);
-        }
+		/// <param name="lambda"></param>
+		/// <returns></returns>
+		public double NextExp(double lambda)
+		{
+			double u = this.NextDouble();
+			return -(1 / lambda) * Math.Log(1 - u, Math.E);
+		}
 
 		/// <summary>Get the next number from the standard normal distribution</summary>
-        /// <returns>a random number drawn from the standard normal distribution</returns>
-        public double NextNormal()
-        {
-            double y;
-            double x;
-            do
-            {
-                double u = this.NextDouble();
-                x = this.NextExp(1);
-                y = 2 * u * sqrt_e_div_2_pi * Math.Exp(-x);
-            } while ( y < (2 / (2 * Math.PI)) * Math.Exp(-0.5 * x * x));
-            if (this.NextDouble() < 0.5)
-                return x;
-            else
-                return -x;
-        }
+		/// <returns>a random number drawn from the standard normal distribution</returns>
+		public double NextNormal()
+		{
+			double y;
+			double x;
+			do
+			{
+				double u = this.NextDouble();
+				x = this.NextExp(1);
+				y = 2 * u * sqrt_e_div_2_pi * Math.Exp(-x);
+			} while ( y < (2 / (2 * Math.PI)) * Math.Exp(-0.5 * x * x));
+			if (this.NextDouble() < 0.5)
+				return x;
+			else
+				return -x;
+		}
 
 		/// <summary>Draw the next number from a normal distribution</summary>
-        /// <param name="mean">mean of the Gaussian</param>
-        /// <param name="stdev">standard deviation of the Gaussian</param>
-        /// <returns>a random number drawn from a normal distribution with the given mean and standard deviation</returns>
-        public double NextNormal(double mean, double stdev)
-        {
-            return mean + stdev * NextNormal();
-        }
-    }
+		/// <param name="mean">mean of the Gaussian</param>
+		/// <param name="stdev">standard deviation of the Gaussian</param>
+		/// <returns>a random number drawn from a normal distribution with the given mean and standard deviation</returns>
+		public double NextNormal(double mean, double stdev)
+		{
+			return mean + stdev * NextNormal();
+		}
+	}
 }

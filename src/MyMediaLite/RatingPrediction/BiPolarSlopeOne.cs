@@ -140,10 +140,10 @@ namespace MyMediaLite.RatingPrediction
 			global_average = Ratings.Average;
 
 			// create data structure
-    		diff_matrix_like = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-    		freq_matrix_like = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
-    		diff_matrix_dislike = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-    		freq_matrix_dislike = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+			diff_matrix_like = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
+			freq_matrix_like = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+			diff_matrix_dislike = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
+			freq_matrix_dislike = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>

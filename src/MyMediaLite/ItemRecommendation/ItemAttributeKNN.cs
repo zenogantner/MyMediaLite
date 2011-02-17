@@ -23,13 +23,13 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
-    /// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
-    /// </summary>
-    /// <remarks>
-    /// This engine does not support online updates.
-    /// </remarks>
-    public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
-    {
+	/// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
+	/// </summary>
+	/// <remarks>
+	/// This engine does not support online updates.
+	/// </remarks>
+	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
+	{
 		/// <inheritdoc/>
 		public SparseBooleanMatrix ItemAttributes
 		{
@@ -43,20 +43,20 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		/// <inheritdoc/>
-	    public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	set; }
 
-        /// <inheritdoc/>
-        public override void Train()
-        {
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			this.correlation = BinaryCosine.Create(ItemAttributes);
 
 			int num_items = MaxItemID + 1;
 			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
-        }
+		}
 
-        /// <inheritdoc/>
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("ItemAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());

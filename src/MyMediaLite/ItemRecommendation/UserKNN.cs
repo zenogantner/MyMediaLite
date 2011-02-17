@@ -22,32 +22,32 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
-    /// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity (unweighted)</summary>
-    /// <remarks>
-    /// k=inf equals most-popular.
-    ///
-    /// This engine does not support online updates.
+	/// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity (unweighted)</summary>
+	/// <remarks>
+	/// k=inf equals most-popular.
+	///
+	/// This engine does not support online updates.
 	/// </remarks>
-    public class UserKNN : KNN
-    {
-        /// <inheritdoc/>
-        public override void Train()
-        {
+	public class UserKNN : KNN
+	{
+		/// <inheritdoc/>
+		public override void Train()
+		{
 			this.correlation = BinaryCosine.Create(data_user);
 
 			int num_users = MaxUserID + 1;
 			this.nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
-        }
+		}
 
-        /// <inheritdoc/>
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id >= nearest_neighbors.Length))
-                throw new ArgumentException("User is unknown: " + user_id);
-            if ((item_id < 0) || (item_id > MaxItemID))
-                throw new ArgumentException("Item is unknown: " + item_id);
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			if ((user_id < 0) || (user_id >= nearest_neighbors.Length))
+				throw new ArgumentException("User is unknown: " + user_id);
+			if ((item_id < 0) || (item_id > MaxItemID))
+				throw new ArgumentException("Item is unknown: " + item_id);
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[user_id])
@@ -56,13 +56,13 @@ namespace MyMediaLite.ItemRecommendation
 					count++;
 			}
 			return (double) count / k;
-        }
+		}
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
 			return string.Format("UserKNN k={0}",
-			                     k == uint.MaxValue ? "inf" : k.ToString());
+								 k == uint.MaxValue ? "inf" : k.ToString());
 		}
-    }
+	}
 }
