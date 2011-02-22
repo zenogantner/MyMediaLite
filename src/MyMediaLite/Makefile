@@ -136,7 +136,8 @@ FILES = \
 	ItemRecommendation/ItemRecommender.cs \
 	RatingPrediction/RatingPredictor.cs \
 	IRecommender.cs \
-	Util/Recommender.cs 
+	Util/Recommender.cs \
+	Util/Memory.cs 
 
 DATA_FILES = 
 
