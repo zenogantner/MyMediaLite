@@ -39,9 +39,20 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SlopeOne : RatingPredictor
 	{
+		/// <summary>Data structure to be used to store the model</summary>
+		/// <value>Data structure to be used to store the model</value>
+		/// <remarks>
+		/// possible values are: SparseMatrixDouble, SparseMatrixFloat
+		/// </remarks>
+		public string DataStructure { get; set; }
+		
+		// model storage for SparseMatrixDouble
   		private SparseMatrix<double> diff_matrix;
   		private SparseMatrix<int> freq_matrix;
 
+		// model storage for SparseMatrixFloat
+  		private SparseMatrix<float> diff_matrix_float;
+		
 		private double global_average;
 
 		private void InitModel()
@@ -100,7 +111,7 @@ namespace MyMediaLite.RatingPrediction
 			// compute difference sums and frequencies
 			foreach (var user_ratings in Ratings.ByUser)
 			{
-				Console.Error.WriteLine("num_entries {0} mem {1}", freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
+				Console.Error.WriteLine("user {0} num_entries {1} mem {2}", user_ratings[0].user_id, freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
 				foreach (RatingEvent r in user_ratings)
 					foreach (RatingEvent r2 in user_ratings)
 					{
