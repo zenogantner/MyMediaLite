@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using Gtk;
+using MyMediaLite.Util;
 
 namespace MovieDemo
 {
@@ -24,6 +25,8 @@ namespace MovieDemo
 		public static void Main(string[] args)
 		{
 			Application.Init();
+			
+			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 					
 			MainWindow win = new MainWindow();
 			win.Show();

@@ -23,6 +23,7 @@
             <property name="CanFocus">True</property>
             <property name="IsEditable">True</property>
             <property name="InvisibleChar">●</property>
+            <signal name="Changed" handler="OnEntry3Changed" />
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -89,6 +90,7 @@
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Rate</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="OnGtkButtonClicked" />
               </widget>
               <packing>
                 <property name="Position">2</property>

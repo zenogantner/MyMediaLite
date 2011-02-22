@@ -22,12 +22,22 @@ namespace MovieDemo
 	[TreeNode (ListOnly=true)]
     public class MovieTreeNode : Gtk.TreeNode {
  
-    	public MovieTreeNode(string movie, string rating)
+    	public MovieTreeNode(string movie, string rating, int id)
 		{
             Movie = movie;
         	Rating = rating;
+			MovieID = id;
     	}
+		
+		public MovieTreeNode(MovieTreeNode node)
+		{
+            Movie = node.Movie;
+        	Rating = node.Rating;
+			MovieID = node.MovieID;			
+		}
  
+		public int MovieID { get; set; }
+		
     	[Gtk.TreeNodeValue (Column=1)]
     	public string Movie { get; set; }
  
