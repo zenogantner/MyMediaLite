@@ -20,12 +20,12 @@ using System.Diagnostics;
 
 namespace MyMediaLite.Util
 {
+	/// <summary>Memory-related tools</summary>
 	public class Memory
 	{
-		public static void ReportUsage()
-		{
-			Console.Error.WriteLine("memory {0}", GC.GetTotalMemory(true) / (1024*1024));
-		}
+		/// <summary>the total memory usage in MB</summary>
+		/// <value>the total memory usage in MB</value>
+		public static long Usage { get { return GC.GetTotalMemory(true) / (1024*1024); } }
 	}
 }
 

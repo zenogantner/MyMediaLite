@@ -279,7 +279,7 @@ MyMediaLite rating prediction
 				Console.Write(recommender.ToString() + " ");
 			}
 
-			Memory.ReportUsage();
+			Console.Error.WriteLine("memory {0}", Memory.Usage);
 			
 			if (!no_eval)
 			{
@@ -371,7 +371,7 @@ MyMediaLite rating prediction
 		DisplayIterationStats();
 	}
 
-	// TODO move to a class in the MyMediaLite.Eval namespace
+	// TODO move to a class in the MyMediaLite base library
 	static void DisplayResults(Dictionary<string, double> result)
 	{
 		Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
