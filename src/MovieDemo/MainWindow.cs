@@ -32,12 +32,15 @@ public partial class MainWindow : Gtk.Window
 		
 		Build();
 		
-		nodeview1.AppendColumn("Movie",  new Gtk.CellRendererText(), "text", 0);
-        nodeview1.AppendColumn("Rating", new Gtk.CellRendererText(), "text", 1);
+        nodeview1.AppendColumn("Rating", new Gtk.CellRendererText(), "text", 0);		
+		nodeview1.AppendColumn("Movie",  new Gtk.CellRendererText(), "text", 1);
 		
 		foreach (Movie movie in movies.movie_list)
-			all_movies.AddNode(new MovieTreeNode(movie.Title, 0));
+			all_movies.AddNode(new MovieTreeNode(movie.Title, ""));
 		nodeview1.NodeStore = all_movies;
+		
+		nodeview1.NodeSelection.Changed += new System.EventHandler(this.OnNodeview1SelectionChanged);
+		
 		nodeview1.ShowAll();
 	}
 
@@ -63,16 +66,18 @@ public partial class MainWindow : Gtk.Window
 		{
 			string title = movie.Title;
 			if (title.Contains(filter))
-				store.AddNode(new MovieTreeNode(title, 0));
+				store.AddNode(new MovieTreeNode(title, ""));
 		}
 		nodeview1.NodeStore = store;
 		nodeview1.ShowAll();
 	}
 
-	protected virtual void OnNodeview1ScreenChanged (object o, Gtk.ScreenChangedArgs args)
+	void OnNodeview1SelectionChanged(object o, System.EventArgs args)
 	{
     	Gtk.NodeSelection selection = (Gtk.NodeSelection) o;
         MovieTreeNode node = (MovieTreeNode) selection.SelectedNode;
         label1.Text = node.Movie;
+		
+		Console.Error.WriteLine("Selection received: {0}", node.Movie);
 	}
 }

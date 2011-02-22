@@ -56,7 +56,7 @@
             <child>
               <widget class="Gtk.Label" id="label1">
                 <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">label1</property>
+                <property name="LabelProp" translatable="yes">Movie</property>
               </widget>
               <packing>
                 <property name="Position">0</property>
@@ -71,7 +71,6 @@
                 <property name="CanFocus">True</property>
                 <property name="Upper">5</property>
                 <property name="PageIncrement">5</property>
-                <property name="PageSize">5</property>
                 <property name="StepIncrement">5</property>
                 <property name="ClimbRate">1</property>
                 <property name="Numeric">True</property>
@@ -84,11 +83,11 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="button1">
+              <widget class="Gtk.Button" id="GtkButton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
-                <property name="Label" translatable="yes">GtkButton</property>
+                <property name="Label" translatable="yes">Rate</property>
                 <property name="UseUnderline">True</property>
               </widget>
               <packing>

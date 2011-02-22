@@ -17,7 +17,7 @@ public partial class MainWindow
 
 	private global::Gtk.SpinButton spinbutton26;
 
-	private global::Gtk.Button button1;
+	private global::Gtk.Button GtkButton;
 
 	protected virtual void Build ()
 	{
@@ -61,7 +61,7 @@ public partial class MainWindow
 		// Container child hbox2.Gtk.Box+BoxChild
 		this.label1 = new global::Gtk.Label ();
 		this.label1.Name = "label1";
-		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("label1");
+		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Movie");
 		this.hbox2.Add (this.label1);
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.label1]));
 		w4.Position = 0;
@@ -72,7 +72,6 @@ public partial class MainWindow
 		this.spinbutton26.CanFocus = true;
 		this.spinbutton26.Name = "spinbutton26";
 		this.spinbutton26.Adjustment.PageIncrement = 5;
-		this.spinbutton26.Adjustment.PageSize = 5;
 		this.spinbutton26.ClimbRate = 1;
 		this.spinbutton26.Numeric = true;
 		this.hbox2.Add (this.spinbutton26);
@@ -81,13 +80,13 @@ public partial class MainWindow
 		w5.Expand = false;
 		w5.Fill = false;
 		// Container child hbox2.Gtk.Box+BoxChild
-		this.button1 = new global::Gtk.Button ();
-		this.button1.CanFocus = true;
-		this.button1.Name = "button1";
-		this.button1.UseUnderline = true;
-		this.button1.Label = global::Mono.Unix.Catalog.GetString ("GtkButton");
-		this.hbox2.Add (this.button1);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.button1]));
+		this.GtkButton = new global::Gtk.Button ();
+		this.GtkButton.CanFocus = true;
+		this.GtkButton.Name = "GtkButton";
+		this.GtkButton.UseUnderline = true;
+		this.GtkButton.Label = global::Mono.Unix.Catalog.GetString ("Rate");
+		this.hbox2.Add (this.GtkButton);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.GtkButton]));
 		w6.Position = 2;
 		w6.Expand = false;
 		w6.Fill = false;
