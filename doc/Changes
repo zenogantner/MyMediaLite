@@ -1,7 +1,11 @@
 0.11	2011-02-??
-	- give out memory usage in command-line tools
         - SlopeOne: use float instead of double for the difference matrix
                     to save memory
+        - command-line programs
+          - handle DirectoryNotFoundExceptions
+	  - give out memory usage
+        - API changes
+          - seal some classes
 
 0.10	2011-02-04
         - API changes
