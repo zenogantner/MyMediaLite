@@ -99,12 +99,15 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute difference sums and frequencies
 			foreach (var user_ratings in Ratings.ByUser)
+			{
+				Console.Error.WriteLine("num_entries {0} mem {1}", freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
 				foreach (RatingEvent r in user_ratings)
 					foreach (RatingEvent r2 in user_ratings)
 					{
 			  			freq_matrix[r.item_id, r2.item_id] += 1;
 			  			diff_matrix[r.item_id, r2.item_id] += (double) (r.rating - r2.rating);
 					}
+			}
 
 			// compute average differences
 			for (int i = 0; i <= MaxItemID; i++)
