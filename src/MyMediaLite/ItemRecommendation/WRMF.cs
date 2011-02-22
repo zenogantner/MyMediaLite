@@ -37,7 +37,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This engine does not support online updates.
 	/// </remarks>
-	public class WRMF : MF
+	public sealed class WRMF : MF
 	{
 		/// <summary>C position: the weight/confidence that is put on positive observations</summary>
 		public double CPos { get { return c_pos; } set { c_pos = value;	} }
@@ -59,7 +59,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="data">The data.</param>
 		/// <param name="W">The W.</param>
 		/// <param name="H">The H.</param>
-		protected void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
+		void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
 		{
 			var HH   = new Matrix<double>(num_factors, num_factors);
 			var HCIH = new Matrix<double>(num_factors, num_factors);

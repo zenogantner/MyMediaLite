@@ -21,19 +21,19 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
-	public class EntityMapping
+	public sealed class EntityMapping
 	{
 		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
 		/// <remarks>
 		/// Never, to repeat NEVER, delete entries from this dictionary!
 		/// </remarks>
-		protected Dictionary<int, int> original_to_internal = new Dictionary<int, int>();
+		Dictionary<int, int> original_to_internal = new Dictionary<int, int>();
 
 		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
 		/// <remarks>
 		/// Never, to repeat NEVER, delete entries from this dictionary!
 		/// </remarks>
-		protected Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
+		Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
 
 		/// <summary>all original (external) entity IDs</summary>
 		public ICollection<int> OriginalIDs

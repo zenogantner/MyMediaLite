@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// http://en.wikipedia.org/wiki/Pearson_correlation
 	/// </remarks>
-	public class Pearson : RatingCorrelationMatrix
+	public sealed class Pearson : RatingCorrelationMatrix
 	{
 		/// <summary>shrinkage parameter</summary>
 		public float shrinkage = 10;

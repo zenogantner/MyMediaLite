@@ -20,8 +20,10 @@ using System;
 
 namespace MyMediaLite.Data
 {
+	// TODO consider having a value type here
+	
 	/// <summary>Weighted items class</summary>
-	public class WeightedItem : IComparable
+	public sealed class WeightedItem : IComparable
 	{
 		/// <summary>Item ID</summary>
 		public int item_id;

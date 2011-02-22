@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// http://en.wikipedia.org/wiki/Cosine_similarity
 	/// </remarks>
-	public class BinaryCosine : BinaryDataCorrelationMatrix
+	public sealed class BinaryCosine : BinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Cosine</summary>
 		/// <param name="num_entities">the number of entities</param>

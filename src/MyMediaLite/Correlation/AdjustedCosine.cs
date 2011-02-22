@@ -29,7 +29,7 @@ namespace MyMediaLite.Correlation
 	/// Item-based collaborative filtering recommendation algorithms.
 	/// WWW 2001
 	/// </remarks>
-	public class AdjustedCosine : RatingCorrelationMatrix
+	public sealed class AdjustedCosine : RatingCorrelationMatrix
 	{
 		/// <summary>shrinkage parameter</summary>
 		public float shrinkage = 10;
