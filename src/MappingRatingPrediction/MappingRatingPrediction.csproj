@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>MappingRatingPrediction</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.10</ReleaseVersion>
+    <ReleaseVersion>0.11</ReleaseVersion>
     <RootNamespace>MappingRatingPrediction</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

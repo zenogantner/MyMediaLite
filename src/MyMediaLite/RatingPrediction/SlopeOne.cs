@@ -63,6 +63,8 @@ namespace MyMediaLite.RatingPrediction
 			// create data structure
 			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
 			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+			
+			diff_matrix_float = new SparseMatrix<float>(MaxItemID + 1, MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>
@@ -165,7 +167,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			 return "SlopeOne";
+			 return string.Format("SlopeOne DataStructure={0}", DataStructure);
 		}
 	}
 }
