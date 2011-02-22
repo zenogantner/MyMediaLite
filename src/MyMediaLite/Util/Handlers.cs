@@ -27,7 +27,14 @@ namespace MyMediaLite.Util
 					var file_not_found_exception = (FileNotFoundException) e;
 					Console.Error.WriteLine("Could not find file " + file_not_found_exception.FileName);
 					Environment.Exit(-1);
-				}			
+				}
+				
+				if (e is DirectoryNotFoundException)
+				{
+					var dir_not_found_exception = (DirectoryNotFoundException) e;
+					Console.Error.WriteLine(dir_not_found_exception.Message);
+					Environment.Exit(-1);
+				}
 											
 				Console.Error.WriteLine("An uncaught exception occured. Please send a bug report to mymedialite@ismll.de");
 				Console.Error.WriteLine(e.Message + e.StackTrace);
