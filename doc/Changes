@@ -1,4 +1,5 @@
 0.11	2011-02-??
+        - add simple GUI demo for CeBIT
         - SlopeOne: use float instead of double for the difference matrix
                     to save memory
         - command-line programs
@@ -6,6 +7,8 @@
 	  - give out memory usage
         - API changes
           - seal some classes
+        - IO
+          - support for MovieLens 1M and 10M rating data format
 
 0.10	2011-02-04
         - API changes
