@@ -17,14 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.DataType
 {
 	/// <summary>a symmetric sparse matrix; consumes less memory</summary>
 	/// <remarks>
-	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and
-	/// NonEmptyRows properties: these contain only the entries with x &gt; y,
-	/// but not their symmetric counterparts.
+	/// Be careful when accessing the matrix via the NonEmptyRows property: this contains
+	/// only the entries with x &gt;, but not their symmetric counterparts.
 	/// </remarks>
 	public class SymmetricSparseMatrix<T> : SparseMatrix<T> where T:new()
 	{
@@ -80,5 +80,21 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("Symmetric matrices must have the same number of rows and columns.");
 			return new SymmetricSparseMatrix<T>(num_rows);
 		}
+		
+		/// <inheritdoc/>
+		public IList<Pair<int, int>> NonEmptyEntryIDs
+		{
+			get	{
+				var return_list = new List<Pair<int, int>>();
+				foreach (var id_row in this.NonEmptyRows)
+					foreach (var col_id in id_row.Value.Keys)
+					{
+						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
+						return_list.Add(new Pair<int, int>(col_id, id_row.Key));
+					}
+				return return_list;
+			}
+		}
+		
 	}
 }

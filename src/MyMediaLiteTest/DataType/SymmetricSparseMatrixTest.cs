@@ -77,7 +77,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
 
 			matrix[3, 1] = 1.0;
-			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
+			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
 		}
 	}
 }
