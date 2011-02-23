@@ -40,7 +40,8 @@ namespace MyMediaLite.RatingPrediction
   		private SparseMatrix<float> diff_matrix;
   		private SymmetricSparseMatrix<int> freq_matrix;
 
-
+		// TODO one more way to save memory: use short instead of int internally in the SparseMatrix datatypes
+		
 		private double global_average;
 
 		private void InitModel()
@@ -122,14 +123,12 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			// compute average differences
-			foreach (Pair<int, int> index_pair in diff_matrix.NonEmptyEntryIDs)
-			{
-				int i = index_pair.First;
-				int j = index_pair.Second;
-
-				//if (j > i)
+			for (int i = 0; i <= MaxItemID; i++)
+				foreach (int j in freq_matrix[i].Keys)
+				{
 					diff_matrix[i, j] /= freq_matrix[i, j];
-			}
+					diff_matrix[j, i] /= freq_matrix[j, i]; // remove once diff_matrix is symmetric
+				}
 		}
 
 		/// <inheritdoc/>
