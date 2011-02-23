@@ -82,7 +82,7 @@ namespace MyMediaLite.DataType
 		}
 		
 		/// <inheritdoc/>
-		public IList<Pair<int, int>> NonEmptyEntryIDs
+		public override IList<Pair<int, int>> NonEmptyEntryIDs
 		{
 			get	{
 				var return_list = new List<Pair<int, int>>();

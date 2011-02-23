@@ -122,7 +122,7 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>The row and column IDs of non-empty entries in the matrix</summary>
-		public IList<Pair<int, int>> NonEmptyEntryIDs
+		public virtual IList<Pair<int, int>> NonEmptyEntryIDs
 		{
 			get	{
 				var return_list = new List<Pair<int, int>>();

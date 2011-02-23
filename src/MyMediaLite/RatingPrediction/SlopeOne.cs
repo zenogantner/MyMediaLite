@@ -101,10 +101,10 @@ namespace MyMediaLite.RatingPrediction
 			// compute difference sums and frequencies
 			foreach (var user_ratings in Ratings.ByUser)
 			{
-				//int u = user_ratings[0].user_id;
+				int u = user_ratings[0].user_id;
 
-				//if (u % 50 == 0)
-				//	Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
+				if (u % 100 == 0)
+					Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
 
 
 				for (int i = 0; i < user_ratings.Count; i++)
