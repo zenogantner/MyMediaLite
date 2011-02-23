@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -32,27 +33,14 @@ namespace MyMediaLite.RatingPrediction
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
 	///
 	/// This recommender does NOT support online updates. They would be easy to implement, though.
-	/// 
-	/// Memory use between float and double difference matrices:
-	/// ml100k: 152 MB vs. 165 MB
-	/// ml1m:   905 MB vs. 980 MB
 	/// </remarks>
 	public class SlopeOne : RatingPredictor
 	{
-		/// <summary>Data structure to be used to store the model</summary>
-		/// <value>Data structure to be used to store the model</value>
-		/// <remarks>
-		/// possible values are: SparseMatrixDouble, SparseMatrixFloat
-		/// </remarks>
-		public string DataStructure { get; set; }
-		
-		// model storage for SparseMatrixDouble
-  		private SparseMatrix<double> diff_matrix;
-  		private SparseMatrix<int> freq_matrix;
+  		//private SkewSymmetricSparseMatrix diff_matrix;
+  		private SparseMatrix<float> diff_matrix;
+  		private SymmetricSparseMatrix<int> freq_matrix;
 
-		// model storage for SparseMatrixFloat
-  		private SparseMatrix<float> diff_matrix_float;
-		
+
 		private double global_average;
 
 		private void InitModel()
@@ -61,10 +49,9 @@ namespace MyMediaLite.RatingPrediction
 			global_average = Ratings.Average;
 
 			// create data structure
-			diff_matrix = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-			freq_matrix = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
-			
-			diff_matrix_float = new SparseMatrix<float>(MaxItemID + 1, MaxItemID + 1);
+			//diff_matrix = new SkewSymmetricSparseMatrix(MaxItemID + 1);
+			diff_matrix = new SparseMatrix<float>(MaxItemID + 1, MaxItemID + 1);
+			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>
@@ -113,19 +100,36 @@ namespace MyMediaLite.RatingPrediction
 			// compute difference sums and frequencies
 			foreach (var user_ratings in Ratings.ByUser)
 			{
-				Console.Error.WriteLine("user {0} num_entries {1} mem {2}", user_ratings[0].user_id, freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
-				foreach (RatingEvent r in user_ratings)
-					foreach (RatingEvent r2 in user_ratings)
+				//int u = user_ratings[0].user_id;
+
+				//if (u % 50 == 0)
+				//	Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NonEmptyEntryIDs.Count, Memory.Usage);
+
+
+				for (int i = 0; i < user_ratings.Count; i++)
+				{
+					RatingEvent r = user_ratings[i];
+					for (int j = i + 1; j < user_ratings.Count; j++)
 					{
+						RatingEvent r2 = user_ratings[j];
+
 			  			freq_matrix[r.item_id, r2.item_id] += 1;
-			  			diff_matrix[r.item_id, r2.item_id] += (double) (r.rating - r2.rating);
+			  			diff_matrix[r.item_id, r2.item_id] += (float) (r.rating - r2.rating);
+
+			  			diff_matrix[r2.item_id, r.item_id] += (float) (r2.rating - r.rating);
 					}
+				}
 			}
 
 			// compute average differences
-			for (int i = 0; i <= MaxItemID; i++)
-				foreach (int j in freq_matrix[i].Keys)
+			foreach (Pair<int, int> index_pair in diff_matrix.NonEmptyEntryIDs)
+			{
+				int i = index_pair.First;
+				int j = index_pair.Second;
+
+				//if (j > i)
 					diff_matrix[i, j] /= freq_matrix[i, j];
+			}
 		}
 
 		/// <inheritdoc/>
@@ -140,8 +144,9 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var global_average = double.Parse(reader.ReadLine(), ni);
 
-				var diff_matrix = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
-				var freq_matrix = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix);
+				var diff_matrix = (SparseMatrix<float>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
+				//var diff_matrix = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);  // TODO take symmetric matrix into account
+				var freq_matrix = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix); // TODO take symmetric matrix into account
 
 				// assign new model
 				this.global_average = global_average;
@@ -167,7 +172,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			 return string.Format("SlopeOne DataStructure={0}", DataStructure);
+			 return string.Format("SlopeOne");
 		}
 	}
 }
