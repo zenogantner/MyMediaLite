@@ -70,6 +70,7 @@ FILES =  \
 	Data/EntityMappingTest.cs \
 	Data/RatingDataTest.cs \
 	Data/RatingsTest.cs \
+	DataType/IntSkewSymmetricSparseMatrixTest.cs \
 	DataType/MatrixTest.cs \
 	DataType/MatrixUtilsTest.cs \
 	DataType/SkewSymmetricSparseMatrixTest.cs \

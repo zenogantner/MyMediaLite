@@ -20,23 +20,21 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.DataType
 {
-	// TODO default should be double, create a specific FloatSkewSymmetricSparseMatrix
-	
 	/// <summary>a skew symmetric (anti-symmetric) sparse matrix; consumes less memory</summary>
 	/// <remarks>
 	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and
 	/// NonEmptyRows properties: these contain only the entries with x &gt; y,
 	/// but not their antisymmetric counterparts.
 	/// </remarks>
-	public class SkewSymmetricSparseMatrix : SparseMatrix<float>
+	public class IntSkewSymmetricSparseMatrix : SparseMatrix<int>
 	{
 		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
 		/// <param name="y">the column ID</param>
-		public override float this [int x, int y]
+		public override int this [int x, int y]
 		{
 			get	{
-				float result = 0f;
+				int result = 0;
 				
 				if (x < y)
 				{
@@ -56,13 +54,13 @@ namespace MyMediaLite.DataType
 				{
 					if (x >= row_list.Count)
 						for (int i = row_list.Count; i <= x; i++)
-							row_list.Add( new Dictionary<int, float>() );
+							row_list.Add( new Dictionary<int, int>() );
 				}
 				else if (x > y)
 				{
 					if (y >= row_list.Count)
 						for (int i = row_list.Count; i <= y; i++)
-							row_list.Add( new Dictionary<int, float>() );					
+							row_list.Add( new Dictionary<int, int>() );					
 				}
 				else
 				{
@@ -92,14 +90,14 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Create a skew symmetric sparse matrix with a given number of rows</summary>
 		/// <param name="num_rows">the number of rows</param>
-		public SkewSymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
+		public IntSkewSymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
 
 		/// <inheritdoc/>
-		public override IMatrix<float> CreateMatrix(int num_rows, int num_columns)
+		public override IMatrix<int> CreateMatrix(int num_rows, int num_columns)
 		{
 			if (num_rows != num_columns)
 				throw new ArgumentException("Skew symmetric matrices must have the same number of rows and columns.");
-			return new SkewSymmetricSparseMatrix(num_rows);
+			return new IntSkewSymmetricSparseMatrix(num_rows);
 		}
 	}
 }
