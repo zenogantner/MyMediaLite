@@ -10,7 +10,7 @@
         - IO
           - support for MovieLens 1M and 10M rating data format
         - data types
-          - add SkewSymmetricSparseMatrix and IntSkewSymmetricSparseMatrix
+          - add SkewSymmetricSparseMatrix
 
 0.10	2011-02-04
         - API changes
