@@ -64,8 +64,8 @@ namespace MyMediaLiteTest
 
 		[Test()] public void TestNonEmptyRows()
 		{
-			var matrix  = new SymmetricSparseMatrix<double>(5);
-			Assert.AreEqual(0, matrix .NonEmptyRows.Count);
+			var matrix = new SymmetricSparseMatrix<double>(5);
+			Assert.AreEqual(0, matrix.NonEmptyRows.Count);
 
 			matrix [3, 1] = 1.0;
 			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
