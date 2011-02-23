@@ -1,17 +1,17 @@
 // Copyright (C) 2011 Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -41,8 +41,8 @@ namespace MyMediaLite.DataType
 					x = y;
 					y = tmp;
 				}
-				
-				T result;				
+
+				T result;
 				if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
 					return result;
 				else
@@ -56,7 +56,7 @@ namespace MyMediaLite.DataType
 					x = y;
 					y = tmp;
 				}
-				
+
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
 						row_list.Add( new Dictionary<int, T>() );
@@ -64,21 +64,21 @@ namespace MyMediaLite.DataType
 				row_list[x][y] = value;
 			}
 		}
-		
+
 		/// <summary>Always true because the data type is symmetric</summary>
 		/// <value>Always true because the data type is symmetric</value>
 		public override bool IsSymmetric { get { return true; } }
-		
+
 		/// <summary>Create a symmetric sparse matrix with a given number of rows</summary>
-		/// <param name="num_rows">the number of rows</param>		
+		/// <param name="num_rows">the number of rows</param>
 		public SymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
-		
+
 		/// <inheritdoc/>
 		public override IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
 			if (num_rows != num_columns)
 				throw new ArgumentException("Symmetric matrices must have the same number of rows and columns.");
 			return new SymmetricSparseMatrix<T>(num_rows);
-		}		
+		}
 	}
 }

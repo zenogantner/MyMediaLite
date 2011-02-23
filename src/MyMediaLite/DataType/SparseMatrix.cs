@@ -36,8 +36,7 @@ namespace MyMediaLite.DataType
 		/// <inheritdoc/>
 		public virtual bool IsSymmetric
 		{
-			get
-			{
+			get	{
 				if (NumberOfRows != NumberOfColumns)
 					return false;
 				for (int i = 0; i < row_list.Count; i++)
@@ -45,14 +44,14 @@ namespace MyMediaLite.DataType
 					{
 						if (i > j)
 							continue; // check every pair only once
-						
+
 						if (! this[i, j].Equals(this[j, i]))
 							return false;
 					}
 				return true;
 			}
 		}
-		
+
 		/// <inheritdoc/>
 		public int NumberOfRows { get { return row_list.Count; } }
 
