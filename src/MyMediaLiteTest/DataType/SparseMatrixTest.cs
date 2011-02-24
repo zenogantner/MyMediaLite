@@ -31,51 +31,51 @@ namespace MyMediaLiteTest
 		{
 			var matrix1 = new SparseMatrix<double>(3, 5);
 			Assert.IsFalse(matrix1.IsSymmetric);
-			
+
 			var matrix2 = new SparseMatrix<double>(5, 5);
 			Assert.IsTrue(matrix2.IsSymmetric);
-			
+
 			matrix2[1, 3] = 1.0;
 			Assert.IsFalse(matrix2.IsSymmetric);
-			
+
 			matrix2[3, 1] = 1.0;
 			Assert.IsTrue(matrix2.IsSymmetric);
 		}
-		
+
 		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseMatrix<double>(3, 5);
 			Assert.AreEqual(3, matrix.NumberOfRows);
 		}
-		
+
 		[Test()] public void TestNumberOfColumns()
 		{
 			var matrix = new SparseMatrix<double>(3, 5);
 			Assert.AreEqual(5, matrix.NumberOfColumns);
 		}
-		
+
 		[Test()] public void TestCreateMatrix()
 		{
 			var matrix1 = new SparseMatrix<double>(3, 5);
 			var matrix2 = matrix1.CreateMatrix(4, 4);
 			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
 		}
-		
+
 		[Test()] public void TestNonEmptyRows()
 		{
 			var matrix  = new SparseMatrix<double>(3, 5);
 			Assert.AreEqual(0, matrix .NonEmptyRows.Count);
-			
+
 			matrix [3, 1] = 1.0;
 			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
 			Assert.AreEqual(3, matrix .NonEmptyRows[0].Key);
 		}
-		
+
 		[Test()] public void TestNonEmptyEntryIDs()
 		{
 			var matrix = new SparseMatrix<double>(3, 5);
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
-			
+
 			matrix[3, 1] = 1.0;
 			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
 			foreach (var pair in matrix.NonEmptyEntryIDs)
@@ -83,6 +83,18 @@ namespace MyMediaLiteTest
 				Assert.AreEqual(3, pair.First);
 				Assert.AreEqual(1, pair.Second);
 			}
+		}
+
+		[Test()] public void TestNumberOfNonEmptyEntries()
+		{
+			var matrix = new SparseMatrix<double>(3, 5);
+			Assert.AreEqual(0, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 1.0;
+			Assert.AreEqual(1, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 2.0;
+			Assert.AreEqual(1, matrix.NumberOfNonEmptyEntries);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace MyMediaLite.DataType
 	/// NonEmptyRows properties: these contain only the entries with x &gt; y,
 	/// but not their antisymmetric counterparts.
 	/// </remarks>
-	public class SkewSymmetricSparseMatrix : SparseMatrix<float>
+	public class SkewSymmetricSparseMatrix : SymmetricSparseMatrix<float>
 	{
 		/// <summary>Access the elements of the sparse matrix</summary>
 		/// <param name="x">the row ID</param>
@@ -57,23 +57,23 @@ namespace MyMediaLite.DataType
 					if (x >= row_list.Count)
 						for (int i = row_list.Count; i <= x; i++)
 							row_list.Add( new Dictionary<int, float>() );
+					
+					row_list[x][y] = value;					
 				}
 				else if (x > y)
 				{
 					if (y >= row_list.Count)
 						for (int i = row_list.Count; i <= y; i++)
-							row_list.Add( new Dictionary<int, float>() );					
+							row_list.Add( new Dictionary<int, float>() );
+					
+					row_list[y][x] = -value;
 				}
 				else
 				{
 					// all elements on the diagonal must be zero
-					if (value == 0)
-						return; // all good
-					else
+					if (value != 0)
 						throw new ArgumentException("Elements of the diagonal of a skew symmetric matrix must equal 0");
 				}
-
-				row_list[x][y] = value;
 			}
 		}
 
@@ -90,9 +90,9 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>Create a skew symmetric sparse matrix with a given number of rows</summary>
-		/// <param name="num_rows">the number of rows</param>
-		public SkewSymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
+		/// <summary>Create a skew symmetric sparse matrix with a given dimension</summary>
+		/// <param name="dimension">the dimension (number of rows/columns)</param>
+		public SkewSymmetricSparseMatrix(int dimension) : base(dimension) { }
 
 		/// <inheritdoc/>
 		public override IMatrix<float> CreateMatrix(int num_rows, int num_columns)

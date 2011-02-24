@@ -69,9 +69,9 @@ namespace MyMediaLite.DataType
 		/// <value>Always true because the data type is symmetric</value>
 		public override bool IsSymmetric { get { return true; } }
 
-		/// <summary>Create a symmetric sparse matrix with a given number of rows</summary>
-		/// <param name="num_rows">the number of rows</param>
-		public SymmetricSparseMatrix(int num_rows) : base(num_rows, num_rows) { }
+		/// <summary>Create a symmetric sparse matrix with a given dimension</summary>
+		/// <param name="dimension">the dimension (number of rows/columns)</param>
+		public SymmetricSparseMatrix(int dimension) : base(dimension, dimension) { }
 
 		/// <inheritdoc/>
 		public override IMatrix<T> CreateMatrix(int num_rows, int num_columns)
@@ -90,11 +90,29 @@ namespace MyMediaLite.DataType
 					foreach (var col_id in id_row.Value.Keys)
 					{
 						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
-						return_list.Add(new Pair<int, int>(col_id, id_row.Key));
+						if (id_row.Key != col_id)
+							return_list.Add(new Pair<int, int>(col_id, id_row.Key));
 					}
 				return return_list;
 			}
 		}
 		
+		/// <inheritdoc/>
+		public override int NumberOfNonEmptyEntries
+		{
+			get	{
+				int counter = 0;
+				for (int i = 0; i < row_list.Count; i++)
+				{
+					counter += 2 * row_list[i].Count;
+					
+					// adjust for diagonal elements
+					if (row_list[i].ContainsKey(i))
+						counter--;
+				}
+				
+				return counter;
+			}
+		}		
 	}
 }

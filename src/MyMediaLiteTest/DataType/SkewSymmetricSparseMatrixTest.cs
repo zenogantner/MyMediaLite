@@ -26,7 +26,20 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class SkewSymmetricSparseMatrixTest
 	{
-		[Test()] public void TestSymmetricity()
+		[Test()] public void TestGetSet()
+		{
+			var matrix = new SkewSymmetricSparseMatrix(5);
+
+			matrix[1, 3] = 1.0f;
+			Assert.AreEqual( 1.0f, matrix[1, 3]);
+			Assert.AreEqual(-1.0f, matrix[3, 1]);
+
+			matrix[4, 1] = -2.0f;
+			Assert.AreEqual(-2.0f, matrix[4, 1]);
+			Assert.AreEqual( 2.0f, matrix[1, 4]);
+		}
+
+		[Test()] public void TestAntiSymmetricity()
 		{
 			var matrix = new SkewSymmetricSparseMatrix(5);
 			matrix[1, 3] = 1.0f;
@@ -41,6 +54,9 @@ namespace MyMediaLiteTest
 
 			matrix[1, 3] = 1.0f;
 			Assert.IsFalse(matrix.IsSymmetric);
+
+			matrix[1, 3] = 0f;
+			Assert.IsTrue(matrix.IsSymmetric);
 		}
 
 		[Test()] public void TestNumberOfRows()
@@ -77,7 +93,22 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
 
 			matrix[3, 1] = 1.0f;
-			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
+			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
+		}
+
+		[Test()] public void TestNumberOfNonEmptyEntries()
+		{
+			var matrix = new SkewSymmetricSparseMatrix(5);
+			Assert.AreEqual(0, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 1.0f;
+			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 2.0f;
+			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 3] = 0f;
+			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
 		}
 	}
 }

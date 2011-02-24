@@ -38,9 +38,9 @@ Recommender functionality
  - prediction certainty output
 Data types
  - data types: introduce more properties
- - data type: symmetric matrix (vs. CorrelationMatrix)
  - profile+optimize data types
  - implement sparse matrices based on binary search
+ - sparse matrices: allow explicit deletion of elements
 Architecture
  - tests/integration
    - test suite should also run for purely binary installation

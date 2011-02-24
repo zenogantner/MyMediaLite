@@ -122,6 +122,7 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>The row and column IDs of non-empty entries in the matrix</summary>
+		/// <value>The row and column IDs of non-empty entries in the matrix</value>
 		public virtual IList<Pair<int, int>> NonEmptyEntryIDs
 		{
 			get	{
@@ -130,6 +131,18 @@ namespace MyMediaLite.DataType
 					foreach (var col_id in id_row.Value.Keys)
 						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
 				return return_list;
+			}
+		}
+
+		/// <summary>The number of non-empty entries in the matrix</summary>
+		/// <value>The number of non-empty entries in the matrix</value>
+		public virtual int NumberOfNonEmptyEntries
+		{
+			get	{
+				int counter = 0;
+				foreach (var row in row_list)
+					counter += row.Count;
+				return counter;
 			}
 		}
 	}

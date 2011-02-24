@@ -79,5 +79,20 @@ namespace MyMediaLiteTest
 			matrix[3, 1] = 1.0;
 			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
 		}
+
+		[Test()] public void TestNumberOfNonEmptyEntries()
+		{
+			var matrix = new SymmetricSparseMatrix<double>(5);
+			Assert.AreEqual(0, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 1.0;
+			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
+
+			matrix[3, 1] = 2.0;
+			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
+			
+			matrix[3, 3] = 2.0;
+			Assert.AreEqual(3, matrix.NumberOfNonEmptyEntries);			
+		}
 	}
 }
