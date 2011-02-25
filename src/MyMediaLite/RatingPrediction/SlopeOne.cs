@@ -51,7 +51,6 @@ namespace MyMediaLite.RatingPrediction
 
 			// create data structure
 			diff_matrix = new SkewSymmetricSparseMatrix(MaxItemID + 1);
-			//diff_matrix = new SparseMatrix<float>(MaxItemID + 1, MaxItemID + 1);
 			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 		}
 
@@ -101,10 +100,9 @@ namespace MyMediaLite.RatingPrediction
 			// compute difference sums and frequencies
 			foreach (var user_ratings in Ratings.ByUser)
 			{
-				int u = user_ratings[0].user_id;
-
-				if (u % 500 == 0)
-					Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NumberOfNonEmptyEntries, Memory.Usage);
+				//int u = user_ratings[0].user_id;
+				//if (u % 500 == 0)
+				//	Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NumberOfNonEmptyEntries, Memory.Usage);
 
 				for (int i = 0; i < user_ratings.Count; i++)
 				{
@@ -115,8 +113,6 @@ namespace MyMediaLite.RatingPrediction
 
 			  			freq_matrix[r.item_id, r2.item_id] += 1;
 			  			diff_matrix[r.item_id, r2.item_id] += (float) (r.rating - r2.rating);
-
-			  			//diff_matrix[r2.item_id, r.item_id] += (float) (r2.rating - r.rating);
 					}
 				}
 			}
@@ -124,10 +120,7 @@ namespace MyMediaLite.RatingPrediction
 			// compute average differences
 			for (int i = 0; i <= MaxItemID; i++)
 				foreach (int j in freq_matrix[i].Keys)
-				{
 					diff_matrix[i, j] /= freq_matrix[i, j];
-					//diff_matrix[j, i] /= freq_matrix[j, i]; // remove once diff_matrix is symmetric
-				}
 		}
 
 		/// <inheritdoc/>
@@ -142,9 +135,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var global_average = double.Parse(reader.ReadLine(), ni);
 
-				//var diff_matrix = (SparseMatrix<float>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);
 				var diff_matrix = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);  // TODO take symmetric matrix into account
-				var freq_matrix = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix); // TODO take symmetric matrix into account
+				var freq_matrix = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix); // TODO take anti-symmetric matrix into account
 
 				// assign new model
 				this.global_average = global_average;
