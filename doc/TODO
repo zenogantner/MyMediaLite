@@ -38,7 +38,7 @@ Recommender functionality
  - prediction certainty output
 Data types
  - data types: introduce more properties
- - profile+optimize data types
+ - profile+optimize data types (using the facilities of Mono 2.10)
  - implement sparse matrices based on binary search
  - sparse matrices: allow explicit deletion of elements
 Architecture
