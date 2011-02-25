@@ -85,7 +85,7 @@ public partial class MainWindow : Gtk.Window
 		CreateTreeView();
 	}
 
-	// inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
+	// heavily inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
 	private void CreateTreeView()
 	{
 		// Fire off an event when the text in the Entry changes
@@ -136,13 +136,20 @@ public partial class MainWindow : Gtk.Window
 		treeview1.ShowAll();
 	}
 
-	private void RatingCellEdited (object o, Gtk.EditedArgs args)
+	private void RatingCellEdited(object o, Gtk.EditedArgs args)
 	{
 		Gtk.TreeIter iter;
-		movie_store.GetIter(out iter, new Gtk.TreePath (args.Path));
+		movie_store.GetIter(out iter, new Gtk.TreePath(args.Path));
 	 
 		Movie movie = (Movie) movie_store.GetValue(iter, 0);
-		ratings[movie.ID] = double.Parse(args.NewText, ni);
+		try
+		{
+			ratings[movie.ID] = double.Parse(args.NewText, ni);
+		}
+		catch (FormatException)
+		{
+			Console.Error.WriteLine("Could not input parse '{0}' as a number.", args.NewText);
+		}		
 	}	
 	
 	private void RenderPrediction(TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
@@ -173,7 +180,7 @@ public partial class MainWindow : Gtk.Window
 		(cell as CellRendererText).Text = movie.Title; // TODO use this for i18n
 	}
 
-	private void OnFilterEntryTextChanged (object o, System.EventArgs args)
+	private void OnFilterEntryTextChanged(object o, System.EventArgs args)
 	{
 		// since the filter text changed, tell the filter to re-determine which rows to display
 		filter.Refilter();

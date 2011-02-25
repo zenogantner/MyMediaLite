@@ -75,7 +75,7 @@ namespace MovieDemo
 
 				int movie_id          = int.Parse(tokens[0]);
 				string movie_imdb_key = tokens[1];
-				string[] movie_genres = tokens[2].Split('|');
+				//string[] movie_genres = tokens[2].Split('|');
 				
 				// TODO
 				int movie_year = 1900;
