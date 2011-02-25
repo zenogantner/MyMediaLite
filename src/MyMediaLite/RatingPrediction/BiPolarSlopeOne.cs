@@ -35,10 +35,10 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class BiPolarSlopeOne : RatingPredictor
 	{
-  		private SparseMatrix<double> diff_matrix_like;
-  		private SparseMatrix<int>    freq_matrix_like;
-  		private SparseMatrix<double> diff_matrix_dislike;
-  		private SparseMatrix<int>    freq_matrix_dislike;
+  		private SkewSymmetricSparseMatrix  diff_matrix_like;
+  		private SymmetricSparseMatrix<int> freq_matrix_like;
+  		private SkewSymmetricSparseMatrix  diff_matrix_dislike;
+  		private SymmetricSparseMatrix<int> freq_matrix_dislike;
 
 		private double global_average;
 
@@ -115,12 +115,12 @@ namespace MyMediaLite.RatingPrediction
 						if (r.rating > user_avg && r2.rating > user_avg)
 						{
 							freq_matrix_like[r.item_id, r2.item_id] += 1;
-							diff_matrix_like[r.item_id, r2.item_id] += r.rating - r2.rating;
+							diff_matrix_like[r.item_id, r2.item_id] += (float) (r.rating - r2.rating);
 						}
 						else if (r.rating < user_avg && r2.rating < user_avg)
 						{
 							freq_matrix_dislike[r.item_id, r2.item_id] += 1;
-							diff_matrix_dislike[r.item_id, r2.item_id] += r.rating - r2.rating;
+							diff_matrix_dislike[r.item_id, r2.item_id] += (float) (r.rating - r2.rating);
 						}
 			}
 
@@ -140,10 +140,10 @@ namespace MyMediaLite.RatingPrediction
 			global_average = Ratings.Average;
 
 			// create data structure
-			diff_matrix_like = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-			freq_matrix_like = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
-			diff_matrix_dislike = new SparseMatrix<double>(MaxItemID + 1, MaxItemID + 1);
-			freq_matrix_dislike = new SparseMatrix<int>(MaxItemID + 1, MaxItemID + 1);
+			diff_matrix_like = new SkewSymmetricSparseMatrix(MaxItemID + 1);
+			freq_matrix_like = new SymmetricSparseMatrix<int>(MaxItemID + 1);
+			diff_matrix_dislike = new SkewSymmetricSparseMatrix(MaxItemID + 1);
+			freq_matrix_dislike = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 		}
 
 		/// <inheritdoc/>
@@ -158,10 +158,10 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var global_average = double.Parse(reader.ReadLine(), ni);
 
-				var diff_matrix_like = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_like);
-				var freq_matrix_like = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
-				var diff_matrix_dislike = (SparseMatrix<double>) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_dislike);
-				var freq_matrix_dislike = (SparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_dislike);
+				var diff_matrix_like = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_like);
+				var freq_matrix_like = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
+				var diff_matrix_dislike = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_dislike);
+				var freq_matrix_dislike = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_dislike);
 
 				// assign new model
 				this.global_average = global_average;
