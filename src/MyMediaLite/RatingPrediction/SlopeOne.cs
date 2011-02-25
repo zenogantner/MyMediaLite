@@ -36,12 +36,11 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SlopeOne : RatingPredictor
 	{
-  		//private SkewSymmetricSparseMatrix diff_matrix;
-  		private SparseMatrix<float> diff_matrix;
+  		private SkewSymmetricSparseMatrix diff_matrix;
   		private SymmetricSparseMatrix<int> freq_matrix;
 
 		// TODO one more way to save memory: use short instead of int internally in the SparseMatrix datatypes
-		
+
 		private double global_average;
 
 		private void InitModel()
