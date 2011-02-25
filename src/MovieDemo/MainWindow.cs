@@ -108,10 +108,7 @@ public partial class MainWindow : Gtk.Window
 
 		prediction_column.SetCellDataFunc(prediction_cell, new Gtk.TreeCellDataFunc(RenderPrediction));
 		rating_column.SetCellDataFunc(rating_cell, new Gtk.TreeCellDataFunc(RenderRating));
-		movie_column.SetCellDataFunc(movie_cell, new Gtk.TreeCellDataFunc(RenderMovieTitle)); // TODO use this for i18n
-		//prediction_column.AddAttribute(prediction_cell, "text", 0);
-		//rating_column.AddAttribute(rating_cell, "text", 1);
-		//movie_column.AddAttribute(movie_cell, "text", 2);
+		movie_column.SetCellDataFunc(movie_cell, new Gtk.TreeCellDataFunc(RenderMovieTitle));
 
 		// Add some data to the store
 		foreach (Movie movie in movies.movie_list)
@@ -145,7 +142,7 @@ public partial class MainWindow : Gtk.Window
 	private void RenderMovieTitle (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
-		(cell as Gtk.CellRendererText).Text = movie.Title;
+		(cell as Gtk.CellRendererText).Text = movie.Title; // TODO use this for i18n
 	}
 
 	private void OnFilterEntryTextChanged (object o, System.EventArgs args)
