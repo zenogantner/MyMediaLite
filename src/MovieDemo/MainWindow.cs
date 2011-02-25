@@ -57,7 +57,7 @@ public partial class MainWindow : Gtk.Window
 
 		Console.Error.Write("Reading in ratings ... "); // TODO param
 		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", 0, 5, user_mapping, item_mapping);
-		training_data = MovieLensRatingData.Read("/home/mrg/data/ml1m/original/ratings.dat", 1, 5, user_mapping, item_mapping);
+		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", 1, 5, user_mapping, item_mapping);
 		rating_predictor.Ratings = training_data;
 		Console.Error.WriteLine("done.");
 
@@ -66,6 +66,9 @@ public partial class MainWindow : Gtk.Window
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
 
+		current_user_id = rating_predictor.MaxUserID;
+		rating_predictor.AddUser(current_user_id);
+		
 		PredictAllRatings();
 
 		// build main window
