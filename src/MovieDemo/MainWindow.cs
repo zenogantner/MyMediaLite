@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -27,7 +28,8 @@ public partial class MainWindow : Gtk.Window
 	
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 	
-	NodeStore all_movies = new Gtk.NodeStore(typeof(MovieTreeNode));
+	ListStore movie_store = new Gtk.ListStore( typeof(double), typeof(double), typeof(string));
+	Gtk.TreeModelFilter filter;
 	
 	RatingData training_data;
 	
@@ -38,88 +40,131 @@ public partial class MainWindow : Gtk.Window
 	EntityMapping item_mapping = new EntityMapping();
 	
 	// ID of the currently selected movie
-	int currentID;
+	int current_movie_id;
+	
+	int current_user_id;
+	
+	Dictionary<int, string> rating_string = new Dictionary<int, string>();
 	
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
 	{
-		
-		
 		// TODO integrate internal IDs
 		Console.Error.Write("Reading in movie data ... ");
-		movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
+		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
+		movies.Read("/home/mrg/data/ml1m/original/movies.dat"); // TODO param
 		Console.Error.WriteLine("done.");
 		
 		Console.Error.Write("Reading in ratings ... "); // TODO param
 		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", 0, 5, user_mapping, item_mapping);
-		training_data = MovieLensRatingData.Read("/home/mrg/data/ml1m/original/ratings.dat", 1, 5, user_mapping, item_mapping);
-		rating_predictor.Ratings = training_data;		
+		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml1m/original/ratings.dat", 1, 5, user_mapping, item_mapping);
+		//rating_predictor.Ratings = training_data;		
 		Console.Error.WriteLine("done.");
 		
 		Console.Error.Write("Training ... ");
-		rating_predictor.Train();
+		//rating_predictor.Train();
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
+		
+		//PredictAllRatings();
 		
 		// build main window
 		Build();
 		
-        nodeview1.AppendColumn("Rating", new Gtk.CellRendererText(), "text", 0);		
-		nodeview1.AppendColumn("Movie",  new Gtk.CellRendererText(), "text", 1);
-		
-		foreach (Movie movie in movies.movie_list)
-			all_movies.AddNode(new MovieTreeNode(movie.Title, "", movie.ID));
-		nodeview1.NodeStore = all_movies;
-		
-		nodeview1.NodeSelection.Changed += new System.EventHandler(this.OnNodeview1SelectionChanged);
-		
-		nodeview1.ShowAll();
+		CreateTreeView();
 	}
 
+	// inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
+	private void CreateTreeView()
+	{
+		// Fire off an event when the text in the Entry changes
+		filter_entry.Changed += OnFilterEntryTextChanged;
+
+		// create a column for the prediction
+		Gtk.TreeViewColumn prediction_column = new Gtk.TreeViewColumn().
+		prediction_column.Title = "Prediction";
+		Gtk.CellRendererText prediction_cell = new Gtk.CellRendererText();
+		prediction_cell.
+		prediction_column.PackStart(prediction_cell, true);				
+		
+		// create a column for the rating
+		Gtk.TreeViewColumn rating_column = new Gtk.TreeViewColumn();
+		rating_column.Title = "Rating";
+		Gtk.CellRendererText rating_cell = new Gtk.CellRendererText();
+		rating_column.PackStart(rating_cell, true);
+		
+		// create a column for the movie title
+		Gtk.TreeViewColumn movie_column = new Gtk.TreeViewColumn();
+		movie_column.Title = "Movie";
+		Gtk.CellRendererText movie_cell = new Gtk.CellRendererText();
+		movie_column.PackStart(movie_cell, true);
+ 
+		// add the columns to the TreeView
+		treeview1.AppendColumn(prediction_column);
+		treeview1.AppendColumn(rating_column);
+		treeview1.AppendColumn(movie_column);
+ 
+		// Tell the Cell Renderers which items in the model to display
+		prediction_column.AddAttribute(prediction_cell, "text", 0);		
+		rating_column.AddAttribute(rating_cell, "text", 1);
+		movie_column.AddAttribute(movie_cell, "text", 2);
+  
+		// Add some data to the store
+		foreach (Movie movie in movies.movie_list)
+			movie_store.AppendValues(0.0, 0.0, movie.IMDBKey);
+		
+		filter = new Gtk.TreeModelFilter(movie_store, null);
+		
+		// specify the function that determines which rows to filter out and which ones to display
+		filter.VisibleFunc = new Gtk.TreeModelFilterVisibleFunc(FilterTree);
+		
+		treeview1.Model = filter;
+		treeview1.ShowAll();		
+	}
+	
+	private void OnFilterEntryTextChanged (object o, System.EventArgs args)
+	{
+		// since the filter text changed, tell the filter to re-determine which rows to display
+		filter.Refilter();
+	}
+	
+	private bool FilterTree(Gtk.TreeModel model, Gtk.TreeIter iter)
+	{
+		string movie_title = model.GetValue(iter, 2).ToString();
+		
+		if (filter_entry.Text.Equals(string.Empty))
+			return true;
+ 
+		//if (movie_title.IndexOf(filter_entry.Text) > -1)
+		if (movie_title.Contains(filter_entry.Text))
+			return true;
+		else
+			return false;
+	}	
+	
+	void PredictAllRatings()
+	{
+		Console.Write("Predicting ... ");
+		
+		// compute ratings
+		var ratings = new double[rating_predictor.MaxItemID + 1];
+		for (int i = 0; i <= rating_predictor.MaxItemID; i++)
+			ratings[i] = rating_predictor.Predict(current_user_id, i);
+		
+		// create strings
+		for (int i = 0; i <= rating_predictor.MaxItemID; i++)
+			rating_string[item_mapping.ToOriginalID(i)] = ratings[i].ToString(); // TODO enforce .
+		
+		Console.Error.WriteLine("done.");		
+	}
+	
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)
 	{
 		Application.Quit();
 		a.RetVal = true;
 	}
 	
-	protected virtual void OnEntry3Changed(object sender, System.EventArgs e)
+	void OnTreeview1SelectionChanged(object o, System.EventArgs args)
 	{
-		string filter = entry3.Text;
-		Console.Error.WriteLine("Filter: '{0}'", filter);
-		
-		if (filter.Equals(string.Empty))
-		{
-			nodeview1.NodeStore = all_movies;
-			nodeview1.ShowAll();
-			return;
-		}
-		
-		var store = new Gtk.NodeStore(typeof(MovieTreeNode));
-		foreach (MovieTreeNode node in all_movies)
-		{
-			if (node.Movie.Contains(filter))
-				store.AddNode(node);
-		}
-		//nodeview1.NodeStore = store;
-		nodeview1.ShowAll();
-	}
-
-	void OnNodeview1SelectionChanged(object o, System.EventArgs args)
-	{
-    	Gtk.NodeSelection selection = (Gtk.NodeSelection) o;
-        MovieTreeNode node = (MovieTreeNode) selection.SelectedNode;
-        
-		label1.Text = node.Movie;
-		
-		currentID = node.MovieID;
-		
-		spinbutton26.Value = 3.0; // TODO maybe get value from somewhere
-		                          // TODO color-code if it is known or not ...
-	}
-	
-	protected virtual void OnGtkButtonClicked (object sender, System.EventArgs e)
-	{
-		// store rating
-		
-		Console.WriteLine("Rating for '{0}' ({1}): {2}", label1.Text, currentID, spinbutton26.Value);
-	}
+		Console.WriteLine("Selection changed.");
+	}	
 }

@@ -5,19 +5,11 @@ public partial class MainWindow
 {
 	private global::Gtk.VBox vbox1;
 
-	private global::Gtk.Entry entry3;
+	private global::Gtk.Entry filter_entry;
 
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 
-	private global::Gtk.NodeView nodeview1;
-
-	private global::Gtk.HBox hbox2;
-
-	private global::Gtk.Label label1;
-
-	private global::Gtk.SpinButton spinbutton26;
-
-	private global::Gtk.Button GtkButton;
+	private global::Gtk.TreeView treeview1;
 
 	protected virtual void Build ()
 	{
@@ -31,13 +23,13 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.entry3 = new global::Gtk.Entry ();
-		this.entry3.CanFocus = true;
-		this.entry3.Name = "entry3";
-		this.entry3.IsEditable = true;
-		this.entry3.InvisibleChar = '●';
-		this.vbox1.Add (this.entry3);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.entry3]));
+		this.filter_entry = new global::Gtk.Entry ();
+		this.filter_entry.CanFocus = true;
+		this.filter_entry.Name = "filter_entry";
+		this.filter_entry.IsEditable = true;
+		this.filter_entry.InvisibleChar = '●';
+		this.vbox1.Add (this.filter_entry);
+		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
 		w1.Position = 0;
 		w1.Expand = false;
 		w1.Fill = false;
@@ -46,55 +38,13 @@ public partial class MainWindow
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-		this.nodeview1 = new global::Gtk.NodeView ();
-		this.nodeview1.CanFocus = true;
-		this.nodeview1.Name = "nodeview1";
-		this.nodeview1.SearchColumn = 0;
-		this.GtkScrolledWindow.Add (this.nodeview1);
+		this.treeview1 = new global::Gtk.TreeView ();
+		this.treeview1.CanFocus = true;
+		this.treeview1.Name = "treeview1";
+		this.GtkScrolledWindow.Add (this.treeview1);
 		this.vbox1.Add (this.GtkScrolledWindow);
 		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
 		w3.Position = 1;
-		// Container child vbox1.Gtk.Box+BoxChild
-		this.hbox2 = new global::Gtk.HBox ();
-		this.hbox2.Name = "hbox2";
-		this.hbox2.Spacing = 6;
-		// Container child hbox2.Gtk.Box+BoxChild
-		this.label1 = new global::Gtk.Label ();
-		this.label1.Name = "label1";
-		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Movie");
-		this.hbox2.Add (this.label1);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.label1]));
-		w4.Position = 0;
-		w4.Expand = false;
-		w4.Fill = false;
-		// Container child hbox2.Gtk.Box+BoxChild
-		this.spinbutton26 = new global::Gtk.SpinButton (0, 5, 5);
-		this.spinbutton26.CanFocus = true;
-		this.spinbutton26.Name = "spinbutton26";
-		this.spinbutton26.Adjustment.PageIncrement = 5;
-		this.spinbutton26.ClimbRate = 1;
-		this.spinbutton26.Numeric = true;
-		this.hbox2.Add (this.spinbutton26);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.spinbutton26]));
-		w5.Position = 1;
-		w5.Expand = false;
-		w5.Fill = false;
-		// Container child hbox2.Gtk.Box+BoxChild
-		this.GtkButton = new global::Gtk.Button ();
-		this.GtkButton.CanFocus = true;
-		this.GtkButton.Name = "GtkButton";
-		this.GtkButton.UseUnderline = true;
-		this.GtkButton.Label = global::Mono.Unix.Catalog.GetString ("Rate");
-		this.hbox2.Add (this.GtkButton);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox2[this.GtkButton]));
-		w6.Position = 2;
-		w6.Expand = false;
-		w6.Fill = false;
-		this.vbox1.Add (this.hbox2);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox2]));
-		w7.Position = 2;
-		w7.Expand = false;
-		w7.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -103,7 +53,5 @@ public partial class MainWindow
 		this.DefaultHeight = 945;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
-		this.entry3.Changed += new global::System.EventHandler (this.OnEntry3Changed);
-		this.GtkButton.Clicked += new global::System.EventHandler (this.OnGtkButtonClicked);
 	}
 }
