@@ -43,8 +43,7 @@ namespace MyMediaLite.RatingPrediction
 	public class UserItemBaseline : RatingPredictor
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
-		public double RegU { get { return reg_u; } set { reg_u = value; }
-		}
+		public double RegU { get { return reg_u; } set { reg_u = value; } }
 		private double reg_u = 25;
 
 		/// <summary>Regularization parameter for the item biases</summary>

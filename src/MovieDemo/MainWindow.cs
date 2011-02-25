@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -45,10 +46,15 @@ public partial class MainWindow : Gtk.Window
 
 	int current_user_id;
 
+	Dictionary<int, int> ratings = new Dictionary<int, int>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
+	NumberFormatInfo ni = new NumberFormatInfo();
+	
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
 	{
+		ni.NumberDecimalDigits = '.'; // for i18n
+		
 		// TODO integrate internal IDs
 		Console.Error.Write("Reading in movie data ... ");
 		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
@@ -62,6 +68,8 @@ public partial class MainWindow : Gtk.Window
 		Console.Error.WriteLine("done.");
 
 		Console.Error.Write("Training ... ");
+		rating_predictor.MinRating = 1;
+		rating_predictor.MaxRating = 5; // TODO this API must be nicer ...
 		rating_predictor.Train();
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
@@ -92,7 +100,7 @@ public partial class MainWindow : Gtk.Window
 		// create a column for the rating
 		Gtk.TreeViewColumn rating_column = new Gtk.TreeViewColumn();
 		rating_column.Title = "Rating";
-		Gtk.CellRendererText rating_cell = new Gtk.CellRendererText();
+		Gtk.CellRendererCombo rating_cell = new Gtk.CellRendererCombo();
 		rating_column.PackStart(rating_cell, true);
 
 		// create a column for the movie title
@@ -130,13 +138,17 @@ public partial class MainWindow : Gtk.Window
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
 		
-		(cell as Gtk.CellRendererText).Text = string.Format("{0,0:0.#}", prediction);
+		(cell as Gtk.CellRendererText).Text = string.Format(ni, "{0,0:0.#}", prediction);
 	}
 
 	private void RenderRating(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
-		(cell as Gtk.CellRendererText).Text = string.Format("{0,0:0.#}", 0.0);
+		
+		int rating = -1;
+		ratings.TryGetValue(movie.ID, out rating);
+		
+		(cell as Gtk.CellRendererCombo).Text = string.Format("{0}", rating);
 	}
 
 	private void RenderMovieTitle (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
@@ -172,7 +184,7 @@ public partial class MainWindow : Gtk.Window
 		// compute ratings
 		for (int i = 0; i <= rating_predictor.MaxItemID; i++)
 			predictions[item_mapping.ToOriginalID(i)] = rating_predictor.Predict(current_user_id, i);
-
+			
 		Console.Error.WriteLine("done.");
 	}
 
