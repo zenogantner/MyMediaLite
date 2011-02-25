@@ -41,15 +41,15 @@ public partial class MainWindow : Gtk.Window
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
 
-	// ID of the currently selected movie
-	int current_movie_id;
-
 	int current_user_id;
 
-	Dictionary<int, int> ratings = new Dictionary<int, int>();
+	Dictionary<int, double> ratings     = new Dictionary<int, double>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
 	NumberFormatInfo ni = new NumberFormatInfo();
+
+	double min_rating = 1;
+	double max_rating = 5;
 	
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
 	{
@@ -62,14 +62,14 @@ public partial class MainWindow : Gtk.Window
 		Console.Error.WriteLine("done.");
 
 		Console.Error.Write("Reading in ratings ... "); // TODO param
-		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", 0, 5, user_mapping, item_mapping);
-		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", 1, 5, user_mapping, item_mapping);
+		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
+		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", min_rating, max_rating, user_mapping, item_mapping);
 		rating_predictor.Ratings = training_data;
 		Console.Error.WriteLine("done.");
 
 		Console.Error.Write("Training ... ");
-		rating_predictor.MinRating = 1;
-		rating_predictor.MaxRating = 5; // TODO this API must be nicer ...
+		rating_predictor.MinRating = min_rating;
+		rating_predictor.MaxRating = max_rating; // TODO this API must be nicer ...
 		rating_predictor.Train();
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
@@ -92,21 +92,23 @@ public partial class MainWindow : Gtk.Window
 		filter_entry.Changed += OnFilterEntryTextChanged;
 
 		// create a column for the prediction
-		Gtk.TreeViewColumn prediction_column = new Gtk.TreeViewColumn();
+		TreeViewColumn prediction_column = new TreeViewColumn();
 		prediction_column.Title = "Prediction";
-		Gtk.CellRendererText prediction_cell = new Gtk.CellRendererText();
+		CellRendererText prediction_cell = new CellRendererText();
 		prediction_column.PackStart(prediction_cell, true);
 
 		// create a column for the rating
-		Gtk.TreeViewColumn rating_column = new Gtk.TreeViewColumn();
+		TreeViewColumn rating_column = new TreeViewColumn();
 		rating_column.Title = "Rating";
-		Gtk.CellRendererCombo rating_cell = new Gtk.CellRendererCombo();
+		CellRendererText rating_cell = new CellRendererText();
+		rating_cell.Editable = true;
+		rating_cell.Edited += RatingCellEdited;
 		rating_column.PackStart(rating_cell, true);
 
 		// create a column for the movie title
-		Gtk.TreeViewColumn movie_column = new Gtk.TreeViewColumn();
+		TreeViewColumn movie_column = new TreeViewColumn();
 		movie_column.Title = "Movie";
-		Gtk.CellRendererText movie_cell = new Gtk.CellRendererText();
+		CellRendererText movie_cell = new CellRendererText();
 		movie_column.PackStart(movie_cell, true);
 
 		// add the columns to the TreeView
@@ -134,30 +136,41 @@ public partial class MainWindow : Gtk.Window
 		treeview1.ShowAll();
 	}
 
-	private void RenderPrediction(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	private void RatingCellEdited (object o, Gtk.EditedArgs args)
+	{
+		Gtk.TreeIter iter;
+		movie_store.GetIter(out iter, new Gtk.TreePath (args.Path));
+	 
+		Movie movie = (Movie) movie_store.GetValue(iter, 0);
+		ratings[movie.ID] = double.Parse(args.NewText, ni);
+	}	
+	
+	private void RenderPrediction(TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
 		
-		(cell as Gtk.CellRendererText).Text = string.Format(ni, "{0,0:0.#}", prediction);
+		(cell as CellRendererText).Text = string.Format(ni, "{0,0:0.#}", prediction);
 	}
 
-	private void RenderRating(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	private void RenderRating(TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		
-		int rating = -1;
-		ratings.TryGetValue(movie.ID, out rating);
+		double rating = -1;	
 		
-		(cell as Gtk.CellRendererCombo).Text = string.Format("{0}", rating);
+		if (ratings.TryGetValue(movie.ID, out rating))
+			(cell as CellRendererText).Text = string.Format(ni, "{0}", rating);
+		else
+			(cell as CellRendererText).Text = string.Empty;
 	}
 
 	private void RenderMovieTitle(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
-		(cell as Gtk.CellRendererText).Text = movie.Title; // TODO use this for i18n
+		(cell as CellRendererText).Text = movie.Title; // TODO use this for i18n
 	}
 
 	private void OnFilterEntryTextChanged (object o, System.EventArgs args)
