@@ -25,24 +25,31 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class RatingPredictor : IRatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
+		/// <value>Maximum user ID</value>
 		public int MaxUserID  { get; set; }
+		
 		/// <summary>Maximum item ID</summary>
+		/// <value>Maximum item ID</value>
 		public int MaxItemID  {	get; set; }
 
 		/// <summary>The max rating value</summary>
+		/// <value>The max rating value</value>
 		public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
 		/// <summary>The max rating value</summary>
 		protected double max_rating;
 
 		/// <summary>The min rating value</summary>
+		/// <value>The min rating value</value>
 		public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
 		/// <summary>The min rating value</summary>
 		protected double min_rating;
 
 		/// <summary>true if users shall be updated when doing online updates</summary>
+		/// <value>true if users shall be updated when doing online updates</value>
 		public bool UpdateUsers { get; set; }
 
 		/// <summary>true if items shall be updated when doing online updates</summary>
+		/// <value>true if items shall be updated when doing online updates</value>
 		public bool UpdateItems { get; set; }		
 		
 		/// <summary>The rating data</summary>
