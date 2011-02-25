@@ -22,12 +22,12 @@ using MyMediaLite.RatingPrediction;
 namespace MyMediaLiteTest
 {
 	[TestFixture()]
-	public class SlopeOneTest
+	public class BiPolarSlopeOneTest
 	{
 		[Test()]
 		public void TestNewItemInTestSet()
 		{
-			var recommender = new SlopeOne();
+			var recommender = new BiPolarSlopeOne();
 			recommender.MinRating = 1;
 			recommender.MaxRating = 5;
 			
@@ -44,7 +44,7 @@ namespace MyMediaLiteTest
 		[Test()]
 		public void TestNewUserInTestSet()
 		{
-			var recommender = new SlopeOne();
+			var recommender = new BiPolarSlopeOne();
 			recommender.MinRating = 1;
 			recommender.MaxRating = 5;
 			
@@ -59,4 +59,3 @@ namespace MyMediaLiteTest
 		}		
 	}
 }
-

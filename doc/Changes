@@ -1,6 +1,8 @@
 0.11	2011-02-??
         - add simple GUI demo for CeBIT
-        - SlopeOne and BiPolarSlopeOne: faster and consume less memory
+        - SlopeOne and BiPolarSlopeOne
+          - faster and consume less memory
+          - fix exception when predicting for new users
         - command-line programs
           - handle DirectoryNotFoundExceptions
 	  - give out memory usage

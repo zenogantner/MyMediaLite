@@ -45,10 +45,9 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			if (user_id > MaxUserID)
+			if (user_id > MaxUserID || item_id > MaxItemID)
 				return false;
-			if (item_id > MaxItemID)
-				return false;
+
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
 			{
 				if (freq_matrix_like[item_id, r.item_id] != 0)
@@ -62,7 +61,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
-			if (item_id > MaxItemID)
+			if (item_id > MaxItemID || user_id > MaxUserID)
 				return global_average;
 
 			double prediction = 0.0;
@@ -71,7 +70,7 @@ namespace MyMediaLite.RatingPrediction
 			double user_avg = Ratings.ByUser[user_id].Average;
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
 				//if (r.item_id <= MaxItemID)
-				{					
+				{
 					if (r.rating > user_avg)
 					{
 						int f = freq_matrix_like[item_id, r.item_id];
@@ -91,7 +90,7 @@ namespace MyMediaLite.RatingPrediction
 						}
 					}
 				}
-			
+
 			if (frequencies == 0)
 				return global_average;
 

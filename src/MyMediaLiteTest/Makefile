@@ -77,6 +77,7 @@ FILES =  \
 	DataType/SparseMatrixTest.cs \
 	DataType/SymmetricSparseMatrixTest.cs \
 	DataType/VectorUtilsTest.cs \
+	RatingPrediction/BiPolarSlopeOneTest.cs \
 	RatingPrediction/SlopeOneTest.cs 
 
 DATA_FILES = 
