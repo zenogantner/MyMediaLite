@@ -53,7 +53,7 @@ public partial class MainWindow : Gtk.Window
 	
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
 	{
-		ni.NumberDecimalDigits = '.'; // for i18n
+		ni.NumberDecimalDigits = '.'; // ensure correct comma separator (for English)
 		
 		// TODO integrate internal IDs
 		Console.Error.Write("Reading in movie data ... ");
@@ -127,7 +127,10 @@ public partial class MainWindow : Gtk.Window
 		// specify the function that determines which rows to filter out and which ones to display
 		filter.VisibleFunc = new Gtk.TreeModelFilterVisibleFunc(FilterTree);
 
-		treeview1.Model = filter;
+		TreeModelSort sorter = new TreeModelSort(filter);
+		// TODO set up sorting
+		
+		treeview1.Model = sorter;
 		treeview1.ShowAll();
 	}
 
@@ -151,7 +154,7 @@ public partial class MainWindow : Gtk.Window
 		(cell as Gtk.CellRendererCombo).Text = string.Format("{0}", rating);
 	}
 
-	private void RenderMovieTitle (Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
+	private void RenderMovieTitle(Gtk.TreeViewColumn column, Gtk.CellRenderer cell, Gtk.TreeModel model, Gtk.TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		(cell as Gtk.CellRendererText).Text = movie.Title; // TODO use this for i18n
