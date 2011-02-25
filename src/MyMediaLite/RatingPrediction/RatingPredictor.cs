@@ -39,6 +39,12 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The min rating value</summary>
 		protected double min_rating;
 
+		/// <summary>true if users shall be updated when doing online updates</summary>
+		public bool UpdateUsers { get; set; }
+
+		/// <summary>true if items shall be updated when doing online updates</summary>
+		public bool UpdateItems { get; set; }		
+		
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings
 		{

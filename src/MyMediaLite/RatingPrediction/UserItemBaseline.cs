@@ -50,12 +50,6 @@ namespace MyMediaLite.RatingPrediction
 		public double RegI { get { return reg_i; } set { reg_i = value; } }
 		private double reg_i = 10;
 
-		/// <summary>true if users shall be updated when doing online updates</summary>
-		public bool UpdateUsers { get; set; }
-
-		/// <summary>true if items shall be updated when doing online updates</summary>
-		public bool UpdateItems { get; set; }
-
 		private double global_average;
 		private double[] user_biases;
 		private double[] item_biases;
