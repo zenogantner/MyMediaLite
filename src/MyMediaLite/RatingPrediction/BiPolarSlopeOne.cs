@@ -70,25 +70,28 @@ namespace MyMediaLite.RatingPrediction
 
 			double user_avg = Ratings.ByUser[user_id].Average;
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
-				if (r.rating > user_avg)
-				{
-					int f = freq_matrix_like[item_id, r.item_id];
-					if (f != 0)
+				//if (r.item_id <= MaxItemID)
+				{					
+					if (r.rating > user_avg)
 					{
-						prediction  += ( diff_matrix_like[item_id, r.item_id] + r.rating ) * f;
-						frequencies += f;
+						int f = freq_matrix_like[item_id, r.item_id];
+						if (f != 0)
+						{
+							prediction  += ( diff_matrix_like[item_id, r.item_id] + r.rating ) * f;
+							frequencies += f;
+						}
+					}
+					else
+					{
+						int f = freq_matrix_dislike[item_id, r.item_id];
+						if (f != 0)
+						{
+							prediction  += ( diff_matrix_dislike[item_id, r.item_id] + r.rating ) * f;
+							frequencies += f;
+						}
 					}
 				}
-				else
-				{
-					int f = freq_matrix_dislike[item_id, r.item_id];
-					if (f != 0)
-					{
-						prediction  += ( diff_matrix_dislike[item_id, r.item_id] + r.rating ) * f;
-						frequencies += f;
-					}
-				}
-
+			
 			if (frequencies == 0)
 				return global_average;
 

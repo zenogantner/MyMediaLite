@@ -77,11 +77,14 @@ namespace MyMediaLite.RatingPrediction
 
 			foreach (RatingEvent r in Ratings.ByUser[user_id])
 			{
-				int f = freq_matrix[item_id, r.item_id];
-				if (f != 0)
+				//if (r.item_id <= MaxItemID)
 				{
-					prediction += ( diff_matrix[item_id, r.item_id] + r.rating ) * f;
-					frequency += f;
+					int f = freq_matrix[item_id, r.item_id];
+					if (f != 0)
+					{
+						prediction += ( diff_matrix[item_id, r.item_id] + r.rating ) * f;
+						frequency += f;
+					}
 				}
 			}
 
