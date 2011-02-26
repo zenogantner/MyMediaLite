@@ -30,6 +30,8 @@ public partial class MainWindow : Window
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 
 	TreeModelFilter filter;
+	TreeModelSort sorter;
+	TreeViewColumn movie_column = new TreeViewColumn();
 
 	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
 	
@@ -98,7 +100,7 @@ public partial class MainWindow : Window
 		CellRendererText prediction_cell = new CellRendererText();
 		prediction_cell.BackgroundGdk = white;
 		prediction_column.PackStart(prediction_cell, true);
-		prediction_column.SortIndicator = true;
+		//prediction_column.SortIndicator = true;
 
 		// create a column for the rating
 		TreeViewColumn rating_column = new TreeViewColumn();
@@ -108,15 +110,16 @@ public partial class MainWindow : Window
 		rating_cell.Edited += RatingCellEdited;
 		rating_cell.BackgroundGdk = white;
 		rating_column.PackStart(rating_cell, true);
-		rating_column.SortIndicator = true;
+		//rating_column.SortIndicator = true;
 
-		// create a column for the movie title
-		TreeViewColumn movie_column = new TreeViewColumn();
+		// set up a column for the movie title
 		movie_column.Title = "Movie";
 		CellRendererText movie_cell = new CellRendererText();
 		movie_cell.BackgroundGdk = white;
 		movie_column.PackStart(movie_cell, true);
 		movie_column.SortIndicator = true;
+		movie_column.Clickable = true;
+		movie_column.Clicked += new EventHandler( MovieColumnClicked );
 
 		// add the columns to the TreeView
 		treeview1.AppendColumn(prediction_column);
@@ -129,9 +132,6 @@ public partial class MainWindow : Window
 
 		var movie_store = new ListStore( typeof(Movie) );		
 		
-		//movie_store.SetSortFunc(0, CompareTitle);
-		//movie_store.DefaultSortFunc = CompareTitle;
-		
 		// Add some data to the store
 		foreach (Movie movie in movies.movie_list)
 			movie_store.AppendValues( movie );
@@ -140,13 +140,35 @@ public partial class MainWindow : Window
 		// specify the function that determines which rows to filter out and which ones to display
 		filter.VisibleFunc = new TreeModelFilterVisibleFunc(FilterTree);
 		
-		TreeModelSort sorter = new TreeModelSort(filter);
+		sorter = new TreeModelSort(filter);
 		sorter.DefaultSortFunc = CompareTitle;
-		
+			
 		treeview1.Model = sorter;
 		treeview1.ShowAll();
 	}
 
+	private void MovieColumnClicked(object o, EventArgs args)
+	{
+		if (movie_column.SortOrder == SortType.Ascending)
+		{
+			movie_column.SortOrder = SortType.Descending;
+			sorter.DefaultSortFunc = CompareTitleReverse;
+		}
+		else
+		{
+			movie_column.SortOrder = SortType.Ascending;
+			sorter.DefaultSortFunc = CompareTitle;
+		}
+	}
+
+ 	private int CompareTitleReverse(TreeModel model, TreeIter a, TreeIter b)
+	{
+		Movie movie1 = (Movie) model.GetValue(a, 0);
+		Movie movie2 = (Movie) model.GetValue(b, 0);
+		
+		return string.Compare(movie2.Title, movie1.Title);
+	}	
+	
  	private int CompareTitle(TreeModel model, TreeIter a, TreeIter b)
 	{
 		Movie movie1 = (Movie) model.GetValue(a, 0);
@@ -191,7 +213,6 @@ public partial class MainWindow : Window
 		if (diff < 0)
 			return -1;
 		return 0;
-		
 	}	
 	
 	private void RatingCellEdited(object o, EditedArgs args)
