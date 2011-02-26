@@ -224,7 +224,6 @@ namespace MyMediaLite.RatingPrediction
 			{
 				base.AddUser(user_id);
 				user_factors.AddRows(user_id + 1);
-				MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 			}
 		}
 
@@ -235,7 +234,6 @@ namespace MyMediaLite.RatingPrediction
 			{
 				base.AddItem(item_id);
 				item_factors.AddRows(item_id + 1);
-				MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 			}
 		}
 
