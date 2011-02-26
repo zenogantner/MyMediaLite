@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq; // TODO remove again
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -212,9 +211,6 @@ namespace MyMediaLite.RatingPrediction
 				double[] user_bias = new double[user_id + 1];
 				Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
 				this.user_bias = user_bias;
-				
-				Console.Error.WriteLine("user_bias length: " + this.user_bias.Length);
-				// TODO measure whether using a List instead of an array gives us a performance penalty
 			}
 		}
 
