@@ -202,6 +202,37 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
+		public override void AddUser(int user_id)
+		{
+			if (user_id > MaxUserID)
+			{
+				base.AddUser(user_id);
+
+				// create new user bias array
+				double[] user_bias = new double[user_id + 1];
+				Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
+				this.user_bias = user_bias;
+				
+				Console.Error.WriteLine("user_bias length: " + this.user_bias.Length);
+				// TODO measure whether using a List instead of an array gives us a performance penalty
+			}
+		}
+
+		/// <inheritdoc/>
+		public override void AddItem(int item_id)
+		{
+			if (item_id > MaxItemID)
+			{
+				base.AddItem(item_id);
+
+				// create new item bias array
+				double[] item_bias = new double[item_id + 1];
+				Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
+				this.item_bias = item_bias;
+			}
+		}
+
+		/// <inheritdoc/>
 		public override void RetrainUser(int user_id)
 		{
 			user_bias[user_id] = 0;

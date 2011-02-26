@@ -4,7 +4,7 @@
           - faster and consume less memory
           - fix exception when predicting for new users
         - BiasedMatrixFactorization
-          - also update bias terms in online updates
+          - online update bug fixes
         - command-line programs
           - handle DirectoryNotFoundExceptions
 	  - give out memory usage
