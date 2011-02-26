@@ -337,8 +337,22 @@ public partial class MainWindow : Window
 
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
+		
+		string text;
+		if (prediction < 1)
+			text = "";
+		else if (prediction < 1.5)
+			text = string.Format(ni, "{0,0:0.00} ★", prediction);
+		else if (prediction < 2.5)
+			text = string.Format(ni, "{0,0:0.00} ★★", prediction);
+		else if (prediction < 3.5)
+			text = string.Format(ni, "{0,0:0.00} ★★★", prediction);
+		else if (prediction < 4.5)
+			text = string.Format(ni, "{0,0:0.00} ★★★★", prediction);
+		else
+			text = string.Format(ni, "{0,0:0.00} ★★★★★", prediction);
 
-		(cell as CellRendererText).Text = string.Format(ni, "{0,0:0.##}", prediction);
+		(cell as CellRendererText).Text = text;
 	}
 
 	private void RenderRating(TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
