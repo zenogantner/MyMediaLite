@@ -3,6 +3,12 @@
 
 public partial class MainWindow
 {
+	private global::Gtk.UIManager UIManager;
+
+	private global::Gtk.Action FilterAction;
+
+	private global::Gtk.Action LanguageAction;
+
 	private global::Gtk.VBox vbox1;
 
 	private global::Gtk.Entry filter_entry;
@@ -11,10 +17,22 @@ public partial class MainWindow
 
 	private global::Gtk.TreeView treeview1;
 
+	private global::Gtk.MenuBar menubar1;
+
 	protected virtual void Build ()
 	{
 		global::Stetic.Gui.Initialize (this);
 		// Widget MainWindow
+		this.UIManager = new global::Gtk.UIManager ();
+		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
+		this.FilterAction = new global::Gtk.Action ("FilterAction", global::Mono.Unix.Catalog.GetString ("Filter"), null, null);
+		this.FilterAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Filter");
+		w1.Add (this.FilterAction, null);
+		this.LanguageAction = new global::Gtk.Action ("LanguageAction", global::Mono.Unix.Catalog.GetString ("Language"), null, null);
+		this.LanguageAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Language");
+		w1.Add (this.LanguageAction, null);
+		this.UIManager.InsertActionGroup (w1, 0);
+		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("MyMediaLite Movie Demo");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
@@ -29,10 +47,10 @@ public partial class MainWindow
 		this.filter_entry.IsEditable = true;
 		this.filter_entry.InvisibleChar = '●';
 		this.vbox1.Add (this.filter_entry);
-		global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
-		w1.Position = 0;
-		w1.Expand = false;
-		w1.Fill = false;
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
+		w2.Position = 0;
+		w2.Expand = false;
+		w2.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -43,8 +61,17 @@ public partial class MainWindow
 		this.treeview1.Name = "treeview1";
 		this.GtkScrolledWindow.Add (this.treeview1);
 		this.vbox1.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
-		w3.Position = 1;
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
+		w4.Position = 1;
+		// Container child vbox1.Gtk.Box+BoxChild
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'/><menu name='LanguageAction' action='LanguageAction'/></menubar></ui>");
+		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
+		this.menubar1.Name = "menubar1";
+		this.vbox1.Add (this.menubar1);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.menubar1]));
+		w5.Position = 2;
+		w5.Expand = false;
+		w5.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();

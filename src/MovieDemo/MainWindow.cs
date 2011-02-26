@@ -39,8 +39,7 @@ public partial class MainWindow : Window
 
 	RatingData training_data;
 
-	//RatingPredictor rating_predictor = new BiasedMatrixFactorization();
-	RatingPredictor rating_predictor = new UserItemBaseline();
+	RatingPredictor rating_predictor;
 
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
@@ -65,20 +64,8 @@ public partial class MainWindow : Window
 		movies.Read("/home/mrg/data/ml1m/original/movies.dat"); // TODO param
 		Console.Error.WriteLine("done.");
 
-		Console.Error.Write("Reading in ratings ... "); // TODO param
-		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
-		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", min_rating, max_rating, user_mapping, item_mapping);
-		rating_predictor.Ratings = training_data;
-		Console.Error.WriteLine("done.");
-
-		Console.Error.Write("Training ... ");
-		rating_predictor.MinRating = min_rating;
-		rating_predictor.MaxRating = max_rating; // TODO this API must be nicer ...
-		rating_predictor.UpdateUsers = true;
-		rating_predictor.Train();
-		Console.Error.WriteLine("done.");
-		// TODO have option of loading from file
-
+		CreateRecommender();
+		
 		current_user_id = rating_predictor.MaxUserID;
 		rating_predictor.AddUser(current_user_id);
 
@@ -90,6 +77,29 @@ public partial class MainWindow : Window
 		CreateTreeView();
 	}
 
+	private void CreateRecommender()
+	{
+		Console.Error.Write("Reading in ratings ... "); // TODO param
+		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
+		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", min_rating, max_rating, user_mapping, item_mapping);
+		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
+		recommender.Ratings = training_data;
+		Console.Error.WriteLine("done.");
+
+		Console.Error.Write("Training ... ");
+		recommender.MinRating = min_rating;
+		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
+		recommender.UpdateUsers = true;
+		recommender.BiasRegularization = 0.001;
+		recommender.Regularization = 0.045;
+		recommender.NumIter = 20;
+		recommender.Train();
+		Console.Error.WriteLine("done.");
+		// TODO have option of loading from file		
+		
+		rating_predictor = recommender;
+	}
+	
 	// heavily inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
 	private void CreateTreeView()
 	{
@@ -130,6 +140,7 @@ public partial class MainWindow : Window
 		treeview1.AppendColumn(rating_column);
 		treeview1.AppendColumn(movie_column);
 
+		// set up the render objects for the columns
 		prediction_column.SetCellDataFunc(prediction_cell, new TreeCellDataFunc(RenderPrediction));
 		rating_column.SetCellDataFunc(rating_cell, new TreeCellDataFunc(RenderRating));
 		movie_column.SetCellDataFunc(movie_cell, new TreeCellDataFunc(RenderMovieTitle));
@@ -285,7 +296,7 @@ public partial class MainWindow : Window
 			return -1;
 		return 0;
 	}
-
+	
 	private void RatingCellEdited(object o, EditedArgs args)
 	{
 		TreeIter iter;
@@ -312,7 +323,7 @@ public partial class MainWindow : Window
 
 			// add the new rating
 			rating_predictor.AddRating(current_user_id, internal_item_id, rating);
-
+			
 			PredictAllRatings();
 		}
 		catch (FormatException)
@@ -328,7 +339,7 @@ public partial class MainWindow : Window
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
 
-		(cell as CellRendererText).Text = string.Format(ni, "{0,0:0.#}", prediction);
+		(cell as CellRendererText).Text = string.Format(ni, "{0,0:0.##}", prediction);
 	}
 
 	private void RenderRating(TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)

@@ -9,6 +9,18 @@
     <widget-library name="../bin/Debug/MovieDemo.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="721 945">
+    <action-group name="Default">
+      <action id="FilterAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Filter</property>
+        <property name="ShortLabel" translatable="yes">Filter</property>
+      </action>
+      <action id="LanguageAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Language</property>
+        <property name="ShortLabel" translatable="yes">Language</property>
+      </action>
+    </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MyMediaLite Movie Demo</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -49,7 +61,19 @@
           </packing>
         </child>
         <child>
-          <placeholder />
+          <widget class="Gtk.MenuBar" id="menubar1">
+            <property name="MemberName" />
+            <node name="__gtksharp_123_Stetic_Editor_ActionMenuBar" type="Menubar">
+              <node type="Menu" action="FilterAction" />
+              <node type="Menu" action="LanguageAction" />
+            </node>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
         </child>
       </widget>
     </child>
