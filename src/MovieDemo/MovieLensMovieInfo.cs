@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using MyMediaLite.Data;
 using MyMediaLite.Util;
 
 
@@ -42,19 +43,21 @@ namespace MovieDemo
 	
 	public sealed class MovieLensMovieInfo
 	{
-		public List<Movie> movie_list; // TODO more elegant solution
+		public List<Movie> movie_list;
 		
 		/// <summary>Read movie data from a file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
-		public void Read(string filename)
+		/// <param name="item_mapping">ID mapping for the movies</param>
+		public void Read(string filename, EntityMapping item_mapping)
 		{
 			using ( var reader = new StreamReader(filename) )
-				Read(reader);
+				Read(reader, item_mapping);
 		}
 
 		/// <summary>Read movie data from a StreamReader</summary>
 		/// <param name="reader">a StreamReader to be read from</param>
-		public void Read(StreamReader reader)
+		/// <param name="item_mapping">ID mapping for the movies</param>
+		public void Read(StreamReader reader, EntityMapping item_mapping)
 		{
 			movie_list = new List<Movie>();
 
@@ -73,7 +76,7 @@ namespace MovieDemo
 				if (tokens.Length != 3)
 					throw new IOException("Expected exactly three columns: " + line);
 
-				int movie_id          = int.Parse(tokens[0]);
+				int movie_id          = item_mapping.ToInternalID(int.Parse(tokens[0]));
 				string movie_imdb_key = tokens[1];
 				//string[] movie_genres = tokens[2].Split('|');
 				

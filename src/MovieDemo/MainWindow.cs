@@ -61,12 +61,12 @@ public partial class MainWindow : Window
 		// TODO integrate internal IDs - load after training data ...
 		Console.Error.Write("Reading in movie data ... ");
 		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
-		movies.Read("/home/mrg/data/ml1m/original/movies.dat"); // TODO param
+		movies.Read("/home/mrg/data/ml1m/original/movies.dat", item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
 
 		CreateRecommender();
 		
-		current_user_id = rating_predictor.MaxUserID;
+		current_user_id = rating_predictor.MaxUserID + 1;
 		rating_predictor.AddUser(current_user_id);
 
 		PredictAllRatings();
@@ -81,19 +81,20 @@ public partial class MainWindow : Window
 	{
 		Console.Error.Write("Reading in ratings ... "); // TODO param
 		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
-		training_data = RatingPredictionData.Read("/home/mrg/data/ml1m/ml1m.txt", min_rating, max_rating, user_mapping, item_mapping);
+		training_data = MovieLensRatingData.Read("/home/mrg/data/ml1m/original/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
 		recommender.Ratings = training_data;
 		Console.Error.WriteLine("done.");
 
-		Console.Error.Write("Training ... ");
+		Console.Error.Write("Loading prediction model ... ");
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
 		recommender.UpdateUsers = true;
 		recommender.BiasRegularization = 0.001;
 		recommender.Regularization = 0.045;
-		recommender.NumIter = 20;
-		recommender.Train();
+		recommender.NumIter = 60;
+		//recommender.Train();
+		recommender.LoadModel("../../bmf.model");
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file		
 		
@@ -147,7 +148,7 @@ public partial class MainWindow : Window
 
 		var movie_store = new ListStore( typeof(Movie) );
 
-		// Add some data to the store
+		// add all movies to the store
 		foreach (Movie movie in movies.movie_list)
 			movie_store.AppendValues( movie );
 
@@ -315,14 +316,12 @@ public partial class MainWindow : Window
 
 			ratings[movie.ID] = rating;
 
-			int internal_item_id = item_mapping.ToInternalID(movie.ID);
-
 			// if necessary, add the the new item to the recommender/dataset
-			if (internal_item_id > rating_predictor.MaxItemID)
-				rating_predictor.AddItem(internal_item_id);
+			if (movie.ID > rating_predictor.MaxItemID)
+				rating_predictor.AddItem(movie.ID);
 
 			// add the new rating
-			rating_predictor.AddRating(current_user_id, internal_item_id, rating);
+			rating_predictor.AddRating(current_user_id, movie.ID, rating);
 			
 			PredictAllRatings();
 		}
@@ -386,7 +385,7 @@ public partial class MainWindow : Window
 
 		// compute ratings
 		for (int i = 0; i <= rating_predictor.MaxItemID; i++)
-			predictions[item_mapping.ToOriginalID(i)] = rating_predictor.Predict(current_user_id, i);
+			predictions[i] = rating_predictor.Predict(current_user_id, i);
 
 		Console.Error.WriteLine("done.");
 	}
