@@ -29,9 +29,7 @@ public partial class MainWindow :  Window
 
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 
-	//ListStore movie_store = new  ListStore( typeof(double), typeof(double), typeof(string), typeof(int) );
-	ListStore movie_store = new  ListStore( typeof(Movie) );
-	 TreeModelFilter filter;
+	TreeModelFilter filter;
 
 	RatingData training_data;
 
@@ -121,6 +119,8 @@ public partial class MainWindow :  Window
 		rating_column.SetCellDataFunc(rating_cell, new  TreeCellDataFunc(RenderRating));
 		movie_column.SetCellDataFunc(movie_cell, new  TreeCellDataFunc(RenderMovieTitle));
 
+		var movie_store = new ListStore( typeof(Movie) );		
+		
 		// Add some data to the store
 		foreach (Movie movie in movies.movie_list)
 			movie_store.AppendValues( movie );
@@ -140,20 +140,27 @@ public partial class MainWindow :  Window
 	private void RatingCellEdited(object o, EditedArgs args)
 	{
 		TreeIter iter;
-		movie_store.GetIter(out iter, new TreePath(args.Path));
+		treeview1.Model.GetIter(out iter, new TreePath(args.Path));
 	 
-		Movie movie = (Movie) movie_store.GetValue(iter, 0);
+		Movie movie = (Movie) treeview1.Model.GetValue(iter, 0);
+		string input = args.NewText;
 		try
 		{
-			ratings[movie.ID] = double.Parse(args.NewText, ni);
+			double rating = double.Parse(input, ni);
+
+			if (rating > max_rating)
+				rating = max_rating;
+			if (rating < min_rating)
+				rating = min_rating;
 			
-			rating_predictor.AddRating(current_user_id, item_mapping.ToInternalID(movie.ID), ratings[movie.ID]);
+			ratings[movie.ID] = rating;
+			rating_predictor.AddRating(current_user_id, item_mapping.ToInternalID(movie.ID), rating);
 			
 			PredictAllRatings();
 		}
 		catch (FormatException)
 		{
-			Console.Error.WriteLine("Could not input parse '{0}' as a number.", args.NewText);
+			Console.Error.WriteLine("Could not parse input '{0}' as a number.", input);
 		}		
 	}	
 	
