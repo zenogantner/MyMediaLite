@@ -6,6 +6,7 @@
         - command-line programs
           - handle DirectoryNotFoundExceptions
 	  - give out memory usage
+          - ignore abstract recommender classes
         - API changes
           - seal some classes
         - IO

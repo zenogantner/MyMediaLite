@@ -254,10 +254,13 @@ namespace MyMediaLite.Util
 		/// <returns>a rating recommender object of type type</returns>
 		public static RatingPrediction.RatingPredictor CreateRatingPredictor(Type type)
 		{
+			if (type.IsAbstract)
+				return null;
+
 			if (type.IsSubclassOf(typeof(RatingPrediction.RatingPredictor)))
 				return (RatingPrediction.RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.Memory");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.RatingPredictor");
 		}
 
 		/// <summary>Create an item recommender engine from the type name</summary>
@@ -279,10 +282,13 @@ namespace MyMediaLite.Util
 		/// <returns>an item recommender object of type type</returns>
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(Type type)
 		{
+			if (type.IsAbstract)
+				return null;
+
 			if (type.IsSubclassOf(typeof(ItemRecommendation.ItemRecommender)))
 				return (ItemRecommendation.ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommendation");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
 		}
 
 		/// <summary>Describes the kind of data needed by this engine</summary>
