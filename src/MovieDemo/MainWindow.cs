@@ -23,7 +23,7 @@ using MyMediaLite.Data;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
 
-public partial class MainWindow :  Window
+public partial class MainWindow : Window
 {
 	// TODO put application logic into one object (not the MainWindow)
 
@@ -31,6 +31,8 @@ public partial class MainWindow :  Window
 
 	TreeModelFilter filter;
 
+	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
+	
 	RatingData training_data;
 
 	//RatingPredictor rating_predictor = new BiasedMatrixFactorization();
@@ -87,14 +89,16 @@ public partial class MainWindow :  Window
 	// heavily inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
 	private void CreateTreeView()
 	{
-		// Fire off an event when the text in the Entry changes
+		// fire off an event when the text in the Entry changes
 		filter_entry.Changed += OnFilterEntryTextChanged;
 
 		// create a column for the prediction
 		TreeViewColumn prediction_column = new TreeViewColumn();
 		prediction_column.Title = "Prediction";
 		CellRendererText prediction_cell = new CellRendererText();
+		prediction_cell.BackgroundGdk = white;
 		prediction_column.PackStart(prediction_cell, true);
+		prediction_column.SortIndicator = true;
 
 		// create a column for the rating
 		TreeViewColumn rating_column = new TreeViewColumn();
@@ -102,41 +106,94 @@ public partial class MainWindow :  Window
 		CellRendererText rating_cell = new CellRendererText();
 		rating_cell.Editable = true;
 		rating_cell.Edited += RatingCellEdited;
+		rating_cell.BackgroundGdk = white;
 		rating_column.PackStart(rating_cell, true);
+		rating_column.SortIndicator = true;
 
 		// create a column for the movie title
 		TreeViewColumn movie_column = new TreeViewColumn();
 		movie_column.Title = "Movie";
 		CellRendererText movie_cell = new CellRendererText();
+		movie_cell.BackgroundGdk = white;
 		movie_column.PackStart(movie_cell, true);
+		movie_column.SortIndicator = true;
 
 		// add the columns to the TreeView
 		treeview1.AppendColumn(prediction_column);
 		treeview1.AppendColumn(rating_column);
 		treeview1.AppendColumn(movie_column);
 
-		prediction_column.SetCellDataFunc(prediction_cell, new  TreeCellDataFunc(RenderPrediction));
-		rating_column.SetCellDataFunc(rating_cell, new  TreeCellDataFunc(RenderRating));
-		movie_column.SetCellDataFunc(movie_cell, new  TreeCellDataFunc(RenderMovieTitle));
+		prediction_column.SetCellDataFunc(prediction_cell, new TreeCellDataFunc(RenderPrediction));
+		rating_column.SetCellDataFunc(rating_cell, new TreeCellDataFunc(RenderRating));
+		movie_column.SetCellDataFunc(movie_cell, new TreeCellDataFunc(RenderMovieTitle));
 
 		var movie_store = new ListStore( typeof(Movie) );		
+		
+		//movie_store.SetSortFunc(0, CompareTitle);
+		//movie_store.DefaultSortFunc = CompareTitle;
 		
 		// Add some data to the store
 		foreach (Movie movie in movies.movie_list)
 			movie_store.AppendValues( movie );
 
 		filter = new TreeModelFilter(movie_store, null);
-
 		// specify the function that determines which rows to filter out and which ones to display
 		filter.VisibleFunc = new TreeModelFilterVisibleFunc(FilterTree);
-
+		
 		TreeModelSort sorter = new TreeModelSort(filter);
-		// TODO set up sorting
+		sorter.DefaultSortFunc = CompareTitle;
 		
 		treeview1.Model = sorter;
 		treeview1.ShowAll();
 	}
 
+ 	private int CompareTitle(TreeModel model, TreeIter a, TreeIter b)
+	{
+		Movie movie1 = (Movie) model.GetValue(a, 0);
+		Movie movie2 = (Movie) model.GetValue(b, 0);
+		
+		return string.Compare(movie1.Title, movie2.Title);
+	}
+
+ 	private int ComparePrediction(TreeModel model, TreeIter a, TreeIter b)
+	{
+		Movie movie1 = (Movie) model.GetValue(a, 0);
+		Movie movie2 = (Movie) model.GetValue(b, 0);
+		
+		double prediction1 = -1;
+		predictions.TryGetValue(movie1.ID, out prediction1);
+		double prediction2 = -1;
+		predictions.TryGetValue(movie2.ID, out prediction2);
+		
+		double diff = prediction1 - prediction2;
+	
+		if (diff > 0)
+			return 1;
+		if (diff < 0)
+			return -1;
+		return 0;
+	}
+
+ 	private int CompareRating(TreeModel model, TreeIter a, TreeIter b)
+	{
+		Movie movie1 = (Movie) model.GetValue(a, 0);
+		Movie movie2 = (Movie) model.GetValue(b, 0);
+
+		double rating1 = -1;
+		ratings.TryGetValue(movie1.ID, out rating1);
+		double rating2 = -1;
+		ratings.TryGetValue(movie2.ID, out rating2);		
+		
+		double diff = rating1 - rating2;
+		
+		if (diff > 0)
+			return 1;
+		if (diff < 0)
+			return -1;
+		return 0;
+		
+	}	
+	
 	private void RatingCellEdited(object o, EditedArgs args)
 	{
 		TreeIter iter;
