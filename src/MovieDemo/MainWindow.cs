@@ -115,7 +115,7 @@ public partial class MainWindow : Window
 		rating_column.SortIndicator = true;
 		rating_column.Clickable = true;
 		rating_column.Clicked += new EventHandler( RatingColumnClicked );
-		
+
 		// set up a column for the movie title
 		movie_column.Title = "Movie";
 		CellRendererText movie_cell = new CellRendererText();
@@ -246,8 +246,8 @@ public partial class MainWindow : Window
 			rating_column.SortOrder = SortType.Ascending;
 			sorter.DefaultSortFunc = CompareRatingReversed;
 		}
-	}	
-	
+	}
+
  	private int CompareRatingReversed(TreeModel model, TreeIter a, TreeIter b)
 	{
 		Movie movie1 = (Movie) model.GetValue(a, 0);
@@ -265,8 +265,8 @@ public partial class MainWindow : Window
 		if (diff < 0)
 			return -1;
 		return 0;
-	}	
-	
+	}
+
  	private int CompareRating(TreeModel model, TreeIter a, TreeIter b)
 	{
 		Movie movie1 = (Movie) model.GetValue(a, 0);
@@ -303,7 +303,15 @@ public partial class MainWindow : Window
 				rating = min_rating;
 
 			ratings[movie.ID] = rating;
-			rating_predictor.AddRating(current_user_id, item_mapping.ToInternalID(movie.ID), rating);
+
+			int internal_item_id = item_mapping.ToInternalID(movie.ID);
+
+			// if necessary, add the the new item to the recommender/dataset
+			if (internal_item_id > rating_predictor.MaxItemID)
+				rating_predictor.AddItem(internal_item_id);
+
+			// add the new rating
+			rating_predictor.AddRating(current_user_id, internal_item_id, rating);
 
 			PredictAllRatings();
 		}
@@ -376,10 +384,5 @@ public partial class MainWindow : Window
 	{
 		Application.Quit();
 		a.RetVal = true;
-	}
-
-	void OnTreeview1SelectionChanged(object o, System.EventArgs args)
-	{
-		Console.WriteLine("Selection changed.");
 	}
 }
