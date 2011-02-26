@@ -48,7 +48,9 @@ public class RatingPrediction
 	static List<double> eval_time_stats     = new List<double>();
 	static List<double> rmse_eval_stats     = new List<double>();
 
+	// global command line parameters
 	static bool compute_fit;
+	static bool movielens1m_format;
 
 	static void Usage(string message)
 	{
@@ -89,6 +91,7 @@ MyMediaLite rating prediction
    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
    - cross_validation=K         perform k-fold crossvalidation on the training data
                                  (ignores the test data)
+   - ml1m_format=BOOL           read rating data in MovieLens 1M (and 10M) format
 
   options for finding the right number of iterations (MF methods)
    - find_iter=N                give out statistics every N iterations
@@ -149,6 +152,7 @@ MyMediaLite rating prediction
 		bool no_eval                = parameters.GetRemoveBool(   "no_eval",      false);
 		string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
 		int cross_validation        = parameters.GetRemoveInt32(  "cross_validation", 0);
+		movielens1m_format          = parameters.GetRemoveBool(   "ml1m_format",  false); // TODO automagically recognize file format
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -317,11 +321,14 @@ MyMediaLite rating prediction
 		// TODO check for the existence of files before starting to load all of them
 
 		// read training data
-		training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+		if (movielens1m_format)
+			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+		else
+			training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
-		if (recommender is IUserAttributeAwareRecommender)
+		if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
 		{
 			if (user_attributes_file.Equals(string.Empty))
 				Usage("Recommender expects user_attributes=FILE.");
@@ -363,7 +370,10 @@ MyMediaLite rating prediction
 			}
 
 		// read test data
-		test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+		if (movielens1m_format)
+			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+		else
+			test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
