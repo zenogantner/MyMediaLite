@@ -58,7 +58,10 @@ namespace MovieDemo
 				// ignore second (or more) aka title
 				if (line.StartsWith("   (aka "))
 					continue;
-				
+
+				if (line.StartsWith("--------"))
+					break;
+								
 				string imdb_key = line;
 				
 				line = reader.ReadLine();

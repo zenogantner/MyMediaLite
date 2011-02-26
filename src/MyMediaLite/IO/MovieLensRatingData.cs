@@ -62,8 +62,8 @@ namespace MyMediaLite.IO
 
 			while ( (line = reader.ReadLine()) != null )
 			{
-				if (line.Trim().Equals(string.Empty))
-					continue;
+				//if (line.Trim().Equals(string.Empty))
+				//	continue;
 
 				string[] tokens = Utils.Split(line, "::", 4);
 

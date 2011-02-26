@@ -63,7 +63,9 @@ public partial class MainWindow : Window
 		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
 		movies.Read("/home/mrg/data/ml1m/original/movies-utf8.dat", item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
-
+		
+		Dictionary<int, string> german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
+		
 		CreateRecommender();
 		
 		current_user_id = rating_predictor.MaxUserID + 1;

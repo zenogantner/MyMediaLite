@@ -21,7 +21,6 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.Util;
 
-
 namespace MovieDemo
 {
 	public sealed class Movie
@@ -44,6 +43,8 @@ namespace MovieDemo
 	public sealed class MovieLensMovieInfo
 	{
 		public List<Movie> movie_list;
+	
+		public Dictionary<string, int> IMDB_KEY_To_ID;
 		
 		/// <summary>Read movie data from a file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
@@ -60,6 +61,7 @@ namespace MovieDemo
 		public void Read(StreamReader reader, EntityMapping item_mapping)
 		{
 			movie_list = new List<Movie>();
+			IMDB_KEY_To_ID = new Dictionary<string, int>();
 
 			string line;
 
@@ -68,8 +70,8 @@ namespace MovieDemo
 			   	line = reader.ReadLine();
 				
 				// ignore empty lines
-				if (line.Trim().Equals(string.Empty))
-					continue;
+				//if (line.Trim().Equals(string.Empty))
+				//	continue;
 
 				string[] tokens = Utils.Split(line, "::", 3);
 
@@ -85,6 +87,7 @@ namespace MovieDemo
 				string movie_title = movie_imdb_key;
 				
 				movie_list.Add(new Movie(movie_id, movie_title, movie_year, movie_imdb_key));
+				IMDB_KEY_To_ID[movie_imdb_key] =  movie_id;
 			}
 		}
 	}
