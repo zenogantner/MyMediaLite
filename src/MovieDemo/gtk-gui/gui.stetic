@@ -20,6 +20,71 @@
         <property name="Label" translatable="yes">Language</property>
         <property name="ShortLabel" translatable="yes">Language</property>
       </action>
+      <action id="UserAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">User</property>
+        <property name="ShortLabel" translatable="yes">User</property>
+      </action>
+      <action id="SaveRatingsAsAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Save Ratings As ...</property>
+        <property name="ShortLabel" translatable="yes">Save Ratings As ...</property>
+      </action>
+      <action id="SaveRatingsAnonymouslyAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Save Ratings Anonymously</property>
+        <property name="ShortLabel" translatable="yes">Save Ratings Anonymously</property>
+      </action>
+      <action id="DiscardRatingsAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Discard Ratings</property>
+        <property name="ShortLabel" translatable="yes">Discard Ratings</property>
+      </action>
+      <action id="OnlyShowRatedItemsAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Only Show Rated Items</property>
+        <property name="ShortLabel" translatable="yes">Only Show Rated Items</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="OnlyShowRatedMoviesAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Only Show Rated Movies</property>
+        <property name="ShortLabel" translatable="yes">Only Show Rated Movies</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="DoNotShowRatedMoviesAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Do Not Show Rated Movies</property>
+        <property name="ShortLabel" translatable="yes">Do Not Show Rated Movies</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="OnlyShow200MostPopularMoviesAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Only Show 200 Most Popular Movies </property>
+        <property name="ShortLabel" translatable="yes">Only Show 200 Most Popular Movies </property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="ByGenreAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">By Genre ...</property>
+        <property name="ShortLabel" translatable="yes">By Genre ...</property>
+      </action>
+      <action id="ActionAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Action</property>
+        <property name="ShortLabel" translatable="yes">Action</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+      </action>
+      <action id="TODORestByProgramAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">TODO: rest by program ...</property>
+        <property name="ShortLabel" translatable="yes">TODO: rest by program ...</property>
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MyMediaLite Movie Demo</property>
@@ -64,8 +129,21 @@
           <widget class="Gtk.MenuBar" id="menubar1">
             <property name="MemberName" />
             <node name="__gtksharp_123_Stetic_Editor_ActionMenuBar" type="Menubar">
-              <node type="Menu" action="FilterAction" />
+              <node type="Menu" action="FilterAction">
+                <node type="Menuitem" action="OnlyShowRatedMoviesAction" />
+                <node type="Menuitem" action="DoNotShowRatedMoviesAction" />
+                <node type="Menuitem" action="OnlyShow200MostPopularMoviesAction" />
+                <node type="Menu" action="ByGenreAction">
+                  <node type="Menuitem" action="ActionAction" />
+                  <node type="Menuitem" action="TODORestByProgramAction" />
+                </node>
+              </node>
               <node type="Menu" action="LanguageAction" />
+              <node type="Menu" action="UserAction">
+                <node type="Menuitem" action="SaveRatingsAsAction" />
+                <node type="Menuitem" action="SaveRatingsAnonymouslyAction" />
+                <node type="Menuitem" action="DiscardRatingsAction" />
+              </node>
             </node>
           </widget>
           <packing>

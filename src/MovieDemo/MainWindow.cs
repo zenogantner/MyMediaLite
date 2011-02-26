@@ -61,7 +61,7 @@ public partial class MainWindow : Window
 		// TODO integrate internal IDs - load after training data ...
 		Console.Error.Write("Reading in movie data ... ");
 		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
-		movies.Read("/home/mrg/data/ml1m/original/movies.dat", item_mapping); // TODO param
+		movies.Read("/home/mrg/data/ml1m/original/movies-utf8.dat", item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
 
 		CreateRecommender();

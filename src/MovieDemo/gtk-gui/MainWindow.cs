@@ -9,6 +9,28 @@ public partial class MainWindow
 
 	private global::Gtk.Action LanguageAction;
 
+	private global::Gtk.Action UserAction;
+
+	private global::Gtk.Action SaveRatingsAsAction;
+
+	private global::Gtk.Action SaveRatingsAnonymouslyAction;
+
+	private global::Gtk.Action DiscardRatingsAction;
+
+	private global::Gtk.ToggleAction OnlyShowRatedItemsAction;
+
+	private global::Gtk.ToggleAction OnlyShowRatedMoviesAction;
+
+	private global::Gtk.ToggleAction DoNotShowRatedMoviesAction;
+
+	private global::Gtk.ToggleAction OnlyShow200MostPopularMoviesAction;
+
+	private global::Gtk.Action ByGenreAction;
+
+	private global::Gtk.ToggleAction ActionAction;
+
+	private global::Gtk.Action TODORestByProgramAction;
+
 	private global::Gtk.VBox vbox1;
 
 	private global::Gtk.Entry filter_entry;
@@ -31,6 +53,39 @@ public partial class MainWindow
 		this.LanguageAction = new global::Gtk.Action ("LanguageAction", global::Mono.Unix.Catalog.GetString ("Language"), null, null);
 		this.LanguageAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Language");
 		w1.Add (this.LanguageAction, null);
+		this.UserAction = new global::Gtk.Action ("UserAction", global::Mono.Unix.Catalog.GetString ("User"), null, null);
+		this.UserAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("User");
+		w1.Add (this.UserAction, null);
+		this.SaveRatingsAsAction = new global::Gtk.Action ("SaveRatingsAsAction", global::Mono.Unix.Catalog.GetString ("Save Ratings As ..."), null, null);
+		this.SaveRatingsAsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Ratings As ...");
+		w1.Add (this.SaveRatingsAsAction, null);
+		this.SaveRatingsAnonymouslyAction = new global::Gtk.Action ("SaveRatingsAnonymouslyAction", global::Mono.Unix.Catalog.GetString ("Save Ratings Anonymously"), null, null);
+		this.SaveRatingsAnonymouslyAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Ratings Anonymously");
+		w1.Add (this.SaveRatingsAnonymouslyAction, null);
+		this.DiscardRatingsAction = new global::Gtk.Action ("DiscardRatingsAction", global::Mono.Unix.Catalog.GetString ("Discard Ratings"), null, null);
+		this.DiscardRatingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Discard Ratings");
+		w1.Add (this.DiscardRatingsAction, null);
+		this.OnlyShowRatedItemsAction = new global::Gtk.ToggleAction ("OnlyShowRatedItemsAction", global::Mono.Unix.Catalog.GetString ("Only Show Rated Items"), null, null);
+		this.OnlyShowRatedItemsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show Rated Items");
+		w1.Add (this.OnlyShowRatedItemsAction, null);
+		this.OnlyShowRatedMoviesAction = new global::Gtk.ToggleAction ("OnlyShowRatedMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies"), null, null);
+		this.OnlyShowRatedMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies");
+		w1.Add (this.OnlyShowRatedMoviesAction, null);
+		this.DoNotShowRatedMoviesAction = new global::Gtk.ToggleAction ("DoNotShowRatedMoviesAction", global::Mono.Unix.Catalog.GetString ("Do Not Show Rated Movies"), null, null);
+		this.DoNotShowRatedMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Do Not Show Rated Movies");
+		w1.Add (this.DoNotShowRatedMoviesAction, null);
+		this.OnlyShow200MostPopularMoviesAction = new global::Gtk.ToggleAction ("OnlyShow200MostPopularMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies "), null, null);
+		this.OnlyShow200MostPopularMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies ");
+		w1.Add (this.OnlyShow200MostPopularMoviesAction, null);
+		this.ByGenreAction = new global::Gtk.Action ("ByGenreAction", global::Mono.Unix.Catalog.GetString ("By Genre ..."), null, null);
+		this.ByGenreAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("By Genre ...");
+		w1.Add (this.ByGenreAction, null);
+		this.ActionAction = new global::Gtk.ToggleAction ("ActionAction", global::Mono.Unix.Catalog.GetString ("Action"), null, null);
+		this.ActionAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Action");
+		w1.Add (this.ActionAction, null);
+		this.TODORestByProgramAction = new global::Gtk.Action ("TODORestByProgramAction", global::Mono.Unix.Catalog.GetString ("TODO: rest by program ..."), null, null);
+		this.TODORestByProgramAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("TODO: rest by program ...");
+		w1.Add (this.TODORestByProgramAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -64,7 +119,7 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
 		w4.Position = 1;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'/><menu name='LanguageAction' action='LanguageAction'/></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'><menuitem name='OnlyShowRatedMoviesAction' action='OnlyShowRatedMoviesAction'/><menuitem name='DoNotShowRatedMoviesAction' action='DoNotShowRatedMoviesAction'/><menuitem name='OnlyShow200MostPopularMoviesAction' action='OnlyShow200MostPopularMoviesAction'/><menu name='ByGenreAction' action='ByGenreAction'><menuitem name='ActionAction' action='ActionAction'/><menuitem name='TODORestByProgramAction' action='TODORestByProgramAction'/></menu></menu><menu name='LanguageAction' action='LanguageAction'/><menu name='UserAction' action='UserAction'><menuitem name='SaveRatingsAsAction' action='SaveRatingsAsAction'/><menuitem name='SaveRatingsAnonymouslyAction' action='SaveRatingsAnonymouslyAction'/><menuitem name='DiscardRatingsAction' action='DiscardRatingsAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
