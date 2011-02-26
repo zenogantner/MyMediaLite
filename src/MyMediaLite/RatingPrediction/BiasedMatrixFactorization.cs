@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq; // TODO remove again
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -198,6 +199,20 @@ namespace MyMediaLite.RatingPrediction
 				this.item_bias = new double[item_factors.dim1];
 				item_bias.CopyTo(this.item_bias, 0);
 			}
+		}
+
+		/// <inheritdoc/>
+		public override void RetrainUser(int user_id)
+		{
+			user_bias[user_id] = 0;
+			base.RetrainUser(user_id);
+		}
+
+		/// <inheritdoc/>
+		public override void RetrainItem(int item_id)
+		{
+			item_bias[item_id] = 0;
+			base.RetrainItem(item_id);
 		}
 
 		/// <inheritdoc/>

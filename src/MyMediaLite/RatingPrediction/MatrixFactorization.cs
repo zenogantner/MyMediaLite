@@ -103,7 +103,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Updates the latent factors on a user</summary>
 		/// <param name="user_id">the user ID</param>
-		public void RetrainUser(int user_id)
+		public virtual void RetrainUser(int user_id)
 		{
 			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 			LearnFactors(ratings.ByUser[(int)user_id], true, false);
@@ -111,7 +111,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Updates the latent factors of an item</summary>
 		/// <param name="item_id">the item ID</param>
-		public void RetrainItem(int item_id)
+		public virtual void RetrainItem(int item_id)
 		{
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 			LearnFactors(ratings.ByItem[(int)item_id], false, true);
