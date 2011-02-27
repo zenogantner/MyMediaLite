@@ -147,6 +147,8 @@ public partial class MainWindow
 		this.DefaultHeight = 945;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		this.SaveRatingsAsAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAsActionActivated);
+		this.SaveRatingsAnonymouslyAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAnonymouslyActionActivated);
 		this.DiscardRatingsAction.Activated += new global::System.EventHandler (this.OnDiscardRatingsActionActivated);
 		this.EnglishAction.Activated += new global::System.EventHandler (this.OnEnglishActionActivated);
 		this.DeutschAction.Activated += new global::System.EventHandler (this.OnDeutschActionActivated);

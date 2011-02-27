@@ -75,6 +75,8 @@
     <Compile Include="IMDBAkaTitles.cs" />
     <Compile Include="GtkSharpUtils.cs" />
     <Compile Include="Locale.cs" />
+    <Compile Include="UserNameInput.cs" />
+    <Compile Include="gtk-gui\MovieDemo.UserNameInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.desktop" />

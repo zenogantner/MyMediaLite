@@ -22,15 +22,38 @@ namespace MovieDemo
 {
 	public class GtkSharpUtils
 	{
-		public static ResponseType YesNoDialog(Window parent_window, string question)
+		public static ResponseType YesNo(Window parent_window, string question)
 		{
-			MessageDialog md = new MessageDialog (parent_window, 
+			var md = new MessageDialog (parent_window, 
 												  DialogFlags.DestroyWithParent,
 												  MessageType.Question, 
 												  ButtonsType.YesNo, question);
 			var result = (ResponseType)md.Run();
 			md.Destroy();
 			return result;
+		}
+		
+		// TODO does not work correctly yet
+		public static string StringInput(Window parent_window, string title)
+		{
+			var dialog = new Dialog(title, parent_window, Gtk.DialogFlags.DestroyWithParent);
+			dialog.Modal = true;
+			
+			Entry text_entry = new Entry("Name");
+			text_entry.Visible = true;
+			
+			dialog.Add( text_entry );
+			dialog.AddButton("OK", ResponseType.Ok);
+			dialog.AddButton("Cancel", ResponseType.Cancel);
+			
+			ResponseType response = (ResponseType)dialog.Run();
+			
+			dialog.Destroy();
+			
+			if (response == ResponseType.Ok)
+				return text_entry.Text;
+			else
+				return "";
 		}
 	}
 }

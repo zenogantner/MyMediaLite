@@ -14,9 +14,11 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -60,6 +62,7 @@ public partial class MainWindow : Window
 	EntityMapping item_mapping = new EntityMapping();
 
 	// application state
+	int current_user_external_id = 100000;
 	int current_user_id;
 	Locale locale = Locale.English;
 
@@ -110,7 +113,7 @@ public partial class MainWindow : Window
 
 		rating_predictor = recommender;
 
-		current_user_id = rating_predictor.MaxUserID + 1;
+		current_user_id = user_mapping.ToInternalID(current_user_external_id);
 		rating_predictor.AddUser(current_user_id);
 
 		PredictAllRatings();
@@ -436,7 +439,7 @@ public partial class MainWindow : Window
 
 	protected virtual void OnDiscardRatingsActionActivated(object sender, System.EventArgs e)
 	{
-		if (GtkSharpUtils.YesNoDialog(this, "Are you sure you want to delete all ratings?") == ResponseType.Yes)
+		if (GtkSharpUtils.YesNo(this, "Are you sure you want to delete all ratings?") == ResponseType.Yes)
 		{
 			ratings.Clear();
 			CreateRecommender();
@@ -469,5 +472,71 @@ public partial class MainWindow : Window
 		prediction_column.Title = "Prediction";
 		rating_column.Title = "Rating";
 		movie_column.Title = "Movie";		
+	}
+	
+	protected virtual void OnSaveRatingsAnonymouslyActionActivated (object sender, System.EventArgs e)
+	{
+		if (GtkSharpUtils.YesNo(this, "Are you sure you want to save all ratings and end this session?") == ResponseType.Yes)
+		{
+			SaveRatings();
+			ratings.Clear();
+			current_user_external_id++;
+			CreateRecommender();
+		}
+	}
+	
+	void SaveRatings()
+	{
+		using ( StreamWriter writer = new StreamWriter("../../user-ratings-" + current_user_id) )
+		{
+			foreach (KeyValuePair<int, double> r in ratings)
+				writer.WriteLine("{0}\t{1}\t{2}",
+								 user_mapping.ToOriginalID(current_user_id),
+								 item_mapping.ToOriginalID(r.Key),
+								 r.Value.ToString(ni));
+		}
+	}
+	
+	void SaveRatings(string name)
+	{
+		using ( StreamWriter writer = new StreamWriter("../../saved_data/user-ratings-" + name) )
+		{
+			foreach (KeyValuePair<int, double> r in ratings)
+				writer.WriteLine("{0}\t{1}\t{2}",
+								 user_mapping.ToOriginalID(current_user_id),
+								 item_mapping.ToOriginalID(r.Key),
+								 r.Value.ToString(ni));
+		}
+	}	
+	
+	protected virtual void OnSaveRatingsAsActionActivated (object sender, System.EventArgs e)
+	{
+		//var user_name = GtkSharpUtils.StringInput(this, "Enter Name");
+
+		string user_name;
+		
+		{
+			UserNameInput dialog = new UserNameInput();
+			dialog.Run();
+		
+			Console.Error.WriteLine("finished running dialog");
+
+			user_name = dialog.UserName;
+			
+			dialog.Destroy();
+		}
+			
+		if (user_name != string.Empty)
+		{
+			Console.Error.WriteLine("save as " + user_name);
+			SaveRatings(user_name);
+			ratings.Clear();
+			current_user_external_id++;
+			CreateRecommender();
+		}
+		else
+		{
+			Console.Error.WriteLine("Aborting saving of user ...");
+		}
 	}
 }
