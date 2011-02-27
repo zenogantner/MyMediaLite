@@ -74,7 +74,7 @@ namespace MovieDemo
 					if (imdb_key_to_id.TryGetValue(imdb_key, out id))
 					{
 					    aka_titles[id] = aka_title;
-						Console.Error.WriteLine("{0} => {1}", imdb_key, aka_title);
+						//Console.Error.WriteLine("{0} => {1}", imdb_key, aka_title);
 					}
 				}
 				else

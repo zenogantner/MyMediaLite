@@ -39,6 +39,7 @@
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Discard Ratings</property>
         <property name="ShortLabel" translatable="yes">Discard Ratings</property>
+        <signal name="Activated" handler="OnDiscardRatingsActionActivated" />
       </action>
       <action id="OnlyShowRatedItemsAction">
         <property name="Type">Toggle</property>

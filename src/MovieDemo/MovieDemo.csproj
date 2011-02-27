@@ -73,6 +73,7 @@
     <Compile Include="MovieLensMovieInfo.cs" />
     <Compile Include="MovieLensGenres.cs" />
     <Compile Include="IMDBAkaTitles.cs" />
+    <Compile Include="GtkSharpUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.desktop" />

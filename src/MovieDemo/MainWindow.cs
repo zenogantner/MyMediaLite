@@ -63,15 +63,10 @@ public partial class MainWindow : Window
 		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
 		movies.Read("/home/mrg/data/ml1m/original/movies-utf8.dat", item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
-		
-		Dictionary<int, string> german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
-		
-		CreateRecommender();
-		
-		current_user_id = rating_predictor.MaxUserID + 1;
-		rating_predictor.AddUser(current_user_id);
 
-		PredictAllRatings();
+		Dictionary<int, string> german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
+
+		CreateRecommender(); // TODO do asynchronously
 
 		// build main window
 		Build();
@@ -98,11 +93,16 @@ public partial class MainWindow : Window
 		//recommender.Train();
 		recommender.LoadModel("../../bmf.model");
 		Console.Error.WriteLine("done.");
-		// TODO have option of loading from file		
-		
+		// TODO have option of loading from file
+
 		rating_predictor = recommender;
+
+		current_user_id = rating_predictor.MaxUserID + 1;
+		rating_predictor.AddUser(current_user_id);
+
+		PredictAllRatings();
 	}
-	
+
 	// heavily inspired by http://www.mono-project.com/GtkSharp_TreeView_Tutorial
 	private void CreateTreeView()
 	{
@@ -124,6 +124,7 @@ public partial class MainWindow : Window
 		rating_cell.Editable = true;
 		rating_cell.Edited += RatingCellEdited;
 		rating_cell.BackgroundGdk = white;
+		//rating_cell.Alignment = Pango.Alignment.Center; // TODO this does not seem to work - what's the problem?
 		rating_column.PackStart(rating_cell, true);
 		rating_column.SortIndicator = true;
 		rating_column.Clickable = true;
@@ -299,7 +300,7 @@ public partial class MainWindow : Window
 			return -1;
 		return 0;
 	}
-	
+
 	private void RatingCellEdited(object o, EditedArgs args)
 	{
 		TreeIter iter;
@@ -324,7 +325,7 @@ public partial class MainWindow : Window
 
 			// add the new rating
 			rating_predictor.AddRating(current_user_id, movie.ID, rating);
-			
+
 			PredictAllRatings();
 		}
 		catch (FormatException)
@@ -339,7 +340,7 @@ public partial class MainWindow : Window
 
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
-		
+
 		string text;
 		if (prediction < 1)
 			text = "";
@@ -410,5 +411,14 @@ public partial class MainWindow : Window
 	{
 		Application.Quit();
 		a.RetVal = true;
+	}
+
+	protected virtual void OnDiscardRatingsActionActivated(object sender, System.EventArgs e)
+	{
+		if (GtkSharpUtils.YesNoDialog(this, "Are you sure you want to delete all ratings?") == ResponseType.Yes)
+		{
+			ratings.Clear();
+			CreateRecommender();
+		}
 	}
 }
