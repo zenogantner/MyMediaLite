@@ -108,6 +108,66 @@
         <property name="Group">group1</property>
         <signal name="Activated" handler="OnDeutschActionActivated" />
       </action>
+      <action id="LoadUserAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Load User</property>
+        <property name="ShortLabel" translatable="yes">Load User</property>
+      </action>
+      <action id="AndrAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">André</property>
+        <property name="ShortLabel" translatable="yes">André</property>
+      </action>
+      <action id="ArtusAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Artus</property>
+        <property name="ShortLabel" translatable="yes">Artus</property>
+      </action>
+      <action id="ChristophAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Christoph</property>
+        <property name="ShortLabel" translatable="yes">Christoph</property>
+      </action>
+      <action id="LucasAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Lucas</property>
+        <property name="ShortLabel" translatable="yes">Lucas</property>
+      </action>
+      <action id="KrisztianAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Krisztian</property>
+        <property name="ShortLabel" translatable="yes">Krisztian</property>
+      </action>
+      <action id="NgheAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Nghe</property>
+        <property name="ShortLabel" translatable="yes">Nghe</property>
+      </action>
+      <action id="OsmanAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Osman</property>
+        <property name="ShortLabel" translatable="yes">Osman</property>
+      </action>
+      <action id="RasoulAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Rasoul</property>
+        <property name="ShortLabel" translatable="yes">Rasoul</property>
+      </action>
+      <action id="SabrinaAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Sabrina</property>
+        <property name="ShortLabel" translatable="yes">Sabrina</property>
+      </action>
+      <action id="TomasAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Tomas</property>
+        <property name="ShortLabel" translatable="yes">Tomas</property>
+      </action>
+      <action id="ZenoAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Zeno</property>
+        <property name="ShortLabel" translatable="yes">Zeno</property>
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MyMediaLite Movie Demo</property>
@@ -132,21 +192,7 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
-            <property name="MemberName" />
-            <property name="ShadowType">In</property>
-            <child>
-              <widget class="Gtk.TreeView" id="treeview1">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="ShowScrollbars">True</property>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">1</property>
-            <property name="AutoSize">True</property>
-          </packing>
+          <placeholder />
         </child>
         <child>
           <widget class="Gtk.MenuBar" id="menubar1">
@@ -169,6 +215,19 @@
                 <node type="Menuitem" action="SaveRatingsAsAction" />
                 <node type="Menuitem" action="SaveRatingsAnonymouslyAction" />
                 <node type="Menuitem" action="DiscardRatingsAction" />
+                <node type="Menu" action="LoadUserAction">
+                  <node type="Menuitem" action="AndrAction" />
+                  <node type="Menuitem" action="ArtusAction" />
+                  <node type="Menuitem" action="ChristophAction" />
+                  <node type="Menuitem" action="LucasAction" />
+                  <node type="Menuitem" action="KrisztianAction" />
+                  <node type="Menuitem" action="NgheAction" />
+                  <node type="Menuitem" action="OsmanAction" />
+                  <node type="Menuitem" action="RasoulAction" />
+                  <node type="Menuitem" action="SabrinaAction" />
+                  <node type="Menuitem" action="TomasAction" />
+                  <node type="Menuitem" action="ZenoAction" />
+                </node>
               </node>
             </node>
           </widget>
