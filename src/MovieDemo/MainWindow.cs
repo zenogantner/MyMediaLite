@@ -40,9 +40,22 @@ public partial class MainWindow : Window
 
 	RatingData training_data;
 	RatingPredictor rating_predictor;
+	
+	// depends on dataset
 	double min_rating = 1;
-	double max_rating = 5;	
-
+	double max_rating = 5;
+	string ratings_file = "../../../../data/ml1m/ratings.dat";
+	string movie_file   = "../../../../data/ml1m/movies-utf8.dat";
+	string model_file   = "../../bmf.model";
+	// MovieLens 10M
+	/*
+	double min_rating = 0;
+	double max_rating = 5;
+	string ratings_file = "../../../../data/ml10m/ratings.dat";
+	string movie_file   = "../../../../data/ml10m/movies.dat";
+	string model_file   = "../../ml10m-bmf.model";
+	*/
+	
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
 
@@ -59,10 +72,9 @@ public partial class MainWindow : Window
 	{
 		ni.NumberDecimalDigits = '.'; // ensure correct comma separator (for English)
 
-		// TODO integrate internal IDs - load after training data ...
 		Console.Error.Write("Reading in movie data ... ");
-		//movies.Read("/home/mrg/data/ml10m/movies.dat"); // TODO param
-		movies.Read("/home/mrg/data/ml1m/original/movies-utf8.dat", item_mapping); // TODO param
+
+		movies.Read(movie_file, item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
 
 		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
@@ -79,8 +91,7 @@ public partial class MainWindow : Window
 	private void CreateRecommender()
 	{
 		Console.Error.Write("Reading in ratings ... "); // TODO param
-		//training_data = MovieLensRatingData.Read("/home/mrg/data/ml10m/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
-		training_data = MovieLensRatingData.Read("/home/mrg/data/ml1m/original/ratings.dat", min_rating, max_rating, user_mapping, item_mapping);
+		training_data = MovieLensRatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
 		recommender.Ratings = training_data;
 		Console.Error.WriteLine("done.");
@@ -93,7 +104,7 @@ public partial class MainWindow : Window
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
 		//recommender.Train();
-		recommender.LoadModel("../../bmf.model");
+		recommender.LoadModel(model_file);
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
 
