@@ -148,7 +148,7 @@ public partial class MainWindow
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.DiscardRatingsAction.Activated += new global::System.EventHandler (this.OnDiscardRatingsActionActivated);
-		this.EnglishAction.Activated += new global::System.EventHandler (this.SwitchInterfaceToEnglish);
-		this.DeutschAction.Activated += new global::System.EventHandler (this.SwitchInterfaceToGerman);
+		this.EnglishAction.Activated += new global::System.EventHandler (this.OnEnglishActionActivated);
+		this.DeutschAction.Activated += new global::System.EventHandler (this.OnDeutschActionActivated);
 	}
 }

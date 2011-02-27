@@ -66,7 +66,7 @@ public partial class MainWindow : Window
 		Console.Error.WriteLine("done.");
 
 		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
-		SwitchInterfaceToEnglish(null, null);
+		SwitchInterfaceToEnglish();
 		
 		CreateRecommender(); // TODO do asynchronously
 
@@ -112,7 +112,6 @@ public partial class MainWindow : Window
 		filter_entry.Changed += OnFilterEntryTextChanged;
 
 		// create a column for the prediction
-		//prediction_column.Title = "Prediction";
 		CellRendererText prediction_cell = new CellRendererText();
 		prediction_cell.BackgroundGdk = white;
 		prediction_column.PackStart(prediction_cell, true);
@@ -121,7 +120,6 @@ public partial class MainWindow : Window
 		prediction_column.Clicked += new EventHandler( PredictionColumnClicked );
 
 		// create a column for the rating
-		//rating_column.Title = "Rating";
 		CellRendererText rating_cell = new CellRendererText();
 		rating_cell.Editable = true;
 		rating_cell.Edited += RatingCellEdited;
@@ -133,7 +131,6 @@ public partial class MainWindow : Window
 		rating_column.Clicked += new EventHandler( RatingColumnClicked );
 
 		// set up a column for the movie title
-		//movie_column.Title = "Movie";
 		CellRendererText movie_cell = new CellRendererText();
 		movie_cell.BackgroundGdk = white;
 		movie_column.PackStart(movie_cell, true);
@@ -435,7 +432,17 @@ public partial class MainWindow : Window
 		}
 	}
 	
-	protected virtual void SwitchInterfaceToGerman(object sender, System.EventArgs e)
+	protected virtual void OnDeutschActionActivated(object sender, System.EventArgs e)
+	{
+		SwitchInterfaceToGerman();
+	}
+		
+	protected virtual void OnEnglishActionActivated(object sender, System.EventArgs e)
+	{
+		SwitchInterfaceToEnglish();
+	}
+		
+	protected virtual void SwitchInterfaceToGerman()
 	{
 		locale = Locale.German;
 		
@@ -444,7 +451,7 @@ public partial class MainWindow : Window
 		movie_column.Title = "Film";
 	}
 	
-	protected virtual void SwitchInterfaceToEnglish(object sender, System.EventArgs e)
+	protected virtual void SwitchInterfaceToEnglish()
 	{
 		locale = Locale.English;
 		
