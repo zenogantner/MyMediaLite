@@ -28,6 +28,7 @@ public partial class MainWindow : Window
 	// TODO put application logic into one object (not the MainWindow)
 
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
+	Dictionary<int, string> german_names;
 
 	TreeModelFilter filter;
 	TreeModelSort sorter;
@@ -38,21 +39,21 @@ public partial class MainWindow : Window
 	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
 
 	RatingData training_data;
-
 	RatingPredictor rating_predictor;
+	double min_rating = 1;
+	double max_rating = 5;	
 
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
 
+	// application state
 	int current_user_id;
+	Locale locale = Locale.English;
 
 	Dictionary<int, double> ratings     = new Dictionary<int, double>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
 	NumberFormatInfo ni = new NumberFormatInfo();
-
-	double min_rating = 1;
-	double max_rating = 5;
 
 	public MainWindow() : base( WindowType.Toplevel)
 	{
@@ -64,8 +65,9 @@ public partial class MainWindow : Window
 		movies.Read("/home/mrg/data/ml1m/original/movies-utf8.dat", item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
 
-		Dictionary<int, string> german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
-
+		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
+		SwitchInterfaceToEnglish(null, null);
+		
 		CreateRecommender(); // TODO do asynchronously
 
 		// build main window
@@ -110,7 +112,7 @@ public partial class MainWindow : Window
 		filter_entry.Changed += OnFilterEntryTextChanged;
 
 		// create a column for the prediction
-		prediction_column.Title = "Prediction";
+		//prediction_column.Title = "Prediction";
 		CellRendererText prediction_cell = new CellRendererText();
 		prediction_cell.BackgroundGdk = white;
 		prediction_column.PackStart(prediction_cell, true);
@@ -119,7 +121,7 @@ public partial class MainWindow : Window
 		prediction_column.Clicked += new EventHandler( PredictionColumnClicked );
 
 		// create a column for the rating
-		rating_column.Title = "Rating";
+		//rating_column.Title = "Rating";
 		CellRendererText rating_cell = new CellRendererText();
 		rating_cell.Editable = true;
 		rating_cell.Edited += RatingCellEdited;
@@ -131,7 +133,7 @@ public partial class MainWindow : Window
 		rating_column.Clicked += new EventHandler( RatingColumnClicked );
 
 		// set up a column for the movie title
-		movie_column.Title = "Movie";
+		//movie_column.Title = "Movie";
 		CellRendererText movie_cell = new CellRendererText();
 		movie_cell.BackgroundGdk = white;
 		movie_column.PackStart(movie_cell, true);
@@ -373,7 +375,18 @@ public partial class MainWindow : Window
 	private void RenderMovieTitle( TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
-		(cell as CellRendererText).Text = movie.Title; // TODO use this for i18n
+		//(cell as CellRendererText).Text = movie.Title; // TODO use this for i18n
+		
+		string title;
+		if (locale == Locale.German)
+		{
+			if (!german_names.TryGetValue(movie.ID, out title))
+				title = movie.Title;
+		}
+		else
+			title = movie.Title;
+			
+		(cell as CellRendererText).Text = title;
 	}
 
 	private void OnFilterEntryTextChanged(object o, System.EventArgs args)
@@ -420,5 +433,23 @@ public partial class MainWindow : Window
 			ratings.Clear();
 			CreateRecommender();
 		}
+	}
+	
+	protected virtual void SwitchInterfaceToGerman(object sender, System.EventArgs e)
+	{
+		locale = Locale.German;
+		
+		prediction_column.Title = "Vorhersage";
+		rating_column.Title = "Bewertung";
+		movie_column.Title = "Film";
+	}
+	
+	protected virtual void SwitchInterfaceToEnglish(object sender, System.EventArgs e)
+	{
+		locale = Locale.English;
+		
+		prediction_column.Title = "Prediction";
+		rating_column.Title = "Rating";
+		movie_column.Title = "Movie";		
 	}
 }

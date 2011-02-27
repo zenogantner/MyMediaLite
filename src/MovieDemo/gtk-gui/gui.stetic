@@ -86,6 +86,26 @@
         <property name="Label" translatable="yes">TODO: rest by program ...</property>
         <property name="ShortLabel" translatable="yes">TODO: rest by program ...</property>
       </action>
+      <action id="EnglishAction">
+        <property name="Type">Radio</property>
+        <property name="Label" translatable="yes">English</property>
+        <property name="ShortLabel" translatable="yes">English</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+        <property name="Value">0</property>
+        <property name="Group">group1</property>
+        <signal name="Activated" handler="OnEnglishActionActivated" />
+      </action>
+      <action id="DeutschAction">
+        <property name="Type">Radio</property>
+        <property name="Label" translatable="yes">Deutsch</property>
+        <property name="ShortLabel" translatable="yes">Deutsch</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">False</property>
+        <property name="Value">0</property>
+        <property name="Group">group1</property>
+        <signal name="Activated" handler="OnDeutschActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MyMediaLite Movie Demo</property>
@@ -139,7 +159,10 @@
                   <node type="Menuitem" action="TODORestByProgramAction" />
                 </node>
               </node>
-              <node type="Menu" action="LanguageAction" />
+              <node type="Menu" action="LanguageAction">
+                <node type="Menuitem" action="EnglishAction" />
+                <node type="Menuitem" action="DeutschAction" />
+              </node>
               <node type="Menu" action="UserAction">
                 <node type="Menuitem" action="SaveRatingsAsAction" />
                 <node type="Menuitem" action="SaveRatingsAnonymouslyAction" />

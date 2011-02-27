@@ -31,6 +31,10 @@ public partial class MainWindow
 
 	private global::Gtk.Action TODORestByProgramAction;
 
+	private global::Gtk.RadioAction EnglishAction;
+
+	private global::Gtk.RadioAction DeutschAction;
+
 	private global::Gtk.VBox vbox1;
 
 	private global::Gtk.Entry filter_entry;
@@ -86,6 +90,14 @@ public partial class MainWindow
 		this.TODORestByProgramAction = new global::Gtk.Action ("TODORestByProgramAction", global::Mono.Unix.Catalog.GetString ("TODO: rest by program ..."), null, null);
 		this.TODORestByProgramAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("TODO: rest by program ...");
 		w1.Add (this.TODORestByProgramAction, null);
+		this.EnglishAction = new global::Gtk.RadioAction ("EnglishAction", global::Mono.Unix.Catalog.GetString ("English"), null, null, 0);
+		this.EnglishAction.Group = new global::GLib.SList (global::System.IntPtr.Zero);
+		this.EnglishAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("English");
+		w1.Add (this.EnglishAction, null);
+		this.DeutschAction = new global::Gtk.RadioAction ("DeutschAction", global::Mono.Unix.Catalog.GetString ("Deutsch"), null, null, 0);
+		this.DeutschAction.Group = this.EnglishAction.Group;
+		this.DeutschAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Deutsch");
+		w1.Add (this.DeutschAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -119,7 +131,7 @@ public partial class MainWindow
 		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
 		w4.Position = 1;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'><menuitem name='OnlyShowRatedMoviesAction' action='OnlyShowRatedMoviesAction'/><menuitem name='DoNotShowRatedMoviesAction' action='DoNotShowRatedMoviesAction'/><menuitem name='OnlyShow200MostPopularMoviesAction' action='OnlyShow200MostPopularMoviesAction'/><menu name='ByGenreAction' action='ByGenreAction'><menuitem name='ActionAction' action='ActionAction'/><menuitem name='TODORestByProgramAction' action='TODORestByProgramAction'/></menu></menu><menu name='LanguageAction' action='LanguageAction'/><menu name='UserAction' action='UserAction'><menuitem name='SaveRatingsAsAction' action='SaveRatingsAsAction'/><menuitem name='SaveRatingsAnonymouslyAction' action='SaveRatingsAnonymouslyAction'/><menuitem name='DiscardRatingsAction' action='DiscardRatingsAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'><menuitem name='OnlyShowRatedMoviesAction' action='OnlyShowRatedMoviesAction'/><menuitem name='DoNotShowRatedMoviesAction' action='DoNotShowRatedMoviesAction'/><menuitem name='OnlyShow200MostPopularMoviesAction' action='OnlyShow200MostPopularMoviesAction'/><menu name='ByGenreAction' action='ByGenreAction'><menuitem name='ActionAction' action='ActionAction'/><menuitem name='TODORestByProgramAction' action='TODORestByProgramAction'/></menu></menu><menu name='LanguageAction' action='LanguageAction'><menuitem name='EnglishAction' action='EnglishAction'/><menuitem name='DeutschAction' action='DeutschAction'/></menu><menu name='UserAction' action='UserAction'><menuitem name='SaveRatingsAsAction' action='SaveRatingsAsAction'/><menuitem name='SaveRatingsAnonymouslyAction' action='SaveRatingsAnonymouslyAction'/><menuitem name='DiscardRatingsAction' action='DiscardRatingsAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -136,5 +148,7 @@ public partial class MainWindow
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.DiscardRatingsAction.Activated += new global::System.EventHandler (this.OnDiscardRatingsActionActivated);
+		this.EnglishAction.Activated += new global::System.EventHandler (this.SwitchInterfaceToEnglish);
+		this.DeutschAction.Activated += new global::System.EventHandler (this.SwitchInterfaceToGerman);
 	}
 }

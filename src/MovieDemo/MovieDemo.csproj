@@ -74,6 +74,7 @@
     <Compile Include="MovieLensGenres.cs" />
     <Compile Include="IMDBAkaTitles.cs" />
     <Compile Include="GtkSharpUtils.cs" />
+    <Compile Include="Locale.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.desktop" />
