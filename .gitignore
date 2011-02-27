@@ -13,3 +13,6 @@ ml100k
 ml1m
 doxygen
 doc/immdoc
+src/MovieDemo/german-aka-titles-utf8.list
+src/MovieDemo/german-aka-titles.list
+
