@@ -8,7 +8,7 @@
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <widget-library name="../bin/Debug/MovieDemo.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="721 945">
+  <widget class="Gtk.Window" id="MainWindow" design-size="721 309">
     <action-group name="Default">
       <action id="FilterAction">
         <property name="Type">Action</property>
@@ -178,23 +178,6 @@
         <property name="MemberName" />
         <property name="Spacing">6</property>
         <child>
-          <widget class="Gtk.Entry" id="filter_entry">
-            <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="IsEditable">True</property>
-            <property name="InvisibleChar">●</property>
-          </widget>
-          <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder />
-        </child>
-        <child>
           <widget class="Gtk.MenuBar" id="menubar1">
             <property name="MemberName" />
             <node name="__gtksharp_123_Stetic_Editor_ActionMenuBar" type="Menubar">
@@ -232,10 +215,41 @@
             </node>
           </widget>
           <packing>
-            <property name="Position">2</property>
+            <property name="Position">0</property>
             <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Entry" id="filter_entry">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="IsEditable">True</property>
+            <property name="InvisibleChar">●</property>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.ScrolledWindow" id="scrolledwindow2">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="ShadowType">In</property>
+            <child>
+              <widget class="Gtk.TreeView" id="treeview1">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+            <property name="AutoSize">True</property>
           </packing>
         </child>
       </widget>

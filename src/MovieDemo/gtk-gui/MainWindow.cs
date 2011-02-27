@@ -35,15 +35,39 @@ public partial class MainWindow
 
 	private global::Gtk.RadioAction DeutschAction;
 
+	private global::Gtk.Action LoadUserAction;
+
+	private global::Gtk.Action AndrAction;
+
+	private global::Gtk.Action ArtusAction;
+
+	private global::Gtk.Action ChristophAction;
+
+	private global::Gtk.Action LucasAction;
+
+	private global::Gtk.Action KrisztianAction;
+
+	private global::Gtk.Action NgheAction;
+
+	private global::Gtk.Action OsmanAction;
+
+	private global::Gtk.Action RasoulAction;
+
+	private global::Gtk.Action SabrinaAction;
+
+	private global::Gtk.Action TomasAction;
+
+	private global::Gtk.Action ZenoAction;
+
 	private global::Gtk.VBox vbox1;
+
+	private global::Gtk.MenuBar menubar1;
 
 	private global::Gtk.Entry filter_entry;
 
-	private global::Gtk.ScrolledWindow GtkScrolledWindow;
+	private global::Gtk.ScrolledWindow scrolledwindow2;
 
 	private global::Gtk.TreeView treeview1;
-
-	private global::Gtk.MenuBar menubar1;
 
 	protected virtual void Build ()
 	{
@@ -98,6 +122,42 @@ public partial class MainWindow
 		this.DeutschAction.Group = this.EnglishAction.Group;
 		this.DeutschAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Deutsch");
 		w1.Add (this.DeutschAction, null);
+		this.LoadUserAction = new global::Gtk.Action ("LoadUserAction", global::Mono.Unix.Catalog.GetString ("Load User"), null, null);
+		this.LoadUserAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Load User");
+		w1.Add (this.LoadUserAction, null);
+		this.AndrAction = new global::Gtk.Action ("AndrAction", global::Mono.Unix.Catalog.GetString ("André"), null, null);
+		this.AndrAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("André");
+		w1.Add (this.AndrAction, null);
+		this.ArtusAction = new global::Gtk.Action ("ArtusAction", global::Mono.Unix.Catalog.GetString ("Artus"), null, null);
+		this.ArtusAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Artus");
+		w1.Add (this.ArtusAction, null);
+		this.ChristophAction = new global::Gtk.Action ("ChristophAction", global::Mono.Unix.Catalog.GetString ("Christoph"), null, null);
+		this.ChristophAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Christoph");
+		w1.Add (this.ChristophAction, null);
+		this.LucasAction = new global::Gtk.Action ("LucasAction", global::Mono.Unix.Catalog.GetString ("Lucas"), null, null);
+		this.LucasAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Lucas");
+		w1.Add (this.LucasAction, null);
+		this.KrisztianAction = new global::Gtk.Action ("KrisztianAction", global::Mono.Unix.Catalog.GetString ("Krisztian"), null, null);
+		this.KrisztianAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Krisztian");
+		w1.Add (this.KrisztianAction, null);
+		this.NgheAction = new global::Gtk.Action ("NgheAction", global::Mono.Unix.Catalog.GetString ("Nghe"), null, null);
+		this.NgheAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Nghe");
+		w1.Add (this.NgheAction, null);
+		this.OsmanAction = new global::Gtk.Action ("OsmanAction", global::Mono.Unix.Catalog.GetString ("Osman"), null, null);
+		this.OsmanAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Osman");
+		w1.Add (this.OsmanAction, null);
+		this.RasoulAction = new global::Gtk.Action ("RasoulAction", global::Mono.Unix.Catalog.GetString ("Rasoul"), null, null);
+		this.RasoulAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Rasoul");
+		w1.Add (this.RasoulAction, null);
+		this.SabrinaAction = new global::Gtk.Action ("SabrinaAction", global::Mono.Unix.Catalog.GetString ("Sabrina"), null, null);
+		this.SabrinaAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Sabrina");
+		w1.Add (this.SabrinaAction, null);
+		this.TomasAction = new global::Gtk.Action ("TomasAction", global::Mono.Unix.Catalog.GetString ("Tomas"), null, null);
+		this.TomasAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Tomas");
+		w1.Add (this.TomasAction, null);
+		this.ZenoAction = new global::Gtk.Action ("ZenoAction", global::Mono.Unix.Catalog.GetString ("Zeno"), null, null);
+		this.ZenoAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Zeno");
+		w1.Add (this.ZenoAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -108,43 +168,44 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'><menuitem name='OnlyShowRatedMoviesAction' action='OnlyShowRatedMoviesAction'/><menuitem name='DoNotShowRatedMoviesAction' action='DoNotShowRatedMoviesAction'/><menuitem name='OnlyShow200MostPopularMoviesAction' action='OnlyShow200MostPopularMoviesAction'/><menu name='ByGenreAction' action='ByGenreAction'><menuitem name='ActionAction' action='ActionAction'/><menuitem name='TODORestByProgramAction' action='TODORestByProgramAction'/></menu></menu><menu name='LanguageAction' action='LanguageAction'><menuitem name='EnglishAction' action='EnglishAction'/><menuitem name='DeutschAction' action='DeutschAction'/></menu><menu name='UserAction' action='UserAction'><menuitem name='SaveRatingsAsAction' action='SaveRatingsAsAction'/><menuitem name='SaveRatingsAnonymouslyAction' action='SaveRatingsAnonymouslyAction'/><menuitem name='DiscardRatingsAction' action='DiscardRatingsAction'/><menu name='LoadUserAction' action='LoadUserAction'><menuitem name='AndrAction' action='AndrAction'/><menuitem name='ArtusAction' action='ArtusAction'/><menuitem name='ChristophAction' action='ChristophAction'/><menuitem name='LucasAction' action='LucasAction'/><menuitem name='KrisztianAction' action='KrisztianAction'/><menuitem name='NgheAction' action='NgheAction'/><menuitem name='OsmanAction' action='OsmanAction'/><menuitem name='RasoulAction' action='RasoulAction'/><menuitem name='SabrinaAction' action='SabrinaAction'/><menuitem name='TomasAction' action='TomasAction'/><menuitem name='ZenoAction' action='ZenoAction'/></menu></menu></menubar></ui>");
+		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
+		this.menubar1.Name = "menubar1";
+		this.vbox1.Add (this.menubar1);
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.menubar1]));
+		w2.Position = 0;
+		w2.Expand = false;
+		w2.Fill = false;
+		// Container child vbox1.Gtk.Box+BoxChild
 		this.filter_entry = new global::Gtk.Entry ();
 		this.filter_entry.CanFocus = true;
 		this.filter_entry.Name = "filter_entry";
 		this.filter_entry.IsEditable = true;
 		this.filter_entry.InvisibleChar = '●';
 		this.vbox1.Add (this.filter_entry);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
-		w2.Position = 0;
-		w2.Expand = false;
-		w2.Fill = false;
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
+		w3.Position = 1;
+		w3.Expand = false;
+		w3.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
-		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
-		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
-		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+		this.scrolledwindow2 = new global::Gtk.ScrolledWindow ();
+		this.scrolledwindow2.CanFocus = true;
+		this.scrolledwindow2.Name = "scrolledwindow2";
+		this.scrolledwindow2.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child scrolledwindow2.Gtk.Container+ContainerChild
 		this.treeview1 = new global::Gtk.TreeView ();
 		this.treeview1.CanFocus = true;
 		this.treeview1.Name = "treeview1";
-		this.GtkScrolledWindow.Add (this.treeview1);
-		this.vbox1.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.GtkScrolledWindow]));
-		w4.Position = 1;
-		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FilterAction' action='FilterAction'><menuitem name='OnlyShowRatedMoviesAction' action='OnlyShowRatedMoviesAction'/><menuitem name='DoNotShowRatedMoviesAction' action='DoNotShowRatedMoviesAction'/><menuitem name='OnlyShow200MostPopularMoviesAction' action='OnlyShow200MostPopularMoviesAction'/><menu name='ByGenreAction' action='ByGenreAction'><menuitem name='ActionAction' action='ActionAction'/><menuitem name='TODORestByProgramAction' action='TODORestByProgramAction'/></menu></menu><menu name='LanguageAction' action='LanguageAction'><menuitem name='EnglishAction' action='EnglishAction'/><menuitem name='DeutschAction' action='DeutschAction'/></menu><menu name='UserAction' action='UserAction'><menuitem name='SaveRatingsAsAction' action='SaveRatingsAsAction'/><menuitem name='SaveRatingsAnonymouslyAction' action='SaveRatingsAnonymouslyAction'/><menuitem name='DiscardRatingsAction' action='DiscardRatingsAction'/></menu></menubar></ui>");
-		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
-		this.menubar1.Name = "menubar1";
-		this.vbox1.Add (this.menubar1);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.menubar1]));
+		this.scrolledwindow2.Add (this.treeview1);
+		this.vbox1.Add (this.scrolledwindow2);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
 		w5.Position = 2;
-		w5.Expand = false;
-		w5.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
 		this.DefaultWidth = 721;
-		this.DefaultHeight = 945;
+		this.DefaultHeight = 309;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.SaveRatingsAsAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAsActionActivated);
