@@ -42,7 +42,7 @@ public partial class MainWindow : Window
 
 	RatingData training_data;
 	RatingPredictor rating_predictor;
-	
+
 	// depends on dataset
 	double min_rating = 1;
 	double max_rating = 5;
@@ -93,20 +93,24 @@ public partial class MainWindow : Window
 
 	private void CreateRecommender()
 	{
-		Console.Error.Write("Reading in ratings ... "); // TODO param
+		Console.Error.Write("Reading in ratings ... ");
 		training_data = MovieLensRatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
 		recommender.Ratings = training_data;
 		Console.Error.WriteLine("done.");
 
+		Console.Error.Write("Reading in additional ratings ... ");
+		string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
+		Console.Error.WriteLine("done.");
+		
 		Console.Error.Write("Loading prediction model ... ");
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
 		recommender.UpdateUsers = true;
+		recommender.UpdateItems = false;
 		recommender.BiasRegularization = 0.001;
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
-		//recommender.Train();
 		recommender.LoadModel(model_file);
 		Console.Error.WriteLine("done.");
 		// TODO have option of loading from file
@@ -320,7 +324,18 @@ public partial class MainWindow : Window
 		treeview1.Model.GetIter(out iter, new TreePath(args.Path));
 
 		Movie movie = (Movie) treeview1.Model.GetValue(iter, 0);
-		string input = args.NewText;
+		string input = args.NewText.Trim();
+		
+		if (input == string.Empty)
+		{
+			Console.Error.WriteLine("Remove rating.");
+			if (ratings.Remove(movie.ID))
+				rating_predictor.RemoveRating(current_user_id, movie.ID);
+			
+			PredictAllRatings();
+			return;
+		}
+		
 		try
 		{
 			double rating = double.Parse(input, ni);
@@ -442,7 +457,9 @@ public partial class MainWindow : Window
 		if (GtkSharpUtils.YesNo(this, "Are you sure you want to delete all ratings?") == ResponseType.Yes)
 		{
 			ratings.Clear();
-			CreateRecommender();
+			rating_predictor.RemoveUser(current_user_id);
+			Console.Error.WriteLine("Removed user ratings.");
+			PredictAllRatings();
 		}
 	}
 	
@@ -474,14 +491,15 @@ public partial class MainWindow : Window
 		movie_column.Title = "Movie";		
 	}
 	
-	protected virtual void OnSaveRatingsAnonymouslyActionActivated (object sender, System.EventArgs e)
+	protected virtual void OnSaveRatingsAnonymouslyActionActivated(object sender, System.EventArgs e)
 	{
 		if (GtkSharpUtils.YesNo(this, "Are you sure you want to save all ratings and end this session?") == ResponseType.Yes)
 		{
 			SaveRatings();
+			
 			ratings.Clear();
-			current_user_external_id++;
-			CreateRecommender();
+			rating_predictor.RemoveUser(current_user_id);
+			PredictAllRatings();
 		}
 	}
 	
@@ -508,6 +526,24 @@ public partial class MainWindow : Window
 								 r.Value.ToString(ni));
 		}
 	}	
+
+	void LoadRatings(string name)
+	{
+		// assumption: ratings, training data and model were reloaded
+		
+		ratings.Clear();
+		
+		using ( var reader = new StreamReader("../../saved_data/user-ratings-" + name) )
+		{
+			RatingData user_ratings = RatingPredictionData.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+			
+			foreach (RatingEvent r in user_ratings.All)
+			{
+				ratings[r.item_id] = r.rating;
+				current_user_id = r.user_id;
+			}
+		}
+	}	
 	
 	protected virtual void OnSaveRatingsAsActionActivated (object sender, System.EventArgs e)
 	{
@@ -530,9 +566,11 @@ public partial class MainWindow : Window
 		{
 			Console.Error.WriteLine("save as " + user_name);
 			SaveRatings(user_name);
+			
 			ratings.Clear();
-			current_user_external_id++;
-			CreateRecommender();
+			rating_predictor.RemoveUser(current_user_id);
+			user_mapping.ToInternalID(++current_user_external_id);
+			PredictAllRatings();
 		}
 		else
 		{
