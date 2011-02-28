@@ -549,7 +549,8 @@ public partial class MainWindow : Window
 			}
 		}
 	}	
-	
+
+	// TODO re-activate
 	protected virtual void OnSaveRatingsAsActionActivated (object sender, System.EventArgs e)
 	{
 		//var user_name = GtkSharpUtils.StringInput(this, "Enter Name");

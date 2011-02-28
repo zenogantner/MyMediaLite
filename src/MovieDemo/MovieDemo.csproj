@@ -63,6 +63,7 @@
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="U-L-9-03-CMYK-200x200.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -80,6 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.desktop" />
+    <Content Include="cebit-logo.png" />
+    <Content Include="MyMediaLogo.png" />
+    <Content Include="U-L-9-03-CMYK-400x400.jpg" />
+    <Content Include="U-L-9-03-CMYK-100x100.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
