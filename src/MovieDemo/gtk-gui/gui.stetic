@@ -171,6 +171,7 @@
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MyMediaLite Movie Demo</property>
+    <property name="Icon">stock:stock_animation Menu</property>
     <property name="WindowPosition">CenterOnParent</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>

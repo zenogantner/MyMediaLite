@@ -130,7 +130,7 @@ public partial class MainWindow : Window
 		filter_entry.Changed += OnFilterEntryTextChanged;
 
 		// create a column for the prediction
-		CellRendererText prediction_cell = new CellRendererText();
+		var prediction_cell = new CellRendererText();
 		prediction_cell.BackgroundGdk = white;
 		prediction_column.PackStart(prediction_cell, true);
 		prediction_column.SortIndicator = true;
@@ -138,7 +138,7 @@ public partial class MainWindow : Window
 		prediction_column.Clicked += new EventHandler( PredictionColumnClicked );
 
 		// create a column for the rating
-		CellRendererText rating_cell = new CellRendererText();
+		var rating_cell = new CellRendererText();
 		rating_cell.Editable = true;
 		rating_cell.Edited += RatingCellEdited;
 		rating_cell.BackgroundGdk = white;
@@ -149,7 +149,7 @@ public partial class MainWindow : Window
 		rating_column.Clicked += new EventHandler( RatingColumnClicked );
 
 		// set up a column for the movie title
-		CellRendererText movie_cell = new CellRendererText();
+		var movie_cell = new CellRendererText();
 		movie_cell.BackgroundGdk = white;
 		movie_column.PackStart(movie_cell, true);
 		movie_column.SortIndicator = true;
@@ -368,8 +368,11 @@ public partial class MainWindow : Window
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 
-		double prediction = -1;
-		predictions.TryGetValue(movie.ID, out prediction);
+		double prediction;
+		
+		//if (!predictions.TryGetValue(movie.ID, out prediction))
+		    predictions.TryGetValue(movie.ID, out prediction);
+		//	Console.Error.WriteLine("{0}: {1}", movie.ID, movie.Title);
 
 		if (ratings.ContainsKey(movie.ID))
 			prediction = ratings[movie.ID];
@@ -416,7 +419,8 @@ public partial class MainWindow : Window
 		}
 		else
 			title = movie.Title;
-			
+		
+		// TODO add tooltip with movie ID etc.		
 		(cell as CellRendererText).Text = title;
 	}
 
@@ -442,7 +446,7 @@ public partial class MainWindow : Window
 
 	void PredictAllRatings()
 	{
-		Console.Write("Predicting ... ");
+		Console.Write("Predicting ... max_item_id={0} ", rating_predictor.MaxItemID);
 
 		// compute ratings
 		for (int i = 0; i <= rating_predictor.MaxItemID; i++)

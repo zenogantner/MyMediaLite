@@ -168,6 +168,7 @@ public partial class MainWindow
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("MyMediaLite Movie Demo");
+		this.Icon = global::Stetic.IconLoader.LoadIcon (this, "stock_animation", global::Gtk.IconSize.Menu);
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.vbox1 = new global::Gtk.VBox ();
