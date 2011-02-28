@@ -27,7 +27,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Maximum user ID</summary>
 		/// <value>Maximum user ID</value>
 		public int MaxUserID  { get; set; }
-		
+
 		/// <summary>Maximum item ID</summary>
 		/// <value>Maximum item ID</value>
 		public int MaxItemID  {	get; set; }
@@ -44,14 +44,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The min rating value</summary>
 		protected double min_rating;
 
+		// TODO find clearer name for this
 		/// <summary>true if users shall be updated when doing online updates</summary>
 		/// <value>true if users shall be updated when doing online updates</value>
 		public bool UpdateUsers { get; set; }
 
 		/// <summary>true if items shall be updated when doing online updates</summary>
 		/// <value>true if items shall be updated when doing online updates</value>
-		public bool UpdateItems { get; set; }		
-		
+		public bool UpdateItems { get; set; }
+
 		/// <summary>The rating data</summary>
 		public virtual RatingData Ratings
 		{

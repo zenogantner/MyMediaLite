@@ -4,6 +4,7 @@ Recommender functionality
  - support for non-binary attributes: real, nominal, textual descriptions
  - directly support MovieLens u.item and u.user files and MovieLens 1M data format
  - support for more relation types: weighted, ternary, multiple relations
+ - online updates (all recommenders): decrease MaxUserID and MaxItemID where possible
  - additional engines
    - item-to-item CF (Linden et al., 2003)
    - non-negative matrix factorization
