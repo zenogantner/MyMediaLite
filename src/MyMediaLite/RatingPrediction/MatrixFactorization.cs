@@ -134,7 +134,7 @@ namespace MyMediaLite.RatingPrediction
 				 // Adjust factors
 				 for (int f = 0; f < num_factors; f++)
 				 {
-					 double u_f = user_factors[u, f];
+					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
 					// compute factor updates
