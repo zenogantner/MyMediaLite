@@ -243,6 +243,22 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
+		public override void RemoveUser(int user_id)
+		{
+			base.RemoveUser(user_id);
+
+			user_bias[user_id] = 0;
+		}
+
+		/// <inheritdoc/>
+		public override void RemoveItem(int item_id)
+		{
+			base.RemoveItem(item_id);
+
+			item_bias[item_id] = 0;
+		}
+
+		/// <inheritdoc/>
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
