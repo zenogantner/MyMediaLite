@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-//using System.Linq;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -33,11 +32,12 @@ public partial class MainWindow : Window
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 	Dictionary<int, string> german_names;
 
-	TreeModelFilter filter;
+	TreeModelFilter pre_filter;
+	TreeModelFilter name_filter;
 	TreeModelSort sorter;
 	TreeViewColumn prediction_column = new TreeViewColumn();
-	TreeViewColumn rating_column = new TreeViewColumn();
-	TreeViewColumn movie_column = new TreeViewColumn();
+	TreeViewColumn rating_column     = new TreeViewColumn();
+	TreeViewColumn movie_column      = new TreeViewColumn();
 
 	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
 
@@ -176,11 +176,14 @@ public partial class MainWindow : Window
 		foreach (Movie movie in movies.movie_list)
 			movie_store.AppendValues( movie );
 
-		filter = new TreeModelFilter(movie_store, null);
+		pre_filter = new TreeModelFilter(movie_store, null);
+		pre_filter.VisibleFunc = new TreeModelFilterVisibleFunc(PreFilter);
+		
+		name_filter = new TreeModelFilter(pre_filter, null);
 		// specify the function that determines which rows to filter out and which ones to display
-		filter.VisibleFunc = new TreeModelFilterVisibleFunc(FilterTree);
+		name_filter.VisibleFunc = new TreeModelFilterVisibleFunc(FilterByName);
 
-		sorter = new TreeModelSort(filter);
+		sorter = new TreeModelSort(name_filter);
 		sorter.DefaultSortFunc = ComparePredictionReversed;
 
 		treeview1.Model = sorter;
@@ -431,10 +434,17 @@ public partial class MainWindow : Window
 	private void OnFilterEntryTextChanged(object o, System.EventArgs args)
 	{
 		// since the filter text changed, tell the filter to re-determine which rows to display
-		filter.Refilter();
+		name_filter.Refilter();
 	}
 
-	private bool FilterTree( TreeModel model,  TreeIter iter)
+	private bool PreFilter(TreeModel model,  TreeIter iter)
+	{
+		Movie movie = (Movie) model.GetValue(iter, 0);
+
+		return true;
+	}
+	
+	private bool FilterByName(TreeModel model,  TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		string movie_title = movie.Title;
