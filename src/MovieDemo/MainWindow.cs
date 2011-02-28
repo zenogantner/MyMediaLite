@@ -69,7 +69,7 @@ public partial class MainWindow : Window
 	Dictionary<int, double> ratings     = new Dictionary<int, double>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
-	NumberFormatInfo ni = new NumberFormatInfo();
+	NumberFormatInfo ni        = new NumberFormatInfo();
 
 	public MainWindow() : base( WindowType.Toplevel)
 	{
@@ -336,6 +336,8 @@ public partial class MainWindow : Window
 			return;
 		}
 		
+		input = input.Replace(',', '.'); // also allow "German" floating point numbers
+		
 		try
 		{
 			double rating = double.Parse(input, ni);
@@ -369,6 +371,9 @@ public partial class MainWindow : Window
 		double prediction = -1;
 		predictions.TryGetValue(movie.ID, out prediction);
 
+		if (ratings.ContainsKey(movie.ID))
+			prediction = ratings[movie.ID];
+		
 		string text;
 		if (prediction < 1)
 			text = "";
