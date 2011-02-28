@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+//using System.Linq;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -120,6 +121,9 @@ public partial class MainWindow : Window
 		current_user_id = user_mapping.ToInternalID(current_user_external_id);
 		rating_predictor.AddUser(current_user_id);
 
+		// add movies that were not in the training set
+		rating_predictor.AddItem( item_mapping.InternalIDs.Count - 1 );
+		
 		PredictAllRatings();
 	}
 
