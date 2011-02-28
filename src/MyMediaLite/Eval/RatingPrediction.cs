@@ -63,7 +63,7 @@ namespace MyMediaLite.eval
 			if (filename.Equals("-"))
 				WritePredictions(engine, ratings, user_mapping, item_mapping, Console.Out);
 			else
-				using ( StreamWriter writer = new StreamWriter(filename) )
+				using ( var writer = new StreamWriter(filename) )
 				{
 					WritePredictions(engine, ratings, user_mapping, item_mapping, writer);
 				}
