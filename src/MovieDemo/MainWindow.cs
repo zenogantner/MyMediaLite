@@ -49,19 +49,19 @@ public partial class MainWindow : Window
 	RatingPredictor rating_predictor;
 
 	// depends on dataset
+	/*
 	double min_rating = 1;
 	double max_rating = 5;
 	string ratings_file = "../../../../data/ml1m/ratings.dat";
 	string movie_file   = "../../../../data/ml1m/movies-utf8.dat";
 	string model_file   = "../../bmf.model";
+	*/
 	// MovieLens 10M
-	/*
 	double min_rating = 0;
 	double max_rating = 5;
 	string ratings_file = "../../../../data/ml10m/ratings.dat";
 	string movie_file   = "../../../../data/ml10m/movies.dat";
 	string model_file   = "../../ml10m-bmf.model";
-	*/
 
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
@@ -366,15 +366,19 @@ public partial class MainWindow : Window
 			if (rating < min_rating)
 				rating = min_rating;
 
-			ratings[movie.ID] = rating;
+			// if rating already exists, remove it first
+			if (ratings.ContainsKey(movie.ID))
+			    rating_predictor.RemoveRating(current_user_id, movie.ID);
 
 			// if necessary, add the the new item to the recommender/dataset
 			if (movie.ID > rating_predictor.MaxItemID)
 				rating_predictor.AddItem(movie.ID);
-
+			
 			// add the new rating
 			rating_predictor.AddRating(current_user_id, movie.ID, rating);
-
+			ratings[movie.ID] = rating;
+			
+			// recompute ratings
 			PredictAllRatings();
 		}
 		catch (FormatException)
@@ -389,9 +393,9 @@ public partial class MainWindow : Window
 
 		double prediction;
 
-		//if (!predictions.TryGetValue(movie.ID, out prediction))
-		    predictions.TryGetValue(movie.ID, out prediction);
-		//	Console.Error.WriteLine("{0}: {1}", movie.ID, movie.Title);
+		if (!predictions.TryGetValue(movie.ID, out prediction))
+		//    predictions.TryGetValue(movie.ID, out prediction);
+			Console.Error.WriteLine("{0}: {1}", movie.ID, movie.Title);
 
 		if (ratings.ContainsKey(movie.ID))
 			prediction = ratings[movie.ID];
