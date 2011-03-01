@@ -43,19 +43,13 @@
         <property name="ShortLabel" translatable="yes">Discard Ratings</property>
         <signal name="Activated" handler="OnDiscardRatingsActionActivated" />
       </action>
-      <action id="OnlyShowRatedItemsAction">
-        <property name="Type">Toggle</property>
-        <property name="Label" translatable="yes">Only Show Rated Items</property>
-        <property name="ShortLabel" translatable="yes">Only Show Rated Items</property>
-        <property name="DrawAsRadio">False</property>
-        <property name="Active">False</property>
-      </action>
       <action id="OnlyShowRatedMoviesAction">
         <property name="Type">Toggle</property>
         <property name="Label" translatable="yes">Only Show Rated Movies</property>
         <property name="ShortLabel" translatable="yes">Only Show Rated Movies</property>
         <property name="DrawAsRadio">False</property>
         <property name="Active">False</property>
+        <signal name="Toggled" handler="OnOnlyShowRatedMoviesActionToggled" />
       </action>
       <action id="DoNotShowRatedMoviesAction">
         <property name="Type">Toggle</property>
@@ -63,6 +57,7 @@
         <property name="ShortLabel" translatable="yes">Do Not Show Rated Movies</property>
         <property name="DrawAsRadio">False</property>
         <property name="Active">False</property>
+        <signal name="Toggled" handler="OnDoNotShowRatedMoviesActionToggled" />
       </action>
       <action id="OnlyShow200MostPopularMoviesAction">
         <property name="Type">Toggle</property>
@@ -184,12 +179,9 @@
             <property name="MemberName" />
             <node name="__gtksharp_123_Stetic_Editor_ActionMenuBar" type="Menubar">
               <node type="Menu" action="FilterAction">
-                <node type="Menuitem" action="OnlyShowRatedMoviesAction" />
-                <node type="Menuitem" action="DoNotShowRatedMoviesAction" />
                 <node type="Menuitem" action="OnlyShow200MostPopularMoviesAction" />
                 <node type="Menu" action="ByGenreAction">
                   <node type="Menuitem" action="ActionAction" />
-                  <node type="Menuitem" action="TODORestByProgramAction" />
                 </node>
               </node>
               <node type="Menu" action="LanguageAction">

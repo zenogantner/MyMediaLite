@@ -17,8 +17,6 @@ public partial class MainWindow
 
 	private global::Gtk.Action DiscardRatingsAction;
 
-	private global::Gtk.ToggleAction OnlyShowRatedItemsAction;
-
 	private global::Gtk.ToggleAction OnlyShowRatedMoviesAction;
 
 	private global::Gtk.ToggleAction DoNotShowRatedMoviesAction;
@@ -99,9 +97,6 @@ public partial class MainWindow
 		this.DiscardRatingsAction = new global::Gtk.Action ("DiscardRatingsAction", global::Mono.Unix.Catalog.GetString ("Discard Ratings"), null, null);
 		this.DiscardRatingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Discard Ratings");
 		w1.Add (this.DiscardRatingsAction, null);
-		this.OnlyShowRatedItemsAction = new global::Gtk.ToggleAction ("OnlyShowRatedItemsAction", global::Mono.Unix.Catalog.GetString ("Only Show Rated Items"), null, null);
-		this.OnlyShowRatedItemsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show Rated Items");
-		w1.Add (this.OnlyShowRatedItemsAction, null);
 		this.OnlyShowRatedMoviesAction = new global::Gtk.ToggleAction ("OnlyShowRatedMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies"), null, null);
 		this.OnlyShowRatedMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies");
 		w1.Add (this.OnlyShowRatedMoviesAction, null);
@@ -245,6 +240,8 @@ public partial class MainWindow
 		this.SaveRatingsAsAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAsActionActivated);
 		this.SaveRatingsAnonymouslyAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAnonymouslyActionActivated);
 		this.DiscardRatingsAction.Activated += new global::System.EventHandler (this.OnDiscardRatingsActionActivated);
+		this.OnlyShowRatedMoviesAction.Toggled += new global::System.EventHandler (this.OnOnlyShowRatedMoviesActionToggled);
+		this.DoNotShowRatedMoviesAction.Toggled += new global::System.EventHandler (this.OnDoNotShowRatedMoviesActionToggled);
 		this.OnlyShow200MostPopularMoviesAction.Toggled += new global::System.EventHandler (this.OnOnlyShow200MostPopularMoviesActionToggled);
 		this.EnglishAction.Activated += new global::System.EventHandler (this.OnEnglishActionActivated);
 		this.DeutschAction.Activated += new global::System.EventHandler (this.OnDeutschActionActivated);
