@@ -36,8 +36,6 @@ public partial class MainWindow : Window
 	HashSet<int> top_n_movies = new HashSet<int>();
 
 	TreeModelFilter pre_filter;
-	bool show_only_rated      = false;
-	bool show_no_rated        = false;
 	bool show_only_top_movies = false;
 
 	TreeModelFilter name_filter;
@@ -622,18 +620,6 @@ public partial class MainWindow : Window
 	protected virtual void OnOnlyShow200MostPopularMoviesActionToggled(object sender, System.EventArgs e)
 	{
 		show_only_top_movies = !show_only_top_movies;
-		pre_filter.Refilter();
-	}
-
-	protected virtual void OnOnlyShowRatedMoviesActionToggled (object sender, System.EventArgs e)
-	{
-		show_only_rated = !show_only_rated;
-		pre_filter.Refilter();
-	}
-
-	protected virtual void OnDoNotShowRatedMoviesActionToggled (object sender, System.EventArgs e)
-	{
-		show_no_rated = !show_no_rated;
 		pre_filter.Refilter();
 	}
 }
