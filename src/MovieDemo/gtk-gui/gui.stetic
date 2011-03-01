@@ -70,6 +70,7 @@
         <property name="ShortLabel" translatable="yes">Only Show 200 Most Popular Movies </property>
         <property name="DrawAsRadio">False</property>
         <property name="Active">False</property>
+        <signal name="Toggled" handler="OnOnlyShow200MostPopularMoviesActionToggled" />
       </action>
       <action id="ByGenreAction">
         <property name="Type">Action</property>

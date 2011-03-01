@@ -58,6 +58,7 @@
       <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -81,10 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.desktop" />
-    <Content Include="cebit-logo.png" />
-    <Content Include="MyMediaLogo.png" />
-    <Content Include="U-L-9-03-CMYK-400x400.jpg" />
-    <Content Include="U-L-9-03-CMYK-100x100.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

@@ -245,6 +245,7 @@ public partial class MainWindow
 		this.SaveRatingsAsAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAsActionActivated);
 		this.SaveRatingsAnonymouslyAction.Activated += new global::System.EventHandler (this.OnSaveRatingsAnonymouslyActionActivated);
 		this.DiscardRatingsAction.Activated += new global::System.EventHandler (this.OnDiscardRatingsActionActivated);
+		this.OnlyShow200MostPopularMoviesAction.Toggled += new global::System.EventHandler (this.OnOnlyShow200MostPopularMoviesActionToggled);
 		this.EnglishAction.Activated += new global::System.EventHandler (this.OnEnglishActionActivated);
 		this.DeutschAction.Activated += new global::System.EventHandler (this.OnDeutschActionActivated);
 	}

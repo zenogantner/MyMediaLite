@@ -31,8 +31,15 @@ public partial class MainWindow : Window
 
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 	Dictionary<int, string> german_names;
+	List<WeightedItem> movies_by_frequency = new List<WeightedItem>();
+	int n_movies = 200;
+	HashSet<int> top_n_movies = new HashSet<int>();
 
 	TreeModelFilter pre_filter;
+	bool show_only_rated      = false;
+	bool show_no_rated        = false;
+	bool show_only_top_movies = false;
+
 	TreeModelFilter name_filter;
 	TreeModelSort sorter;
 	TreeViewColumn prediction_column = new TreeViewColumn();
@@ -41,7 +48,6 @@ public partial class MainWindow : Window
 
 	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
 
-	RatingData training_data;
 	RatingPredictor rating_predictor;
 
 	// depends on dataset
@@ -58,7 +64,7 @@ public partial class MainWindow : Window
 	string movie_file   = "../../../../data/ml10m/movies.dat";
 	string model_file   = "../../ml10m-bmf.model";
 	*/
-	
+
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
 
@@ -83,7 +89,7 @@ public partial class MainWindow : Window
 
 		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
 		SwitchInterfaceToEnglish();
-		
+
 		CreateRecommender(); // TODO do asynchronously
 
 		// build main window
@@ -94,16 +100,24 @@ public partial class MainWindow : Window
 
 	private void CreateRecommender()
 	{
-		Console.Error.Write("Reading in ratings ... ");
-		training_data = MovieLensRatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
-		recommender.Ratings = training_data;
+
+		Console.Error.Write("Reading in ratings ... ");
+		recommender.Ratings = MovieLensRatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		Console.Error.WriteLine("done.");
 
 		Console.Error.Write("Reading in additional ratings ... ");
 		string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
 		Console.Error.WriteLine("done.");
-		
+
+		foreach (var item_ratings in recommender.Ratings.ByItem)
+			if (item_ratings.Count > 0)
+				movies_by_frequency.Add( new WeightedItem(item_ratings[0].item_id, item_ratings.Count) );
+		movies_by_frequency.Sort();
+		movies_by_frequency.Reverse();
+		for (int i = 0; i < n_movies; i++)
+			top_n_movies.Add( movies_by_frequency[i].item_id );
+
 		Console.Error.Write("Loading prediction model ... ");
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
@@ -123,7 +137,7 @@ public partial class MainWindow : Window
 
 		// add movies that were not in the training set
 		rating_predictor.AddItem( item_mapping.InternalIDs.Count - 1 );
-		
+
 		PredictAllRatings();
 	}
 
@@ -178,7 +192,7 @@ public partial class MainWindow : Window
 
 		pre_filter = new TreeModelFilter(movie_store, null);
 		pre_filter.VisibleFunc = new TreeModelFilterVisibleFunc(PreFilter);
-		
+
 		name_filter = new TreeModelFilter(pre_filter, null);
 		// specify the function that determines which rows to filter out and which ones to display
 		name_filter.VisibleFunc = new TreeModelFilterVisibleFunc(FilterByName);
@@ -332,19 +346,19 @@ public partial class MainWindow : Window
 
 		Movie movie = (Movie) treeview1.Model.GetValue(iter, 0);
 		string input = args.NewText.Trim();
-		
+
 		if (input == string.Empty)
 		{
 			Console.Error.WriteLine("Remove rating.");
 			if (ratings.Remove(movie.ID))
 				rating_predictor.RemoveRating(current_user_id, movie.ID);
-			
+
 			PredictAllRatings();
 			return;
 		}
-		
+
 		input = input.Replace(',', '.'); // also allow "German" floating point numbers
-		
+
 		try
 		{
 			double rating = double.Parse(input, ni);
@@ -376,14 +390,14 @@ public partial class MainWindow : Window
 		Movie movie = (Movie) model.GetValue(iter, 0);
 
 		double prediction;
-		
+
 		//if (!predictions.TryGetValue(movie.ID, out prediction))
 		    predictions.TryGetValue(movie.ID, out prediction);
 		//	Console.Error.WriteLine("{0}: {1}", movie.ID, movie.Title);
 
 		if (ratings.ContainsKey(movie.ID))
 			prediction = ratings[movie.ID];
-		
+
 		string text;
 		if (prediction < 1)
 			text = "";
@@ -417,7 +431,7 @@ public partial class MainWindow : Window
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		//(cell as CellRendererText).Text = movie.Title; // TODO use this for i18n
-		
+
 		string title;
 		if (locale == Locale.German)
 		{
@@ -426,8 +440,8 @@ public partial class MainWindow : Window
 		}
 		else
 			title = movie.Title;
-		
-		// TODO add tooltip with movie ID etc.		
+
+		// TODO add tooltip with movie ID etc.
 		(cell as CellRendererText).Text = title;
 	}
 
@@ -441,9 +455,12 @@ public partial class MainWindow : Window
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
 
+		if (show_only_top_movies && !top_n_movies.Contains(movie.ID))
+			return false;
+
 		return true;
 	}
-	
+
 	private bool FilterByName(TreeModel model,  TreeIter iter)
 	{
 		Movie movie = (Movie) model.GetValue(iter, 0);
@@ -485,47 +502,47 @@ public partial class MainWindow : Window
 			PredictAllRatings();
 		}
 	}
-	
+
 	protected virtual void OnDeutschActionActivated(object sender, System.EventArgs e)
 	{
 		SwitchInterfaceToGerman();
 	}
-		
+
 	protected virtual void OnEnglishActionActivated(object sender, System.EventArgs e)
 	{
 		SwitchInterfaceToEnglish();
 	}
-		
+
 	protected virtual void SwitchInterfaceToGerman()
 	{
 		locale = Locale.German;
-		
+
 		prediction_column.Title = "Vorhersage";
 		rating_column.Title = "Bewertung";
 		movie_column.Title = "Film";
 	}
-	
+
 	protected virtual void SwitchInterfaceToEnglish()
 	{
 		locale = Locale.English;
-		
+
 		prediction_column.Title = "Prediction";
 		rating_column.Title = "Rating";
-		movie_column.Title = "Movie";		
+		movie_column.Title = "Movie";
 	}
-	
+
 	protected virtual void OnSaveRatingsAnonymouslyActionActivated(object sender, System.EventArgs e)
 	{
 		if (GtkSharpUtils.YesNo(this, "Are you sure you want to save all ratings and end this session?") == ResponseType.Yes)
 		{
 			SaveRatings();
-			
+
 			ratings.Clear();
 			rating_predictor.RemoveUser(current_user_id);
 			PredictAllRatings();
 		}
 	}
-	
+
 	void SaveRatings()
 	{
 		using ( StreamWriter writer = new StreamWriter("../../user-ratings-" + current_user_id) )
@@ -537,7 +554,7 @@ public partial class MainWindow : Window
 								 r.Value.ToString(ni));
 		}
 	}
-	
+
 	void SaveRatings(string name)
 	{
 		using ( StreamWriter writer = new StreamWriter("../../saved_data/user-ratings-" + name) )
@@ -548,25 +565,25 @@ public partial class MainWindow : Window
 								 item_mapping.ToOriginalID(r.Key),
 								 r.Value.ToString(ni));
 		}
-	}	
+	}
 
 	void LoadRatings(string name)
 	{
 		// assumption: ratings, training data and model were reloaded
-		
+
 		ratings.Clear();
-		
+
 		using ( var reader = new StreamReader("../../saved_data/user-ratings-" + name) )
 		{
 			RatingData user_ratings = RatingPredictionData.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
-			
+
 			foreach (RatingEvent r in user_ratings.All)
 			{
 				ratings[r.item_id] = r.rating;
 				current_user_id = r.user_id;
 			}
 		}
-	}	
+	}
 
 	// TODO re-activate
 	protected virtual void OnSaveRatingsAsActionActivated (object sender, System.EventArgs e)
@@ -574,23 +591,23 @@ public partial class MainWindow : Window
 		//var user_name = GtkSharpUtils.StringInput(this, "Enter Name");
 
 		string user_name;
-		
+
 		{
 			UserNameInput dialog = new UserNameInput();
 			dialog.Run();
-		
+
 			Console.Error.WriteLine("finished running dialog");
 
 			user_name = dialog.UserName;
-			
+
 			dialog.Destroy();
 		}
-			
+
 		if (user_name != string.Empty)
 		{
 			Console.Error.WriteLine("save as " + user_name);
 			SaveRatings(user_name);
-			
+
 			ratings.Clear();
 			rating_predictor.RemoveUser(current_user_id);
 			user_mapping.ToInternalID(++current_user_external_id);
@@ -600,5 +617,11 @@ public partial class MainWindow : Window
 		{
 			Console.Error.WriteLine("Aborting saving of user ...");
 		}
+	}
+
+	protected virtual void OnOnlyShow200MostPopularMoviesActionToggled(object sender, System.EventArgs e)
+	{
+		show_only_top_movies = !show_only_top_movies;
+		pre_filter.Refilter();
 	}
 }
