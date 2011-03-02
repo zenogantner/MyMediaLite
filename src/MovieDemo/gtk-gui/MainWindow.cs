@@ -17,10 +17,6 @@ public partial class MainWindow
 
 	private global::Gtk.Action DiscardRatingsAction;
 
-	private global::Gtk.ToggleAction OnlyShowRatedMoviesAction;
-
-	private global::Gtk.ToggleAction DoNotShowRatedMoviesAction;
-
 	private global::Gtk.ToggleAction OnlyShow200MostPopularMoviesAction;
 
 	private global::Gtk.Action ByGenreAction;
@@ -97,13 +93,8 @@ public partial class MainWindow
 		this.DiscardRatingsAction = new global::Gtk.Action ("DiscardRatingsAction", global::Mono.Unix.Catalog.GetString ("Discard Ratings"), null, null);
 		this.DiscardRatingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Discard Ratings");
 		w1.Add (this.DiscardRatingsAction, null);
-		this.OnlyShowRatedMoviesAction = new global::Gtk.ToggleAction ("OnlyShowRatedMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies"), null, null);
-		this.OnlyShowRatedMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show Rated Movies");
-		w1.Add (this.OnlyShowRatedMoviesAction, null);
-		this.DoNotShowRatedMoviesAction = new global::Gtk.ToggleAction ("DoNotShowRatedMoviesAction", global::Mono.Unix.Catalog.GetString ("Do Not Show Rated Movies"), null, null);
-		this.DoNotShowRatedMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Do Not Show Rated Movies");
-		w1.Add (this.DoNotShowRatedMoviesAction, null);
 		this.OnlyShow200MostPopularMoviesAction = new global::Gtk.ToggleAction ("OnlyShow200MostPopularMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies "), null, null);
+		this.OnlyShow200MostPopularMoviesAction.Active = true;
 		this.OnlyShow200MostPopularMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies ");
 		w1.Add (this.OnlyShow200MostPopularMoviesAction, null);
 		this.ByGenreAction = new global::Gtk.Action ("ByGenreAction", global::Mono.Unix.Catalog.GetString ("By Genre ..."), null, null);

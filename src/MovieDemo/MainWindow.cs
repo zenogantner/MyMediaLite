@@ -49,19 +49,20 @@ public partial class MainWindow : Window
 	RatingPredictor rating_predictor;
 
 	// depends on dataset
-	/*
 	double min_rating = 1;
 	double max_rating = 5;
 	string ratings_file = "../../../../data/ml1m/ratings.dat";
 	string movie_file   = "../../../../data/ml1m/movies-utf8.dat";
 	string model_file   = "../../bmf.model";
-	*/
+
 	// MovieLens 10M
+	/*
 	double min_rating = 0;
 	double max_rating = 5;
 	string ratings_file = "../../../../data/ml10m/ratings.dat";
 	string movie_file   = "../../../../data/ml10m/movies.dat";
 	string model_file   = "../../ml10m-bmf.model";
+	*/
 
 	EntityMapping user_mapping = new EntityMapping();
 	EntityMapping item_mapping = new EntityMapping();
@@ -94,6 +95,7 @@ public partial class MainWindow : Window
 		Build();
 
 		CreateTreeView();
+		OnOnlyShow200MostPopularMoviesActionToggled(null, null);
 	}
 
 	private void CreateRecommender()
@@ -373,11 +375,11 @@ public partial class MainWindow : Window
 			// if necessary, add the the new item to the recommender/dataset
 			if (movie.ID > rating_predictor.MaxItemID)
 				rating_predictor.AddItem(movie.ID);
-			
+
 			// add the new rating
 			rating_predictor.AddRating(current_user_id, movie.ID, rating);
 			ratings[movie.ID] = rating;
-			
+
 			// recompute ratings
 			PredictAllRatings();
 		}
@@ -401,7 +403,7 @@ public partial class MainWindow : Window
 			prediction = ratings[movie.ID];
 
 		string text;
-		if (prediction < 1)
+		if (prediction < min_rating)
 			text = "";
 		else if (prediction < 1.5)
 			text = string.Format(ni, "{0,0:0.00} ★", prediction);
@@ -459,7 +461,7 @@ public partial class MainWindow : Window
 
 		if (show_only_top_movies && !top_n_movies.Contains(movie.ID))
 			return false;
-		
+
 		return true;
 	}
 
