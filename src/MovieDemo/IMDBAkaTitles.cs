@@ -49,14 +49,14 @@ namespace MovieDemo
 			
 			while (!reader.EndOfStream)
 			{
-			   	line = reader.ReadLine();
+			   	line = reader.ReadLine().Trim();
 				
 				// ignore empty lines
-				if (line.Trim().Equals(string.Empty))
+				if (line.Equals(string.Empty))
 					continue;
 
 				// ignore second (or more) aka title
-				if (line.StartsWith("   (aka "))
+				if (line.StartsWith("(aka "))
 					continue;
 
 				if (line.StartsWith("--------"))
@@ -64,22 +64,24 @@ namespace MovieDemo
 								
 				string imdb_key = line;
 				
-				line = reader.ReadLine();
-				if (line.StartsWith("   (aka "))
+				line = reader.ReadLine().Trim();
+				if (line.StartsWith("(aka "))
 				{
-					int end_pos = line.LastIndexOf(')', line.Length - 2);
-					string aka_title = line.Substring(8, end_pos - 8 + 1);
+					string[] parts = line.Split('\t');
+					line = parts[0];
+					
+					string aka_title = line.Substring(5, line.Length - 6);
 					
 					int id;
 					if (imdb_key_to_id.TryGetValue(imdb_key, out id))
 					{
 					    aka_titles[id] = aka_title;
-						//Console.Error.WriteLine("{0} => {1}", imdb_key, aka_title);
+						//Console.Error.WriteLine("{0} => {1}", line, aka_title);
 					}
 				}
 				else
 				{
-					throw new IOException("aka titles should start with three spaces: " + line + " IMDB key: " + imdb_key);
+					throw new IOException("aka titles should start with '(aka': " + line + " IMDB key: " + imdb_key);
 				}
 			}
 			
