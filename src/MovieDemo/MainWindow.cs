@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
@@ -49,19 +50,21 @@ public partial class MainWindow : Window
 	RatingPredictor rating_predictor;
 
 	// depends on dataset
-	double min_rating = 1;
-	double max_rating = 5;
-	string ratings_file = "../../../../data/ml1m/ratings.dat";
-	string movie_file   = "../../../../data/ml1m/movies-utf8.dat";
-	string model_file   = "../../bmf.model";
+	double min_rating            = 1;
+	double max_rating            = 5;
+	string ratings_file          = "../../../../data/ml1m/ratings.dat";
+	string movie_file            = "../../../../data/ml1m/movies.dat";
+	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
+	string model_file            = "../../bmf.model";
 
 	// MovieLens 10M
 	/*
-	double min_rating = 0;
-	double max_rating = 5;
-	string ratings_file = "../../../../data/ml10m/ratings.dat";
-	string movie_file   = "../../../../data/ml10m/movies.dat";
-	string model_file   = "../../ml10m-bmf.model";
+	double min_rating            = 0;
+	double max_rating            = 5;
+	string ratings_file          = "../../../../data/ml10m/ratings.dat";
+	string movie_file            = "../../../../data/ml10m/movies.dat";
+	Encoding movie_file_encoding = Encoding.UTF8;
+	string model_file            = "../../ml10m-bmf.model";
 	*/
 
 	EntityMapping user_mapping = new EntityMapping();
@@ -83,7 +86,7 @@ public partial class MainWindow : Window
 
 		Console.Error.Write("Reading in movie data ... ");
 
-		movies.Read(movie_file, item_mapping); // TODO param
+		movies.Read(movie_file, movie_file_encoding, item_mapping); // TODO param
 		Console.Error.WriteLine("done.");
 
 		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);

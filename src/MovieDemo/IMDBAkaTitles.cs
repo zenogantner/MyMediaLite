@@ -1,17 +1,17 @@
 // Copyright (C) 2011 Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -38,19 +38,19 @@ namespace MovieDemo
 			while (!reader.EndOfStream)
 			{
 				line = reader.ReadLine();
-				
+
 				if (line == "AKA TITLES LIST " + language)
 				{
 					line = reader.ReadLine();
-					
+
 					break;
 				}
 			}
-			
+
 			while (!reader.EndOfStream)
 			{
 			   	line = reader.ReadLine().Trim();
-				
+
 				// ignore empty lines
 				if (line.Equals(string.Empty))
 					continue;
@@ -61,17 +61,17 @@ namespace MovieDemo
 
 				if (line.StartsWith("--------"))
 					break;
-								
+
 				string imdb_key = line;
-				
+
 				line = reader.ReadLine().Trim();
 				if (line.StartsWith("(aka "))
 				{
 					string[] parts = line.Split('\t');
 					line = parts[0];
-					
+
 					string aka_title = line.Substring(5, line.Length - 6);
-					
+
 					int id;
 					if (imdb_key_to_id.TryGetValue(imdb_key, out id))
 					{
@@ -84,7 +84,7 @@ namespace MovieDemo
 					throw new IOException("aka titles should start with '(aka': " + line + " IMDB key: " + imdb_key);
 				}
 			}
-			
+
 			return aka_titles;
 		}
 	}
