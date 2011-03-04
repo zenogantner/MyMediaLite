@@ -87,13 +87,19 @@ Architecture
      - check out http://code.google.com/p/qizmt/ and http://mapsharp.codeplex.com/
  - source code organization
    - use one repository per component, instead of having everything in one repository
- - IO+storage
+ - IO and storage
    - allow storage of models in database in addition to text files
    - store models via reflection (can save a lot of code)
    - faster reading of text files (less checks, at user request)
-   - consider using the CsvReader class in the programs, so that we can get rid
-     of our home-grown CSV reader stuff (possibly not worth the trouble)
-     - http://www.codeproject.com/KB/database/CsvReader.aspx
+GUI demo
+ - display a fixed number of movies on the screen, let the user browse
+ - tabs
+ - info panel (including movie poster, cast, etc.)
+ - ability to switch between datasets
+ - complete i18n
+ - scale up to Netflix
+ - store/load user data
+ - faster IO
 Misc features
  - use --param for command-line parameters
    - https://github.com/mono/mono/tree/master/mcs/class/Mono.Options/
