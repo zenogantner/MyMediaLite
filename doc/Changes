@@ -1,10 +1,11 @@
 0.11	2011-03-04
         - add simple GUI demo for CeBIT
-        - SlopeOne and BiPolarSlopeOne
-          - faster and consume less memory
-          - fix exception when predicting for new users
-        - MatrixFactorization and BiasedMatrixFactorization
-          - online update bug fixes
+        - recommenders
+          - SlopeOne and BiPolarSlopeOne
+            - faster and consume less memory
+            - fix exception when predicting for new users
+          - MatrixFactorization and BiasedMatrixFactorization
+            - online update bug fixes
         - command-line programs
           - handle DirectoryNotFoundExceptions
 	  - give out memory usage
