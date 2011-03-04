@@ -20,6 +20,7 @@ BUILD_DIR = bin/Debug
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITETEST_DLL_MDB_SOURCE=bin/Debug/MyMediaLiteTest.dll.mdb
@@ -39,6 +40,7 @@ BUILD_DIR = bin/Release
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB=
 MYMEDIALITETEST_DLL_MDB=
 
@@ -50,6 +52,7 @@ SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 PROGRAMFILES = \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
+	$(LUMENWORKS_FRAMEWORK_IO_DLL) \
 	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITETEST_DLL_MDB)  
 
@@ -61,24 +64,25 @@ RESGEN=resgen2
 
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL = $(BUILD_DIR)/LumenWorks.Framework.IO.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
-FILES =  \
-	Correlation/BinaryCosineTest.cs \
-	Correlation/CorrelationMatrixTest.cs \
-	Correlation/PearsonTest.cs \
-	Data/EntityMappingTest.cs \
-	Data/RatingDataTest.cs \
+FILES = \
 	Data/RatingsTest.cs \
-	DataType/MatrixTest.cs \
-	DataType/MatrixUtilsTest.cs \
-	DataType/SkewSymmetricSparseMatrixTest.cs \
+	Correlation/CorrelationMatrixTest.cs \
 	DataType/SparseBooleanMatrixTest.cs \
+	DataType/MatrixTest.cs \
+	DataType/VectorUtilsTest.cs \
+	DataType/MatrixUtilsTest.cs \
+	Data/RatingDataTest.cs \
+	Data/EntityMappingTest.cs \
+	Correlation/PearsonTest.cs \
 	DataType/SparseMatrixTest.cs \
 	DataType/SymmetricSparseMatrixTest.cs \
-	DataType/VectorUtilsTest.cs \
-	RatingPrediction/BiPolarSlopeOneTest.cs \
-	RatingPrediction/SlopeOneTest.cs 
+	Correlation/BinaryCosineTest.cs \
+	DataType/SkewSymmetricSparseMatrixTest.cs \
+	RatingPrediction/SlopeOneTest.cs \
+	RatingPrediction/BiPolarSlopeOneTest.cs 
 
 DATA_FILES = 
 
@@ -88,10 +92,10 @@ EXTRAS = \
 	DataType \
 	Data \
 	Correlation \
+	RatingPrediction \
 	mymedialitetest.pc.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:mono-nunit \
 	System.Core
 
@@ -109,6 +113,7 @@ include $(top_srcdir)/Makefile.include
 
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL))
 $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
+$(eval $(call emit-deploy-target,LUMENWORKS_FRAMEWORK_IO_DLL))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
 $(eval $(call emit-deploy-wrapper,MYMEDIALITETEST_PC,mymedialitetest.pc))
 
@@ -135,6 +140,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITETEST_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
@@ -148,6 +154,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITETEST_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITETEST_PC),$(DESTDIR)$(libdir)/pkgconfig)

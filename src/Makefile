@@ -1,5 +1,5 @@
 
-EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll
+EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll ../lib/CsvReader/LumenWorks.Framework.IO.dll
 
 all: all-recursive
 
@@ -12,10 +12,10 @@ include $(top_srcdir)/rules.make
 
 #Warning: This is an automatically generated file, do not edit!
 ifeq ($(CONFIG),DEBUG)
- SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
+ SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental MovieDemo ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
 ifeq ($(CONFIG),RELEASE)
- SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
+ SUBDIRS =  SVM MyMediaLite MyMediaLiteTest MyMediaLiteExperimental MovieDemo ItemPrediction RatingPrediction MappingItemPrediction MappingRatingPrediction
 endif
 
 

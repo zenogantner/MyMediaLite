@@ -21,6 +21,7 @@ BUILD_DIR = bin/Debug
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
@@ -47,6 +48,7 @@ BUILD_DIR = bin/Release
 
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB=
 MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
@@ -62,6 +64,7 @@ SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 PROGRAMFILES = \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
+	$(LUMENWORKS_FRAMEWORK_IO_DLL) \
 	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITEEXPERIMENTAL_DLL) \
 	$(SVM_DLL) \
@@ -77,11 +80,12 @@ RESGEN=resgen2
 
 MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL = $(BUILD_DIR)/LumenWorks.Framework.IO.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -93,8 +97,6 @@ EXTRAS = \
 	item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System.Core \
 	System.Data
 
@@ -112,6 +114,7 @@ include $(top_srcdir)/Makefile.include
 
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL))
 $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
+$(eval $(call emit-deploy-target,LUMENWORKS_FRAMEWORK_IO_DLL))
 $(eval $(call emit-deploy-target,MYMEDIALITE_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
@@ -142,6 +145,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -159,6 +163,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))

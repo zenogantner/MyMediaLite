@@ -1,6 +1,6 @@
 Name: MyMediaLiteExperimental
 Description: MyMediaLiteExperimental
-Version: 0.10
+Version: 0.11
 
 Requires: 
 Libs: -r:@expanded_libdir@/@PACKAGE@/MyMediaLiteExperimental.dll

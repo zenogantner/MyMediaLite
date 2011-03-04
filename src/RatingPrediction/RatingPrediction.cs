@@ -284,7 +284,7 @@ MyMediaLite rating prediction
 			}
 
 			Console.Error.WriteLine("memory {0}", Memory.Usage);
-			
+
 			if (!no_eval)
 			{
 				seconds = Utils.MeasureTime(
@@ -312,7 +312,7 @@ MyMediaLite rating prediction
 	}
 
     static void LoadData(string data_dir,
-	              string training_file, string testfile,
+	              string training_file, string test_file,
 	              double min_rating, double max_rating,
 	              EntityMapping user_mapping, EntityMapping item_mapping,
 	              string user_attributes_file, string item_attributes_file,
@@ -371,9 +371,9 @@ MyMediaLite rating prediction
 
 		// read test data
 		if (movielens1m_format)
-			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			test_data = RatingPredictionData.Read(Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping);
+			test_data = RatingPredictionData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

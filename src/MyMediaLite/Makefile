@@ -18,6 +18,7 @@ PROJECT_REFERENCES =
 BUILD_DIR = bin/Debug/
 
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB_SOURCE=bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
 
@@ -33,6 +34,7 @@ PROJECT_REFERENCES =
 BUILD_DIR = bin/Release/
 
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL_SOURCE=../../lib/CsvReader/LumenWorks.Framework.IO.dll
 MYMEDIALITE_DLL_MDB=
 
 endif
@@ -42,6 +44,7 @@ SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
 	$(MATHNET_IRIDIUM_DLL) \
+	$(LUMENWORKS_FRAMEWORK_IO_DLL) \
 	$(MYMEDIALITE_DLL_MDB)  
 
 LINUX_PKGCONFIG = \
@@ -51,6 +54,7 @@ LINUX_PKGCONFIG = \
 RESGEN=resgen2
 
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
+LUMENWORKS_FRAMEWORK_IO_DLL = $(BUILD_DIR)/LumenWorks.Framework.IO.dll
 MYMEDIALITE_PC = $(BUILD_DIR)/mymedialite.pc
 
 FILES = \
@@ -137,7 +141,9 @@ FILES = \
 	RatingPrediction/RatingPredictor.cs \
 	IRecommender.cs \
 	Util/Recommender.cs \
-	Util/Memory.cs 
+	Util/Memory.cs \
+	IO/MovieLensRatingData.cs \
+	DataType/SkewSymmetricSparseMatrix.cs 
 
 DATA_FILES = 
 
@@ -163,7 +169,8 @@ REFERENCES =  \
 	System.Data
 
 DLL_REFERENCES =  \
-	../../lib/MathNet/MathNet.Iridium.dll
+	../../lib/MathNet/MathNet.Iridium.dll \
+	../../lib/CsvReader/LumenWorks.Framework.IO.dll
 
 CLEANFILES = $(PROGRAMFILES) $(LINUX_PKGCONFIG) 
 
@@ -176,6 +183,7 @@ include $(top_srcdir)/Makefile.include
 
 
 $(eval $(call emit-deploy-target,MATHNET_IRIDIUM_DLL))
+$(eval $(call emit-deploy-target,LUMENWORKS_FRAMEWORK_IO_DLL))
 $(eval $(call emit-deploy-wrapper,MYMEDIALITE_PC,mymedialite.pc))
 
 
@@ -200,6 +208,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(libdir)/pkgconfig'
 	$(call cp,$(MYMEDIALITE_PC),$(DESTDIR)$(libdir)/pkgconfig)
@@ -211,6 +220,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(LUMENWORKS_FRAMEWORK_IO_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_PC),$(DESTDIR)$(libdir)/pkgconfig)
 	make post-uninstall-local-hook prefix=$(prefix)
