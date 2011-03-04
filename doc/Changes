@@ -3,7 +3,7 @@
         - SlopeOne and BiPolarSlopeOne
           - faster and consume less memory
           - fix exception when predicting for new users
-        - BiasedMatrixFactorization
+        - MatrixFactorization and BiasedMatrixFactorization
           - online update bug fixes
         - command-line programs
           - handle DirectoryNotFoundExceptions
@@ -29,12 +29,12 @@
           - rename namespace RatingPredictor to RatingPrediction
           - rename Memory to RatingPredictor
         - command-line programs
-          - find and load engines via reflection
-          - engine names are now CamelCase (exactly their class names)
-	- engines
-          - kNN-based engines are now much faster and consume less memory
-          - add BiPolarSlopeOne engine
-          - move SlopeOne engine to the stable code
+          - find and load recommenders via reflection
+          - recommender names are now CamelCase (exactly their class names)
+	- recommenders
+          - kNN-based recommenders are now much faster and consume less memory
+          - add BiPolarSlopeOne
+          - move SlopeOne to the stable code
         - data types
           - SparseBooleanMatrix now implements IMatrix<bool>
           - new type SymmetricSparseMatrix
@@ -58,11 +58,11 @@
           - graceful handling of FileNotExceptions
           - bug fix in rating data reading routine: expect at least three
             columns
-        - engines
-          - add Slope-One rating prediction engine
+        - recommenders
+          - add Slope-One rating predictor
           - weighted-item-kNN: fix ToString() method
           - fix configuration bug that affected parameters of type float
-          - engine configuration: interpret string "inf" as MaxValue for
+          - recommender configuration: interpret string "inf" as MaxValue for
             signed and unsigned integers
         - evaluation
           - initial support for dataset splits, cross-validation, and
@@ -74,8 +74,8 @@
           - improve SparseMatrix implementation
         - source code structure
           - split up unit tests: one file per tested class
-          - get rid of 'Experimental' namespace, experimental engine now reside
-            in their own project
+          - get rid of 'Experimental' namespace, experimental recommenders now
+            reside in their own project
 
 0.08	2010-12-09
         - add information about ML's non-commercial use license to the download
@@ -111,29 +111,30 @@
         - attribute-to-factor mapping framework (ICDM 2010)
         - add shell/Perl cripts to download MovieLens and IMDB data
         - tests should now run on every Unix computer
-	- engines
+	- recommenders
           - encapsulate hyperparameters of ItemAttributeSVM and WRMF
           - print newline after Pearson correlation is computed
           - support LoadModel() and SaveModel() for biased MF
           - simpler LoadModel() and SaveModel() for all matrix factorization
-            engines
-          - fix LoadModel() and SaveModel() for item prediction kNN engines
+            methods 
+          - fix LoadModel() and SaveModel() for item prediction kNN
+            recommenders
           - differentiate between weighted and unweighted item-based kNN for
             item prediction
-          - fix off-by-one error in attribute-aware engines
+          - fix off-by-one error in attribute-aware recommenders
         - interfaces
           - new interfaces ILatentFactorModel
           - new interface IItemRecommender (instead of abstract class)
           - simplify interface of io.AttributeData
           - add property NumberOfColumns to SparseBooleanMatrix
-          - attibute-aware engines: attributes now also have getters
+          - attibute-aware recommenders: attributes now also have getters
 	- command-line programs
           - exception handler: encourage users to file bug reports
           - check again for unknown program parameters
         - misc
           - code clean-ups
           - documentation improvements in many places
-          - automagic engine configuration: proper handling of read-only
+          - automagic recommender configuration: proper handling of read-only
             properties
           - development: improve 'make gendarme' and 'make todo'
           - add more test cases (e.g. for LoadModel() and SaveModel())
@@ -145,17 +146,17 @@
 
 0.05	2010-11-02
         - rename the library from 'Algorithms' to 'MyMediaLite'
-	- engines
+	- recommenders
           - more fixes to ensure locale-independent output of '.' as floating
             point separator
-          - MF and linear  engines for item prediction: rename init_f_mean to
+          - MF and linear recommenders for item prediction: rename init_f_mean to
             init_mean and init_f_stdev to init_stdev
           - return hyperparameter values in ItemAttributeSVM.ToString() and all
-            kNN engines
+            kNN recommenders
           - fix bug that caused crashes with new users/items for user/item knn
-            rating prediction engines
+            rating predictors
           - kNN: do not store hyperparameter values in model files (consistent
-            with the other engines)
+            with the other recommenders)
           - RatingPredictor: shorter property names:
             - MinRatingValue -> MinRating
             - MaxRatingValue -> MaxRating
@@ -165,7 +166,7 @@
         - command-line programs
           - rating prediction: map internal user/item IDs back to the original
             ones (this bug was found and reported by Thorsten Angermann)
-          - configure recommender engines via reflection
+          - configure recommenders via reflection
           - improve usage information
           - item prediction: rename option 'prec_cutoff' to 'prec5_cutoff'
           - item prediction: fix iteration statistics display
@@ -193,7 +194,7 @@
             using the interfaces UserRelationAwareRecommender and
            ItemRelationAwareRecommender
           - SocialMF by Jamali+Ester 2010
-        - engine changes:
+        - recommender changes:
           - add global bias term to BiasedMatrixFactorization
         - command-line programs:
           - allow input from STDIN and output to STDOUT
@@ -221,7 +222,7 @@
 0.03	2010-09-29
 	- fix some crashes in both demo programs
 	- add initial pre-release test suite
-	- allow lower case names for all engines
+	- allow lower case names for all recommenders
 	- some code clean-up
 	- introduced interface IterativeModel
 
