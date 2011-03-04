@@ -58,6 +58,7 @@ namespace MyMediaLite.IO
 
 			bool out_of_range_warning_issued = false;
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
+			var separators = new string[] { "::" };
 			string line;
 
 			while ( (line = reader.ReadLine()) != null )
@@ -65,7 +66,7 @@ namespace MyMediaLite.IO
 				//if (line.Trim().Equals(string.Empty))
 				//	continue;
 
-				string[] tokens = Utils.Split(line, "::", 4);
+				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
 				if (tokens.Length < 3)
 					throw new IOException("Expected at least three columns: " + line);
