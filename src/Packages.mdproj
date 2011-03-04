@@ -1,1 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?><Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <PropertyGroup>    <ItemType>PackagingProject</ItemType>    <ProductVersion>9.0.21022</ProductVersion>    <SchemaVersion>2.0</SchemaVersion>    <ProjectGuid>{B9BDA1D0-532A-479D-B681-E5AF4DD20154}</ProjectGuid>    <Packages>      <Packages xmlns="">        <Package name="Linux Binärdateien">          <Builder targetFile="MyMediaLite-linux.tar.gz" platform="Linux" configuration="Debug" ctype="BinariesZipPackageBuilder">            <ChildEntries>              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />            </ChildEntries>            <RootEntry path="MyMediaLite.sln" id=":root:" />          </Builder>        </Package>        <Package name="Microsoft Windows Binärdateien">          <Builder targetFile="MyMediaLite-windows.tar.gz" platform="Windows" configuration="Debug" ctype="BinariesZipPackageBuilder">            <ChildEntries>              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />            </ChildEntries>            <RootEntry path="MyMediaLite.sln" id=":root:" />          </Builder>        </Package>        <Package name="Tarball">          <Builder TargetDirectory="MovieDemo" DefaultConfiguration="Debug" GenerateFiles="false" ctype="TarballDeployTarget">            <ChildEntries>              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />            </ChildEntries>            <RootEntry path="MyMediaLite.sln" id=":root:" />          </Builder>        </Package>      </Packages>    </Packages>    <ReleaseVersion>0.11</ReleaseVersion>  </PropertyGroup></Project>
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ItemType>PackagingProject</ItemType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9BDA1D0-532A-479D-B681-E5AF4DD20154}</ProjectGuid>
+    <Packages>
+      <Packages>
+        <Package name="Linux Binärdateien">
+          <Builder targetFile="MyMediaLite-linux.tar.gz" platform="Linux" configuration="Debug" ctype="BinariesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+        <Package name="Microsoft Windows Binärdateien">
+          <Builder targetFile="MyMediaLite-windows.tar.gz" platform="Windows" configuration="Debug" ctype="BinariesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+        <Package name="Tarball">
+          <Builder TargetDirectory="MovieDemo" DefaultConfiguration="Debug" GenerateFiles="false" ctype="TarballDeployTarget">
+            <ChildEntries>
+              <SolutionItemReference path="MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+      </Packages>
+    </Packages>
+    <ReleaseVersion>0.11</ReleaseVersion>
+  </PropertyGroup>
+</Project>
