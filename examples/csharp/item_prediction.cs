@@ -22,7 +22,8 @@ public class ItemPrediction
 
 		// measure the accuracy on the test data set
 		var results = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_items);
-		Console.WriteLine("prec@5={0}", results["prec5"]);
+		foreach (var key in results.Keys)
+			Console.WriteLine("{0}={1}", key, results[key]);
 
 		// make a prediction for a certain user and item
 		Console.WriteLine(recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1)));
