@@ -29,6 +29,7 @@ clean:
 
 veryclean: clean
 	rm -f *.tar.gz
+	rm -rf MyMediaLite-${VERSION}
 	rm -rf doc/immdoc/*
 	rm -rf website/public_html/*
 
