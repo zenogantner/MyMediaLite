@@ -40,8 +40,9 @@ rm ml-data.tar.gz million-ml-data.tar.gz ml-data-10M100K.tar.gz
 ../scripts/ml1m_genres.pl ml1m/movies.dat > ml1m/item-attributes-genres.txt
 ../scripts/ml1m_user_attributes.pl ml1m/users.dat > ml1m/user-attributes-nozip.txt
 
-# create tab-separated file and cold start evaluation splits for MovieLens 1M
+# create tab-separated file and evaluation splits for MovieLens 1M
 ../scripts/import_dataset.pl --separator=:: ml1m/ratings.dat > ml1m/ratings.txt
+../scripts/import_dataset.pl --separator=:: ml1m/ratings.dat | ../scripts/crossvalidation.pl --k=5 --filename=ml1m/ml1m --suffix=.txt
 ../scripts/user_cold_start.pl ml1m/ratings.dat --separator=:: --filename=ml1m/ml1m-new-user --k=5 --suffix=.txt
 
 # create tab-separated file for MovieLens 10M
