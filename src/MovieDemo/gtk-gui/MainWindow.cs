@@ -65,10 +65,6 @@ public partial class MainWindow
 
 	private global::Gtk.TreeView treeview1;
 
-	private global::Gtk.VBox vbox3;
-
-	private global::Gtk.Image image2;
-
 	protected virtual void Build ()
 	{
 		global::Stetic.Gui.Initialize (this);
@@ -199,27 +195,9 @@ public partial class MainWindow
 		this.hbox1.Add (this.scrolledwindow2);
 		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.scrolledwindow2]));
 		w5.Position = 0;
-		// Container child hbox1.Gtk.Box+BoxChild
-		this.vbox3 = new global::Gtk.VBox ();
-		this.vbox3.Name = "vbox3";
-		this.vbox3.Spacing = 6;
-		// Container child vbox3.Gtk.Box+BoxChild
-		this.image2 = new global::Gtk.Image ();
-		this.image2.Name = "image2";
-		this.image2.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("MovieDemo.U-L-9-03-CMYK-200x200.jpg");
-		this.vbox3.Add (this.image2);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox3[this.image2]));
-		w6.Position = 1;
-		w6.Expand = false;
-		w6.Fill = false;
-		this.hbox1.Add (this.vbox3);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.vbox3]));
-		w7.Position = 1;
-		w7.Expand = false;
-		w7.Fill = false;
 		this.vbox1.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox1]));
-		w8.Position = 2;
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox1]));
+		w6.Position = 2;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
