@@ -79,7 +79,7 @@ public partial class MainWindow : Window
 	Dictionary<int, double> ratings     = new Dictionary<int, double>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
-	NumberFormatInfo ni        = new NumberFormatInfo();
+	NumberFormatInfo ni = new NumberFormatInfo();
 
 	public MainWindow() : base( WindowType.Toplevel)
 	{
