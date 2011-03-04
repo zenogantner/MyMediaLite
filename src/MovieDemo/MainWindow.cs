@@ -56,7 +56,7 @@ public partial class MainWindow : Window
 	string ratings_file          = "../../../../data/ml1m/ratings.txt";
 	string movie_file            = "../../../../data/ml1m/movies.dat";
 	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
-	string model_file            = "../../bmf.model";
+	string model_file            = "../../../../data/models/ml1m-bmf.model";
 
 	// MovieLens 10M
 	/*
@@ -65,7 +65,7 @@ public partial class MainWindow : Window
 	string ratings_file          = "../../../../data/ml10m/ratings.txt";
 	string movie_file            = "../../../../data/ml10m/movies.dat";
 	Encoding movie_file_encoding = Encoding.UTF8;
-	string model_file            = "../../ml10m-bmf.model";
+	string model_file            = "../../../../data/models/ml10m-bmf.model";
 	*/
 
 	EntityMapping user_mapping = new EntityMapping();
@@ -564,7 +564,7 @@ public partial class MainWindow : Window
 
 	void SaveRatings()
 	{
-		using ( StreamWriter writer = new StreamWriter("../../user-ratings-" + current_user_id) )
+		using ( StreamWriter writer = new StreamWriter("../../../../data/user-ratings-" + current_user_id) )
 		{
 			foreach (KeyValuePair<int, double> r in ratings)
 				writer.WriteLine("{0}\t{1}\t{2}",
@@ -576,7 +576,7 @@ public partial class MainWindow : Window
 
 	void SaveRatings(string name)
 	{
-		using ( StreamWriter writer = new StreamWriter("../../saved_data/user-ratings-" + name) )
+		using ( StreamWriter writer = new StreamWriter("../../../../saved_data/user-ratings-" + name) )
 		{
 			foreach (KeyValuePair<int, double> r in ratings)
 				writer.WriteLine("{0}\t{1}\t{2}",
@@ -592,7 +592,7 @@ public partial class MainWindow : Window
 
 		ratings.Clear();
 
-		using ( var reader = new StreamReader("../../saved_data/user-ratings-" + name) )
+		using ( var reader = new StreamReader("../../../../saved_data/user-ratings-" + name) )
 		{
 			RatingData user_ratings = RatingPredictionData.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 

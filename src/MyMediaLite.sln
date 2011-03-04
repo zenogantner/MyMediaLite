@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteExperimental", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "MovieDemo\MovieDemo.csproj", "{0BDB995A-81B3-4110-95DF-F389F9E0D5E1}"
 EndProject
-Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "Packages", "Packages.mdproj", "{B9BDA1D0-532A-479D-B681-E5AF4DD20154}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,8 +53,6 @@ Global
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92954F48-7C7D-4F84-BB6C-6A7E4DC3191B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9BDA1D0-532A-479D-B681-E5AF4DD20154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9BDA1D0-532A-479D-B681-E5AF4DD20154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF080B4A-B4BD-48B1-AE57-A67505F655BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
