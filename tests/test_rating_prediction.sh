@@ -10,14 +10,15 @@ echo "------------"
 
 DATA_DIR=../../../../data/ml1m
 
+ 
 cd src/RatingPrediction/bin/Debug/
-
+ 
 for method in MatrixFactorization BiasedMatrixFactorization
 do
-	echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
-	     $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
+       echo $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
+             $PROGRAM ml1m-0.train.txt ml1m-0.test.txt $method find_iter=1 max_iter=5 num_iter=1 compute_fit=true data_dir=$DATA_DIR
 done
-
+ 
 touch $DATA_DIR/empty
 for method in SocialMF
 do
