@@ -25,6 +25,7 @@ using MovieDemo;
 using MyMediaLite.Data;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
+using MyMediaLite.Util;
 
 public partial class MainWindow : Window
 {
@@ -52,7 +53,7 @@ public partial class MainWindow : Window
 	// depends on dataset
 	double min_rating            = 1;
 	double max_rating            = 5;
-	string ratings_file          = "../../../../data/ml1m/ratings.dat";
+	string ratings_file          = "../../../../data/ml1m/ratings.txt";
 	string movie_file            = "../../../../data/ml1m/movies.dat";
 	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
 	string model_file            = "../../bmf.model";
@@ -61,7 +62,7 @@ public partial class MainWindow : Window
 	/*
 	double min_rating            = 0;
 	double max_rating            = 5;
-	string ratings_file          = "../../../../data/ml10m/ratings.dat";
+	string ratings_file          = "../../../../data/ml10m/ratings.txt";
 	string movie_file            = "../../../../data/ml10m/movies.dat";
 	Encoding movie_file_encoding = Encoding.UTF8;
 	string model_file            = "../../ml10m-bmf.model";
@@ -85,11 +86,17 @@ public partial class MainWindow : Window
 		ni.NumberDecimalDigits = '.'; // ensure correct comma separator (for English)
 
 		Console.Error.Write("Reading in movie data ... ");
+		TimeSpan time = Utils.MeasureTime(delegate() {
+			movies.Read(movie_file, movie_file_encoding, item_mapping);
+		});
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 
-		movies.Read(movie_file, movie_file_encoding, item_mapping); // TODO param
-		Console.Error.WriteLine("done.");
+		Console.Error.Write("Reading in German movie titles ... ");
+		time = Utils.MeasureTime(delegate() {
+			german_names = IMDBAkaTitles.Read("../../../../data/imdb/german-aka-titles.list", "GERMAN", movies.IMDB_KEY_To_ID);
+		});
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 
-		german_names = IMDBAkaTitles.Read("../../german-aka-titles-utf8.list", "GERMAN", movies.IMDB_KEY_To_ID);
 		SwitchInterfaceToEnglish();
 
 		CreateRecommender(); // TODO do asynchronously
@@ -106,12 +113,14 @@ public partial class MainWindow : Window
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
 
 		Console.Error.Write("Reading in ratings ... ");
-		recommender.Ratings = MovieLensRatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
-		Console.Error.WriteLine("done.");
+		TimeSpan time = Utils.MeasureTime(delegate() {
+			recommender.Ratings = RatingPredictionData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
+		});
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 
-		Console.Error.Write("Reading in additional ratings ... ");
-		string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
-		Console.Error.WriteLine("done.");
+		//Console.Error.Write("Reading in additional ratings ... ");
+		//string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
+		//Console.Error.WriteLine("done.");
 
 		foreach (var item_ratings in recommender.Ratings.ByItem)
 			if (item_ratings.Count > 0)
@@ -129,9 +138,10 @@ public partial class MainWindow : Window
 		recommender.BiasRegularization = 0.001;
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
-		recommender.LoadModel(model_file);
-		Console.Error.WriteLine("done.");
-		// TODO have option of loading from file
+		time = Utils.MeasureTime(delegate() {
+			recommender.LoadModel(model_file);
+		});
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 
 		rating_predictor = recommender;
 
@@ -486,11 +496,13 @@ public partial class MainWindow : Window
 	{
 		Console.Write("Predicting ... max_item_id={0} ", rating_predictor.MaxItemID);
 
-		// compute ratings
-		for (int i = 0; i <= rating_predictor.MaxItemID; i++)
-			predictions[i] = rating_predictor.Predict(current_user_id, i);
+		TimeSpan time = Utils.MeasureTime(delegate() {
+			// compute ratings
+			for (int i = 0; i <= rating_predictor.MaxItemID; i++)
+				predictions[i] = rating_predictor.Predict(current_user_id, i);
+		});
 
-		Console.Error.WriteLine("done.");
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 	}
 
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)

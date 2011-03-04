@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace MovieDemo
 {
@@ -25,7 +26,7 @@ namespace MovieDemo
 	{
 		static public Dictionary<int, string> Read(string filename, string language, Dictionary<string, int> imdb_key_to_id)
 		{
-			using ( var reader = new StreamReader(filename) )
+			using ( var reader = new StreamReader(filename, Encoding.GetEncoding("ISO-8859-1")) )
 				return Read(reader, language, imdb_key_to_id);
 		}
 

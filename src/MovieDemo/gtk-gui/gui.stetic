@@ -164,9 +164,6 @@
             <node name="__gtksharp_123_Stetic_Editor_ActionMenuBar" type="Menubar">
               <node type="Menu" action="FilterAction">
                 <node type="Menuitem" action="OnlyShow200MostPopularMoviesAction" />
-                <node type="Menu" action="ByGenreAction">
-                  <node type="Menuitem" action="ActionAction" />
-                </node>
               </node>
               <node type="Menu" action="LanguageAction">
                 <node type="Menuitem" action="EnglishAction" />
@@ -175,19 +172,6 @@
               <node type="Menu" action="UserAction">
                 <node type="Menuitem" action="SaveRatingsAnonymouslyAction" />
                 <node type="Menuitem" action="DiscardRatingsAction" />
-                <node type="Menu" action="LoadUserAction">
-                  <node type="Menuitem" action="AndrAction" />
-                  <node type="Menuitem" action="ArtusAction" />
-                  <node type="Menuitem" action="ChristophAction" />
-                  <node type="Menuitem" action="LucasAction" />
-                  <node type="Menuitem" action="KrisztianAction" />
-                  <node type="Menuitem" action="NgheAction" />
-                  <node type="Menuitem" action="OsmanAction" />
-                  <node type="Menuitem" action="RasoulAction" />
-                  <node type="Menuitem" action="SabrinaAction" />
-                  <node type="Menuitem" action="TomasAction" />
-                  <node type="Menuitem" action="ZenoAction" />
-                </node>
               </node>
             </node>
           </widget>
