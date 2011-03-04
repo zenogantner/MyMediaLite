@@ -57,28 +57,6 @@ namespace MyMediaLite.Util
 			return DateTime.Now - startTime;
 		}
 
-		// TODO only works for strings, not for regexes, do proper implementations
-		/// <summary>Split a string</summary>
-		/// <param name="str">the string to be split</param>
-		/// <param name="regex">the separator (warning: currently not a regex)</param>
-		/// <param name="max_fields">the maximum number of fields</param>
-		/// <returns>the components the string was split into</returns>
-		public static string[] Split(string str, string regex, int max_fields)
-		{
-			string[] fields = System.Text.RegularExpressions.Regex.Split(str, regex);
-
-			if (fields.Length > max_fields)
-			{
-				int rest_length = fields.Length - max_fields + 1;
-
-				string[] return_fields = new string[max_fields];
-				Array.Copy(fields, return_fields, max_fields - 1);
-				return_fields[max_fields - 1] = String.Join(regex, fields, max_fields - 1, rest_length);
-				return return_fields;
-			}
-			return fields;
-		}
-
 		/// <summary>Read a list of integers from a StreamReader</summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
 		/// <returns>a list of integers</returns>
@@ -126,10 +104,10 @@ namespace MyMediaLite.Util
 		public static Type[] GetTypesInNamespace(string name_space)
 		{
 			var types = new List<Type>();
-			
+
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 				types.AddRange( assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)) );
-			
+
 			return types.ToArray();
 		}
 	}

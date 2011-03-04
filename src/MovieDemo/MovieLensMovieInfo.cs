@@ -63,17 +63,15 @@ namespace MovieDemo
 			movie_list = new List<Movie>();
 			IMDB_KEY_To_ID = new Dictionary<string, int>();
 
+			var separators = new string[] { "::" };			
+			
 			string line;
 
 			while (!reader.EndOfStream)
 			{
 			   	line = reader.ReadLine();
-				
-				// ignore empty lines
-				//if (line.Trim().Equals(string.Empty))
-				//	continue;
 
-				string[] tokens = Utils.Split(line, "::", 3);
+				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
 				if (tokens.Length != 3)
 					throw new IOException("Expected exactly three columns: " + line);
