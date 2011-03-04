@@ -9,13 +9,9 @@ bin
 *.pidb
 test-results
 *.log
-ml100k
-ml1m
 doxygen
 doc/immdoc
-src/MovieDemo/german-aka-titles-utf8.list
-src/MovieDemo/german-aka-titles.list
-src/MovieDemo/bmf.model
+src/MovieDemo/ml1m-bmf.model
 src/MovieDemo/ml10m-bmf.model
 src/MovieDemo/saved_data
 data/*
