@@ -1,5 +1,5 @@
 
-EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll ../lib/CsvReader/LumenWorks.Framework.IO.dll
+EXTRA_DIST =  rules.make configure Makefile.include ../lib/MathNet/MathNet.Iridium.dll
 
 all: all-recursive
 
