@@ -17,6 +17,7 @@
           - add SkewSymmetricSparseMatrix
         - data preprocessing scripts
           - also download MovieLens 10M
+          - add IMDB data download script
         - utils
           - remove the Utils.Split() method
 
