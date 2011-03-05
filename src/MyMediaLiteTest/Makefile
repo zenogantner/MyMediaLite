@@ -63,22 +63,22 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 MYMEDIALITETEST_PC = $(BUILD_DIR)/mymedialitetest.pc
 
-FILES = \
-	Data/RatingsTest.cs \
+FILES =  \
+	Correlation/BinaryCosineTest.cs \
 	Correlation/CorrelationMatrixTest.cs \
-	DataType/SparseBooleanMatrixTest.cs \
-	DataType/MatrixTest.cs \
-	DataType/VectorUtilsTest.cs \
-	DataType/MatrixUtilsTest.cs \
-	Data/RatingDataTest.cs \
-	Data/EntityMappingTest.cs \
 	Correlation/PearsonTest.cs \
+	Data/EntityMappingTest.cs \
+	Data/RatingDataTest.cs \
+	Data/RatingsTest.cs \
+	DataType/MatrixTest.cs \
+	DataType/MatrixUtilsTest.cs \
+	DataType/SkewSymmetricSparseMatrixTest.cs \
+	DataType/SparseBooleanMatrixTest.cs \
 	DataType/SparseMatrixTest.cs \
 	DataType/SymmetricSparseMatrixTest.cs \
-	Correlation/BinaryCosineTest.cs \
-	DataType/SkewSymmetricSparseMatrixTest.cs \
-	RatingPrediction/SlopeOneTest.cs \
-	RatingPrediction/BiPolarSlopeOneTest.cs 
+	DataType/VectorUtilsTest.cs \
+	RatingPrediction/BiPolarSlopeOneTest.cs \
+	RatingPrediction/SlopeOneTest.cs 
 
 DATA_FILES = 
 
@@ -92,6 +92,7 @@ EXTRAS = \
 	mymedialitetest.pc.in 
 
 REFERENCES =  \
+	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:mono-nunit \
 	System.Core
 

@@ -94,18 +94,20 @@ namespace MyMediaLite.ItemRecommendation
 			random = Util.Random.GetInstance();
 			CheckSampling();
 
+			// if necessary, set the bias counterparts to 1
+			if (item_bias)
+				user_factors.SetColumnToOneValue(0, 1.0);
+			
 			base.Train();
 		}
 
-		/// <summary>
-		/// Perform one iteration of stochastic gradient ascent over the training data.
+		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
+		/// <remarks>
 		/// One iteration is <see cref="iteration_length"/> * number of entries in the training matrix
-		/// </summary>
+		/// </remarks>
 		public override void Iterate()
 		{
 			int num_pos_events = data_user.NumberOfEntries;
-
-			user_factors.SetColumnToOneValue(0, 1.0);
 
 			for (int i = 0; i < num_pos_events * iteration_length; i++)
 			{
@@ -213,7 +215,8 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (item_bias)
 			{
-				start_factor = 1;
+				start_factor = 1; // leave out the first (index 0) factor later
+				
 				double w_uf = user_factors[u, 0];
 				double h_if = item_factors[i, 0];
 				double h_jf = item_factors[j, 0];
