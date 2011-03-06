@@ -1,3 +1,7 @@
+0.12	2011-03-??
+	- recommenders
+          - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
+
 0.11	2011-03-04
         - add simple GUI demo for CeBIT
         - recommenders
