@@ -28,6 +28,7 @@ mv README movies.dat ratings.dat users.dat ml1m
 tar -zxf ml-data-10M100K.tar.gz
 mkdir ml10m
 mv movies.dat ratings.dat tags.dat ml10m
+mv allbut.pl README.html split_ratings.sh ml10m
 
 # remove downloaded archives
 rm ml-data.tar.gz million-ml-data.tar.gz ml-data-10M100K.tar.gz
