@@ -3,6 +3,8 @@
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
         - API changes
           - CanPredict() is now part of the IRecommender interface
+        - example scripts
+          - fix a bug in the example scripts (reported by Yongfeng Wang)
 
 0.11	2011-03-04
         - add simple GUI demo for CeBIT

@@ -88,7 +88,6 @@ namespace MyMediaLite.Eval
 				num_users++;
 				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
 
-
 				auc_sum     += AUC(prediction, correct_items, train[user_id]);
 				map_sum     += MAP(prediction, correct_items, train[user_id]);
 				ndcg_sum    += NDCG(prediction, correct_items, train[user_id]);

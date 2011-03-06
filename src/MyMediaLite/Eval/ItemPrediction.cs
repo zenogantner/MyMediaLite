@@ -181,7 +181,7 @@ namespace MyMediaLite.Eval
 		static public int[] PredictItems(IRecommender recommender, int user_id, int max_item_id)
 		{
 			var result = new List<WeightedItem>();
-			for (int item_id = 0; item_id < max_item_id + 1; item_id++)
+			for (int item_id = 0; item_id <= max_item_id; item_id++)
 				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
 
 			result.Sort();
@@ -205,7 +205,7 @@ namespace MyMediaLite.Eval
 
 			foreach (int item_id in relevant_items)
 				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-
+				
 			result.Sort();
 			result.Reverse();
 

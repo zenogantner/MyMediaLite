@@ -8,12 +8,13 @@ from MyMediaLite import *
 user_mapping = Data.EntityMapping()
 item_mapping = Data.EntityMapping()
 train_data = IO.ItemRecommenderData.Read("u1.base", user_mapping, item_mapping)
-relevant_items = item_mapping.InternalIDs
+relevant_items = train_data.NonEmptyColumnIDs;
 test_data = IO.ItemRecommenderData.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
-recommender = ItemRecommendation.MostPopular()
-recommender.SetCollaborativeData(train_data);
+recommender = ItemRecommendation.ItemKNN()
+recommender.K = 2000
+recommender.SetCollaborativeData(train_data)
 recommender.Train()
 
 # measure the accuracy on the test data set
