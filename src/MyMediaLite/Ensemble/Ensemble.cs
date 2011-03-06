@@ -32,7 +32,7 @@ namespace MyMediaLite.ensemble
 		/// </summary>
 		public List<IRecommender> recommenders = new List<IRecommender>();
 
-		private double max_rating_value = 5;
+		private double max_rating_value = 5; // FIXME
 		private double min_rating_value = 1;
 
 		/// <summary>The max rating value</summary>
@@ -59,10 +59,19 @@ namespace MyMediaLite.ensemble
 					if (recommender is IRatingPredictor)
 						((IRatingPredictor)recommender).MinRating = value;
 			}
-		}		
-		
+		}
+
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
+
+		/// <inheritdoc/>
+		public virtual bool CanPredict(int user_id, int item_id)
+		{
+			foreach (var recommender in recommenders)
+				if (!recommender.CanPredict(user_id, item_id))
+					return false;
+			return true;
+		}
 
 		/// <inheritdoc/>
 		public abstract void SaveModel(string file);

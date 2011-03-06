@@ -28,6 +28,13 @@ namespace MyMediaLite
 		/// <returns>the predicted score/rating for the given user-item combination</returns>
 		double Predict(int user_id, int item_id);
 
+		/// <summary>Check whether a useful prediction can be made for a given user-item combination</summary>
+		/// <remarks></remarks>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <returns>true if a useful prediction can be made, false otherwise</returns>
+		bool CanPredict(int user_id, int item_id);
+
 		/// <summary>Learn the model parameters of the recommender from the training data</summary>
 		/// <remarks></remarks>
 		void Train();

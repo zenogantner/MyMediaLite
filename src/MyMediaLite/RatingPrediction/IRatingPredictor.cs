@@ -27,8 +27,6 @@ namespace MyMediaLite.RatingPrediction
 		double MinRating { get; set; }
 
 		/// <inheritdoc/>
-		bool CanPredict(int user_id, int item_id);
-		/// <inheritdoc/>
 		void AddRating(int user_id, int item_id, double rating);
 		/// <inheritdoc/>
 		void UpdateRating(int user_id, int item_id, double rating);

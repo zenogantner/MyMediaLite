@@ -366,7 +366,7 @@ public class ItemPrediction
 			}
 
 		// test data
-        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping );
+        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

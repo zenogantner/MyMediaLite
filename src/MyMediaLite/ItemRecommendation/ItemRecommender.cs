@@ -46,6 +46,12 @@ namespace MyMediaLite.ItemRecommendation
 		public abstract double Predict(int user_id, int item_id);
 
 		/// <inheritdoc/>
+		public virtual bool CanPredict(int user_id, int item_id)
+		{
+			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
+		}
+		
+		/// <inheritdoc/>
 		public abstract void Train();
 
 		/// <inheritdoc/>
