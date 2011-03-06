@@ -6,7 +6,7 @@ require 'MyMediaLite'
 user_mapping = MyMediaLite::Data::EntityMapping.new()
 item_mapping = MyMediaLite::Data::EntityMapping.new()
 train_data = MyMediaLite::IO::ItemRecommenderData.Read("u1.base", user_mapping, item_mapping)
-relevant_items = train_data.NonEmptyColumnIDs
+relevant_items = train_data.NonEmptyColumnIDs # items that will be taken into account in the evaluation
 test_data = MyMediaLite::IO::ItemRecommenderData.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
