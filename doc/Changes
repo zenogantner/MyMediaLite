@@ -3,6 +3,8 @@
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
         - API changes
           - CanPredict() is now part of the IRecommender interface
+        - IO
+          - add routines for KDD Cup 2011 data
         - example programs
           - fix a bug in the example programs (reported by Yongfeng Wang)
         - data preprocessing scripts
