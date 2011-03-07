@@ -16,21 +16,19 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Data;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
-using MyMediaLite.Data;
-using MyMediaLite.Util;
+//using MyMediaLite.Util;
 
 namespace MyMediaLite.IO.KDDCup2011
 {
-	/// <summary>Class that offers static methods for reading in rating data from the KDD Cup 2011 files</summary>
-	public class RatingPredictionData
+	/// <summary>Class that offers static methods for reading in test data from the KDD Cup 2011 files</summary>
+	public class Track2Candidates
 	{
-		/// <summary>Read in rating data from a file</summary>
+		/// <summary>Read track 2 candidates from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
-		/// <returns>the rating data</returns>
-		static public RatingData Read(string filename)
+		/// <returns>the candidates</returns>
+		static public Dictionary<int, int[]> Read(string filename)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In);
@@ -39,13 +37,13 @@ namespace MyMediaLite.IO.KDDCup2011
 					return Read(reader);
 		}
 
-		/// <summary>Read in rating data from a TextReader</summary>
+		/// <summary>Read track 2 candidates from a TextReader</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
-		/// <returns>the rating data</returns>
-		static public RatingData
+		/// <returns>the candidates</returns>
+		static public Dictionary<int, int[]>
 			Read(TextReader reader)
 		{
-			var ratings = new RatingData();
+			var candidates = new Dictionary<int, int[]>();
 
 			string line;
 
@@ -56,21 +54,17 @@ namespace MyMediaLite.IO.KDDCup2011
 				int user_id     = int.Parse(tokens[0]);
 				int num_ratings = int.Parse(tokens[1]); // number of ratings for this user
 
+				var user_candidates = new int[num_ratings];
 				for (int i = 0; i < num_ratings; i++)
 				{
 					line = reader.ReadLine();
 
-					tokens = line.Split('\t');
-
-					var rating = new RatingEvent();
-					rating.user_id = user_id;
-					rating.item_id = int.Parse(tokens[0]);
-					rating.rating  = (double) uint.Parse(tokens[1]);
-
-					ratings.AddRating(rating);
+					user_candidates[i] = int.Parse(line);
 				}
+				
+				candidates.Add(user_id, user_candidates);
 			}
-			return ratings;
+			return candidates;
 		}
 	}
 }

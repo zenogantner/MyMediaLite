@@ -144,7 +144,7 @@ public class MappingRatingPrediction
 		EntityMapping item_mapping = new EntityMapping();
 
 		// training data
-		training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
+		training_data = RatingData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -166,7 +166,7 @@ public class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = RatingPredictionData.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
+        test_data = RatingData.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
