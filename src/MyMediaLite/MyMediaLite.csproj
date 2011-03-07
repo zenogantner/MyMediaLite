@@ -134,8 +134,6 @@
     <Compile Include="Util\Memory.cs" />
     <Compile Include="IO\MovieLensRatingData.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
-    <Compile Include="IO\KDDCup2011\RatingData.cs" />
-    <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -156,7 +154,6 @@
     <Folder Include="Ensemble\" />
     <Folder Include="ItemRecommendation\" />
     <Folder Include="RatingPrediction\" />
-    <Folder Include="IO\KDDCup2011\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

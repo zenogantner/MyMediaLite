@@ -66,6 +66,8 @@
     <Compile Include="RatingPredictor\NewKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
+    <Compile Include="IO\KDDCup2011\RatingData.cs" />
+    <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -73,6 +75,8 @@
     <Folder Include="ItemRecommender\" />
     <Folder Include="Util\" />
     <Folder Include="Diversification\" />
+    <Folder Include="IO\" />
+    <Folder Include="IO\KDDCup2011\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

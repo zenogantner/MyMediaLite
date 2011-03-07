@@ -2,6 +2,7 @@
 
 import clr
 clr.AddReference("MyMediaLite.dll")
+clr.AddReference("MyMediaLiteExperimental.dll")
 from MyMediaLite import *
 
 min_rating = 0;
@@ -19,7 +20,9 @@ recommender = RatingPrediction.UserItemBaseline()
 recommender.MinRating = min_rating
 recommender.MaxRating = max_rating
 recommender.Ratings = train_data
+print "Training ..."
 recommender.Train()
+print "done."
 
 # measure the accuracy on the test data set
 #print Eval.RatingEval.Evaluate(recommender, test_data)
