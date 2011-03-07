@@ -27,3 +27,7 @@ print "done."
 # measure the accuracy on the test data set
 #print Eval.RatingEval.Evaluate(recommender, test_data)
 
+for user_id in test_data.Keys:
+	for item_id in test_data[user_id]:
+		print repr(user_id) + "\t" + repr(item_id) + "\t" + repr(recommender.Predict(user_id, item_id))
+
