@@ -114,7 +114,7 @@ public partial class MainWindow : Window
 
 		Console.Error.Write("Reading in ratings ... ");
 		TimeSpan time = Utils.MeasureTime(delegate() {
-			recommender.Ratings = RatingData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
+			recommender.Ratings = RatingPredictionData.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
 
@@ -594,7 +594,7 @@ public partial class MainWindow : Window
 
 		using ( var reader = new StreamReader("../../../../saved_data/user-ratings-" + name) )
 		{
-			RatingData user_ratings = RatingData.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+			RatingData user_ratings = RatingPredictionData.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 
 			foreach (RatingEvent r in user_ratings.All)
 			{

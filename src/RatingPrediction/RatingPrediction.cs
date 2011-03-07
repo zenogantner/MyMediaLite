@@ -324,7 +324,7 @@ MyMediaLite rating prediction
 		if (movielens1m_format)
 			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			training_data = RatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -373,7 +373,7 @@ MyMediaLite rating prediction
 		if (movielens1m_format)
 			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			test_data = RatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+			test_data = RatingPredictionData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
