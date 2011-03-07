@@ -225,7 +225,6 @@ public class MappingRatingPrediction
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);
 		}
-
 	}
 
     static TimeSpan EvaluateRecommender(MF_Mapping recommender)
