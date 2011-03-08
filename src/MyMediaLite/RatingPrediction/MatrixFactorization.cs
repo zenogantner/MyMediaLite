@@ -78,21 +78,15 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			// init factor matrices
-			   user_factors = new Matrix<double>(ratings.MaxUserID + 1, num_factors);
-			   item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
-			   MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			   MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			user_factors = new Matrix<double>(ratings.MaxUserID + 1, num_factors);
+			item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 
 			// learn model parameters
 			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
 			global_bias = Ratings.All.Average;
 			LearnFactors(ratings.All, true, true);
-
-			// check for NaN in the model
-			if (MatrixUtils.ContainsNaN(user_factors))
-				throw new ArithmeticException("user_factors contains NaN");
-			if (MatrixUtils.ContainsNaN(item_factors))
-				throw new ArithmeticException("item_factors contains NaN");
 		}
 
 		/// <inheritdoc/>

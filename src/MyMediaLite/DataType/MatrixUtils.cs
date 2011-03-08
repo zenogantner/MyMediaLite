@@ -38,9 +38,7 @@ namespace MyMediaLite.DataType
 				matrix[row, j] = rnd.NextNormal(mean, stdev);
 		}
 
-		/// <summary>
-		/// Initializes a double matrix with normal distributed (Gaussian) noise
-		/// </summary>
+		/// <summary>Initializes a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
