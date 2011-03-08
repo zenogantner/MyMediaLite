@@ -68,6 +68,7 @@
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
     <Compile Include="IO\KDDCup2011\RatingData.cs" />
     <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
+    <Compile Include="Eval\KDDCup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -77,6 +78,7 @@
     <Folder Include="Diversification\" />
     <Folder Include="IO\" />
     <Folder Include="IO\KDDCup2011\" />
+    <Folder Include="Eval\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
