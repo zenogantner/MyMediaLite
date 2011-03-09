@@ -94,7 +94,6 @@ EXTRAS = \
 
 REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System.Core \
 	System.Data
 

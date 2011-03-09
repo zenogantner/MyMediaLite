@@ -44,14 +44,14 @@ namespace MyMediaLite.Eval
 		/// <param name="engine">Rating prediction engine</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, RatingData ratings)
+		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, Ratings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
 
-			foreach (RatingEvent r in ratings)
+			for (int index = 0; index < ratings.Count; index++)
 			{
-				double error = (engine.Predict(r.user_id, r.item_id) - r.rating);
+				double error = (engine.Predict(ratings.users[index], ratings.items[index]) - ratings[index]);
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
@@ -66,11 +66,12 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
+		/*
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="engine">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<RatingData> split)
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<Ratings> split)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -95,5 +96,6 @@ namespace MyMediaLite.Eval
 
 			return avg_results;
 		}
+		*/
 	}
 }

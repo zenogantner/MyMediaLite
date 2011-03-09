@@ -54,7 +54,7 @@ namespace MyMediaLite.RatingPrediction
 		public bool UpdateItems { get; set; }
 
 		/// <summary>The rating data</summary>
-		public virtual RatingData Ratings
+		public virtual Ratings Ratings
 		{
 			get { return this.ratings; }
 			set {
@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>rating data</summary>
-		protected RatingData ratings;
+		protected Ratings ratings;
 
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
@@ -88,51 +88,43 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
-			ratings.AddRating(new RatingEvent(user_id, item_id, rating));
+			ratings.AddRating(user_id, item_id, rating);
 		}
 
 		/// <inheritdoc/>
 		public virtual void UpdateRating(int user_id, int item_id, double rating)
 		{
-			RatingEvent r = ratings.FindRating(user_id, item_id);
-			if (r == null)
-				throw new Exception("Rating not found");
-			r.rating = rating;
 		}
 
 		/// <inheritdoc/>
 		public virtual void RemoveRating(int user_id, int item_id)
 		{
-			RatingEvent r = ratings.FindRating(user_id, item_id);
-			if (r == null)
-				throw new Exception("Rating not found");
-			ratings.RemoveRating(r);
 		}
 
 		/// <inheritdoc/>
 		public virtual void AddUser(int user_id)
 		{
-			ratings.AddUser(user_id);
 			MaxUserID = Math.Max(MaxUserID, user_id);
 		}
 
 		/// <inheritdoc/>
 		public virtual void AddItem(int item_id)
 		{
-			ratings.AddItem(item_id);
 			MaxItemID = Math.Max(MaxItemID, item_id);
 		}
 
 		/// <inheritdoc/>
 		public virtual void RemoveUser(int user_id)
 		{
-			ratings.RemoveUser(user_id);
+			if (user_id == MaxUserID)
+				MaxUserID++;
 		}
 
 		/// <inheritdoc/>
 		public virtual void RemoveItem(int item_id)
 		{
-			ratings.RemoveItem(item_id);
+			if (item_id == MaxItemID)
+				MaxItemID++;
 		}
 	}
 }

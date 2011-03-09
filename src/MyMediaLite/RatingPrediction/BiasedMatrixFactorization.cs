@@ -50,35 +50,31 @@ namespace MyMediaLite.RatingPrediction
 
 			user_bias = new double[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
-				user_bias[u] = Util.Random.GetInstance().NextNormal(InitMean, InitStdev);
+				user_bias[u] = 0;
 			item_bias = new double[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
-				item_bias[i] = Util.Random.GetInstance().NextNormal(InitMean, InitStdev);
+				item_bias[i] = 0;
 
 			// learn model parameters
-			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
 
 			// compute global average
-			double global_average = 0;
-			foreach (RatingEvent r in Ratings.All)
-				global_average += r.rating;
-			global_average /= Ratings.All.Count;
+			double global_average = ratings.Average;
 
 			// TODO also learn global bias?
 			global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
-				Iterate(ratings.All, true, true);
+				Iterate();
 		}
 
 		/// <inheritdoc/>
-		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
+		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRating - MinRating;
 
-			foreach (RatingEvent rating in ratings)
+			foreach (int index in rating_indices)
 			{
-				int u = rating.user_id;
-				int i = rating.item_id;
+				int u = ratings.users[index];
+				int i = ratings.items[index];
 
 				double dot_product = global_bias + user_bias[u] + item_bias[i];
 				for (int f = 0; f < num_factors; f++)
@@ -86,7 +82,7 @@ namespace MyMediaLite.RatingPrediction
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
-				double err = rating.rating - p;
+				double err = ratings.ratings[index] - p;
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
 

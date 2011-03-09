@@ -1,111 +1,143 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011 Zeno Gantner
-//
+// 
 // This file is part of MyMediaLite.
-//
+// 
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+// 
+// You should have received a copy of the GNU General Public License
+// along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using MyMediaLite.Util;
 
-namespace MyMediaLite.Data
+namespace MyMediaLite
 {
-	/// <summary>Class representing a collection of ratings in a particular order</summary>
+	public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
+	
 	public class Ratings
 	{
-		private List<RatingEvent> rating_list = new List<RatingEvent>();
+		public List<int> users;
+		public List<int> items;
+		public List<double> ratings; // TODO try to make generic here
 
-		/// <summary>Number of ratings in the collection</summary>
-		public int Count { get { return rating_list.Count; }	}
-
-		/// <summary>Average rating value in the collection</summary>
+		public double this[int index] { get { return ratings[index]; } }
+		
+		public int Count { get { return ratings.Count; } }
+		
+		public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
+		
+		// TODO try size reservation optimization
+		public Ratings()
+		{
+			users = new List<int>();
+			items = new List<int>();
+			ratings = new List<double>();
+		}
+		
+		public int MaxUserID { get; protected set; }
+		public int MaxItemID { get; protected set; }
+		
+		public List<List<int>> ByUser { get; set; }
+		public List<List<int>> ByItem { get; set; }
+		public int[] RandomIndex
+		{
+			get {
+				if (random_index == null || random_index.Length != ratings.Count)
+				{
+					random_index = new int[ratings.Count];
+					for (int index = 0; index < ratings.Count; index++)
+						random_index[index] = index;
+					Util.Utils.Shuffle<int>(random_index);
+				}
+					
+				return random_index;
+			}
+		}
+		private int[] random_index;
+		
+		// TODO speed up
 		public double Average
 		{
 			get {
 				double sum = 0;
-				foreach (RatingEvent r in rating_list)
-					sum += r.rating;
-				return sum / rating_list.Count;
+				for (int index = 0; index < ratings.Count; index++)
+					sum += ratings[index];
+				return (double) sum / ratings.Count;
 			}
 		}
 
-		/// <summary>Access an event in the collection directly via an index</summary>
-		/// <param name="index">the index</param>
-		public RatingEvent this [int index] { get { return rating_list[index]; } }
-
-		/// <summary>Shuffle the order of the rating events</summary>
-		/// <remarks>
-		/// Fisher-Yates shuffle
-		/// </remarks>
-		public void Shuffle()
-		{
-			Utils.Shuffle<RatingEvent>(rating_list);
-		}
-
-		/// <inheritdoc/>
-		public IEnumerator GetEnumerator()
-		{
-			return rating_list.GetEnumerator();
-		}
-
-		/// <summary>Add a rating event to the collection</summary>
-		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
-		public void AddRating(RatingEvent rating)
-		{
-			rating_list.Add(rating);
-		}
-
-		/// <summary>Remove a rating from the collection</summary>
-		/// <param name="rating">the rating event to remove</param>
-		public void RemoveRating(RatingEvent rating)
-		{
-			rating_list.Remove(rating);
-		}
-
-		/// <summary>Find a rating for a given user and item</summary>
-		/// <param name="user_id">the numerical ID of the user</param>
-		/// <param name="item_id">the numerical ID of the item</param>
-		/// <returns>the rating event corresponding to the given user and item, null if such a rating does not exist</returns>
-		public RatingEvent FindRating(int user_id, int item_id)
-		{
-			foreach (RatingEvent rating in rating_list)
-				if ((rating.user_id == user_id) && (rating.item_id == item_id))
-					return rating;
-			return null;
-		}
-
-		/// <summary>Get the users in the rating collection</summary>
-		/// <returns>a collection of numerical user IDs</returns>
 		public HashSet<int> GetUsers()
 		{
-			var users = new HashSet<int>();
-			foreach (RatingEvent rating in rating_list)
-				users.Add(rating.user_id);
-			return users;
+			var result_set = new HashSet<int>();
+			for (int index = 0; index < ratings.Count; index++)
+				result_set.Add(users[index]);
+			return result_set;
 		}
-		// TODO use ISet when we support Mono 2.8
 
-		/// <summary>Get the items in the rating collection</summary>
-		/// <returns>a collection of numerical item IDs</returns>
 		public HashSet<int> GetItems()
 		{
-			var items = new HashSet<int>();
-			foreach (RatingEvent rating in rating_list)
-				items.Add(rating.item_id);
-			return items;
+			var result_set = new HashSet<int>();
+			for (int index = 0; index < ratings.Count; index++)
+				result_set.Add(items[index]);
+			return result_set;
+		}				
+		
+		public HashSet<int> GetUsers(IList<int> indices)
+		{
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(users[index]);
+			return result_set;
+		}
+
+		public HashSet<int> GetItems(IList<int> indices)
+		{
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(items[index]);
+			return result_set;
+		}		
+		
+		public double FindRating(int user_id, int item_id)
+		{
+			// TODO speed up
+			for (int index = 0; index < ratings.Count; index++)
+				if (users[index] == user_id && items[index] == item_id)
+					return ratings[index];
+			
+			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+		}
+
+		public double FindRating(int user_id, int item_id, ICollection<int> indexes)
+		{
+			// TODO speed up
+			foreach (int index in indexes)
+				if (users[index] == user_id && items[index] == item_id)
+					return ratings[index];
+			
+			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+		}		
+		
+		public void AddRating(int user_id, int item_id, double rating)
+		{
+			users.Add(user_id);
+			items.Add(item_id);
+			ratings.Add(rating);
+			
+			if (user_id > MaxUserID)
+				MaxUserID = user_id;
+			
+			if (item_id > MaxItemID)
+				MaxItemID = item_id;			
 		}
 	}
 }
+

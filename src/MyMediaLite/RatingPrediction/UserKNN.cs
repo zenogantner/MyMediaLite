@@ -30,10 +30,9 @@ namespace MyMediaLite.RatingPrediction
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc/>
-		public override RatingData Ratings
+		public override Ratings Ratings
 		{
-			set
-			{
+			set	{
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
 				foreach (RatingEvent r in ratings)

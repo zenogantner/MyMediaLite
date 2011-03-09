@@ -34,18 +34,18 @@ namespace MyMediaLite.eval
 		/// <param name="writer">the TextWriter to write the predictions to</param>
 		public static void WritePredictions(
 			IRatingPredictor engine,
-			RatingData ratings,
-			EntityMapping user_mapping, EntityMapping item_mapping,		                                    
+			Ratings ratings,
+			EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			foreach (RatingEvent r in ratings)
+			for (int index = 0; index < ratings.Count; index++)
 				writer.WriteLine("{0}\t{1}\t{2}",
-								 user_mapping.ToOriginalID(r.user_id),
-								 item_mapping.ToOriginalID(r.item_id),
-								 engine.Predict(r.user_id, r.item_id).ToString(ni));
+								 user_mapping.ToOriginalID(ratings.users[index]),
+								 item_mapping.ToOriginalID(ratings.items[index]),
+								 engine.Predict(ratings.users[index], ratings.items[index]).ToString(ni));
 		}
 
 		/// <summary>Rates a given set of instances</summary>
@@ -56,7 +56,7 @@ namespace MyMediaLite.eval
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		public static void WritePredictions(
 			IRatingPredictor engine,
-			RatingData ratings,
+			Ratings ratings,
 			EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
 		{
@@ -64,9 +64,7 @@ namespace MyMediaLite.eval
 				WritePredictions(engine, ratings, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-				{
 					WritePredictions(engine, ratings, user_mapping, item_mapping, writer);
-				}
 		}
 	}
 }

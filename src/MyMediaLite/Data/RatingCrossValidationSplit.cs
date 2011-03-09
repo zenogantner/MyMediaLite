@@ -20,25 +20,25 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>k-fold split for rating prediction</summary>
-	public class RatingCrossValidationSplit : ISplit<RatingData>
+	public class RatingCrossValidationSplit : ISplit<Ratings>
 	{
 		/// <inheritdoc/>
 		public int NumberOfFolds { get; private set; }
 
 		/// <inheritdoc/>
-		public List<RatingData> Train { get; private set; }
+		public List<Ratings> Train { get; private set; }
 
 		/// <inheritdoc/>
-		public List<RatingData> Test { get; private set; }
+		public List<Ratings> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of rating prediction data</summary>
 		/// <param name="rating_data">the dataset</param>
 		/// <param name="num_folds">the number of folds</param>
-		public RatingCrossValidationSplit(RatingData rating_data, int num_folds)
+		public RatingCrossValidationSplit(Ratings rating_data, int num_folds)
 		{
 			NumberOfFolds = num_folds;
-			Train = new List<RatingData>(num_folds);
-			Test  = new List<RatingData>(num_folds);
+			Train = new List<Ratings>(num_folds);
+			Test  = new List<Ratings>(num_folds);
 
 			// create data structures
 			for (int i = 0; i < num_folds; i++)

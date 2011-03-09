@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -84,15 +85,14 @@ namespace MyMediaLite.RatingPrediction
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 
 			// learn model parameters
-			ratings.Shuffle(); // avoid effects e.g. if rating data is sorted by user or item
-			global_bias = Ratings.All.Average;
-			LearnFactors(ratings.All, true, true);
+			global_bias = Ratings.Average;
+			LearnFactors(ratings.RandomIndex, true, true);
 		}
 
 		/// <inheritdoc/>
 		public virtual void Iterate()
 		{
-			Iterate(ratings.All, true, true);
+			Iterate(ratings.RandomIndex, true, true);
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -121,15 +121,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
 		/// <param name="update_user">true if user factors to be updated</param>
 		/// <param name="update_item">true if item factors to be updated</param>
-		protected virtual void Iterate(Ratings ratings, bool update_user, bool update_item)
+		protected virtual void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			foreach (RatingEvent rating in ratings)
+			foreach (int index in rating_indices)
 			{
-				int u = rating.user_id;
-				int i = rating.item_id;
+				int u = ratings.users[index];
+				int i = ratings.items[index];
 
 				double p = Predict(u, i, false);
-				double err = rating.rating - p;
+				double err = ratings.ratings[index] - p;
 
 				 // Adjust factors
 				 for (int f = 0; f < num_factors; f++)
@@ -150,10 +150,10 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		private void LearnFactors(Ratings ratings, bool update_user, bool update_item)
+		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			for (int current_iter = 0; current_iter < num_iter; current_iter++)
-				Iterate(ratings, update_user, update_item);
+				Iterate(rating_indices, update_user, update_item);
 		}
 
 		/// <inheritdoc/>
@@ -307,8 +307,8 @@ namespace MyMediaLite.RatingPrediction
 		public double ComputeFit()
 		{
 			double rmse_sum = 0;
-			foreach (RatingEvent rating in ratings)
-				rmse_sum += Math.Pow(Predict(rating.user_id, rating.item_id) - rating.rating, 2);
+			for (int i = 0; i < ratings.Count; i++)
+				rmse_sum += Math.Pow(Predict(ratings.users[i], ratings.items[i]) - ratings.ratings[i], 2);
 
 			return Math.Sqrt((double) rmse_sum / ratings.Count);
 		}

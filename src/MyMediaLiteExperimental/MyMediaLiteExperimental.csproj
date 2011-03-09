@@ -63,7 +63,6 @@
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="RatingPredictor\NewKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
     <Compile Include="IO\KDDCup2011\RatingData.cs" />
