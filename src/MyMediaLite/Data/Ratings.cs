@@ -24,12 +24,16 @@ namespace MyMediaLite
 
 	public class Ratings : IRatings
 	{
+		/// <inheritdoc/>
 		public IList<int> Users { get; protected set; }
+		/// <inheritdoc/>
 		public IList<int> Items { get; protected set; }
+		/// <inheritdoc/>
 		public IList<double> Values  { get; protected set; }
 
+		/// <inheritdoc/>
 		public double this[int index] { get { return Values[index]; } }
-
+		/// <inheritdoc/>
 		public int Count { get { return Values.Count; } }
 
 		public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
@@ -42,12 +46,17 @@ namespace MyMediaLite
 			Values = new List<double>();
 		}
 
+		/// <inheritdoc/>
 		public int MaxUserID { get; protected set; }
+		/// <inheritdoc/>
 		public int MaxItemID { get; protected set; }
 
+		/// <inheritdoc/>
 		public IList<List<int>> ByUser { get; protected set; }
+		/// <inheritdoc/>
 		public IList<List<int>> ByItem { get; protected set; }
-		public int[] RandomIndex
+		/// <inheritdoc/>
+		public IList<int> RandomIndex
 		{
 			get {
 				if (random_index == null || random_index.Length != Values.Count)
@@ -66,6 +75,7 @@ namespace MyMediaLite
 		private int[] random_index;
 
 		// TODO speed up
+		/// <inheritdoc/>
 		public double Average
 		{
 			get {
@@ -76,22 +86,29 @@ namespace MyMediaLite
 			}
 		}
 
-		public HashSet<int> GetUsers()
+		/// <inheritdoc/>
+		public HashSet<int> AllUsers
 		{
-			var result_set = new HashSet<int>();
-			for (int index = 0; index < Values.Count; index++)
-				result_set.Add(Users[index]);
-			return result_set;
+			get {
+				var result_set = new HashSet<int>();
+				for (int index = 0; index < Values.Count; index++)
+					result_set.Add(Users[index]);
+				return result_set;
+			}
 		}
 
-		public HashSet<int> GetItems()
+		/// <inheritdoc/>
+		public HashSet<int> AllItems
 		{
-			var result_set = new HashSet<int>();
-			for (int index = 0; index < Values.Count; index++)
-				result_set.Add(Items[index]);
-			return result_set;
+			get {
+				var result_set = new HashSet<int>();
+				for (int index = 0; index < Values.Count; index++)
+					result_set.Add(Items[index]);
+				return result_set;
+			}
 		}
 
+		/// <inheritdoc/>
 		public HashSet<int> GetUsers(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
@@ -100,6 +117,7 @@ namespace MyMediaLite
 			return result_set;
 		}
 
+		/// <inheritdoc/>
 		public HashSet<int> GetItems(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
@@ -108,6 +126,7 @@ namespace MyMediaLite
 			return result_set;
 		}
 
+		/// <inheritdoc/>
 		public double FindRating(int user_id, int item_id)
 		{
 			// TODO speed up
@@ -118,6 +137,7 @@ namespace MyMediaLite
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
+		/// <inheritdoc/>
 		public double FindRating(int user_id, int item_id, ICollection<int> indexes)
 		{
 			// TODO speed up
@@ -128,6 +148,7 @@ namespace MyMediaLite
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
+		/// <inheritdoc/>
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);

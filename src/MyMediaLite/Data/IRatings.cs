@@ -22,24 +22,48 @@ namespace MyMediaLite
 {
 	public interface IRatings
 	{
+		// TODO add value fields to all properties
+
+		/// <summary>the user entries</summary>
 		IList<int> Users { get; }
+		/// <summary>the item entries</summary>
 		IList<int> Items { get; }
+		/// <summary>the rating value entries</summary>
 		IList<double> Values  { get; } // TODO make generic
+		/// <summary>get the rating value for a given index</summary>
+		/// <param name="index">the index</param>
 		double this[int index] { get; }
 
+		/// <summary>the maximum user ID in the dataset</summary>
 		int MaxUserID { get; }
+		/// <summary>the maximum item ID in the dataset</summary>
 		int MaxItemID { get; }
 
+		/// <summary>indices by user</summary>
 		IList<List<int>> ByUser { get; }
+		/// <summary>indices by item</summary>
 		IList<List<int>> ByItem { get; }
-		int[] RandomIndex { get; }
+		/// <summary>get a randomly ordered list of all indices</summary>
+		IList<int> RandomIndex { get; }
+		// TODO add method to force refresh
 
+		/// <summary>number of ratings in the dataset</summary>
 		int Count { get; }
+		/// <summary>average rating in the dataset</summary>
 		double Average { get; }
 
-		HashSet<int> GetUsers();
-		HashSet<int> GetItems();
+		/// <summary>all user IDs in the dataset</summary>
+		HashSet<int> AllUsers { get; }
+		/// <summary>all item IDs in the dataset</summary>
+		HashSet<int> AllItems { get; }
+
+		/// <summary>Get all users that are referenced by a given list of indices</summary>
+		/// <param name="indices">the indices to take into account</param>
+		/// <returns>the set of users</returns>
 		HashSet<int> GetUsers(IList<int> indices);
+		/// <summary>Get all items that are referenced by a given list of indices</summary>
+		/// <param name="indices">the indices to take into account</param>
+		/// <returns>the set of itemss</returns>
 		HashSet<int> GetItems(IList<int> indices);
 
 		double FindRating(int user_id, int item_id); // TODO think about returning an index ...

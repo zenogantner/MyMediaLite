@@ -59,8 +59,8 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return false;
 
-			foreach (RatingEvent r in Ratings.ByUser[user_id])
-				if (freq_matrix[item_id, r.item_id] != 0)
+			foreach (int index in Ratings.ByUser[user_id])
+				if (freq_matrix[item_id, Ratings.Items[index]] != 0)
 					return true;
 			return false;
 		}
@@ -74,12 +74,14 @@ namespace MyMediaLite.RatingPrediction
 			double prediction = 0.0;
 			int frequency = 0;
 
-			foreach (RatingEvent r in Ratings.ByUser[user_id])
+			foreach (int index in Ratings.ByUser[user_id])			
+
 			{
-				int f = freq_matrix[item_id, r.item_id];
+				int other_item_id = Ratings.Items[index];
+				int f = freq_matrix[item_id, other_item_id];
 				if (f != 0)
 				{
-					prediction += ( diff_matrix[item_id, r.item_id] + r.rating ) * f;
+					prediction += ( diff_matrix[item_id, other_item_id] + Ratings[index] ) * f;
 					frequency += f;
 				}
 			}
@@ -96,21 +98,18 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// compute difference sums and frequencies
-			foreach (var user_ratings in Ratings.ByUser)
+			foreach (var by_user_indices in Ratings.ByUser)
 			{
-				//int u = user_ratings[0].user_id;
-				//if (u % 500 == 0)
-				//	Console.Error.WriteLine("user {0} num_entries {1} mem {2}", u, freq_matrix.NumberOfNonEmptyEntries, Memory.Usage);
-
-				for (int i = 0; i < user_ratings.Count; i++)
+				for (int i = 0; i < by_user_indices.Count; i++)
 				{
-					RatingEvent r = user_ratings[i];
-					for (int j = i + 1; j < user_ratings.Count; j++)
-					{
-						RatingEvent r2 = user_ratings[j];
+					int index1 = by_user_indices[i];
 
-			  			freq_matrix[r.item_id, r2.item_id] += 1;
-			  			diff_matrix[r.item_id, r2.item_id] += (float) (r.rating - r2.rating);
+					for (int j = i + 1; j < by_user_indices.Count; j++)
+					{
+						int index2 = by_user_indices[j];
+
+			  			freq_matrix[Ratings.Items[index1], Ratings.Items[index2]] += 1;
+			  			diff_matrix[Ratings.Items[index1], Ratings.Items[index2]] += (float) (Ratings[index1] - Ratings[index2]);
 					}
 				}
 			}

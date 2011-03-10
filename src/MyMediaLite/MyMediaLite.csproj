@@ -115,6 +115,7 @@
     <Compile Include="Data\IRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="IO\RatingPredictionStatic.cs" />
+    <Compile Include="RatingPrediction\SlopeOne.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
