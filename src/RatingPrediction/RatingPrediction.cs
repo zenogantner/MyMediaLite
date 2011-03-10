@@ -251,6 +251,8 @@ MyMediaLite rating prediction
 				}
 			} // for
 
+			Console.Error.WriteLine("memory {0}", Memory.Usage);
+			
 			DisplayIterationStats();
 			Recommender.SaveModel(recommender, save_model_file);
 		}
