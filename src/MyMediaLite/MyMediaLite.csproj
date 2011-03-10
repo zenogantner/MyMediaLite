@@ -119,6 +119,8 @@
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
     <Compile Include="RatingPrediction\UserAverage.cs" />
     <Compile Include="RatingPrediction\ItemAverage.cs" />
+    <Compile Include="RatingPrediction\KNN.cs" />
+    <Compile Include="RatingPrediction\UserItemBaseline.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
