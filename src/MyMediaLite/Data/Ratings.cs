@@ -24,9 +24,9 @@ namespace MyMediaLite
 
 	public class Ratings : IRatings
 	{
-		public IList<int> Users { get; private set; }
-		public IList<int> Items { get; private set; }
-		public IList<double> Values  { get; private set; } // TODO make generic
+		public IList<int> Users { get; protected set; }
+		public IList<int> Items { get; protected set; }
+		public IList<double> Values  { get; protected set; }
 
 		public double this[int index] { get { return Values[index]; } }
 
@@ -42,11 +42,11 @@ namespace MyMediaLite
 			Values = new List<double>();
 		}
 
-		public int MaxUserID { get; private set; }
-		public int MaxItemID { get; private set; }
+		public int MaxUserID { get; protected set; }
+		public int MaxItemID { get; protected set; }
 
-		public IList<List<int>> ByUser { get; private set; }
-		public IList<List<int>> ByItem { get; private set; }
+		public IList<List<int>> ByUser { get; protected set; }
+		public IList<List<int>> ByItem { get; protected set; }
 		public int[] RandomIndex
 		{
 			get {
@@ -128,7 +128,7 @@ namespace MyMediaLite
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
-		public void AddRating(int user_id, int item_id, double rating)
+		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);
 			Items.Add(item_id);
