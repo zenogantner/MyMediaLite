@@ -41,7 +41,7 @@ namespace MyMediaLite.RatingPrediction
   		private SymmetricSparseMatrix<int> freq_matrix_dislike;
 
 		private double global_average;
-		private UserAverage user_average;
+		private UserAverage user_average = new UserAverage();
 
 		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
