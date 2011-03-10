@@ -20,6 +20,7 @@ using System.Collections.Generic;
 
 namespace MyMediaLite
 {
+	/// <summary>Interface for rating datasets</summary>
 	public interface IRatings
 	{
 		// TODO add value fields to all properties
@@ -40,9 +41,9 @@ namespace MyMediaLite
 		int MaxItemID { get; }
 
 		/// <summary>indices by user</summary>
-		IList<List<int>> ByUser { get; }
+		IList<IList<int>> ByUser { get; }
 		/// <summary>indices by item</summary>
-		IList<List<int>> ByItem { get; }
+		IList<IList<int>> ByItem { get; }
 		/// <summary>get a randomly ordered list of all indices</summary>
 		IList<int> RandomIndex { get; }
 		// TODO add method to force refresh

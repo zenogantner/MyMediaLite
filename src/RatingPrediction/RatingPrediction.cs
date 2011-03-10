@@ -396,16 +396,16 @@ MyMediaLite rating prediction
 	static void DisplayDataStats()
 	{
 		// training data stats
-		int num_users = training_data.GetUsers().Count;
-		int num_items = training_data.GetItems().Count;
+		int num_users = training_data.AllUsers.Count;
+		int num_items = training_data.AllItems.Count;
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
 		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
-		num_users = test_data.GetUsers().Count;
-		num_items = test_data.GetItems().Count;
+		num_users = test_data.AllUsers.Count;
+		num_items = test_data.AllItems.Count;
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;

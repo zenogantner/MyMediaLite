@@ -51,10 +51,31 @@ namespace MyMediaLite
 		/// <inheritdoc/>
 		public int MaxItemID { get; protected set; }
 
+		// TODO explicit commands to build indices?
+		
 		/// <inheritdoc/>
-		public IList<List<int>> ByUser { get; protected set; }
+		public IList<IList<int>> ByUser
+		{
+			get {
+				if (by_user == null)
+					BuildUserIndices();
+				return by_user;
+			}
+		}
+		IList<IList<int>> by_user;
+		
+		public void BuildUserIndices()
+		{
+			by_user = new IList<int>[MaxUserID + 1];
+			for (int u = 0; u <= MaxUserID; u++)
+				by_user[u] = new List<int>();
+			
+			for (int index = 0; index < Count; index++)
+				by_user[Users[index]].Add(index);
+		}
+		
 		/// <inheritdoc/>
-		public IList<List<int>> ByItem { get; protected set; }
+		public IList<IList<int>> ByItem { get; protected set; }
 		/// <inheritdoc/>
 		public IList<int> RandomIndex
 		{
@@ -86,6 +107,7 @@ namespace MyMediaLite
 			}
 		}
 
+		// TODO think whether we want to have a set or a list here
 		/// <inheritdoc/>
 		public HashSet<int> AllUsers
 		{
