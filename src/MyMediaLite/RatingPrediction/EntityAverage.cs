@@ -32,6 +32,10 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected double global_average = 0;
 
+		/// <summary>return the average rating for a given entity</summary>
+		/// <param name="index">the entity index</param>
+		public double this [int index] { get { return entity_averages[index]; } }
+
 		/// <inheritdoc/>
 		public override void SaveModel(string file)
 		{

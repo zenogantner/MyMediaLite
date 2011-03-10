@@ -31,20 +31,20 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			var rating_counts = new List<int>();
-
-			foreach (RatingEvent r in Ratings.All)
+			for (int u = 0; u <= Ratings.MaxUserID; u++)
 			{
-				if (rating_counts.Count <= r.user_id)
-				{
-					rating_counts.Insert(r.user_id, 0);
-					entity_averages.Insert(r.user_id, 0);
-				}
-				rating_counts[r.user_id]++;
-				entity_averages[r.user_id] += r.rating;
-				global_average += r.rating;
+				rating_counts.Add(0);
+				entity_averages.Add(0);
 			}
 
-			global_average /= Ratings.All.Count;
+			for (int i = 0; i < Ratings.Count; i++)
+			{
+				rating_counts[Ratings.Users[i]]++;
+				entity_averages[Ratings.Users[i]] += Ratings[i];
+				global_average += Ratings[i];
+			}
+
+			global_average /= Ratings.Count;
 
 			for (int i = 0; i < entity_averages.Count; i++)
 				if (rating_counts[i] != 0)
