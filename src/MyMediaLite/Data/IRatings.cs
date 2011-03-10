@@ -48,6 +48,11 @@ namespace MyMediaLite
 		IList<int> RandomIndex { get; }
 		// TODO add method to force refresh
 
+		/// <summary>Build the user indices</summary>
+		void BuildUserIndices();
+		/// <summary>Build the item indices</summary>
+		void BuildItemIndices();
+
 		/// <summary>number of ratings in the dataset</summary>
 		int Count { get; }
 		/// <summary>average rating in the dataset</summary>

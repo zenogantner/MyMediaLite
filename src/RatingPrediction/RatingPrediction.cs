@@ -252,7 +252,7 @@ MyMediaLite rating prediction
 			} // for
 
 			Console.Error.WriteLine("memory {0}", Memory.Usage);
-			
+
 			DisplayIterationStats();
 			Recommender.SaveModel(recommender, save_model_file);
 		}
@@ -325,7 +325,7 @@ MyMediaLite rating prediction
 		// TODO check for the existence of files before starting to load all of them
 
 		// read training data
-		
+
 		//if (movielens1m_format)
 		//	training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		//else

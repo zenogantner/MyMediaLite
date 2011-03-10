@@ -74,7 +74,7 @@ namespace MyMediaLite.RatingPrediction
 			double prediction = 0.0;
 			int frequency = 0;
 
-			foreach (int index in Ratings.ByUser[user_id])			
+			foreach (int index in Ratings.ByUser[user_id])
 
 			{
 				int other_item_id = Ratings.Items[index];

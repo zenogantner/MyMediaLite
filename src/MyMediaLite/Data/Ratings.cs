@@ -22,6 +22,8 @@ namespace MyMediaLite
 {
 	public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
 
+	// TODO optimize some index accesses via slicing
+
 	public class Ratings : IRatings
 	{
 		/// <inheritdoc/>
@@ -52,7 +54,7 @@ namespace MyMediaLite
 		public int MaxItemID { get; protected set; }
 
 		// TODO explicit commands to build indices?
-		
+
 		/// <inheritdoc/>
 		public IList<IList<int>> ByUser
 		{
@@ -63,19 +65,40 @@ namespace MyMediaLite
 			}
 		}
 		IList<IList<int>> by_user;
-		
+
+		/// <inheritdoc/>
 		public void BuildUserIndices()
 		{
 			by_user = new IList<int>[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
 				by_user[u] = new List<int>();
-			
+
 			for (int index = 0; index < Count; index++)
 				by_user[Users[index]].Add(index);
 		}
-		
+
 		/// <inheritdoc/>
-		public IList<IList<int>> ByItem { get; protected set; }
+		public IList<IList<int>> ByItem
+		{
+			get {
+				if (by_item == null)
+					BuildItemIndices();
+				return by_item;
+			}
+		}
+		IList<IList<int>> by_item;
+
+		/// <inheritdoc/>
+		public void BuildItemIndices()
+		{
+			by_item = new IList<int>[MaxItemID + 1];
+			for (int i = 0; i <= MaxItemID; i++)
+				by_item[i] = new List<int>();
+
+			for (int index = 0; index < Count; index++)
+				by_item[Items[index]].Add(index);
+		}
+
 		/// <inheritdoc/>
 		public IList<int> RandomIndex
 		{
