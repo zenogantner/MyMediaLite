@@ -104,19 +104,21 @@ namespace MyMediaLite
 		{
 			get {
 				if (random_index == null || random_index.Length != Values.Count)
-				{
-					Console.Error.Write("Shuffling ... ");
-					random_index = new int[Values.Count];
-					for (int index = 0; index < Values.Count; index++)
-						random_index[index] = index;
-					Util.Utils.Shuffle<int>(random_index);
-					Console.Error.WriteLine("done.");
-				}
+					BuildRandomIndex();
 
 				return random_index;
 			}
 		}
 		private int[] random_index;
+
+		/// <inheritdoc/>
+		public void BuildRandomIndex()
+		{
+			random_index = new int[Values.Count];
+			for (int index = 0; index < Values.Count; index++)
+				random_index[index] = index;
+			Util.Utils.Shuffle<int>(random_index);
+		}
 
 		// TODO speed up
 		/// <inheritdoc/>

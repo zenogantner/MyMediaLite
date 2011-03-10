@@ -52,6 +52,8 @@ namespace MyMediaLite
 		void BuildUserIndices();
 		/// <summary>Build the item indices</summary>
 		void BuildItemIndices();
+		/// <summary>Build the random index</summary>
+		void BuildRandomIndex();
 
 		/// <summary>number of ratings in the dataset</summary>
 		int Count { get; }
