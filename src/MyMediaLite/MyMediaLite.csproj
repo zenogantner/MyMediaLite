@@ -69,8 +69,6 @@
     <Compile Include="Eval\RatingEval.cs" />
     <Compile Include="Eval\RatingPrediction.cs" />
     <Compile Include="IO\AttributeData.cs" />
-    <Compile Include="IO\ItemRecommenderData.cs" />
-    <Compile Include="IO\RatingPredictionData.cs" />
     <Compile Include="IO\RelationData.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="Util\CommandLineParameters.cs" />
@@ -112,8 +110,11 @@
     <Compile Include="Util\Recommender.cs" />
     <Compile Include="Util\Memory.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
+    <Compile Include="IO\ItemRecommendation.cs" />
+    <Compile Include="IO\RatingPrediction.cs" />
     <Compile Include="Data\IRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
+    <Compile Include="IO\RatingPredictionStatic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
