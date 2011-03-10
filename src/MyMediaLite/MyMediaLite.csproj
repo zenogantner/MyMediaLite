@@ -112,6 +112,7 @@
     <Compile Include="Util\Recommender.cs" />
     <Compile Include="Util\Memory.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
+    <Compile Include="Data\IRatings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

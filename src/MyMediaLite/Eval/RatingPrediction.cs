@@ -43,9 +43,9 @@ namespace MyMediaLite.eval
 
 			for (int index = 0; index < ratings.Count; index++)
 				writer.WriteLine("{0}\t{1}\t{2}",
-								 user_mapping.ToOriginalID(ratings.users[index]),
-								 item_mapping.ToOriginalID(ratings.items[index]),
-								 engine.Predict(ratings.users[index], ratings.items[index]).ToString(ni));
+								 user_mapping.ToOriginalID(ratings.Users[index]),
+								 item_mapping.ToOriginalID(ratings.Items[index]),
+								 engine.Predict(ratings.Users[index], ratings.Items[index]).ToString(ni));
 		}
 
 		/// <summary>Rates a given set of instances</summary>

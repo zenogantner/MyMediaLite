@@ -125,11 +125,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			foreach (int index in rating_indices)
 			{
-				int u = ratings.users[index];
-				int i = ratings.items[index];
+				int u = ratings.Users[index];
+				int i = ratings.Items[index];
 
 				double p = Predict(u, i, false);
-				double err = ratings.ratings[index] - p;
+				double err = ratings[index] - p;
 
 				 // Adjust factors
 				 for (int f = 0; f < num_factors; f++)
@@ -308,7 +308,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double rmse_sum = 0;
 			for (int i = 0; i < ratings.Count; i++)
-				rmse_sum += Math.Pow(Predict(ratings.users[i], ratings.items[i]) - ratings.ratings[i], 2);
+				rmse_sum += Math.Pow(Predict(ratings.Users[i], ratings.Items[i]) - ratings[i], 2);
 
 			return Math.Sqrt((double) rmse_sum / ratings.Count);
 		}

@@ -73,8 +73,8 @@ namespace MyMediaLite.RatingPrediction
 
 			foreach (int index in rating_indices)
 			{
-				int u = ratings.users[index];
-				int i = ratings.items[index];
+				int u = ratings.Users[index];
+				int i = ratings.Items[index];
 
 				double dot_product = global_bias + user_bias[u] + item_bias[i];
 				for (int f = 0; f < num_factors; f++)
@@ -82,7 +82,7 @@ namespace MyMediaLite.RatingPrediction
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
-				double err = ratings.ratings[index] - p;
+				double err = ratings[index] - p;
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
 
