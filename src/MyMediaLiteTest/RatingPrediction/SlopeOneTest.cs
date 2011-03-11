@@ -31,9 +31,9 @@ namespace MyMediaLiteTest
 			recommender.MinRating = 1;
 			recommender.MaxRating = 5;
 			
-			var training_data = new RatingData();
-			training_data.AddRating( new RatingEvent(0, 0, 1.0) );
-			training_data.AddRating( new RatingEvent(1, 1, 5.0) );
+			var training_data = new Ratings();
+			training_data.Add(0, 0, 1.0);
+			training_data.Add(1, 1, 5.0);
 			
 			recommender.Ratings = training_data;
 			recommender.Train();
@@ -48,9 +48,9 @@ namespace MyMediaLiteTest
 			recommender.MinRating = 1;
 			recommender.MaxRating = 5;
 			
-			var training_data = new RatingData();
-			training_data.AddRating( new RatingEvent(0, 0, 1.0) );
-			training_data.AddRating( new RatingEvent(1, 1, 5.0) );
+			var training_data = new Ratings();
+			training_data.Add(0, 0, 1.0);
+			training_data.Add(1, 1, 5.0);
 			
 			recommender.Ratings = training_data;
 			recommender.Train();
