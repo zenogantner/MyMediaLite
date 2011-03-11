@@ -61,8 +61,6 @@ FILES = \
 	IItemRelationAwareRecommender.cs \
 	AssemblyInfo.cs \
 	Data/EntityMapping.cs \
-	Data/RatingData.cs \
-	Data/RatingEvent.cs \
 	Data/Ratings.cs \
 	DataType/Matrix.cs \
 	DataType/MatrixUtils.cs \
@@ -77,8 +75,6 @@ FILES = \
 	Eval/RatingEval.cs \
 	Eval/RatingPrediction.cs \
 	IO/AttributeData.cs \
-	IO/ItemRecommenderData.cs \
-	IO/RatingPredictionData.cs \
 	IO/RelationData.cs \
 	Taxonomy/EntityType.cs \
 	Util/CommandLineParameters.cs \
@@ -88,17 +84,12 @@ FILES = \
 	Util/Triple.cs \
 	Util/Utils.cs \
 	Correlation/CorrelationMatrix.cs \
-	Correlation/Pearson.cs \
-	Data/ISplit.cs \
-	Data/RatingCrossValidationSplit.cs \
 	DataType/IMatrix.cs \
 	DataType/IMatrixUtils.cs \
 	DataType/SymmetricSparseMatrix.cs \
 	Data/WeightedItem.cs \
 	Correlation/BinaryCosine.cs \
 	Correlation/Jaccard.cs \
-	Correlation/AdjustedCosine.cs \
-	Correlation/RatingCorrelationMatrix.cs \
 	Correlation/BinaryDataCorrelationMatrix.cs \
 	ItemRecommendation/BPR_Linear.cs \
 	ItemRecommendation/BPRMF.cs \
@@ -116,30 +107,28 @@ FILES = \
 	ItemRecommendation/WRMF.cs \
 	RatingPrediction/BiasedMatrixFactorization.cs \
 	RatingPrediction/IRatingPredictor.cs \
-	RatingPrediction/ItemAttributeKNN.cs \
-	RatingPrediction/ItemKNN.cs \
-	RatingPrediction/ItemKNNCosine.cs \
-	RatingPrediction/ItemKNNPearson.cs \
-	RatingPrediction/KNN.cs \
 	RatingPrediction/MatrixFactorization.cs \
-	RatingPrediction/UserAttributeKNN.cs \
-	RatingPrediction/UserItemBaseline.cs \
-	RatingPrediction/UserKNN.cs \
-	RatingPrediction/UserKNNCosine.cs \
-	RatingPrediction/UserKNNPearson.cs \
 	RatingPrediction/EntityAverage.cs \
 	RatingPrediction/GlobalAverage.cs \
-	RatingPrediction/UserAverage.cs \
-	RatingPrediction/ItemAverage.cs \
-	RatingPrediction/BiPolarSlopeOne.cs \
-	RatingPrediction/SlopeOne.cs \
 	ItemRecommendation/ItemRecommender.cs \
 	RatingPrediction/RatingPredictor.cs \
 	IRecommender.cs \
 	Util/Recommender.cs \
 	Util/Memory.cs \
-	IO/MovieLensRatingData.cs \
-	DataType/SkewSymmetricSparseMatrix.cs 
+	DataType/SkewSymmetricSparseMatrix.cs \
+	IO/ItemRecommendation.cs \
+	IO/RatingPrediction.cs \
+	Data/IRatings.cs \
+	Data/StaticRatings.cs \
+	IO/RatingPredictionStatic.cs \
+	RatingPrediction/SlopeOne.cs \
+	RatingPrediction/BiPolarSlopeOne.cs \
+	RatingPrediction/UserAverage.cs \
+	RatingPrediction/ItemAverage.cs \
+	RatingPrediction/KNN.cs \
+	RatingPrediction/UserItemBaseline.cs \
+	RatingPrediction/ItemKNNCosine.cs \
+	RatingPrediction/ItemKNN.cs 
 
 DATA_FILES = 
 

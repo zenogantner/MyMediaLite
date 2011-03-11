@@ -196,6 +196,28 @@ namespace MyMediaLite
 		}
 
 		/// <inheritdoc/>
+		public int FindIndex(int user_id, int item_id)
+		{
+			// TODO speed up
+			for (int index = 0; index < Values.Count; index++)
+				if (Users[index] == user_id && Items[index] == item_id)
+					return index;
+
+			throw new Exception(string.Format("index for {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public double FindIndex(int user_id, int item_id, ICollection<int> indexes)
+		{
+			// TODO speed up
+			foreach (int index in indexes)
+				if (Users[index] == user_id && Items[index] == item_id)
+					return index;
+
+			throw new Exception(string.Format("index for {0}, {1} not found.", user_id, item_id));
+		}
+		
+		/// <inheritdoc/>
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);

@@ -121,6 +121,8 @@
     <Compile Include="RatingPrediction\ItemAverage.cs" />
     <Compile Include="RatingPrediction\KNN.cs" />
     <Compile Include="RatingPrediction\UserItemBaseline.cs" />
+    <Compile Include="RatingPrediction\ItemKNNCosine.cs" />
+    <Compile Include="RatingPrediction\ItemKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
