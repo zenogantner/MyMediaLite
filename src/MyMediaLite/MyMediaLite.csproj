@@ -131,6 +131,9 @@
     <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
     <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
+    <Compile Include="Data\ISplit.cs" />
+    <Compile Include="Data\RatingsProxy.cs" />
+    <Compile Include="DataType\ListProxy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
