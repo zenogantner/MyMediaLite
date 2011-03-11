@@ -110,7 +110,7 @@ namespace MyMediaLite.Correlation
 				else
 				{
 					r1 = ratings.FindRating(other_entity_id, i, ratings1);
-					r2 = ratings.FindRating(other_entity_id, j, ratings2);					
+					r2 = ratings.FindRating(other_entity_id, j, ratings2);
 				}
 
 				// update sums
@@ -138,7 +138,7 @@ namespace MyMediaLite.Correlation
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			List<Ratings> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
+			IList<IList<int>> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 
 			var freqs   = new SparseMatrix<int>(num_entities, num_entities);
 			var i_sums  = new SparseMatrix<double>(num_entities, num_entities);
@@ -147,36 +147,39 @@ namespace MyMediaLite.Correlation
 			var ii_sums = new SparseMatrix<double>(num_entities, num_entities);
 			var jj_sums = new SparseMatrix<double>(num_entities, num_entities);
 
-			foreach (Ratings other_entity_ratings in ratings_by_other_entity)
+			foreach (IList<int> other_entity_ratings in ratings_by_other_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
 				{
-					var r1 = other_entity_ratings[i];
-					int x = (entity_type == EntityType.USER) ? r1.user_id : r1.item_id;
+					var index1 = other_entity_ratings[i];
+					int x = (entity_type == EntityType.USER) ? ratings.Users[index1] : ratings.Items[index1];
 
 					// update pairwise scalar product and frequency
 	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
 					{
-						var r2 = other_entity_ratings[j];
-						int y = (entity_type == EntityType.USER) ? r2.user_id : r2.item_id;
+						var index2 = other_entity_ratings[j];
+						int y = (entity_type == EntityType.USER) ? ratings.Users[index2] : ratings.Items[index2];
+
+						double rating1 = ratings[index1];
+						double rating2 = ratings[index2];
 
 						// update sums
 						if (x < y)
 						{
 							freqs[x, y]   += 1;
-							i_sums[x, y]  += r1.rating;
-							j_sums[x, y]  += r2.rating;
-							ij_sums[x, y] += r1.rating * r2.rating;
-							ii_sums[x, y] += r1.rating * r1.rating;
-							jj_sums[x, y] += r2.rating * r2.rating;
+							i_sums[x, y]  += rating1;
+							j_sums[x, y]  += rating2;
+							ij_sums[x, y] += rating1 * rating2;
+							ii_sums[x, y] += rating1 * rating1;
+							jj_sums[x, y] += rating2 * rating2;
 						}
 						else
 						{
 							freqs[y, x]   += 1;
-							i_sums[y, x]  += r1.rating;
-							j_sums[y, x]  += r2.rating;
-							ij_sums[y, x] += r1.rating * r2.rating;
-							ii_sums[y, x] += r1.rating * r1.rating;
-							jj_sums[y, x] += r2.rating * r2.rating;
+							i_sums[y, x]  += rating1;
+							j_sums[y, x]  += rating2;
+							ij_sums[y, x] += rating1 * rating2;
+							ii_sums[y, x] += rating1 * rating1;
+							jj_sums[y, x] += rating2 * rating2;
 						}
 	        		}
 				}

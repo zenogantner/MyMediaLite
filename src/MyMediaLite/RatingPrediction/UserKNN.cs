@@ -35,8 +35,8 @@ namespace MyMediaLite.RatingPrediction
 			set	{
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
-				foreach (RatingEvent r in ratings)
-				   	data_user[r.user_id, r.item_id] = true;
+				for (int index = 0; index < Ratings.Count; index++)
+					data_user[ratings.Users[index], ratings.Items[index]] = true;
 			}
 		}
 
@@ -67,10 +67,11 @@ namespace MyMediaLite.RatingPrediction
 			{
 				if (data_user[user_id2, item_id])
 				{
-					RatingEvent r = ratings.ByUser[user_id2].FindRating(user_id2, item_id);
+					double rating = ratings.FindRating(user_id2, item_id, ratings.ByUser[user_id2]);
+
 					double weight = correlation[user_id, user_id2];
 					weight_sum += weight;
-					sum += weight * (r.rating - base.Predict(user_id2, item_id));
+					sum += weight * (rating - base.Predict(user_id2, item_id));
 
 					if (--neighbors == 0)
 						break;
