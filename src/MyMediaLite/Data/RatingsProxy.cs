@@ -24,7 +24,7 @@ namespace MyMediaLite.Data
 {	
 	public class RatingsProxy : Ratings
 	{
-		public RatingsProxy(Ratings ratings, IList<int> indices)
+		public RatingsProxy(IRatings ratings, IList<int> indices)
 		{
 			if (ratings.Count != indices.Count)
 				throw new ArgumentException();

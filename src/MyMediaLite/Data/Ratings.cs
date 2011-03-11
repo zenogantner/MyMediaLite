@@ -31,7 +31,7 @@ namespace MyMediaLite.Data
 		/// <inheritdoc/>
 		public IList<int> Items { get; protected set; }
 		/// <inheritdoc/>
-		public IList<double> Values  { get; protected set; }
+		public IList<double> Values { get; protected set; }
 
 		/// <inheritdoc/>
 		public double this[int index] { get { return Values[index]; } }
