@@ -31,7 +31,7 @@ namespace MyMediaLite.RatingPrediction
 		protected SparseBooleanMatrix data_item;
 
 		/// <inheritdoc/>
-		public override Ratings Ratings
+		public override IRatings Ratings
 		{
 			set {
 				base.Ratings = value;

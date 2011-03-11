@@ -54,7 +54,7 @@ namespace MyMediaLite.RatingPrediction
 		public bool UpdateItems { get; set; }
 
 		/// <summary>The rating data</summary>
-		public virtual Ratings Ratings
+		public virtual IRatings Ratings
 		{
 			get { return this.ratings; }
 			set {
@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>rating data</summary>
-		protected Ratings ratings;
+		protected IRatings ratings;
 
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);

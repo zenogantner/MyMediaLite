@@ -29,8 +29,6 @@ namespace MyMediaLite.Data
 		IList<int> Users { get; }
 		/// <summary>the item entries</summary>
 		IList<int> Items { get; }
-		/// <summary>the rating value entries</summary>
-		IList<double> Values  { get; } // TODO make generic
 		/// <summary>get the rating value for a given index</summary>
 		/// <param name="index">the index</param>
 		double this[int index] { get; }

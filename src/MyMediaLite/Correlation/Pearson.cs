@@ -42,7 +42,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="shrinkage">a shrinkage parameter</param>
 		/// <returns>the complete Pearson correlation matrix</returns>
-		static public CorrelationMatrix Create(Ratings ratings, EntityType entity_type, float shrinkage)
+		static public CorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
 		{
 			Pearson cm;
 			int num_entities = 0;
@@ -73,7 +73,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter</param>
-		public static float ComputeCorrelation(Ratings ratings, EntityType entity_type, int i, int j, float shrinkage)
+		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
 				return 1;
@@ -133,7 +133,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute correlations for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		public override void ComputeCorrelations(Ratings ratings, EntityType entity_type)
+		public override void ComputeCorrelations(IRatings ratings, EntityType entity_type)
 		{
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
