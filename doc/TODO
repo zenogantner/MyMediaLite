@@ -2,7 +2,7 @@ Recommender functionality
  - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
  - support for non-binary attributes: real, nominal, textual descriptions
- - directly support MovieLens u.item and u.user files and MovieLens 1M data format
+ - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
  - online updates (all recommenders): decrease MaxUserID and MaxItemID where possible
  - additional recommenders
