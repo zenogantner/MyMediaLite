@@ -92,6 +92,7 @@ GUI demo
  - store/load user data
  - faster IO
 Misc features
+ - support compressed data and model files
  - use --param for command-line parameters
    - https://github.com/mono/mono/tree/master/mcs/class/Mono.Options/
      or
