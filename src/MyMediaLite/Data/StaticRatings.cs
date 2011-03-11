@@ -25,6 +25,7 @@ namespace MyMediaLite.Data
 		/// <summary>The position where the next rating will be stored</summary>
 		private int pos = 0;
 		
+		/// <inheritdoc/>
 		public StaticRatings(int size)
 		{
 			Users  = new int[size];
@@ -32,6 +33,7 @@ namespace MyMediaLite.Data
 			Values = new double[size];
 		}
 
+		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			if (pos == Count)
@@ -48,6 +50,12 @@ namespace MyMediaLite.Data
 				MaxItemID = item_id;
 			
 			pos++;
+		}
+		
+		/// <inheritdoc/>
+		public virtual void RemoveAt(int index)
+		{
+			throw new NotSupportedException();
 		}
 	}
 }

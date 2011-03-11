@@ -191,7 +191,7 @@ namespace MyMediaLite.Data
 		{
 			return this[user_id, item_id];
 		}
-		
+
 		/// <inheritdoc/>
 		public bool TryGet(int user_id, int item_id, out double rating)
 		{
@@ -209,20 +209,20 @@ namespace MyMediaLite.Data
 
 		/// <inheritdoc/>
 		public double Get(int user_id, int item_id, ICollection<int> indexes)
-		{			
+		{
 			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 					return Values[index];
 
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
-		}		
-		
+		}
+
 		/// <inheritdoc/>
 		public bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
 		{
 			rating = double.NegativeInfinity;
-			
+
 			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
@@ -238,7 +238,7 @@ namespace MyMediaLite.Data
 		public bool TryGetIndex(int user_id, int item_id, out int index)
 		{
 			index = -1;
-			
+
 			// TODO speed up
 			for (int i = 0; i < Values.Count; i++)
 				if (Users[i] == user_id && Items[i] == item_id)
@@ -254,7 +254,7 @@ namespace MyMediaLite.Data
 		public bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index)
 		{
 			index = -1;
-			
+
 			// TODO speed up
 			foreach (int i in indexes)
 				if (Users[i] == user_id && Items[i] == item_id)
@@ -265,7 +265,29 @@ namespace MyMediaLite.Data
 
 			return false;
 		}
-		
+
+		/// <inheritdoc/>
+		public int GetIndex(int user_id, int item_id)
+		{
+			// TODO speed up
+			for (int i = 0; i < Values.Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public int GetIndex(int user_id, int item_id, ICollection<int> indexes)
+		{
+			// TODO speed up
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
 		/// <inheritdoc/>
 		public virtual void Add(int user_id, int item_id, double rating)
 		{
@@ -278,6 +300,14 @@ namespace MyMediaLite.Data
 
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
+		}
+
+		/// <inheritdoc/>
+		public virtual void RemoveAt(int index)
+		{
+			Users.RemoveAt(index);
+			Items.RemoveAt(index);
+			Values.RemoveAt(index);
 		}
 	}
 }
