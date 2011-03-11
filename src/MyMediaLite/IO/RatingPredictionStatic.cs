@@ -85,7 +85,7 @@ namespace MyMediaLite.IO
 						out_of_range_warning_issued = true;
 					}
 
-				ratings.AddRating(user_id, item_id, rating);
+				ratings.Add(user_id, item_id, rating);
 			}
 			return ratings;
 		}

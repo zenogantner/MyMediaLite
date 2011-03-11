@@ -32,7 +32,7 @@ namespace MyMediaLite.Data
 			Values = new double[size];
 		}
 
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, double rating)
 		{
 			if (pos == Count)
 				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));

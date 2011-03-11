@@ -390,7 +390,7 @@ public partial class MainWindow : Window
 				rating_predictor.AddItem(movie.ID);
 
 			// add the new rating
-			rating_predictor.AddRating(current_user_id, movie.ID, rating);
+			rating_predictor.Add(current_user_id, movie.ID, rating);
 			ratings[movie.ID] = rating;
 
 			// recompute ratings

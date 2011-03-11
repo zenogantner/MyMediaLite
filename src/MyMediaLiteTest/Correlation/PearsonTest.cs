@@ -37,13 +37,13 @@ namespace MyMediaLiteTest
 		{
 			// create test objects
 			var ratings = new Ratings();
-			ratings.AddRating(0, 1, 0.3);
-			ratings.AddRating(0, 2, 0.6);
-			ratings.AddRating(0, 4, 0.2);
-			ratings.AddRating(1, 3, 0.4);
-			ratings.AddRating(1, 4, 0.2);
-			ratings.AddRating(2, 0, 0.1);
-			ratings.AddRating(2, 1, 0.3);
+			ratings.Add(0, 1, 0.3);
+			ratings.Add(0, 2, 0.6);
+			ratings.Add(0, 4, 0.2);
+			ratings.Add(1, 3, 0.4);
+			ratings.Add(1, 4, 0.2);
+			ratings.Add(2, 0, 0.1);
+			ratings.Add(2, 1, 0.3);
 			// test
 			var pearson = Pearson.Create(ratings, EntityType.USER, 0f);
 			Assert.AreEqual(0, pearson[0, 1]);
@@ -53,11 +53,11 @@ namespace MyMediaLiteTest
 		{
 			// create test objects	
 			var ratings = new Ratings();
-			ratings.AddRating(0, 1, 0.3);
-			ratings.AddRating(0, 4, 0.2);
-			ratings.AddRating(1, 2, 0.6);
-			ratings.AddRating(1, 3, 0.4);
-			ratings.AddRating(1, 4, 0.2);
+			ratings.Add(0, 1, 0.3);
+			ratings.Add(0, 4, 0.2);
+			ratings.Add(1, 2, 0.6);
+			ratings.Add(1, 3, 0.4);
+			ratings.Add(1, 4, 0.2);
 
 			// test
 			Assert.AreEqual(0, Pearson.ComputeCorrelation(ratings, EntityType.USER, 0, 1, 0));
@@ -68,13 +68,13 @@ namespace MyMediaLiteTest
 			// create test objects
 			var pearson = new Pearson(3);
 			var rating_data = new Ratings();
-			rating_data.AddRating(0, 1, 0.3);
-			rating_data.AddRating(0, 2, 0.6);
-			rating_data.AddRating(0, 4, 0.2);
-			rating_data.AddRating(1, 3, 0.4);
-			rating_data.AddRating(1, 4, 0.2);
-			rating_data.AddRating(2, 0, 0.1);
-			rating_data.AddRating(2, 1, 0.3);
+			rating_data.Add(0, 1, 0.3);
+			rating_data.Add(0, 2, 0.6);
+			rating_data.Add(0, 4, 0.2);
+			rating_data.Add(1, 3, 0.4);
+			rating_data.Add(1, 4, 0.2);
+			rating_data.Add(2, 0, 0.1);
+			rating_data.Add(2, 1, 0.3);
 			// test
 			pearson.shrinkage = 0;
 			pearson.ComputeCorrelations(rating_data, EntityType.USER);

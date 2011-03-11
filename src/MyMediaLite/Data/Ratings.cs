@@ -174,51 +174,100 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-		public double FindRating(int user_id, int item_id)
+		public double this[int user_id, int item_id]
 		{
-			// TODO speed up
-			for (int index = 0; index < Values.Count; index++)
-				if (Users[index] == user_id && Items[index] == item_id)
-					return Values[index];
+			get {
+				// TODO speed up
+				for (int index = 0; index < Values.Count; index++)
+					if (Users[index] == user_id && Items[index] == item_id)
+						return Values[index];
 
-			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+			}
 		}
 
 		/// <inheritdoc/>
-		public double FindRating(int user_id, int item_id, ICollection<int> indexes)
+		public double Get(int user_id, int item_id)
 		{
+			return this[user_id, item_id];
+		}
+		
+		/// <inheritdoc/>
+		public bool TryGet(int user_id, int item_id, out double rating)
+		{
+			rating = double.NegativeInfinity;
+			// TODO speed up
+			for (int index = 0; index < Values.Count; index++)
+				if (Users[index] == user_id && Items[index] == item_id)
+				{
+					rating = Values[index];
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public double Get(int user_id, int item_id, ICollection<int> indexes)
+		{			
 			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 					return Values[index];
 
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
-		}
-
+		}		
+		
 		/// <inheritdoc/>
-		public int FindIndex(int user_id, int item_id)
+		public bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
 		{
-			// TODO speed up
-			for (int index = 0; index < Values.Count; index++)
-				if (Users[index] == user_id && Items[index] == item_id)
-					return index;
-
-			throw new Exception(string.Format("index for {0}, {1} not found.", user_id, item_id));
-		}
-
-		/// <inheritdoc/>
-		public int FindIndex(int user_id, int item_id, ICollection<int> indexes)
-		{
+			rating = double.NegativeInfinity;
+			
 			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
-					return index;
+				{
+					rating = Values[index];
+					return true;
+				}
 
-			throw new Exception(string.Format("index for {0}, {1} not found.", user_id, item_id));
+			return false;
 		}
 
 		/// <inheritdoc/>
-		public virtual void AddRating(int user_id, int item_id, double rating)
+		public bool TryGetIndex(int user_id, int item_id, out int index)
+		{
+			index = -1;
+			
+			// TODO speed up
+			for (int i = 0; i < Values.Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index)
+		{
+			index = -1;
+			
+			// TODO speed up
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+		
+		/// <inheritdoc/>
+		public virtual void Add(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);
 			Items.Add(item_id);

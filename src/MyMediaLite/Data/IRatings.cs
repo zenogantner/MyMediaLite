@@ -74,15 +74,21 @@ namespace MyMediaLite.Data
 		/// <returns>the set of itemss</returns>
 		HashSet<int> GetItems(IList<int> indices);
 
-		double FindRating(int user_id, int item_id); // TODO think about returning an index ...
+		double this[int user_id, int item_id] { get; }
 
-		double FindRating(int user_id, int item_id, ICollection<int> indexes);
+		double Get(int user_id, int item_id);
+		
+		bool TryGet(int user_id, int item_id, out double rating);
+		
+		bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating);
+		
+		double Get(int user_id, int item_id, ICollection<int> indexes);
+		
+		bool TryGetIndex(int user_id, int item_id, out int index);
 
-		int FindIndex(int user_id, int item_id); // TODO think about returning an index ...
+		bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index);
 
-		int FindIndex(int user_id, int item_id, ICollection<int> indexes);
-
-		void AddRating(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
+		void Add(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
 	}
 }
 

@@ -104,13 +104,13 @@ namespace MyMediaLite.Correlation
 				double r2 = 0;
 				if (entity_type == EntityType.USER)
 				{
-					r1 = ratings.FindRating(i, other_entity_id, ratings1);
-					r2 = ratings.FindRating(j, other_entity_id, ratings2);
+					r1 = ratings.Get(i, other_entity_id, ratings1);
+					r2 = ratings.Get(j, other_entity_id, ratings2);
 				}
 				else
 				{
-					r1 = ratings.FindRating(other_entity_id, i, ratings1);
-					r2 = ratings.FindRating(other_entity_id, j, ratings2);
+					r1 = ratings.Get(other_entity_id, i, ratings1);
+					r2 = ratings.Get(other_entity_id, j, ratings2);
 				}
 
 				// update sums

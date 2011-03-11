@@ -126,9 +126,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, double rating)
 		{
-			base.AddRating(user_id, item_id, rating);
+			base.Add(user_id, item_id, rating);
 			RetrainItem(item_id);
 			RetrainUser(user_id);
 		}

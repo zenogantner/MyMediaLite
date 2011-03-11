@@ -47,12 +47,12 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
+    <Compile Include="Data\RatingsTest.cs" />
     <Compile Include="Correlation\CorrelationMatrixTest.cs" />
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\MatrixTest.cs" />
     <Compile Include="DataType\VectorUtilsTest.cs" />
     <Compile Include="DataType\MatrixUtilsTest.cs" />
-    <Compile Include="Data\RatingDataTest.cs" />
     <Compile Include="Data\EntityMappingTest.cs" />
     <Compile Include="Correlation\PearsonTest.cs" />
     <Compile Include="DataType\SparseMatrixTest.cs" />

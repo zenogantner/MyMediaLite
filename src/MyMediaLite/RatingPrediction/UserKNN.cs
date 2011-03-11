@@ -67,7 +67,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				if (data_user[user_id2, item_id])
 				{
-					double rating = ratings.FindRating(user_id2, item_id, ratings.ByUser[user_id2]);
+					double rating = ratings.Get(user_id2, item_id, ratings.ByUser[user_id2]);
 
 					double weight = correlation[user_id, user_id2];
 					weight_sum += weight;
@@ -93,9 +93,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, double rating)
 		{
-			base.AddRating(user_id, item_id, rating);
+			base.Add(user_id, item_id, rating);
 			data_user[user_id, item_id] = true;
 			RetrainUser(user_id);
 		}

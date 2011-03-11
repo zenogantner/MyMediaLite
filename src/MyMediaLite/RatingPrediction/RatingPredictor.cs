@@ -86,9 +86,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		public virtual void AddRating(int user_id, int item_id, double rating)
+		public virtual void Add(int user_id, int item_id, double rating)
 		{
-			ratings.AddRating(user_id, item_id, rating);
+			ratings.Add(user_id, item_id, rating);
 		}
 
 		/// <inheritdoc/>
