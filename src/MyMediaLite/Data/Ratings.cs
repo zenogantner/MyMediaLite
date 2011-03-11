@@ -309,6 +309,30 @@ namespace MyMediaLite.Data
 			Items.RemoveAt(index);
 			Values.RemoveAt(index);
 		}
+		
+		/// <inheritdoc/>
+		public virtual void RemoveUser(int user_id)
+		{
+			for (int index = 0; index < Count; index++)
+				if (Users[index] == user_id)
+				{
+					Users.RemoveAt(index);
+					Items.RemoveAt(index);
+					Values.RemoveAt(index);
+				}
+		}
+
+		/// <inheritdoc/>
+		public virtual void RemoveItem(int item_id)
+		{
+			for (int index = 0; index < Count; index++)
+				if (Items[index] == item_id)
+				{
+					Users.RemoveAt(index);
+					Items.RemoveAt(index);
+					Values.RemoveAt(index);
+				}
+		}		
 	}
 }
 

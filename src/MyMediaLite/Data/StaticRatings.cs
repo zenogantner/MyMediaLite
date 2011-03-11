@@ -53,10 +53,22 @@ namespace MyMediaLite.Data
 		}
 		
 		/// <inheritdoc/>
-		public virtual void RemoveAt(int index)
+		public override void RemoveAt(int index)
 		{
 			throw new NotSupportedException();
 		}
+		
+		/// <inheritdoc/>
+		public override void RemoveUser(int user_id)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <inheritdoc/>
+		public override void RemoveItem(int item_id)
+		{
+			throw new NotSupportedException();
+		}		
 	}
 }
 

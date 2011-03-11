@@ -92,10 +92,13 @@ namespace MyMediaLite.Data
 
 		bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index);
 
-
-
 		void Add(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
+
 		void RemoveAt(int index);
+		
+		void RemoveUser(int user_id);
+		
+		void RemoveItem(int item_id);
 	}
 }
 
