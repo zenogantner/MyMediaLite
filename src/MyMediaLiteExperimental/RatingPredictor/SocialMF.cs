@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -37,7 +38,7 @@ namespace MyMediaLite.RatingPrediction
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
         /// <summary>Social network regularization constant</summary>
-		public double SocialRegularization { get { return social_regularization;	} set {	social_regularization = value; } }
+		public double SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
         private double social_regularization = 1;
 
 		/*
@@ -78,9 +79,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute global average
 			double global_average = 0;
-			foreach (RatingEvent r in Ratings.All)
-				global_average += r.rating;
-			global_average /= Ratings.All.Count;
+			global_average = Ratings.Average;
 
 			// learn model parameters
             global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
@@ -89,8 +88,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		protected override void Iterate(Ratings ratings, bool update_user, bool update_item)
+		protected virtual void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			// We ignore the method's arguments.
 			IterateBatch();
 		}
 
