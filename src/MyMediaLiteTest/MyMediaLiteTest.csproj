@@ -47,7 +47,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Compile Include="Data\RatingsTest.cs" />
     <Compile Include="Correlation\CorrelationMatrixTest.cs" />
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\MatrixTest.cs" />

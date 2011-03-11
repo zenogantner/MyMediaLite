@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MyMediaLite
+namespace MyMediaLite.Data
 {
 	public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
 

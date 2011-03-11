@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MyMediaLite
+namespace MyMediaLite.Data
 {
 	/// <summary>Interface for rating datasets</summary>
 	public interface IRatings
