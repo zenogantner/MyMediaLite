@@ -80,8 +80,8 @@ namespace MyMediaLite
 
 		int FindIndex(int user_id, int item_id); // TODO think about returning an index ...
 
-		int FindIndex(int user_id, int item_id, ICollection<int> indexes);		
-		
+		int FindIndex(int user_id, int item_id, ICollection<int> indexes);
+
 		void AddRating(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
 	}
 }

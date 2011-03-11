@@ -207,7 +207,7 @@ namespace MyMediaLite
 		}
 
 		/// <inheritdoc/>
-		public double FindIndex(int user_id, int item_id, ICollection<int> indexes)
+		public int FindIndex(int user_id, int item_id, ICollection<int> indexes)
 		{
 			// TODO speed up
 			foreach (int index in indexes)
@@ -216,7 +216,7 @@ namespace MyMediaLite
 
 			throw new Exception(string.Format("index for {0}, {1} not found.", user_id, item_id));
 		}
-		
+
 		/// <inheritdoc/>
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
