@@ -44,7 +44,7 @@ namespace MyMediaLite.Eval
 		/// <param name="engine">Rating prediction engine</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, Ratings ratings)
+		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
@@ -66,12 +66,11 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
-		/*
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="engine">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<Ratings> split)
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -96,6 +95,5 @@ namespace MyMediaLite.Eval
 
 			return avg_results;
 		}
-		*/
 	}
 }

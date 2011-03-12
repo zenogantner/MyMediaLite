@@ -263,7 +263,6 @@ MyMediaLite rating prediction
 			if (load_model_file.Equals(string.Empty))
 			{
 				Console.Write(recommender.ToString());
-				/*
 				if (cross_validation > 0)
 				{
 					Console.WriteLine();
@@ -274,7 +273,6 @@ MyMediaLite rating prediction
 					recommender.Ratings = training_data;
 				}
 				else
-				*/
 				{
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
         			Console.Write(" training_time " + seconds + " ");

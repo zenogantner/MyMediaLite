@@ -43,8 +43,14 @@ namespace MyMediaLite.Data
 
 			// create index lists
 			List<int>[] train_indices = new List<int>[num_folds];
-			List<int>[] test_indices = new List<int>[num_folds];
+			List<int>[] test_indices  = new List<int>[num_folds];
 
+			for (int i = 0; i < num_folds; i++)
+			{
+				train_indices[i] = new List<int>();
+				test_indices[i]  = new List<int>();
+			}
+			
 			// assign indices to folds
 			foreach (int i in random_indices)
 				for (int j = 0; j < num_folds; j++)
