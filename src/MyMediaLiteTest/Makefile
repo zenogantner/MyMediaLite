@@ -69,6 +69,7 @@ FILES =  \
 	Correlation/PearsonTest.cs \
 	Data/EntityMappingTest.cs \
 	Data/RatingsTest.cs \
+	DataType/ListProxyTest.cs \
 	DataType/MatrixTest.cs \
 	DataType/MatrixUtilsTest.cs \
 	DataType/SkewSymmetricSparseMatrixTest.cs \
