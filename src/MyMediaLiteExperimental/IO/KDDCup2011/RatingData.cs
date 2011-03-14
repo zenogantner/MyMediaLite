@@ -28,7 +28,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <returns>the rating data</returns>
-		static public Ratings Read(string filename)
+		static public IRatings Read(string filename)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In);
@@ -40,10 +40,10 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <summary>Read in rating data from a TextReader</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <returns>the rating data</returns>
-		static public Ratings
+		static public IRatings
 			Read(TextReader reader)
 		{
-			var ratings = new Data.Ratings();
+			IRatings ratings = new Ratings();
 
 			string line;
 

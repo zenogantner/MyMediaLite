@@ -68,6 +68,9 @@
     <Compile Include="IO\KDDCup2011\RatingData.cs" />
     <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
     <Compile Include="Eval\KDDCup.cs" />
+    <Compile Include="Data\KDDCupItems.cs" />
+    <Compile Include="Taxonomy\KDDCupItemType.cs" />
+    <Compile Include="IO\KDDCup2011\Items.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -78,6 +81,8 @@
     <Folder Include="IO\" />
     <Folder Include="IO\KDDCup2011\" />
     <Folder Include="Eval\" />
+    <Folder Include="Data\" />
+    <Folder Include="Taxonomy\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
