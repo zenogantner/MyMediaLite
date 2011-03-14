@@ -83,6 +83,7 @@
     <Folder Include="Eval\" />
     <Folder Include="Data\" />
     <Folder Include="Taxonomy\" />
+    <Folder Include="Correlation\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

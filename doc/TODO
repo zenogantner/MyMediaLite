@@ -66,6 +66,7 @@ Architecture
        - rename to Similarity (instead of Correlation)?
      - combine arbitrary similarity matrices
      - user-defined similarities
+     - re-integrate adjusted cosine (port to new rating data structure)
    - slope-one
        - different weighting schemes
  - distributed/parallel computing

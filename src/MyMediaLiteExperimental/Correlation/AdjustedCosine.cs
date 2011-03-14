@@ -43,7 +43,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="shrinkage">a shrinkage parameter</param>
 		/// <returns>the complete AdjustedCosine matrix</returns>
-		static public CorrelationMatrix Create(Ratings ratings, EntityType entity_type, float shrinkage)
+		static public CorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
 		{
 			AdjustedCosine cm;
 			int num_entities = 0;
@@ -74,17 +74,17 @@ namespace MyMediaLite.Correlation
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter</param>
-		public static float ComputeCorrelation(Ratings ratings, EntityType entity_type, int i, int j, float shrinkage)
+		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
 				return 1;
 
-			Ratings ratings1 = entity_type == EntityType.USER ? ratings.ByUser[i] : ratings.ByItem[i];
-			Ratings ratings2 = entity_type == EntityType.USER ? ratings.ByUser[j] : ratings.ByItem[j];
+			IList<int> ratings1 = (entity_type == EntityType.USER) ? ratings.ByUser[i] : ratings.ByItem[i];
+			IList<int> ratings2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
 
 			// get common ratings for the two entities
-			HashSet<int> e1 = entity_type == EntityType.USER ? ratings1.GetItems() : ratings1.GetUsers();
-			HashSet<int> e2 = entity_type == EntityType.USER ? ratings2.GetItems() : ratings2.GetUsers();
+			HashSet<int> e1 = (entity_type == EntityType.USER) ? ratings.GetItems(ratings1) : ratings.GetUsers(ratings1);
+			HashSet<int> e2 = (entity_type == EntityType.USER) ? ratings.GetItems(ratings2) : ratings.GetUsers(ratings2);
 
 			e1.IntersectWith(e2);
 
@@ -107,13 +107,13 @@ namespace MyMediaLite.Correlation
 				double r2 = 0;
 				if (entity_type == EntityType.USER)
 				{
-					r1 = ratings1.FindRating(i, other_entity_id).rating;
-					r2 = ratings2.FindRating(j, other_entity_id).rating;
+					r1 = ratings.Get(i, other_entity_id, ratings1);
+					r2 = ratings.Get(j, other_entity_id, ratings2);
 				}
 				else
 				{
-					r1 = ratings1.FindRating(other_entity_id, i).rating;
-					r2 = ratings2.FindRating(other_entity_id, j).rating;
+					r1 = ratings.Get(other_entity_id, i, ratings1);
+					r2 = ratings.Get(other_entity_id, j, ratings2);
 				}
 
 				double dev_i = r1 - average_rating;
@@ -137,7 +137,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute correlations for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		public override void ComputeCorrelations(Ratings ratings, EntityType entity_type)
+		public override void ComputeCorrelations(IRatings ratings, EntityType entity_type)
 		{
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
