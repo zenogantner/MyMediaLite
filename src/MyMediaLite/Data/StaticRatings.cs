@@ -20,6 +20,12 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
+	/// <summary>Array-based storage for rating data.</summary>
+	/// <remarks>
+	/// Very memory-efficient.
+	/// 
+	/// This data structure does NOT support online updates.
+	/// </remarks>
 	public class StaticRatings : Ratings
 	{
 		/// <summary>The position where the next rating will be stored</summary>

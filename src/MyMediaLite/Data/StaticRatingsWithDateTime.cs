@@ -23,21 +23,22 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Data
 {
 	/// <summary>Rating data structure for ratings with time stamps</summary>
-	public class RatingsWithDateTime : Ratings
+	/// <remarks>This data structure does NOT support online updates.</remarks>
+	public class StaticRatingsWithDateTime : StaticRatings
 	{
 		/// <summary>List of DateTime values for each rating event</summary>
 		public IList<DateTime> DateTimes { get; private set; }
 		
-		/// <summary>Create a new RatingsWithDateTime object</summary>
-		public RatingsWithDateTime() : base()
+		/// <summary>Create a new StaticRatingsWithDateTime object</summary>
+		/// <param name="size">the number of ratings</param>
+		public StaticRatingsWithDateTime(int size) : base(size)
 		{
-			DateTimes = new List<DateTime>();
+			DateTimes = new DateTime[size];
 		}
 		
-		/// <inheritdoc/>
 		public void Add(int user_id, int item_id, double rating, DateTime datetime)
 		{
-			DateTimes.Add(datetime);
+			DateTimes[pos] = datetime; // must be before base.Add because pos changes in there ...
 			base.Add(user_id, item_id, rating);
 		}
 	}

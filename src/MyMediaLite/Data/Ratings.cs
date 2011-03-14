@@ -20,10 +20,17 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
+	// TODO use this for optimizing away the ByUser or ByItem indices
+	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
 
 	// TODO optimize some index accesses via slicing
 
+	/// <summary>Data structure for storing ratings</summary>
+	/// <remarks>
+	/// Small memory overhead for added flexibility.
+	/// 
+	/// This data structure supports online updates.
+	/// </remarks>
 	public class Ratings : IRatings
 	{
 		/// <inheritdoc/>
@@ -38,13 +45,13 @@ namespace MyMediaLite.Data
 		/// <inheritdoc/>
 		public int Count { get { return Values.Count; } }
 
-		public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
+		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
 
-		// TODO try size reservation optimization
+		/// <summary>Create a new Ratings object</summary>
 		public Ratings()
 		{
-			Users = new List<int>();
-			Items = new List<int>();
+			Users  = new List<int>();
+			Items  = new List<int>();
 			Values = new List<double>();
 		}
 
@@ -52,8 +59,6 @@ namespace MyMediaLite.Data
 		public int MaxUserID { get; protected set; }
 		/// <inheritdoc/>
 		public int MaxItemID { get; protected set; }
-
-		// TODO explicit commands to build indices?
 
 		/// <inheritdoc/>
 		public IList<IList<int>> ByUser

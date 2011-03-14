@@ -135,6 +135,7 @@
     <Compile Include="Data\RatingsProxy.cs" />
     <Compile Include="DataType\ListProxy.cs" />
     <Compile Include="Data\RatingCrossValidationSplit.cs" />
+    <Compile Include="Data\StaticRatingsWithDateTime.cs" />
     <Compile Include="Data\RatingsWithDateTime.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

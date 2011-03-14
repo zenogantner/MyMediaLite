@@ -7,7 +7,8 @@
           - CanPredict() is now part of the IRecommender interface.
           - rename IO.RatingPredictionData to IO.RatingPrediction
           - rename IO.ItemRecommenderData to IO.ItemRecommendation
-          - add rating data structures with time stamps
+          - add rating data structures with time stamps: RatingsWithDateTime
+            and StaticRatingsWithDateTime
         - IO
           - add routines for KDD Cup 2011 data
         - example programs
