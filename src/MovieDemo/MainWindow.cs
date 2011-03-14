@@ -594,7 +594,7 @@ public partial class MainWindow : Window
 
 		using ( var reader = new StreamReader("../../../../saved_data/user-ratings-" + name) )
 		{
-			Ratings user_ratings = RatingPrediction.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+			IRatings user_ratings = RatingPrediction.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 
 			for (int i = 0; i < user_ratings.Count; i++)
 			{

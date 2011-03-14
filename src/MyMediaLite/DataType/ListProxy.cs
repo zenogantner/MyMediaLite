@@ -60,7 +60,12 @@ namespace MyMediaLite.DataType
 		public void Clear() { throw new NotSupportedException(); }
 
 		/// <inheritdoc/>
-		public bool Contains(T item) { return list.Contains(item); }
+		public bool Contains(T item) {
+			foreach (int index in indices)
+				if (list[index].Equals(item))
+					return true;
+			return false;
+		}
 
 		/// <inheritdoc/>
 		public void CopyTo(T[] array, int i) { throw new NotImplementedException(); }

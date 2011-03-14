@@ -36,8 +36,8 @@ public class MappingRatingPrediction
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
 	// data sets
-	static Ratings training_data;
-	static Ratings test_data;
+	static IRatings training_data;
+	static IRatings test_data;
 
 	static MF_Mapping recommender;
 	static MF_ItemMapping mf_map = new MF_ItemMapping();
@@ -144,7 +144,7 @@ public class MappingRatingPrediction
 		EntityMapping item_mapping = new EntityMapping();
 
 		// training data
-		training_data = RatingPrediction.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
+		training_data = MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -166,7 +166,7 @@ public class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = RatingPrediction.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
+        test_data = MyMediaLite.IO.RatingPrediction.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
@@ -220,7 +220,7 @@ public class MappingRatingPrediction
 			seconds = Utils.MeasureTime(
 		    	delegate() {
 					Console.WriteLine();
-					MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);

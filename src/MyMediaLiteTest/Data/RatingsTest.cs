@@ -91,7 +91,9 @@ namespace MyMediaLiteTest
 
 			Assert.AreEqual(0.4, ratings.Get(2, 5));
 			ratings.RemoveUser(2);
-			Assert.IsNull(ratings.Get(2, 5));
+			
+			double rating;
+			Assert.IsFalse(ratings.TryGet(2, 5, out rating));
 		}
 
 		[Test()] public void TestRemoveItem()

@@ -40,40 +40,36 @@ namespace MyMediaLiteTest
 			return new int[] { 2, 4, 6, 8, 10 };
 		}
 
-		[Test()]
-		public void TestIndex()
+		[Test()] public void TestIndex()
 		{
 			var list_proxy = new ListProxy<int>(CreateSequence(), CreateOddSequence());
 
 			for (int i = 0; i < list_proxy.Count; i++)
-				Assert.AreEqual(i * 2 + 1, list_proxy[i]);
+				Assert.AreEqual(i * 2 + 2, list_proxy[i]);
 		}
 
-		[Test()]
-		public void TestCount()
+		[Test()] public void TestCount()
 		{
 			var list_proxy = new ListProxy<int>(CreateSequence(), CreateOddSequence());
 
 			Assert.AreEqual(CreateOddSequence().Count, list_proxy.Count);
 		}
 
-		[Test()]
-		public void TestIsReadOnly()
+		[Test()] public void TestIsReadOnly()
 		{
 			var list_proxy = new ListProxy<int>(CreateSequence(), CreateOddSequence());
 
 			Assert.IsTrue(list_proxy.IsReadOnly);
 		}
 
-		[Test()]
-		public void TestContains()
+		[Test()] public void TestContains()
 		{
 			var list_proxy = new ListProxy<int>(CreateSequence(), CreateOddSequence());
 
-			foreach (int num in CreateOddSequence())
-				Assert.IsTrue(list_proxy.Contains(num));
-
 			foreach (int num in CreateEvenSequence())
+				Assert.IsTrue(list_proxy.Contains(num));
+			
+			foreach (int num in CreateOddSequence())
 				Assert.IsFalse(list_proxy.Contains(num));
 		}
 	}
