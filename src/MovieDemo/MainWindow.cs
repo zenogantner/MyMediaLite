@@ -122,9 +122,9 @@ public partial class MainWindow : Window
 		//string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
 		//Console.Error.WriteLine("done.");
 
-		foreach (var item_ratings in recommender.Ratings.ByItem)
-			if (item_ratings.Count > 0)
-				movies_by_frequency.Add( new WeightedItem(item_ratings[0].item_id, item_ratings.Count) );
+		foreach (var indices_for_item in recommender.Ratings.ByItem)
+			if (indices_for_item.Count > 0)
+				movies_by_frequency.Add( new WeightedItem(recommender.Ratings.Items[indices_for_item[0]], indices_for_item.Count) );
 		movies_by_frequency.Sort();
 		movies_by_frequency.Reverse();
 		for (int i = 0; i < n_movies; i++)
@@ -594,12 +594,12 @@ public partial class MainWindow : Window
 
 		using ( var reader = new StreamReader("../../../../saved_data/user-ratings-" + name) )
 		{
-			RatingData user_ratings = RatingPrediction.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+			Ratings user_ratings = RatingPrediction.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
 
-			foreach (RatingEvent r in user_ratings.All)
+			for (int i = 0; i < user_ratings.Count; i++)
 			{
-				ratings[r.item_id] = r.rating;
-				current_user_id = r.user_id;
+				ratings[user_ratings.Items[i]] = user_ratings[i];
+				current_user_id = user_ratings.Users[i]; // TODO check whether user ID is the same for all ratings
 			}
 		}
 	}
