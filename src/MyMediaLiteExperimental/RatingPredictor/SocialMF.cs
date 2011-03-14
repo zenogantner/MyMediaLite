@@ -84,7 +84,7 @@ namespace MyMediaLite.RatingPrediction
 			// learn model parameters
             global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
             for (int current_iter = 0; current_iter < NumIter; current_iter++)
-				Iterate(ratings.All, true, true);
+				Iterate(ratings.RandomIndex, true, true);
 		}
 
 		/// <inheritdoc/>
@@ -104,10 +104,10 @@ namespace MyMediaLite.RatingPrediction
 
 			// I.1 prediction error
 			double rating_range_size = MaxRating - MinRating;
-			foreach (RatingEvent rating in ratings)
+			for (int index = 0; index < ratings.Count; index++)
             {
-            	int u = rating.user_id;
-                int i = rating.item_id;
+            	int u = ratings.Users[index];
+                int i = ratings.Items[index];
 
 				// prediction
 				double score = global_bias;
@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
                 double prediction = MinRating + sig_score * rating_range_size;
-				double error      = rating.rating - prediction;
+				double error      = ratings[index] - prediction;
 
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 

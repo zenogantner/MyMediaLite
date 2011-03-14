@@ -62,8 +62,8 @@ namespace MyMediaLite.AttrToFactor
 
 			// create helper data structure
 			this.data_item = new SparseBooleanMatrix();
-			foreach (RatingEvent r in Ratings.All)
-				data_item[r.item_id, r.user_id] = true;
+			for (int i = 0; i < ratings.Count; i++)
+				data_item[ratings.Items[i], ratings.Users[i]] = true;
 
 			// create attribute-to-factor weight matrix
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
