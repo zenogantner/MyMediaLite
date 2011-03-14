@@ -2,10 +2,12 @@
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
         - API changes
-          - new data structures and interfaces for rating predictions
+          - new data structures and interfaces for rating predictions (consume
+            less memory)
           - CanPredict() is now part of the IRecommender interface.
           - rename IO.RatingPredictionData to IO.RatingPrediction
           - rename IO.ItemRecommenderData to IO.ItemRecommendation
+          - add rating data structures with time stamps
         - IO
           - add routines for KDD Cup 2011 data
         - example programs
