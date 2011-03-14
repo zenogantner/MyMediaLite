@@ -135,6 +135,7 @@
     <Compile Include="Data\RatingsProxy.cs" />
     <Compile Include="DataType\ListProxy.cs" />
     <Compile Include="Data\RatingCrossValidationSplit.cs" />
+    <Compile Include="Data\RatingsWithDateTime.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

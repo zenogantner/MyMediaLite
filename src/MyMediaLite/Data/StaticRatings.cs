@@ -23,7 +23,7 @@ namespace MyMediaLite.Data
 	public class StaticRatings : Ratings
 	{
 		/// <summary>The position where the next rating will be stored</summary>
-		private int pos = 0;
+		protected int pos = 0;
 		
 		/// <inheritdoc/>
 		public StaticRatings(int size)
