@@ -26,12 +26,14 @@ namespace MyMediaLite.DataType
 		IList<T> list;
 		IList<int> indices;
 
+		/// <inheritdoc/>
 		public ListProxy(IList<T> list, IList<int> indices)
 		{
 			this.list = list;
 			this.indices = indices;
 		}
 
+		/// <inheritdoc/>
 		public T this[int index]
 		{
 			get {
@@ -42,29 +44,40 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		public int Count { get { return list.Count; } }
+		/// <inheritdoc/>
+		public int Count { get { return indices.Count; } }
 
+		/// <inheritdoc/>
 		public bool IsReadOnly { get { return true; } }
 
-
+		/// <inheritdoc/>
 		public void Add(T item) { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		public void Clear() { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		public bool Contains(T item) { return list.Contains(item); }
 
+		/// <inheritdoc/>
 		public void CopyTo(T[] array, int i) { throw new NotImplementedException(); }
 
+		/// <inheritdoc/>
 		public void Insert(int index, T item) { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		public int IndexOf(T item) { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		public bool Remove(T item) { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		public void RemoveAt(int index) { throw new NotSupportedException(); }
 
+		/// <inheritdoc/>
 		IEnumerator IEnumerable.GetEnumerator() { return list.GetEnumerator(); }
 
+		/// <inheritdoc/>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator() { return list.GetEnumerator(); }
 	}
 }

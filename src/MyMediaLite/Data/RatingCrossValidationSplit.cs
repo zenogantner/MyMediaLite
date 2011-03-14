@@ -59,7 +59,7 @@ namespace MyMediaLite.Data
 					else
 						train_indices[j].Add(i);
 
-			// create data structures
+			// create split data structures
 			Train = new List<IRatings>(num_folds);
 			Test  = new List<IRatings>(num_folds);
 			for (int i = 0; i < num_folds; i++)
