@@ -34,7 +34,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public StaticRatings Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+		static public IRatings Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			int size = 0;
 			using ( var reader = new StreamReader(filename) )
@@ -53,7 +53,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public StaticRatings
+		static public IRatings
 			Read(TextReader reader,	int size, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			var ratings = new StaticRatings(size);

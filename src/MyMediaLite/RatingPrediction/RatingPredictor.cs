@@ -117,14 +117,14 @@ namespace MyMediaLite.RatingPrediction
 		public virtual void RemoveUser(int user_id)
 		{
 			if (user_id == MaxUserID)
-				MaxUserID++;
+				MaxUserID--;
 		}
 
 		/// <inheritdoc/>
 		public virtual void RemoveItem(int item_id)
 		{
 			if (item_id == MaxItemID)
-				MaxItemID++;
+				MaxItemID--;
 		}
 	}
 }

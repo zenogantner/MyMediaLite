@@ -36,8 +36,8 @@ public class RatingPrediction
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
 	// data sets
-	static Ratings training_data;
-	static Ratings test_data;
+	static IRatings training_data;
+	static IRatings test_data;
 
 	// recommenders
 	static RatingPredictor recommender = null;
@@ -303,7 +303,7 @@ MyMediaLite rating prediction
 				seconds = Utils.MeasureTime(
 			    	delegate() {
 						Console.WriteLine();
-						MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+						MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
 					}
 				);
 				Console.Error.Write("predicting_time " + seconds);
@@ -324,9 +324,9 @@ MyMediaLite rating prediction
 
 		// read training data
 
-		//if (movielens1m_format)
-		//	training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
-		//else
+		if (movielens1m_format)
+			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+		else
 			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
@@ -373,9 +373,9 @@ MyMediaLite rating prediction
 			}
 
 		// read test data
-		//if (movielens1m_format) // TODO re-activate
-		//	test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
-		//else
+		if (movielens1m_format) // TODO re-activate
+			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+		else
 			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 	}
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,7 +21,7 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
-namespace MyMediaLite.eval
+namespace MyMediaLite.Eval
 {
 	/// <summary>Class that contains static methods for rating prediction</summary>
 	public class RatingPrediction
@@ -34,7 +34,7 @@ namespace MyMediaLite.eval
 		/// <param name="writer">the TextWriter to write the predictions to</param>
 		public static void WritePredictions(
 			IRatingPredictor engine,
-			Ratings ratings,
+			IRatings ratings,
 			EntityMapping user_mapping, EntityMapping item_mapping,
 			TextWriter writer)
 		{
@@ -56,7 +56,7 @@ namespace MyMediaLite.eval
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		public static void WritePredictions(
 			IRatingPredictor engine,
-			Ratings ratings,
+			IRatings ratings,
 			EntityMapping user_mapping, EntityMapping item_mapping,
 			string filename)
 		{
