@@ -31,7 +31,7 @@ namespace MyMediaLite.Data
 		IList<int> Items { get; }
 		/// <summary>the rating entries</summary>
 		IList<double> Values { get; }
-		
+
 		/// <summary>get the rating value for a given index</summary>
 		/// <param name="index">the index</param>
 		double this[int index] { get; }
@@ -75,30 +75,83 @@ namespace MyMediaLite.Data
 		/// <returns>the set of itemss</returns>
 		HashSet<int> GetItems(IList<int> indices);
 
+		/// <summary>Directly access rating by user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
 		double this[int user_id, int item_id] { get; }
 
+		/// <summary>Directly access rating by user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <returns>the first found rating of the given item by the given user</returns>
 		double Get(int user_id, int item_id);
 
+		/// <summary>Try to retrieve a rating for a given user-item combination</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">will contain the first rating encountered that matches the user ID and item ID</param>
+		/// <returns>true if a rating was found for the user and item</returns>
 		bool TryGet(int user_id, int item_id, out double rating);
 
+		/// <summary>Try to retrieve a rating for a given user-item combination</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="indexes">the indexes to look at</param>
+		/// <param name="rating">will contain the first rating encountered that matches the user ID and item ID</param>
+		/// <returns>true if a rating was found for the user and item</returns>
 		bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating);
 
+		/// <summary>Directly access rating by user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="indexes">the indexes to look at</param>
+		/// <returns>the first rating encountered that matches the user ID and item ID</returns>
 		double Get(int user_id, int item_id, ICollection<int> indexes);
 
+		/// <summary>Get index of rating for given user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <returns>the index of the first rating encountered that matches the user ID and item ID</returns>
 		int GetIndex(int user_id, int item_id);
 
+		/// <summary>Get index of rating for given user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="indexes">the indexes to look at</param>
+		/// <returns>the index of the first rating encountered that matches the user ID and item ID</returns>
 		int GetIndex(int user_id, int item_id, ICollection<int> indexes);
 
+		/// <summary>Try to get the index for given user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="index">will contain the index of the first rating encountered that matches the user ID and item ID</param>
+		/// <returns>true if an index was found for the user and item</returns>
 		bool TryGetIndex(int user_id, int item_id, out int index);
 
+		/// <summary>Try to get the index for given user and item</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="indexes">the indexes to look at</param>
+		/// <param name="index">will contain the index of the first rating encountered that matches the user ID and item ID</param>
+		/// <returns>true if an index was found for the user and item</returns>
 		bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index);
 
+		/// <summary>Add a new rating</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">the rating value</param>
 		void Add(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
 
+		/// <summary>Remove rating at a given position</summary>
+		/// <param name="index">the position of the rating to remove</param>
 		void RemoveAt(int index);
-		
+
+		/// <summary>Remove all ratings by a given user</summary>
+		/// <param name="user_id">the user ID</param>
 		void RemoveUser(int user_id);
-		
+
+		/// <summary>Remove all ratings of a given item</summary>
+		/// <param name="item_id">the item ID</param>
 		void RemoveItem(int item_id);
 	}
 }

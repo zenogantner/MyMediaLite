@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>Iterate once over rating data and adjust corresponding factors (stochastic gradient descent)</summary>
-		/// <param name="ratings"><see cref="Ratings"/> object containing the ratings to iterate over</param>
+		/// <param name="rating_indices">a list of indices pointing to the ratings to iterate over</param>
 		/// <param name="update_user">true if user factors to be updated</param>
 		/// <param name="update_item">true if item factors to be updated</param>
 		protected virtual void Iterate(IList<int> rating_indices, bool update_user, bool update_item)

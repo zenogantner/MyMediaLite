@@ -27,13 +27,13 @@ namespace MyMediaLite.Data
 	{
 		/// <summary>List of DateTime values for each rating event</summary>
 		public IList<DateTime> DateTimes { get; private set; }
-		
+
 		/// <summary>Create a new RatingsWithDateTime object</summary>
 		public RatingsWithDateTime() : base()
 		{
 			DateTimes = new List<DateTime>();
 		}
-		
+
 		/// <inheritdoc/>
 		public void Add(int user_id, int item_id, double rating, DateTime datetime)
 		{

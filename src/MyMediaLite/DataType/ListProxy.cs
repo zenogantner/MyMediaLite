@@ -21,12 +21,15 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.DataType
 {
+	/// <summary>Proxy class that allows access to selected elements of an underlying list data structure</summary>
 	public class ListProxy<T> : IList<T>
 	{
 		IList<T> list;
 		IList<int> indices;
 
-		/// <inheritdoc/>
+		/// <summary>Create a new ListProxy object</summary>
+		/// <param name="list">the list to proxy</param>
+		/// <param name="indices">an index list pointing to entries in the list</param>
 		public ListProxy(IList<T> list, IList<int> indices)
 		{
 			this.list = list;

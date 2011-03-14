@@ -88,7 +88,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		protected virtual void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			// We ignore the method's arguments.
 			IterateBatch();

@@ -22,6 +22,7 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.IO.KDDCup2011
 {
+	/// <summary>Routines for reading in the item taxonomy of the KDD Cup 2011 data</summary>
 	public class Items
 	{
 		/// <summary>Read in the item data from several files</summary>
@@ -45,6 +46,9 @@ namespace MyMediaLite.IO.KDDCup2011
 			return items;
 		}
 
+		/// <summary>Read the track data</summary>
+		/// <param name="reader">a reader object to read the data from</param>
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>
 		static public void ReadTracks(TextReader reader, KDDCupItems items)
 		{
 			string line;
@@ -65,6 +69,9 @@ namespace MyMediaLite.IO.KDDCup2011
 			}
 		}
 
+		/// <summary>Read the album data</summary>
+		/// <param name="reader">a reader object to read the data from</param>
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
 		static public void ReadAlbums(TextReader reader, KDDCupItems items)
 		{
 			string line;
@@ -80,10 +87,13 @@ namespace MyMediaLite.IO.KDDCup2011
 				for (int i = 0; i < genres.Length; i++)
 					genres[i] = int.Parse(tokens[2 + i]);
 
-				items.Insert(album_id, KDDCupItemType.Album, -1, artist_id, genres);
+				items.Insert(album_id, KDDCupItemType.Album, album_id, artist_id, genres);
 			}
 		}
 
+		/// <summary>Read the artist data</summary>
+		/// <param name="reader">a reader object to read the data from</param>
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
 		static public void ReadArtists(TextReader reader, KDDCupItems items)
 		{
 			string line;
@@ -92,10 +102,13 @@ namespace MyMediaLite.IO.KDDCup2011
 			{
 				int artist_id = int.Parse(line);
 
-				items.Insert(artist_id, KDDCupItemType.Artist, -1, -1, null);
+				items.Insert(artist_id, KDDCupItemType.Artist, -1, artist_id, null);
 			}
 		}
 
+		/// <summary>Read the genre data</summary>
+		/// <param name="reader">a reader object to read the data from</param>
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
 		static public void ReadGenres(TextReader reader, KDDCupItems items)
 		{
 			string line;

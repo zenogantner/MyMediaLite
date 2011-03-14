@@ -21,35 +21,41 @@ using System.IO;
 
 namespace MyMediaLite.Eval
 {
+	/// <summary>Evaluation and prediction routines for the KDD Cup 2011</summary>
 	public class KDDCup
 	{
-		public static void PredictTrack2(Dictionary<int, int[]> candidates, IRecommender recommender, string filename)
+		/// <summary>Predict items for Track 2</summary>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="filename">the file to write the predictions to</param>
+		public static void PredictTrack2(Dictionary<int, IList<int>> candidates, IRecommender recommender, string filename)
 		{
 			using (var writer = new StreamWriter(filename))
 				PredictTrack2(candidates, recommender, writer);
 		}
 
-		public static void PredictTrack2(Dictionary<int, int[]> candidates, IRecommender recommender, TextWriter writer)
+		/// <summary>Predict items for Track 2</summary>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="writer">the writer object to write the predictions to</param>
+		public static void PredictTrack2(Dictionary<int, IList<int>> candidates, IRecommender recommender, TextWriter writer)
 		{
 			foreach (int user_id in candidates.Keys)
 			{
-				int[] user_candidates = candidates[user_id];
-				
-				var predictions = new double[user_candidates.Length];
-				for (int i = 0; i < user_candidates.Length; i++)
+				IList<int> user_candidates = candidates[user_id];
+
+				var predictions = new double[user_candidates.Count];
+				for (int i = 0; i < user_candidates.Count; i++)
 					predictions[i] = recommender.Predict(user_id, user_candidates[i]);
-				
-				
+
 				var positions = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
 				positions.Sort(delegate(int pos1, int pos2) { return predictions[pos2].CompareTo(predictions[pos1]); } );
-				
-				for (int i = 0; i < user_candidates.Length; i++)
+
+				for (int i = 0; i < user_candidates.Count; i++)
 					if (positions.IndexOf(i) < 3)
 						writer.WriteLine("1");
-						//writer.WriteLine("1 {0}", predictions[i]);
 					else
 						writer.WriteLine("0");
-						//writer.WriteLine("0 {0}", predictions[i]);
 			}
 		}
 	}

@@ -22,14 +22,18 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
+	/// <summary>Data structure that allows access to selected entries of a rating data structure</summary>
 	public class RatingsProxy : Ratings
 	{
+		/// <summary>Create a RatingsProxy object</summary>
+		/// <param name="ratings">a ratings data structure</param>
+		/// <param name="indices">an index list pointing to entries in the ratings</param>
 		public RatingsProxy(IRatings ratings, IList<int> indices)
 		{
 			Users  = new ListProxy<int>(ratings.Users, indices);
 			Items  = new ListProxy<int>(ratings.Items, indices);
 			Values = new ListProxy<double>(ratings.Values, indices);
-			
+
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;
 		}

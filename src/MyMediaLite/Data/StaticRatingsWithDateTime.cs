@@ -28,14 +28,15 @@ namespace MyMediaLite.Data
 	{
 		/// <summary>List of DateTime values for each rating event</summary>
 		public IList<DateTime> DateTimes { get; private set; }
-		
+
 		/// <summary>Create a new StaticRatingsWithDateTime object</summary>
 		/// <param name="size">the number of ratings</param>
 		public StaticRatingsWithDateTime(int size) : base(size)
 		{
 			DateTimes = new DateTime[size];
 		}
-		
+
+		/// <inheritdoc/>
 		public void Add(int user_id, int item_id, double rating, DateTime datetime)
 		{
 			DateTimes[pos] = datetime; // must be before base.Add because pos changes in there ...
