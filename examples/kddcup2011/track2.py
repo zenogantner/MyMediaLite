@@ -26,5 +26,5 @@ print "Training ..."
 recommender.Train()
 print "done."
 
-# measure the accuracy on the test data set
+# predict on test data set
 Eval.KDDCup.PredictTrack2(test_data, recommender, "output.txt")
