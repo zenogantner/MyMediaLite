@@ -58,8 +58,8 @@ namespace MyMediaLite.ItemRecommendation
         /// <inheritdoc/>
         public override void Train()
         {
-			int num_users = data_user.NumberOfRows;
-			int num_items = data_item.NumberOfRows;
+			int num_users = Feedback.UserMatrix.NumberOfRows;
+			int num_items = Feedback.ItemMatrix.NumberOfRows;
 
 			var svm_features = new List<Node[]>();
 
@@ -76,7 +76,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				var targets = new double[num_items];
 				for (int i = 0; i < num_items; i++)
-					targets[i] = data_user[u, i] ? 1 : 0;
+					targets[i] = Feedback.UserMatrix[u, i] ? 1 : 0;
 
 				Problem svm_problem = new Problem(svm_features.Count, targets, svm_features_array, NumItemAttributes - 1); // TODO check
 				models[u] = SVM.Training.Train(svm_problem, svm_parameters);

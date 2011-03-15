@@ -56,7 +56,7 @@ namespace MyMediaLite.AttrToFactor
 			while (true)
 			{
 				int user_id = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = data_user[user_id];
+				HashSet<int> user_items = Feedback.UserMatrix[user_id];
 				HashSet<int> user_attrs = user_attributes[user_id];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;
@@ -163,9 +163,9 @@ namespace MyMediaLite.AttrToFactor
 			double[] rmse_and_penalty_per_factor = new double[num_factors];
 
 			int num_users = 0;
-			for (int i = 0; i < MaxUserID + 1; i++)
+			for (int i = 0; i <= MaxUserID; i++)
 			{
-				HashSet<int> user_items = data_user[i];
+				HashSet<int> user_items = Feedback.UserMatrix[i];
 				HashSet<int> user_attrs = user_attributes[i];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;

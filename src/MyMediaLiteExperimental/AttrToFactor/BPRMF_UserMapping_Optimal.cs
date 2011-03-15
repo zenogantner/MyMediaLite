@@ -47,7 +47,7 @@ namespace MyMediaLite.AttrToFactor
 		public override void IterateMapping()
 		{
 
-			int num_pos_events = data_user.NumberOfEntries;
+			int num_pos_events = Feedback.Count;
 
 			for (int i = 0; i < num_pos_events / 250; i++)
 			{

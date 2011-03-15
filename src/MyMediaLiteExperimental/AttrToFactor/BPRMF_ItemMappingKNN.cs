@@ -58,7 +58,7 @@ namespace MyMediaLite.AttrToFactor
 			{
 				if (item_id2 >= item_factors.dim1) // check whether item is in training data
 					continue;
-				if (data_item[item_id2].Count == 0)
+				if (Feedback.ItemMatrix[item_id2].Count == 0)
 					continue;
 
 				double weight = item_correlation[item_id, item_id2];

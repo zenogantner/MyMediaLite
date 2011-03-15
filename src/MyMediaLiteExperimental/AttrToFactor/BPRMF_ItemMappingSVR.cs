@@ -47,7 +47,7 @@ namespace MyMediaLite.AttrToFactor
 			for (int i = 0; i < MaxItemID + 1; i++)
 			{
 				// ignore items w/o collaborative data
-				if (data_item[i].Count == 0)
+				if (Feedback.ItemMatrix[i].Count == 0)
 					continue;
 				// ignore items w/o attribute data
 				if (item_attributes[i].Count == 0)

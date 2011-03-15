@@ -74,9 +74,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			Console.Error.Write(".");
 
-			int num_pos_events = data_user.NumberOfEntries;
-
-			for (int i = 0; i < num_pos_events / 50; i++)
+			for (int i = 0; i < Feedback.Count / 50; i++)
 			{
 				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
