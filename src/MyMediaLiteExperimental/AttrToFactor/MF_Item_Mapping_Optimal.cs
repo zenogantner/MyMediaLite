@@ -21,7 +21,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.AttrToFactor
 {
-	/// <summary>biased MF with item mapping, optimized for RMSE on the ratings</summary>	
+	/// <summary>biased MF with item mapping, optimized for RMSE on the ratings</summary>
 	public class MF_Item_Mapping_Optimal : MF_ItemMapping
 	{
 		/// <inheritdoc/>
@@ -34,7 +34,7 @@ namespace MyMediaLite.AttrToFactor
 				IterateMapping();
 		}
 
-		/// <summary>One (stochastic) pass over the training data</summary>
+		/// <summary>One pass over the training data</summary>
 		public override void IterateMapping()
 		{
 			//var factor_bias_gradient         = new double[factor_bias.Length];
@@ -55,29 +55,33 @@ namespace MyMediaLite.AttrToFactor
 			}
 
 			// 2. compute gradients
-			foreach (RatingEvent r in Ratings.All)
+			for (int i = 0; i < ratings.Count; i++)
 			{
+				int user_id = ratings.Users[i];
+				int item_id = ratings.Items[i];
+
 		        double score =
-					MatrixUtils.RowScalarProduct(user_factors, r.user_id, item_latent_factors[r.item_id])
-					+ user_bias[r.user_id]
-					+ item_est_bias[r.item_id] // estimated item bias
+					MatrixUtils.RowScalarProduct(user_factors, user_id, item_latent_factors[item_id])
+					+ user_bias[user_id]
+					+ item_est_bias[item_id] // estimated item bias
 					+ global_bias;
 
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
                 double p = MinRating + sig_score * rating_range_size;
-				double err = r.rating - p;
+				double err = ratings[i] - p;
 
 				double gradient_common = err * sig_score * (1 - sig_score) * rating_range_size;
 
-				foreach (int a in ItemAttributes[r.item_id])
+				foreach (int a in ItemAttributes[item_id])
 				{
 					for (int f = 0; f < attribute_to_factor.dim2; f++)
-						attribute_to_factor_gradient[a, f] += gradient_common * user_factors[r.user_id, f] * attribute_to_factor[f, a];
+						attribute_to_factor_gradient[a, f] += gradient_common * user_factors[user_id, f] * attribute_to_factor[f, a];
 				}
 			}
 
 			// 3. gradient descent step
+			// TODO
 		}
 	}
 }

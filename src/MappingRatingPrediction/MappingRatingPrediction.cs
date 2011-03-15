@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,8 +36,8 @@ public class MappingRatingPrediction
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
 	// data sets
-	static RatingData training_data;
-	static RatingData test_data;
+	static IRatings training_data;
+	static IRatings test_data;
 
 	static MF_Mapping recommender;
 	static MF_ItemMapping mf_map = new MF_ItemMapping();
@@ -144,7 +144,7 @@ public class MappingRatingPrediction
 		EntityMapping item_mapping = new EntityMapping();
 
 		// training data
-		training_data = RatingPredictionData.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
+		training_data = MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -166,7 +166,7 @@ public class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = RatingPredictionData.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
+        test_data = MyMediaLite.IO.RatingPrediction.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
@@ -220,7 +220,7 @@ public class MappingRatingPrediction
 			seconds = Utils.MeasureTime(
 		    	delegate() {
 					Console.WriteLine();
-					MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);
@@ -250,16 +250,16 @@ public class MappingRatingPrediction
 	static void DisplayDataStats()
 	{
 		// training data stats
-		int num_users = training_data.All.GetUsers().Count;
-		int num_items = training_data.All.GetItems().Count;
+		int num_users = training_data.AllUsers.Count;
+		int num_items = training_data.AllItems.Count;
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
 		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
-		num_users = test_data.All.GetUsers().Count;
-		num_items = test_data.All.GetItems().Count;
+		num_users = test_data.AllUsers.Count;
+		num_items = test_data.AllItems.Count;
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;

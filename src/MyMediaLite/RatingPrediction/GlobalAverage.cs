@@ -31,9 +31,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			foreach (RatingEvent r in Ratings.All)
-				global_average += r.rating;
-			global_average /= Ratings.All.Count;
+			global_average = Ratings.Average;
 		}
 
 		/// <inheritdoc/>

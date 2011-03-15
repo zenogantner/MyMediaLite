@@ -32,6 +32,38 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected double global_average = 0;
 
+		/// <summary>return the average rating for a given entity</summary>
+		/// <param name="index">the entity index</param>
+		public double this [int index] { get { return entity_averages[index]; } }
+
+		/// <summary>Train the recommender according to the given entity type</summary>
+		/// <param name="entity_ids">list of the relevant entity IDs in the training data</param>
+		/// <param name="max_entity_id">the maximum entity ID</param>
+		protected void Train(IList<int> entity_ids, int max_entity_id)
+		{
+			var rating_counts = new List<int>();
+			for (int i = 0; i <= max_entity_id; i++)
+			{
+				rating_counts.Add(0);
+				entity_averages.Add(0);
+			}
+
+			for (int i = 0; i < Ratings.Count; i++)
+			{
+				int entity_id = entity_ids[i];
+				rating_counts[entity_id]++;
+				entity_averages[entity_id] += Ratings[i];
+			}
+
+			global_average = Ratings.Average;
+
+			for (int i = 0; i < entity_averages.Count; i++)
+				if (rating_counts[i] != 0)
+					entity_averages[i] /= rating_counts[i];
+				else
+					entity_averages[i] = global_average;
+		}
+
 		/// <inheritdoc/>
 		public override void SaveModel(string file)
 		{

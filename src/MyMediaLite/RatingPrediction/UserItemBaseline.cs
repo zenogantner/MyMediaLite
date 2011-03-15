@@ -57,10 +57,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			// compute global average
-			foreach (RatingEvent r in Ratings.All)
-				global_average += r.rating;
-			global_average /= Ratings.All.Count;
+			global_average = Ratings.Average;
 
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
@@ -69,20 +66,20 @@ namespace MyMediaLite.RatingPrediction
 			int[] item_ratings_count = new int[MaxItemID + 1];
 
 			// compute item biases
-			foreach (RatingEvent r in ratings)
+			for (int index = 0; index < Ratings.Count; index++)
 			{
-				item_biases[r.item_id] += r.rating - global_average;
-				item_ratings_count[r.item_id]++;
+				item_biases[Ratings.Items[index]] += Ratings[index] - global_average;
+				item_ratings_count[Ratings.Items[index]]++;
 			}
 			for (int i = 0; i < item_biases.Length; i++)
 				if (item_ratings_count[i] != 0)
 					item_biases[i] = item_biases[i] / (reg_i + item_ratings_count[i]);
 
 			// compute user biases
-			foreach (RatingEvent r in ratings)
+			for (int index = 0; index < Ratings.Count; index++)
 			{
-				user_biases[r.user_id] += r.rating - global_average - item_biases[r.item_id];
-				user_ratings_count[r.user_id]++;
+				user_biases[Ratings.Users[index]] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
+				user_ratings_count[Ratings.Users[index]]++;
 			}
 			for (int u = 0; u < user_biases.Length; u++)
 				if (user_ratings_count[u] != 0)
@@ -109,8 +106,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateUsers)
 			{
-				foreach (RatingEvent r in ratings.ByUser[user_id])
-					user_biases[user_id] += r.rating - global_average - item_biases[r.item_id];
+				foreach (int index in ratings.ByUser[user_id])
+					user_biases[user_id] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
 				if (ratings.ByUser[user_id].Count != 0)
 					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.ByUser[user_id].Count);
 			}
@@ -121,17 +118,17 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateItems)
 			{
-				foreach (RatingEvent r in ratings.ByItem[item_id])
-					item_biases[item_id] += r.rating - global_average;
+				foreach (int index in ratings.ByItem[item_id])
+					item_biases[item_id] += Ratings[index] - global_average;
 				if (ratings.ByItem[item_id].Count != 0)
 					item_biases[item_id] = item_biases[item_id] / (reg_i + ratings.ByItem[item_id].Count);
 			}
 		}
 
 		/// <inheritdoc/>
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, double rating)
 		{
-			base.AddRating(user_id, item_id, rating);
+			base.Add(user_id, item_id, rating);
 			RetrainItem(item_id);
 			RetrainUser(user_id);
 		}
@@ -192,7 +189,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				// TODO
 			}
-			Train();
+			Train(); // instead ;-)
 		}
 
 		/// <inheritdoc/>

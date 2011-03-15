@@ -30,14 +30,13 @@ namespace MyMediaLite.RatingPrediction
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc/>
-		public override RatingData Ratings
+		public override IRatings Ratings
 		{
-			set
-			{
+			set	{
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
-				foreach (RatingEvent r in ratings)
-				   	data_user[r.user_id, r.item_id] = true;
+				for (int index = 0; index < Ratings.Count; index++)
+					data_user[ratings.Users[index], ratings.Items[index]] = true;
 			}
 		}
 
@@ -68,10 +67,11 @@ namespace MyMediaLite.RatingPrediction
 			{
 				if (data_user[user_id2, item_id])
 				{
-					RatingEvent r = ratings.ByUser[user_id2].FindRating(user_id2, item_id);
+					double rating = ratings.Get(user_id2, item_id, ratings.ByUser[user_id2]);
+
 					double weight = correlation[user_id, user_id2];
 					weight_sum += weight;
-					sum += weight * (r.rating - base.Predict(user_id2, item_id));
+					sum += weight * (rating - base.Predict(user_id2, item_id));
 
 					if (--neighbors == 0)
 						break;
@@ -93,9 +93,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <inheritdoc/>
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, double rating)
 		{
-			base.AddRating(user_id, item_id, rating);
+			base.Add(user_id, item_id, rating);
 			data_user[user_id, item_id] = true;
 			RetrainUser(user_id);
 		}

@@ -1,4 +1,3 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -13,99 +12,332 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-//  You should have received a copy of the GNU General Public License
-//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU General Public License
+// along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Class representing a collection of ratings in a particular order</summary>
-	public class Ratings
+	// TODO use this for optimizing away the ByUser or ByItem indices
+	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
+
+	// TODO optimize some index accesses via slicing
+
+	/// <summary>Data structure for storing ratings</summary>
+	/// <remarks>
+	/// Small memory overhead for added flexibility.
+	/// 
+	/// This data structure supports online updates.
+	/// </remarks>
+	public class Ratings : IRatings
 	{
-		private List<RatingEvent> rating_list = new List<RatingEvent>();
+		/// <inheritdoc/>
+		public IList<int> Users { get; protected set; }
+		/// <inheritdoc/>
+		public IList<int> Items { get; protected set; }
+		/// <inheritdoc/>
+		public IList<double> Values { get; protected set; }
 
-		/// <summary>Number of ratings in the collection</summary>
-		public int Count { get { return rating_list.Count; }	}
+		/// <inheritdoc/>
+		public double this[int index] { get { return Values[index]; } }
+		/// <inheritdoc/>
+		public int Count { get { return Values.Count; } }
 
-		/// <summary>Average rating value in the collection</summary>
+		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
+
+		/// <summary>Create a new Ratings object</summary>
+		public Ratings()
+		{
+			Users  = new List<int>();
+			Items  = new List<int>();
+			Values = new List<double>();
+		}
+
+		/// <inheritdoc/>
+		public int MaxUserID { get; protected set; }
+		/// <inheritdoc/>
+		public int MaxItemID { get; protected set; }
+
+		/// <inheritdoc/>
+		public IList<IList<int>> ByUser
+		{
+			get {
+				if (by_user == null)
+					BuildUserIndices();
+				return by_user;
+			}
+		}
+		IList<IList<int>> by_user;
+
+		/// <inheritdoc/>
+		public void BuildUserIndices()
+		{
+			by_user = new IList<int>[MaxUserID + 1];
+			for (int u = 0; u <= MaxUserID; u++)
+				by_user[u] = new List<int>();
+
+			for (int index = 0; index < Count; index++)
+				by_user[Users[index]].Add(index);
+		}
+
+		/// <inheritdoc/>
+		public IList<IList<int>> ByItem
+		{
+			get {
+				if (by_item == null)
+					BuildItemIndices();
+				return by_item;
+			}
+		}
+		IList<IList<int>> by_item;
+
+		/// <inheritdoc/>
+		public void BuildItemIndices()
+		{
+			by_item = new IList<int>[MaxItemID + 1];
+			for (int i = 0; i <= MaxItemID; i++)
+				by_item[i] = new List<int>();
+
+			for (int index = 0; index < Count; index++)
+				by_item[Items[index]].Add(index);
+		}
+
+		/// <inheritdoc/>
+		public IList<int> RandomIndex
+		{
+			get {
+				if (random_index == null || random_index.Length != Values.Count)
+					BuildRandomIndex();
+
+				return random_index;
+			}
+		}
+		private int[] random_index;
+
+		/// <inheritdoc/>
+		public void BuildRandomIndex()
+		{
+			random_index = new int[Values.Count];
+			for (int index = 0; index < Values.Count; index++)
+				random_index[index] = index;
+			Util.Utils.Shuffle<int>(random_index);
+		}
+
+		// TODO speed up
+		/// <inheritdoc/>
 		public double Average
 		{
 			get {
 				double sum = 0;
-				foreach (RatingEvent r in rating_list)
-					sum += r.rating;
-				return sum / rating_list.Count;
+				for (int index = 0; index < Values.Count; index++)
+					sum += Values[index];
+				return (double) sum / Values.Count;
 			}
 		}
 
-		/// <summary>Access an event in the collection directly via an index</summary>
-		/// <param name="index">the index</param>
-		public RatingEvent this [int index] { get { return rating_list[index]; } }
-
-		/// <summary>Shuffle the order of the rating events</summary>
-		/// <remarks>
-		/// Fisher-Yates shuffle
-		/// </remarks>
-		public void Shuffle()
+		// TODO think whether we want to have a set or a list here
+		/// <inheritdoc/>
+		public HashSet<int> AllUsers
 		{
-			Utils.Shuffle<RatingEvent>(rating_list);
+			get {
+				var result_set = new HashSet<int>();
+				for (int index = 0; index < Values.Count; index++)
+					result_set.Add(Users[index]);
+				return result_set;
+			}
 		}
 
 		/// <inheritdoc/>
-		public IEnumerator GetEnumerator()
+		public HashSet<int> AllItems
 		{
-			return rating_list.GetEnumerator();
+			get {
+				var result_set = new HashSet<int>();
+				for (int index = 0; index < Values.Count; index++)
+					result_set.Add(Items[index]);
+				return result_set;
+			}
 		}
 
-		/// <summary>Add a rating event to the collection</summary>
-		/// <param name="rating">the <see cref="RatingEvent"/> to add</param>
-		public void AddRating(RatingEvent rating)
+		/// <inheritdoc/>
+		public HashSet<int> GetUsers(IList<int> indices)
 		{
-			rating_list.Add(rating);
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(Users[index]);
+			return result_set;
 		}
 
-		/// <summary>Remove a rating from the collection</summary>
-		/// <param name="rating">the rating event to remove</param>
-		public void RemoveRating(RatingEvent rating)
+		/// <inheritdoc/>
+		public HashSet<int> GetItems(IList<int> indices)
 		{
-			rating_list.Remove(rating);
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(Items[index]);
+			return result_set;
 		}
 
-		/// <summary>Find a rating for a given user and item</summary>
-		/// <param name="user_id">the numerical ID of the user</param>
-		/// <param name="item_id">the numerical ID of the item</param>
-		/// <returns>the rating event corresponding to the given user and item, null if such a rating does not exist</returns>
-		public RatingEvent FindRating(int user_id, int item_id)
+		/// <inheritdoc/>
+		public double this[int user_id, int item_id]
 		{
-			foreach (RatingEvent rating in rating_list)
-				if ((rating.user_id == user_id) && (rating.item_id == item_id))
-					return rating;
-			return null;
+			get {
+				// TODO speed up
+				for (int index = 0; index < Values.Count; index++)
+					if (Users[index] == user_id && Items[index] == item_id)
+						return Values[index];
+
+				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+			}
 		}
 
-		/// <summary>Get the users in the rating collection</summary>
-		/// <returns>a collection of numerical user IDs</returns>
-		public HashSet<int> GetUsers()
+		/// <inheritdoc/>
+		public double Get(int user_id, int item_id)
 		{
-			var users = new HashSet<int>();
-			foreach (RatingEvent rating in rating_list)
-				users.Add(rating.user_id);
-			return users;
+			return this[user_id, item_id];
 		}
-		// TODO use ISet when we support Mono 2.8
 
-		/// <summary>Get the items in the rating collection</summary>
-		/// <returns>a collection of numerical item IDs</returns>
-		public HashSet<int> GetItems()
+		/// <inheritdoc/>
+		public bool TryGet(int user_id, int item_id, out double rating)
 		{
-			var items = new HashSet<int>();
-			foreach (RatingEvent rating in rating_list)
-				items.Add(rating.item_id);
-			return items;
+			rating = double.NegativeInfinity;
+			// TODO speed up
+			for (int index = 0; index < Values.Count; index++)
+				if (Users[index] == user_id && Items[index] == item_id)
+				{
+					rating = Values[index];
+					return true;
+				}
+
+			return false;
 		}
+
+		/// <inheritdoc/>
+		public double Get(int user_id, int item_id, ICollection<int> indexes)
+		{
+			// TODO speed up
+			foreach (int index in indexes)
+				if (Users[index] == user_id && Items[index] == item_id)
+					return Values[index];
+
+			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
+		{
+			rating = double.NegativeInfinity;
+
+			// TODO speed up
+			foreach (int index in indexes)
+				if (Users[index] == user_id && Items[index] == item_id)
+				{
+					rating = Values[index];
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public bool TryGetIndex(int user_id, int item_id, out int index)
+		{
+			index = -1;
+
+			// TODO speed up
+			for (int i = 0; i < Values.Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index)
+		{
+			index = -1;
+
+			// TODO speed up
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public int GetIndex(int user_id, int item_id)
+		{
+			// TODO speed up
+			for (int i = 0; i < Values.Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public int GetIndex(int user_id, int item_id, ICollection<int> indexes)
+		{
+			// TODO speed up
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public virtual void Add(int user_id, int item_id, double rating)
+		{
+			Users.Add(user_id);
+			Items.Add(item_id);
+			Values.Add(rating);
+
+			if (user_id > MaxUserID)
+				MaxUserID = user_id;
+
+			if (item_id > MaxItemID)
+				MaxItemID = item_id;
+		}
+
+		/// <inheritdoc/>
+		public virtual void RemoveAt(int index)
+		{
+			Users.RemoveAt(index);
+			Items.RemoveAt(index);
+			Values.RemoveAt(index);
+		}
+		
+		/// <inheritdoc/>
+		public virtual void RemoveUser(int user_id)
+		{
+			for (int index = 0; index < Count; index++)
+				if (Users[index] == user_id)
+				{
+					Users.RemoveAt(index);
+					Items.RemoveAt(index);
+					Values.RemoveAt(index);
+				}
+		}
+
+		/// <inheritdoc/>
+		public virtual void RemoveItem(int item_id)
+		{
+			for (int index = 0; index < Count; index++)
+				if (Items[index] == item_id)
+				{
+					Users.RemoveAt(index);
+					Items.RemoveAt(index);
+					Values.RemoveAt(index);
+				}
+		}		
 	}
 }
+

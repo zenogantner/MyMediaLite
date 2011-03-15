@@ -312,7 +312,7 @@ public class ItemPrediction
 	                     string user_relation_file, string item_relation_file)
 	{
 		// training data
-		training_data = ItemRecommenderData.Read(trainfile, user_mapping, item_mapping);
+		training_data = ItemRecommendation.Read(trainfile, user_mapping, item_mapping);
 
 		// relevant items
 		if (! relevant_items_file.Equals(string.Empty) )
@@ -366,7 +366,7 @@ public class ItemPrediction
 			}
 
 		// test data
-        test_data = ItemRecommenderData.Read(testfile, user_mapping, item_mapping);
+        test_data = ItemRecommendation.Read(testfile, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

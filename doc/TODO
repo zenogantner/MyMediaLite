@@ -2,25 +2,24 @@ Recommender functionality
  - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
  - support for non-binary attributes: real, nominal, textual descriptions
- - directly support MovieLens u.item and u.user files and MovieLens 1M data format
+ - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
- - online updates (all recommenders): decrease MaxUserID and MaxItemID where possible
- - additional engines
+ - additional recommenders
    - item-to-item CF (Linden et al., 2003)
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
    - scalable CF by Koren: http://research.yahoo.com/pub/2435
-   - Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
+   - Improved Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
-   - attribute-based engines using LIBSVM
+   - attribute-based recommenders using LIBSVM
    - Bayesian Probabilistic Matrix Factorization http://www.mit.edu/~rsalakhu/BPMF.html
    - Content-boosted CF http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.73.8546&rep=rep1&type=pdf
    - restricted boltzmann machines
    - http://jmlr.csail.mit.edu/papers/v11/seldin10a.html
  - time-aware rating and item prediction
    - timeSVD++
- - new engine types: TagRecommender, ContextAwareRecommender, SequentialRecommender
+ - new recommender types: TagRecommender, ContextAwareRecommender, SequentialRecommender
  - ensembles
    - ranking ensembles
    - stacking ensembles
@@ -50,32 +49,24 @@ Architecture
    - implement features similar to the Strands web service API or Hunch
  - internal APIs
    - interface(s) for recommenders that support online updates
-   - define an easy interface for rating data access
-     - allow lazy iteration
-     - allow random and randomized access
-     - allow creating splits for cross-validation w/o duplicating data
-     - (maybe) get num_users, num_items, max_user_id, max_item_id
    - user and item IDs should be unsigned integers, not signed integers
    - generic optimization interface and algorithms (like Mallet)
    - consider using simulated multiple inheritance for the attribute-based recommenders:
      http://www.codeproject.com/KB/architecture/smip.aspx
  - data structures
-   - rewrite rating data structures
-     - implement easy interface (see above)
-     - store in one list (as values, not references!)
-     - create special index data structures on demand
    - redesign/rewrite implicit feedback data structures
    - parameterize types:
      - user and item IDs
      - stored ratings
      - prediction values (in C++ port)
- - engines
-   - nicer, more generic structure for kNN engines
+ - recommenders 
+   - nicer, more generic structure for kNN recommenders
      - non-weighted kNN
      - more correlation/similarity measures
        - rename to Similarity (instead of Correlation)?
      - combine arbitrary similarity matrices
      - user-defined similarities
+     - re-integrate adjusted cosine (port to new rating data structure)
    - slope-one
        - different weighting schemes
  - distributed/parallel computing
@@ -101,6 +92,7 @@ GUI demo
  - store/load user data
  - faster IO
 Misc features
+ - support compressed data and model files
  - use --param for command-line parameters
    - https://github.com/mono/mono/tree/master/mcs/class/Mono.Options/
      or
@@ -112,7 +104,7 @@ Documentation/website
  - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing
  - (*) document how to set up C# development environment for Ubuntu, Debian, etc.
- - document using MyMediaLite from other languages, implementing engines in other languages
+ - document using MyMediaLite from other languages, implementing recommenders in other languages
    - Java (*), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - JavaScript -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
  - glossary where we explain commonly used terms

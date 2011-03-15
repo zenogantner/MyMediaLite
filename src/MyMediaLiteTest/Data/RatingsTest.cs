@@ -24,93 +24,116 @@ using NUnit.Framework;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Testing the Ratings class</summary>
 	[TestFixture()]
-	public class RatingsTest
+	public class RatingDataTest
 	{
-		[Test()] public void TestShuffle()
+		[Test()] public void TestMaxUserIDItemID()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
 
-			test_ratings.Shuffle();
-			// at least one rating must change his position
-			Assert.IsTrue(test_ratings[0].rating != 0.1 || test_ratings[1].rating != 0.2 || test_ratings[2].rating != 0.3 || test_ratings[3].rating != 0.4 || test_ratings[4].rating != 0.5);
-			// TODO this is a wrong assumption!
+			Assert.AreEqual(6, ratings.MaxUserID);
+			Assert.AreEqual(8, ratings.MaxItemID);
 		}
 
-		[Test()] public void TestAverage()
+		[Test()] public void TestAddRating()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
 
-			Assert.AreEqual(0.3f, test_ratings.Average, 0.0001f);
+			Assert.AreEqual(0.4, ratings.Get(2, 5));
+			Assert.AreEqual(0.3, ratings.Get(1, 4));
+			Assert.AreEqual(0.3, ratings.Get(6, 3));
 		}
 
-		[Test()] public void TestCount()
+		[Test()] public void TestRemoveAt()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(3, 3, 0.3);
+			ratings.Add(6, 3, 0.3);
 
-			Assert.AreEqual(5, test_ratings.Count);
+			Assert.AreEqual(0.4, ratings.Get(2, 5));
+			ratings.RemoveAt(ratings.GetIndex(2, 5));
+			ratings.RemoveAt(ratings.GetIndex(6, 3));
+			
+			double r;
+			Assert.IsFalse(ratings.TryGet(2, 5, out r));
 		}
 
-		[Test()] public void TestRemoveRating()
+		[Test()] public void TestRemoveUser()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(1, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(2, 2, 0.4));
-			RatingEvent removeRating = new RatingEvent(2, 5, 0.5);
-			test_ratings.AddRating(removeRating);
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(3, 3, 0.3);
 
-			test_ratings.RemoveRating(removeRating);
-			Assert.IsNull(test_ratings.FindRating(2, 5));
+			Assert.AreEqual(0.4, ratings.Get(2, 5));
+			ratings.RemoveUser(2);
+			
+			double rating;
+			Assert.IsFalse(ratings.TryGet(2, 5, out rating));
 		}
 
-		[Test()] public void TestGetUsers()
+		[Test()] public void TestRemoveItem()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 4, 0.2);
+			ratings.Add(3, 3, 0.3);
 
-			List<int> user_list = test_ratings.GetUsers().ToList();
-			Assert.Contains(1, user_list);
-			Assert.Contains(2, user_list);
-			Assert.Contains(4, user_list);
-			Assert.Contains(5, user_list);
+			Assert.AreEqual(0.2, ratings.Get(2, 4));
+			ratings.RemoveItem(4);
+			double r;
+			Assert.IsFalse(ratings.TryGet(2, 4, out r));
 		}
 
-		[Test()] public void TestGetItems()
+		[Test()] public void TestGet()
 		{
-			var test_ratings = new Ratings();
-			test_ratings.AddRating(new RatingEvent(1, 4, 0.1));
-			test_ratings.AddRating(new RatingEvent(5, 8, 0.2));
-			test_ratings.AddRating(new RatingEvent(2, 4, 0.3));
-			test_ratings.AddRating(new RatingEvent(4, 2, 0.4));
-			test_ratings.AddRating(new RatingEvent(2, 5, 0.5));
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 4, 0.2);
+			ratings.Add(3, 3, 0.3);
+			ratings.Add(6, 3, 0.3);
 
-			List<int> item_list = test_ratings.GetItems().ToList();
-			Assert.Contains(2, item_list);
-			Assert.Contains(4, item_list);
-			Assert.Contains(5, item_list);
-			Assert.Contains(8, item_list);
+			// test Get
+			Assert.AreEqual(0.2, ratings.Get(2, 4));
+			Assert.AreEqual(0.3, ratings.Get(3, 3));
+			Assert.AreEqual(0.3, ratings.Get(6, 3));
+			
+			// test index[,]
+			Assert.AreEqual(0.3, ratings[1, 4]);
+			Assert.AreEqual(0.2, ratings[1, 8]);
+			Assert.AreEqual(0.6, ratings[2, 2]);			
 		}
 	}
 }

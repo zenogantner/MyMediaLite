@@ -63,12 +63,14 @@
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="RatingPredictor\NewKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
     <Compile Include="IO\KDDCup2011\RatingData.cs" />
     <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
     <Compile Include="Eval\KDDCup.cs" />
+    <Compile Include="Data\KDDCupItems.cs" />
+    <Compile Include="Taxonomy\KDDCupItemType.cs" />
+    <Compile Include="IO\KDDCup2011\Items.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -79,6 +81,9 @@
     <Folder Include="IO\" />
     <Folder Include="IO\KDDCup2011\" />
     <Folder Include="Eval\" />
+    <Folder Include="Data\" />
+    <Folder Include="Taxonomy\" />
+    <Folder Include="Correlation\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

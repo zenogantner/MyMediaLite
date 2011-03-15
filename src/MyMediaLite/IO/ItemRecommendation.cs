@@ -27,7 +27,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that contains static methods for reading in implicit feedback data for ItemRecommender engines</summary>
-	public class ItemRecommenderData // TODO consider renaming to ImplicitFeedback
+	public class ItemRecommendation
 	{
 		/// <summary>Read in implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>

@@ -20,43 +20,53 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>k-fold split for rating prediction</summary>
-	public class RatingCrossValidationSplit : ISplit<RatingData>
+	public class RatingCrossValidationSplit : ISplit<IRatings>
 	{
 		/// <inheritdoc/>
 		public int NumberOfFolds { get; private set; }
 
 		/// <inheritdoc/>
-		public List<RatingData> Train { get; private set; }
+		public List<IRatings> Train { get; private set; }
 
 		/// <inheritdoc/>
-		public List<RatingData> Test { get; private set; }
+		public List<IRatings> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of rating prediction data</summary>
-		/// <param name="rating_data">the dataset</param>
+		/// <param name="ratings">the dataset</param>
 		/// <param name="num_folds">the number of folds</param>
-		public RatingCrossValidationSplit(RatingData rating_data, int num_folds)
+		public RatingCrossValidationSplit(IRatings ratings, int num_folds)
 		{
 			NumberOfFolds = num_folds;
-			Train = new List<RatingData>(num_folds);
-			Test  = new List<RatingData>(num_folds);
-
-			// create data structures
-			for (int i = 0; i < num_folds; i++)
-			{
-				Train.Add(new RatingData());
-				Test.Add(new RatingData());
-			}
 
 			// randomize
-			rating_data.Shuffle();
+			IList<int> random_indices = ratings.RandomIndex;
 
-			// assign ratings to folds
-			for (int i = 0; i < rating_data.All.Count; i++)
+			// create index lists
+			List<int>[] train_indices = new List<int>[num_folds];
+			List<int>[] test_indices  = new List<int>[num_folds];
+
+			for (int i = 0; i < num_folds; i++)
+			{
+				train_indices[i] = new List<int>();
+				test_indices[i]  = new List<int>();
+			}
+			
+			// assign indices to folds
+			foreach (int i in random_indices)
 				for (int j = 0; j < num_folds; j++)
 					if (j == i % num_folds)
-						Test[j].AddRating(rating_data.All[i]);
+						test_indices[j].Add(i);
 					else
-						Train[j].AddRating(rating_data.All[i]);
+						train_indices[j].Add(i);
+
+			// create split data structures
+			Train = new List<IRatings>(num_folds);
+			Test  = new List<IRatings>(num_folds);
+			for (int i = 0; i < num_folds; i++)
+			{
+				Train.Add(new RatingsProxy(ratings, train_indices[i]));
+				Test.Add(new RatingsProxy(ratings, test_indices[i]));
+			}
 		}
 	}
 }

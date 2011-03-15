@@ -36,8 +36,8 @@ public class RatingPrediction
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
 	// data sets
-	static RatingData training_data;
-	static RatingData test_data;
+	static IRatings training_data;
+	static IRatings test_data;
 
 	// recommenders
 	static RatingPredictor recommender = null;
@@ -252,7 +252,7 @@ MyMediaLite rating prediction
 			} // for
 
 			Console.Error.WriteLine("memory {0}", Memory.Usage);
-			
+
 			DisplayIterationStats();
 			Recommender.SaveModel(recommender, save_model_file);
 		}
@@ -303,7 +303,7 @@ MyMediaLite rating prediction
 				seconds = Utils.MeasureTime(
 			    	delegate() {
 						Console.WriteLine();
-						MyMediaLite.eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+						MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
 					}
 				);
 				Console.Error.Write("predicting_time " + seconds);
@@ -323,10 +323,11 @@ MyMediaLite rating prediction
 		// TODO check for the existence of files before starting to load all of them
 
 		// read training data
+
 		if (movielens1m_format)
 			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			training_data = RatingPredictionData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -372,10 +373,10 @@ MyMediaLite rating prediction
 			}
 
 		// read test data
-		if (movielens1m_format)
+		if (movielens1m_format) // TODO re-activate
 			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			test_data = RatingPredictionData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
@@ -393,16 +394,16 @@ MyMediaLite rating prediction
 	static void DisplayDataStats()
 	{
 		// training data stats
-		int num_users = training_data.All.GetUsers().Count;
-		int num_items = training_data.All.GetItems().Count;
+		int num_users = training_data.AllUsers.Count;
+		int num_items = training_data.AllItems.Count;
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
 		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
-		num_users = test_data.All.GetUsers().Count;
-		num_items = test_data.All.GetItems().Count;
+		num_users = test_data.AllUsers.Count;
+		num_items = test_data.AllItems.Count;
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;

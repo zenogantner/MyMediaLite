@@ -30,39 +30,19 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			var rating_counts = new List<int>();
-
-			foreach (RatingEvent r in Ratings.All)
-			{
-				if (rating_counts.Count <= r.item_id)
-				{
-					rating_counts.Insert(r.item_id, 0);
-					entity_averages.Insert(r.item_id, 0);
-				}
-				rating_counts[r.item_id]++;
-				entity_averages[r.item_id] += r.rating;
-				global_average += r.rating;
-			}
-
-			global_average /= Ratings.All.Count;
-
-			for (int i = 0; i < entity_averages.Count; i++)
-				if (rating_counts[i] != 0)
-					entity_averages[i] /= rating_counts[i];
-				else
-					entity_averages[i] = global_average;
+			base.Train(Ratings.Items, Ratings.MaxItemID);
 		}
 
 		/// <inheritdoc/>
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			return (item_id <= MaxItemID);
+			return (item_id <= Ratings.MaxItemID);
 		}
 
 		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
-			if (item_id <= MaxItemID)
+			if (item_id <= Ratings.MaxItemID)
 				return entity_averages[item_id];
 			else
 				return global_average;

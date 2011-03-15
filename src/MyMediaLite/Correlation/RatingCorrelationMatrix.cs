@@ -31,7 +31,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute the correlations for a given entity type from a rating dataset</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
-		public virtual void ComputeCorrelations(RatingData ratings, EntityType entity_type)
+		public virtual void ComputeCorrelations(IRatings ratings, EntityType entity_type)
 		{
 			throw new NotSupportedException();
 		}

@@ -34,8 +34,7 @@ namespace MyMediaLite.AttrToFactor
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set
-			{
+			set	{
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);

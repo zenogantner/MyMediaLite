@@ -25,8 +25,8 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that offers static methods for reading in rating data</summary>
-	public class RatingPredictionData
+	/// <summary>Class that offers methods for reading in rating data</summary>
+	public class RatingPrediction
 	{
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public RatingData Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+		static public IRatings Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, min_rating, max_rating, user_mapping, item_mapping);
@@ -51,10 +51,10 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public RatingData
+		static public IRatings
 			Read(TextReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-			var ratings = new RatingData();
+			var ratings = new Ratings();
 
 			bool out_of_range_warning_issued = false;
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
@@ -71,20 +71,19 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 3)
 					throw new IOException("Expected at least three columns: " + line);
 
-				var rating = new RatingEvent();
-				rating.user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
-				rating.item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
-				rating.rating = double.Parse(tokens[2], ni);
+				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
+				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
+				double rating = double.Parse(tokens[2], ni);
 
 				if (!out_of_range_warning_issued)
-					if (rating.rating > max_rating || rating.rating < min_rating)
+					if (rating > max_rating || rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating.rating.ToString(ni), rating.user_id, rating.item_id);
+												min_rating, max_rating, rating.ToString(ni), user_id, item_id);
 						out_of_range_warning_issued = true;
 					}
 
-				ratings.AddRating(rating);
+				ratings.Add(user_id, item_id, rating);
 			}
 			return ratings;
 		}
@@ -96,10 +95,10 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public RatingData
+		static public IRatings
 			Read(IDataReader reader, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-			var ratings = new RatingData();
+			var ratings = new Ratings();
 
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 
@@ -109,20 +108,19 @@ namespace MyMediaLite.IO
 			bool out_of_range_warning_issued = false;
 			while (reader.Read())
 			{
-				var rating = new RatingEvent();
-				rating.user_id = user_mapping.ToInternalID(reader.GetInt32(0));
-				rating.item_id = item_mapping.ToInternalID(reader.GetInt32(1));
-				rating.rating = reader.GetDouble(2);
+				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
+				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+				double rating = reader.GetDouble(2);
 
 				if (!out_of_range_warning_issued)
-					if (rating.rating > max_rating || rating.rating < min_rating)
+					if (rating > max_rating || rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating.rating.ToString(ni), rating.user_id, rating.item_id);
+												min_rating, max_rating, rating.ToString(ni), user_id, item_id);
 						out_of_range_warning_issued = true;
 					}
 
-				ratings.AddRating(rating);
+				ratings.Add(user_id, item_id, rating);
 			}
 			return ratings;
 		}

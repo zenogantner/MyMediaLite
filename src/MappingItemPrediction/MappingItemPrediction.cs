@@ -161,7 +161,7 @@ public class MappingItemPrediction
 		var item_mapping = new EntityMapping();
 
 		// training data
-		training_data = ItemRecommenderData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
+		training_data = ItemRecommendation.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 		recommender.SetCollaborativeData(training_data);
 
 		// relevant items
@@ -189,7 +189,7 @@ public class MappingItemPrediction
 		}
 
 		// test data
-        test_data = ItemRecommenderData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+        test_data = ItemRecommendation.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 		TimeSpan seconds;
 

@@ -47,7 +47,7 @@ namespace MyMediaLite.Util
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
 		                                 RatingPredictor recommender,
-		                                 ISplit<RatingData> split)
+		                                 ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
 
@@ -75,7 +75,7 @@ namespace MyMediaLite.Util
 		                                 		    double[] hyperparameter_values,
 		                                            double basis,
 		                                 		    RatingPrediction.RatingPredictor recommender,
-		                                 		    ISplit<RatingData> split)
+		                                 		    ISplit<IRatings> split)
 		{
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 				hyperparameter_values[i] = Math.Pow(basis, hyperparameter_values[i]);
@@ -97,7 +97,7 @@ namespace MyMediaLite.Util
 		                                 RatingPrediction.RatingPredictor recommender,
 		                                 int k)
 		{
-			RatingData data = recommender.Ratings;
+			var data = recommender.Ratings;
 			var split = new RatingCrossValidationSplit(data, k);
 			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
 			recommender.Ratings = data;
