@@ -9,6 +9,9 @@
           - rename IO.ItemRecommenderData to IO.ItemRecommendation
           - add rating data structures with time stamps: RatingsWithDateTime
             and StaticRatingsWithDateTime
+        - command-line programs
+          - display number of ratings
+          - give out memory usage also for find_iter
         - IO
           - add routines for KDD Cup 2011 data
         - example programs
