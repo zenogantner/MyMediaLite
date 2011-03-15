@@ -21,6 +21,8 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
+	// TODO unit tests
+	
 	/// <summary>Data structure for implicit, positive-only user feedback</summary>
 	/// <remarks>
 	/// This data structure supports online updates.
@@ -48,11 +50,13 @@ namespace MyMediaLite.Data
 		/// <summary>the maximum item ID</summary>
 		public int MaxItemID { get; private set; }
 
+		/// <summary>the number of feedback events</summary>
 		public int Count { get { return UserMatrix.NumberOfEntries; } }
 
-		
+		/// <summary>all users that have given feedback</summary>
 		public ICollection<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
 		
+		/// <summary>all items mentioned at least once</summary>
 		public ICollection<int> AllItems {
 			get {
 				if (item_matrix == null)
@@ -85,7 +89,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <summary>Remove a user-item event from the data structure</summary>
-		/// <param name="item_id">the user ID</param>
+		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		public void Remove(int user_id, int item_id)
 		{
@@ -94,6 +98,8 @@ namespace MyMediaLite.Data
 				item_matrix[item_id, user_id] = false;
 		}
 
+		/// <summary>Remove all feedback by a given user</summary>
+		/// <param name="user_id">the user id</param>
 		public void RemoveUser(int user_id)
 		{
 			UserMatrix[user_id].Clear();
@@ -102,6 +108,8 @@ namespace MyMediaLite.Data
 					item_matrix[i].Remove(user_id);
 		}
 
+		/// <summary>Remove all feedback about a given item</summary>
+		/// <param name="item_id">the item ID</param>
 		public void RemoveItem(int item_id)
 		{
 			for (int u = 0; u < UserMatrix.NumberOfRows; u++)
@@ -111,6 +119,9 @@ namespace MyMediaLite.Data
 				item_matrix[item_id].Clear();
 		}
 
+		/// <summary>Compute the number of overlapping events in two feedback datasets</summary>
+		/// <param name="s">the feedback dataset to compare to</param>
+		/// <returns>the number of overlapping events, i.e. events that have the same user and item ID</returns>
 		public int Overlap(PosOnlyFeedback s)
 		{
 			return UserMatrix.Overlap(s.UserMatrix);

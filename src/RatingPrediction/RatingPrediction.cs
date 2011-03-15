@@ -388,6 +388,7 @@ MyMediaLite rating prediction
 		                            result["RMSE"], result["MAE"], result["NMAE"]));
 	}
 
+	// TODO move to a class in the MyMediaLite base library
 	static void DisplayDataStats()
 	{
 		// training data stats

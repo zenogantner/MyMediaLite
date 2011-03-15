@@ -32,11 +32,12 @@ namespace MyMediaLite.ItemRecommendation
 	public abstract class ItemRecommender : IItemRecommender
 	{
 		/// <summary>Maximum user ID</summary>
-		public int MaxUserID  { get; set;	}
+		public int MaxUserID { get; set; }
 
 		/// <summary>Maximum item ID</summary>
-		public int MaxItemID  {	get; set; }
+		public int MaxItemID { get; set; }
 
+		/// <summary>the feedback data to be used for training</summary>
 		public PosOnlyFeedback Feedback
 		{
 			get { return this.feedback; }
@@ -106,7 +107,7 @@ namespace MyMediaLite.ItemRecommendation
 		public virtual void RemoveUser(int user_id)
 		{
 			Feedback.RemoveUser(user_id);
-			
+
 			if (user_id == MaxUserID)
 				MaxUserID--;
 		}
@@ -114,8 +115,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public virtual void RemoveItem(int item_id)
 		{
-			Feedback.RemoveItem(item_id);			
-			
+			Feedback.RemoveItem(item_id);
+
 			if (item_id == MaxItemID)
 				MaxItemID--;
 		}
