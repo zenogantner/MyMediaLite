@@ -1,8 +1,8 @@
 [% netflix_data = [
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=0  learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=25',  rmse => '0.9830' mae => '0.7710' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 learn_rate=0.005 bias_reg=0.0001 reg=0.035  num_iter=40', rmse => '0.9244', mae => '0.7221' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=50 learn_rate=0.005 bias_reg=0.0001 reg=0.035  num_iter=90', rmse => '0.9175', mae => '0.7135' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 learn_rate=0.005 reg=0.035 num_iter=26', rmse => '0.9169' mae => '0.7126' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=0  learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=80', rmse => '0.9830', mae => '0.7710' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=40', rmse => '0.9197', mae => '0.7157', nmae => '0.1789' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=50 learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=90', rmse => '0.9175', mae => '0.7135' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 learn_rate=0.005 reg=0.035 num_iter=26',                 rmse => '0.9169', mae => '0.7126' }
    ]
    ml1m_data = [
      { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.9113', mae => '0.7226' }
@@ -23,7 +23,7 @@
    ]
    # MovieLens 100k, 5-fold CV with random_seed=1
    ml100k = [
-     { method => 'BipolarSlopeOne',           hp => '',                                                                    rmse => '0.971', mae => '0.747', name => '0.1866' }
+     { method => 'BipolarSlopeOne',           hp => '',                                                                    rmse => '0.971', mae => '0.747', nmae => '0.1866' }
      { method => 'UserItemBaseline',          hp => 'reg_u=5 reg_i=2',                                                     rmse => '0.947', mae => '0.754', nmae => '0.1884' }
      { method => 'SlopeOne',                  hp => '',                                                                    rmse => '0.940', mae => '0.741'  nmae => '0.1852' }
      { method => 'UserKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.937', mae => '0.737', nmae => '0.1842' }
