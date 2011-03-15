@@ -53,33 +53,31 @@ namespace MyMediaLite.DataType
 		/// <inheritdoc/>
 		public virtual bool IsSymmetric
 		{
-			get
-			{
+			get	{
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
 					{
 						if (i > j)
 							continue; // check every pair only once
-						
+
 						if (!this[j, i])
 							return false;
 					}
 				return true;
 			}
-		}		
-		
+		}
+
 		/// <inheritdoc/>
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
 			return new SparseBooleanMatrix();
 		}
-		
+
 		/// <summary>Indexer to access the rows of the matrix</summary>
 		/// <param name="x">the row ID</param>
 		public HashSet<int> this [int x]
 		{
-			get
-			{
+			get	{
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
 						row_list.Add(new HashSet<int>());
@@ -95,8 +93,7 @@ namespace MyMediaLite.DataType
 		/// <value>The rows of the matrix, with their IDs</value>
 		public IList<KeyValuePair<int, HashSet<int>>> Rows
 		{
-			get
-			{
+			get	{
 				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
@@ -108,8 +105,7 @@ namespace MyMediaLite.DataType
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
 		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
 		{
-			get
-			{
+			get	{
 				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 				{
@@ -124,8 +120,7 @@ namespace MyMediaLite.DataType
 		/// <value>The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)</value>
 		public ICollection<int> NonEmptyRowIDs
 		{
-			get
-			{
+			get	{
 				var row_ids = new HashSet<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
@@ -141,8 +136,7 @@ namespace MyMediaLite.DataType
 		/// <value>The IDs of the non-empty columns in the matrix (the ones that contain at least one true entry)</value>
 		public ICollection<int> NonEmptyColumnIDs
 		{
-			get
-			{
+			get	{
 				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
@@ -152,8 +146,8 @@ namespace MyMediaLite.DataType
 
 				return col_ids;
 			}
-		}		
-		
+		}
+
 		/// <summary>The number of rows in the matrix</summary>
 		/// <value>The number of rows in the matrix</value>
 		public int NumberOfRows	{ get { return row_list.Count; } }
@@ -161,30 +155,28 @@ namespace MyMediaLite.DataType
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>
 		public int NumberOfColumns {
-			get
-			{
+			get	{
 				int max_column_id = -1;
 				foreach (var row in row_list)
 					if (row.Count > 0)
 						max_column_id = Math.Max(max_column_id, row.Max());
-				
+
 				return max_column_id + 1;
 			}
-		}		
-		
+		}
+
 		/// <summary>The number of (true) entries</summary>
 		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
-			get
-			{
+			get	{
 				int n = 0;
 				foreach (var row in row_list)
 					n += row.Count;
 				return n;
 			}
-		}		
-		
+		}
+
 		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one.</summary>
 		/// <param name="y">the column ID</param>
 		public void RemoveColumn(int y)
