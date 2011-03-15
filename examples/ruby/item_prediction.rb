@@ -6,12 +6,12 @@ require 'MyMediaLite'
 user_mapping = MyMediaLite::Data::EntityMapping.new()
 item_mapping = MyMediaLite::Data::EntityMapping.new()
 train_data = MyMediaLite::IO::ItemRecommendation.Read("u1.base", user_mapping, item_mapping)
-relevant_items = train_data.NonEmptyColumnIDs # items that will be taken into account in the evaluation
+relevant_items = train_data.AllItems # items that will be taken into account in the evaluation
 test_data = MyMediaLite::IO::ItemRecommendation.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
 recommender = MyMediaLite::ItemRecommendation::MostPopular.new()
-recommender.SetCollaborativeData(train_data);
+recommender.Feedback = train_data;
 recommender.Train()
 
 # measure the accuracy on the test data set
