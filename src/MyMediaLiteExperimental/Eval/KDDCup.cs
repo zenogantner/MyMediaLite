@@ -53,9 +53,9 @@ namespace MyMediaLite.Eval
 
 				for (int i = 0; i < user_candidates.Count; i++)
 					if (positions.IndexOf(i) < 3)
-						writer.WriteLine("1");
+						writer.Write("1");
 					else
-						writer.WriteLine("0");
+						writer.Write("0");
 			}
 		}
 	}

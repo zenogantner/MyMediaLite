@@ -109,6 +109,22 @@ namespace MyMediaLite.Data
 				return false;
 			return genres[item_id].Count > 0;
 		}
+		
+		/// <summary>Gives a textual summary of the item data</summary>
+		public override string ToString()
+		{
+			int num_tracks = 0, num_albums = 0, num_artists = 0, num_genres = 0;
+			foreach (var type in types)
+				switch (type)
+				{
+					case KDDCupItemType.Track:	num_tracks++;  break;
+					case KDDCupItemType.Album: 	num_albums++;  break;
+					case KDDCupItemType.Artist: num_artists++; break;
+					case KDDCupItemType.Genre:  num_genres++;  break;
+				}
+			
+			return string.Format("{0} tracks, {1} albums, {2} artists, {3} genres", num_tracks, num_albums, num_artists, num_genres);
+		}
 	}
 }
 

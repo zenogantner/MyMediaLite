@@ -28,7 +28,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <summary>Read track 2 candidates from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <returns>the candidates</returns>
-		static public Dictionary<int, int[]> Read(string filename)
+		static public Dictionary<int, IList<int>> Read(string filename)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In);
@@ -40,10 +40,10 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <summary>Read track 2 candidates from a TextReader</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <returns>the candidates</returns>
-		static public Dictionary<int, int[]>
+		static public Dictionary<int, IList<int>>
 			Read(TextReader reader)
 		{
-			var candidates = new Dictionary<int, int[]>();
+			var candidates = new Dictionary<int, IList<int>>();
 
 			string line;
 

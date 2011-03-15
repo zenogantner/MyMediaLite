@@ -14,6 +14,8 @@ test_file  = "testIdx2.firstLines.txt"
 # load the data
 train_data = IO.KDDCup2011.Ratings.Read(train_file)
 test_data = IO.KDDCup2011.Track2Candidates.Read(test_file)
+item_relations = IO.KDDCup2011.Items.ReadTrack2("trackData2.txt", "albumData2.txt", "artistData2.txt", "genreData2.txt");
+print item_relations
 
 # set up the recommender
 recommender = RatingPrediction.UserItemBaseline()

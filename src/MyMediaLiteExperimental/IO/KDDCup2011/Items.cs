@@ -25,7 +25,32 @@ namespace MyMediaLite.IO.KDDCup2011
 	/// <summary>Routines for reading in the item taxonomy of the KDD Cup 2011 data</summary>
 	public class Items
 	{
+		/// <summary>Read in the item data from several files (for Track 2)</summary>
+		/// <param name="tracks_filename">name of the tracks file</param>
+		/// <param name="albums_filename">name of the album/record file</param>
+		/// <param name="artists_filename">name of the artists file</param>
+		/// <param name="genres_filename">name of the genre file</param>
+		static public KDDCupItems ReadTrack2(string tracks_filename, string albums_filename, string artists_filename, string genres_filename)
+		{
+			return Read(tracks_filename, albums_filename, artists_filename, genres_filename, false);
+		}
+
+		/// <summary>Read in the item data from several files (for Track 1)</summary>
+		/// <param name="tracks_filename">name of the tracks file</param>
+		/// <param name="albums_filename">name of the album/record file</param>
+		/// <param name="artists_filename">name of the artists file</param>
+		/// <param name="genres_filename">name of the genre file</param>
+		static public KDDCupItems ReadTrack1(string tracks_filename, string albums_filename, string artists_filename, string genres_filename)
+		{
+			return Read(tracks_filename, albums_filename, artists_filename, genres_filename, true);
+		}
+
 		/// <summary>Read in the item data from several files</summary>
+		/// <param name="tracks_filename">name of the tracks file</param>
+		/// <param name="albums_filename">name of the album/record file</param>
+		/// <param name="artists_filename">name of the artists file</param>
+		/// <param name="genres_filename">name of the genre file</param>
+		/// <param name="track1">must be set to true if we read in for Track 1, and false for Track 2</param>
 		/// <returns>the rating data</returns>
 		static public KDDCupItems Read(string tracks_filename, string albums_filename, string artists_filename, string genres_filename, bool track1)
 		{
@@ -42,7 +67,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 			using ( var reader = new StreamReader(genres_filename) )
 				ReadGenres(reader, items);
-			
+
 			return items;
 		}
 
@@ -71,7 +96,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 		/// <summary>Read the album data</summary>
 		/// <param name="reader">a reader object to read the data from</param>
-		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>
 		static public void ReadAlbums(TextReader reader, KDDCupItems items)
 		{
 			string line;
@@ -93,7 +118,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 		/// <summary>Read the artist data</summary>
 		/// <param name="reader">a reader object to read the data from</param>
-		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>
 		static public void ReadArtists(TextReader reader, KDDCupItems items)
 		{
 			string line;
@@ -108,7 +133,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 		/// <summary>Read the genre data</summary>
 		/// <param name="reader">a reader object to read the data from</param>
-		/// <param name="items">the <see cref="KDDCupItems"/> object</param>		
+		/// <param name="items">the <see cref="KDDCupItems"/> object</param>
 		static public void ReadGenres(TextReader reader, KDDCupItems items)
 		{
 			string line;
