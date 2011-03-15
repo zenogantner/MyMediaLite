@@ -15,7 +15,8 @@ test_file       = "testIdx1.firstLines.txt"
 # load the data
 training_data   = IO.KDDCup2011.Ratings.Read(train_file)
 validation_data = IO.KDDCup2011.Ratings.Read(validation_file)
-# TODO load test data
+test_data       = IO.KDDCup2011.Ratings.ReadTest(test_file)
+
 item_relations = IO.KDDCup2011.Items.ReadTrack1("trackData1.txt", "albumData1.txt", "artistData1.txt", "genreData1.txt");
 print item_relations
 
@@ -29,7 +30,9 @@ recommender.Train()
 print "done."
 
 # measure the accuracy on the validation set
-# TODO
+print Eval.RatingEval.Evaluate(recommender, validation_data)
 
 # predict on the test set
-# TODO
+print "Predicting ..."
+Eval.KDDCup.PredictTrack1(recommender, test_data, "track1-output.txt")
+print "done."

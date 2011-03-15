@@ -26,5 +26,7 @@ print "Training ..."
 recommender.Train()
 print "done."
 
-# predict on test data set
-Eval.KDDCup.PredictTrack2(test_data, recommender, "output.txt")
+# predict on the test set
+print "Predicting ..."
+Eval.KDDCup.PredictTrack2(recommender, test_data, "track2-output.txt")
+print "done."

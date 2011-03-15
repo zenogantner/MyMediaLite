@@ -41,17 +41,17 @@ namespace MyMediaLite.Eval
 		/// <remarks>
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
 		/// </remarks>
-		/// <param name="engine">Rating prediction engine</param>
+		/// <param name="recommender">Rating prediction engine</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(IRatingPredictor engine, IRatings ratings)
+		static public Dictionary<string, double> Evaluate(IRatingPredictor recommender, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
 
 			for (int index = 0; index < ratings.Count; index++)
 			{
-				double error = (engine.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
+				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
@@ -62,15 +62,15 @@ namespace MyMediaLite.Eval
 			var result = new Dictionary<string, double>();
 			result.Add("RMSE", rmse);
 			result.Add("MAE",  mae);
-			result.Add("NMAE", mae / (engine.MaxRating - engine.MinRating));
+			result.Add("NMAE", mae / (recommender.MaxRating - recommender.MinRating));
 			return result;
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="engine">a rating prediction engine</param>
+		/// <param name="recommender">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor engine, ISplit<IRatings> split)
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -81,9 +81,9 @@ namespace MyMediaLite.Eval
 
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
-				engine.Ratings = split.Train[i];
-				engine.Train(); // TODO measure time
-				var fold_results = Evaluate(engine, split.Test[i]);
+				recommender.Ratings = split.Train[i];
+				recommender.Train(); // TODO measure time
+				var fold_results = Evaluate(recommender, split.Test[i]);
 
 				foreach (var key in fold_results.Keys)
 					avg_results[key] += fold_results[key];

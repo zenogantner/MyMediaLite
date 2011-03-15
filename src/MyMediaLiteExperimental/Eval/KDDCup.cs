@@ -17,7 +17,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using MyMediaLite.Data;
 
 namespace MyMediaLite.Eval
 {
@@ -25,20 +27,20 @@ namespace MyMediaLite.Eval
 	public class KDDCup
 	{
 		/// <summary>Predict items for Track 2</summary>
-		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="recommender">the recommender to use</param>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictTrack2(Dictionary<int, IList<int>> candidates, IRecommender recommender, string filename)
+		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
 		{
 			using (var writer = new StreamWriter(filename))
-				PredictTrack2(candidates, recommender, writer);
+				PredictTrack2(recommender, candidates, writer);
 		}
 
 		/// <summary>Predict items for Track 2</summary>
 		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictTrack2(Dictionary<int, IList<int>> candidates, IRecommender recommender, TextWriter writer)
+		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, TextWriter writer)
 		{
 			foreach (int user_id in candidates.Keys)
 			{
@@ -58,6 +60,29 @@ namespace MyMediaLite.Eval
 						writer.Write("0");
 			}
 		}
+		
+		/// <summary>Predict items for Track 1</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="ratings">the ratings to predict</param>
+		/// <param name="filename">the file to write the predictions to</param>
+		public static void PredictTrack1(IRecommender recommender, IRatings ratings, string filename)
+		{
+			using (var writer = new StreamWriter(filename))
+				PredictTrack1(recommender, ratings, writer);
+		}
+
+		/// <summary>Predict items for Track 1</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="ratings">the ratings to predict</param>
+		/// <param name="writer">the writer object to write the predictions to</param>
+		public static void PredictTrack1(IRecommender recommender, IRatings ratings, TextWriter writer)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+			
+			for (int i = 0; i < ratings.Count; i++)
+				writer.WriteLine(recommender.Predict(ratings.Users[i], ratings.Items[i]).ToString(ni));
+		}		
 	}
 }
 

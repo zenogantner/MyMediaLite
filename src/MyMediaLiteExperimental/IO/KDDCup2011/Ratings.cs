@@ -59,10 +59,50 @@ namespace MyMediaLite.IO.KDDCup2011
 
 					tokens = line.Split('\t');
 
-					int item_id = int.Parse(tokens[0]);
-					double rating  = (double) uint.Parse(tokens[1]);
+					int item_id   = int.Parse(tokens[0]);
+					double rating = (double) uint.Parse(tokens[1]);
 
 					ratings.Add(user_id, item_id, rating);
+				}
+			}
+			return ratings;
+		}
+
+		/// <summary>Read in test rating data (Track 1) from a file</summary>
+		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
+		/// <returns>the rating data</returns>
+		static public IRatings ReadTest(string filename)
+		{
+			using ( var reader = new StreamReader(filename) )
+				return ReadTest(reader);
+		}
+
+		/// <summary>Read in rating test data (Track 1) from a TextReader</summary>
+		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
+		/// <returns>the rating data</returns>
+		static public IRatings
+			ReadTest(TextReader reader)
+		{
+			IRatings ratings = new MyMediaLite.Data.Ratings();
+
+			string line;
+
+			while ( (line = reader.ReadLine()) != null )
+			{
+				string[] tokens = line.Split('|');
+
+				int user_id     = int.Parse(tokens[0]);
+				int num_ratings = int.Parse(tokens[1]); // number of ratings for this user
+
+				for (int i = 0; i < num_ratings; i++)
+				{
+					line = reader.ReadLine();
+
+					tokens = line.Split('\t');
+
+					int item_id   = int.Parse(tokens[0]);
+
+					ratings.Add(user_id, item_id, 0);
 				}
 			}
 			return ratings;
