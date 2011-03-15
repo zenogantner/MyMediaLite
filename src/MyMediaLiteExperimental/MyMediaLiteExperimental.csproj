@@ -65,12 +65,12 @@
     <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
-    <Compile Include="IO\KDDCup2011\RatingData.cs" />
     <Compile Include="IO\KDDCup2011\Track2Candidates.cs" />
     <Compile Include="Eval\KDDCup.cs" />
     <Compile Include="Data\KDDCupItems.cs" />
     <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="IO\KDDCup2011\Items.cs" />
+    <Compile Include="IO\KDDCup2011\Ratings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
