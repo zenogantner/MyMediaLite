@@ -10,8 +10,8 @@ max_rating = 5
 # load the data
 user_mapping = Data.EntityMapping()
 item_mapping = Data.EntityMapping()
-train_data = IO.RatingPredictionData.Read("u1.base", min_rating, max_rating, user_mapping, item_mapping)
-test_data = IO.RatingPredictionData.Read("u1.test", min_rating, max_rating, user_mapping, item_mapping)
+train_data = IO.RatingPrediction.Read("u1.base", min_rating, max_rating, user_mapping, item_mapping)
+test_data = IO.RatingPrediction.Read("u1.test", min_rating, max_rating, user_mapping, item_mapping)
 
 # set up the recommender
 recommender = RatingPrediction.UserItemBaseline()

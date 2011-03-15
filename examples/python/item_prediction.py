@@ -7,9 +7,9 @@ from MyMediaLite import *
 # load the data
 user_mapping = Data.EntityMapping()
 item_mapping = Data.EntityMapping()
-train_data = IO.ItemRecommenderData.Read("u1.base", user_mapping, item_mapping)
+train_data = IO.ItemRecommendation.Read("u1.base", user_mapping, item_mapping)
 relevant_items = train_data.NonEmptyColumnIDs; # items that will be taken into account in the evaluation
-test_data = IO.ItemRecommenderData.Read("u1.test", user_mapping, item_mapping)
+test_data = IO.ItemRecommendation.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
 recommender = ItemRecommendation.ItemKNN()

@@ -9,9 +9,9 @@ max_rating = 5
 user_mapping = MyMediaLite::Data::EntityMapping.new()
 item_mapping = MyMediaLite::Data::EntityMapping.new()
 
-train_data = MyMediaLite::IO::RatingPredictionData.Read("u1.base", min_rating, max_rating,
+train_data = MyMediaLite::IO::RatingPrediction.Read("u1.base", min_rating, max_rating,
                                                         user_mapping, item_mapping)
-test_data = MyMediaLite::IO::RatingPredictionData.Read("u1.test", min_rating, max_rating,
+test_data = MyMediaLite::IO::RatingPrediction.Read("u1.test", min_rating, max_rating,
                                                         user_mapping, item_mapping)
 
 # set up the recommender

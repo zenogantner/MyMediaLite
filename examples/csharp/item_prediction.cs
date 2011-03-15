@@ -11,9 +11,9 @@ public class ItemPrediction
 		// load the data
 		var user_mapping = new EntityMapping();
 		var item_mapping = new EntityMapping();
-		var training_data = ItemRecommenderData.Read(args[0], user_mapping, item_mapping);
+		var training_data = ItemRecommendation.Read(args[0], user_mapping, item_mapping);
 		var relevant_items = training_data.NonEmptyColumnIDs; // items that will be taken into account in the evaluation
-		var test_data = ItemRecommenderData.Read(args[1], user_mapping, item_mapping);
+		var test_data = ItemRecommendation.Read(args[1], user_mapping, item_mapping);
 
 		// set up the recommender
 		var recommender = new MostPopular();

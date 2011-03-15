@@ -12,7 +12,7 @@ train_file = "trainIdx2.firstLines.txt"
 test_file  = "testIdx2.firstLines.txt"
 
 # load the data
-train_data = IO.KDDCup2011.RatingData.Read(train_file)
+train_data = IO.KDDCup2011.Ratings.Read(train_file)
 test_data = IO.KDDCup2011.Track2Candidates.Read(test_file)
 
 # set up the recommender

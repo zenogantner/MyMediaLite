@@ -14,8 +14,8 @@ public class RatingPrediction
 		// load the data
 		var user_mapping = new EntityMapping();
 		var item_mapping = new EntityMapping();
-		var training_data = RatingPredictionData.Read(args[0], min_rating, max_rating, user_mapping, item_mapping);
-		var test_data = RatingPredictionData.Read(args[1], min_rating, max_rating, user_mapping, item_mapping);
+		var training_data = MyMediaLite.IO.RatingPrediction.Read(args[0], min_rating, max_rating, user_mapping, item_mapping);
+		var test_data = MyMediaLite.IO.RatingPrediction.Read(args[1], min_rating, max_rating, user_mapping, item_mapping);
 
 		// set up the recommender
 		var recommender = new UserItemBaseline();
