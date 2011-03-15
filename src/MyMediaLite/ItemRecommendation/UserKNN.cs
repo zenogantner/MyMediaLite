@@ -33,7 +33,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			this.correlation = BinaryCosine.Create(data_user);
+			this.correlation = BinaryCosine.Create(Feedback.UserMatrix);
 
 			int num_users = MaxUserID + 1;
 			this.nearest_neighbors = new int[num_users][];
@@ -52,7 +52,7 @@ namespace MyMediaLite.ItemRecommendation
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[user_id])
 			{
-				if (data_user[neighbor, item_id])
+				if (Feedback.UserMatrix[neighbor, item_id])
 					count++;
 			}
 			return (double) count / k;

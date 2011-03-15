@@ -28,26 +28,28 @@ namespace MyMediaLite.ItemRecommendation
 	/// Items are weighted by how often they have been seen in the past.
 	///
 	/// This method is not personalized.
-	/// This engine does not support online updates.
+	/// This engine supports online updates.
 	/// </remarks>
 	public class MostPopular : ItemRecommender
 	{
 		/// <summary>View count</summary>
-		protected Dictionary<int, int> view_count = new Dictionary<int, int>();
+		protected int[] view_count;
 
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			for (int i = 0; i <= MaxItemID; i++)
-				view_count[i] = this.data_item[i].Count;
+			view_count = new int[MaxItemID + 1];
+			
+			for (int u = 0; u < Feedback.UserMatrix.NumberOfRows; u++)
+				foreach (int i in Feedback.UserMatrix[u])
+					view_count[i]++;
 		}
 
 		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
-			int cnt = 0;
-			if (view_count.TryGetValue(item_id, out cnt))
-				return cnt;
+			if (item_id <= MaxItemID)
+				return view_count[item_id];
 			else
 				return 0;
 		}
@@ -55,21 +57,20 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override void RemoveItem (int item_id)
 		{
-			view_count.Remove(item_id);
+			view_count[item_id] = 0;
 		}
 
 		/// <inheritdoc/>
 		public override void AddFeedback(int user_id, int item_id)
 		{
-			if (!view_count.ContainsKey(item_id))
-	 		   view_count[item_id] = 0;
-
+			base.AddFeedback(user_id, item_id);
 			view_count[item_id]++;
 		}
 
 		/// <inheritdoc/>
 		public override void RemoveFeedback(int user_id, int item_id)
 		{
+			base.RemoveFeedback(user_id, item_id);
 			view_count[item_id]--;
 		}
 
@@ -77,8 +78,11 @@ namespace MyMediaLite.ItemRecommendation
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
-				foreach (int key in view_count.Keys)
-					writer.WriteLine(key + " " + view_count[key]);
+			{
+				writer.WriteLine(MaxItemID + 1);
+				for (int i = 0; i <= MaxItemID; i++)
+					writer.WriteLine(i + " " + view_count[i]);
+			}
 		}
 
 		/// <inheritdoc/>
@@ -86,13 +90,16 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				var view_count = new Dictionary<int, int>();
+				int size = int.Parse(reader.ReadLine());
+				
+				var view_count = new int[size];
+				
 				while (! reader.EndOfStream)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');
-					int key   = int.Parse(numbers[0]);
-					int count = int.Parse(numbers[1]);
-			 		view_count[key] = count;
+					int item_id = int.Parse(numbers[0]);
+					int count   = int.Parse(numbers[1]);
+			 		view_count[item_id] = count;
 				}
 				this.view_count = view_count;
 			}

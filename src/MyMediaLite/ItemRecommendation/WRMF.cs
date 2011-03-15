@@ -51,8 +51,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
-			optimize(data_user, user_factors, item_factors);
-			optimize(data_item, item_factors, user_factors);
+			optimize(Feedback.UserMatrix, user_factors, item_factors);
+			optimize(Feedback.ItemMatrix, item_factors, user_factors); // TODO create different formulation to save 50% memory
 		}
 
 		/// <summary>Optimizes the specified data</summary>

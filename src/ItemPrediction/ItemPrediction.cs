@@ -33,8 +33,8 @@ using MyMediaLite.Util;
 /// <summary>Item prediction program, see Usage() method for more information</summary>
 public class ItemPrediction
 {
-	static SparseBooleanMatrix training_data;
-	static SparseBooleanMatrix test_data;
+	static PosOnlyFeedback training_data;
+	static PosOnlyFeedback test_data;
 	static ICollection<int> relevant_items;
 
 	static NumberFormatInfo ni = new NumberFormatInfo();
@@ -316,10 +316,10 @@ public class ItemPrediction
 		if (! relevant_items_file.Equals(string.Empty) )
 			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 		else
-			relevant_items = training_data.NonEmptyColumnIDs;
+			relevant_items = training_data.AllItems;
 
 		if (! (recommender is MyMediaLite.ItemRecommendation.Random))
-			((ItemRecommender)recommender).SetCollaborativeData(training_data);
+			((ItemRecommender)recommender).Feedback = training_data;
 
 		// user attributes
 		if (recommender is IUserAttributeAwareRecommender)
@@ -381,20 +381,20 @@ public class ItemPrediction
 	static void DisplayDataStats()
 	{
 		// training data stats
-		int num_users = training_data.NonEmptyRowIDs.Count;
-		int num_items = training_data.NonEmptyColumnIDs.Count;
+		int num_users = training_data.AllUsers.Count;
+		int num_items = training_data.AllItems.Count;
 		long matrix_size = (long) num_users * num_items;
-		long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
+		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.NumberOfEntries, sparsity));
+		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
 
 		// test data stats
-		num_users = test_data.NonEmptyRowIDs.Count;
-		num_items = test_data.NonEmptyColumnIDs.Count;
+		num_users = test_data.AllUsers.Count;
+		num_items = test_data.AllItems.Count;
 		matrix_size = (long) num_users * num_items;
-		empty_size  = (long) matrix_size - test_data.NumberOfEntries;
+		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.NumberOfEntries, sparsity));
+		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)

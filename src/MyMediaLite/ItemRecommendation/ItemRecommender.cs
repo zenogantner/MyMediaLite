@@ -19,7 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyMediaLite.DataType;
+using MyMediaLite.Data;
+//using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -32,15 +33,20 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID  { get; set;	}
-		
+
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 
-		/// <summary>Implicit feedback, user-wise</summary>
-		protected SparseBooleanMatrix data_user;
-
-		/// <summary>Implicit feedback, item-wise</summary>
-		protected SparseBooleanMatrix data_item;
+		public PosOnlyFeedback Feedback
+		{
+			get { return this.feedback; }
+			set {
+				this.feedback = value;
+				MaxUserID = feedback.MaxUserID;
+				MaxItemID = feedback.MaxItemID;
+			}
+		}
+		PosOnlyFeedback feedback;
 
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
@@ -50,7 +56,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
 		}
-		
+
 		/// <inheritdoc/>
 		public abstract void Train();
 
@@ -68,11 +74,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_id > MaxItemID)
 				throw new ArgumentException("Unknown item " + item_id + ". Add it before inserting event data.");
 
-			// update data structures
-			HashSet<int> user_items = data_user[user_id];
-			user_items.Add(item_id);
-			HashSet<int> item_users = data_item[item_id];
-			item_users.Add(user_id);
+			Feedback.Add(user_id, item_id);
 		}
 
 		/// <inheritdoc/>
@@ -83,11 +85,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_id > MaxItemID)
 				throw new ArgumentException("Unknown item " + item_id);
 
-			// update data structures
-			HashSet<int> user_items = data_user[user_id];
-			user_items.Remove(item_id);
-			HashSet<int> item_users = data_item[item_id];
-			item_users.Remove(user_id);
+			Feedback.Remove(user_id, item_id);
 		}
 
 		/// <inheritdoc/>
@@ -107,12 +105,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public virtual void RemoveUser(int user_id)
 		{
-			// remove all mentions of this user from data structures
-			HashSet<int> user_items = data_user[user_id];
-			foreach (int item_id in user_items)
-				data_item[item_id, user_id] = false;
-			user_items.Clear();
-
+			Feedback.RemoveUser(user_id);
+			
 			if (user_id == MaxUserID)
 				MaxUserID--;
 		}
@@ -120,26 +114,10 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public virtual void RemoveItem(int item_id)
 		{
-			// remove all mentions of this item from data structures
-			HashSet<int> item_users = data_item[item_id];
-			foreach (int user_id in item_users)
-				data_user[user_id, item_id] = false;
-			item_users.Clear();
-
+			Feedback.RemoveItem(item_id);			
+			
 			if (item_id == MaxItemID)
 				MaxItemID--;
-		}
-
-		
-		/// <summary>Set the collaborative training data</summary>
-		/// <param name="user_items">a <see cref="SparseBooleanMatrix"/> that where a user (rows) has interacted with an item (columns)</param>
-		public void SetCollaborativeData(SparseBooleanMatrix user_items)
-		{
-			this.data_user = user_items;
-			this.data_item = user_items.Transpose();
-			
-			this.MaxUserID = Math.Max(MaxUserID, data_user.NonEmptyRowIDs.Max());			
-			this.MaxItemID = Math.Max(MaxItemID, data_item.NonEmptyRowIDs.Max());
 		}
 	}
 }

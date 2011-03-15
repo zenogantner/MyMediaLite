@@ -241,15 +241,9 @@ namespace MyMediaLite.DataType
 			return transpose;
 		}
 
-		/// <summary>
-		/// Get the overlap of two matrices, i.e. the number of true entries where they agree
-		/// </summary>
-		/// <param name="s">
-		/// the <see cref="SparseBooleanMatrix"/> to compare to
-		/// </param>
-		/// <returns>
-		/// the number of entries that are true in both matrices
-		/// </returns>
+		/// <summary>Get the overlap of two matrices, i.e. the number of true entries where they agree</summary>
+		/// <param name="s">the <see cref="SparseBooleanMatrix"/> to compare to</param>
+		/// <returns>the number of entries that are true in both matrices</returns>
 		public int Overlap(SparseBooleanMatrix s)
 		{
 			int c = 0;

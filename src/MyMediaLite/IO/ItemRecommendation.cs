@@ -33,8 +33,8 @@ namespace MyMediaLite.IO
 		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
 		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-		/// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
-		static public SparseBooleanMatrix Read(string filename, EntityMapping user_mapping, EntityMapping item_mapping)
+		/// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+		static public PosOnlyFeedback Read(string filename, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
@@ -47,10 +47,10 @@ namespace MyMediaLite.IO
 		/// <param name="reader">the TextReader to be read from</param>
 		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-		/// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
-		static public SparseBooleanMatrix Read(TextReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+		/// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+		static public PosOnlyFeedback Read(TextReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
 		{
-	        var user_items = new SparseBooleanMatrix();
+	        var feedback = new PosOnlyFeedback();
 
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
@@ -69,20 +69,20 @@ namespace MyMediaLite.IO
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
-               	user_items[user_id, item_id] = true;
+               	feedback.Add(user_id, item_id);
 			}
 
-			return user_items;
+			return feedback;
 		}
 
         /// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
         /// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
         /// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-        /// <returns>a <see cref="SparseBooleanMatrix"/> object with the user-wise collaborative data</returns>
-        static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+        /// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+        static public PosOnlyFeedback Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
         {
-            var user_items = new SparseBooleanMatrix();
+            var feedback = new PosOnlyFeedback();
 
             if (reader.FieldCount < 2)
                 throw new IOException("Expected at least two columns.");
@@ -92,10 +92,10 @@ namespace MyMediaLite.IO
                 int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
                 int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
 
-                user_items[user_id, item_id] = true;
+                feedback.Add(user_id, item_id);
             }
 
-            return user_items;
+            return feedback;
         }
 	}
 }

@@ -38,13 +38,13 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (k == uint.MaxValue)
 			{
-				return correlation.SumUp(item_id, data_user[user_id]);
+				return correlation.SumUp(item_id, Feedback.UserMatrix[user_id]);
 			}
 			else
 			{
 				double result = 0;
 				foreach (int neighbor in nearest_neighbors[item_id])
-					if (data_item[neighbor, user_id])
+					if (Feedback.ItemMatrix[neighbor, user_id])
 						result += correlation[item_id, neighbor];
 				return result;
 			}

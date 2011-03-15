@@ -2,8 +2,8 @@
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
         - API changes
-          - new data structures and interfaces for rating predictions (consume
-            less memory)
+          - new data structures and interfaces for rating prediction and for
+            item prediction from implicit feedback (consume less memory)
           - CanPredict() is now part of the IRecommender interface.
           - rename IO.RatingPredictionData to IO.RatingPrediction
           - rename IO.ItemRecommenderData to IO.ItemRecommendation

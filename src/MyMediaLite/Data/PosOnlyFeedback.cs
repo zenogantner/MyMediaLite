@@ -23,38 +23,49 @@ namespace MyMediaLite.Data
 {
 	/// <summary>Data structure for implicit, positive-only user feedback</summary>
 	/// <remarks>
-	/// This data structure does currently NOT support online updates.
-	/// Adding this functionality is trivial, though.
+	/// This data structure supports online updates.
 	/// </remarks>
 	public class PosOnlyFeedback
 	{
 		/// <summary>By-user access, users are stored in the rows, items in the culumns</summary>
 		public SparseBooleanMatrix UserMatrix { get; private set; }
 
-		/// <summary>By-item access, items are stored in the rows, users in the culumns</summary>		
+		/// <summary>By-item access, items are stored in the rows, users in the culumns</summary>
 		public SparseBooleanMatrix ItemMatrix
 		{
 			get {
 				if (item_matrix == null)
-					BuildItemMatrix();
+					item_matrix = UserMatrix.Transpose();
 
 				return item_matrix;
 			}
 		}
 		SparseBooleanMatrix item_matrix;
 
+		/// <summary>the maximum user ID</summary>
+		public int MaxUserID { get; private set; }
+
+		/// <summary>the maximum item ID</summary>
+		public int MaxItemID { get; private set; }
+
+		public int Count { get { return UserMatrix.NumberOfEntries; } }
+
+		
+		public ICollection<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
+		
+		public ICollection<int> AllItems {
+			get {
+				if (item_matrix == null)
+					return UserMatrix.NonEmptyColumnIDs;
+				else
+					return ItemMatrix.NonEmptyRowIDs;
+			}
+		}
+		
 		/// <summary>Create a PosOnlyFeedback object</summary>
 		public PosOnlyFeedback()
 		{
 			UserMatrix = new SparseBooleanMatrix();
-		}
-
-		void BuildItemMatrix()
-		{
-			item_matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < UserMatrix.NumberOfRows; i++)
-				foreach (int j in UserMatrix[i])
-					item_matrix[j, i] = true;
 		}
 
 		/// <summary>Add a user-item event to the data structure</summary>
@@ -63,6 +74,46 @@ namespace MyMediaLite.Data
 		public void Add(int user_id, int item_id)
 		{
 			UserMatrix[user_id, item_id] = true;
+			if (item_matrix != null)
+				item_matrix[item_id, user_id] = true;
+
+			if (user_id > MaxUserID)
+				MaxUserID = user_id;
+
+			if (item_id > MaxItemID)
+				MaxItemID = item_id;
+		}
+
+		/// <summary>Remove a user-item event from the data structure</summary>
+		/// <param name="item_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		public void Remove(int user_id, int item_id)
+		{
+			UserMatrix[user_id, item_id] = false;
+			if (item_matrix != null)
+				item_matrix[item_id, user_id] = false;
+		}
+
+		public void RemoveUser(int user_id)
+		{
+			UserMatrix[user_id].Clear();
+			if (item_matrix != null)
+				for (int i = 0; i < item_matrix.NumberOfRows; i++)
+					item_matrix[i].Remove(user_id);
+		}
+
+		public void RemoveItem(int item_id)
+		{
+			for (int u = 0; u < UserMatrix.NumberOfRows; u++)
+				UserMatrix[u].Remove(item_id);
+
+			if (item_matrix != null)
+				item_matrix[item_id].Clear();
+		}
+
+		public int Overlap(PosOnlyFeedback s)
+		{
+			return UserMatrix.Overlap(s.UserMatrix);
 		}
 	}
 }

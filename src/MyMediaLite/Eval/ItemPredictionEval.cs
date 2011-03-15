@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 
@@ -54,8 +55,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
 			IItemRecommender engine,
-			SparseBooleanMatrix test,
-			SparseBooleanMatrix train,
+			PosOnlyFeedback test,
+			PosOnlyFeedback train,
 			ICollection<int> relevant_items)
 		{
 			if (train.Overlap(test) > 0)
@@ -70,14 +71,12 @@ namespace MyMediaLite.Eval
 			double ndcg_sum    = 0;
 			int num_users      = 0;
 
-			foreach (KeyValuePair<int, HashSet<int>> user in test.NonEmptyRows)
+			foreach (int user_id in test.AllUsers)
 			{
-				int user_id = user.Key;
-				HashSet<int> test_items = user.Value;
-				var correct_items = new HashSet<int>(test_items.Intersect(relevant_items));
+				var correct_items = new HashSet<int>(test.UserMatrix[user_id].Intersect(relevant_items));
 
 				// the number of items that are really relevant for this user
-				int num_eval_items = relevant_items.Count - train[user_id].Intersect(relevant_items).Count();
+				int num_eval_items = relevant_items.Count - train.UserMatrix[user_id].Intersect(relevant_items).Count();
 
 				// skip all users that have 0 or #relevant_items test items
 				if (correct_items.Count == 0)
@@ -88,12 +87,12 @@ namespace MyMediaLite.Eval
 				num_users++;
 				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
 
-				auc_sum     += AUC(prediction, correct_items, train[user_id]);
-				map_sum     += MAP(prediction, correct_items, train[user_id]);
-				ndcg_sum    += NDCG(prediction, correct_items, train[user_id]);
-				prec_5_sum  += PrecisionAt(prediction, correct_items, train[user_id],  5);
-				prec_10_sum += PrecisionAt(prediction, correct_items, train[user_id], 10);
-				prec_15_sum += PrecisionAt(prediction, correct_items, train[user_id], 15);
+				auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
+				map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);
+				ndcg_sum    += NDCG(prediction, correct_items, train.UserMatrix[user_id]);
+				prec_5_sum  += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
+				prec_10_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
+				prec_15_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
 
 				if (prediction.Length != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");

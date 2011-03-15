@@ -97,7 +97,7 @@ namespace MyMediaLite.ItemRecommendation
 			// if necessary, set the bias counterparts to 1
 			if (item_bias)
 				user_factors.SetColumnToOneValue(0, 1.0);
-			
+
 			base.Train();
 		}
 
@@ -107,7 +107,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
-			int num_pos_events = data_user.NumberOfEntries;
+			int num_pos_events = Feedback.Count;
 
 			for (int i = 0; i < num_pos_events * iteration_length; i++)
 			{
@@ -124,7 +124,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <returns>true if the given item was already seen by user u</returns>
 		protected virtual bool SampleOtherItem(int u, int i, out int j)
 		{
-			HashSet<int> user_items = data_user[u];
+			HashSet<int> user_items = Feedback.UserMatrix[u];
 			bool item_is_positive = user_items.Contains(i);
 
 			if (fast_sampling)
@@ -168,7 +168,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			else
 			{
-				HashSet<int> user_items = data_user[u];
+				HashSet<int> user_items = Feedback.UserMatrix[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
 					j = random.Next (0, MaxItemID + 1);
@@ -183,7 +183,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (true)
 			{
 				int u = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = data_user[u];
+				HashSet<int> user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
@@ -216,7 +216,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_bias)
 			{
 				start_factor = 1; // leave out the first (index 0) factor later
-				
+
 				double w_uf = user_factors[u, 0];
 				double h_if = item_factors[i, 0];
 				double h_jf = item_factors[j, 0];
@@ -343,7 +343,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 
-			HashSet<int> user_items = data_user[user_id];
+			HashSet<int> user_items = Feedback.UserMatrix[user_id];
 			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++)
 			{
 				int item_id_1, item_id_2;
@@ -358,7 +358,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 
-			int num_pos_events = data_user.NumberOfEntries;
+			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
 			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
@@ -382,7 +382,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			for (int user_id = 0; user_id < MaxUserID + 1; user_id++)
 			{
-				HashSet<int> test_items = data_user[user_id];
+				HashSet<int> test_items = Feedback.UserMatrix[user_id];
 				if (test_items.Count == 0)
 					continue;
 				int[] prediction = ItemPrediction.PredictItems(this, user_id, MaxItemID);
@@ -418,11 +418,11 @@ namespace MyMediaLite.ItemRecommendation
 			while (u >= user_neg_items.Count)
 				user_neg_items.Add(null);
 
-			var pos_list = new List<int>(data_user[u]);
+			var pos_list = new List<int>(Feedback.UserMatrix[u]);
 			user_pos_items[u] = pos_list.ToArray();
 			var neg_list = new List<int>();
 			for (int i = 0; i < MaxItemID; i++)
-				if (! data_user[u, i])
+				if (! Feedback.UserMatrix[u, i])
 					neg_list.Add(i);
 			user_neg_items[u] = neg_list.ToArray();
 		}

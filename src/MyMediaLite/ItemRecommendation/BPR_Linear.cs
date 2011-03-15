@@ -82,9 +82,9 @@ namespace MyMediaLite.ItemRecommendation
 		double regularization = 0.015;
 
 		// support data structure for fast sampling
-		private int[][] user_pos_items;
+		private IList<int>[] user_pos_items;
 		// support data structure for fast sampling
-		private int[][] user_neg_items;
+		private IList<int>[] user_neg_items;
 
 		/// <inheritdoc/>
 		public override void Train()
@@ -102,11 +102,11 @@ namespace MyMediaLite.ItemRecommendation
 				this.user_neg_items = new int[MaxUserID + 1][];
 				for (int u = 0; u < MaxUserID + 1; u++)
 				{
-					var pos_list = new List<int>(data_user[u]);
+					var pos_list = new List<int>(Feedback.UserMatrix[u]);
 					user_pos_items[u] = pos_list.ToArray();
 					var neg_list = new List<int>();
 					for (int i = 0; i < MaxItemID; i++)
-						if (!data_user[u].Contains(i) && data_item[i].Count != 0)
+						if (!Feedback.UserMatrix[u].Contains(i) && Feedback.ItemMatrix[i].Count != 0) // TODO we can spare the item matrix, thus use less memory
 							neg_list.Add(i);
 					user_neg_items[u] = neg_list.ToArray();
 				}
@@ -128,7 +128,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </summary>
 		public void Iterate()
 		{
-			int num_pos_events = data_user.NumberOfEntries;
+			int num_pos_events = Feedback.Count;
 
 			for (int i = 0; i < num_pos_events * iteration_length; i++)
 			{
@@ -152,16 +152,16 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (fast_sampling)
 			{
-				i = user_pos_items[u][random.Next(0, user_pos_items[u].Length)];
-				j = user_neg_items[u][random.Next (0, user_neg_items[u].Length)];
+				i = user_pos_items[u][random.Next(0, user_pos_items[u].Count)];
+				j = user_neg_items[u][random.Next (0, user_neg_items[u].Count)];
 			}
 			else
 			{
-				HashSet<int> user_items = data_user[u];
+				HashSet<int> user_items = Feedback.UserMatrix[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
 					j = random.Next (0, MaxItemID + 1);
-				while (user_items.Contains(j) || data_item[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
+				while (user_items.Contains(j) || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
 			}
 		}
 
@@ -172,7 +172,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (true)
 			{
 				int u = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = data_user[u];
+				HashSet<int> user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
