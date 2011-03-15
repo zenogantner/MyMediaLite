@@ -234,7 +234,6 @@ public class ItemPrediction
 					}
 				}
 			} // for
-
 			DisplayIterationStats();
 		}
 		else
@@ -251,8 +250,6 @@ public class ItemPrediction
 				Console.Write(recommender.ToString() + " ");
 				// TODO is this the right time to load the model?
 			}
-
-			Console.Error.WriteLine("memory {0}", Memory.Usage);
 
 			if (!predict_items_file.Equals(string.Empty))
 			{
@@ -302,6 +299,7 @@ public class ItemPrediction
 			}
 			Console.WriteLine();
 		}
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 		Recommender.SaveModel(recommender, save_model_file);
 	}
 
@@ -388,7 +386,7 @@ public class ItemPrediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.NumberOfEntries;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.NumberOfEntries, sparsity));
 
 		// test data stats
 		num_users = test_data.NonEmptyRowIDs.Count;
@@ -396,7 +394,7 @@ public class ItemPrediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.NumberOfEntries;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.NumberOfEntries, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)

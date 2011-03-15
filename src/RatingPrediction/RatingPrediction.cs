@@ -251,8 +251,6 @@ MyMediaLite rating prediction
 				}
 			} // for
 
-			Console.Error.WriteLine("memory {0}", Memory.Usage);
-
 			DisplayIterationStats();
 			Recommender.SaveModel(recommender, save_model_file);
 		}
@@ -285,8 +283,6 @@ MyMediaLite rating prediction
 				Console.Write(recommender.ToString() + " ");
 			}
 
-			Console.Error.WriteLine("memory {0}", Memory.Usage);
-
 			if (!no_eval)
 			{
 				seconds = Utils.MeasureTime(
@@ -311,6 +307,7 @@ MyMediaLite rating prediction
 
 			Console.WriteLine();
 		}
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
     static void LoadData(string data_dir,
@@ -399,7 +396,7 @@ MyMediaLite rating prediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
 
 		// test data stats
 		num_users = test_data.AllUsers.Count;
@@ -407,7 +404,7 @@ MyMediaLite rating prediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)
