@@ -17,9 +17,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MyMediaLite.Data;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
 {
@@ -109,6 +112,39 @@ namespace MyMediaLite.Util
 				types.AddRange( assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)) );
 
 			return types.ToArray();
+		}
+
+		// TODO get rid of recommender argument
+		/// <summary>Display dataset statistics</summary>
+		/// <param name="train">the training data</param>
+		/// <param name="test">the test data</param>
+		/// <param name="recommender">the recommender (to get attribute information)</param>
+		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			// training data stats
+			int num_users = train.AllUsers.Count;
+			int num_items = train.AllItems.Count;
+			long matrix_size = (long) num_users * num_items;
+			long empty_size  = (long) matrix_size - train.Count;
+			double sparsity = (double) 100L * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, train.Count, sparsity));
+
+			// test data stats
+			num_users = test.AllUsers.Count;
+			num_items = test.AllItems.Count;
+			matrix_size = (long) num_users * num_items;
+			empty_size  = (long) matrix_size - test.Count;
+			sparsity = (double) 100L * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
+
+			// attribute stats
+			if (recommender is IUserAttributeAwareRecommender)
+				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+			if (recommender is IItemAttributeAwareRecommender)
+				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
 		}
 	}
 }

@@ -31,7 +31,7 @@ using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
-public class RatingPrediction
+public static class RatingPrediction
 {
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
@@ -187,7 +187,7 @@ MyMediaLite rating prediction
 		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
-		DisplayDataStats();
+		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		if (find_iter != 0)
 		{
@@ -386,32 +386,6 @@ MyMediaLite rating prediction
 	{
 		Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
 		                            result["RMSE"], result["MAE"], result["NMAE"]));
-	}
-
-	// TODO move to a class in the MyMediaLite base library
-	static void DisplayDataStats()
-	{
-		// training data stats
-		int num_users = training_data.AllUsers.Count;
-		int num_items = training_data.AllItems.Count;
-		long matrix_size = (long) num_users * num_items;
-		long empty_size  = (long) matrix_size - training_data.Count;
-		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
-
-		// test data stats
-		num_users = test_data.AllUsers.Count;
-		num_items = test_data.AllItems.Count;
-		matrix_size = (long) num_users * num_items;
-		empty_size  = (long) matrix_size - test_data.Count;
-		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
-
-		// attribute stats
-		if (recommender is IUserAttributeAwareRecommender)
-			Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
-		if (recommender is IItemAttributeAwareRecommender)
-			Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
 	}
 
 	static void DisplayIterationStats()
