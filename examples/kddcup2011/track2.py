@@ -5,22 +5,19 @@ clr.AddReference("MyMediaLite.dll")
 clr.AddReference("MyMediaLiteExperimental.dll")
 from MyMediaLite import *
 
-min_rating = 0;
-max_rating = 100;
-
 train_file = "trainIdx2.firstLines.txt"
 test_file  = "testIdx2.firstLines.txt"
 
 # load the data
 train_data = IO.KDDCup2011.Ratings.Read(train_file)
 test_data = IO.KDDCup2011.Track2Candidates.Read(test_file)
-item_relations = IO.KDDCup2011.Items.ReadTrack2("trackData2.txt", "albumData2.txt", "artistData2.txt", "genreData2.txt");
+item_relations = IO.KDDCup2011.Items.Read("trackData2.txt", "albumData2.txt", "artistData2.txt", "genreData2.txt", 2);
 print item_relations
 
 # set up the recommender
 recommender = RatingPrediction.UserItemBaseline()
-recommender.MinRating = min_rating
-recommender.MaxRating = max_rating
+recommender.MinRating = 0
+recommender.MaxRating = 100
 recommender.Ratings = train_data
 print "Training ..."
 recommender.Train()
