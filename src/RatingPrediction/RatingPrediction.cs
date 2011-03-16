@@ -320,7 +320,6 @@ MyMediaLite rating prediction
 		// TODO check for the existence of files before starting to load all of them
 
 		// read training data
-
 		if (movielens1m_format)
 			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
@@ -370,7 +369,7 @@ MyMediaLite rating prediction
 			}
 
 		// read test data
-		if (movielens1m_format) // TODO re-activate
+		if (movielens1m_format)
 			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
 			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
