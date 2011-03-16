@@ -37,6 +37,17 @@ namespace MyMediaLite.Eval
 			}
 		}
 
+		/// <summary>Write rating prediction results to STDOUT</summary>
+		/// <param name="result">the output of the Evaluate() method</param>
+		static public void DisplayResults(Dictionary<string, double> result)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
+		                                result["RMSE"], result["MAE"], result["NMAE"]));
+		}
+
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
 		/// <remarks>
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.

@@ -204,7 +204,7 @@ MyMediaLite rating prediction
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			DisplayResults(RatingEval.Evaluate(recommender, test_data));
+			RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data));
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
 			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -229,7 +229,7 @@ MyMediaLite rating prediction
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
 						results = RatingEval.Evaluate(recommender, test_data);
-						DisplayResults(results);
+						RatingEval.DisplayResults(results);
 						rmse_eval_stats.Add(results["RMSE"]);
 						Console.WriteLine(" " + i);
 					});
@@ -266,7 +266,7 @@ MyMediaLite rating prediction
 					Console.WriteLine();
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
 					var results = RatingEval.EvaluateOnSplit(recommender, split);
-					DisplayResults(results);
+					RatingEval.DisplayResults(results);
 					no_eval = true;
 					recommender.Ratings = training_data;
 				}
@@ -288,7 +288,7 @@ MyMediaLite rating prediction
 				seconds = Utils.MeasureTime(
 			    	delegate()
 				    {
-						DisplayResults(RatingEval.Evaluate(recommender, test_data));
+						RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data));
 					}
 				);
 				Console.Write(" testing_time " + seconds);
@@ -378,13 +378,6 @@ MyMediaLite rating prediction
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayIterationStats();
-	}
-
-	// TODO move to a class in the MyMediaLite base library
-	static void DisplayResults(Dictionary<string, double> result)
-	{
-		Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
-		                            result["RMSE"], result["MAE"], result["NMAE"]));
 	}
 
 	static void DisplayIterationStats()

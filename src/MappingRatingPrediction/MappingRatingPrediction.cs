@@ -234,17 +234,11 @@ public class MappingRatingPrediction
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
 	    		var result = RatingEval.Evaluate(recommender, test_data);
-				DisplayResults(result);
+				RatingEval.DisplayResults(result);
 	    	} );
 		Console.Write(" testing " + seconds);
 
 		return seconds;
-	}
-
-	static void DisplayResults(Dictionary<string, double> result)
-	{
-		Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####}",
-		                            result["RMSE"], result["MAE"]));
 	}
 
 	static void DisplayDataStats()

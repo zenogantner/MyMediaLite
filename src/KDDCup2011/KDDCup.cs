@@ -136,23 +136,23 @@ MyMediaLite KDD Cup 2011 tool
 		catch (ArgumentException e) { Usage(e.Message);	}
 
 		// arguments for iteration search
-		find_iter      = parameters.GetRemoveInt32(  "find_iter",   0);
-		max_iter       = parameters.GetRemoveInt32(  "max_iter",    500);
-		compute_fit        = parameters.GetRemoveBool(   "compute_fit", false);
+		find_iter   = parameters.GetRemoveInt32(  "find_iter",   0);
+		max_iter    = parameters.GetRemoveInt32(  "max_iter",    500);
+		compute_fit = parameters.GetRemoveBool(   "compute_fit", false);
 		epsilon     = parameters.GetRemoveDouble( "epsilon",     0);
 		rmse_cutoff = parameters.GetRemoveDouble( "rmse_cutoff", double.MaxValue);
 		mae_cutoff  = parameters.GetRemoveDouble( "mae_cutoff",  double.MaxValue);
 
 		// data arguments
-		string data_dir      = parameters.GetRemoveString( "data_dir"); Console.Error.WriteLine("data_dir {0}", data_dir);
+		string data_dir  = parameters.GetRemoveString( "data_dir");
 
 		// other arguments
-		save_model_file      = parameters.GetRemoveString( "save_model");
-		load_model_file      = parameters.GetRemoveString( "load_model");
-		int random_seed      = parameters.GetRemoveInt32(  "random_seed",  -1);
-		no_eval              = parameters.GetRemoveBool(   "no_eval",      false);
-		prediction_file = parameters.GetRemoveString( "predict_ratings_file"); // TODO
-		cross_validation     = parameters.GetRemoveInt32(  "cross_validation", 0);
+		save_model_file  = parameters.GetRemoveString( "save_model");
+		load_model_file  = parameters.GetRemoveString( "load_model");
+		int random_seed  = parameters.GetRemoveInt32(  "random_seed",  -1);
+		no_eval          = parameters.GetRemoveBool(   "no_eval",      false);
+		prediction_file  = parameters.GetRemoveString( "predict_ratings_file");
+		cross_validation = parameters.GetRemoveInt32(  "cross_validation", 0);
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -208,7 +208,7 @@ MyMediaLite KDD Cup 2011 tool
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			DisplayResults(RatingEval.Evaluate(recommender, validation_data));
+			RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data));
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
 			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -233,7 +233,7 @@ MyMediaLite KDD Cup 2011 tool
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
 						results = RatingEval.Evaluate(recommender, validation_data);
-						DisplayResults(results);
+						RatingEval.DisplayResults(results);
 						rmse_eval_stats.Add(results["RMSE"]);
 						Console.WriteLine(" " + i);
 					});
@@ -270,7 +270,7 @@ MyMediaLite KDD Cup 2011 tool
 					Console.WriteLine();
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
 					var results = RatingEval.EvaluateOnSplit(recommender, split);
-					DisplayResults(results);
+					RatingEval.DisplayResults(results);
 					no_eval = true;
 					recommender.Ratings = training_data;
 				}
@@ -290,10 +290,7 @@ MyMediaLite KDD Cup 2011 tool
 			if (!no_eval)
 			{
 				seconds = Utils.MeasureTime(
-			    	delegate()
-				    {
-						DisplayResults(RatingEval.Evaluate(recommender, validation_data));
-					}
+			    	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data)); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}
@@ -317,7 +314,7 @@ MyMediaLite KDD Cup 2011 tool
 	{
 		string training_file   = Path.Combine(data_dir, string.Format("trainIdx{0}.txt", track_no));
 		string test_file       = Path.Combine(data_dir, string.Format("testIdx{0}.txt",  track_no));
-		string validation_file = Path.Combine(data_dir, "validationIdx1.firstLines.txt");
+		string validation_file = Path.Combine(data_dir, "validationIdx1.txt");
 		string track_file      = Path.Combine(data_dir, string.Format("trackData{0}.txt",  track_no));
 		string album_file      = Path.Combine(data_dir, string.Format("albumData{0}.txt",  track_no));
 		string artist_file     = Path.Combine(data_dir, string.Format("artistData{0}.txt", track_no));
@@ -344,13 +341,6 @@ MyMediaLite KDD Cup 2011 tool
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayIterationStats();
-	}
-
-	// TODO move to a class in the MyMediaLite base library
-	static void DisplayResults(Dictionary<string, double> result)
-	{
-		Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
-		                            result["RMSE"], result["MAE"], result["NMAE"]));
 	}
 
 	static void DisplayIterationStats()

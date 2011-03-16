@@ -12,6 +12,8 @@
         - command-line programs
           - display number of ratings
           - give out memory usage also for find_iter
+          - move some statistics routines to the library because they are
+            used several times
         - IO
           - add routines for KDD Cup 2011 data
         - example programs
