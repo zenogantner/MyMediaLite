@@ -28,6 +28,7 @@ using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
 using MyMediaLite.IO.KDDCup2011;
+using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
@@ -44,7 +45,7 @@ public static class RatingPrediction
 	static KDDCupItems item_relations;
 
 	// recommenders
-	static RatingPredictor recommender = null;
+	static IRecommender recommender = null;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -55,7 +56,7 @@ public static class RatingPrediction
 	// global command line parameters
 	static bool compute_fit;
 	static string save_model_file;
-	static string load_model_file;	
+	static string load_model_file;
 	static int max_iter;
 	static int find_iter;
 	static int cross_validation;
@@ -64,7 +65,7 @@ public static class RatingPrediction
 	static double mae_cutoff;
 	static bool no_eval;
 	static string prediction_file; // TODO do something useful with this
-	
+
 
 	static void Usage(string message)
 	{
@@ -86,6 +87,8 @@ MyMediaLite KDD Cup 2011 tool
 
 			Console.Write("   - ");
 			Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.RatingPrediction")));
+			Console.Write("   - ");
+			Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.ItemRecommendation")));
 
 			Console.WriteLine(@"method ARGUMENTS have the form name=value
 
@@ -118,7 +121,7 @@ MyMediaLite KDD Cup 2011 tool
 
 		double min_rating = 0;
 		double max_rating = 100;
-		
+
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 		ni.NumberDecimalDigits = '.';
@@ -159,6 +162,8 @@ MyMediaLite KDD Cup 2011 tool
 
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
+			recommender = Recommender.CreateItemRecommender(method);
+		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
 
 		Recommender.Configure(recommender, parameters, Usage);
@@ -172,32 +177,117 @@ MyMediaLite KDD Cup 2011 tool
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating;
-		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
+		if (recommender is RatingPredictor)
+		{
+			var rating_predictor = recommender as RatingPredictor;
+
+			rating_predictor.Ratings = training_data;
+
+			rating_predictor.MinRating = min_rating;
+			rating_predictor.MaxRating = max_rating;
+			Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", rating_predictor.MinRating, rating_predictor.MaxRating));
+		}
+
+		if (recommender is ItemRecommender)
+		{
+			var item_recommender = recommender as ItemRecommender;
+
+			item_recommender.Feedback = CreateFeedback(training_data);
+		}
 
 		if (track_no == 1)
 			DoTrack1();
 		else
 			DoTrack2();
-		
+
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
-	
+
+	static PosOnlyFeedback CreateFeedback(IRatings ratings)
+	{
+		var feedback = new PosOnlyFeedback();
+
+		for (int i = 0; i < ratings.Count; i++)
+			if (ratings[i] >= 80)
+				feedback.Add(ratings.Users[i], ratings.Items[i]);
+
+		return feedback;
+	}
+
 	static void DoTrack2()
 	{
-		
+		TimeSpan seconds;
+
+		if (load_model_file.Equals(string.Empty))
+		{
+			Console.Write(recommender.ToString());
+
+			if (cross_validation > 0)
+			{
+				Console.WriteLine();
+
+				if (recommender is RatingPredictor)
+				{
+					var rating_predictor = recommender as RatingPredictor;
+
+					var split = new RatingCrossValidationSplit(training_data, cross_validation);
+					var results = RatingEval.EvaluateOnSplit(rating_predictor, split);
+					RatingEval.DisplayResults(results);
+					no_eval = true;
+					rating_predictor.Ratings = training_data;
+				}
+				else
+				{
+					throw new NotImplementedException("Crossvalidation for item predictors is not implemented yet.");
+				}
+			}
+			else
+			{
+				seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+    			Console.Write(" training_time " + seconds + " ");
+				Recommender.SaveModel(recommender, save_model_file);
+			}
+		}
+		else
+		{
+			Recommender.LoadModel(recommender, load_model_file);
+			Console.Write(recommender.ToString() + " ");
+		}
+
+		if (!no_eval)
+		{
+			// TODO implement a validation split
+			// seconds = Utils.MeasureTime(
+		    //	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data)); }
+			//);
+			//Console.Write(" testing_time " + seconds);
+		}
+
+		if (!prediction_file.Equals(string.Empty))
+		{
+			seconds = Utils.MeasureTime(
+		    	delegate() {
+					Console.WriteLine();
+					KDDCup.PredictTrack2(recommender, track2_test_data, prediction_file);
+				}
+			);
+			Console.Error.Write("predicting_time " + seconds);
+		}
+
+		Console.WriteLine();
 	}
-	
+
 	static void DoTrack1()
 	{
-		Utils.DisplayDataStats(training_data, track1_test_data, recommender);		
-		
+		var rating_predictor = recommender as RatingPredictor;
+
+		Utils.DisplayDataStats(training_data, track1_test_data, rating_predictor);
+
 		if (find_iter != 0)
 		{
 			if ( !(recommender is IIterativeModel) )
 				Usage("Only iterative recommenders support find_iter.");
-			IIterativeModel iterative_recommender = (MatrixFactorization) recommender;
+			IIterativeModel iterative_recommender = (MatrixFactorization) rating_predictor;
 			Console.WriteLine(recommender.ToString() + " ");
 
 			if (load_model_file.Equals(string.Empty))
@@ -208,7 +298,7 @@ MyMediaLite KDD Cup 2011 tool
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data));
+			RatingEval.DisplayResults(RatingEval.Evaluate(rating_predictor, validation_data));
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
 			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -232,7 +322,7 @@ MyMediaLite KDD Cup 2011 tool
 
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
-						results = RatingEval.Evaluate(recommender, validation_data);
+						results = RatingEval.Evaluate(rating_predictor, validation_data);
 						RatingEval.DisplayResults(results);
 						rmse_eval_stats.Add(results["RMSE"]);
 						Console.WriteLine(" " + i);
@@ -269,10 +359,10 @@ MyMediaLite KDD Cup 2011 tool
 				{
 					Console.WriteLine();
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = RatingEval.EvaluateOnSplit(recommender, split);
+					var results = RatingEval.EvaluateOnSplit(rating_predictor, split);
 					RatingEval.DisplayResults(results);
 					no_eval = true;
-					recommender.Ratings = training_data;
+					rating_predictor.Ratings = training_data;
 				}
 				else
 				{
@@ -290,7 +380,7 @@ MyMediaLite KDD Cup 2011 tool
 			if (!no_eval)
 			{
 				seconds = Utils.MeasureTime(
-			    	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data)); }
+			    	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(rating_predictor, validation_data)); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}
@@ -319,21 +409,20 @@ MyMediaLite KDD Cup 2011 tool
 		string album_file      = Path.Combine(data_dir, string.Format("albumData{0}.txt",  track_no));
 		string artist_file     = Path.Combine(data_dir, string.Format("artistData{0}.txt", track_no));
 		string genre_file      = Path.Combine(data_dir, string.Format("genreData{0}.txt",  track_no));
-		
+
 		// read training data
 		training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
-		recommender.Ratings = training_data;
 
 		// read validation data, if necessary
 		if (track_no == 1)
 			validation_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(validation_file);
-		
+
 		// read test data
 		if (track_no == 1)
 			track1_test_data = MyMediaLite.IO.KDDCup2011.Ratings.ReadTest(test_file);
 		else
 			track2_test_data = Track2Candidates.Read(test_file);
-		
+
 		// read item data
 		item_relations = Items.Read(track_file, album_file, artist_file, genre_file, track_no);
 	}

@@ -141,10 +141,13 @@ namespace MyMediaLite.Util
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
 
 			// attribute stats
-			if (recommender is IUserAttributeAwareRecommender)
-				Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
-			if (recommender is IItemAttributeAwareRecommender)
-				Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
+			if (recommender != null)
+			{
+				if (recommender is IUserAttributeAwareRecommender)
+					Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+				if (recommender is IItemAttributeAwareRecommender)
+					Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
+			}
 		}
 	}
 }

@@ -71,6 +71,7 @@
     <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="IO\KDDCup2011\Items.cs" />
     <Compile Include="IO\KDDCup2011\Ratings.cs" />
+    <Compile Include="Eval\Track2Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
