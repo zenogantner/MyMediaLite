@@ -151,7 +151,7 @@ MyMediaLite KDD Cup 2011 tool
 		load_model_file  = parameters.GetRemoveString( "load_model");
 		int random_seed  = parameters.GetRemoveInt32(  "random_seed",  -1);
 		no_eval          = parameters.GetRemoveBool(   "no_eval",      false);
-		prediction_file  = parameters.GetRemoveString( "predict_ratings_file");
+		prediction_file  = parameters.GetRemoveString( "prediction_file");
 		cross_validation = parameters.GetRemoveInt32(  "cross_validation", 0);
 
 		if (random_seed != -1)
@@ -186,7 +186,7 @@ MyMediaLite KDD Cup 2011 tool
 	
 	static void DoTrack2()
 	{
-		throw new NotImplementedException();
+		
 	}
 	
 	static void DoTrack1()

@@ -100,7 +100,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 					tokens = line.Split('\t');
 
-					int item_id   = int.Parse(tokens[0]);
+					int item_id = int.Parse(tokens[0]);
 
 					ratings.Add(user_id, item_id, 0);
 				}
