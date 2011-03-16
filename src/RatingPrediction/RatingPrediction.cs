@@ -88,7 +88,7 @@ MyMediaLite rating prediction
    - min_rating=NUM             the smallest valid rating value
    - max_rating=NUM             the greatest valid rating value
    - no_eval=BOOL               do not evaluate
-   - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+   - prediction_file=FILE       write the rating predictions to  FILE ('-' for STDOUT)
    - cross_validation=K         perform k-fold crossvalidation on the training data
                                  (ignores the test data)
    - ml1m_format=BOOL           read rating data in MovieLens 1M (and 10M) format
@@ -146,13 +146,13 @@ MyMediaLite rating prediction
 		string item_relation_file   = parameters.GetRemoveString( "item_relation");
 
 		// other arguments
-		string save_model_file      = parameters.GetRemoveString( "save_model");
-		string load_model_file      = parameters.GetRemoveString( "load_model");
-		int random_seed             = parameters.GetRemoveInt32(  "random_seed",  -1);
-		bool no_eval                = parameters.GetRemoveBool(   "no_eval",      false);
-		string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
-		int cross_validation        = parameters.GetRemoveInt32(  "cross_validation", 0);
-		movielens1m_format          = parameters.GetRemoveBool(   "ml1m_format",  false); // TODO automagically recognize file format
+		string save_model_file = parameters.GetRemoveString( "save_model");
+		string load_model_file = parameters.GetRemoveString( "load_model");
+		int random_seed        = parameters.GetRemoveInt32(  "random_seed",  -1);
+		bool no_eval           = parameters.GetRemoveBool(   "no_eval",      false);
+		string prediction_file = parameters.GetRemoveString( "prediction_file");
+		int cross_validation   = parameters.GetRemoveInt32(  "cross_validation", 0);
+		movielens1m_format     = parameters.GetRemoveBool(   "ml1m_format",  false); // TODO automagically recognize file format
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -294,12 +294,12 @@ MyMediaLite rating prediction
 				Console.Write(" testing_time " + seconds);
 			}
 
-			if (!predict_ratings_file.Equals(string.Empty))
+			if (!prediction_file.Equals(string.Empty))
 			{
 				seconds = Utils.MeasureTime(
 			    	delegate() {
 						Console.WriteLine();
-						MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+						MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
 					}
 				);
 				Console.Error.Write("predicting_time " + seconds);

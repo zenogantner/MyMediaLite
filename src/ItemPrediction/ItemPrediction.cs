@@ -83,7 +83,7 @@ public class ItemPrediction
 		Console.WriteLine("   - save_model=FILE            save computed model to FILE");
 		Console.WriteLine("   - load_model=FILE            load model from FILE");
 		Console.WriteLine("   - no_eval=BOOL               do not evaluate");
-		Console.WriteLine("   - predict_items_file=FILE    write predictions to FILE ('-' for STDOUT)");
+		Console.WriteLine("   - prediction_file=FILE       write predictions to FILE ('-' for STDOUT)");
 		Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
 		Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
 		Console.WriteLine();
@@ -134,7 +134,7 @@ public class ItemPrediction
 		string load_model_file        = parameters.GetRemoveString( "load_model");
 		int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
 		bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
-		string predict_items_file     = parameters.GetRemoveString( "predict_items_file", string.Empty);
+		string prediction_file        = parameters.GetRemoveString( "prediction_file", string.Empty);
 		int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
 		string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
 
@@ -251,7 +251,7 @@ public class ItemPrediction
 				// TODO is this the right time to load the model?
 			}
 
-			if (!predict_items_file.Equals(string.Empty))
+			if (!prediction_file.Equals(string.Empty))
 			{
 				if (predict_for_users_file.Equals(string.Empty))
 					time_span = Utils.MeasureTime( delegate()
@@ -261,9 +261,9 @@ public class ItemPrediction
 						        training_data,
 						        relevant_items, predict_items_number,
 						        user_mapping, item_mapping,
-						        predict_items_file
+						        prediction_file
 							);
-							Console.Error.WriteLine("Wrote predictions to {0}", predict_items_file);
+							Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
 				    	}
 					);
 				else
@@ -275,9 +275,9 @@ public class ItemPrediction
 						        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
 						        relevant_items, predict_items_number,
 						        user_mapping, item_mapping,
-						        predict_items_file
+						        prediction_file
 							);
-							Console.Error.WriteLine("Wrote predictions for selected users to {0}", predict_items_file);
+							Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
 				    	}
 					);
 				Console.Write(" predicting_time " + time_span);

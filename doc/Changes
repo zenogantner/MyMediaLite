@@ -14,6 +14,9 @@
           - give out memory usage also for find_iter
           - move some statistics routines to the library because they are
             used several times
+          - rename the arguments rating_predictions_file and
+            item_predictions_file to prediction_file for consistency in
+            all command-line programs
         - IO
           - add routines for KDD Cup 2011 data
         - example programs

@@ -71,7 +71,7 @@ public class MappingRatingPrediction
 		Console.WriteLine("    - max_rating=NUM         the greatest valid rating value");
 		Console.WriteLine("    - no_eval=BOOL           don't evaluate, only run the mapping");
 		Console.WriteLine("    - compute_fit=N          compute fit every N iterations");
-		Console.WriteLine("    - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)");
+		Console.WriteLine("    - prediction_file=FILE   write the rating predictions to  FILE ('-' for STDOUT)");
 
 		Environment.Exit (exit_code);
 	}
@@ -103,7 +103,7 @@ public class MappingRatingPrediction
 		int random_seed             = parameters.GetRemoveInt32(  "random_seed", -1);
 		bool no_eval                = parameters.GetRemoveBool(   "no_eval", false);
 		bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
-		string predict_ratings_file = parameters.GetRemoveString( "predict_ratings_file");
+		string prediction_file      = parameters.GetRemoveString( "prediction_file");
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -215,12 +215,12 @@ public class MappingRatingPrediction
 			seconds = EvaluateRecommender(recommender);
 		Console.WriteLine();
 
-		if (!predict_ratings_file.Equals(string.Empty))
+		if (!prediction_file.Equals(string.Empty))
 		{
 			seconds = Utils.MeasureTime(
 		    	delegate() {
 					Console.WriteLine();
-					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, predict_ratings_file);
+					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);
