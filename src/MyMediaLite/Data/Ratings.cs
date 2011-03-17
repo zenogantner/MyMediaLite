@@ -16,6 +16,7 @@
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MyMediaLite.Data
@@ -37,13 +38,22 @@ namespace MyMediaLite.Data
 		public IList<int> Users { get; protected set; }
 		/// <inheritdoc/>
 		public IList<int> Items { get; protected set; }
+		
 		/// <inheritdoc/>
-		public IList<double> Values { get; protected set; }
+		protected IList<double> Values;//{ protected get; protected set; }
 
 		/// <inheritdoc/>
-		public double this[int index] { get { return Values[index]; } }
+		public virtual double this[int index]
+		{
+			get {
+				return Values[index];
+			}
+			set {
+				throw new NotSupportedException();
+			}
+		}
 		/// <inheritdoc/>
-		public int Count { get { return Values.Count; } }
+		public virtual int Count { get { return Values.Count; } }
 
 		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
 
@@ -132,7 +142,7 @@ namespace MyMediaLite.Data
 			get {
 				double sum = 0;
 				for (int index = 0; index < Values.Count; index++)
-					sum += Values[index];
+					sum += this[index];
 				return (double) sum / Values.Count;
 			}
 		}
@@ -294,6 +304,12 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
+		public virtual void Add(int user_id, int item_id, byte rating)
+		{
+			Add(user_id, item_id, (double) rating);
+		}
+		
+		/// <inheritdoc/>
 		public virtual void Add(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);
@@ -338,6 +354,37 @@ namespace MyMediaLite.Data
 					Values.RemoveAt(index);
 				}
 		}		
+		
+		/// <inheritdoc/>
+		public bool IsReadOnly { get { return true; } }
+		
+		/// <inheritdoc/>
+		public void Add(double item) { throw new NotSupportedException(); }
+		
+		/// <inheritdoc/>
+		public void Clear() { throw new NotSupportedException(); }
+		
+		/// <inheritdoc/>
+		public bool Contains(double item) { throw new NotSupportedException(); }
+
+		/// <inheritdoc/>
+		public void CopyTo(double[] array, int index) { throw new NotSupportedException(); }		
+		
+		/// <inheritdoc/>
+		public int IndexOf(double item) { throw new NotSupportedException(); }
+		
+		/// <inheritdoc/>
+		public void Insert(int index, double item) { throw new NotSupportedException(); }
+
+		/// <inheritdoc/>
+		public bool Remove(double item) { throw new NotSupportedException(); }
+			
+		/// <inheritdoc/>
+		IEnumerator IEnumerable.GetEnumerator() { throw new NotSupportedException(); }
+
+		/// <inheritdoc/>
+		IEnumerator<double> IEnumerable<double>.GetEnumerator() { throw new NotSupportedException(); }
+		
 	}
 }
 

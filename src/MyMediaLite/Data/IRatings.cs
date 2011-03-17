@@ -21,7 +21,7 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Interface for rating datasets</summary>
-	public interface IRatings
+	public interface IRatings : IList<double>
 	{
 		// TODO add value fields to all properties
 
@@ -29,13 +29,7 @@ namespace MyMediaLite.Data
 		IList<int> Users { get; }
 		/// <summary>the item entries</summary>
 		IList<int> Items { get; }
-		/// <summary>the rating entries</summary>
-		IList<double> Values { get; }
-
-		/// <summary>get the rating value for a given index</summary>
-		/// <param name="index">the index</param>
-		double this[int index] { get; }
-
+		
 		/// <summary>the maximum user ID in the dataset</summary>
 		int MaxUserID { get; }
 		/// <summary>the maximum item ID in the dataset</summary>
@@ -56,8 +50,6 @@ namespace MyMediaLite.Data
 		/// <summary>Build the random index</summary>
 		void BuildRandomIndex();
 
-		/// <summary>number of ratings in the dataset</summary>
-		int Count { get; }
 		/// <summary>average rating in the dataset</summary>
 		double Average { get; }
 
@@ -136,15 +128,17 @@ namespace MyMediaLite.Data
 		/// <returns>true if an index was found for the user and item</returns>
 		bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index);
 
+		/// <summary>Add byte-valued rating to the collection</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">the rating</param>
+		void Add(int user_id, int item_id, byte rating);
+		
 		/// <summary>Add a new rating</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating value</param>
 		void Add(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
-
-		/// <summary>Remove rating at a given position</summary>
-		/// <param name="index">the position of the rating to remove</param>
-		void RemoveAt(int index);
 
 		/// <summary>Remove all ratings by a given user</summary>
 		/// <param name="user_id">the user ID</param>

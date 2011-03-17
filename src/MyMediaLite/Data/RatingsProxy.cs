@@ -32,7 +32,7 @@ namespace MyMediaLite.Data
 		{
 			Users  = new ListProxy<int>(ratings.Users, indices);
 			Items  = new ListProxy<int>(ratings.Items, indices);
-			Values = new ListProxy<double>(ratings.Values, indices);
+			Values = new ListProxy<double>(ratings, indices);
 
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;

@@ -23,61 +23,58 @@ namespace MyMediaLite.Data
 	/// <summary>Array-based storage for rating data.</summary>
 	/// <remarks>
 	/// Very memory-efficient.
-	/// 
+	///
 	/// This data structure does NOT support online updates.
 	/// </remarks>
-	public class StaticRatings : Ratings
+	public class StaticByteRatings : StaticRatings
 	{
-		/// <summary>The position where the next rating will be stored</summary>
-		protected int pos = 0;
-		
+		byte[] ByteValues;
+
 		/// <inheritdoc/>
-		public StaticRatings() { }
-		
+		public override double this[int index]
+		{
+			get {
+				return (double) ByteValues[index];
+			}
+			set {
+				throw new NotSupportedException();
+			}
+		}
 		/// <inheritdoc/>
-		public StaticRatings(int size)
+		public override int Count { get { return ByteValues.Length; } }
+
+		/// <inheritdoc/>
+		public StaticByteRatings(int size)
 		{
 			Users  = new int[size];
 			Items  = new int[size];
-			Values = new double[size];
+			ByteValues = new byte[size];
 		}
 
 		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, double rating)
 		{
+			Add(user_id, item_id, (byte) rating);
+		}
+
+		/// <inheritdoc/>
+		public override void Add(int user_id, int item_id, byte rating)
+		{
 			if (pos == Count)
 				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));
-			
-			Users[pos]  = user_id;
-			Items[pos]  = item_id;
-			Values[pos] = rating;
+
+			Users[pos]      = user_id;
+			Items[pos]      = item_id;
+			ByteValues[pos] = rating;
 
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
 
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
-			
+
 			pos++;
 		}
-		
-		/// <inheritdoc/>
-		public override void RemoveAt(int index)
-		{
-			throw new NotSupportedException();
-		}
-		
-		/// <inheritdoc/>
-		public override void RemoveUser(int user_id)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <inheritdoc/>
-		public override void RemoveItem(int item_id)
-		{
-			throw new NotSupportedException();
-		}		
 	}
 }
 
