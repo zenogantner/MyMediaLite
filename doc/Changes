@@ -1,7 +1,7 @@
 1.0	2011-03-??
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
-          - UserItemBaseline: use internal CV to find good regularization
+          - UserItemBaseline: use internal splitting to find good regularization
                               parameters
         - API changes
           - new data structures and interfaces for rating prediction and for
@@ -22,6 +22,9 @@
             all command-line programs
         - IO
           - add routines for KDD Cup 2011 data
+        - Evaluation
+          - add simple dataset splitting for rating prediction
+          - improve grid search routines
         - example programs
           - fix a bug in the example programs (reported by Yongfeng Wang)
         - data preprocessing scripts

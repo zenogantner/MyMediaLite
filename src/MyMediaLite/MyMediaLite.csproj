@@ -140,6 +140,7 @@
     <Compile Include="IO\MovieLensRatingData.cs" />
     <Compile Include="Data\PosOnlyFeedback.cs" />
     <Compile Include="Util\GridSearch.cs" />
+    <Compile Include="Data\RatingSimpleSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
