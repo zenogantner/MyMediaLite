@@ -84,15 +84,36 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
 		{
-			return EvaluateOnSplit(recommender, delegate() { recommender.Train(); }, split);
+			return EvaluateOnSplit(recommender, delegate() { recommender.Train(); }, split, false);
 		}
-		
+
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">a rating prediction engine</param>
+		/// <param name="split">a rating dataset split</param>
+		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
+		{
+			return EvaluateOnSplit(recommender, delegate() { recommender.Train(); }, split, show_results);
+		}
+
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="recommender">a rating prediction engine</param>
 		/// <param name="training_delegate">the delegate to call for training</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, Utils.task training_delegate, ISplit<IRatings> split)
+		{
+			return EvaluateOnSplit(recommender, training_delegate, split, false);
+		}
+
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">a rating prediction engine</param>
+		/// <param name="training_delegate">the delegate to call for training</param>
+		/// <param name="split">a rating dataset split</param>
+		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, Utils.task training_delegate, ISplit<IRatings> split, bool show_results)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -109,13 +130,14 @@ namespace MyMediaLite.Eval
 
 				foreach (var key in fold_results.Keys)
 					avg_results[key] += fold_results[key];
-				Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
+				if (show_results)
+					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())
 				avg_results[key] /= split.NumberOfFolds;
 
 			return avg_results;
-		}		
+		}
 	}
 }

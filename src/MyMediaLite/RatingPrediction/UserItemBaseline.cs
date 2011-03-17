@@ -62,25 +62,56 @@ namespace MyMediaLite.RatingPrediction
 			if (double.IsNaN(RegU) || double.IsNaN(RegI)) // TODO handle separately
 			{
 				var ni = new NumberFormatInfo();
-				
+
 				// save ratings for later use
 				var all_ratings = Ratings;
-			
+
 				// hyperparameter search
 				var split = new RatingCrossValidationSplit(Ratings, 5);
-				var hp_values = new double[] {0, 0.5, 5, 10, 15};
-				double estimate = GridSearch.FindMinimum("RMSE", "reg_u", "reg_i", hp_values, hp_values, this, delegate() { TrainModel(); }, split);
-				Console.Error.WriteLine("estimated RMSE: {0}", estimate.ToString(ni));
-				
+				int basis = 2;
+				// rough search
+				var hp_values_u = new double[] {-5, -3, -1, 0, 1, 3, 5};
+				var hp_values_i = new double[] {-5, -3, -1, 0, 1, 3, 5};
+				double estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
+				Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
+				// check for edges
+				double lower_edge_u = -5;
+				double upper_edge_u = 5;
+				double lower_edge_i = -5;
+				double upper_edge_i = 5;
+				while ( (Math.Log(RegU, basis) == lower_edge_u) || Math.Log(RegU, basis) == upper_edge_u
+				       || Math.Log(RegI, basis) == lower_edge_i || Math.Log(RegI, basis) == upper_edge_i)
+				{
+					// search around the current values
+					hp_values_u = new double[5];
+					for (int i = 0; i < hp_values_u.Length; i++)
+						hp_values_u[i] = Math.Log(RegU, basis) + i - 2;
+					hp_values_i = new double[5];
+					for (int i = 0; i < hp_values_i.Length; i++)
+						hp_values_i[i] = Math.Log(RegI, basis) + i - 2;
+					estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
+					Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
+				}
+				// refine search
+				hp_values_u = new double[5];
+				for (int i = 0; i < hp_values_u.Length; i++)
+					hp_values_u[i] = Math.Log(RegU, basis) + (double) (i - 2) / 2;
+				hp_values_i = new double[5];
+				for (int i = 0; i < hp_values_i.Length; i++)
+					hp_values_i[i] = Math.Log(RegI, basis) + (double) (i - 2) / 2;
+				estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
+				Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
+				// TODO this is a rather general grid search, move it to the GridSearch class
+
 				// reset ratings
 				Ratings = all_ratings;
-				
+
 				Console.WriteLine(this);
 			}
-			
+
 			TrainModel();
 		}
-		
+
 		void TrainModel()
 		{
 			global_average = Ratings.Average;
