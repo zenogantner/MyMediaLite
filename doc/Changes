@@ -1,6 +1,8 @@
 1.0	2011-03-??
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
+          - UserItemBaseline: use internal CV to find good regularization
+                              parameters
         - API changes
           - new data structures and interfaces for rating prediction and for
             item prediction from implicit feedback (consume less memory)
@@ -10,6 +12,7 @@
           - add rating data structures with time stamps: RatingsWithDateTime
             and StaticRatingsWithDateTime
         - command-line programs
+          - add command-line program for KDD Cup 2011
           - display number of ratings
           - give out memory usage also for find_iter
           - move some statistics routines to the library because they are
