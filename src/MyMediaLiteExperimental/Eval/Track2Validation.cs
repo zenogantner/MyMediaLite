@@ -35,6 +35,9 @@ namespace MyMediaLiteExperimental
 		public IRatings Training { get; private set; }
 		
 		// TODO check whether this needs too much memory
+		/// <summary>Create a validation split</summary>
+		/// <param name="ratings">the rating data</param>
+		/// <param name="test_candidates">the test candidates</param>
 		public Track2Validation(IRatings ratings, Dictionary<int, IList<int>> test_candidates)
 		{
 			// initialize the properties
