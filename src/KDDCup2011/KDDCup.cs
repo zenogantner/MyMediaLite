@@ -65,8 +65,8 @@ public static class RatingPrediction
 	static double rmse_cutoff;
 	static double mae_cutoff;
 	static bool no_eval;
-	static string prediction_file; // TODO do something useful with this
-
+	static string prediction_file;
+	static bool sample_data;
 
 	static void Usage(string message)
 	{
@@ -103,6 +103,7 @@ MyMediaLite KDD Cup 2011 tool
    - prediction_file=FILE       write the predictions to  FILE ('-' for STDOUT)
    - cross_validation=K         perform k-fold crossvalidation on the training data
                                  (ignores the test data)
+   - sample_data=BOOL           assume the sample data set instead of the real one
 
   options for finding the right number of iterations (MF methods)
    - find_iter=N                give out statistics every N iterations
@@ -149,6 +150,7 @@ MyMediaLite KDD Cup 2011 tool
 
 		// data arguments
 		string data_dir  = parameters.GetRemoveString( "data_dir");
+		sample_data      = parameters.GetRemoveBool(   "sample_data", false);
 
 		// other arguments
 		save_model_file  = parameters.GetRemoveString( "save_model");
@@ -423,17 +425,27 @@ MyMediaLite KDD Cup 2011 tool
 		string album_file      = Path.Combine(data_dir, string.Format("albumData{0}.txt",  track_no));
 		string artist_file     = Path.Combine(data_dir, string.Format("artistData{0}.txt", track_no));
 		string genre_file      = Path.Combine(data_dir, string.Format("genreData{0}.txt",  track_no));
-
+		int num_ratings            = track_no == 1 ? 1000990 : 62551438;
+		int num_validation_ratings = 4003960;
+		int num_test_ratings       = 6005940;
+		
+		if (sample_data)
+		{
+			num_ratings            = track_no == 1 ? 11696 : 8824; // these are not true values, just upper bounds
+			num_validation_ratings = 220;                          // these are not true values, just upper bounds
+			num_test_ratings       = 308;
+		}
+		
 		// read training data
-		training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
+		training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file, num_ratings);
 
 		// read validation data, if necessary
 		if (track_no == 1)
-			validation_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(validation_file);
+			validation_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(validation_file, num_validation_ratings);
 
 		// read test data
 		if (track_no == 1)
-			track1_test_data = MyMediaLite.IO.KDDCup2011.Ratings.ReadTest(test_file);
+			track1_test_data = MyMediaLite.IO.KDDCup2011.Ratings.ReadTest(test_file, num_test_ratings);
 		else
 			track2_test_data = Track2Candidates.Read(test_file);
 
