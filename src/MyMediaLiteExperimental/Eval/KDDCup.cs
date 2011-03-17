@@ -37,8 +37,8 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Predict items for Track 2</summary>
-		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="recommender">the recommender to use</param>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
 		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, TextWriter writer)
 		{
@@ -59,6 +59,35 @@ namespace MyMediaLite.Eval
 					else
 						writer.Write("0");
 			}
+		}
+
+		/// <summary>Evaluate Track 2 on a validation set</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="validation_split">the validation split to use</param>
+		/// <returns>the error rate on this validation split</returns>
+		public static double EvaluateTrack2(IRecommender recommender, Track2Validation validation_split)
+		{
+			int hit_count = 0;
+
+			foreach (int user_id in validation_split.Candidates.Keys)
+			{
+				IList<int> user_candidates = validation_split.Candidates[user_id];
+
+				var predictions = new double[user_candidates.Count];
+				for (int i = 0; i < user_candidates.Count; i++)
+					predictions[i] = recommender.Predict(user_id, user_candidates[i]);
+
+				var positions = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
+				positions.Sort(delegate(int pos1, int pos2) { return predictions[pos2].CompareTo(predictions[pos1]); } );
+
+				var user_true_items = new HashSet<int>(validation_split.Hits[user_id]);
+
+				for (int i = 0; i < 3; i++)
+					if (user_true_items.Contains(user_candidates[positions[i]]))
+						hit_count++;
+			}
+
+			return (double) (hit_count / (validation_split.Candidates.Count * 3));
 		}
 
 		/// <summary>Predict items for Track 1</summary>

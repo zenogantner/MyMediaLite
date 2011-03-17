@@ -39,6 +39,7 @@ public static class RatingPrediction
 
 	// data sets
 	static IRatings training_data;
+	static PosOnlyFeedback training_data_posonly;
 	static IRatings validation_data;
 	static IRatings track1_test_data;
 	static Dictionary<int, IList<int>> track2_test_data;
@@ -191,8 +192,8 @@ MyMediaLite KDD Cup 2011 tool
 		if (recommender is ItemRecommender)
 		{
 			var item_recommender = recommender as ItemRecommender;
-
-			item_recommender.Feedback = CreateFeedback(training_data);
+			training_data_posonly = CreateFeedback(training_data);
+			item_recommender.Feedback = training_data_posonly;
 		}
 
 		if (track_no == 1)
@@ -216,51 +217,64 @@ MyMediaLite KDD Cup 2011 tool
 
 	static void DoTrack2()
 	{
+		if (cross_validation > 0)
+			throw new ArgumentException("k-fold crossvalidation is not supported for Track 2.");
+
 		TimeSpan seconds;
 
+		// do training + testing on generated validation data
+		if (!no_eval)
+		{
+			var track2_validation = new Track2Validation(training_data, track2_test_data);
+
+			// set training data to temporary values
+			if (recommender is RatingPredictor)
+			{
+				var rating_predictor = recommender as RatingPredictor;
+				rating_predictor.Ratings = track2_validation.Training;
+			}
+			if (recommender is ItemRecommender)
+			{
+				var item_recommender = recommender as ItemRecommender;
+				item_recommender.Feedback = CreateFeedback(track2_validation.Training);
+			}
+
+			seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+   			Console.Write("{0} training_time {1} ", recommender, seconds);			
+			seconds = Utils.MeasureTime(
+		    	delegate() {
+					double accuracy = KDDCup.EvaluateTrack2(recommender, track2_validation);
+					Console.Write("ACC {0}", accuracy.ToString(ni));
+				}
+			);
+			Console.WriteLine(" validating_time " + seconds);
+
+			// reset training data
+			if (recommender is RatingPredictor)
+			{
+				var rating_predictor = recommender as RatingPredictor;
+				rating_predictor.Ratings = training_data;
+			}
+			if (recommender is ItemRecommender)
+			{
+				var item_recommender = recommender as ItemRecommender;
+				item_recommender.Feedback = training_data_posonly;
+			}
+		}
+
+		// do complete training + testing
 		if (load_model_file.Equals(string.Empty))
 		{
 			Console.Write(recommender.ToString());
 
-			if (cross_validation > 0)
-			{
-				Console.WriteLine();
-
-				if (recommender is RatingPredictor)
-				{
-					var rating_predictor = recommender as RatingPredictor;
-
-					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = RatingEval.EvaluateOnSplit(rating_predictor, split);
-					RatingEval.DisplayResults(results);
-					no_eval = true;
-					rating_predictor.Ratings = training_data;
-				}
-				else
-				{
-					throw new NotImplementedException("Crossvalidation for item predictors is not implemented yet.");
-				}
-			}
-			else
-			{
-				seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
-    			Console.Write(" training_time " + seconds + " ");
-				Recommender.SaveModel(recommender, save_model_file);
-			}
+			seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+   			Console.Write(" training_time " + seconds + " ");
+			Recommender.SaveModel(recommender, save_model_file);
 		}
 		else
 		{
 			Recommender.LoadModel(recommender, load_model_file);
 			Console.Write(recommender.ToString() + " ");
-		}
-
-		if (!no_eval)
-		{
-			// TODO implement a validation split
-			// seconds = Utils.MeasureTime(
-		    //	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, validation_data)); }
-			//);
-			//Console.Write(" testing_time " + seconds);
 		}
 
 		if (!prediction_file.Equals(string.Empty))

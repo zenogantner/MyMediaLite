@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
 
-namespace MyMediaLiteExperimental
+namespace MyMediaLite.Eval
 {
 	// TODO create unit tests
 	
