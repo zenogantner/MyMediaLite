@@ -61,7 +61,6 @@
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
     <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
-    <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
