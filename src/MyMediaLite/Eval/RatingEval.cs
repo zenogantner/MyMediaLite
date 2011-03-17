@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
@@ -83,6 +84,16 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
 		{
+			return EvaluateOnSplit(recommender, delegate() { recommender.Train(); }, split);
+		}
+		
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">a rating prediction engine</param>
+		/// <param name="training_delegate">the delegate to call for training</param>
+		/// <param name="split">a rating dataset split</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, Utils.task training_delegate, ISplit<IRatings> split)
+		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
@@ -93,7 +104,7 @@ namespace MyMediaLite.Eval
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
 				recommender.Ratings = split.Train[i];
-				recommender.Train(); // TODO measure time
+				training_delegate();
 				var fold_results = Evaluate(recommender, split.Test[i]);
 
 				foreach (var key in fold_results.Keys)
@@ -105,6 +116,6 @@ namespace MyMediaLite.Eval
 				avg_results[key] /= split.NumberOfFolds;
 
 			return avg_results;
-		}
+		}		
 	}
 }

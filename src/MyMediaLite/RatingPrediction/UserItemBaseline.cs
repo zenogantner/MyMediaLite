@@ -43,12 +43,14 @@ namespace MyMediaLite.RatingPrediction
 	public class UserItemBaseline : RatingPredictor
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
+		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
 		public double RegU { get { return reg_u; } set { reg_u = value; } }
-		private double reg_u = 25;
+		private double reg_u = double.NaN;
 
 		/// <summary>Regularization parameter for the item biases</summary>
+		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
 		public double RegI { get { return reg_i; } set { reg_i = value; } }
-		private double reg_i = 10;
+		private double reg_i = double.NaN;
 
 		private double global_average;
 		private double[] user_biases;
@@ -56,6 +58,30 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <inheritdoc/>
 		public override void Train()
+		{
+			if (double.IsNaN(RegU) || double.IsNaN(RegI)) // TODO handle separately
+			{
+				var ni = new NumberFormatInfo();
+				
+				// save ratings for later use
+				var all_ratings = Ratings;
+			
+				// hyperparameter search
+				var split = new RatingCrossValidationSplit(Ratings, 5);
+				var hp_values = new double[] {0, 0.5, 5, 10, 15};
+				double estimate = GridSearch.FindMinimum("RMSE", "reg_u", "reg_i", hp_values, hp_values, this, delegate() { TrainModel(); }, split);
+				Console.Error.WriteLine("estimated RMSE: {0}", estimate.ToString(ni));
+				
+				// reset ratings
+				Ratings = all_ratings;
+				
+				Console.WriteLine(this);
+			}
+			
+			TrainModel();
+		}
+		
+		void TrainModel()
 		{
 			global_average = Ratings.Average;
 

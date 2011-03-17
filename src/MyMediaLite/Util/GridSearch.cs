@@ -28,14 +28,9 @@ using MyMediaLite.RatingPrediction;
 namespace MyMediaLite.Util
 {
 	/// <summary>Grid search for finding suitable hyperparameters</summary>
-	public class GridSearch
+	public static class GridSearch
 	{
-		// TODO implement first for rating prediction, then for item prediction
-		//      generalize also to FindMaximum
-
-		// TODO use delegates or boolean flag to be able to use fit on the test data as a criterion
-
-		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (1D)</summary>
 		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
@@ -51,17 +46,95 @@ namespace MyMediaLite.Util
 		{
 			var ni = new NumberFormatInfo();
 
-			var eval_results = new double[hyperparameter_values.Length];
+			double min_result = double.MaxValue;
+			int min_i = -1;
+
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
 				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(ni));
-				eval_results[i] = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
+				double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
+				
+				if (result < min_result)
+				{
+					min_i = i;
+					min_result = result;
+				}
 			}
 
-			return eval_results.Min();
+			Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[min_i].ToString(ni));			
+			
+			return min_result;
 		}
 
-		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (2D)</summary>
+		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>
+		/// <param name="hyperparameter_name1">the name of the first hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values1">the values of the first hyperparameter to try out</param>
+		/// <param name="hyperparameter_name2">the name of the second hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values2">the values of the second hyperparameter to try out</param>
+		/// <param name="recommender">the recommender</param>
+		/// <param name="split">the dataset split to use</param>
+		/// <returns>the best (lowest) average value for the hyperparameter</returns>
+		public static double FindMinimum(string evaluation_measure,
+		                                 string hyperparameter_name1, string hyperparameter_name2,
+		                                 double[] hyperparameter_values1, double[] hyperparameter_values2,
+		                                 RatingPredictor recommender,
+		                                 ISplit<IRatings> split)
+		{
+			return FindMinimum(evaluation_measure, hyperparameter_name1, hyperparameter_name2,
+			                   hyperparameter_values1, hyperparameter_values2,
+			                   recommender, delegate() { recommender.Train(); }, split);
+		}
+
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (2D)</summary>
+		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>
+		/// <param name="hyperparameter_name1">the name of the first hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values1">the values of the first hyperparameter to try out</param>
+		/// <param name="hyperparameter_name2">the name of the second hyperparameter to optimize</param>
+		/// <param name="hyperparameter_values2">the values of the second hyperparameter to try out</param>
+		/// <param name="recommender">the recommender</param>
+		/// <param name="training_delegate">the delegate to call for training</param>
+		/// <param name="split">the dataset split to use</param>
+		/// <returns>the best (lowest) average value for the hyperparameter</returns>
+		public static double FindMinimum(string evaluation_measure,
+		                                 string hyperparameter_name1, string hyperparameter_name2,
+		                                 double[] hyperparameter_values1, double[] hyperparameter_values2,
+		                                 RatingPredictor recommender,
+		                                 Utils.task training_delegate,
+		                                 ISplit<IRatings> split)
+		{
+			var ni = new NumberFormatInfo();
+
+			double min_result = double.MaxValue;
+			int min_i = -1;
+			int min_j = -1;
+			
+			for (int i = 0; i < hyperparameter_values1.Length; i++)
+				for (int j = 0; j < hyperparameter_values2.Length; j++)
+				{
+					Recommender.SetProperty(recommender, hyperparameter_name1, hyperparameter_values1[i].ToString(ni));
+					Recommender.SetProperty(recommender, hyperparameter_name2, hyperparameter_values2[j].ToString(ni));
+				
+					Console.Error.WriteLine("reg_u={0} reg_i={1}", hyperparameter_values1[i].ToString(ni), hyperparameter_values2[j].ToString(ni));
+					double result = RatingEval.EvaluateOnSplit(recommender, training_delegate, split)[evaluation_measure];
+					if (result < min_result)
+					{
+						min_i = i;
+						min_j = j;
+						min_result = result;
+					}
+				}
+
+			// set to best hyperparameter values
+			Recommender.SetProperty(recommender, hyperparameter_name1, hyperparameter_values1[min_i].ToString(ni));
+			Recommender.SetProperty(recommender, hyperparameter_name2, hyperparameter_values2[min_j].ToString(ni));
+
+			return min_result;
+		}		
+		
+		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (1D)</summary>
 		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hyperparameter_name">the name of the hyperparameter to optimize</param>
