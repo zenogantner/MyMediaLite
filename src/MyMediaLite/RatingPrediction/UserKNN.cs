@@ -30,6 +30,9 @@ namespace MyMediaLite.RatingPrediction
 		protected SparseBooleanMatrix data_user;
 
 		/// <inheritdoc/>
+		public UserKNN() : base() { }
+
+		/// <inheritdoc/>
 		public override IRatings Ratings
 		{
 			set	{

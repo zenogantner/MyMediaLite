@@ -35,8 +35,7 @@ namespace MyMediaLite.RatingPrediction
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
-			set
-			{
+			set	{
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
@@ -46,6 +45,9 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <inheritdoc/>
 		public int NumUserAttributes { get; set; }
+
+		/// <inheritdoc/>
+		public UserAttributeKNN() : base() { }
 
 		/// <inheritdoc/>
 		public override void Train()

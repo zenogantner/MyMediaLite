@@ -60,29 +60,34 @@ namespace MyMediaLite.Eval
 						writer.Write("0");
 			}
 		}
-		
+
 		/// <summary>Predict items for Track 1</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="filename">the file to write the predictions to</param>
 		public static void PredictTrack1(IRecommender recommender, IRatings ratings, string filename)
 		{
-			using (var writer = new StreamWriter(filename))
-				PredictTrack1(recommender, ratings, writer);
+			using (var stream = new FileStream(filename, FileMode.Create))
+				using (var writer = new BinaryWriter(stream))
+					PredictTrack1(recommender, ratings, writer);
 		}
 
 		/// <summary>Predict items for Track 1</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictTrack1(IRecommender recommender, IRatings ratings, TextWriter writer)
+		public static void PredictTrack1(IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			for (int i = 0; i < ratings.Count; i++)
-				writer.WriteLine(recommender.Predict(ratings.Users[i], ratings.Items[i]).ToString(ni));
-		}		
+			{
+				double prediction = recommender.Predict(ratings.Users[i], ratings.Items[i]);
+				byte encoded_prediction = (byte) (2.55 * prediction + 0.5);
+				writer.Write(encoded_prediction);
+			}
+		}
 	}
 }
 

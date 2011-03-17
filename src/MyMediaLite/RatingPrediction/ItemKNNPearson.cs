@@ -30,6 +30,9 @@ namespace MyMediaLite.RatingPrediction
 		private float shrinkage = 10;
 
 		/// <inheritdoc/>
+		public ItemKNNPearson() : base() { }
+
+		/// <inheritdoc/>
 		public override void Train()
 		{
 			base.Train();

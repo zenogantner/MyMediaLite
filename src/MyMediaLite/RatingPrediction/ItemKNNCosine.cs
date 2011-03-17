@@ -25,6 +25,9 @@ namespace MyMediaLite.RatingPrediction
 	public class ItemKNNCosine : ItemKNN
 	{
 		/// <inheritdoc/>
+		public ItemKNNCosine() : base() { }
+
+		/// <inheritdoc/>
 		public override void Train()
 		{
 			base.Train();

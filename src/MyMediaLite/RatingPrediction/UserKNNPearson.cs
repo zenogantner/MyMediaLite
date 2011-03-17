@@ -25,10 +25,13 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted user-based kNN with Pearson correlation</summary>
 	public class UserKNNPearson : UserKNN
 	{
-		/// <summary>Shrinkage parameter</summary>		
+		/// <summary>Shrinkage parameter</summary>
 		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
 		private float shrinkage = 10;
-		
+
+		/// <inheritdoc/>
+		public UserKNNPearson() : base() { }
+
 		/// <inheritdoc/>
 		public override void Train()
 		{
@@ -49,8 +52,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni,
 								 "UserKNNPearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
 								 K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);

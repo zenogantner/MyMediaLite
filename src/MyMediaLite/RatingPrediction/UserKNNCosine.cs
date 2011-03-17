@@ -25,6 +25,9 @@ namespace MyMediaLite.RatingPrediction
 	public class UserKNNCosine : UserKNN
 	{
 		/// <inheritdoc/>
+		public UserKNNCosine() : base() { }
+
+		/// <inheritdoc/>
 		public override void Train()
 		{
 			base.Train();
@@ -44,8 +47,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			return string.Format(ni,
 								 "UserKNNCosine k={0} reg_u={1} reg_i={2}",
 								 K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);

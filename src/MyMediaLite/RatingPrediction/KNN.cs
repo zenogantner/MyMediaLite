@@ -46,6 +46,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected CorrelationMatrix correlation;
 
+		/// <summary>Create a new KNN recommender</summary>
+		public KNN()
+		{
+			RegU = 10;
+			RegI = 5;
+		}
+		
 		/// <inheritdoc/>
 		public override void SaveModel(string filename)
 		{

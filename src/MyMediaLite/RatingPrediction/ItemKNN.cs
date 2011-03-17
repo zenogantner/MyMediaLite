@@ -42,6 +42,9 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		/// <inheritdoc/>
+		public ItemKNN() : base() { }
+
 		/// <summary>Get positively correlated entities</summary>
 		protected Func<int, IList<int>> GetPositivelyCorrelatedEntities;
 
@@ -83,7 +86,7 @@ namespace MyMediaLite.RatingPrediction
 			double result = base.Predict(user_id, item_id);
 			if (weight_sum != 0)
 				result += sum / weight_sum;
- 
+
 			if (result > MaxRating)
 				result = MaxRating;
 			if (result < MinRating)
