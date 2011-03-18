@@ -208,7 +208,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-		public bool TryGet(int user_id, int item_id, out double rating)
+		public virtual bool TryGet(int user_id, int item_id, out double rating)
 		{
 			rating = double.NegativeInfinity;
 			// TODO speed up
@@ -223,7 +223,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-		public double Get(int user_id, int item_id, ICollection<int> indexes)
+		public virtual double Get(int user_id, int item_id, ICollection<int> indexes)
 		{
 			// TODO speed up
 			foreach (int index in indexes)
@@ -234,7 +234,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-		public bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
+		public virtual bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
 		{
 			rating = double.NegativeInfinity;
 
@@ -255,7 +255,7 @@ namespace MyMediaLite.Data
 			index = -1;
 
 			// TODO speed up
-			for (int i = 0; i < Values.Count; i++)
+			for (int i = 0; i < Count; i++)
 				if (Users[i] == user_id && Items[i] == item_id)
 				{
 					index = i;
@@ -285,7 +285,7 @@ namespace MyMediaLite.Data
 		public int GetIndex(int user_id, int item_id)
 		{
 			// TODO speed up
-			for (int i = 0; i < Values.Count; i++)
+			for (int i = 0; i < Count; i++)
 				if (Users[i] == user_id && Items[i] == item_id)
 					return i;
 

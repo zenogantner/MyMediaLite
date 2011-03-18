@@ -86,6 +86,47 @@ namespace MyMediaLite.Data
 
 			pos++;
 		}
+		
+		/// <inheritdoc/>
+		public override bool TryGet(int user_id, int item_id, out double rating)
+		{
+			rating = double.NegativeInfinity;
+			// TODO speed up
+			for (int index = 0; index < pos; index++)
+				if (Users[index] == user_id && Items[index] == item_id)
+				{
+					rating = (double) ByteValues[index];
+					return true;
+				}
+
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public override double Get(int user_id, int item_id, ICollection<int> indexes)
+		{
+			foreach (int index in indexes)
+				if (Users[index] == user_id && Items[index] == item_id)
+					return (double) ByteValues[index];
+
+			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+		}
+
+		/// <inheritdoc/>
+		public override bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
+		{
+			rating = double.NegativeInfinity;
+
+			foreach (int index in indexes)
+				if (Users[index] == user_id && Items[index] == item_id)
+				{
+					rating = (double) ByteValues[index];
+					return true;
+				}
+
+			return false;
+		}
+		
 	}
 }
 
