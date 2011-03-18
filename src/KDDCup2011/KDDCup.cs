@@ -431,7 +431,7 @@ MyMediaLite KDD Cup 2011 tool
 		string album_file      = Path.Combine(data_dir, string.Format("albumData{0}.txt",  track_no));
 		string artist_file     = Path.Combine(data_dir, string.Format("artistData{0}.txt", track_no));
 		string genre_file      = Path.Combine(data_dir, string.Format("genreData{0}.txt",  track_no));
-		int num_ratings            = track_no == 1 ? 1000990 : 62551438;
+		int num_ratings            = track_no == 1 ? 262810175 : 62551438;
 		int num_validation_ratings = 4003960;
 		int num_test_ratings       = 6005940;
 		

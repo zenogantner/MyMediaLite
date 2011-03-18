@@ -49,7 +49,7 @@ namespace MyMediaLite.Data
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			if (pos == Values.Count)
-				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));
+				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
 			
 			Users[pos]  = user_id;
 			Items[pos]  = item_id;
