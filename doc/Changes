@@ -1,4 +1,4 @@
-1.0	2011-03-??
+1.0	2011-03-19
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
           - UserItemBaseline: use internal splitting to find good regularization
