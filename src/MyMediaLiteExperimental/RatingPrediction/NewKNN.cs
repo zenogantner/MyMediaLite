@@ -28,6 +28,8 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
+	// FIXME implementation is not complete and DOES NOT WORK
+	
 	/// <summary>kNN-based rating predictors</summary>
 	/// <remarks>
 	/// The method is described in section 2.2 of
@@ -115,10 +117,10 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int user_id2 in relevant_users)
 					if (entity_data[user_id2, item_id])
 					{
-						RatingEvent r = ratings.ByUser[user_id2].FindRating(user_id2, item_id);
+						double rating = ratings.Get(user_id2, item_id, ratings.ByUser[user_id2]);
 						double weight = correlation[user_id, user_id2];
 						weight_sum += weight;
-						sum += weight * (r.rating - base.Predict(user_id2, item_id));
+						sum += weight * (rating - base.Predict(user_id2, item_id));
 
 						if (--neighbors == 0)
 							break;
@@ -131,10 +133,10 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int item_id2 in relevant_items)
 					if (entity_data[item_id2, user_id])
 					{
-						RatingEvent r = ratings.ByItem[item_id2].FindRating(user_id, item_id2);
+						double rating = ratings.Get(user_id, item_id2, ratings.ByItem[item_id2]);
 						double weight = correlation[item_id, item_id2];
 						weight_sum += weight;
-						sum += weight * (r.rating - base.Predict(user_id, item_id2));
+						sum += weight * (rating - base.Predict(user_id, item_id2));
 
 						if (--neighbors == 0)
 							break;
@@ -170,11 +172,11 @@ namespace MyMediaLite.RatingPrediction
 			{
 				this.entity_data = new SparseBooleanMatrix();
 				if (Entity == EntityType.USER)
-					foreach (RatingEvent r in ratings)
-	               		entity_data[r.user_id, r.item_id] = true;
+					for (int i = 0; i < ratings.Count; i++)
+	               		entity_data[ratings.Users[i], ratings.Items[i]] = true;
 				else if (Entity == EntityType.ITEM)
-					foreach (RatingEvent r in ratings)
-	               		entity_data[r.item_id, r.user_id] = true;
+					for (int i = 0; i < ratings.Count; i++)
+	               		entity_data[ratings.Items[i], ratings.Users[i]] = true;
 				else
 					throw new ArgumentException("Unknown entity type: " + Entity);
 

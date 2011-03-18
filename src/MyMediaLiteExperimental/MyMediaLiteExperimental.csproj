@@ -59,7 +59,6 @@
     <Compile Include="AttrToFactor\MF_Mapping.cs" />
     <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
-    <Compile Include="RatingPredictor\SocialMF.cs" />
     <Compile Include="ItemRecommender\ItemAttributeSVM.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
@@ -71,10 +70,11 @@
     <Compile Include="IO\KDDCup2011\Items.cs" />
     <Compile Include="IO\KDDCup2011\Ratings.cs" />
     <Compile Include="Eval\Track2Validation.cs" />
+    <Compile Include="RatingPrediction\SocialMF.cs" />
+    <Compile Include="RatingPrediction\NewKNN.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
-    <Folder Include="RatingPredictor\" />
     <Folder Include="ItemRecommender\" />
     <Folder Include="Util\" />
     <Folder Include="Diversification\" />
@@ -84,6 +84,7 @@
     <Folder Include="Data\" />
     <Folder Include="Taxonomy\" />
     <Folder Include="Correlation\" />
+    <Folder Include="RatingPrediction\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
