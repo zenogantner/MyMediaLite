@@ -25,11 +25,24 @@ using NUnit.Framework;
 namespace MyMediaLiteTest
 {
 	[TestFixture()]
-	public class RatingsTest
+	public class StaticRatingsTest
 	{
+		[Test()]
+		[ExpectedException(typeof(Exception))]
+		public void TestFull()
+		{
+			var ratings = new StaticRatings(2);
+			Assert.AreEqual(0, ratings.Count);
+			ratings.Add(1, 4, 0.3);
+			Assert.AreEqual(1, ratings.Count);
+			ratings.Add(1, 8, 0.2);
+			Assert.AreEqual(2, ratings.Count);
+			ratings.Add(2, 4, 0.2);
+		}		
+		
 		[Test()] public void TestMaxUserIDMaxItemID()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(7);
 			ratings.Add(1, 4, 0.3);
 			ratings.Add(1, 8, 0.2);
 			ratings.Add(2, 4, 0.2);
@@ -44,9 +57,11 @@ namespace MyMediaLiteTest
 
 		[Test()] public void TestAddRating()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(7);
 			ratings.Add(1, 4, 0.3);
+			Assert.AreEqual(1, ratings.Count);
 			ratings.Add(1, 8, 0.2);
+			Assert.AreEqual(2, ratings.Count);
 			ratings.Add(2, 4, 0.2);
 			ratings.Add(2, 2, 0.6);
 			ratings.Add(2, 5, 0.4);
@@ -59,9 +74,11 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(7, ratings.Count);
 		}
 
-		[Test()] public void TestRemoveAt()
+		[Test()]
+		[ExpectedException(typeof(NotSupportedException))]
+		public void TestRemoveAt()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(8);
 			ratings.Add(1, 4, 0.3);
 			ratings.Add(1, 8, 0.2);
 			ratings.Add(2, 4, 0.2);
@@ -72,19 +89,14 @@ namespace MyMediaLiteTest
 			ratings.Add(6, 3, 0.3);
 
 			Assert.AreEqual(8, ratings.Count);
-			Assert.AreEqual(0.4, ratings.Get(2, 5));
 			ratings.RemoveAt(ratings.GetIndex(2, 5));
-			Assert.AreEqual(7, ratings.Count);
-			ratings.RemoveAt(ratings.GetIndex(6, 3));
-			Assert.AreEqual(6, ratings.Count);
-			
-			double r;
-			Assert.IsFalse(ratings.TryGet(2, 5, out r));
 		}
 
-		[Test()] public void TestRemoveUser()
+		[Test()]
+		[ExpectedException(typeof(NotSupportedException))]
+		public void TestRemoveUser()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(7);
 			ratings.Add(1, 4, 0.3);
 			ratings.Add(1, 8, 0.2);
 			ratings.Add(2, 4, 0.2);
@@ -94,17 +106,14 @@ namespace MyMediaLiteTest
 			ratings.Add(3, 3, 0.3);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.4, ratings.Get(2, 5));
 			ratings.RemoveUser(2);
-			Assert.AreEqual(5, ratings.Count);
-			
-			double rating;
-			Assert.IsFalse(ratings.TryGet(2, 5, out rating));
 		}
 
-		[Test()] public void TestRemoveItem()
+		[Test()]
+		[ExpectedException(typeof(NotSupportedException))]
+		public void TestRemoveItem()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(7);
 			ratings.Add(1, 4, 0.3);
 			ratings.Add(1, 8, 0.2);
 			ratings.Add(2, 4, 0.2);
@@ -114,16 +123,12 @@ namespace MyMediaLiteTest
 			ratings.Add(3, 3, 0.3);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.2, ratings.Get(2, 4));
 			ratings.RemoveItem(4);
-			Assert.AreEqual(4, ratings.Count);
-			double r;
-			Assert.IsFalse(ratings.TryGet(2, 4, out r));
 		}
 
 		[Test()] public void TestGet()
 		{
-			var ratings = new Ratings();
+			var ratings = new StaticRatings(8);
 			ratings.Add(1, 4, 0.3);
 			ratings.Add(1, 8, 0.2);
 			ratings.Add(2, 4, 0.2);
