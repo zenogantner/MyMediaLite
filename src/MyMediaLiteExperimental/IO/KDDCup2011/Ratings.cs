@@ -43,7 +43,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <returns>the rating data</returns>
 		static public IRatings Read(TextReader reader, int num_ratings)
 		{
-			IRatings ratings = new StaticRatings(num_ratings);
+			IRatings ratings = new StaticByteRatings(num_ratings);
 
 			string line;
 
@@ -60,8 +60,8 @@ namespace MyMediaLite.IO.KDDCup2011
 
 					tokens = line.Split('\t');
 
-					int item_id   = int.Parse(tokens[0]);
-					double rating = (double) uint.Parse(tokens[1]);
+					int item_id = int.Parse(tokens[0]);
+					byte rating = byte.Parse(tokens[1]);
 
 					ratings.Add(user_id, item_id, rating);
 				}
@@ -85,7 +85,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <returns>the rating data</returns>
 		static public IRatings ReadTest(TextReader reader, int num_ratings)
 		{
-			IRatings ratings = new StaticRatings(num_ratings);
+			IRatings ratings = new StaticByteRatings(num_ratings);
 
 			string line;
 

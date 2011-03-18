@@ -345,7 +345,13 @@ MyMediaLite KDD Cup 2011 tool
 					});
 					eval_time_stats.Add(time.TotalSeconds);
 
-					Recommender.SaveModel(recommender, save_model_file, i);
+					// if best result so far, write out model file and predictions
+					if (results["RMSE"] == rmse_eval_stats.Min())
+					{
+						Recommender.SaveModel(recommender, save_model_file, i);
+						if (!prediction_file.Equals(string.Empty))
+							KDDCup.PredictTrack1(recommender, track1_test_data, prediction_file + "-it-" + i);
+					}
 
 					if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 					{
@@ -355,8 +361,8 @@ MyMediaLite KDD Cup 2011 tool
 					}
 					if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
 					{
-							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
-							break;
+						Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
+						break;
 					}
 				}
 			} // for
@@ -434,6 +440,9 @@ MyMediaLite KDD Cup 2011 tool
 			num_ratings            = track_no == 1 ? 11696 : 8824; // these are not true values, just upper bounds
 			num_validation_ratings = 220;                          // these are not true values, just upper bounds
 			num_test_ratings       = 308;
+			training_file   = Path.Combine(data_dir, string.Format("trainIdx{0}.firstLines.txt", track_no));
+			test_file       = Path.Combine(data_dir, string.Format("testIdx{0}.firstLines.txt",  track_no));
+			validation_file = Path.Combine(data_dir, "validationIdx1.firstLines.txt");			
 		}
 		
 		// read training data
