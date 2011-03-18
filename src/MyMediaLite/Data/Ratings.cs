@@ -153,7 +153,7 @@ namespace MyMediaLite.Data
 		{
 			get {
 				var result_set = new HashSet<int>();
-				for (int index = 0; index < Values.Count; index++)
+				for (int index = 0; index < Users.Count; index++)
 					result_set.Add(Users[index]);
 				return result_set;
 			}
@@ -164,7 +164,7 @@ namespace MyMediaLite.Data
 		{
 			get {
 				var result_set = new HashSet<int>();
-				for (int index = 0; index < Values.Count; index++)
+				for (int index = 0; index < Items.Count; index++)
 					result_set.Add(Items[index]);
 				return result_set;
 			}

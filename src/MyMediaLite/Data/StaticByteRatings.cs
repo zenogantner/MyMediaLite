@@ -40,8 +40,6 @@ namespace MyMediaLite.Data
 				throw new NotSupportedException();
 			}
 		}
-		/// <inheritdoc/>
-		public override int Count { get { return ByteValues.Length; } }
 
 		/// <inheritdoc/>
 		public StaticByteRatings(int size)
@@ -60,7 +58,7 @@ namespace MyMediaLite.Data
 		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, byte rating)
 		{
-			if (pos == Count)
+			if (pos == ByteValues.Length)
 				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));
 
 			Users[pos]      = user_id;

@@ -30,6 +30,9 @@ namespace MyMediaLite.Data
 	{
 		/// <summary>The position where the next rating will be stored</summary>
 		protected int pos = 0;
+
+		/// <inheritdoc/>
+		public override int Count { get { return pos; } }
 		
 		/// <inheritdoc/>
 		public StaticRatings() { }
@@ -45,7 +48,7 @@ namespace MyMediaLite.Data
 		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, double rating)
 		{
-			if (pos == Count)
+			if (pos == Values.Count)
 				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));
 			
 			Users[pos]  = user_id;
