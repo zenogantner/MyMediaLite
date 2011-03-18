@@ -118,7 +118,7 @@ namespace MyMediaLite.Data
 		public IList<int> RandomIndex
 		{
 			get {
-				if (random_index == null || random_index.Length != Values.Count)
+				if (random_index == null || random_index.Length != Count)
 					BuildRandomIndex();
 
 				return random_index;
@@ -129,8 +129,8 @@ namespace MyMediaLite.Data
 		/// <inheritdoc/>
 		public void BuildRandomIndex()
 		{
-			random_index = new int[Values.Count];
-			for (int index = 0; index < Values.Count; index++)
+			random_index = new int[Count];
+			for (int index = 0; index < Count; index++)
 				random_index[index] = index;
 			Util.Utils.Shuffle<int>(random_index);
 		}
@@ -141,9 +141,9 @@ namespace MyMediaLite.Data
 		{
 			get {
 				double sum = 0;
-				for (int index = 0; index < Values.Count; index++)
+				for (int index = 0; index < Count; index++)
 					sum += this[index];
-				return (double) sum / Values.Count;
+				return (double) sum / Count;
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
-		public double this[int user_id, int item_id]
+		public virtual double this[int user_id, int item_id]
 		{
 			get {
 				// TODO speed up

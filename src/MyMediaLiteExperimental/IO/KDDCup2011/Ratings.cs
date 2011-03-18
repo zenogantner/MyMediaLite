@@ -43,7 +43,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <returns>the rating data</returns>
 		static public IRatings Read(TextReader reader, int num_ratings)
 		{
-			IRatings ratings = new StaticRatings(num_ratings);
+			IRatings ratings = new StaticByteRatings(num_ratings);
 
 			string line;
 
@@ -85,7 +85,7 @@ namespace MyMediaLite.IO.KDDCup2011
 		/// <returns>the rating data</returns>
 		static public IRatings ReadTest(TextReader reader, int num_ratings)
 		{
-			IRatings ratings = new StaticRatings(num_ratings);
+			IRatings ratings = new StaticByteRatings(num_ratings);
 
 			string line;
 

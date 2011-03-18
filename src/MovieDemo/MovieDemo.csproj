@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>MovieDemo</RootNamespace>
     <StartupObject>MovieDemo.MainClass</StartupObject>
-    <ReleaseVersion>0.11</ReleaseVersion>
+    <ReleaseVersion>1.0</ReleaseVersion>
     <AssemblyName>MovieDemo</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>

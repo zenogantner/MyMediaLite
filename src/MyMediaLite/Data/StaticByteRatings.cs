@@ -42,6 +42,19 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
+		public override double this[int user_id, int item_id]
+		{
+			get {
+				// TODO speed up
+				for (int index = 0; index < pos; index++)
+					if (Users[index] == user_id && Items[index] == item_id)
+						return (double) ByteValues[index];
+
+				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+			}
+		}
+		
+		/// <inheritdoc/>
 		public StaticByteRatings(int size)
 		{
 			Users  = new int[size];
@@ -59,7 +72,7 @@ namespace MyMediaLite.Data
 		public override void Add(int user_id, int item_id, byte rating)
 		{
 			if (pos == ByteValues.Length)
-				throw new Exception(string.Format("Ratings storage is full, only space fo {0} ratings", Count));
+				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
 
 			Users[pos]      = user_id;
 			Items[pos]      = item_id;
