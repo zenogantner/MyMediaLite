@@ -13,6 +13,8 @@
             and StaticRatingsWithDateTime
         - command-line programs
           - add command-line program for KDD Cup 2011
+          - rating prediction now lets the user specify to store the ratings
+            as bytes or floats instead of doubles, to save memory
           - display number of ratings
           - give out memory usage also for find_iter
           - move some statistics routines to the library because they are

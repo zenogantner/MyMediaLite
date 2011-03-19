@@ -67,8 +67,7 @@ Architecture
      - combine arbitrary similarity matrices
      - user-defined similarities
      - re-integrate adjusted cosine (port to new rating data structure)
-   - slope-one
-       - different weighting schemes
+   - enforce positive regularization parameters
  - distributed/parallel computing
    - use Parallel.ForEach for item recommender evaluation
      - as soon as Mono 2.8 is more widely available
