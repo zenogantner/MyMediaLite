@@ -68,7 +68,7 @@ namespace MyMediaLite.RatingPrediction
 
 				// hyperparameter search
 				//var split = new RatingCrossValidationSplit(Ratings, 5);
-				var split = new RatingSimpleSplit(Ratings, 0.2);
+				var split = new RatingsSimpleSplit(Ratings, 0.2);
 				int basis = 2;
 				// rough search
 				var hp_values_u = new double[] {-5, -3, -1, 0, 1, 3, 5};

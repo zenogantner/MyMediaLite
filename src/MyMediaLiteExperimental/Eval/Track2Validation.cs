@@ -48,7 +48,7 @@ namespace MyMediaLite.Eval
 			// initialize random number generator
 			var random = new System.Random();
 			
-			var left_out_indices = new List<int>();
+			int counter = 0;
 			
 			// for each user in the test set, randomly sample three items scored 80 or higher,
 			// and three that were not 
@@ -72,9 +72,6 @@ namespace MyMediaLite.Eval
 				{
 					int random_item = user_pos_items_array[random.Next(0, user_pos_items_array.Length - 1)];
 					sampled_pos_items.Add(random_item);
-					
-					// remember index to leave out from the training data
-					left_out_indices.Add(ratings.GetIndex(user_id, random_item, ratings.ByUser[user_id]));
 				}
 				
 				// sample negative items
@@ -87,15 +84,31 @@ namespace MyMediaLite.Eval
 				}
 				
 				// add to data structure
-				Hits[user_id] = new List<int>(sampled_pos_items);
-				Candidates[user_id] = new List<int>(sampled_pos_items.Union(sampled_neg_items));
+				Hits[user_id] = sampled_pos_items.ToArray();
+				Candidates[user_id] = sampled_pos_items.Union(sampled_neg_items).ToArray();
+
+				if (counter % 100 == 0)
+					Console.Error.Write(".");
 				
-				Console.Error.WriteLine(Memory.Usage);
-			}
+				if (counter++ % 1000 == 0)
+					Console.Error.WriteLine("{0}: {1}", user_id, Memory.Usage);
+			}			
+			Console.WriteLine("{0} users in validation set, {1} in test.", Hits.Count, test_candidates.Count);
+			
+			var left_out_indices = new int[Hits.Count * 3];
+			Console.Error.WriteLine("left_out_indices {0}", Memory.Usage);
+			int pos = 0;
+			foreach (int user_id in Hits.Keys)
+				foreach (int item_id in Hits[user_id])
+					left_out_indices[pos++] = ratings.GetIndex(user_id, item_id, ratings.ByUser[user_id]);
 			
 			// create training part of the ratings (without the validation items)
-			var kept_indices = new List<int>(ratings.RandomIndex.Except(left_out_indices));
+			var kept_indices = ratings.RandomIndex.Except(left_out_indices).ToArray();
+			Console.Error.WriteLine("kept_indices {0}", Memory.Usage);
+			left_out_indices = null;
+			Console.Error.WriteLine("rm left_out_indices {0}", Memory.Usage);
 			Training = new RatingsProxy(ratings, kept_indices);
+			Console.Error.WriteLine("training {0}", Memory.Usage);
 		}
 	}
 }
