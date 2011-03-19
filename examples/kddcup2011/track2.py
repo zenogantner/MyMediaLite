@@ -9,8 +9,8 @@ train_file = "trainIdx2.firstLines.txt"
 test_file  = "testIdx2.firstLines.txt"
 
 # load the data
-train_data = IO.KDDCup2011.Ratings.Read(train_file)
-test_data = IO.KDDCup2011.Track2Candidates.Read(test_file)
+train_data = IO.KDDCup2011.Ratings.Read(train_file, 8824)
+test_data = IO.KDDCup2011.Track2Candidates.Read(test_file, 119)
 item_relations = IO.KDDCup2011.Items.Read("trackData2.txt", "albumData2.txt", "artistData2.txt", "genreData2.txt", 2);
 print item_relations
 
