@@ -93,6 +93,8 @@ MyMediaLite rating prediction
    - cross_validation=K         perform k-fold crossvalidation on the training data
                                  (ignores the test data)
    - ml1m_format=BOOL           read rating data in MovieLens 1M (and 10M) format
+   - use_float=BOOL             store ratings as floats instead of doubles
+   - use_byte=BOOL              store ratings as bytes instead of doubles
 
   options for finding the right number of iterations (MF methods)
    - find_iter=N                give out statistics every N iterations
