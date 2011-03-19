@@ -272,30 +272,30 @@ MyMediaLite KDD Cup 2011 tool
 				{   // make this more abstract ...
 					if ( !(recommender is IIterativeModel) )
 						Usage("Only iterative recommenders support find_iter.");
-					
+
 					IIterativeModel iterative_recommender = (MF) item_recommender;
 					Console.WriteLine(recommender.ToString() + " ");
-		
-					var auc_eval_stats = new List<double>();
-					
+
+					//var auc_eval_stats = new List<double>();
+
 					if (load_model_file.Equals(string.Empty))
 						recommender.Train();
 					else
 						Recommender.LoadModel(iterative_recommender, load_model_file);
-		
+
 					if (compute_fit)
 						Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
-		
+
 					ItemPredictionEval.DisplayResults(ItemPredictionEval.Evaluate(item_recommender, split.Test[0], split.Train[0], split.Train[0].AllItems));
 					Console.WriteLine(" " + iterative_recommender.NumIter);
-		
+
 					for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
 					{
 						TimeSpan time = Utils.MeasureTime(delegate() {
 							iterative_recommender.Iterate();
 						});
 						training_time_stats.Add(time.TotalSeconds);
-		
+
 						if (i % find_iter == 0)
 						{
 							if (compute_fit)
@@ -307,38 +307,18 @@ MyMediaLite KDD Cup 2011 tool
 								fit_time_stats.Add(time.TotalSeconds);
 								Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
 							}
-		
+
 							Dictionary<string, double> results = null;
 							time = Utils.MeasureTime(delegate() {
 								results = ItemPredictionEval.Evaluate(item_recommender, split.Test[0], split.Train[0], split.Train[0].AllItems);
-								RatingEval.DisplayResults(results);
-								auc_eval_stats.Add(results["AUC"]);
+								ItemPredictionEval.DisplayResults(results);
+								//auc_eval_stats.Add(results["AUC"]);
 								Console.WriteLine(" " + i);
 							});
 							eval_time_stats.Add(time.TotalSeconds);
-		
-							// if best result so far, write out model file and predictions
-							if (results["RMSE"] == rmse_eval_stats.Min())
-							{
-								Recommender.SaveModel(recommender, save_model_file, i);
-								if (!prediction_file.Equals(string.Empty))
-									KDDCup.PredictTrack1(recommender, track1_test_data, prediction_file + "-it-" + i);
-							}
-		
-							if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
-							{
-								Console.Error.WriteLine(string.Format(ni, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
-								Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
-								break;
-							}
-							if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
-							{
-								Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
-								break;
-							}
 						}
 					} // for
-		
+
 					DisplayIterationStats();
 					Recommender.SaveModel(recommender, save_model_file);
 				}
@@ -347,7 +327,7 @@ MyMediaLite KDD Cup 2011 tool
 						item_recommender.Train();
 					});
 					Console.Write(" training_time " + seconds + " ");
-	
+
 					seconds = Utils.MeasureTime(delegate() {
 						var results = ItemPredictionEval.Evaluate(item_recommender, split.Test[0], split.Train[0], split.Train[0].AllItems);
 						ItemPredictionEval.DisplayResults(results);
