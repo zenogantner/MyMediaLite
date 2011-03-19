@@ -1,0 +1,50 @@
+[%
+  title='MyMediaLite: KDD Cup 2011'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+  <h2>KDD Cup 2011</h2>
+  <p>
+    Since version 1.0, MyMediaLite supports reading in the
+    <a href="http://kddcup.yahoo.com">KDD Cup 2011</a> data files,
+    so that you can run existing recommenders on that data set,
+    or implement new ones using the MyMediaLite infrastructure.
+  </p>
+  
+  <p>
+  To find out more about the challenge, please go the
+  <a href="http://kddcup.yahoo.com/">official KDD Cup 2011 website.</a>
+  </p>
+  
+  <h2>Lots of Data</h2>
+  <p>
+    The KDD Cup 2011 datasets are huge:
+    The training set for Track 1 contains about 300 million ratings,
+    while the training set for Track 2 contains about 60 million ratings.
+    We took care to implement the MyMediaLite algorithms and data structures
+    so that they do not waste memory, but we recommend to run MyMediaLite for
+    the KDD Cup 2011 on a computer with at least 8 GB (track 1) or 4 GB (track 2).
+  </p>
+  
+  <p>
+    Patches that improve memory use and runtime are, as well as other improvements,
+    of course
+    <a href="mailto:mymedialite@ismll.de">always welcome</a>.
+  </p>
+  
+  <p>
+    If you run into troubles with <a href="http://go-mono.com">Mono</a>,
+    please upgrade to Mono 2.10 and make sure it is compiled with the option
+    <code>--with-large-head=yes</code>.
+</div>
+
+[% INCLUDE footer %]
