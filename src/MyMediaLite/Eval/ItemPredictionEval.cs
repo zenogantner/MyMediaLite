@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -36,6 +37,17 @@ namespace MyMediaLite.Eval
 				string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
 				return new HashSet<string>(measures);
 			}
+		}
+
+		/// <summary>Display item prediction results</summary>
+		/// <param name="result">the result dictionary</param>
+		static public void DisplayResults(Dictionary<string, double> result)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
 
 		/// <summary>Evaluation for rankings of item recommenders</summary>

@@ -193,7 +193,7 @@ public class ItemPrediction
 			                                 test_data,
 				                             training_data,
 				                             relevant_items);
-			DisplayResults(result);
+			ItemPredictionEval.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
 			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -222,7 +222,7 @@ public class ItemPrediction
 							training_data,
 							relevant_items
 						);
-						DisplayResults(result);
+						ItemPredictionEval.DisplayResults(result);
 						Console.WriteLine(" " + i);
 					});
 					eval_time_stats.Add(t.TotalSeconds);
@@ -295,7 +295,7 @@ public class ItemPrediction
 				            training_data,
 				            relevant_items
 						);
-						DisplayResults(result);
+						ItemPredictionEval.DisplayResults(result);
 			    	}
 				);
 				Console.Write(" testing_time " + time_span);
@@ -383,13 +383,6 @@ public class ItemPrediction
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayIterationStats();
-	}
-
-	// TODO move to a class in the MyMediaLite base library
-	static void DisplayResults(Dictionary<string, double> result)
-	{
-		Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
-		                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 	}
 
 	// TODO move to a class in the MyMediaLite base library
