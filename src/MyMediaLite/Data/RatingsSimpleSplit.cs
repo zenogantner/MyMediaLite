@@ -38,6 +38,9 @@ namespace MyMediaLite.Data
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
 		public RatingsSimpleSplit(IRatings ratings, double ratio)
 		{
+			if (ratio <= 0)
+				throw new ArgumentException();
+
 			// create index lists
 			var train_indices = new List<int>();
 			var test_indices  = new List<int>();

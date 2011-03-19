@@ -43,6 +43,7 @@ public class ItemPrediction
 	static IItemRecommender recommender = null;
 
 	static bool compute_fit;
+	static double test_ratio;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -86,6 +87,7 @@ public class ItemPrediction
 		Console.WriteLine("   - prediction_file=FILE       write predictions to FILE ('-' for STDOUT)");
 		Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
 		Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (needs predict_items_file)");
+		Console.WriteLine("   - test_ratio=NUM             evaluate by splitting of a NUM part of the feedback");
 		Console.WriteLine();
 		Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
 		Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
@@ -137,6 +139,7 @@ public class ItemPrediction
 		string prediction_file        = parameters.GetRemoveString( "prediction_file", string.Empty);
 		int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
 		string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
+		test_ratio                    = parameters.GetRemoveDouble( "test_ratio", 0);
 
 		// main data files and method
 		string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
@@ -364,7 +367,17 @@ public class ItemPrediction
 			}
 
 		// test data
-        test_data = ItemRecommendation.Read(testfile, user_mapping, item_mapping);
+		if (test_ratio == 0)
+		{
+			// normal case
+        	test_data = ItemRecommendation.Read(testfile, user_mapping, item_mapping);
+		}
+		else
+		{
+			var split = new PosOnlyFeedbackSimpleSplit(training_data, test_ratio);
+			training_data = split.Train[0];
+			test_data     = split.Test[0];
+		}
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

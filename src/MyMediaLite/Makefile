@@ -146,8 +146,9 @@ FILES = \
 	IO/MovieLensRatingData.cs \
 	Data/PosOnlyFeedback.cs \
 	Util/GridSearch.cs \
-	Data/RatingSimpleSplit.cs \
-	Data/StaticByteRatings.cs 
+	Data/PosOnlyFeedbackSimpleSplit.cs \
+	Data/StaticByteRatings.cs \
+	Data/RatingsSimpleSplit.cs 
 
 DATA_FILES = 
 

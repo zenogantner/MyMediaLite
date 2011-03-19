@@ -38,6 +38,9 @@ namespace MyMediaLite.Data
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
 		public PosOnlyFeedbackSimpleSplit(PosOnlyFeedback feedback, double ratio)
 		{
+			if (ratio <= 0)
+				throw new ArgumentException();
+
 			// create train/test data structures
 			var train = new PosOnlyFeedback();
 			var test  = new PosOnlyFeedback();
