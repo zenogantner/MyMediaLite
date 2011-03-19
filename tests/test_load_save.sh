@@ -10,12 +10,12 @@ cd src/RatingPrediction/bin/Debug/
 echo "This will take about 5 minutes ..."
 
 echo
-echo "rating prediction engines"
-echo "-------------------------"
+echo "rating predictors"
+echo "-----------------"
 
 # load/save currently not supported: global-average user-average item-average
 
-for method in UserItemBaseline SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization
+for method in SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization
 do
      echo $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR
           $PROGRAM u1.base u1.test $method save_model=tmp.model data_dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
@@ -45,8 +45,8 @@ done
 rm tmp.model output1.txt output2.txt
 
 echo
-echo "item prediction engines"
-echo "-----------------------"
+echo "item recommenders"
+echo "-----------------"
 
 PROGRAM="mono --debug ItemPrediction.exe"
 
