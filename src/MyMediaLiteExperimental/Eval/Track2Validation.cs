@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
@@ -45,7 +46,7 @@ namespace MyMediaLite.Eval
 			Hits = new Dictionary<int, IList<int>>();
 			
 			// initialize random number generator
-			var random = new Random();
+			var random = new System.Random();
 			
 			var left_out_indices = new List<int>();
 			
@@ -88,6 +89,8 @@ namespace MyMediaLite.Eval
 				// add to data structure
 				Hits[user_id] = new List<int>(sampled_pos_items);
 				Candidates[user_id] = new List<int>(sampled_pos_items.Union(sampled_neg_items));
+				
+				Console.Error.WriteLine(Memory.Usage);
 			}
 			
 			// create training part of the ratings (without the validation items)

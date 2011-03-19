@@ -128,7 +128,26 @@ FILES = \
 	RatingPrediction/KNN.cs \
 	RatingPrediction/UserItemBaseline.cs \
 	RatingPrediction/ItemKNNCosine.cs \
-	RatingPrediction/ItemKNN.cs 
+	RatingPrediction/ItemKNN.cs \
+	Correlation/Pearson.cs \
+	Correlation/RatingCorrelationMatrix.cs \
+	RatingPrediction/UserKNNCosine.cs \
+	RatingPrediction/UserKNN.cs \
+	RatingPrediction/ItemKNNPearson.cs \
+	RatingPrediction/UserKNNPearson.cs \
+	RatingPrediction/ItemAttributeKNN.cs \
+	RatingPrediction/UserAttributeKNN.cs \
+	Data/ISplit.cs \
+	Data/RatingsProxy.cs \
+	DataType/ListProxy.cs \
+	Data/RatingCrossValidationSplit.cs \
+	Data/StaticRatingsWithDateTime.cs \
+	Data/RatingsWithDateTime.cs \
+	IO/MovieLensRatingData.cs \
+	Data/PosOnlyFeedback.cs \
+	Util/GridSearch.cs \
+	Data/RatingSimpleSplit.cs \
+	Data/StaticByteRatings.cs 
 
 DATA_FILES = 
 

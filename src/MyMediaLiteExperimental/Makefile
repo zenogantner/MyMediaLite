@@ -83,13 +83,19 @@ FILES = \
 	AttrToFactor/MF_Mapping.cs \
 	AttrToFactor/MF_ItemMapping.cs \
 	AttrToFactor/MF_Item_Mapping_Optimal.cs \
-	RatingPredictor/SocialMF.cs \
 	ItemRecommender/ItemAttributeSVM.cs \
-	Util/GridSearch.cs \
 	Diversification/SequentialDiversification.cs \
-	RatingPredictor/NewKNN.cs \
 	AttrToFactor/BPRMF_ItemMappingKNN.cs \
-	AttrToFactor/BPRMF_ItemMappingSVR.cs 
+	AttrToFactor/BPRMF_ItemMappingSVR.cs \
+	IO/KDDCup2011/Track2Candidates.cs \
+	Eval/KDDCup.cs \
+	Data/KDDCupItems.cs \
+	Taxonomy/KDDCupItemType.cs \
+	IO/KDDCup2011/Items.cs \
+	IO/KDDCup2011/Ratings.cs \
+	Eval/Track2Validation.cs \
+	RatingPrediction/SocialMF.cs \
+	RatingPrediction/NewKNN.cs 
 
 DATA_FILES = 
 
@@ -97,10 +103,16 @@ RESOURCES =
 
 EXTRAS = \
 	AttrToFactor \
-	RatingPredictor \
 	ItemRecommender \
 	Util \
 	Diversification \
+	IO \
+	IO/KDDCup2011 \
+	Eval \
+	Data \
+	Taxonomy \
+	Correlation \
+	RatingPrediction \
 	mymedialiteexperimental.pc.in 
 
 REFERENCES =  \

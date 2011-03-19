@@ -63,7 +63,7 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
 
-FILES =  \
+FILES = \
 	AssemblyInfo.cs \
 	ItemPrediction.cs 
 
@@ -75,7 +75,6 @@ EXTRAS = \
 	item_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	System.Core \
 	System.Data
 

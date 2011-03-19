@@ -1,9 +1,9 @@
 #!/bin/bash
-VERSION=0.11
+VERSION=1.0
 PACKAGE=mymedialite
 prefix=/usr/local
 config=DEBUG
-configurations=" DEBUG RELEASE"
+configurations=" DEBUG RELEASE DEBUG_X86 RELEASE_X86"
 common_packages=" glade-sharp-2.0;2.12.9 glib-sharp-2.0;2.12.9 gtk-sharp-2.0;2.12.9 mono-nunit;2.4.7"
 
 
