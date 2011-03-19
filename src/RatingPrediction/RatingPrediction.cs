@@ -51,6 +51,7 @@ public static class RatingPrediction
 	// global command line parameters
 	static bool compute_fit;
 	static bool movielens1m_format;
+	static RatingType rating_type = RatingType.DOUBLE;
 
 	static void Usage(string message)
 	{
@@ -144,7 +145,14 @@ MyMediaLite rating prediction
 		string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 		string user_relation_file   = parameters.GetRemoveString( "user_relation");
 		string item_relation_file   = parameters.GetRemoveString( "item_relation");
+		bool use_float                   = parameters.GetRemoveBool(   "use_float", false);
+		bool use_byte                    = parameters.GetRemoveBool(   "use_byte", false);
 
+		if (use_float)
+			rating_type = RatingType.FLOAT;
+		if (use_byte)
+			rating_type = RatingType.BYTE;
+		
 		// other arguments
 		string save_model_file = parameters.GetRemoveString( "save_model");
 		string load_model_file = parameters.GetRemoveString( "load_model");
@@ -323,7 +331,7 @@ MyMediaLite rating prediction
 		if (movielens1m_format)
 			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -372,7 +380,7 @@ MyMediaLite rating prediction
 		if (movielens1m_format)
 			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
 		else
-			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

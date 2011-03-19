@@ -1,6 +1,6 @@
 Name: MyMediaLite
 Description: MyMediaLite
-Version: 0.11
+Version: 1.0
 
 Requires: 
 Libs: -r:/usr/local/lib/mymedialite/MyMediaLite.dll

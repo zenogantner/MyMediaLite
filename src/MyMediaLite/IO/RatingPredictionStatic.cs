@@ -24,6 +24,17 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
+	/// <summary>Represent different numerical types that are used to store the ratings</summary>
+	public enum RatingType
+	{
+		/// <summary>byte (1 byte per rating)</summary>
+		BYTE,
+		/// <summary>float (4 bytes per rating)</summary>
+		FLOAT,
+		/// <summary>double (8 bytes per rating)</summary>
+		DOUBLE
+	}
+
 	/// <summary>Class that offers methods for reading in static rating data</summary>
 	public class RatingPredictionStatic
 	{
@@ -33,8 +44,11 @@ namespace MyMediaLite.IO
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="rating_type">the data type to be used for storing the ratings</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+		static public IRatings Read(string filename, double min_rating, double max_rating,
+		                            EntityMapping user_mapping, EntityMapping item_mapping,
+		                            RatingType rating_type)
 		{
 			int size = 0;
 			using ( var reader = new StreamReader(filename) )
@@ -42,7 +56,7 @@ namespace MyMediaLite.IO
 					size++;
 
 			using ( var reader = new StreamReader(filename) )
-				return Read(reader, size, min_rating, max_rating, user_mapping, item_mapping);
+				return Read(reader, size, min_rating, max_rating, user_mapping, item_mapping, rating_type);
 		}
 
 		/// <summary>Read in static rating data from a TextReader</summary>
@@ -52,11 +66,19 @@ namespace MyMediaLite.IO
 		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="rating_type">the data type to be used for storing the ratings</param>
 		/// <returns>the rating data</returns>
-		static public IRatings
-			Read(TextReader reader,	int size, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+		static public IRatings Read(TextReader reader, int size, double min_rating, double max_rating,
+		                            EntityMapping user_mapping, EntityMapping item_mapping,
+		                            RatingType rating_type)
 		{
-			var ratings = new StaticRatings(size);
+			IRatings ratings;
+			if (rating_type == RatingType.BYTE)
+				ratings = new StaticByteRatings(size);
+			else if (rating_type == RatingType.FLOAT)
+				ratings = new StaticFloatRatings(size);
+			else
+				ratings = new StaticRatings(size);
 
 			bool out_of_range_warning_issued = false;
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';

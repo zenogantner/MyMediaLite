@@ -1,6 +1,6 @@
 Name: MyMediaLiteExperimental
 Description: MyMediaLiteExperimental
-Version: 0.11
+Version: 1.0
 
 Requires: 
 Libs: -r:/usr/local/lib/mymedialite/MyMediaLiteExperimental.dll

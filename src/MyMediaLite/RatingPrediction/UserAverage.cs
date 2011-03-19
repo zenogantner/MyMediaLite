@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
-			if (user_id <= Ratings.MaxUserID)
+			if (user_id < entity_averages.Count)
 				return entity_averages[user_id];
 			else
 				return global_average;
