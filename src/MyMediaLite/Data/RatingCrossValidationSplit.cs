@@ -20,6 +20,7 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>k-fold split for rating prediction</summary>
+	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
 	public class RatingCrossValidationSplit : ISplit<IRatings>
 	{
 		/// <inheritdoc/>
@@ -50,7 +51,7 @@ namespace MyMediaLite.Data
 				train_indices[i] = new List<int>();
 				test_indices[i]  = new List<int>();
 			}
-			
+
 			// assign indices to folds
 			foreach (int i in random_indices)
 				for (int j = 0; j < num_folds; j++)

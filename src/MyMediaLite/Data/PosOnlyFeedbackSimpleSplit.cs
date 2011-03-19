@@ -20,41 +20,42 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>simple split for rating prediction</summary>
+	/// <summary>simple split for item prediction from implicit feedback</summary>
 	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
-	public class RatingsSimpleSplit : ISplit<IRatings>
+	public class PosOnlyFeedbackSimpleSplit : ISplit<PosOnlyFeedback>
 	{
 		/// <inheritdoc/>
 		public int NumberOfFolds { get { return 1; } }
 
 		/// <inheritdoc/>
-		public List<IRatings> Train { get; private set; }
+		public List<PosOnlyFeedback> Train { get; private set; }
 
 		/// <inheritdoc/>
-		public List<IRatings> Test { get; private set; }
+		public List<PosOnlyFeedback> Test { get; private set; }
 
 		/// <summary>Create a simple split of rating prediction data</summary>
-		/// <param name="ratings">the dataset</param>
+		/// <param name="feedback">the dataset</param>
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
-		public RatingsSimpleSplit(IRatings ratings, double ratio)
+		public PosOnlyFeedbackSimpleSplit(PosOnlyFeedback feedback, double ratio)
 		{
-			// create index lists
-			var train_indices = new List<int>();
-			var test_indices  = new List<int>();
+			// create train/test data structures
+			var train = new PosOnlyFeedback();
+			var test  = new PosOnlyFeedback();
 
 			// assign indices to training or validation part
 			Random random = new Random();
-			for (int i = 0; i < ratings.Count; i++)
-				if (random.NextDouble() < ratio)
-					test_indices.Add(i);
-				else
-					train_indices.Add(i);
+			foreach (int user_id in feedback.AllUsers)
+				foreach (int item_id in feedback.UserMatrix[user_id])
+					if (random.NextDouble() < ratio)
+						test.Add(user_id, item_id);
+					else
+						train.Add(user_id, item_id);
 
 			// create split data structures
-			Train = new List<IRatings>(NumberOfFolds);
-			Test  = new List<IRatings>(NumberOfFolds);
-			Train.Add(new RatingsProxy(ratings, train_indices));
-			Test.Add(new RatingsProxy(ratings, test_indices));
+			Train = new List<PosOnlyFeedback>(NumberOfFolds);
+			Test  = new List<PosOnlyFeedback>(NumberOfFolds);
+			Train.Add(train);
+			Test.Add(test);
 		}
 	}
 }

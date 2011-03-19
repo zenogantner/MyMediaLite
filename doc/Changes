@@ -23,7 +23,7 @@
         - IO
           - add routines for KDD Cup 2011 data
         - Evaluation
-          - add simple dataset splitting for rating prediction
+          - add simple dataset splitting
           - improve grid search routines
         - example programs
           - fix a bug in the example programs (reported by Yongfeng Wang)

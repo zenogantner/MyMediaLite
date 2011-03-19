@@ -141,6 +141,7 @@
     <Compile Include="Data\PosOnlyFeedback.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Data\StaticByteRatings.cs" />
+    <Compile Include="Data\PosOnlyFeedbackSimpleSplit.cs" />
     <Compile Include="Data\RatingsSimpleSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
