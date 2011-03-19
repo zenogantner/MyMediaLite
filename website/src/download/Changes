@@ -1,3 +1,37 @@
+1.0	2011-03-19
+	- recommenders
+          - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
+          - UserItemBaseline: use internal splitting to find good regularization
+                              parameters
+        - API changes
+          - new data structures and interfaces for rating prediction and for
+            item prediction from implicit feedback (consume less memory)
+          - CanPredict() is now part of the IRecommender interface.
+          - rename IO.RatingPredictionData to IO.RatingPrediction
+          - rename IO.ItemRecommenderData to IO.ItemRecommendation
+          - add rating data structures with time stamps: RatingsWithDateTime
+            and StaticRatingsWithDateTime
+        - command-line programs
+          - add command-line program for KDD Cup 2011
+          - rating prediction now lets the user specify to store the ratings
+            as bytes or floats instead of doubles, to save memory
+          - display number of ratings
+          - give out memory usage also for find_iter
+          - move some statistics routines to the library because they are
+            used several times
+          - rename the arguments rating_predictions_file and
+            item_predictions_file to prediction_file for consistency in
+            all command-line programs
+        - IO
+          - add routines for KDD Cup 2011 data
+        - Evaluation
+          - add simple dataset splitting
+          - improve grid search routines
+        - example programs
+          - fix a bug in the example programs (reported by Yongfeng Wang)
+        - data preprocessing scripts
+          - fix download_movielens.sh
+
 0.11	2011-03-04
         - add simple GUI demo for CeBIT
         - recommenders
