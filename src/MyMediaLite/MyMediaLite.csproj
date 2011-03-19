@@ -143,6 +143,7 @@
     <Compile Include="Data\StaticByteRatings.cs" />
     <Compile Include="Data\PosOnlyFeedbackSimpleSplit.cs" />
     <Compile Include="Data\RatingsSimpleSplit.cs" />
+    <Compile Include="Data\StaticFloatRatings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

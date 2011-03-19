@@ -304,6 +304,12 @@ namespace MyMediaLite.Data
 		}
 
 		/// <inheritdoc/>
+		public virtual void Add(int user_id, int item_id, float rating)
+		{
+			Add(user_id, item_id, (double) rating);
+		}		
+		
+		/// <inheritdoc/>
 		public virtual void Add(int user_id, int item_id, byte rating)
 		{
 			Add(user_id, item_id, (double) rating);

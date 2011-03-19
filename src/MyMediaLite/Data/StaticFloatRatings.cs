@@ -20,21 +20,21 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Array-based storage for rating data.</summary>
+	/// <summary>Array-based storage for rating data</summary>
 	/// <remarks>
 	/// Very memory-efficient.
 	///
 	/// This data structure does NOT support online updates.
 	/// </remarks>
-	public class StaticByteRatings : StaticRatings
+	public class StaticFloatRatings : StaticRatings
 	{
-		byte[] byte_values;
+		float[] float_values;
 
 		/// <inheritdoc/>
 		public override double this[int index]
 		{
 			get {
-				return (double) byte_values[index];
+				return (double) float_values[index];
 			}
 			set {
 				throw new NotSupportedException();
@@ -48,35 +48,41 @@ namespace MyMediaLite.Data
 				// TODO speed up
 				for (int index = 0; index < pos; index++)
 					if (Users[index] == user_id && Items[index] == item_id)
-						return (double) byte_values[index];
+						return (double) float_values[index];
 
 				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
 		}
 
 		/// <inheritdoc/>
-		public StaticByteRatings(int size)
+		public StaticFloatRatings(int size)
 		{
 			Users  = new int[size];
 			Items  = new int[size];
-			byte_values = new byte[size];
+			float_values = new float[size];
 		}
 
 		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, double rating)
 		{
-			Add(user_id, item_id, (byte) rating);
+			Add(user_id, item_id, (float) rating);
 		}
 
 		/// <inheritdoc/>
 		public override void Add(int user_id, int item_id, byte rating)
 		{
-			if (pos == byte_values.Length)
+			Add(user_id, item_id, (float) rating);
+		}
+
+		/// <inheritdoc/>
+		public override void Add(int user_id, int item_id, float rating)
+		{
+			if (pos == float_values.Length)
 				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
 
-			Users[pos]      = user_id;
-			Items[pos]      = item_id;
-			byte_values[pos] = rating;
+			Users[pos]        = user_id;
+			Items[pos]        = item_id;
+			float_values[pos] = rating;
 
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
@@ -95,7 +101,7 @@ namespace MyMediaLite.Data
 			for (int index = 0; index < pos; index++)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
-					rating = (double) byte_values[index];
+					rating = (double) float_values[index];
 					return true;
 				}
 
@@ -107,7 +113,7 @@ namespace MyMediaLite.Data
 		{
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
-					return (double) byte_values[index];
+					return (double) float_values[index];
 
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
@@ -120,13 +126,11 @@ namespace MyMediaLite.Data
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
-					rating = (double) byte_values[index];
+					rating = (double) float_values[index];
 					return true;
 				}
 
 			return false;
 		}
-
 	}
 }
-

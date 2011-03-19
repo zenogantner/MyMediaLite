@@ -133,12 +133,18 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating</param>
 		void Add(int user_id, int item_id, byte rating);
+
+		/// <summary>Add float-valued rating to the collection</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">the rating</param>
+		void Add(int user_id, int item_id, float rating);		
 		
 		/// <summary>Add a new rating</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating value</param>
-		void Add(int user_id, int item_id, double rating); // TODO think about returning the index of the newly added rating
+		void Add(int user_id, int item_id, double rating);
 
 		/// <summary>Remove all ratings by a given user</summary>
 		/// <param name="user_id">the user ID</param>
