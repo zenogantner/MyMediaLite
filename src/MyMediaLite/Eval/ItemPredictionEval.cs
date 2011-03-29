@@ -63,12 +63,14 @@ namespace MyMediaLite.Eval
 		/// <param name="engine">Item recommender engine</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data</param>
+		/// <param name="relevant_users">a collection of integers with all relevant items</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
 			IItemRecommender engine,
 			PosOnlyFeedback test,
 			PosOnlyFeedback train,
+		    ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
 			if (train.Overlap(test) > 0)
@@ -83,7 +85,7 @@ namespace MyMediaLite.Eval
 			double ndcg_sum    = 0;
 			int num_users      = 0;
 
-			foreach (int user_id in test.AllUsers)
+			foreach (int user_id in relevant_users)
 			{
 				var correct_items = new HashSet<int>(test.UserMatrix[user_id].Intersect(relevant_items));
 
@@ -108,6 +110,11 @@ namespace MyMediaLite.Eval
 
 				if (prediction.Length != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
+				
+				if (num_users % 1000 == 0)
+					Console.Error.Write(".");
+				if (num_users % 20000 == 0)
+					Console.Error.WriteLine();
 			}
 
 			var result = new Dictionary<string, double>();

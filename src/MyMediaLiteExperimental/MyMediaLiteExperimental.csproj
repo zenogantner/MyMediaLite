@@ -72,6 +72,7 @@
     <Compile Include="Eval\Track2Validation.cs" />
     <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="RatingPrediction\NewKNN.cs" />
+    <Compile Include="IKDDCupRecommender.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

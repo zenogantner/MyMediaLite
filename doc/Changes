@@ -1,3 +1,11 @@
+1.01	2011-04-??
+	- KDD Cup 2011
+          - do track 2 validation on a subset of 10,000 users
+          - add IKDDCupRecommender interface for recommenders that use the
+            KDDCup item data
+        - evaluation
+          - add relevant_users feature for item prediction
+
 1.0	2011-03-19
 	- recommenders
           - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
@@ -24,7 +32,7 @@
             all command-line programs
         - IO
           - add routines for KDD Cup 2011 data
-        - Evaluation
+        - evaluation
           - add simple dataset splitting
           - improve grid search routines
         - example programs

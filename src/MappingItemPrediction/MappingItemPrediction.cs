@@ -234,7 +234,7 @@ public class MappingItemPrediction
 		Console.WriteLine();
 	}
 
-    static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, PosOnlyFeedback test_user_items, PosOnlyFeedback train_user_items)
+    static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, PosOnlyFeedback test_data, PosOnlyFeedback train_data)
 	{
 		Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
 
@@ -242,8 +242,9 @@ public class MappingItemPrediction
 	    	{
 	    		var result = ItemPredictionEval.Evaluate(
                                 recommender,
-								test_user_items,
-        	                    train_user_items,
+								test_data,
+        	                    train_data,
+			                    test_data.AllUsers,
             	                relevant_items
 			    );
 				DisplayResults(result);

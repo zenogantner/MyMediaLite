@@ -192,6 +192,7 @@ public class ItemPrediction
 			var result = ItemPredictionEval.Evaluate(recommender,
 			                                 test_data,
 				                             training_data,
+			                                 test_data.AllUsers,
 				                             relevant_items);
 			ItemPredictionEval.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
@@ -220,6 +221,7 @@ public class ItemPrediction
 							recommender,
 						    test_data,
 							training_data,
+						    test_data.AllUsers,
 							relevant_items
 						);
 						ItemPredictionEval.DisplayResults(result);
@@ -293,6 +295,7 @@ public class ItemPrediction
 					    	recommender,
 							test_data,
 				            training_data,
+					        test_data.AllUsers,
 				            relevant_items
 						);
 						ItemPredictionEval.DisplayResults(result);
