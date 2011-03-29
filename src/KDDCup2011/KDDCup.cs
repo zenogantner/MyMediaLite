@@ -33,7 +33,7 @@ using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
-public static class RatingPrediction
+public static class KDDCupProgram
 {
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
@@ -197,7 +197,7 @@ MyMediaLite KDD Cup 2011 tool
 			training_data_posonly = CreateFeedback(training_data);
 			item_recommender.Feedback = training_data_posonly;
 		}
-		
+
 		if (recommender is IKDDCupRecommender)
 		{
 			var kddcup_recommender = recommender as IKDDCupRecommender;
@@ -272,29 +272,37 @@ MyMediaLite KDD Cup 2011 tool
 				var item_recommender = recommender as ItemRecommender;
 
 				var random = new System.Random();
-				
+
 				// create split
 				var split = new PosOnlyFeedbackSimpleSplit(training_data_posonly, 0.2);
 				item_recommender.Feedback = split.Train[0];
 
-				// use candidate items intersected with test items as relevant items 
+				// use candidate items intersected with test items as relevant items
 				var relevant_items = new HashSet<int>();
 				foreach (int user_id in track2_test_data.Keys)
 					foreach (int item_id in track2_test_data[user_id])
 						relevant_items.Add(item_id);
 				relevant_items.IntersectWith(split.Test[0].AllItems);
-				
-				// use corresponding intersection for relevant users, and sample from them
-				var relevant_users_set = new HashSet<int>(split.Test[0].AllUsers);
-				relevant_users_set.IntersectWith(split.Test[0].AllItems);
-				var relevant_users_list = new List<int>(relevant_users_set);
-				var relevant_users = new int[10000];
-				for (int i = 0; i < relevant_users.Length; i++)
-					relevant_users[i] = relevant_users_list[random.Next(0, relevant_users_list.Count - 1)];
-				
-				Console.Error.WriteLine("{0} relevant users, {1} relevant items", relevant_users_list.Count, relevant_items.Count);
-				Console.Error.WriteLine("Use subset of 10000 users for validation.");
-				
+
+				int[] relevant_users;
+				if (sample_data)
+				{
+					relevant_users = split.Test[0].AllUsers.ToArray();
+				}
+				else
+				{
+					// use corresponding intersection for relevant users, and sample from them
+					var relevant_users_set = new HashSet<int>(split.Test[0].AllUsers);
+					relevant_users_set.IntersectWith(split.Test[0].AllItems);
+					var relevant_users_list = new List<int>(relevant_users_set);
+					relevant_users = new int[10000];
+					for (int i = 0; i < relevant_users.Length; i++)
+						relevant_users[i] = relevant_users_list[random.Next(0, relevant_users_list.Count - 1)];
+
+					Console.Error.WriteLine("{0} relevant users, {1} relevant items", relevant_users_list.Count, relevant_items.Count);
+					Console.Error.WriteLine("Use subset of 10000 users for validation.");
+				}
+
 				if (find_iter != 0)
 				{   // make this more abstract ...
 					if ( !(recommender is IIterativeModel) )
