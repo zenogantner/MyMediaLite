@@ -67,8 +67,8 @@ namespace MyMediaLite.RatingPrediction
         public override void Train()
 		{
 			// init latent factor matrices
-	       	user_factors = new Matrix<double>(NumUsers, num_factors);
-	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
+	       	user_factors = new Matrix<double>(NumUsers, NumFactors);
+	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
 	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
 	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 			// init biases
@@ -113,7 +113,7 @@ namespace MyMediaLite.RatingPrediction
 				double score = global_bias;
 				score += user_bias[u];
 				score += item_bias[i];
-	            for (int f = 0; f < num_factors; f++)
+	            for (int f = 0; f < NumFactors; f++)
     	            score += user_factors[u, f] * item_factors[i, f];
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
 				// add up error gradient
-                for (int f = 0; f < num_factors; f++)
+                for (int f = 0; f < NumFactors; f++)
                 {
                  	double u_f = user_factors[u, f];
                     double i_f = item_factors[i, f];
@@ -138,23 +138,23 @@ namespace MyMediaLite.RatingPrediction
 			// I.2 L2 regularization
 			//        biases
 			for (int u = 0; u < user_bias_gradient.Length; u++)
-				user_bias_gradient[u] += user_bias[u] * regularization;
+				user_bias_gradient[u] += user_bias[u] * Regularization;
 			for (int i = 0; i < item_bias_gradient.Length; i++)
-				item_bias_gradient[i] += item_bias[i] * regularization;
+				item_bias_gradient[i] += item_bias[i] * Regularization;
 			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
-				for (int f = 2; f < num_factors; f++)
-					MatrixUtils.Inc(user_factors_gradient, u, f, user_factors[u, f] * regularization);
+				for (int f = 2; f < NumFactors; f++)
+					MatrixUtils.Inc(user_factors_gradient, u, f, user_factors[u, f] * Regularization);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
-				for (int f = 2; f < num_factors; f++)
-					MatrixUtils.Inc(item_factors_gradient, i, f, item_factors[i, f] * regularization);
+				for (int f = 2; f < NumFactors; f++)
+					MatrixUtils.Inc(item_factors_gradient, i, f, item_factors[i, f] * Regularization);
 
 			// I.3 social network regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
 				// see eq. (13) in the paper
-				double[] sum_neighbors    = new double[num_factors];
+				double[] sum_neighbors    = new double[NumFactors];
 				double bias_sum_neighbors = 0;
 				int      num_neighbors    = user_neighbors[u].Count;
 
@@ -180,16 +180,16 @@ namespace MyMediaLite.RatingPrediction
 
 				// latent factor part
 				foreach (int v in user_neighbors[u])
-                	for (int f = 0; f < num_factors; f++)
+                	for (int f = 0; f < NumFactors; f++)
 						sum_neighbors[f] += user_factors[v, f];
 				if (num_neighbors != 0)
-					for (int f = 0; f < num_factors; f++)
+					for (int f = 0; f < NumFactors; f++)
 						MatrixUtils.Inc(user_factors_gradient, u, f, social_regularization * (user_factors[u, f] - sum_neighbors[f] / num_neighbors));
 				foreach (int v in user_neighbors[u])
 					if (user_neighbors[v].Count != 0)
 					{
 						double trust_v = (double) 1 / user_neighbors[v].Count;
-						for (int f = 0; f < num_factors; f++)
+						for (int f = 0; f < NumFactors; f++)
 						{
 							double diff = 0;
 							foreach (int w in user_neighbors[v])
@@ -205,15 +205,15 @@ namespace MyMediaLite.RatingPrediction
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
-				user_bias[u] += user_bias_gradient[u] * learn_rate;
-				for (int f = 2; f < num_factors; f++)
-					MatrixUtils.Inc(user_factors, u, f, user_factors_gradient[u, f] * learn_rate);
+				user_bias[u] += user_bias_gradient[u] * LearnRate;
+				for (int f = 2; f < NumFactors; f++)
+					MatrixUtils.Inc(user_factors, u, f, user_factors_gradient[u, f] * LearnRate);
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
-				item_bias[i] += item_bias_gradient[i] * learn_rate;
-				for (int f = 2; f < num_factors; f++)
-					MatrixUtils.Inc(item_factors, i, f, item_factors_gradient[i, f] * learn_rate);
+				item_bias[i] += item_bias_gradient[i] * LearnRate;
+				for (int f = 2; f < NumFactors; f++)
+					MatrixUtils.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace MyMediaLite.RatingPrediction
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
+			                     "SocialMF NumFactors={0} regularization={1} social_regularization={2} LearnRate={3} num_iter={4} init_mean={5} init_stdev={6}",
 				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}

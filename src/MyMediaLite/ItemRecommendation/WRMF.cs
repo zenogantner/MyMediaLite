@@ -37,9 +37,10 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This engine does not support online updates.
 	/// </remarks>
-	public sealed class WRMF : MF
+	public class WRMF : MF
 	{
 		/// <summary>C position: the weight/confidence that is put on positive observations</summary>
+		/// <remarks>The alpha value in Hu et al.</remarks>
 		public double CPos { get { return c_pos; } set { c_pos = value;	} }
 		double c_pos = 1;
 
@@ -51,24 +52,28 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
-			optimize(Feedback.UserMatrix, user_factors, item_factors);
-			optimize(Feedback.ItemMatrix, item_factors, user_factors); // TODO create different formulation to save 50% memory
+			Optimize(Feedback.UserMatrix, user_factors, item_factors);
+			Optimize(Feedback.ItemMatrix, item_factors, user_factors); // TODO create different formulation to save 50% memory
 		}
 
 		/// <summary>Optimizes the specified data</summary>
-		/// <param name="data">The data.</param>
-		/// <param name="W">The W.</param>
-		/// <param name="H">The H.</param>
-		void optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
+		/// <param name="data">data</param>
+		/// <param name="W">W</param>
+		/// <param name="H">H</param>
+		protected virtual void Optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
 		{
-			var HH   = new Matrix<double>(num_factors, num_factors);
-			var HCIH = new Matrix<double>(num_factors, num_factors);
-			var HCp = new double[num_factors];
+			var HH          = new Matrix<double>(num_factors, num_factors);
+			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
+			var HCp         = new double[num_factors];
 
 			var m = new MathNet.Numerics.LinearAlgebra.Matrix(num_factors, num_factors);
 			MathNet.Numerics.LinearAlgebra.Matrix m_inv;
+			// TODO speed up using more parts of that library
 
-			// (1) create HH in O(f^2|I|)
+			// source code comments are in terms of computing the user factors
+			// works the same with users and items exchanged
+			
+			// (1) create HH in O(f^2|Items|)
 			// HH is symmetric
 			for (int f_1 = 0; f_1 < num_factors; f_1++)
 				for (int f_2 = 0; f_2 < num_factors; f_2++)
@@ -79,34 +84,36 @@ namespace MyMediaLite.ItemRecommendation
 					HH[f_1, f_2] = d;
 				}
 			// (2) optimize all U
-			// HCIH is symmetric
+			// HC_minus_IH is symmetric
 			for (int u = 0; u < W.dim1; u++)
 			{
 				HashSet<int> row = data[u];
-				// create HCIH in O(f^2|S_u|)
+				// create HC_minus_IH in O(f^2|S_u|)
 				for (int f_1 = 0; f_1 < num_factors; f_1++)
 					for (int f_2 = 0; f_2 < num_factors; f_2++)
 					{
 						double d = 0;
 						foreach (int i in row)
-							d += H[i, f_1] * H[i, f_2] * (c_pos - 1);
-						HCIH[f_1, f_2] = d;
+							//d += H[i, f_1] * H[i, f_2] * (c_pos - 1);
+							d += H[i, f_1] * H[i, f_2] * c_pos;
+						HC_minus_IH[f_1, f_2] = d;
 					}
 				// create HCp in O(f|S_u|)
 				for (int f = 0; f < num_factors; f++)
 				{
 					double d = 0;
 					foreach (int i in row)
-						d += H[i, f] * c_pos * 1;
+						//d += H[i, f] * c_pos;
+						d += H[i, f] * (1 + c_pos);
 					HCp[f] = d;
 				}
-				// create m = HH + HCp + gamma*I
+				// create m = HH + HC_minus_IH + reg*I
 				// m is symmetric
 				// the inverse m_inv is symmetric
 				for (int f_1 = 0; f_1 < num_factors; f_1++)
 					for (int f_2 = 0; f_2 < num_factors; f_2++)
 					{
-						double d = HH[f_1, f_2] + HCIH[f_1, f_2];
+						double d = HH[f_1, f_2] + HC_minus_IH[f_1, f_2];
 						if (f_1 == f_2)
 							d += regularization;
 						m[f_1, f_2] = d;

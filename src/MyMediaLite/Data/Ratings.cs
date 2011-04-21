@@ -40,7 +40,7 @@ namespace MyMediaLite.Data
 		public IList<int> Items { get; protected set; }
 		
 		/// <inheritdoc/>
-		protected IList<double> Values;//{ protected get; protected set; }
+		protected IList<double> Values;
 
 		/// <inheritdoc/>
 		public virtual double this[int index]
@@ -347,6 +347,9 @@ namespace MyMediaLite.Data
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
 				}
+			
+			if (MaxUserID == user_id)
+				MaxUserID--;
 		}
 
 		/// <inheritdoc/>
@@ -359,6 +362,9 @@ namespace MyMediaLite.Data
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
 				}
+			
+			if (MaxItemID == item_id)
+				MaxItemID--;
 		}		
 		
 		/// <inheritdoc/>

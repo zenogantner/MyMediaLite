@@ -149,7 +149,7 @@ namespace MyMediaLite.DataType
 		public void SetColumn(int j, T[] column)
 		{
 			if (column.Length != this.dim1)
-				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
+				throw new ArgumentException(string.Format("Array length ({0}) must equal number of rows ({1}",
 														  column.Length, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)

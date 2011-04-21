@@ -42,7 +42,7 @@ using MyMediaLite.Util;
 ///   <year>2010</year>
 /// </inproceedings>
 /// </remarks>
-public class MappingItemPrediction
+class MappingItemPrediction
 {
 	static NumberFormatInfo ni = new NumberFormatInfo();
 

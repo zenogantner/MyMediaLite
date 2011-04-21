@@ -61,6 +61,11 @@ namespace MyMediaLite.Eval
 			double rmse = 0;
 			double mae  = 0;
 
+			if (recommender == null)
+				throw new ArgumentNullException("recommender");
+			if (ratings == null)
+				throw new ArgumentNullException("ratings");
+
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);

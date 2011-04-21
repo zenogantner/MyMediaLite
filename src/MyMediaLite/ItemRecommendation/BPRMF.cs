@@ -26,39 +26,29 @@ using MyMediaLite.Eval;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
-	/// Matrix factorization model for item prediction optimized using BPR-Opt;
+	/// Matrix factorization model for item prediction optimized using BPR-Opt
 	/// </summary>
 	/// <remarks>
-	/// <inproceedings>
-	///   <author>Steffen Rendle</author>
-	///   <author>Christoph Freudenthaler</author>
-	///   <author>Zeno Gantner</author>
-	///   <author>Lars Schmidt-Thieme</author>
-	///   <title>BPR: Bayesian Personalized Ranking from Implicit Feedback</title>
-	///   <booktitle>Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009)</booktitle>
-	///   <location>Montreal, Canada</location>
-	///   <year>2009</year>
-	/// </inproceedings>
+	/// Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
+	/// BPR: Bayesian Personalized Ranking from Implicit Feedback.
+	/// Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009),
+	/// Montreal, Canada, 2009.
 	/// </remarks>
 	public class BPRMF : MF, IIterativeModel
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
 
+		/// <summary>Item bias terms</summary>
+		protected IList<double> item_bias;
+
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
 
-		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
-		public bool ItemBias { get { return item_bias; } set { item_bias = value; }	}
-		/// <summary>Use the first item latent factor as a bias term if set to true</summary>
-		protected bool item_bias = false;
-
-		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
-		public int IterationLength { get { return iteration_length; } set { iteration_length = value; }	}
-		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
-		protected int iteration_length = 5;
+		/// <summary>Regularization parameter for the bias term</summary>
+		public double BiasReg { get; set; }
 
 		/// <summary>Learning rate alpha</summary>
 		public double LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
@@ -81,37 +71,36 @@ namespace MyMediaLite.ItemRecommendation
 		protected double reg_u = 0.0025;
 
 		/// <summary>support data structure for fast sampling</summary>
-		protected List<int[]> user_pos_items;
+		protected IList<IList<int>> user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
-		protected List<int[]> user_neg_items;
+		protected IList<IList<int>> user_neg_items;
 
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
 		/// <inheritdoc/>
-		public override void Train()
+		protected override void InitModel()
 		{
-			random = Util.Random.GetInstance();
-			CheckSampling();
+			base.InitModel();
 
-			// if necessary, set the bias counterparts to 1
-			if (item_bias)
-				user_factors.SetColumnToOneValue(0, 1.0);
+			item_bias = new double[MaxItemID + 1];
 
-			base.Train();
+			random = Util.Random.GetInstance(); // TODO move to training
+			CheckSampling();                    // TODO rename
 		}
 
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
 		/// <remarks>
-		/// One iteration is <see cref="iteration_length"/> * number of entries in the training matrix
+		/// One iteration is samples number of positive entries in the training matrix times
 		/// </remarks>
 		public override void Iterate()
 		{
 			int num_pos_events = Feedback.Count;
 
-			for (int i = 0; i < num_pos_events * iteration_length; i++)
+			int user_id, item_id_1, item_id_2;
+
+			for (int i = 0; i < num_pos_events; i++)
 			{
-				int user_id, item_id_1, item_id_2;
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
 				UpdateFactors(user_id, item_id_1, item_id_2, true, true, true);
 			}
@@ -131,19 +120,19 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				if (item_is_positive)
 				{
-					int rindex = random.Next (0, user_neg_items[u].Length);
+					int rindex = random.Next(0, user_neg_items[u].Count);
 					j = user_neg_items[u][rindex];
 				}
 				else
 				{
-					int rindex = random.Next (0, user_pos_items[u].Length);
+					int rindex = random.Next(0, user_pos_items[u].Count);
 					j = user_pos_items[u][rindex];
 				}
 			}
 			else
 			{
 				do
-					j = random.Next (0, MaxItemID + 1);
+					j = random.Next(0, MaxItemID + 1);
 				while (user_items.Contains(j) != item_is_positive);
 			}
 
@@ -160,18 +149,18 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				int rindex;
 
-				rindex = random.Next (0, user_pos_items[u].Length);
-				i = user_pos_items[u][rindex];
+				rindex = random.Next(0, user_pos_items[u].Count);
+				i = user_pos_items[u][rindex]; // TODO use this also with slow sampling?
 
-				rindex = random.Next (0, user_neg_items[u].Length);
+				rindex = random.Next(0, user_neg_items[u].Count);
 				j = user_neg_items[u][rindex];
 			}
 			else
 			{
 				HashSet<int> user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next (0, user_items.Count));
+				i = user_items.ElementAt(random.Next(0, user_items.Count));
 				do
-					j = random.Next (0, MaxItemID + 1);
+					j = random.Next(0, MaxItemID + 1);
 				while (user_items.Contains(j));
 			}
 		}
@@ -194,7 +183,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="u">the user ID</param>
 		/// <param name="i">the ID of the first item</param>
 		/// <param name="j">the ID of the second item</param>
-		protected void SampleTriple(out int u, out int i, out int j)
+		protected virtual void SampleTriple(out int u, out int i, out int j)
 		{
 			u = SampleUser();
 			SampleItemPair(u, out i, out j);
@@ -211,30 +200,23 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			int start_factor = 0;
+			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
-			if (item_bias)
+			// adjust bias terms
+			if (update_i)
 			{
-				start_factor = 1; // leave out the first (index 0) factor later
-
-				double w_uf = user_factors[u, 0];
-				double h_if = item_factors[i, 0];
-				double h_jf = item_factors[j, 0];
-
-				if (update_i)
-				{
-					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
-					item_factors[i, 0] = h_if + learn_rate * if_update;
-				}
-
-				if (update_j)
-				{
-					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
-					item_factors[j, 0] = h_jf + learn_rate * jf_update;
-				}
+				double bias_update = one_over_one_plus_ex - BiasReg * item_bias[i];
+				item_bias[i] += learn_rate * bias_update;
 			}
 
-			for (int f = start_factor; f < num_factors; f++)
+			if (update_j)
+			{
+				double bias_update = -one_over_one_plus_ex - BiasReg * item_bias[j];
+				item_bias[j] += learn_rate * bias_update;
+			}
+
+			// adjust factors
+			for (int f = 0; f < num_factors; f++)
 			{
 				double w_uf = user_factors[u, f];
 				double h_if = item_factors[i, f];
@@ -242,19 +224,19 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u)
 				{
-					double uf_update = (h_if - h_jf) / (1 + Math.Exp(x_uij)) - reg_u * w_uf;
+					double uf_update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
 					user_factors[u, f] = w_uf + learn_rate * uf_update;
 				}
 
 				if (update_i)
 				{
-					double if_update = w_uf / (1 + Math.Exp(x_uij)) - reg_i * h_if;
+					double if_update = w_uf * one_over_one_plus_ex - reg_i * h_if;
 					item_factors[i, f] = h_if + learn_rate * if_update;
 				}
 
 				if (update_j)
 				{
-					double jf_update = -w_uf / (1 + Math.Exp(x_uij)) - reg_j * h_jf;
+					double jf_update = -w_uf  * one_over_one_plus_ex - reg_j * h_jf;
 					item_factors[j, f] = h_jf + learn_rate * jf_update;
 				}
 			}
@@ -344,7 +326,7 @@ namespace MyMediaLite.ItemRecommendation
 			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 
 			HashSet<int> user_items = Feedback.UserMatrix[user_id];
-			for (int i = 0; i < user_items.Count * iteration_length * NumIter; i++)
+			for (int i = 0; i < user_items.Count; i++)
 			{
 				int item_id_1, item_id_2;
 				SampleItemPair(user_id, out item_id_1, out item_id_2);
@@ -359,7 +341,7 @@ namespace MyMediaLite.ItemRecommendation
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 
 			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
-			int num_item_iterations = num_pos_events * iteration_length * NumIter / (MaxItemID + 1);
+			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
 				int user_id = SampleUser();
@@ -441,8 +423,8 @@ namespace MyMediaLite.ItemRecommendation
 					{
 						fast_sampling = true;
 
-						this.user_pos_items = new List<int[]>(MaxUserID + 1);
-						this.user_neg_items = new List<int[]>(MaxUserID + 1);
+						this.user_pos_items = new List<IList<int>>(MaxUserID + 1);
+						this.user_neg_items = new List<IList<int>>(MaxUserID + 1);
 						for (int u = 0; u < MaxUserID + 1; u++)
 							CreateFastSamplingData(u);
 					}
@@ -453,6 +435,12 @@ namespace MyMediaLite.ItemRecommendation
 				Console.Error.WriteLine("fast_sampling_memory_size=TOO_MUCH");
 				// do nothing - don't use fast sampling
 			}
+		}
+
+		/// <inheritdoc/>
+		public override double Predict(int user_id, int item_id)
+		{
+			return item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
 		/// <inheritdoc/>
@@ -468,8 +456,8 @@ namespace MyMediaLite.ItemRecommendation
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "BPRMF num_factors={0} item_bias={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
-								 num_factors, item_bias, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
+			return string.Format(ni, "BPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
+								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
 }

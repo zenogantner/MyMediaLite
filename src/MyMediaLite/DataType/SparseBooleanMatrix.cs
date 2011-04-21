@@ -50,6 +50,22 @@ namespace MyMediaLite.DataType
 			}
 		}
 
+		/// <summary>Indexer to access the rows of the matrix</summary>
+		/// <param name="x">the row ID</param>
+		public HashSet<int> this [int x]
+		{
+			get	{
+				if (x >= row_list.Count)
+					for (int i = row_list.Count; i <= x; i++)
+						row_list.Add(new HashSet<int>());
+				return row_list[x];
+			}
+			set
+			{
+				row_list[x] = value; // TODO get rid of this?
+			}
+		}
+
 		/// <inheritdoc/>
 		public virtual bool IsSymmetric
 		{
@@ -71,22 +87,6 @@ namespace MyMediaLite.DataType
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
 			return new SparseBooleanMatrix();
-		}
-
-		/// <summary>Indexer to access the rows of the matrix</summary>
-		/// <param name="x">the row ID</param>
-		public HashSet<int> this [int x]
-		{
-			get	{
-				if (x >= row_list.Count)
-					for (int i = row_list.Count; i <= x; i++)
-						row_list.Add(new HashSet<int>());
-				return row_list[x];
-			}
-			set
-			{
-				row_list[x] = value; // TODO think about getting rid of this
-			}
 		}
 
 		/// <summary>The rows of the matrix, with their IDs</summary>

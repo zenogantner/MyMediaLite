@@ -31,7 +31,7 @@ using MyMediaLite.Util;
 /// <summary>Command-line tool: attribute-to-factor mappings for rating prediction</summary>
 /// <remarks>
 /// </remarks>
-public class MappingRatingPrediction
+class MappingRatingPrediction
 {
 	static NumberFormatInfo ni = new NumberFormatInfo();
 

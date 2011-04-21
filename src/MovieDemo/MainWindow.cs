@@ -135,7 +135,7 @@ public partial class MainWindow : Window
 		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
 		recommender.UpdateUsers = true;
 		recommender.UpdateItems = false;
-		recommender.BiasRegularization = 0.001;
+		recommender.BiasReg = 0.001;
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
 		time = Utils.MeasureTime(delegate() {

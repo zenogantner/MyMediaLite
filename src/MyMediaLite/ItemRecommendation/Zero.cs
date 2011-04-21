@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,11 +17,11 @@
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Random item recommender for use as experimental baseline</summary>
+	/// <summary>Constant item recommender for use as experimental baseline. Always predicts a score of zero</summary>
 	/// <remarks>
-	/// It would not be necessary for Random to inherit from ItemRecommender, but it is done nonetheless for convenience.
+	/// This recommender can be used to detect non-random orderings in item lists.
 	/// </remarks>
-	public class Random : ItemRecommender
+	public class Zero : ItemRecommender
 	{
 		/// <inheritdoc/>
 		public override void Train() { }
@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override double Predict(int user_id, int item_id)
 		{
-			return Util.Random.GetInstance().NextDouble();
+			return 0;
 		}
 
 		/// <inheritdoc/>
@@ -47,7 +47,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return "Random";
+			return "Zero";
 		}
 	}
 }

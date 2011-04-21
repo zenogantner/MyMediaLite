@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using MyMediaLite.Data;
+using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
@@ -114,12 +115,22 @@ namespace MyMediaLite.Util
 			return types.ToArray();
 		}
 
-		// TODO get rid of recommender argument
 		/// <summary>Display dataset statistics</summary>
 		/// <param name="train">the training data</param>
 		/// <param name="test">the test data</param>
 		/// <param name="recommender">the recommender (to get attribute information)</param>
 		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender)
+		{
+			DisplayDataStats(train, test, recommender, false);
+		}
+		
+		// TODO get rid of recommender argument
+		/// <summary>Display dataset statistics</summary>
+		/// <param name="train">the training data</param>
+		/// <param name="test">the test data</param>
+		/// <param name="recommender">the recommender (to get attribute information)</param>
+		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
+		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender, bool display_overlap)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -140,14 +151,65 @@ namespace MyMediaLite.Util
 			sparsity = (double) 100L * empty_size / matrix_size;
 			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
 
+			// count and display the overlap between train and test
+			if (display_overlap)
+			{
+				int num_new_users = 0;
+				int num_new_items = 0;
+				TimeSpan seconds = Utils.MeasureTime(delegate() {
+							num_new_users = test.AllUsers.Except(train.AllUsers).Count();
+							num_new_items = test.AllItems.Except(train.AllItems).Count();
+				});
+				Console.WriteLine("{0} new users, {1} new items ({2} seconds)", num_new_users, num_new_items, seconds);
+			}
+				
 			// attribute stats
 			if (recommender != null)
 			{
 				if (recommender is IUserAttributeAwareRecommender)
-					Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender)recommender).NumUserAttributes);
+					Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender) recommender).NumUserAttributes);
 				if (recommender is IItemAttributeAwareRecommender)
-					Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender)recommender).NumItemAttributes);
+					Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender) recommender).NumItemAttributes);
 			}
+		}
+		
+		/// <summary>Display data statistics for item recommendation datasets</summary>
+		/// <param name="training_data">the training dataset</param>
+		/// <param name="test_data">the test dataset</param>
+		/// <param name="recommender">the recommender that will be used</param>
+		public static void DisplayDataStats(PosOnlyFeedback training_data, PosOnlyFeedback test_data, IItemRecommender recommender)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+			
+			// training data stats
+			int num_users = training_data.AllUsers.Count;
+			int num_items = training_data.AllItems.Count;
+			long matrix_size = (long) num_users * num_items;
+			long empty_size  = (long) matrix_size - training_data.Count;
+			double sparsity = (double) 100L * empty_size / matrix_size;
+			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
+	
+			// test data stats
+			if (test_data != null)
+			{
+				num_users = test_data.AllUsers.Count;
+				num_items = test_data.AllItems.Count;
+				matrix_size = (long) num_users * num_items;
+				empty_size  = (long) matrix_size - test_data.Count;
+				sparsity = (double) 100L * empty_size / matrix_size;
+				Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
+			}
+				
+			// attribute stats
+			if (recommender is IUserAttributeAwareRecommender)
+				Console.WriteLine("{0} user attributes for {1} users",
+				                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
+				                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
+			if (recommender is IItemAttributeAwareRecommender)
+				Console.WriteLine("{0} item attributes for {1} items",
+				                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
+				                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
 		}
 	}
 }

@@ -205,16 +205,18 @@ namespace MyMediaLite.ItemRecommendation
 			var attr_j_over_i = new HashSet<int>(attr_j);
 			attr_j_over_i.ExceptWith(attr_i);
 
+			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+
 			foreach (int a in attr_i_over_j)
 			{
 				double w_uf = item_attribute_weight_by_user[u, a];
-				double uf_update = 1 / (1 + Math.Exp(x_uij)) - regularization * w_uf;
+				double uf_update = one_over_one_plus_ex - regularization * w_uf;
 				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 			foreach (int a in attr_j_over_i)
 			{
 				double w_uf = item_attribute_weight_by_user[u, a];
-				double uf_update = -1 / (1 + Math.Exp(x_uij)) - regularization * w_uf;
+				double uf_update = -one_over_one_plus_ex - regularization * w_uf;
 				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
 			}
 		}

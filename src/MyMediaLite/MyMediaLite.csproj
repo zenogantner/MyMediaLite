@@ -144,6 +144,9 @@
     <Compile Include="Data\PosOnlyFeedbackSimpleSplit.cs" />
     <Compile Include="Data\RatingsSimpleSplit.cs" />
     <Compile Include="Data\StaticFloatRatings.cs" />
+    <Compile Include="Data\CombinedRatings.cs" />
+    <Compile Include="DataType\CombinedList.cs" />
+    <Compile Include="ItemRecommendation\Zero.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

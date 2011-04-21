@@ -1,10 +1,12 @@
 Recommender functionality
+ - add InitModel to ItemRecommender and RatingPredictor
  - automated hyperparameter search
  - add filtering mechanism (pre-filter, post-filter)
  - support for non-binary attributes: real, nominal, textual descriptions
  - directly support MovieLens u.item and u.user files
  - support for more relation types: weighted, ternary, multiple relations
  - additional recommenders
+   - memory: just give out ratings in the training set, exception otherwise
    - item-to-item CF (Linden et al., 2003)
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
@@ -54,7 +56,6 @@ Architecture
    - consider using simulated multiple inheritance for the attribute-based recommenders:
      http://www.codeproject.com/KB/architecture/smip.aspx
  - data structures
-   - redesign/rewrite implicit feedback data structures
    - parameterize types:
      - user and item IDs
      - stored ratings
@@ -67,7 +68,8 @@ Architecture
      - combine arbitrary similarity matrices
      - user-defined similarities
      - re-integrate adjusted cosine (port to new rating data structure)
-   - enforce positive regularization parameters
+   - slope-one
+       - different weighting schemes
  - distributed/parallel computing
    - use Parallel.ForEach for item recommender evaluation
      - as soon as Mono 2.8 is more widely available
@@ -78,9 +80,8 @@ Architecture
  - source code organization
    - use one repository per component, instead of having everything in one repository
  - IO and storage
-   - allow storage of models in database in addition to text files
-   - store models via reflection (can save a lot of code)
-   - faster reading of text files (less checks, at user request)
+   - save model files using reflection (binary and XML)
+   - GZip model files and prediction files (on demand)
 GUI demo
  - display a fixed number of movies on the screen, let the user browse
  - tabs
@@ -91,14 +92,12 @@ GUI demo
  - store/load user data
  - faster IO
 Misc features
- - support compressed data and model files
- - use --param for command-line parameters
-   - https://github.com/mono/mono/tree/master/mcs/class/Mono.Options/
-     or
-   - http://www.ndesk.org/Options
+ - command-line tools: standalone only for prediction based on model files
+ - use --param for command-line parameters: Mono.Options
  - rewrite MF techniques using vector/matrix abstractions
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
+ - document all file formats
  - have documentation for different versions on the website
  - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing

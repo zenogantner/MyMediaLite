@@ -21,9 +21,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace MyMediaLite.Util
 {
+	// TODO get rid of this class
+	
 	/// <summary>Class for command line argument processing</summary>
 	[Serializable]
 	public class CommandLineParameters : Dictionary<string, string>
@@ -31,11 +34,42 @@ namespace MyMediaLite.Util
 		private NumberFormatInfo ni = new NumberFormatInfo();
 
 		/// <summary>Create a CommandLineParameters object</summary>
+		/// <param name="arg_string">a string that contains the command line parameters</param>
+		public CommandLineParameters(string arg_string)
+		{
+			IList<string> args = Regex.Split(arg_string, "\\s");
+			
+			for (int i = 0; i < args.Count; i++)
+			{
+				if (args[i].Equals(string.Empty))
+					continue;
+
+				string[] pair = args[i].Split('=');
+				if (pair.Length != 2)
+					throw new ArgumentException("Too many '=' in argument '" + args[i] + "'.");
+
+				string arg_name  = pair[0];
+				string arg_value = pair[1];
+
+				if (this.ContainsKey(arg_name))
+					throw new ArgumentException(arg_name + " is used twice as an argument.");
+
+				if (arg_value.Equals(string.Empty))
+					throw new ArgumentException(arg_name + " has an empty value.");
+
+				if (arg_name.Equals("option_file"))
+					AddArgumentsFromFile(arg_value);
+				else
+					this.Add(arg_name, arg_value);
+			}
+		}
+		
+		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="args">a list of strings that contains the command line parameters</param>
 		/// <param name="start">ignore all parameters before this position</param>
-		public CommandLineParameters(string[] args, int start)
+		public CommandLineParameters(IList<string> args, int start)
 		{
-			for (int i = start; i < args.Length; i++)
+			for (int i = start; i < args.Count; i++)
 			{
 				if (args[i].Equals(string.Empty))
 					continue;

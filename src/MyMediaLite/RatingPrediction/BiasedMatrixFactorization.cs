@@ -30,9 +30,24 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
-		/// <summary>Regularization constant for the bias terms</summary>
-		public double BiasRegularization { get { return bias_regularization; } set { bias_regularization = value; } }
-		double bias_regularization = 0;
+		/// <summary>regularization constant for the bias terms</summary>
+		public double BiasReg { get; set; }
+
+		/// <summary>regularization constant for the user factors</summary>
+		public double RegU { get; set; }
+
+		/// <summary>regularization constant for the user factors</summary>
+		public double RegI { get; set; }
+
+		/// <inheritdoc/>
+		public override double Regularization
+		{
+			set {
+				base.Regularization = value;
+				RegU = value;
+				RegI = value;
+			}
+		}
 
 		/// <summary>the user biases</summary>
 		protected double[] user_bias;
@@ -40,13 +55,15 @@ namespace MyMediaLite.RatingPrediction
 		protected double[] item_bias;
 
 		/// <inheritdoc/>
-		public override void Train()
+		public BiasedMatrixFactorization()
 		{
-			// init factor matrices
-		   	user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
-		   	item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
-		   	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-		   	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			BiasReg = 0.0001;
+		}
+
+		/// <inheritdoc/>
+		protected override void InitModel()
+		{
+			base.InitModel();
 
 			user_bias = new double[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
@@ -54,13 +71,16 @@ namespace MyMediaLite.RatingPrediction
 			item_bias = new double[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
 				item_bias[i] = 0;
+		}
 
-			// learn model parameters
+		/// <inheritdoc/>
+		public override void Train()
+		{
+			InitModel();
 
 			// compute global average
 			double global_average = ratings.Average;
 
-			// TODO also learn global bias?
 			global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
@@ -76,9 +96,8 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = global_bias + user_bias[u] + item_bias[i];
-				for (int f = 0; f < num_factors; f++)
-					dot_product += user_factors[u, f] * item_factors[i, f];
+				double dot_product = global_bias + user_bias[u] + item_bias[i]
+				                   + MatrixUtils.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
@@ -86,29 +105,29 @@ namespace MyMediaLite.RatingPrediction
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
 
-				// Adjust biases
+				// adjust biases
 				if (update_user)
-					user_bias[u] += learn_rate * (gradient_common - bias_regularization * user_bias[u]);
+					user_bias[u] += LearnRate * (gradient_common - BiasReg * user_bias[u]);
 				if (update_item)
-					item_bias[i] += learn_rate * (gradient_common - bias_regularization * item_bias[i]);
+					item_bias[i] += LearnRate * (gradient_common - BiasReg * item_bias[i]);
 
-				// Adjust latent factors
-				for (int f = 0; f < num_factors; f++)
+				// adjust latent factors
+				for (int f = 0; f < NumFactors; f++)
 				{
 				 	double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
 					if (update_user)
 					{
-						double delta_u = gradient_common * i_f - regularization * u_f;
-						MatrixUtils.Inc(user_factors, u, f, learn_rate * delta_u);
+						double delta_u = gradient_common * i_f - RegU * u_f;
+						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
 						//    user_factors[u, f] += learn_rate * delta_u;
 					}
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_f - regularization * i_f;
-						MatrixUtils.Inc(item_factors, i, f, learn_rate * delta_i);
+						double delta_i = gradient_common * u_f - RegI * i_f;
+						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
 						// item_factors[i, f] += learn_rate * delta_i;
 					}
 				}
@@ -121,11 +140,8 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return MinRating + ( 1 / (1 + Math.Exp(-global_bias)) ) * (MaxRating - MinRating);
 
-			double score = global_bias + user_bias[user_id] + item_bias[item_id];
-
-			// U*V
-			for (int f = 0; f < num_factors; f++)
-				score += user_factors[user_id, f] * item_factors[item_id, f];
+			double score = global_bias + user_bias[user_id] + item_bias[item_id]
+			             + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
 		}
@@ -182,10 +198,10 @@ namespace MyMediaLite.RatingPrediction
 
 				// assign new model
 				this.global_bias = bias;
-				if (this.num_factors != user_factors.dim2)
+				if (this.NumFactors != user_factors.dim2)
 				{
 					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
-					this.num_factors = user_factors.dim2;
+					this.NumFactors = user_factors.dim2;
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;
@@ -261,8 +277,8 @@ namespace MyMediaLite.RatingPrediction
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-								 "BiasedMatrixFactorization num_factors={0} bias_regularization={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
-								 NumFactors, BiasRegularization, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+								 "BiasedMatrixFactorization num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} init_mean={6} init_stdev={7}",
+								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }

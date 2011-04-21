@@ -53,46 +53,55 @@ namespace MyMediaLite.RatingPrediction
 		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the factors</summary>
-		public double InitStdev { get { return init_stdev; } set { init_stdev = value; } }
-		private double init_stdev = 0.1;
+		public double InitStdev { get; set; }
 
 		/// <summary>Number of latent factors</summary>
-		public int NumFactors { get { return num_factors; } set { num_factors = value; }	}
-		/// <summary>Number of latent factors</summary>
-		protected int num_factors = 10;
+		public int NumFactors { get; set;}
 
 		/// <summary>Learn rate</summary>
-		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
-		/// <summary>Learn rate</summary>
-		protected double learn_rate = 0.01;
+		public double LearnRate { get; set; }
 
 		/// <summary>Regularization parameter</summary>
-		public double Regularization { get { return regularization; } set { regularization = value; } }
-		/// <summary>Regularization parameter</summary>
-		protected double regularization = 0.015;
+		public virtual double Regularization { get; set; }
 
 		/// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-		private int num_iter = 30;
+		public int NumIter { get; set; }
+
+		/// <summary>Create a new object</summary>
+		public MatrixFactorization()
+		{
+			// set default values
+			Regularization = 0.015;
+			LearnRate = 0.01;
+			NumIter = 30;
+			InitStdev = 0.1;
+			NumFactors = 10;
+		}
+
+		/// <summary>Initialize the model data structure</summary>
+		protected virtual void InitModel()
+		{
+			// init factor matrices
+			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+		}
 
 		/// <inheritdoc/>
 		public override void Train()
 		{
-			// init factor matrices
-			user_factors = new Matrix<double>(ratings.MaxUserID + 1, num_factors);
-			item_factors = new Matrix<double>(ratings.MaxItemID + 1, num_factors);
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			InitModel();
 
 			// learn model parameters
 			global_bias = Ratings.Average;
-			LearnFactors(ratings.RandomIndex, true, true);
+			LearnFactors(Ratings.RandomIndex, true, true);
 		}
 
 		/// <inheritdoc/>
 		public virtual void Iterate()
 		{
-			Iterate(ratings.RandomIndex, true, true);
+			Iterate(Ratings.RandomIndex, true, true);
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -102,7 +111,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
-				LearnFactors(ratings.ByUser[(int)user_id], true, false);
+				LearnFactors(Ratings.ByUser[(int)user_id], true, false);
 			}
 		}
 
@@ -113,7 +122,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateItems)
 			{
 				MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
-				LearnFactors(ratings.ByItem[(int)item_id], false, true);
+				LearnFactors(Ratings.ByItem[(int)item_id], false, true);
 			}
 		}
 
@@ -132,38 +141,34 @@ namespace MyMediaLite.RatingPrediction
 				double err = ratings[index] - p;
 
 				 // Adjust factors
-				 for (int f = 0; f < num_factors; f++)
+				 for (int f = 0; f < NumFactors; f++)
 				 {
 					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
 					// compute factor updates
-					double delta_u = err * i_f - regularization * u_f;
-					double delta_i = err * u_f - regularization * i_f;
+					double delta_u = err * i_f - Regularization * u_f;
+					double delta_i = err * u_f - Regularization * i_f;
 
 					// if necessary, apply updates
 					if (update_user)
-						MatrixUtils.Inc(user_factors, u, f, learn_rate * delta_u);
+						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
 					if (update_item)
-						MatrixUtils.Inc(item_factors, i, f, learn_rate * delta_i);
+						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
 				 }
 			}
 		}
 
 		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			for (int current_iter = 0; current_iter < num_iter; current_iter++)
+			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(rating_indices, update_user, update_item);
 		}
 
 		/// <inheritdoc/>
 		protected double Predict(int user_id, int item_id, bool bound)
 		{
-			double result = global_bias;
-
-			// U*V
-			for (int f = 0; f < num_factors; f++)
-				result += user_factors[user_id, f] * item_factors[item_id, f];
+			double result = global_bias + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (bound)
 			{
@@ -292,17 +297,17 @@ namespace MyMediaLite.RatingPrediction
 
 				// assign new model
 				this.global_bias = bias;
-				if (this.num_factors != user_factors.NumberOfColumns)
+				if (this.NumFactors != user_factors.NumberOfColumns)
 				{
 					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.num_factors = user_factors.NumberOfColumns;
+					this.NumFactors = user_factors.NumberOfColumns;
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;
 			}
 		}
 
-		/// <summary>Compute approximated fit (RMSE) on the training data</summary>
+		/// <summary>Compute fit (RMSE) on the training data</summary>
 		/// <returns>the root mean square error (RMSE) on the training data</returns>
 		public double ComputeFit()
 		{

@@ -27,7 +27,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <inheritdoc/>
 		public override void LearnAttributeToFactorMapping()
 		{
-			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, NumFactors + 1);
 			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
@@ -50,8 +50,8 @@ namespace MyMediaLite.AttrToFactor
 			{
 				// estimate factors
 				double[] est_factors = MapToLatentFactorSpace(i);
-				Array.Copy(est_factors, item_latent_factors[i], num_factors);
-				item_est_bias[i] = est_factors[num_factors];
+				Array.Copy(est_factors, item_latent_factors[i], NumFactors);
+				item_est_bias[i] = est_factors[NumFactors];
 			}
 
 			// 2. compute gradients

@@ -22,7 +22,7 @@ using System.Globalization;
 using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.ensemble
+namespace MyMediaLite.Ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>
 	public abstract class Ensemble : IRecommender

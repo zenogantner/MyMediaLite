@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)</summary>
-	public abstract class RatingPredictor : IRatingPredictor
+	public abstract class RatingPredictor : IRatingPredictor, ICloneable
 	{
 		/// <summary>Maximum user ID</summary>
 		/// <value>Maximum user ID</value>
@@ -66,6 +66,12 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>rating data</summary>
 		protected IRatings ratings;
+
+		/// <summary>create a shallow copy of the object</summary>
+		public Object Clone()
+		{
+			return this.MemberwiseClone();
+		}
 
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);

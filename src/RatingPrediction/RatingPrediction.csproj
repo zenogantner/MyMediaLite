@@ -36,6 +36,9 @@
   <ItemGroup>
     <Compile Include="RatingPrediction.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="..\..\lib\Options.cs">
+      <Link>Options.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

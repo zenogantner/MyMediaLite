@@ -82,6 +82,7 @@ SVM_DLL = $(BUILD_DIR)/SVM.dll
 RATING_PREDICTION = $(BUILD_DIR)/rating_prediction
 
 FILES =  \
+	../../lib/Options.cs \
 	AssemblyInfo.cs \
 	RatingPrediction.cs 
 

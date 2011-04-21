@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// The data is stored in two sparse matrices:
 	/// one column-wise and one row-wise
 	/// </remarks>
-	public abstract class ItemRecommender : IItemRecommender
+	public abstract class ItemRecommender : IItemRecommender, ICloneable
 	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID { get; set; }
@@ -38,7 +38,7 @@ namespace MyMediaLite.ItemRecommendation
 		public int MaxItemID { get; set; }
 
 		/// <summary>the feedback data to be used for training</summary>
-		public PosOnlyFeedback Feedback
+		public virtual PosOnlyFeedback Feedback
 		{
 			get { return this.feedback; }
 			set {
@@ -49,6 +49,12 @@ namespace MyMediaLite.ItemRecommendation
 		}
 		PosOnlyFeedback feedback;
 
+		/// <summary>create a shallow copy of the object</summary>
+		public Object Clone()
+		{
+			return this.MemberwiseClone();
+		}
+		
 		/// <inheritdoc/>
 		public abstract double Predict(int user_id, int item_id);
 

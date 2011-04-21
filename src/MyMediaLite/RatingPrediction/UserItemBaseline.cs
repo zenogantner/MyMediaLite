@@ -31,12 +31,8 @@ namespace MyMediaLite.RatingPrediction
 	/// for prediction.
 	///
 	/// The method is described in section 2.1 of
-	/// <article>
-	///   <author>Yehuda Koren</author>
-	///   <title>Factor in the Neighbors: Scalable and Accurate Collaborative Filtering</title>
-	///   <journal>Transactions on Knowledge Discovery from Data (TKDD)</journal>
-	///   <year>2009</year>
-	/// </article>
+	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
+	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
 	///
 	/// This engine supports online updates.
 	/// </remarks>

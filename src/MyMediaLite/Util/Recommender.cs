@@ -110,7 +110,16 @@ namespace MyMediaLite.Util
 		/// <summary>Delegate definition necessary to define ConfigureEngine</summary>
 		public delegate void takes_string(string s);
 
-		// TODO Configure from string
+		/// <summary>Configure a recommender engine</summary>
+		/// <param name="engine">the recommender engine to configure</param>
+		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
+		/// <param name="report_error">void function that takes a string for error reporting</param>
+		/// <returns>the configured recommender engine</returns>
+		public static T Configure<T>(T engine, string parameters, takes_string report_error)
+		{
+			var parameters_dictionary = new CommandLineParameters(parameters);
+			return Configure(engine, parameters_dictionary, report_error);
+		}
 		
 		/// <summary>Configure a recommender engine</summary>
 		/// <param name="engine">the recommender engine to configure</param>
@@ -258,6 +267,8 @@ namespace MyMediaLite.Util
 		{
 			if (type.IsAbstract)
 				return null;
+			if (type.IsGenericType)
+				return null;
 
 			if (type.IsSubclassOf(typeof(RatingPrediction.RatingPredictor)))
 				return (RatingPrediction.RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
@@ -285,6 +296,8 @@ namespace MyMediaLite.Util
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(Type type)
 		{
 			if (type.IsAbstract)
+				return null;
+			if (type.IsGenericType)
 				return null;
 
 			if (type.IsSubclassOf(typeof(ItemRecommendation.ItemRecommender)))
@@ -320,7 +333,7 @@ namespace MyMediaLite.Util
 			var result = new List<string>();
 
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
-				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum)
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType)
 				{
 					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Recommender.CreateRatingPredictor(type) : (IRecommender) Recommender.CreateItemRecommender(type);
 

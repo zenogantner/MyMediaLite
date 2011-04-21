@@ -20,21 +20,23 @@ MyMediaLite rating prediction
   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
 
   methods (plus arguments and their defaults):
+   - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1 (needs user_relation=FILE)
+   - NewKNN k=60 entity_type=USER similarity=Pearson shrinkage=10 reg_u=NaN reg_i=NaN
    - BiasedMatrixFactorization num_factors=10 bias_regularization=0 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
-   - ItemAttributeKNN k=inf reg_u=25 reg_i=10 (needs item_attributes=FILE)
-   - ItemKNNCosine k=inf reg_u=25 reg_i=10
-   - ItemKNNPearson k=inf shrinkage=10 reg_u=25 reg_i=10
    - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
-   - UserAttributeKNN k=inf reg_u=25 reg_i=10 (needs user_attributes=FILE)
-   - UserItemBaseline reg_u=25 reg_i=10
-   - UserKNNCosine k=inf reg_u=25 reg_i=10
-   - UserKNNPearson k=inf shrinkage=10 reg_u=25 reg_i=10
    - GlobalAverage
+   - SlopeOne
+   - BipolarSlopeOne
    - UserAverage
    - ItemAverage
-   - BipolarSlopeOne
-   - SlopeOne
-  method ARGUMENTS have the form name=value
+   - UserItemBaseline reg_u=NaN reg_i=NaN
+   - ItemKNNCosine k=inf reg_u=10 reg_i=5
+   - UserKNNCosine k=inf reg_u=10 reg_i=5
+   - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs item_attributes=FILE)
+   - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs user_attributes=FILE)
+method ARGUMENTS have the form name=value
 
   general OPTIONS have the form name=value
    - option_file=FILE           read options from FILE (line format KEY: VALUE)
@@ -49,9 +51,12 @@ MyMediaLite rating prediction
    - min_rating=NUM             the smallest valid rating value
    - max_rating=NUM             the greatest valid rating value
    - no_eval=BOOL               do not evaluate
-   - predict_ratings_file=FILE  write the rating predictions to  FILE ('-' for STDOUT)
+   - prediction_file=FILE       write the rating predictions to  FILE ('-' for STDOUT)
    - cross_validation=K         perform k-fold crossvalidation on the training data
-                                (ignores the test data)
+                                 (ignores the test data)
+   - ml1m_format=BOOL           read rating data in MovieLens 1M (and 10M) format
+   - use_float=BOOL             store ratings as floats instead of doubles
+   - use_byte=BOOL              store ratings as bytes instead of doubles
 
   options for finding the right number of iterations (MF methods)
    - find_iter=N                give out statistics every N iterations

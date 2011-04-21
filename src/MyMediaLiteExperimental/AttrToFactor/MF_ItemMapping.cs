@@ -66,7 +66,7 @@ namespace MyMediaLite.AttrToFactor
 				data_item[ratings.Items[i], ratings.Users[i]] = true;
 
 			// create attribute-to-factor weight matrix
-			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors + 1);
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, NumFactors + 1);
 			// account for regression bias term, and the item bias that we want to model
 
 			// store the results of the different runs in the following array
@@ -87,14 +87,14 @@ namespace MyMediaLite.AttrToFactor
 				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 
-			var min_rmse_per_factor = new double[num_factors + 1];
-			for (int i = 0; i <= num_factors; i++)
+			var min_rmse_per_factor = new double[NumFactors + 1];
+			for (int i = 0; i <= NumFactors; i++)
 				min_rmse_per_factor[i] = Double.MaxValue;
-			var best_factor_init       = new int[num_factors + 1];
+			var best_factor_init       = new int[NumFactors + 1];
 
 			// find best factor mappings:
 			for (int i = 0; i < num_init_mapping; i++)
-				for (int j = 0; j <= num_factors; j++)
+				for (int j = 0; j <= NumFactors; j++)
 					if (old_rmse_per_factor[i][j] < min_rmse_per_factor[j])
 					{
 						min_rmse_per_factor[j] = old_rmse_per_factor[i][j];
@@ -102,7 +102,7 @@ namespace MyMediaLite.AttrToFactor
 					}
 
 			// set the best weight combinations for each factor mapping
-			for (int i = 0; i <= num_factors; i++)
+			for (int i = 0; i <= NumFactors; i++)
 			{
 				Console.Error.WriteLine("Factor {0}, pick {1}", i, best_factor_init[i]);
 
@@ -137,7 +137,7 @@ namespace MyMediaLite.AttrToFactor
 
 			double[] est_factors = MapToLatentFactorSpace(item_id);
 
-			for (int j = 0; j < num_factors; j++) {
+			for (int j = 0; j < NumFactors; j++) {
 				// TODO do we need an absolute term here???
 				double diff = est_factors[j] - item_factors[item_id, j];
 				if (diff > 0)
@@ -156,19 +156,19 @@ namespace MyMediaLite.AttrToFactor
 			}
 
 			// item bias part
-			double bias_diff = est_factors[num_factors] - item_bias[item_id];
+			double bias_diff = est_factors[NumFactors] - item_bias[item_id];
 			if (bias_diff > 0)
 			{
 				foreach (int attribute in item_attributes[item_id])
 				{
-					double w = attribute_to_factor[attribute, num_factors];
+					double w = attribute_to_factor[attribute, NumFactors];
 					double deriv = bias_diff * w + reg_mapping * w;
-					MatrixUtils.Inc(attribute_to_factor, attribute, num_factors, learn_rate_mapping * -deriv);
+					MatrixUtils.Inc(attribute_to_factor, attribute, NumFactors, learn_rate_mapping * -deriv);
 				}
 				// bias term
-				double w_bias = attribute_to_factor[NumItemAttributes, num_factors];
+				double w_bias = attribute_to_factor[NumItemAttributes, NumFactors];
 				double deriv_bias = bias_diff * w_bias + reg_mapping * w_bias;
-				MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, num_factors, learn_rate_mapping * -deriv_bias);
+				MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, NumFactors, learn_rate_mapping * -deriv_bias);
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace MyMediaLite.AttrToFactor
 
 			double rmse    = 0;
 			double penalty = 0;
-			var rmse_and_penalty_per_factor = new double[num_factors + 1];
+			var rmse_and_penalty_per_factor = new double[NumFactors + 1];
 
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
@@ -194,7 +194,7 @@ namespace MyMediaLite.AttrToFactor
 
 				double[] est_factors = MapToLatentFactorSpace(i);
 				double error, reg_term;
-				for (int j = 0; j < num_factors; j++)
+				for (int j = 0; j < NumFactors; j++)
 				{
 					error    = Math.Pow(est_factors[j] - item_factors[i, j], 2);
 					reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(j));
@@ -204,20 +204,20 @@ namespace MyMediaLite.AttrToFactor
 				}
 
 				// error term for item bias term
-				error    = Math.Pow(est_factors[num_factors] - item_bias[i], 2);
-				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(num_factors)), 2);
+				error    = Math.Pow(est_factors[NumFactors] - item_bias[i], 2);
+				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(NumFactors)), 2);
 				rmse    += error;
 				penalty += reg_term;
-				rmse_and_penalty_per_factor[num_factors] += error + reg_term;
+				rmse_and_penalty_per_factor[NumFactors] += error + reg_term;
 			}
 
-			for (int i = 0; i <= num_factors; i++)
+			for (int i = 0; i <= NumFactors; i++)
 			{
 				rmse_and_penalty_per_factor[i] = (double) rmse_and_penalty_per_factor[i] / num_items;
 				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_factor[i]);
 			}
-			rmse    = (double) rmse    / ((num_factors + 1) * num_items);
-			penalty = (double) penalty / ((num_factors + 1) * num_items);
+			rmse    = (double) rmse    / ((NumFactors + 1) * num_items);
+			penalty = (double) penalty / ((NumFactors + 1) * num_items);
 			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
 
 			return rmse_and_penalty_per_factor;
@@ -227,15 +227,15 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>map to latent factor space</summary>
 		protected virtual double[] MapToLatentFactorSpace(int item_id)
 		{
-			var factor_representation = new double[num_factors + 1];
+			var factor_representation = new double[NumFactors + 1];
 
 			// regression bias
-			for (int j = 0; j <= num_factors; j++)
+			for (int j = 0; j <= NumFactors; j++)
 				factor_representation[j] = attribute_to_factor[NumItemAttributes, j];
 
 			// estimate latent factors
 			foreach (int i in item_attributes[item_id])
-				for (int j = 0; j <= num_factors; j++)
+				for (int j = 0; j <= NumFactors; j++)
 					factor_representation[j] += attribute_to_factor[i, j];
 
 			return factor_representation;
@@ -251,14 +251,14 @@ namespace MyMediaLite.AttrToFactor
             }
 
 			double[] est_factors = MapToLatentFactorSpace(item_id);
-			var latent_factors = new double[num_factors];
+			var latent_factors = new double[NumFactors];
 
-			Array.Copy(est_factors, latent_factors, num_factors);
+			Array.Copy(est_factors, latent_factors, NumFactors);
 
             double score =
 				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
 				+ user_bias[user_id]
-				+ est_factors[num_factors] // estimated item bias
+				+ est_factors[NumFactors] // estimated item bias
 				+ global_bias;
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
@@ -272,8 +272,8 @@ namespace MyMediaLite.AttrToFactor
 
 			return string.Format(
 				ni,
-			    "{0} num_factors={1} regularization={2} num_iter={3} learn_rate={4} reg_mapping={5} num_iter_mapping={6} learn_rate_mapping={7} init_mean={8} init_stdev={9}",
-				this.GetType().Name, num_factors, Regularization, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+			    "{0} NumFactors={1} regularization={2} num_iter={3} learn_rate={4} reg_mapping={5} num_iter_mapping={6} learn_rate_mapping={7} init_mean={8} init_stdev={9}",
+				this.GetType().Name, NumFactors, Regularization, NumIter, LearnRate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}
 	}

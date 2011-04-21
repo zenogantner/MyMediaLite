@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Util;
@@ -142,19 +143,17 @@ namespace MyMediaLite.DataType
 			return Math.Sqrt(squared_entry_sum);
 		}
 
-		/// <summary>
-		/// Compute the scalar product between a vector and a row of the matrix
-		/// </summary>
+		/// <summary>Compute the scalar product between a vector and a row of the matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row ID</param>
 		/// <param name="vector">the numeric vector</param>
 		/// <returns>the scalar product of row i and the vector</returns>
-		static public double RowScalarProduct(Matrix<double> matrix, int i, double[] vector)
+		static public double RowScalarProduct(Matrix<double> matrix, int i, IList<double> vector)
 		{
 			if (i >= matrix.dim1)
 				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix.dim1);
-			if (vector.Length != matrix.dim2)
-				throw new ArgumentException("wrong vector size: " + vector.Length + ", dim2 is " + matrix.dim2);
+			if (vector.Count != matrix.dim2)
+				throw new ArgumentException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			double result = 0;
 			for (int j = 0; j < matrix.dim2; j++)
@@ -162,6 +161,30 @@ namespace MyMediaLite.DataType
 
 			return result;
 		}
+
+		/// <summary>Compute the scalar product between two rows of two matrices</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <returns>the scalar product of row i of matrix1 and row j of matrix2</returns>
+		static public double RowScalarProduct(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
+		{
+			if (i >= matrix1.dim1)
+				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
+
+			double result = 0;
+			for (int c = 0; c < matrix1.dim2; c++)
+				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
+
+			return result;
+		}
+		// TODO unit tests
 
 		/// <summary>
 		/// Check whether a matrix contains NaN ("not a number") elements

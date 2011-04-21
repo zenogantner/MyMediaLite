@@ -23,13 +23,11 @@ namespace MyMediaLite.Data
 	/// <summary>Interface for rating datasets</summary>
 	public interface IRatings : IList<double>
 	{
-		// TODO add value fields to all properties
-
 		/// <summary>the user entries</summary>
 		IList<int> Users { get; }
 		/// <summary>the item entries</summary>
 		IList<int> Items { get; }
-		
+
 		/// <summary>the maximum user ID in the dataset</summary>
 		int MaxUserID { get; }
 		/// <summary>the maximum item ID in the dataset</summary>
@@ -138,8 +136,8 @@ namespace MyMediaLite.Data
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating</param>
-		void Add(int user_id, int item_id, float rating);		
-		
+		void Add(int user_id, int item_id, float rating);
+
 		/// <summary>Add a new rating</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
