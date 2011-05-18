@@ -144,15 +144,18 @@ namespace MyMediaLite.Util
 			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, train.Count, sparsity));
 
 			// test data stats
-			num_users = test.AllUsers.Count;
-			num_items = test.AllItems.Count;
-			matrix_size = (long) num_users * num_items;
-			empty_size  = (long) matrix_size - test.Count;
-			sparsity = (double) 100L * empty_size / matrix_size;
-			Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
-
+			if (test != null)
+			{
+				num_users = test.AllUsers.Count;
+				num_items = test.AllItems.Count;
+				matrix_size = (long) num_users * num_items;
+				empty_size  = (long) matrix_size - test.Count;
+				sparsity = (double) 100L * empty_size / matrix_size;
+				Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
+			}
+				
 			// count and display the overlap between train and test
-			if (display_overlap)
+			if (display_overlap && test != null)
 			{
 				int num_new_users = 0;
 				int num_new_items = 0;

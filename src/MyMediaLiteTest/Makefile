@@ -67,11 +67,13 @@ FILES =  \
 	Correlation/BinaryCosineTest.cs \
 	Correlation/CorrelationMatrixTest.cs \
 	Correlation/PearsonTest.cs \
+	Data/CombinedRatingsTest.cs \
 	Data/EntityMappingTest.cs \
 	Data/RatingsTest.cs \
 	Data/StaticByteRatingsTest.cs \
 	Data/StaticFloatRatingsTest.cs \
 	Data/StaticRatingsTest.cs \
+	DataType/CombinedListTest.cs \
 	DataType/ListProxyTest.cs \
 	DataType/MatrixTest.cs \
 	DataType/MatrixUtilsTest.cs \

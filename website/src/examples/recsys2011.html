@@ -1,0 +1,57 @@
+[%
+  title='MyMediaLite: Runtime Behavior'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content"> 
+  <h2>Experimental Environment</h2>
+  <p>
+  We ran the experiments on a Sun Grid Engine cluster with 24 nodes running <a href="http://www.rocksclusters.org/">Rocks Linux</a>
+  with 16 GB RAM and 2 quad-core Intel(R) Xeon(R) CPU E5410 CPUs @2.33GH processors each.
+  Every single program was run non-exclusively on one core.
+  </p>
+  
+  <p>
+  You can also run the experiments on one machine, though, <a href="#scripts">see below for scripts</a>.
+  </p>
+  
+  <h2>Results</h2>
+  <p style="text-align:center">
+    <img src="[% prefix %]/img/time-ml100k.jpg"/>
+  </p>
+  
+  <p style="text-align:center">
+    <img src="[% prefix %]/img/time-ml1m.jpg"/>
+  </p>
+  
+  <p style="text-align:center">
+    <img src="[% prefix %]/img/time-netflix.jpg"/>
+  </p>
+  
+  <a name="scripts"><h2>Scripts</h2></a>
+  <p>
+    Cluster (Sun Grid Engine) scripts:
+    <ul>
+      <li><a href="time-ml100k-sge.sh"><tt>time-ml100k-sge.sh</tt></a></li>
+      <li><a href="time-ml100k-sge.sh"><tt>time-ml1m-sge.sh</tt></a></li>
+      <li><a href="time-ml100k-sge.sh"><tt>time-netflix-sge.sh</tt></a></li>
+    </ul>
+    
+    Local scripts:
+    <ul>
+      <li><a href="time-ml100k.sh"><tt>time-ml100k.sh</tt></a></li>
+      <li><a href="time-ml100k.sh"><tt>time-ml1m.sh</tt></a></li>
+      <li><a href="time-ml100k.sh"><tt>time-netflix.sh</tt></a></li>
+    </ul>
+  </p>
+</div>
+
+[% INCLUDE footer %]

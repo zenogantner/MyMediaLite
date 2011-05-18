@@ -1,0 +1,57 @@
+[%
+  title='MyMediaLite: Example Experiments'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+[% PROCESS datasets %]
+
+<div id="content">
+  <h2>Datasets</h2>
+
+  Experimental results for some example datasets.
+  The given hyperparameters may not be the optimal ones.
+  
+  <a href="http://www.netflixprize.com/"><h3>Netflix</h3></a>
+  <p>
+    Results on the <it>probe</it> dataset:
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th></tr>
+      [% FOREACH entry IN netflix_data %]
+        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+  
+  <a href="http://www.grouplens.org/node/73"><h3>MovieLens 1M</h3></a>
+  <p>
+   Results on a random 80-20 split:
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th> </tr>
+      [% FOREACH entry IN ml1m_data %]
+        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+
+  <h3>MovieLens 100k</h3>
+  <p>
+    5-fold crossvalidation with <tt>--random-seed=1</tt>
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th>  <th>MAE</th> </tr>
+      [% FOREACH entry IN ml100k %]
+      <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+
+</div>
+
+[% INCLUDE footer %]

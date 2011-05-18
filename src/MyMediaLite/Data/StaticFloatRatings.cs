@@ -50,7 +50,7 @@ namespace MyMediaLite.Data
 					if (Users[index] == user_id && Items[index] == item_id)
 						return (double) float_values[index];
 
-				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+				throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace MyMediaLite.Data
 				if (Users[index] == user_id && Items[index] == item_id)
 					return (double) float_values[index];
 
-			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+			throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
 		/// <inheritdoc/>

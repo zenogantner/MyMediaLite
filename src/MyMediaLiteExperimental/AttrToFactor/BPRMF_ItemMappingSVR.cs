@@ -114,7 +114,7 @@ namespace MyMediaLite.AttrToFactor
 			return string.Format(
 				ni,
 				"BPRMF_ItemMappingSVR num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} c={6} gamma={7} init_mean={8} init_stdev={9}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, init_mean, init_stdev
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, InitMean, InitStdev
 			);
 		}
 

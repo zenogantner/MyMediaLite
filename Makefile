@@ -97,6 +97,9 @@ data:
 download-movielens: data
 	scripts/download_movielens.sh
 
+download-imdb: data
+	scripts/download_imdb.sh
+
 todo:
 	ack --type=csharp TODO                    ${SRC_DIR}; echo
 	ack --type=csharp FIXME                   ${SRC_DIR}; echo
@@ -117,7 +120,8 @@ gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingRatingPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingItemPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/SVM.dll
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/SVM.dll
 
 apidoc: mdoc-html doxygen immdoc
 

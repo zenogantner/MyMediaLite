@@ -25,28 +25,24 @@ namespace MyMediaLite.IO.KDDCup2011
 	public static class Ratings
 	{
 		/// <summary>Read in rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
-		/// <param name="num_ratings">the number of ratings</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, int num_ratings)
+		static public IRatings Read(string filename)
 		{
-			if (filename.Equals("-"))
-				return Read(Console.In, num_ratings);
-			else
-				using ( var reader = new StreamReader(filename) )
-					return Read(reader, num_ratings);
+			using ( var reader = new StreamReader(filename) )
+				return Read(reader);
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>
-		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
-		/// <param name="num_ratings">the number of ratings</param>
+		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(TextReader reader, int num_ratings)
+		static public IRatings Read(StreamReader reader)
 		{
-			IRatings ratings = new StaticByteRatings(num_ratings);
+			// create ratings data structure
+			IRatings ratings = new StaticByteRatings(GetNumberOfRatings(reader));
 
+			// read in ratings
 			string line;
-
 			while ( (line = reader.ReadLine()) != null )
 			{
 				string[] tokens = line.Split('|');
@@ -70,22 +66,20 @@ namespace MyMediaLite.IO.KDDCup2011
 		}
 
 		/// <summary>Read in test rating data (Track 1) from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
-		/// <param name="num_ratings">the number of ratings</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <returns>the rating data</returns>
-		static public IRatings ReadTest(string filename, int num_ratings)
+		static public IRatings ReadTest(string filename)
 		{
 			using ( var reader = new StreamReader(filename) )
-				return ReadTest(reader, num_ratings);
+				return ReadTest(reader);
 		}
 
 		/// <summary>Read in rating test data (Track 1) from a TextReader</summary>
-		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
-		/// <param name="num_ratings">the number of ratings</param>
+		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
 		/// <returns>the rating data</returns>
-		static public IRatings ReadTest(TextReader reader, int num_ratings)
+		static public IRatings ReadTest(StreamReader reader)
 		{
-			IRatings ratings = new StaticByteRatings(num_ratings);
+			IRatings ratings = new StaticByteRatings(GetNumberOfRatings(reader));
 
 			string line;
 
@@ -108,6 +102,63 @@ namespace MyMediaLite.IO.KDDCup2011
 				}
 			}
 			return ratings;
+		}
+
+		/// <summary>Read in rating data from a file</summary>
+		/// <param name="filename">the name of the file to read from</param>
+		/// <returns>the rating data</returns>
+		static public IRatings Read80Plus(string filename)
+		{
+			using ( var reader = new StreamReader(filename) )
+				return Read80Plus(reader);
+		}
+
+		/// <summary>Read in rating data from a TextReader</summary>
+		/// <param name="reader">the <see cref="StreamReader"/> to read from</param>
+		/// <returns>the rating data</returns>
+		static public IRatings Read80Plus(StreamReader reader)
+		{
+			// create ratings data structure
+			IRatings ratings = new StaticByteRatings(GetNumberOfRatings(reader));
+
+			// read in ratings
+			string line;
+			while ( (line = reader.ReadLine()) != null )
+			{
+				string[] tokens = line.Split('|');
+
+				int user_id          = int.Parse(tokens[0]);
+				int num_user_ratings = int.Parse(tokens[1]); // number of ratings for this user
+
+				for (int i = 0; i < num_user_ratings; i++)
+				{
+					line = reader.ReadLine();
+
+					tokens = line.Split('\t');
+
+					int item_id = int.Parse(tokens[0]);
+					byte rating = byte.Parse(tokens[1]);
+
+					ratings.Add(user_id, item_id, rating >= 80 ? 1 : 0);
+				}
+			}
+			return ratings;
+		}		
+		
+		static int GetNumberOfRatings(StreamReader reader)
+		{
+			int num_ratings = 0;
+
+			string line;
+			while ( (line = reader.ReadLine()) != null )
+				if (!line.Contains("|"))
+					num_ratings++;
+
+			// reset reader
+			reader.BaseStream.Position = 0;
+			reader.DiscardBufferedData();
+
+			return num_ratings;
 		}
 	}
 }

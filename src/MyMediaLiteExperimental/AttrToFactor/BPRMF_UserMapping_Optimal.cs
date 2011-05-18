@@ -25,7 +25,7 @@ using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.AttrToFactor
 {
-	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for BPR loss</summary>	
+	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for BPR loss</summary>
 	public class BPRMF_UserMapping_Optimal : BPRMF_UserMapping
 	{
 		/// <inheritdoc/>
@@ -37,7 +37,7 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 
-			MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();
@@ -60,7 +60,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>update the mapping factors for a given user and an item pair</summary>
 		/// <param name="u">the user ID</param>
 		/// <param name="i">the first item ID</param>
-		/// <param name="j">the second item ID</param>		
+		/// <param name="j">the second item ID</param>
 		protected virtual void UpdateMappingFactors(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
@@ -101,7 +101,7 @@ namespace MyMediaLite.AttrToFactor
 			return string.Format(
 				ni,
 			    "BPRMF_UserMapping_Optimal num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} reg_mapping={6} num_iter_mapping={7} learn_rate_mapping={8} init_mean={9} init_stdev={10}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, init_mean, init_stdev
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}
 

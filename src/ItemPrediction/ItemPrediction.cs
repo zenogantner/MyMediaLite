@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -59,42 +60,43 @@ class ItemPrediction
 
 	static void Usage(int exit_code)
 	{
-		Console.WriteLine("MyMediaLite item prediction from implicit feedback");
-		Console.WriteLine();
-		Console.WriteLine("  usage:   ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]");
-		Console.WriteLine();
-		Console.WriteLine("   use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN");
-		Console.WriteLine();
-		Console.WriteLine("   methods (plus arguments and their defaults):");
+		Console.WriteLine(@"MyMediaLite item prediction from implicit feedback
+
+ usage:   ItemPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
+
+   methods (plus arguments and their defaults):");
 
 		Console.Write("   - ");
 		Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.ItemRecommendation")));
 
-		Console.WriteLine("  method ARGUMENTS have the form name=value");
-		Console.WriteLine();
-		Console.WriteLine("  general OPTIONS have the form name=value");
-		Console.WriteLine("   - option_file=FILE           read options from FILE (line format KEY: VALUE)");
-		Console.WriteLine("   - random_seed=N");
-		Console.WriteLine("   - data_dir=DIR               load all files from DIR");
-		Console.WriteLine("   - relevant_items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set");
-		Console.WriteLine("   - user_attributes=FILE       file containing user attribute information");
-		Console.WriteLine("   - item_attributes=FILE       file containing item attribute information");
-		Console.WriteLine("   - user_relation=FILE         file containing user relation information");
-		Console.WriteLine("   - item_relation=FILE         file containing item relation information");
-		Console.WriteLine("   - save_model=FILE            save computed model to FILE");
-		Console.WriteLine("   - load_model=FILE            load model from FILE");
-		Console.WriteLine("   - no_eval=BOOL               do not evaluate");
-		Console.WriteLine("   - prediction_file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line");
-		Console.WriteLine("   - predict_items_num=N        predict N items per user (needs predict_items_file)");
-		Console.WriteLine("   - predict_for_users=FILE     predict items for users specified in FILE (one user per line, needs predict_items_file)");
-		Console.WriteLine("   - test_ratio=NUM             evaluate by splitting of a NUM part of the feedback");
-		Console.WriteLine();
-		Console.WriteLine("  options for finding the right number of iterations (MF methods and BPR-Linear)");
-		Console.WriteLine("   - find_iter=N                give out statistics every N iterations");
-		Console.WriteLine("   - max_iter=N                 perform at most N iterations");
-		Console.WriteLine("   - auc_cutoff=NUM             abort if AUC is below NUM");
-		Console.WriteLine("   - prec5_cutoff=NUM           abort if prec@5 is below NUM");
-		Console.WriteLine("   - compute_fit=BOOL           display fit on training data every find_iter iterations");
+		Console.WriteLine(@"  method ARGUMENTS have the form name=value
+
+  general OPTIONS:
+   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender-options=OPTIONS    use OPTIONS as recommender options
+   --training-file=FILE             read training data from FILE
+   --test-file=FILE                 read test data from FILE
+
+   --random-seed=N
+   --data-dir=DIR               load all files from DIR
+   --relevant-items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set
+   --user-attributes=FILE       file containing user attribute information
+   --item-attributes=FILE       file containing item attribute information
+   --user-relations=FILE        file containing user relation information
+   --item-relations=FILE        file containing item relation information
+   --save-model=FILE            save computed model to FILE
+   --load-model=FILE            load model from FILE
+   --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
+   --predict-items-number=N     predict N items per user (needs --predict-items-file)
+   --predict-for-users=FILE     predict items for users specified in FILE (one user per line, needs --predict-items-file)
+   --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
+
+  options for finding the right number of iterations (MF methods and BPR-Linear)
+   --find-iter=N                give out statistics every N iterations
+   --max-iter=N                 perform at most N iterations
+   --auc-cutoff=NUM             abort if AUC is below NUM
+   --prec5-cutoff=NUM           abort if prec@5 is below NUM
+   --compute-fit                display fit on training data every find_iter iterations");
 		Environment.Exit(exit_code);
 	}
 
@@ -107,44 +109,75 @@ class ItemPrediction
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 		ni.NumberDecimalDigits = '.';
 
-		// check number of command line parameters
-		if (args.Length < 3)
-			Usage("Not enough arguments.");
-
-		// read command line parameters
-		CommandLineParameters parameters = null;
-		try	{ parameters = new CommandLineParameters(args, 3); }
-		catch (ArgumentException e)	{ Usage(e.Message);  	   }
+		// recommender arguments
+		string method              = "MostPopular";
+		string recommender_options = string.Empty;
 
 		// variables for iteration search
-		int find_iter                 = parameters.GetRemoveInt32(  "find_iter", 0);
-		int max_iter                  = parameters.GetRemoveInt32(  "max_iter", 500);
-		double auc_cutoff             = parameters.GetRemoveDouble( "auc_cutoff");
-		double prec5_cutoff           = parameters.GetRemoveDouble( "prec5_cutoff");
-		compute_fit                   = parameters.GetRemoveBool(   "compute_fit", false);
+		int find_iter       = 0;
+		int max_iter        = 500;
+		double auc_cutoff   = 0;
+		double prec5_cutoff = 0;
+		compute_fit         = false;
 
 		// data parameters
-		string data_dir               = parameters.GetRemoveString( "data_dir");
-		string relevant_items_file    = parameters.GetRemoveString( "relevant_items");
-		string user_attributes_file   = parameters.GetRemoveString( "user_attributes");
-		string item_attributes_file   = parameters.GetRemoveString( "item_attributes");
-		string user_relation_file     = parameters.GetRemoveString( "user_relation");
-		string item_relation_file     = parameters.GetRemoveString( "item_relation");
+		string training_file = null;
+		string test_file     = null;
+		string data_dir             = "";
+		string relevant_items_file  = string.Empty;
+		string user_attributes_file = string.Empty;
+		string item_attributes_file = string.Empty;
+		string user_relations_file  = string.Empty;
+		string item_relations_file  = string.Empty;
 
 		// other parameters
-		string save_model_file        = parameters.GetRemoveString( "save_model");
-		string load_model_file        = parameters.GetRemoveString( "load_model");
-		int random_seed               = parameters.GetRemoveInt32(  "random_seed", -1);
-		bool no_eval                  = parameters.GetRemoveBool(   "no_eval", false);
-		string prediction_file        = parameters.GetRemoveString( "prediction_file", string.Empty);
-		int predict_items_number      = parameters.GetRemoveInt32(  "predict_items_num", -1);
-		string predict_for_users_file = parameters.GetRemoveString( "predict_for_users", string.Empty);
-		test_ratio                    = parameters.GetRemoveDouble( "test_ratio", 0);
+		string save_model_file        = string.Empty;
+		string load_model_file        = string.Empty;
+		int random_seed               = -1;
+		string prediction_file        = string.Empty;
+		int predict_items_number      = -1;
+		string predict_for_users_file = string.Empty;
+		test_ratio                    = 0;
 
-		// main data files and method
-		string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);
-		string testfile  = args[1].Equals("-") ? "-" : Path.Combine(data_dir, args[1]);
-		string method    = args[2];
+	   	var p = new OptionSet() {
+			// string-valued options
+			{ "training-file=",       v              => training_file        = v },
+			{ "test-file=",           v              => test_file            = v },
+			{ "recommender=",         v              => method               = v },
+			{ "recommender-options=", v              => recommender_options  = v },
+   			{ "data-dir=",            v              => data_dir             = v },
+			{ "user-attributes=",     v              => user_attributes_file = v },
+			{ "item-attributes=",     v              => item_attributes_file = v },
+			{ "user-relations=",      v              => user_relations_file  = v },
+			{ "item-relations=",      v              => item_relations_file  = v },
+			{ "save-model=",          v              => save_model_file      = v },
+			{ "load-model=",          v              => load_model_file      = v },
+			{ "prediction-file=",     v              => prediction_file      = v },
+			{ "predict-for-users=",   v              => predict_for_users_file = v },
+			// integer-valued options
+   			{ "find-iter=",            (int v) => find_iter            = v },
+			{ "max-iter=",             (int v) => max_iter             = v },
+			{ "random-seed=",          (int v) => random_seed          = v },
+			{ "predict-items-number=", (int v) => predict_items_number = v },
+			// double-valued options
+//			{ "epsilon=",             (double v) => epsilon      = v },
+			{ "auc-cutoff=",          (double v) => auc_cutoff   = v },
+			{ "prec5-cutoff=",        (double v) => prec5_cutoff = v },
+			{ "test-ratio=",          (double v) => test_ratio   = v },
+			// enum options
+			//   * currently none *
+			// boolean options
+			{ "compute-fit",          v              => compute_fit = v != null },
+   	  	};
+   		IList<string> extra_args = p.Parse(args);
+
+		bool no_eval = test_file == null;
+
+		if (training_file == null)
+			Usage("Parameter --training-file=FILE is missing.");
+
+		if (extra_args.Count > 0)
+			Usage("Did not understand " + extra_args[0]);
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -153,14 +186,7 @@ class ItemPrediction
 		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
 
-		Recommender.Configure(recommender, parameters, Usage);
-
-		if (parameters.CheckForLeftovers())
-			Usage(-1);
-
-		// check command-line parameters
-		if (trainfile.Equals("-") && testfile.Equals("-"))
-			Usage("Either training OR test data, not both, can be read from STDIN.");
+		Recommender.Configure(recommender, recommender_options, Usage);
 
 		// ID mapping objects
 		var user_mapping = new EntityMapping();
@@ -168,7 +194,7 @@ class ItemPrediction
 
 		// load all the data
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir, trainfile, testfile, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relation_file, item_relation_file);
+			LoadData(data_dir, training_file, test_file, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
@@ -309,14 +335,14 @@ class ItemPrediction
 		Recommender.SaveModel(recommender, save_model_file);
 	}
 
-    static void LoadData(string data_dir, string trainfile, string testfile,
+    static void LoadData(string data_dir, string training_file, string test_file,
 	                     EntityMapping user_mapping, EntityMapping item_mapping,
 	                     string relevant_items_file,
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file)
 	{
 		// training data
-		training_data = ItemRecommendation.Read(trainfile, user_mapping, item_mapping);
+		training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 
 		// relevant items
 		if (! relevant_items_file.Equals(string.Empty) )
@@ -373,7 +399,7 @@ class ItemPrediction
 		if (test_ratio == 0)
 		{
 			// normal case
-        	test_data = ItemRecommendation.Read(testfile, user_mapping, item_mapping);
+        	test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 		}
 		else
 		{
@@ -386,6 +412,7 @@ class ItemPrediction
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayIterationStats();
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
 	static void DisplayIterationStats()
@@ -399,7 +426,7 @@ class ItemPrediction
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    ni,
-				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"eval_time: min={0,0:0.###}, max={1,0:0.###}, avg={2,0:0.###}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)

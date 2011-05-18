@@ -43,8 +43,11 @@ namespace MyMediaLite.RatingPrediction
 
 		private double global_average;
 
-		void InitModel()
+		/// <inheritdoc/>
+		protected override void InitModel()
 		{
+			base.InitModel();
+
 			// default value if no prediction can be made
 			global_average = Ratings.Average;
 

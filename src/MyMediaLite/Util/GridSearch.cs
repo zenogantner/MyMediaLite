@@ -70,8 +70,8 @@ namespace MyMediaLite.Util
 		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
 		/// <param name="evaluation_measure">the name of the evaluation measure</param>
 		/// <param name="hp_name1">the name of the first hyperparameter to optimize</param>
-		/// <param name="hp_name2">the name of the second hyperparameter to optimize</param>
 		/// <param name="hp_values1">the values of the first hyperparameter to try out</param>
+		/// <param name="hp_name2">the name of the second hyperparameter to optimize</param>
 		/// <param name="hp_values2">the values of the second hyperparameter to try out</param>
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
@@ -80,29 +80,6 @@ namespace MyMediaLite.Util
 		                                 string hp_name1, string hp_name2,
 		                                 double[] hp_values1, double[] hp_values2,
 		                                 RatingPredictor recommender,
-		                                 ISplit<IRatings> split)
-		{
-			return FindMinimum(evaluation_measure, hp_name1, hp_name2,
-			                   hp_values1, hp_values2,
-			                   recommender, delegate() { recommender.Train(); }, split);
-		}
-
-		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (2D)</summary>
-		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
-		/// <param name="evaluation_measure">the name of the evaluation measure</param>
-		/// <param name="hp_name1">the name of the first hyperparameter to optimize</param>
-		/// <param name="hp_values1">the values of the first hyperparameter to try out</param>
-		/// <param name="hp_name2">the name of the second hyperparameter to optimize</param>
-		/// <param name="hp_values2">the values of the second hyperparameter to try out</param>
-		/// <param name="recommender">the recommender</param>
-		/// <param name="training_delegate">the delegate to call for training</param>
-		/// <param name="split">the dataset split to use</param>
-		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(string evaluation_measure,
-		                                 string hp_name1, string hp_name2,
-		                                 double[] hp_values1, double[] hp_values2,
-		                                 RatingPredictor recommender,
-		                                 Utils.task training_delegate,
 		                                 ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
@@ -118,7 +95,7 @@ namespace MyMediaLite.Util
 					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(ni));
 
 					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(ni), hp_values2[j].ToString(ni));
-					double result = RatingEval.EvaluateOnSplit(recommender, training_delegate, split)[evaluation_measure];
+					double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
 					if (result < min_result)
 					{
 						min_i = i;
@@ -143,7 +120,6 @@ namespace MyMediaLite.Util
 		/// <param name="hp_values2">the logarithm values of the second hyperparameter to try out</param>
 		/// <param name="basis">the basis to use for the logarithms</param>
 		/// <param name="recommender">the recommender</param>
-		/// <param name="training_delegate">the delegate to call for training</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimumExponential(string evaluation_measure,
@@ -153,7 +129,6 @@ namespace MyMediaLite.Util
 		                                            double[] hp_values2,
 		                                            double basis,
 		                                 		    RatingPrediction.RatingPredictor recommender,
-		                                            Utils.task training_delegate,
 		                                 		    ISplit<IRatings> split)
 		{
 			var new_hp_values1 = new double[hp_values1.Length];
@@ -164,7 +139,7 @@ namespace MyMediaLite.Util
 			for (int i = 0; i < hp_values2.Length; i++)
 				new_hp_values2[i] = Math.Pow(basis, hp_values2[i]);
 
-			return FindMinimum(evaluation_measure, hp_name1, hp_name2, new_hp_values1, new_hp_values2, recommender, training_delegate, split);
+			return FindMinimum(evaluation_measure, hp_name1, hp_name2, new_hp_values1, new_hp_values2, recommender, split);
 		}
 
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (1D)</summary>

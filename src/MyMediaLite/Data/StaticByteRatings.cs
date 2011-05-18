@@ -50,7 +50,7 @@ namespace MyMediaLite.Data
 					if (Users[index] == user_id && Items[index] == item_id)
 						return (double) byte_values[index];
 
-				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+				throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace MyMediaLite.Data
 		public override void Add(int user_id, int item_id, byte rating)
 		{
 			if (pos == byte_values.Length)
-				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
+				throw new KeyNotFoundException(string.Format("Ratings storage is full, only space for {0} ratings", Count));
 
 			Users[pos]      = user_id;
 			Items[pos]      = item_id;
@@ -109,7 +109,7 @@ namespace MyMediaLite.Data
 				if (Users[index] == user_id && Items[index] == item_id)
 					return (double) byte_values[index];
 
-			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+			throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
 		/// <inheritdoc/>

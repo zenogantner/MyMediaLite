@@ -71,7 +71,6 @@
     <Compile Include="IO\AttributeData.cs" />
     <Compile Include="IO\RelationData.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
-    <Compile Include="Util\CommandLineParameters.cs" />
     <Compile Include="Util\Handlers.cs" />
     <Compile Include="Util\Pair.cs" />
     <Compile Include="Util\Random.cs" />
@@ -147,6 +146,11 @@
     <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="DataType\CombinedList.cs" />
     <Compile Include="ItemRecommendation\Zero.cs" />
+    <Compile Include="Data\RatingType.cs" />
+    <Compile Include="IO\FileFormat.cs" />
+    <Compile Include="Data\IdentityMapping.cs" />
+    <Compile Include="Data\IEntityMapping.cs" />
+    <Compile Include="Util\RecommenderParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

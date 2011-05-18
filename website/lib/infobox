@@ -1,17 +1,7 @@
 <div id="infobox">
-<!--
-<p>
-  <script type="text/javascript" src="http://www.ohloh.net/p/485704/widgets/project_users_logo.js"></script>      
-</p>
-
-<p>
-  <br/>
-</p>
--->
-
 <h2><a href="[% prefix %]news/index.html">News</a></h2>
 <p>
-  <a href="[% prefix %]news/index.html#0.11">MyMediaLite 0.11 has been released.</a>
+  <a href="[% prefix %]news/index.html#1.01">MyMediaLite 1.01 has been released.</a>
 </p>
 </div>
 

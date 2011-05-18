@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+//using System.IO.Compression;
+using System.Linq;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.Eval
@@ -32,8 +34,37 @@ namespace MyMediaLite.Eval
 		/// <param name="filename">the file to write the predictions to</param>
 		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
 		{
-			using (var writer = new StreamWriter(filename))
-				PredictTrack2(recommender, candidates, writer);
+       		//using (FileStream file_stream = File.Create(filename + ".gz"))
+			using (FileStream file_stream = File.Create(filename))
+				//using (var compressed_stream = new GZipStream(file_stream, CompressionMode.Compress))
+            	//	using (var writer = new StreamWriter(compressed_stream))
+					using (var writer = new StreamWriter(file_stream))
+						PredictTrack2(recommender, candidates, writer);
+		}
+
+		/// <summary>Predict item scores for Track 2</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
+		/// <param name="filename">the file to write the predictions to</param>
+		public static void PredictScoresTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
+		{
+       		//using (FileStream file_stream = File.Create(filename + ".gz"))
+			using (FileStream file_stream = File.Create(filename))
+				//using (var compressed_stream = new GZipStream(file_stream, CompressionMode.Compress))
+            	//	using (var writer = new BinaryWriter(compressed_stream))
+					using (var writer = new BinaryWriter(file_stream))
+						PredictScoresTrack2(recommender, candidates, writer);
+		}
+
+		/// <summary>Predict item scores for Track 2</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
+		/// <param name="writer">the writer to write the scores to</param>
+		public static void PredictScoresTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, BinaryWriter writer)
+		{
+			foreach (int user_id in candidates.Keys)
+				foreach (int item_id in candidates[user_id])
+					writer.Write(recommender.Predict(user_id, item_id));
 		}
 
 		/// <summary>Predict items for Track 2</summary>
@@ -63,15 +94,16 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Evaluate Track 2 on a validation set</summary>
 		/// <param name="recommender">the recommender to use</param>
-		/// <param name="validation_split">the validation split to use</param>
+		/// <param name="candidates">the candidate items (per user)</param>
+		/// <param name="hits">the real items (per user)</param>
 		/// <returns>the error rate on this validation split</returns>
-		public static double EvaluateTrack2(IRecommender recommender, Track2Validation validation_split)
+		public static double EvaluateTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, Dictionary<int, IList<int>> hits)
 		{
 			int hit_count = 0;
 
-			foreach (int user_id in validation_split.Candidates.Keys)
+			foreach (int user_id in candidates.Keys)
 			{
-				IList<int> user_candidates = validation_split.Candidates[user_id];
+				IList<int> user_candidates = candidates[user_id];
 
 				var predictions = new double[user_candidates.Count];
 				for (int i = 0; i < user_candidates.Count; i++)
@@ -80,32 +112,56 @@ namespace MyMediaLite.Eval
 				var positions = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
 				positions.Sort(delegate(int pos1, int pos2) { return predictions[pos2].CompareTo(predictions[pos1]); } );
 
-				var user_true_items = new HashSet<int>(validation_split.Hits[user_id]);
+				var user_true_items = new HashSet<int>(hits[user_id]);
 
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < user_true_items.Count; i++)
 					if (user_true_items.Contains(user_candidates[positions[i]]))
 						hit_count++;
 			}
 
-			return (double) (hit_count / (validation_split.Candidates.Count * 3));
+			int num_pos = hits.Keys.Sum(u => hits[u].Count);
+			return 1 - (double) hit_count / num_pos;
 		}
 
-		/// <summary>Predict items for Track 1</summary>
+		/// <summary>Evaluate Track 2 on a validation set</summary>
+		/// <param name="predictions">the predictions for all candidates as one list</param>
+		/// <param name="candidates">the candidate items (per user)</param>
+		/// <param name="hits">the real items (per user)</param>
+		/// <returns>the error rate on this validation split</returns>
+		public static double EvaluateTrack2(IList<byte> predictions, Dictionary<int, IList<int>> candidates, Dictionary<int, IList<int>> hits)
+		{
+			int position  = 0;
+			int hit_count = 0;
+
+			foreach (int user_id in candidates.Keys)
+			{
+				var user_true_items = new HashSet<int>(hits[user_id]);
+
+				foreach (int item_id in candidates[user_id])
+					if (predictions[position++] == 1 && user_true_items.Contains(item_id))
+						hit_count++;
+			}
+
+			int num_positive = candidates.Count * 3;
+			return 1 - (double) hit_count / num_positive;
+		}
+
+		/// <summary>Predict ratings for Track 1</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictTrack1(IRecommender recommender, IRatings ratings, string filename)
+		public static void PredictRatings(IRecommender recommender, IRatings ratings, string filename)
 		{
 			using (var stream = new FileStream(filename, FileMode.Create))
 				using (var writer = new BinaryWriter(stream))
-					PredictTrack1(recommender, ratings, writer);
+					PredictRatings(recommender, ratings, writer);
 		}
 
-		/// <summary>Predict items for Track 1</summary>
+		/// <summary>Predict ratings for Track 1</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictTrack1(IRecommender recommender, IRatings ratings, BinaryWriter writer)
+		public static void PredictRatings(IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
@@ -116,6 +172,30 @@ namespace MyMediaLite.Eval
 				byte encoded_prediction = (byte) (2.55 * prediction + 0.5);
 				writer.Write(encoded_prediction);
 			}
+		}
+
+		/// <summary>Predict ratings (double precision)</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="ratings">the ratings to predict</param>
+		/// <param name="filename">the file to write the predictions to</param>
+		public static void PredictRatingsDouble(IRecommender recommender, IRatings ratings, string filename)
+		{
+			using (var stream = new FileStream(filename, FileMode.Create))
+				using (var writer = new BinaryWriter(stream))
+					PredictRatingsDouble(recommender, ratings, writer);
+		}
+
+		/// <summary>Predict ratings (double precision)</summary>
+		/// <param name="recommender">the recommender to use</param>
+		/// <param name="ratings">the ratings to predict</param>
+		/// <param name="writer">the writer object to write the predictions to</param>
+		public static void PredictRatingsDouble(IRecommender recommender, IRatings ratings, BinaryWriter writer)
+		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
+			for (int i = 0; i < ratings.Count; i++)
+				writer.Write(recommender.Predict(ratings.Users[i], ratings.Items[i]));
 		}
 	}
 }

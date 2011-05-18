@@ -23,8 +23,6 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	// TODO run CV internally in order to find suitable hyperparameters
-
 	/// <summary>baseline method for rating prediction</summary>
 	/// <remarks>
 	/// Uses the average rating value, plus a regularized user and item bias
@@ -40,81 +38,31 @@ namespace MyMediaLite.RatingPrediction
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
 		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
-		public double RegU { get { return reg_u; } set { reg_u = value; } }
-		private double reg_u = double.NaN;
+		public double RegU { get; set; }
 
 		/// <summary>Regularization parameter for the item biases</summary>
 		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
-		public double RegI { get { return reg_i; } set { reg_i = value; } }
-		private double reg_i = double.NaN;
+		public double RegI { get; set; }
 
 		private double global_average;
 		private double[] user_biases;
 		private double[] item_biases;
 
 		/// <inheritdoc/>
-		public override void Train()
+		protected override void InitModel()
 		{
-			if (double.IsNaN(RegU) || double.IsNaN(RegI)) // TODO handle separately
-			{
-				var ni = new NumberFormatInfo();
-
-				// save ratings for later use
-				var all_ratings = Ratings;
-
-				// hyperparameter search
-				//var split = new RatingCrossValidationSplit(Ratings, 5);
-				var split = new RatingsSimpleSplit(Ratings, 0.2);
-				int basis = 2;
-				// rough search
-				var hp_values_u = new double[] {-5, -3, -1, 0, 1, 3, 5};
-				var hp_values_i = new double[] {-5, -3, -1, 0, 1, 3, 5};
-				double estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
-				Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
-				// check for edges
-				double lower_edge_u = -5;
-				double upper_edge_u = 5;
-				double lower_edge_i = -5;
-				double upper_edge_i = 5;
-				while ( (Math.Log(RegU, basis) == lower_edge_u) || Math.Log(RegU, basis) == upper_edge_u
-				       || Math.Log(RegI, basis) == lower_edge_i || Math.Log(RegI, basis) == upper_edge_i)
-				{
-					// search around the current values
-					hp_values_u = new double[5];
-					for (int i = 0; i < hp_values_u.Length; i++)
-						hp_values_u[i] = Math.Log(RegU, basis) + i - 2;
-					hp_values_i = new double[5];
-					for (int i = 0; i < hp_values_i.Length; i++)
-						hp_values_i[i] = Math.Log(RegI, basis) + i - 2;
-					estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
-					Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
-				}
-				// refine search
-				hp_values_u = new double[5];
-				for (int i = 0; i < hp_values_u.Length; i++)
-					hp_values_u[i] = Math.Log(RegU, basis) + (double) (i - 2) / 2;
-				hp_values_i = new double[5];
-				for (int i = 0; i < hp_values_i.Length; i++)
-					hp_values_i[i] = Math.Log(RegI, basis) + (double) (i - 2) / 2;
-				estimate = GridSearch.FindMinimumExponential("RMSE", "reg_u", "reg_i", hp_values_u, hp_values_i, basis, this, delegate() { TrainModel(); }, split);
-				Console.Error.WriteLine("estimated RMSE for {0}, {1}: {2}", RegU, RegI, estimate.ToString(ni));
-				// TODO this is a rather general grid search, move it to the GridSearch class
-
-				// reset ratings
-				Ratings = all_ratings;
-
-				Console.WriteLine(this);
-			}
-
-			TrainModel();
-		}
-
-		void TrainModel()
-		{
-			global_average = Ratings.Average;
+			base.InitModel();
 
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
+		}
+
+		/// <inheritdoc/>
+		public override void Train()
+		{
+			InitModel();
+
+			global_average = Ratings.Average;
 
 			int[] user_ratings_count = new int[MaxUserID + 1];
 			int[] item_ratings_count = new int[MaxItemID + 1];
@@ -127,7 +75,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 			for (int i = 0; i < item_biases.Length; i++)
 				if (item_ratings_count[i] != 0)
-					item_biases[i] = item_biases[i] / (reg_i + item_ratings_count[i]);
+					item_biases[i] = item_biases[i] / (RegI + item_ratings_count[i]);
 
 			// compute user biases
 			for (int index = 0; index < Ratings.Count; index++)
@@ -137,7 +85,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 			for (int u = 0; u < user_biases.Length; u++)
 				if (user_ratings_count[u] != 0)
-					user_biases[u] = user_biases[u] / (reg_u + user_ratings_count[u]);
+					user_biases[u] = user_biases[u] / (RegU + user_ratings_count[u]);
 		}
 
 		/// <inheritdoc/>
@@ -163,7 +111,7 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int index in ratings.ByUser[user_id])
 					user_biases[user_id] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
 				if (ratings.ByUser[user_id].Count != 0)
-					user_biases[user_id] = user_biases[user_id] / (reg_u + ratings.ByUser[user_id].Count);
+					user_biases[user_id] = user_biases[user_id] / (RegU + ratings.ByUser[user_id].Count);
 			}
 		}
 
@@ -175,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int index in ratings.ByItem[item_id])
 					item_biases[item_id] += Ratings[index] - global_average;
 				if (ratings.ByItem[item_id].Count != 0)
-					item_biases[item_id] = item_biases[item_id] / (reg_i + ratings.ByItem[item_id].Count);
+					item_biases[item_id] = item_biases[item_id] / (RegI + ratings.ByItem[item_id].Count);
 			}
 		}
 
@@ -252,7 +200,7 @@ namespace MyMediaLite.RatingPrediction
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1}", reg_u, reg_i);
+			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1}", RegU, RegI);
 		}
 	}
 }

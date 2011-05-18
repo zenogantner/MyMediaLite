@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "MovieDemo\Movi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteExperimental", "MyMediaLiteExperimental\MyMediaLiteExperimental.csproj", "{750EE318-9B7E-4825-8E42-5D9ABDD6E050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDDCup2011", "KDDCup2011\KDDCup2011.csproj", "{2D46DE72-628D-4223-BF43-A05E7C99FECB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDDTrack1", "KDDCup2011\KDDTrack1.csproj", "{2D46DE72-628D-4223-BF43-A05E7C99FECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

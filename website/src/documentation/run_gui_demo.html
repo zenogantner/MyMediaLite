@@ -1,0 +1,37 @@
+[%
+  title='MyMediaLite: GUI Demo'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+  <p>
+    <img src="[% prefix %]/img/movie_demo.png"/>
+  </p>
+  <h2>Setup</h2>
+  <p>
+  Download the source package of MyMediaLite, and open the MyMediaLite solution file <code>src/MyMediaLite.sln</code> in MonoDevelop.
+  Hit Ctrl-F8 to build the complete project.
+  
+  In the MyMediaLite root directory, enter
+  <pre>
+    make download_imdb
+    make download_movielens
+  </pre>
+  To train the initial model, execute
+  <pre>
+    mkdir data/models
+    mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe --training-file=data/ml1m/ratings.txt --recommender=BiasedMatrixFactorization  --recommender-options="num_iter=60 bias_reg=0.001 regularization=0.045" --save-model=data/models/ml1m-bmf.model
+  </pre>
+  </p>
+  Then you can run the GUI demo e.g. by opening <code>src/MovieDemo/Main.cs</code> and hitting Ctrl-F5 in MonoDevelop.
+</div>
+
+[% INCLUDE footer %]

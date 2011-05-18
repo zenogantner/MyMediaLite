@@ -101,8 +101,8 @@ class MappingItemPrediction
 			Usage("Not enough arguments.");
 
 		// read command line parameters
-		CommandLineParameters parameters = null;
-		try	{ parameters = new CommandLineParameters(args, 4);	}
+		RecommenderParameters parameters = null;
+		try	{ parameters = new RecommenderParameters(args, 4);	}
 		catch (ArgumentException e)	{ Usage(e.Message); 		}
 
 		// other parameters

@@ -50,9 +50,9 @@ class RatingPrediction
 	static List<double> rmse_eval_stats     = new List<double>();
 
 	// global command line parameters
-	static bool compute_fit      = false;
-	static bool movielens_format = false;
-	static RatingType rating_type = RatingType.DOUBLE;
+	static bool compute_fit             = false;
+	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
+	static RatingType rating_type       = RatingType.DOUBLE;
 
 	static void Usage(string message)
 	{
@@ -63,48 +63,45 @@ class RatingPrediction
 
 	static void Usage(int exit_code)
 	{
-		Console.WriteLine(@"
-MyMediaLite rating prediction
+		Console.WriteLine(@"MyMediaLite rating prediction
 
- usage:  RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]
+ usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
-  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-
-  methods (plus arguments and their defaults):");
+  recommenders (plus options and their defaults):");
 
 			Console.Write("   - ");
 			Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.RatingPrediction")));
 
-			Console.WriteLine(@"method ARGUMENTS have the form name=value
+			Console.WriteLine(@"  method ARGUMENTS have the form name=value
 
-  general OPTIONS have the form --name=value
-   --option-file=FILE           read options from FILE (line format KEY: VALUE)
-   --random-seed=N              set random seed to N
-   --data-dir=DIR               load all files from DIR
-   --user-attributes=FILE       file containing user attribute information
-   --item-attributes=FILE       file containing item attribute information
-   --user-relations=FILE         file containing user relation information
-   --item-relations=FILE         file containing item relation information
-   --save-model=FILE            save computed model to FILE
-   --load-model=FILE            load model from FILE
-   --min-rating=NUM             the smallest valid rating value
-   --max-rating=NUM             the greatest valid rating value
-   --no-eval=BOOL               do not evaluate
-   --prediction-file=FILE       write the rating predictions to  FILE ('-' for STDOUT)
-   --cross-validation=K         perform k-fold crossvalidation on the training data
-                                 (ignores the test data)
-   --ml1m-format=BOOL           read rating data in MovieLens 1M (and 10M) format
-   --kddcup-format=BOOL         read rating data in KDDCup-2011 format
-   --use-float=BOOL             store ratings as floats instead of doubles
-   --use-byte=BOOL              store ratings as bytes instead of doubles
+  general OPTIONS:
+   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender-options=OPTIONS    use OPTIONS as recommender options
+   --training-file=FILE             read training data from FILE
+   --test-file=FILE                 read test data from FILE
+   --random-seed=N                  set random seed to N
+   --data-dir=DIR                   load all files from DIR
+   --user-attributes=FILE           file containing user attribute information
+   --item-attributes=FILE           file containing item attribute information
+   --user-relations=FILE            file containing user relation information
+   --item-relations=FILE            file containing item relation information
+   --save-model=FILE                save computed model to FILE
+   --load-model=FILE                load model from FILE
+   --min-rating=NUM                 the smallest valid rating value
+   --max-rating=NUM                 the greatest valid rating value
+   --prediction-file=FILE           write the rating predictions to  FILE ('-' for STDOUT)
+   --cross-validation=K             perform k-fold crossvalidation on the training data
+                                    (does not need test data)
+   --file-format=ml1m|kddcup2011|default
+   --rating-type=float|byte|double  store ratings as floats or bytes or doubles (default)
 
   options for finding the right number of iterations (MF methods)
-   --find-iter=N                give out statistics every N iterations
-   --max-iter=N                 perform at most N iterations
-   --epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
-   --rmse-cutoff=NUM            abort if RMSE is above NUM
-   --mae-cutoff=NUM             abort if MAE is above NUM
-   --compute-fit=BOOL           display fit on training data every find_iter iterations");
+   --find-iter=N                  give out statistics every N iterations
+   --max-iter=N                   perform at most N iterations
+   --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
+   --rmse-cutoff=NUM              abort if RMSE is above NUM
+   --mae-cutoff=NUM               abort if MAE is above NUM
+   --compute-fit                  display fit on training data every find_iter iterations");
 
 		Environment.Exit(exit_code);
 	}
@@ -119,6 +116,7 @@ MyMediaLite rating prediction
 		ni.NumberDecimalDigits = '.';
 
 		// recommender arguments
+		string method              = "BiasedMatrixFactorization";
 		string recommender_options = string.Empty;
 
 		// arguments for iteration search
@@ -128,11 +126,13 @@ MyMediaLite rating prediction
 		double rmse_cutoff = double.MaxValue;
 		double mae_cutoff  = double.MaxValue;
 
-		// collaborative data characteristics
+		// data characteristics
 		double min_rating  = 1;
 		double max_rating  = 5;
 
 		// data arguments
+		string training_file        = null;
+		string test_file            = null;
 		string data_dir             = string.Empty;
 		string user_attributes_file = string.Empty;
 		string item_attributes_file = string.Empty;
@@ -143,12 +143,14 @@ MyMediaLite rating prediction
 		string save_model_file = string.Empty;
 		string load_model_file = string.Empty;
 		int random_seed        = -1;
-		bool no_eval           = false;
 		string prediction_file = string.Empty;
 		int cross_validation   = 0;
 
 	   	var p = new OptionSet() {
 			// string-valued options
+			{ "training-file=",       v              => training_file        = v },
+			{ "test-file=",           v              => test_file            = v },
+			{ "recommender=",         v              => method               = v },
 			{ "recommender-options=", v              => recommender_options  = v },
    			{ "data-dir=",            v              => data_dir             = v },
 			{ "user-attributes=",     v              => user_attributes_file = v },
@@ -171,29 +173,22 @@ MyMediaLite rating prediction
 			{ "mae-cutoff=",          (double v)     => mae_cutoff           = v },
 			// enum options
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
+			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
-			{ "compute-fit",          v              => compute_fit      = v != null },
-			{ "no-eval",              v              => no_eval          = v != null },
-			{ "movielens-format",     v              => movielens_format = v != null },
+			{ "compute-fit",          v              => compute_fit = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
-		// check number of command line parameters
-		if (extra_args.Count < 3)
-			Usage("Not enough arguments.");
+		// TODO make sure interaction of --find-iter and --cross-validation works properly
 
-		// read command line parameters
-		string training_file = extra_args[0];
-		string testfile      = extra_args[1];
-		string method        = extra_args[2];
+		bool no_eval = test_file == null;
+				
+		if (extra_args.Count > 0)
+			Usage("Did not understand " + extra_args[0]);
 
-		CommandLineParameters parameters = null;
-		try	{ parameters = new CommandLineParameters(extra_args, 3); }
-		catch (ArgumentException e) { Usage(e.Message); }
-
-		if (parameters.CheckForLeftovers())
-			Usage(-1);
-
+		if (training_file == null)
+			Usage("Parameter --training-file=FILE is missing.");		
+		
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
@@ -203,24 +198,23 @@ MyMediaLite rating prediction
 
 		Recommender.Configure(recommender, recommender_options, Usage);
 
-
-		// check command-line parameters
-		if (training_file.Equals("-") && testfile.Equals("-"))
-			Usage("Either training or test data, not both, can be read from STDIN.");
-
 		// ID mapping objects
-		var user_mapping = new EntityMapping();
-		var item_mapping = new EntityMapping();
+		IEntityMapping user_mapping = new EntityMapping();
+		IEntityMapping item_mapping = new EntityMapping();
+		if (file_format == RatingFileFormat.KDDCUP_2011)
+		{
+			user_mapping = new IdentityMapping();
+			item_mapping = new IdentityMapping();
+		}
 
 		// load all the data
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir, training_file, testfile, min_rating, max_rating,
+			LoadData(data_dir, training_file, test_file, min_rating, max_rating,
 			         user_mapping, item_mapping, user_attributes_file, item_attributes_file,
 			         user_relations_file, item_relations_file);
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
-		// TODO move that into the recommender functionality (set from data)
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
@@ -346,24 +340,28 @@ MyMediaLite rating prediction
     static void LoadData(string data_dir,
 	              string training_file, string test_file,
 	              double min_rating, double max_rating,
-	              EntityMapping user_mapping, EntityMapping item_mapping,
+	              IEntityMapping user_mapping, IEntityMapping item_mapping,
 	              string user_attributes_file, string item_attributes_file,
 	              string user_relation_file, string item_relation_file)
 	{
-		// TODO check for the existence of files before starting to load all of them
-
+		if (training_file == null)
+			Usage("Program expects --training-file=FILE.");
+		
 		// read training data
-		if (movielens_format)
-			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
-		else
+		if (file_format == RatingFileFormat.DEFAULT)
 			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+		else if (file_format == RatingFileFormat.MOVIELENS_1M)
+			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+		else if (file_format == RatingFileFormat.KDDCUP_2011)
+			training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file)); // TODO do something about the mappings
+
 		recommender.Ratings = training_data;
 
 		// user attributes
 		if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
 		{
 			if (user_attributes_file.Equals(string.Empty))
-				Usage("Recommender expects user_attributes=FILE.");
+				Usage("Recommender expects --user-attributes=FILE.");
 			else
 				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 		}
@@ -372,7 +370,7 @@ MyMediaLite rating prediction
 		if (recommender is IItemAttributeAwareRecommender)
 		{
 			if (item_attributes_file.Equals(string.Empty))
-				Usage("Recommender expects item_attributes=FILE.");
+				Usage("Recommender expects --item-attributes=FILE.");
 			else
 				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 		}
@@ -381,7 +379,7 @@ MyMediaLite rating prediction
 		if (recommender is IUserRelationAwareRecommender)
 			if (user_relation_file.Equals(string.Empty))
 			{
-				Usage("Recommender expects user_relation=FILE.");
+				Usage("Recommender expects --user-relations=FILE.");
 			}
 			else
 			{
@@ -393,7 +391,7 @@ MyMediaLite rating prediction
 		if (recommender is IItemRelationAwareRecommender)
 			if (user_relation_file.Equals(string.Empty))
 			{
-				Usage("Recommender expects item_relation=FILE.");
+				Usage("Recommender expects --item-relations=FILE.");
 			}
 			else
 			{
@@ -402,15 +400,20 @@ MyMediaLite rating prediction
 			}
 
 		// read test data
-		if (movielens_format)
-			test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
-		else
-			test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+		if (test_file != null)
+		{
+			if (file_format == RatingFileFormat.MOVIELENS_1M)
+				test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+			else
+				test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+			// TODO add KDD Cup
+		}
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayIterationStats();
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
 	static void DisplayIterationStats()

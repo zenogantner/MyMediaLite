@@ -43,8 +43,8 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("num_item_attributes=" + NumItemAttributes);
 			Console.Error.WriteLine("num_hidden_factors=" + num_hidden_factors);
 
-			MatrixUtils.InitNormal(attribute_to_factor, init_mean, init_stdev);
-			MatrixUtils.InitNormal(output_layer, init_mean, init_stdev);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+			MatrixUtils.InitNormal(output_layer, InitMean, InitStdev);
 
 			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
 			for (int i = 0; i < num_iter_mapping; i++)
@@ -181,7 +181,7 @@ namespace MyMediaLite.AttrToFactor
 			return string.Format(
 				ni,
 				"BPRMF_ItemMapping_Complex num_factors={0}, reg_u={1}, reg_i={2}, reg_j={3}, num_iter={4}, learn_rate={5}, reg_mapping={6}, num_iter_mapping={7}, learn_rate_mapping={8}, num_hidden_factors={9}, init_mean={9}, init_stdev={10}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_factors, init_mean, init_stdev
+				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_factors, InitMean, InitStdev
 			);
 		}
 	}

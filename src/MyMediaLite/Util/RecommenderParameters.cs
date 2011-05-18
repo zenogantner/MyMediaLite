@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -25,17 +25,15 @@ using System.Text.RegularExpressions;
 
 namespace MyMediaLite.Util
 {
-	// TODO get rid of this class
-	
-	/// <summary>Class for command line argument processing</summary>
+	/// <summary>Class for key-value pair string processing</summary>
 	[Serializable]
-	public class CommandLineParameters : Dictionary<string, string>
+	public class RecommenderParameters : Dictionary<string, string>
 	{
 		private NumberFormatInfo ni = new NumberFormatInfo();
 
 		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="arg_string">a string that contains the command line parameters</param>
-		public CommandLineParameters(string arg_string)
+		public RecommenderParameters(string arg_string)
 		{
 			IList<string> args = Regex.Split(arg_string, "\\s");
 			
@@ -67,7 +65,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="args">a list of strings that contains the command line parameters</param>
 		/// <param name="start">ignore all parameters before this position</param>
-		public CommandLineParameters(IList<string> args, int start)
+		public RecommenderParameters(IList<string> args, int start)
 		{
 			for (int i = start; i < args.Count; i++)
 			{
@@ -96,7 +94,7 @@ namespace MyMediaLite.Util
 
 		/// <summary>Constructor</summary>
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
-		public CommandLineParameters(Dictionary<string,string> parameters) : base(parameters)
+		public RecommenderParameters(Dictionary<string,string> parameters) : base(parameters)
 		{
 			this.ni.NumberDecimalDigits = '.';
 		}

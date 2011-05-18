@@ -79,8 +79,10 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>Initialize the model data structure</summary>
-		protected virtual void InitModel()
+		protected override void InitModel()
 		{
+			base.InitModel();
+
 			// init factor matrices
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
@@ -316,6 +318,27 @@ namespace MyMediaLite.RatingPrediction
 				rmse_sum += Math.Pow(Predict(ratings.Users[i], ratings.Items[i]) - ratings[i], 2);
 
 			return Math.Sqrt((double) rmse_sum / ratings.Count);
+		}
+
+		/// <summary>Compute the regularized loss</summary>
+		/// <returns>the regularized loss</returns>
+		public virtual double ComputeLoss()
+		{
+			double loss = 0;
+			for (int i = 0; i < ratings.Count; i++)
+			{
+				int user_id = ratings.Users[i];
+				int item_id = ratings.Items[i];
+				loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+			}
+
+			for (int u = 0; u <= MaxUserID; u++)
+				loss += ratings.CountByUser[u] * Regularization * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
+
+			for (int i = 0; i <= MaxItemID; i++)
+				loss += ratings.CountByItem[i] * Regularization * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
+
+			return loss;
 		}
 
 		/// <inheritdoc/>

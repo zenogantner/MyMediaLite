@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+		static public IRatings Read(string filename, double min_rating, double max_rating, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, min_rating, max_rating, user_mapping, item_mapping);
@@ -52,7 +52,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(TextReader reader,	double min_rating, double max_rating, EntityMapping user_mapping, EntityMapping item_mapping)
+			Read(TextReader reader,	double min_rating, double max_rating, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var ratings = new Ratings();
 

@@ -49,23 +49,19 @@ namespace MyMediaLite.RatingPrediction
 		*/
 
 		/// <inheritdoc/>
-		public SparseBooleanMatrix UserRelation
-		{
-			get { return this.user_neighbors; }
-			set {
-				this.user_neighbors = value;
-				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
-				this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
-			}
-		}
+		public SparseBooleanMatrix UserRelation { get { return this.user_neighbors; } set {	this.user_neighbors = value; } }
 		private SparseBooleanMatrix user_neighbors;
 
 		/// <summary>the number of users</summary>
 		public int NumUsers { get { return MaxUserID + 1; } }
 
 		/// <inheritdoc/>
-        public override void Train()
+		protected override void InitModel()
 		{
+			base.InitModel();
+			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
+			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
+			
 			// init latent factor matrices
 	       	user_factors = new Matrix<double>(NumUsers, NumFactors);
 	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
@@ -74,7 +70,13 @@ namespace MyMediaLite.RatingPrediction
 			// init biases
 			user_bias = new double[NumUsers];
 			item_bias = new double[ratings.MaxItemID + 1];
-
+		}
+		
+		/// <inheritdoc/>
+        public override void Train()
+		{
+			InitModel();
+			
 			Console.Error.WriteLine("num_users={0}, num_items={1}", NumUsers, item_bias.Length);
 
 			// compute global average
@@ -224,7 +226,7 @@ namespace MyMediaLite.RatingPrediction
 			ni.NumberDecimalDigits = '.';
 
 			return string.Format(ni,
-			                     "SocialMF NumFactors={0} regularization={1} social_regularization={2} LearnRate={3} num_iter={4} init_mean={5} init_stdev={6}",
+			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
 				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}

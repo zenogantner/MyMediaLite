@@ -355,7 +355,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>Compute approximate fit (AUC on training data)</summary>
+		/// <summary>Compute the fit (AUC on training data)</summary>
 		/// <returns>the fit</returns>
 		public override double ComputeFit()
 		{

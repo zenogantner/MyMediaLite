@@ -34,13 +34,24 @@ namespace MyMediaLite.Data
 		int MaxItemID { get; }
 
 		/// <summary>indices by user</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<IList<int>> ByUser { get; }
 		/// <summary>indices by item</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<IList<int>> ByItem { get; }
 		/// <summary>get a randomly ordered list of all indices</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<int> RandomIndex { get; }
 		// TODO add method to force refresh
 
+		/// <summary>rating count by user</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
+		IList<int> CountByUser { get; }
+		/// <summary>rating count by item</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
+		IList<int> CountByItem { get; }		
+		
+		// TODO think about getting rid of the interface
 		/// <summary>Build the user indices</summary>
 		void BuildUserIndices();
 		/// <summary>Build the item indices</summary>

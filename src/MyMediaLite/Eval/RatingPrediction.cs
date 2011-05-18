@@ -35,7 +35,7 @@ namespace MyMediaLite.Eval
 		public static void WritePredictions(
 			IRatingPredictor engine,
 			IRatings ratings,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
 			var ni = new NumberFormatInfo();
@@ -57,7 +57,7 @@ namespace MyMediaLite.Eval
 		public static void WritePredictions(
 			IRatingPredictor engine,
 			IRatings ratings,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))

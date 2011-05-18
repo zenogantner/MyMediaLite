@@ -64,7 +64,7 @@ namespace MyMediaLite.RatingPrediction
 
 			global_average = Ratings.Average;
 
-			for (int i = 0; i < entity_averages.Count; i++)
+			for (int i = 0; i <= max_entity_id; i++)
 				if (rating_counts[i] > 0)
 					entity_averages[i] /= rating_counts[i];
 				else

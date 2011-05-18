@@ -37,7 +37,7 @@ namespace MyMediaLite.IO
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
-		static public SparseBooleanMatrix Read(string filename, EntityMapping mapping)
+		static public SparseBooleanMatrix Read(string filename, IEntityMapping mapping)
 		{
 			using ( var reader = new StreamReader(filename) )
 				return Read(reader, mapping);
@@ -47,7 +47,7 @@ namespace MyMediaLite.IO
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
-		static public SparseBooleanMatrix Read(StreamReader reader, EntityMapping mapping)
+		static public SparseBooleanMatrix Read(StreamReader reader, IEntityMapping mapping)
 		{
 			var matrix = new SparseBooleanMatrix();
 
@@ -83,7 +83,7 @@ namespace MyMediaLite.IO
 		/// <param name="reader">an IDataReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
-		static public SparseBooleanMatrix Read(IDataReader reader, EntityMapping mapping)
+		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
 				throw new IOException("Expected at least two columns.");			

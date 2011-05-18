@@ -108,7 +108,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Returns a copy of the i-th row of the matrix</summary>
 		/// <param name="i">the row ID</param>
-		/// <returns>A <see cref="T[]"/> containing the row data</returns>
+		/// <returns>A vector of T containing the row data</returns>
 		public T[] GetRow(int i)
 		{
 			// TODO speed up using Array.Copy()?
@@ -120,7 +120,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Returns a copy of the j-th column of the matrix</summary>
 		/// <param name="j">the column ID</param>
-		/// <returns><see cref="T[]"/> containing the column data</returns>
+		/// <returns>A vector of T containing the column data</returns>
 		public T[] GetColumn(int j)
 		{
 			T[] column = new T[this.dim1];
@@ -131,7 +131,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Sets the values of the i-th row to the values in a given array</summary>
 		/// <param name="i">the row ID</param>
-		/// <param name="row">A <see cref="T[]"/> of length dim1</param>
+		/// <param name="row">A vector of T of length dim1</param>
 		public void SetRow(int i, T[] row)
 		{
 			// TODO speed up using Array.Copy()?

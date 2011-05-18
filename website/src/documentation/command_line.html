@@ -43,7 +43,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     The general <a href="rating_prediction.html">usage of the rating prediction program</a> is as follows:
     <pre>
-    mono RatingPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGS] [OPTIONS]
+    mono RatingPrediction.exe --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]
     </pre>
     If you use Windows, just leave out the <tt>mono</tt>.
     METHOD is the recommender to use, which will be trained using the contents
@@ -62,12 +62,16 @@ to integrate the library in your application or having to develop your own progr
   <p>
     You can <a href="http://www.grouplens.org/node/73">download the MovieLens 100k ratings dataset from the
     GroupLens Research website</a> and unzip it to have something to play with.
+    If you have downloaded the MyMediaLite source code, you can do this automatically by entering
+    <pre>
+      make download-movielens
+    </pre>
   </p>
   
   <p>
     To try out a simple baseline method on the data, you just need to enter
     <pre>
-    mono RatingPrediction.exe u1.base u1.test UserAverage
+    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=UserAverage
     </pre>
     which should give a result like
     <pre>
@@ -78,7 +82,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     To use a more advanced recommender, enter
     <pre>
-    mono RatingPrediction.exe u1.base u1.test BiasedMatrixFactorization
+    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommenderBiasedMatrixFactorization
     </pre>
     which yields better result than the user average:
     <pre>
@@ -90,7 +94,7 @@ to integrate the library in your application or having to develop your own progr
     that may be modified to get even better results. For instance, we could use more latent factors
     per user and item, which leads to a more complex (and hopefully more accurate) model:
     <pre>
-    mono RatingPrediction.exe u1.base u1.test BiasedMatrixFactorization num_factors=20
+    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recommender-options="num_factors=20"
     ...
     ... RMSE 0.98029 MAE 0.76558
     </pre>
@@ -104,7 +108,7 @@ to integrate the library in your application or having to develop your own progr
     &quot;From iteration B on, give out the evaluation results on the test set every A iterations,
     until you reach iteration C.&quot;
     <pre>
-    mono RatingPrediction.exe u1.base u1.test BiasedMatrixFactorization num_factors=20 find_iter=1 max_iter=25 num_iter=0
+    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recomender-options="num_factors=20 num_iter=0" --max-iter=25 --num-iter=0
     ...
     RMSE 1.17083 MAE 0.96918 0
     RMSE 1.01383 MAE 0.8143 1
@@ -133,7 +137,7 @@ to integrate the library in your application or having to develop your own progr
     RMSE 0.9705 MAE 0.76246 24
     RMSE 0.97247 MAE 0.76364 25    
     </pre>
-    This means that we should probably set <tt>num_iter</tt> to around 15 to get better results.
+    This means that we should probably set <tt>--num-iter</tt> to around 15 to get better results.
   </p>
   
   <p>
@@ -155,7 +159,7 @@ to integrate the library in your application or having to develop your own progr
 </p>
 
 <p>
-  <pre>mono ItemPrediction.exe TRAINING_FILE TEST_FILE METHOD [ARGUMENTS] [OPTIONS]</pre>
+  <pre>mono ItemPrediction.exe --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]</pre>
 </p>
 
 <p>
@@ -184,19 +188,19 @@ to integrate the library in your application or having to develop your own progr
 </p>
 
   <p>
-  Instead of RMSE and MAP, the evaluation measures are now prec@N (precision at N), AUC (area under the ROC curve),
-  MAP (mean average precision), and NDCG (normalized discounted cumulative gain).
+  Instead of RMSE and MAP, the evaluation measures are now prec@N (precision at N), <a href="http://en.wikipedia.org/wiki/Receiver_operating_characteristic">AUC (area under the ROC curve)</a>,
+  MAP (mean average precision), and <a href="http://en.wikipedia.org/wiki/Discounted_cumulative_gain">NDCG (normalized discounted cumulative gain)</a>.
   </p>
   
   <p>
-  Let us start again with some baseline methods, <tt>random</tt> and <tt>most-popular</tt>:
+  Let us start again with some baseline methods, <tt>Random</tt> and <tt>MostPopular</tt>:
   <pre>
-  mono ItemPrediction.exe u1.base u1.test Random
+  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=Random
   random training_time 00:00:00.0001040
     AUC 0.49924 prec@5 0.02789 prec@10 0.02898 MAP 0.00122 NDCG 0.37214
     num_users 459 num_items 1650 testing_time 00:00:02.7115540  
   
-  mono ItemPrediction.exe u1.base u1.test MostPopular
+  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=MostPopular
   MostPopular training_time 00:00:00.0015710
     AUC 0.8543 prec@5 0.322 prec@10 0.30458 MAP 0.02187 NDCG 0.57038
     num_users 459 num_items 1650 testing_time 00:00:02.3813790
@@ -206,7 +210,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
   User-based collaborative filtering:
   <pre>
-  mono ItemPrediction.exe u1.base  u1.test UserKNN
+  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=UserKNN
   UserKNN k=80 training_time 00:00:05.6057200
     AUC 0.91682 prec@5 0.52505 prec@10 0.46776 MAP 0.06482 NDCG 0.68793
     num_users 459 num_items 1650 testing_time 00:00:08.8362840
@@ -221,8 +225,8 @@ to integrate the library in your application or having to develop your own progr
   </p>
   
   <p>
-  The item prediction program supports the same options (<tt>find_iter=N</tt> etc.)
-  for iteratively trained recommenders like <tt>BPR-MF</tt> and <tt>WR-MF</tt>.
+  The item prediction program supports the same options (<tt>--find-iter=N</tt> etc.)
+  for iteratively trained recommenders like <tt>BPRMF</tt> and <tt>WRMF</tt>.
   </p>
   
 </div>

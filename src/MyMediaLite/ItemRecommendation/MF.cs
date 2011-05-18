@@ -33,14 +33,10 @@ namespace MyMediaLite.ItemRecommendation
 		protected Matrix<double> item_factors;
 
 		/// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
-		public double InitMean { get { return init_mean; } set { init_mean = value;	} }
-		/// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
-		protected double init_mean = 0;
+		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
-		public double InitStdev { get {	return init_stdev; } set { init_stdev = value; } }
-		/// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
-		protected double init_stdev = 0.1;
+		public double InitStdev { get; set; }
 
 		/// <summary>Number of latent factors per user/item</summary>
 		public int NumFactors { get { return num_factors; } set { num_factors = value; } }
@@ -48,18 +44,25 @@ namespace MyMediaLite.ItemRecommendation
 		protected int num_factors = 10;
 
 		/// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-		int num_iter = 30;
+		public int NumIter { get; set; }
+
+		/// <summary>Default constructor</summary>
+		public MF()
+		{
+			NumIter = 30;
+			InitMean = 0;
+			InitStdev = 0.1;
+		}
 
 		// TODO push upwards in class hierarchy
 		/// <inheritdoc/>
 		protected virtual void InitModel()
 		{
-			user_factors = new Matrix<double>(MaxUserID + 1, num_factors);
-			item_factors = new Matrix<double>(MaxItemID + 1, num_factors);
+			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
-			MatrixUtils.InitNormal(user_factors, init_mean, init_stdev);
-			MatrixUtils.InitNormal(item_factors, init_mean, init_stdev);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 		}
 
 		/// <inheritdoc/>
@@ -67,7 +70,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 
-			for (int i = 0; i < num_iter; i++)
+			for (int i = 0; i < NumIter; i++)
 				Iterate();
 		}
 

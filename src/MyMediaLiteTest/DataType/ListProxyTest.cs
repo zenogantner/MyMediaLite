@@ -68,7 +68,7 @@ namespace MyMediaLiteTest
 
 			foreach (int num in CreateEvenSequence())
 				Assert.IsTrue(list_proxy.Contains(num));
-			
+
 			foreach (int num in CreateOddSequence())
 				Assert.IsFalse(list_proxy.Contains(num));
 		}

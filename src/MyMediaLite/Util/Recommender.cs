@@ -117,7 +117,7 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender engine</returns>
 		public static T Configure<T>(T engine, string parameters, takes_string report_error)
 		{
-			var parameters_dictionary = new CommandLineParameters(parameters);
+			var parameters_dictionary = new RecommenderParameters(parameters);
 			return Configure(engine, parameters_dictionary, report_error);
 		}
 		
@@ -314,13 +314,13 @@ namespace MyMediaLite.Util
 			// determine necessary data
 			var needs = new List<string>();
 			if (recommender is IUserRelationAwareRecommender)
-				needs.Add("user_relation=FILE");
+				needs.Add("--user-relations=FILE");
 			if (recommender is IItemRelationAwareRecommender)
-				needs.Add("item_relation=FILE");
+				needs.Add("--item-relations=FILE");
 			if (recommender is IUserAttributeAwareRecommender)
-				needs.Add("user_attributes=FILE");
+				needs.Add("--user-attributes=FILE");
 			if (recommender is IItemAttributeAwareRecommender)
-				needs.Add("item_attributes=FILE");
+				needs.Add("--item-attributes=FILE");
 
 			return string.Join(", ", needs.ToArray());
 		}

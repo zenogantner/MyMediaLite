@@ -52,6 +52,7 @@ namespace MyMediaLite.Data
 				throw new NotSupportedException();
 			}
 		}
+		
 		/// <inheritdoc/>
 		public virtual int Count { get { return Values.Count; } }
 
@@ -91,7 +92,7 @@ namespace MyMediaLite.Data
 			for (int index = 0; index < Count; index++)
 				by_user[Users[index]].Add(index);
 		}
-
+	
 		/// <inheritdoc/>
 		public IList<IList<int>> ByItem
 		{
@@ -135,6 +136,44 @@ namespace MyMediaLite.Data
 			Util.Utils.Shuffle<int>(random_index);
 		}
 
+		/// <inheritdoc/>
+		public IList<int> CountByUser
+		{
+			get {
+				if (count_by_user == null)
+					BuildByUserCounts();
+				return count_by_user;
+			}
+		}
+		IList<int> count_by_user;
+
+		/// <inheritdoc/>
+		public void BuildByUserCounts()
+		{
+			count_by_user = new int[MaxUserID + 1];
+			for (int index = 0; index < Count; index++)
+				count_by_user[Users[index]]++;
+		}		
+		
+		/// <inheritdoc/>
+		public IList<int> CountByItem
+		{
+			get {
+				if (count_by_item == null)
+					BuildByItemCounts();
+				return count_by_item;
+			}
+		}
+		IList<int> count_by_item;
+
+		/// <inheritdoc/>
+		public void BuildByItemCounts()
+		{
+			count_by_item = new int[MaxItemID + 1];
+			for (int index = 0; index < Count; index++)
+				count_by_item[Items[index]]++;
+		}		
+		
 		// TODO speed up
 		/// <inheritdoc/>
 		public double Average
@@ -196,8 +235,7 @@ namespace MyMediaLite.Data
 				for (int index = 0; index < Values.Count; index++)
 					if (Users[index] == user_id && Items[index] == item_id)
 						return Values[index];
-
-				throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
+				throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
 		}
 
@@ -289,7 +327,7 @@ namespace MyMediaLite.Data
 				if (Users[i] == user_id && Items[i] == item_id)
 					return i;
 
-			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
 		}
 
 		/// <inheritdoc/>
@@ -300,7 +338,7 @@ namespace MyMediaLite.Data
 				if (Users[i] == user_id && Items[i] == item_id)
 					return i;
 
-			throw new Exception(string.Format("index {0}, {1} not found.", user_id, item_id));
+			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
 		}
 
 		/// <inheritdoc/>
@@ -399,4 +437,3 @@ namespace MyMediaLite.Data
 		
 	}
 }
-

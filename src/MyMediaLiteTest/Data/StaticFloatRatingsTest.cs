@@ -148,5 +148,50 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(0.2f, ratings[1, 8]);
 			Assert.AreEqual(0.6f, ratings[2, 2]);
 		}
+
+		[Test()] public void TestByUserByItem()
+		{
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
+
+			Assert.IsTrue(new HashSet<int>( new int[] { 0, 1 } ).SetEquals(ratings.ByUser[1]));
+			Assert.IsTrue(new HashSet<int>( new int[] { 0, 2 } ).SetEquals(ratings.ByItem[4]));
+		}
+
+		[Test()] public void TestCountByUserCountByItem()
+		{
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
+
+			Assert.AreEqual(0, ratings.CountByUser[0]);
+			Assert.AreEqual(2, ratings.CountByUser[1]);
+			Assert.AreEqual(3, ratings.CountByUser[2]);
+			Assert.AreEqual(1, ratings.CountByUser[3]);
+			Assert.AreEqual(0, ratings.CountByUser[4]);
+			Assert.AreEqual(0, ratings.CountByUser[5]);
+			Assert.AreEqual(1, ratings.CountByUser[6]);
+
+			Assert.AreEqual(0, ratings.CountByItem[0]);
+			Assert.AreEqual(0, ratings.CountByItem[1]);
+			Assert.AreEqual(1, ratings.CountByItem[2]);
+			Assert.AreEqual(1, ratings.CountByItem[3]);
+			Assert.AreEqual(2, ratings.CountByItem[4]);
+			Assert.AreEqual(1, ratings.CountByItem[5]);
+			Assert.AreEqual(0, ratings.CountByItem[6]);
+			Assert.AreEqual(1, ratings.CountByItem[7]);
+			Assert.AreEqual(1, ratings.CountByItem[8]);
+		}
 	}
 }

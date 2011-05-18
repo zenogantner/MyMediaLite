@@ -21,7 +21,7 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
-	public sealed class EntityMapping
+	public sealed class EntityMapping : IEntityMapping
 	{
 		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
 		/// <remarks>
@@ -37,8 +37,7 @@ namespace MyMediaLite.Data
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
-		public ICollection<int> OriginalIDs	{ get { return original_to_internal.Keys; }
-		}
+		public ICollection<int> OriginalIDs	{ get { return original_to_internal.Keys; } }
 
 		/// <summary>all internal entity IDs</summary>
 		/// <value>all internal entity IDs</value>
