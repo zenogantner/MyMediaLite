@@ -51,8 +51,6 @@ binary-package: all
 	cp src/ItemPrediction/bin/Debug/*.dll MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.mdb MyMediaLite-${VERSION}
 	cp src/RatingPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp src/MappingItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp src/KDDCup2011/bin/Debug/*.exe MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
