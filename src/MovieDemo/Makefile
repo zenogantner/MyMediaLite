@@ -18,12 +18,12 @@ PROJECT_REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll
 BUILD_DIR = bin/Debug
 
+MOVIEDEMO_EXE_MDB_SOURCE=bin/Debug/MovieDemo.exe.mdb
+MOVIEDEMO_EXE_MDB=$(BUILD_DIR)/MovieDemo.exe.mdb
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
 MYMEDIALITE_DLL_MDB=$(BUILD_DIR)/MyMediaLite.dll.mdb
-MOVIEDEMO_EXE_MDB_SOURCE=bin/Debug/MovieDemo.exe.mdb
-MOVIEDEMO_EXE_MDB=$(BUILD_DIR)/MovieDemo.exe.mdb
 
 endif
 
@@ -37,10 +37,10 @@ PROJECT_REFERENCES =  \
 	../MyMediaLite/bin/Release/MyMediaLite.dll
 BUILD_DIR = bin/Release
 
+MOVIEDEMO_EXE_MDB=
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB=
-MOVIEDEMO_EXE_MDB=
 
 endif
 
@@ -48,10 +48,10 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
+	$(MOVIEDEMO_EXE_MDB) \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
-	$(MYMEDIALITE_DLL_MDB) \
-	$(MOVIEDEMO_EXE_MDB)  
+	$(MYMEDIALITE_DLL_MDB)  
 
 BINARIES = \
 	$(MOVIEDEMO)  
@@ -132,10 +132,10 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(MOVIEDEMO_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(MOVIEDEMO_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
 	$(call cp,$(MOVIEDEMO),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
@@ -145,10 +145,10 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(MOVIEDEMO_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(MOVIEDEMO_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MOVIEDEMO),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 

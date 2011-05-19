@@ -1,6 +1,6 @@
 Name: MyMediaLite
 Description: MyMediaLite
-Version: 1.0
+Version: 1.01
 
 Requires: 
 Libs: -r:@expanded_libdir@/@PACKAGE@/MyMediaLite.dll

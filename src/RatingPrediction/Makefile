@@ -19,6 +19,8 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Debug
 
+RATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/RatingPrediction.exe.mdb
+RATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/RatingPrediction.exe.mdb
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
@@ -29,8 +31,6 @@ SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
-RATINGPREDICTION_EXE_MDB_SOURCE=bin/Debug/RatingPrediction.exe.mdb
-RATINGPREDICTION_EXE_MDB=$(BUILD_DIR)/RatingPrediction.exe.mdb
 
 endif
 
@@ -45,6 +45,7 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Release
 
+RATINGPREDICTION_EXE_MDB=
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB=
@@ -52,7 +53,6 @@ MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Release/MyMedi
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=
-RATINGPREDICTION_EXE_MDB=
 
 endif
 
@@ -60,14 +60,14 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
+	$(RATINGPREDICTION_EXE_MDB) \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
 	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITEEXPERIMENTAL_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
-	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB) \
-	$(RATINGPREDICTION_EXE_MDB)  
+	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB)  
 
 BINARIES = \
 	$(RATING_PREDICTION)  
@@ -81,10 +81,10 @@ MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
 RATING_PREDICTION = $(BUILD_DIR)/rating_prediction
 
-FILES =  \
-	../../lib/Options.cs \
+FILES = \
+	RatingPrediction.cs \
 	AssemblyInfo.cs \
-	RatingPrediction.cs 
+	../../lib/Options.cs 
 
 DATA_FILES = 
 
@@ -94,8 +94,6 @@ EXTRAS = \
 	rating_prediction.in 
 
 REFERENCES =  \
-	../MyMediaLite/bin/Debug/MyMediaLite.dll \
-	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll \
 	System \
 	System.Core \
 	System.Data
@@ -142,6 +140,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -149,7 +148,6 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
 	$(call cp,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
@@ -159,6 +157,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -166,7 +165,6 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(RATINGPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(RATING_PREDICTION),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 

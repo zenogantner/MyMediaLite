@@ -19,6 +19,8 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Debug
 
+KDDCUP2011_EXE_MDB_SOURCE=bin/Debug/KDDCup2011.exe.mdb
+KDDCUP2011_EXE_MDB=$(BUILD_DIR)/KDDCup2011.exe.mdb
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
@@ -29,8 +31,6 @@ SVM_DLL_MDB_SOURCE=../SVM/bin/Debug/SVM.dll.mdb
 SVM_DLL_MDB=$(BUILD_DIR)/SVM.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB_SOURCE=../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll.mdb
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=$(BUILD_DIR)/MyMediaLiteExperimental.dll.mdb
-KDDCUP2011_EXE_MDB_SOURCE=bin/Debug/KDDCup2011.exe.mdb
-KDDCUP2011_EXE_MDB=$(BUILD_DIR)/KDDCup2011.exe.mdb
 
 endif
 
@@ -45,6 +45,7 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Release
 
+KDDCUP2011_EXE_MDB=
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB=
@@ -52,7 +53,6 @@ MYMEDIALITEEXPERIMENTAL_DLL_SOURCE=../MyMediaLiteExperimental/bin/Release/MyMedi
 SVM_DLL_SOURCE=../SVM/bin/Release/SVM.dll
 SVM_DLL_MDB=
 MYMEDIALITEEXPERIMENTAL_DLL_MDB=
-KDDCUP2011_EXE_MDB=
 
 endif
 
@@ -60,17 +60,17 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
+	$(KDDCUP2011_EXE_MDB) \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
 	$(MYMEDIALITE_DLL_MDB) \
 	$(MYMEDIALITEEXPERIMENTAL_DLL) \
 	$(SVM_DLL) \
 	$(SVM_DLL_MDB) \
-	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB) \
-	$(KDDCUP2011_EXE_MDB)  
+	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB)  
 
 BINARIES = \
-	$(KDDCUP2011)  
+	$(KDDTRACK1)  
 
 
 RESGEN=resgen2
@@ -79,18 +79,18 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-KDDCUP2011 = $(BUILD_DIR)/kddcup2011
+KDDTRACK1 = $(BUILD_DIR)/kddtrack1
 
 FILES = \
-	KDDCup.cs \
-	AssemblyInfo.cs 
+	AssemblyInfo.cs \
+	KDDTrack1.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	kddcup2011.in 
+	kddtrack1.in 
 
 REFERENCES =  \
 	System \
@@ -115,7 +115,7 @@ $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,KDDCUP2011,kddcup2011,x))
+$(eval $(call emit-deploy-wrapper,KDDTRACK1,kddtrack1,x))
 
 
 $(eval $(call emit_resgen_targets))
@@ -138,6 +138,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(KDDCUP2011_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -145,9 +146,8 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(KDDCUP2011_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(KDDCUP2011),$(DESTDIR)$(bindir))
+	$(call cp,$(KDDTRACK1),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -155,6 +155,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(KDDCUP2011_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -162,8 +163,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(KDDCUP2011_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(KDDCUP2011),$(DESTDIR)$(bindir))
+	$(call rm,$(KDDTRACK1),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local

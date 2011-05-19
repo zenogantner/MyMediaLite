@@ -8,29 +8,9 @@
     <ProjectGuid>{750EE318-9B7E-4825-8E42-5D9ABDD6E050}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLiteExperimental</RootNamespace>
-    <ReleaseVersion>1.0</ReleaseVersion>
+    <ReleaseVersion>1.01</ReleaseVersion>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +53,8 @@
     <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="RatingPrediction\NewKNN.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
+    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
+    <Compile Include="ItemRecommender\ISemiSupervisedItemRecommender.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

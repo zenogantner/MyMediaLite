@@ -11,7 +11,7 @@ include $(top_srcdir)/config.make
 ifeq ($(CONFIG),DEBUG)
 ASSEMBLY_COMPILER_COMMAND = gmcs
 ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize- -debug "-define:DEBUG"
-ASSEMBLY = bin/Debug/ItemPrediction.exe
+ASSEMBLY = bin/Debug/KDDTrack2.exe
 ASSEMBLY_MDB = $(ASSEMBLY).mdb
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
@@ -19,8 +19,8 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Debug
 
-ITEMPREDICTION_EXE_MDB_SOURCE=bin/Debug/ItemPrediction.exe.mdb
-ITEMPREDICTION_EXE_MDB=$(BUILD_DIR)/ItemPrediction.exe.mdb
+KDDTRACK2_EXE_MDB_SOURCE=bin/Debug/KDDTrack2.exe.mdb
+KDDTRACK2_EXE_MDB=$(BUILD_DIR)/KDDTrack2.exe.mdb
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB_SOURCE=../MyMediaLite/bin/Debug/MyMediaLite.dll.mdb
@@ -36,8 +36,8 @@ endif
 
 ifeq ($(CONFIG),RELEASE)
 ASSEMBLY_COMPILER_COMMAND = gmcs
-ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize+
-ASSEMBLY = bin/Release/ItemPrediction.exe
+ASSEMBLY_COMPILER_FLAGS =  -noconfig -codepage:utf8 -warn:4 -optimize-
+ASSEMBLY = bin/Release/KDDTrack2.exe
 ASSEMBLY_MDB = 
 COMPILE_TARGET = exe
 PROJECT_REFERENCES =  \
@@ -45,7 +45,7 @@ PROJECT_REFERENCES =  \
 	../MyMediaLiteExperimental/bin/Release/MyMediaLiteExperimental.dll
 BUILD_DIR = bin/Release
 
-ITEMPREDICTION_EXE_MDB=
+KDDTRACK2_EXE_MDB=
 MYMEDIALITE_DLL_SOURCE=../MyMediaLite/bin/Release/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL_SOURCE=../../lib/MathNet/MathNet.Iridium.dll
 MYMEDIALITE_DLL_MDB=
@@ -60,7 +60,7 @@ AL=al2
 SATELLITE_ASSEMBLY_NAME=$(notdir $(basename $(ASSEMBLY))).resources.dll
 
 PROGRAMFILES = \
-	$(ITEMPREDICTION_EXE_MDB) \
+	$(KDDTRACK2_EXE_MDB) \
 	$(MYMEDIALITE_DLL) \
 	$(MATHNET_IRIDIUM_DLL) \
 	$(MYMEDIALITE_DLL_MDB) \
@@ -70,7 +70,7 @@ PROGRAMFILES = \
 	$(MYMEDIALITEEXPERIMENTAL_DLL_MDB)  
 
 BINARIES = \
-	$(ITEM_PREDICTION)  
+	$(KDDTRACK2)  
 
 
 RESGEN=resgen2
@@ -79,24 +79,22 @@ MYMEDIALITE_DLL = $(BUILD_DIR)/MyMediaLite.dll
 MATHNET_IRIDIUM_DLL = $(BUILD_DIR)/MathNet.Iridium.dll
 MYMEDIALITEEXPERIMENTAL_DLL = $(BUILD_DIR)/MyMediaLiteExperimental.dll
 SVM_DLL = $(BUILD_DIR)/SVM.dll
-ITEM_PREDICTION = $(BUILD_DIR)/item_prediction
+KDDTRACK2 = $(BUILD_DIR)/kddtrack2
 
 FILES = \
-	AssemblyInfo.cs \
-	ItemPrediction.cs \
-	../../lib/Options.cs 
+	KDDTrack2.cs \
+	AssemblyInfo.cs 
 
 DATA_FILES = 
 
 RESOURCES = 
 
 EXTRAS = \
-	item_prediction.in 
+	kddtrack2.in 
 
 REFERENCES =  \
-	System.Core \
-	System.Data \
-	System
+	System \
+	System.Core
 
 DLL_REFERENCES = 
 
@@ -117,7 +115,7 @@ $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL))
 $(eval $(call emit-deploy-target,SVM_DLL_MDB))
 $(eval $(call emit-deploy-target,MYMEDIALITEEXPERIMENTAL_DLL_MDB))
-$(eval $(call emit-deploy-wrapper,ITEM_PREDICTION,item_prediction,x))
+$(eval $(call emit-deploy-wrapper,KDDTRACK2,kddtrack2,x))
 
 
 $(eval $(call emit_resgen_targets))
@@ -140,7 +138,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	mkdir -p '$(DESTDIR)$(libdir)/$(PACKAGE)'
 	$(call cp,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call cp,$(ITEMPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call cp,$(KDDTRACK2_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -149,7 +147,7 @@ install-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call cp,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call cp,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	mkdir -p '$(DESTDIR)$(bindir)'
-	$(call cp,$(ITEM_PREDICTION),$(DESTDIR)$(bindir))
+	$(call cp,$(KDDTRACK2),$(DESTDIR)$(bindir))
 	make post-install-local-hook prefix=$(prefix)
 
 uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
@@ -157,7 +155,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	make uninstall-satellite-assemblies prefix=$(prefix)
 	$(call rm,$(ASSEMBLY),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(ASSEMBLY_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(ITEMPREDICTION_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
+	$(call rm,$(KDDTRACK2_EXE_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MATHNET_IRIDIUM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITE_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
@@ -165,7 +163,7 @@ uninstall-local: $(ASSEMBLY) $(ASSEMBLY_MDB)
 	$(call rm,$(SVM_DLL),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(SVM_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
 	$(call rm,$(MYMEDIALITEEXPERIMENTAL_DLL_MDB),$(DESTDIR)$(libdir)/$(PACKAGE))
-	$(call rm,$(ITEM_PREDICTION),$(DESTDIR)$(bindir))
+	$(call rm,$(KDDTRACK2),$(DESTDIR)$(bindir))
 	make post-uninstall-local-hook prefix=$(prefix)
 
 install: install-local
