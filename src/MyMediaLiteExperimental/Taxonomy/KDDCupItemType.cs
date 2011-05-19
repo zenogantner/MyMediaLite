@@ -27,7 +27,9 @@ namespace MyMediaLite.Taxonomy
 		/// <summary>an artist/interpret</summary>
 		Artist,
 		/// <summary>a music genre</summary>
-		Genre
+		Genre,
+		/// <summary>none of the above</summary>
+		None,
 	}
 }
 
