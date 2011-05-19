@@ -55,14 +55,102 @@
   <h3>Track 1</h3>
   Usage:
   <pre>
+MyMediaLite KDD Cup 2011 Track 1 tool
+
+ usage:  KDDCup.exe METHOD [ARGUMENTS] [OPTIONS]
+
+  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+
+  methods (plus arguments and their defaults):
+   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stdev=0.1
+   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
+   - GlobalAverage
+   - SlopeOne
+   - BipolarSlopeOne
+   - UserAverage
+   - ItemAverage
+   - UserItemBaseline reg_u=0 reg_i=0
+   - ItemKNNCosine k=inf reg_u=10 reg_i=5
+   - UserKNNCosine k=inf reg_u=10 reg_i=5
+   - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs --item-attributes=FILE)
+   - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs --user-attributes=FILE)
+method ARGUMENTS have the form name=value
+
+  general OPTIONS have the form name=value
+   - option_file=FILE           read options from FILE (line format KEY: VALUE)
+   - random_seed=N              set random seed to N
+   - data_dir=DIR               load all files from DIR
+   - save_model=FILE            save computed model to FILE
+   - load_model=FILE            load model from FILE
+   - no_eval=BOOL               do not evaluate
+   - prediction_file=FILE       write the predictions to  FILE ('-' for STDOUT)
+   - cross_validation=K         perform k-fold crossvalidation on the training data
+                                 (ignores the test data)
+   - sample_data=BOOL           assume the sample data set instead of the real one
+   - track2=BOOL                perform rating prediction on track 2 data
+   - good_rating_prob=BOOL      try to predict the probability of a good rating (>= 80)
+
+  options for finding the right number of iterations (MF methods)
+   - find_iter=N                give out statistics every N iterations
+   - max_iter=N                 perform at most N iterations
+   - epsilon=NUM                abort iterations if RMSE is more than best result plus NUM
+   - rmse_cutoff=NUM            abort if RMSE is above NUM
+   - mae_cutoff=NUM             abort if MAE is above NUM
+   - compute_fit=BOOL           display fit on training data every find_iter iterations
   </pre>
-  
+
   <h3>Track 2</h3>
   Usage:
   <pre>
+MyMediaLite KDD Cup 2011 Track 2 tool
+
+ usage:  KDDTrack2.exe METHOD [ARGUMENTS] [OPTIONS]
+
+  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
+
+  methods (plus arguments and their defaults):
+   - ItemAttributeSVM C=1 Gamma=0.002 (needs --item-attributes=FILE)
+   - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs --item-attributes=FILE)
+   - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
+   - ItemAttributeKNN k=80 (needs --item-attributes=FILE)
+   - ItemKNN k=80
+   - MostPopular
+   - Random
+   - UserAttributeKNN k=80 (needs --user-attributes=FILE)
+   - UserKNN k=80
+   - WeightedItemKNN k=80
+   - WeightedUserKNN k=80
+   - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=30 init_mean=0 init_stdev=0.1
+   - Zero
+method ARGUMENTS have the form name=value
+
+  general OPTIONS have the form name=value
+   - option_file=FILE           read options from FILE (line format KEY: VALUE)
+   - random_seed=N              set random seed to N
+   - data_dir=DIR               load all files from DIR
+   - save_model=FILE            save computed model to FILE
+   - load_model=FILE            load model from FILE
+   - prediction_file=FILE       write the predictions to  FILE ('-' for STDOUT)
+   - sample_data=BOOL           assume the sample data set instead of the real one
+   - predict_score=BOOL         predict scores (double precision) instead of 0/1 decisions
+   - predict_rated=BOOL         instead of predicting what received a good rating, try to predict what received a rating at all
+                                (implies predict_score)
+
+  options for finding the right number of iterations (MF methods)
+   - find_iter=N                give out statistics every N iterations
+   - max_iter=N                 perform at most N iterations
+   - epsilon=NUM                abort iterations if error is more than best result plus NUM
+   - err_cutoff=NUM             abort if error is above NUM
   </pre>
   
   <h2>Item Data</h2>
+  <p>
+  If you want to use the item data (relations between tracks, artists, albums, genres),
+  then you just need to implement the interface <tt>IKDDCupRecommender</tt>.
+  Its property <tt>ItemInfo</tt> gives you access to a <tt>KDDCupItems</tt> object which contains all item data.
+  </p>
   
   <h2>Dates and Times</h2>
   <p>We have currently no support for dates/times in track 1, it should be not difficult to add this, though.</p>
