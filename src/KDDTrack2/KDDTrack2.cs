@@ -78,8 +78,6 @@ class KDDTrack2
 		Usage(-1);
 	}
 
-	// TODO add compute_fit again
-
 	static void Usage(int exit_code)
 	{
 		Console.WriteLine(@"
