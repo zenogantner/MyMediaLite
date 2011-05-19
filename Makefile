@@ -39,7 +39,7 @@ install:
 uninstall:
 	cd ${SRC_DIR} && make uninstall
 
-binary-package: all
+binary-package:
 	mkdir MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/doc
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
