@@ -1,15 +1,15 @@
-1.01	2011-04-??
-	- KDD Cup 2011
-          - one program per track
-          - add validation functionality for track 2
-          - add IKDDCupRecommender interface for recommenders that use the
-            KDDCup item data
+1.01	2011-05-19
+        - API changes
+          - add interface IEntityMapping
+          - IRatings: add CountByUser and CountByItem
         - recommenders
           - make ItemRecommender and RatingPredictor clonable
           - BiasedMatrixFactorization
             - rename BiasRegularization to BiasReg for consistency with other
               recommenders
             - different regularization parameters for user and item factors
+            - add ComputeLoss() (also for MatrixFactorization)
+            - add optional bold driver heuristic for learn rate adaptation
           - BPRMF:
             - get rid of unnecessary IterationLength parameter
             - only interate once over relevant data points in online learning
@@ -17,6 +17,8 @@
             - significant training speed-up
           - BPR_Linear
             - significant training speed-up
+          - kNN recommenders
+            - improve API documentation
           - Random: remove unnecessary methods
           - Zero: new item recommender that always predicts the score 0
           - rename MyMediaLite.ensemble namespace to MyMediaLite.Ensemble
@@ -26,13 +28,25 @@
           - move DisplayDataStats() for item recommendation from the program
             to the library
           - improved usage information
-          - rating prediction: use Mono.Options for command-line parsing
+          - use Mono.Options for command-line argument parsing
+          - support --help and --version
         - evaluation
           - add relevant_users feature for item prediction
           - rating evaluation: check arguments for null
-        - data types
+          - rating evaluation cross validation: clone recommender to be
+             unaffected by state changes
+        - data structures
           - fix incorrect error message in Matrix class (reported by
             Chris Newell)
+        - documentation
+          - update performance stats
+        - misc
+          - add target download-imdb to Makefile
+	- KDD Cup 2011
+          - one program per track
+          - add validation functionality for track 2
+          - add IKDDCupRecommender interface for recommenders that use the
+            KDDCup item data
 
 1.0	2011-03-19
 	- recommenders
