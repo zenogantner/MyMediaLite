@@ -107,6 +107,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
+			// default value if no prediction can be made
+			global_average = Ratings.Average;
+
 			user_average.Ratings = Ratings;
 			user_average.Train();
 
@@ -142,9 +145,6 @@ namespace MyMediaLite.RatingPrediction
 		protected override void InitModel()
 		{
 			base.InitModel();
-
-			// default value if no prediction can be made
-			global_average = Ratings.Average;
 
 			// create data structure
 			diff_matrix_like = new SkewSymmetricSparseMatrix(MaxItemID + 1);
