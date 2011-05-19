@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local
-VERSION=1.0
+VERSION=1.01
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 HTML_IMMDOC_DIR=website/public_html/documentation/immdoc
