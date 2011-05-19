@@ -21,12 +21,14 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Data
 {
 	/// <summary>Represents KDD Cup 2011 items like album, track, artist, or genre</summary>
-	public class KDDCupItems
+	public sealed class KDDCupItems
 	{
 		IList<IList<int>> genres;
 		IList<int> artists;
 		IList<int> albums;
 		IList<KDDCupItemType> types;
+
+		static int[] empty_list = new int[0];
 
 		/// <summary>Create item information object</summary>
 		/// <param name="size">the number of items</param>
@@ -36,6 +38,13 @@ namespace MyMediaLite.Data
 			artists = new int[size];
 			albums  = new int[size];
 			types   = new KDDCupItemType[size];
+
+			for (int i = 0; i < size; i++)
+			{
+				artists[i] = -1;
+				albums[i]  = -1;
+				types[i]   = KDDCupItemType.None;
+			}
 		}
 
 		/// <summary>Insert information about an entry to the data structure</summary>
@@ -65,7 +74,7 @@ namespace MyMediaLite.Data
 		/// <returns>a list of genres</returns>
 		public IList<int> GetGenres(int item_id)
 		{
-			return genres[item_id];
+			return genres[item_id] != null ? genres[item_id] : empty_list;
 		}
 
 		/// <summary>Get the artist for a given item</summary>
@@ -109,7 +118,7 @@ namespace MyMediaLite.Data
 				return false;
 			return genres[item_id].Count > 0;
 		}
-		
+
 		/// <summary>Gives a textual summary of the item data</summary>
 		public override string ToString()
 		{
@@ -122,7 +131,7 @@ namespace MyMediaLite.Data
 					case KDDCupItemType.Artist: num_artists++; break;
 					case KDDCupItemType.Genre:  num_genres++;  break;
 				}
-			
+
 			return string.Format("{0} tracks, {1} albums, {2} artists, {3} genres", num_tracks, num_albums, num_artists, num_genres);
 		}
 	}
