@@ -54,6 +54,16 @@ class RatingPrediction
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
 
+	static void ShowVersion()
+	{
+		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("Copyright (C) 2010, 2011 Zeno Gantner, Steffen Rendle");
+	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
+        Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+		Environment.Exit(0);
+	}
+
 	static void Usage(string message)
 	{
 		Console.WriteLine(message);
@@ -63,8 +73,9 @@ class RatingPrediction
 
 	static void Usage(int exit_code)
 	{
-		Console.WriteLine(@"MyMediaLite rating prediction
-
+		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine(@"
  usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):");
@@ -79,21 +90,24 @@ class RatingPrediction
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
+
+   --help                           display this usage information and exit
+   --version                        display version information and exit
+
    --random-seed=N                  set random seed to N
    --data-dir=DIR                   load all files from DIR
    --user-attributes=FILE           file containing user attribute information
    --item-attributes=FILE           file containing item attribute information
-   --user-relations=FILE            file containing user relation information
-   --item-relations=FILE            file containing item relation information
-   --save-model=FILE                save computed model to FILE
-   --load-model=FILE                load model from FILE
-   --min-rating=NUM                 the smallest valid rating value
-   --max-rating=NUM                 the greatest valid rating value
-   --prediction-file=FILE           write the rating predictions to  FILE ('-' for STDOUT)
-   --cross-validation=K             perform k-fold crossvalidation on the training data
-                                    (does not need test data)
+   --user-relations=FILE                  file containing user relation information
+   --item-relations=FILE                  file containing item relation information
+   --save-model=FILE                      save computed model to FILE
+   --load-model=FILE                      load model from FILE
+   --min-rating=NUM                       the smallest valid rating value
+   --max-rating=NUM                       the greatest valid rating value
+   --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
+   --cross-validation=K                   perform k-fold crossvalidation on the training data
    --file-format=ml1m|kddcup2011|default
-   --rating-type=float|byte|double  store ratings as floats or bytes or doubles (default)
+   --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
 
   options for finding the right number of iterations (MF methods)
    --find-iter=N                  give out statistics every N iterations
@@ -118,6 +132,10 @@ class RatingPrediction
 		// recommender arguments
 		string method              = "BiasedMatrixFactorization";
 		string recommender_options = string.Empty;
+
+		// help/version
+		bool show_help    = false;
+		bool show_version = false;
 
 		// arguments for iteration search
 		int find_iter      = 0;
@@ -175,20 +193,27 @@ class RatingPrediction
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
-			{ "compute-fit",          v              => compute_fit = v != null },
+			{ "compute-fit",          v => compute_fit  = v != null },
+			{ "help",                 v => show_help    = v != null },
+			{ "version",              v => show_version = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
 		// TODO make sure interaction of --find-iter and --cross-validation works properly
 
 		bool no_eval = test_file == null;
-				
+
+		if (show_version)
+			ShowVersion();
+		if (show_help)
+			Usage(0);
+
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
 
 		if (training_file == null)
-			Usage("Parameter --training-file=FILE is missing.");		
-		
+			Usage("Parameter --training-file=FILE is missing.");
+
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
@@ -346,7 +371,7 @@ class RatingPrediction
 	{
 		if (training_file == null)
 			Usage("Program expects --training-file=FILE.");
-		
+
 		// read training data
 		if (file_format == RatingFileFormat.DEFAULT)
 			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);

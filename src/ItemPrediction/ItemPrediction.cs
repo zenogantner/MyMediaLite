@@ -51,6 +51,16 @@ class ItemPrediction
 	static List<double> fit_time_stats      = new List<double>();
 	static List<double> eval_time_stats     = new List<double>();
 
+	static void ShowVersion()
+	{
+		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		Console.WriteLine("MyMediaLite Item Prediction from Implicit Feedback {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("Copyright (C) 2010, 2011 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
+	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
+        Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+		Environment.Exit(0);
+	}
+
 	static void Usage(string message)
 	{
 		Console.WriteLine(message);
@@ -60,8 +70,9 @@ class ItemPrediction
 
 	static void Usage(int exit_code)
 	{
-		Console.WriteLine(@"MyMediaLite item prediction from implicit feedback
-
+		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		Console.WriteLine("MyMediaLite Item Prediction from Implicit Feedback {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine(@"
  usage:   ItemPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
    methods (plus arguments and their defaults):");
@@ -76,6 +87,9 @@ class ItemPrediction
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
+
+   --help                           display this usage information and exit
+   --version                        display version information and exit
 
    --random-seed=N
    --data-dir=DIR               load all files from DIR
@@ -112,6 +126,10 @@ class ItemPrediction
 		// recommender arguments
 		string method              = "MostPopular";
 		string recommender_options = string.Empty;
+
+		// help/version
+		bool show_help    = false;
+		bool show_version = false;
 
 		// variables for iteration search
 		int find_iter       = 0;
@@ -167,9 +185,17 @@ class ItemPrediction
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "compute-fit",          v              => compute_fit = v != null },
+			{ "compute-fit",          v => compute_fit  = v != null },
+			{ "help",                 v => show_help    = v != null },
+			{ "version",              v => show_version = v != null },
+
    	  	};
    		IList<string> extra_args = p.Parse(args);
+
+		if (show_version)
+			ShowVersion();
+		if (show_help)
+			Usage(0);
 
 		bool no_eval = test_file == null;
 
