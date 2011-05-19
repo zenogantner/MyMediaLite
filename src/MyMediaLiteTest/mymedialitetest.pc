@@ -1,6 +1,6 @@
 Name: MyMediaLiteTest
 Description: MyMediaLiteTest
-Version: 1.0
+Version: 1.01
 
 Requires: 
 Libs: -r:/usr/local/lib/mymedialite/MyMediaLiteTest.dll

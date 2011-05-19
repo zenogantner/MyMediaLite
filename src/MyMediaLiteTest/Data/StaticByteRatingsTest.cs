@@ -28,7 +28,7 @@ namespace MyMediaLiteTest
 	public class StaticByteRatingsTest
 	{
 		[Test()]
-		[ExpectedException(typeof(Exception))]
+		[ExpectedException(typeof(KeyNotFoundException))]
 		public void TestFull()
 		{
 			var ratings = new StaticByteRatings(2);
