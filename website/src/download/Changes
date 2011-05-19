@@ -1,3 +1,87 @@
+1.01	2011-05-19
+        - API changes
+          - add interface IEntityMapping
+          - IRatings: add CountByUser and CountByItem
+        - recommenders
+          - make ItemRecommender and RatingPredictor clonable
+          - BiasedMatrixFactorization
+            - rename BiasRegularization to BiasReg for consistency with other
+              recommenders
+            - different regularization parameters for user and item factors
+            - add ComputeLoss() (also for MatrixFactorization)
+            - add optional bold driver heuristic for learn rate adaptation
+          - BPRMF:
+            - get rid of unnecessary IterationLength parameter
+            - only interate once over relevant data points in online learning
+            - explicitly model item bias
+            - significant training speed-up
+          - BPR_Linear
+            - significant training speed-up
+          - kNN recommenders
+            - improve API documentation
+          - Random: remove unnecessary methods
+          - Zero: new item recommender that always predicts the score 0
+          - rename MyMediaLite.ensemble namespace to MyMediaLite.Ensemble
+          - make matrix factorization recommender faster by using
+            MatrixUtils.RowScalarProduct
+        - command-line tools
+          - move DisplayDataStats() for item recommendation from the program
+            to the library
+          - improved usage information
+          - use Mono.Options for command-line argument parsing
+          - support --help and --version
+        - evaluation
+          - add relevant_users feature for item prediction
+          - rating evaluation: check arguments for null
+          - rating evaluation cross validation: clone recommender to be
+             unaffected by state changes
+        - data structures
+          - fix incorrect error message in Matrix class (reported by
+            Chris Newell)
+        - documentation
+          - update performance stats
+        - misc
+          - add target download-imdb to Makefile
+	- KDD Cup 2011
+          - one program per track
+          - add validation functionality for track 2
+          - add IKDDCupRecommender interface for recommenders that use the
+            KDDCup item data
+
+1.0	2011-03-19
+	- recommenders
+          - BPRMF: bug fix in item bias handling (reported by Christian Brauch)
+          - UserItemBaseline: use internal splitting to find good regularization
+                              parameters
+        - API changes
+          - new data structures and interfaces for rating prediction and for
+            item prediction from implicit feedback (consume less memory)
+          - CanPredict() is now part of the IRecommender interface.
+          - rename IO.RatingPredictionData to IO.RatingPrediction
+          - rename IO.ItemRecommenderData to IO.ItemRecommendation
+          - add rating data structures with time stamps: RatingsWithDateTime
+            and StaticRatingsWithDateTime
+        - command-line programs
+          - add command-line program for KDD Cup 2011
+          - rating prediction now lets the user specify to store the ratings
+            as bytes or floats instead of doubles, to save memory
+          - display number of ratings
+          - give out memory usage also for find_iter
+          - move some statistics routines to the library because they are
+            used several times
+          - rename the arguments rating_predictions_file and
+            item_predictions_file to prediction_file for consistency in
+            all command-line programs
+        - IO
+          - add routines for KDD Cup 2011 data
+        - evaluation
+          - add simple dataset splitting
+          - improve grid search routines
+        - example programs
+          - fix a bug in the example programs (reported by Yongfeng Wang)
+        - data preprocessing scripts
+          - fix download_movielens.sh
+
 0.11	2011-03-04
         - add simple GUI demo for CeBIT
         - recommenders
