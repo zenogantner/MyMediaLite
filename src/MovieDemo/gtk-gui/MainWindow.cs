@@ -4,67 +4,37 @@
 public partial class MainWindow
 {
 	private global::Gtk.UIManager UIManager;
-
 	private global::Gtk.Action FilterAction;
-
 	private global::Gtk.Action LanguageAction;
-
 	private global::Gtk.Action UserAction;
-
 	private global::Gtk.Action SaveRatingsAsAction;
-
 	private global::Gtk.Action SaveRatingsAnonymouslyAction;
-
 	private global::Gtk.Action DiscardRatingsAction;
-
 	private global::Gtk.ToggleAction OnlyShow200MostPopularMoviesAction;
-
 	private global::Gtk.Action ByGenreAction;
-
 	private global::Gtk.ToggleAction ActionAction;
-
 	private global::Gtk.Action TODORestByProgramAction;
-
 	private global::Gtk.RadioAction EnglishAction;
-
 	private global::Gtk.RadioAction DeutschAction;
-
 	private global::Gtk.Action LoadUserAction;
-
 	private global::Gtk.Action AndrAction;
-
 	private global::Gtk.Action ArtusAction;
-
 	private global::Gtk.Action ChristophAction;
-
 	private global::Gtk.Action LucasAction;
-
 	private global::Gtk.Action KrisztianAction;
-
 	private global::Gtk.Action NgheAction;
-
 	private global::Gtk.Action OsmanAction;
-
 	private global::Gtk.Action RasoulAction;
-
 	private global::Gtk.Action SabrinaAction;
-
 	private global::Gtk.Action TomasAction;
-
 	private global::Gtk.Action ZenoAction;
-
 	private global::Gtk.VBox vbox1;
-
 	private global::Gtk.MenuBar menubar1;
-
 	private global::Gtk.Entry filter_entry;
-
 	private global::Gtk.HBox hbox1;
-
 	private global::Gtk.ScrolledWindow scrolledwindow2;
-
 	private global::Gtk.TreeView treeview1;
-
+	
 	protected virtual void Build ()
 	{
 		global::Stetic.Gui.Initialize (this);
@@ -161,7 +131,7 @@ public partial class MainWindow
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.menubar1]));
+		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.menubar1]));
 		w2.Position = 0;
 		w2.Expand = false;
 		w2.Fill = false;
@@ -173,7 +143,7 @@ public partial class MainWindow
 		this.filter_entry.IsEditable = true;
 		this.filter_entry.InvisibleChar = '●';
 		this.vbox1.Add (this.filter_entry);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.filter_entry]));
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.filter_entry]));
 		w3.Position = 1;
 		w3.Expand = false;
 		w3.Fill = false;
@@ -193,10 +163,10 @@ public partial class MainWindow
 		this.treeview1.Name = "treeview1";
 		this.scrolledwindow2.Add (this.treeview1);
 		this.hbox1.Add (this.scrolledwindow2);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1[this.scrolledwindow2]));
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.scrolledwindow2]));
 		w5.Position = 0;
 		this.vbox1.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1[this.hbox1]));
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox1]));
 		w6.Position = 2;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
