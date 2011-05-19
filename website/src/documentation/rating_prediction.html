@@ -13,7 +13,7 @@
 
 <div id="content">
 <pre>
-MyMediaLite rating prediction
+MyMediaLite Rating Prediction 1.01
 
  usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
@@ -40,21 +40,24 @@ MyMediaLite rating prediction
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
+
+   --help                           display this usage information and exit
+   --version                        display version information and exit
+
    --random-seed=N                  set random seed to N
    --data-dir=DIR                   load all files from DIR
    --user-attributes=FILE           file containing user attribute information
    --item-attributes=FILE           file containing item attribute information
-   --user-relations=FILE            file containing user relation information
-   --item-relations=FILE            file containing item relation information
-   --save-model=FILE                save computed model to FILE
-   --load-model=FILE                load model from FILE
-   --min-rating=NUM                 the smallest valid rating value
-   --max-rating=NUM                 the greatest valid rating value
-   --prediction-file=FILE           write the rating predictions to  FILE ('-' for STDOUT)
-   --cross-validation=K             perform k-fold crossvalidation on the training data
-                                    (does not need test data)
+   --user-relations=FILE                  file containing user relation information
+   --item-relations=FILE                  file containing item relation information
+   --save-model=FILE                      save computed model to FILE
+   --load-model=FILE                      load model from FILE
+   --min-rating=NUM                       the smallest valid rating value
+   --max-rating=NUM                       the greatest valid rating value
+   --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
+   --cross-validation=K                   perform k-fold crossvalidation on the training data
    --file-format=ml1m|kddcup2011|default
-   --rating-type=float|byte|double  store ratings as floats or bytes or doubles (default)
+   --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
 
   options for finding the right number of iterations (MF methods)
    --find-iter=N                  give out statistics every N iterations

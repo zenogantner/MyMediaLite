@@ -4,6 +4,7 @@
      { url => 'download/index.html',      title => 'Download' }
      { url => 'documentation/index.html', title => 'Documentation' }
      { url => 'examples/index.html',      title => 'Examples' }
+     { url => 'contribute.html',      title => 'Contribute' }
      { url => 'links.html',               title => 'Links' }
 ] %]
 
