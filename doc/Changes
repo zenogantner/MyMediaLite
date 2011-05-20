@@ -1,3 +1,9 @@
+1.02	2011-??-??
+	- recommenders
+	- command-line tools
+	  - item prediction: fix null pointer exception when no --test-file is
+            given
+
 1.01	2011-05-19
         - API changes
           - add interface IEntityMapping

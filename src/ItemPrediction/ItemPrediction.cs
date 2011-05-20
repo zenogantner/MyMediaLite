@@ -424,8 +424,8 @@ class ItemPrediction
 		// test data
 		if (test_ratio == 0)
 		{
-			// normal case
-        	test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
+			if (test_file != null)
+        		test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 		}
 		else
 		{
