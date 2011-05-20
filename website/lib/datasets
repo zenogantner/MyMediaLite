@@ -21,8 +21,8 @@
 #     { method => 'SlopeOne',                  hp => '',                                                                      rmse => '0.902', mae => '0.712', nmae => '0.1779' }
 #     { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.910', mae => '0.721', nmae => '0.1803' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.860', mae => '0.676', nmae => '0.1691' }
-#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.04 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.675', nmae => '0.1688' }
-#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.001 regularization=0.050 learn_rate=0.01 num_iter=60',   rmse => '0.876', mae => '0.688', nmae => '0.1720' }
+#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.675', nmae => '0.1688' }
+#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.001 regularization=0.050 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.857', mae => '0.677', nmae => '0.1692' }
  
 #     commented out results: 5-fold CV
    ]

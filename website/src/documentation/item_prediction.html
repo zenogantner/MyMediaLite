@@ -13,7 +13,7 @@
 
 <div id="content">
 <pre>
-MyMediaLite item prediction from implicit feedback
+MyMediaLite Item Prediction from Implicit Feedback 1.01
 
  usage:   ItemPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
@@ -21,7 +21,7 @@ MyMediaLite item prediction from implicit feedback
    - ItemAttributeSVM C=1 Gamma=0.002 (needs --item-attributes=FILE)
    - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs --item-attributes=FILE)
    - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
-   - ItemAttributeKNN k=80 (needs --item--attributes=FILE)
+   - ItemAttributeKNN k=80 (needs --item-attributes=FILE)
    - ItemKNN k=80
    - MostPopular
    - Random
@@ -38,6 +38,9 @@ MyMediaLite item prediction from implicit feedback
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
+
+   --help                           display this usage information and exit
+   --version                        display version information and exit
 
    --random-seed=N
    --data-dir=DIR               load all files from DIR
