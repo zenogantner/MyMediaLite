@@ -1,5 +1,7 @@
-1.02	2011-??-??
+1.02	2011-05-23
 	- recommenders
+          - BPR_Linear: less verbose output
+          - BPRMF: fix loading/saving of models
 	- command-line tools
 	  - item prediction: fix null pointer exception when no --test-file is
             given

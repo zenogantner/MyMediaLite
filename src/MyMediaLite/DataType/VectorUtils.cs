@@ -42,8 +42,8 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Read a collection of doubles from a TextReader object</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>		
-		/// <returns>a collection of double values</returns>
-		static public ICollection<double> ReadVector(TextReader reader)
+		/// <returns>a list of double values</returns>
+		static public IList<double> ReadVector(TextReader reader)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';			

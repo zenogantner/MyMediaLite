@@ -124,7 +124,7 @@ namespace MyMediaLite.ItemRecommendation
 				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new Exception(
+					throw new IOException(
 									string.Format("Number of user and item factors must match: {0} != {1}",
 												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 

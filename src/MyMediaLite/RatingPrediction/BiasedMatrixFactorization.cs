@@ -209,9 +209,9 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = double.Parse(reader.ReadLine(), ni);
 
-				ICollection<double> user_bias = VectorUtils.ReadVector(reader);
+				IList<double> user_bias = VectorUtils.ReadVector(reader);
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
-				ICollection<double> item_bias = VectorUtils.ReadVector(reader);
+				IList<double> item_bias = VectorUtils.ReadVector(reader);
 				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)

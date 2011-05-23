@@ -19,9 +19,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -444,9 +446,48 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <inheritdoc/>
-		public override void LoadModel(string filename)
+		public override void SaveModel(string file)
 		{
-			base.LoadModel(filename);
+			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
+			{
+				IMatrixUtils.WriteMatrix(writer, user_factors);
+				VectorUtils.WriteVector(writer, item_bias);
+				IMatrixUtils.WriteMatrix(writer, item_factors);
+			}
+		}
+
+		/// <inheritdoc/>
+		public override void LoadModel(string file)
+		{
+			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
+			{
+				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+				IList<double> item_bias = VectorUtils.ReadVector(reader);
+				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+
+				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
+					throw new IOException(
+									string.Format("Number of user and item factors must match: {0} != {1}",
+												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+				if (item_bias.Count != item_factors.dim1)
+					throw new IOException(
+								  string.Format(
+									  "Number of items must be the same for biases and factors: {0} != {1}",
+									  item_bias.Count, item_factors.dim1));
+
+				this.MaxUserID = user_factors.NumberOfRows - 1;
+				this.MaxItemID = item_factors.NumberOfRows - 1;
+
+				// assign new model
+				if (this.num_factors != user_factors.NumberOfColumns)
+				{
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
+					this.num_factors = user_factors.NumberOfColumns;
+				}
+				this.user_factors = user_factors;
+				this.item_bias    = item_bias;
+				this.item_factors = item_factors;
+			}
 			random = Util.Random.GetInstance();
 		}
 

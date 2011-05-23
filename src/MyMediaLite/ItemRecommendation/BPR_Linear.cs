@@ -93,7 +93,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			// prepare fast sampling, if necessary
 			int support_data_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-			Console.Error.WriteLine("BPR-LIN sds=" + support_data_size);
+			Console.Error.WriteLine("sds=" + support_data_size);
 			if (support_data_size <= fast_sampling_memory_limit)
 			{
 				fast_sampling = true;
@@ -116,10 +116,7 @@ namespace MyMediaLite.ItemRecommendation
 			MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
 
 			for (int i = 0; i < NumIter; i++)
-			{
 				Iterate();
-				Console.Error.WriteLine(i);
-			}
 		}
 
 		/// <summary>
