@@ -6,6 +6,7 @@
 	- command-line tools
 	  - item prediction: fix null pointer exception when no --test-file is
             given
+          - rating prediction: save model file in all cases when requested
         - documentation
           - fix Doxygen API doc (wrong path)
           - Doxygen: do not build LaTeX doc; add main page
