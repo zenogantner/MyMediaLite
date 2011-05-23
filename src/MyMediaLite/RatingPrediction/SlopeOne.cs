@@ -48,9 +48,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
-			// default value if no prediction can be made
-			global_average = Ratings.Average;
-
 			// create data structure
 			diff_matrix = new SkewSymmetricSparseMatrix(MaxItemID + 1);
 			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
@@ -100,6 +97,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
+			// default value if no prediction can be made
+			global_average = Ratings.Average;
+
 			// compute difference sums and frequencies
 			foreach (var by_user_indices in Ratings.ByUser)
 			{
@@ -135,8 +135,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var global_average = double.Parse(reader.ReadLine(), ni);
 
-				var diff_matrix = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);  // TODO take symmetric matrix into account
-				var freq_matrix = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix); // TODO take anti-symmetric matrix into account
+				var diff_matrix = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix);  // TODO take symmetric matrix into account for smaller model files
+				var freq_matrix = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix); // TODO take anti-symmetric matrix into account for smaller model files
 
 				// assign new model
 				this.global_average = global_average;
