@@ -94,9 +94,8 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// compute global average
-			double global_average = Ratings.Average;
+			global_bias = ratings.Average;
 
-			global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
 		}
@@ -133,11 +132,11 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = global_bias + user_bias[u] + item_bias[i]
-				                   + MatrixUtils.RowScalarProduct(user_factors, u, item_factors, i);
+				double dot_product = user_bias[u] + item_bias[i] + MatrixUtils.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
+
 				double err = ratings[index] - p;
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
@@ -165,7 +164,6 @@ namespace MyMediaLite.RatingPrediction
 					{
 						double delta_i = gradient_common * u_f - RegI * i_f;
 						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
-						// item_factors[i, f] += learn_rate * delta_i;
 					}
 				}
 			}
@@ -175,10 +173,9 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int user_id, int item_id)
 		{
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
-				return MinRating + ( 1 / (1 + Math.Exp(-global_bias)) ) * (MaxRating - MinRating);
+				return global_bias;
 
-			double score = global_bias + user_bias[user_id] + item_bias[item_id]
-			             + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double score = user_bias[user_id] + item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
 		}
