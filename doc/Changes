@@ -7,9 +7,10 @@
 	  - item prediction: fix null pointer exception when no --test-file is
             given
         - documentation
+          - fix Doxygen API doc (wrong path)
+          - Doxygen: do not build LaTeX doc; add main page
           - remove <inheritdoc/> XML tags - currently not supported by any
             tool we use
-          - fix Doxygen API doc
 
 1.01	2011-05-19
         - API changes

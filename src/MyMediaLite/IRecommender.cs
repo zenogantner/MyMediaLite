@@ -17,6 +17,12 @@
 
 namespace MyMediaLite
 {
+	// Doxygen main page
+	/// \mainpage MyMediaLite API Documentation
+	/// You can browse the documentation by class name, class hierarchy, and member name. Just click on the "Classes" tab.
+	///
+	/// Please report problems and missing information to the MyMediaLite authors: http://ismll.de/mymedialite/contact.html
+
 	/// <summary>Generic interface for simple recommenders</summary>
 	/// <remarks></remarks>
 	public interface IRecommender
