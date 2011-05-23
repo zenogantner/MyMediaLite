@@ -309,7 +309,6 @@ class RatingPrediction
 			} // for
 
 			DisplayIterationStats();
-			Recommender.SaveModel(recommender, save_model_file);
 		}
 		else
 		{
@@ -331,7 +330,6 @@ class RatingPrediction
 				{
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
         			Console.Write(" training_time " + seconds + " ");
-					Recommender.SaveModel(recommender, save_model_file);
 				}
 			}
 			else
@@ -359,6 +357,7 @@ class RatingPrediction
 
 			Console.WriteLine();
 		}
+		Recommender.SaveModel(recommender, save_model_file);
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 

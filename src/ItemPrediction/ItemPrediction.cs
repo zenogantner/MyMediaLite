@@ -281,8 +281,6 @@ class ItemPrediction
 					});
 					eval_time_stats.Add(t.TotalSeconds);
 
-					Recommender.SaveModel(recommender, save_model_file, i);
-
 					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 					{
 							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
@@ -357,8 +355,8 @@ class ItemPrediction
 			}
 			Console.WriteLine();
 		}
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
 		Recommender.SaveModel(recommender, save_model_file);
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
     static void LoadData(string data_dir, string training_file, string test_file,
