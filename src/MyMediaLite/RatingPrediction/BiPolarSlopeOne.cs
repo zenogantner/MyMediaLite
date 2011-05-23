@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -41,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
   		private SymmetricSparseMatrix<int> freq_matrix_dislike;
 
 		private double global_average;
-		private UserAverage user_average = new UserAverage();
+		private IList<double> user_average;
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
@@ -110,13 +111,17 @@ namespace MyMediaLite.RatingPrediction
 			// default value if no prediction can be made
 			global_average = Ratings.Average;
 
-			user_average.Ratings = Ratings;
-			user_average.Train();
-
 			// compute difference sums and frequencies
 			foreach (int user_id in Ratings.AllUsers)
 			{
-				double user_avg = user_average[user_id];
+				double user_avg = 0;
+				foreach (int index in Ratings.ByUser[user_id])
+					user_avg += Ratings[index];
+				user_avg /= Ratings.ByUser[user_id].Count;
+
+				// store for later use
+				user_average[user_id] = user_avg;
+
 				foreach (int index in Ratings.ByUser[user_id])
 					foreach (int index2 in Ratings.ByUser[user_id])
 						if (Ratings[index] > user_avg && Ratings[index2] > user_avg)
@@ -129,6 +134,7 @@ namespace MyMediaLite.RatingPrediction
 							freq_matrix_dislike[Ratings.Items[index], Ratings.Items[index2]] += 1;
 							diff_matrix_dislike[Ratings.Items[index], Ratings.Items[index2]] += (float) (Ratings[index] - Ratings[index2]);
 						}
+
 			}
 
 			// compute average differences
@@ -151,6 +157,7 @@ namespace MyMediaLite.RatingPrediction
 			freq_matrix_like = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 			diff_matrix_dislike = new SkewSymmetricSparseMatrix(MaxItemID + 1);
 			freq_matrix_dislike = new SymmetricSparseMatrix<int>(MaxItemID + 1);
+			user_average = new double[MaxUserID + 1];
 		}
 
 		///
@@ -169,6 +176,7 @@ namespace MyMediaLite.RatingPrediction
 				var freq_matrix_like = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
 				var diff_matrix_dislike = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_dislike);
 				var freq_matrix_dislike = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_dislike);
+				var user_average = VectorUtils.ReadVector(reader);
 
 				// assign new model
 				this.global_average = global_average;
@@ -176,6 +184,7 @@ namespace MyMediaLite.RatingPrediction
 				this.freq_matrix_like = freq_matrix_like;
 				this.diff_matrix_dislike = diff_matrix_dislike;
 				this.freq_matrix_dislike = freq_matrix_dislike;
+				this.user_average = user_average;
 			}
 		}
 
@@ -192,6 +201,7 @@ namespace MyMediaLite.RatingPrediction
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix_like);
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix_dislike);
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix_dislike);
+				VectorUtils.WriteVector(writer, user_average);
 			}
 		}
 
