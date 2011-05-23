@@ -38,7 +38,7 @@ namespace MyMediaLite.Ensemble
 		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			foreach (var recommender in this.recommenders)
@@ -47,7 +47,7 @@ namespace MyMediaLite.Ensemble
 			this.weight_sum = weights.Sum();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			double result = 0;
@@ -58,7 +58,7 @@ namespace MyMediaLite.Ensemble
 			return (double) result / weight_sum;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
@@ -75,7 +75,7 @@ namespace MyMediaLite.Ensemble
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string file)
 		{
 			var ni = new NumberFormatInfo();

@@ -26,17 +26,17 @@ namespace MyMediaLite.ItemRecommendation
 		// <returns>true if the engine can produce recommendations for the given user, false otherwise</returns>
 		// bool CanPredict(int user_id);
 
-		/// <inheritdoc/>
+		///
 		void AddFeedback(int user_id, int item_id);
-		/// <inheritdoc/>
+		///
 		void RemoveFeedback(int user_id, int item_id);
-		/// <inheritdoc/>
+		///
 		void AddUser(int user_id);
-		/// <inheritdoc/>
+		///
 		void AddItem(int item_id);
-		/// <inheritdoc/>
+		///
 		void RemoveUser(int user_id);
-		/// <inheritdoc/>
+		///
 		void RemoveItem(int item_id);
 	}
 }

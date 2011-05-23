@@ -80,7 +80,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
-		/// <inheritdoc/>
+		///
 		protected override void InitModel()
 		{
 			base.InitModel();
@@ -244,7 +244,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddFeedback(int user_id, int item_id)
 		{
 			base.AddFeedback(user_id, item_id);
@@ -257,7 +257,7 @@ namespace MyMediaLite.ItemRecommendation
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveFeedback(int user_id, int item_id)
 		{
 			base.RemoveFeedback(user_id, item_id);
@@ -270,7 +270,7 @@ namespace MyMediaLite.ItemRecommendation
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddUser(int user_id)
 		{
 			if (user_id > MaxUserID)
@@ -282,7 +282,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddUser(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddItem(int item_id)
 		{
 			if (item_id > MaxItemID)
@@ -294,7 +294,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveUser(int user_id)
 		{
 			base.RemoveUser(user_id);
@@ -309,7 +309,7 @@ namespace MyMediaLite.ItemRecommendation
 			user_factors.SetRowToOneValue(user_id, 0);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveItem(int item_id)
 		{
 			base.RemoveItem(item_id);
@@ -411,7 +411,7 @@ namespace MyMediaLite.ItemRecommendation
 			user_neg_items[u] = neg_list.ToArray();
 		}
 
-		/// <inheritdoc/>
+		///
 		protected void CheckSampling()
 		{
 			try
@@ -439,13 +439,13 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			return item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string file)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
@@ -456,7 +456,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string file)
 		{
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
@@ -491,7 +491,7 @@ namespace MyMediaLite.ItemRecommendation
 			random = Util.Random.GetInstance();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

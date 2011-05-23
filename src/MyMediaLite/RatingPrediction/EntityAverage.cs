@@ -71,13 +71,13 @@ namespace MyMediaLite.RatingPrediction
 					entity_averages[i] = global_average;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string file)
 		{
 			// do nothing
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string file)
 		{
 			Train();

@@ -66,7 +66,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual bool IsSymmetric
 		{
 			get	{
@@ -83,7 +83,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
 			return new SparseBooleanMatrix();

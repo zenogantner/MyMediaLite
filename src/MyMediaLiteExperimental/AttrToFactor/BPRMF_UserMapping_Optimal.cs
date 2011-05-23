@@ -28,7 +28,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for BPR loss</summary>
 	public class BPRMF_UserMapping_Optimal : BPRMF_UserMapping
 	{
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-factor weight matrix
@@ -43,7 +43,7 @@ namespace MyMediaLite.AttrToFactor
 				IterateMapping();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void IterateMapping()
 		{
 
@@ -80,7 +80,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
 		{
 			var factor_representation = new double[num_factors];
@@ -92,7 +92,7 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

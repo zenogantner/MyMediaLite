@@ -36,7 +36,7 @@ namespace MyMediaLite.Data
 			DateTimes = new DateTime[size];
 		}
 
-		/// <inheritdoc/>
+		///
 		public void Add(int user_id, int item_id, double rating, DateTime datetime)
 		{
 			DateTimes[pos] = datetime; // must be before base.Add because pos changes in there ...

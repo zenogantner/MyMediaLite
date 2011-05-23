@@ -28,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class WeightedItemKNN : ItemKNN
 	{
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id > MaxUserID))
@@ -50,7 +50,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return string.Format("WeightedItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());

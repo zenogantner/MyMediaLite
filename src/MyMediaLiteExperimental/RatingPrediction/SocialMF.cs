@@ -28,12 +28,9 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This implementation assumes a binary and symmetrical trust network.
 	///
-	/// <inproceedings>
-	///   <author>Mohsen Jamali</author> <author>Martin Ester</author>
-    ///   <title>A matrix factorization technique with trust propagation for recommendation in social networks</title>
-    ///   <booktitle>RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems</booktitle>
-    ///   <year>2010</year>
-    /// </inproceedings>
+	/// Mohsen Jamali, Martin Ester:
+    /// A matrix factorization technique with trust propagation for recommendation in social networks
+    /// RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
@@ -48,20 +45,20 @@ namespace MyMediaLite.RatingPrediction
 		public bool StochasticLearning { get; set; }
 		*/
 
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix UserRelation { get { return this.user_neighbors; } set {	this.user_neighbors = value; } }
 		private SparseBooleanMatrix user_neighbors;
 
 		/// <summary>the number of users</summary>
 		public int NumUsers { get { return MaxUserID + 1; } }
 
-		/// <inheritdoc/>
+		///
 		protected override void InitModel()
 		{
 			base.InitModel();
 			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
 			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
-			
+
 			// init latent factor matrices
 	       	user_factors = new Matrix<double>(NumUsers, NumFactors);
 	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
@@ -71,12 +68,12 @@ namespace MyMediaLite.RatingPrediction
 			user_bias = new double[NumUsers];
 			item_bias = new double[ratings.MaxItemID + 1];
 		}
-		
-		/// <inheritdoc/>
+
+		///
         public override void Train()
 		{
 			InitModel();
-			
+
 			Console.Error.WriteLine("num_users={0}, num_items={1}", NumUsers, item_bias.Length);
 
 			// compute global average
@@ -89,7 +86,7 @@ namespace MyMediaLite.RatingPrediction
 				Iterate(ratings.RandomIndex, true, true);
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			// We ignore the method's arguments.
@@ -219,7 +216,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

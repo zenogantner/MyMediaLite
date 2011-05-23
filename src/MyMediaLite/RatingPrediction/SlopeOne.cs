@@ -43,7 +43,7 @@ namespace MyMediaLite.RatingPrediction
 
 		private double global_average;
 
-		/// <inheritdoc/>
+		///
 		protected override void InitModel()
 		{
 			base.InitModel();
@@ -56,7 +56,7 @@ namespace MyMediaLite.RatingPrediction
 			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
@@ -68,7 +68,7 @@ namespace MyMediaLite.RatingPrediction
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if (item_id > MaxItemID || user_id > MaxUserID)
@@ -95,7 +95,7 @@ namespace MyMediaLite.RatingPrediction
 			return (double) prediction / frequency;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			InitModel();
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 					diff_matrix[i, j] /= freq_matrix[i, j];
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string file)
 		{
 			InitModel();
@@ -145,7 +145,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string file)
 		{
 			var ni = new NumberFormatInfo();
@@ -159,7 +159,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			 return string.Format("SlopeOne");

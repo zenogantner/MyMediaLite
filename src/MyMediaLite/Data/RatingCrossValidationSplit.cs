@@ -23,13 +23,13 @@ namespace MyMediaLite.Data
 	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
 	public class RatingCrossValidationSplit : ISplit<IRatings>
 	{
-		/// <inheritdoc/>
+		///
 		public int NumberOfFolds { get; private set; }
 
-		/// <inheritdoc/>
+		///
 		public List<IRatings> Train { get; private set; }
 
-		/// <inheritdoc/>
+		///
 		public List<IRatings> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of rating prediction data</summary>

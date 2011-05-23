@@ -27,19 +27,19 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class ItemAverage : EntityAverage
 	{
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			base.Train(Ratings.Items, Ratings.MaxItemID);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return (item_id <= Ratings.MaxItemID);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if (item_id <= Ratings.MaxItemID)
@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 				return global_average;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return "ItemAverage";

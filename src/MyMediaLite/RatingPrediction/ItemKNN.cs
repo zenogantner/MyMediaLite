@@ -30,7 +30,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Matrix indicating which item was rated by which user</summary>
 		protected SparseBooleanMatrix data_item;
 
-		/// <inheritdoc/>
+		///
 		public override IRatings Ratings
 		{
 			set {
@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public ItemKNN() : base() { }
 
 		/// <summary>Get positively correlated entities</summary>
@@ -94,7 +94,7 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			base.Add(user_id, item_id, rating);
@@ -102,14 +102,14 @@ namespace MyMediaLite.RatingPrediction
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void UpdateRating(int user_id, int item_id, double rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveRating(int user_id, int item_id)
 		{
 			base.RemoveRating(user_id, item_id);
@@ -117,14 +117,14 @@ namespace MyMediaLite.RatingPrediction
 			RetrainItem(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddItem(int item_id)
 		{
 			base.AddUser(item_id);
 			correlation.AddEntity(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			base.LoadModel(filename);

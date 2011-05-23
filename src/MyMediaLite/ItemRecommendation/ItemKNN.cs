@@ -28,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class ItemKNN : KNN
 	{
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			correlation = BinaryCosine.Create(Feedback.ItemMatrix);
@@ -39,7 +39,7 @@ namespace MyMediaLite.ItemRecommendation
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id > MaxUserID))
@@ -55,7 +55,7 @@ namespace MyMediaLite.ItemRecommendation
 			return (double) count / k;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return string.Format("ItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());

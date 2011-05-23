@@ -61,7 +61,7 @@ namespace MyMediaLite.Correlation
 			return cm;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...

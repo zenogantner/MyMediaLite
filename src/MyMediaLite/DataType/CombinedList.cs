@@ -36,7 +36,7 @@ namespace MyMediaLite.DataType
 			second = list2;
 		}
 
-		/// <inheritdoc/>
+		///
 		public T this[int index]
 		{
 			get {
@@ -50,22 +50,22 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public int Count { get { return first.Count + second.Count; } }
 
-		/// <inheritdoc/>
+		///
 		public bool IsReadOnly { get { return first.IsReadOnly || second.IsReadOnly; } }
 
-		/// <inheritdoc/>
+		///
 		public void Add(T item)
 		{
 			second.Add(item);
 		}
 
-		/// <inheritdoc/>
+		///
 		public void Clear() { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public bool Contains(T item) {
 			for (int i = 0; i < first.Count; i++)
 				if (first[i].Equals(item))
@@ -76,19 +76,19 @@ namespace MyMediaLite.DataType
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public void CopyTo(T[] array, int i) { throw new NotImplementedException(); }
 
-		/// <inheritdoc/>
+		///
 		public void Insert(int index, T item) { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public int IndexOf(T item) { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public bool Remove(T item) { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public void RemoveAt(int index)
 		{
 			if (index < first.Count)
@@ -97,7 +97,7 @@ namespace MyMediaLite.DataType
 				second.RemoveAt(index - first.Count);
 		}
 
-		/// <inheritdoc/>
+		///
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			var list = new List<T>(first);
@@ -105,7 +105,7 @@ namespace MyMediaLite.DataType
 			return list.GetEnumerator();
 		}
 
-		/// <inheritdoc/>
+		///
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			var list = new List<T>(first);

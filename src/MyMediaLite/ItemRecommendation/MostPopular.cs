@@ -35,7 +35,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>View count</summary>
 		protected int[] view_count;
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			view_count = new int[MaxItemID + 1];
@@ -45,7 +45,7 @@ namespace MyMediaLite.ItemRecommendation
 					view_count[i]++;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if (item_id <= MaxItemID)
@@ -54,27 +54,27 @@ namespace MyMediaLite.ItemRecommendation
 				return 0;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveItem (int item_id)
 		{
 			view_count[item_id] = 0;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddFeedback(int user_id, int item_id)
 		{
 			base.AddFeedback(user_id, item_id);
 			view_count[item_id]++;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveFeedback(int user_id, int item_id)
 		{
 			base.RemoveFeedback(user_id, item_id);
 			view_count[item_id]--;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
@@ -85,7 +85,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
@@ -105,7 +105,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return "MostPopular";

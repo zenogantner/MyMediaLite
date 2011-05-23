@@ -24,17 +24,17 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted user-based kNN with cosine similarity</summary>
 	public class UserKNNCosine : UserKNN
 	{
-		/// <inheritdoc/>
+		///
 		public UserKNNCosine() : base() { }
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			base.Train();
 			this.correlation = BinaryCosine.Create(data_user);
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override void RetrainUser(int user_id)
 		{
 			base.RetrainUser(user_id);
@@ -43,7 +43,7 @@ namespace MyMediaLite.RatingPrediction
 					correlation[user_id, i] = BinaryCosine.ComputeCorrelation(data_user[user_id], data_user[i]);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

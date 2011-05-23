@@ -35,7 +35,7 @@ namespace MyMediaLite.AttrToFactor
 
 		CorrelationMatrix item_correlation;
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			BinaryCosine cosine_correlation = new BinaryCosine(MaxItemID + 1);
@@ -76,7 +76,7 @@ namespace MyMediaLite.AttrToFactor
 			return est_factors;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

@@ -30,7 +30,7 @@ namespace MyMediaLite.Data
 	{
 		float[] float_values;
 
-		/// <inheritdoc/>
+		///
 		public override double this[int index]
 		{
 			get {
@@ -41,7 +41,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double this[int user_id, int item_id]
 		{
 			get {
@@ -54,7 +54,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public StaticFloatRatings(int size)
 		{
 			Users  = new int[size];
@@ -62,19 +62,19 @@ namespace MyMediaLite.Data
 			float_values = new float[size];
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			Add(user_id, item_id, (float) rating);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, byte rating)
 		{
 			Add(user_id, item_id, (float) rating);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, float rating)
 		{
 			if (pos == float_values.Length)
@@ -93,7 +93,7 @@ namespace MyMediaLite.Data
 			pos++;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override bool TryGet(int user_id, int item_id, out double rating)
 		{
 			rating = double.NegativeInfinity;
@@ -108,7 +108,7 @@ namespace MyMediaLite.Data
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Get(int user_id, int item_id, ICollection<int> indexes)
 		{
 			foreach (int index in indexes)
@@ -118,7 +118,7 @@ namespace MyMediaLite.Data
 			throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
-		/// <inheritdoc/>
+		///
 		public override bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
 		{
 			rating = double.NegativeInfinity;

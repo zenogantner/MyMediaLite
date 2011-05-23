@@ -26,7 +26,7 @@ namespace MyMediaLite.Data
 	{
 		private int MaxEntityID { get; set; }
 		
-		/// <inheritdoc/>
+		///
 		public ICollection<int> OriginalIDs {
 			get {
 				// TODO maybe there is an elegant LINQ expression to generate this list?
@@ -38,31 +38,31 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public ICollection<int> InternalIDs { get { return OriginalIDs; } }
 
-		/// <inheritdoc/>
+		///
 		public int ToOriginalID(int internal_id)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, internal_id);
 			return internal_id;
 		}
 
-		/// <inheritdoc/>
+		///
 		public int ToInternalID(int original_id)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, original_id);
 			return original_id;
 		}
 
-		/// <inheritdoc/>
+		///
 		public IList<int> ToOriginalID(IList<int> internal_id_list)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, internal_id_list.Max());
 			return new List<int>(internal_id_list);
 		}
 
-		/// <inheritdoc/>		
+		///		
 		public IList<int> ToInternalID(IList<int> original_id_list)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, original_id_list.Max());

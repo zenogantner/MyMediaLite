@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 			return this.MemberwiseClone();
 		}
 
-		/// <inheritdoc/>
+		///
 		public abstract double Predict(int user_id, int item_id);
 
 		/// <summary>Inits the recommender model</summary>
@@ -79,57 +79,57 @@ namespace MyMediaLite.RatingPrediction
 			MaxItemID = Ratings.MaxItemID;
 		}
 
-		/// <inheritdoc/>
+		///
 		public abstract void Train();
 
-		/// <inheritdoc/>
+		///
 		public abstract void SaveModel(string filename);
 
-		/// <inheritdoc/>
+		///
 		public abstract void LoadModel(string filename);
 
-		/// <inheritdoc/>
+		///
 		public virtual bool CanPredict(int user_id, int item_id)
 		{
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void Add(int user_id, int item_id, double rating)
 		{
 			ratings.Add(user_id, item_id, rating);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void UpdateRating(int user_id, int item_id, double rating)
 		{
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveRating(int user_id, int item_id)
 		{
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void AddUser(int user_id)
 		{
 			MaxUserID = Math.Max(MaxUserID, user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void AddItem(int item_id)
 		{
 			MaxItemID = Math.Max(MaxItemID, item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveUser(int user_id)
 		{
 			if (user_id == MaxUserID)
 				MaxUserID--;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveItem(int item_id)
 		{
 			if (item_id == MaxItemID)

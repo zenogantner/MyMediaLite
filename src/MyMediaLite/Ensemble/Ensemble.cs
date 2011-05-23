@@ -61,10 +61,10 @@ namespace MyMediaLite.Ensemble
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public abstract double Predict(int user_id, int item_id);
 
-		/// <inheritdoc/>
+		///
 		public virtual bool CanPredict(int user_id, int item_id)
 		{
 			foreach (var recommender in recommenders)
@@ -73,12 +73,12 @@ namespace MyMediaLite.Ensemble
 			return true;
 		}
 
-		/// <inheritdoc/>
+		///
 		public abstract void SaveModel(string file);
-		/// <inheritdoc/>
+		///
 		public abstract void LoadModel(string file);
 
-		/// <inheritdoc/>
+		///
 		public virtual void Train()
 		{
 			foreach (IRecommender recommender in recommenders)

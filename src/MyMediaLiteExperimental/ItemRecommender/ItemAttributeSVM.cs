@@ -30,7 +30,7 @@ namespace MyMediaLite.ItemRecommendation
     /// </remarks>
     public class ItemAttributeSVM : ItemRecommender, IItemAttributeAwareRecommender
     {
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -42,7 +42,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 		private SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc/>
+		///
 	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>C hyperparameter for the SVM</summary>
@@ -55,7 +55,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		private SVM.Model[] models;
 
-        /// <inheritdoc/>
+        ///
         public override void Train()
         {
 			int num_users = Feedback.UserMatrix.NumberOfRows;
@@ -95,7 +95,7 @@ namespace MyMediaLite.ItemRecommendation
 			return item_svm_data;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			// TODO speed improvement: do not create nodes on the fly
@@ -103,19 +103,19 @@ namespace MyMediaLite.ItemRecommendation
 			// TODO make sure we return score, not class
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			throw new NotImplementedException();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			throw new NotImplementedException();
 		}
 
-        /// <inheritdoc/>
+        ///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

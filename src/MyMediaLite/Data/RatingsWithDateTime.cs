@@ -34,7 +34,7 @@ namespace MyMediaLite.Data
 			DateTimes = new List<DateTime>();
 		}
 
-		/// <inheritdoc/>
+		///
 		public void Add(int user_id, int item_id, double rating, DateTime datetime)
 		{
 			DateTimes.Add(datetime);

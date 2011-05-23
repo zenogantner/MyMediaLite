@@ -23,28 +23,28 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class Random : ItemRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public override void Train() { }
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			return Util.Random.GetInstance().NextDouble();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			// do nothing
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			// do nothing
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return "Random";

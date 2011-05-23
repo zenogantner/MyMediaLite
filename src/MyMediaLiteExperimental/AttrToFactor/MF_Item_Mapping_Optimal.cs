@@ -24,7 +24,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <summary>biased MF with item mapping, optimized for RMSE on the ratings</summary>
 	public class MF_Item_Mapping_Optimal : MF_ItemMapping
 	{
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, NumFactors + 1);

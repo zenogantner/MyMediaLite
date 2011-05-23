@@ -24,13 +24,13 @@ namespace MyMediaLite.Data
 	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
 	public class RatingsSimpleSplit : ISplit<IRatings>
 	{
-		/// <inheritdoc/>
+		///
 		public int NumberOfFolds { get { return 1; } }
 
-		/// <inheritdoc/>
+		///
 		public List<IRatings> Train { get; private set; }
 
-		/// <inheritdoc/>
+		///
 		public List<IRatings> Test { get; private set; }
 
 		/// <summary>Create a simple split of rating prediction data</summary>

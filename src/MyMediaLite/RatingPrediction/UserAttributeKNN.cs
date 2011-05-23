@@ -31,7 +31,7 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
@@ -43,20 +43,20 @@ namespace MyMediaLite.RatingPrediction
 		}
 		private SparseBooleanMatrix user_attributes;
 
-		/// <inheritdoc/>
+		///
 		public int NumUserAttributes { get; set; }
 
-		/// <inheritdoc/>
+		///
 		public UserAttributeKNN() : base() { }
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			base.Train();
 			this.correlation = BinaryCosine.Create(user_attributes);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return string.Format("UserAttributeKNN k={0} reg_u={1} reg_i={2}",

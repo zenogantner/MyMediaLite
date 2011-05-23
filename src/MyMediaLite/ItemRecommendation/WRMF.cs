@@ -48,7 +48,7 @@ namespace MyMediaLite.ItemRecommendation
 		public double Regularization { get { return regularization;	} set {	regularization = value;	} }
 		double regularization = 0.015;
 
-		/// <inheritdoc/>
+		///
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
@@ -130,13 +130,13 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double ComputeFit()
 		{
 			return -1;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

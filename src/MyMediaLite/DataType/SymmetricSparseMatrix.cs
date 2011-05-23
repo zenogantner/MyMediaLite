@@ -73,7 +73,7 @@ namespace MyMediaLite.DataType
 		/// <param name="dimension">the dimension (number of rows/columns)</param>
 		public SymmetricSparseMatrix(int dimension) : base(dimension, dimension) { }
 
-		/// <inheritdoc/>
+		///
 		public override IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
 			if (num_rows != num_columns)
@@ -81,7 +81,7 @@ namespace MyMediaLite.DataType
 			return new SymmetricSparseMatrix<T>(num_rows);
 		}
 		
-		/// <inheritdoc/>
+		///
 		public override IList<Pair<int, int>> NonEmptyEntryIDs
 		{
 			get	{
@@ -97,7 +97,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 		
-		/// <inheritdoc/>
+		///
 		public override int NumberOfNonEmptyEntries
 		{
 			get	{

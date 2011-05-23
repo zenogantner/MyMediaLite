@@ -29,10 +29,10 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>boolean matrix indicating which user rated which item</summary>
 		protected SparseBooleanMatrix data_user;
 
-		/// <inheritdoc/>
+		///
 		public UserKNN() : base() { }
 
-		/// <inheritdoc/>
+		///
 		public override IRatings Ratings
 		{
 			set	{
@@ -95,7 +95,7 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			base.Add(user_id, item_id, rating);
@@ -103,14 +103,14 @@ namespace MyMediaLite.RatingPrediction
 			RetrainUser(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void UpdateRating(int user_id, int item_id, double rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
 			RetrainUser(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveRating(int user_id, int item_id)
 		{
 			base.RemoveRating(user_id, item_id);
@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 			RetrainUser(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddUser(int user_id)
 		{
 			base.AddUser(user_id);

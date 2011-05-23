@@ -31,13 +31,13 @@ namespace MyMediaLite.Data
 		/// <summary>The position where the next rating will be stored</summary>
 		protected int pos = 0;
 
-		/// <inheritdoc/>
+		///
 		public override int Count { get { return pos; } }
 		
-		/// <inheritdoc/>
+		///
 		public StaticRatings() { }
 		
-		/// <inheritdoc/>
+		///
 		public StaticRatings(int size)
 		{
 			Users  = new int[size];
@@ -45,7 +45,7 @@ namespace MyMediaLite.Data
 			Values = new double[size];
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			if (pos == Values.Count)
@@ -64,19 +64,19 @@ namespace MyMediaLite.Data
 			pos++;
 		}
 		
-		/// <inheritdoc/>
+		///
 		public override void RemoveAt(int index)
 		{
 			throw new NotSupportedException();
 		}
 		
-		/// <inheritdoc/>
+		///
 		public override void RemoveUser(int user_id)
 		{
 			throw new NotSupportedException();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveItem(int item_id)
 		{
 			throw new NotSupportedException();

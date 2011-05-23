@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -41,13 +41,13 @@ namespace MyMediaLite.RatingPrediction
 		}
 		private SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc/>
+		///
 		public int NumItemAttributes { get;	set; }
 
-		/// <inheritdoc/>
+		///
 		public ItemAttributeKNN() : base() { }
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			base.Train();
@@ -55,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return string.Format("ItemAttributeKNN k={0} reg_u={1} reg_i={2}",

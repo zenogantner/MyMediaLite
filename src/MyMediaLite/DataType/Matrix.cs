@@ -36,7 +36,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Dimension 2, the number of columns</summary>
 		public int dim2;
 
-		/// <inheritdoc/>
+		///
 		public virtual bool IsSymmetric
 		{
 			get {
@@ -50,10 +50,10 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public int NumberOfRows { get { return dim1; } }
 
-		/// <inheritdoc/>
+		///
 		public int NumberOfColumns { get { return dim2; } }
 
 		/// <summary>Initializes a new instance of the Matrix class</summary>
@@ -81,13 +81,13 @@ namespace MyMediaLite.DataType
 			matrix.data.CopyTo(this.data, 0);
 		}
 
-		/// <inheritdoc/>
+		///
 		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
 			return new Matrix<T>(num_rows, num_columns);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual T this [int i, int j]
 		{
 			get

@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>regularization constant for the user factors</summary>
 		public double RegI { get; set; }
 
-		/// <inheritdoc/>
+		///
 		public override double Regularization
 		{
 			set {
@@ -72,7 +72,7 @@ namespace MyMediaLite.RatingPrediction
 			BiasReg = 0.0001;
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override void InitModel()
 		{
 			base.InitModel();
@@ -88,7 +88,7 @@ namespace MyMediaLite.RatingPrediction
 				last_loss = ComputeLoss();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			InitModel();
@@ -100,7 +100,7 @@ namespace MyMediaLite.RatingPrediction
 				Iterate();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Iterate()
 		{
 			base.Iterate();
@@ -122,7 +122,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRating - MinRating;
@@ -169,7 +169,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
@@ -180,7 +180,7 @@ namespace MyMediaLite.RatingPrediction
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
@@ -196,7 +196,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
@@ -246,7 +246,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddUser(int user_id)
 		{
 			if (user_id > MaxUserID)
@@ -260,7 +260,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddItem(int item_id)
 		{
 			if (item_id > MaxItemID)
@@ -274,21 +274,21 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RetrainUser(int user_id)
 		{
 			user_bias[user_id] = 0;
 			base.RetrainUser(user_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RetrainItem(int item_id)
 		{
 			item_bias[item_id] = 0;
 			base.RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveUser(int user_id)
 		{
 			base.RemoveUser(user_id);
@@ -296,7 +296,7 @@ namespace MyMediaLite.RatingPrediction
 			user_bias[user_id] = 0;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveItem(int item_id)
 		{
 			base.RemoveItem(item_id);
@@ -304,7 +304,7 @@ namespace MyMediaLite.RatingPrediction
 			item_bias[item_id] = 0;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double ComputeLoss()
 		{
 			double square_loss = 0;
@@ -331,7 +331,7 @@ namespace MyMediaLite.RatingPrediction
 			return square_loss + 0.5 * complexity;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

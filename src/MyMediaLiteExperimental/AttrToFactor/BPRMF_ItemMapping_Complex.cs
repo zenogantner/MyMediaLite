@@ -33,7 +33,7 @@ namespace MyMediaLite.AttrToFactor
 
 		private Matrix<double> output_layer;
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors); // TODO change name
@@ -69,7 +69,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void IterateMapping()
 		{
 			Console.Error.Write(".");
@@ -172,7 +172,7 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

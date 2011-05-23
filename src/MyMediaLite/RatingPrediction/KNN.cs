@@ -49,14 +49,14 @@ namespace MyMediaLite.RatingPrediction
 			RegI = 5;
 		}
 		
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )

@@ -94,7 +94,7 @@ namespace MyMediaLite.DataType
 		/// <param name="dimension">the dimension (number of rows/columns)</param>
 		public SkewSymmetricSparseMatrix(int dimension) : base(dimension) { }
 
-		/// <inheritdoc/>
+		///
 		public override IMatrix<float> CreateMatrix(int num_rows, int num_columns)
 		{
 			if (num_rows != num_columns)

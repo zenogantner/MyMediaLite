@@ -34,15 +34,15 @@ namespace MyMediaLite.Data
 	/// </remarks>
 	public class Ratings : IRatings
 	{
-		/// <inheritdoc/>
+		///
 		public IList<int> Users { get; protected set; }
-		/// <inheritdoc/>
+		///
 		public IList<int> Items { get; protected set; }
 		
-		/// <inheritdoc/>
+		///
 		protected IList<double> Values;
 
-		/// <inheritdoc/>
+		///
 		public virtual double this[int index]
 		{
 			get {
@@ -53,7 +53,7 @@ namespace MyMediaLite.Data
 			}
 		}
 		
-		/// <inheritdoc/>
+		///
 		public virtual int Count { get { return Values.Count; } }
 
 		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
@@ -66,12 +66,12 @@ namespace MyMediaLite.Data
 			Values = new List<double>();
 		}
 
-		/// <inheritdoc/>
+		///
 		public int MaxUserID { get; protected set; }
-		/// <inheritdoc/>
+		///
 		public int MaxItemID { get; protected set; }
 
-		/// <inheritdoc/>
+		///
 		public IList<IList<int>> ByUser
 		{
 			get {
@@ -82,7 +82,7 @@ namespace MyMediaLite.Data
 		}
 		IList<IList<int>> by_user;
 
-		/// <inheritdoc/>
+		///
 		public void BuildUserIndices()
 		{
 			by_user = new IList<int>[MaxUserID + 1];
@@ -93,7 +93,7 @@ namespace MyMediaLite.Data
 				by_user[Users[index]].Add(index);
 		}
 	
-		/// <inheritdoc/>
+		///
 		public IList<IList<int>> ByItem
 		{
 			get {
@@ -104,7 +104,7 @@ namespace MyMediaLite.Data
 		}
 		IList<IList<int>> by_item;
 
-		/// <inheritdoc/>
+		///
 		public void BuildItemIndices()
 		{
 			by_item = new IList<int>[MaxItemID + 1];
@@ -115,7 +115,7 @@ namespace MyMediaLite.Data
 				by_item[Items[index]].Add(index);
 		}
 
-		/// <inheritdoc/>
+		///
 		public IList<int> RandomIndex
 		{
 			get {
@@ -127,7 +127,7 @@ namespace MyMediaLite.Data
 		}
 		private int[] random_index;
 
-		/// <inheritdoc/>
+		///
 		public void BuildRandomIndex()
 		{
 			random_index = new int[Count];
@@ -136,7 +136,7 @@ namespace MyMediaLite.Data
 			Util.Utils.Shuffle<int>(random_index);
 		}
 
-		/// <inheritdoc/>
+		///
 		public IList<int> CountByUser
 		{
 			get {
@@ -147,7 +147,7 @@ namespace MyMediaLite.Data
 		}
 		IList<int> count_by_user;
 
-		/// <inheritdoc/>
+		///
 		public void BuildByUserCounts()
 		{
 			count_by_user = new int[MaxUserID + 1];
@@ -155,7 +155,7 @@ namespace MyMediaLite.Data
 				count_by_user[Users[index]]++;
 		}		
 		
-		/// <inheritdoc/>
+		///
 		public IList<int> CountByItem
 		{
 			get {
@@ -166,7 +166,7 @@ namespace MyMediaLite.Data
 		}
 		IList<int> count_by_item;
 
-		/// <inheritdoc/>
+		///
 		public void BuildByItemCounts()
 		{
 			count_by_item = new int[MaxItemID + 1];
@@ -175,7 +175,7 @@ namespace MyMediaLite.Data
 		}		
 		
 		// TODO speed up
-		/// <inheritdoc/>
+		///
 		public double Average
 		{
 			get {
@@ -187,7 +187,7 @@ namespace MyMediaLite.Data
 		}
 
 		// TODO think whether we want to have a set or a list here
-		/// <inheritdoc/>
+		///
 		public HashSet<int> AllUsers
 		{
 			get {
@@ -198,7 +198,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public HashSet<int> AllItems
 		{
 			get {
@@ -209,7 +209,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public HashSet<int> GetUsers(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
@@ -218,7 +218,7 @@ namespace MyMediaLite.Data
 			return result_set;
 		}
 
-		/// <inheritdoc/>
+		///
 		public HashSet<int> GetItems(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
@@ -227,7 +227,7 @@ namespace MyMediaLite.Data
 			return result_set;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual double this[int user_id, int item_id]
 		{
 			get {
@@ -239,13 +239,13 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public double Get(int user_id, int item_id)
 		{
 			return this[user_id, item_id];
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual bool TryGet(int user_id, int item_id, out double rating)
 		{
 			rating = double.NegativeInfinity;
@@ -260,7 +260,7 @@ namespace MyMediaLite.Data
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual double Get(int user_id, int item_id, ICollection<int> indexes)
 		{
 			// TODO speed up
@@ -271,7 +271,7 @@ namespace MyMediaLite.Data
 			throw new Exception(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
 		{
 			rating = double.NegativeInfinity;
@@ -287,7 +287,7 @@ namespace MyMediaLite.Data
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public bool TryGetIndex(int user_id, int item_id, out int index)
 		{
 			index = -1;
@@ -303,7 +303,7 @@ namespace MyMediaLite.Data
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index)
 		{
 			index = -1;
@@ -319,7 +319,7 @@ namespace MyMediaLite.Data
 			return false;
 		}
 
-		/// <inheritdoc/>
+		///
 		public int GetIndex(int user_id, int item_id)
 		{
 			// TODO speed up
@@ -330,7 +330,7 @@ namespace MyMediaLite.Data
 			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
 		}
 
-		/// <inheritdoc/>
+		///
 		public int GetIndex(int user_id, int item_id, ICollection<int> indexes)
 		{
 			// TODO speed up
@@ -341,19 +341,19 @@ namespace MyMediaLite.Data
 			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void Add(int user_id, int item_id, float rating)
 		{
 			Add(user_id, item_id, (double) rating);
 		}		
 		
-		/// <inheritdoc/>
+		///
 		public virtual void Add(int user_id, int item_id, byte rating)
 		{
 			Add(user_id, item_id, (double) rating);
 		}
 		
-		/// <inheritdoc/>
+		///
 		public virtual void Add(int user_id, int item_id, double rating)
 		{
 			Users.Add(user_id);
@@ -367,7 +367,7 @@ namespace MyMediaLite.Data
 				MaxItemID = item_id;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveAt(int index)
 		{
 			Users.RemoveAt(index);
@@ -375,7 +375,7 @@ namespace MyMediaLite.Data
 			Values.RemoveAt(index);
 		}
 		
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveUser(int user_id)
 		{
 			for (int index = 0; index < Count; index++)
@@ -390,7 +390,7 @@ namespace MyMediaLite.Data
 				MaxUserID--;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void RemoveItem(int item_id)
 		{
 			for (int index = 0; index < Count; index++)
@@ -405,34 +405,34 @@ namespace MyMediaLite.Data
 				MaxItemID--;
 		}		
 		
-		/// <inheritdoc/>
+		///
 		public bool IsReadOnly { get { return true; } }
 		
-		/// <inheritdoc/>
+		///
 		public void Add(double item) { throw new NotSupportedException(); }
 		
-		/// <inheritdoc/>
+		///
 		public void Clear() { throw new NotSupportedException(); }
 		
-		/// <inheritdoc/>
+		///
 		public bool Contains(double item) { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public void CopyTo(double[] array, int index) { throw new NotSupportedException(); }		
 		
-		/// <inheritdoc/>
+		///
 		public int IndexOf(double item) { throw new NotSupportedException(); }
 		
-		/// <inheritdoc/>
+		///
 		public void Insert(int index, double item) { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		public bool Remove(double item) { throw new NotSupportedException(); }
 			
-		/// <inheritdoc/>
+		///
 		IEnumerator IEnumerable.GetEnumerator() { throw new NotSupportedException(); }
 
-		/// <inheritdoc/>
+		///
 		IEnumerator<double> IEnumerable<double>.GetEnumerator() { throw new NotSupportedException(); }
 		
 	}

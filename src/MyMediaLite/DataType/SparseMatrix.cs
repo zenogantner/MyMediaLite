@@ -33,7 +33,7 @@ namespace MyMediaLite.DataType
 		/// <summary>List that stores the rows of the matrix</summary>
 		protected List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
 
-		/// <inheritdoc/>
+		///
 		public virtual bool IsSymmetric
 		{
 			get	{
@@ -52,10 +52,10 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public int NumberOfRows { get { return row_list.Count; } }
 
-		/// <inheritdoc/>
+		///
 		public int NumberOfColumns { get; private set; }
 
 		/// <summary>Create a sparse matrix with a given number of rows</summary>
@@ -68,7 +68,7 @@ namespace MyMediaLite.DataType
 			NumberOfColumns = num_cols;
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
 			return new SparseMatrix<T>(num_rows, num_columns);

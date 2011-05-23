@@ -28,37 +28,37 @@ namespace MyMediaLite.RatingPrediction
 	{
 		private double global_average = 0;
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			global_average = Ratings.Average;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			return true;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			return global_average;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			// do nothing
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			Train();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return "GlobalAverage";

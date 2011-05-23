@@ -33,7 +33,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>Who has rated what? item-wise</summary>
         protected SparseBooleanMatrix data_item;
 
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -46,7 +46,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>The matrix storing the item attributes</summary>
 		protected SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc/>
+		///
 	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>array to store the bias for each mapping</summary>
@@ -55,7 +55,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>random number generator</summary>
 		protected System.Random random;
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			random = Util.Random.GetInstance();
@@ -241,7 +241,7 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-        /// <inheritdoc/>
+        ///
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id >= user_factors.dim1))
@@ -264,7 +264,7 @@ namespace MyMediaLite.AttrToFactor
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
         }
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

@@ -30,7 +30,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -43,13 +43,13 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>The matrix storing the item attributes</summary>
 		protected SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc/>
+		///
 	    public int NumItemAttributes { get;	set; }
 
 		/// <summary>array to store the bias for each mapping</summary>
 		protected double[] factor_bias;
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-latent factor weight matrix
@@ -218,7 +218,7 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-        /// <inheritdoc/>
+        ///
         public override double Predict(int user_id, int item_id)
         {
             if ((user_id < 0) || (user_id >= user_factors.dim1))
@@ -231,7 +231,7 @@ namespace MyMediaLite.AttrToFactor
             return MatrixUtils.RowScalarProduct(user_factors, user_id, est_factors);
         }
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

@@ -26,19 +26,19 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The min rating value</summary>
 		double MinRating { get; set; }
 
-		/// <inheritdoc/>
+		///
 		void Add(int user_id, int item_id, double rating);
-		/// <inheritdoc/>
+		///
 		void UpdateRating(int user_id, int item_id, double rating);
-		/// <inheritdoc/>
+		///
 		void RemoveRating(int user_id, int item_id);
-		/// <inheritdoc/>
+		///
 		void AddUser(int user_id);
-		/// <inheritdoc/>
+		///
 		void AddItem(int item_id);
-		/// <inheritdoc/>
+		///
 		void RemoveUser(int user_id);
-		/// <inheritdoc/>
+		///
 		void RemoveItem(int item_id);
 	}
 }

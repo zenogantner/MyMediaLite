@@ -30,7 +30,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -42,10 +42,10 @@ namespace MyMediaLite.ItemRecommendation
 		}
 		private SparseBooleanMatrix item_attributes;
 
-		/// <inheritdoc/>
+		///
 		public int NumItemAttributes { get;	set; }
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			this.correlation = BinaryCosine.Create(ItemAttributes);
@@ -56,7 +56,7 @@ namespace MyMediaLite.ItemRecommendation
 				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			return string.Format("ItemAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());

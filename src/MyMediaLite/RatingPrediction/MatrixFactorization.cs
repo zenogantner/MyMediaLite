@@ -90,7 +90,7 @@ namespace MyMediaLite.RatingPrediction
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			InitModel();
@@ -100,7 +100,7 @@ namespace MyMediaLite.RatingPrediction
 			LearnFactors(Ratings.RandomIndex, true, true);
 		}
 
-		/// <inheritdoc/>
+		///
 		public virtual void Iterate()
 		{
 			Iterate(Ratings.RandomIndex, true, true);
@@ -167,7 +167,7 @@ namespace MyMediaLite.RatingPrediction
 				Iterate(rating_indices, update_user, update_item);
 		}
 
-		/// <inheritdoc/>
+		///
 		protected double Predict(int user_id, int item_id, bool bound)
 		{
 			double result = global_bias + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
@@ -200,7 +200,7 @@ namespace MyMediaLite.RatingPrediction
 			return Predict(user_id, item_id, true);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Add(int user_id, int item_id, double rating)
 		{
 			base.Add(user_id, item_id, rating);
@@ -208,7 +208,7 @@ namespace MyMediaLite.RatingPrediction
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void UpdateRating(int user_id, int item_id, double rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
@@ -216,7 +216,7 @@ namespace MyMediaLite.RatingPrediction
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveRating(int user_id, int item_id)
 		{
 			base.RemoveRating(user_id, item_id);
@@ -224,7 +224,7 @@ namespace MyMediaLite.RatingPrediction
 			RetrainItem(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddUser(int user_id)
 		{
 			if (user_id > MaxUserID)
@@ -234,7 +234,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void AddItem(int item_id)
 		{
 			if (item_id > MaxItemID)
@@ -244,7 +244,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveUser(int user_id)
 		{
 			base.RemoveUser(user_id);
@@ -253,7 +253,7 @@ namespace MyMediaLite.RatingPrediction
 			user_factors.SetRowToOneValue(user_id, 0);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void RemoveItem(int item_id)
 		{
 			base.RemoveItem(item_id);
@@ -262,7 +262,7 @@ namespace MyMediaLite.RatingPrediction
 			item_factors.SetRowToOneValue(item_id, 0);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
@@ -276,7 +276,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			var ni = new NumberFormatInfo();
@@ -341,7 +341,7 @@ namespace MyMediaLite.RatingPrediction
 			return loss;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

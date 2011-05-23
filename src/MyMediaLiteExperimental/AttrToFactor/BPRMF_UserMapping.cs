@@ -29,7 +29,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for RMSE on the latent factors</summary>
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{
-		/// <inheritdoc/>
+		///
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
@@ -42,7 +42,7 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>The matrix storing the user attributes</summary>
 		protected SparseBooleanMatrix user_attributes;
 
-		/// <inheritdoc/>
+		///
 		public int NumUserAttributes { get; set; }
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-factor weight matrix
@@ -126,7 +126,7 @@ namespace MyMediaLite.AttrToFactor
 			ComputeMappingFit();
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void IterateMapping()
 		{
 			// stochastic gradient descent
@@ -155,7 +155,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		protected double[] ComputeMappingFit()
 		{
 			double rmse    = 0;
@@ -211,7 +211,7 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-        /// <inheritdoc/>
+        ///
         public override double Predict(int user_id, int item_id)
         {
 			HashSet<int> attributes = user_attributes[user_id];
@@ -223,7 +223,7 @@ namespace MyMediaLite.AttrToFactor
             return result;
         }
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

@@ -34,7 +34,7 @@ namespace MyMediaLite.Correlation
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
 
-		/// <inheritdoc/>
+		///
         public override float this [int i, int j]
         {
 			get { return data[i * dim2 + j]; }

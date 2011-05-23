@@ -30,7 +30,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <summary>item attribute to latent factor mapping, optimized for BPR loss</summary>
 	public class BPRMF_ItemMapping_Optimal : BPRMF_ItemMapping
 	{
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.factor_bias = new double[num_factors];
@@ -50,7 +50,7 @@ namespace MyMediaLite.AttrToFactor
 			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void IterateMapping()
 		{
 			_MapToLatentFactorSpace = __MapToLatentFactorSpace; // make sure we don't memoize during training
@@ -100,7 +100,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
 			HashSet<int> attributes = this.item_attributes[item_id];
@@ -116,13 +116,13 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override double[] MapToLatentFactorSpace(int item_id)
 		{
 			return _MapToLatentFactorSpace(item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

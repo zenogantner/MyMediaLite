@@ -55,7 +55,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		// TODO push upwards in class hierarchy
-		/// <inheritdoc/>
+		///
 		protected virtual void InitModel()
 		{
 			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
@@ -65,7 +65,7 @@ namespace MyMediaLite.ItemRecommendation
 			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void Train()
 		{
 			InitModel();
@@ -105,7 +105,7 @@ namespace MyMediaLite.ItemRecommendation
 			return MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string file)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
@@ -115,7 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string file)
 		{
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )

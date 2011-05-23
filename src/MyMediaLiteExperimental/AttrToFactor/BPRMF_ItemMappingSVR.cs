@@ -39,7 +39,7 @@ namespace MyMediaLite.AttrToFactor
 
 		SVM.Model[] models;
 
-		/// <inheritdoc/>
+		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			var svm_features = new List<Node[]>();
@@ -83,7 +83,7 @@ namespace MyMediaLite.AttrToFactor
 			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
 		}
 
-		/// <inheritdoc/>
+		///
 		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
 			var item_factors = new double[num_factors];
@@ -105,7 +105,7 @@ namespace MyMediaLite.AttrToFactor
 			return item_svm_data;
 		}
 
-		/// <inheritdoc/>
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();

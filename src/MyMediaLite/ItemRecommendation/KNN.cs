@@ -36,7 +36,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected CorrelationMatrix correlation;
 
-		/// <inheritdoc/>
+		///
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
@@ -54,7 +54,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <inheritdoc/>
+		///
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
