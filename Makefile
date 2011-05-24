@@ -6,12 +6,10 @@ CONFIGURE_OPTIONS=--prefix=/usr/local
 VERSION=1.02
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
-HTML_IMMDOC_DIR=website/public_html/documentation/immdoc
-IMMDOC=mono --debug ${HOME}/src/immdoc/Src/ImmDocNet/ImmDocNet/bin/Debug/ImmDocNet.exe
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html immdoc view-immdoc doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
 all: configure
 	cd ${SRC_DIR} && make all
 
@@ -30,7 +28,6 @@ clean:
 veryclean: clean
 	rm -f *.tar.gz
 	rm -rf MyMediaLite-${VERSION}
-	rm -rf doc/immdoc/*
 	rm -rf website/public_html/*
 
 install:
@@ -44,7 +41,7 @@ binary-package:
 	mkdir MyMediaLite-${VERSION}/doc
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
 	mkdir MyMediaLite-${VERSION}/doc/api
-	cp -r doc/immdoc/* MyMediaLite-${VERSION}/doc/api
+	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
@@ -59,7 +56,7 @@ source-package: clean
 	mkdir MyMediaLite-${VERSION}.src/doc
 	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
 	mkdir MyMediaLite-${VERSION}.src/doc/api
-	cp -r doc/immdoc/* MyMediaLite-${VERSION}.src/doc/api
+	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r src examples scripts tests MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data
@@ -121,7 +118,7 @@ gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/SVM.dll
 
-apidoc: mdoc-html doxygen immdoc
+apidoc: mdoc-html doxygen
 
 monodoc:
 	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
@@ -140,14 +137,6 @@ doxygen:
 
 view-doxygen:
 	x-www-browser file://${HTML_DOXYGEN_DIR}/index.html
-
-immdoc:
-	${IMMDOC} -vl:3 -ForceDelete -pn:MyMediaLite -od:doc/immdoc ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-	mkdir -p ${HTML_IMMDOC_DIR}
-	cp -r doc/immdoc/* ${HTML_IMMDOC_DIR}
-
-view-immdoc:
-	x-www-browser file://${HTML_IMMDOC_DIR}/index.html
 
 flyer:
 	cd doc/flyer; pdflatex mymedialite-flyer.tex
