@@ -22,12 +22,11 @@ clean:
 	rm -rf ${SRC_DIR}/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/*/bin/Release/*	
 	rm -rf doc/monodoc/*
-	rm -rf doc/doxygen/*
 	rm -rf MyMediaLite-*/
 
 veryclean: clean
 	rm -f *.tar.gz
-	rm -rf MyMediaLite-${VERSION}
+	rm -rf doc/doxygen/*
 	rm -rf website/public_html/*
 
 install:
@@ -56,7 +55,7 @@ source-package: clean
 	mkdir MyMediaLite-${VERSION}.src/doc
 	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
 	mkdir MyMediaLite-${VERSION}.src/doc/api
-	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
+	cp -r doc/doxygen/html MyMediaLite-${VERSION}.src/doc/api
 	cp -r src examples scripts tests MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data
