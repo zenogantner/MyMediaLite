@@ -45,7 +45,7 @@
     { method => 'UserAverage',               hp => '',                  rmse => '1.032', mae => '0.719', nmae => '0.1598' }
     { method => 'ItemAverage',               hp => '',                  rmse => '1.097', mae => '0.852', nmae => '0.1894' }
     { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10', rmse => '0.904', mae => '0.685', nmae => '0.1523' }
-    { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.0001 regularization=0.015 learn_rate=0.01 num_iter=5 bold_driver=True', rmse => '0.874', mae => '0.661', nmae => '0.1469' }
+    { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.0001 regularization=0.015 learn_rate=0.051 num_iter=10 bold_driver=True', rmse => '0.858', mae => '0.639', nmae => '0.1419' }
    ]
    camra_mp_xmas_data = [
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=30 reg=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
