@@ -48,6 +48,13 @@ namespace MyMediaLite.RatingPrediction
 		private double[] user_biases;
 		private double[] item_biases;
 
+		/// <summary>Default constructor</summary>
+		public UserItemBaseline()
+		{
+			RegU = 15;
+			RegI = 10;
+		}
+
 		///
 		protected override void InitModel()
 		{

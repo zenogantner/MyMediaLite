@@ -1,10 +1,11 @@
-1.02	2011-05-23
+1.02	2011-05-24
 	- recommenders
           - BPR_Linear: less verbose output
           - BPRMF: fix loading/saving of models
           - BiasedMatrixFactorization: simplify a bit
           - SlopeOne: move computation of rating average to Train()
 	  - BiPolarSlopeOne: fix loading/saving of models
+          - UserItemBias: set default values for reg_u and reg_i
 	- command-line tools
 	  - item prediction: fix null pointer exception when no --test-file is
             given
