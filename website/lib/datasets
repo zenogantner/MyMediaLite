@@ -23,7 +23,10 @@
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.860', mae => '0.676', nmae => '0.1691' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.675', nmae => '0.1688' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.676', nmae => '0.1691' }
- 
+#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=60 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1691' }
+#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1691' }
+#     { method => 'BiasedMatrixFactorization', hp => 'num_factors=120 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1690' }
+
 #     commented out results: 5-fold CV
    ]
    # MovieLens 100k, 5-fold CV with --random-seed=1
@@ -45,7 +48,8 @@
     { method => 'UserAverage',               hp => '',                  rmse => '1.032', mae => '0.719', nmae => '0.1598' }
     { method => 'ItemAverage',               hp => '',                  rmse => '1.097', mae => '0.852', nmae => '0.1894' }
     { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10', rmse => '0.904', mae => '0.685', nmae => '0.1523' }
-    { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.0001 regularization=0.015 learn_rate=0.051 num_iter=30 bold_driver=True', rmse => '0.853', mae => '0.633', nmae => '0.1407' }
+    { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.0001 regularization=0.03 learn_rate=0.051 num_iter=50 bold_driver=True', rmse => '0.851', mae => '0.633', nmae => '0.1407' }
+    { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.0001 regularization=0.015 learn_rate=0.051 num_iter=50 bold_driver=True', rmse => '0.845', mae => '0.625', nmae => '0.1389' }    
    ]
    camra_mp_xmas_data = [
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=30 reg=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
