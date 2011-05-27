@@ -27,7 +27,7 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class MatrixTest
 	{
-		[Test()] public void TestGetRow()
+		[Test()] public void TestGetSetRow()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] row = { 1, 2, 3, 4, 5 };
@@ -37,12 +37,14 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(1, matrix[3, 0]);
 		}
 
-		[Test()] public void TestGetColumn()
+		[Test()] public void TestGetSetColumn()
 		{
 			var matrix = new Matrix<int>(5, 5);
 			int[] column = { 1, 2, 3, 4, 5 };
 			matrix.SetColumn(3, column);
 			Assert.AreEqual(column, matrix.GetColumn(3));
+			Assert.AreEqual(0, matrix[0, 0]);
+			Assert.AreEqual(1, matrix[0, 3]);
 		}
 
 		[Test()] public void TestInit()
@@ -73,6 +75,25 @@ namespace MyMediaLiteTest
 			matrix.SetColumnToOneValue(3, 10);
 			int[] testcolumn = { 10, 10, 10, 10, 10 };
 			Assert.AreEqual(testcolumn, matrix.GetColumn(3));
+		}
+
+		[Test()] public void TestTranspose()
+		{
+			var matrix = new Matrix<int>(5, 6);
+			matrix[1, 1] = 3;
+			matrix[1, 3] = 4;
+			matrix[3, 1] = 5;
+
+			var transpose = matrix.Transpose();
+			Assert.AreEqual(6, transpose.NumberOfRows);
+			Assert.AreEqual(5, transpose.NumberOfColumns);
+			Assert.AreEqual(3, transpose[1, 1]);
+			Assert.AreEqual(4, transpose[3, 1]);
+			Assert.AreEqual(5, transpose[1, 3]);
+
+			// check whether it is really a copy
+			transpose[1, 1] = 0;
+			Assert.AreEqual(3, matrix[1, 1]);
 		}
 	}
 }
