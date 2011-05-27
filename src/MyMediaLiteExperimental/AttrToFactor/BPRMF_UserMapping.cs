@@ -132,8 +132,7 @@ namespace MyMediaLite.AttrToFactor
 			// stochastic gradient descent
 			int user_id = SampleUserWithAttributes();
 
-			HashSet<int> attributes = user_attributes[user_id];
-			double[] est_factors = MapUserToLatentFactorSpace(attributes);
+			double[] est_factors = MapUserToLatentFactorSpace(user_attributes[user_id]);
 
 			for (int j = 0; j < num_factors; j++)
 			{
@@ -141,7 +140,7 @@ namespace MyMediaLite.AttrToFactor
 				double diff = est_factors[j] - user_factors[user_id, j];
 				if (diff > 0)
 				{
-					foreach (int attribute in attributes)
+					foreach (int attribute in user_attributes[user_id])
 					{
 						double w = attribute_to_factor[attribute, j];
 						double deriv = diff * w + reg_mapping * w;
@@ -172,8 +171,7 @@ namespace MyMediaLite.AttrToFactor
 
 				num_users++;
 
-				HashSet<int> attributes = user_attributes[i];
-				double[] est_factors = MapUserToLatentFactorSpace(attributes);
+				double[] est_factors = MapUserToLatentFactorSpace(user_attributes[i]);
 				for (int j = 0; j < num_factors; j++)
 				{
 					double error    = Math.Pow(est_factors[j] - user_factors[i, j], 2);
@@ -197,7 +195,7 @@ namespace MyMediaLite.AttrToFactor
 		}
 
 		/// <summary>map from user attributes to latent factor space</summary>
-		protected virtual double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
+		protected virtual double[] MapUserToLatentFactorSpace(ICollection<int> user_attributes)
 		{
 			double[] factor_representation = new double[num_factors];
 			for (int j = 0; j < num_factors; j++)
@@ -214,8 +212,7 @@ namespace MyMediaLite.AttrToFactor
         ///
         public override double Predict(int user_id, int item_id)
         {
-			HashSet<int> attributes = user_attributes[user_id];
-			double[] est_factors = MapUserToLatentFactorSpace(attributes);
+			double[] est_factors = MapUserToLatentFactorSpace(user_attributes[user_id]);
 
             double result = 0;
             for (int f = 0; f < num_factors; f++)

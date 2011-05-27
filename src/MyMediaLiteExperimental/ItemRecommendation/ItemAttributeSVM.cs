@@ -87,7 +87,7 @@ namespace MyMediaLite.ItemRecommendation
 		private Node[] CreateNodes(int item_id)
 		{
 			// create attribute representation digestible by LIBSVM
-			HashSet<int> attributes = this.ItemAttributes[item_id];
+			var attributes = this.ItemAttributes[item_id];
 			var item_svm_data = new Node[attributes.Count];
 			int counter = 0;
 			foreach (int attr in attributes)

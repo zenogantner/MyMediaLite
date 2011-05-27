@@ -71,8 +71,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_i = item_attributes[i];
-			HashSet<int> attr_j = item_attributes[j];
+			var attr_i = item_attributes[i];
+			var attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
 			var attr_i_over_j = new HashSet<int>(attr_i);
@@ -103,13 +103,12 @@ namespace MyMediaLite.AttrToFactor
 		///
 		protected override double[] __MapToLatentFactorSpace(int item_id)
 		{
-			HashSet<int> attributes = this.item_attributes[item_id];
 			var factor_representation = new double[num_factors];
 
 			for (int j = 0; j < num_factors; j++)
 				factor_representation[j] = factor_bias[j];
 
-			foreach (int i in attributes)
+			foreach (int i in item_attributes[item_id])
 				for (int j = 0; j < num_factors; j++)
 					factor_representation[j] += attribute_to_factor[i, j];
 

@@ -204,14 +204,12 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>map to latent factor space (actual function)</summary>
 		protected virtual double[] __MapToLatentFactorSpace(int item_id)
 		{
-			HashSet<int> item_attributes = this.item_attributes[item_id];
-
 			var factor_representation = new double[num_factors];
 			for (int j = 0; j < num_factors; j++)
 				// bias
 				factor_representation[j] = attribute_to_factor[NumItemAttributes, j];
 
-			foreach (int i in item_attributes)
+			foreach (int i in item_attributes[item_id])
 				for (int j = 0; j < num_factors; j++)
 					factor_representation[j] += attribute_to_factor[i, j];
 

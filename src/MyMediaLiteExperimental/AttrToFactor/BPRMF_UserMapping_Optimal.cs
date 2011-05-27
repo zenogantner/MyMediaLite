@@ -65,13 +65,11 @@ namespace MyMediaLite.AttrToFactor
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_u = user_attributes[u];
-
 			for (int f = 0; f < num_factors; f++)
 			{
 				double diff = item_factors[i, f] - item_factors[j, f];
 
-				foreach (int a in attr_u)
+				foreach (int a in user_attributes[u])
 				{
 					double m_af = attribute_to_factor[a, f];
 					double update = diff / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
@@ -81,7 +79,7 @@ namespace MyMediaLite.AttrToFactor
 		}
 
 		///
-		protected override double[] MapUserToLatentFactorSpace(HashSet<int> user_attributes)
+		protected override double[] MapUserToLatentFactorSpace(ICollection<int> user_attributes)
 		{
 			var factor_representation = new double[num_factors];
 

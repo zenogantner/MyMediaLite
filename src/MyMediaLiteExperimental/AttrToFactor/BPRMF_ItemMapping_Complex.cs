@@ -57,10 +57,8 @@ namespace MyMediaLite.AttrToFactor
 			// set item_factors to the mapped ones:                     // TODO: put into a separate method
 			for (int item_id = 0; item_id < MaxItemID + 1; item_id++)
 			{
-				HashSet<int> attributes = item_attributes[item_id];
-
 				// only map factors for items where we know attributes
-				if (attributes.Count == 0)
+				if (item_attributes[item_id].Count == 0)
 					continue;
 
 				double[] est_factors = MapToLatentFactorSpace(item_id);
@@ -91,8 +89,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_i = item_attributes[i];
-			HashSet<int> attr_j = item_attributes[j];
+			var attr_i = item_attributes[i];
+			var attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
 			var attr_i_over_j = new HashSet<int>(attr_i);
@@ -160,10 +158,9 @@ namespace MyMediaLite.AttrToFactor
 		/// <summary>map to latent factor space (actual function)</summary>
 		protected override double[] MapToLatentFactorSpace(int item_id)
 		{
-			HashSet<int> attributes = this.item_attributes[item_id];
 			var factor_representation = new double[num_factors];
 
-			foreach (int i in attributes)
+			foreach (int i in item_attributes[item_id])
 				for (int j = 0; j < num_factors; j++)
 					for (int k = 0; k < num_hidden_factors; k++)
 						factor_representation[j] += attribute_to_factor[i, k] * output_layer[k, j];
