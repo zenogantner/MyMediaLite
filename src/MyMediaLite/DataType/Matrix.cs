@@ -88,20 +88,34 @@ namespace MyMediaLite.DataType
 		}
 
 		///
+		public IMatrix<T> Transpose()
+		{
+			var transpose = new Matrix<T>(NumberOfColumns, NumberOfRows);
+			for (int i = 0; i < dim1; i++)
+				for (int j = 0; j < dim2; j++)
+					transpose.data[j * dim1 + i] = data[i * dim2 + j];
+			return transpose;
+		}
+
+		///
 		public virtual T this [int i, int j]
 		{
-			get
-			{
-				// TODO deactivate in production code
+			get	{
+#if DEBUG
 				if (i >= this.dim1)
 					throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
 				if (j >= this.dim2)
 					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
-
+#endif
 				return data[i * dim2 + j];
 			}
-			set
-			{
+			set	{
+#if DEBUG
+				if (i >= this.dim1)
+					throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
+				if (j >= this.dim2)
+					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
+#endif
 				data[i * dim2 + j] = value;
 			}
 		}
@@ -111,7 +125,7 @@ namespace MyMediaLite.DataType
 		/// <returns>A vector of T containing the row data</returns>
 		public T[] GetRow(int i)
 		{
-			// TODO speed up using Array.Copy()?
+			// TODO speed up using Array.Copy()/CopyTo?
 			T[] row = new T[this.dim2];
 			for (int x = 0; x < this.dim2; x++)
 				row[x] = this[i, x];
@@ -140,6 +154,7 @@ namespace MyMediaLite.DataType
 														  row.Length, this.dim2));
 
 			for (int j = 0; j < this.dim2; j++)
+				
 				this[i, j] = row[j];
 		}
 
