@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-
 namespace MyMediaLite.DataType
 {
 	/// <summary>Generic interface for matrix data types</summary>
@@ -39,6 +37,10 @@ namespace MyMediaLite.DataType
 		/// <summary>True if the matrix is symmetric, false otherwise</summary>
 		/// <value>True if the matrix is symmetric, false otherwise</value>
 		bool IsSymmetric { get; }
+
+		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
+		/// <returns>the transpose of the matrix (copy)</returns>
+		IMatrix<T> Transpose();
 
 		/// <summary>Create a matrix with a given number of rows and columns</summary>
 		/// <param name="num_rows">the number of rows</param>

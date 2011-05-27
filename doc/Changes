@@ -4,8 +4,15 @@
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
 	- evaluation
+        - data structures
+          - add interfaces IBooleanMatrix and IPosOnlyFeedback
+          - make PosOnlyFeedback generic to allow different backends
+          - add SparseBooleanMatrixBinarySearch and SparseBooleanMatrixStatic
+          - IMatrix<T> interface: add Transpose() method
+          - SparseBooleanMatrix: remove Rows() method (not necessary)
+          - Matrix<T>: perform bounds check only when DEBUG is set;
+            faster GetRow()/SetRow(); generic return types
 	- documentation
-          - some API doc improvements
 
 1.02	2011-05-24
 	- recommenders

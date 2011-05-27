@@ -74,6 +74,15 @@ namespace MyMediaLite.DataType
 			return new SparseMatrix<T>(num_rows, num_columns);
 		}
 
+		///
+		public virtual IMatrix<T> Transpose()
+		{
+			var transpose = new SparseMatrix<T>(NumberOfColumns, NumberOfRows);
+			foreach (Pair<int, int> p in NonEmptyEntryIDs)
+				transpose[p.Second, p.First] = this[p.First, p.Second];
+			return transpose;
+		}
+		
 		/// <summary>Get a row of the matrix</summary>
 		/// <param name="x">the row ID</param>
 		public Dictionary<int, T> this [int x]

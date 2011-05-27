@@ -22,45 +22,42 @@ using System.Linq;
 
 namespace MyMediaLite.DataType
 {
-	/// <summary>Sparse representation of a boolean matrix, using HashSets</summary>
+	/// <summary>Sparse representation of a boolean matrix, using binary search (memory efficient)</summary>
 	/// <remarks>
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
-	/// 
-	/// If you need a more memory-efficient data structure, try <see cref="SparseBooleanMatrixBinarySearch"/>
-	/// or <see cref="SparseBooleanMatrixStatic"/>.
 	/// </remarks>
-	public class SparseBooleanMatrix : IBooleanMatrix
+	public class SparseBooleanMatrixStatic : IBooleanMatrix
 	{
-		private List<HashSet<int>> row_list = new List<HashSet<int>>();
+		private List<int[]> row_list = new List<int[]>();
 
-		/// <summary>Indexer to access the elements of the matrix</summary>
-		/// <param name="x">the row ID</param>
-		/// <param name="y">the column ID</param>
+		///
 		public bool this [int x, int y]
 		{
 			get	{
 				if (x < row_list.Count)
-					return row_list[x].Contains(y);
+					return Array.BinarySearch(row_list[x], y) >= 0;
 				else
 					return false;
 			}
 			set	{
-				if (value)
-					this[x].Add(y);
-				else
-					this[x].Remove(y);
+				throw new NotSupportedException();
 			}
 		}
 
 		///
-		public ICollection<int> this [int x]
+		public ICollection<int> this [int x] // TODO think about returning IList
 		{
 			get	{
 				if (x >= row_list.Count)
-					for (int i = row_list.Count; i <= x; i++)
-						row_list.Add(new HashSet<int>());
+					return new int[0];
 				return row_list[x];
+			}
+			set {
+				if (x >= row_list.Count)
+					for (int i = row_list.Count; i <= x; i++)
+						row_list.Add(new int[0]);
+				row_list[x] = (int[]) value;
 			}
 		}
 
@@ -84,28 +81,28 @@ namespace MyMediaLite.DataType
 		///
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
-			return new SparseBooleanMatrix();
+			return new SparseBooleanMatrixStatic();
 		}
 
 		///
 		public IList<int> GetEntriesByRow(int row_id)
 		{
-			return row_list[row_id].ToList();
+			return row_list[row_id];
 		}
 
 		///
 		public int NumEntriesByRow(int row_id)
 		{
-			return row_list[row_id].Count;
-		}		
-		
-		/// <remarks>Takes O(N) worst-case time, where N is the number of rows, if the internal hash table can be queried in constant time.</remarks>
+			return row_list[row_id].Length;
+		}
+
+		/// <remarks>Takes O(N log(M)) worst-case time, where N is the number of rows and M is the number of columns.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
 		{
 			var list = new List<int>();
 
 			for (int row_id = 0; row_id < NumberOfRows; row_id++)
-				if (row_list[row_id].Contains(column_id))
+				if (Array.BinarySearch(row_list[row_id], column_id) >= 0)
 					list.Add(row_id);
 			return list;
 		}
@@ -113,23 +110,25 @@ namespace MyMediaLite.DataType
 		///
 		public int NumEntriesByColumn(int column_id)
 		{
-			int count = 0;
+			int counter = 0;
 
 			for (int row_id = 0; row_id < NumberOfRows; row_id++)
-				if (row_list[row_id].Contains(column_id))
-					count++;
-			return count;
-		}		
-				
+				if (Array.BinarySearch(row_list[row_id], column_id) >= 0)
+					counter++;
+			return counter;
+		}
+
+
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
-		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
-		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
+		public IList<KeyValuePair<int, IList<int>>> NonEmptyRows
 		{
 			get	{
-				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
+				var return_list = new List<KeyValuePair<int, IList<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
-					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
+				{
+					if (row_list[i].Length > 0)
+						return_list.Add(new KeyValuePair<int, IList<int>>(i, row_list[i]));
+				}
 				return return_list;
 			}
 		}
@@ -141,7 +140,7 @@ namespace MyMediaLite.DataType
 				var row_ids = new HashSet<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
-					if (row_list[i].Count > 0)
+					if (row_list[i].Length > 0)
 						row_ids.Add(i);
 
 				return row_ids;
@@ -174,20 +173,21 @@ namespace MyMediaLite.DataType
 			get	{
 				int max_column_id = -1;
 				foreach (var row in row_list)
-					if (row.Count > 0)
+					if (row.Length > 0)
 						max_column_id = Math.Max(max_column_id, row.Max());
 
 				return max_column_id + 1;
 			}
 		}
 
-		///
+		/// <summary>The number of (true) entries</summary>
+		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
 			get	{
 				int n = 0;
 				foreach (var row in row_list)
-					n += row.Count;
+					n += row.Length;
 				return n;
 			}
 		}
@@ -196,63 +196,28 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public void RemoveColumn(int y)
 		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					if (col_id >= y)
-						row_list[row_id].Remove(y);
-					if (col_id > y)
-						row_list[row_id].Add(col_id - 1);
-				}
-			}
+			throw new NotSupportedException();
 		}
 
 		/// <summary>Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs</summary>
 		/// <param name="delete_columns">an array with column IDs</param>
 		public void RemoveColumn(int[] delete_columns)
 		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					int decrease_by = 0;
-					foreach (int y in delete_columns)
-					{
-						if (col_id == y)
-						{
-							row_list[row_id].Remove(y);
-							goto NEXT_COL; // poor man's labeled continue
-						}
-						if (col_id > y)
-							decrease_by++;
-					}
-
-					// decrement column ID
-					row_list[row_id].Remove(col_id);
-					row_list[row_id].Add(col_id - decrease_by);
-
-					NEXT_COL:;
-				}
-			}
+			throw new NotSupportedException();			
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
-		/// <returns>the transpose of the matrix (copy)</returns>
+		/// <returns>the transpose of the matrix</returns>
 		public IMatrix<bool> Transpose()
 		{
-			var transpose = new SparseBooleanMatrix();
+			var transpose = new SparseBooleanMatrixStatic();
 			for (int i = 0; i < row_list.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;
 			return transpose;
 		}
 
-		/// <summary>Get the overlap of two matrices, i.e. the number of true entries where they agree</summary>
-		/// <param name="s">the <see cref="SparseBooleanMatrix"/> to compare to</param>
-		/// <returns>the number of entries that are true in both matrices</returns>
+		///
 		public int Overlap(IBooleanMatrix s)
 		{
 			int c = 0;

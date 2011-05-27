@@ -57,6 +57,7 @@ Architecture
    - consider using simulated multiple inheritance for the attribute-based recommenders:
      http://www.codeproject.com/KB/architecture/smip.aspx
  - data structures
+   - IMatrix<T>: add RemoveColumn and RemoveRow methods
    - parameterize types:
      - user and item IDs
      - stored ratings
@@ -97,7 +98,6 @@ Misc features
  - command-line tools: read from DB
  - command-line tools: time stats for CV
  - command-line tools: give out partial results for t-test etc.
- - command-line tools: --version
  - rewrite MF techniques using vector/matrix abstractions
  - output a nice table format for evaluation w/ R etc.
 Documentation/website

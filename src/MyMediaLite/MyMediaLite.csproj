@@ -11,7 +11,7 @@
     <AssemblyName>MyMediaLite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ReleaseVersion>1.02</ReleaseVersion>
+    <ReleaseVersion>1.01</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,7 +151,10 @@
     <Compile Include="Data\IdentityMapping.cs" />
     <Compile Include="Data\IEntityMapping.cs" />
     <Compile Include="Util\RecommenderParameters.cs" />
+    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
+    <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="Data\IPosOnlyFeedback.cs" />
+    <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

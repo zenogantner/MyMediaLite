@@ -22,44 +22,43 @@ using System.Linq;
 
 namespace MyMediaLite.DataType
 {
-	/// <summary>Sparse representation of a boolean matrix, using HashSets</summary>
+	/// <summary>Sparse representation of a boolean matrix, using binary search (memory efficient)</summary>
 	/// <remarks>
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
-	/// 
-	/// If you need a more memory-efficient data structure, try <see cref="SparseBooleanMatrixBinarySearch"/>
-	/// or <see cref="SparseBooleanMatrixStatic"/>.
 	/// </remarks>
-	public class SparseBooleanMatrix : IBooleanMatrix
+	public class SparseBooleanMatrixBinarySearch : IBooleanMatrix
 	{
-		private List<HashSet<int>> row_list = new List<HashSet<int>>();
+		private List<List<int>> row_list = new List<List<int>>();
 
-		/// <summary>Indexer to access the elements of the matrix</summary>
-		/// <param name="x">the row ID</param>
-		/// <param name="y">the column ID</param>
+		///
 		public bool this [int x, int y]
 		{
 			get	{
 				if (x < row_list.Count)
-					return row_list[x].Contains(y);
+					return row_list[x].BinarySearch(y) >= 0;
 				else
 					return false;
 			}
 			set	{
-				if (value)
-					this[x].Add(y);
-				else
-					this[x].Remove(y);
+				if (value)         // if true
+				{
+					int index = ((List<int>) this[x]).BinarySearch(y);
+					if (index < 0) // ... and not there yet
+						row_list[x].Insert(~index, y);
+				}
+				else if (row_list.Count > x && row_list[x].BinarySearch(y) >= 0) // if false
+					row_list[x].Remove(y);
 			}
 		}
 
 		///
-		public ICollection<int> this [int x]
+		public ICollection<int> this [int x] // TODO think about returning IList
 		{
 			get	{
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
-						row_list.Add(new HashSet<int>());
+						row_list.Add(new List<int>());
 				return row_list[x];
 			}
 		}
@@ -84,28 +83,28 @@ namespace MyMediaLite.DataType
 		///
 		public IMatrix<bool> CreateMatrix(int x, int y)
 		{
-			return new SparseBooleanMatrix();
+			return new SparseBooleanMatrixBinarySearch();
 		}
 
 		///
 		public IList<int> GetEntriesByRow(int row_id)
 		{
-			return row_list[row_id].ToList();
+			return row_list[row_id];
 		}
 
 		///
 		public int NumEntriesByRow(int row_id)
 		{
 			return row_list[row_id].Count;
-		}		
-		
-		/// <remarks>Takes O(N) worst-case time, where N is the number of rows, if the internal hash table can be queried in constant time.</remarks>
+		}
+
+		/// <remarks>Takes O(N log(M)) worst-case time, where N is the number of rows and M is the number of columns.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
 		{
 			var list = new List<int>();
 
 			for (int row_id = 0; row_id < NumberOfRows; row_id++)
-				if (row_list[row_id].Contains(column_id))
+				if (row_list[row_id].BinarySearch(column_id) >= 0)
 					list.Add(row_id);
 			return list;
 		}
@@ -113,23 +112,24 @@ namespace MyMediaLite.DataType
 		///
 		public int NumEntriesByColumn(int column_id)
 		{
-			int count = 0;
+			int counter = 0;
 
 			for (int row_id = 0; row_id < NumberOfRows; row_id++)
-				if (row_list[row_id].Contains(column_id))
-					count++;
-			return count;
-		}		
-				
+				if (row_list[row_id].BinarySearch(column_id) >= 0)
+					counter++;
+			return counter;
+		}
+
+
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
-		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
+		public IList<KeyValuePair<int, List<int>>> NonEmptyRows
 		{
 			get	{
-				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
+				var return_list = new List<KeyValuePair<int, List<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
+						return_list.Add(new KeyValuePair<int, List<int>>(i, row_list[i]));
 				return return_list;
 			}
 		}
@@ -181,7 +181,8 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		///
+		/// <summary>The number of (true) entries</summary>
+		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
 			get	{
@@ -240,19 +241,17 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
-		/// <returns>the transpose of the matrix (copy)</returns>
+		/// <returns>the transpose of the matrix</returns>
 		public IMatrix<bool> Transpose()
 		{
-			var transpose = new SparseBooleanMatrix();
+			var transpose = new SparseBooleanMatrixBinarySearch();
 			for (int i = 0; i < row_list.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;
 			return transpose;
 		}
 
-		/// <summary>Get the overlap of two matrices, i.e. the number of true entries where they agree</summary>
-		/// <param name="s">the <see cref="SparseBooleanMatrix"/> to compare to</param>
-		/// <returns>the number of entries that are true in both matrices</returns>
+		///
 		public int Overlap(IBooleanMatrix s)
 		{
 			int c = 0;
