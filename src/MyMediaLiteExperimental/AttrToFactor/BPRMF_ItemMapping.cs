@@ -109,7 +109,7 @@ namespace MyMediaLite.AttrToFactor
 			while (true)
 			{
 				int item_id = random.Next(0, MaxItemID + 1);
-				HashSet<int> item_users = Feedback.ItemMatrix[item_id];
+				var item_users = Feedback.ItemMatrix.GetEntriesByRow(item_id);
 				if (item_users.Count == 0)
 					continue;
 				return item_id;
@@ -162,8 +162,8 @@ namespace MyMediaLite.AttrToFactor
 			int num_items = 0;
 			for (int i = 0; i < MaxItemID + 1; i++)
 			{
-				HashSet<int> item_users = Feedback.ItemMatrix[i];
-				HashSet<int> item_attrs = item_attributes[i];
+				var item_users = Feedback.ItemMatrix.GetEntriesByRow(i);
+				var item_attrs = item_attributes.GetEntriesByRow(i);
 				if (item_users.Count == 0 || item_attrs.Count == 0)
 					continue;
 

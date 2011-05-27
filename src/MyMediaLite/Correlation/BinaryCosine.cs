@@ -44,7 +44,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Creates a Cosine similarity matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public CorrelationMatrix Create(SparseBooleanMatrix vectors)
+		static public CorrelationMatrix Create(IBooleanMatrix vectors)
 		{
 			BinaryDataCorrelationMatrix cm;
 			int num_entities = vectors.NumberOfRows;
@@ -62,16 +62,16 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public override void ComputeCorrelations(SparseBooleanMatrix entity_data)
+		public override void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
-			var transpose = entity_data.Transpose(); // TODO save memory by having a fixed relation here ...
+			var transpose = entity_data.Transpose();
 
 			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
 
 			// go over all (other) entities
-			foreach (var row_id in transpose.NonEmptyRowIDs)
+			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
 			{
-				var row = transpose[row_id].ToList();
+				var row = ((IBooleanMatrix) transpose).GetEntriesByRow(row_id);
 
 				for (int i = 0; i < row.Count; i++)
 				{
@@ -99,7 +99,7 @@ namespace MyMediaLite.Correlation
 				int x = index_pair.First;
 				int y = index_pair.Second;
 
-				this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data[x].Count * entity_data[y].Count));
+				this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
 			}
 
 		}

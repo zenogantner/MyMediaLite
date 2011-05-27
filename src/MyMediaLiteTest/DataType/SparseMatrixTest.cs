@@ -96,5 +96,24 @@ namespace MyMediaLiteTest
 			matrix[3, 1] = 2.0;
 			Assert.AreEqual(1, matrix.NumberOfNonEmptyEntries);
 		}
+		
+		[Test()] public void TestTranspose()
+		{
+			var matrix = new SparseMatrix<int>(5, 6);
+			matrix[1, 1] = 3;
+			matrix[1, 3] = 4;
+			matrix[3, 1] = 5;
+			
+			var transpose = matrix.Transpose();
+			Assert.AreEqual(6, transpose.NumberOfRows);
+			Assert.AreEqual(5, transpose.NumberOfColumns);
+			Assert.AreEqual(3, transpose[1, 1]);
+			Assert.AreEqual(4, transpose[3, 1]);
+			Assert.AreEqual(5, transpose[1, 3]);
+			
+			// check whether it is really a copy
+			transpose[1, 1] = 0;
+			Assert.AreEqual(3, matrix[1, 1]);
+		}		
 	}
 }

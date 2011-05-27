@@ -154,11 +154,12 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			else
 			{
-				HashSet<int> user_items = Feedback.UserMatrix[u];
+				var user_items = Feedback.UserMatrix[u];
 				i = user_items.ElementAt(random.Next (0, user_items.Count));
 				do
 					j = random.Next (0, MaxItemID + 1);
-				while (user_items.Contains(j) || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
+				while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
+				// TODO think about saving the property accesses here
 			}
 		}
 
@@ -169,7 +170,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (true)
 			{
 				int u = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = Feedback.UserMatrix[u];
+				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
@@ -191,8 +192,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
-			HashSet<int> attr_i = item_attributes[i];
-			HashSet<int> attr_j = item_attributes[j];
+			ICollection<int> attr_i = item_attributes[i];
+			ICollection<int> attr_j = item_attributes[j];
 
 			// assumption: attributes are sparse
 			var attr_i_over_j = new HashSet<int>(attr_i);
@@ -231,8 +232,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			double result = 0;
-			HashSet<int> attributes = this.item_attributes[item_id];
-			foreach (int a in attributes)
+			foreach (int a in item_attributes[item_id])
 				result += item_attribute_weight_by_user[user_id, a];
 			return result;
 		}

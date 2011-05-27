@@ -32,8 +32,7 @@ namespace MyMediaLite.Eval
 		/// <summary>the evaluation measures for item prediction offered by the class</summary>
 		static public ICollection<string> ItemPredictionMeasures
 		{
-			get
-			{
+			get	{
 				string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
 				return new HashSet<string>(measures);
 			}
@@ -68,8 +67,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
 			IItemRecommender engine,
-			PosOnlyFeedback test,
-			PosOnlyFeedback train,
+			IPosOnlyFeedback test,
+			IPosOnlyFeedback train,
 		    ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
@@ -87,10 +86,13 @@ namespace MyMediaLite.Eval
 
 			foreach (int user_id in relevant_users)
 			{
-				var correct_items = new HashSet<int>(test.UserMatrix[user_id].Intersect(relevant_items));
+				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
+				correct_items.IntersectWith(relevant_items);
 
 				// the number of items that are really relevant for this user
-				int num_eval_items = relevant_items.Count - train.UserMatrix[user_id].Intersect(relevant_items).Count();
+				var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
+				relevant_items_in_train.IntersectWith(relevant_items);
+				int num_eval_items = relevant_items.Count - relevant_items_in_train.Count();
 
 				// skip all users that have 0 or #relevant_items test items
 				if (correct_items.Count == 0)
@@ -110,7 +112,7 @@ namespace MyMediaLite.Eval
 
 				if (prediction.Length != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
-				
+
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
 				if (num_users % 20000 == 0)

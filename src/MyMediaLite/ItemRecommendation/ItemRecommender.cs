@@ -38,7 +38,7 @@ namespace MyMediaLite.ItemRecommendation
 		public int MaxItemID { get; set; }
 
 		/// <summary>the feedback data to be used for training</summary>
-		public virtual PosOnlyFeedback Feedback
+		public virtual IPosOnlyFeedback Feedback
 		{
 			get { return this.feedback; }
 			set {
@@ -47,7 +47,7 @@ namespace MyMediaLite.ItemRecommendation
 				MaxItemID = feedback.MaxItemID;
 			}
 		}
-		PosOnlyFeedback feedback;
+		IPosOnlyFeedback feedback;
 
 		/// <summary>create a shallow copy of the object</summary>
 		public Object Clone()

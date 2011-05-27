@@ -60,7 +60,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="data">data</param>
 		/// <param name="W">W</param>
 		/// <param name="H">H</param>
-		protected virtual void Optimize(SparseBooleanMatrix data, Matrix<double> W, Matrix<double> H)
+		protected virtual void Optimize(IBooleanMatrix data, Matrix<double> W, Matrix<double> H)
 		{
 			var HH          = new Matrix<double>(num_factors, num_factors);
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
@@ -87,7 +87,7 @@ namespace MyMediaLite.ItemRecommendation
 			// HC_minus_IH is symmetric
 			for (int u = 0; u < W.dim1; u++)
 			{
-				HashSet<int> row = data[u];
+				var row = data.GetEntriesByRow(u);
 				// create HC_minus_IH in O(f^2|S_u|)
 				for (int f_1 = 0; f_1 < num_factors; f_1++)
 					for (int f_2 = 0; f_2 < num_factors; f_2++)

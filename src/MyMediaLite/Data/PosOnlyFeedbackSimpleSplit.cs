@@ -22,28 +22,28 @@ namespace MyMediaLite.Data
 {
 	/// <summary>simple split for item prediction from implicit feedback</summary>
 	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
-	public class PosOnlyFeedbackSimpleSplit : ISplit<PosOnlyFeedback>
+	public class PosOnlyFeedbackSimpleSplit<T> : ISplit<IPosOnlyFeedback> where T : IPosOnlyFeedback, new()
 	{
 		///
 		public int NumberOfFolds { get { return 1; } }
 
 		///
-		public List<PosOnlyFeedback> Train { get; private set; }
+		public List<IPosOnlyFeedback> Train { get; private set; }
 
 		///
-		public List<PosOnlyFeedback> Test { get; private set; }
+		public List<IPosOnlyFeedback> Test { get; private set; }
 
 		/// <summary>Create a simple split of rating prediction data</summary>
 		/// <param name="feedback">the dataset</param>
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
-		public PosOnlyFeedbackSimpleSplit(PosOnlyFeedback feedback, double ratio)
+		public PosOnlyFeedbackSimpleSplit(IPosOnlyFeedback feedback, double ratio)
 		{
 			if (ratio <= 0)
 				throw new ArgumentException();
 
 			// create train/test data structures
-			var train = new PosOnlyFeedback();
-			var test  = new PosOnlyFeedback();
+			var train = new T();
+			var test  = new T();
 
 			// assign indices to training or validation part
 			Random random = new Random();
@@ -55,8 +55,8 @@ namespace MyMediaLite.Data
 						train.Add(user_id, item_id);
 
 			// create split data structures
-			Train = new List<PosOnlyFeedback>(NumberOfFolds);
-			Test  = new List<PosOnlyFeedback>(NumberOfFolds);
+			Train = new List<IPosOnlyFeedback>(NumberOfFolds);
+			Test  = new List<IPosOnlyFeedback>(NumberOfFolds);
 			Train.Add(train);
 			Test.Add(test);
 		}

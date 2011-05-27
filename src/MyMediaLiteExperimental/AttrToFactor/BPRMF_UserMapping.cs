@@ -56,8 +56,8 @@ namespace MyMediaLite.AttrToFactor
 			while (true)
 			{
 				int user_id = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = Feedback.UserMatrix[user_id];
-				HashSet<int> user_attrs = user_attributes[user_id];
+				var user_items = Feedback.UserMatrix[user_id];
+				var user_attrs = user_attributes[user_id];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;
 				return user_id;
@@ -165,8 +165,8 @@ namespace MyMediaLite.AttrToFactor
 			int num_users = 0;
 			for (int i = 0; i <= MaxUserID; i++)
 			{
-				HashSet<int> user_items = Feedback.UserMatrix[i];
-				HashSet<int> user_attrs = user_attributes[i];
+				var user_items = Feedback.UserMatrix[i];
+				var user_attrs = user_attributes[i];
 				if (user_items.Count == 0 || user_attrs.Count == 0)
 					continue;
 

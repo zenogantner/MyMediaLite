@@ -115,8 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <returns>true if the given item was already seen by user u</returns>
 		protected virtual bool SampleOtherItem(int u, int i, out int j)
 		{
-			HashSet<int> user_items = Feedback.UserMatrix[u];
-			bool item_is_positive = user_items.Contains(i);
+			bool item_is_positive = Feedback.UserMatrix[u, i];
 
 			if (fast_sampling)
 			{
@@ -135,7 +134,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				do
 					j = random.Next(0, MaxItemID + 1);
-				while (user_items.Contains(j) != item_is_positive);
+				while (Feedback.UserMatrix[u, j] != item_is_positive);
 			}
 
 			return item_is_positive;
@@ -159,11 +158,11 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			else
 			{
-				HashSet<int> user_items = Feedback.UserMatrix[u];
+				var user_items = Feedback.UserMatrix[u];
 				i = user_items.ElementAt(random.Next(0, user_items.Count));
 				do
 					j = random.Next(0, MaxItemID + 1);
-				while (user_items.Contains(j));
+				while (Feedback.UserMatrix[u, j]);
 			}
 		}
 
@@ -174,7 +173,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (true)
 			{
 				int u = random.Next(0, MaxUserID + 1);
-				HashSet<int> user_items = Feedback.UserMatrix[u];
+				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return u;
@@ -327,7 +326,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 
-			HashSet<int> user_items = Feedback.UserMatrix[user_id];
+			var user_items = Feedback.UserMatrix[user_id];
 			for (int i = 0; i < user_items.Count; i++)
 			{
 				int item_id_1, item_id_2;
@@ -366,13 +365,13 @@ namespace MyMediaLite.ItemRecommendation
 
 			for (int user_id = 0; user_id < MaxUserID + 1; user_id++)
 			{
-				HashSet<int> test_items = Feedback.UserMatrix[user_id];
-				if (test_items.Count == 0)
+				int num_test_items = Feedback.UserMatrix[user_id].Count;
+				if (num_test_items == 0)
 					continue;
 				int[] prediction = ItemPrediction.PredictItems(this, user_id, MaxItemID);
 
 				int num_eval_items = MaxItemID + 1;
-				int num_eval_pairs = (num_eval_items - test_items.Count) * test_items.Count;
+				int num_eval_pairs = (num_eval_items - num_test_items) * num_test_items;
 
 				int num_correct_pairs = 0;
 				int num_pos_above = 0;
@@ -381,7 +380,7 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					int item_id = prediction[i];
 
-					if (test_items.Contains(item_id))
+					if (Feedback.UserMatrix[user_id, item_id])
 						num_pos_above++;
 					else
 						num_correct_pairs += num_pos_above;

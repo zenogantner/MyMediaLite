@@ -152,7 +152,7 @@ namespace MyMediaLiteTest
 			matrix[2, 5] = true;
 			matrix[4, 3] = true;
 			// transpose the matrix
-			SparseBooleanMatrix transposedMatrix = matrix.Transpose();
+			var transposedMatrix = (SparseBooleanMatrix) matrix.Transpose();
 			// test the transposed matrix
 			Assert.IsTrue(transposedMatrix[1,0]);
 			Assert.IsTrue(transposedMatrix[4, 6]);

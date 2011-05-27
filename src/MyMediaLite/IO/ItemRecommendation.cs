@@ -35,7 +35,6 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
-
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
@@ -50,9 +49,8 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
-
 		{
-	        var feedback = new PosOnlyFeedback();
+	        var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
@@ -84,7 +82,7 @@ namespace MyMediaLite.IO
         /// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
         static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
         {
-            var feedback = new PosOnlyFeedback();
+            var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
             if (reader.FieldCount < 2)
                 throw new IOException("Expected at least two columns.");

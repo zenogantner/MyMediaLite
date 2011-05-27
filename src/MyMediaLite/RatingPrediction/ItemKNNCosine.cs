@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 			base.RetrainUser(item_id);
 			if (UpdateItems)
 				for (int i = 0; i <= MaxItemID; i++)
-					correlation[item_id, i] = BinaryCosine.ComputeCorrelation(data_item[item_id], data_item[i]);
+					correlation[item_id, i] = BinaryCosine.ComputeCorrelation(new HashSet<int>(data_item[item_id]), new HashSet<int>(data_item[i]));
 		}
 
 		///

@@ -180,7 +180,7 @@ namespace MyMediaLite.Util
 		/// <param name="training_data">the training dataset</param>
 		/// <param name="test_data">the test dataset</param>
 		/// <param name="recommender">the recommender that will be used</param>
-		public static void DisplayDataStats(PosOnlyFeedback training_data, PosOnlyFeedback test_data, IItemRecommender recommender)
+		public static void DisplayDataStats(IPosOnlyFeedback training_data, IPosOnlyFeedback test_data, IItemRecommender recommender)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';

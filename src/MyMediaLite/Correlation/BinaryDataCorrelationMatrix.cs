@@ -29,7 +29,7 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
-		public virtual void ComputeCorrelations(SparseBooleanMatrix entity_data)
+		public virtual void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
 			throw new NotSupportedException();
 		}

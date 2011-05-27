@@ -33,7 +33,7 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Write item predictions (scores) for all users to a file</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
@@ -41,7 +41,7 @@ namespace MyMediaLite.Eval
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
-			PosOnlyFeedback train,
+			IPosOnlyFeedback train,
 			ICollection<int> relevant_items,
 			int num_predictions,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
@@ -56,7 +56,7 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Write item predictions (scores) to a file</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
@@ -65,7 +65,7 @@ namespace MyMediaLite.Eval
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
-			PosOnlyFeedback train,
+			IPosOnlyFeedback train,
 			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -81,7 +81,7 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Write item predictions (scores) for all users to a TextWriter object</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
@@ -89,7 +89,7 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
-			PosOnlyFeedback train,
+			IPosOnlyFeedback train,
 			ICollection<int> relevant_items,
 			int num_predictions,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
@@ -101,7 +101,7 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
@@ -110,7 +110,7 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
-			PosOnlyFeedback train,
+			IPosOnlyFeedback train,
 			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
@@ -119,7 +119,7 @@ namespace MyMediaLite.Eval
 		{
 			foreach (int user_id in relevant_users)
 			{
-				HashSet<int> ignore_items = train.UserMatrix[user_id];
+				var ignore_items = train.UserMatrix[user_id];
 				WritePredictions(recommender, user_id, relevant_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
 			}
 		}
