@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.DataType
@@ -122,20 +123,18 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Returns a copy of the i-th row of the matrix</summary>
 		/// <param name="i">the row ID</param>
-		/// <returns>A vector of T containing the row data</returns>
-		public T[] GetRow(int i)
+		/// <returns>a list of T containing the row data</returns>
+		public IList<T> GetRow(int i)
 		{
-			// TODO speed up using Array.Copy()/CopyTo?
 			T[] row = new T[this.dim2];
-			for (int x = 0; x < this.dim2; x++)
-				row[x] = this[i, x];
+			Array.Copy(data, i * dim2, row, 0, dim2);
 			return row;
 		}
 
 		/// <summary>Returns a copy of the j-th column of the matrix</summary>
 		/// <param name="j">the column ID</param>
-		/// <returns>A vector of T containing the column data</returns>
-		public T[] GetColumn(int j)
+		/// <returns>a list of T containing the column data</returns>
+		public IList<T> GetColumn(int j)
 		{
 			T[] column = new T[this.dim1];
 			for (int x = 0; x < this.dim1; x++)
@@ -145,27 +144,24 @@ namespace MyMediaLite.DataType
 
 		/// <summary>Sets the values of the i-th row to the values in a given array</summary>
 		/// <param name="i">the row ID</param>
-		/// <param name="row">A vector of T of length dim1</param>
-		public void SetRow(int i, T[] row)
+		/// <param name="row">a list of T of length dim1</param>
+		public void SetRow(int i, IList<T> row)
 		{
-			// TODO speed up using Array.Copy()?
-			if (row.Length != this.dim2)
+			if (row.Count != this.dim2)
 				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
-														  row.Length, this.dim2));
+														  row.Count, this.dim2));
 
-			for (int j = 0; j < this.dim2; j++)
-				
-				this[i, j] = row[j];
+			row.CopyTo(data, i * dim2);
 		}
 
 		/// <summary>Sets the values of the j-th column to the values in a given array</summary>
 		/// <param name="j">the column ID</param>
-		/// <param name="column">A T[] of length dim2</param>
-		public void SetColumn(int j, T[] column)
+		/// <param name="column">a list of T of length dim2</param>
+		public void SetColumn(int j, IList<T> column)
 		{
-			if (column.Length != this.dim1)
+			if (column.Count != this.dim1)
 				throw new ArgumentException(string.Format("Array length ({0}) must equal number of rows ({1}",
-														  column.Length, this.dim1));
+														  column.Count, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
 				this[i, j] = column[i];
