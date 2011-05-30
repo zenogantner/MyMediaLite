@@ -34,8 +34,8 @@ using MyMediaLite.Util;
 /// <summary>Item prediction program, see Usage() method for more information</summary>
 class ItemPrediction
 {
-	static PosOnlyFeedback training_data;
-	static PosOnlyFeedback test_data;
+	static IPosOnlyFeedback training_data;
+	static IPosOnlyFeedback test_data;
 	static ICollection<int> relevant_items;
 
 	static NumberFormatInfo ni = new NumberFormatInfo();
@@ -429,7 +429,7 @@ class ItemPrediction
 		}
 		else
 		{
-			var split = new PosOnlyFeedbackSimpleSplit(training_data, test_ratio);
+			var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
 			training_data = split.Train[0];
 			test_data     = split.Test[0];
 		}

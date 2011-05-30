@@ -46,8 +46,8 @@ class MappingItemPrediction
 {
 	static NumberFormatInfo ni = new NumberFormatInfo();
 
-	static PosOnlyFeedback training_data;
-	static PosOnlyFeedback test_data;
+	static IPosOnlyFeedback training_data;
+	static IPosOnlyFeedback test_data;
 	static ICollection<int> relevant_items;
 
 	static BPRMF_Mapping recommender;
@@ -234,7 +234,7 @@ class MappingItemPrediction
 		Console.WriteLine();
 	}
 
-    static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, PosOnlyFeedback test_data, PosOnlyFeedback train_data)
+    static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, IPosOnlyFeedback test_data, IPosOnlyFeedback train_data)
 	{
 		Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
 
