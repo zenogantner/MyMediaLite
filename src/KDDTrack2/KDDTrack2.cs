@@ -241,6 +241,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 							{
 								Console.Error.WriteLine("Predicting validation scores ...");
 								KDDCup.PredictScoresTrack2(recommender_validate, validation_candidates, prediction_file + "-validate-it-" + i);
+
 								Console.Error.WriteLine("Predicting real scores ...");
 								KDDCup.PredictScoresTrack2(recommender_final, test_candidates, prediction_file + "-it-" + i);
 							}
@@ -410,7 +411,17 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 	{
 		return CreateFeedback(ratings, 0);
 	}
+<<<<<<< HEAD
 	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
+=======
+
+	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
+	{
+		var feedback = new PosOnlyFeedback<SparseBooleanMatrixBinarySearch>();
+		for (int i = 0; i < ratings.Count; i++)
+			if (ratings[i] >= threshold)
+				feedback.Add(ratings.Users[i], ratings.Items[i]);
+>>>>>>> 2c5109c... adapt KDD Cup track 2 to new PosOnlyFeedback data type
 
 	{
 		SparseBooleanMatrixStatic user_item_matrix = new SparseBooleanMatrixStatic();
