@@ -22,7 +22,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Data
 {
 	// TODO unit tests
-	
+
 	/// <summary>Data structure for implicit, positive-only user feedback</summary>
 	/// <remarks>
 	/// This data structure supports online updates.
@@ -55,7 +55,7 @@ namespace MyMediaLite.Data
 
 		/// <summary>all users that have given feedback</summary>
 		public ICollection<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
-		
+
 		/// <summary>all items mentioned at least once</summary>
 		public ICollection<int> AllItems {
 			get {
@@ -65,11 +65,20 @@ namespace MyMediaLite.Data
 					return ItemMatrix.NonEmptyRowIDs;
 			}
 		}
-		
-		/// <summary>Create a PosOnlyFeedback object</summary>
+
+		/// <summary>Default constructor</summary>
 		public PosOnlyFeedback()
 		{
 			UserMatrix = new SparseBooleanMatrix();
+		}
+
+		/// <summary>Create a PosOnlyFeedback object from an existing user-item matrix</summary>
+		/// <param name="user_matrix">the user-item matrix</param>
+		public PosOnlyFeedback(T user_matrix)
+		{
+			UserMatrix = user_matrix;
+			MaxUserID = user_matrix.NumberOfRows;
+			MaxItemID = user_matrix.NumberOfColumns;
 		}
 
 		/// <summary>Add a user-item event to the data structure</summary>
