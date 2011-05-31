@@ -36,15 +36,15 @@ namespace MyMediaLite.Eval
 		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			PosOnlyFeedback train,
 			ICollection<int> relevant_items,
 			int num_predictions,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
@@ -60,8 +60,8 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
@@ -69,7 +69,7 @@ namespace MyMediaLite.Eval
 			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
@@ -84,15 +84,15 @@ namespace MyMediaLite.Eval
 		/// <param name="train">a user-wise <see cref="PosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			PosOnlyFeedback train,
 			ICollection<int> relevant_items,
 			int num_predictions,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
 			var relevant_users = new List<int>(user_mapping.InternalIDs);
@@ -105,8 +105,8 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_users">a list of users to make recommendations for</param>
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
@@ -114,7 +114,7 @@ namespace MyMediaLite.Eval
 			IList<int> relevant_users,
 			ICollection<int> relevant_items,
 			int num_predictions,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
 			foreach (int user_id in relevant_users)
@@ -130,8 +130,8 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_items">the list of candidate items</param>
 		/// <param name="ignore_items">a list of items for which no predictions should be made</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
@@ -139,7 +139,7 @@ namespace MyMediaLite.Eval
 			ICollection<int> relevant_items,
 			ICollection<int> ignore_items,
 			int num_predictions,
-			EntityMapping user_mapping, EntityMapping item_mapping,
+			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
 			var ni = new NumberFormatInfo();
