@@ -43,6 +43,10 @@ class RatingPrediction
 	// recommenders
 	static RatingPredictor recommender = null;
 
+	// ID mapping objects
+	static IEntityMapping user_mapping = new EntityMapping();
+	static IEntityMapping item_mapping = new EntityMapping();
+
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
 	static List<double> fit_time_stats      = new List<double>();
@@ -224,8 +228,6 @@ class RatingPrediction
 		Recommender.Configure(recommender, recommender_options, Usage);
 
 		// ID mapping objects
-		IEntityMapping user_mapping = new EntityMapping();
-		IEntityMapping item_mapping = new EntityMapping();
 		if (file_format == RatingFileFormat.KDDCUP_2011)
 		{
 			user_mapping = new IdentityMapping();
@@ -235,7 +237,7 @@ class RatingPrediction
 		// load all the data
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			LoadData(data_dir, training_file, test_file, min_rating, max_rating,
-			         user_mapping, item_mapping, user_attributes_file, item_attributes_file,
+			         user_attributes_file, item_attributes_file,
 			         user_relations_file, item_relations_file);
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
@@ -253,7 +255,7 @@ class RatingPrediction
 			IIterativeModel iterative_recommender = (MatrixFactorization) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 
-			if (load_model_file.Equals(string.Empty))
+			if (load_model_file == string.Empty)
 				recommender.Train();
 			else
 				Recommender.LoadModel(iterative_recommender, load_model_file);
@@ -293,6 +295,7 @@ class RatingPrediction
 					eval_time_stats.Add(time.TotalSeconds);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
+					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i);
 
 					if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
 					{
@@ -308,13 +311,13 @@ class RatingPrediction
 				}
 			} // for
 
-			DisplayIterationStats();
+			DisplayStats();
 		}
 		else
 		{
 			TimeSpan seconds;
 
-			if (load_model_file.Equals(string.Empty))
+			if (load_model_file == string.Empty)
 			{
 				Console.Write(recommender.ToString());
 				if (cross_validation > 0)
@@ -346,7 +349,7 @@ class RatingPrediction
 				Console.Write(" testing_time " + seconds);
 			}
 
-			if (!prediction_file.Equals(string.Empty))
+			if (prediction_file != string.Empty)
 			{
 				seconds = Utils.MeasureTime(delegate() {
 						Console.WriteLine();
@@ -364,7 +367,6 @@ class RatingPrediction
     static void LoadData(string data_dir,
 	              string training_file, string test_file,
 	              double min_rating, double max_rating,
-	              IEntityMapping user_mapping, IEntityMapping item_mapping,
 	              string user_attributes_file, string item_attributes_file,
 	              string user_relation_file, string item_relation_file)
 	{
@@ -377,14 +379,14 @@ class RatingPrediction
 		else if (file_format == RatingFileFormat.MOVIELENS_1M)
 			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 		else if (file_format == RatingFileFormat.KDDCUP_2011)
-			training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file)); // TODO do something about the mappings
+			training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
 
 		recommender.Ratings = training_data;
 
 		// user attributes
 		if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
 		{
-			if (user_attributes_file.Equals(string.Empty))
+			if (user_attributes_file == string.Empty)
 				Usage("Recommender expects --user-attributes=FILE.");
 			else
 				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
@@ -393,7 +395,7 @@ class RatingPrediction
 		// item attributes
 		if (recommender is IItemAttributeAwareRecommender)
 		{
-			if (item_attributes_file.Equals(string.Empty))
+			if (item_attributes_file == string.Empty)
 				Usage("Recommender expects --item-attributes=FILE.");
 			else
 				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
@@ -401,7 +403,7 @@ class RatingPrediction
 
 		// user relation
 		if (recommender is IUserRelationAwareRecommender)
-			if (user_relation_file.Equals(string.Empty))
+			if (user_relation_file == string.Empty)
 			{
 				Usage("Recommender expects --user-relations=FILE.");
 			}
@@ -413,7 +415,7 @@ class RatingPrediction
 
 		// item relation
 		if (recommender is IItemRelationAwareRecommender)
-			if (user_relation_file.Equals(string.Empty))
+			if (user_relation_file == string.Empty)
 			{
 				Usage("Recommender expects --item-relations=FILE.");
 			}
@@ -436,11 +438,11 @@ class RatingPrediction
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
-		DisplayIterationStats();
+		DisplayStats();
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-	static void DisplayIterationStats()
+	static void DisplayStats()
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(

@@ -43,8 +43,14 @@ class ItemPrediction
 	// recommenders
 	static IItemRecommender recommender = null;
 
+	// ID mapping objects
+	static IEntityMapping user_mapping = new EntityMapping();
+	static IEntityMapping item_mapping = new EntityMapping();
+
+	// command-line parameters
 	static bool compute_fit;
 	static double test_ratio;
+	static int predict_items_number = -1;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -153,7 +159,6 @@ class ItemPrediction
 		string load_model_file        = string.Empty;
 		int random_seed               = -1;
 		string prediction_file        = string.Empty;
-		int predict_items_number      = -1;
 		string predict_for_users_file = string.Empty;
 		test_ratio                    = 0;
 
@@ -214,13 +219,9 @@ class ItemPrediction
 
 		Recommender.Configure(recommender, recommender_options, Usage);
 
-		// ID mapping objects
-		var user_mapping = new EntityMapping();
-		var item_mapping = new EntityMapping();
-
 		// load all the data
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir, training_file, test_file, user_mapping, item_mapping, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
+			LoadData(data_dir, training_file, test_file, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 		});
 		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
@@ -233,7 +234,7 @@ class ItemPrediction
 			IIterativeModel iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 
-			if (load_model_file.Equals(string.Empty))
+			if (load_model_file == string.Empty)
 				iterative_recommender.Train();
 			else
 				Recommender.LoadModel(iterative_recommender, load_model_file);
@@ -282,6 +283,7 @@ class ItemPrediction
 					eval_time_stats.Add(t.TotalSeconds);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
+					Predict(prediction_file, predict_for_users_file, i);
 
 					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 					{
@@ -295,7 +297,7 @@ class ItemPrediction
 		}
 		else
 		{
-			if (load_model_file.Equals(string.Empty))
+			if (load_model_file == string.Empty)
 			{
 				Console.Write(recommender.ToString() + " ");
 				time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
@@ -308,36 +310,9 @@ class ItemPrediction
 				// TODO is this the right time to load the model?
 			}
 
-			if (!prediction_file.Equals(string.Empty))
+			if (prediction_file != string.Empty)
 			{
-				if (predict_for_users_file.Equals(string.Empty))
-					time_span = Utils.MeasureTime( delegate()
-				    	{
-					    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
-						    	recommender,
-						        training_data,
-						        relevant_items, predict_items_number,
-						        user_mapping, item_mapping,
-						        prediction_file
-							);
-							Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
-				    	}
-					);
-				else
-					time_span = Utils.MeasureTime( delegate()
-				    	{
-					    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
-						    	recommender,
-						        training_data,
-						        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
-						        relevant_items, predict_items_number,
-						        user_mapping, item_mapping,
-						        prediction_file
-							);
-							Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
-				    	}
-					);
-				Console.Write(" predicting_time " + time_span);
+				Predict(prediction_file, predict_for_users_file);
 			}
 			else if (!no_eval)
 			{
@@ -362,7 +337,6 @@ class ItemPrediction
 	}
 
     static void LoadData(string data_dir, string training_file, string test_file,
-	                     EntityMapping user_mapping, EntityMapping item_mapping,
 	                     string relevant_items_file,
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file)
@@ -371,7 +345,7 @@ class ItemPrediction
 		training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 
 		// relevant items
-		if (! relevant_items_file.Equals(string.Empty) )
+		if (relevant_items_file != string.Empty)
 			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 		else
 			relevant_items = training_data.AllItems;
@@ -382,7 +356,7 @@ class ItemPrediction
 		// user attributes
 		if (recommender is IUserAttributeAwareRecommender)
 		{
-			if (user_attributes_file.Equals(string.Empty))
+			if (user_attributes_file == string.Empty)
 				Usage("Recommender expects user_attributes=FILE.");
 			else
 				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
@@ -391,7 +365,7 @@ class ItemPrediction
 		// item attributes
 		if (recommender is IItemAttributeAwareRecommender)
 		{
-			if (item_attributes_file.Equals(string.Empty))
+			if (item_attributes_file == string.Empty)
 				Usage("Recommender expects item_attributes=FILE.");
 			else
 				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
@@ -399,7 +373,7 @@ class ItemPrediction
 
 		// user relation
 		if (recommender is IUserRelationAwareRecommender)
-			if (user_relation_file.Equals(string.Empty))
+			if (user_relation_file == string.Empty)
 			{
 				Usage("Recommender expects user_relation=FILE.");
 			}
@@ -411,7 +385,7 @@ class ItemPrediction
 
 		// item relation
 		if (recommender is IItemRelationAwareRecommender)
-			if (user_relation_file.Equals(string.Empty))
+			if (user_relation_file == string.Empty)
 			{
 				Usage("Recommender expects item_relation=FILE.");
 			}
@@ -433,6 +407,48 @@ class ItemPrediction
 			training_data = split.Train[0];
 			test_data     = split.Test[0];
 		}
+	}
+
+	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
+	{
+		if (prediction_file == string.Empty)
+			return;
+
+		Predict(prediction_file + "-it-" + iteration, predict_for_users_file);
+	}
+
+	static void Predict(string prediction_file, string predict_for_users_file)
+	{
+		TimeSpan time_span;
+
+		if (predict_for_users_file == string.Empty)
+			time_span = Utils.MeasureTime( delegate()
+		    	{
+			    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
+				    	recommender,
+				        training_data,
+				        relevant_items, predict_items_number,
+				        user_mapping, item_mapping,
+				        prediction_file
+					);
+					Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
+		    	}
+			);
+		else
+			time_span = Utils.MeasureTime( delegate()
+		    	{
+			    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
+				    	recommender,
+				        training_data,
+				        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
+				        relevant_items, predict_items_number,
+				        user_mapping, item_mapping,
+				        prediction_file
+					);
+					Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
+		    	}
+			);
+		Console.Write(" predicting_time " + time_span);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

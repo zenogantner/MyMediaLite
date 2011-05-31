@@ -1,8 +1,11 @@
 1.03	2011-0?-??
 	- recommenders
 	- command-line tools
+          - write out predictions every N iterations with --prediction-file=F
+            and --find-iter=N (bug reported by Alejandro Bellogin)
 	- evaluation
 	- documentation
+          - some API doc improvements
 
 1.02	2011-05-24
 	- recommenders
