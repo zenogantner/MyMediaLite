@@ -27,22 +27,22 @@ namespace MyMediaLite.Data
 	/// <remarks>
 	/// This data structure supports online updates.
 	/// </remarks>
-	public class PosOnlyFeedback
+	public class PosOnlyFeedback<T> : IPosOnlyFeedback where T : IBooleanMatrix, new()
 	{
 		/// <summary>By-user access, users are stored in the rows, items in the culumns</summary>
-		public SparseBooleanMatrix UserMatrix { get; private set; }
+		public IBooleanMatrix UserMatrix { get; private set; }
 
 		/// <summary>By-item access, items are stored in the rows, users in the culumns</summary>
-		public SparseBooleanMatrix ItemMatrix
+		public IBooleanMatrix ItemMatrix
 		{
 			get {
 				if (item_matrix == null)
-					item_matrix = UserMatrix.Transpose();
+					item_matrix = (IBooleanMatrix) UserMatrix.Transpose();
 
 				return item_matrix;
 			}
 		}
-		SparseBooleanMatrix item_matrix;
+		IBooleanMatrix item_matrix;
 
 		/// <summary>the maximum user ID</summary>
 		public int MaxUserID { get; private set; }
@@ -69,7 +69,7 @@ namespace MyMediaLite.Data
 		/// <summary>Default constructor</summary>
 		public PosOnlyFeedback()
 		{
-			UserMatrix = new SparseBooleanMatrix();
+			UserMatrix = new T();
 		}
 
 		/// <summary>Create a PosOnlyFeedback object from an existing user-item matrix</summary>
@@ -131,7 +131,7 @@ namespace MyMediaLite.Data
 		/// <summary>Compute the number of overlapping events in two feedback datasets</summary>
 		/// <param name="s">the feedback dataset to compare to</param>
 		/// <returns>the number of overlapping events, i.e. events that have the same user and item ID</returns>
-		public int Overlap(PosOnlyFeedback s)
+		public int Overlap(IPosOnlyFeedback s)
 		{
 			return UserMatrix.Overlap(s.UserMatrix);
 		}

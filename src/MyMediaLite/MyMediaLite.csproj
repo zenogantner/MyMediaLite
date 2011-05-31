@@ -151,6 +151,7 @@
     <Compile Include="Data\IdentityMapping.cs" />
     <Compile Include="Data\IEntityMapping.cs" />
     <Compile Include="Util\RecommenderParameters.cs" />
+    <Compile Include="Data\IPosOnlyFeedback.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
