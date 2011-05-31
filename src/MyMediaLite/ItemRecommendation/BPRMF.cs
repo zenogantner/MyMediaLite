@@ -57,6 +57,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Learning rate alpha</summary>
 		protected double learn_rate = 0.05;
 
+		/// <summary>Regularization parameter for user factors</summary>
+		public double RegU { get { return reg_u; } set { reg_u = value; } }
+		/// <summary>Regularization parameter for user factors</summary>
+		protected double reg_u = 0.0025;
+
 		/// <summary>Regularization parameter for positive item factors</summary>
 		public double RegI { get { return reg_i; } set { reg_i = value;	} }
 		/// <summary>Regularization parameter for positive item factors</summary>
@@ -66,11 +71,6 @@ namespace MyMediaLite.ItemRecommendation
 		public double RegJ { get { return reg_j; } set { reg_j = value; } }
 		/// <summary>Regularization parameter for negative item factors</summary>
 		protected double reg_j = 0.00025;
-
-		/// <summary>Regularization parameter for user factors</summary>
-		public double RegU { get { return reg_u; } set { reg_u = value; } }
-		/// <summary>Regularization parameter for user factors</summary>
-		protected double reg_u = 0.0025;
 
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_pos_items;
