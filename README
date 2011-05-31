@@ -37,9 +37,10 @@ in your papers. Please inform us about if you have publication that uses
 this software, so we can list it on MyMediaLite's website.
 
 Thanks go to the following people, who provided valuable feedback about
-MyMediaLite: Thorsten Angermann, Suhrid Balakrishnan, Christian Brauch,
-Fu Changhong, Andreas Hoffmann, Artus Krohn-Grimberghe, Christina Lichtenthäler,
-Damir Logar, Chris Newell, Thai-Nghe Nguyen, Yongfeng Wang
+MyMediaLite: Thorsten Angermann, Suhrid Balakrishnan, Alejandro Bellogin,
+Christian Brauch, Fu Changhong, Andreas Hoffmann, Artus Krohn-Grimberghe,
+Christina Lichtenthäler, Damir Logar, Chris Newell, Thai-Nghe Nguyen,
+Yongfeng Wang
 
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
@@ -65,7 +66,7 @@ along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 ----
 This package currently contains Mono.Options, the Math.NET library and a
-C# version of LIBSVM.
+C# port of LIBSVM.
 
 The original packages can be found here:
 http://www.mathdotnet.com/
