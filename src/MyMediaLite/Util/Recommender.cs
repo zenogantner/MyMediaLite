@@ -32,15 +32,17 @@ namespace MyMediaLite.Util
 	/// </remarks>
 	public class Recommender
 	{
+		// TODO move IO stuff to IO namespace
+
 		/// <summary>Save the model parameters of a recommender to a file</summary>
 		/// <remarks>
-		/// Does not save if file is an empty string
+		/// Does not save if filename is an empty string.
 		/// </remarks>
 		/// <param name="recommender">the recommender to store</param>
 		/// <param name="filename">the filename (may include relative paths)</param>
 		public static void SaveModel(IRecommender recommender, string filename)
 		{
-			if (filename.Equals(string.Empty))
+			if (filename == string.Empty)
 				return;
 
 			Console.Error.WriteLine("Save model to {0}", filename);
@@ -48,23 +50,29 @@ namespace MyMediaLite.Util
 		}
 
 		/// <summary>Save the model parameters of a recommender (in a given iteration of the training) to a file</summary>
+		/// <remarks>
+		/// Does not save if filename is an empty string.
+		/// </remarks>
 		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
 		public static void SaveModel(IRecommender recommender, string filename, int iteration)
 		{
-			if (filename.Equals(string.Empty))
+			if (filename == string.Empty)
 				return;
 
 			SaveModel(recommender, filename + "-it-" + iteration);
 		}
 
 		/// <summary>Load the model parameters of a recommender (in a given iteration of the training) from a file</summary>
+		/// <remarks>
+		/// Does not load model if filename is an empty string.
+		/// </remarks>
 		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
 		/// <param name="filename">the filename template</param>
 		public static void LoadModel(IRecommender recommender, string filename)
 		{
-			if (filename.Equals(string.Empty))
+			if (filename  == string.Empty)
 				return;
 
 			Console.Error.WriteLine("Load model from {0}", filename);
@@ -120,7 +128,7 @@ namespace MyMediaLite.Util
 			var parameters_dictionary = new RecommenderParameters(parameters);
 			return Configure(engine, parameters_dictionary, report_error);
 		}
-		
+
 		/// <summary>Configure a recommender engine</summary>
 		/// <param name="engine">the recommender engine to configure</param>
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
