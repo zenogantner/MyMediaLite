@@ -293,7 +293,7 @@ class ItemPrediction
 					}
 				}
 			} // for
-			DisplayIterationStats();
+			DisplayStats();
 		}
 		else
 		{
@@ -333,7 +333,6 @@ class ItemPrediction
 			Console.WriteLine();
 		}
 		Recommender.SaveModel(recommender, save_model_file);
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
     static void LoadData(string data_dir, string training_file, string test_file,
@@ -453,11 +452,10 @@ class ItemPrediction
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
-		DisplayIterationStats();
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
+		DisplayStats();
 	}
 
-	static void DisplayIterationStats()
+	static void DisplayStats()
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
@@ -477,5 +475,6 @@ class ItemPrediction
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
+		Console.Error.WriteLine("memory {0}", Memory.Usage);		
 	}
 }

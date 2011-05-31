@@ -439,7 +439,6 @@ class RatingPrediction
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
 	{
 		DisplayStats();
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
 	static void DisplayStats()
@@ -462,5 +461,6 @@ class RatingPrediction
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 }

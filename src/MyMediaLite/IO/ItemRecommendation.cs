@@ -31,10 +31,11 @@ namespace MyMediaLite.IO
 	{
 		/// <summary>Read in implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
-		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-		/// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public PosOnlyFeedback Read(string filename, EntityMapping user_mapping, EntityMapping item_mapping)
+		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+
 		{
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
@@ -45,10 +46,11 @@ namespace MyMediaLite.IO
 
 		/// <summary>Read in implicit feedback data from a TextReader</summary>
 		/// <param name="reader">the TextReader to be read from</param>
-		/// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-		/// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public PosOnlyFeedback Read(TextReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
+
 		{
 	        var feedback = new PosOnlyFeedback();
 
@@ -77,10 +79,10 @@ namespace MyMediaLite.IO
 
         /// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
-        /// <param name="user_mapping">user <see cref="EntityMapping"/> object</param>
-        /// <param name="item_mapping">item <see cref="EntityMapping"/> object</param>
-        /// <returns>a <see cref="PosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-        static public PosOnlyFeedback Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+        /// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
+        /// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+        /// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+        static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
         {
             var feedback = new PosOnlyFeedback();
 
