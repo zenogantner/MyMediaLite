@@ -1,6 +1,8 @@
 1.03	2011-0?-??
 	- recommenders
           - remove NewKNN from project (still not finished)
+          - new rating predictor BiasedMatrixFactorizationMAE, which is BMF
+            optimized for MAE instead of RMSE
 	- command-line tools
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
