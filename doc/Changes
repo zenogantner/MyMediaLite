@@ -1,5 +1,6 @@
 1.03	2011-0?-??
 	- recommenders
+          - remove NewKNN from project (still not finished)
 	- command-line tools
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
