@@ -185,25 +185,5 @@ namespace MyMediaLite.DataType
 			return result;
 		}
 		// TODO unit tests
-
-		/// <summary>
-		/// Check whether a matrix contains NaN ("not a number") elements
-		/// </summary>
-		/// <param name="matrix">a matrix</param>
-		/// <returns>true if there are NaN elements in the matrix, false otherwise</returns>
-		static public bool ContainsNaN(Matrix<double> matrix)
-		{
-			int nan_counter = 0;
-			for (int x = 0; x < matrix.dim1; x++)
-				for (int y = 0; y < matrix.dim2; y++)
-					if ( Double.IsNaN(matrix[x, y]) )
-						nan_counter++;
-			if (nan_counter > 0)
-			{
-				Console.Error.WriteLine("Number of NaNs: " + nan_counter);
-				return true;
-			}
-			return false;
-		}
 	}
 }

@@ -103,18 +103,5 @@ namespace MyMediaLiteTest
 			double result = 55;
 			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(matrix, 2, vector));
 		}
-
-		[Test()] public void TestContainsNaN()
-		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
-			for (int i = 0; i < 5; i++)
-				matrix.SetRow(i, row);
-			
-			Assert.IsFalse(MatrixUtils.ContainsNaN(matrix));
-
-			matrix[1, 1] = double.NaN;			
-			Assert.IsTrue(MatrixUtils.ContainsNaN(matrix));
-		}
 	}
 }

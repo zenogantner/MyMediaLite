@@ -50,6 +50,7 @@ Architecture
  - web APIs
    - integrate with easyrec JavaScript API http://easyrec.org/ 
    - implement features similar to the Strands web service API or Hunch
+   - http://drupal.org/project/recommender
  - internal APIs
    - interface(s) for recommenders that support online updates
    - user and item IDs should be unsigned integers, not signed integers
@@ -79,11 +80,13 @@ Architecture
    - GPU support
    - support for distributed computing
      - check out http://code.google.com/p/qizmt/ and http://mapsharp.codeplex.com/
+     - http://atbrox.com/2011/02/07/an-example-of-using-f-and-c-netmono-with-amazons-elastic-mapreduce-hadoop/
  - source code organization
    - use one repository per component, instead of having everything in one repository
  - IO and storage
    - save model files using reflection (binary and XML)
    - GZip model files and prediction files (on demand)
+ - try to run on JavaScript via https://github.com/kevingadd/JSIL
 GUI demo
  - display a fixed number of movies on the screen, let the user browse
  - tabs
