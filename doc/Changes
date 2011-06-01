@@ -13,7 +13,8 @@
           - SparseBooleanMatrix: remove Rows() method (not necessary)
           - Matrix<T>: perform bounds check only when DEBUG is set;
             faster GetRow()/SetRow(); generic return types
-          - MatrixUtils: remove ContainsNaN() method
+          - MatrixUtils: remove ContainsNaN()
+          - VectorUtils: add L1Norm()
 	- documentation
 
 1.02	2011-05-24

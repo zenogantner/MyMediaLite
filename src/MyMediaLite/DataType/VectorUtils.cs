@@ -36,18 +36,18 @@ namespace MyMediaLite.DataType
 			writer.WriteLine(vector.Count);
 			foreach (var v in vector)
 			   	writer.WriteLine(v.ToString(ni));
-			
+
 			writer.WriteLine();
 		}
 
 		/// <summary>Read a collection of doubles from a TextReader object</summary>
-		/// <param name="reader">the <see cref="TextReader"/> to read from</param>		
+		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <returns>a list of double values</returns>
 		static public IList<double> ReadVector(TextReader reader)
 		{
 			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';			
-			
+			ni.NumberDecimalDigits = '.';
+
 			int dim = int.Parse(reader.ReadLine());
 
 			var vector = new double[dim];
@@ -65,8 +65,8 @@ namespace MyMediaLite.DataType
 			}
 
 			return vector;
-		}		
-		
+		}
+
 		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the Euclidean norm of the vector</returns>
@@ -76,6 +76,17 @@ namespace MyMediaLite.DataType
 			foreach (double v in vector)
 				sum += Math.Pow(v, 2);
 			return Math.Sqrt(sum);
+		}
+
+		/// <summary>Compute the L1 norm of a collection of doubles</summary>
+		/// <param name="vector">the vector to compute the norm for</param>
+		/// <returns>the L1 norm of the vector</returns>
+		public static double L1Norm(ICollection<double> vector)
+		{
+			double sum = 0;
+			foreach (double v in vector)
+				sum += Math.Abs(v);
+			return sum;
 		}
 
 		/// <summary>Initialize a collection of doubles with values from a normal distribution</summary>
