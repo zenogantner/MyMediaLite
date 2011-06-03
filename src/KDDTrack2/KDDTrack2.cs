@@ -219,10 +219,8 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			for (int i = iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan time = Utils.MeasureTime(delegate() {
-					Console.Error.WriteLine("validation set: iterate");
 					iterative_recommender_validate.Iterate(); // TODO parallelize
-					Console.Error.WriteLine("prediction set: iterate");
-					if (prediction_file != string.Empty)				
+					if (prediction_file != string.Empty)
 						iterative_recommender_final.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
@@ -425,19 +423,19 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 	{
 		SparseBooleanMatrixStatic user_item_matrix = new SparseBooleanMatrixStatic();
-		
+
 		for (int u = 0; u <= ratings.MaxUserID; u++)
 		{
 			var items = new List<int>();
-			
+
 			foreach (int index in ratings.ByUser[u])
 				if (ratings[index] >= threshold)
 					items.Add(ratings.Items[index]);
-			
+
 			user_item_matrix[u] = items.ToArray();
 		}
-		var feedback = new PosOnlyFeedback<SparseBooleanMatrixStatic>(user_item_matrix);			
-		
+		var feedback = new PosOnlyFeedback<SparseBooleanMatrixStatic>(user_item_matrix);
+
 		Console.Error.WriteLine("{0} ratings > {1}", feedback.Count, threshold);
 
 		return feedback;
