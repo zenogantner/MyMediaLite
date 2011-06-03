@@ -77,6 +77,25 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_neg_items;
 
+		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
+		/// <remarks>
+		/// See
+		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent
+		/// 2011
+		/// </remarks>
+		public bool BoldDriver { set; get; }
+
+		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
+		double last_loss = double.NegativeInfinity;
+
+		/// <summary>array of user components of triples to use for approximate loss computation</summary>
+		int[] loss_sample_u;
+		/// <summary>array of positive item components of triples to use for approximate loss computation</summary>
+		int[] loss_sample_i;
+		/// <summary>array of negative item components of triples to use for approximate loss computation</summary>
+		int[] loss_sample_j;
+
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
@@ -87,8 +106,39 @@ namespace MyMediaLite.ItemRecommendation
 
 			item_bias = new double[MaxItemID + 1];
 
+			CheckSampling(); // TODO rename
+		}
+
+		///
+		public override void Train()
+		{
+			InitModel();
+
 			random = Util.Random.GetInstance(); // TODO move to training
-			CheckSampling();                    // TODO rename
+
+			if (BoldDriver)
+			{
+				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100; // TODO make configurable
+				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
+
+				loss_sample_u = new int[num_sample_triples];
+				loss_sample_i = new int[num_sample_triples];
+				loss_sample_j = new int[num_sample_triples];
+
+				int u, i, j;
+				for (int c = 0; c < num_sample_triples; c++)
+				{
+					SampleTriple(out u, out i, out j);
+					loss_sample_u[c] = u;
+					loss_sample_i[c] = i;
+					loss_sample_j[c] = j;
+				}
+
+				last_loss = ComputeLoss();
+			}
+
+			for (int i = 0; i < NumIter; i++)
+				Iterate();
 		}
 
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
@@ -105,6 +155,22 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				SampleTriple(out user_id, out item_id_1, out item_id_2);
 				UpdateFactors(user_id, item_id_1, item_id_2, true, true, true);
+			}
+
+			if (BoldDriver)
+			{
+				double loss = ComputeLoss();
+
+				if (loss > last_loss)
+					LearnRate *= 0.5;
+				else if (loss < last_loss)
+					LearnRate *= 1.1;
+
+				last_loss = loss;
+
+				var ni = new NumberFormatInfo();
+				ni.NumberDecimalDigits = '.';
+				Console.Error.WriteLine(string.Format(ni, "loss {0} learn_rate {1} ", loss, LearnRate));
 			}
 		}
 
@@ -356,6 +422,30 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
+		/// <summary>Compute approximate loss</summary>
+		/// <returns>the approximate loss</returns>
+		public virtual double ComputeLoss()
+		{
+			double ranking_loss = 0;
+			for (int c = 0; c < loss_sample_u.Length; c++)
+			{
+				double x_uij = Predict(loss_sample_u[c], loss_sample_i[c]) - Predict(loss_sample_u[c], loss_sample_j[c]);
+				ranking_loss += 1 / (1 + Math.Exp(x_uij));
+			}
+
+			double complexity = 0;
+			for (int c = 0; c < loss_sample_u.Length; c++)
+			{
+				complexity += RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(loss_sample_u[c])), 2);
+				complexity += RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(loss_sample_i[c])), 2);
+				complexity += RegJ * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(loss_sample_j[c])), 2);
+				complexity += BiasReg * Math.Pow(item_bias[loss_sample_i[c]], 2);
+				complexity += BiasReg * Math.Pow(item_bias[loss_sample_j[c]], 2);
+			}
+
+			return ranking_loss + 0.5 * complexity;
+		}
+
 		/// <summary>Compute the fit (AUC on training data)</summary>
 		/// <returns>the fit</returns>
 		public override double ComputeFit()
@@ -496,8 +586,8 @@ namespace MyMediaLite.ItemRecommendation
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "BPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} fast_sampling_memory_limit={7} init_mean={8} init_stdev={9}",
-								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, fast_sampling_memory_limit, InitMean, InitStdev);
+			return string.Format(ni, "BPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} bold_driver={7} fast_sampling_memory_limit={8} init_mean={9} init_stdev={10}",
+								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
 }

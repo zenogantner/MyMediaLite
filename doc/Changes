@@ -5,6 +5,7 @@
             optimized for MAE instead of RMSE
           - BiasedMatrixFactorization: fixed a wrong constant factor in
             ComputeLoss()
+          - BPRMF: add optional bold driver heuristic for learn rate adaptation
 	- command-line tools
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
