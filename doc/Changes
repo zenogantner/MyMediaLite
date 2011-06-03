@@ -8,6 +8,7 @@
 	- command-line tools
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
+          - write loading time to STDERR, not STDOUT
 	- evaluation
         - data structures
           - add interfaces IBooleanMatrix and IPosOnlyFeedback

@@ -235,12 +235,8 @@ class RatingPrediction
 		}
 
 		// load all the data
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir, training_file, test_file, min_rating, max_rating,
-			         user_attributes_file, item_attributes_file,
-			         user_relations_file, item_relations_file);
-		});
-		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		LoadData(data_dir, training_file, test_file, min_rating, max_rating,
+			     user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
@@ -373,67 +369,70 @@ class RatingPrediction
 		if (training_file == null)
 			Usage("Program expects --training-file=FILE.");
 
-		// read training data
-		if (file_format == RatingFileFormat.DEFAULT)
-			training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
-		else if (file_format == RatingFileFormat.MOVIELENS_1M)
-			training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
-		else if (file_format == RatingFileFormat.KDDCUP_2011)
-			training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
+		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+			// read training data
+			if (file_format == RatingFileFormat.DEFAULT)
+				training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+			else if (file_format == RatingFileFormat.MOVIELENS_1M)
+				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+			else if (file_format == RatingFileFormat.KDDCUP_2011)
+				training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
 
-		recommender.Ratings = training_data;
+			recommender.Ratings = training_data;
 
-		// user attributes
-		if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
-		{
-			if (user_attributes_file == string.Empty)
-				Usage("Recommender expects --user-attributes=FILE.");
-			else
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-		}
-
-		// item attributes
-		if (recommender is IItemAttributeAwareRecommender)
-		{
-			if (item_attributes_file == string.Empty)
-				Usage("Recommender expects --item-attributes=FILE.");
-			else
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-		}
-
-		// user relation
-		if (recommender is IUserRelationAwareRecommender)
-			if (user_relation_file == string.Empty)
+			// user attributes
+			if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
 			{
-				Usage("Recommender expects --user-relations=FILE.");
-			}
-			else
-			{
-				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+				if (user_attributes_file == string.Empty)
+					Usage("Recommender expects --user-attributes=FILE.");
+				else
+					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 			}
 
-		// item relation
-		if (recommender is IItemRelationAwareRecommender)
-			if (user_relation_file == string.Empty)
+			// item attributes
+			if (recommender is IItemAttributeAwareRecommender)
 			{
-				Usage("Recommender expects --item-relations=FILE.");
-			}
-			else
-			{
-				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+				if (item_attributes_file == string.Empty)
+					Usage("Recommender expects --item-attributes=FILE.");
+				else
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 			}
 
-		// read test data
-		if (test_file != null)
-		{
-			if (file_format == RatingFileFormat.MOVIELENS_1M)
-				test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
-			else
-				test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
-			// TODO add KDD Cup
-		}
+			// user relation
+			if (recommender is IUserRelationAwareRecommender)
+				if (user_relation_file == string.Empty)
+				{
+					Usage("Recommender expects --user-relations=FILE.");
+				}
+				else
+				{
+					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+				}
+
+			// item relation
+			if (recommender is IItemRelationAwareRecommender)
+				if (user_relation_file == string.Empty)
+				{
+					Usage("Recommender expects --item-relations=FILE.");
+				}
+				else
+				{
+					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+				}
+
+			// read test data
+			if (test_file != null)
+			{
+				if (file_format == RatingFileFormat.MOVIELENS_1M)
+					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+				else
+					test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+				// TODO add KDD Cup
+			}
+		});
+		Console.Error.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

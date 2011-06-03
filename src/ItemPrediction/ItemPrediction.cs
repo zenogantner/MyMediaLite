@@ -220,11 +220,7 @@ class ItemPrediction
 		Recommender.Configure(recommender, recommender_options, Usage);
 
 		// load all the data
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir, training_file, test_file, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
-		});
-		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
-
+		LoadData(data_dir, training_file, test_file, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		TimeSpan time_span;
@@ -340,72 +336,75 @@ class ItemPrediction
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file)
 	{
-		// training data
-		training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+			// training data
+			training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 
-		// relevant items
-		if (relevant_items_file != string.Empty)
-			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-		else
-			relevant_items = training_data.AllItems;
-
-		if (! (recommender is MyMediaLite.ItemRecommendation.Random))
-			((ItemRecommender)recommender).Feedback = training_data;
-
-		// user attributes
-		if (recommender is IUserAttributeAwareRecommender)
-		{
-			if (user_attributes_file == string.Empty)
-				Usage("Recommender expects user_attributes=FILE.");
+			// relevant items
+			if (relevant_items_file != string.Empty)
+				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-		}
+				relevant_items = training_data.AllItems;
 
-		// item attributes
-		if (recommender is IItemAttributeAwareRecommender)
-		{
-			if (item_attributes_file == string.Empty)
-				Usage("Recommender expects item_attributes=FILE.");
-			else
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-		}
+			if (! (recommender is MyMediaLite.ItemRecommendation.Random))
+				((ItemRecommender)recommender).Feedback = training_data;
 
-		// user relation
-		if (recommender is IUserRelationAwareRecommender)
-			if (user_relation_file == string.Empty)
+			// user attributes
+			if (recommender is IUserAttributeAwareRecommender)
 			{
-				Usage("Recommender expects user_relation=FILE.");
+				if (user_attributes_file == string.Empty)
+					Usage("Recommender expects user_attributes=FILE.");
+				else
+					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			}
+
+			// item attributes
+			if (recommender is IItemAttributeAwareRecommender)
+			{
+				if (item_attributes_file == string.Empty)
+					Usage("Recommender expects item_attributes=FILE.");
+				else
+					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+			}
+
+			// user relation
+			if (recommender is IUserRelationAwareRecommender)
+				if (user_relation_file == string.Empty)
+				{
+					Usage("Recommender expects user_relation=FILE.");
+				}
+				else
+				{
+					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+				}
+
+			// item relation
+			if (recommender is IItemRelationAwareRecommender)
+				if (user_relation_file == string.Empty)
+				{
+					Usage("Recommender expects item_relation=FILE.");
+				}
+				else
+				{
+					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+				}
+
+			// test data
+			if (test_ratio == 0)
+			{
+				if (test_file != null)
+	        		test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 			}
 			else
 			{
-				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
+				training_data = split.Train[0];
+				test_data     = split.Test[0];
 			}
-
-		// item relation
-		if (recommender is IItemRelationAwareRecommender)
-			if (user_relation_file == string.Empty)
-			{
-				Usage("Recommender expects item_relation=FILE.");
-			}
-			else
-			{
-				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
-			}
-
-		// test data
-		if (test_ratio == 0)
-		{
-			if (test_file != null)
-        		test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
-		}
-		else
-		{
-			var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
-			training_data = split.Train[0];
-			test_data     = split.Test[0];
-		}
+		});
+		Console.Error.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
@@ -475,6 +474,6 @@ class ItemPrediction
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
-		Console.Error.WriteLine("memory {0}", Memory.Usage);		
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 }
