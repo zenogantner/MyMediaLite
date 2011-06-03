@@ -176,10 +176,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			Usage(-1);
 
 		// load all the data
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir);
-		});
-		Console.WriteLine("loading_time {0:0.##}", loading_time.TotalSeconds.ToString(ni));
+		LoadData(data_dir);
 
 		if (load_model_file != string.Empty)
 		{
@@ -342,65 +339,68 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			validation_hits_file       = Path.Combine(data_dir, "validationHitsIdx2.firstLines.txt");
 		}
 
-		// read training data
-		training_ratings = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
+		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+			// read training data
+			training_ratings = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
 
-		// read validation data
-		validation_candidates = Track2Items.Read(validation_candidates_file);
-		validation_hits       = Track2Items.Read(validation_hits_file);
+			// read validation data
+			validation_candidates = Track2Items.Read(validation_candidates_file);
+			validation_hits       = Track2Items.Read(validation_hits_file);
 
-		if (validation_hits.Count != validation_candidates.Count)
-			throw new Exception("inconsistent number of users in hits and candidates");
-		validation_ratings = MyMediaLite.IO.KDDCup2011.Ratings.Read(validation_ratings_file);
+			if (validation_hits.Count != validation_candidates.Count)
+				throw new Exception("inconsistent number of users in hits and candidates");
+			validation_ratings = MyMediaLite.IO.KDDCup2011.Ratings.Read(validation_ratings_file);
 
-		complete_ratings = new CombinedRatings(training_ratings, validation_ratings);
+			complete_ratings = new CombinedRatings(training_ratings, validation_ratings);
 
-		// read test data
-		test_candidates = Track2Items.Read(test_file);
+			// read test data
+			test_candidates = Track2Items.Read(test_file);
 
-		// read item data
-		if (recommender_validate is IKDDCupRecommender)
-		{
-			var kddcup_recommender = recommender_validate as IKDDCupRecommender;
-			kddcup_recommender.ItemInfo = Items.Read(track_file, album_file, artist_file, genre_file, 2);
-		}
+			// read item data
+			if (recommender_validate is IKDDCupRecommender)
+			{
+				var kddcup_recommender = recommender_validate as IKDDCupRecommender;
+				kddcup_recommender.ItemInfo = Items.Read(track_file, album_file, artist_file, genre_file, 2);
+			}
 
-		// connect data and recommenders
-		if (predict_rated)
-		{
-			recommender_validate.Feedback = CreateFeedback(training_ratings);
-			recommender_final.Feedback    = CreateFeedback(complete_ratings);
-		}
-		else
-		{
-			// normal item recommenders
-			recommender_validate.Feedback = CreateFeedback(training_ratings, 80);
-			recommender_final.Feedback    = CreateFeedback(complete_ratings, 80);
-		}
-		if (recommender_validate is ISemiSupervisedItemRecommender)
-		{
-			// add additional data to semi-supervised models
-			//   for the validation recommender
-			((ISemiSupervisedItemRecommender) recommender_validate).TestUsers = new HashSet<int>(validation_candidates.Keys);
-			var validation_items = new HashSet<int>();
-			foreach (var l in validation_candidates.Values)
-				foreach (var i in l)
-					validation_items.Add(i);
-			((ISemiSupervisedItemRecommender) recommender_validate).TestItems = validation_items;
+			// connect data and recommenders
+			if (predict_rated)
+			{
+				recommender_validate.Feedback = CreateFeedback(training_ratings);
+				recommender_final.Feedback    = CreateFeedback(complete_ratings);
+			}
+			else
+			{
+				// normal item recommenders
+				recommender_validate.Feedback = CreateFeedback(training_ratings, 80);
+				recommender_final.Feedback    = CreateFeedback(complete_ratings, 80);
+			}
+			if (recommender_validate is ISemiSupervisedItemRecommender)
+			{
+				// add additional data to semi-supervised models
+				//   for the validation recommender
+				((ISemiSupervisedItemRecommender) recommender_validate).TestUsers = new HashSet<int>(validation_candidates.Keys);
+				var validation_items = new HashSet<int>();
+				foreach (var l in validation_candidates.Values)
+					foreach (var i in l)
+						validation_items.Add(i);
+				((ISemiSupervisedItemRecommender) recommender_validate).TestItems = validation_items;
 
-			//   for the test/final recommender
-			((ISemiSupervisedItemRecommender) recommender_final).TestUsers = new HashSet<int>(test_candidates.Keys);
-			var test_items = new HashSet<int>();
-			foreach (var l in test_candidates.Values)
-				foreach (var i in l)
-					test_items.Add(i);
-			((ISemiSupervisedItemRecommender) recommender_final).TestItems = test_items;
-		}
+				//   for the test/final recommender
+				((ISemiSupervisedItemRecommender) recommender_final).TestUsers = new HashSet<int>(test_candidates.Keys);
+				var test_items = new HashSet<int>();
+				foreach (var l in test_candidates.Values)
+					foreach (var i in l)
+						test_items.Add(i);
+				((ISemiSupervisedItemRecommender) recommender_final).TestItems = test_items;
+			}
 
-		Console.Error.WriteLine("memory before deleting ratings: {0}", Memory.Usage);
-		training_ratings = null;
-		complete_ratings = null;
-		Console.Error.WriteLine("memory after deleting ratings:  {0}", Memory.Usage);
+			Console.Error.WriteLine("memory before deleting ratings: {0}", Memory.Usage);
+			training_ratings = null;
+			complete_ratings = null;
+			Console.Error.WriteLine("memory after deleting ratings:  {0}", Memory.Usage);
+		});
+		Console.Error.WriteLine("loading_time {0:0.##}", loading_time.TotalSeconds.ToString(ni));
 
 		Utils.DisplayDataStats(recommender_final.Feedback, null, recommender_final);
 	}

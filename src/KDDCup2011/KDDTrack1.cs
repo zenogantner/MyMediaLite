@@ -181,10 +181,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			Usage(-1);
 
 		// load all the data
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
-			LoadData(data_dir);
-		});
-		Console.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		TimeSpan loading_time = Utils.MeasureTime(delegate() { LoadData(data_dir); });
+		Console.Error.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
 		recommender.Ratings = training_ratings;
 
