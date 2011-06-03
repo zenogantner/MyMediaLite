@@ -234,11 +234,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void AddItem(int item_id)
 		{
-			if (item_id > MaxItemID)
-			{
-				base.AddItem(item_id);
-				item_factors.AddRows(item_id + 1);
-			}
+			base.AddItem(item_id);
+			item_factors.AddRows(item_id + 1);
 		}
 
 		///
