@@ -146,10 +146,10 @@ public partial class MainWindow : Window
 		rating_predictor = recommender;
 
 		current_user_id = user_mapping.ToInternalID(current_user_external_id);
-		rating_predictor.AddUser(current_user_id);
+		//rating_predictor.AddUser(current_user_id);
 
 		// add movies that were not in the training set
-		rating_predictor.AddItem( item_mapping.InternalIDs.Count - 1 );
+		//rating_predictor.AddItem( item_mapping.InternalIDs.Count - 1 );
 
 		PredictAllRatings();
 	}
@@ -385,12 +385,8 @@ public partial class MainWindow : Window
 			if (ratings.ContainsKey(movie.ID))
 			    rating_predictor.RemoveRating(current_user_id, movie.ID);
 
-			// if necessary, add the the new item to the recommender/dataset
-			if (movie.ID > rating_predictor.MaxItemID)
-				rating_predictor.AddItem(movie.ID);
-
 			// add the new rating
-			rating_predictor.Add(current_user_id, movie.ID, rating);
+			rating_predictor.AddRating(current_user_id, movie.ID, rating);
 			ratings[movie.ID] = rating;
 
 			// recompute ratings
