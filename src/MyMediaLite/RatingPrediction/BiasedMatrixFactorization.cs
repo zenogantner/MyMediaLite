@@ -136,7 +136,6 @@ namespace MyMediaLite.RatingPrediction
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
-
 				double err = ratings[index] - p;
 
 				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
@@ -321,14 +320,13 @@ namespace MyMediaLite.RatingPrediction
 				complexity += ratings.CountByUser[u] * RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
 				complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
 			}
-
 			for (int i = 0; i <= MaxItemID; i++)
 			{
 				complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
 				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
-			return square_loss + 0.5 * complexity;
+			return square_loss + complexity;
 		}
 
 		///

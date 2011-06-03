@@ -40,7 +40,7 @@ namespace MyMediaLite.RatingPrediction
 
 				double p = MinRating + sig_dot * rating_range_size;
 				double err = ratings[index] - p;
-				
+
 				// the only difference to RMSE optimization is here:
 				double gradient_common = Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size;
 
@@ -54,8 +54,8 @@ namespace MyMediaLite.RatingPrediction
 				for (int f = 0; f < NumFactors; f++)
 				{
 				 	double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];					
-					
+					double i_f = item_factors[i, f];
+
 					if (update_user)
 					{
 						double delta_u = i_f * gradient_common - RegU * u_f;
@@ -94,7 +94,7 @@ namespace MyMediaLite.RatingPrediction
 				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
-			return mae + 0.5 * complexity;
+			return mae + complexity;
 		}
 
 		///

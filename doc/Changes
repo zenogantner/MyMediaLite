@@ -3,6 +3,8 @@
           - remove NewKNN from project (still not finished)
           - new rating predictor BiasedMatrixFactorizationMAE, which is BMF
             optimized for MAE instead of RMSE
+          - BiasedMatrixFactorization: fixed a wrong constant factor in
+            ComputeLoss()
 	- command-line tools
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
