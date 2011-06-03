@@ -48,6 +48,8 @@ class ItemPrediction
 	static IEntityMapping item_mapping = new EntityMapping();
 
 	// command-line parameters
+	static string training_file     = null;
+	static string test_file         = null;
 	static bool compute_fit;
 	static double test_ratio;
 	static int predict_items_number = -1;
@@ -145,8 +147,6 @@ class ItemPrediction
 		compute_fit         = false;
 
 		// data parameters
-		string training_file = null;
-		string test_file     = null;
 		string data_dir             = "";
 		string relevant_items_file  = string.Empty;
 		string user_attributes_file = string.Empty;
@@ -220,7 +220,7 @@ class ItemPrediction
 		Recommender.Configure(recommender, recommender_options, Usage);
 
 		// load all the data
-		LoadData(data_dir, training_file, test_file, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
+		LoadData(data_dir, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		TimeSpan time_span;
@@ -331,10 +331,7 @@ class ItemPrediction
 		Recommender.SaveModel(recommender, save_model_file);
 	}
 
-    static void LoadData(string data_dir, string training_file, string test_file,
-	                     string relevant_items_file,
-	                     string user_attributes_file, string item_attributes_file,
-	                     string user_relation_file, string item_relation_file)
+    static void LoadData(string data_dir, string relevant_items_file, string user_attributes_file, string item_attributes_file, string user_relation_file, string item_relation_file)
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
