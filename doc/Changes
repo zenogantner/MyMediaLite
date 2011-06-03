@@ -1,4 +1,6 @@
 1.03	2011-0?-??
+        - API changes
+          - IRatingPredictor: Add() is now AddRating()
 	- recommenders
           - remove NewKNN from project (still not finished)
           - new rating predictor BiasedMatrixFactorizationMAE, which is BMF

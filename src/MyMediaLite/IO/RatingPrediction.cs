@@ -28,6 +28,8 @@ namespace MyMediaLite.IO
 	/// <summary>Class that offers methods for reading in rating data</summary>
 	public class RatingPrediction
 	{
+		// TODO also support different rating data types
+		
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>

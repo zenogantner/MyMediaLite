@@ -114,6 +114,7 @@ class RatingPrediction
    --cross-validation=K                   perform k-fold crossvalidation on the training data
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
+   --online-evaluation                    perform online evaluation (use every tested rating for online training)
 
   options for finding the right number of iterations (MF methods)
    --find-iter=N                  give out statistics every N iterations
@@ -237,7 +238,7 @@ class RatingPrediction
 		}
 
 		// load all the data
-		LoadData(data_dir, min_rating, max_rating, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
+		LoadData(data_dir, min_rating, max_rating, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
 
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
@@ -364,7 +365,9 @@ class RatingPrediction
 	}
 
     static void LoadData(string data_dir, double min_rating, double max_rating,
-	                     string user_attributes_file, string item_attributes_file, string user_relation_file, string item_relation_file)
+	                     string user_attributes_file, string item_attributes_file,
+	                     string user_relation_file, string item_relation_file,
+	                     bool static_data)
 	{
 		if (training_file == null)
 			Usage("Program expects --training-file=FILE.");
@@ -372,7 +375,8 @@ class RatingPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
 			if (file_format == RatingFileFormat.DEFAULT)
-				training_data = RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+				training_data = static_data ? RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type)
+					                        : MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.MOVIELENS_1M)
 				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.KDDCUP_2011)

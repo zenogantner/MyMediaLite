@@ -100,13 +100,15 @@ namespace MyMediaLite.Eval
 			if (ratings == null)
 				throw new ArgumentNullException("ratings");
 
-			// iterate in random order
+			// iterate in random order    // TODO also support chronological order
 			foreach (int index in ratings.RandomIndex)
 			{
 				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
+				
+				recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
