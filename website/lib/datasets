@@ -9,7 +9,7 @@
      { method => 'SlopeOne',                  hp => '',                                                                      rmse => '0.9032', mae => '0.7131', nmae => '0.1783' }
      { method => 'UserKNNPearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                  rmse => '0.9193', mae => '0.7221' }
      { method => 'ItemKNNCosine',             hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8970', mae => '0.7083', nmae => '0.1771' }
-     { method => 'ItemKNNPearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8829', mae => '0.6946', nmae => '0.1736' }   
+     { method => 'ItemKNNPearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8829', mae => '0.6946', nmae => '0.1736' }
      { method => 'ItemAttributeKNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                                rmse => '0.8958', mae => '0.7056' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.8554', mae => '0.6744' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.001 regularization=0.045 learn_rate=0.01 num_iter=66',   rmse => '0.8534', mae => '0.6742' }
@@ -38,11 +38,12 @@
      { method => 'UserKNNPearson',            hp => 'k=60 shrinkage=100 reg_u=12 reg_i=1' ,                                rmse => '0.930', mae => '0.729', nmae => '0.1823' }
      { method => 'ItemKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.924', mae => '0.727', nmae => '0.1817' }
      { method => 'ItemKNNPearson',            hp => 'k=40 shrinkage=200 reg_u=12 reg_i=1',                                 rmse => '0.915', mae => '0.717', nmae => '0.1792' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.005 reg_u=0.1 reg_i=0.1 learn_rate=0.05 num_iter=500 bold_driver=true', rmse => '0.91622', mae => '0.72242', nmae => '0.18061' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91622', mae => '0.72242', nmae => '0.18061' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.007 reg_u=0.1 reg_i=0.12 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91588', mae => '0.72271', nmae => '0.18068' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.005 reg_u=0.1 reg_i=0.1 learn_rate=0.05 num_iter=500 bold_driver=true', rmse => '0.91242', mae => '0.72119', nmae => '0.1803' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 bias_reg=0.005 reg_u=0.1 reg_i=0.1 learn_rate=0.05 num_iter=500 bold_driver=true', rmse => '0.91121', mae => '0.72072', nmae => '0.18018' }
-     { method => 'BiasedMatrixFactorization', hp => 'num_factors=160 bias_reg=0.005 reg_u=0.1 reg_i=0.1 learn_rate=0.05 num_iter=500 bold_driver=true', rmse => '0.91074', mae => '0.72047', nmae => '0.18012' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91242', mae => '0.72119', nmae => '0.1803' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91121', mae => '0.72072', nmae => '0.18018' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=160 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91074', mae => '0.72047', nmae => '0.18012' }
+     { method => 'BiasedMatrixFactorization', hp => 'num_factors=320 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91073', mae => '0.72053', nmae => '0.18013' }
    ]
    # Flixster, 5-fold CV with --random-seed=1
    flixster = [
@@ -51,7 +52,7 @@
     { method => 'ItemAverage',               hp => '',                  rmse => '1.097', mae => '0.852', nmae => '0.1894' }
     { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10', rmse => '0.904', mae => '0.685', nmae => '0.1523' }
     { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.0001 regularization=0.03 learn_rate=0.051 num_iter=50 bold_driver=True', rmse => '0.851', mae => '0.633', nmae => '0.1407' }
-    { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.0001 regularization=0.015 learn_rate=0.051 num_iter=50 bold_driver=True', rmse => '0.845', mae => '0.625', nmae => '0.1389' }    
+    { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.0001 regularization=0.015 learn_rate=0.051 num_iter=50 bold_driver=True', rmse => '0.845', mae => '0.625', nmae => '0.1389' }
    ]
    camra_mp_xmas_data = [
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=30 reg=25 learn_rate=0.00003 num_iter=25', rmse => 16.5, mae => '' }
