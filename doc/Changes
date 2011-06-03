@@ -25,6 +25,8 @@
             faster GetRow()/SetRow(); generic return types
           - MatrixUtils: remove ContainsNaN()
           - VectorUtils: add L1Norm()
+          - fix bug in Ratings that prevented online updates to work properly
+            (reported by Chris Newell)
 	- documentation
 
 1.02	2011-05-24

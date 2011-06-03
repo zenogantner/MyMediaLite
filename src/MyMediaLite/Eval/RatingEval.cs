@@ -107,7 +107,7 @@ namespace MyMediaLite.Eval
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
-				
+
 				recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
 			mae  = mae / ratings.Count;
