@@ -83,6 +83,41 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
+		/// <summary>Online evaluation for rating prediction</summary>
+		/// <remarks>
+		/// Every rating that is tested is added to the training set afterwards.
+		/// </remarks>
+		/// <param name="recommender">Rating prediction engine</param>
+		/// <param name="ratings">Test cases</param>
+		/// <returns>a Dictionary containing the evaluation results</returns>
+		static public Dictionary<string, double> EvaluateOnline(IRatingPredictor recommender, IRatings ratings)
+		{
+			double rmse = 0;
+			double mae  = 0;
+
+			if (recommender == null)
+				throw new ArgumentNullException("recommender");
+			if (ratings == null)
+				throw new ArgumentNullException("ratings");
+
+			// iterate in random order
+			foreach (int index in ratings.RandomIndex)
+			{
+				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
+
+				rmse += error * error;
+				mae  += Math.Abs(error);
+			}
+			mae  = mae / ratings.Count;
+			rmse = Math.Sqrt(rmse / ratings.Count);
+
+			var result = new Dictionary<string, double>();
+			result.Add("RMSE", rmse);
+			result.Add("MAE",  mae);
+			result.Add("NMAE", mae / (recommender.MaxRating - recommender.MinRating));
+			return result;
+		}
+
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="recommender">a rating prediction engine</param>
 		/// <param name="split">a rating dataset split</param>

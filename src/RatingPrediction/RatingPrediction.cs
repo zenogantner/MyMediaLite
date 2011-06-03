@@ -54,6 +54,8 @@ class RatingPrediction
 	static List<double> rmse_eval_stats     = new List<double>();
 
 	// global command line parameters
+	static string training_file         = null;
+	static string test_file             = null;
 	static bool compute_fit             = false;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
@@ -153,8 +155,6 @@ class RatingPrediction
 		double max_rating  = 5;
 
 		// data arguments
-		string training_file        = null;
-		string test_file            = null;
 		string data_dir             = string.Empty;
 		string user_attributes_file = string.Empty;
 		string item_attributes_file = string.Empty;
@@ -162,6 +162,7 @@ class RatingPrediction
 		string item_relations_file  = string.Empty;
 
 		// other arguments
+		bool online_eval       = false;
 		string save_model_file = string.Empty;
 		string load_model_file = string.Empty;
 		int random_seed        = -1;
@@ -198,6 +199,7 @@ class RatingPrediction
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
 			{ "compute-fit",          v => compute_fit  = v != null },
+			{ "online-evaluation",    v => online_eval  = v != null },
 			{ "help",                 v => show_help    = v != null },
 			{ "version",              v => show_version = v != null },
    	  	};
@@ -235,8 +237,7 @@ class RatingPrediction
 		}
 
 		// load all the data
-		LoadData(data_dir, training_file, test_file, min_rating, max_rating,
-			     user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
+		LoadData(data_dir, min_rating, max_rating, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
 
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
@@ -339,9 +340,11 @@ class RatingPrediction
 
 			if (!no_eval)
 			{
-				seconds = Utils.MeasureTime(delegate() {
-						RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data));
-				});
+				if (online_eval)
+					seconds = Utils.MeasureTime(delegate() { RatingEval.DisplayResults(RatingEval.EvaluateOnline(recommender, test_data)); });
+				else
+					seconds = Utils.MeasureTime(delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data)); });
+
 				Console.Write(" testing_time " + seconds);
 			}
 
@@ -360,11 +363,8 @@ class RatingPrediction
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-    static void LoadData(string data_dir,
-	              string training_file, string test_file,
-	              double min_rating, double max_rating,
-	              string user_attributes_file, string item_attributes_file,
-	              string user_relation_file, string item_relation_file)
+    static void LoadData(string data_dir, double min_rating, double max_rating,
+	                     string user_attributes_file, string item_attributes_file, string user_relation_file, string item_relation_file)
 	{
 		if (training_file == null)
 			Usage("Program expects --training-file=FILE.");
