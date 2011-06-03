@@ -246,31 +246,25 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddUser(int user_id)
+		protected override void AddUser(int user_id)
 		{
-			if (user_id > MaxUserID)
-			{
-				base.AddUser(user_id);
+			base.AddUser(user_id);
 
-				// create new user bias array
-				double[] user_bias = new double[user_id + 1];
-				Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
-				this.user_bias = user_bias;
-			}
+			// create new user bias array
+			double[] user_bias = new double[user_id + 1];
+			Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
+			this.user_bias = user_bias;
 		}
 
 		///
-		public override void AddItem(int item_id)
+		protected override void AddItem(int item_id)
 		{
-			if (item_id > MaxItemID)
-			{
-				base.AddItem(item_id);
+			base.AddItem(item_id);
 
-				// create new item bias array
-				double[] item_bias = new double[item_id + 1];
-				Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
-				this.item_bias = item_bias;
-			}
+			// create new item bias array
+			double[] item_bias = new double[item_id + 1];
+			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
+			this.item_bias = item_bias;
 		}
 
 		///

@@ -97,27 +97,34 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
+			if (user_id > MaxUserID)
+				AddUser(user_id);
+			if (item_id > MaxItemID)
+				AddItem(item_id);
+
 			ratings.Add(user_id, item_id, rating);
 		}
 
 		///
 		public virtual void UpdateRating(int user_id, int item_id, double rating)
 		{
+			throw new NotImplementedException();
 		}
 
 		///
 		public virtual void RemoveRating(int user_id, int item_id)
 		{
+			throw new NotImplementedException();
 		}
 
 		///
-		public virtual void AddUser(int user_id)
+		protected virtual void AddUser(int user_id)
 		{
 			MaxUserID = Math.Max(MaxUserID, user_id);
 		}
 
 		///
-		public virtual void AddItem(int item_id)
+		protected virtual void AddItem(int item_id)
 		{
 			MaxItemID = Math.Max(MaxItemID, item_id);
 		}
@@ -127,6 +134,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (user_id == MaxUserID)
 				MaxUserID--;
+			ratings.RemoveUser(user_id);
 		}
 
 		///
@@ -134,6 +142,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (item_id == MaxItemID)
 				MaxItemID--;
+			ratings.RemoveItem(item_id);
 		}
 	}
 }

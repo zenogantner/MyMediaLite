@@ -159,27 +159,23 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddUser(int user_id)
+		protected override void AddUser(int user_id)
 		{
 			base.AddUser(user_id);
-			if (user_id >= this.user_biases.Length)
-			{
-				double[] user_biases = new double[this.MaxUserID + 1];
-				Array.Copy(this.user_biases, user_biases, this.user_biases.Length);
-				this.user_biases = user_biases;
-			}
+
+			double[] user_biases = new double[this.MaxUserID + 1];
+			Array.Copy(this.user_biases, user_biases, this.user_biases.Length);
+			this.user_biases = user_biases;
 		}
 
 		///
-		public override void AddItem(int item_id)
+		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
-			if (item_id >= this.item_biases.Length)
-			{
-				double[] item_biases = new double[this.MaxItemID + 1];
-				Array.Copy(this.item_biases, item_biases, this.item_biases.Length);
-				this.item_biases = item_biases;
-			}
+
+			double[] item_biases = new double[this.MaxItemID + 1];
+			Array.Copy(this.item_biases, item_biases, this.item_biases.Length);
+			this.item_biases = item_biases;
 		}
 
 		///
@@ -187,7 +183,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				// TODO
+				throw new NotImplementedException();
 			}
 		}
 
@@ -196,9 +192,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				// TODO
+				throw new NotImplementedException();
 			}
-			Train(); // instead ;-)
 		}
 
 		///

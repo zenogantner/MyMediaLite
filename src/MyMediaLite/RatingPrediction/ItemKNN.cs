@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddItem(int item_id)
+		protected override void AddItem(int item_id)
 		{
 			base.AddUser(item_id);
 			correlation.AddEntity(item_id);

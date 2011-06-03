@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 			RegU = 10;
 			RegI = 5;
 		}
-		
+
 		///
 		public override void SaveModel(string filename)
 		{
