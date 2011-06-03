@@ -28,6 +28,8 @@ namespace MyMediaLite.Data
 	/// </remarks>
 	public class StaticRatings : Ratings
 	{
+		// TODO for better performance, build array-based indices
+		
 		/// <summary>The position where the next rating will be stored</summary>
 		protected int pos = 0;
 

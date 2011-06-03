@@ -29,7 +29,7 @@ namespace MyMediaLite.Data
 	/// <summary>Data structure for storing ratings</summary>
 	/// <remarks>
 	/// Small memory overhead for added flexibility.
-	/// 
+	///
 	/// This data structure supports online updates.
 	/// </remarks>
 	public class Ratings : IRatings
@@ -38,7 +38,7 @@ namespace MyMediaLite.Data
 		public IList<int> Users { get; protected set; }
 		///
 		public IList<int> Items { get; protected set; }
-		
+
 		///
 		protected IList<double> Values;
 
@@ -52,7 +52,7 @@ namespace MyMediaLite.Data
 				throw new NotSupportedException();
 			}
 		}
-		
+
 		///
 		public virtual int Count { get { return Values.Count; } }
 
@@ -85,14 +85,15 @@ namespace MyMediaLite.Data
 		///
 		public void BuildUserIndices()
 		{
-			by_user = new IList<int>[MaxUserID + 1];
+			by_user = new List<IList<int>>();
 			for (int u = 0; u <= MaxUserID; u++)
-				by_user[u] = new List<int>();
+				by_user.Add(new List<int>());
 
+			// one pass over the data
 			for (int index = 0; index < Count; index++)
 				by_user[Users[index]].Add(index);
 		}
-	
+
 		///
 		public IList<IList<int>> ByItem
 		{
@@ -107,12 +108,14 @@ namespace MyMediaLite.Data
 		///
 		public void BuildItemIndices()
 		{
-			by_item = new IList<int>[MaxItemID + 1];
+			by_item = new List<IList<int>>();
 			for (int i = 0; i <= MaxItemID; i++)
-				by_item[i] = new List<int>();
+				by_item.Add(new List<int>());
 
+			// one pass over the data
 			for (int index = 0; index < Count; index++)
 				by_item[Items[index]].Add(index);
+
 		}
 
 		///
@@ -153,8 +156,8 @@ namespace MyMediaLite.Data
 			count_by_user = new int[MaxUserID + 1];
 			for (int index = 0; index < Count; index++)
 				count_by_user[Users[index]]++;
-		}		
-		
+		}
+
 		///
 		public IList<int> CountByItem
 		{
@@ -172,8 +175,8 @@ namespace MyMediaLite.Data
 			count_by_item = new int[MaxItemID + 1];
 			for (int index = 0; index < Count; index++)
 				count_by_item[Items[index]]++;
-		}		
-		
+		}
+
 		// TODO speed up
 		///
 		public double Average
@@ -345,14 +348,14 @@ namespace MyMediaLite.Data
 		public virtual void Add(int user_id, int item_id, float rating)
 		{
 			Add(user_id, item_id, (double) rating);
-		}		
-		
+		}
+
 		///
 		public virtual void Add(int user_id, int item_id, byte rating)
 		{
 			Add(user_id, item_id, (double) rating);
 		}
-		
+
 		///
 		public virtual void Add(int user_id, int item_id, double rating)
 		{
@@ -360,11 +363,26 @@ namespace MyMediaLite.Data
 			Items.Add(item_id);
 			Values.Add(rating);
 
+			int pos = Users.Count - 1;
+
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
-
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
+
+			// update index data structures if necessary
+			if (by_user != null)
+			{
+				for (int u = by_user.Count; u <= user_id; u++)
+					by_user.Add(new List<int>());
+				by_user[user_id].Add(pos);
+			}
+			if (by_item != null)
+			{
+				for (int i = by_item.Count; i <= item_id; i++)
+					by_item.Add(new List<int>());
+				by_item[item_id].Add(pos);
+			}
 		}
 
 		///
@@ -374,7 +392,7 @@ namespace MyMediaLite.Data
 			Items.RemoveAt(index);
 			Values.RemoveAt(index);
 		}
-		
+
 		///
 		public virtual void RemoveUser(int user_id)
 		{
@@ -385,7 +403,7 @@ namespace MyMediaLite.Data
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
 				}
-			
+
 			if (MaxUserID == user_id)
 				MaxUserID--;
 		}
@@ -400,40 +418,40 @@ namespace MyMediaLite.Data
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
 				}
-			
+
 			if (MaxItemID == item_id)
 				MaxItemID--;
-		}		
-		
+		}
+
 		///
 		public bool IsReadOnly { get { return true; } }
-		
+
 		///
 		public void Add(double item) { throw new NotSupportedException(); }
-		
+
 		///
 		public void Clear() { throw new NotSupportedException(); }
-		
+
 		///
 		public bool Contains(double item) { throw new NotSupportedException(); }
 
 		///
-		public void CopyTo(double[] array, int index) { throw new NotSupportedException(); }		
-		
+		public void CopyTo(double[] array, int index) { throw new NotSupportedException(); }
+
 		///
 		public int IndexOf(double item) { throw new NotSupportedException(); }
-		
+
 		///
 		public void Insert(int index, double item) { throw new NotSupportedException(); }
 
 		///
 		public bool Remove(double item) { throw new NotSupportedException(); }
-			
+
 		///
 		IEnumerator IEnumerable.GetEnumerator() { throw new NotSupportedException(); }
 
 		///
 		IEnumerator<double> IEnumerable<double>.GetEnumerator() { throw new NotSupportedException(); }
-		
+
 	}
 }
