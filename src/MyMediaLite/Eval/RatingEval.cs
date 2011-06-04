@@ -30,7 +30,7 @@ namespace MyMediaLite.Eval
 	public static class RatingEval
 	{
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
-		static public ICollection<string> RatingPredictionMeasures
+		static public ICollection<string> Measures
 		{
 			get	{
 				string[] measures = { "RMSE", "MAE", "NMAE" };
@@ -140,7 +140,7 @@ namespace MyMediaLite.Eval
 			ni.NumberDecimalDigits = '.';
 
 			var avg_results = new Dictionary<string, double>();
-			foreach (var key in RatingPredictionMeasures)
+			foreach (var key in Measures)
 				avg_results[key] = 0;
 
 			for (int i = 0; i < split.NumberOfFolds; i++)

@@ -30,7 +30,7 @@ namespace MyMediaLite.Eval
 	public static class ItemPredictionEval
 	{
 		/// <summary>the evaluation measures for item prediction offered by the class</summary>
-		static public ICollection<string> ItemPredictionMeasures
+		static public ICollection<string> Measures
 		{
 			get	{
 				string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
@@ -139,7 +139,7 @@ namespace MyMediaLite.Eval
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data (must be connected to the recommender's training data)</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(
+		static public Dictionary<string, double> EvaluateOnline(
 			IItemRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train)
@@ -177,14 +177,14 @@ namespace MyMediaLite.Eval
 				if (current_result["num_users"] == 1)
 				{
 					user_count++;
-					foreach (string measure in ItemPredictionMeasures)
+					foreach (string measure in Measures)
 						results[measure] += current_result[measure];
 				}
 
 				// update recommender
 				recommender.AddFeedback(users[index], items[index]);
 			}
-			foreach (string measure in ItemPredictionMeasures)
+			foreach (string measure in Measures)
 				results[measure] /= user_count;
 
 			return results;

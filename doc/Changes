@@ -15,7 +15,12 @@
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT
 	- evaluation
-          - RatingPredictionEval: add EvaluateOnline() method
+          - RatingEval
+            - add EvaluateOnline() method
+            - rename RatingPredictionMeasures to Measures
+          - ItemPredictionEval
+            - add EvaluateOnline() method
+            - rename ItemPredictionMeasures to Measures
         - data structures
           - add interfaces IBooleanMatrix and IPosOnlyFeedback
           - make PosOnlyFeedback generic to allow different backends
