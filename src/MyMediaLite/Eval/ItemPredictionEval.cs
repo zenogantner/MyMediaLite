@@ -132,8 +132,66 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
+		/// <summary>Online evaluation for rankings of items</summary>
+		/// <remarks>
+		/// </remarks>
+		/// <param name="recommender">item recommender</param>
+		/// <param name="test">test cases</param>
+		/// <param name="train">training data (must be connected to the recommender's training data)</param>
+		/// <returns>a dictionary containing the evaluation results</returns>
+		static public Dictionary<string, double> Evaluate(
+			IItemRecommender recommender,
+			IPosOnlyFeedback test,
+			IPosOnlyFeedback train)
+		{
+			// for better handling, move test data points into arrays
+			var users = new int[test.Count];
+			var items = new int[test.Count];
+			int pos = 0;
+			foreach (int user_id in test.UserMatrix.NonEmptyRowIDs)
+				foreach (int item_id in test.UserMatrix[user_id])
+				{
+					users[pos] = user_id;
+					items[pos] = item_id;
+					pos++;
+				}
+
+			// random order of the test data points  // TODO chronological order
+			var random_index = new int[test.Count];
+			for (int index = 0; index < random_index.Length; index++)
+				random_index[index] = index;
+			Util.Utils.Shuffle<int>(random_index);
+
+			// TODO consider an evaluation protocol that is comparable/compatible with the non-online scenario
+			var relevant_items = train.AllItems;
+			var results = new Dictionary<string, double>();
+			int user_count = 0;
+			foreach (int index in random_index)
+			{
+				// evaluate user
+				relevant_items.Add(items[index]);
+				var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
+				current_test.Add(users[index], items[index]);
+				var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
+
+				if (current_result["num_users"] == 1)
+				{
+					user_count++;
+					foreach (string measure in ItemPredictionMeasures)
+						results[measure] += current_result[measure];
+				}
+
+				// update recommender
+				recommender.AddFeedback(users[index], items[index]);
+			}
+			foreach (string measure in ItemPredictionMeasures)
+				results[measure] /= user_count;
+
+			return results;
+		}
+
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the AUC for the given data</returns>
 		public static double AUC(int[] ranked_items, ICollection<int> correct_items)
