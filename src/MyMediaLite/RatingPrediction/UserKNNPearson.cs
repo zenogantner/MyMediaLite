@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted user-based kNN with Pearson correlation</summary>
 	public class UserKNNPearson : UserKNN
 	{
-		/// <summary>Shrinkage parameter</summary>
+		/// <summary>shrinkage (regularization) parameter</summary>
 		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
 		private float shrinkage = 10;
 

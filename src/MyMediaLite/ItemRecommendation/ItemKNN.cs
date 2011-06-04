@@ -24,7 +24,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
 	/// <remarks>
-	/// This engine does not support online updates.
+	/// This recommender does not support online updates.
 	/// </remarks>
 	public class ItemKNN : KNN
 	{

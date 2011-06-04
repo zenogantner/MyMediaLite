@@ -27,7 +27,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Matrix factorization engine with explicit user and item bias</summary>
+	/// <summary>Matrix factorization with explicit user and item bias</summary>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
 		/// <summary>regularization constant for the bias terms</summary>

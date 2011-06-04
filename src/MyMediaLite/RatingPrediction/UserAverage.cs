@@ -23,7 +23,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses the average rating value of a user for predictions</summary>
 	/// <remarks>
-	/// This engine does NOT support online updates.
+	/// This recommender does NOT support online updates.
 	/// </remarks>
 	public class UserAverage : EntityAverage
 	{

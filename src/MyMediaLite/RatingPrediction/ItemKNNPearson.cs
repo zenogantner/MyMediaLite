@@ -23,10 +23,10 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN with pearson correlation</summary>
-	/// <remarks>This engine supports online updates.</remarks>
+	/// <remarks>This recommender supports online updates.</remarks>
 	public class ItemKNNPearson : ItemKNN
 	{
-		/// <summary>Shrinkage parameter</summary>
+		/// <summary>shrinkage (regularization) parameter</summary>
 		public float Shrinkage { get { return shrinkage; } set { shrinkage = value; } }
 		private float shrinkage = 10;
 

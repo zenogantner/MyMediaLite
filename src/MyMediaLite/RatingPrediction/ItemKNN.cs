@@ -23,8 +23,8 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Weighted item-based kNN engine</summary>
-	/// <remarks>This engine supports online updates.</remarks>
+	/// <summary>Weighted item-based kNN</summary>
+	/// <remarks>This recommender supports online updates.</remarks>
 	public abstract class ItemKNN : KNN
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
@@ -50,7 +50,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the engine, a suitable average is returned.
+		/// If the user or the item are not known to the recommender, a suitable average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>

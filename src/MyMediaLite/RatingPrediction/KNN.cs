@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
 	///
-	/// This engine does NOT support online updates.
+	/// This recommender does NOT support online updates.
 	///
 	/// <seealso cref="ItemRecommendation.KNN"/>
 	/// </remarks>

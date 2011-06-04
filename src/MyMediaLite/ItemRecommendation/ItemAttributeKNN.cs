@@ -22,11 +22,9 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>
-	/// k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes
-	/// </summary>
+	/// <summary>k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes</summary>
 	/// <remarks>
-	/// This engine does not support online updates.
+	/// This recommender does not support online updates.
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{

@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Attribute-aware weighted item-based kNN recommender</summary>
 	/// <remarks>
-	/// This engine does NOT support online updates.
+	/// This recommender does NOT support online updates.
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{

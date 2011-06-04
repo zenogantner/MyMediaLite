@@ -26,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// k=inf equals most-popular.
 	///
-	/// This engine does not support online updates.
+	/// This recommender does not support online updates.
 	/// </remarks>
 	public class UserKNN : KNN
 	{

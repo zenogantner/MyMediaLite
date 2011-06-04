@@ -53,7 +53,7 @@ namespace MyMediaLite.Eval
 		/// <remarks>
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
 		/// </remarks>
-		/// <param name="recommender">Rating prediction engine</param>
+		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(IRatingPredictor recommender, IRatings ratings)
@@ -87,7 +87,7 @@ namespace MyMediaLite.Eval
 		/// <remarks>
 		/// Every rating that is tested is added to the training set afterwards.
 		/// </remarks>
-		/// <param name="recommender">Rating prediction engine</param>
+		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> EvaluateOnline(IRatingPredictor recommender, IRatings ratings)
@@ -121,7 +121,7 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating prediction engine</param>
+		/// <param name="recommender">a rating predictor</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
@@ -130,7 +130,7 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating prediction engine</param>
+		/// <param name="recommender">a rating predictor</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>

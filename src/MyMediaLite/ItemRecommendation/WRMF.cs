@@ -32,10 +32,10 @@ namespace MyMediaLite.ItemRecommendation
 	///   One-class collaborative filtering,
 	///   IEEE International Conference on Data Mining (ICDM), 2008
 	///
-	/// We use the fast computation method proposed by Hu et al. and we allow a global
+	/// We use the fast computation method proposed by Hu et al. and we use a global
 	/// weight to penalize observed/unobserved values.
 	///
-	/// This engine does not support online updates.
+	/// This recommender does not support online updates.
 	/// </remarks>
 	public class WRMF : MF
 	{

@@ -34,7 +34,7 @@ namespace MyMediaLite.RatingPrediction
 	/// After training, an ArithmeticException is thrown if there are NaN values in the model.
 	/// NaN values occur if values become too large or too small to be represented by the type double.
 	/// If you encounter such problems, there are three ways to fix them:
-	/// (1) (preferred) Use the BiasedMatrixFactorization engine, which is more stable.
+	/// (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
 	/// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
 	/// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
 	/// </remarks>
@@ -184,7 +184,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the engine, the global average is returned.
+		/// If the user or the item are not known to the recommender, the global average is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>

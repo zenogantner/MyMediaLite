@@ -28,7 +28,8 @@ namespace MyMediaLite.ItemRecommendation
 	/// Items are weighted by how often they have been seen in the past.
 	///
 	/// This method is not personalized.
-	/// This engine supports online updates.
+	/// 
+	/// This recommender supports online updates.
 	/// </remarks>
 	public class MostPopular : ItemRecommender
 	{

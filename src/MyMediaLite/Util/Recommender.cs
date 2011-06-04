@@ -28,7 +28,7 @@ namespace MyMediaLite.Util
 {
 	/// <summary>Helper class with utility methods for handling recommenders</summary>
 	/// <remarks>
-	/// Contains methods for storing and loading engine models, and for configuring recommenders.
+	/// Contains methods for storing and loading recommender models, and for configuring recommenders.
 	/// </remarks>
 	public class Recommender
 	{
@@ -96,14 +96,14 @@ namespace MyMediaLite.Util
 			return reader;
 		}
 
-		/// <summary>Get a writer object to save the model parameters of a recommender engine</summary>
+		/// <summary>Get a writer object to save the model parameters of a recommender</summary>
 		/// <param name="filename">the filename of the model file</param>
-		/// <param name="engine_type">the engine type</param>
+		/// <param name="recommender_type">the recommender type</param>
 		/// <returns>a <see cref="StreamWriter"/></returns>
-		public static StreamWriter GetWriter(string filename, Type engine_type)
+		public static StreamWriter GetWriter(string filename, Type recommender_type)
 		{
 			var writer = new StreamWriter(filename);
-			writer.WriteLine(engine_type);
+			writer.WriteLine(recommender_type);
 			return writer;
 		}
 
@@ -115,31 +115,31 @@ namespace MyMediaLite.Util
 			return s.ToUpperInvariant();
 		}
 
-		/// <summary>Delegate definition necessary to define ConfigureEngine</summary>
+		/// <summary>Delegate definition necessary to define Configure</summary>
 		public delegate void takes_string(string s);
 
-		/// <summary>Configure a recommender engine</summary>
-		/// <param name="engine">the recommender engine to configure</param>
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
 		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
-		/// <returns>the configured recommender engine</returns>
-		public static T Configure<T>(T engine, string parameters, takes_string report_error)
+		/// <returns>the configured recommender</returns>
+		public static T Configure<T>(T recommender, string parameters, takes_string report_error)
 		{
 			var parameters_dictionary = new RecommenderParameters(parameters);
-			return Configure(engine, parameters_dictionary, report_error);
+			return Configure(recommender, parameters_dictionary, report_error);
 		}
 
-		/// <summary>Configure a recommender engine</summary>
-		/// <param name="engine">the recommender engine to configure</param>
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
-		/// <returns>the configured recommender engine</returns>
-		public static T Configure<T>(T engine, Dictionary<string, string> parameters, takes_string report_error)
+		/// <returns>the configured recommender</returns>
+		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, takes_string report_error)
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			Type type = engine.GetType();
+			Type type = recommender.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
 				property_names.Add(p.Name);
@@ -161,28 +161,28 @@ namespace MyMediaLite.Util
 						switch (property.PropertyType.ToString())
 						{
 							case "System.Double":
-								property.GetSetMethod().Invoke(engine, new Object[] { double.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(parameters[key], ni) });
 								break;
 							case "System.Single":
-								property.GetSetMethod().Invoke(engine, new Object[] { float.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(parameters[key], ni) });
 								break;
 							case "System.Int32":
 								if (parameters[key].Equals("inf"))
-									property.GetSetMethod().Invoke(engine, new Object[] { int.MaxValue });
+									property.GetSetMethod().Invoke(recommender, new Object[] { int.MaxValue });
 								else
-									property.GetSetMethod().Invoke(engine, new Object[] { int.Parse(parameters[key]) });
+									property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(parameters[key]) });
 								break;
 							case "System.UInt32":
 								if (parameters[key].Equals("inf"))
-									property.GetSetMethod().Invoke(engine, new Object[] { uint.MaxValue });
+									property.GetSetMethod().Invoke(recommender, new Object[] { uint.MaxValue });
 								else
-									property.GetSetMethod().Invoke(engine, new Object[] { uint.Parse(parameters[key]) });
+									property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(parameters[key]) });
 								break;
 							case "System.Boolean":
-								property.GetSetMethod().Invoke(engine, new Object[] { bool.Parse(parameters[key]) });
+								property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(parameters[key]) });
 								break;
 							case "System.String":
-								property.GetSetMethod().Invoke(engine, new Object[] { parameters[key] });
+								property.GetSetMethod().Invoke(recommender, new Object[] { parameters[key] });
 								break;
 							default:
 								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
@@ -196,16 +196,16 @@ namespace MyMediaLite.Util
 					Console.Write(string.Empty); // the C# compiler wants some statement here
 				}
 
-				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, engine));
+				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
 
 				NEXT_KEY:
 				Console.Write(string.Empty); // the C# compiler wants some statement here
 			}
 
-			return engine;
+			return recommender;
 		}
 
-		/// <summary>Sets a property of a MyMediaLite recommender engine</summary>
+		/// <summary>Sets a property of a MyMediaLite recommender</summary>
 		/// <param name="recommender">An <see cref="IRecommender"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
@@ -254,9 +254,9 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>Create a rating prediction engine from the type name</summary>
+		/// <summary>Create a rating predictor from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
-		/// <returns>a rating recommender object of type typename if the engine type is found, null otherwise</returns>
+		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
 		public static RatingPrediction.RatingPredictor CreateRatingPredictor(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -268,7 +268,7 @@ namespace MyMediaLite.Util
 			return null;
 		}
 
-		/// <summary>Create a rating prediction engine from a type object</summary>
+		/// <summary>Create a rating predictor from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>a rating recommender object of type type</returns>
 		public static RatingPrediction.RatingPredictor CreateRatingPredictor(Type type)
@@ -284,9 +284,9 @@ namespace MyMediaLite.Util
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.RatingPredictor");
 		}
 
-		/// <summary>Create an item recommender engine from the type name</summary>
+		/// <summary>Create an item recommender from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
-		/// <returns>an item recommender object of type typename if the engine type is found, null otherwise</returns>
+		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -298,7 +298,7 @@ namespace MyMediaLite.Util
 			return null;
 		}
 
-		/// <summary>Create an item recommender engine from a type object</summary>
+		/// <summary>Create an item recommender from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>an item recommender object of type type</returns>
 		public static ItemRecommendation.ItemRecommender CreateItemRecommender(Type type)
@@ -314,9 +314,9 @@ namespace MyMediaLite.Util
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
 		}
 
-		/// <summary>Describes the kind of data needed by this engine</summary>
-		/// <param name="recommender">a recommender engine</param>
-		/// <returns>a string containing the additional datafiles needed for training this engine</returns>
+		/// <summary>Describes the kind of data needed by this recommender</summary>
+		/// <param name="recommender">a recommender</param>
+		/// <returns>a string containing the additional datafiles needed for training this recommender</returns>
 		public static string Needs(IRecommender recommender)
 		{
 			// determine necessary data
@@ -333,9 +333,9 @@ namespace MyMediaLite.Util
 			return string.Join(", ", needs.ToArray());
 		}
 
-		/// <summary>List all recommender engines in a given namespace</summary>
+		/// <summary>List all recommenders in a given namespace</summary>
 		/// <param name="prefix">a string representing the namespace</param>
-		/// <returns>an array of strings containing the engine descriptions</returns>
+		/// <returns>an array of strings containing the recommender descriptions</returns>
 		public static string[] List(string prefix)
 		{
 			var result = new List<string>();

@@ -22,7 +22,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted k-nearest neighbor user-based collaborative filtering using cosine-similarity</summary>
 	/// <remarks>
-	/// This engine does not support online updates.
+	/// This recommender does not support online updates.
 	/// </remarks>
 	public class WeightedUserKNN : UserKNN
 	{

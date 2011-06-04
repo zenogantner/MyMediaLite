@@ -49,7 +49,7 @@ namespace MyMediaLite.Eval
 			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
 
-		/// <summary>Evaluation for rankings of item recommenders</summary>
+		/// <summary>Evaluation for rankings of items</summary>
 		/// <remarks>
 		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
 		/// The evaluation measures are listed in the ItemPredictionMeasures property.
@@ -59,14 +59,14 @@ namespace MyMediaLite.Eval
 		/// Literature:
 		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
 		/// </remarks>
-		/// <param name="engine">Item recommender engine</param>
+		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data</param>
 		/// <param name="relevant_users">a collection of integers with all relevant items</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender engine,
+			IItemRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
 		    ICollection<int> relevant_users,
@@ -101,7 +101,7 @@ namespace MyMediaLite.Eval
 					continue;
 
 				num_users++;
-				int[] prediction = ItemPrediction.PredictItems(engine, user_id, relevant_items);
+				int[] prediction = ItemPrediction.PredictItems(recommender, user_id, relevant_items);
 
 				auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
 				map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);

@@ -19,7 +19,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite
 {
-	/// <summary>Interface for recommender engines that take a binary relation over users into account</summary>
+	/// <summary>Interface for recommenders that take a binary relation over users into account</summary>
 	/// <remarks></remarks>
 	public interface IUserRelationAwareRecommender : IRecommender
 	{
@@ -29,6 +29,6 @@ namespace MyMediaLite
 
 		/// <value>Number of users</value>
 		/// <remarks></remarks>
-		int NumUsers { get; }
+		int NumUsers { get; } // TODO think about getting rid of this again
 	}
 }

@@ -83,7 +83,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Predict the weight for a given user-item combination</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the engine, zero is returned.
+		/// If the user or the item are not known to the recommender, zero is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>

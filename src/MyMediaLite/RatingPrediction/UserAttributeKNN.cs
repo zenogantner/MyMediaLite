@@ -25,9 +25,9 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Weighted kNN recommender engine based on user attributes</summary>
+	/// <summary>Weighted kNN recommender based on user attributes</summary>
 	/// <remarks>
-	/// This engine does NOT support online updates.
+	/// This recommender does NOT support online updates.
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{

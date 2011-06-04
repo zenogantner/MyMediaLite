@@ -27,13 +27,13 @@ namespace MyMediaLite.Eval
 	public class RatingPrediction
 	{
 		/// <summary>Rates a given set of instances</summary>
-		/// <param name="engine">rating prediction engine</param>
+		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the TextWriter to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor engine,
+			IRatingPredictor recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
@@ -45,26 +45,26 @@ namespace MyMediaLite.Eval
 				writer.WriteLine("{0}\t{1}\t{2}",
 								 user_mapping.ToOriginalID(ratings.Users[index]),
 								 item_mapping.ToOriginalID(ratings.Items[index]),
-								 engine.Predict(ratings.Users[index], ratings.Items[index]).ToString(ni));
+								 recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(ni));
 		}
 
 		/// <summary>Rates a given set of instances</summary>
-		/// <param name="engine">rating prediction engine</param>
+		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor engine,
+			IRatingPredictor recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
 			if (filename.Equals("-"))
-				WritePredictions(engine, ratings, user_mapping, item_mapping, Console.Out);
+				WritePredictions(recommender, ratings, user_mapping, item_mapping, Console.Out);
 			else
 				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(engine, ratings, user_mapping, item_mapping, writer);
+					WritePredictions(recommender, ratings, user_mapping, item_mapping, writer);
 		}
 	}
 }

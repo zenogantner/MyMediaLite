@@ -20,7 +20,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite
 {
-	/// <summary>Interface for recommender engines that take binary user attributes into account</summary>
+	/// <summary>Interface for recommenderss that take binary user attributes into account</summary>
 	/// <remarks></remarks>
 	public interface IUserAttributeAwareRecommender : IRecommender
 	{

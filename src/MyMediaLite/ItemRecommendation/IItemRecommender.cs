@@ -21,9 +21,9 @@ namespace MyMediaLite.ItemRecommendation
 	/// <summary>Interface for item recommenders</summary>
 	public interface IItemRecommender : IRecommender
 	{
-		// <summary>Check if the engine can produce meaningful recommendations for a given user</summary>
+		// <summary>Check if the recommender can produce meaningful recommendations for a given user</summary>
 		// <param name="user_id">the user ID</param>
-		// <returns>true if the engine can produce recommendations for the given user, false otherwise</returns>
+		// <returns>true if the recommender can produce recommendations for the given user, false otherwise</returns>
 		// bool CanPredict(int user_id);
 
 		///

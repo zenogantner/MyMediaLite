@@ -20,7 +20,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite
 {
-	/// <summary>Interface for recommender engines that take a binary relation over items into account</summary>
+	/// <summary>Interface for recommenders that take a binary relation over items into account</summary>
 	/// <remarks></remarks>
 	public interface IItemRelationAwareRecommender : IRecommender
 	{

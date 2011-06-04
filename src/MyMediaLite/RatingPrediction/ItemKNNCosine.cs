@@ -22,7 +22,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN with cosine similarity</summary>
-	/// <remarks>This engine supports online updates.</remarks>
+	/// <remarks>This recommender supports online updates.</remarks>
 	public class ItemKNNCosine : ItemKNN
 	{
 		///

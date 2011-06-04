@@ -22,8 +22,8 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Weighted user-based kNN engine</summary>
-	/// <remarks>This engine supports online updates.</remarks>
+	/// <summary>Weighted user-based kNN</summary>
+	/// <remarks>This recommender supports online updates.</remarks>
 	public abstract class UserKNN : KNN
 	{
 		/// <summary>boolean matrix indicating which user rated which item</summary>
@@ -45,7 +45,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the engine, a suitable average rating is returned.
+		/// If the user or the item are not known to the recommender, a suitable average rating is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>
