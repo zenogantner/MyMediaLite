@@ -15,6 +15,7 @@
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT
 	- evaluation
+          - RatingPredictionEval: add EvaluateOnline() method
         - data structures
           - add interfaces IBooleanMatrix and IPosOnlyFeedback
           - make PosOnlyFeedback generic to allow different backends

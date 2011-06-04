@@ -57,6 +57,7 @@ namespace MyMediaLite.RatingPrediction
 		/// 2011
 		/// </remarks>
 		public bool BoldDriver { set; get; }
+		// TODO use for online learning as well
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		double last_loss = double.NegativeInfinity;
