@@ -405,22 +405,12 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		Utils.DisplayDataStats(recommender_final.Feedback, null, recommender_final);
 	}
 
-	static PosOnlyFeedback CreateFeedback(IRatings ratings)
+	static IPosOnlyFeedback CreateFeedback(IRatings ratings)
 	{
 		return CreateFeedback(ratings, 0);
 	}
-<<<<<<< HEAD
-	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
-=======
 
 	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
-	{
-		var feedback = new PosOnlyFeedback<SparseBooleanMatrixBinarySearch>();
-		for (int i = 0; i < ratings.Count; i++)
-			if (ratings[i] >= threshold)
-				feedback.Add(ratings.Users[i], ratings.Items[i]);
->>>>>>> 2c5109c... adapt KDD Cup track 2 to new PosOnlyFeedback data type
-
 	{
 		SparseBooleanMatrixStatic user_item_matrix = new SparseBooleanMatrixStatic();
 
