@@ -141,8 +141,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> EvaluateOnline(
 			IItemRecommender recommender,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback train)
+			IPosOnlyFeedback test, IPosOnlyFeedback train,
+		    ICollection<int> relevant_users, ICollection<int> relevant_items)
 		{
 			// for better handling, move test data points into arrays
 			var users = new int[test.Count];

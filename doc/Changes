@@ -13,6 +13,8 @@
             ComputeLoss()
           - BPRMF: add optional bold driver heuristic for learn rate adaptation
 	- command-line tools
+          - item prediction: rename --predict-for-users-file to
+            --relevant-users for consistency with --relevant-items
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT

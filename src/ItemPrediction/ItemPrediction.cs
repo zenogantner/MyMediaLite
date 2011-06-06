@@ -36,6 +36,7 @@ class ItemPrediction
 {
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
+	static ICollection<int> relevant_users;
 	static ICollection<int> relevant_items;
 
 	static NumberFormatInfo ni = new NumberFormatInfo();
@@ -47,9 +48,18 @@ class ItemPrediction
 	static IEntityMapping user_mapping = new EntityMapping();
 	static IEntityMapping item_mapping = new EntityMapping();
 
-	// command-line parameters
-	static string training_file     = null;
-	static string test_file         = null;
+	// command-line parameters (data)
+	static string training_file        = null;
+	static string test_file            = null;
+	static string data_dir             = string.Empty;
+	static string relevant_users_file  = null;
+	static string relevant_items_file  = null;
+	static string user_attributes_file = null;
+	static string item_attributes_file = null;
+	static string user_relations_file  = null;
+	static string item_relations_file  = null;
+
+	// command-line parameters (other)
 	static bool compute_fit;
 	static double test_ratio;
 	static int predict_items_number = -1;
@@ -101,7 +111,8 @@ class ItemPrediction
 
    --random-seed=N
    --data-dir=DIR               load all files from DIR
-   --relevant-items=FILE        use the items in FILE for evaluation, otherwise all items that occur in the training set
+   --relevant-items=FILE        use the items in FILE (one per line) as candidate items, otherwise all items in the training set
+   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --user-attributes=FILE       file containing user attribute information
    --item-attributes=FILE       file containing item attribute information
    --user-relations=FILE        file containing user relation information
@@ -110,7 +121,6 @@ class ItemPrediction
    --load-model=FILE            load model from FILE
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
-   --predict-for-users=FILE     predict items for users specified in FILE (one user per line, needs --predict-items-file)
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --online-evaluation          perform online evaluation (use every tested user-item combination for online training)
 
@@ -147,38 +157,30 @@ class ItemPrediction
 		double prec5_cutoff = 0;
 		compute_fit         = false;
 
-		// data parameters
-		string data_dir             = "";
-		string relevant_items_file  = string.Empty;
-		string user_attributes_file = string.Empty;
-		string item_attributes_file = string.Empty;
-		string user_relations_file  = string.Empty;
-		string item_relations_file  = string.Empty;
-
 		// other parameters
 		string save_model_file        = string.Empty;
 		string load_model_file        = string.Empty;
 		int random_seed               = -1;
 		string prediction_file        = string.Empty;
-		string predict_for_users_file = string.Empty;
 		bool online_eval              = false;
 		test_ratio                    = 0;
 
 	   	var p = new OptionSet() {
 			// string-valued options
-			{ "training-file=",       v              => training_file        = v },
-			{ "test-file=",           v              => test_file            = v },
-			{ "recommender=",         v              => method               = v },
-			{ "recommender-options=", v              => recommender_options  = v },
-   			{ "data-dir=",            v              => data_dir             = v },
-			{ "user-attributes=",     v              => user_attributes_file = v },
-			{ "item-attributes=",     v              => item_attributes_file = v },
-			{ "user-relations=",      v              => user_relations_file  = v },
-			{ "item-relations=",      v              => item_relations_file  = v },
-			{ "save-model=",          v              => save_model_file      = v },
-			{ "load-model=",          v              => load_model_file      = v },
-			{ "prediction-file=",     v              => prediction_file      = v },
-			{ "predict-for-users=",   v              => predict_for_users_file = v },
+			{ "training-file=",       v => training_file          = v },
+			{ "test-file=",           v => test_file              = v },
+			{ "recommender=",         v => method                 = v },
+			{ "recommender-options=", v => recommender_options    = v },
+   			{ "data-dir=",            v => data_dir               = v },
+			{ "user-attributes=",     v => user_attributes_file   = v },
+			{ "item-attributes=",     v => item_attributes_file   = v },
+			{ "user-relations=",      v => user_relations_file    = v },
+			{ "item-relations=",      v => item_relations_file    = v },
+			{ "save-model=",          v => save_model_file        = v },
+			{ "load-model=",          v => load_model_file        = v },
+			{ "prediction-file=",     v => prediction_file        = v },
+			{ "relevant-users=",      v => relevant_users_file    = v },
+			{ "relevant-items=",      v => relevant_items_file    = v },
 			// integer-valued options
    			{ "find-iter=",            (int v) => find_iter            = v },
 			{ "max-iter=",             (int v) => max_iter             = v },
@@ -223,7 +225,7 @@ class ItemPrediction
 		Recommender.Configure(recommender, recommender_options, Usage);
 
 		// load all the data
-		LoadData(data_dir, relevant_items_file, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file);
+		LoadData();
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		TimeSpan time_span;
@@ -241,11 +243,7 @@ class ItemPrediction
 			if (compute_fit)
 				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			var result = ItemPredictionEval.Evaluate(recommender,
-			                                 test_data,
-				                             training_data,
-			                                 test_data.AllUsers,
-				                             relevant_items);
+			var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
 			ItemPredictionEval.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
@@ -282,7 +280,7 @@ class ItemPrediction
 					eval_time_stats.Add(t.TotalSeconds);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
-					Predict(prediction_file, predict_for_users_file, i);
+					Predict(prediction_file, relevant_users_file, i);
 
 					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
 					{
@@ -311,7 +309,7 @@ class ItemPrediction
 
 			if (prediction_file != string.Empty)
 			{
-				Predict(prediction_file, predict_for_users_file);
+				Predict(prediction_file, relevant_users_file);
 			}
 			else if (!no_eval)
 			{
@@ -319,7 +317,7 @@ class ItemPrediction
 					time_span = Utils.MeasureTime( delegate() {
 						var result = ItemPredictionEval.EvaluateOnline(recommender, test_data, training_data); // TODO support also for prediction outputs (to allow external evaluation)
 						ItemPredictionEval.DisplayResults(result);
-			    	});					
+			    	});
 				else
 					time_span = Utils.MeasureTime( delegate() {
 						var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, test_data.AllUsers, relevant_items);
@@ -332,14 +330,18 @@ class ItemPrediction
 		Recommender.SaveModel(recommender, save_model_file);
 	}
 
-    static void LoadData(string data_dir, string relevant_items_file, string user_attributes_file, string item_attributes_file, string user_relation_file, string item_relation_file)
+    static void LoadData()
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
 			training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 
-			// relevant items
-			if (relevant_items_file != string.Empty)
+			// relevant users and items
+			if (relevant_users_file != null)
+				relevant_users = new HashSet<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
+			else
+				relevant_users = training_data.AllUsers;
+			if (relevant_items_file != null)
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else
 				relevant_items = training_data.AllItems;
@@ -350,7 +352,7 @@ class ItemPrediction
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
 			{
-				if (user_attributes_file == string.Empty)
+				if (user_attributes_file == null)
 					Usage("Recommender expects user_attributes=FILE.");
 				else
 					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
@@ -359,7 +361,7 @@ class ItemPrediction
 			// item attributes
 			if (recommender is IItemAttributeAwareRecommender)
 			{
-				if (item_attributes_file == string.Empty)
+				if (item_attributes_file == null)
 					Usage("Recommender expects item_attributes=FILE.");
 				else
 					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
@@ -367,26 +369,26 @@ class ItemPrediction
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
-				if (user_relation_file == string.Empty)
+				if (user_relations_file == null)
 				{
 					Usage("Recommender expects user_relation=FILE.");
 				}
 				else
 				{
-					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
+					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers); // TODO move to DisplayDataStats
 				}
 
 			// item relation
 			if (recommender is IItemRelationAwareRecommender)
-				if (user_relation_file == string.Empty)
+				if (user_relations_file == null)
 				{
 					Usage("Recommender expects item_relation=FILE.");
 				}
 				else
 				{
-					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
+					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems); // TODO move to DisplayDataStats
 				}
 
 			// test data

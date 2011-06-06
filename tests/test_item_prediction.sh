@@ -1,7 +1,5 @@
 #!/bin/sh -e
 
-# TODO use relevant_items
-
 PROGRAM="mono --debug ItemPrediction.exe"
 THIS_DIR=`pwd`/tests
 
@@ -39,11 +37,13 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR
 done
 
+for i in `seq 1 10`; do echo $i >> $DATA_DIR/first-10; done
 for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --relevant-users=first-10 --relevant-items=first-10
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --relevant-users=first-10 --relevant-items=first-10
 done
+rm $DATA_DIR/first-10
 
 echo
 echo "MovieLens 1M"
