@@ -8,7 +8,6 @@ Recommender functionality
  - support for more relation types: weighted, ternary, multiple relations
  - additional recommenders
    - memory: just give out ratings in the training set, exception otherwise
-   - item-to-item CF (Linden et al., 2003)
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
    - adaptive kNN by Koren+Bell
@@ -22,6 +21,7 @@ Recommender functionality
    - http://jmlr.csail.mit.edu/papers/v11/seldin10a.html
  - time-aware rating and item prediction
    - timeSVD++
+ - item recommender: add explicit top-n recommendation method to API
  - new recommender types: TagRecommender, ContextAwareRecommender, SequentialRecommender
  - ensembles
    - ranking ensembles
@@ -33,10 +33,7 @@ Recommender functionality
    - allow new user evaluation for item prediction
    - support different CV protocols: leave-one-out, leave-one-out-per-user, k-fold CV, chronological splits, user-/item-stratified CV
    - support evaluation protocols w/ repeated events
-   - faster evaluation routines
-     - approximate AUC
-     - sample precision@N
-   - online update evaluation
+   - online update evaluation: chronological order
  - consider to store the hyperparameters in the model files as well
  - prediction certainty output
 Data types
