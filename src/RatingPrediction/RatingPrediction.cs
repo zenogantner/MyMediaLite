@@ -341,7 +341,7 @@ class RatingPrediction
 
 			if (!no_eval)
 			{
-				if (online_eval)
+				if (online_eval)  // TODO support also for prediction outputs (to allow external evaluation)
 					seconds = Utils.MeasureTime(delegate() { RatingEval.DisplayResults(RatingEval.EvaluateOnline(recommender, test_data)); });
 				else
 					seconds = Utils.MeasureTime(delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data)); });
