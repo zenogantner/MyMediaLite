@@ -18,6 +18,12 @@ do
        echo $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
             $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
 done
+
+for method in BiasedMatrixFactorization
+do
+       echo $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR --online-evaluation
+            $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR --online-evaluation
+done
  
 touch $DATA_DIR/empty
 for method in SocialMF
