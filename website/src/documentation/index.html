@@ -68,6 +68,19 @@
        and include your data with the report (if possible).
   </p>
 
+  <h3>Item recommender evaluation is quite slow. What can I do to speed it up?</h3>
+  <p>
+  Evaluation using measures like <a href="http://recsyswiki.com/wiki/Area_under_the_ROC_curve">AUC</a>
+  or <a href="http://recsyswiki.com/wiki/Precision_and_Recall">precision</a> requires, at least for many recommenders,
+  computing the scores for all user-item combination.
+  This means evaluation can take some time, even if you have a fast recommender.
+  If evaluation takes too much time, you can consider reducing the number of candidate items,
+  or the number of users.
+  </p>
+  <p>
+  The <a href="item_prediction.html">item prediction command line tool</a> offers the options
+  <tt>--relevant-items=FILE</tt> and <tt>--relevant-users=FILE</tt> for this purpose.
+  </p>
 </div>
 
 [% INCLUDE footer %]
