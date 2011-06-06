@@ -336,27 +336,21 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void AddUser(int user_id)
+		protected override void AddUser(int user_id)
 		{
-			if (user_id > MaxUserID)
-			{
-				user_factors.AddRows(user_id + 1);
-				MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
-			}
-
 			base.AddUser(user_id);
+
+			user_factors.AddRows(user_id + 1);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
 		}
 
 		///
-		public override void AddItem(int item_id)
+		protected override void AddItem(int item_id)
 		{
-			if (item_id > MaxItemID)
-			{
-				item_factors.AddRows(item_id + 1);
-				MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
-			}
-
 			base.AddItem(item_id);
+
+			item_factors.AddRows(item_id + 1);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
 		}
 
 		///

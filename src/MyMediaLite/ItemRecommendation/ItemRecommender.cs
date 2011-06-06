@@ -77,9 +77,9 @@ namespace MyMediaLite.ItemRecommendation
 		public virtual void AddFeedback(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID)
-				throw new ArgumentException("Unknown user " + user_id + ". Add it before inserting event data.");
+				AddUser(user_id);
 			if (item_id > MaxItemID)
-				throw new ArgumentException("Unknown item " + item_id + ". Add it before inserting event data.");
+				AddItem(item_id);
 
 			Feedback.Add(user_id, item_id);
 		}
@@ -96,14 +96,14 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public virtual void AddUser(int user_id)
+		protected virtual void AddUser(int user_id)
 		{
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
 		}
 
 		///
-		public virtual void AddItem(int item_id)
+		protected virtual void AddItem(int item_id)
 		{
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;

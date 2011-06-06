@@ -31,10 +31,6 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		void RemoveFeedback(int user_id, int item_id);
 		///
-		void AddUser(int user_id);
-		///
-		void AddItem(int item_id);
-		///
 		void RemoveUser(int user_id);
 		///
 		void RemoveItem(int item_id);
