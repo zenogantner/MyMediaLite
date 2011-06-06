@@ -112,6 +112,7 @@ class ItemPrediction
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
    --predict-for-users=FILE     predict items for users specified in FILE (one user per line, needs --predict-items-file)
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
+   --online-evaluation          perform online evaluation (use every tested user-item combination for online training)
 
   options for finding the right number of iterations (MF methods and BPR-Linear)
    --find-iter=N                give out statistics every N iterations
@@ -160,6 +161,7 @@ class ItemPrediction
 		int random_seed               = -1;
 		string prediction_file        = string.Empty;
 		string predict_for_users_file = string.Empty;
+		bool online_eval              = false;
 		test_ratio                    = 0;
 
 	   	var p = new OptionSet() {
@@ -191,6 +193,7 @@ class ItemPrediction
 			//   * currently none *
 			// boolean options
 			{ "compute-fit",          v => compute_fit  = v != null },
+			{ "online-evaluation",    v => online_eval  = v != null },
 			{ "help",                 v => show_help    = v != null },
 			{ "version",              v => show_version = v != null },
 
@@ -312,18 +315,16 @@ class ItemPrediction
 			}
 			else if (!no_eval)
 			{
-				time_span = Utils.MeasureTime( delegate()
-			    	{
-				    	var result = ItemPredictionEval.Evaluate(
-					    	recommender,
-							test_data,
-				            training_data,
-					        test_data.AllUsers,
-				            relevant_items
-						);
+				if (online_eval)
+					time_span = Utils.MeasureTime( delegate() {
+						var result = ItemPredictionEval.EvaluateOnline(recommender, test_data, training_data); // TODO support also for prediction outputs (to allow external evaluation)
 						ItemPredictionEval.DisplayResults(result);
-			    	}
-				);
+			    	});					
+				else
+					time_span = Utils.MeasureTime( delegate() {
+						var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, test_data.AllUsers, relevant_items);
+						ItemPredictionEval.DisplayResults(result);
+			    	});
 				Console.Write(" testing_time " + time_span);
 			}
 			Console.WriteLine();
