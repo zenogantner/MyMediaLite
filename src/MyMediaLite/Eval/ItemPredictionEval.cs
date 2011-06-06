@@ -62,7 +62,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data</param>
-		/// <param name="relevant_users">a collection of integers with all relevant items</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
@@ -138,6 +138,8 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data (must be connected to the recommender's training data)</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
+		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> EvaluateOnline(
 			IItemRecommender recommender,
@@ -162,30 +164,31 @@ namespace MyMediaLite.Eval
 				random_index[index] = index;
 			Util.Utils.Shuffle<int>(random_index);
 
-			var relevant_items = train.AllItems;
 			var results_by_user = new Dictionary<int, Dictionary<string, double>>();
 
 			foreach (int index in random_index)
 			{
-				// evaluate user
-				relevant_items.Add(items[index]);
-				var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
-				current_test.Add(users[index], items[index]);
-				var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
-
-				if (current_result["num_users"] == 1)
-					if (results_by_user.ContainsKey(users[index]))
-					{
-						foreach (string measure in Measures)
-							results_by_user[users[index]][measure] += current_result[measure];
-						results_by_user[users[index]]["num_items"]++;
-					}
-					else
-					{
-						results_by_user[users[index]] = current_result;
-						results_by_user[users[index]]["num_items"] = 1;
-						results_by_user[users[index]].Remove("num_users");
-					}
+				if (relevant_users.Contains(users[index]) && relevant_items.Contains(items[index]))
+				{
+					// evaluate user
+					var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
+					current_test.Add(users[index], items[index]);
+					var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
+	
+					if (current_result["num_users"] == 1)
+						if (results_by_user.ContainsKey(users[index]))
+						{
+							foreach (string measure in Measures)
+								results_by_user[users[index]][measure] += current_result[measure];
+							results_by_user[users[index]]["num_items"]++;
+						}
+						else
+						{
+							results_by_user[users[index]] = current_result;
+							results_by_user[users[index]]["num_items"] = 1;
+							results_by_user[users[index]].Remove("num_users");
+						}
+				}
 
 				// update recommender
 				recommender.AddFeedback(users[index], items[index]);

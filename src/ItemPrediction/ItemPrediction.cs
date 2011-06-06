@@ -315,7 +315,7 @@ class ItemPrediction
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var result = ItemPredictionEval.EvaluateOnline(recommender, test_data, training_data); // TODO support also for prediction outputs (to allow external evaluation)
+						var result = ItemPredictionEval.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
 						ItemPredictionEval.DisplayResults(result);
 			    	});
 				else
