@@ -165,6 +165,8 @@ namespace MyMediaLite.Eval
 			// TODO consider an evaluation protocol that is comparable/compatible with the non-online scenario
 			var relevant_items = train.AllItems;
 			var results = new Dictionary<string, double>();
+			foreach (string measure in Measures)
+				results[measure] = 0;
 			int user_count = 0;
 			foreach (int index in random_index)
 			{
