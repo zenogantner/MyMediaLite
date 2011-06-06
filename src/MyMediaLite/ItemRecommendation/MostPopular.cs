@@ -28,19 +28,21 @@ namespace MyMediaLite.ItemRecommendation
 	/// Items are weighted by how often they have been seen in the past.
 	///
 	/// This method is not personalized.
-	/// 
+	///
 	/// This recommender supports online updates.
 	/// </remarks>
 	public class MostPopular : ItemRecommender
 	{
 		/// <summary>View count</summary>
-		protected int[] view_count;
+		protected IList<int> view_count;
 
 		///
 		public override void Train()
 		{
-			view_count = new int[MaxItemID + 1];
-			
+			view_count = new List<int>(MaxItemID + 1);
+			for (int i = 0; i <= MaxItemID; i++)
+				view_count.Add(0);
+
 			for (int u = 0; u < Feedback.UserMatrix.NumberOfRows; u++)
 				foreach (int i in Feedback.UserMatrix[u])
 					view_count[i]++;
@@ -56,11 +58,28 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void RemoveItem (int item_id)
+		protected override void AddItem(int item_id)
 		{
+			base.AddItem(item_id);
+			while (view_count.Count <= MaxItemID)
+				view_count.Add(0);
+		}
+		
+		///
+		public override void RemoveItem(int item_id)
+		{
+			base.RemoveItem(item_id);
 			view_count[item_id] = 0;
 		}
 
+		///
+		public override void RemoveUser(int user_id)
+		{
+			foreach (int i in Feedback.UserMatrix[user_id])
+				view_count[i]--;
+			base.RemoveUser(user_id);
+		}
+		
 		///
 		public override void AddFeedback(int user_id, int item_id)
 		{
@@ -92,9 +111,9 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				int size = int.Parse(reader.ReadLine());
-				
+
 				var view_count = new int[size];
-				
+
 				while (! reader.EndOfStream)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');

@@ -138,7 +138,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data (must be connected to the recommender's training data)</param>
-		/// <returns>a dictionary containing the evaluation results</returns>
+		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> EvaluateOnline(
 			IItemRecommender recommender,
 			IPosOnlyFeedback test,
@@ -162,12 +162,9 @@ namespace MyMediaLite.Eval
 				random_index[index] = index;
 			Util.Utils.Shuffle<int>(random_index);
 
-			// TODO consider an evaluation protocol that is comparable/compatible with the non-online scenario
 			var relevant_items = train.AllItems;
-			var results = new Dictionary<string, double>();
-			foreach (string measure in Measures)
-				results[measure] = 0;
-			int user_count = 0;
+			var results_by_user = new Dictionary<int, Dictionary<string, double>>();
+
 			foreach (int index in random_index)
 			{
 				// evaluate user
@@ -177,17 +174,37 @@ namespace MyMediaLite.Eval
 				var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
 
 				if (current_result["num_users"] == 1)
-				{
-					user_count++;
-					foreach (string measure in Measures)
-						results[measure] += current_result[measure];
-				}
+					if (results_by_user.ContainsKey(users[index]))
+					{
+						foreach (string measure in Measures)
+							results_by_user[users[index]][measure] += current_result[measure];
+						results_by_user[users[index]]["num_items"]++;
+					}
+					else
+					{
+						results_by_user[users[index]] = current_result;
+						results_by_user[users[index]]["num_items"] = 1;
+						results_by_user[users[index]].Remove("num_users");
+					}
 
 				// update recommender
 				recommender.AddFeedback(users[index], items[index]);
 			}
+
+			var results = new Dictionary<string, double>();
 			foreach (string measure in Measures)
-				results[measure] /= user_count;
+				results[measure] = 0;
+
+			foreach (int u in results_by_user.Keys)
+				foreach (string measure in Measures)
+					results[measure] += results_by_user[u][measure] / results_by_user[u]["num_items"];
+
+			foreach (string measure in Measures)
+				results[measure] /= results_by_user.Count;
+
+
+			results["num_users"] = results_by_user.Count;
+			results["num_items"] = relevant_items.Count;
 
 			return results;
 		}
