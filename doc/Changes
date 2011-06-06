@@ -16,6 +16,7 @@
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT
+          - support online evaluation (see below)
 	- evaluation
           - RatingEval
             - add EvaluateOnline() method
