@@ -100,10 +100,10 @@ class RatingPrediction
    --help                           display this usage information and exit
    --version                        display version information and exit
 
-   --random-seed=N                  set random seed to N
-   --data-dir=DIR                   load all files from DIR
-   --user-attributes=FILE           file containing user attribute information
-   --item-attributes=FILE           file containing item attribute information
+   --random-seed=N                        set random seed to N
+   --data-dir=DIR                         load all files from DIR
+   --user-attributes=FILE                 file containing user attribute information
+   --item-attributes=FILE                 file containing item attribute information
    --user-relations=FILE                  file containing user relation information
    --item-relations=FILE                  file containing item relation information
    --save-model=FILE                      save computed model to FILE
@@ -115,6 +115,7 @@ class RatingPrediction
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
    --online-evaluation                    perform online evaluation (use every tested rating for online training)
+   --search-hp                            search for good hyperparameter values (experimental)
 
   options for finding the right number of iterations (MF methods)
    --find-iter=N                  give out statistics every N iterations
@@ -164,6 +165,7 @@ class RatingPrediction
 
 		// other arguments
 		bool online_eval       = false;
+		bool search_hp         = false;
 		string save_model_file = string.Empty;
 		string load_model_file = string.Empty;
 		int random_seed        = -1;
@@ -201,6 +203,7 @@ class RatingPrediction
 			// boolean options
 			{ "compute-fit",          v => compute_fit  = v != null },
 			{ "online-evaluation",    v => online_eval  = v != null },
+			{ "search-hp",            v => search_hp    = v != null },
 			{ "help",                 v => show_help    = v != null },
 			{ "version",              v => show_version = v != null },
    	  	};
@@ -250,7 +253,7 @@ class RatingPrediction
 		{
 			if ( !(recommender is IIterativeModel) )
 				Usage("Only iterative recommenders support find_iter.");
-			IIterativeModel iterative_recommender = (MatrixFactorization) recommender;
+			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 
 			if (load_model_file == string.Empty)
@@ -295,7 +298,7 @@ class RatingPrediction
 					Recommender.SaveModel(recommender, save_model_file, i);
 					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i);
 
-					if (epsilon > 0 && results["RMSE"] > rmse_eval_stats.Min() + epsilon)
+					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
 						Console.Error.WriteLine(string.Format(ni, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
 						Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
@@ -317,18 +320,27 @@ class RatingPrediction
 
 			if (load_model_file == string.Empty)
 			{
-				Console.Write(recommender.ToString());
 				if (cross_validation > 0)
 				{
+					Console.Write(recommender.ToString());
 					Console.WriteLine();
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = RatingEval.EvaluateOnSplit(recommender, split);
+					var results = RatingEval.EvaluateOnSplit(recommender, split); 					// TODO	if (search_hp)
 					RatingEval.DisplayResults(results);
 					no_eval = true;
 					recommender.Ratings = training_data;
 				}
 				else
 				{
+					if (search_hp)
+					{
+						// TODO --search-hp-criterion=RMSE
+						double result = NelderMead.FindMinimum("RMSE", recommender);
+						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(ni));
+						// TODO give out hp search time
+					}
+						
+					Console.Write(recommender.ToString());
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
         			Console.Write(" training_time " + seconds + " ");
 				}
@@ -359,9 +371,9 @@ class RatingPrediction
 			}
 
 			Console.WriteLine();
+			Console.Error.WriteLine("memory {0}", Memory.Usage);
 		}
 		Recommender.SaveModel(recommender, save_model_file);
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
     static void LoadData(string data_dir, double min_rating, double max_rating,
