@@ -232,7 +232,7 @@ class ItemPrediction
 
 		if (find_iter != 0)
 		{
-			IIterativeModel iterative_recommender = (IIterativeModel) recommender;
+			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 
 			if (load_model_file == string.Empty)
