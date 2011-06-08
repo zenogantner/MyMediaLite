@@ -32,9 +32,12 @@ namespace MyMediaLite.RatingPrediction
 	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
 	///
+	/// One difference is that we support several iterations of alternating optimization,
+	/// instead of just one.
+	///
 	/// This recommender supports online updates.
 	/// </remarks>
-	public class UserItemBaseline : RatingPredictor
+	public class UserItemBaseline : RatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
 		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
@@ -43,6 +46,9 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Regularization parameter for the item biases</summary>
 		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
 		public double RegI { get; set; }
+
+		///
+		public int NumIter { get; set; }
 
 		private double global_average;
 		private double[] user_biases;
@@ -53,6 +59,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			RegU = 15;
 			RegI = 10;
+			NumIter = 10;
 		}
 
 		///
@@ -71,20 +78,20 @@ namespace MyMediaLite.RatingPrediction
 
 			global_average = Ratings.Average;
 
+			for (int i = 0; i < NumIter; i++)
+				Iterate();
+		}
+
+		public void Iterate()
+		{
+			OptimizeItemBiases();
+			OptimizeUserBiases();
+		}
+
+		void OptimizeUserBiases()
+		{
 			int[] user_ratings_count = new int[MaxUserID + 1];
-			int[] item_ratings_count = new int[MaxItemID + 1];
 
-			// compute item biases
-			for (int index = 0; index < Ratings.Count; index++)
-			{
-				item_biases[Ratings.Items[index]] += Ratings[index] - global_average;
-				item_ratings_count[Ratings.Items[index]]++;
-			}
-			for (int i = 0; i < item_biases.Length; i++)
-				if (item_ratings_count[i] != 0)
-					item_biases[i] = item_biases[i] / (RegI + item_ratings_count[i]);
-
-			// compute user biases
 			for (int index = 0; index < Ratings.Count; index++)
 			{
 				user_biases[Ratings.Users[index]] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
@@ -93,6 +100,21 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u < user_biases.Length; u++)
 				if (user_ratings_count[u] != 0)
 					user_biases[u] = user_biases[u] / (RegU + user_ratings_count[u]);
+		}
+
+		void OptimizeItemBiases()
+		{
+			int[] item_ratings_count = new int[MaxItemID + 1];
+
+			// compute item biases
+			for (int index = 0; index < Ratings.Count; index++)
+			{
+				item_biases[Ratings.Items[index]] += Ratings[index] - global_average - user_biases[Ratings.Users[index]];
+				item_ratings_count[Ratings.Items[index]]++;
+			}
+			for (int i = 0; i < item_biases.Length; i++)
+				if (item_ratings_count[i] != 0)
+					item_biases[i] = item_biases[i] / (RegI + item_ratings_count[i]);
 		}
 
 		///
@@ -197,12 +219,18 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
+		public double ComputeFit()
+		{
+			return MyMediaLite.Eval.RatingEval.Evaluate(this, ratings)["RMSE"];
+		}
+
+		///
 		public override string ToString()
 		{
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
 
-			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1}", RegU, RegI);
+			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1} num_iter={2}", RegU, RegI, NumIter);
 		}
 	}
 }
