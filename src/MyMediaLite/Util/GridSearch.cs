@@ -45,6 +45,7 @@ namespace MyMediaLite.Util
 		                                 ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
 
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -83,6 +84,7 @@ namespace MyMediaLite.Util
 		                                 ISplit<IRatings> split)
 		{
 			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
 
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -94,7 +96,7 @@ namespace MyMediaLite.Util
 					Recommender.SetProperty(recommender, hp_name1, hp_values1[i].ToString(ni));
 					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(ni));
 
-					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(ni), hp_values2[j].ToString(ni));
+					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(ni), hp_values2[j].ToString(ni)); // TODO this is not generic
 					double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
 					if (result < min_result)
 					{
