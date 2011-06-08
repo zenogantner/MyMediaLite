@@ -52,6 +52,8 @@
     <Compile Include="IO\KDDCup2011\Track2Items.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ISemiSupervisedItemRecommender.cs" />
+    <Compile Include="Util\GridSearch.cs" />
+    <Compile Include="Util\NelderMead.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -79,6 +81,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
