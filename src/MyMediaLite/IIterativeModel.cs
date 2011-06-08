@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,19 +21,14 @@ namespace MyMediaLite
 	/// <remarks></remarks>
 	public interface IIterativeModel : IRecommender
 	{
-		/// <value>Number of iterations to run the training</value>
-		/// <remarks></remarks>
+		/// <summary>Number of iterations to run the training</summary>
 		int NumIter { get; set; }
 
 		/// <summary>Run one iteration (= pass over the training data)</summary>
-		/// <remarks></remarks>
 		void Iterate();
 
-		/// <summary>Compute the fit on the training data</summary>
-		/// <remarks></remarks>
-		/// <returns>
-		/// the fit on the training data according to the optimization criterion; -1 if not implemented
-		/// </returns>
+		/// <summary>Compute the fit (RMSE) on the training data</summary>
+		/// <returns>the fit (RMSE) on the training data according to the optimization criterion; -1 if not implemented</returns>
 		double ComputeFit();
 	}
 }
