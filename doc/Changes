@@ -5,6 +5,8 @@
            - remove AddUser() and AddItem()
           - IItemRecommender
            - remove AddUser() and AddItem()
+          - Util.Recommender.Configure can now be called without a delegate
+            argument.
 	- recommenders
           - remove NewKNN from project (still not finished)
           - new rating predictor BiasedMatrixFactorizationMAE, which is BMF

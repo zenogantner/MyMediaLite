@@ -131,6 +131,14 @@ namespace MyMediaLite.Util
 
 		/// <summary>Configure a recommender</summary>
 		/// <param name="recommender">the recommender to configure</param>
+		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
+		public static T Configure<T>(T recommender, string parameters)
+		{
+			return Configure(recommender, parameters, delegate(string s) { Console.Error.WriteLine(s); });
+		}
+
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
 		/// <returns>the configured recommender</returns>
