@@ -12,6 +12,7 @@
           - BiasedMatrixFactorization: fixed a wrong constant factor in
             ComputeLoss()
           - BPRMF: add optional bold driver heuristic for learn rate adaptation
+          - MatrixFactorization: use method from Eval namespace to compute fit
 	- command-line tools
           - item prediction: rename --predict-for-users-file to
             --relevant-users for consistency with --relevant-items

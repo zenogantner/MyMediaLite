@@ -303,15 +303,10 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <summary>Compute fit (RMSE) on the training data</summary>
-		/// <returns>the root mean square error (RMSE) on the training data</returns>
+		///
 		public double ComputeFit()
 		{
-			double rmse_sum = 0;
-			for (int i = 0; i < ratings.Count; i++)
-				rmse_sum += Math.Pow(Predict(ratings.Users[i], ratings.Items[i]) - ratings[i], 2);
-
-			return Math.Sqrt((double) rmse_sum / ratings.Count);
+			return MyMediaLite.Eval.RatingEval.Evaluate(this, ratings)["RMSE"];
 		}
 
 		/// <summary>Compute the regularized loss</summary>
