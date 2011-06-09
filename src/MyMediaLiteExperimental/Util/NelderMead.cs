@@ -38,7 +38,7 @@ namespace MyMediaLite.Util
 		static double gamma = 2.0;
 		static double rho = 0.5;
 		static double sigma = 0.5;
-		static double num_it = 20;
+		static double num_it = 50;
 		static double split_ratio = 0.2;
 
 		static string CreateConfigString(IList<string> hp_names, IList<double> hp_values)
@@ -79,8 +79,12 @@ namespace MyMediaLite.Util
 
 			return center;
 		}
-
-		public static double FindMinimum(string evaluation_measure,
+		
+		/// <summary>Find best hyperparameter (according to an error measure) using Nelder-Mead search</summary>
+		/// <param name="error_measure">an error measure (lower is better)</param>
+		/// <param name="recommender">a rating predictor (will be set to best hyperparameter combination)</param>
+		/// <returns>the estimated error of the best hyperparameter combination</returns>
+		public static double FindMinimum(string error_measure,
 		                                 RatingPredictor recommender)
 		{
 			var split = new RatingsSimpleSplit(recommender.Ratings, split_ratio);
@@ -106,7 +110,7 @@ namespace MyMediaLite.Util
 			else if (recommender is BiasedMatrixFactorization)
 			{
 				hp_names = new string[] { "regularization", "bias_reg" };
-				initial_hp_values = new Vector[] {
+				initial_hp_values = new Vector[] { // TODO reg_u and reg_i (in a second step?)
 					new Vector(	new double[] { 0.1,     0 } ),
 					new Vector(	new double[] { 0.01,    0 } ),
 					new Vector(	new double[] { 0.0001,  0 } ),
@@ -115,15 +119,25 @@ namespace MyMediaLite.Util
 					new Vector(	new double[] { 0.01,    0.0001 } ),
 					new Vector(	new double[] { 0.0001,  0.0001 } ),
 					new Vector(	new double[] { 0.00001, 0.0001 } ),
-
 				};
 			}
+			else if (recommender is MatrixFactorization)
+			{ // TODO normal interval search could be more efficient
+				hp_names = new string[] { "regularization", };
+				initial_hp_values = new Vector[] {
+					new Vector(	new double[] { 0.1     } ),
+					new Vector(	new double[] { 0.01    } ),
+					new Vector(	new double[] { 0.0001  } ),
+					new Vector(	new double[] { 0.00001 } ),
+				};				
+			}
+			// TODO kNN-based methods
 			else
 			{
 				throw new Exception("not prepared for type " + recommender.GetType().ToString());
 			}
 
-			return FindMinimum(evaluation_measure,
+			return FindMinimum(error_measure,
 			                   hp_names, initial_hp_values, recommender, split);
 		}
 
