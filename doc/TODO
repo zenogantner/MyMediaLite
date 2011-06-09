@@ -1,7 +1,9 @@
 Recommender functionality
  - add InitModel to ItemRecommender and RatingPredictor
  - BMF: consider to make bold_driver the default
- - automated hyperparameter search
+ - completely automated hyperparameter search
+   - for item prediction
+   - learning rate search
  - add filtering mechanism (pre-filter, post-filter)
  - support for non-binary attributes: real, nominal, textual descriptions
  - directly support MovieLens u.item and u.user files
