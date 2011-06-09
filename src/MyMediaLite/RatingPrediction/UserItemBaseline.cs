@@ -82,6 +82,7 @@ namespace MyMediaLite.RatingPrediction
 				Iterate();
 		}
 
+		///
 		public void Iterate()
 		{
 			OptimizeItemBiases();
