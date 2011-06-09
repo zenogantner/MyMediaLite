@@ -33,17 +33,23 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void SaveModel(string filename)
-		{
-			// do nothing
-		}
+		public override void SaveModel(string filename) { /* do nothing */ }
 
 		///
-		public override void LoadModel(string filename)
-		{
-			// do nothing
-		}
+		public override void LoadModel(string filename) { /* do nothing */ }
 
+		///
+		public override void AddFeedback(int user_id, int item_id) { /* do nothing */ }
+
+		///
+		public override void RemoveFeedback(int user_id, int item_id) { /* do nothing */ }
+		
+		///
+		public override void RemoveUser(int user_id) { /* do nothing */ }
+
+		///
+		public override void RemoveItem(int item_id) { /* do nothing */ }		
+		
 		///
 		public override string ToString()
 		{
