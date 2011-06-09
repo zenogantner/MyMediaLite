@@ -339,7 +339,7 @@ class RatingPrediction
 						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(ni));
 						// TODO give out hp search time
 					}
-						
+
 					Console.Write(recommender.ToString());
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
         			Console.Write(" training_time " + seconds + " ");
