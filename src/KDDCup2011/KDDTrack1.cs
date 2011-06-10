@@ -92,7 +92,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			Console.WriteLine(@"method ARGUMENTS have the form name=value
 
   general OPTIONS have the form name=value
-   - option_file=FILE           read options from FILE (line format KEY: VALUE)
    - random_seed=N              set random seed to N
    - data_dir=DIR               load all files from DIR
    - save_model=FILE            save computed model to FILE

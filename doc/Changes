@@ -53,6 +53,7 @@
           - move GridSearch to experimental section
           - add Nelder-Mead algorithm for hyperparameter selection; currently
             only rating prediction is supported (experimental)
+          - remove obsolete option_file functionality
 
 1.02	2011-05-24
 	- recommenders

@@ -36,7 +36,7 @@ namespace MyMediaLite.Util
 		public RecommenderParameters(string arg_string)
 		{
 			IList<string> args = Regex.Split(arg_string, "\\s");
-			
+
 			for (int i = 0; i < args.Count; i++)
 			{
 				if (args[i].Equals(string.Empty))
@@ -52,16 +52,13 @@ namespace MyMediaLite.Util
 				if (this.ContainsKey(arg_name))
 					throw new ArgumentException(arg_name + " is used twice as an argument.");
 
-				if (arg_value.Equals(string.Empty))
+				if (arg_value.Length == 0)
 					throw new ArgumentException(arg_name + " has an empty value.");
 
-				if (arg_name.Equals("option_file"))
-					AddArgumentsFromFile(arg_value);
-				else
-					this.Add(arg_name, arg_value);
+				this.Add(arg_name, arg_value);
 			}
 		}
-		
+
 		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="args">a list of strings that contains the command line parameters</param>
 		/// <param name="start">ignore all parameters before this position</param>
@@ -82,13 +79,10 @@ namespace MyMediaLite.Util
 				if (this.ContainsKey(arg_name))
 					throw new ArgumentException(arg_name + " is used twice as an argument.");
 
-				if (arg_value.Equals(string.Empty))
+				if (arg_value.Length == 0)
 					throw new ArgumentException(arg_name + " has an empty value.");
 
-				if (arg_name.Equals("option_file"))
-					AddArgumentsFromFile(arg_value);
-				else
-					this.Add(arg_name, arg_value);
+				this.Add(arg_name, arg_value);
 			}
 		}
 
@@ -301,34 +295,6 @@ namespace MyMediaLite.Util
 			else
 			{
 				return dvalue;
-			}
-		}
-
-		/// <summary>Add key-value pairs from a text file to the collection</summary>
-		/// <param name="filename">the name of the text file</param>
-		protected void AddArgumentsFromFile(string filename)
-		{
-			using ( var reader = new StreamReader(filename) )
-			{
-				while (!reader.EndOfStream)
-				{
-				   	string line = reader.ReadLine();
-					if (line.Trim().Equals(string.Empty))
-						continue;
-
-					string[] tokens = line.Split(':');
-					if (tokens.Length != 2)
-						throw new IOException("Expected format: 'KEY: VALUE':" + line);
-
-					string arg_name  = tokens[0].Trim();
-					string arg_value = tokens[1].Trim();
-
-					if (arg_value.Equals(string.Empty))
-						throw new ArgumentException(arg_name + " has an empty value.");
-
-					if (!this.ContainsKey(arg_name)) // command line overrides argument file
-						this.Add(arg_name, arg_value);
-				}
 			}
 		}
 	}
