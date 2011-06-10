@@ -1,5 +1,5 @@
 Recommender functionality
- - add InitModel to ItemRecommender and RatingPredictor
+ - add association rules from sequin: http://sequin.codeplex.com/
  - BMF: consider to make bold_driver the default
  - completely automated hyperparameter search
    - for item prediction
@@ -46,12 +46,25 @@ Data types
 Architecture
  - tests/integration
    - test suite should also run for purely binary installation
+   - make Debian package
  - web APIs
    - integrate with easyrec JavaScript API http://easyrec.org/ 
    - implement features similar to the Strands web service API or Hunch
    - http://drupal.org/project/recommender
+   - generic API:
+     - add/remove feedback (user, item, type, score)
+       - bulk version
+     - remove user or item
+     - get score for user/item combination
+     - get top N recommendations for user
+       - possibly filtered
+       - possibly diversified
+     - add user or item information (attributes etc.)
+     - get explanation
+     - retrain (asynchronous)
  - internal APIs
    - interface(s) for recommenders that support online updates
+   - change online learning APIs back to notification APIs
    - user and item IDs should be unsigned integers, not signed integers
    - generic optimization interface and algorithms (like Mallet)
    - consider using simulated multiple inheritance for the attribute-based recommenders:
@@ -63,6 +76,7 @@ Architecture
      - stored ratings
      - prediction values (in C++ port)
  - recommenders 
+   - add InitModel to ItemRecommender and RatingPredictor
    - nicer, more generic structure for kNN recommenders
      - non-weighted kNN
      - more correlation/similarity measures
