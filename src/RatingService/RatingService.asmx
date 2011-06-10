@@ -36,7 +36,9 @@ namespace MyMediaLite
 				item_mapping = new EntityMapping();
 				
 				recommender.Ratings = new Ratings();
-				recommender.Train();
+				recommender.MinRating = 1;
+				recommender.MaxRating = 5; // expose this to API/configuration
+				//recommender.Train();
 				Console.Error.WriteLine("done.");
 			}
 		}
@@ -54,7 +56,7 @@ namespace MyMediaLite
 			if (access_counter % 8000 == 7999)						
 				Console.Error.WriteLine();
 			access_counter++;						
-						
+			
 			// TODO check whether score is in valid range
 			recommender.Ratings.Add(user_mapping.ToInternalID(user_id), item_mapping.ToInternalID(item_id), score);
 		}		
@@ -69,13 +71,17 @@ namespace MyMediaLite
 		[WebMethod]
 		public double Predict(int user_id, int item_id)
 		{
-			return recommender.Predict(user_mapping.ToInternalID(user_id), item_mapping.ToInternalID(item_id));
+			double pred = recommender.Predict(user_mapping.ToInternalID(user_id), item_mapping.ToInternalID(item_id));
+			//Console.Error.WriteLine("p({0}, {1}, {2})", user_id, item_id, pred);
+			
+			return pred;
 		}
 		
 		[WebMethod]
 		public void Train()
 		{
 			Utils.DisplayDataStats(recommender.Ratings, null, recommender);
+			Console.Error.WriteLine(recommender.ToString());
 			recommender.Train();
 		}		
 	}
