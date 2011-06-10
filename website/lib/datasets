@@ -1,4 +1,5 @@
 [% netflix_data = [
+     { method => 'UserItemBaseline',          hp => 'reg_u=4.5 reg_i=1.137 num_iter=10', rmse => '0.98261', mae => '0.76832', nmae => '0.19208' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=0  learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=80', rmse => '0.9830', mae => '0.7710' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=40', rmse => '0.9197', mae => '0.7157', nmae => '0.1789' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=50 learn_rate=0.005 bias_reg=0.0001 reg=0.035 num_iter=90', rmse => '0.9175', mae => '0.7135' }
