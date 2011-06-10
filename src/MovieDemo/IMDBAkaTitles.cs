@@ -43,7 +43,6 @@ namespace MovieDemo
 				if (line == "AKA TITLES LIST " + language)
 				{
 					line = reader.ReadLine();
-
 					break;
 				}
 			}
@@ -53,7 +52,7 @@ namespace MovieDemo
 			   	line = reader.ReadLine().Trim();
 
 				// ignore empty lines
-				if (line.Equals(string.Empty))
+				if (line == string.Empty)
 					continue;
 
 				// ignore second (or more) aka title
@@ -90,4 +89,3 @@ namespace MovieDemo
 		}
 	}
 }
-

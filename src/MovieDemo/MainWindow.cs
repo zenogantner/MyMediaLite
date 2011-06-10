@@ -479,7 +479,7 @@ public partial class MainWindow : Window
 		Movie movie = (Movie) model.GetValue(iter, 0);
 		string movie_title = movie.Title;
 
-		if (filter_entry.Text.Equals(string.Empty))
+		if (filter_entry.Text == string.Empty)
 			return true;
 
 		if (movie_title.Contains(filter_entry.Text))

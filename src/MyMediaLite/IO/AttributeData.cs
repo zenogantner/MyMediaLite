@@ -53,16 +53,16 @@ namespace MyMediaLite.IO
 
 			var ni = new NumberFormatInfo();
 			ni.NumberDecimalDigits = '.';
-			
+
 			var split_chars = new char[]{ '\t', ' ' };
 			string line;
 
 			while (!reader.EndOfStream)
 			{
 			   	line = reader.ReadLine();
-				
+
 				// ignore empty lines
-				if (line.Trim().Equals(string.Empty))
+				if (line.Length == 0)
 					continue;
 
 				string[] tokens = line.Split(split_chars);
@@ -78,7 +78,7 @@ namespace MyMediaLite.IO
 
 			return matrix;
 		}
-		
+
 		/// <summary>Read binary attribute data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">an IDataReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
@@ -86,8 +86,8 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least two columns.");			
-			
+				throw new IOException("Expected at least two columns.");
+
 			var matrix = new SparseBooleanMatrix();
 
 			while (!reader.Read())
@@ -99,6 +99,6 @@ namespace MyMediaLite.IO
 			}
 
 			return matrix;
-		}		
+		}
 	}
 }
