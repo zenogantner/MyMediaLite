@@ -67,7 +67,7 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the writer object to write the predictions to</param>
 		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, TextWriter writer)
 		{
-			foreach (int user_id in candidates.Keys)
+			foreach (int user_id in candidates.Keys) // this is ordered, but is it guaranteed?
 			{
 				IList<int> user_candidates = candidates[user_id];
 
