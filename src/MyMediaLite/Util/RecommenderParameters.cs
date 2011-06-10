@@ -39,7 +39,7 @@ namespace MyMediaLite.Util
 
 			for (int i = 0; i < args.Count; i++)
 			{
-				if (args[i].Equals(string.Empty))
+				if (args[i].Length == 0)
 					continue;
 
 				string[] pair = args[i].Split('=');
@@ -66,7 +66,7 @@ namespace MyMediaLite.Util
 		{
 			for (int i = start; i < args.Count; i++)
 			{
-				if (args[i].Equals(string.Empty))
+				if (args[i].Length == 0)
 					continue;
 
 				string[] pair = args[i].Split('=');
