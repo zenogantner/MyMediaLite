@@ -1,4 +1,7 @@
 1.03	2011-0?-??
+        - web service API
+          - add prototype for a SOAP web service for rating prediction, plus a
+            test script
         - API changes
           - IRatingPredictor
            - Add() is now AddRating()
