@@ -51,7 +51,7 @@ Architecture
    - integrate with easyrec JavaScript API http://easyrec.org/ 
    - implement features similar to the Strands web service API or Hunch
    - http://drupal.org/project/recommender
-   - generic API:
+   - generic API (implement RESTful using Manos):
      - add/remove feedback (user, item, type, score)
        - bulk version
      - remove user or item
