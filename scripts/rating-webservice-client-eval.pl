@@ -28,7 +28,7 @@ my $predict = sub {
   return $result->result;
 };
 
-print "Evaluating ratings ... ";
+print "Evaluating ratings (takes about 3.5 minutes) ... ";
 my @test_lines = read_file('data/ml100k/u1.test');
 my $error_sum = 0;
 foreach my $line (@test_lines) {
