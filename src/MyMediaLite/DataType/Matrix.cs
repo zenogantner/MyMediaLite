@@ -82,6 +82,18 @@ namespace MyMediaLite.DataType
 			matrix.data.CopyTo(this.data, 0);
 		}
 
+		/// <summary>Constructor that takes a list of lists to initialize the matrix</summary>
+		/// <param name="data">a list of lists of T</param>
+		public Matrix(IList<IList<T>> data)
+		{
+			this.dim1 = data.Count;
+			this.dim2 = data[0].Count;
+			this.data = new T[this.dim1 * this.dim2];
+			for (int i = 0; i < dim1; i++)
+				for (int j = 0; j < dim2; j++)
+					this.data[i * dim2 + j] = data[i][j];
+		}
+
 		///
 		public IMatrix<T> CreateMatrix(int num_rows, int num_columns)
 		{
