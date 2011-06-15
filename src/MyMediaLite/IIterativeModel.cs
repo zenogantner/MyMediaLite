@@ -22,7 +22,7 @@ namespace MyMediaLite
 	public interface IIterativeModel : IRecommender
 	{
 		/// <summary>Number of iterations to run the training</summary>
-		int NumIter { get; set; }
+		uint NumIter { get; set; }
 
 		/// <summary>Run one iteration (= pass over the training data)</summary>
 		void Iterate();

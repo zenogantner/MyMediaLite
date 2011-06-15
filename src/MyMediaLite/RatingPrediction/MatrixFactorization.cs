@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		public virtual double Regularization { get; set; }
 
 		/// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get; set; }
+		public uint NumIter { get; set; }
 
 		/// <summary>Create a new object</summary>
 		public MatrixFactorization()
@@ -163,7 +163,7 @@ namespace MyMediaLite.RatingPrediction
 
 		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			for (int current_iter = 0; current_iter < NumIter; current_iter++)
+			for (uint current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(rating_indices, update_user, update_item);
 		}
 

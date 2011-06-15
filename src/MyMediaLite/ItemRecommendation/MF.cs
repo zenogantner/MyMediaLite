@@ -44,7 +44,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected int num_factors = 10;
 
 		/// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get; set; }
+		public uint NumIter { get; set; }
 
 		/// <summary>Default constructor</summary>
 		public MF()
@@ -70,7 +70,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 
-			for (int i = 0; i < NumIter; i++)
+			for (uint i = 0; i < NumIter; i++)
 				Iterate();
 		}
 

@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 		public double RegI { get; set; }
 
 		///
-		public int NumIter { get; set; }
+		public uint NumIter { get; set; }
 
 		private double global_average;
 		private double[] user_biases;
@@ -78,7 +78,7 @@ namespace MyMediaLite.RatingPrediction
 
 			global_average = Ratings.Average;
 
-			for (int i = 0; i < NumIter; i++)
+			for (uint i = 0; i < NumIter; i++)
 				Iterate();
 		}
 

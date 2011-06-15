@@ -58,8 +58,8 @@ namespace MyMediaLite.ItemRecommendation
 		private bool fast_sampling = false;
 
 		/// <summary>Number of iterations over the training data</summary>
-		public int NumIter { get { return num_iter; } set { num_iter = value; } }
-		private int num_iter = 10;
+		public uint NumIter { get { return num_iter; } set { num_iter = value; } }
+		private uint num_iter = 10;
 
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; }	}
@@ -115,7 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 			this.item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
 			MatrixUtils.InitNormal(item_attribute_weight_by_user, init_mean, init_stdev);
 
-			for (int i = 0; i < NumIter; i++)
+			for (uint i = 0; i < NumIter; i++)
 				Iterate();
 		}
 
