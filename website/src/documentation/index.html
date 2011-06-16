@@ -81,6 +81,32 @@
   The <a href="item_prediction.html">item prediction command line tool</a> offers the options
   <tt>--relevant-items=FILE</tt> and <tt>--relevant-users=FILE</tt> for this purpose.
   </p>
+  
+  <h3>Is MyMediaLite <a href="http://en.wikipedia.org/wiki/Thread_safety">thread-safe</a>?</h3>
+  <p>
+  No, the MyMediaLite core library is generally not thread-safe.
+  If you use MyMediaLite in a multi-threading scenario, you need to make sure that
+  write access to data structures and recommender models (e.g. training) as properly synchronized.
+  </p>
+  <p>
+  The <tt>Predict()</tt> method <it>is</it> thread-safe because it does not write any data.
+  The example web service included with MyMediaLite can be called from more than one client at once
+  because all method calls that write data are properly synchronized.
+  </p>
+  
+  <h3>What can I do to make MyMediaLite consume less memory?</h3>
+  <p>
+  Depending on your application, you can use datatypes that use less memory,
+  e.g.
+  <tt><a href="doxygen/class_my_media_lite_1_1_data_1_1_static_byte_ratings.html">StaticByteRatings</a></tt>,
+  <tt><a href="doxygen/class_my_media_lite_1_1_data_1_1_static_float_ratings.html">StaticFloatRatings</a></tt>
+  for rating prediction, or
+  <tt><a href="doxygen/class_my_media_lite_1_1_data_type_1_1_sparse_boolean_matrix_binary_search.html">PosOnlyFeedback&gl;SparseBooleanMatrixBinarySearch&gr;</a></tt>.
+  </p>
+  <p>
+  If you use the <a href="rating_prediction.html">rating prediction command-line tool</a>,
+  you may use the <tt>--rating-type=byte|float|double</tt> argument.
+  </p>
 </div>
 
 [% INCLUDE footer %]
