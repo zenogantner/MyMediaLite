@@ -20,7 +20,7 @@ Remark
 ------
 MyMediaLite is under development, its API and architecture may change over
 time. Major API and structure changes will be denoted by a major version
-number jump, i.e. from 0.x to 1.0.
+number jump, i.e. from 1.x to 2.0.
 
 Documentation
 -------------

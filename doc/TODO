@@ -121,8 +121,7 @@ Documentation/website
  - have documentation for different versions on the website
  - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing
- - (*) document how to set up C# development environment for Ubuntu, Debian, etc.
  - document using MyMediaLite from other languages, implementing recommenders in other languages
-   - Java (*), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
+   - Java (via IKVM or JaCIL), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - JavaScript -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
  - glossary where we explain commonly used terms
