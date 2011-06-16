@@ -39,9 +39,7 @@ namespace MyMediaLite.ItemRecommendation
 		public double InitStdev { get; set; }
 
 		/// <summary>Number of latent factors per user/item</summary>
-		public int NumFactors { get { return num_factors; } set { num_factors = value; } }
-		/// <summary>Number of latent factors per user/item</summary>
-		protected int num_factors = 10;
+		public uint NumFactors { get; set; }
 
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
@@ -52,6 +50,7 @@ namespace MyMediaLite.ItemRecommendation
 			NumIter = 30;
 			InitMean = 0;
 			InitStdev = 0.1;
+			NumFactors = 10;
 		}
 
 		// TODO push upwards in class hierarchy

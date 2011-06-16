@@ -18,7 +18,10 @@
           - BiasedMatrixFactorization: fixed a wrong constant factor in
             ComputeLoss()
           - BPRMF: add optional bold driver heuristic for learn rate adaptation
-          - MatrixFactorization: use method from Eval namespace to compute fit
+          - MatrixFactorization:
+            - use method from Eval namespace to compute fit
+            - NumFactors: int -> uint
+          - ItemRecommendation.MF: NumFactors: int -> uint
           - UserItemBaseline: use several iterations of alternating
             optimization instead of just one; implement IIterativeModel
 	- command-line tools
