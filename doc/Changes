@@ -63,6 +63,8 @@
           - minor speed-up: do not .Trim() lines before checking whether they
             are empty
 	- misc
+          - reflection-based recommender configuration from string: check
+            whether properties are read-only
           - move GridSearch to experimental section
           - add Nelder-Mead algorithm for hyperparameter selection; currently
             only rating prediction is supported (experimental)
