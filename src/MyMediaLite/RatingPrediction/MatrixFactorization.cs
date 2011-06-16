@@ -56,7 +56,7 @@ namespace MyMediaLite.RatingPrediction
 		public double InitStdev { get; set; }
 
 		/// <summary>Number of latent factors</summary>
-		public int NumFactors { get; set;}
+		public uint NumFactors { get; set;}
 
 		/// <summary>Learn rate</summary>
 		public double LearnRate { get; set; }
@@ -67,7 +67,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
 
-		/// <summary>Create a new object</summary>
+		/// <summary>Default constructor</summary>
 		public MatrixFactorization()
 		{
 			// set default values
