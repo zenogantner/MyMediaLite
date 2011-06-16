@@ -39,7 +39,9 @@ namespace MyMediaLite.ItemRecommendation
 		public double InitStdev { get; set; }
 
 		/// <summary>Number of latent factors per user/item</summary>
-		public uint NumFactors { get; set; }
+		public uint NumFactors { get { return (uint) num_factors; } set { num_factors = (int) value; } }
+		/// <summary>Number of latent factors per user/item</summary>
+		protected int num_factors = 10;
 
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
@@ -50,7 +52,6 @@ namespace MyMediaLite.ItemRecommendation
 			NumIter = 30;
 			InitMean = 0;
 			InitStdev = 0.1;
-			NumFactors = 10;
 		}
 
 		// TODO push upwards in class hierarchy
@@ -131,10 +132,10 @@ namespace MyMediaLite.ItemRecommendation
 				this.MaxItemID = item_factors.NumberOfRows - 1;
 
 				// assign new model
-				if (this.num_factors != user_factors.NumberOfColumns)
+				if (this.NumFactors != user_factors.NumberOfColumns)
 				{
 					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.num_factors = user_factors.NumberOfColumns;
+					this.NumFactors = (uint) user_factors.NumberOfColumns;
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;

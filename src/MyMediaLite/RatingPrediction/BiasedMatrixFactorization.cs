@@ -235,7 +235,7 @@ namespace MyMediaLite.RatingPrediction
 				if (this.NumFactors != user_factors.dim2)
 				{
 					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
-					this.NumFactors = user_factors.dim2;
+					this.NumFactors = (uint) user_factors.dim2;
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;

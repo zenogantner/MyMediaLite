@@ -72,6 +72,16 @@ namespace MyMediaLite.DataType
 			this.data = new T[dim1 * dim2];
 		}
 
+		/// <summary>Initializes a new instance of the Matrix class</summary>
+		/// <param name="dim1">the number of rows</param>
+		/// <param name="dim2">the number of columns</param>
+		public Matrix(int dim1, uint dim2)
+		{
+			this.dim1 = dim1;
+			this.dim2 = (int) dim2;
+			this.data = new T[dim1 * dim2];
+		}
+
 		/// <summary>Copy constructor. Creates a deep copy of the given matrix.</summary>
 		/// <param name="matrix">the matrix to be copied</param>
 		public Matrix(Matrix<T> matrix)
