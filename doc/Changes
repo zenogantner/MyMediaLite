@@ -23,8 +23,10 @@
             - use method from Eval namespace to compute fit
             - NumFactors: int -> uint
           - ItemRecommendation.MF: NumFactors: int -> uint
-          - UserItemBaseline: use several iterations of alternating
-            optimization instead of just one; implement IIterativeModel
+          - UserItemBaseline:
+            - use several iterations of alternating optimization instead of just
+              one; implement IIterativeModel
+            - implement LoadModel() and SaveModel()
 	- command-line tools
           - item prediction: rename --predict-for-users-file to
             --relevant-users for consistency with --relevant-items

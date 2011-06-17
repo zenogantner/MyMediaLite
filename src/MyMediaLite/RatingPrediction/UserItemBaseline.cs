@@ -18,7 +18,9 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
@@ -204,18 +206,32 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				throw new NotImplementedException();
+				writer.WriteLine(global_average.ToString(ni));
+				VectorUtils.WriteVector(writer, user_biases);
+				VectorUtils.WriteVector(writer, item_biases);
 			}
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
+			var ni = new NumberFormatInfo();
+			ni.NumberDecimalDigits = '.';
+
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				throw new NotImplementedException();
+				var global_average = double.Parse(reader.ReadLine(), ni);
+				var user_biases = VectorUtils.ReadVector(reader);
+				var item_biases = VectorUtils.ReadVector(reader);
+
+				this.global_average = global_average;
+				this.user_biases = user_biases.ToArray();
+				this.item_biases = item_biases.ToArray();
 			}
 		}
 
