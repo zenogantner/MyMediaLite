@@ -75,6 +75,7 @@
           - add Nelder-Mead algorithm for hyperparameter selection; currently
             only rating prediction is supported (experimental)
           - remove obsolete option_file functionality
+          - add test script for online updates (rating prediction)
 
 1.02	2011-05-24
 	- recommenders
