@@ -42,7 +42,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_factors);
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+			MatrixUtils.RowInitNormal(attribute_to_factor, InitMean, InitStdev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();

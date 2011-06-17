@@ -78,7 +78,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+				MatrixUtils.RowInitNormal(attribute_to_factor, InitMean, InitStdev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
@@ -161,14 +161,14 @@ namespace MyMediaLite.AttrToFactor
 			{
 				foreach (int attribute in item_attributes[item_id])
 				{
-					double w = attribute_to_factor[attribute, NumFactors];
+					double w = attribute_to_factor[attribute, (int) NumFactors];
 					double deriv = bias_diff * w + reg_mapping * w;
-					MatrixUtils.Inc(attribute_to_factor, attribute, NumFactors, learn_rate_mapping * -deriv);
+					MatrixUtils.Inc(attribute_to_factor, attribute, (int) NumFactors, learn_rate_mapping * -deriv);
 				}
 				// bias term
-				double w_bias = attribute_to_factor[NumItemAttributes, NumFactors];
+				double w_bias = attribute_to_factor[NumItemAttributes, (int) NumFactors];
 				double deriv_bias = bias_diff * w_bias + reg_mapping * w_bias;
-				MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, NumFactors, learn_rate_mapping * -deriv_bias);
+				MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, (int) NumFactors, learn_rate_mapping * -deriv_bias);
 			}
 		}
 
@@ -203,7 +203,7 @@ namespace MyMediaLite.AttrToFactor
 
 				// error term for item bias term
 				error    = Math.Pow(est_factors[NumFactors] - item_bias[i], 2);
-				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(NumFactors)), 2);
+				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn((int) NumFactors)), 2);
 				rmse    += error;
 				penalty += reg_term;
 				rmse_and_penalty_per_factor[NumFactors] += error + reg_term;
