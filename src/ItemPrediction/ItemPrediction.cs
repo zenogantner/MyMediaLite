@@ -170,7 +170,7 @@ class ItemPrediction
 			{ "training-file=",       v => training_file          = v },
 			{ "test-file=",           v => test_file              = v },
 			{ "recommender=",         v => method                 = v },
-			{ "recommender-options=", v => recommender_options    = v },
+			{ "recommender-options=", v => recommender_options   += " " + v },
    			{ "data-dir=",            v => data_dir               = v },
 			{ "user-attributes=",     v => user_attributes_file   = v },
 			{ "item-attributes=",     v => item_attributes_file   = v },

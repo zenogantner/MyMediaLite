@@ -34,6 +34,7 @@
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT
           - support online evaluation (see below)
+          - allow several --recommender-options arguments
 	- evaluation
           - RatingEval
             - add EvaluateOnline() method
