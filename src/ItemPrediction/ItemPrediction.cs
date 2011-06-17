@@ -247,7 +247,7 @@ class ItemPrediction
 			ItemPredictionEval.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
-			for (int i = iterative_recommender.NumIter + 1; i <= max_iter; i++)
+			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan t = Utils.MeasureTime(delegate() {
 					iterative_recommender.Iterate();
