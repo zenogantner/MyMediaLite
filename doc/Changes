@@ -1,7 +1,7 @@
-1.03	2011-0?-??
+1.03	2011-06-??
         - web service API
-          - add prototype for a SOAP web service for rating prediction, plus a
-            test script
+          - add prototype for a SOAP web service for rating prediction, plus
+            three test script
         - API changes
           - IRatingPredictor
            - Add() is now AddRating()
@@ -13,6 +13,7 @@
           - IIterativeModel: NumIter is now uint instead of int
 	- recommenders
           - remove NewKNN from project (still not finished)
+          - new rating predictor FactorWiseMatrixFactorization
           - new rating predictor BiasedMatrixFactorizationMAE, which is BMF
             optimized for MAE instead of RMSE
           - BiasedMatrixFactorization: fixed a wrong constant factor in
