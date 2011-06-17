@@ -107,13 +107,13 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			global_effects.Train();
-			global_bias = Ratings.Average;	
-			
+			global_bias = Ratings.Average;
+
 			// initialize learning data structure
 			residuals = new double[Ratings.Count];
 
 			// learn model parameters
-			num_learned_factors = 0;			
+			num_learned_factors = 0;
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
 		}
