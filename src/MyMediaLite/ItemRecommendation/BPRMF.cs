@@ -341,7 +341,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddUser(user_id);
 
 			user_factors.AddRows(user_id + 1);
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
 		}
 
 		///
@@ -350,7 +350,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddItem(item_id);
 
 			item_factors.AddRows(item_id + 1);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
 		}
 
 		///
@@ -384,7 +384,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
 
 			var user_items = Feedback.UserMatrix[user_id];
 			for (int i = 0; i < user_items.Count; i++)
@@ -399,7 +399,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
 
 			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
 			int num_item_iterations = num_pos_events  / (MaxItemID + 1);

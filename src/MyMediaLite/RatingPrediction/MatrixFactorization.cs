@@ -86,8 +86,8 @@ namespace MyMediaLite.RatingPrediction
 			// init factor matrices
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev);
 		}
 
 		///
@@ -112,7 +112,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateUsers)
 			{
-				MatrixUtils.InitNormal(user_factors, InitMean, InitStdev, user_id);
+				MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
 				LearnFactors(Ratings.ByUser[(int)user_id], true, false);
 			}
 		}
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateItems)
 			{
-				MatrixUtils.InitNormal(item_factors, InitMean, InitStdev, item_id);
+				MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
 				LearnFactors(Ratings.ByItem[(int)item_id], false, true);
 			}
 		}

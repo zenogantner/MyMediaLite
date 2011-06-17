@@ -61,8 +61,8 @@ namespace MyMediaLite.ItemRecommendation
 			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev);
 		}
 
 		///
