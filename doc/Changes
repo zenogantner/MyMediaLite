@@ -51,7 +51,9 @@
             - faster GetRow()/SetRow()
             - generic return types
             - additional constructor with list of list of T as argument
-          - MatrixUtils: remove ContainsNaN()
+          - MatrixUtils:
+            - remove ContainsNaN()
+            - rename InitNormal() to RowInitNormal(); add ColumnInitNormal()
           - VectorUtils: add L1Norm()
           - fix bug in Ratings that prevented online updates to work properly
             (reported by Chris Newell)

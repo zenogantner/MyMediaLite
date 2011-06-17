@@ -32,18 +32,30 @@ namespace MyMediaLite.DataType
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
 		/// <param name="row">the row to be initialized</param>
-		static public void InitNormal(Matrix<double> matrix, double mean, double stdev, int row)
+		static public void RowInitNormal(Matrix<double> matrix, double mean, double stdev, int row)
 		{
 			var rnd = Util.Random.GetInstance();
 			for (int j = 0; j < matrix.dim2; j++)
 				matrix[row, j] = rnd.NextNormal(mean, stdev);
 		}
 
+		/// <summary>Initializes one column of a double matrix with normal distributed (Gaussian) noise</summary>
+		/// <param name="matrix">the matrix to initialize</param>
+		/// <param name="mean">the mean of the normal distribution drawn from</param>
+		/// <param name="stdev">the standard deviation of the normal distribution</param>
+		/// <param name="column">the column to be initialized</param>
+		static public void ColumnInitNormal(Matrix<double> matrix, double mean, double stdev, int column)
+		{
+			var rnd = Util.Random.GetInstance();
+			for (int i = 0; i < matrix.dim1; i++)
+				matrix[i, column] = rnd.NextNormal(mean, stdev);
+		}
+
 		/// <summary>Initializes a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
-		static public void InitNormal(Matrix<double> matrix, double mean, double stdev)
+		static public void RowInitNormal(Matrix<double> matrix, double mean, double stdev)
 		{
 			var rnd = Util.Random.GetInstance();
 			for (int i = 0; i < matrix.dim1; i++)
@@ -51,9 +63,7 @@ namespace MyMediaLite.DataType
 					matrix[i, j] = rnd.NextNormal(mean, stdev);
 		}
 
-		/// <summary>
-		/// Increments the specified matrix element by a double value.
-		/// </summary>
+		/// <summary>Increments the specified matrix element by a double value</summary>
 		/// <param name="matrix">The matrix.</param>
 		/// <param name="i">the row</param>
 		/// <param name="j">the column</param>
