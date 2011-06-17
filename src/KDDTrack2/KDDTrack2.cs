@@ -212,7 +212,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 			Console.WriteLine(string.Format(ni, "ERR {0:0.######} {1}", error, iterative_recommender_validate.NumIter));
 
-			for (int i = iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
+			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan time = Utils.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate(); // TODO parallelize

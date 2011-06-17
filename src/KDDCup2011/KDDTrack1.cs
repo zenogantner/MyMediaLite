@@ -232,7 +232,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			RatingEval.DisplayResults(RatingEval.Evaluate(rating_predictor_validate, validation_ratings));
 			Console.WriteLine(" " + iterative_recommender_validate.NumIter);
 
-			for (int i = iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
+			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan time = Utils.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate();
