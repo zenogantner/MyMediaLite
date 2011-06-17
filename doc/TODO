@@ -12,8 +12,7 @@ Recommender functionality
    - memory: just give out ratings in the training set, exception otherwise
    - non-negative matrix factorization
    - matrix factorization learned with alternating least squares/batch gradient descent
-   - adaptive kNN by Koren+Bell
-   - scalable CF by Koren: http://research.yahoo.com/pub/2435
+   - scalable/adaptive CF by Koren: http://research.yahoo.com/pub/2435
    - Improved Maximum Margin Matrix Factorization http://www.ci.tuwien.ac.at/~alexis/immmf.pdf
    - Hashing for CF: http://jmlr.csail.mit.edu/proceedings/papers/v9/karatzoglou10a/karatzoglou10a.pdf
    - attribute-based recommenders using LIBSVM
@@ -119,6 +118,7 @@ Misc features
 Documentation/website
  - document all file formats
  - have documentation for different versions on the website
+ - Doxygen: link to files on github/gitorious
  - add flyer to homepage (main page)
  - document attribute-aware recommenders: using and implementing
  - document using MyMediaLite from other languages, implementing recommenders in other languages
