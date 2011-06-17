@@ -165,7 +165,7 @@ namespace MyMediaLite.Util
 
 						if (!property.CanWrite)
 							throw new Exception(string.Format("Property '{0}' is read-only.", property.Name));
-						
+
 						if (property.GetSetMethod() == null)
 							goto NEXT_PROPERTY; // poor man's labeled break ...
 
