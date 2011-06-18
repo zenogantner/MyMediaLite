@@ -21,6 +21,7 @@
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=120 bias_reg=0.001 regularization=0.055  learn_rate=0.01 num_iter=90', rmse => '0.8507', mae => '0.6749' }
 #     { method => 'SlopeOne',                  hp => '',                                                                      rmse => '0.902', mae => '0.712', nmae => '0.1779' }
 #     { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.910', mae => '0.721', nmae => '0.1803' }
+#     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=11 num_iter=11 shrinkage=115', rmse => '0.85998', mae => '0.67271', nmae => '0.16818' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.860', mae => '0.676', nmae => '0.1691' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.675', nmae => '0.1688' }
 #     { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=110 bold_driver=true', rmse => '0.855', mae => '0.676', nmae => '0.1691' }
@@ -39,6 +40,7 @@
      { method => 'UserKNNPearson',            hp => 'k=60 shrinkage=100 reg_u=12 reg_i=1' ,                                rmse => '0.930', mae => '0.729', nmae => '0.1823' }
      { method => 'ItemKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.924', mae => '0.727', nmae => '0.1817' }
      { method => 'ItemKNNPearson',            hp => 'k=40 shrinkage=200 reg_u=12 reg_i=1',                                 rmse => '0.915', mae => '0.717', nmae => '0.1792' }
+     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=5 num_iter=5 shrinkage=150',                        rmse => '0.9212', mae => '0.7252', nmae => '0.1813' }     
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91622', mae => '0.72242', nmae => '0.18061' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.007 reg_u=0.1 reg_i=0.12 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91588', mae => '0.72271', nmae => '0.18068' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91242', mae => '0.72119', nmae => '0.1803' }
