@@ -51,9 +51,6 @@ namespace MyMediaLite.IO
 		{
 			var matrix = new SparseBooleanMatrix();
 
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			var split_chars = new char[]{ '\t', ' ' };
 			string line;
 

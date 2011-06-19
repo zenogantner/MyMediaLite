@@ -123,7 +123,7 @@ namespace MyMediaLite.Util
 		{
 			DisplayDataStats(train, test, recommender, false);
 		}
-		
+
 		// TODO get rid of recommender argument
 		/// <summary>Display dataset statistics</summary>
 		/// <param name="train">the training data</param>
@@ -132,16 +132,13 @@ namespace MyMediaLite.Util
 		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
 		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender, bool display_overlap)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			// training data stats
 			int num_users = train.AllUsers.Count;
 			int num_items = train.AllItems.Count;
 			long matrix_size = (long) num_users * num_items;
 			long empty_size  = (long) matrix_size - train.Count;
 			double sparsity = (double) 100L * empty_size / matrix_size;
-			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, train.Count, sparsity));
+			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, train.Count, sparsity));
 
 			// test data stats
 			if (test != null)
@@ -151,9 +148,9 @@ namespace MyMediaLite.Util
 				matrix_size = (long) num_users * num_items;
 				empty_size  = (long) matrix_size - test.Count;
 				sparsity = (double) 100L * empty_size / matrix_size;
-				Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
+				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
 			}
-				
+
 			// count and display the overlap between train and test
 			if (display_overlap && test != null)
 			{
@@ -165,7 +162,7 @@ namespace MyMediaLite.Util
 				});
 				Console.WriteLine("{0} new users, {1} new items ({2} seconds)", num_new_users, num_new_items, seconds);
 			}
-				
+
 			// attribute stats
 			if (recommender != null)
 			{
@@ -175,24 +172,21 @@ namespace MyMediaLite.Util
 					Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender) recommender).NumItemAttributes);
 			}
 		}
-		
+
 		/// <summary>Display data statistics for item recommendation datasets</summary>
 		/// <param name="training_data">the training dataset</param>
 		/// <param name="test_data">the test dataset</param>
 		/// <param name="recommender">the recommender that will be used</param>
 		public static void DisplayDataStats(IPosOnlyFeedback training_data, IPosOnlyFeedback test_data, IItemRecommender recommender)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-			
 			// training data stats
 			int num_users = training_data.AllUsers.Count;
 			int num_items = training_data.AllItems.Count;
 			long matrix_size = (long) num_users * num_items;
 			long empty_size  = (long) matrix_size - training_data.Count;
 			double sparsity = (double) 100L * empty_size / matrix_size;
-			Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
-	
+			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, training_data.Count, sparsity));
+
 			// test data stats
 			if (test_data != null)
 			{
@@ -201,9 +195,9 @@ namespace MyMediaLite.Util
 				matrix_size = (long) num_users * num_items;
 				empty_size  = (long) matrix_size - test_data.Count;
 				sparsity = (double) 100L * empty_size / matrix_size;
-				Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
+				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
 			}
-				
+
 			// attribute stats
 			if (recommender is IUserAttributeAwareRecommender)
 				Console.WriteLine("{0} user attributes for {1} users",

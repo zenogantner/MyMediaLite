@@ -165,12 +165,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
-				var global_average = double.Parse(reader.ReadLine(), ni);
+				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var diff_matrix_like = (SkewSymmetricSparseMatrix) IMatrixUtils.ReadMatrix(reader, this.diff_matrix_like);
 				var freq_matrix_like = (SymmetricSparseMatrix<int>) IMatrixUtils.ReadMatrix(reader, this.freq_matrix_like);
@@ -191,12 +188,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string file)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
 			{
-				writer.WriteLine(global_average.ToString(ni));
+				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix_like);
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix_like);
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix_dislike);

@@ -42,10 +42,7 @@ namespace MyMediaLite.Eval
 		/// <param name="result">the result dictionary</param>
 		static public void DisplayResults(Dictionary<string, double> result)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
 			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 		}
 
@@ -174,7 +171,7 @@ namespace MyMediaLite.Eval
 					var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
 					current_test.Add(users[index], items[index]);
 					var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
-	
+
 					if (current_result["num_users"] == 1)
 						if (results_by_user.ContainsKey(users[index]))
 						{

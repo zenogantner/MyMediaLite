@@ -70,7 +70,6 @@ namespace MyMediaLite.IO
 				ratings = new StaticRatings(size);
 
 			bool out_of_range_warning_issued = false;
-			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
@@ -86,13 +85,13 @@ namespace MyMediaLite.IO
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], ni);
+				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				if (!out_of_range_warning_issued)
 					if (rating > max_rating || rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating.ToString(ni), user_id, item_id);
+												min_rating, max_rating, rating.ToString(CultureInfo.InvariantCulture), user_id, item_id);
 						out_of_range_warning_issued = true;
 					}
 

@@ -219,14 +219,11 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			global_effects.SaveModel(filename + "-global-effects");
 
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(global_bias.ToString(ni));
+				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(num_learned_factors);
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				IMatrixUtils.WriteMatrix(writer, item_factors);
@@ -236,15 +233,12 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			global_effects.LoadModel(filename + "-global-effects");
 
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				var global_bias         = double.Parse(reader.ReadLine(), ni);
-				var num_learned_factors = int.Parse(reader.ReadLine(), ni);
+				var global_bias         = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var num_learned_factors = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
@@ -279,12 +273,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
-								 "FactorWiseMatrixFactorization num_factors={0} shrinkage={1} sensibility={2}  init_mean={3} init_stdev={4}",
-								 NumFactors, Shrinkage, Sensibility, InitMean, InitStdev);
+			return string.Format(CultureInfo.InvariantCulture,
+								 "FactorWiseMatrixFactorization num_factors={0} shrinkage={1} sensibility={2}  init_mean={3} init_stdev={4} num_iter={5}",
+								 NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
 		}
 	}
 }

@@ -61,16 +61,13 @@ namespace MyMediaLite.Ensemble
 		///
 		public override void SaveModel(string file)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(recommenders.Count);
 				for (int i = 0; i < recommenders.Count; i++)
 				{
 					recommenders[i].SaveModel("model-" + i + ".txt");
-					writer.WriteLine(recommenders[i].GetType() + " " + weights[i].ToString(ni));
+					writer.WriteLine(recommenders[i].GetType() + " " + weights[i].ToString(CultureInfo.InvariantCulture));
 				}
 			}
 		}
@@ -78,9 +75,6 @@ namespace MyMediaLite.Ensemble
 		///
 		public override void LoadModel(string file)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
 			{
 				int numberOfComponents = int.Parse(reader.ReadLine());
@@ -98,7 +92,7 @@ namespace MyMediaLite.Ensemble
 
 					// make sure the recommenders get their data FIXME
 
-					weights.Add(double.Parse(data[1], ni));
+					weights.Add(double.Parse(data[1], CultureInfo.InvariantCulture));
 				}
 
 				this.weights = weights;

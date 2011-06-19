@@ -100,10 +100,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
+			return string.Format(CultureInfo.InvariantCulture,
 								 "BiasedMatrixFactorizationMAE num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8}",
 								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
 		}

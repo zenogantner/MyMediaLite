@@ -52,7 +52,6 @@ namespace MyMediaLite.IO
 		{
 	        var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
-			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 

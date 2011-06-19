@@ -142,9 +142,6 @@ namespace MyMediaLite.Eval
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			var score_list = new List<WeightedItem>();
 			foreach (int item_id in relevant_items)
 				score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
@@ -160,9 +157,9 @@ namespace MyMediaLite.Eval
 				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
 				{
 					if (prediction_count == 0)
-						writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
+						writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(CultureInfo.InvariantCulture));
 					else
-						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(ni));
+						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(CultureInfo.InvariantCulture));
 
 					prediction_count++;
 				}
@@ -205,7 +202,7 @@ namespace MyMediaLite.Eval
 
 			foreach (int item_id in relevant_items)
 				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-				
+
 			result.Sort();
 			result.Reverse();
 

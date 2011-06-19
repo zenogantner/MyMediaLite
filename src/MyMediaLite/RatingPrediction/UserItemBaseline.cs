@@ -206,12 +206,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(global_average.ToString(ni));
+				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				VectorUtils.WriteVector(writer, user_biases);
 				VectorUtils.WriteVector(writer, item_biases);
 			}
@@ -220,12 +217,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				var global_average = double.Parse(reader.ReadLine(), ni);
+				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_biases = VectorUtils.ReadVector(reader);
 				var item_biases = VectorUtils.ReadVector(reader);
 
@@ -244,10 +238,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni, "UserItemBaseline reg_u={0} reg_i={1} num_iter={2}", RegU, RegI, NumIter);
+			return string.Format(CultureInfo.InvariantCulture, "UserItemBaseline reg_u={0} reg_i={1} num_iter={2}", RegU, RegI, NumIter);
 		}
 	}
 }

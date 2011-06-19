@@ -259,12 +259,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(global_bias.ToString(ni));
+				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				IMatrixUtils.WriteMatrix(writer, item_factors);
 			}
@@ -273,12 +270,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				var bias = double.Parse(reader.ReadLine(), ni);
+				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
@@ -333,10 +327,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
+			return string.Format(CultureInfo.InvariantCulture,
 								 "MatrixFactorization num_factors={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
 								 NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}

@@ -144,9 +144,6 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender</returns>
 		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, takes_string report_error)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			Type type = recommender.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
@@ -172,10 +169,10 @@ namespace MyMediaLite.Util
 						switch (property.PropertyType.ToString())
 						{
 							case "System.Double":
-								property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(parameters[key], CultureInfo.InvariantCulture) });
 								break;
 							case "System.Single":
-								property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(parameters[key], ni) });
+								property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(parameters[key], CultureInfo.InvariantCulture) });
 								break;
 							case "System.Int32":
 								if (parameters[key].Equals("inf"))
@@ -222,9 +219,6 @@ namespace MyMediaLite.Util
 		/// <param name="val">the string representation of the value</param>
 		public static void SetProperty(IRecommender recommender, string key, string val)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			Type type = recommender.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
@@ -244,10 +238,10 @@ namespace MyMediaLite.Util
 					switch (property.PropertyType.ToString())
 					{
 						case "System.Double":
-							property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, ni) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, CultureInfo.InvariantCulture) });
 							break;
 						case "System.Single":
-							property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, ni) });
+							property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, CultureInfo.InvariantCulture) });
 							break;
 						case "System.Int32":
 							property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });

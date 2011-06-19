@@ -72,7 +72,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			// source code comments are in terms of computing the user factors
 			// works the same with users and items exchanged
-			
+
 			// (1) create HH in O(f^2|Items|)
 			// HH is symmetric
 			for (int f_1 = 0; f_1 < num_factors; f_1++)
@@ -139,10 +139,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni, "WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
+			return string.Format(CultureInfo.InvariantCulture, "WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
 								 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdev);
 		}
 	}

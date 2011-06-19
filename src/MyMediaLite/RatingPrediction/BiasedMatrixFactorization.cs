@@ -117,9 +117,7 @@ namespace MyMediaLite.RatingPrediction
 
 				last_loss = loss;
 
-				var ni = new NumberFormatInfo();
-				ni.NumberDecimalDigits = '.';
-				Console.Error.WriteLine(string.Format(ni, "loss {0} learn_rate {1} ", loss, LearnRate));
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loss {0} learn_rate {1} ", loss, LearnRate));
 			}
 		}
 
@@ -183,12 +181,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(global_bias.ToString(ni));
+				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				VectorUtils.WriteVector(writer, user_bias);
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
@@ -199,12 +194,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
-				var bias = double.Parse(reader.ReadLine(), ni);
+				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				IList<double> user_bias = VectorUtils.ReadVector(reader);
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
@@ -327,10 +319,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
+			return string.Format(CultureInfo.InvariantCulture,
 								 "BiasedMatrixFactorization num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8}",
 								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
 		}

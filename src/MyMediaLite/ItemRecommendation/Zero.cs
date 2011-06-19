@@ -24,30 +24,18 @@ namespace MyMediaLite.ItemRecommendation
 	public class Zero : ItemRecommender
 	{
 		///
-		public override void Train() { }
+		public override void Train() { /* do nothing */ }
 
 		///
-		public override double Predict(int user_id, int item_id)
-		{
-			return 0;
-		}
+		public override double Predict(int user_id, int item_id) { return 0; }
 
 		///
-		public override void SaveModel(string filename)
-		{
-			// do nothing
-		}
+		public override void SaveModel(string filename) { /* do nothing */ }
 
 		///
-		public override void LoadModel(string filename)
-		{
-			// do nothing
-		}
+		public override void LoadModel(string filename) { /* do nothing */ }
 
 		///
-		public override string ToString()
-		{
-			return "Zero";
-		}
+		public override string ToString() { return "Zero"; }
 	}
 }

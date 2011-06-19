@@ -30,12 +30,9 @@ namespace MyMediaLite.DataType
 		/// <param name="vector">a collection of double values</param>
 		static public void WriteVector(StreamWriter writer, ICollection<double> vector)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(vector.Count);
 			foreach (var v in vector)
-			   	writer.WriteLine(v.ToString(ni));
+			   	writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
 
 			writer.WriteLine();
 		}
@@ -45,9 +42,6 @@ namespace MyMediaLite.DataType
 		/// <returns>a list of double values</returns>
 		static public IList<double> ReadVector(TextReader reader)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			int dim = int.Parse(reader.ReadLine());
 
 			var vector = new double[dim];
@@ -56,7 +50,7 @@ namespace MyMediaLite.DataType
 			int i = 0;
 			while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
 			{
-				var v = double.Parse(numbers[0], ni);
+				var v = double.Parse(numbers[0], CultureInfo.InvariantCulture);
 
 				if (i >= dim)
 					throw new IOException("i = " + i + " >= " + dim);

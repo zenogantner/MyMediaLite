@@ -34,8 +34,6 @@ using MyMediaLite.Util;
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
 class RatingPrediction
 {
-	static NumberFormatInfo ni = new NumberFormatInfo();
-
 	// data sets
 	static IRatings training_data;
 	static IRatings test_data;
@@ -135,7 +133,6 @@ class RatingPrediction
 
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
-		ni.NumberDecimalDigits = '.';
 
 		// recommender arguments
 		string method              = "BiasedMatrixFactorization";
@@ -245,7 +242,7 @@ class RatingPrediction
 
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
-		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
@@ -262,7 +259,7 @@ class RatingPrediction
 				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
 			RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data));
 			Console.WriteLine(" " + iterative_recommender.NumIter);
@@ -283,7 +280,7 @@ class RatingPrediction
 							fit = iterative_recommender.ComputeFit();
 						});
 						fit_time_stats.Add(time.TotalSeconds);
-						Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
+						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
 					}
 
 					Dictionary<string, double> results = null;
@@ -300,7 +297,7 @@ class RatingPrediction
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
-						Console.Error.WriteLine(string.Format(ni, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
+						Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
 						Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
 						break;
 					}
@@ -336,7 +333,7 @@ class RatingPrediction
 					{
 						// TODO --search-hp-criterion=RMSE
 						double result = NelderMead.FindMinimum("RMSE", recommender);
-						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(ni));
+						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(CultureInfo.InvariantCulture));
 						// TODO give out hp search time
 					}
 
@@ -448,7 +445,7 @@ class RatingPrediction
 				// TODO add KDD Cup
 			}
 		});
-		Console.Error.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
@@ -460,19 +457,19 @@ class RatingPrediction
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));

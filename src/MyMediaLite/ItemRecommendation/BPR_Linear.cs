@@ -261,10 +261,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
+			return string.Format(CultureInfo.InvariantCulture,
 								 "BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
 								 Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
 		}

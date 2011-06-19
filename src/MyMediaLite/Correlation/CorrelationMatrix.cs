@@ -90,9 +90,6 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				cm[i, i] = 1;
 
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-			
 			var split_chars = new char[]{ '\t', ' ', ',' };
 
 			while (! reader.EndOfStream)
@@ -100,7 +97,7 @@ namespace MyMediaLite.Correlation
 				string[] numbers = reader.ReadLine().Split(split_chars);
 				int i = int.Parse(numbers[0]);
 				int j = int.Parse(numbers[1]);
-				float c = float.Parse(numbers[2], ni);
+				float c = float.Parse(numbers[2], CultureInfo.InvariantCulture);
 
 				if (i >= num_entities)
 					throw new IOException("Entity ID is too big: i = " + i);
@@ -112,23 +109,20 @@ namespace MyMediaLite.Correlation
 
 			return cm;
 		}
-		
+
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>
 		/// </param>
 		public void Write(StreamWriter writer) // TODO use library routine instead
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(num_entities);
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
 				{
 					float val = this[i, j];
 					if (val != 0f)
-						writer.WriteLine(i + " " + j + " " + val.ToString(ni));
+						writer.WriteLine(i + " " + j + " " + val.ToString(CultureInfo.InvariantCulture));
 				}
 		}
 

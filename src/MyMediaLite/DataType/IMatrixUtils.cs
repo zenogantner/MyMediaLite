@@ -31,13 +31,10 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix of doubles to write out</param>
 		static public void WriteMatrix(StreamWriter writer, IMatrix<double> matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			for (int i = 0; i < matrix.NumberOfRows; i++)
 				for (int j = 0; j < matrix.NumberOfColumns; j++)
-					writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(ni));
+					writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -46,13 +43,10 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix of floats to write out</param>
 		static public void WriteMatrix(StreamWriter writer, IMatrix<float> matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			for (int i = 0; i < matrix.NumberOfRows; i++)
 				for (int j = 0; j < matrix.NumberOfColumns; j++)
-					writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(ni));
+					writer.WriteLine(i + " " + j + " " + matrix[i, j].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -73,12 +67,9 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix of doubles to write out</param>
 		static public void WriteSparseMatrix(StreamWriter writer, SparseMatrix<double> matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
-			   	writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(ni));
+			   	writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -87,12 +78,9 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix of floats to write out</param>
 		static public void WriteSparseMatrix(StreamWriter writer, SparseMatrix<float> matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
-			   	writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(ni));
+			   	writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -113,9 +101,6 @@ namespace MyMediaLite.DataType
 		/// <returns>a matrix of doubles</returns>
 		static public IMatrix<double> ReadMatrix(TextReader reader, IMatrix<double> example_matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			string[] numbers = reader.ReadLine().Split(' ');
 			int dim1 = int.Parse(numbers[0]);
 			int dim2 = int.Parse(numbers[1]);
@@ -126,7 +111,7 @@ namespace MyMediaLite.DataType
 			{
 				int i = int.Parse(numbers[0]);
 				int j = int.Parse(numbers[1]);
-				double v = double.Parse(numbers[2], ni);
+				double v = double.Parse(numbers[2], CultureInfo.InvariantCulture);
 
 				if (i >= dim1)
 					throw new IOException("i = " + i + " >= " + dim1);
@@ -145,9 +130,6 @@ namespace MyMediaLite.DataType
 		/// <returns>a matrix of float</returns>
 		static public IMatrix<float> ReadMatrix(TextReader reader, IMatrix<float> example_matrix)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			string[] numbers = reader.ReadLine().Split(' ');
 			int dim1 = int.Parse(numbers[0]);
 			int dim2 = int.Parse(numbers[1]);
@@ -158,7 +140,7 @@ namespace MyMediaLite.DataType
 			{
 				int i = int.Parse(numbers[0]);
 				int j = int.Parse(numbers[1]);
-				float v = float.Parse(numbers[2], ni);
+				float v = float.Parse(numbers[2], CultureInfo.InvariantCulture);
 
 				if (i >= dim1)
 					throw new IOException("i = " + i + " >= " + dim1);

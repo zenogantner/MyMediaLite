@@ -39,8 +39,6 @@ class ItemPrediction
 	static ICollection<int> relevant_users;
 	static ICollection<int> relevant_items;
 
-	static NumberFormatInfo ni = new NumberFormatInfo();
-
 	// recommenders
 	static IItemRecommender recommender = null;
 
@@ -140,7 +138,6 @@ class ItemPrediction
 
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
-		ni.NumberDecimalDigits = '.';
 
 		// recommender arguments
 		string method              = "MostPopular";
@@ -241,7 +238,7 @@ class ItemPrediction
 				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(ni, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
 			var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
 			ItemPredictionEval.DisplayResults(result);
@@ -263,7 +260,7 @@ class ItemPrediction
 							fit = iterative_recommender.ComputeFit();
 						});
 						fit_time_stats.Add(t.TotalSeconds);
-						Console.Write(string.Format(ni, "fit {0,0:0.#####} ", fit));
+						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
 					}
 
 					t = Utils.MeasureTime(delegate() {
@@ -404,7 +401,7 @@ class ItemPrediction
 				test_data     = split.Test[0];
 			}
 		});
-		Console.Error.WriteLine(string.Format(ni, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
@@ -458,19 +455,19 @@ class ItemPrediction
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"eval_time: min={0,0:0.###}, max={1,0:0.###}, avg={2,0:0.###}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));

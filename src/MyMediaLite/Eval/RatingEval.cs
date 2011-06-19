@@ -42,10 +42,7 @@ namespace MyMediaLite.Eval
 		/// <param name="result">the output of the Evaluate() method</param>
 		static public void DisplayResults(Dictionary<string, double> result)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			Console.Write(string.Format(ni, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
+			Console.Write(string.Format(CultureInfo.InvariantCulture, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
 		                                result["RMSE"], result["MAE"], result["NMAE"]));
 		}
 
@@ -136,9 +133,6 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			var avg_results = new Dictionary<string, double>();
 			foreach (var key in Measures)
 				avg_results[key] = 0;
@@ -153,7 +147,7 @@ namespace MyMediaLite.Eval
 				foreach (var key in fold_results.Keys)
 					avg_results[key] += fold_results[key];
 				if (show_results)
-					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(ni), fold_results["MAE"].ToString(ni));
+					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(CultureInfo.InvariantCulture), fold_results["MAE"].ToString(CultureInfo.InvariantCulture));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())

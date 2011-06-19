@@ -64,7 +64,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (view_count.Count <= MaxItemID)
 				view_count.Add(0);
 		}
-		
+
 		///
 		public override void RemoveItem(int item_id)
 		{
@@ -79,7 +79,7 @@ namespace MyMediaLite.ItemRecommendation
 				view_count[i]--;
 			base.RemoveUser(user_id);
 		}
-		
+
 		///
 		public override void AddFeedback(int user_id, int item_id)
 		{

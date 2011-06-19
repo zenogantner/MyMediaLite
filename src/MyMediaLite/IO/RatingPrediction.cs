@@ -29,7 +29,7 @@ namespace MyMediaLite.IO
 	public class RatingPrediction
 	{
 		// TODO also support different rating data types
-		
+
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
@@ -59,7 +59,6 @@ namespace MyMediaLite.IO
 			var ratings = new Ratings();
 
 			bool out_of_range_warning_issued = false;
-			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
@@ -75,13 +74,13 @@ namespace MyMediaLite.IO
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], ni);
+				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				if (!out_of_range_warning_issued)
 					if (rating > max_rating || rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating.ToString(ni), user_id, item_id);
+												min_rating, max_rating, rating.ToString(CultureInfo.InvariantCulture), user_id, item_id);
 						out_of_range_warning_issued = true;
 					}
 
@@ -102,8 +101,6 @@ namespace MyMediaLite.IO
 		{
 			var ratings = new Ratings();
 
-			var ni = new NumberFormatInfo(); ni.NumberDecimalDigits = '.';
-
 			if (reader.FieldCount < 3)
 				throw new IOException("Expected at least three columns.");
 
@@ -118,7 +115,7 @@ namespace MyMediaLite.IO
 					if (rating > max_rating || rating < min_rating)
 					{
 						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating.ToString(ni), user_id, item_id);
+												min_rating, max_rating, rating.ToString(CultureInfo.InvariantCulture), user_id, item_id);
 						out_of_range_warning_issued = true;
 					}
 

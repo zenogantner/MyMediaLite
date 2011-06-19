@@ -38,14 +38,11 @@ namespace MyMediaLite.Eval
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			for (int index = 0; index < ratings.Count; index++)
 				writer.WriteLine("{0}\t{1}\t{2}",
 								 user_mapping.ToOriginalID(ratings.Users[index]),
 								 item_mapping.ToOriginalID(ratings.Items[index]),
-								 recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(ni));
+								 recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>Rates a given set of instances</summary>

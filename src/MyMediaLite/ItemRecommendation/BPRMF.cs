@@ -168,9 +168,7 @@ namespace MyMediaLite.ItemRecommendation
 
 				last_loss = loss;
 
-				var ni = new NumberFormatInfo();
-				ni.NumberDecimalDigits = '.';
-				Console.Error.WriteLine(string.Format(ni, "loss {0} learn_rate {1} ", loss, LearnRate));
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loss {0} learn_rate {1} ", loss, LearnRate));
 			}
 		}
 
@@ -577,10 +575,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni, "BPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} bold_driver={7} fast_sampling_memory_limit={8} init_mean={9} init_stdev={10}",
+			return string.Format(CultureInfo.InvariantCulture, "BPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} bold_driver={7} fast_sampling_memory_limit={8} init_mean={9} init_stdev={10}",
 								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, InitMean, InitStdev);
 		}
 	}
