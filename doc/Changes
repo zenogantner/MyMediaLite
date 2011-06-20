@@ -33,8 +33,10 @@
 	- command-line tools
           - item prediction: rename --predict-for-users-file to
             --relevant-users for consistency with --relevant-items
-          - rating prediction: support all IIterativeModel recommenders, not
-            just the ones derived from MatrixFactorization
+          - rating prediction:
+             - support all IIterativeModel recommenders, not just the ones
+               derived from MatrixFactorization
+             - --compute-fit now works in all cases
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT

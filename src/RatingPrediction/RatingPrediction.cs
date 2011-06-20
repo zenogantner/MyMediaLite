@@ -109,9 +109,9 @@ class RatingPrediction
    --min-rating=NUM                       the smallest valid rating value
    --max-rating=NUM                       the greatest valid rating value
    --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
-   --cross-validation=K                   perform k-fold crossvalidation on the training data
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
+   --cross-validation=K                   perform k-fold crossvalidation on the training data
    --online-evaluation                    perform online evaluation (use every tested rating for online training)
    --search-hp                            search for good hyperparameter values (experimental)
 
@@ -356,6 +356,15 @@ class RatingPrediction
 					seconds = Utils.MeasureTime(delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(recommender, test_data)); });
 
 				Console.Write(" testing_time " + seconds);
+			}
+
+			if (compute_fit)
+			{
+				Console.Write("fit ");
+				seconds = Utils.MeasureTime(delegate() {
+					RatingEval.DisplayResults(RatingEval.Evaluate(recommender, training_data));
+				});
+				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0,0:0.#####} ", seconds));
 			}
 
 			if (prediction_file != string.Empty)
