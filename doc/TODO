@@ -34,7 +34,7 @@ Recommender functionality
    - allow new user evaluation for item prediction
    - support different CV protocols: leave-one-out, leave-one-out-per-user, k-fold CV, chronological splits, user-/item-stratified CV
    - support evaluation protocols w/ repeated events
-   - online update evaluation: chronological order
+   - online update evaluation: chronological order; complete re-training
    - measure recommendation coverage
  - consider to store the hyperparameters in the model files as well
  - prediction certainty output
