@@ -39,7 +39,7 @@ namespace MyMediaLite.Data
 		public RatingsSimpleSplit(IRatings ratings, double ratio)
 		{
 			if (ratio <= 0)
-				throw new ArgumentException();
+				throw new ArgumentException("ratio");
 
 			// create index lists
 			var train_indices = new List<int>();
