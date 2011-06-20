@@ -112,6 +112,7 @@ class RatingPrediction
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
    --cross-validation=K                   perform k-fold crossvalidation on the training data
+   --split-ratio=NUM                      use a ratio of NUM of the training data for evaluation (simple split)
    --online-evaluation                    perform online evaluation (use every tested rating for online training)
    --search-hp                            search for good hyperparameter values (experimental)
 
@@ -168,6 +169,7 @@ class RatingPrediction
 		int random_seed        = -1;
 		string prediction_file = string.Empty;
 		int cross_validation   = 0;
+		double split_ratio     = 0;
 
 	   	var p = new OptionSet() {
 			// string-valued options
@@ -194,15 +196,16 @@ class RatingPrediction
 			{ "epsilon=",             (double v)     => epsilon              = v },
 			{ "rmse-cutoff=",         (double v)     => rmse_cutoff          = v },
 			{ "mae-cutoff=",          (double v)     => mae_cutoff           = v },
+			{ "split-ratio=",         (double v)     => split_ratio          = v },
 			// enum options
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
-			{ "compute-fit",          v => compute_fit  = v != null },
-			{ "online-evaluation",    v => online_eval  = v != null },
-			{ "search-hp",            v => search_hp    = v != null },
-			{ "help",                 v => show_help    = v != null },
-			{ "version",              v => show_version = v != null },
+			{ "compute-fit-",         v => compute_fit  = v != null },
+			{ "online-evaluation-",   v => online_eval  = v != null },
+			{ "search-hp-",           v => search_hp    = v != null },
+			{ "help-",                v => show_help    = v != null },
+			{ "version-",             v => show_version = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -221,6 +224,9 @@ class RatingPrediction
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
+		if (cross_validation != 0 && split_ratio != 0)
+			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+		
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
@@ -244,6 +250,14 @@ class RatingPrediction
 		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
+		if (split_ratio > 0)
+		{
+			var split = new RatingsSimpleSplit(training_data, split_ratio);
+			recommender.Ratings = split.Train[0];
+			training_data = split.Train[0];
+			test_data     = split.Test[0];
+		}
+	
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		if (find_iter != 0)
