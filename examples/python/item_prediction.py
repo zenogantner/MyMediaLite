@@ -13,8 +13,8 @@ relevant_items = train_data.AllItems; # items that will be taken into account in
 test_data = IO.ItemRecommendation.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
-recommender = ItemRecommendation.ItemKNN()
-recommender.K = 2000
+recommender = ItemRecommendation.UserKNN()
+recommender.K = 20
 recommender.Feedback = train_data
 recommender.Train()
 
