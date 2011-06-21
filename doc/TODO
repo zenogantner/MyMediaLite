@@ -20,6 +20,7 @@ Recommender functionality
    - Content-boosted CF http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.73.8546&rep=rep1&type=pdf
    - restricted boltzmann machines
    - http://jmlr.csail.mit.edu/papers/v11/seldin10a.html
+   - Bell/Koren iCDM 2007 [SimuFctr]
  - time-aware rating and item prediction
    - timeSVD++
  - item recommender: add explicit top-n recommendation method to API
@@ -126,3 +127,5 @@ Documentation/website
    - Java (via IKVM or JaCIL), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - JavaScript -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
  - glossary where we explain commonly used terms
+Distribution
+ - package for Debian, Fedora and nuget
