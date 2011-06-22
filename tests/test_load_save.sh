@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# TODO test ALL engines: attribute-aware, averages, etc.
+# TODO test ALL recommenders: attribute-aware, averages, etc.
 
 PROGRAM="mono --debug RatingPrediction.exe"
 DATA_DIR=../../../../data/ml100k
