@@ -1,7 +1,8 @@
-1.03	2011-06-??
-        * This may be the last version to support Mono 2.6. If you use        *
-        * MyMediaLite, and rely on running it on Mono 2.6, please contact the *
-        * authors.                                                            *
+1.03	2011-06-22
+        - IMPORTANT ANNOUNCEMENT
+          - This may be the last version to support Mono 2.6. If you use
+            MyMediaLite, and rely on running it on Mono 2.6, please contact the
+            authors.
         - web service API
           - add prototype for a SOAP web service for rating prediction, plus
             three test script
