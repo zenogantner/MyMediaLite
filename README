@@ -3,7 +3,7 @@ MyMediaLite - a recommender system algorithm library
 Features
 --------
  - Choice:
-   - Dozens of different recommender engines,
+   - Dozens of different recommendation methods,
    - methods can use collaborative, attribute/content, and relational data,
  - support for incremental training for most models.
  - Ready to use:
