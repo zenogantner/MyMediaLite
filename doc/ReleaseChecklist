@@ -16,5 +16,5 @@ release checklist:
 10. Create the release announcement
 11. Add the new version to the website
 12. Commit the website changes
-13. Create a git tag: 'git tag -a v0.XX -m "release 0.XX"'
+13. Create a git tag: 'git tag -a v1.XX -m "release 1.XX"'
 14. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
