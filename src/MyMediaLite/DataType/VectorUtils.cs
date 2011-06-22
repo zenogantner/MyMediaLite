@@ -46,17 +46,8 @@ namespace MyMediaLite.DataType
 
 			var vector = new double[dim];
 
-			string[] numbers;
-			int i = 0;
-			while ((numbers = reader.ReadLine().Split(' ')).Length == 1 && numbers[0].Length != 0)
-			{
-				var v = double.Parse(numbers[0], CultureInfo.InvariantCulture);
-
-				if (i >= dim)
-					throw new IOException("i = " + i + " >= " + dim);
-
-				vector[i++] = v;
-			}
+			for (int i = 0; i < vector.Length; i++)
+				vector[i] = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 			return vector;
 		}
