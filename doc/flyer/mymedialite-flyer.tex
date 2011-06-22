@@ -47,7 +47,7 @@
 	\includegraphics[width=4.0cm]{fig/uni-hildesheim-400x400.jpg}\\
 	Machine Learning Lab
 }
-\date{February 2011}
+\date{June 2011}
 
 \begin{document}
 
@@ -72,8 +72,8 @@ and \textbf{item prediction from implicit feedback} (e.g. from clicks or purchas
 \begin{itemize}
 	\item \textbf{Choice:}
 		\begin{itemize}
-			\item Dozens of different recommender engines (see list on this flyer),
-			\item methods can use collaborative and attribute/content data.
+			\item Dozens of different recommendation methods (see list on this flyer),
+			\item methods can use collaborative, content, or relational data.
 		\end{itemize}
 	\item \textbf{Ready to use:}
 		\begin{itemize}
@@ -88,8 +88,8 @@ and \textbf{item prediction from implicit feedback} (e.g. from clicks or purchas
 	      Linux, Windows, Mac OS X.
 	\item \textbf{Free:} Free/Open Source software, distributed under the terms of the
 	      GNU General Public License (GPL).
-	\item \textbf{Serialization:} save and reload recommender engine models.
-	\item \textbf{Real-time online updates} for most models.
+	\item \textbf{Serialization:} save and reload recommender models.
+	\item \textbf{Real-time incremental updates} for most models.
 \end{itemize}
 
 \newpage
@@ -101,7 +101,7 @@ and \textbf{item prediction from implicit feedback} (e.g. from clicks or purchas
 	\item Don't waste your time implementing methods
 	      if you actually want to study
 	      other aspects of recommender systems!
-	\item Use the engines as baseline methods in benchmarks.
+	\item Use the MyMediaLite recommenders as baseline methods in benchmarks.
 	\item Use MyMediaLite's infrastructure as an easy
 	      starting point to implement your own methods.
 \end{itemize}
@@ -169,7 +169,7 @@ that they do not like everything they have not (yet) bought.
 			\item based on user or item similarities, with different similarity measures
 			\item collaborative or attribute-/content-based
 		\end{itemize}
-	\item (biased) matrix factorization
+	\item (biased) matrix factorization; factor-wise/SGD training; optimized for RMSE or MAE
 \end{itemize}
 
 \textbf{Item Prediction}
