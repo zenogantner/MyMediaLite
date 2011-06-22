@@ -1,3 +1,114 @@
+1.03	2011-06-22
+        - IMPORTANT ANNOUNCEMENT: This may be the last version to support
+          Mono 2.6. If you use MyMediaLite and rely on running it on Mono 2.6,
+          please contact the authors: mymedialite@ismll.de.
+        - web service API
+          - add prototype for a SOAP web service for rating prediction, plus
+            three test script
+        - API changes
+          - IRatingPredictor
+           - Add() is now AddRating()
+           - remove AddUser() and AddItem()
+          - IItemRecommender
+           - remove AddUser() and AddItem()
+          - Util.Recommender.Configure can now be called without a delegate
+            argument.
+          - IIterativeModel: NumIter is now uint instead of int
+	- recommenders
+          - remove NewKNN from project (still not finished)
+          - new rating predictor FactorWiseMatrixFactorization
+          - new rating predictor BiasedMatrixFactorizationMAE, which is BMF
+            optimized for MAE instead of RMSE
+          - BiasedMatrixFactorization: fixed a wrong constant factor in
+            ComputeLoss()
+          - BPRMF: add optional bold driver heuristic for learn rate adaptation
+          - MatrixFactorization:
+            - use method from Eval namespace to compute fit
+            - NumFactors: int -> uint
+          - ItemRecommendation.MF: NumFactors: int -> uint
+          - UserItemBaseline:
+            - use several iterations of alternating optimization instead of just
+              one; implement IIterativeModel
+            - implement LoadModel() and SaveModel()
+	- command-line tools
+          - item prediction: rename --predict-for-users-file to
+            --relevant-users for consistency with --relevant-items
+          - rating prediction:
+             - support all IIterativeModel recommenders, not just the ones
+               derived from MatrixFactorization
+             - --compute-fit now works in all cases
+             - evaluate on simple split (given split ratio)
+          - write out predictions every N iterations with --prediction-file=F
+            and --find-iter=N (bug reported by Alejandro Bellogin)
+          - write loading time to STDERR, not STDOUT
+          - support online evaluation with incremental updates (see below)
+          - allow several --recommender-options arguments
+	- evaluation
+          - RatingEval
+            - add EvaluateOnline() method
+            - rename RatingPredictionMeasures to Measures
+          - ItemPredictionEval
+            - add EvaluateOnline() method
+            - rename ItemPredictionMeasures to Measures
+        - data structures
+          - add interfaces IBooleanMatrix and IPosOnlyFeedback
+          - make PosOnlyFeedback generic to allow different backends
+          - add SparseBooleanMatrixBinarySearch and SparseBooleanMatrixStatic
+          - IMatrix<T> interface: add Transpose() method
+          - SparseBooleanMatrix: remove Rows() method (not necessary)
+          - Matrix<T>:
+            - perform bounds check only when DEBUG is set
+            - faster GetRow()/SetRow()
+            - generic return types
+            - additional constructor with list of list of T as argument
+          - MatrixUtils:
+            - remove ContainsNaN()
+            - rename InitNormal() to RowInitNormal(); add ColumnInitNormal()
+          - VectorUtils:
+            - add L1Norm()
+            - simplify ReadVector()
+          - fix bug in Ratings that prevented incremental updates to work properly
+            (reported by Chris Newell)
+	- documentation
+          - some API doc improvements
+          - get rid of the word 'engine', as it usually carries no relevant
+            information
+          - get rid of the term 'online updates', as it may cause confusion
+            because of the term "online learning" in the machine learning
+            literature; we now use the term 'incremental updates'
+        - IO
+          - minor speed-up: do not .Trim() lines before checking whether they
+            are empty
+	- misc
+          - reflection-based recommender configuration from string: check
+            whether properties are read-only
+          - move GridSearch to experimental section
+          - add Nelder-Mead algorithm for hyperparameter selection; currently
+            only rating prediction is supported (experimental)
+          - remove obsolete option_file functionality
+          - add test script for incremental updates (rating prediction)
+          - suppress localized formatting in a more elegant way (saves more
+            than 100 lines of source code overall)
+
+1.02	2011-05-24
+	- recommenders
+          - BPR_Linear: less verbose output
+          - BPRMF: fix loading/saving of models
+          - BiasedMatrixFactorization: simplify a bit
+          - SlopeOne: move computation of rating average to Train()
+	  - BiPolarSlopeOne: fix loading/saving of models
+          - UserItemBias: set default values for reg_u and reg_i
+	- command-line tools
+	  - item prediction: fix null pointer exception when no --test-file is
+            given
+          - rating prediction: save model file in all cases when requested
+        - documentation
+          - fix Doxygen API doc (wrong path)
+          - Doxygen: do not build LaTeX doc; add main page
+          - remove <inheritdoc/> XML tags - currently not supported by any
+            tool we use
+          - drop ImmDoc.NET support
+
 1.01	2011-05-19
         - API changes
           - add interface IEntityMapping

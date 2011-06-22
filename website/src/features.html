@@ -37,12 +37,12 @@
     <ul>
 	<li>MyMediaLite includes evaluation routines for rating prediction and item prediction;
             it can measure
-            <a href="http://recsyswiki.com/wiki/MAE">MAE</a>,
-            <a href="http://recsyswiki.com/wiki/RMSE">RMSE</a>,
-            <a href="http://recsyswiki.com/wiki/AUC">AUC</a>,
+            [% INCLUDE link link='mae' %],
+            [% INCLUDE link link='rmse' %],
+            [% INCLUDE link link='auc' %],
             prec@N,
             MAP,
-            and <a href="http://recsyswiki.com/wiki/NDCG">NDCG</a>.</li>
+            and [% INCLUDE link link='ndcg' %].</li>
 	<li>It also comes with command line tools for both tasks that read a simple text-based input format.</li>
     </ul>
   </p>
@@ -66,7 +66,7 @@
     Additional features:
     <ul>
       <li><b>Serialization:</b> save and reload recommender models</li>
-      <li><b>Real-time online updates</b> for many recommenders</li>
+      <li><b>Real-time incremental updates</b> for many recommenders</li>
       <li>Attribute-based <b>diversification</b> of recommendation lists</li>
     </ul>
   </p>

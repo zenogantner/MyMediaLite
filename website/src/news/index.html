@@ -13,6 +13,30 @@
 
 <div id="content">
 
+  <a name="1.03"><h2>MyMediaLite 1.03</h2></a>  
+    <p>
+    <b>June 22, 2011.</b>
+    Version 1.03 of MyMediaLite has been released. There are many new features:
+    <ul>
+      <li>A prototype SOAP web service for rating prediction. We plan to offer most of MyMediaLite's functionality using RESTful services in the future.</li>
+      <li>New recommenders: FactorWiseMatrixFactorization, BiasMatrixFactorizationMAE</li>
+      <li>Simplified interfaces IRatingPrediction and IItemRecommender</li>
+      <li>The library (and the command-line tools) now also offer an online evaluation protocol that uses incremental updates.</li>
+    </ul>
+    </p>
+    
+    <p>
+    Important announcement:
+    <b>This may be the last version to support Mono 2.6. If you use MyMediaLite and rely on running it on Mono 2.6,
+       please tell us so that we can figure out how you will be able to run future versions of MML.</b>
+    </p>
+    
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
   <a name="1.02"><h2>MyMediaLite 1.02</h2></a>  
     <p>
     <b>May 24, 2011.</b>
@@ -65,7 +89,7 @@
     There have been the following improvements:
     <ul>
       <li>SlopeOne is now much faster and consumes less memory.</li>
-      <li>We fixed some bugs in the online update functionality of the matrix
+      <li>We fixed some bugs in the incremental update functionality of the matrix
           factorization recommenders.</li>
       <li>We now support the MovieLens 1M/10M ratings format.</li>
     </ul>

@@ -47,6 +47,10 @@
      ironruby      => { url => 'http://ironruby.net/'                            title => 'IronRuby' }
      recsyswiki    => { url => 'http://recsyswiki.com/'                          title => 'RecSysWiki' }
      recsysconf    => { url => 'http://recsys.acm.org/'                          title => 'ACM Conference on Recommender Systems' }
+     ndcg          => { url => 'http://recsyswiki.com/wiki/NDCG'                 title => 'NDCG' }
+     mae           => { url => 'http://recsyswiki.com/wiki/MAE'                  title => 'MAE' }
+     rmse          => { url => 'http://recsyswiki.com/wiki/RMSE'                 title => 'RMSE' }
+     auc           => { url => 'http://recsyswiki.com/wiki/AUC'                  title => 'AUC' }
   }
 %]
 <a href="[% links.$link.url %]">[% links.$link.title %]</a>
