@@ -201,11 +201,11 @@ class RatingPrediction
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
-			{ "compute-fit-",         v => compute_fit  = v != null },
-			{ "online-evaluation-",   v => online_eval  = v != null },
-			{ "search-hp-",           v => search_hp    = v != null },
-			{ "help-",                v => show_help    = v != null },
-			{ "version-",             v => show_version = v != null },
+			{ "compute-fit",          v => compute_fit  = v != null },
+			{ "online-evaluation",    v => online_eval  = v != null },
+			{ "search-hp",            v => search_hp    = v != null },
+			{ "help",                 v => show_help    = v != null },
+			{ "version",              v => show_version = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -226,7 +226,7 @@ class RatingPrediction
 
 		if (cross_validation != 0 && split_ratio != 0)
 			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
-		
+
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
@@ -257,7 +257,7 @@ class RatingPrediction
 			training_data = split.Train[0];
 			test_data     = split.Test[0];
 		}
-	
+
 		Utils.DisplayDataStats(training_data, test_data, recommender);
 
 		if (find_iter != 0)
