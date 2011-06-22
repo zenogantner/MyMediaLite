@@ -42,7 +42,7 @@
           - write out predictions every N iterations with --prediction-file=F
             and --find-iter=N (bug reported by Alejandro Bellogin)
           - write loading time to STDERR, not STDOUT
-          - support online evaluation (see below)
+          - support online evaluation with incremental updates (see below)
           - allow several --recommender-options arguments
 	- evaluation
           - RatingEval
@@ -66,7 +66,7 @@
             - remove ContainsNaN()
             - rename InitNormal() to RowInitNormal(); add ColumnInitNormal()
           - VectorUtils: add L1Norm()
-          - fix bug in Ratings that prevented online updates to work properly
+          - fix bug in Ratings that prevented incremental updates to work properly
             (reported by Chris Newell)
 	- documentation
           - some API doc improvements
@@ -82,7 +82,7 @@
           - add Nelder-Mead algorithm for hyperparameter selection; currently
             only rating prediction is supported (experimental)
           - remove obsolete option_file functionality
-          - add test script for online updates (rating prediction)
+          - add test script for incremental updates (rating prediction)
           - suppress localized formatting in a more elegant way (saves more
             than 100 lines of source code overall)
 
