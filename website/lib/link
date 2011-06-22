@@ -12,6 +12,7 @@
      monodevelop   => { url => 'http://monodevelop.com/',                        title => 'MonoDevelop' }
      tt            => { url => 'http://template-toolkit.org',                    title => 'Template Toolkit' }
      gitorious     => { url => 'http://gitorious.org/',                          title => 'Gitorious' }
+     github        => { url => 'http://github.com/',                             title => 'github' }     
      git           => { url => 'http://git-scm.com/',                            title => 'git' }
      nunit         => { url => 'http://nunit.org/',                              title => 'NUnit' }
      mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
@@ -19,6 +20,8 @@
      easyrec       => { url => 'http://easyrec.org/',                            title => 'easyrec' }
      duine         => { url => 'http://www.duineframework.org/',                 title => 'Duine' }
      reclab        => { url => 'http://code.richrelevance.com/reclab-core/',     title => 'RecLab' }
+     lenskit       => { url => 'http://lenskit.grouplens.org/',                  title => 'LensKit' }
+     crab          => { url => 'http://muricoca.github.com/crab/',               title => 'Crab' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
@@ -26,6 +29,8 @@
      cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'                         title => 'Collection Workflow Integration System' }
      filmaster     => { url => 'http://filmaster.com/'                                        title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                                            title => 'mloss.org' }
+     graphlab      => { url => 'http://www.graphlab.ml.cmu.edu/',                title => 'GraphLab' }
+     graphlabcf    => { url => 'http://www.graphlab.ml.cmu.edu/pmf.html',        title => 'GraphLab collaborative filtering library' }
      vw            => { url => 'http://hunch.net/~vw/',                          title => 'Vowpal Wabbit' }
      liblinear     => { url => 'http://www.csie.ntu.edu.tw/~cjlin/liblinear/',   title => 'LIBLINEAR' }
      libsvm        => { url => 'http://www.csie.ntu.edu.tw/~cjlin/libsvm/',      title => 'LIBSVM' }
