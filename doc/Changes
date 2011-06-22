@@ -89,6 +89,7 @@
           - add test script for incremental updates (rating prediction)
           - suppress localized formatting in a more elegant way (saves more
             than 100 lines of source code overall)
+          - 'make clean' now removes more temporary files
 
 1.02	2011-05-24
 	- recommenders
