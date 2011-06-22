@@ -33,8 +33,6 @@ namespace MyMediaLite.DataType
 			writer.WriteLine(vector.Count);
 			foreach (var v in vector)
 			   	writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
-
-			writer.WriteLine();
 		}
 
 		/// <summary>Read a collection of doubles from a TextReader object</summary>
