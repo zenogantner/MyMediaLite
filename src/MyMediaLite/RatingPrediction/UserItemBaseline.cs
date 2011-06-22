@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 	/// One difference is that we support several iterations of alternating optimization,
 	/// instead of just one.
 	///
-	/// This recommender supports online updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class UserItemBaseline : RatingPredictor, IIterativeModel
 	{
@@ -123,8 +123,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override double Predict(int user_id, int item_id)
 		{
-			double user_bias = (user_id <= MaxUserID && user_id >= 0) ? user_biases[user_id] : 0;
-			double item_bias = (item_id <= MaxItemID && item_id >= 0) ? item_biases[item_id] : 0;
+			double user_bias = (user_id < user_biases.Length && user_id >= 0) ? user_biases[user_id] : 0;
+			double item_bias = (item_id < user_biases.Length && item_id >= 0) ? item_biases[item_id] : 0;
 			double result = global_average + user_bias + item_bias;
 
 			if (result > MaxRating)
@@ -217,6 +217,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
+			base.InitModel();
+
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
