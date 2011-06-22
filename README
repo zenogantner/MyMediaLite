@@ -4,8 +4,8 @@ Features
 --------
  - Choice:
    - Dozens of different recommender engines,
-   - methods can use collaborative and attribute/content data,
- - support for on-line updates to most models.
+   - methods can use collaborative, attribute/content, and relational data,
+ - support for incremental training for most models.
  - Ready to use:
    - Includes evaluation routines for rating and item prediction;
      quality measures MAE, RMSE, AUC, MAP, prec@N, NDCG; and

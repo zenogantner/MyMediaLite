@@ -1,8 +1,7 @@
 1.03	2011-06-22
-        - IMPORTANT ANNOUNCEMENT
-          - This may be the last version to support Mono 2.6. If you use
-            MyMediaLite, and rely on running it on Mono 2.6, please contact the
-            authors.
+        - IMPORTANT ANNOUNCEMENT: This may be the last version to support
+          Mono 2.6. If you use MyMediaLite and rely on running it on Mono 2.6,
+          please contact the authors: mymedialite@ismll.de.
         - web service API
           - add prototype for a SOAP web service for rating prediction, plus
             three test script
@@ -65,13 +64,18 @@
           - MatrixUtils:
             - remove ContainsNaN()
             - rename InitNormal() to RowInitNormal(); add ColumnInitNormal()
-          - VectorUtils: add L1Norm()
+          - VectorUtils:
+            - add L1Norm()
+            - simplify ReadVector()
           - fix bug in Ratings that prevented incremental updates to work properly
             (reported by Chris Newell)
 	- documentation
           - some API doc improvements
           - get rid of the word 'engine', as it usually carries no relevant
             information
+          - get rid of the term 'online updates', as it may cause confusion
+            because of the term "online learning" in the machine learning
+            literature; we now use the term 'incremental updates'
         - IO
           - minor speed-up: do not .Trim() lines before checking whether they
             are empty
