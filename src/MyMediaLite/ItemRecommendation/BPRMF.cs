@@ -35,6 +35,8 @@ namespace MyMediaLite.ItemRecommendation
 	/// BPR: Bayesian Personalized Ranking from Implicit Feedback.
 	/// Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009),
 	/// Montreal, Canada, 2009.
+	///
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class BPRMF : MF, IIterativeModel
 	{

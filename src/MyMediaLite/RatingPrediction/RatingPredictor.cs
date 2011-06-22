@@ -40,17 +40,17 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The min rating value</summary>
 		protected double min_rating;
 
-		/// <summary>true if users shall be updated when doing online updates</summary>
+		/// <summary>true if users shall be updated when doing incremental updates</summary>
 		/// <remarks>
 		/// Default is true.
-		/// Set to false if you do not want any updates to the user model parameters when doing online updates.
+		/// Set to false if you do not want any updates to the user model parameters when doing incremental updates.
 		/// </remarks>
 		public bool UpdateUsers { get; set; }
 
-		/// <summary>true if items shall be updated when doing online updates</summary>
+		/// <summary>true if items shall be updated when doing incremental updates</summary>
 		/// <remarks>
 		/// Default is true.
-		/// Set to false if you do not want any updates to the item model parameters when doing online updates.
+		/// Set to false if you do not want any updates to the item model parameters when doing incremental updates.
 		/// </remarks>
 		public bool UpdateItems { get; set; }
 

@@ -26,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Content-based filtering using one support-vector machine (SVM) per user</summary>
     /// <remarks>
-    /// This recommender does not support online updates.
+    /// This recommender does NOT support incremental updates.
     /// </remarks>
     public class ItemAttributeSVM : ItemRecommender, IItemAttributeAwareRecommender
     {

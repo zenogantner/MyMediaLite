@@ -23,7 +23,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Data
 {
 	/// <summary>Rating data structure for ratings with time stamps</summary>
-	/// <remarks>This data structure does NOT support online updates.</remarks>
+	/// <remarks>This data structure does NOT support incremental updates.</remarks>
 	public class StaticRatingsWithDateTime : StaticRatings
 	{
 		/// <summary>List of DateTime values for each rating event</summary>

@@ -30,7 +30,7 @@ namespace MyMediaLite.Data
 	/// <remarks>
 	/// Small memory overhead for added flexibility.
 	///
-	/// This data structure supports online updates.
+	/// This data structure supports incremental updates.
 	/// </remarks>
 	public class Ratings : IRatings
 	{

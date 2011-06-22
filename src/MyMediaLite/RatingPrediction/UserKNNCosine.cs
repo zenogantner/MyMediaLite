@@ -23,6 +23,9 @@ using MyMediaLite.Correlation;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted user-based kNN with cosine similarity</summary>
+	/// <remarks>
+	/// This recommender supports incremental updates.
+	/// </remarks>
 	public class UserKNNCosine : UserKNN
 	{
 		///

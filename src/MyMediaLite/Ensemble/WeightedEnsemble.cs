@@ -28,7 +28,7 @@ namespace MyMediaLite.Ensemble
 {
 	/// <summary>Combining several predictors with a weighted ensemble</summary>
 	/// <remarks>
-	/// This recommender does NOT support online updates.
+	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class WeightedEnsemble : Ensemble
 	{

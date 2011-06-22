@@ -28,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Linear model optimized for BPR</summary>
 	/// <remarks>
-	/// This recommender does not support online updates.
+	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class BPR_Linear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{

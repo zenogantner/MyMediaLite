@@ -23,7 +23,9 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN with pearson correlation</summary>
-	/// <remarks>This recommender supports online updates.</remarks>
+	/// <remarks>
+	/// This recommender supports incremental updates.
+	/// </remarks>
 	public class ItemKNNPearson : ItemKNN
 	{
 		/// <summary>shrinkage (regularization) parameter</summary>

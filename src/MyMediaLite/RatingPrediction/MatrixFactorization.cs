@@ -29,14 +29,14 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Simple matrix factorization class</summary>
 	/// <remarks>
 	/// Factorizing the observed rating values using a factor matrix for users and one for items.
-	/// This class can update the factorization online.
 	///
-	/// After training, an ArithmeticException is thrown if there are NaN values in the model.
-	/// NaN values occur if values become too large or too small to be represented by the type double.
+	/// NaN values in the model occur if values become too large or too small to be represented by the type double.
 	/// If you encounter such problems, there are three ways to fix them:
 	/// (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
 	/// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
 	/// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
+	///
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class MatrixFactorization : RatingPredictor, IIterativeModel
 	{

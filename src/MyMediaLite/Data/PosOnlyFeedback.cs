@@ -25,7 +25,7 @@ namespace MyMediaLite.Data
 
 	/// <summary>Data structure for implicit, positive-only user feedback</summary>
 	/// <remarks>
-	/// This data structure supports online updates.
+	/// This data structure supports incremental updates if supported by T.
 	/// </remarks>
 	public class PosOnlyFeedback<T> : IPosOnlyFeedback where T : IBooleanMatrix, new()
 	{

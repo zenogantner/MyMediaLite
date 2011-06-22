@@ -19,7 +19,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Constant item recommender for use as experimental baseline. Always predicts a score of zero</summary>
 	/// <remarks>
-	/// This recommender can be used to detect non-random orderings in item lists.
+	/// This recommender can be used for debugging, e.g. to detect non-random orderings in item lists.
 	/// </remarks>
 	public class Zero : ItemRecommender
 	{

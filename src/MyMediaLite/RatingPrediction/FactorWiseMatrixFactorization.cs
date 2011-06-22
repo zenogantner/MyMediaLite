@@ -30,7 +30,7 @@ namespace MyMediaLite.RatingPrediction
 	/// Modeling Relationships at Multiple Scales to Improve Accuracy of Large Recommender Systems,
 	/// ACM Int. Conference on Knowledge Discovery and Data Mining (KDD'07), 2007.
 	///
-	/// This recommender does NOT support online updates.
+	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class FactorWiseMatrixFactorization : RatingPredictor, IIterativeModel
 	{

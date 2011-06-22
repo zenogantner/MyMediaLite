@@ -28,6 +28,9 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Matrix factorization with explicit user and item bias</summary>
+	/// <remarks>
+	/// This recommender supports incremental updates.
+	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
 		/// <summary>regularization constant for the bias terms</summary>
@@ -53,11 +56,11 @@ namespace MyMediaLite.RatingPrediction
 		/// <remarks>
 		/// See
 		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent
+		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent,
 		/// 2011
 		/// </remarks>
 		public bool BoldDriver { set; get; }
-		// TODO use for online learning as well
+		// TODO use for incremental updates as well
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		double last_loss = double.NegativeInfinity;

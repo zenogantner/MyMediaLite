@@ -120,7 +120,7 @@ class ItemPrediction
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
-   --online-evaluation          perform online evaluation (use every tested user-item combination for online training)
+   --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
 
   options for finding the right number of iterations (MF methods and BPR-Linear)
    --find-iter=N                give out statistics every N iterations

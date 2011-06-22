@@ -24,7 +24,7 @@ namespace MyMediaLite.Data
 	/// <remarks>
 	/// Very memory-efficient.
 	/// 
-	/// This data structure does NOT support online updates.
+	/// This data structure does NOT support incremental updates.
 	/// </remarks>
 	public class StaticRatings : Ratings
 	{

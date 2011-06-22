@@ -32,7 +32,7 @@ namespace MyMediaLite.RatingPrediction
 	/// SIAM Data Mining (SDM 2005)
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
 	///
-	/// This recommender does NOT support online updates. They would be easy to implement, though.
+	/// This recommender does NOT support incremental updates. They would be easy to implement, though.
 	/// </remarks>
 	public class BiPolarSlopeOne : RatingPredictor
 	{

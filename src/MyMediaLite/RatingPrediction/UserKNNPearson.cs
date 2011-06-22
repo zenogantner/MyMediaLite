@@ -23,6 +23,9 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted user-based kNN with Pearson correlation</summary>
+	/// <remarks>
+	/// This recommender supports incremental updates.
+	/// </remarks>
 	public class UserKNNPearson : UserKNN
 	{
 		/// <summary>shrinkage (regularization) parameter</summary>

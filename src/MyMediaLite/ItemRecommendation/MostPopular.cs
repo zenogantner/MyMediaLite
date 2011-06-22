@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This method is not personalized.
 	///
-	/// This recommender supports online updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class MostPopular : ItemRecommender
 	{

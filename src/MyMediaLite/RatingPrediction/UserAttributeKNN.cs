@@ -27,7 +27,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted kNN recommender based on user attributes</summary>
 	/// <remarks>
-	/// This recommender does NOT support online updates.
+	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{

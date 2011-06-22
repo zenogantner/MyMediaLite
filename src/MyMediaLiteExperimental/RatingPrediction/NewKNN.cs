@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 	///   Factor in the Neighbors: Scalable and Accurate Collaborative Filtering
 	///   Transactions on Knowledge Discovery from Data (TKDD), 2009
 	///
-	/// This recommender does NOT support online updates.
+	/// This recommender does NOT support incremental updates.
 	///
 	/// <seealso cref="ItemRecommendation.KNN"/>
 	/// </remarks>

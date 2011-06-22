@@ -35,7 +35,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// We use the fast computation method proposed by Hu et al. and we use a global
 	/// weight to penalize observed/unobserved values.
 	///
-	/// This recommender does not support online updates.
+	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class WRMF : MF
 	{

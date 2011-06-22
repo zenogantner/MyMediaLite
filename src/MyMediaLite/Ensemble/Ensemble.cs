@@ -30,7 +30,7 @@ namespace MyMediaLite.Ensemble
 		/// <summary>list of recommenders</summary>
 		public List<IRecommender> recommenders = new List<IRecommender>();
 
-		private double max_rating_value = 5; // TODO make configurable
+		private double max_rating_value = 5;
 		private double min_rating_value = 1;
 
 		/// <summary>The max rating value</summary>

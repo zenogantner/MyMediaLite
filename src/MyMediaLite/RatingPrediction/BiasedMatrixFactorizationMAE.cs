@@ -23,6 +23,9 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>BiasedMatrixFactorization optimized for MAE instead of RMSE</summary>
+	/// <remarks>
+	/// This recommender supports incremental updates.
+	/// </remarks>
 	public class BiasedMatrixFactorizationMAE : BiasedMatrixFactorization
 	{
 		///

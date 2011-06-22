@@ -113,7 +113,7 @@ class RatingPrediction
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
    --cross-validation=K                   perform k-fold crossvalidation on the training data
    --split-ratio=NUM                      use a ratio of NUM of the training data for evaluation (simple split)
-   --online-evaluation                    perform online evaluation (use every tested rating for online training)
+   --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
    --search-hp                            search for good hyperparameter values (experimental)
 
   options for finding the right number of iterations (MF methods)

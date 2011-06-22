@@ -23,7 +23,6 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted user-based kNN</summary>
-	/// <remarks>This recommender supports online updates.</remarks>
 	public abstract class UserKNN : KNN
 	{
 		/// <summary>boolean matrix indicating which user rated which item</summary>

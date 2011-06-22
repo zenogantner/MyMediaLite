@@ -24,7 +24,6 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN</summary>
-	/// <remarks>This recommender supports online updates.</remarks>
 	public abstract class ItemKNN : KNN
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
