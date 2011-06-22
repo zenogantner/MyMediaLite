@@ -25,21 +25,17 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class RatingPredictor : IRatingPredictor, ICloneable
 	{
 		/// <summary>Maximum user ID</summary>
-		/// <value>Maximum user ID</value>
 		public int MaxUserID  { get; set; }
 
 		/// <summary>Maximum item ID</summary>
-		/// <value>Maximum item ID</value>
 		public int MaxItemID  {	get; set; }
 
 		/// <summary>The max rating value</summary>
-		/// <value>The max rating value</value>
 		public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
 		/// <summary>The max rating value</summary>
 		protected double max_rating;
 
 		/// <summary>The min rating value</summary>
-		/// <value>The min rating value</value>
 		public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
 		/// <summary>The min rating value</summary>
 		protected double min_rating;
@@ -70,7 +66,7 @@ namespace MyMediaLite.RatingPrediction
 			UpdateUsers = true;
 			UpdateItems = true;
 		}
-		
+
 		/// <summary>create a shallow copy of the object</summary>
 		public Object Clone()
 		{
