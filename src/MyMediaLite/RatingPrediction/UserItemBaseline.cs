@@ -128,10 +128,9 @@ namespace MyMediaLite.RatingPrediction
 			double result = global_average + user_bias + item_bias;
 
 			if (result > MaxRating)
-				result = MaxRating;
+				return MaxRating;
 			if (result < MinRating)
-				result = MinRating;
-
+				return MinRating;
 			return result;
 		}
 

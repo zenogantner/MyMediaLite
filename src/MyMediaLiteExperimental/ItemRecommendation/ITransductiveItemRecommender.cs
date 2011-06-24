@@ -22,7 +22,7 @@ namespace MyMediaLite.ItemRecommendation
 	// TODO handle this interface in the item recommendation command-line program
 	
 	/// <summary>Interface for item recommenders that take into account some test data for training</summary>
-	public interface ISemiSupervisedItemRecommender
+	public interface ITransductiveItemRecommender
 	{
 		/// <summary>Set containing all test users</summary>
 		HashSet<int> TestUsers { get; set; }

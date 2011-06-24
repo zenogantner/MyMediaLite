@@ -51,9 +51,9 @@
     <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="IO\KDDCup2011\Track2Items.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="ItemRecommendation\ISemiSupervisedItemRecommender.cs" />
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Util\NelderMead.cs" />
+    <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
