@@ -16,7 +16,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Globalization;
+using System.IO;
 using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -49,13 +52,15 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			// do nothing
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			Train();
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 		}
 
 		///
