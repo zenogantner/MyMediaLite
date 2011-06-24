@@ -1,3 +1,11 @@
+1.04	2011-07-?
+	- web service API
+        - API changes
+        - recommenders
+          - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
+            SaveModel()
+        - command-line tools
+
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support
           Mono 2.6. If you use MyMediaLite and rely on running it on Mono 2.6,

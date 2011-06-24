@@ -18,7 +18,6 @@
 
 using System.Globalization;
 using System.IO;
-using MyMediaLite.Data;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction

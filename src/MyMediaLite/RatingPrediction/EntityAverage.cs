@@ -17,6 +17,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -24,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class EntityAverage : RatingPredictor
 	{
 		/// <summary>The average rating for each entity</summary>
-		protected List<double> entity_averages = new List<double>();
+		protected IList<double> entity_averages = new List<double>();
 
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected double global_average = 0;
@@ -37,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 					return entity_averages[index];
 				else
 					return global_average;
-				}
+			}
 		}
 
 		/// <summary>Train the recommender according to the given entity type</summary>
@@ -69,15 +74,23 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void SaveModel(string file)
+		public override void SaveModel(string filename)
 		{
-			// do nothing
+			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			{
+				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
+				VectorUtils.WriteVector(writer, entity_averages);
+			}
 		}
 
 		///
-		public override void LoadModel(string file)
+		public override void LoadModel(string filename)
 		{
-			Train();
+			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			{
+				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				this.entity_averages = VectorUtils.ReadVector(reader);
+			}
 		}
 	}
 }
