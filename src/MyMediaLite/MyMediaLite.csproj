@@ -154,7 +154,6 @@
     <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="Data\IPosOnlyFeedback.cs" />
     <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
-    <Compile Include="RatingPrediction\BiasedMatrixFactorizationMAE.cs" />
     <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

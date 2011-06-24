@@ -29,6 +29,9 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Matrix factorization with explicit user and item bias</summary>
 	/// <remarks>
+	/// Per default optimizes for RMSE.
+	/// Set OptimizeMAE to true if you want to optimize for MAE.
+	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
@@ -51,6 +54,9 @@ namespace MyMediaLite.RatingPrediction
 				RegI = value;
 			}
 		}
+
+		/// <summary>If set to true, optimize model for MAE instead of RMSE</summary>
+		public bool OptimizeMAE { get; set; }
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
@@ -126,6 +132,58 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		{
+			if (OptimizeMAE)
+				IterateMAE(rating_indices, update_user, update_item);
+			else
+				IterateRMSE(rating_indices, update_user, update_item);
+		}
+
+		void IterateMAE(IList<int> rating_indices, bool update_user, bool update_item)
+		{
+			double rating_range_size = MaxRating - MinRating;
+
+			foreach (int index in rating_indices)
+			{
+				int u = ratings.Users[index];
+				int i = ratings.Items[index];
+
+				double dot_product = user_bias[u] + item_bias[i] + MatrixUtils.RowScalarProduct(user_factors, u, item_factors, i);
+				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+
+				double p = MinRating + sig_dot * rating_range_size;
+				double err = ratings[index] - p;
+
+				// the only difference to RMSE optimization is here:
+				double gradient_common = Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size;
+
+				// adjust biases
+				if (update_user)
+					user_bias[u] += LearnRate * (user_bias[u] * gradient_common - BiasReg * user_bias[u]);
+				if (update_item)
+					item_bias[i] += LearnRate * (item_bias[i] * gradient_common - BiasReg * item_bias[i]);
+
+				// adjust latent factors
+				for (int f = 0; f < NumFactors; f++)
+				{
+				 	double u_f = user_factors[u, f];
+					double i_f = item_factors[i, f];
+
+					if (update_user)
+					{
+						double delta_u = i_f * gradient_common - RegU * u_f;
+						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
+					}
+					if (update_item)
+					{
+						double delta_i = u_f * gradient_common - RegI * i_f;
+						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
+					}
+				}
+			}
+		}
+
+		void IterateRMSE(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			double rating_range_size = MaxRating - MinRating;
 
@@ -296,13 +354,22 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override double ComputeLoss()
 		{
-			double square_loss = 0;
-			for (int i = 0; i < ratings.Count; i++)
-			{
-				int user_id = ratings.Users[i];
-				int item_id = ratings.Items[i];
-				square_loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
-			}
+			double loss = 0;
+
+			if (OptimizeMAE)
+				for (int i = 0; i < ratings.Count; i++)
+				{
+					int user_id = ratings.Users[i];
+					int item_id = ratings.Items[i];
+					loss += Math.Abs(Predict(user_id, item_id) - ratings[i]);
+				}
+			else
+				for (int i = 0; i < ratings.Count; i++)
+				{
+					int user_id = ratings.Users[i];
+					int item_id = ratings.Items[i];
+					loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+				}
 
 			double complexity = 0;
 			for (int u = 0; u <= MaxUserID; u++)
@@ -316,15 +383,15 @@ namespace MyMediaLite.RatingPrediction
 				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
-			return square_loss + complexity;
+			return loss + complexity;
 		}
 
 		///
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "BiasedMatrixFactorization num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8}",
-								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
+								 "BiasedMatrixFactorization num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8} optimize_mae={9}",
+								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev, OptimizeMAE);
 		}
 	}
 }

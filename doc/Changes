@@ -4,6 +4,8 @@
         - recommenders
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
+          - merge functionality of BiasedMatrixFactorizationMAE into
+            BiasedMatrixFactorization
         - command-line tools
 
 1.03	2011-06-22
