@@ -78,6 +78,7 @@ Architecture
      - prediction values (in C++ port)
  - recommenders 
    - add InitModel to ItemRecommender and RatingPredictor
+   - regularization parameters: use logarithms instead of absolute values
    - nicer, more generic structure for kNN recommenders
      - non-weighted kNN
      - more correlation/similarity measures
