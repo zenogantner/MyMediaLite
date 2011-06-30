@@ -156,7 +156,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			 return string.Format("SlopeOne");
+			 return "SlopeOne";
 		}
 	}
 }

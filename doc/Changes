@@ -6,6 +6,7 @@
             SaveModel()
           - merge functionality of BiasedMatrixFactorizationMAE into
             BiasedMatrixFactorization
+          - SlopeOne: get rid of unnecessary String.Format() call
         - command-line tools
 
 1.03	2011-06-22
