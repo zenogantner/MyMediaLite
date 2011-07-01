@@ -34,8 +34,6 @@ using MyMediaLite.Util;
 /// </remarks>
 class MappingRatingPrediction
 {
-	static NumberFormatInfo ni = new NumberFormatInfo();
-
 	// data sets
 	static IRatings training_data;
 	static IRatings test_data;
@@ -80,7 +78,6 @@ class MappingRatingPrediction
     public static void Main(string[] args)
     {
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
-		ni.NumberDecimalDigits = '.';
 
 		// check number of command line parameters
 		if (args.Length < 4)
@@ -180,7 +177,7 @@ class MappingRatingPrediction
 		// TODO move that into the recommender functionality (set from data)
 		recommender.MinRating = min_rating;
 		recommender.MaxRating = max_rating;
-		Console.Error.WriteLine(string.Format(ni, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		DisplayDataStats();
 
@@ -193,13 +190,13 @@ class MappingRatingPrediction
 				recommender.NumIterMapping = 0;
 				recommender.LearnAttributeToFactorMapping();
 				Console.Error.WriteLine();
-				Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
 
 				recommender.NumIterMapping = 1;
 				for (int i = 0; i < num_iter; i++, i++)
 				{
 					recommender.IterateMapping();
-					Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", i, recommender.ComputeFit()));
+					Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 				}
 				recommender.NumIterMapping = num_iter; // restore
 	    	} );
@@ -230,7 +227,7 @@ class MappingRatingPrediction
 
     static TimeSpan EvaluateRecommender(MF_Mapping recommender)
 	{
-		Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
@@ -250,7 +247,7 @@ class MappingRatingPrediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
 		num_users = test_data.AllUsers.Count;
@@ -258,7 +255,7 @@ class MappingRatingPrediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)

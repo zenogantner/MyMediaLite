@@ -43,25 +43,19 @@ namespace MyMediaLite.Util
 
 		static string CreateConfigString(IList<string> hp_names, IList<double> hp_values)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			string hp_string = string.Empty;
 			for (int i = 0; i < hp_names.Count; i++)
-				hp_string += string.Format(ni, " {0}={1}", hp_names[i], hp_values[i]);
+				hp_string += string.Format(CultureInfo.InvariantCulture, " {0}={1}", hp_names[i], hp_values[i]);
 
 			return hp_string;
 		}
 
 		static double Run(RatingPredictor recommender, ISplit<IRatings> split, string hp_string, string evaluation_measure)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			Recommender.Configure(recommender, hp_string);
 
 			double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
-			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(ni));
+			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(CultureInfo.InvariantCulture));
 			return result;
 		}
 

@@ -44,15 +44,12 @@ namespace MyMediaLite.Util
 		                                 RatingPredictor recommender,
 		                                 ISplit<IRatings> split)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			double min_result = double.MaxValue;
 			int min_i = -1;
 
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
-				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(ni));
+				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(CultureInfo.InvariantCulture));
 				double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
 
 				if (result < min_result)
@@ -62,7 +59,7 @@ namespace MyMediaLite.Util
 				}
 			}
 
-			Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[min_i].ToString(ni));
+			Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[min_i].ToString(CultureInfo.InvariantCulture));
 
 			return min_result;
 		}
@@ -83,9 +80,6 @@ namespace MyMediaLite.Util
 		                                 RatingPredictor recommender,
 		                                 ISplit<IRatings> split)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			double min_result = double.MaxValue;
 			int min_i = -1;
 			int min_j = -1;
@@ -93,10 +87,10 @@ namespace MyMediaLite.Util
 			for (int i = 0; i < hp_values1.Length; i++)
 				for (int j = 0; j < hp_values2.Length; j++)
 				{
-					Recommender.SetProperty(recommender, hp_name1, hp_values1[i].ToString(ni));
-					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(ni));
+					Recommender.SetProperty(recommender, hp_name1, hp_values1[i].ToString(CultureInfo.InvariantCulture));
+					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(CultureInfo.InvariantCulture));
 
-					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(ni), hp_values2[j].ToString(ni)); // TODO this is not generic
+					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(CultureInfo.InvariantCulture), hp_values2[j].ToString(CultureInfo.InvariantCulture)); // TODO this is not generic
 					double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
 					if (result < min_result)
 					{
@@ -107,8 +101,8 @@ namespace MyMediaLite.Util
 				}
 
 			// set to best hyperparameter values
-			Recommender.SetProperty(recommender, hp_name1, hp_values1[min_i].ToString(ni));
-			Recommender.SetProperty(recommender, hp_name2, hp_values2[min_j].ToString(ni));
+			Recommender.SetProperty(recommender, hp_name1, hp_values1[min_i].ToString(CultureInfo.InvariantCulture));
+			Recommender.SetProperty(recommender, hp_name2, hp_values2[min_j].ToString(CultureInfo.InvariantCulture));
 
 			return min_result;
 		}

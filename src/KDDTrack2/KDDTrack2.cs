@@ -35,8 +35,6 @@ using MyMediaLite.Util;
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
 class KDDTrack2
 {
-	static NumberFormatInfo ni = new NumberFormatInfo();
-
 	// data sets
 	//  training
 	static IRatings training_ratings;
@@ -121,7 +119,6 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
-		ni.NumberDecimalDigits = '.';
 
 		// check number of command line parameters
 		if (args.Length < 1)
@@ -210,7 +207,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 			// evaluate and display results
 			double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
-			Console.WriteLine(string.Format(ni, "ERR {0:0.######} {1}", error, iterative_recommender_validate.NumIter));
+			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} {1}", error, iterative_recommender_validate.NumIter));
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
@@ -227,7 +224,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 						// evaluate
 						error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 						err_eval_stats.Add(error);
-						Console.WriteLine(string.Format(ni, "ERR {0:0.######} {1}", error, i));
+						Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} {1}", error, i));
 
 						if (prediction_file != string.Empty)
 						{
@@ -263,7 +260,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 					if (err_eval_stats.Last() > err_eval_stats.Min() + epsilon)
 					{
-						Console.Error.WriteLine(string.Format(ni, "Reached convergence (eps={0:0.######}) on training/validation data after {1} iterations.", epsilon, i));
+						Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "Reached convergence (eps={0:0.######}) on training/validation data after {1} iterations.", epsilon, i));
 						break;
 					}
 
@@ -288,7 +285,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			seconds = Utils.MeasureTime(delegate() {
 					// evaluate
 					double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
-					Console.Write(string.Format(ni, "ERR {0:0.######}", error));
+					Console.Write(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######}", error));
 
 					if (prediction_file != string.Empty)
 					{
@@ -399,7 +396,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			complete_ratings = null;
 			Console.Error.WriteLine("memory after deleting ratings:  {0}", Memory.Usage);
 		});
-		Console.Error.WriteLine("loading_time {0:0.##}", loading_time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("loading_time {0:0.##}", loading_time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		Utils.DisplayDataStats(recommender_final.Feedback, null, recommender_final);
 	}
@@ -439,13 +436,13 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    ni,
+			    CultureInfo.InvariantCulture,
 				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));

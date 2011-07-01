@@ -29,8 +29,6 @@ namespace MyMediaLite.Util
 	[Serializable]
 	public class RecommenderParameters : Dictionary<string, string>
 	{
-		private NumberFormatInfo ni = new NumberFormatInfo();
-
 		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="arg_string">a string that contains the command line parameters</param>
 		public RecommenderParameters(string arg_string)
@@ -84,13 +82,6 @@ namespace MyMediaLite.Util
 
 				this.Add(arg_name, arg_value);
 			}
-		}
-
-		/// <summary>Constructor</summary>
-		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
-		public RecommenderParameters(Dictionary<string,string> parameters) : base(parameters)
-		{
-			this.ni.NumberDecimalDigits = '.';
 		}
 
 		/// <summary>Check for parameters that have not been processed yet</summary>
@@ -196,12 +187,10 @@ namespace MyMediaLite.Util
 		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>
 		public double GetRemoveDouble(string key, double dvalue)
 		{
-			ni.NumberDecimalDigits = '.';
-
 			if (this.ContainsKey(key))
 				try
 				{
-					double value = double.Parse(this[key], ni);
+					double value = double.Parse(this[key], CultureInfo.InvariantCulture);
 					this.Remove(key);
 					return value;
 				}
@@ -228,12 +217,10 @@ namespace MyMediaLite.Util
 		/// <returns>the value of the parameter if it is found, the default value otherwise</returns>
 		public float GetRemoveFloat(string key, float dvalue)
 		{
-			ni.NumberDecimalDigits = '.';
-
 			if (this.ContainsKey(key))
 				try
 				{
-					float value = float.Parse(this[key], ni);
+					float value = float.Parse(this[key], CultureInfo.InvariantCulture);
 					this.Remove(key);
 					return value;
 				}

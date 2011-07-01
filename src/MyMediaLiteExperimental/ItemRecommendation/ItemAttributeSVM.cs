@@ -118,10 +118,7 @@ namespace MyMediaLite.ItemRecommendation
         ///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni, "ItemAttributeSVM C={0} Gamma={1}", c, gamma);
+			return string.Format(CultureInfo.InvariantCulture, "ItemAttributeSVM C={0} Gamma={1}", c, gamma);
 		}
 	}
 }

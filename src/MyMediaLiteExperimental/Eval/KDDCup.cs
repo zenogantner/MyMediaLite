@@ -157,9 +157,6 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the writer object to write the predictions to</param>
 		public static void PredictRatings(IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			for (int i = 0; i < ratings.Count; i++)
 			{
 				double prediction = recommender.Predict(ratings.Users[i], ratings.Items[i]);
@@ -185,11 +182,8 @@ namespace MyMediaLite.Eval
 		/// <param name="writer">the writer object to write the predictions to</param>
 		public static void PredictRatingsDouble(IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			for (int i = 0; i < ratings.Count; i++)
-				writer.Write(recommender.Predict(ratings.Users[i], ratings.Items[i]));
+				writer.Write(recommender.Predict(ratings.Users[i], ratings.Items[i]).ToString(CultureInfo.InvariantCulture));
 		}
 	}
 }

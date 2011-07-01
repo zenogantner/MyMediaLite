@@ -205,10 +205,7 @@ namespace MyMediaLite.RatingPrediction
         ///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
-			return string.Format(ni,
+			return string.Format(CultureInfo.InvariantCulture,
 			                     "NewKNN k={0} entity_type={1} similarity={2} shrinkage={3} reg_u={4} reg_i={5}",
 			                     K == uint.MaxValue ? "inf" : K.ToString(), Entity, Similarity, Shrinkage, RegU, RegI);
 		}

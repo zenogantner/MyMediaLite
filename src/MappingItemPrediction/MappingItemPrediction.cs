@@ -44,8 +44,6 @@ using MyMediaLite.Util;
 /// </remarks>
 class MappingItemPrediction
 {
-	static NumberFormatInfo ni = new NumberFormatInfo();
-
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
 	static ICollection<int> relevant_items;
@@ -94,7 +92,6 @@ class MappingItemPrediction
     public static void Main(string[] args)
     {
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
-		ni.NumberDecimalDigits = '.';
 
 		// check number of command line parameters
 		if (args.Length < 4)
@@ -210,13 +207,13 @@ class MappingItemPrediction
 				recommender.NumIterMapping = 0;
 				recommender.LearnAttributeToFactorMapping();
 				Console.Error.WriteLine();
-				Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", -1, recommender.ComputeFit()));
 
 				recommender.NumIterMapping = 1;
 				for (int i = 0; i < num_iter; i++, i++)
 				{
 					recommender.IterateMapping();
-					Console.Error.WriteLine(string.Format(ni, "iteration {0} fit {1}", i, recommender.ComputeFit()));
+					Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 				}
 				recommender.NumIterMapping = num_iter; // restore
 	    	} );
@@ -236,7 +233,7 @@ class MappingItemPrediction
 
     static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, IPosOnlyFeedback test_data, IPosOnlyFeedback train_data)
 	{
-		Console.Error.WriteLine(string.Format(ni, "fit {0}", recommender.ComputeFit()));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
@@ -256,7 +253,7 @@ class MappingItemPrediction
 
 	static void DisplayResults(Dictionary<string, double> result)
 	{
-		Console.Write(string.Format(ni, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+		Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
 		                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 	}
 
@@ -268,7 +265,7 @@ class MappingItemPrediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
 		num_users = test_data.AllUsers.Count;
@@ -276,7 +273,7 @@ class MappingItemPrediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(ni, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)

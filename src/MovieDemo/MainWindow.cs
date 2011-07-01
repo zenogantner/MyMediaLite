@@ -79,12 +79,8 @@ public partial class MainWindow : Window
 	Dictionary<int, double> ratings     = new Dictionary<int, double>();
 	Dictionary<int, double> predictions = new Dictionary<int, double>();
 
-	NumberFormatInfo ni = new NumberFormatInfo();
-
 	public MainWindow() : base( WindowType.Toplevel)
 	{
-		ni.NumberDecimalDigits = '.'; // ensure correct comma separator (for English)
-
 		Console.Error.Write("Reading in movie data ... ");
 		TimeSpan time = Utils.MeasureTime(delegate() {
 			movies.Read(movie_file, movie_file_encoding, item_mapping);

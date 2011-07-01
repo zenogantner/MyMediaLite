@@ -79,11 +79,8 @@ namespace MyMediaLite.AttrToFactor
 		///
 		public override string ToString()
 		{
-			var ni = new NumberFormatInfo();
-			ni.NumberDecimalDigits = '.';
-
 			return string.Format(
-				ni,
+				CultureInfo.InvariantCulture,
 				"BPRMF_ItemMappingKNN num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} k={6} init_mean={7} init_stdev={8}",
 				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == uint.MaxValue ? "inf" : k.ToString(), InitMean, InitStdev
 			);
