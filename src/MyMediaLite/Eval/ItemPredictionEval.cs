@@ -98,7 +98,7 @@ namespace MyMediaLite.Eval
 					continue;
 
 				num_users++;
-				int[] prediction = ItemPrediction.PredictItems(recommender, user_id, relevant_items);
+				int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
 
 				auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
 				map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);

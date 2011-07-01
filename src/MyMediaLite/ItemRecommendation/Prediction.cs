@@ -24,10 +24,10 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 
-namespace MyMediaLite.Eval
+namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Class that contains static methods for item prediction</summary>
-	public static class ItemPrediction
+	public static class Prediction
 	{
 		// TODO there are too many different versions of this method interface - we should simplify the API
 

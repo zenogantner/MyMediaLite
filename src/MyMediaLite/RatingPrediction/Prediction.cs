@@ -21,10 +21,10 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
-namespace MyMediaLite.Eval
+namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Class that contains static methods for rating prediction</summary>
-	public class RatingPrediction
+	public class Prediction
 	{
 		/// <summary>Rates a given set of instances</summary>
 		/// <param name="recommender">rating predictor</param>

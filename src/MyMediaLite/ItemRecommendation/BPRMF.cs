@@ -452,7 +452,7 @@ namespace MyMediaLite.ItemRecommendation
 				int num_test_items = Feedback.UserMatrix[user_id].Count;
 				if (num_test_items == 0)
 					continue;
-				int[] prediction = ItemPrediction.PredictItems(this, user_id, MaxItemID);
+				int[] prediction = Prediction.PredictItems(this, user_id, MaxItemID);
 
 				int num_eval_items = MaxItemID + 1;
 				int num_eval_pairs = (num_eval_items - num_test_items) * num_test_items;

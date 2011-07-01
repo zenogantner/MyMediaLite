@@ -419,7 +419,7 @@ class ItemPrediction
 		if (predict_for_users_file == string.Empty)
 			time_span = Utils.MeasureTime( delegate()
 		    	{
-			    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
+			    	Prediction.WritePredictions(
 				    	recommender,
 				        training_data,
 				        relevant_items, predict_items_number,
@@ -432,7 +432,7 @@ class ItemPrediction
 		else
 			time_span = Utils.MeasureTime( delegate()
 		    	{
-			    	MyMediaLite.Eval.ItemPrediction.WritePredictions(
+			    	Prediction.WritePredictions(
 				    	recommender,
 				        training_data,
 				        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
