@@ -1,6 +1,10 @@
 1.04	2011-07-?
 	- web service API
         - API changes
+          - Eval.RatingPrediction -> RatingPrediction.Prediction
+          - Eval.ItemPrediction -> ItemRecommendation.Prediction
+          - Eval.RatingPredictionEval -> Eval.Ratings
+          - Eval.ItemPredictionEval -> Eval.Items
         - recommenders
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
