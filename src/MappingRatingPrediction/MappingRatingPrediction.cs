@@ -21,11 +21,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MyMediaLite;
+using MyMediaLite.AttrToFactor;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
-using MyMediaLite.AttrToFactor;
 using MyMediaLite.IO;
+using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Command-line tool: attribute-to-factor mappings for rating prediction</summary>
@@ -215,12 +216,12 @@ class MappingRatingPrediction
 			seconds = EvaluateRecommender(recommender);
 		Console.WriteLine();
 
-		if (!prediction_file.Equals(string.Empty))
+		if (prediction_file != string.Empty)
 		{
+			Console.WriteLine();
 			seconds = Utils.MeasureTime(
 		    	delegate() {
-					Console.WriteLine();
-					MyMediaLite.Eval.RatingPrediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
+					Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);
