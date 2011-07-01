@@ -300,7 +300,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public double ComputeFit()
 		{
-			return MyMediaLite.Eval.RatingEval.Evaluate(this, ratings)["RMSE"];
+			return Eval.Ratings.Evaluate(this, ratings)["RMSE"];
 		}
 
 		/// <summary>Compute the regularized loss</summary>

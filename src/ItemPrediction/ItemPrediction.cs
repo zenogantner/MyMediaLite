@@ -240,8 +240,8 @@ class ItemPrediction
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
-			ItemPredictionEval.DisplayResults(result);
+			var result = Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+			Items.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -264,14 +264,14 @@ class ItemPrediction
 					}
 
 					t = Utils.MeasureTime(delegate() {
-						result = ItemPredictionEval.Evaluate(
+						result = Items.Evaluate(
 							recommender,
 						    test_data,
 							training_data,
 						    test_data.AllUsers,
 							relevant_items
 						);
-						ItemPredictionEval.DisplayResults(result);
+						Items.DisplayResults(result);
 						Console.WriteLine(" " + i);
 					});
 					eval_time_stats.Add(t.TotalSeconds);
@@ -312,13 +312,13 @@ class ItemPrediction
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var result = ItemPredictionEval.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
-						ItemPredictionEval.DisplayResults(result);
+						var result = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
+						Items.DisplayResults(result);
 			    	});
 				else
 					time_span = Utils.MeasureTime( delegate() {
-						var result = ItemPredictionEval.Evaluate(recommender, test_data, training_data, test_data.AllUsers, relevant_items);
-						ItemPredictionEval.DisplayResults(result);
+						var result = Items.Evaluate(recommender, test_data, training_data, test_data.AllUsers, relevant_items);
+						Items.DisplayResults(result);
 			    	});
 				Console.Write(" testing_time " + time_span);
 			}

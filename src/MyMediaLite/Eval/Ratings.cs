@@ -26,8 +26,8 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
-	/// <summary>Evaluation class</summary>
-	public static class RatingEval
+	/// <summary>Evaluation class for rating prediction</summary>
+	public static class Ratings
 	{
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
 		static public ICollection<string> Measures

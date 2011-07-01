@@ -85,13 +85,13 @@ public partial class MainWindow : Window
 		TimeSpan time = Utils.MeasureTime(delegate() {
 			movies.Read(movie_file, movie_file_encoding, item_mapping);
 		});
-		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		Console.Error.Write("Reading in German movie titles ... ");
 		time = Utils.MeasureTime(delegate() {
 			german_names = IMDBAkaTitles.Read("../../../../data/imdb/german-aka-titles.list", "GERMAN", movies.IMDB_KEY_To_ID);
 		});
-		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		SwitchInterfaceToEnglish();
 
@@ -112,7 +112,7 @@ public partial class MainWindow : Window
 		TimeSpan time = Utils.MeasureTime(delegate() {
 			recommender.Ratings = RatingPrediction.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
 		});
-		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		//Console.Error.Write("Reading in additional ratings ... ");
 		//string[] rating_files = Directory.GetFiles("../../saved_data/", "user-ratings-*");
@@ -137,7 +137,7 @@ public partial class MainWindow : Window
 		time = Utils.MeasureTime(delegate() {
 			recommender.LoadModel(model_file);
 		});
-		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		rating_predictor = recommender;
 
@@ -370,7 +370,7 @@ public partial class MainWindow : Window
 
 		try
 		{
-			double rating = double.Parse(input, ni);
+			double rating = double.Parse(input, CultureInfo.InvariantCulture);
 
 			if (rating > max_rating)
 				rating = max_rating;
@@ -411,15 +411,15 @@ public partial class MainWindow : Window
 		if (prediction < min_rating)
 			text = "";
 		else if (prediction < 1.5)
-			text = string.Format(ni, "{0,0:0.00} ★", prediction);
+			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★", prediction);
 		else if (prediction < 2.5)
-			text = string.Format(ni, "{0,0:0.00} ★★", prediction);
+			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★★", prediction);
 		else if (prediction < 3.5)
-			text = string.Format(ni, "{0,0:0.00} ★★★", prediction);
+			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★★★", prediction);
 		else if (prediction < 4.5)
-			text = string.Format(ni, "{0,0:0.00} ★★★★", prediction);
+			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★★★★", prediction);
 		else
-			text = string.Format(ni, "{0,0:0.00} ★★★★★", prediction);
+			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★★★★★", prediction);
 
 		(cell as CellRendererText).Text = text;
 	}
@@ -431,7 +431,7 @@ public partial class MainWindow : Window
 		double rating = -1;
 
 		if (ratings.TryGetValue(movie.ID, out rating))
-			(cell as CellRendererText).Text = string.Format(ni, "{0}", rating);
+			(cell as CellRendererText).Text = string.Format(CultureInfo.InvariantCulture, "{0}", rating);
 		else
 			(cell as CellRendererText).Text = string.Empty;
 	}
@@ -494,7 +494,7 @@ public partial class MainWindow : Window
 				predictions[i] = rating_predictor.Predict(current_user_id, i);
 		});
 
-		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(ni));
+		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 	}
 
 	protected void OnDeleteEvent(object sender, DeleteEventArgs a)
@@ -562,7 +562,7 @@ public partial class MainWindow : Window
 				writer.WriteLine("{0}\t{1}\t{2}",
 								 user_mapping.ToOriginalID(current_user_id),
 								 item_mapping.ToOriginalID(r.Key),
-								 r.Value.ToString(ni));
+								 r.Value.ToString(CultureInfo.InvariantCulture));
 		}
 	}
 
@@ -574,7 +574,7 @@ public partial class MainWindow : Window
 				writer.WriteLine("{0}\t{1}\t{2}",
 								 user_mapping.ToOriginalID(current_user_id),
 								 item_mapping.ToOriginalID(r.Key),
-								 r.Value.ToString(ni));
+								 r.Value.ToString(CultureInfo.InvariantCulture));
 		}
 	}
 

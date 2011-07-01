@@ -231,8 +231,8 @@ class MappingRatingPrediction
 
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
-	    		var result = RatingEval.Evaluate(recommender, test_data);
-				RatingEval.DisplayResults(result);
+	    		var result = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
+				MyMediaLite.Eval.Ratings.DisplayResults(result);
 	    	} );
 		Console.Write(" testing " + seconds);
 

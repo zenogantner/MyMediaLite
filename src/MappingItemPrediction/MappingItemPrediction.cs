@@ -237,7 +237,7 @@ class MappingItemPrediction
 
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
-	    		var result = ItemPredictionEval.Evaluate(
+	    		var result = Items.Evaluate(
                                 recommender,
 								test_data,
         	                    train_data,

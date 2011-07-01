@@ -64,8 +64,6 @@
     <Compile Include="DataType\VectorUtils.cs" />
     <Compile Include="Ensemble\Ensemble.cs" />
     <Compile Include="Ensemble\WeightedEnsemble.cs" />
-    <Compile Include="Eval\ItemPredictionEval.cs" />
-    <Compile Include="Eval\RatingEval.cs" />
     <Compile Include="IO\AttributeData.cs" />
     <Compile Include="IO\RelationData.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
@@ -153,6 +151,8 @@
     <Compile Include="Data\IPosOnlyFeedback.cs" />
     <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
     <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
+    <Compile Include="Eval\Items.cs" />
+    <Compile Include="Eval\Ratings.cs" />
     <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="RatingPrediction\Prediction.cs" />
   </ItemGroup>

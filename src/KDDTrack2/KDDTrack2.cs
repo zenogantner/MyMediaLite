@@ -356,7 +356,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			if (recommender_validate is IKDDCupRecommender)
 			{
 				var kddcup_recommender = recommender_validate as IKDDCupRecommender;
-				kddcup_recommender.ItemInfo = Items.Read(track_file, album_file, artist_file, genre_file, 2);
+				kddcup_recommender.ItemInfo = MyMediaLite.IO.KDDCup2011.Items.Read(track_file, album_file, artist_file, genre_file, 2);
 			}
 
 			// connect data and recommenders

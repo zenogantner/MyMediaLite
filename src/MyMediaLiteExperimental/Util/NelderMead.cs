@@ -54,7 +54,7 @@ namespace MyMediaLite.Util
 		{
 			Recommender.Configure(recommender, hp_string);
 
-			double result = RatingEval.EvaluateOnSplit(recommender, split)[evaluation_measure];
+			double result = Eval.Ratings.EvaluateOnSplit(recommender, split)[evaluation_measure];
 			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(CultureInfo.InvariantCulture));
 			return result;
 		}

@@ -226,7 +226,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender_validate.ComputeFit()));
 
-			RatingEval.DisplayResults(RatingEval.Evaluate(rating_predictor_validate, validation_ratings));
+			MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings));
 			Console.WriteLine(" " + iterative_recommender_validate.NumIter);
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
@@ -255,8 +255,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					// TODO parallelize
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
-						results = RatingEval.Evaluate(rating_predictor_validate, validation_ratings);
-						RatingEval.DisplayResults(results);
+						results = MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings);
+						MyMediaLite.Eval.Ratings.DisplayResults(results);
 						rmse_eval_stats.Add(results["RMSE"]);
 						Console.WriteLine(" " + i);
 					});
@@ -312,8 +312,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					{                         // TODO support track2
 						Console.WriteLine();
 						var split = new RatingCrossValidationSplit(training_ratings, cross_validation);
-						var results = RatingEval.EvaluateOnSplit(rating_predictor_validate, split);
-						RatingEval.DisplayResults(results);
+						var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(rating_predictor_validate, split);
+						MyMediaLite.Eval.Ratings.DisplayResults(results);
 						no_eval = true;
 						rating_predictor_validate.Ratings = training_ratings;
 					}
@@ -328,7 +328,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				Console.Write(recommender.ToString() + " ");
 
 				seconds = Utils.MeasureTime(
-			    	delegate() { RatingEval.DisplayResults(RatingEval.Evaluate(rating_predictor_validate, validation_ratings)); }
+			    	delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings)); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}
@@ -407,7 +407,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		if (recommender is IKDDCupRecommender)
 		{
 			var kddcup_recommender = recommender as IKDDCupRecommender;
-			kddcup_recommender.ItemInfo = Items.Read(track_file, album_file, artist_file, genre_file, 1);
+			kddcup_recommender.ItemInfo = MyMediaLite.IO.KDDCup2011.Items.Read(track_file, album_file, artist_file, genre_file, 1);
 		}
 	}
 
