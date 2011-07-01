@@ -312,7 +312,11 @@ class RatingPrediction
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
+<<<<<<< HEAD
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file + "-it-" + i);
+=======
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i);
+>>>>>>> ddf0c9d... nicer names for classes containing prediction helper routines
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
@@ -390,7 +394,11 @@ class RatingPrediction
 			{
 				seconds = Utils.MeasureTime(delegate() {
 						Console.WriteLine();
+<<<<<<< HEAD
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file);
+=======
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
+>>>>>>> ddf0c9d... nicer names for classes containing prediction helper routines
 				});
 				Console.Error.Write("predicting_time " + seconds);
 			}
