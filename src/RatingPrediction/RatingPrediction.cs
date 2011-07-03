@@ -109,6 +109,8 @@ class RatingPrediction
    --min-rating=NUM                       the smallest valid rating value
    --max-rating=NUM                       the greatest valid rating value
    --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
+   --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
+                                          and predicted rating, respectively; default is {0}\\t{1}\\t{2}
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
    --cross-validation=K                   perform k-fold crossvalidation on the training data
@@ -168,6 +170,7 @@ class RatingPrediction
 		string load_model_file = string.Empty;
 		int random_seed        = -1;
 		string prediction_file = string.Empty;
+		string prediction_line = "{0}\t{1}\t{2}";
 		int cross_validation   = 0;
 		double split_ratio     = 0;
 
@@ -185,6 +188,7 @@ class RatingPrediction
 			{ "save-model=",          v              => save_model_file      = v },
 			{ "load-model=",          v              => load_model_file      = v },
 			{ "prediction-file=",     v              => prediction_file      = v },
+			{ "prediction-line=",     v              => prediction_line      = v },
 			// integer-valued options
    			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
@@ -308,7 +312,7 @@ class RatingPrediction
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i);
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file + "-it-" + i);
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
@@ -386,7 +390,7 @@ class RatingPrediction
 			{
 				seconds = Utils.MeasureTime(delegate() {
 						Console.WriteLine();
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file);
 				});
 				Console.Error.Write("predicting_time " + seconds);
 			}

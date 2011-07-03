@@ -12,6 +12,8 @@
             BiasedMatrixFactorization
           - SlopeOne: get rid of unnecessary String.Format() call
         - command-line tools
+          - rating prediction: add user-defined prediction format
+            via the --prediction-line argument
 
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support
