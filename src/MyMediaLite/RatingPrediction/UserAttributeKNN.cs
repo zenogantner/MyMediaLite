@@ -44,10 +44,7 @@ namespace MyMediaLite.RatingPrediction
 		private SparseBooleanMatrix user_attributes;
 
 		///
-		public int NumUserAttributes { get; set; }
-
-		///
-		public UserAttributeKNN() : base() { }
+		public int NumUserAttributes { get; private set; }
 
 		///
 		public override void Train()

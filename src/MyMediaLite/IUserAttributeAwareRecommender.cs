@@ -17,7 +17,6 @@
 
 using MyMediaLite.DataType;
 
-
 namespace MyMediaLite
 {
 	/// <summary>Interface for recommenderss that take binary user attributes into account</summary>
@@ -26,7 +25,7 @@ namespace MyMediaLite
 	{
 		/// <value>Number of binary user attributes</value>
 		/// <remarks></remarks>
-		int NumUserAttributes { get; set; }
+		int NumUserAttributes { get; }
 
 		/// <value>The binary user attributes</value>
 		/// <remarks></remarks>
