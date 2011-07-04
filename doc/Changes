@@ -12,6 +12,8 @@
             BiasedMatrixFactorization
           - SlopeOne: get rid of unnecessary String.Format() call
         - command-line tools
+          - --find-iter=N: explicitly state that the last number refers to the
+            number of iterations computed so far
           - rating prediction: add user-defined prediction format
             via the --prediction-line argument
           - item prediction: always obey --relevant-users=FILE and

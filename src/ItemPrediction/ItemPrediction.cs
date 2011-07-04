@@ -250,7 +250,7 @@ class ItemPrediction
 
 			var result = Evaluate();
 			Items.DisplayResults(result);
-			Console.WriteLine(" " + iterative_recommender.NumIter);
+			Console.WriteLine(" iterations " + iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
 			{
@@ -269,12 +269,10 @@ class ItemPrediction
 						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
 					}
 
-					t = Utils.MeasureTime(delegate() {
-						result = Evaluate();
-						Items.DisplayResults(result);
-						Console.WriteLine(" " + i);
-					});
+					t = Utils.MeasureTime(delegate() { result = Evaluate(); });
 					eval_time_stats.Add(t.TotalSeconds);
+					Items.DisplayResults(result);
+					Console.WriteLine(" iterations " + i);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					Predict(prediction_file, relevant_users_file, i);
