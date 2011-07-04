@@ -121,6 +121,7 @@ class ItemPrediction
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
+   --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
 
   options for finding the right number of iterations (MF methods and BPR-Linear)
    --find-iter=N                give out statistics every N iterations
@@ -160,6 +161,7 @@ class ItemPrediction
 		int random_seed               = -1;
 		string prediction_file        = string.Empty;
 		bool online_eval              = false;
+		bool filtered_eval            = false;
 		test_ratio                    = 0;
 
 	   	var p = new OptionSet() {
@@ -191,11 +193,11 @@ class ItemPrediction
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "compute-fit",          v => compute_fit  = v != null },
-			{ "online-evaluation",    v => online_eval  = v != null },
-			{ "help",                 v => show_help    = v != null },
-			{ "version",              v => show_version = v != null },
-
+			{ "compute-fit",          v => compute_fit   = v != null },
+			{ "online-evaluation",    v => online_eval   = v != null },
+			{ "filtered-evaluation",  v => filtered_eval = v != null },
+			{ "help",                 v => show_help     = v != null },
+			{ "version",              v => show_version  = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -211,6 +213,9 @@ class ItemPrediction
 
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
+		
+		if (online_eval && filtered_eval)
+			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -240,7 +245,7 @@ class ItemPrediction
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			var result = Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+			var result = Evaluate();
 			Items.DisplayResults(result);
 			Console.WriteLine(" " + iterative_recommender.NumIter);
 
@@ -256,21 +261,13 @@ class ItemPrediction
 					if (compute_fit)
 					{
 						double fit = 0;
-						t = Utils.MeasureTime(delegate() {
-							fit = iterative_recommender.ComputeFit();
-						});
+						t = Utils.MeasureTime(delegate() { fit = iterative_recommender.ComputeFit(); });
 						fit_time_stats.Add(t.TotalSeconds);
 						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
 					}
 
 					t = Utils.MeasureTime(delegate() {
-						result = Items.Evaluate(
-							recommender,
-						    test_data,
-							training_data,
-						    test_data.AllUsers,
-							relevant_items
-						);
+						result = Evaluate();
 						Items.DisplayResults(result);
 						Console.WriteLine(" " + i);
 					});
@@ -317,7 +314,7 @@ class ItemPrediction
 			    	});
 				else
 					time_span = Utils.MeasureTime( delegate() {
-						var result = Items.Evaluate(recommender, test_data, training_data, test_data.AllUsers, relevant_items);
+						var result = Evaluate();
 						Items.DisplayResults(result);
 			    	});
 				Console.Write(" testing_time " + time_span);
@@ -404,6 +401,11 @@ class ItemPrediction
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
 
+	static Dictionary<string, double> Evaluate()
+	{
+		return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+	}
+	
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
 	{
 		if (prediction_file == string.Empty)
