@@ -5,6 +5,8 @@
           - Eval.ItemPrediction -> ItemRecommendation.Prediction
           - Eval.RatingPredictionEval -> Eval.Ratings
           - Eval.ItemPredictionEval -> Eval.Items
+          - IUserAttributeAwareRecommender: remove set from NumUserAttributes
+          - IItemAttributeAwareRecommender: remove set from NumItemAttributes
         - recommenders
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
