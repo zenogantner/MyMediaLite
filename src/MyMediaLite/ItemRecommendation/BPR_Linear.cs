@@ -45,7 +45,7 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		///
-		public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	private set; }
 
 		// Item attribute weights
 		private Matrix<double> item_attribute_weight_by_user;

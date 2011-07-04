@@ -41,7 +41,7 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		///
-		public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	private set; }
 
 		///
 		public override void Train()

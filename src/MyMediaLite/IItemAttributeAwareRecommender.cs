@@ -27,9 +27,9 @@ namespace MyMediaLite
 		/// <value>an integer stating the number of attributes</value>
 		/// <summary></summary>
 		/// <remarks></remarks>
-		int NumItemAttributes { get; set; }
+		int NumItemAttributes { get; }
 
-		/// <value>The binary item attributes</value>
+		/// <value>the binary item attributes</value>
 		/// <summary></summary>
 		/// <remarks></remarks>
 		SparseBooleanMatrix ItemAttributes { get; set; }
