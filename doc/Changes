@@ -16,10 +16,11 @@
             via the --prediction-line argument
           - item prediction: always obey --relevant-users=FILE and
             --relevant-items=FILE arguments
+          - item prediction: improved error messages
         - evaluation
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
-            filtered according to given attributes
+            filtered according to given attributes: Eval.ItemsFiltered
 
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support

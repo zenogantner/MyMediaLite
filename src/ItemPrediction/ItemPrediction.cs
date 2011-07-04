@@ -46,6 +46,9 @@ class ItemPrediction
 	static IEntityMapping user_mapping = new EntityMapping();
 	static IEntityMapping item_mapping = new EntityMapping();
 
+	// item attributes (currently used for filtered evaluation
+	static SparseBooleanMatrix item_attributes;
+
 	// command-line parameters (data)
 	static string training_file        = null;
 	static string test_file            = null;
@@ -61,6 +64,8 @@ class ItemPrediction
 	static bool compute_fit;
 	static double test_ratio;
 	static int predict_items_number = -1;
+	static bool online_eval;
+	static bool filtered_eval;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -160,8 +165,6 @@ class ItemPrediction
 		string load_model_file        = string.Empty;
 		int random_seed               = -1;
 		string prediction_file        = string.Empty;
-		bool online_eval              = false;
-		bool filtered_eval            = false;
 		test_ratio                    = 0;
 
 	   	var p = new OptionSet() {
@@ -213,7 +216,7 @@ class ItemPrediction
 
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
-		
+
 		if (online_eval && filtered_eval)
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
@@ -347,7 +350,7 @@ class ItemPrediction
 			if (recommender is IUserAttributeAwareRecommender)
 			{
 				if (user_attributes_file == null)
-					Usage("Recommender expects user_attributes=FILE.");
+					Usage("Recommender expects --user-attributes=FILE.");
 				else
 					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 			}
@@ -356,16 +359,23 @@ class ItemPrediction
 			if (recommender is IItemAttributeAwareRecommender)
 			{
 				if (item_attributes_file == null)
-					Usage("Recommender expects item_attributes=FILE.");
+					Usage("Recommender expects --item-attributes=FILE.");
 				else
 					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+			}
+			if (filtered_eval)
+			{
+				if (item_attributes_file == null)
+					Usage("--filtered-evaluation expects --item-attributes=FILE.");
+				else
+					item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 			}
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
 				if (user_relations_file == null)
 				{
-					Usage("Recommender expects user_relation=FILE.");
+					Usage("Recommender expects --user-relation=FILE.");
 				}
 				else
 				{
@@ -377,7 +387,7 @@ class ItemPrediction
 			if (recommender is IItemRelationAwareRecommender)
 				if (user_relations_file == null)
 				{
-					Usage("Recommender expects item_relation=FILE.");
+					Usage("Recommender expects --item-relation=FILE.");
 				}
 				else
 				{
@@ -403,9 +413,12 @@ class ItemPrediction
 
 	static Dictionary<string, double> Evaluate()
 	{
-		return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+		if (filtered_eval)
+			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items);
+		else
+			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
 	}
-	
+
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
 	{
 		if (prediction_file == string.Empty)

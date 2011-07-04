@@ -31,22 +31,22 @@ namespace MyMediaLite.Eval
 	{
 		// TODO generalize more to save code ...
 		// TODO generalize that normal protocol is just an instance of this? Only if w/o performance penalty ...
-		
+
 		static public Dictionary<int, ICollection<int>> GetFilteredItems(int user_id, IPosOnlyFeedback test,
 		                                                                 SparseBooleanMatrix item_attributes)
 		{
 			var filtered_items = new Dictionary<int, ICollection<int>>();
-			
+
 			foreach (int item_id in test.UserMatrix[user_id])
 				foreach (int attribute_id in item_attributes[item_id])
 					if (filtered_items.ContainsKey(attribute_id))
 						filtered_items[attribute_id].Add(item_id);
 					else
 						filtered_items[attribute_id] = new HashSet<int>() { item_id };
-			
+
 			return filtered_items;
 		}
-		
+
 		/// <summary>Evaluation for rankings of filtered items</summary>
 		/// <remarks>
 		/// </remarks>
@@ -69,7 +69,7 @@ namespace MyMediaLite.Eval
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			SparseBooleanMatrix items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();
-			
+
 			// compute evaluation measures
 			double auc_sum     = 0;
 			double map_sum     = 0;
@@ -77,45 +77,57 @@ namespace MyMediaLite.Eval
 			double prec_10_sum = 0;
 			double prec_15_sum = 0;
 			double ndcg_sum    = 0;
-			int num_lists      = 0;
+
+			// for counting the users and the evaluation lists
+			int num_lists = 0;
+			int num_users = 0;
+			int last_user_id = -1;
 
 			foreach (int user_id in relevant_users)
 			{
 				var filtered_items = GetFilteredItems(user_id, test, item_attributes);
-				
+
 				foreach (int attribute_id in filtered_items.Keys)
 				{
 					// TODO optimize this a bit, currently it is quite naive
 					var relevant_filtered_items = new HashSet<int>(items_by_attribute[attribute_id]);
 					relevant_filtered_items.IntersectWith(relevant_items);
-					
+
 					var correct_items = new HashSet<int>(filtered_items[attribute_id]);
 					correct_items.IntersectWith(relevant_filtered_items);
-	
+
 					// the number of items that are really relevant for this user
 					var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
 					relevant_items_in_train.IntersectWith(relevant_filtered_items);
 					int num_eval_items = relevant_filtered_items.Count - relevant_items_in_train.Count();
-	
+
 					// skip all users that have 0 or #relevant_filtered_items test items
 					if (correct_items.Count == 0)
 						continue;
 					if (num_eval_items - correct_items.Count == 0)
 						continue;
-	
+
+					// counting stats
 					num_lists++;
+					if (last_user_id != user_id)
+					{
+						last_user_id = user_id;
+						num_users++;
+					}
+
+					// evaluation
 					int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_filtered_items);
-	
+
 					auc_sum     += Items.AUC(prediction, correct_items, train.UserMatrix[user_id]);
 					map_sum     += Items.MAP(prediction, correct_items, train.UserMatrix[user_id]);
 					ndcg_sum    += Items.NDCG(prediction, correct_items, train.UserMatrix[user_id]);
 					prec_5_sum  += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
 					prec_10_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
 					prec_15_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
-	
-					if (prediction.Length != relevant_items.Count)
+
+					if (prediction.Length != relevant_filtered_items.Count)
 						throw new Exception("Not all items have been ranked.");
-	
+
 					if (num_lists % 1000 == 0)
 						Console.Error.Write(".");
 					if (num_lists % 20000 == 0)
@@ -130,7 +142,8 @@ namespace MyMediaLite.Eval
 			result.Add("prec@5",  prec_5_sum / num_lists);
 			result.Add("prec@10", prec_10_sum / num_lists);
 			result.Add("prec@15", prec_15_sum / num_lists);
-			result.Add("num_users", num_lists);
+			result.Add("num_users", num_users);
+			result.Add("num_lists", num_lists);
 			result.Add("num_items", relevant_items.Count);
 
 			return result;

@@ -42,8 +42,8 @@ namespace MyMediaLite.Eval
 		/// <param name="result">the result dictionary</param>
 		static public void DisplayResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
+			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6} num_lists {7}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]));
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -124,6 +124,7 @@ namespace MyMediaLite.Eval
 			result.Add("prec@10", prec_10_sum / num_users);
 			result.Add("prec@15", prec_15_sum / num_users);
 			result.Add("num_users", num_users);
+			result.Add("num_lists", num_users);
 			result.Add("num_items", relevant_items.Count);
 
 			return result;
