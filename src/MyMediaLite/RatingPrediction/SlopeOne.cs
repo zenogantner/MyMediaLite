@@ -152,11 +152,5 @@ namespace MyMediaLite.RatingPrediction
 				IMatrixUtils.WriteSparseMatrix(writer, freq_matrix);
 			}
 		}
-
-		///
-		public override string ToString()
-		{
-			 return "SlopeOne";
-		}
 	}
 }

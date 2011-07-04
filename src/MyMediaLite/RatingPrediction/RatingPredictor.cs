@@ -152,5 +152,11 @@ namespace MyMediaLite.RatingPrediction
 				MaxItemID--;
 			ratings.RemoveItem(item_id);
 		}
+
+		///
+		public override string ToString()
+		{
+			return this.GetType().Name;
+		}
 	}
 }

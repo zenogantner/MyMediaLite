@@ -47,11 +47,5 @@ namespace MyMediaLite.RatingPrediction
 			else
 				return global_average;
 		}
-
-		///
-		public override string ToString()
-		{
-			return "UserAverage";
-		}
 	}
 }

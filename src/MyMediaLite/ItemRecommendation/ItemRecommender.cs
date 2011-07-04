@@ -125,5 +125,11 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_id == MaxItemID)
 				MaxItemID--;
 		}
+		
+		///
+		public override string ToString()
+		{
+			return this.GetType().Name;
+		}
 	}
 }

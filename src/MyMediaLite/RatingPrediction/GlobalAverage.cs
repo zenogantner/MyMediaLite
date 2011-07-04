@@ -61,11 +61,5 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 		}
-
-		///
-		public override string ToString()
-		{
-			return "GlobalAverage";
-		}
 	}
 }

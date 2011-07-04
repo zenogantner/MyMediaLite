@@ -124,11 +124,5 @@ namespace MyMediaLite.ItemRecommendation
 				this.view_count = view_count;
 			}
 		}
-
-		///
-		public override string ToString()
-		{
-			return "MostPopular";
-		}
 	}
 }

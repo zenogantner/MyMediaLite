@@ -49,8 +49,5 @@ namespace MyMediaLite.ItemRecommendation
 
 		///
 		public override void RemoveItem(int item_id) { /* do nothing */ }
-
-		///
-		public override string ToString() { return "Random"; }
 	}
 }

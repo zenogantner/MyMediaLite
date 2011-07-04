@@ -198,11 +198,5 @@ namespace MyMediaLite.RatingPrediction
 				VectorUtils.WriteVector(writer, user_average);
 			}
 		}
-
-		///
-		public override string ToString()
-		{
-			 return "BipolarSlopeOne";
-		}
 	}
 }

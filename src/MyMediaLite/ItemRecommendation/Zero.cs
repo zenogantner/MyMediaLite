@@ -34,8 +34,5 @@ namespace MyMediaLite.ItemRecommendation
 
 		///
 		public override void LoadModel(string filename) { /* do nothing */ }
-
-		///
-		public override string ToString() { return "Zero"; }
 	}
 }
