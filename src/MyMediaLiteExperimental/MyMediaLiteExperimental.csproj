@@ -54,6 +54,7 @@
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Util\NelderMead.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
+    <Compile Include="Eval\ItemsFiltered.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
