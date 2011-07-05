@@ -66,8 +66,6 @@ class MappingRatingPrediction
 		Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");
 		Console.WriteLine("    - user_attributes=FILE   file containing user attribute information");
 		//Console.WriteLine("    - save_mappings=FILE     save computed mapping model to FILE");
-		Console.WriteLine("    - min_rating=NUM         the smallest valid rating value");
-		Console.WriteLine("    - max_rating=NUM         the greatest valid rating value");
 		Console.WriteLine("    - no_eval=BOOL           don't evaluate, only run the mapping");
 		Console.WriteLine("    - compute_fit=N          compute fit every N iterations");
 		Console.WriteLine("    - prediction_file=FILE   write the rating predictions to  FILE ('-' for STDOUT)");
@@ -87,10 +85,6 @@ class MappingRatingPrediction
 		RecommenderParameters parameters = null;
 		try	{ parameters = new RecommenderParameters(args, 4);	}
 		catch (ArgumentException e)	{ Usage(e.Message); 		}
-
-		// collaborative data characteristics
-		double min_rating           = parameters.GetRemoveDouble( "min_rating",  1);
-		double max_rating           = parameters.GetRemoveDouble( "max_rating",  5);
 
 		// other parameters
 		string data_dir             = parameters.GetRemoveString( "data_dir");
@@ -142,7 +136,7 @@ class MappingRatingPrediction
 		EntityMapping item_mapping = new EntityMapping();
 
 		// training data
-		training_data = MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, trainfile), min_rating, max_rating, user_mapping, item_mapping);
+		training_data = MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -164,7 +158,7 @@ class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = MyMediaLite.IO.RatingPrediction.Read( Path.Combine(data_dir, testfile), min_rating, max_rating, user_mapping, item_mapping );
+        test_data = MyMediaLite.IO.RatingPrediction.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
@@ -174,9 +168,6 @@ class MappingRatingPrediction
 		recommender.MaxUserID = user_mapping.InternalIDs.Max();
 		recommender.MaxItemID = item_mapping.InternalIDs.Max();
 
-		// TODO move that into the recommender functionality (set from data)
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		DisplayDataStats();

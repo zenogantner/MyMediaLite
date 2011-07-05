@@ -105,7 +105,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute global average
 			global_bias = ratings.Average;
-
+			
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
 		}

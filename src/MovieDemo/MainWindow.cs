@@ -51,8 +51,6 @@ public partial class MainWindow : Window
 	RatingPredictor rating_predictor;
 
 	// depends on dataset
-	double min_rating            = 1;
-	double max_rating            = 5;
 	string ratings_file          = "../../../../data/ml1m/ratings.txt";
 	string movie_file            = "../../../../data/ml1m/movies.dat";
 	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
@@ -110,7 +108,7 @@ public partial class MainWindow : Window
 
 		Console.Error.Write("Reading in ratings ... ");
 		TimeSpan time = Utils.MeasureTime(delegate() {
-			recommender.Ratings = RatingPrediction.Read(ratings_file, min_rating, max_rating, user_mapping, item_mapping);
+			recommender.Ratings = RatingPrediction.Read(ratings_file, user_mapping, item_mapping);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
@@ -127,8 +125,6 @@ public partial class MainWindow : Window
 			top_n_movies.Add( movies_by_frequency[i].item_id );
 
 		Console.Error.Write("Loading prediction model ... ");
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating; // TODO this API must be nicer ...
 		recommender.UpdateUsers = true;
 		recommender.UpdateItems = false;
 		recommender.BiasReg = 0.001;
@@ -372,10 +368,10 @@ public partial class MainWindow : Window
 		{
 			double rating = double.Parse(input, CultureInfo.InvariantCulture);
 
-			if (rating > max_rating)
-				rating = max_rating;
-			if (rating < min_rating)
-				rating = min_rating;
+			if (rating > rating_predictor.MaxRating)
+				rating = rating_predictor.MaxRating;
+			if (rating < rating_predictor.MinRating)
+				rating = rating_predictor.MinRating;
 
 			// if rating already exists, remove it first
 			if (ratings.ContainsKey(movie.ID))
@@ -408,7 +404,7 @@ public partial class MainWindow : Window
 			prediction = ratings[movie.ID];
 
 		string text;
-		if (prediction < min_rating)
+		if (prediction < rating_predictor.MinRating)
 			text = "";
 		else if (prediction < 1.5)
 			text = string.Format(CultureInfo.InvariantCulture, "{0,0:0.00} ★", prediction);
@@ -586,7 +582,7 @@ public partial class MainWindow : Window
 
 		using ( var reader = new StreamReader("../../../../saved_data/user-ratings-" + name) )
 		{
-			IRatings user_ratings = RatingPrediction.Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+			IRatings user_ratings = RatingPrediction.Read(reader, user_mapping, item_mapping);
 
 			for (int i = 0; i < user_ratings.Count; i++)
 			{

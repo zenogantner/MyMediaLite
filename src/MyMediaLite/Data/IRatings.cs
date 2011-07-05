@@ -33,6 +33,11 @@ namespace MyMediaLite.Data
 		/// <summary>the maximum item ID in the dataset</summary>
 		int MaxItemID { get; }
 
+		/// <summary>the maximum rating in the dataset</summary>
+		double MaxRating { get; }
+		/// <summary>the minimum rating in the dataset</summary>
+		double MinRating { get; }
+		
 		/// <summary>indices by user</summary>
 		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<IList<int>> ByUser { get; }

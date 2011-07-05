@@ -87,7 +87,7 @@ namespace MyMediaLiteTest
 			// load data from disk
 			var user_mapping = new EntityMapping();
 			var item_mapping = new EntityMapping();
-			var ratings = RatingPrediction.Read("../../../../data/ml100k/u1.base", 1, 5, user_mapping, item_mapping);
+			var ratings = RatingPrediction.Read("../../../../data/ml100k/u1.base", user_mapping, item_mapping);
 						
 			Assert.AreEqual(-0.02855815f, Pearson.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311, 200f), 0.00001);			
 		}

@@ -36,6 +36,8 @@ namespace MyMediaLite.Data
 
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;
+			MaxRating = ratings.MaxRating;
+			MinRating = ratings.MinRating;
 		}
 	}
 }

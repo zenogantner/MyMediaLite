@@ -106,8 +106,6 @@ class RatingPrediction
    --item-relations=FILE                  file containing item relation information
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
-   --min-rating=NUM                       the smallest valid rating value
-   --max-rating=NUM                       the greatest valid rating value
    --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
    --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
                                           and predicted rating, respectively; default is {0}\\t{1}\\t{2}
@@ -153,8 +151,8 @@ class RatingPrediction
 		double mae_cutoff  = double.MaxValue;
 
 		// data characteristics
-		double min_rating  = 1;
-		double max_rating  = 5;
+		//double min_rating  = 1;
+		//double max_rating  = 5;
 
 		// data arguments
 		string data_dir             = string.Empty;
@@ -195,8 +193,6 @@ class RatingPrediction
 			{ "random-seed=",         (int v)        => random_seed          = v },
 			{ "cross-validation=",    (int v)        => cross_validation     = v },
 			// double-valued options
-			{ "min-rating=",          (double v)     => min_rating           = v },
-			{ "max-rating=",          (double v)     => max_rating           = v },
 			{ "epsilon=",             (double v)     => epsilon              = v },
 			{ "rmse-cutoff=",         (double v)     => rmse_cutoff          = v },
 			{ "mae-cutoff=",          (double v)     => mae_cutoff           = v },
@@ -248,10 +244,8 @@ class RatingPrediction
 		}
 
 		// load all the data
-		LoadData(data_dir, min_rating, max_rating, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
+		LoadData(data_dir, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
 
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		if (split_ratio > 0)
@@ -399,7 +393,7 @@ class RatingPrediction
 		Recommender.SaveModel(recommender, save_model_file);
 	}
 
-    static void LoadData(string data_dir, double min_rating, double max_rating,
+    static void LoadData(string data_dir,
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file,
 	                     bool static_data)
@@ -410,10 +404,10 @@ class RatingPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
 			if (file_format == RatingFileFormat.DEFAULT)
-				training_data = static_data ? RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping, rating_type)
-					                        : MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+				training_data = static_data ? RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
+					                        : MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.MOVIELENS_1M)
-				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), min_rating, max_rating, user_mapping, item_mapping);
+				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.KDDCUP_2011)
 				training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
 
@@ -465,9 +459,9 @@ class RatingPrediction
 			if (test_file != null)
 			{
 				if (file_format == RatingFileFormat.MOVIELENS_1M)
-					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping);
+					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else
-					test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), min_rating, max_rating, user_mapping, item_mapping, rating_type);
+					test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
 				// TODO add KDD Cup
 			}
 		});

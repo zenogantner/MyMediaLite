@@ -72,6 +72,11 @@ namespace MyMediaLite.Data
 		public int MaxItemID { get; protected set; }
 
 		///
+		public double MaxRating { get; protected set; }
+		///
+		public double MinRating { get; protected set; }
+		
+		///
 		public IList<IList<int>> ByUser
 		{
 			get {
@@ -365,10 +370,15 @@ namespace MyMediaLite.Data
 
 			int pos = Users.Count - 1;
 
+			// TODO maybe avoid for fast reading
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
+			if (rating < MinRating)
+				MinRating = rating;
+			if (rating > MaxRating)
+				MaxRating = rating;
 
 			// update index data structures if necessary
 			if (by_user != null)

@@ -55,8 +55,16 @@ namespace MyMediaLite.RatingPrediction
 		public bool UpdateItems { get; set; }
 
 		/// <summary>The rating data</summary>
-		public virtual IRatings Ratings { get { return ratings; } set { ratings = value; } }
-
+		public virtual IRatings Ratings
+		{
+			get { return ratings; }
+			set {
+				ratings = value;
+				
+				MinRating = ratings.MinRating;
+				MaxRating = ratings.MaxRating;
+			}
+		}
 		/// <summary>rating data</summary>
 		protected IRatings ratings;
 

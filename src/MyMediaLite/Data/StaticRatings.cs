@@ -59,9 +59,13 @@ namespace MyMediaLite.Data
 
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
-
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
+			
+			if (rating > MaxRating)
+				MaxRating = rating;
+			if (rating < MinRating)
+				MinRating = rating;			
 			
 			pos++;
 		}

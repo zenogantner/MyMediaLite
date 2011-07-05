@@ -17,11 +17,15 @@
         - command-line tools
           - --find-iter=N: explicitly state that the last number refers to the
             number of iterations computed so far
-          - rating prediction: add user-defined prediction format
-            via the --prediction-line argument
-          - item prediction: always obey --relevant-users=FILE and
-            --relevant-items=FILE arguments
-          - item prediction: improved error messages
+          - rating prediction:
+            - add user-defined prediction format via the --prediction-line
+              argument
+            - get rid of --min-rating and --max-rating, it is now automatically
+              read from the data
+          - item prediction:
+            - always obey --relevant-users=FILE and --relevant-items=FILE
+              arguments
+            - improved error messages
         - evaluation
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets

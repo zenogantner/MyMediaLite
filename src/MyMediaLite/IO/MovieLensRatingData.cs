@@ -30,33 +30,28 @@ namespace MyMediaLite.IO
 	{
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
-		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
-		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, double min_rating, double max_rating, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			if (filename.Equals("-"))
-				return Read(Console.In, min_rating, max_rating, user_mapping, item_mapping);
+				return Read(Console.In, user_mapping, item_mapping);
 			else
 				using ( var reader = new StreamReader(filename) )
-					return Read(reader, min_rating, max_rating, user_mapping, item_mapping);
+					return Read(reader, user_mapping, item_mapping);
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
-		/// <param name="min_rating">the lowest possible rating value, warn on out of range ratings</param>
-		/// <param name="max_rating">the highest possible rating value, warn on out of range ratings</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(TextReader reader,	double min_rating, double max_rating, IEntityMapping user_mapping, IEntityMapping item_mapping)
+			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var ratings = new Ratings();
 
-			bool out_of_range_warning_issued = false;
 			var separators = new string[] { "::" };
 			string line;
 
@@ -70,14 +65,6 @@ namespace MyMediaLite.IO
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-
-				if (!out_of_range_warning_issued)
-					if (rating > max_rating || rating < min_rating)
-					{
-						Console.Error.WriteLine("WARNING: rating value out of range [{0}, {1}]: {2} for user {3}, item {4}",
-												min_rating, max_rating, rating, user_id, item_id);
-						out_of_range_warning_issued = true;
-					}
 
 				ratings.Add(user_id, item_id, rating);
 			}
