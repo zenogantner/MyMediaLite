@@ -346,7 +346,7 @@ namespace MyMediaLite.Util
 			var result = new List<string>();
 
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
-				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType)
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
 				{
 					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Recommender.CreateRatingPredictor(type) : (IRecommender) Recommender.CreateItemRecommender(type);
 
