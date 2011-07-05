@@ -495,7 +495,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected void CheckSampling()
+		protected void CheckSampling() // TODO more descriptive name
 		{
 			try
 			{
