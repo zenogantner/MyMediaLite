@@ -8,19 +8,14 @@ public class RatingPrediction
 {
 	public static void Main(string[] args)
 	{
-		double min_rating = 1;
-		double max_rating = 5;
-		
 		// load the data
 		var user_mapping = new EntityMapping();
 		var item_mapping = new EntityMapping();
-		var training_data = MyMediaLite.IO.RatingPrediction.Read(args[0], min_rating, max_rating, user_mapping, item_mapping);
-		var test_data = MyMediaLite.IO.RatingPrediction.Read(args[1], min_rating, max_rating, user_mapping, item_mapping);
+		var training_data = MyMediaLite.IO.RatingPrediction.Read(args[0], user_mapping, item_mapping);
+		var test_data = MyMediaLite.IO.RatingPrediction.Read(args[1], user_mapping, item_mapping);
 
 		// set up the recommender
 		var recommender = new UserItemBaseline();
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating;
 		recommender.Ratings = training_data;
 		recommender.Train();
 
