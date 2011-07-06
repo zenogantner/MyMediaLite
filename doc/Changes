@@ -30,6 +30,9 @@
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
             filtered according to given attributes: Eval.ItemsFiltered
+        - misc
+          - MatrixUtils: rename RowInitNormal(m, d, d) to InitNormal() - "row"
+            made no sense here
 
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support

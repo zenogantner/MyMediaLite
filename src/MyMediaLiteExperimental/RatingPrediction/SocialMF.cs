@@ -62,8 +62,8 @@ namespace MyMediaLite.RatingPrediction
 			// init latent factor matrices
 	       	user_factors = new Matrix<double>(NumUsers, NumFactors);
 	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
-	       	MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev);
-	       	MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
+	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
 			// init biases
 			user_bias = new double[NumUsers];
 			item_bias = new double[ratings.MaxItemID + 1];

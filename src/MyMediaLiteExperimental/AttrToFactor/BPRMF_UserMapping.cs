@@ -79,7 +79,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.RowInitNormal(attribute_to_factor, InitMean, InitStdev);
+				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxUserID; i++)

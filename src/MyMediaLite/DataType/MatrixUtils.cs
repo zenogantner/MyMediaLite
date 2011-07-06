@@ -55,7 +55,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stdev">the standard deviation of the normal distribution</param>
-		static public void RowInitNormal(Matrix<double> matrix, double mean, double stdev)
+		static public void InitNormal(Matrix<double> matrix, double mean, double stdev)
 		{
 			var rnd = Util.Random.GetInstance();
 			for (int i = 0; i < matrix.dim1; i++)
