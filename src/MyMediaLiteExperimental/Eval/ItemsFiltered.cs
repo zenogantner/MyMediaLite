@@ -1,5 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner, Steffen Rendle
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -32,6 +31,11 @@ namespace MyMediaLite.Eval
 		// TODO generalize more to save code ...
 		// TODO generalize that normal protocol is just an instance of this? Only if w/o performance penalty ...
 
+		/// <summary>For a given user and the test dataset, return a dictionary of items filtered by attributes</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="test">the test dataset</param>
+		/// <param name="item_attributes"></param>
+		/// <returns>a dictionary containing a mapping from attribute IDs to collections of item IDs</returns>
 		static public Dictionary<int, ICollection<int>> GetFilteredItems(int user_id, IPosOnlyFeedback test,
 		                                                                 SparseBooleanMatrix item_attributes)
 		{
