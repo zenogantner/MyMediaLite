@@ -1,13 +1,5 @@
 Recommender functionality
- - add association rules from sequin: http://sequin.codeplex.com/
  - BMF: consider to make bold_driver the default
- - completely automated hyperparameter search
-   - for item prediction
-   - learning rate search
- - add filtering mechanism (pre-filter, post-filter)
- - support for non-binary attributes: real, nominal, textual descriptions
- - directly support MovieLens u.item and u.user files
- - support for more relation types: weighted, ternary, multiple relations
  - additional recommenders
    - memory: just give out ratings in the training set, exception otherwise
    - non-negative matrix factorization
@@ -24,7 +16,6 @@ Recommender functionality
  - time-aware rating and item prediction
    - timeSVD++
  - item recommender: add explicit top-n recommendation method to API
- - new recommender types: TagRecommender, ContextAwareRecommender, SequentialRecommender
  - ensembles
    - ranking ensembles
    - stacking ensembles
@@ -128,5 +119,3 @@ Documentation/website
    - Java (via IKVM or JaCIL), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - JavaScript -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
  - glossary where we explain commonly used terms
-Distribution
- - package for Debian, Fedora and nuget
