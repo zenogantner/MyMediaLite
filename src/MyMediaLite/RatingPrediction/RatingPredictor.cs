@@ -60,7 +60,8 @@ namespace MyMediaLite.RatingPrediction
 			get { return ratings; }
 			set {
 				ratings = value;
-				
+				MaxUserID = Math.Max(ratings.MaxUserID, MaxUserID);
+				MaxItemID = Math.Max(ratings.MaxItemID, MaxItemID);
 				MinRating = ratings.MinRating;
 				MaxRating = ratings.MaxRating;
 			}
@@ -83,17 +84,6 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public abstract double Predict(int user_id, int item_id);
-
-		/// <summary>Inits the recommender model</summary>
-		/// <remarks>
-		/// This method is called by the Train() method.
-		/// When overriding, please call base.InitModel() to get the functions performed in the base class.
-		/// </remarks>
-		protected virtual void InitModel()
-		{
-			MaxUserID = Ratings.MaxUserID;
-			MaxItemID = Ratings.MaxItemID;
-		}
 
 		///
 		public abstract void Train();

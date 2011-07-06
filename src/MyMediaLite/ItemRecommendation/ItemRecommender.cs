@@ -42,8 +42,8 @@ namespace MyMediaLite.ItemRecommendation
 			get { return this.feedback; }
 			set {
 				this.feedback = value;
-				MaxUserID = feedback.MaxUserID;
-				MaxItemID = feedback.MaxItemID;
+				MaxUserID = Math.Max(feedback.MaxUserID, MaxUserID);
+				MaxItemID = Math.Max(feedback.MaxItemID, MaxItemID);
 			}
 		}
 		IPosOnlyFeedback feedback;
@@ -53,7 +53,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return this.MemberwiseClone();
 		}
-		
+
 		///
 		public abstract double Predict(int user_id, int item_id);
 
@@ -125,7 +125,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_id == MaxItemID)
 				MaxItemID--;
 		}
-		
+
 		///
 		public override string ToString()
 		{

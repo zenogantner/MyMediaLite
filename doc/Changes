@@ -12,7 +12,9 @@
             SaveModel()
           - merge functionality of BiasedMatrixFactorizationMAE into
             BiasedMatrixFactorization
+          - RatingPredictor: get rid of InitModel() method
           - SlopeOne: get rid of unnecessary String.Format() call
+          - UserItemBaseline: fixed incorrect item ID check
           - simple recommenders: avoid reimplementation of ToString() method
         - command-line tools
           - --find-iter=N: explicitly state that the last number refers to the

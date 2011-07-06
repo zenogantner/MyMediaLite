@@ -148,10 +148,8 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void InitModel()
+		void InitModel()
 		{
-			base.InitModel();
-
 			// create data structure
 			diff_matrix_like = new SkewSymmetricSparseMatrix(MaxItemID + 1);
 			freq_matrix_like = new SymmetricSparseMatrix<int>(MaxItemID + 1);

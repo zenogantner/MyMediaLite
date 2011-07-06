@@ -86,11 +86,9 @@ namespace MyMediaLite.RatingPrediction
 			InitStdev = 0.1;
 		}
 
-		/// <summary>Initialize the model data structure</summary>
-		protected override void InitModel()
+		///
+		public override void Train()
 		{
-			base.InitModel();
-
 			// init factor matrices
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
@@ -99,12 +97,6 @@ namespace MyMediaLite.RatingPrediction
 			global_effects.Ratings = Ratings;
 			global_effects.MinRating = MinRating;
 			global_effects.MaxRating = MaxRating;
-		}
-
-		///
-		public override void Train()
-		{
-			InitModel();
 
 			global_effects.Train();
 			global_bias = Ratings.Average;
@@ -193,7 +185,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
-		/// If the user or the item are not known to the recommender, the global average is returned.
+		/// If the user or the item are not known to the recommender, the global effects prediction is returned.
 		/// To avoid this behavior for unknown entities, use CanPredict() to check before.
 		/// </remarks>
 		/// <param name="user_id">the user ID</param>
@@ -201,10 +193,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the predicted rating</returns>
 		public override double Predict(int user_id, int item_id)
 		{
-			if (user_id >= user_factors.dim1)
-				return global_bias;
-			if (item_id >= item_factors.dim1)
-				return global_bias;
+			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
+				return global_effects.Predict(user_id, item_id);
 
 			double result = global_effects.Predict(user_id, item_id) + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 

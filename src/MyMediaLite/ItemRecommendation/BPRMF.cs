@@ -107,8 +107,6 @@ namespace MyMediaLite.ItemRecommendation
 			base.InitModel();
 
 			item_bias = new double[MaxItemID + 1];
-
-			CheckSampling(); // TODO rename
 		}
 
 		///
@@ -116,6 +114,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 
+			CheckSampling();
+			
 			random = Util.Random.GetInstance(); // TODO move to training
 
 			if (BoldDriver)

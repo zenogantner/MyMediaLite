@@ -54,7 +54,6 @@ namespace MyMediaLite.ItemRecommendation
 			InitStdev = 0.1;
 		}
 
-		// TODO push upwards in class hierarchy
 		///
 		protected virtual void InitModel()
 		{

@@ -44,16 +44,6 @@ namespace MyMediaLite.RatingPrediction
 		private double global_average;
 
 		///
-		protected override void InitModel()
-		{
-			base.InitModel();
-
-			// create data structure
-			diff_matrix = new SkewSymmetricSparseMatrix(MaxItemID + 1);
-			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
-		}
-
-		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
@@ -90,6 +80,12 @@ namespace MyMediaLite.RatingPrediction
 				return global_average;
 
 			return (double) prediction / frequency;
+		}
+
+		void InitModel()
+		{
+			diff_matrix = new SkewSymmetricSparseMatrix(MaxItemID + 1);
+			freq_matrix = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 		}
 
 		///
