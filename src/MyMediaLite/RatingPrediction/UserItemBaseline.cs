@@ -65,18 +65,10 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void InitModel()
-		{
-			base.InitModel();
-
-			user_biases = new double[MaxUserID + 1];
-			item_biases = new double[MaxItemID + 1];
-		}
-
-		///
 		public override void Train()
 		{
-			InitModel();
+			user_biases = new double[MaxUserID + 1];
+			item_biases = new double[MaxItemID + 1];
 
 			global_average = Ratings.Average;
 
@@ -124,7 +116,7 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int user_id, int item_id)
 		{
 			double user_bias = (user_id < user_biases.Length && user_id >= 0) ? user_biases[user_id] : 0;
-			double item_bias = (item_id < user_biases.Length && item_id >= 0) ? item_biases[item_id] : 0;
+			double item_bias = (item_id < item_biases.Length && item_id >= 0) ? item_biases[item_id] : 0;
 			double result = global_average + user_bias + item_bias;
 
 			if (result > MaxRating)
@@ -216,8 +208,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			base.InitModel();
-
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
