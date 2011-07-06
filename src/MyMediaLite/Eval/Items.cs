@@ -130,6 +130,7 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
+		// TODO consider micro- (by item) and macro-averaging (by user, the current thing)
 		/// <summary>Online evaluation for rankings of items</summary>
 		/// <remarks>
 		/// </remarks>
@@ -203,9 +204,9 @@ namespace MyMediaLite.Eval
 			foreach (string measure in Measures)
 				results[measure] /= results_by_user.Count;
 
-
 			results["num_users"] = results_by_user.Count;
 			results["num_items"] = relevant_items.Count;
+			results["num_lists"] = test.Count; // FIXME this is not exact
 
 			return results;
 		}
