@@ -117,15 +117,15 @@ namespace MyMediaLite.Eval
 			}
 
 			var result = new Dictionary<string, double>();
-			result.Add("AUC",     auc_sum / num_users);
-			result.Add("MAP",     map_sum / num_users);
-			result.Add("NDCG",    ndcg_sum / num_users);
-			result.Add("prec@5",  prec_5_sum / num_users);
-			result.Add("prec@10", prec_10_sum / num_users);
-			result.Add("prec@15", prec_15_sum / num_users);
-			result.Add("num_users", num_users);
-			result.Add("num_lists", num_users);
-			result.Add("num_items", relevant_items.Count);
+			result["AUC"]       = auc_sum / num_users;
+			result["MAP"]       = map_sum / num_users;
+			result["NDCG"]      = ndcg_sum / num_users;
+			result["prec@5"]    = prec_5_sum / num_users;
+			result["prec@10"]   = prec_10_sum / num_users;
+			result["prec@15"]   = prec_15_sum / num_users;
+			result["num_users"] = num_users;
+			result["num_lists"] = num_users;
+			result["num_items"] = relevant_items.Count;
 
 			return result;
 		}

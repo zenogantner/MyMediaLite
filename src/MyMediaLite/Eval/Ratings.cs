@@ -74,9 +74,9 @@ namespace MyMediaLite.Eval
 			rmse = Math.Sqrt(rmse / ratings.Count);
 
 			var result = new Dictionary<string, double>();
-			result.Add("RMSE", rmse);
-			result.Add("MAE",  mae);
-			result.Add("NMAE", mae / (recommender.MaxRating - recommender.MinRating));
+			result["RMSE"] = rmse;
+			result["MAE"]  = mae;
+			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
 			return result;
 		}
 
@@ -111,9 +111,9 @@ namespace MyMediaLite.Eval
 			rmse = Math.Sqrt(rmse / ratings.Count);
 
 			var result = new Dictionary<string, double>();
-			result.Add("RMSE", rmse);
-			result.Add("MAE",  mae);
-			result.Add("NMAE", mae / (recommender.MaxRating - recommender.MinRating));
+			result["RMSE"] = rmse;
+			result["MAE"]  = mae;
+			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
 			return result;
 		}
 
