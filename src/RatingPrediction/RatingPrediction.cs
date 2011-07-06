@@ -274,7 +274,7 @@ class RatingPrediction
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
 			MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data));
-			Console.WriteLine(" iterations " + iterative_recommender.NumIter);
+			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
 			{
@@ -300,7 +300,7 @@ class RatingPrediction
 					eval_time_stats.Add(time.TotalSeconds);
 					MyMediaLite.Eval.Ratings.DisplayResults(results);
 					rmse_eval_stats.Add(results["RMSE"]);
-					Console.WriteLine(" iterations " + i);
+					Console.WriteLine(" iteration " + i);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
