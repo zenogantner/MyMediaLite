@@ -5,8 +5,8 @@ THIS_DIR=`pwd`/tests
 
 cd src/ItemPrediction/bin/Debug/
 
-echo "This may take about 15 minutes ..."
-echo "Do not take the results serious - we do not use the best hyperparameters here"
+echo "This may take about 18 minutes ..."
+echo "Do not take the results too serious - we do not use the best hyperparameters here"
 
 echo
 echo "Tiny example dataset"

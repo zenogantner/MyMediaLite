@@ -2,7 +2,7 @@
 
 PROGRAM="mono --debug RatingPrediction.exe"
 
-echo "This will take about 7 minutes ..."
+echo "This will take about 6 minutes ..."
 
 echo ""
 echo "MovieLens 1M"
