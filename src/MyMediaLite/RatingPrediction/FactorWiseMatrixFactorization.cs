@@ -93,12 +93,10 @@ namespace MyMediaLite.RatingPrediction
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
 
-			// init global effects model
+			// init+train global effects model
 			global_effects.Ratings = Ratings;
-			global_effects.MinRating = MinRating;
-			global_effects.MaxRating = MaxRating;
-
 			global_effects.Train();
+
 			global_bias = Ratings.Average;
 
 			// initialize learning data structure
@@ -224,6 +222,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			global_effects.LoadModel(filename + "-global-effects");
+			global_effects.Ratings = Ratings;
 
 			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
 			{
