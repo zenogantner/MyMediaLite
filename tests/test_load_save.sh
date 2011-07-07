@@ -7,7 +7,7 @@ DATA_DIR=../../../../data/ml100k
 
 cd src/RatingPrediction/bin/Debug/
 
-echo "This will take about 5 minutes ..."
+echo "This will take about 10 minutes ..."
 
 echo
 echo "rating predictors"
