@@ -128,7 +128,7 @@ class ItemPrediction
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
 
-  options for finding the right number of iterations (MF methods and BPR-Linear)
+  options for finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
    --max-iter=N                 perform at most N iterations
    --auc-cutoff=NUM             abort if AUC is below NUM

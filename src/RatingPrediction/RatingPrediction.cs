@@ -116,7 +116,7 @@ class RatingPrediction
    --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
    --search-hp                            search for good hyperparameter values (experimental)
 
-  options for finding the right number of iterations (MF methods)
+  options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --max-iter=N                   perform at most N iterations
    --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
