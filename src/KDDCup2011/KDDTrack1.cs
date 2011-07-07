@@ -118,9 +118,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
-		double min_rating = 0;
-		double max_rating = 100;
-
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 
@@ -161,9 +158,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		cross_validation = parameters.GetRemoveInt32(  "cross_validation", 0);
 		good_rating_prob = parameters.GetRemoveBool(   "good_rating_prob", false);
 
-		if (good_rating_prob)
-			max_rating = 1;
-
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
@@ -182,8 +176,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 		recommender.Ratings = training_ratings;
 
-		recommender.MinRating = min_rating;
-		recommender.MaxRating = max_rating;
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		if (load_model_file != string.Empty)
