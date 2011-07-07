@@ -150,10 +150,6 @@ class RatingPrediction
 		double rmse_cutoff = double.MaxValue;
 		double mae_cutoff  = double.MaxValue;
 
-		// data characteristics
-		//double min_rating  = 1;
-		//double max_rating  = 5;
-
 		// data arguments
 		string data_dir             = string.Empty;
 		string user_attributes_file = string.Empty;
