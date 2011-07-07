@@ -64,7 +64,7 @@ namespace MyMediaLite.Util
 			SaveModel(recommender, filename + "-it-" + iteration);
 		}
 
-		/// <summary>Load the model parameters of a recommender (in a given iteration of the training) from a file</summary>
+		/// <summary>Load the model parameters of a recommender from a file</summary>
 		/// <remarks>
 		/// Does not load model if filename is an empty string.
 		/// </remarks>
@@ -72,11 +72,38 @@ namespace MyMediaLite.Util
 		/// <param name="filename">the filename template</param>
 		public static void LoadModel(IRecommender recommender, string filename)
 		{
-			if (filename  == string.Empty)
+			if (filename == string.Empty)
 				return;
 
 			Console.Error.WriteLine("Load model from {0}", filename);
 			recommender.LoadModel(filename);
+		}
+
+		/// <summary>Load a recommender from a file, including object creation</summary>
+		/// <param name="filename">the name of the model file</param>
+		/// <returns>the recommender loaded from the file</returns>
+		public static IRecommender Load(string filename)
+		{
+			IRecommender recommender;
+			string type_name;
+
+			using (var reader = new StreamReader(filename))
+			{
+				if (reader.EndOfStream)
+					throw new IOException("Unexpected end of file " + filename);
+				type_name = reader.ReadLine();
+			}
+
+			if (type_name.StartsWith("MyMediaLite.RatingPrediction."))
+				recommender = CreateRatingPredictor(type_name);
+			else if (type_name.StartsWith("MyMediaLite.ItemRecommendation."))
+				recommender = CreateItemRecommender(type_name);
+			else
+				throw new Exception(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
+
+			recommender.LoadModel(filename);
+
+			return recommender;
 		}
 
 		/// <summary>Get a reader object to read in model parameters of a recommender</summary>

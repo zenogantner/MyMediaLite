@@ -35,6 +35,9 @@
         - misc
           - MatrixUtils: rename RowInitNormal(m, d, d) to InitNormal() - "row"
             made no sense here
+          - Utils.Recommender: add Load(filename) method that creates a
+            recommender object of the appropriate type and loads the model from
+            file
 
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support
