@@ -13,7 +13,7 @@ DATA_DIR=../../../../data/ml1m
  
 cd src/RatingPrediction/bin/Debug/
  
-for method in MatrixFactorization BiasedMatrixFactorization
+for method in MatrixFactorization BiasedMatrixFactorization FactorWiseMatrixFactorization
 do
        echo $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
             $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
