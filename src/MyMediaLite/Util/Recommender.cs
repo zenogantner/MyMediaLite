@@ -95,12 +95,14 @@ namespace MyMediaLite.Util
 			}
 
 			if (type_name.StartsWith("MyMediaLite.RatingPrediction."))
-				recommender = CreateRatingPredictor(type_name);
+				recommender = CreateRatingPredictor(type_name.Substring("MyMediaLite.RatingPrediction.".Length));
 			else if (type_name.StartsWith("MyMediaLite.ItemRecommendation."))
-				recommender = CreateItemRecommender(type_name);
+				recommender = CreateItemRecommender(type_name.Substring("MyMediaLite.ItemRecommendation.".Length));
 			else
 				throw new Exception(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
 
+			Console.WriteLine(recommender.ToString());
+			
 			recommender.LoadModel(filename);
 
 			return recommender;
