@@ -8,6 +8,7 @@
           - IUserAttributeAwareRecommender: remove set from NumUserAttributes
           - IItemAttributeAwareRecommender: remove set from NumItemAttributes
         - recommenders
+          - BPRMF: speed up training by about 5% for higher num_factors
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
           - merge functionality of BiasedMatrixFactorizationMAE into

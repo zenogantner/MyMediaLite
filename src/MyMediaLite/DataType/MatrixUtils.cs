@@ -180,6 +180,7 @@ namespace MyMediaLite.DataType
 		/// <returns>the scalar product of row i of matrix1 and row j of matrix2</returns>
 		static public double RowScalarProduct(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
 		{
+			// TODO replace by assertion
 			if (i >= matrix1.dim1)
 				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
 			if (j >= matrix2.dim1)
@@ -191,6 +192,62 @@ namespace MyMediaLite.DataType
 			double result = 0;
 			for (int c = 0; c < matrix1.dim2; c++)
 				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
+
+			return result;
+		}
+		// TODO unit tests
+
+		/// <summary>Compute the difference vector between two rows of two matrices</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <returns>the difference vector of row i of matrix1 and row j of matrix2</returns>
+		static public IList<double> RowDifference(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
+		{
+			// TODO replace by assertion
+			if (i >= matrix1.dim1)
+				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
+
+			var result = new double[matrix1.dim2];
+			for (int c = 0; c < matrix1.dim2; c++)
+				result[c] = matrix1.data[i * matrix1.dim2 + c] - matrix2.data[j * matrix2.dim2 + c];
+
+			return result;
+		}
+		// TODO unit tests
+
+		/// <summary>Compute the scalar product of a matrix row with the difference vector of two other matrix rows</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <param name="matrix3">the third matrix</param>
+		/// <param name="k">the third row ID</param>///
+		/// <returns>see summary</returns>
+		static public double RowScalarProductWithRowDifference(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j, Matrix<double> matrix3, int k)
+		{
+			// TODO replace by assertion
+			if (i >= matrix1.dim1)
+				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+			if (k >= matrix3.dim1)
+				throw new ArgumentException("k too big: " + k + ", dim1 is " + matrix3.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (2) " + matrix2.dim2);
+			if (matrix1.dim2 != matrix3.dim2)
+				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (3) " + matrix3.dim2);
+
+			double result = 0;
+			for (int c = 0; c < matrix1.dim2; c++)
+				result += matrix1.data[i * matrix1.dim2 + c] * (matrix2.data[j * matrix2.dim2 + c] - matrix3.data[k * matrix3.dim2 + c]);
 
 			return result;
 		}

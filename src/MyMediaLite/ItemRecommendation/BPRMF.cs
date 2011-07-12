@@ -115,7 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 			InitModel();
 
 			CheckSampling();
-			
+
 			random = Util.Random.GetInstance(); // TODO move to training
 
 			if (BoldDriver)
@@ -265,7 +265,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
 		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = Predict(u, i) - Predict(u, j);
+			double x_uij = item_bias[i] - item_bias[j] + MatrixUtils.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
