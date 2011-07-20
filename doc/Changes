@@ -33,6 +33,8 @@
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
             filtered according to given attributes: Eval.ItemsFiltered
+        - examples
+          - fix KDD Cup examples (reported by Subramanyeshwar Cherukuri)
         - misc
           - MatrixUtils: rename RowInitNormal(m, d, d) to InitNormal() - "row"
             made no sense here
