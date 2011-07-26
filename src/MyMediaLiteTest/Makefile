@@ -99,7 +99,8 @@ EXTRAS = \
 REFERENCES =  \
 	../MyMediaLite/bin/Debug/MyMediaLite.dll \
 	-pkg:nunit \
-	System.Core
+	System.Core \
+	System.Data
 
 DLL_REFERENCES = 
 
