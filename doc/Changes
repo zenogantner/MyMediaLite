@@ -1,5 +1,4 @@
 1.04	2011-07-?
-	- web service API
         - API changes
           - Eval.RatingPrediction -> RatingPrediction.Prediction
           - Eval.ItemPrediction -> ItemRecommendation.Prediction
@@ -41,6 +40,8 @@
           - Utils.Recommender: add Load(filename) method that creates a
             recommender object of the appropriate type and loads the model from
             file
+          - packaging: add missing lib/ directory to source package (reported
+            by Artus Krohn-Grimberghe)
 
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support
