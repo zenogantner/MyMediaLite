@@ -27,6 +27,21 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class StaticByteRatingsTest
 	{
+		[Test()] public void TestMinRatingMaxRating()
+		{
+			var ratings = new StaticByteRatings(7);
+			ratings.Add(1, 4, 3);
+			ratings.Add(1, 8, 2);
+			ratings.Add(2, 4, 2);
+			ratings.Add(2, 2, 6);
+			ratings.Add(2, 5, 4);
+			ratings.Add(3, 7, 2);
+			ratings.Add(6, 3, 3);
+
+			Assert.AreEqual(6, ratings.MaxRating);
+			Assert.AreEqual(2, ratings.MinRating);
+		}
+
 		[Test()]
 		[ExpectedException(typeof(KeyNotFoundException))]
 		public void TestFull()

@@ -27,6 +27,21 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class StaticRatingsTest
 	{
+		[Test()] public void TestMinRatingMaxRating()
+		{
+			var ratings = new StaticRatings(7);
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
+
+			Assert.AreEqual(0.6, ratings.MaxRating);
+			Assert.AreEqual(0.2, ratings.MinRating);
+		}
+
 		[Test()]
 		[ExpectedException(typeof(Exception))]
 		public void TestFull()

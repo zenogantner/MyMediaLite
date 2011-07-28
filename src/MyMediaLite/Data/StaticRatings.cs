@@ -23,22 +23,22 @@ namespace MyMediaLite.Data
 	/// <summary>Array-based storage for rating data.</summary>
 	/// <remarks>
 	/// Very memory-efficient.
-	/// 
+	///
 	/// This data structure does NOT support incremental updates.
 	/// </remarks>
 	public class StaticRatings : Ratings
 	{
 		// TODO for better performance, build array-based indices
-		
+
 		/// <summary>The position where the next rating will be stored</summary>
 		protected int pos = 0;
 
 		///
 		public override int Count { get { return pos; } }
-		
+
 		///
 		public StaticRatings() { }
-		
+
 		///
 		public StaticRatings(int size)
 		{
@@ -52,7 +52,7 @@ namespace MyMediaLite.Data
 		{
 			if (pos == Values.Count)
 				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
-			
+
 			Users[pos]  = user_id;
 			Items[pos]  = item_id;
 			Values[pos] = rating;
@@ -61,21 +61,21 @@ namespace MyMediaLite.Data
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
-			
+
 			if (rating > MaxRating)
 				MaxRating = rating;
 			if (rating < MinRating)
-				MinRating = rating;			
-			
+				MinRating = rating;
+
 			pos++;
 		}
-		
+
 		///
 		public override void RemoveAt(int index)
 		{
 			throw new NotSupportedException();
 		}
-		
+
 		///
 		public override void RemoveUser(int user_id)
 		{
@@ -86,7 +86,7 @@ namespace MyMediaLite.Data
 		public override void RemoveItem(int item_id)
 		{
 			throw new NotSupportedException();
-		}		
+		}
 	}
 }
 
