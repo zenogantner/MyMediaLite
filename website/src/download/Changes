@@ -1,3 +1,48 @@
+1.04	2011-07-?
+        - API changes
+          - Eval.RatingPrediction -> RatingPrediction.Prediction
+          - Eval.ItemPrediction -> ItemRecommendation.Prediction
+          - Eval.RatingPredictionEval -> Eval.Ratings
+          - Eval.ItemPredictionEval -> Eval.Items
+          - IUserAttributeAwareRecommender: remove set from NumUserAttributes
+          - IItemAttributeAwareRecommender: remove set from NumItemAttributes
+        - recommenders
+          - BPRMF: speed up training by about 5% for higher num_factors
+          - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
+            SaveModel()
+          - merge functionality of BiasedMatrixFactorizationMAE into
+            BiasedMatrixFactorization
+          - RatingPredictor: get rid of InitModel() method
+          - SlopeOne: get rid of unnecessary String.Format() call
+          - UserItemBaseline: fixed incorrect item ID check
+          - simple recommenders: avoid reimplementation of ToString() method
+        - command-line tools
+          - --find-iter=N: explicitly state that the last number refers to the
+            number of iterations computed so far
+          - rating prediction:
+            - add user-defined prediction format via the --prediction-line
+              argument
+            - get rid of --min-rating and --max-rating, it is now automatically
+              read from the data
+          - item prediction:
+            - always obey --relevant-users=FILE and --relevant-items=FILE
+              arguments
+            - improved error messages
+        - evaluation
+          - add "filtered evaluation" protocol for item recommendation:
+            for every user, compute recommendation quality for item sets
+            filtered according to given attributes: Eval.ItemsFiltered
+        - examples
+          - fix KDD Cup examples (reported by Subramanyeshwar Cherukuri)
+        - misc
+          - MatrixUtils: rename RowInitNormal(m, d, d) to InitNormal() - "row"
+            made no sense here
+          - Utils.Recommender: add Load(filename) method that creates a
+            recommender object of the appropriate type and loads the model from
+            file
+          - packaging: add missing lib/ directory to source package (reported
+            by Artus Krohn-Grimberghe)
+
 1.03	2011-06-22
         - IMPORTANT ANNOUNCEMENT: This may be the last version to support
           Mono 2.6. If you use MyMediaLite and rely on running it on Mono 2.6,
