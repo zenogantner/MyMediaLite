@@ -24,6 +24,9 @@
               argument
             - get rid of --min-rating and --max-rating, it is now automatically
               read from the data
+            - rename --split-ratio to --test-ratio: more intuitive, and
+              consistent with the item prediction tool
+            - fix bug that suppressed evaluation with --test-ratio
           - item prediction:
             - always obey --relevant-users=FILE and --relevant-items=FILE
               arguments
