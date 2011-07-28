@@ -64,6 +64,8 @@ namespace MyMediaLite.Data
 			Users  = new List<int>();
 			Items  = new List<int>();
 			Values = new List<double>();
+			MinRating = double.MaxValue;
+			MaxRating = double.MinValue;
 		}
 
 		///
@@ -75,7 +77,7 @@ namespace MyMediaLite.Data
 		public double MaxRating { get; protected set; }
 		///
 		public double MinRating { get; protected set; }
-		
+
 		///
 		public IList<IList<int>> ByUser
 		{
@@ -462,6 +464,5 @@ namespace MyMediaLite.Data
 
 		///
 		IEnumerator<double> IEnumerable<double>.GetEnumerator() { throw new NotSupportedException(); }
-
 	}
 }

@@ -27,6 +27,21 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class RatingsTest
 	{
+		[Test()] public void TestMinRatingMaxRating()
+		{
+			var ratings = new Ratings();
+			ratings.Add(1, 4, 0.3);
+			ratings.Add(1, 8, 0.2);
+			ratings.Add(2, 4, 0.2);
+			ratings.Add(2, 2, 0.6);
+			ratings.Add(2, 5, 0.4);
+			ratings.Add(3, 7, 0.2);
+			ratings.Add(6, 3, 0.3);
+
+			Assert.AreEqual(0.6, ratings.MaxRating);
+			Assert.AreEqual(0.2, ratings.MinRating);
+		}
+
 		[Test()] public void TestMaxUserIDMaxItemID()
 		{
 			var ratings = new Ratings();

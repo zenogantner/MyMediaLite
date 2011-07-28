@@ -35,6 +35,9 @@
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
             filtered according to given attributes: Eval.ItemsFiltered
+        - data structures
+          - Ratings: set MinRating and MaxRating to double.MaxValue and
+            double.MinValue, respectively
         - examples
           - fix KDD Cup examples (reported by Subramanyeshwar Cherukuri)
         - misc
