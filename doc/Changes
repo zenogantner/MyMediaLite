@@ -30,6 +30,7 @@
           - item prediction:
             - always obey --relevant-users=FILE and --relevant-items=FILE
               arguments
+            - add arguments --num-test-users, --overlap-items and --test-items
             - improved error messages
         - evaluation
           - add "filtered evaluation" protocol for item recommendation:

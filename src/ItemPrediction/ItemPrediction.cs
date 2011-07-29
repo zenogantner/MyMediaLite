@@ -63,9 +63,12 @@ class ItemPrediction
 	// command-line parameters (other)
 	static bool compute_fit;
 	static double test_ratio;
+	static int num_test_users;
 	static int predict_items_number = -1;
 	static bool online_eval;
 	static bool filtered_eval;
+	static bool overlap_items;
+	static bool test_items;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -114,17 +117,20 @@ class ItemPrediction
 
    --random-seed=N
    --data-dir=DIR               load all files from DIR
-   --relevant-items=FILE        use the items in FILE (one per line) as candidate items, otherwise all items in the training set
-   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --user-attributes=FILE       file containing user attribute information
    --item-attributes=FILE       file containing item attribute information
    --user-relations=FILE        file containing user relation information
    --item-relations=FILE        file containing item relation information
    --save-model=FILE            save computed model to FILE
    --load-model=FILE            load model from FILE
+   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
+   --relevant-items=FILE        use the items in FILE (one per line) as candidate items in the evaluation
+   --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
+   --test-items                 use only the items in the test set for evaluation as candidate items in the evaluation
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
+   --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
 
@@ -161,11 +167,13 @@ class ItemPrediction
 		compute_fit         = false;
 
 		// other parameters
-		string save_model_file        = string.Empty;
-		string load_model_file        = string.Empty;
-		int random_seed               = -1;
-		string prediction_file        = string.Empty;
-		test_ratio                    = 0;
+		string save_model_file = string.Empty;
+		string load_model_file = string.Empty;
+		int random_seed        = -1;
+		string prediction_file = string.Empty;
+		test_ratio             = 0;
+		num_test_users         = -1;
+
 
 	   	var p = new OptionSet() {
 			// string-valued options
@@ -188,40 +196,45 @@ class ItemPrediction
 			{ "max-iter=",             (int v) => max_iter             = v },
 			{ "random-seed=",          (int v) => random_seed          = v },
 			{ "predict-items-number=", (int v) => predict_items_number = v },
+			{ "num-test-users=",       (int v) => num_test_users       = v },
 			// double-valued options
-//			{ "epsilon=",             (double v) => epsilon      = v },
-			{ "auc-cutoff=",          (double v) => auc_cutoff   = v },
-			{ "prec5-cutoff=",        (double v) => prec5_cutoff = v },
-			{ "test-ratio=",          (double v) => test_ratio   = v },
+//			{ "epsilon=",             (double v) => epsilon         = v },
+			{ "auc-cutoff=",          (double v) => auc_cutoff      = v },
+			{ "prec5-cutoff=",        (double v) => prec5_cutoff    = v },
+			{ "test-ratio=",          (double v) => test_ratio      = v },
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "compute-fit",          v => compute_fit   = v != null },
-			{ "online-evaluation",    v => online_eval   = v != null },
-			{ "filtered-evaluation",  v => filtered_eval = v != null },
-			{ "help",                 v => show_help     = v != null },
-			{ "version",              v => show_version  = v != null },
+			{ "compute-fit",         v => compute_fit        = v != null },
+			{ "online-evaluation",   v => online_eval        = v != null },
+			{ "filtered-evaluation", v => filtered_eval      = v != null },
+			{ "overlap-items",       v => overlap_items = v != null },
+			{ "test-items",          v => test_items         = v != null },
+			{ "help",                v => show_help          = v != null },
+			{ "version",             v => show_version       = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
+
+		bool no_eval = true;
+		if (test_ratio > 0 || test_file != null)
+			no_eval = false;
 
 		if (show_version)
 			ShowVersion();
 		if (show_help)
 			Usage(0);
 
-		bool no_eval = test_file == null;
-
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
-
-		if (extra_args.Count > 0)
-			Usage("Did not understand " + extra_args[0]);
 
 		if (online_eval && filtered_eval)
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
+
+		if (extra_args.Count > 0)
+			Usage("Did not understand " + extra_args[0]);
 
 		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
@@ -323,6 +336,7 @@ class ItemPrediction
 			Console.WriteLine();
 		}
 		Recommender.SaveModel(recommender, save_model_file);
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
     static void LoadData()
@@ -330,16 +344,6 @@ class ItemPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
 			training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
-
-			// relevant users and items
-			if (relevant_users_file != null)
-				relevant_users = new HashSet<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
-			else
-				relevant_users = training_data.AllUsers;
-			if (relevant_items_file != null)
-				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-			else
-				relevant_items = training_data.AllItems;
 
 			if (! (recommender is MyMediaLite.ItemRecommendation.Random))
 				((ItemRecommender)recommender).Feedback = training_data;
@@ -405,6 +409,39 @@ class ItemPrediction
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
 			}
+
+			// relevant users
+			if (relevant_users_file != null)
+				relevant_users = new HashSet<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
+			else
+				relevant_users = test_data.AllUsers;
+
+			// if necessary, perform user sampling
+			if (num_test_users > 0 && num_test_users < relevant_users.Count)
+			{
+				var old_relevant_users = new HashSet<int>(relevant_users);
+				var new_relevant_users = new int[num_test_users];
+				for (int i = 0; i < num_test_users; i++)
+				{
+					int random_index = MyMediaLite.Util.Random.GetInstance().Next(old_relevant_users.Count - 1);
+					new_relevant_users[i] = old_relevant_users.ElementAt(random_index);
+					old_relevant_users.Remove(new_relevant_users[i]);
+				}
+				relevant_users = new_relevant_users;
+			}
+
+			// relevant items
+			if (relevant_items_file != null)
+				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			else if (test_items)
+				relevant_items = test_data.AllItems;
+			else if (overlap_items)
+				relevant_items = new HashSet<int>(test_data.AllItems.Intersect(training_data.AllItems));
+			else
+				relevant_items = training_data.AllItems;
+
+			// display stats about relevant users and items TODO move do DisplayDataStats
+			Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
