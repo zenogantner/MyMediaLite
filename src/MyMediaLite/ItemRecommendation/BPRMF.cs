@@ -120,9 +120,10 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (BoldDriver)
 			{
-				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100; // TODO make configurable
+				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100;         // TODO make configurable
 				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
 
+				// create the sample to estimate loss from
 				loss_sample_u = new int[num_sample_triples];
 				loss_sample_i = new int[num_sample_triples];
 				loss_sample_j = new int[num_sample_triples];
@@ -443,7 +444,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Compute the fit (AUC on training data)</summary>
 		/// <returns>the fit</returns>
 		public override double ComputeFit()
-		{
+		{   // TODO compute smoothed fit?
 			double sum_auc = 0;
 			int num_user = 0;
 
