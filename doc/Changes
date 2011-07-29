@@ -35,6 +35,10 @@
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
             filtered according to given attributes: Eval.ItemsFiltered
+          - support predicting and evaluating items that have interactions
+            with the given user in the training set (which would usually be
+            ignored). This is useful e.g. for repeat buying, and for computing
+            the fit on the training data.
         - data structures
           - Ratings: set MinRating and MaxRating to double.MaxValue and
             double.MinValue, respectively

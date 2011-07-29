@@ -69,6 +69,34 @@ namespace MyMediaLite.Eval
 		    ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
+			return Evaluate(recommender, test, train, relevant_users, relevant_items, true);
+		}
+
+		/// <summary>Evaluation for rankings of items</summary>
+		/// <remarks>
+		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
+		/// The evaluation measures are listed in the ItemPredictionMeasures property.
+		/// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
+		/// and the number of items that were taken into account.
+		///
+		/// Literature:
+		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
+		/// </remarks>
+		/// <param name="recommender">item recommender</param>
+		/// <param name="test">test cases</param>
+		/// <param name="train">training data</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
+		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
+		/// <returns>a dictionary containing the evaluation results</returns>
+		static public Dictionary<string, double> Evaluate(
+			IItemRecommender recommender,
+			IPosOnlyFeedback test,
+			IPosOnlyFeedback train,
+		    ICollection<int> relevant_users,
+			ICollection<int> relevant_items,
+			bool ignore_overlap)
+		{
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
@@ -89,7 +117,7 @@ namespace MyMediaLite.Eval
 				// the number of items that are really relevant for this user
 				var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
 				relevant_items_in_train.IntersectWith(relevant_items);
-				int num_eval_items = relevant_items.Count - relevant_items_in_train.Count();
+				int num_eval_items = relevant_items.Count - (ignore_overlap ? relevant_items_in_train.Count() : 0);
 
 				// skip all users that have 0 or #relevant_items test items
 				if (correct_items.Count == 0)
@@ -99,16 +127,28 @@ namespace MyMediaLite.Eval
 
 				num_users++;
 				int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
-
-				auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
-				map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);
-				ndcg_sum    += NDCG(prediction, correct_items, train.UserMatrix[user_id]);
-				prec_5_sum  += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
-				prec_10_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
-				prec_15_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
-
 				if (prediction.Length != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
+
+				if (ignore_overlap)
+				{
+					auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
+					map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);
+					ndcg_sum    += NDCG(prediction, correct_items, train.UserMatrix[user_id]);
+					prec_5_sum  += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
+					prec_10_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
+					prec_15_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
+				}
+				else
+				{
+					var empty_list = new int[0];
+					auc_sum     += AUC(prediction, correct_items, empty_list);
+					map_sum     += MAP(prediction, correct_items, empty_list);
+					ndcg_sum    += NDCG(prediction, correct_items, empty_list);
+					prec_5_sum  += PrecisionAt(prediction, correct_items, empty_list,  5);
+					prec_10_sum += PrecisionAt(prediction, correct_items, empty_list, 10);
+					prec_15_sum += PrecisionAt(prediction, correct_items, empty_list, 15);
+				}
 
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
