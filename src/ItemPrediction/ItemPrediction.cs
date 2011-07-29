@@ -234,7 +234,13 @@ class ItemPrediction
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
 		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty)
-			Usage("Please provide either test-file=FILE or --test-ratio=NUM.");
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, or --save-model=FILE.");
+
+		if (test_file == null && test_ratio == 0 && overlap_items)
+			Usage("--overlap-items only makes sens if there is either test-file=FILE --test-ratio=NUM.");
+
+		if (test_file == null && test_ratio == 0 && test_items)
+			Usage("--test-items only makes sens if there is either test-file=FILE --test-ratio=NUM.");
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
