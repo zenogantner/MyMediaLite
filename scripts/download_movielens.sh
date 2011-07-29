@@ -48,5 +48,6 @@ rm ml-data.tar.gz million-ml-data.tar.gz ml-data-10M100K.tar.gz
 
 # create tab-separated file for MovieLens 10M
 ../scripts/import_dataset.pl --separator=:: ml10m/ratings.dat > ml10m/ratings.txt
+../scripts/ml1m_genres.pl ml10m/movies.dat > ml10m/item-attributes-genres.txt
 
 cd ..

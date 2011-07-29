@@ -51,6 +51,7 @@
           - Utils.Recommender: add Load(filename) method that creates a
             recommender object of the appropriate type and loads the model from
             file
+          - also create genres file for MovieLens 10M
           - packaging: add missing lib/ directory to source package (reported
             by Artus Krohn-Grimberghe)
 

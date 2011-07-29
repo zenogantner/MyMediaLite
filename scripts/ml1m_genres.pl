@@ -41,6 +41,10 @@ my @genres = (
 my $counter = 0;
 my %genre_id = map { $_ => $counter++ } @genres;
 
+# fix for MovieLens 10M
+$genre_id{Children} = $genre_id{"Children's"};
+$genre_id{IMAX}     = $counter++;
+
 while (<>) {
     my $line = $_;
     chomp $line;
@@ -52,12 +56,19 @@ while (<>) {
 
     my ($movie_id, $movie_title, $movie_genres) = @fields;
 
+    next if $movie_genres eq '(no genres listed)';
+
     my @movie_genres    = split /\|/, $movie_genres;
     my @movie_genre_ids = map { $genre_id{$_} } @movie_genres;
 
     if ($sparse_output) {
 	foreach my $genre_id (@movie_genre_ids) {
-	    print "$movie_id\t$genre_id\n";
+	    if (defined $genre_id) {
+		print "$movie_id\t$genre_id\n";
+	    }
+	    else {
+		print STDERR "Unknown genre in line '$line'\n";
+	    }
 	}
     }
     else {
