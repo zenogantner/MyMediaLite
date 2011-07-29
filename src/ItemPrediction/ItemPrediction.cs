@@ -67,6 +67,7 @@ class ItemPrediction
 	static int predict_items_number = -1;
 	static bool online_eval;
 	static bool filtered_eval;
+	static bool repeat_eval;
 	static bool overlap_items;
 	static bool test_items;
 
@@ -133,6 +134,7 @@ class ItemPrediction
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
+   --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
@@ -173,7 +175,7 @@ class ItemPrediction
 		string prediction_file = string.Empty;
 		test_ratio             = 0;
 		num_test_users         = -1;
-
+		repeat_eval            = false;
 
 	   	var p = new OptionSet() {
 			// string-valued options
@@ -205,13 +207,14 @@ class ItemPrediction
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "compute-fit",         v => compute_fit        = v != null },
-			{ "online-evaluation",   v => online_eval        = v != null },
-			{ "filtered-evaluation", v => filtered_eval      = v != null },
+			{ "compute-fit",         v => compute_fit   = v != null },
+			{ "online-evaluation",   v => online_eval   = v != null },
+			{ "filtered-evaluation", v => filtered_eval = v != null },
+			{ "repeat-evaluation",   v => repeat_eval   = v != null },
 			{ "overlap-items",       v => overlap_items = v != null },
-			{ "test-items",          v => test_items         = v != null },
-			{ "help",                v => show_help          = v != null },
-			{ "version",             v => show_version       = v != null },
+			{ "test-items",          v => test_items    = v != null },
+			{ "help",                v => show_help     = v != null },
+			{ "version",             v => show_version  = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -449,9 +452,9 @@ class ItemPrediction
 	static Dictionary<string, double> Evaluate()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items);
+			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items, !repeat_eval);
 		else
-			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, !repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)

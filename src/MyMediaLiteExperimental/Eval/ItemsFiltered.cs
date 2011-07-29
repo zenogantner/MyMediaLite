@@ -60,6 +60,29 @@ namespace MyMediaLite.Eval
 		/// <param name="item_attributes">the item attributes to be used for filtering</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <returns>a dictionary containing the evaluation results</returns>		
+		static public Dictionary<string, double> Evaluate(
+			IItemRecommender recommender,
+			IPosOnlyFeedback test,
+			IPosOnlyFeedback train,
+		    SparseBooleanMatrix item_attributes,		                                                  
+		    ICollection<int> relevant_users,
+			ICollection<int> relevant_items)
+		{
+			return Evaluate(recommender, test, train, item_attributes, relevant_users, relevant_items, true);
+		}
+		
+		
+		/// <summary>Evaluation for rankings of filtered items</summary>
+		/// <remarks>
+		/// </remarks>
+		/// <param name="recommender">item recommender</param>
+		/// <param name="test">test cases</param>
+		/// <param name="train">training data</param>
+		/// <param name="item_attributes">the item attributes to be used for filtering</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
+		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
 			IItemRecommender recommender,
@@ -67,7 +90,8 @@ namespace MyMediaLite.Eval
 			IPosOnlyFeedback train,
 		    SparseBooleanMatrix item_attributes,
 		    ICollection<int> relevant_users,
-			ICollection<int> relevant_items)
+			ICollection<int> relevant_items,
+			bool ignore_overlap)
 		{
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
