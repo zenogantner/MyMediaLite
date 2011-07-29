@@ -169,7 +169,7 @@ class ItemPrediction
 		compute_fit         = false;
 
 		// other parameters
-		string save_model_file = string.Empty;
+		string save_model_file = string.Empty; // TODO use null here?
 		string load_model_file = string.Empty;
 		int random_seed        = -1;
 		string prediction_file = string.Empty;
@@ -232,6 +232,9 @@ class ItemPrediction
 
 		if (online_eval && filtered_eval)
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
+
+		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty)
+			Usage("Please provide either test-file=FILE or --test-ratio=NUM.");
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -417,7 +420,7 @@ class ItemPrediction
 			if (relevant_users_file != null)
 				relevant_users = new HashSet<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
 			else
-				relevant_users = test_data.AllUsers;
+				relevant_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
 			// if necessary, perform user sampling
 			if (num_test_users > 0 && num_test_users < relevant_users.Count)
