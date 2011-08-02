@@ -16,7 +16,7 @@ recommender.Ratings = train_data
 recommender.Train()
 
 # measure the accuracy on the test data set
-print Eval.RatingEval.Evaluate(recommender, test_data)
+print Eval.Ratings.Evaluate(recommender, test_data)
 
 # make a prediction for a certain user and item
 print recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))

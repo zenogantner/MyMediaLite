@@ -15,7 +15,7 @@ recommender.Ratings = train_data
 recommender.Train()
 
 # measure the accuracy on the test data set
-eval_results = MyMediaLite::Eval::RatingEval::Evaluate(recommender, test_data)
+eval_results = MyMediaLite::Eval::Ratings::Evaluate(recommender, test_data)
 eval_results.each do |entry|
 	puts "#{entry}"
 end
