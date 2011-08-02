@@ -1,4 +1,4 @@
-1.04	2011-07-?
+1.04	2011-08-02
         - API changes
           - Eval.RatingPrediction -> RatingPrediction.Prediction
           - Eval.ItemPrediction -> ItemRecommendation.Prediction
@@ -10,6 +10,7 @@
           - BPRMF: speed up training by about 5% for higher num_factors
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
+          - BiasedMatrixFactorization: fix incorrect output of LoadModel()
           - merge functionality of BiasedMatrixFactorizationMAE into
             BiasedMatrixFactorization
           - RatingPredictor: get rid of InitModel() method

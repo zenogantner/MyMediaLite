@@ -105,7 +105,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute global average
 			global_bias = ratings.Average;
-			
+
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
 		}
@@ -287,7 +287,7 @@ namespace MyMediaLite.RatingPrediction
 				this.global_bias = bias;
 				if (this.NumFactors != user_factors.dim2)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim1);
+					Console.Error.WriteLine("Set num_factors to {0}", user_factors.dim2);
 					this.NumFactors = (uint) user_factors.dim2;
 				}
 				this.user_factors = user_factors;
