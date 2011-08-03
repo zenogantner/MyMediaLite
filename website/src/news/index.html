@@ -13,6 +13,34 @@
 
 <div id="content">
 
+  <a name="1.04"><h2>MyMediaLite 1.04</h2></a>  
+    <p>
+    <b>August 3, 2011.</b>
+    Version 1.04 of MyMediaLite has been released. New features:
+    <ul>
+      <li>Simplified API for item recommendation and matrix factorization: nicer class names (<tt>Eval.Items</tt> and <tt>Eval.Ratings</tt>).</li>
+      <li>Merge [% INCLUDE link link='mae' %] optimization as an option into the <tt>BiasedMatrixFactorization</tt> recommender, instead
+          of having a separate recommender.</li>
+      <li><a href="[% prefix %]documentation/rating_prediction.html">Rating prediction tool:</a>
+          allow user-defined formatting of prediction output.</li>
+      <li><a href="[% prefix %]documentation/item_prediction.html">Item prediction tool:</a>
+          allow specification of the set of items to consider for evaluation,
+          the items in the training set (default), a given set (via <tt>--relevant-items=FILE</tt>),
+          the ones in the test set(<tt>--test-items</tt>), or only those items in both the
+          training and the test set <tt>--overlap-items</tt>);
+          save time by evaluation on a random subset of the users (<tt>--num-test-users=N</tt>).</li>
+      <li>Fixed packaging/compilation on Windows/Microsoft .NET (thank you Artus).</li>
+      <li>Fixed KDD Cup examples (reported by Subramanyeshwar Cherukuri).</li>
+    </ul>
+    </p>
+
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
+
   <a name="google_group"><h2>Google Group for MyMediaLite</h2></a>
   <p>
   <b>June 30, 2011.</b>  
