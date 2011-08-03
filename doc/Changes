@@ -1,4 +1,4 @@
-1.04	2011-08-02
+1.04	2011-08-03
         - API changes
           - Eval.RatingPrediction -> RatingPrediction.Prediction
           - Eval.ItemPrediction -> ItemRecommendation.Prediction
