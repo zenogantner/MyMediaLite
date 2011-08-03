@@ -1,4 +1,4 @@
-1.04	2011-07-?
+1.04	2011-08-03
         - API changes
           - Eval.RatingPrediction -> RatingPrediction.Prediction
           - Eval.ItemPrediction -> ItemRecommendation.Prediction
@@ -10,6 +10,7 @@
           - BPRMF: speed up training by about 5% for higher num_factors
           - UserAverage, ItemAverage, GlobalAverage: support LoadModel() and
             SaveModel()
+          - BiasedMatrixFactorization: fix incorrect output of LoadModel()
           - merge functionality of BiasedMatrixFactorizationMAE into
             BiasedMatrixFactorization
           - RatingPredictor: get rid of InitModel() method
@@ -19,19 +20,30 @@
         - command-line tools
           - --find-iter=N: explicitly state that the last number refers to the
             number of iterations computed so far
+          - fix bug that suppressed evaluation with --test-ratio
           - rating prediction:
             - add user-defined prediction format via the --prediction-line
               argument
             - get rid of --min-rating and --max-rating, it is now automatically
               read from the data
+            - rename --split-ratio to --test-ratio: more intuitive, and
+              consistent with the item prediction tool
           - item prediction:
             - always obey --relevant-users=FILE and --relevant-items=FILE
               arguments
+            - add arguments --num-test-users, --overlap-items and --test-items
             - improved error messages
         - evaluation
           - add "filtered evaluation" protocol for item recommendation:
             for every user, compute recommendation quality for item sets
             filtered according to given attributes: Eval.ItemsFiltered
+          - support predicting and evaluating items that have interactions
+            with the given user in the training set (which would usually be
+            ignored). This is useful e.g. for repeat buying, and for computing
+            the fit on the training data.
+        - data structures
+          - Ratings: set MinRating and MaxRating to double.MaxValue and
+            double.MinValue, respectively
         - examples
           - fix KDD Cup examples (reported by Subramanyeshwar Cherukuri)
         - misc
@@ -40,6 +52,7 @@
           - Utils.Recommender: add Load(filename) method that creates a
             recommender object of the appropriate type and loads the model from
             file
+          - also create genres file for MovieLens 10M
           - packaging: add missing lib/ directory to source package (reported
             by Artus Krohn-Grimberghe)
 
