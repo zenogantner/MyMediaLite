@@ -22,7 +22,7 @@ public class ItemPrediction
 		recommender.Train();
 
 		// measure the accuracy on the test data set
-		var results = ItemPredictionEval.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+		var results = Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
 
