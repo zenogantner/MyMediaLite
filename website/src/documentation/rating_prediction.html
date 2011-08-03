@@ -13,26 +13,27 @@
 
 <div id="content">
 <pre>
-MyMediaLite Rating Prediction 1.01
+MyMediaLite Rating Prediction 1.04
 
  usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):
    - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1 (needs --user-relations=FILE)
-   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stdev=0.1
+   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stdev=0.1 optimize_mae=False
    - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
    - GlobalAverage
    - SlopeOne
-   - BipolarSlopeOne
+   - BiPolarSlopeOne
    - UserAverage
    - ItemAverage
-   - UserItemBaseline reg_u=0 reg_i=0
+   - UserItemBaseline reg_u=15 reg_i=10 num_iter=10
    - ItemKNNCosine k=inf reg_u=10 reg_i=5
    - UserKNNCosine k=inf reg_u=10 reg_i=5
    - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
    - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
    - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs --item-attributes=FILE)
    - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs --user-attributes=FILE)
+   - FactorWiseMatrixFactorization num_factors=10 shrinkage=25 sensibility=1E-05  init_mean=0 init_stdev=0.1 num_iter=10
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
@@ -44,22 +45,25 @@ MyMediaLite Rating Prediction 1.01
    --help                           display this usage information and exit
    --version                        display version information and exit
 
-   --random-seed=N                  set random seed to N
-   --data-dir=DIR                   load all files from DIR
-   --user-attributes=FILE           file containing user attribute information
-   --item-attributes=FILE           file containing item attribute information
+   --random-seed=N                        set random seed to N
+   --data-dir=DIR                         load all files from DIR
+   --user-attributes=FILE                 file containing user attribute information
+   --item-attributes=FILE                 file containing item attribute information
    --user-relations=FILE                  file containing user relation information
    --item-relations=FILE                  file containing item relation information
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
-   --min-rating=NUM                       the smallest valid rating value
-   --max-rating=NUM                       the greatest valid rating value
    --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
-   --cross-validation=K                   perform k-fold crossvalidation on the training data
+   --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
+                                          and predicted rating, respectively; default is {0}\\t{1}\\t{2}
    --file-format=ml1m|kddcup2011|default
    --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
+   --cross-validation=K                   perform k-fold crossvalidation on the training data
+   --test-ratio=NUM                       use a ratio of NUM of the training data for evaluation (simple split)
+   --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
+   --search-hp                            search for good hyperparameter values (experimental)
 
-  options for finding the right number of iterations (MF methods)
+  options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --max-iter=N                   perform at most N iterations
    --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
