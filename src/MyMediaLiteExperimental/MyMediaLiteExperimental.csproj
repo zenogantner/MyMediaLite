@@ -55,6 +55,8 @@
     <Compile Include="Util\NelderMead.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="Eval\ItemsFiltered.cs" />
+    <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
+    <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
