@@ -1,6 +1,8 @@
 System Requirements:
  - Mono 2.6.x or another recent .NET runtime
  - NUnit
+ - Perl and File::Slurp for the download and data processing scripts
+   (not necessary for running/building MyMediaLite)
 
 Instructions:
  - For building from source, we recommend to use MonoDevelop.
