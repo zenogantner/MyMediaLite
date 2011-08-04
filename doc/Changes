@@ -1,6 +1,8 @@
 1.05	2011-08-
 	- documentation
           - more detailed system requirements in doc/Installation
+        - helper scripts
+          - better --help usage information for crossvalidation.pl
 
 1.04	2011-08-03
         - API changes

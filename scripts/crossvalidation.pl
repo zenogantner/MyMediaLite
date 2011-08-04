@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# (c) 2009, 2010 by Zeno Gantner <zeno.gantner@gmail.com>
+# (c) 2009, 2010, 2011 by Zeno Gantner <zeno.gantner@gmail.com>
 #
 # This file is part of MyMediaLite.
 #
@@ -17,7 +17,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO complete documentation
+# notice: In most cases, you will not need this script. You can just use
+#         the --cross-validation=K feature of the command-line tools
 
 use strict;
 use warnings;
@@ -29,11 +30,13 @@ use File::Slurp;
 use Getopt::Long;
 use List::Util 'shuffle';
 
+my $DEFAULT_K = 10;
+
 GetOptions(
 	   'help'       => \(my $help   = 0),
 	   'filename=s' => \(my $name   = 'dataset'),
 	   'suffix=s'   => \(my $suffix = '.txt'),
-	   'k=i'        => \(my $k      = 10),
+	   'k=i'        => \(my $k      = $DEFAULT_K),
 	  ) or usage(-1);
 
 usage(0) if $help;
@@ -95,9 +98,10 @@ split file for crossvalidation
 usage: $PROGRAM_NAME [OPTIONS] FILE
 
   options:
-    --filename=NAME
-    --suffix=.SUFFIX
-    --k=K
+    --help              display this help
+    --filename=NAME     (prefix of the) name of the output files
+    --suffix=.SUFFIX    suffix of the output files
+    --k=K               the number of folds (default $DEFAULT_K)
 END
     exit $return_code;
 }
