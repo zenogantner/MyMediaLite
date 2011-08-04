@@ -317,8 +317,6 @@ class RatingPrediction
 					}
 				}
 			} // for
-
-			DisplayStats();
 		}
 		else
 		{
@@ -386,9 +384,9 @@ class RatingPrediction
 			}
 
 			Console.WriteLine();
-			Console.Error.WriteLine("memory {0}", Memory.Usage);
 		}
 		Recommender.SaveModel(recommender, save_model_file);
+		DisplayStats();
 	}
 
     static void LoadData(string data_dir,

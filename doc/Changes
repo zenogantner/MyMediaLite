@@ -1,6 +1,8 @@
 1.05	2011-08-
         - recommenders
           - WeightedBPRMF: the recommender developed for KDD Cup 2011, track 2
+        - command-line tools
+          - display memory stats just once when the program finishes
 	- documentation
           - more detailed system requirements in doc/Installation
         - helper scripts

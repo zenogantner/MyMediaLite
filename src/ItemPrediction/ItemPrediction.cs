@@ -310,7 +310,6 @@ class ItemPrediction
 					}
 				}
 			} // for
-			DisplayStats();
 		}
 		else
 		{
@@ -348,7 +347,7 @@ class ItemPrediction
 			Console.WriteLine();
 		}
 		Recommender.SaveModel(recommender, save_model_file);
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
+		DisplayStats();
 	}
 
     static void LoadData()
