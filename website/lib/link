@@ -42,7 +42,7 @@
      ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx',         title => 'User Centric Media Cluster' }
      email         => { url => 'mailto:mymedialite@ismll.de',                    title => 'mymedialite@ismll.de' }
      mymedia_email => { url => 'mailto:info@mymediaproject.org',                 title => 'info@mymediaproject.org' }
-     source_code   => { url => 'http://gitorious.org/mymedialite/mymedialite',   title => 'http://gitorious.org/mymedialite/mymedialite' }
+     source_code   => { url => 'https://github.com/zenogantner/MyMediaLite',     title => 'https://github.com/zenogantner/MyMediaLite' }
      ironpython    => { url => 'http://ironpython.net/'                          title => 'IronPython' }
      ironruby      => { url => 'http://ironruby.net/'                            title => 'IronRuby' }
      recsyswiki    => { url => 'http://recsyswiki.com/'                          title => 'RecSysWiki' }
