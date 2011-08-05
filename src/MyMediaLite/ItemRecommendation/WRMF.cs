@@ -49,6 +49,12 @@ namespace MyMediaLite.ItemRecommendation
 		double regularization = 0.015;
 
 		///
+		public WRMF()
+		{
+			NumIter = 15;
+		}
+
+		///
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
