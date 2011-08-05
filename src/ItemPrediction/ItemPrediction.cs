@@ -70,6 +70,7 @@ class ItemPrediction
 	static bool repeat_eval;
 	static bool overlap_items;
 	static bool test_items;
+	static bool user_prediction;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -135,6 +136,7 @@ class ItemPrediction
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
    --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
+   --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
@@ -207,14 +209,15 @@ class ItemPrediction
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "compute-fit",         v => compute_fit   = v != null },
-			{ "online-evaluation",   v => online_eval   = v != null },
-			{ "filtered-evaluation", v => filtered_eval = v != null },
-			{ "repeat-evaluation",   v => repeat_eval   = v != null },
-			{ "overlap-items",       v => overlap_items = v != null },
-			{ "test-items",          v => test_items    = v != null },
-			{ "help",                v => show_help     = v != null },
-			{ "version",             v => show_version  = v != null },
+			{ "user-prediction",     v => user_prediction = v != null },
+			{ "compute-fit",         v => compute_fit     = v != null },
+			{ "online-evaluation",   v => online_eval     = v != null },
+			{ "filtered-evaluation", v => filtered_eval   = v != null },
+			{ "repeat-evaluation",   v => repeat_eval     = v != null },
+			{ "overlap-items",       v => overlap_items   = v != null },
+			{ "test-items",          v => test_items      = v != null },
+			{ "help",                v => show_help       = v != null },
+			{ "version",             v => show_version    = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -241,6 +244,15 @@ class ItemPrediction
 
 		if (test_file == null && test_ratio == 0 && test_items)
 			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
+
+		if (user_prediction)
+		{
+			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
+			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
+				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
+			if (filtered_eval)
+				Usage("--user-prediction is not (yet) supported in combination with filtered evaluation.");
+		}
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -356,9 +368,6 @@ class ItemPrediction
 			// training data
 			training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 
-			if (! (recommender is MyMediaLite.ItemRecommendation.Random))
-				((ItemRecommender)recommender).Feedback = training_data;
-
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
 			{
@@ -420,6 +429,31 @@ class ItemPrediction
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
 			}
+
+			if (user_prediction)
+			{
+				// swap relevant users and items
+				var ruf = relevant_users_file;
+				var rif = relevant_items_file;
+				relevant_users_file = rif;
+				relevant_items_file = ruf;
+
+				// swap user and item mappings
+				var um = user_mapping;
+				var im = item_mapping;
+				user_mapping = im;
+				item_mapping = um;
+
+				// transpose training and test data
+				training_data = new PosOnlyFeedback<SparseBooleanMatrix>((SparseBooleanMatrix) training_data.UserMatrix.Transpose());
+
+				// transpose test data
+				if (test_data != null)
+					test_data = new PosOnlyFeedback<SparseBooleanMatrix>((SparseBooleanMatrix) test_data.UserMatrix.Transpose());;
+			}
+
+			if (! (recommender is MyMediaLite.ItemRecommendation.Random))
+				((ItemRecommender)recommender).Feedback = training_data;
 
 			// relevant users
 			if (relevant_users_file != null)
