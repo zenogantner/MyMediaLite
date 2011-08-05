@@ -59,6 +59,8 @@ class ItemPrediction
 	static string item_attributes_file = null;
 	static string user_relations_file  = null;
 	static string item_relations_file  = null;
+	static string save_model_file      = string.Empty; // TODO use null here?
+	static string load_model_file      = string.Empty;
 
 	// command-line parameters (other)
 	static bool compute_fit;
@@ -171,8 +173,6 @@ class ItemPrediction
 		compute_fit         = false;
 
 		// other parameters
-		string save_model_file = string.Empty; // TODO use null here?
-		string load_model_file = string.Empty;
 		int random_seed        = -1;
 		string prediction_file = string.Empty;
 		test_ratio             = 0;
@@ -230,35 +230,10 @@ class ItemPrediction
 		if (show_help)
 			Usage(0);
 
-		if (training_file == null)
-			Usage("Parameter --training-file=FILE is missing.");
-
-		if (online_eval && filtered_eval)
-			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
-
-		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty && relevant_users_file == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --save-model=FILE, or --relevant-users=FILE.");
-
-		if (test_file == null && test_ratio == 0 && overlap_items)
-			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
-
-		if (test_file == null && test_ratio == 0 && test_items)
-			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
-
-		if (user_prediction)
-		{
-			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
-			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
-				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
-			if (filtered_eval)
-				Usage("--user-prediction is not (yet) supported in combination with filtered evaluation.");
-		}
+		CheckParameters(extra_args);
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
-
-		if (extra_args.Count > 0)
-			Usage("Did not understand " + extra_args[0]);
 
 		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
@@ -362,6 +337,51 @@ class ItemPrediction
 		DisplayStats();
 	}
 
+	static void CheckParameters(IList<string> extra_args)
+	{
+		if (training_file == null)
+			Usage("Parameter --training-file=FILE is missing.");
+
+		if (online_eval && filtered_eval)
+			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
+
+		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty && relevant_users_file == null)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --save-model=FILE, or --relevant-users=FILE.");
+
+		if (test_file == null && test_ratio == 0 && overlap_items)
+			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
+
+		if (test_file == null && test_ratio == 0 && test_items)
+			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
+
+		if (user_prediction)
+		{
+			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
+			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
+				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
+			if (filtered_eval)
+				Usage("--user-prediction is not (yet) supported in combination with filtered evaluation.");
+		}
+
+		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
+			Usage("Recommender expects --user-attributes=FILE.");
+
+		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
+			Usage("Recommender expects --item-attributes=FILE.");
+
+		if (filtered_eval && item_attributes_file == null)
+			Usage("--filtered-evaluation expects --item-attributes=FILE.");
+
+		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
+			Usage("Recommender expects --user-relations=FILE.");
+
+		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
+			Usage("Recommender expects --item-relations=FILE.");
+
+		if (extra_args.Count > 0)
+			Usage("Did not understand " + extra_args[0]);
+	}
+
     static void LoadData()
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
@@ -370,52 +390,28 @@ class ItemPrediction
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
-			{
-				if (user_attributes_file == null)
-					Usage("Recommender expects --user-attributes=FILE.");
-				else
-					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-			}
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 
 			// item attributes
 			if (recommender is IItemAttributeAwareRecommender)
-			{
-				if (item_attributes_file == null)
-					Usage("Recommender expects --item-attributes=FILE.");
-				else
-					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			}
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+
 			if (filtered_eval)
-			{
-				if (item_attributes_file == null)
-					Usage("--filtered-evaluation expects --item-attributes=FILE.");
-				else
-					item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			}
+				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
-				if (user_relations_file == null)
-				{
-					Usage("Recommender expects --user-relation=FILE.");
-				}
-				else
-				{
-					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
-					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers); // TODO move to DisplayDataStats
-				}
+			{
+				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
+				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers); // TODO move to DisplayDataStats
+			}
 
 			// item relation
 			if (recommender is IItemRelationAwareRecommender)
-				if (user_relations_file == null)
-				{
-					Usage("Recommender expects --item-relation=FILE.");
-				}
-				else
-				{
-					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
-					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems); // TODO move to DisplayDataStats
-				}
+			{
+				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
+				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems); // TODO move to DisplayDataStats
+			}
 
 			// test data
 			if (test_ratio == 0)

@@ -4,6 +4,7 @@
           - WRMF: set NumIter default value down to 15
         - command-line tools
           - display memory stats just once when the program finishes
+          - introduce CheckParameters() method for better source readability
           - item prediction:
             - better handling of different prediction scenarios
             - improved error/usage messages

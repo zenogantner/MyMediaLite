@@ -54,9 +54,17 @@ class RatingPrediction
 	// global command line parameters
 	static string training_file         = null;
 	static string test_file             = null;
+	static string save_model_file       = string.Empty;
+	static string load_model_file       = string.Empty;
+	static string user_attributes_file  = null;
+	static string item_attributes_file  = null;
+	static string user_relations_file   = null;
+	static string item_relations_file   = null;
 	static bool compute_fit             = false;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
+	static int cross_validation         = 0;
+	static double test_ratio            = 0;
 
 	static void ShowVersion()
 	{
@@ -152,21 +160,13 @@ class RatingPrediction
 
 		// data arguments
 		string data_dir             = string.Empty;
-		string user_attributes_file = string.Empty;
-		string item_attributes_file = string.Empty;
-		string user_relations_file  = string.Empty;
-		string item_relations_file  = string.Empty;
 
 		// other arguments
 		bool online_eval       = false;
 		bool search_hp         = false;
-		string save_model_file = string.Empty;
-		string load_model_file = string.Empty;
 		int random_seed        = -1;
 		string prediction_file = string.Empty;
 		string prediction_line = "{0}\t{1}\t{2}";
-		int cross_validation   = 0;
-		double test_ratio      = 0;
 
 	   	var p = new OptionSet() {
 			// string-valued options
@@ -216,14 +216,7 @@ class RatingPrediction
 		if (show_help)
 			Usage(0);
 
-		if (extra_args.Count > 0)
-			Usage("Did not understand " + extra_args[0]);
-
-		if (training_file == null)
-			Usage("Parameter --training-file=FILE is missing.");
-
-		if (cross_validation != 0 && test_ratio != 0)
-			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+		CheckParameters(extra_args);
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
@@ -389,14 +382,38 @@ class RatingPrediction
 		DisplayStats();
 	}
 
+	static void CheckParameters(IList<string> extra_args)
+	{
+		if (training_file == null)
+			Usage("Parameter --training-file=FILE is missing.");
+
+		if (cross_validation != 0 && test_ratio != 0)
+			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+
+		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, or --save-model=FILE.");
+
+		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
+			Usage("Recommender expects --user-attributes=FILE.");
+
+		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
+			Usage("Recommender expects --item-attributes=FILE.");
+
+		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
+			Usage("Recommender expects --user-relations=FILE.");
+
+		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
+			Usage("Recommender expects --item-relations=FILE.");
+
+		if (extra_args.Count > 0)
+			Usage("Did not understand " + extra_args[0]);
+	}
+
     static void LoadData(string data_dir,
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file,
 	                     bool static_data)
 	{
-		if (training_file == null)
-			Usage("Program expects --training-file=FILE.");
-
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
 			if (file_format == RatingFileFormat.DEFAULT)
@@ -411,45 +428,25 @@ class RatingPrediction
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
-			{
-				if (user_attributes_file == string.Empty)
-					Usage("Recommender expects --user-attributes=FILE.");
-				else
-					((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-			}
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 
 			// item attributes
 			if (recommender is IItemAttributeAwareRecommender)
-			{
-				if (item_attributes_file == string.Empty)
-					Usage("Recommender expects --item-attributes=FILE.");
-				else
-					((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			}
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
-				if (user_relation_file == string.Empty)
-				{
-					Usage("Recommender expects --user-relations=FILE.");
-				}
-				else
-				{
-					((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
-					Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
-				}
+			{
+				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+			}
 
 			// item relation
 			if (recommender is IItemRelationAwareRecommender)
-				if (user_relation_file == string.Empty)
-				{
-					Usage("Recommender expects --item-relations=FILE.");
-				}
-				else
-				{
-					((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
-					Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
-				}
+			{
+				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+			}
 
 			// read test data
 			if (test_file != null)
