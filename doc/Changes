@@ -3,6 +3,9 @@
           - WeightedBPRMF: the recommender developed for KDD Cup 2011, track 2
         - command-line tools
           - display memory stats just once when the program finishes
+          - item prediction:
+            - better handling of different prediction scenarios
+            - improved error/usage messages
 	- documentation
           - more detailed system requirements in doc/Installation
         - helper scripts
