@@ -291,7 +291,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating predictor from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static RatingPrediction.RatingPredictor CreateRatingPredictor(string typename)
+		public static RatingPredictor CreateRatingPredictor(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
@@ -305,15 +305,15 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating predictor from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>a rating recommender object of type type</returns>
-		public static RatingPrediction.RatingPredictor CreateRatingPredictor(Type type)
+		public static RatingPredictor CreateRatingPredictor(Type type)
 		{
 			if (type.IsAbstract)
 				return null;
 			if (type.IsGenericType)
 				return null;
 
-			if (type.IsSubclassOf(typeof(RatingPrediction.RatingPredictor)))
-				return (RatingPrediction.RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(RatingPredictor)))
+				return (RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.RatingPredictor");
 		}
@@ -321,7 +321,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static ItemRecommendation.ItemRecommender CreateItemRecommender(string typename)
+		public static ItemRecommender CreateItemRecommender(string typename)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
@@ -335,15 +335,15 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>an item recommender object of type type</returns>
-		public static ItemRecommendation.ItemRecommender CreateItemRecommender(Type type)
+		public static ItemRecommender CreateItemRecommender(Type type)
 		{
 			if (type.IsAbstract)
 				return null;
 			if (type.IsGenericType)
 				return null;
 
-			if (type.IsSubclassOf(typeof(ItemRecommendation.ItemRecommender)))
-				return (ItemRecommendation.ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(ItemRecommender)))
+				return (ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
 		}
