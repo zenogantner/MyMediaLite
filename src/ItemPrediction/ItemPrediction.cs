@@ -38,6 +38,8 @@ class ItemPrediction
 	static IPosOnlyFeedback test_data;
 	static ICollection<int> relevant_users;
 	static ICollection<int> relevant_items;
+	static SparseBooleanMatrix group_to_user; // rows: groups, columns: users
+	static ICollection<int> user_groups;
 
 	// recommenders
 	static IItemRecommender recommender = null;
@@ -61,6 +63,7 @@ class ItemPrediction
 	static string item_relations_file  = null;
 	static string save_model_file      = string.Empty; // TODO use null here?
 	static string load_model_file      = string.Empty;
+	static string user_groups_file     = null;
 
 	// command-line parameters (other)
 	static bool compute_fit;
@@ -70,6 +73,7 @@ class ItemPrediction
 	static bool online_eval;
 	static bool filtered_eval;
 	static bool repeat_eval;
+	static bool group_eval;
 	static bool overlap_items;
 	static bool test_items;
 	static bool user_prediction;
@@ -195,6 +199,7 @@ class ItemPrediction
 			{ "prediction-file=",     v => prediction_file        = v },
 			{ "relevant-users=",      v => relevant_users_file    = v },
 			{ "relevant-items=",      v => relevant_items_file    = v },
+			{ "user-groups=",         v => user_groups_file       = v },
 			// integer-valued options
    			{ "find-iter=",            (int v) => find_iter            = v },
 			{ "max-iter=",             (int v) => max_iter             = v },
@@ -214,6 +219,7 @@ class ItemPrediction
 			{ "online-evaluation",   v => online_eval     = v != null },
 			{ "filtered-evaluation", v => filtered_eval   = v != null },
 			{ "repeat-evaluation",   v => repeat_eval     = v != null },
+			{ "group-evaluation",    v => group_eval      = v != null },
 			{ "overlap-items",       v => overlap_items   = v != null },
 			{ "test-items",          v => test_items      = v != null },
 			{ "help",                v => show_help       = v != null },
@@ -360,7 +366,9 @@ class ItemPrediction
 			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
 				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
 			if (filtered_eval)
-				Usage("--user-prediction is not (yet) supported in combination with filtered evaluation.");
+				Usage("--user-prediction is not (yet) supported in combination with --filtered-evaluation.");
+			if (user_groups_file != null)
+				Usage("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
 		}
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
@@ -411,6 +419,15 @@ class ItemPrediction
 			{
 				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
 				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems); // TODO move to DisplayDataStats
+			}
+
+			// user groups
+			if (user_groups_file != null)
+			{
+				group_to_user = RelationData.Read(Path.Combine(data_dir, user_groups_file), user_mapping);
+				// assumptions: user and user group IDs are disjoint // FIXME?
+				user_groups = group_to_user.NonEmptyRowIDs;
+				Console.WriteLine("{0} user groups", user_groups.Count);
 			}
 
 			// test data
