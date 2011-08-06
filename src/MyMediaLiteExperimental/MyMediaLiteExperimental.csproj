@@ -57,6 +57,12 @@
     <Compile Include="Eval\ItemsFiltered.cs" />
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
+    <Compile Include="GroupRecommendation\Average.cs" />
+    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\Maximum.cs" />
+    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
+    <Compile Include="GroupRecommendation\Minimum.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
@@ -69,6 +75,7 @@
     <Folder Include="Correlation\" />
     <Folder Include="RatingPrediction\" />
     <Folder Include="ItemRecommendation\" />
+    <Folder Include="GroupRecommendation\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">

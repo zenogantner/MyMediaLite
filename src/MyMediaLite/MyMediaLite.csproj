@@ -175,6 +175,7 @@
     <Folder Include="Ensemble\" />
     <Folder Include="ItemRecommendation\" />
     <Folder Include="RatingPrediction\" />
+    <Folder Include="GroupRecommendation\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
