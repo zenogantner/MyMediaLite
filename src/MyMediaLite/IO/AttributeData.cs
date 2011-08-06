@@ -34,6 +34,11 @@ namespace MyMediaLite.IO
 	public class AttributeData
 	{
 		/// <summary>Read binary attribute data from a file</summary>
+		/// <remarks>
+		/// The expected (sparse) line format is:
+		/// ENTITY_ID whitespace/comma ATTRIBUTE_ID
+		/// for the relations that hold.
+		/// </remarks>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
@@ -44,6 +49,11 @@ namespace MyMediaLite.IO
 		}
 
 		/// <summary>Read binary attribute data from a StreamReader</summary>
+		/// <remarks>
+		/// The expected (sparse) line format is:
+		/// ENTITY_ID whitespace/comma ATTRIBUTE_ID
+		/// for the relations that hold.
+		/// </remarks>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="mapping">the mapping object for the given entity type</param>
 		/// <returns>the attribute data</returns>
@@ -51,7 +61,7 @@ namespace MyMediaLite.IO
 		{
 			var matrix = new SparseBooleanMatrix();
 
-			var split_chars = new char[]{ '\t', ' ' };
+			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
 
 			while (!reader.EndOfStream)
