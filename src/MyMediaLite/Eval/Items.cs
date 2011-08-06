@@ -26,7 +26,7 @@ using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
 {
-	/// <summary>Evaluation class</summary>
+	/// <summary>Evaluation class for item recommendation</summary>
 	public static class Items
 	{
 		/// <summary>the evaluation measures for item prediction offered by the class</summary>
