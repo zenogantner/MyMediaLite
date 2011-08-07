@@ -126,29 +126,17 @@ namespace MyMediaLite.Eval
 					continue;
 
 				num_users++;
-				int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
-				if (prediction.Length != relevant_items.Count)
+				IList<int> prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
+				if (prediction.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
-				if (ignore_overlap)
-				{
-					auc_sum     += AUC(prediction, correct_items, train.UserMatrix[user_id]);
-					map_sum     += MAP(prediction, correct_items, train.UserMatrix[user_id]);
-					ndcg_sum    += NDCG(prediction, correct_items, train.UserMatrix[user_id]);
-					prec_5_sum  += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
-					prec_10_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
-					prec_15_sum += PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
-				}
-				else
-				{
-					var empty_list = new int[0];
-					auc_sum     += AUC(prediction, correct_items, empty_list);
-					map_sum     += MAP(prediction, correct_items, empty_list);
-					ndcg_sum    += NDCG(prediction, correct_items, empty_list);
-					prec_5_sum  += PrecisionAt(prediction, correct_items, empty_list,  5);
-					prec_10_sum += PrecisionAt(prediction, correct_items, empty_list, 10);
-					prec_15_sum += PrecisionAt(prediction, correct_items, empty_list, 15);
-				}
+				ICollection<int> ignore_items = ignore_overlap ? train.UserMatrix[user_id] : new int[0];
+				auc_sum     += AUC(prediction, correct_items, ignore_items);
+				map_sum     += MAP(prediction, correct_items, ignore_items);
+				ndcg_sum    += NDCG(prediction, correct_items, ignore_items);
+				prec_5_sum  += PrecisionAt(prediction, correct_items, ignore_items,  5);
+				prec_10_sum += PrecisionAt(prediction, correct_items, ignore_items, 10);
+				prec_15_sum += PrecisionAt(prediction, correct_items, ignore_items, 15);
 
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
@@ -255,7 +243,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the AUC for the given data</returns>
-		public static double AUC(int[] ranked_items, ICollection<int> correct_items)
+		public static double AUC(IList<int> ranked_items, ICollection<int> correct_items)
 		{
 			return AUC(ranked_items, correct_items, new HashSet<int>());
 		}
@@ -265,9 +253,9 @@ namespace MyMediaLite.Eval
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the AUC for the given data</returns>
-		public static double AUC(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		public static double AUC(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
-				int num_eval_items = ranked_items.Length - ignore_items.Intersect(ranked_items).Count();
+				int num_eval_items = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
 				int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
 
 				int num_correct_pairs = 0;
@@ -291,7 +279,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the MAP for the given data</returns>
-		public static double MAP(int[] ranked_items, ICollection<int> correct_items)
+		public static double MAP(IList<int> ranked_items, ICollection<int> correct_items)
 		{
 			return MAP(ranked_items, correct_items, new HashSet<int>());
 		}
@@ -301,13 +289,13 @@ namespace MyMediaLite.Eval
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the MAP for the given data</returns>
-		public static double MAP(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		public static double MAP(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
 			int hit_count       = 0;
 			double avg_prec_sum = 0;
 			int left_out        = 0;
 
-			for (int i = 0; i < ranked_items.Length; i++)
+			for (int i = 0; i < ranked_items.Count; i++)
 			{
 				int item_id = ranked_items[i];
 				if (ignore_items.Contains(item_id))
@@ -334,7 +322,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the NDCG for the given data</returns>
-		public static double NDCG(int[] ranked_items, ICollection<int> correct_items)
+		public static double NDCG(IList<int> ranked_items, ICollection<int> correct_items)
 		{
 			return NDCG(ranked_items, correct_items, new HashSet<int>());
 		}
@@ -344,13 +332,13 @@ namespace MyMediaLite.Eval
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the NDCG for the given data</returns>
-		public static double NDCG(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		public static double NDCG(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
 			double dcg   = 0;
 			double idcg  = ComputeIDCG(correct_items.Count);
 			int left_out = 0;
 
-			for (int i = 0; i < ranked_items.Length; i++)
+			for (int i = 0; i < ranked_items.Count; i++)
 			{
 				int item_id = ranked_items[i];
 				if (ignore_items.Contains(item_id))
@@ -375,7 +363,7 @@ namespace MyMediaLite.Eval
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, int n)
+		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
 		{
 			return PrecisionAt(ranked_items, correct_items, new HashSet<int>(), n);
 		}
@@ -386,7 +374,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(int[] ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items, int n)
+		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items, int n)
 		{
 			if (n < 1)
 				throw new ArgumentException("N must be at least 1.");
@@ -394,7 +382,7 @@ namespace MyMediaLite.Eval
 			int hit_count = 0;
 			int left_out  = 0;
 
-			for (int i = 0; i < ranked_items.Length; i++)
+			for (int i = 0; i < ranked_items.Count; i++)
 			{
 				int item_id = ranked_items[i];
 				if (ignore_items.Contains(item_id))

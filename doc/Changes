@@ -9,6 +9,8 @@
             - better handling of different prediction scenarios
             - improved error/usage messages
             - support --user-prediction by transposing the user-item matrix
+        - evaluation
+           - item prediction: more generic method signatures; more compact code
         - IO
           - support CSV format also for attribute and relation files
 	- documentation
