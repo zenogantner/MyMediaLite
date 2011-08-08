@@ -1,9 +1,10 @@
 1.05	2011-08-
         - add preliminary support for group recommendation
         - recommenders
-          - WeightedBPRMF: the recommender developed for KDD Cup 2011, track 2
+          - add WeightedBPRMF: the recommender developed for KDD Cup 2011
+          - group recommenders: add Average, Minimum, Maximum, PairwiseWins
           - WRMF: set NumIter default value down to 15
-          - group recommenders: Average, Minimum, Maximum, PairwiseWins
+          - BiasedMatrixFactorization: improved API doc
         - command-line tools
           - display memory stats just once when the program finishes
           - introduce CheckParameters() method for better source readability
