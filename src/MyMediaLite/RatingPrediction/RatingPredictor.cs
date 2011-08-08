@@ -30,14 +30,14 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID  {	get; set; }
 
-		/// <summary>The max rating value</summary>
+		/// <summary>Maximum rating value</summary>
 		public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
-		/// <summary>The max rating value</summary>
+		/// <summary>Maximum rating value</summary>
 		protected double max_rating;
 
-		/// <summary>The min rating value</summary>
+		/// <summary>Minimum rating value</summary>
 		public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
-		/// <summary>The min rating value</summary>
+		/// <summary>Minimum rating value</summary>
 		protected double min_rating;
 
 		/// <summary>true if users shall be updated when doing incremental updates</summary>

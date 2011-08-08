@@ -31,6 +31,22 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// Per default optimizes for RMSE.
 	/// Set OptimizeMAE to true if you want to optimize for MAE.
+	/// 
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Ruslan Salakhutdinov, Andriy Mnih:
+	///     Probabilistic Matrix Factorization.
+	///     NIPS 2008.
+	///     http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
+	///   </description></item>
+    ///   <item><description>
+	///     Steffen Rendle, Lars Schmidt-Thieme:
+	///     Online-Updating Regularized Kernel Matrix Factorization Models for Large-Scale Recommender Systems.
+	///     RecSys 2008.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2008-Online_Updating_Regularized_Kernel_Matrix_Factorization_Models.pdf
+	///   </description></item>
+	/// </list>
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
@@ -42,7 +58,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>regularization constant for the user factors</summary>
 		public double RegU { get; set; }
 
-		/// <summary>regularization constant for the user factors</summary>
+		/// <summary>regularization constant for the item factors</summary>
 		public double RegI { get; set; }
 
 		///
