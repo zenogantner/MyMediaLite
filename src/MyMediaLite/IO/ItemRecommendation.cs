@@ -18,7 +18,6 @@
 
 using System;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;

@@ -155,6 +155,7 @@
     <Compile Include="Eval\Ratings.cs" />
     <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="RatingPrediction\Prediction.cs" />
+    <Compile Include="IO\ItemRecommendationRatingThreshold.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -175,7 +176,6 @@
     <Folder Include="Ensemble\" />
     <Folder Include="ItemRecommendation\" />
     <Folder Include="RatingPrediction\" />
-    <Folder Include="GroupRecommendation\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

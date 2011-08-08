@@ -69,6 +69,7 @@ class ItemPrediction
 	// command-line parameters (other)
 	static bool compute_fit;
 	static double test_ratio;
+	static double rating_threshold = double.NaN;
 	static int num_test_users;
 	static int predict_items_number = -1;
 	static bool online_eval;
@@ -144,6 +145,7 @@ class ItemPrediction
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
    --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
    --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
+   --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
@@ -210,10 +212,11 @@ class ItemPrediction
 			{ "predict-items-number=", (int v) => predict_items_number = v },
 			{ "num-test-users=",       (int v) => num_test_users       = v },
 			// double-valued options
-//			{ "epsilon=",             (double v) => epsilon         = v },
-			{ "auc-cutoff=",          (double v) => auc_cutoff      = v },
-			{ "prec5-cutoff=",        (double v) => prec5_cutoff    = v },
-			{ "test-ratio=",          (double v) => test_ratio      = v },
+//			{ "epsilon=",             (double v) => epsilon          = v },
+			{ "auc-cutoff=",          (double v) => auc_cutoff       = v },
+			{ "prec5-cutoff=",        (double v) => prec5_cutoff     = v },
+			{ "test-ratio=",          (double v) => test_ratio       = v },
+			{ "rating-threshold=",    (double v) => rating_threshold = v },
 			// enum options
 			//   * currently none *
 			// boolean options
@@ -411,7 +414,9 @@ class ItemPrediction
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
-			training_data = ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+			training_data = double.IsNaN(rating_threshold)
+				? ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping)
+				: ItemRecommendationRatingThreshold.Read(Path.Combine(data_dir, training_file), rating_threshold, user_mapping, item_mapping);
 
 			// user attributes
 			if (recommender is IUserAttributeAwareRecommender)
@@ -428,14 +433,14 @@ class ItemPrediction
 			if (recommender is IUserRelationAwareRecommender)
 			{
 				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
-				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers); // TODO move to DisplayDataStats
+				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
 			}
 
 			// item relation
 			if (recommender is IItemRelationAwareRecommender)
 			{
 				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
-				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems); // TODO move to DisplayDataStats
+				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 			}
 
 			// user groups
@@ -451,7 +456,9 @@ class ItemPrediction
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
-	        		test_data = ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
+	        		test_data = double.IsNaN(rating_threshold)
+						? ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping)
+						: ItemRecommendationRatingThreshold.Read(Path.Combine(data_dir, test_file), rating_threshold, user_mapping, item_mapping);
 			}
 			else
 			{

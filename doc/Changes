@@ -10,6 +10,8 @@
           - item prediction:
             - better handling of different prediction scenarios
             - improved error/usage messages
+            - new parameter --rating-threshold=NUM uses ratings of at least NUM
+              as positive examples
             - support --user-prediction by transposing the user-item matrix
             - support group recommendation: --group-evaluation and
               --user-groups=FILE
