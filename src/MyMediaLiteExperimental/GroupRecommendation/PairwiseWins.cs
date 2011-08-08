@@ -17,34 +17,43 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.GroupRecommendation
 {
 	/// <summary>A simple Condorcet-style voting mechanism</summary>
+	/// <remarks>runtime complexity O(|U| |I|^2)</remarks>
 	public class PairwiseWins : GroupRecommender
 	{
 		///
 		public PairwiseWins(IRecommender recommender) : base(recommender) { }
 
 		///
-		public override IList<int> RankItems(IList<int> users, IList<int> items)
+		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
 			var scores_by_user = new double[users.Count, items.Count];
 
-			foreach (int i in items)
-				foreach (int u in users)
-					scores_by_user[u, i] = recommender.Predict(u, i);
+			var users_array = users.ToArray();
+			var items_array = items.ToArray();
+			
+			for (int u = 0; u < users.Count; u++)
+				for (int i = 0; i < items.Count; i++)
+				{
+					int user_id = users_array[u];
+					int item_id = items_array[i];
+					scores_by_user[u, i] = recommender.Predict(user_id, item_id);
+				}
 
 			var wins_by_item = new Dictionary<int, int>();
-			foreach (int i in items)
-				wins_by_item[i] = 0;
+			foreach (int item_id in items)
+				wins_by_item[item_id] = 0;
 
-			foreach (int u in users)
-				foreach (int i in items)
-					foreach (int j in items)
+			for (int u = 0; u < users.Count; u++)
+				for (int i = 0; i < items.Count; i++)
+					for (int j = 0; j < items.Count; j++)
 						if (scores_by_user[u, i] > scores_by_user[u, j])
-							wins_by_item[i]++;
+							wins_by_item[items_array[i]]++;
 
 			var ranked_items = new List<int>(items);
 			ranked_items.Sort(delegate(int i1, int i2) { return wins_by_item[i2].CompareTo(wins_by_item[i1]); } );

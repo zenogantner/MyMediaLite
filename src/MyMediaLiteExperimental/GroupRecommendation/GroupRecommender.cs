@@ -35,7 +35,7 @@ namespace MyMediaLite.GroupRecommendation
 		}
 
 		///
-		public abstract IList<int> RankItems(IList<int> users, IList<int> items);
+		public abstract IList<int> RankItems(ICollection<int> users, ICollection<int> items);
 	}
 }
 

@@ -63,6 +63,8 @@
     <Compile Include="GroupRecommendation\Maximum.cs" />
     <Compile Include="GroupRecommendation\PairwiseWins.cs" />
     <Compile Include="GroupRecommendation\Minimum.cs" />
+    <Compile Include="Util\GroupUtils.cs" />
+    <Compile Include="Eval\Groups.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />

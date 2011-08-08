@@ -27,6 +27,6 @@ namespace MyMediaLite.GroupRecommendation
 		/// <param name="users">the users</param>
 		/// <param name="items">the items to be ranked</param>
 		/// <returns>a ranked list of items, highest-ranking item comes first</returns>
-		IList<int> RankItems(IList<int> users, IList<int> items);
+		IList<int> RankItems(ICollection<int> users, ICollection<int> items);
 	}
 }

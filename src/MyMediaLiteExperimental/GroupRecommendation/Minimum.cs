@@ -28,7 +28,7 @@ namespace MyMediaLite.GroupRecommendation
 		public Minimum(IRecommender recommender) : base(recommender) { }
 
 		///
-		public override IList<int> RankItems(IList<int> users, IList<int> items)
+		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
 			var minimum_scores = new Dictionary<int, double>();
 
