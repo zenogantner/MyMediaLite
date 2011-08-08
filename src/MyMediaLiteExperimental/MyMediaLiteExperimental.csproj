@@ -65,6 +65,7 @@
     <Compile Include="GroupRecommendation\Minimum.cs" />
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="Eval\Groups.cs" />
+    <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
