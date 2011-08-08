@@ -27,6 +27,7 @@ using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
+using MyMediaLite.GroupRecommendation;
 using MyMediaLite.IO;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
@@ -163,6 +164,7 @@ class ItemPrediction
 
 		// recommender arguments
 		string method              = "MostPopular";
+		string group_method        = "Minimum";
 		string recommender_options = string.Empty;
 
 		// help/version
@@ -188,6 +190,7 @@ class ItemPrediction
 			{ "training-file=",       v => training_file          = v },
 			{ "test-file=",           v => test_file              = v },
 			{ "recommender=",         v => method                 = v },
+			{ "group-recommender=",   v => group_method           = v },
 			{ "recommender-options=", v => recommender_options   += " " + v },
    			{ "data-dir=",            v => data_dir               = v },
 			{ "user-attributes=",     v => user_attributes_file   = v },
@@ -219,7 +222,7 @@ class ItemPrediction
 			{ "online-evaluation",   v => online_eval     = v != null },
 			{ "filtered-evaluation", v => filtered_eval   = v != null },
 			{ "repeat-evaluation",   v => repeat_eval     = v != null },
-			{ "group-evaluation",    v => group_eval      = v != null },
+			{ "group-evaluation",    v => group_eval      = v != null }, // TODO better --group-prediction ??
 			{ "overlap-items",       v => overlap_items   = v != null },
 			{ "test-items",          v => test_items      = v != null },
 			{ "help",                v => show_help       = v != null },
@@ -330,6 +333,18 @@ class ItemPrediction
 						var result = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
 						Items.DisplayResults(result);
 			    	});
+				else if (group_eval)
+				{
+					// FIXME this is under construction ...
+					// TODO let user select
+					GroupRecommender group_recommender = new Average(recommender); //GroupUtils.CreateGroupRecommender(group_method, recommender);
+					// TODO catch error
+					
+					time_span = Utils.MeasureTime( delegate() {
+						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, relevant_items);
+						Groups.DisplayResults(result);
+					});
+				}
 				else
 					time_span = Utils.MeasureTime( delegate() {
 						var result = Evaluate();
@@ -345,6 +360,8 @@ class ItemPrediction
 
 	static void CheckParameters(IList<string> extra_args)
 	{
+		// TODO block group vs. filter/online, etc.
+		
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
@@ -498,8 +515,11 @@ class ItemPrediction
 			else
 				relevant_items = training_data.AllItems;
 
-			// display stats about relevant users and items TODO move do DisplayDataStats
-			Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
+			// display stats about relevant users and items
+			if (group_eval)
+				Console.WriteLine("{0} user groups and {1} items will be used for evaluation.", user_groups.Count, relevant_items.Count);
+			else
+				Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 	}
