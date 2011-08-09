@@ -34,12 +34,27 @@ Website
 -------
   http://ismll.de/mymedialite
 
-Acknowledgments
----------------
+Citing MyMediaLite
+------------------
 If you use MyMediaLite for your research, it would be nice to acknowledge it
-in your papers. Please inform us about if you have publication that uses
+in your papers by citing the following paper:
+
+Zeno Gantner, Steffen Rendle, Christoph Freudenthaler, Lars Schmidt-Thieme:
+MyMediaLite: A Free Recommender System Library. RecSys 2011
+
+@inproceedings{Gantner2011MyMediaLite,
+  author    = { Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
+  title     = {{MyMediaLite}: A Free Recommender System Library},
+  booktitle = {5th ACM International Conference on Recommender Systems (RecSys 2011)},
+  year      = 2011,
+  location  = {Chicago, USA}
+}
+
+Please inform us about if you have publication that uses
 this software, so we can list it on MyMediaLite's website.
 
+Acknowledgements
+----------------
 Thanks go to the following people, who provided valuable feedback about
 MyMediaLite: Thorsten Angermann, Suhrid Balakrishnan, Alejandro Bellogin,
 Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri, Andreas Hoffmann,
