@@ -80,6 +80,7 @@ class ItemPrediction
 	static bool overlap_items;
 	static bool test_items;
 	static bool user_prediction;
+	static int random_seed = -1;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -181,7 +182,6 @@ class ItemPrediction
 		compute_fit         = false;
 
 		// other parameters
-		int random_seed        = -1;
 		string prediction_file = string.Empty;
 		test_ratio             = 0;
 		num_test_users         = -1;
@@ -462,6 +462,10 @@ class ItemPrediction
 			}
 			else
 			{
+				// ensure reproducible splitting
+				if (random_seed != -1)
+					MyMediaLite.Util.Random.InitInstance(random_seed);
+
 				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
@@ -525,6 +529,10 @@ class ItemPrediction
 			// if necessary, perform user sampling
 			if (num_test_users > 0 && num_test_users < relevant_users.Count)
 			{
+				// ensure reproducible splitting
+				if (random_seed != -1)
+					MyMediaLite.Util.Random.InitInstance(random_seed);
+
 				var old_relevant_users = new HashSet<int>(relevant_users);
 				var new_relevant_users = new int[num_test_users];
 				for (int i = 0; i < num_test_users; i++)
@@ -553,6 +561,7 @@ class ItemPrediction
 				Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
 	static Dictionary<string, double> Evaluate()

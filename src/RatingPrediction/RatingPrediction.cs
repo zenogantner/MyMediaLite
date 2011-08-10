@@ -241,6 +241,10 @@ class RatingPrediction
 
 		if (test_ratio > 0)
 		{
+			// ensure reproducible splitting
+			if (random_seed != -1)
+				MyMediaLite.Util.Random.InitInstance(random_seed);
+
 			var split = new RatingsSimpleSplit(training_data, test_ratio);
 			recommender.Ratings = split.Train[0];
 			training_data = split.Train[0];
@@ -459,6 +463,7 @@ class RatingPrediction
 			}
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

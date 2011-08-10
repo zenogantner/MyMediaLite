@@ -8,7 +8,10 @@
           - BiasedMatrixFactorization: improved API doc
         - command-line tools
           - display memory stats just once when the program finishes
+          - display memory stats after loading data is complete
           - introduce CheckParameters() method for better source readability
+          - ensure that 'random' data splitting is reproducible when using
+            --random-seed=N
           - item prediction:
             - better handling of different prediction scenarios
             - improved error/usage messages

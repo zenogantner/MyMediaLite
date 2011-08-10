@@ -46,7 +46,7 @@ namespace MyMediaLite.Data
 			var test_indices  = new List<int>();
 
 			// assign indices to training or validation part
-			Random random = new Random();
+			Random random = MyMediaLite.Util.Random.GetInstance();
 			for (int i = 0; i < ratings.Count; i++)
 				if (random.NextDouble() < ratio)
 					test_indices.Add(i);
