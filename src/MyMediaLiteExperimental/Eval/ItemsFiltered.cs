@@ -158,7 +158,7 @@ namespace MyMediaLite.Eval
 
 					if (num_lists % 5000 == 0)
 						Console.Error.Write(".");
-					if (num_lists % 100000 == 0)
+					if (num_lists % 300000 == 0)
 						Console.Error.WriteLine();
 				}
 			}

@@ -111,7 +111,7 @@ namespace MyMediaLite.Eval
 			foreach (int group_id in group_to_user.NonEmptyRowIDs)
 			{
 				var users = group_to_user.GetEntriesByRow(group_id);
-				
+
 				var correct_items = new HashSet<int>();
 				foreach (int user_id in users)
 					correct_items.UnionWith(test.UserMatrix[user_id]);
@@ -130,7 +130,7 @@ namespace MyMediaLite.Eval
 					continue;
 
 				num_groups++;
-				
+
 				IList<int> prediction = recommender.RankItems(users, relevant_items);
 				if (prediction.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
@@ -145,7 +145,7 @@ namespace MyMediaLite.Eval
 
 				if (num_groups % 1000 == 0)
 					Console.Error.Write(".");
-				if (num_groups % 20000 == 0)
+				if (num_groups % 60000 == 0)
 					Console.Error.WriteLine();
 			}
 

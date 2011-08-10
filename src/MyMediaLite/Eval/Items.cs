@@ -140,7 +140,7 @@ namespace MyMediaLite.Eval
 
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
-				if (num_users % 20000 == 0)
+				if (num_users % 60000 == 0)
 					Console.Error.WriteLine();
 			}
 
