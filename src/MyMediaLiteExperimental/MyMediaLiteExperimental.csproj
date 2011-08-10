@@ -66,6 +66,7 @@
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="Eval\Groups.cs" />
     <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
+    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AttrToFactor\" />
