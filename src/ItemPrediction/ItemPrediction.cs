@@ -76,6 +76,7 @@ class ItemPrediction
 	static bool filtered_eval;
 	static bool repeat_eval;
 	static bool group_eval;
+	static string group_method = "Average";
 	static bool overlap_items;
 	static bool test_items;
 	static bool user_prediction;
@@ -166,7 +167,6 @@ class ItemPrediction
 
 		// recommender arguments
 		string method              = "MostPopular";
-		string group_method        = "Minimum";
 		string recommender_options = string.Empty;
 
 		// help/version
@@ -342,7 +342,7 @@ class ItemPrediction
 					// TODO let user select
 					GroupRecommender group_recommender = new Average(recommender); //GroupUtils.CreateGroupRecommender(group_method, recommender);
 					// TODO catch error
-					
+
 					time_span = Utils.MeasureTime( delegate() {
 						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, relevant_items);
 						Groups.DisplayResults(result);
@@ -364,7 +364,7 @@ class ItemPrediction
 	static void CheckParameters(IList<string> extra_args)
 	{
 		// TODO block group vs. filter/online, etc.
-		
+
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
@@ -465,6 +465,30 @@ class ItemPrediction
 				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
+			}
+
+			if (group_eval && group_method == "GroupsAsUsers")
+			{
+				//var training_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
+				// transform groups to users
+				foreach (int group_id in group_to_user.NonEmptyRowIDs)
+					foreach (int user_id in group_to_user[group_id])
+						foreach (int item_id in training_data.UserMatrix.GetEntriesByRow(user_id))
+							training_data.Add(group_id, item_id);
+				// add the users that do not belong to groups
+
+
+				// transform groups to users
+				var test_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
+				foreach (int group_id in group_to_user.NonEmptyRowIDs)
+					foreach (int user_id in group_to_user[group_id])
+						foreach (int item_id in test_data.UserMatrix.GetEntriesByRow(user_id))
+							test_data_group.Add(group_id, item_id);
+
+				//training_data = training_data_group;
+				test_data     = test_data_group;
+
+				group_eval = false; // deactivate s.t. the normal eval routines are used
 			}
 
 			if (user_prediction)
