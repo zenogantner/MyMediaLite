@@ -27,14 +27,16 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>
-	/// Matrix factorization model for item prediction optimized using BPR-Opt
-	/// </summary>
+	/// <summary>Matrix factorization model for item prediction optimized using BPR-Opt</summary>
 	/// <remarks>
-	/// Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
-	/// BPR: Bayesian Personalized Ranking from Implicit Feedback.
-	/// Proceedings of the 25th Conference on Uncertainty in Artificial Intelligence (UAI 2009),
-	/// Montreal, Canada, 2009.
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
+	///     BPR: Bayesian Personalized Ranking from Implicit Feedback.
+	///     UAI 2009.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
+	///   </description></item>
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
@@ -116,7 +118,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			CheckSampling();
 
-			random = Util.Random.GetInstance(); // TODO move to training
+			random = Util.Random.GetInstance();
 
 			if (BoldDriver)
 			{

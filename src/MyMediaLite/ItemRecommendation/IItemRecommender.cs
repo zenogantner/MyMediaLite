@@ -19,6 +19,9 @@
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Interface for item recommenders</summary>
+	/// <remarks>
+	/// see http://recsyswiki/wiki/Item_prediction
+	/// </remarks>
 	public interface IItemRecommender : IRecommender
 	{
 		// <summary>Check if the recommender can produce meaningful recommendations for a given user</summary>
