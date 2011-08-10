@@ -30,6 +30,8 @@
           - support CSV format also for attribute and relation files
 	- documentation
           - more detailed system requirements in doc/Installation
+          - improved API documentation, with some links to RecSysWiki
+            http://recsyswiki.com
         - helper scripts
           - better --help usage information for crossvalidation.pl
 
