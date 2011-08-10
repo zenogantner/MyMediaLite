@@ -2,7 +2,8 @@
         - add preliminary support for group recommendation
         - recommenders
           - add WeightedBPRMF: the recommender developed for KDD Cup 2011
-          - group recommenders: add Average, Minimum, Maximum, PairwiseWins
+          - group recommenders: add aggregation methods Average, Minimum, Maximum,
+                                PairwiseWins, Weighted Average
           - WRMF: set NumIter default value down to 15
           - BiasedMatrixFactorization: improved API doc
         - command-line tools
@@ -16,8 +17,10 @@
             - support --user-prediction by transposing the user-item matrix
             - support group recommendation: --group-evaluation and
               --user-groups=FILE
+            - add 'groups as user' approach for group recommendation
         - evaluation
            - item prediction: more generic method signatures; more compact code
+           - item/group/filtered prediction: modify progress output
         - IO
           - support CSV format also for attribute and relation files
 	- documentation
