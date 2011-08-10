@@ -62,7 +62,7 @@ class ItemPrediction
 	static string item_attributes_file = null;
 	static string user_relations_file  = null;
 	static string item_relations_file  = null;
-	static string save_model_file      = string.Empty; // TODO use null here?
+	static string save_model_file      = string.Empty;
 	static string load_model_file      = string.Empty;
 	static string user_groups_file     = null;
 
@@ -575,7 +575,7 @@ class ItemPrediction
 	{
 		TimeSpan time_span;
 
-		if (predict_for_users_file == string.Empty)
+		if (predict_for_users_file == null)
 			time_span = Utils.MeasureTime( delegate()
 		    	{
 			    	Prediction.WritePredictions(

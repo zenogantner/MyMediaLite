@@ -79,6 +79,9 @@ namespace MyMediaLite.Util
 		/// <returns>a list of integers</returns>
 		public static IList<int> ReadIntegers(string filename)
 		{
+			if (filename == null)
+				throw new ArgumentNullException("filename");
+
 			using ( var reader = new StreamReader(filename) )
 				return ReadIntegers(reader);
 		}
