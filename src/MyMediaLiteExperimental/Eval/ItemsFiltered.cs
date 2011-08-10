@@ -156,9 +156,9 @@ namespace MyMediaLite.Eval
 					if (prediction.Length != relevant_filtered_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
-					if (num_lists % 1000 == 0)
+					if (num_lists % 5000 == 0)
 						Console.Error.Write(".");
-					if (num_lists % 20000 == 0)
+					if (num_lists % 100000 == 0)
 						Console.Error.WriteLine();
 				}
 			}
