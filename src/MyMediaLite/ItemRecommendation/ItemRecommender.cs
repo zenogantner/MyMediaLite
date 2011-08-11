@@ -25,7 +25,6 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Abstract item recommender class that loads the (positive-only implicit feedback) training data into memory</summary>
 	/// <remarks>
-	/// <remarks>
 	/// see http://recsyswiki/wiki/Item_prediction and http://recsyswiki/wiki/Implicit_feedback
 	/// 
 	/// The data is stored in two sparse matrices:

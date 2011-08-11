@@ -37,6 +37,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     UAI 2009.
 	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
 	///   </description></item>
+	/// </list>
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
