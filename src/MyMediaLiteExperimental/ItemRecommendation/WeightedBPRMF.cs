@@ -68,13 +68,13 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void SampleTriple(out int u, out int i, out int j)
 		{
 			// sample user from positive user-item pairs
-			int index = random.Next(0, items.Length - 1);
+			int index = random.Next(items.Length - 1);
 			u = users[index];
 			i = items[index];
 
 			// sample negative item
 			do
-				j = items[random.Next(0, items.Length - 1)];
+				j = items[random.Next(items.Length - 1)];
 			while (Feedback.UserMatrix[u, j]);
 		}
 

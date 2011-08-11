@@ -96,7 +96,7 @@ namespace MyMediaLite.Util
 			Random random = MyMediaLite.Util.Random.GetInstance();
 			for (int i = list.Count - 1; i >= 0; i--)
 			{
-				int r = random.Next(0, i + 1);
+				int r = random.Next(i + 1);
 
 				// swap position i with position r
 				T tmp = list[i];

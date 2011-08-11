@@ -55,7 +55,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			while (true)
 			{
-				int user_id = random.Next(0, MaxUserID + 1);
+				int user_id = random.Next(MaxUserID + 1);
 				var user_items = Feedback.UserMatrix[user_id];
 				var user_attrs = user_attributes[user_id];
 				if (user_items.Count == 0 || user_attrs.Count == 0)

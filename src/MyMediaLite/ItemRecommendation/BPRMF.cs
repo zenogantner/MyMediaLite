@@ -191,19 +191,19 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				if (item_is_positive)
 				{
-					int rindex = random.Next(0, user_neg_items[u].Count);
+					int rindex = random.Next(user_neg_items[u].Count);
 					j = user_neg_items[u][rindex];
 				}
 				else
 				{
-					int rindex = random.Next(0, user_pos_items[u].Count);
+					int rindex = random.Next(user_pos_items[u].Count);
 					j = user_pos_items[u][rindex];
 				}
 			}
 			else
 			{
 				do
-					j = random.Next(0, MaxItemID + 1);
+					j = random.Next(MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j] != item_is_positive);
 			}
 
@@ -220,18 +220,18 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				int rindex;
 
-				rindex = random.Next(0, user_pos_items[u].Count);
+				rindex = random.Next(user_pos_items[u].Count);
 				i = user_pos_items[u][rindex]; // TODO use this also with slow sampling?
 
-				rindex = random.Next(0, user_neg_items[u].Count);
+				rindex = random.Next(user_neg_items[u].Count);
 				j = user_neg_items[u][rindex];
 			}
 			else
 			{
 				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next(0, user_items.Count));
+				i = user_items.ElementAt(random.Next(user_items.Count));
 				do
-					j = random.Next(0, MaxItemID + 1);
+					j = random.Next(MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j]);
 			}
 		}
@@ -242,7 +242,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(0, MaxUserID + 1);
+				int u = random.Next(MaxUserID + 1);
 				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;

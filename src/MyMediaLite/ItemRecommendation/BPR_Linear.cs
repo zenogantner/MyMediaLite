@@ -149,13 +149,13 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (fast_sampling)
 			{
-				i = user_pos_items[u][random.Next(0, user_pos_items[u].Count)];
-				j = user_neg_items[u][random.Next (0, user_neg_items[u].Count)];
+				i = user_pos_items[u][random.Next(user_pos_items[u].Count)];
+				j = user_neg_items[u][random.Next (user_neg_items[u].Count)];
 			}
 			else
 			{
 				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next (0, user_items.Count));
+				i = user_items.ElementAt(random.Next (user_items.Count));
 				do
 					j = random.Next (0, MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
@@ -169,7 +169,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(0, MaxUserID + 1);
+				int u = random.Next(MaxUserID + 1);
 				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;

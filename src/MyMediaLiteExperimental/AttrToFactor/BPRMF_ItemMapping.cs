@@ -108,7 +108,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			while (true)
 			{
-				int item_id = random.Next(0, MaxItemID + 1);
+				int item_id = random.Next(MaxItemID + 1);
 				var item_users = Feedback.ItemMatrix.GetEntriesByRow(item_id);
 				if (item_users.Count == 0)
 					continue;

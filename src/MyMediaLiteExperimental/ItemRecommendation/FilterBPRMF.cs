@@ -67,16 +67,16 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			// sample filter attribute accessed by user
 			var user_filter_attributes = filtered_items_by_user[u].Keys;
-			int a = user_filter_attributes.ElementAt(random.Next(0, user_filter_attributes.Count));
+			int a = user_filter_attributes.ElementAt(random.Next(user_filter_attributes.Count));
 
 			// TODO catch condition that user has rated all comedies ...
 
 			var user_filtered_items = filtered_items_by_user[u][a];
 			// sample positive item
-			i = user_filtered_items.ElementAt(random.Next(0, user_filtered_items.Count));
+			i = user_filtered_items.ElementAt(random.Next(user_filtered_items.Count));
 			// sample negative item
 			do
-				j = items_by_attribute[a].ElementAt(random.Next(0, items_by_attribute[a].Count));
+				j = items_by_attribute[a].ElementAt(random.Next(items_by_attribute[a].Count));
 			while (Feedback.UserMatrix[u, j]);
 		}
 	}

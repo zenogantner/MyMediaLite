@@ -121,7 +121,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			while (true)
 			{
-				int item_id = random.Next(0, MaxItemID + 1);
+				int item_id = random.Next(MaxItemID + 1);
 
 				if (data_item[item_id].Count == 0)
 					continue;
