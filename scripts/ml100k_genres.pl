@@ -37,7 +37,7 @@ while (<>) {
 
     my ($movie_id, $movie_title, $movie_date, $movie_url, @movie_genres) = @fields;
 
-    for (my $i = 5; $i < scalar @movie_genres; $i++) {
+    for (my $i = 0; $i < scalar @movie_genres; $i++) {
 	print "$movie_id\t$i\n" if $movie_genres[$i] eq '1';
     }
 }
