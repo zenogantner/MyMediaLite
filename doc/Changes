@@ -14,6 +14,7 @@
           - introduce CheckParameters() method for better source readability
           - ensure that 'random' data splitting is reproducible when using
             --random-seed=N
+          - improved attribute statistics output
           - item prediction:
             - better handling of different prediction scenarios
             - improved error/usage messages
@@ -33,6 +34,7 @@
           - improved API documentation, with some links to RecSysWiki
             http://recsyswiki.com
         - helper scripts
+          - fix bug in ml100k_genres.pl
           - better --help usage information for crossvalidation.pl
 
 1.04	2011-08-03
@@ -99,7 +101,7 @@
           please contact the authors: mymedialite@ismll.de.
         - web service API
           - add prototype for a SOAP web service for rating prediction, plus
-            three test script
+            three test scripts
         - API changes
           - IRatingPredictor
            - Add() is now AddRating()
