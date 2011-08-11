@@ -45,6 +45,10 @@ class RatingPrediction
 	static IEntityMapping user_mapping = new EntityMapping();
 	static IEntityMapping item_mapping = new EntityMapping();
 
+	// user and item attributes
+	static SparseBooleanMatrix user_attributes;
+	static SparseBooleanMatrix item_attributes;
+
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
 	static List<double> fit_time_stats      = new List<double>();
@@ -251,7 +255,7 @@ class RatingPrediction
 			test_data     = split.Test[0];
 		}
 
-		Utils.DisplayDataStats(training_data, test_data, recommender);
+		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
 
 		if (find_iter != 0)
 		{
@@ -431,12 +435,16 @@ class RatingPrediction
 			recommender.Ratings = training_data;
 
 			// user attributes
-			if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			if (user_attributes_file != null)
+				user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			if (recommender is IUserAttributeAwareRecommender)
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
 
 			// item attributes
+			if (item_attributes_file != null)
+				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 			if (recommender is IItemAttributeAwareRecommender)
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)

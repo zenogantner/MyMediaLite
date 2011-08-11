@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 
@@ -121,19 +122,24 @@ namespace MyMediaLite.Util
 		/// <summary>Display dataset statistics</summary>
 		/// <param name="train">the training data</param>
 		/// <param name="test">the test data</param>
-		/// <param name="recommender">the recommender (to get attribute information)</param>
-		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender)
+		/// <param name="user_attributes">the user attributes</param>
+		/// <param name="item_attributes">the item attributes</param>
+		public static void DisplayDataStats(IRatings train, IRatings test,
+		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
 		{
-			DisplayDataStats(train, test, recommender, false);
+			DisplayDataStats(train, test, user_attributes, item_attributes, false);
 		}
 
 		// TODO get rid of recommender argument
 		/// <summary>Display dataset statistics</summary>
 		/// <param name="train">the training data</param>
 		/// <param name="test">the test data</param>
-		/// <param name="recommender">the recommender (to get attribute information)</param>
+		/// <param name="user_attributes">the user attributes</param>
+		/// <param name="item_attributes">the item attributes</param>
 		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
-		public static void DisplayDataStats(IRatings train, IRatings test, RatingPredictor recommender, bool display_overlap)
+		public static void DisplayDataStats(IRatings train, IRatings test,
+		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes,
+		                                    bool display_overlap)
 		{
 			// training data stats
 			int num_users = train.AllUsers.Count;
@@ -149,7 +155,7 @@ namespace MyMediaLite.Util
 				num_users = test.AllUsers.Count;
 				num_items = test.AllItems.Count;
 				matrix_size = (long) num_users * num_items;
-				empty_size  = (long) matrix_size - test.Count;
+				empty_size  = (long) matrix_size - test.Count; // TODO depends on the eval scheme whether this is correct
 				sparsity = (double) 100L * empty_size / matrix_size;
 				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
 			}
@@ -166,21 +172,16 @@ namespace MyMediaLite.Util
 				Console.WriteLine("{0} new users, {1} new items ({2} seconds)", num_new_users, num_new_items, seconds);
 			}
 
-			// attribute stats
-			if (recommender != null)
-			{
-				if (recommender is IUserAttributeAwareRecommender)
-					Console.WriteLine("{0} user attributes", ((IUserAttributeAwareRecommender) recommender).NumUserAttributes);
-				if (recommender is IItemAttributeAwareRecommender)
-					Console.WriteLine("{0} item attributes", ((IItemAttributeAwareRecommender) recommender).NumItemAttributes);
-			}
+			DisplayAttributeStats(user_attributes, item_attributes);
 		}
 
 		/// <summary>Display data statistics for item recommendation datasets</summary>
 		/// <param name="training_data">the training dataset</param>
 		/// <param name="test_data">the test dataset</param>
-		/// <param name="recommender">the recommender that will be used</param>
-		public static void DisplayDataStats(IPosOnlyFeedback training_data, IPosOnlyFeedback test_data, IItemRecommender recommender)
+		/// <param name="user_attributes">the user attributes</param>
+		/// <param name="item_attributes">the item attributes</param>
+		public static void DisplayDataStats(IPosOnlyFeedback training_data, IPosOnlyFeedback test_data,
+		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
 		{
 			// training data stats
 			int num_users = training_data.AllUsers.Count;
@@ -197,19 +198,28 @@ namespace MyMediaLite.Util
 				num_items = test_data.AllItems.Count;
 				matrix_size = (long) num_users * num_items;
 				empty_size  = (long) matrix_size - test_data.Count;
-				sparsity = (double) 100L * empty_size / matrix_size;
+				sparsity = (double) 100L * empty_size / matrix_size; // TODO depends on the eval scheme whether this is correct
 				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, {2} events, sparsity {3,0:0.#####}", num_users, num_items, test_data.Count, sparsity));
 			}
 
-			// attribute stats
-			if (recommender is IUserAttributeAwareRecommender)
-				Console.WriteLine("{0} user attributes for {1} users",
-				                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
-				                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
-			if (recommender is IItemAttributeAwareRecommender)
-				Console.WriteLine("{0} item attributes for {1} items",
-				                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
-				                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
+			DisplayAttributeStats(user_attributes, item_attributes);
+		}
+
+		/// <summary>Display statistics for user and item attributes</summary>
+		/// <param name="user_attributes">the user attributes</param>
+		/// <param name="item_attributes">the item attributes</param>
+		public static void DisplayAttributeStats(SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
+		{
+			if (user_attributes != null)
+			{
+				Console.WriteLine("{0} user attributes for {1} users, {2} assignments, {3} users with attribute assignments",
+				                  user_attributes.NumberOfColumns, user_attributes.NumberOfRows,
+				                  user_attributes.NumberOfEntries, user_attributes.NonEmptyRows);
+			}
+			if (item_attributes != null)
+				Console.WriteLine("{0} item attributes for {1} items, {2} assignments, {3} items with attribute assignments",
+				                  item_attributes.NonEmptyColumnIDs.Count, item_attributes.NumberOfRows,
+				                  item_attributes.NumberOfEntries, item_attributes.NonEmptyRowIDs.Count);
 		}
 	}
 }

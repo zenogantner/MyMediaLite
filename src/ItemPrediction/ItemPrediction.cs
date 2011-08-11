@@ -49,7 +49,8 @@ class ItemPrediction
 	static IEntityMapping user_mapping = new EntityMapping();
 	static IEntityMapping item_mapping = new EntityMapping();
 
-	// item attributes (currently used for filtered evaluation
+	// user and item attributes
+	static SparseBooleanMatrix user_attributes;
 	static SparseBooleanMatrix item_attributes;
 
 	// command-line parameters (data)
@@ -255,7 +256,7 @@ class ItemPrediction
 
 		// load all the data
 		LoadData();
-		Utils.DisplayDataStats(training_data, test_data, recommender);
+		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
 
 		TimeSpan time_span;
 
@@ -422,15 +423,16 @@ class ItemPrediction
 				: ItemRecommendationRatingThreshold.Read(Path.Combine(data_dir, training_file), rating_threshold, user_mapping, item_mapping);
 
 			// user attributes
+			if (user_attributes_file != null)
+				user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
 			if (recommender is IUserAttributeAwareRecommender)
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
 
 			// item attributes
-			if (recommender is IItemAttributeAwareRecommender)
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-
-			if (filtered_eval)
+			if (item_attributes_file != null)
 				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+			if (recommender is IItemAttributeAwareRecommender)
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
