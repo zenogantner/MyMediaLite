@@ -380,6 +380,9 @@ class ItemPrediction
 		if (test_file == null && test_ratio == 0 && test_items)
 			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
 
+		if (group_eval && user_groups_file == null)
+			Usage("--group-evaluation needs --user-groups=FILE.");
+		
 		if (user_prediction)
 		{
 			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
