@@ -156,6 +156,9 @@
     <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="RatingPrediction\Prediction.cs" />
     <Compile Include="IO\ItemRecommendationRatingThreshold.cs" />
+    <Compile Include="Data\ITimedRatings.cs" />
+    <Compile Include="Data\TimedRatings.cs" />
+    <Compile Include="IO\TimedRatings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
