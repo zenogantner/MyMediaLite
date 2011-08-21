@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-//using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.Util;
