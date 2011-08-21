@@ -82,8 +82,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-			                     "WeightedBPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} bold_driver={6} learn_rate={7} init_mean={8} init_stdev={8}",
-								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate, InitMean, InitStdev);
+			                     "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} bold_driver={7} learn_rate={8} init_mean={9} init_stdev={10}",
+								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate, InitMean, InitStdev);
 		}
 	}
 }
