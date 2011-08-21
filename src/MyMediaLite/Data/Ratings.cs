@@ -87,6 +87,7 @@ namespace MyMediaLite.Data
 				return by_user;
 			}
 		}
+		/// <summary>Rating indices organized by user</summary>
 		protected IList<IList<int>> by_user;
 
 		///
@@ -110,6 +111,7 @@ namespace MyMediaLite.Data
 				return by_item;
 			}
 		}
+		/// <summary>Rating indices organized by item</summary>
 		protected IList<IList<int>> by_item;
 
 		///

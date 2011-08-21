@@ -26,6 +26,11 @@ namespace MyMediaLite.Data
 		/// <summary>the item entries</summary>
 		IList<DateTime> Times { get; }
 		
+		/// <summary>add a rating event including time information</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <param name="rating">the rating value</param>
+		/// <param name="time">A <see cref="DateTime"/> specifying the time of the rating event</param>
 		void Add(int user_id, int item_id, double rating, DateTime time);
 	}
 }
