@@ -33,7 +33,7 @@ namespace MyMediaLite.Eval
 		static public ICollection<string> Measures
 		{
 			get	{
-				string[] measures = { "AUC", "prec@5", "prec@10", "prec@15", "NDCG", "MAP" };
+				string[] measures = { "AUC", "prec@5", "prec@10", "recall@5", "recall@10", "NDCG", "MAP" };
 				return new HashSet<string>(measures);
 			}
 		}
@@ -42,8 +42,8 @@ namespace MyMediaLite.Eval
 		/// <param name="result">the result dictionary</param>
 		static public void DisplayResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6} num_lists {7}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]));
+			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} recall@5 {4,0:0.#####} recall@10 {5,0:0.#####} NDCG {6,0:0.#####} num_users {7} num_items {8} num_lists {9}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]));
 		}
 		// TODO return a string instead of writing to STDOUT (also for ratings)
 
@@ -102,13 +102,14 @@ namespace MyMediaLite.Eval
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			// compute evaluation measures
-			double auc_sum     = 0;
-			double map_sum     = 0;
-			double prec_5_sum  = 0;
-			double prec_10_sum = 0;
-			double prec_15_sum = 0;
-			double ndcg_sum    = 0;
-			int num_users      = 0;
+			double auc_sum       = 0;
+			double map_sum       = 0;
+			double prec_5_sum    = 0;
+			double prec_10_sum   = 0;
+			double recall_5_sum  = 0;
+			double recall_10_sum = 0;
+			double ndcg_sum      = 0;
+			int num_users        = 0;
 
 			foreach (int user_id in relevant_users)
 			{
@@ -132,12 +133,18 @@ namespace MyMediaLite.Eval
 					throw new Exception("Not all items have been ranked.");
 
 				ICollection<int> ignore_items = ignore_overlap ? train.UserMatrix[user_id] : new int[0];
+
 				auc_sum     += AUC(prediction, correct_items, ignore_items);
 				map_sum     += MAP(prediction, correct_items, ignore_items);
 				ndcg_sum    += NDCG(prediction, correct_items, ignore_items);
-				prec_5_sum  += PrecisionAt(prediction, correct_items, ignore_items,  5);
-				prec_10_sum += PrecisionAt(prediction, correct_items, ignore_items, 10);
-				prec_15_sum += PrecisionAt(prediction, correct_items, ignore_items, 15);
+
+				var ns = new int[] { 5, 10, 15 };
+				var prec = PrecisionAt(prediction, correct_items, ignore_items, ns);
+				prec_5_sum  += prec[5];
+				prec_10_sum += prec[10];
+				var recall = RecallAt(prediction, correct_items, ignore_items, ns);
+				recall_5_sum  += recall[5];
+				recall_10_sum += recall[10];
 
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
@@ -151,7 +158,8 @@ namespace MyMediaLite.Eval
 			result["NDCG"]      = ndcg_sum / num_users;
 			result["prec@5"]    = prec_5_sum / num_users;
 			result["prec@10"]   = prec_10_sum / num_users;
-			result["prec@15"]   = prec_15_sum / num_users;
+			result["recall@5"]  = recall_5_sum / num_users;
+			result["recall@10"] = recall_10_sum / num_users;
 			result["num_users"] = num_users;
 			result["num_lists"] = num_users;
 			result["num_items"] = relevant_items.Count;
@@ -412,6 +420,23 @@ namespace MyMediaLite.Eval
 			return dcg / idcg;
 		}
 
+		/// <summary>Compute the precision@N of a list of ranked items at several N</summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <param name="ns">the cutoff positions in the list</param>
+		/// <returns>the precision@N for the given data at the different positions N</returns>
+		public static Dictionary<int, double> PrecisionAt(IList<int> ranked_items,
+		                                                  ICollection<int> correct_items,
+		                                                  ICollection<int> ignore_items,
+		                                                  IList<int> ns)
+		{
+			var precision_at_n = new Dictionary<int, double>();
+			foreach (int n in ns)
+				precision_at_n[n] = PrecisionAt(ranked_items, correct_items, ignore_items, n);
+			return precision_at_n;
+		}
+
 		/// <summary>Compute the precision@N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
@@ -428,10 +453,62 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items, int n)
+		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items,
+		                                 ICollection<int> ignore_items, int n)
+		{
+			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / n;
+		}
+
+		/// <summary>Compute the recall@N of a list of ranked items at several N</summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <param name="ns">the cutoff positions in the list</param>
+		/// <returns>the recall@N for the given data at the different positions N</returns>
+		public static Dictionary<int, double> RecallAt(IList<int> ranked_items,
+		                                                  ICollection<int> correct_items,
+		                                                  ICollection<int> ignore_items,
+		                                                  IList<int> ns)
+		{
+			var recall_at_n = new Dictionary<int, double>();
+			foreach (int n in ns)
+				recall_at_n[n] = RecallAt(ranked_items, correct_items, ignore_items, n);
+			return recall_at_n;
+		}
+
+		/// <summary>Compute the recall@N of a list of ranked items</summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="n">the cutoff position in the list</param>
+		/// <returns>the recall@N for the given data</returns>
+		public static double RecallAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
+		{
+			return RecallAt(ranked_items, correct_items, new HashSet<int>(), n);
+		}
+
+		/// <summary>Compute the recall@N of a list of ranked items</summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <param name="n">the cutoff position in the list</param>
+		/// <returns>the recall@N for the given data</returns>
+		public static double RecallAt(IList<int> ranked_items, ICollection<int> correct_items,
+		                                 ICollection<int> ignore_items, int n)
+		{
+			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / correct_items.Count;
+		}
+
+		/// <summary>Compute the number of hits until position N of a list of ranked items</summary>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <param name="n">the cutoff position in the list</param>
+		/// <returns>the hits@N for the given data</returns>
+		public static int HitsAt(IList<int> ranked_items, ICollection<int> correct_items,
+		                                 ICollection<int> ignore_items, int n)
 		{
 			if (n < 1)
-				throw new ArgumentException("N must be at least 1.");
+				throw new ArgumentException("n must be at least 1.");
 
 			int hit_count = 0;
 			int left_out  = 0;
@@ -454,7 +531,7 @@ namespace MyMediaLite.Eval
 					break;
 			}
 
-			return (double) hit_count / n;
+			return hit_count;
 		}
 
 		/// <summary>Computes the ideal DCG given the number of positive items.</summary>

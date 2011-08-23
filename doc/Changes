@@ -37,6 +37,7 @@
              simplified constructor
            - RatingsCrossValidationSplit: check in constructor whether num_folds
              has a legal value
+           - add Eval.Items.RecallAt()
            - add Eval.Items.EvaluateOnSplit()
         - IO
           - support CSV format also for attribute and relation files
