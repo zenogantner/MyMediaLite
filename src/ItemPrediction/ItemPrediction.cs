@@ -276,9 +276,8 @@ class ItemPrediction
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			var result = Evaluate();
-			Items.DisplayResults(result);
-			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
+			var results = Evaluate();
+			Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
 			{
@@ -297,15 +296,14 @@ class ItemPrediction
 						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
 					}
 
-					t = Utils.MeasureTime(delegate() { result = Evaluate(); });
+					t = Utils.MeasureTime(delegate() { results = Evaluate(); });
 					eval_time_stats.Add(t.TotalSeconds);
-					Items.DisplayResults(result);
-					Console.WriteLine(" iteration " + i);
+					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), i);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					Predict(prediction_file, relevant_users_file, i);
 
-					if (result["AUC"] < auc_cutoff || result["prec@5"] < prec5_cutoff)
+					if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
 					{
 							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
 							Console.Error.WriteLine("DONE");
@@ -323,7 +321,7 @@ class ItemPrediction
 					Console.WriteLine(recommender.ToString());
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
 					var results = MyMediaLite.Eval.Items.EvaluateOnSplit((ItemRecommender) recommender, split, relevant_users, relevant_items);
-					MyMediaLite.Eval.Items.DisplayResults(results);
+					Console.WriteLine(Items.FormatResults(results));
 					no_eval = true;
 				}
 				else
@@ -348,8 +346,8 @@ class ItemPrediction
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var result = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
-						Items.DisplayResults(result);
+						var results = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
+						Console.WriteLine(Items.FormatResults(results));
 			    	});
 				else if (group_eval)
 				{
@@ -365,8 +363,8 @@ class ItemPrediction
 				}
 				else
 					time_span = Utils.MeasureTime( delegate() {
-						var result = Evaluate();
-						Items.DisplayResults(result);
+						var results = Evaluate();
+						Console.WriteLine(Items.FormatResults(results));
 			    	});
 				Console.Write(" testing_time " + time_span);
 			}

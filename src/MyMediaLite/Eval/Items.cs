@@ -38,14 +38,13 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		/// <summary>Display item prediction results</summary>
+		/// <summary>Format item prediction results</summary>
 		/// <param name="result">the result dictionary</param>
-		static public void DisplayResults(Dictionary<string, double> result)
+		static public string FormatResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} recall@5 {4,0:0.#####} recall@10 {5,0:0.#####} NDCG {6,0:0.#####} num_users {7} num_items {8} num_lists {9}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]));
+			return string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} recall@5 {4,0:0.#####} recall@10 {5,0:0.#####} NDCG {6,0:0.#####} num_users {7} num_items {8} num_lists {9}",
+			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]);
 		}
-		// TODO return a string instead of writing to STDOUT (also for ratings)
 
 		/// <summary>Evaluation for rankings of items</summary>
 		/// <remarks>
