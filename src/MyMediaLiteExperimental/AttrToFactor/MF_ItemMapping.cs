@@ -212,11 +212,11 @@ namespace MyMediaLite.AttrToFactor
 			for (int i = 0; i <= NumFactors; i++)
 			{
 				rmse_and_penalty_per_factor[i] = (double) rmse_and_penalty_per_factor[i] / num_items;
-				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_factor[i]);
+				Console.Error.Write("{0:0.####} ", rmse_and_penalty_per_factor[i]);
 			}
 			rmse    = (double) rmse    / ((NumFactors + 1) * num_items);
 			penalty = (double) penalty / ((NumFactors + 1) * num_items);
-			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
+			Console.Error.WriteLine(" > {0:0.####} ({1:0.####})", rmse, penalty);
 
 			return rmse_and_penalty_per_factor;
 		}

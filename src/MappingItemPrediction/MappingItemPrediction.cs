@@ -253,7 +253,7 @@ class MappingItemPrediction
 
 	static void DisplayResults(Dictionary<string, double> result)
 	{
-		Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6}",
+		Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6}",
 		                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 	}
 
@@ -265,7 +265,7 @@ class MappingItemPrediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
 		num_users = test_data.AllUsers.Count;
@@ -273,7 +273,7 @@ class MappingItemPrediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2:0.#####}", num_users, num_items, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)
