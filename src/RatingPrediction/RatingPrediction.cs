@@ -370,7 +370,7 @@ class RatingPrediction
 				seconds = Utils.MeasureTime(delegate() {
 					MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data));
 				});
-				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0,0:0.#####} ", seconds));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0:0.#####} ", seconds));
 			}
 
 			if (prediction_file != string.Empty)

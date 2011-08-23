@@ -274,7 +274,7 @@ class ItemPrediction
 				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
 
 			var results = Evaluate();
 			Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
@@ -293,7 +293,7 @@ class ItemPrediction
 						double fit = 0;
 						t = Utils.MeasureTime(delegate() { fit = iterative_recommender.ComputeFit(); });
 						fit_time_stats.Add(t.TotalSeconds);
-						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
+						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", fit));
 					}
 
 					t = Utils.MeasureTime(delegate() { results = Evaluate(); });
@@ -647,19 +647,19 @@ class ItemPrediction
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"eval_time: min={0,0:0.###}, max={1,0:0.###}, avg={2,0:0.###}",
+				"eval_time: min={0:0.###}, max={1:0.###}, avg={2:0.###}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
