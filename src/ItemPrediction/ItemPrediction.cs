@@ -214,7 +214,7 @@ class ItemPrediction
 			{ "random-seed=",          (int v) => random_seed          = v },
 			{ "predict-items-number=", (int v) => predict_items_number = v },
 			{ "num-test-users=",       (int v) => num_test_users       = v },
-			{ "cross-validation=",     (uint v) => cross_validation    = v },	
+			{ "cross-validation=",     (uint v) => cross_validation    = v },
 			// double-valued options
 //			{ "epsilon=",             (double v) => epsilon          = v },
 			{ "auc-cutoff=",          (double v) => auc_cutoff       = v },
@@ -386,8 +386,14 @@ class ItemPrediction
 		if (online_eval && filtered_eval)
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
-		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty && relevant_users_file == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --save-model=FILE, or --relevant-users=FILE.");
+		if (cross_validation == 1)
+			Usage("--cross-validation=K requires K to be at least 2.");
+
+		if (cross_validation > 1 && test_ratio != 0)
+			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+
+		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && relevant_users_file == null)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
 
 		if (test_file == null && test_ratio == 0 && overlap_items)
 			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
@@ -397,7 +403,7 @@ class ItemPrediction
 
 		if (group_eval && user_groups_file == null)
 			Usage("--group-evaluation needs --user-groups=FILE.");
-		
+
 		if (user_prediction)
 		{
 			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
