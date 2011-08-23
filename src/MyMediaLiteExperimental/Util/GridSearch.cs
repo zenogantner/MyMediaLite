@@ -174,7 +174,7 @@ namespace MyMediaLite.Util
 		                                 string hyperparameter_name,
 		                                 double[] hyperparameter_values,
 		                                 RatingPrediction.RatingPredictor recommender,
-		                                 int k)
+		                                 uint k)
 		{
 			var data = recommender.Ratings;
 			var split = new RatingCrossValidationSplit(data, k);

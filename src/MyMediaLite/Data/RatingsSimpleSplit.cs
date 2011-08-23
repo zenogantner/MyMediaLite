@@ -25,13 +25,13 @@ namespace MyMediaLite.Data
 	public class RatingsSimpleSplit : ISplit<IRatings>
 	{
 		///
-		public int NumberOfFolds { get { return 1; } }
+		public uint NumberOfFolds { get { return 1; } }
 
 		///
-		public List<IRatings> Train { get; private set; }
+		public IList<IRatings> Train { get; private set; }
 
 		///
-		public List<IRatings> Test { get; private set; }
+		public IList<IRatings> Test { get; private set; }
 
 		/// <summary>Create a simple split of rating prediction data</summary>
 		/// <param name="ratings">the dataset</param>
@@ -54,10 +54,8 @@ namespace MyMediaLite.Data
 					train_indices.Add(i);
 
 			// create split data structures
-			Train = new List<IRatings>(NumberOfFolds);
-			Test  = new List<IRatings>(NumberOfFolds);
-			Train.Add(new RatingsProxy(ratings, train_indices));
-			Test.Add(new RatingsProxy(ratings, test_indices));
+			Train = new IRatings[] { new RatingsProxy(ratings, train_indices) };
+			Test  = new IRatings[] { new RatingsProxy(ratings, test_indices) };
 		}
 	}
 }

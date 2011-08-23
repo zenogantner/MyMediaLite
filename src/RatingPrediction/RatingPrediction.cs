@@ -67,7 +67,7 @@ class RatingPrediction
 	static bool compute_fit             = false;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
-	static int cross_validation         = 0;
+	static uint cross_validation        = 0;
 	static double test_ratio            = 0;
 
 	static void ShowVersion()
@@ -191,7 +191,7 @@ class RatingPrediction
    			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
 			{ "random-seed=",         (int v)        => random_seed          = v },
-			{ "cross-validation=",    (int v)        => cross_validation     = v },
+			{ "cross-validation=",    (uint v)       => cross_validation     = v },
 			// double-valued options
 			{ "epsilon=",             (double v)     => epsilon              = v },
 			{ "rmse-cutoff=",         (double v)     => rmse_cutoff          = v },
@@ -325,7 +325,7 @@ class RatingPrediction
 
 			if (load_model_file == string.Empty)
 			{
-				if (cross_validation > 0)
+				if (cross_validation > 1)
 				{
 					Console.Write(recommender.ToString());
 					Console.WriteLine();
@@ -395,11 +395,14 @@ class RatingPrediction
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
-		if (cross_validation != 0 && test_ratio != 0)
+		if (cross_validation == 1)
+			Usage("--cross-validation=K requires K to be at least 2.");
+		
+		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, or --save-model=FILE.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --save-model=FILE.");
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
 			Usage("Recommender expects --user-attributes=FILE.");
