@@ -43,7 +43,7 @@ Zeno Gantner, Steffen Rendle, Christoph Freudenthaler, Lars Schmidt-Thieme:
 MyMediaLite: A Free Recommender System Library. RecSys 2011
 
 @inproceedings{Gantner2011MyMediaLite,
-  author    = { Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
+  author    = {Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
   title     = {{MyMediaLite}: A Free Recommender System Library},
   booktitle = {5th ACM International Conference on Recommender Systems (RecSys 2011)},
   year      = 2011,

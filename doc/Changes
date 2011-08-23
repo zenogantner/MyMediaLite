@@ -1,4 +1,8 @@
 1.05	2011-08-
+	- API changes
+           - ISplit
+              - use IList<T> instead of List<T> for Train and Test
+              - NumberOfFolds is now a uint instead of an int
         - add preliminary support for group recommendation
         - recommenders
           - add WeightedBPRMF: the item recommender developed for KDD Cup 2011
@@ -16,6 +20,7 @@
             --random-seed=N
           - improved attribute statistics output
           - item prediction:
+            - add support for k-fold cross-validation: --cross-validation=K
             - better handling of different prediction scenarios
             - improved error/usage messages
             - new parameter --rating-threshold=NUM uses ratings of at least NUM
@@ -27,6 +32,12 @@
         - evaluation
            - item prediction: more generic method signatures; more compact code
            - item/group/filtered prediction: modify progress output
+           - add class PosOnlyFeedbackCrossValidationSplit
+           - RatingsSimpleSplit and PosOnlyFeedbackSimpleSplit:
+             simplified constructor
+           - RatingsCrossValidationSplit: check in constructor whether num_folds
+             has a legal value
+           - add Eval.Items.EvaluateOnSplit()
         - IO
           - support CSV format also for attribute and relation files
 	- documentation
