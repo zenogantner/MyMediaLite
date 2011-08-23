@@ -56,7 +56,7 @@ class KDDTrack1
 	static string load_model_file;
 	static int max_iter;
 	static int find_iter;
-	static int cross_validation;
+	static uint cross_validation;
 	static double epsilon;
 	static double rmse_cutoff;
 	static double mae_cutoff;
@@ -155,7 +155,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		int random_seed  = parameters.GetRemoveInt32(  "random_seed",      -1);
 		no_eval          = parameters.GetRemoveBool(   "no_eval",          false);
 		prediction_file  = parameters.GetRemoveString( "prediction_file");
-		cross_validation = parameters.GetRemoveInt32(  "cross_validation", 0);
+		cross_validation = parameters.GetRemoveUInt32( "cross_validation", 0);
 		good_rating_prob = parameters.GetRemoveBool(   "good_rating_prob", false);
 
 		if (random_seed != -1)
@@ -193,9 +193,9 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		rating_predictor_final.Ratings = complete_ratings;
 
 		Console.WriteLine("Validation split:");
-		Utils.DisplayDataStats(training_ratings, validation_ratings, rating_predictor_validate);
+		Utils.DisplayDataStats(training_ratings, validation_ratings, null, null);
 		Console.WriteLine("Test split:");
-		Utils.DisplayDataStats(complete_ratings, test_data, rating_predictor_final);
+		Utils.DisplayDataStats(complete_ratings, test_data, null, null);
 
 		if (find_iter != 0)
 		{

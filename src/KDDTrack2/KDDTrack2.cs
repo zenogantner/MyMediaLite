@@ -398,7 +398,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		});
 		Console.Error.WriteLine("loading_time {0:0.##}", loading_time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
-		Utils.DisplayDataStats(recommender_final.Feedback, null, recommender_final);
+		Utils.DisplayDataStats(recommender_final.Feedback, null, null, null);
 	}
 
 	static IPosOnlyFeedback CreateFeedback(IRatings ratings)
