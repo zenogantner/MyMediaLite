@@ -56,19 +56,19 @@ class RatingPrediction
 	static List<double> rmse_eval_stats     = new List<double>();
 
 	// global command line parameters
-	static string training_file         = null;
-	static string test_file             = null;
+	static string training_file;
+	static string test_file;
 	static string save_model_file       = string.Empty;
 	static string load_model_file       = string.Empty;
-	static string user_attributes_file  = null;
-	static string item_attributes_file  = null;
-	static string user_relations_file   = null;
-	static string item_relations_file   = null;
-	static bool compute_fit             = false;
+	static string user_attributes_file;
+	static string item_attributes_file;
+	static string user_relations_file;
+	static string item_relations_file;
+	static bool compute_fit;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
-	static uint cross_validation        = 0;
-	static double test_ratio            = 0;
+	static uint cross_validation;
+	static double test_ratio;
 
 	static void ShowVersion()
 	{
@@ -327,13 +327,11 @@ class RatingPrediction
 			{
 				if (cross_validation > 1)
 				{
-					Console.Write(recommender.ToString());
-					Console.WriteLine();
+					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
 					var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(recommender, split); // TODO if (search_hp)
 					MyMediaLite.Eval.Ratings.DisplayResults(results);
 					no_eval = true;
-					recommender.Ratings = training_data;
 				}
 				else
 				{

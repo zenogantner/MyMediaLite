@@ -159,6 +159,7 @@
     <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="IO\TimedRatings.cs" />
+    <Compile Include="Data\PosOnlyFeedbackCrossValidationSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -45,6 +45,7 @@ namespace MyMediaLite.Eval
 			Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0,0:0.#####} prec@5 {1,0:0.#####} prec@10 {2,0:0.#####} MAP {3,0:0.#####} NDCG {4,0:0.#####} num_users {5} num_items {6} num_lists {7}",
 			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]));
 		}
+		// TODO return a string instead of writing to STDOUT (also for ratings)
 
 		/// <summary>Evaluation for rankings of items</summary>
 		/// <remarks>
@@ -239,6 +240,58 @@ namespace MyMediaLite.Eval
 			return results;
 		}
 
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">an item recommender</param>
+		/// <param name="split">a dataset split</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
+		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> EvaluateOnSplit(ItemRecommender recommender,
+		                                                         ISplit<IPosOnlyFeedback> split,
+													 		     ICollection<int> relevant_users,
+																 ICollection<int> relevant_items)
+		{
+			return EvaluateOnSplit(recommender, split, relevant_users, relevant_items, false);
+		}
+
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">an item recommender</param>
+		/// <param name="split">a dataset split</param>
+		/// <param name="relevant_users">a collection of integers with all relevant users</param>
+		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> EvaluateOnSplit(ItemRecommender recommender,
+		                                                         ISplit<IPosOnlyFeedback> split,
+													 		     ICollection<int> relevant_users,
+																 ICollection<int> relevant_items,
+		                                                         bool show_results)
+		{
+			var avg_results = new Dictionary<string, double>();
+			foreach (var key in Measures)
+				avg_results[key] = 0;
+
+			for (int fold = 0; fold < split.NumberOfFolds; fold++)
+			{
+				var split_recommender = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
+				split_recommender.Feedback = split.Train[fold];
+				split_recommender.Train();
+				var fold_results = Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items);
+
+				foreach (var key in fold_results.Keys)
+					avg_results[key] += fold_results[key];
+				if (show_results)
+					Console.Error.Write(string.Format(CultureInfo.InvariantCulture, "fold {0}, AUC {1,0:0.#####} prec@5 {2,0:0.#####} prec@10 {3,0:0.#####} MAP {4,0:0.#####} NDCG {5,0:0.#####} num_users {6} num_items {7} num_lists {8}",
+   	                                    fold, avg_results["AUC"], avg_results["prec@5"], avg_results["prec@10"], avg_results["MAP"], avg_results["NDCG"], avg_results["num_users"], avg_results["num_items"], avg_results["num_lists"]));
+
+			}
+
+			foreach (var key in avg_results.Keys.ToList())
+				avg_results[key] /= split.NumberOfFolds;
+
+			return avg_results;
+		}
+		
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>

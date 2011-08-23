@@ -54,21 +54,22 @@ class ItemPrediction
 	static SparseBooleanMatrix item_attributes;
 
 	// command-line parameters (data)
-	static string training_file        = null;
-	static string test_file            = null;
-	static string data_dir             = string.Empty;
-	static string relevant_users_file  = null;
-	static string relevant_items_file  = null;
-	static string user_attributes_file = null;
-	static string item_attributes_file = null;
-	static string user_relations_file  = null;
-	static string item_relations_file  = null;
+	static string training_file;
+	static string test_file;
+	static string data_dir = string.Empty;
+	static string relevant_users_file;
+	static string relevant_items_file;
+	static string user_attributes_file;
+	static string item_attributes_file;
+	static string user_relations_file;
+	static string item_relations_file;
 	static string save_model_file      = string.Empty;
 	static string load_model_file      = string.Empty;
-	static string user_groups_file     = null;
+	static string user_groups_file;
 
 	// command-line parameters (other)
 	static bool compute_fit;
+	static uint cross_validation;
 	static double test_ratio;
 	static double rating_threshold = double.NaN;
 	static int num_test_users;
@@ -142,6 +143,7 @@ class ItemPrediction
    --test-items                 use only the items in the test set for evaluation as candidate items in the evaluation
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
+   --cross-validation=K         perform k-fold crossvalidation on the training data
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
@@ -212,6 +214,7 @@ class ItemPrediction
 			{ "random-seed=",          (int v) => random_seed          = v },
 			{ "predict-items-number=", (int v) => predict_items_number = v },
 			{ "num-test-users=",       (int v) => num_test_users       = v },
+			{ "cross-validation=",     (uint v) => cross_validation    = v },	
 			// double-valued options
 //			{ "epsilon=",             (double v) => epsilon          = v },
 			{ "auc-cutoff=",          (double v) => auc_cutoff       = v },
@@ -315,9 +318,20 @@ class ItemPrediction
 		{
 			if (load_model_file == string.Empty)
 			{
-				Console.Write(recommender.ToString() + " ");
-				time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
-        		Console.Write("training_time " + time_span + " ");
+				if (cross_validation > 1)
+				{
+					Console.WriteLine(recommender.ToString());
+					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
+					var results = MyMediaLite.Eval.Items.EvaluateOnSplit((ItemRecommender) recommender, split, relevant_users, relevant_items);
+					MyMediaLite.Eval.Items.DisplayResults(results);
+					no_eval = true;
+				}
+				else
+				{
+					Console.Write(recommender.ToString() + " ");
+					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
+	        		Console.Write("training_time " + time_span + " ");
+				}
 			}
 			else
 			{
