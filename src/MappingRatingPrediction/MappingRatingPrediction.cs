@@ -223,7 +223,7 @@ class MappingRatingPrediction
 		TimeSpan seconds = Utils.MeasureTime( delegate()
 	    	{
 	    		var result = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
-				MyMediaLite.Eval.Ratings.DisplayResults(result);
+				Console.Write(MyMediaLite.Eval.Ratings.FormatResults(result));
 	    	} );
 		Console.Write(" testing " + seconds);
 
@@ -238,7 +238,7 @@ class MappingRatingPrediction
 		long matrix_size = (long) num_users * num_items;
 		long empty_size  = (long) matrix_size - training_data.Count;
 		double sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "training data: {0} users, {1} items, sparsity {2:0.#####}", num_users, num_items, sparsity));
 
 		// test data stats
 		num_users = test_data.AllUsers.Count;
@@ -246,7 +246,7 @@ class MappingRatingPrediction
 		matrix_size = (long) num_users * num_items;
 		empty_size  = (long) matrix_size - test_data.Count;
 		sparsity = (double) 100L * empty_size / matrix_size;
-		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2,0:0.#####}", num_users, num_items, sparsity));
+		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, sparsity {2:0.#####}", num_users, num_items, sparsity));
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)

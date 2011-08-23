@@ -218,7 +218,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender_validate.ComputeFit()));
 
-			MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings));
+			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings)));
 			Console.WriteLine(" " + iterative_recommender_validate.NumIter);
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
@@ -248,9 +248,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
 						results = MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings);
-						MyMediaLite.Eval.Ratings.DisplayResults(results);
+						Console.WriteLine(MyMediaLite.Eval.Ratings.FormatResults(results) + " " + i);
 						rmse_eval_stats.Add(results["RMSE"]);
-						Console.WriteLine(" " + i);
 					});
 					eval_time_stats.Add(time.TotalSeconds);
 
@@ -305,7 +304,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 						Console.WriteLine();
 						var split = new RatingCrossValidationSplit(training_ratings, cross_validation);
 						var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(rating_predictor_validate, split);
-						MyMediaLite.Eval.Ratings.DisplayResults(results);
+						Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 						no_eval = true;
 						rating_predictor_validate.Ratings = training_ratings;
 					}
@@ -320,7 +319,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				Console.Write(recommender.ToString() + " ");
 
 				seconds = Utils.MeasureTime(
-			    	delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings)); }
+			    	delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings))); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}

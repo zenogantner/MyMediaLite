@@ -38,12 +38,13 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		/// <summary>Write rating prediction results to STDOUT</summary>
-		/// <param name="result">the output of the Evaluate() method</param>
-		static public void DisplayResults(Dictionary<string, double> result)
+		/// <summary>Format rating prediction results</summary>
+		/// <param name="result">the result dictionary</param>
+		/// <returns>a string containing the results</returns>
+		static public string FormatResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(CultureInfo.InvariantCulture, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
-		                                result["RMSE"], result["MAE"], result["NMAE"]));
+			return string.Format(CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
+		                         result["RMSE"], result["MAE"], result["NMAE"]);
 		}
 
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
@@ -149,7 +150,7 @@ namespace MyMediaLite.Eval
 						avg_results[key] = fold_results[key];
 
 				if (show_results)
-					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(CultureInfo.InvariantCulture), fold_results["MAE"].ToString(CultureInfo.InvariantCulture));
+					Console.Error.WriteLine("fold {0} {1}", i, FormatResults(fold_results));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())

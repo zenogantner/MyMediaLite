@@ -270,9 +270,9 @@ class RatingPrediction
 				Recommender.LoadModel(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data));
+			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)));
 			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -291,15 +291,14 @@ class RatingPrediction
 							fit = iterative_recommender.ComputeFit();
 						});
 						fit_time_stats.Add(time.TotalSeconds);
-						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
+						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", fit));
 					}
 
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
 					eval_time_stats.Add(time.TotalSeconds);
-					MyMediaLite.Eval.Ratings.DisplayResults(results);
 					rmse_eval_stats.Add(results["RMSE"]);
-					Console.WriteLine(" iteration " + i);
+					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), i);
 
 					Recommender.SaveModel(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
@@ -330,7 +329,7 @@ class RatingPrediction
 					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
 					var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(recommender, split); // TODO if (search_hp)
-					MyMediaLite.Eval.Ratings.DisplayResults(results);
+					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}
 				else
@@ -357,9 +356,9 @@ class RatingPrediction
 			if (!no_eval)
 			{
 				if (online_eval)  // TODO support also for prediction outputs (to allow external evaluation)
-					seconds = Utils.MeasureTime(delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.EvaluateOnline(recommender, test_data)); });
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.EvaluateOnline(recommender, test_data))); });
 				else
-					seconds = Utils.MeasureTime(delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)); });
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
 
 				Console.Write(" testing_time " + seconds);
 			}
@@ -368,7 +367,7 @@ class RatingPrediction
 			{
 				Console.Write("fit ");
 				seconds = Utils.MeasureTime(delegate() {
-					MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data));
+					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)));
 				});
 				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0:0.#####} ", seconds));
 			}
@@ -471,7 +470,7 @@ class RatingPrediction
 				// TODO add KDD Cup
 			}
 		});
-		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
@@ -485,19 +484,19 @@ class RatingPrediction
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"eval_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
