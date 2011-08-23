@@ -268,8 +268,6 @@ namespace MyMediaLite.Eval
 		                                                         bool show_results)
 		{
 			var avg_results = new Dictionary<string, double>();
-			foreach (var key in Measures)
-				avg_results[key] = 0;
 
 			for (int fold = 0; fold < split.NumberOfFolds; fold++)
 			{
@@ -279,7 +277,10 @@ namespace MyMediaLite.Eval
 				var fold_results = Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items);
 
 				foreach (var key in fold_results.Keys)
-					avg_results[key] += fold_results[key];
+					if (avg_results.ContainsKey(key))
+						avg_results[key] += fold_results[key];
+					else
+						avg_results[key] = fold_results[key];
 				if (show_results)
 					Console.Error.Write(string.Format(CultureInfo.InvariantCulture, "fold {0}, AUC {1,0:0.#####} prec@5 {2,0:0.#####} prec@10 {3,0:0.#####} MAP {4,0:0.#####} NDCG {5,0:0.#####} num_users {6} num_items {7} num_lists {8}",
    	                                    fold, avg_results["AUC"], avg_results["prec@5"], avg_results["prec@10"], avg_results["MAP"], avg_results["NDCG"], avg_results["num_users"], avg_results["num_items"], avg_results["num_lists"]));
@@ -291,7 +292,7 @@ namespace MyMediaLite.Eval
 
 			return avg_results;
 		}
-		
+
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>

@@ -134,8 +134,6 @@ namespace MyMediaLite.Eval
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
 		{
 			var avg_results = new Dictionary<string, double>();
-			foreach (var key in Measures)
-				avg_results[key] = 0;
 
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
@@ -145,7 +143,11 @@ namespace MyMediaLite.Eval
 				var fold_results = Evaluate(split_recommender, split.Test[i]);
 
 				foreach (var key in fold_results.Keys)
-					avg_results[key] += fold_results[key];
+					if (avg_results.ContainsKey(key))
+						avg_results[key] += fold_results[key];
+					else
+						avg_results[key] = fold_results[key];
+
 				if (show_results)
 					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(CultureInfo.InvariantCulture), fold_results["MAE"].ToString(CultureInfo.InvariantCulture));
 			}
