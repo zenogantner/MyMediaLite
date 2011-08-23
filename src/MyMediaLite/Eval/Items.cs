@@ -40,10 +40,11 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Format item prediction results</summary>
 		/// <param name="result">the result dictionary</param>
+		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
 		{
 			return string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} num_users {7} num_items {8} num_lists {9}",
-			                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]);
+			                     result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]);
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -289,9 +290,7 @@ namespace MyMediaLite.Eval
 					else
 						avg_results[key] = fold_results[key];
 				if (show_results)
-					Console.Error.Write(string.Format(CultureInfo.InvariantCulture, "fold {0}, AUC {1,0:0.#####} prec@5 {2,0:0.#####} prec@10 {3,0:0.#####} MAP {4,0:0.#####} NDCG {5,0:0.#####} num_users {6} num_items {7} num_lists {8}",
-   	                                    fold, avg_results["AUC"], avg_results["prec@5"], avg_results["prec@10"], avg_results["MAP"], avg_results["NDCG"], avg_results["num_users"], avg_results["num_items"], avg_results["num_lists"]));
-
+					Console.Error.Write("fold {0} {1}", fold, FormatResults(avg_results));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())
