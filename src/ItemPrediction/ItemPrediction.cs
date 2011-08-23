@@ -266,7 +266,7 @@ class ItemPrediction
 		if (find_iter != 0)
 		{
 			var iterative_recommender = (IIterativeModel) recommender;
-			Console.WriteLine(recommender.ToString() + " ");
+			Console.WriteLine(recommender + " ");
 
 			if (load_model_file == string.Empty)
 				iterative_recommender.Train();
@@ -318,10 +318,10 @@ class ItemPrediction
 			{
 				if (cross_validation > 1)
 				{
-					Console.WriteLine(recommender.ToString());
+					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
 					var results = MyMediaLite.Eval.Items.EvaluateOnSplit((ItemRecommender) recommender, split, relevant_users, relevant_items);
-					Console.WriteLine(Items.FormatResults(results));
+					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}
 				else
@@ -347,7 +347,7 @@ class ItemPrediction
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
 						var results = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
-						Console.WriteLine(Items.FormatResults(results));
+						Console.Write(Items.FormatResults(results));
 			    	});
 				else if (group_eval)
 				{
@@ -364,7 +364,7 @@ class ItemPrediction
 				else
 					time_span = Utils.MeasureTime( delegate() {
 						var results = Evaluate();
-						Console.WriteLine(Items.FormatResults(results));
+						Console.Write(Items.FormatResults(results));
 			    	});
 				Console.Write(" testing_time " + time_span);
 			}
