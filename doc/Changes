@@ -3,6 +3,8 @@
            - ISplit
               - use IList<T> instead of List<T> for Train and Test
               - NumberOfFolds is now a uint instead of an int
+           - Eval.Ratings and Eval.Items
+              - replace DisplayResults by FormatResults
         - add preliminary support for group recommendation
         - recommenders
           - add WeightedBPRMF: the item recommender developed for KDD Cup 2011
