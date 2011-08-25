@@ -77,8 +77,7 @@ class ItemPrediction
 	static bool online_eval;
 	static bool filtered_eval;
 	static bool repeat_eval;
-	static bool group_eval;
-	static string group_method = "Average";
+	static string group_method;
 	static bool overlap_items;
 	static bool test_items;
 	static bool user_prediction;
@@ -121,7 +120,8 @@ class ItemPrediction
 		Console.WriteLine(@"  method ARGUMENTS have the form name=value
 
   general OPTIONS:
-   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender=METHOD             use METHOD for recommendations (default: MostPopular)
+   --group-recommender=METHOD       use METHOD to combine the predictions for several users
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
@@ -224,16 +224,15 @@ class ItemPrediction
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "user-prediction",     v => user_prediction = v != null },
-			{ "compute-fit",         v => compute_fit     = v != null },
-			{ "online-evaluation",   v => online_eval     = v != null },
-			{ "filtered-evaluation", v => filtered_eval   = v != null },
-			{ "repeat-evaluation",   v => repeat_eval     = v != null },
-			{ "group-evaluation",    v => group_eval      = v != null }, // TODO better --group-prediction ??
-			{ "overlap-items",       v => overlap_items   = v != null },
-			{ "test-items",          v => test_items      = v != null },
-			{ "help",                v => show_help       = v != null },
-			{ "version",             v => show_version    = v != null },
+			{ "user-prediction",      v => user_prediction = v != null },
+			{ "compute-fit",          v => compute_fit     = v != null },
+			{ "online-evaluation",    v => online_eval     = v != null },
+			{ "filtered-evaluation",  v => filtered_eval   = v != null },
+			{ "repeat-evaluation",    v => repeat_eval     = v != null },
+			{ "overlap-items",        v => overlap_items   = v != null },
+			{ "test-items",           v => test_items      = v != null },
+			{ "help",                 v => show_help       = v != null },
+			{ "version",              v => show_version    = v != null },
    	  	};
    		IList<string> extra_args = p.Parse(args);
 
@@ -349,12 +348,19 @@ class ItemPrediction
 						var results = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
 						Console.Write(Items.FormatResults(results));
 			    	});
-				else if (group_eval)
+				else if (group_method != null)
 				{
-					// FIXME this is under construction ...
-					// TODO let user select
-					GroupRecommender group_recommender = new Average(recommender); //GroupUtils.CreateGroupRecommender(group_method, recommender);
-					// TODO catch error
+					GroupRecommender group_recommender = null;
+
+					// TODO GroupUtils.CreateGroupRecommender(group_method, recommender);
+					if (group_method == "Average")
+						group_recommender = new Average(recommender);
+					else if (group_method == "Minimum")
+						group_recommender = new Minimum(recommender);
+					else if (group_method == "Maximum")
+						group_recommender = new Maximum(recommender);
+					else
+						Usage("Unknown method in --group-recommender=METHOD: " + group_method);
 
 					time_span = Utils.MeasureTime( delegate() {
 						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, relevant_items);
@@ -399,8 +405,8 @@ class ItemPrediction
 		if (test_file == null && test_ratio == 0 && test_items)
 			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
 
-		if (group_eval && user_groups_file == null)
-			Usage("--group-evaluation needs --user-groups=FILE.");
+		if (group_method != null && user_groups_file == null)
+			Usage("--group-recommender needs --user-groups=FILE.");
 
 		if (user_prediction)
 		{
@@ -494,8 +500,10 @@ class ItemPrediction
 				test_data     = split.Test[0];
 			}
 
-			if (group_eval && group_method == "GroupsAsUsers")
+			if (group_method == "GroupsAsUsers")
 			{
+				// TODO verify what is going on here
+
 				//var training_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
 				// transform groups to users
 				foreach (int group_id in group_to_user.NonEmptyRowIDs)
@@ -504,6 +512,7 @@ class ItemPrediction
 							training_data.Add(group_id, item_id);
 				// add the users that do not belong to groups
 
+				//training_data = training_data_group;
 
 				// transform groups to users
 				var test_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
@@ -512,10 +521,9 @@ class ItemPrediction
 						foreach (int item_id in test_data.UserMatrix.GetEntriesByRow(user_id))
 							test_data_group.Add(group_id, item_id);
 
-				//training_data = training_data_group;
-				test_data     = test_data_group;
+				test_data = test_data_group;
 
-				group_eval = false; // deactivate s.t. the normal eval routines are used
+				group_method = null; // deactivate s.t. the normal eval routines are used
 			}
 
 			if (user_prediction)
@@ -578,7 +586,7 @@ class ItemPrediction
 				relevant_items = training_data.AllItems;
 
 			// display stats about relevant users and items
-			if (group_eval)
+			if (group_method != null)
 				Console.WriteLine("{0} user groups and {1} items will be used for evaluation.", user_groups.Count, relevant_items.Count);
 			else
 				Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
