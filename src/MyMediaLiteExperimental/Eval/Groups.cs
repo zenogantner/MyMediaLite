@@ -42,7 +42,7 @@ namespace MyMediaLite.Eval
 		/// <summary>Format group recommendation results</summary>
 		/// <param name="result">the result dictionary</param>
 		/// <returns>the formatted results</returns>
-		static public string DisplayResults(Dictionary<string, double> result)
+		static public string FormatResults(Dictionary<string, double> result)
 		{
 			return string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6} num_lists {7}",
  	                             result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_groups"], result["num_items"], result["num_lists"]);

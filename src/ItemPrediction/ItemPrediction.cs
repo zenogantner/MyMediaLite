@@ -352,6 +352,7 @@ class ItemPrediction
 				{
 					GroupRecommender group_recommender = null;
 
+					Console.Write("group recommendation strategy: {0} ", group_method);
 					// TODO GroupUtils.CreateGroupRecommender(group_method, recommender);
 					if (group_method == "Average")
 						group_recommender = new Average(recommender);
@@ -360,11 +361,11 @@ class ItemPrediction
 					else if (group_method == "Maximum")
 						group_recommender = new Maximum(recommender);
 					else
-						Usage("Unknown method in --group-recommender=METHOD: " + group_method);
+						Usage("Unknown method in --group-recommender=METHOD");
 
 					time_span = Utils.MeasureTime( delegate() {
 						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, relevant_items);
-						Groups.DisplayResults(result);
+						Console.Write(Groups.FormatResults(result));
 					});
 				}
 				else
@@ -502,6 +503,7 @@ class ItemPrediction
 
 			if (group_method == "GroupsAsUsers")
 			{
+				Console.WriteLine("group recommendation strategy: {0}", group_method);				
 				// TODO verify what is going on here
 
 				//var training_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
