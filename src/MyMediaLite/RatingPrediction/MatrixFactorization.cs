@@ -26,7 +26,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Simple matrix factorization class</summary>
+	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
 	/// Factorizing the observed rating values using a factor matrix for users and one for items.
 	///

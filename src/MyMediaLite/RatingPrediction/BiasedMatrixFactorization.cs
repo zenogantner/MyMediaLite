@@ -27,7 +27,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Matrix factorization with explicit user and item bias</summary>
+	/// <summary>Matrix factorization with explicit user and item bias, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
 	/// Per default optimizes for RMSE.
 	/// Set OptimizeMAE to true if you want to optimize for MAE.
