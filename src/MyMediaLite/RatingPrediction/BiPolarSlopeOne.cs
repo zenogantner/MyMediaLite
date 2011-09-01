@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// Daniel Lemire, Anna Maclachlan:
 	/// Slope One Predictors for Online Rating-Based Collaborative Filtering.
-	/// SIAM Data Mining (SDM 2005)
+	/// SIAM Data Mining (SDM 2005).
 	/// http://www.daniel-lemire.com/fr/abstracts/SDM2005.html
 	///
 	/// This recommender does NOT support incremental updates. They would be easy to implement, though.
