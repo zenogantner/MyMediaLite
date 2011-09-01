@@ -10,7 +10,7 @@
     <AssemblyName>Mapping</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <StartupObject>MappingItemPrediction</StartupObject>
-    <ReleaseVersion>1.04</ReleaseVersion>
+    <ReleaseVersion>1.05</ReleaseVersion>
     <RootNamespace>MappingItemPrediction</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

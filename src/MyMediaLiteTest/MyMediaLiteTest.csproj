@@ -10,7 +10,7 @@
     <RootNamespace>MyMediaLiteTest</RootNamespace>
     <AssemblyName>MyMediaLiteTest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.04</ReleaseVersion>
+    <ReleaseVersion>1.05</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
