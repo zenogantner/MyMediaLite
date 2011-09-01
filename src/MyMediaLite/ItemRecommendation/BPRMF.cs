@@ -27,8 +27,10 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Matrix factorization model for item prediction optimized using BPR-Opt</summary>
+	/// <summary>Matrix factorization model for item prediction (ranking) optimized using BPR-Opt</summary>
 	/// <remarks>
+	/// BPR reduces ranking to pairwise classification.
+	///
 	/// Literature:
 	/// <list type="bullet">
     ///   <item><description>
@@ -41,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class BPRMF : MF, IIterativeModel
+	public class BPRMF : MF
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;

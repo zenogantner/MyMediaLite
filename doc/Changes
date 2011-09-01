@@ -9,12 +9,14 @@
         - recommenders
           - add WeightedBPRMF: the item recommender developed for KDD Cup 2011
                                track 2
-          - group recommenders: add aggregation methods Average, Minimum, Maximum,
-                                PairwiseWins, Weighted Average
+          - group recommenders: add aggregation methods Average, Minimum,
+                                Maximum, PairwiseWins, Weighted Average
           - add SoftMarginRankingMF: item recommender inspired both by CofiRank
             (ranking loss) and BPR-MF (stochastic gradient descent learning)
           - WRMF: set NumIter default value down to 15
           - BiasedMatrixFactorization: improved API doc
+          - BPRMF: do not implement IIterativeModel (this is done indirectly by
+                   inheriting from the MF class)
         - command-line tools
           - display memory stats just once when the program finishes
           - display memory stats after loading data is complete
