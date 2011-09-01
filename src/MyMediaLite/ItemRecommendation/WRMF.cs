@@ -33,7 +33,7 @@ namespace MyMediaLite.ItemRecommendation
     ///   <item><description>
 	///     Y. Hu, Y. Koren, C. Volinsky: Collaborative filtering for implicit feedback datasets.
 	///     ICDM 2008.
-	///     http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.167.5120&rep=rep1&type=pdf
+	///     http://research.yahoo.net/files/HuKorenVolinsky-ICDM08.pdf
 	///   </description></item>
 	///   <item><description>
 	///     R. Pan, Y. Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, Q. Yang:
