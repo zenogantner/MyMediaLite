@@ -499,7 +499,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected void CheckSampling() // TODO more descriptive name
+		protected void CheckSampling() // TODO more descriptive name; then also port to BPR_Linear
 		{
 			try
 			{

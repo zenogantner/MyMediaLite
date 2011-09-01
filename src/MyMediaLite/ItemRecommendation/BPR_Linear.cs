@@ -102,9 +102,9 @@ namespace MyMediaLite.ItemRecommendation
 			random = Util.Random.GetInstance();
 
 			// prepare fast sampling, if necessary
-			int support_data_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-			Console.Error.WriteLine("sds=" + support_data_size);
-			if (support_data_size <= fast_sampling_memory_limit)
+			int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
+			Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
+			if (fast_sampling_memory_size <= fast_sampling_memory_limit)
 			{
 				fast_sampling = true;
 
