@@ -16,6 +16,7 @@ release checklist:
 9. Check the contents of the binary package
 10. Create the release announcement
 11. Add the new version to the website
+11a. Copy the --help output of the two command-line tools to the website
 12. Commit the website changes
 13. Create a git tag: 'git tag -a v1.XX -m "release 1.XX"'
 14. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
