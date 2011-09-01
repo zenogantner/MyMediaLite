@@ -30,4 +30,32 @@ You can reach the authors of #MyMediaLite by sending an e-mail to mymedialite@is
 
 Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.net/projects/mymedialite http://mloss.org/software/view/282/
 
+----
 
+WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
+
+BPR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/pYrJ7l #MyMediaLite #recsys
+
+#MyMediaLite supports the tasks of rating prediction and item recommendation: http://bit.ly/qhMI5V http://bit.ly/qlNDbY #recsys
+
+Since version 1.05, #MyMediaLite supports recommendations for groups: http://ismll.de/mymedialite/news/index.html#1.05 #recsys
+
+#MyMediaLite supports different evaluation protocols, e.g. simple splits and k-fold cross-validation: http://bit.ly/nbykPh #recsys
+
+We also have a nice GUI demo: http://bit.ly/pvXuSB #MyMediaLite #recsys
+
+#MyMediaLite scales pretty well: For small models, 1 iteration over the Netflix dataset takes less than 100 seconds: http://bit.ly/pQxTYZ #recsys
+
+BiasedMatrixFactorization in #MyMediaLite is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys
+
+#MyMediaLite contains different kNN models for both rating and item prediction: http://bit.ly/pscX4U http://bit.ly/no1sam #recsys
+
+BPR_Linear in #MyMediaLite is an attribute-based model for personalized item ranking: http://bit.ly/mV5lal #recsys
+
+Rate #MyMediaLite on ohloh.net: https://www.ohloh.net/p/mymedialite #recsys
+
+You can download #MyMediaLite here: http://ismll.de/mymedialite/download/index.html #recsys
+
+----
+
+Visit the #MyMediaLite poster at the #recsys2011 poster session tonight. #recsys
