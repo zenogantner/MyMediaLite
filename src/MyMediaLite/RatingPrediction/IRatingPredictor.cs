@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,22 +18,22 @@
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>interface for rating predictors</summary>
+	/// <summary>Interface for rating predictors</summary>
 	/// <remarks>
 	/// Rating prediction is used in systems that let users rate items (e.g. movies, books, songs, etc.)
 	/// on a certain scale, e.g. from 1 to 5 stars, where 1 star means the user does not like the item at all,
 	/// and 5 stars mean the user likes the item very much.
-	/// 
+	///
 	/// Given an (incomplete) set of ratings for several items by several users (and maybe additional information),
 	/// the task is to predict (some of the) missing ratings.
-	/// 
+	///
 	/// See also http://recsyswiki.com/wiki/Rating_prediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
 		/// <summary>The max rating value</summary>
 		double MaxRating { get; set; }
-		
+
 		/// <summary>The min rating value</summary>
 		double MinRating { get; set; }
 
