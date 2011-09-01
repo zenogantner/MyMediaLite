@@ -23,12 +23,19 @@ using MyMediaLite.Data;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Abstract item recommender class that loads the (positive-only implicit feedback) training data into memory</summary>
+	/// <summary>
+	/// Abstract item recommender class that loads the (positive-only implicit feedback) training data into memory
+	/// and provides flexible access to it.
+	/// </summary>
 	/// <remarks>
-	/// see http://recsyswiki/wiki/Item_prediction and http://recsyswiki/wiki/Implicit_feedback
-	/// 
 	/// The data is stored in two sparse matrices:
-	/// one column-wise and one row-wise
+	/// one user-wise (in the rows)  and one item-wise.
+	///
+	/// Positive-only means we only which items a user has accessed/liked, but not which items a user does not like.
+	/// If there is not data for a specific item, we do not know whether the user has just not yet accessed the item,
+	/// or whether they really dislike it.
+	///
+	/// See http://recsyswiki/wiki/Item_recommendation and http://recsyswiki/wiki/Implicit_feedback
 	/// </remarks>
 	public abstract class ItemRecommender : IItemRecommender, ICloneable
 	{

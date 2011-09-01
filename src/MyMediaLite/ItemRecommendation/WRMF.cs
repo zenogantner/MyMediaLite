@@ -25,15 +25,23 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted matrix factorization method proposed by Hu et al. and Pan et al.</summary>
 	/// <remarks>
-	///   Y. Hu Y. Koren C. Volinsky: Collaborative filtering for implicit feedback datasets,
-	///   IEEE International Conference on Data Mining (ICDM), 2008
-	///
-	///   R. Pan, Y. Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, Q. Yang:
-	///   One-class collaborative filtering,
-	///   IEEE International Conference on Data Mining (ICDM), 2008
-	///
-	/// We use the fast computation method proposed by Hu et al. and we use a global
+ 	/// We use the fast computation method proposed by Hu et al. and we use a global
 	/// weight to penalize observed/unobserved values.
+	///
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Y. Hu, Y. Koren, C. Volinsky: Collaborative filtering for implicit feedback datasets.
+	///     ICDM 2008.
+	///     http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.167.5120&rep=rep1&type=pdf
+	///   </description></item>
+	///   <item><description>
+	///     R. Pan, Y. Zhou, B. Cao, N. N. Liu, R. M. Lukose, M. Scholz, Q. Yang:
+	///     One-class collaborative filtering,
+	///     ICDM 2008.
+	///     http://www.hpl.hp.com/techreports/2008/HPL-2008-48R1.pdf
+	///   </description></item>
+	/// </list>
 	///
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
