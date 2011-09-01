@@ -32,6 +32,8 @@ Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.
 
 ----
 
+If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
+
 WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
 
 BPR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/pYrJ7l #MyMediaLite #recsys
@@ -55,6 +57,10 @@ BPR_Linear in #MyMediaLite is an attribute-based model for personalized item ran
 Rate #MyMediaLite on ohloh.net: https://www.ohloh.net/p/mymedialite #recsys
 
 You can download #MyMediaLite here: http://ismll.de/mymedialite/download/index.html #recsys
+
+Read the #recsys2011 paper on #MyMediaLite: http://ismll.de/pub/pdfs/Gantner_et_al2011_MyMediaLite.pdf #recsys
+
+Read about our approach for #kddcup2011: http://ismll.de/pub/pdfs/Gantner_et_al2011_KDDCup.pdf #recsys #MyMediaLite
 
 ----
 
