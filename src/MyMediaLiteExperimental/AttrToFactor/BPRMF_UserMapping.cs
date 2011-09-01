@@ -27,6 +27,19 @@ using MyMediaLite.ItemRecommendation;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>User attribute to latent factor mapping for BPR-MF, optimized for RMSE on the latent factors</summary>
+	/// <remarks>
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///     ICDM 2011.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///   </description></item>
+	/// </list>
+	///
+	/// This recommender does NOT support incremental updates.
+	/// </remarks>
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{
 		///

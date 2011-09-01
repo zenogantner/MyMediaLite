@@ -31,13 +31,13 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// Per default optimizes for RMSE.
 	/// Set OptimizeMAE to true if you want to optimize for MAE.
-	/// 
+	///
 	/// Literature:
 	/// <list type="bullet">
     ///   <item><description>
 	///     Ruslan Salakhutdinov, Andriy Mnih:
 	///     Probabilistic Matrix Factorization.
-	///     NIPS 2008.
+	///     NIPS 2007.
 	///     http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
 	///   </description></item>
     ///   <item><description>
@@ -76,10 +76,15 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
-		/// See
-		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent,
-		/// 2011
+		/// Literature
+		/// <list type="bullet">
+    	///   <item><description>
+		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
+		///     KDD 2011.
+		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
+   	    ///   </description></item>
+	    /// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
 		// TODO use for incremental updates as well

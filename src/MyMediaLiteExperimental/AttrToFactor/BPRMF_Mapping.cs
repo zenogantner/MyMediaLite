@@ -22,6 +22,17 @@ using MyMediaLite.ItemRecommendation;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>Base class for BPR-MF plus attribute-to-factor mapping</summary>
+	/// <remarks>
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///     ICDM 2011.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///   </description></item>
+	/// </list>
+	/// </remarks>
 	public abstract class BPRMF_Mapping : BPRMF
 	{
 		/// <summary>The learn rate for training the mapping functions</summary>
