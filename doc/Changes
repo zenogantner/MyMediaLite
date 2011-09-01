@@ -1,13 +1,14 @@
-1.05	2011-08-
+1.05	2011-09-01
 	- API changes
            - ISplit
               - use IList<T> instead of List<T> for Train and Test
               - NumberOfFolds is now a uint instead of an int
            - Eval.Ratings and Eval.Items
               - replace DisplayResults by FormatResults
-        - add preliminary support for group recommendation
+        - add support for group recommendation
         - recommenders
           - add WeightedBPRMF: the item recommender developed for KDD Cup 2011
+                               track 2
           - group recommenders: add aggregation methods Average, Minimum, Maximum,
                                 PairwiseWins, Weighted Average
           - add SoftMarginRankingMF: item recommender inspired both by CofiRank
