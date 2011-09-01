@@ -13,6 +13,32 @@
 
 <div id="content">
 
+  <a name="1.05"><h2>MyMediaLite 1.05</h2></a>  
+    <p>
+    <b>September 1, 2011.</b>
+    Version 1.05 of MyMediaLite has been released. Changes since the last release:
+    <ul>
+      <li>API changes:
+          <ul>
+            <li><tt>ISplit</tt>: use <tt>IList<T></tt> instead of <tt>List<T></tt> for <tt>Train</tt> and <tt>Test</tt>;
+                                 <tt>NumberOfFolds</tt> is now a <tt>uint</tt> instead of an <tt>int</tt>
+             <li><tt>Eval.Ratings</tt> and <tt>Eval.Items</tt>: replace <tt>DisplayResults</tt> by <tt>FormatResults</tt></li>
+          </ul></li>
+      <li>new feature: recommendations for groups</li>
+      <li>new recommenders: WeightedBPRMF (used for KDD Cup 2011, track 2), SoftMarginRankingMF
+          (item recommender inspired both by CofiRank, ranking loss, and BPR-MF, stochastic gradient descent learning)</li>
+      <li>evalation: k-fold cross-validation protocol for <a href="[% prefix %]documentation/item_prediction.html">item prediction</a></li>
+      <li>numerous improvements in documentation, command-line tools, helper scripts</li>
+    </ul>
+    </p>
+
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
+
   <a name="1.04"><h2>MyMediaLite 1.04</h2></a>  
     <p>
     <b>August 3, 2011.</b>
