@@ -162,7 +162,7 @@ class MappingRatingPrediction
 
 		TimeSpan seconds;
 
-		Recommender.LoadModel(recommender, load_model_file);
+		Model.Load(recommender, load_model_file);
 
 		// set the maximum user and item IDs in the recommender - this is important for the cold start use case
 		recommender.MaxUserID = user_mapping.InternalIDs.Max();

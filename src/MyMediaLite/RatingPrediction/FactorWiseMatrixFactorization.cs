@@ -20,7 +20,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -209,7 +209,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			global_effects.SaveModel(filename + "-global-effects");
 
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(num_learned_factors);
@@ -224,7 +224,7 @@ namespace MyMediaLite.RatingPrediction
 			global_effects.LoadModel(filename + "-global-effects");
 			global_effects.Ratings = Ratings;
 
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var global_bias         = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var num_learned_factors = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);

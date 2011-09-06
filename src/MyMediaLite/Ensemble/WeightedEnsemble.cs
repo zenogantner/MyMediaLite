@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Ensemble
 {
@@ -61,7 +61,7 @@ namespace MyMediaLite.Ensemble
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(recommenders.Count);
 				for (int i = 0; i < recommenders.Count; i++)
@@ -75,7 +75,7 @@ namespace MyMediaLite.Ensemble
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				int numberOfComponents = int.Parse(reader.ReadLine());
 
@@ -90,7 +90,7 @@ namespace MyMediaLite.Ensemble
 					recommenders.Add( (IRecommender) Activator.CreateInstance(t) );
 					recommenders[i].LoadModel("model-" + i + ".txt");
 
-					// make sure the recommenders get their data FIXME
+					// TODO make sure the recommenders get their data?
 
 					weights.Add(double.Parse(data[1], CultureInfo.InvariantCulture));
 				}

@@ -179,7 +179,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		if (load_model_file != string.Empty)
-			Recommender.LoadModel(recommender, load_model_file);
+			Model.Load(recommender, load_model_file);
 
 		DoTrack1();
 
@@ -212,7 +212,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			}
 			else
 			{
-				Recommender.LoadModel(rating_predictor_final, "final-" + load_model_file);
+				Model.Load(rating_predictor_final, "final-" + load_model_file);
 			}
 
 			if (compute_fit)
@@ -226,7 +226,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				TimeSpan time = Utils.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate();
 
-					iterative_recommender_final.Iterate(); // TODO parallelize this
+					iterative_recommender_final.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
 
@@ -244,7 +244,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					}
 
 					// evaluate and save stats
-					// TODO parallelize
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() {
 						results = MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings);
@@ -257,8 +256,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					// write out model files and predictions
 					if (save_model_file != string.Empty)
 					{
-						Recommender.SaveModel(rating_predictor_validate, save_model_file + "-validate", i);
-						Recommender.SaveModel(rating_predictor_final, save_model_file, i);
+						Model.Save(rating_predictor_validate, save_model_file + "-validate", i);
+						Model.Save(rating_predictor_final, save_model_file, i);
 					}
 					if (prediction_file != string.Empty)
 						if (track2)
@@ -288,7 +287,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			} // for
 
 			DisplayIterationStats();
-			Recommender.SaveModel(recommender, save_model_file);
+			Model.Save(recommender, save_model_file);
 		}
 		else
 		{
@@ -312,7 +311,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					{
 						seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
 	        			Console.Write(" training_time " + seconds + " ");
-						Recommender.SaveModel(recommender, save_model_file);
+						Model.Save(recommender, save_model_file);
 					}
 				}
 
@@ -333,8 +332,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
         		Console.Write(" training_time " + seconds + " ");
 				if (save_model_file != string.Empty)
 				{
-					Recommender.SaveModel(rating_predictor_validate, save_model_file + "-validate");
-					Recommender.SaveModel(rating_predictor_final, save_model_file);
+					Model.Save(rating_predictor_validate, save_model_file + "-validate");
+					Model.Save(rating_predictor_final, save_model_file);
 				}
 
 				Console.WriteLine();

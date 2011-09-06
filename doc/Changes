@@ -1,4 +1,7 @@
 1.06	2011-09-??
+        - API changes
+          - move read/write routines from Util.Recommender to the new static
+            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
 	- documentation
           - API docs:
             - improved literature references

@@ -176,8 +176,8 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 		if (load_model_file != string.Empty)
 		{
-			Recommender.LoadModel(recommender_validate, load_model_file + "-validate");
-			Recommender.LoadModel(recommender_final,    load_model_file + "-final");
+			Model.Load(recommender_validate, load_model_file + "-validate");
+			Model.Load(recommender_final,    load_model_file + "-final");
 		}
 
 		Console.Write(recommender_validate.ToString());
@@ -247,9 +247,9 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 					if (save_model_file != string.Empty)
 					{
-						Recommender.SaveModel(recommender_validate, save_model_file + "-validate", i);
+						Model.Save(recommender_validate, save_model_file + "-validate", i);
 						if (prediction_file != string.Empty)
-							Recommender.SaveModel(recommender_final, save_model_file, i);
+							Model.Save(recommender_final, save_model_file, i);
 					}
 
 					if (err_eval_stats.Last() > err_cutoff)
@@ -305,9 +305,9 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 			if (save_model_file != string.Empty)
 			{
-				Recommender.SaveModel(recommender_validate, save_model_file + "-validate");
+				Model.Save(recommender_validate, save_model_file + "-validate");
 				if (prediction_file != string.Empty)
-					Recommender.SaveModel(recommender_final,    save_model_file);
+					Model.Save(recommender_final,    save_model_file);
 			}
 		}
 

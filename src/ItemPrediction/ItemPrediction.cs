@@ -270,7 +270,7 @@ class ItemPrediction
 			if (load_model_file == string.Empty)
 				iterative_recommender.Train();
 			else
-				Recommender.LoadModel(iterative_recommender, load_model_file);
+				Model.Load(iterative_recommender, load_model_file);
 
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -299,7 +299,7 @@ class ItemPrediction
 					eval_time_stats.Add(t.TotalSeconds);
 					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), i);
 
-					Recommender.SaveModel(recommender, save_model_file, i);
+					Model.Save(recommender, save_model_file, i);
 					Predict(prediction_file, relevant_users_file, i);
 
 					if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
@@ -332,7 +332,7 @@ class ItemPrediction
 			}
 			else
 			{
-				Recommender.LoadModel(recommender, load_model_file);
+				Model.Load(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 				// TODO is this the right time to load the model?
 			}
@@ -377,7 +377,7 @@ class ItemPrediction
 			}
 			Console.WriteLine();
 		}
-		Recommender.SaveModel(recommender, save_model_file);
+		Model.Save(recommender, save_model_file);
 		DisplayStats();
 	}
 

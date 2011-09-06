@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -537,7 +537,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
@@ -548,7 +548,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 				IList<double> item_bias = VectorUtils.ReadVector(reader);

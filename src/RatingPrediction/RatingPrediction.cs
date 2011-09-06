@@ -267,7 +267,7 @@ class RatingPrediction
 			if (load_model_file == string.Empty)
 				recommender.Train();
 			else
-				Recommender.LoadModel(iterative_recommender, load_model_file);
+				Model.Load(iterative_recommender, load_model_file);
 
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
@@ -300,7 +300,7 @@ class RatingPrediction
 					rmse_eval_stats.Add(results["RMSE"]);
 					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), i);
 
-					Recommender.SaveModel(recommender, save_model_file, i);
+					Model.Save(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file + "-it-" + i);
 
@@ -349,7 +349,7 @@ class RatingPrediction
 			}
 			else
 			{
-				Recommender.LoadModel(recommender, load_model_file);
+				Model.Load(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 			}
 
@@ -383,7 +383,7 @@ class RatingPrediction
 
 			Console.WriteLine();
 		}
-		Recommender.SaveModel(recommender, save_model_file);
+		Model.Save(recommender, save_model_file);
 		DisplayStats();
 	}
 

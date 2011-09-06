@@ -21,7 +21,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -124,7 +124,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
@@ -141,7 +141,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				IMatrixUtils.WriteSparseMatrix(writer, diff_matrix);
