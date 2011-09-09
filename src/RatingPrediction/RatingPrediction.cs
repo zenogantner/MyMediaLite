@@ -425,8 +425,8 @@ class RatingPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
 			if (file_format == RatingFileFormat.DEFAULT)
-				training_data = static_data ? RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
-					                        : MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				training_data = static_data ? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
+					                        : RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.MOVIELENS_1M)
 				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.KDDCUP_2011)
@@ -466,7 +466,7 @@ class RatingPrediction
 				if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else
-					test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
+					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
 				// TODO add KDD Cup
 			}
 		});

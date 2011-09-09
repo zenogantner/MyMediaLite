@@ -25,7 +25,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Utilities to work with matrices</summary>
-	public class MatrixUtils
+	public static class MatrixUtils
 	{
 		/// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>

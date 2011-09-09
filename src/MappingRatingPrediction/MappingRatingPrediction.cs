@@ -136,7 +136,7 @@ class MappingRatingPrediction
 		EntityMapping item_mapping = new EntityMapping();
 
 		// training data
-		training_data = MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
+		training_data = RatingData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 		recommender.Ratings = training_data;
 
 		// user attributes
@@ -158,7 +158,7 @@ class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = MyMediaLite.IO.RatingPrediction.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+        test_data = RatingData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 		TimeSpan seconds;
 

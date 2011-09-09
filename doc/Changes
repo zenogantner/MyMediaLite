@@ -2,12 +2,17 @@
         - API changes
           - move read/write routines from Util.Recommender to the new static
             class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
+          - rename IO.RatingPrediction to IO.RatingData and
+            IO.RatingPredictionStatic to IO.StaticRatingData
 	- documentation
           - API docs:
             - improved literature references
             - add links to RecSysWiki articles
           - IItemRecommender: explain the task of item recommendation
           - IRatingPredictor: explain the task of rating prediction
+        - misc
+          - improved ToString() methods
+          - declared all classes as static that contain only static methods
 
 1.05	2011-09-01
 	- API changes
