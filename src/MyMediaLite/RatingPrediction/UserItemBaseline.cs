@@ -229,7 +229,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "UserItemBaseline reg_u={0} reg_i={1} num_iter={2}", RegU, RegI, NumIter);
+			return string.Format(CultureInfo.InvariantCulture, "{0} reg_u={1} reg_i={2} num_iter={3}", this.GetType().Name, RegU, RegI, NumIter);
 		}
 	}
 }

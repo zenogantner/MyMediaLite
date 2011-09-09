@@ -123,8 +123,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"BPRMF_ItemMappingSVR num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} c={6} gamma={7} init_mean={8} init_stdev={9}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, InitMean, InitStdev
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} c={7} gamma={8} init_mean={9} init_stdev={10}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, InitMean, InitStdev
 			);
 		}
 

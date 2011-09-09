@@ -263,8 +263,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "FactorWiseMatrixFactorization num_factors={0} shrinkage={1} sensibility={2}  init_mean={3} init_stdev={4} num_iter={5}",
-								 NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
+								 "{0} num_factors={1} shrinkage={2} sensibility={3}  init_mean={4} init_stdev={5} num_iter={6}",
+								 this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
 		}
 	}
 }

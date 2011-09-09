@@ -118,7 +118,7 @@ namespace MyMediaLite.ItemRecommendation
         ///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "ItemAttributeSVM C={0} Gamma={1}", c, gamma);
+			return string.Format(CultureInfo.InvariantCulture, "{0} C={1} Gamma={2}", this.GetType().Name, c, gamma);
 		}
 	}
 }

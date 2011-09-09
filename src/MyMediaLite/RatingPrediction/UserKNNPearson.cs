@@ -55,8 +55,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "UserKNNPearson k={0} shrinkage={1} reg_u={2} reg_i={3}",
-								 K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
+								 "{0} k={1} shrinkage={2} reg_u={3} reg_i={4}",
+								 this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
 		}
 	}
 }
