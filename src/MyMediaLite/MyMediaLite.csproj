@@ -105,7 +105,6 @@
     <Compile Include="Util\Recommender.cs" />
     <Compile Include="Util\Memory.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
-    <Compile Include="IO\ItemRecommendation.cs" />
     <Compile Include="Data\IRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="RatingPrediction\SlopeOne.cs" />
@@ -153,14 +152,15 @@
     <Compile Include="Eval\Ratings.cs" />
     <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="RatingPrediction\Prediction.cs" />
-    <Compile Include="IO\ItemRecommendationRatingThreshold.cs" />
     <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="IO\TimedRatings.cs" />
     <Compile Include="Data\PosOnlyFeedbackCrossValidationSplit.cs" />
     <Compile Include="IO\Model.cs" />
+    <Compile Include="IO\ItemData.cs" />
     <Compile Include="IO\RatingData.cs" />
     <Compile Include="IO\StaticRatingData.cs" />
+    <Compile Include="IO\ItemDataRatingThreshold.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

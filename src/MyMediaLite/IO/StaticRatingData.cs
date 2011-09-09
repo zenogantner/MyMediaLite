@@ -23,29 +23,46 @@ using MyMediaLite.Data;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that offers methods for reading in rating data</summary>
-	public static class TimedRatings
+	/// <summary>Class that offers methods for reading in static rating data</summary>
+	public static class StaticRatingData
 	{
-		/// <summary>Read in rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from</param>
+		/// <summary>Read in static rating data from a file</summary>
+		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="rating_type">the data type to be used for storing the ratings</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IRatings Read(string filename,
+		                            IEntityMapping user_mapping, IEntityMapping item_mapping,
+		                            RatingType rating_type)
 		{
+			int size = 0;
 			using ( var reader = new StreamReader(filename) )
-				return Read(reader, user_mapping, item_mapping);
+				while (reader.ReadLine() != null)
+					size++;
+
+			using ( var reader = new StreamReader(filename) )
+				return Read(reader, size, user_mapping, item_mapping, rating_type);
 		}
 
-		/// <summary>Read in rating data from a TextReader</summary>
+		/// <summary>Read in static rating data from a TextReader</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
+		/// <param name="size">the number of ratings in the file</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="rating_type">the data type to be used for storing the ratings</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings
-			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IRatings Read(TextReader reader, int size,
+		                            IEntityMapping user_mapping, IEntityMapping item_mapping,
+		                            RatingType rating_type)
 		{
-			var ratings = new MyMediaLite.Data.TimedRatings();
+			IRatings ratings;
+			if (rating_type == RatingType.BYTE)
+				ratings = new StaticByteRatings(size);
+			else if (rating_type == RatingType.FLOAT)
+				ratings = new StaticFloatRatings(size);
+			else
+				ratings = new StaticRatings(size);
 
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
@@ -57,26 +74,14 @@ namespace MyMediaLite.IO
 
 				string[] tokens = line.Split(split_chars);
 
-				if (tokens.Length < 4)
-					throw new IOException("Expected at least 4 columns: " + line);
+				if (tokens.Length < 3)
+					throw new IOException("Expected at least three columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-				string date_string = tokens[3];
-				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\""))
-				{
-					date_string = tokens[3] + " " + tokens[4];
-					date_string = date_string.Substring(1, date_string.Length - 2);
-				}
 
-				DateTime time = DateTime.Parse(date_string, CultureInfo.InvariantCulture);
-				ratings.Add(user_id, item_id, rating, time);
-
-				if (ratings.Count % 20000 == 19999)
-					Console.Error.Write(".");
-				if (ratings.Count % 1200000 == 1199999)
-					Console.Error.WriteLine();
+				ratings.Add(user_id, item_id, rating);
 			}
 			return ratings;
 		}

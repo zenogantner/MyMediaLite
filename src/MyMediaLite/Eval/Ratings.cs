@@ -22,7 +22,6 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {

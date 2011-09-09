@@ -4,6 +4,8 @@
             class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
           - rename IO.RatingPrediction to IO.RatingData and
             IO.RatingPredictionStatic to IO.StaticRatingData
+          - rename IO.ItemRecommendation to IO.ItemData and
+            IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
 	- documentation
           - API docs:
             - improved literature references

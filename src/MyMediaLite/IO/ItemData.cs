@@ -18,36 +18,35 @@
 
 using System;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that contains static methods for reading in implicit feedback data for ItemRecommender</summary>
-	public class ItemRecommendationRatingThreshold
+	public static class ItemData
 	{
-		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a file</summary>
-		/// <param name="filename">name of the file to be read from</param>
-		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
+		/// <summary>Read in implicit feedback data from a file</summary>
+		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(string filename, double rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-           	using ( var reader = new StreamReader(filename) )
-				return Read(reader, rating_threshold, user_mapping, item_mapping);
+			if (filename.Equals("-"))
+				return Read(Console.In, user_mapping, item_mapping);
+			else
+            	using ( var reader = new StreamReader(filename) )
+					return Read(reader, user_mapping, item_mapping);
 		}
 
-		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a TextReader</summary>
+		/// <summary>Read in implicit feedback data from a TextReader</summary>
 		/// <param name="reader">the TextReader to be read from</param>
-		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(TextReader reader, double rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 	        var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
@@ -61,41 +60,36 @@ namespace MyMediaLite.IO
 
 	            string[] tokens = line.Split(split_chars);
 
-				if (tokens.Length < 3)
-					throw new IOException("Expected at least 3 columns: " + line);
+				if (tokens.Length < 2)
+					throw new IOException("Expected at least two columns: " + line);
 
-				int user_id   = user_mapping.ToInternalID(int.Parse(tokens[0]));
-				int item_id   = item_mapping.ToInternalID(int.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
+				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
-				if (rating >= rating_threshold)
-               		feedback.Add(user_id, item_id);
+               	feedback.Add(user_id, item_id);
 			}
 
 			return feedback;
 		}
 
-        /// <summary>Read in rating data which will be interpreted as implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
+        /// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
-		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
         /// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
         /// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
         /// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-        static public IPosOnlyFeedback Read(IDataReader reader, double rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
+        static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
         {
             var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
-            if (reader.FieldCount < 3)
-                throw new IOException("Expected at least 3 columns.");
+            if (reader.FieldCount < 2)
+                throw new IOException("Expected at least two columns.");
 
             while (reader.Read())
             {
                 int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
                 int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
-				double rating = reader.GetDouble(2);
-				
-				if (rating >= rating_threshold)
-                	feedback.Add(user_id, item_id);
+
+                feedback.Add(user_id, item_id);
             }
 
             return feedback;

@@ -444,8 +444,8 @@ class ItemPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
 			training_data = double.IsNaN(rating_threshold)
-				? ItemRecommendation.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping)
-				: ItemRecommendationRatingThreshold.Read(Path.Combine(data_dir, training_file), rating_threshold, user_mapping, item_mapping);
+				? ItemData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping)
+				: ItemDataRatingThreshold.Read(Path.Combine(data_dir, training_file), rating_threshold, user_mapping, item_mapping);
 
 			// user attributes
 			if (user_attributes_file != null)
@@ -487,8 +487,8 @@ class ItemPrediction
 			{
 				if (test_file != null)
 	        		test_data = double.IsNaN(rating_threshold)
-						? ItemRecommendation.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping)
-						: ItemRecommendationRatingThreshold.Read(Path.Combine(data_dir, test_file), rating_threshold, user_mapping, item_mapping);
+						? ItemData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping)
+						: ItemDataRatingThreshold.Read(Path.Combine(data_dir, test_file), rating_threshold, user_mapping, item_mapping);
 			}
 			else
 			{

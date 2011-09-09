@@ -1,4 +1,5 @@
 // Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
 //
@@ -24,17 +25,20 @@ using MyMediaLite.Data;
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers methods for reading in rating data</summary>
-	public static class TimedRatings
+	public static class RatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from</param>
+		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			using ( var reader = new StreamReader(filename) )
-				return Read(reader, user_mapping, item_mapping);
+			if (filename.Equals("-"))
+				return Read(Console.In, user_mapping, item_mapping);
+			else
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, user_mapping, item_mapping);
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>
@@ -42,10 +46,10 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings
+		static public IRatings
 			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			var ratings = new MyMediaLite.Data.TimedRatings();
+			var ratings = new Ratings();
 
 			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
@@ -57,26 +61,38 @@ namespace MyMediaLite.IO
 
 				string[] tokens = line.Split(split_chars);
 
-				if (tokens.Length < 4)
-					throw new IOException("Expected at least 4 columns: " + line);
+				if (tokens.Length < 3)
+					throw new IOException("Expected at least three columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-				string date_string = tokens[3];
-				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\""))
-				{
-					date_string = tokens[3] + " " + tokens[4];
-					date_string = date_string.Substring(1, date_string.Length - 2);
-				}
 
-				DateTime time = DateTime.Parse(date_string, CultureInfo.InvariantCulture);
-				ratings.Add(user_id, item_id, rating, time);
+				ratings.Add(user_id, item_id, rating);
+			}
+			return ratings;
+		}
 
-				if (ratings.Count % 20000 == 19999)
-					Console.Error.Write(".");
-				if (ratings.Count % 1200000 == 1199999)
-					Console.Error.WriteLine();
+		/// <summary>Read in rating data from an IDataReader, e.g. a database via DbDataReader</summary>
+		/// <param name="reader">the <see cref="IDataReader"/> to read from</param>
+		/// <param name="user_mapping">mapping object for user IDs</param>
+		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <returns>the rating data</returns>
+		static public IRatings
+			Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+		{
+			var ratings = new Ratings();
+
+			if (reader.FieldCount < 3)
+				throw new IOException("Expected at least three columns.");
+
+			while (reader.Read())
+			{
+				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
+				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+				double rating = reader.GetDouble(2);
+
+				ratings.Add(user_id, item_id, rating);
 			}
 			return ratings;
 		}
