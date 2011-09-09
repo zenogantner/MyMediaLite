@@ -6,6 +6,8 @@
             IO.RatingPredictionStatic to IO.StaticRatingData
           - rename IO.ItemRecommendation to IO.ItemData and
             IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
+        - recommenders
+          - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
 	- documentation
           - API docs:
             - improved literature references

@@ -111,7 +111,6 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				int size = int.Parse(reader.ReadLine());
-
 				var view_count = new int[size];
 
 				while (! reader.EndOfStream)
@@ -121,7 +120,9 @@ namespace MyMediaLite.ItemRecommendation
 					int count   = int.Parse(numbers[1]);
 			 		view_count[item_id] = count;
 				}
+
 				this.view_count = view_count;
+				this.MaxItemID = view_count.Length - 1;
 			}
 		}
 	}
