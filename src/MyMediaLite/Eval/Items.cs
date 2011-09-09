@@ -33,7 +33,7 @@ namespace MyMediaLite.Eval
 		static public ICollection<string> Measures
 		{
 			get	{
-				string[] measures = { "AUC", "prec@5", "prec@10", "recall@5", "recall@10", "NDCG", "MAP" };
+				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "mrr" };
 				return new HashSet<string>(measures);
 			}
 		}
@@ -43,8 +43,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
 		{
-			return string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} num_users {7} num_items {8} num_lists {9}",
-			                     result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["num_users"], result["num_items"], result["num_lists"]);
+			return string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} mrr {7:0.#####} num_users {8} num_items {9} num_lists {10}",
+			                     result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["mrr"], result["num_users"], result["num_items"], result["num_lists"]);
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -109,6 +109,7 @@ namespace MyMediaLite.Eval
 			double recall_5_sum  = 0;
 			double recall_10_sum = 0;
 			double ndcg_sum      = 0;
+			double rr_sum        = 0;
 			int num_users        = 0;
 
 			foreach (int user_id in relevant_users)
@@ -134,9 +135,10 @@ namespace MyMediaLite.Eval
 
 				ICollection<int> ignore_items = ignore_overlap ? train.UserMatrix[user_id] : new int[0];
 
-				auc_sum     += AUC(prediction, correct_items, ignore_items);
-				map_sum     += MAP(prediction, correct_items, ignore_items);
-				ndcg_sum    += NDCG(prediction, correct_items, ignore_items);
+				auc_sum  += AUC(prediction, correct_items, ignore_items);
+				map_sum  += MAP(prediction, correct_items, ignore_items);
+				ndcg_sum += NDCG(prediction, correct_items, ignore_items);
+				rr_sum   += ReciprocalRank(prediction, correct_items, ignore_items);
 
 				var ns = new int[] { 5, 10, 15 };
 				var prec = PrecisionAt(prediction, correct_items, ignore_items, ns);
@@ -154,12 +156,13 @@ namespace MyMediaLite.Eval
 
 			var result = new Dictionary<string, double>();
 			result["AUC"]       = auc_sum / num_users;
-			result["MAP"]       = map_sum / num_users;
-			result["NDCG"]      = ndcg_sum / num_users;
 			result["prec@5"]    = prec_5_sum / num_users;
 			result["prec@10"]   = prec_10_sum / num_users;
+			result["MAP"]       = map_sum / num_users;
 			result["recall@5"]  = recall_5_sum / num_users;
 			result["recall@10"] = recall_10_sum / num_users;
+			result["NDCG"]      = ndcg_sum / num_users;
+			result["mrr"]       = rr_sum / num_users;
 			result["num_users"] = num_users;
 			result["num_lists"] = num_users;
 			result["num_items"] = relevant_items.Count;
@@ -300,6 +303,9 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
+		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the AUC for the given data</returns>
@@ -309,30 +315,71 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
+		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the AUC for the given data</returns>
 		public static double AUC(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
 		{
-				int num_eval_items = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
-				int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
+			int num_eval_items = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
+			int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
 
-				int num_correct_pairs = 0;
-				int hit_count         = 0;
+			int num_correct_pairs = 0;
+			int hit_count         = 0;
 
-				foreach (int item_id in ranked_items)
-				{
-					if (ignore_items.Contains(item_id))
-						continue;
+			foreach (int item_id in ranked_items)
+			{
+				if (ignore_items.Contains(item_id))
+					continue;
 
-					if (!correct_items.Contains(item_id))
-						num_correct_pairs += hit_count;
-					else
-						hit_count++;
-				}
+				if (!correct_items.Contains(item_id))
+					num_correct_pairs += hit_count;
+				else
+					hit_count++;
+			}
 
-				return ((double) num_correct_pairs) / num_eval_pairs;
+			return ((double) num_correct_pairs) / num_eval_pairs;
+		}
+
+		/// <summary>Compute the reciprocal rank of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
+		/// </remarks>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <returns>the reciprocal rank for the given data</returns>
+		public static double ReciprocalRank(IList<int> ranked_items, ICollection<int> correct_items)
+		{
+			return ReciprocalRank(ranked_items, correct_items, new HashSet<int>());
+		}
+
+		/// <summary>Compute the reciprocal rank of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
+		/// </remarks>
+		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
+		/// <returns>the mean reciprocal rank for the given data</returns>
+		public static double ReciprocalRank(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
+		{
+			int pos = 0;
+
+			foreach (int item_id in ranked_items)
+			{
+				if (ignore_items.Contains(item_id))
+					continue;
+
+				if (correct_items.Contains(ranked_items[pos]))
+					return (double) 1 / (pos + 1);
+
+				pos++;
+			}
+
+			return 0;
 		}
 
 		/// <summary>Compute the mean average precision (MAP) of a list of ranked items</summary>
@@ -379,6 +426,9 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
+		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <returns>the NDCG for the given data</returns>
@@ -388,6 +438,9 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
+		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
@@ -533,6 +586,9 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Computes the ideal DCG given the number of positive items.</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
+		/// </remarks>
 		/// <returns>the ideal DCG</returns>
 		/// <param name='n'>the number of positive items</param>
 		static double ComputeIDCG(int n)
