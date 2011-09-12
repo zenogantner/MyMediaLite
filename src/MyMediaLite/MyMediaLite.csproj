@@ -1,46 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</ProjectGuid>
+    <ProjectGuid>{73424F09-BEEA-4992-B116-5F123496F5D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ReleaseVersion>1.05</ReleaseVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\MyMediaLite.XML</DocumentationFile>
-    <GenerateDocumentation>true</GenerateDocumentation>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
       <SpecificVersion>False</SpecificVersion>
@@ -48,156 +38,119 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IItemAttributeAwareRecommender.cs" />
-    <Compile Include="IUserAttributeAwareRecommender.cs" />
-    <Compile Include="IIterativeModel.cs" />
-    <Compile Include="IUserRelationAwareRecommender.cs" />
-    <Compile Include="IItemRelationAwareRecommender.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="IItemAttributeAwareRecommender.cs" />
+    <Compile Include="IItemRelationAwareRecommender.cs" />
+    <Compile Include="IIterativeModel.cs" />
+    <Compile Include="IRecommender.cs" />
+    <Compile Include="IUserAttributeAwareRecommender.cs" />
+    <Compile Include="IUserRelationAwareRecommender.cs" />
+    <Compile Include="Correlation\BinaryCosine.cs" />
+    <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
+    <Compile Include="Correlation\CorrelationMatrix.cs" />
+    <Compile Include="Correlation\Jaccard.cs" />
+    <Compile Include="Correlation\Pearson.cs" />
+    <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
+    <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="Data\EntityMapping.cs" />
+    <Compile Include="Data\IEntityMapping.cs" />
+    <Compile Include="Data\IPosOnlyFeedback.cs" />
+    <Compile Include="Data\IRatings.cs" />
+    <Compile Include="Data\ISplit.cs" />
+    <Compile Include="Data\ITimedRatings.cs" />
+    <Compile Include="Data\IdentityMapping.cs" />
+    <Compile Include="Data\PosOnlyFeedback.cs" />
+    <Compile Include="Data\PosOnlyFeedbackCrossValidationSplit.cs" />
+    <Compile Include="Data\PosOnlyFeedbackSimpleSplit.cs" />
+    <Compile Include="Data\RatingCrossValidationSplit.cs" />
+    <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
-    <Compile Include="DataType\Matrix.cs" />
-    <Compile Include="DataType\MatrixUtils.cs" />
-    <Compile Include="DataType\SparseBooleanMatrix.cs" />
-    <Compile Include="DataType\SparseMatrix.cs" />
-    <Compile Include="DataType\SparseVector.cs" />
-    <Compile Include="DataType\VectorUtils.cs" />
+    <Compile Include="Data\RatingsProxy.cs" />
+    <Compile Include="Data\RatingsSimpleSplit.cs" />
+    <Compile Include="Data\RatingsWithDateTime.cs" />
+    <Compile Include="Data\StaticByteRatings.cs" />
+    <Compile Include="Data\StaticFloatRatings.cs" />
+    <Compile Include="Data\StaticRatings.cs" />
+    <Compile Include="Data\StaticRatingsWithDateTime.cs" />
+    <Compile Include="Data\TimedRatings.cs" />
+    <Compile Include="Data\WeightedItem.cs" />
     <Compile Include="Ensemble\Ensemble.cs" />
     <Compile Include="Ensemble\WeightedEnsemble.cs" />
-    <Compile Include="IO\AttributeData.cs" />
-    <Compile Include="IO\RelationData.cs" />
-    <Compile Include="Taxonomy\EntityType.cs" />
-    <Compile Include="Util\Handlers.cs" />
-    <Compile Include="Util\Pair.cs" />
-    <Compile Include="Util\Random.cs" />
-    <Compile Include="Util\Triple.cs" />
-    <Compile Include="Util\Utils.cs" />
-    <Compile Include="Correlation\CorrelationMatrix.cs" />
+    <Compile Include="DataType\CombinedList.cs" />
+    <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\IMatrixUtils.cs" />
+    <Compile Include="DataType\ListProxy.cs" />
+    <Compile Include="DataType\Matrix.cs" />
+    <Compile Include="DataType\MatrixUtils.cs" />
+    <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
+    <Compile Include="DataType\SparseBooleanMatrix.cs" />
+    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
+    <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
+    <Compile Include="DataType\SparseMatrix.cs" />
+    <Compile Include="DataType\SparseVector.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
-    <Compile Include="Data\WeightedItem.cs" />
-    <Compile Include="Correlation\BinaryCosine.cs" />
-    <Compile Include="Correlation\Jaccard.cs" />
-    <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
-    <Compile Include="ItemRecommendation\BPR_Linear.cs" />
+    <Compile Include="DataType\VectorUtils.cs" />
+    <Compile Include="Util\Handlers.cs" />
+    <Compile Include="Util\Memory.cs" />
+    <Compile Include="Util\Pair.cs" />
+    <Compile Include="Util\Random.cs" />
+    <Compile Include="Util\Recommender.cs" />
+    <Compile Include="Util\RecommenderParameters.cs" />
+    <Compile Include="Util\Triple.cs" />
+    <Compile Include="Util\Utils.cs" />
+    <Compile Include="Taxonomy\EntityType.cs" />
+    <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
+    <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\EntityAverage.cs" />
+    <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\GlobalAverage.cs" />
+    <Compile Include="RatingPrediction\IRatingPredictor.cs" />
+    <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
+    <Compile Include="RatingPrediction\ItemAverage.cs" />
+    <Compile Include="RatingPrediction\ItemKNN.cs" />
+    <Compile Include="RatingPrediction\ItemKNNCosine.cs" />
+    <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
+    <Compile Include="RatingPrediction\KNN.cs" />
+    <Compile Include="RatingPrediction\MatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\Prediction.cs" />
+    <Compile Include="RatingPrediction\RatingPredictor.cs" />
+    <Compile Include="RatingPrediction\SlopeOne.cs" />
+    <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
+    <Compile Include="RatingPrediction\UserAverage.cs" />
+    <Compile Include="RatingPrediction\UserItemBaseline.cs" />
+    <Compile Include="RatingPrediction\UserKNN.cs" />
+    <Compile Include="RatingPrediction\UserKNNCosine.cs" />
+    <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="ItemRecommendation\BPRMF.cs" />
+    <Compile Include="ItemRecommendation\BPR_Linear.cs" />
     <Compile Include="ItemRecommendation\IItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
+    <Compile Include="ItemRecommendation\ItemRecommender.cs" />
     <Compile Include="ItemRecommendation\KNN.cs" />
     <Compile Include="ItemRecommendation\MF.cs" />
     <Compile Include="ItemRecommendation\MostPopular.cs" />
+    <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="ItemRecommendation\Random.cs" />
     <Compile Include="ItemRecommendation\UserAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\UserKNN.cs" />
+    <Compile Include="ItemRecommendation\WRMF.cs" />
     <Compile Include="ItemRecommendation\WeightedItemKNN.cs" />
     <Compile Include="ItemRecommendation\WeightedUserKNN.cs" />
-    <Compile Include="ItemRecommendation\WRMF.cs" />
-    <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
-    <Compile Include="RatingPrediction\IRatingPredictor.cs" />
-    <Compile Include="RatingPrediction\MatrixFactorization.cs" />
-    <Compile Include="RatingPrediction\EntityAverage.cs" />
-    <Compile Include="RatingPrediction\GlobalAverage.cs" />
-    <Compile Include="ItemRecommendation\ItemRecommender.cs" />
-    <Compile Include="RatingPrediction\RatingPredictor.cs" />
-    <Compile Include="IRecommender.cs" />
-    <Compile Include="Util\Recommender.cs" />
-    <Compile Include="Util\Memory.cs" />
-    <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
-    <Compile Include="Data\IRatings.cs" />
-    <Compile Include="Data\StaticRatings.cs" />
-    <Compile Include="RatingPrediction\SlopeOne.cs" />
-    <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
-    <Compile Include="RatingPrediction\UserAverage.cs" />
-    <Compile Include="RatingPrediction\ItemAverage.cs" />
-    <Compile Include="RatingPrediction\KNN.cs" />
-    <Compile Include="RatingPrediction\UserItemBaseline.cs" />
-    <Compile Include="RatingPrediction\ItemKNNCosine.cs" />
-    <Compile Include="RatingPrediction\ItemKNN.cs" />
-    <Compile Include="Correlation\Pearson.cs" />
-    <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
-    <Compile Include="RatingPrediction\UserKNNCosine.cs" />
-    <Compile Include="RatingPrediction\UserKNN.cs" />
-    <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
-    <Compile Include="RatingPrediction\UserKNNPearson.cs" />
-    <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
-    <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
-    <Compile Include="Data\ISplit.cs" />
-    <Compile Include="Data\RatingsProxy.cs" />
-    <Compile Include="DataType\ListProxy.cs" />
-    <Compile Include="Data\RatingCrossValidationSplit.cs" />
-    <Compile Include="Data\StaticRatingsWithDateTime.cs" />
-    <Compile Include="Data\RatingsWithDateTime.cs" />
-    <Compile Include="IO\MovieLensRatingData.cs" />
-    <Compile Include="Data\PosOnlyFeedback.cs" />
-    <Compile Include="Data\StaticByteRatings.cs" />
-    <Compile Include="Data\PosOnlyFeedbackSimpleSplit.cs" />
-    <Compile Include="Data\RatingsSimpleSplit.cs" />
-    <Compile Include="Data\StaticFloatRatings.cs" />
-    <Compile Include="Data\CombinedRatings.cs" />
-    <Compile Include="DataType\CombinedList.cs" />
     <Compile Include="ItemRecommendation\Zero.cs" />
-    <Compile Include="Data\RatingType.cs" />
+    <Compile Include="IO\AttributeData.cs" />
     <Compile Include="IO\FileFormat.cs" />
-    <Compile Include="Data\IdentityMapping.cs" />
-    <Compile Include="Data\IEntityMapping.cs" />
-    <Compile Include="Util\RecommenderParameters.cs" />
-    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
-    <Compile Include="DataType\IBooleanMatrix.cs" />
-    <Compile Include="Data\IPosOnlyFeedback.cs" />
-    <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
-    <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
+    <Compile Include="IO\ItemData.cs" />
+    <Compile Include="IO\ItemDataRatingThreshold.cs" />
+    <Compile Include="IO\Model.cs" />
+    <Compile Include="IO\MovieLensRatingData.cs" />
+    <Compile Include="IO\RatingData.cs" />
+    <Compile Include="IO\RelationData.cs" />
+    <Compile Include="IO\StaticRatingData.cs" />
+    <Compile Include="IO\TimedRatings.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
-    <Compile Include="ItemRecommendation\Prediction.cs" />
-    <Compile Include="RatingPrediction\Prediction.cs" />
-    <Compile Include="Data\ITimedRatings.cs" />
-    <Compile Include="Data\TimedRatings.cs" />
-    <Compile Include="IO\TimedRatings.cs" />
-    <Compile Include="Data\PosOnlyFeedbackCrossValidationSplit.cs" />
-    <Compile Include="IO\Model.cs" />
-    <Compile Include="IO\ItemData.cs" />
-    <Compile Include="IO\RatingData.cs" />
-    <Compile Include="IO\StaticRatingData.cs" />
-    <Compile Include="IO\ItemDataRatingThreshold.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <ItemGroup>
-    <Folder Include="Correlation\" />
-    <Folder Include="Eval\" />
-    <Folder Include="DataType\" />
-    <Folder Include="Util\" />
-    <Folder Include="IO\" />
-    <Folder Include="Data\" />
-    <Folder Include="Taxonomy\" />
-    <Folder Include="Ensemble\" />
-    <Folder Include="ItemRecommendation\" />
-    <Folder Include="RatingPrediction\" />
-  </ItemGroup>
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <StandardHeader Text="Copyright (C) 2011 Zeno Gantner&#xA;&#xA;This file is part of MyMediaLite.&#xA;&#xA;MyMediaLite is free software: you can redistribute it and/or modify&#xA;it under the terms of the GNU General Public License as published by&#xA;the Free Software Foundation, either version 3 of the License, or&#xA;(at your option) any later version.&#xA;&#xA;MyMediaLite is distributed in the hope that it will be useful,&#xA;but WITHOUT ANY WARRANTY; without even the implied warranty of&#xA;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xA;GNU General Public License for more details.&#xA;&#xA;You should have received a copy of the GNU General Public License&#xA;along with MyMediaLite.  If not, see &lt;http://www.gnu.org/licenses/&gt;." inheritsSet="Apache2License" />
-        </Policies>
-        <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="Makefile" SyncReferences="true">
-          <BuildFilesVar Sync="true" Name="FILES" />
-          <DeployFilesVar />
-          <ResourcesVar Sync="true" Name="RESOURCES" />
-          <OthersVar />
-          <GacRefVar Sync="true" Name="REFERENCES" />
-          <AsmRefVar Sync="true" Name="REFERENCES" />
-          <ProjectRefVar Sync="true" Name="REFERENCES" />
-        </MonoDevelop.Autotools.MakefileInfo>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
 </Project>

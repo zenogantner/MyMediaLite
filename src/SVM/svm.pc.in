@@ -1,6 +1,0 @@
-Name: SVM
-Description: SVM
-Version: 1.01
-
-Requires: 
-Libs: -r:@expanded_libdir@/@PACKAGE@/SVM.dll

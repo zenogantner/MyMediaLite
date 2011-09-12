@@ -1,105 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{750EE318-9B7E-4825-8E42-5D9ABDD6E050}</ProjectGuid>
+    <ProjectGuid>{B350A953-A5D8-4302-8C8C-2399FA43D85F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLiteExperimental</RootNamespace>
-    <ReleaseVersion>1.05</ReleaseVersion>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateDocumentation>true</GenerateDocumentation>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateDocumentation>true</GenerateDocumentation>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\MF_Mapping.cs" />
-    <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
-    <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
-    <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
-    <Compile Include="Eval\KDDCup.cs" />
-    <Compile Include="Data\KDDCupItems.cs" />
-    <Compile Include="Taxonomy\KDDCupItemType.cs" />
-    <Compile Include="IO\KDDCup2011\Items.cs" />
-    <Compile Include="IO\KDDCup2011\Ratings.cs" />
-    <Compile Include="RatingPrediction\SocialMF.cs" />
-    <Compile Include="IKDDCupRecommender.cs" />
-    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
-    <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="Util\GridSearch.cs" />
-    <Compile Include="Util\NelderMead.cs" />
-    <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
-    <Compile Include="Eval\ItemsFiltered.cs" />
-    <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
-    <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
-    <Compile Include="GroupRecommendation\Average.cs" />
-    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\Maximum.cs" />
-    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
-    <Compile Include="GroupRecommendation\Minimum.cs" />
-    <Compile Include="Util\GroupUtils.cs" />
-    <Compile Include="Eval\Groups.cs" />
-    <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
-    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
-    <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AttrToFactor\" />
-    <Folder Include="Diversification\" />
-    <Folder Include="IO\" />
-    <Folder Include="IO\KDDCup2011\" />
-    <Folder Include="Eval\" />
-    <Folder Include="Data\" />
-    <Folder Include="Taxonomy\" />
-    <Folder Include="Correlation\" />
-    <Folder Include="RatingPrediction\" />
-    <Folder Include="ItemRecommendation\" />
-    <Folder Include="GroupRecommendation\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
-      <Project>{D5BBB78C-DAE0-4516-8AE5-91DBFAC6DE92}</Project>
-      <Name>MyMediaLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SVM\SVM.csproj">
-      <Project>{2A381CBB-8291-435C-A8E3-BBF3B590B2B6}</Project>
-      <Name>SVM</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Core" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
     </Reference>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
+    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
+    <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
+    <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
+    <Compile Include="AttrToFactor\MF_Mapping.cs" />
+    <Compile Include="Data\KDDCupItems.cs" />
+    <Compile Include="Diversification\SequentialDiversification.cs" />
+    <Compile Include="Eval\Groups.cs" />
+    <Compile Include="Eval\ItemsFiltered.cs" />
+    <Compile Include="Eval\KDDCup.cs" />
+    <Compile Include="GroupRecommendation\Average.cs" />
+    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\Maximum.cs" />
+    <Compile Include="GroupRecommendation\Minimum.cs" />
+    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
+    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
+    <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
+    <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
+    <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
+    <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
+    <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
+    <Compile Include="IO\KDDCup2011\Items.cs" />
+    <Compile Include="IO\KDDCup2011\Ratings.cs" />
+    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
+    <Compile Include="Taxonomy\KDDCupItemType.cs" />
+    <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\SocialMF.cs" />
+    <Compile Include="IKDDCupRecommender.cs" />
+    <Compile Include="Util\GridSearch.cs" />
+    <Compile Include="Util\GroupUtils.cs" />
+    <Compile Include="Util\NelderMead.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
+      <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
+      <Name>MyMediaLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SVM\SVM.csproj">
+      <Project>{309290E3-E52B-4E67-9F6E-2A67B5D54320}</Project>
+      <Name>SVM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Correlation\" />
+  </ItemGroup>
 </Project>

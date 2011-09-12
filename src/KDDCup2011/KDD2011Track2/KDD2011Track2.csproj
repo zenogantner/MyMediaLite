@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}</ProjectGuid>
+    <ProjectGuid>{DB4C4882-DD1D-42FB-8F23-5C269C36A0B3}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RatingPrediction</RootNamespace>
-    <AssemblyName>RatingPrediction</AssemblyName>
+    <RootNamespace>KDD2011Track2</RootNamespace>
+    <AssemblyName>KDD2011Track2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,25 +34,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="RatingPrediction.cs" />
-    <Compile Include="..\..\lib\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
+    <Compile Include="KDDTrack2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Deployment.LinuxDeployData scriptName="rating_prediction" />
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
   <ItemGroup>
-    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
+    <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
+    <ProjectReference Include="..\..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
       <Project>{B350A953-A5D8-4302-8C8C-2399FA43D85F}</Project>
       <Name>MyMediaLiteExperimental</Name>
     </ProjectReference>

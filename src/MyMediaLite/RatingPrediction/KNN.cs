@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
 	///
-	/// <seealso cref="ItemRecommendation.KNN"/>
+	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	/// </remarks>
 	public abstract class KNN : UserItemBaseline
 	{

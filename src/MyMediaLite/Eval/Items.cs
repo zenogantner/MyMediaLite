@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+//using System.Threading;
+//using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
@@ -113,6 +115,7 @@ namespace MyMediaLite.Eval
 			int num_users        = 0;
 
 			foreach (int user_id in relevant_users)
+			// Parallel.ForEach (relevant_users, user_id =>
 			{
 				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
 				correct_items.IntersectWith(relevant_items);
@@ -124,9 +127,9 @@ namespace MyMediaLite.Eval
 
 				// skip all users that have 0 or #relevant_items test items
 				if (correct_items.Count == 0)
-					continue;
+					continue; //return;
 				if (num_eval_items - correct_items.Count == 0)
-					continue;
+					continue; //return;
 
 				num_users++;
 				IList<int> prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
@@ -152,7 +155,7 @@ namespace MyMediaLite.Eval
 					Console.Error.Write(".");
 				if (num_users % 60000 == 0)
 					Console.Error.WriteLine();
-			}
+			}//);
 
 			var result = new Dictionary<string, double>();
 			result["AUC"]       = auc_sum / num_users;

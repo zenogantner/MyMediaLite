@@ -74,7 +74,8 @@ class RatingPrediction
 	{
 		Version version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2010, 2011 Zeno Gantner, Steffen Rendle");
+		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
+		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");		
 	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
         Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);

@@ -1,9 +1,0 @@
-prefix=/usr/local
-libdir=/usr/local/lib
-bindir=/usr/local/bin
-datadir=/usr/local/share
-RUNTIME=mono
-ASSEMBLY_VERSION=1.0.0.0
-VERSION=1.0
-PACKAGE=mymedialite
-CONFIG=DEBUG
