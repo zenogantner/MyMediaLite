@@ -11,6 +11,8 @@
             IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
         - recommenders
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
+        - command-line tools
+          - check parameters after creating recommender, catching more errors
         - evaluation
           - new evaluation measure: mean reciprocal rank (mrr)
 	- documentation

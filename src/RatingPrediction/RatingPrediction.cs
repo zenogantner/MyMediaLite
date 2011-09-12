@@ -75,7 +75,7 @@ class RatingPrediction
 		Version version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
-		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");		
+		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
 	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
         Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
@@ -221,14 +221,14 @@ class RatingPrediction
 		if (show_help)
 			Usage(0);
 
-		CheckParameters(extra_args);
-
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
+
+		CheckParameters(extra_args);
 
 		Recommender.Configure(recommender, recommender_options, Usage);
 
@@ -395,7 +395,7 @@ class RatingPrediction
 
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
-		
+
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
 

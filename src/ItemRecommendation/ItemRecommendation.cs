@@ -246,14 +246,14 @@ class ItemRecommendation
 		if (show_help)
 			Usage(0);
 
-		CheckParameters(extra_args);
-
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
+
+		CheckParameters(extra_args);
 
 		Recommender.Configure(recommender, recommender_options, Usage);
 
@@ -504,7 +504,7 @@ class ItemRecommendation
 
 			if (group_method == "GroupsAsUsers")
 			{
-				Console.WriteLine("group recommendation strategy: {0}", group_method);				
+				Console.WriteLine("group recommendation strategy: {0}", group_method);
 				// TODO verify what is going on here
 
 				//var training_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
