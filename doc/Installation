@@ -1,5 +1,5 @@
 Requirements for running MyMediaLite:
- - Mono 2.6.x or another recent .NET runtime
+ - Mono 2.8.x or another recent .NET runtime
  - Perl and File::Slurp for the download and data processing scripts
    (not necessary for running/building MyMediaLite)
 
