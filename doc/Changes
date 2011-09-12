@@ -13,6 +13,7 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
         - command-line tools
           - check parameters after creating recommender, catching more errors
+          - refer to GitHub issue tracker in exception handler
         - evaluation
           - new evaluation measure: mean reciprocal rank (mrr)
 	- documentation
