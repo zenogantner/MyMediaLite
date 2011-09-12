@@ -19,6 +19,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
@@ -101,7 +103,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			int[] item_ratings_count = new int[MaxItemID + 1];
 
-			// compute item biases
 			for (int index = 0; index < Ratings.Count; index++)
 			{
 				item_biases[Ratings.Items[index]] += Ratings[index] - global_average - user_biases[Ratings.Users[index]];
