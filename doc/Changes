@@ -10,11 +10,16 @@
           - rename IO.ItemRecommendation to IO.ItemData and
             IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
         - recommenders
+          - new rating predictor MultiCoreMatrixFactorization based on
+            Distributed SGD paper at KDD 2011 by Gemulla et al.
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
+          - BiasedMatrixFactorization: make fields needed for the bold-driver
+            learning rate heuristic protected
         - command-line tools
           - rename ItemPrediction.exe to ItemRecommendation.exe
           - check parameters after creating recommender, catching more errors
-          - refer to GitHub issue tracker in exception handler
+          - refer to GitHub issue tracker in exception handler, make handler
+            output more noticeable
         - evaluation
           - new evaluation measure: mean reciprocal rank (mrr)
 	- documentation
