@@ -12,6 +12,7 @@
         - recommenders
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
         - command-line tools
+          - rename ItemPrediction.exe to ItemRecommendation.exe
           - check parameters after creating recommender, catching more errors
           - refer to GitHub issue tracker in exception handler
         - evaluation
