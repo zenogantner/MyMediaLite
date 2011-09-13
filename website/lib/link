@@ -14,6 +14,7 @@
      gitorious     => { url => 'http://gitorious.org/',                          title => 'Gitorious' }
      github        => { url => 'http://github.com/',                             title => 'github' }     
      git           => { url => 'http://git-scm.com/',                            title => 'git' }
+     jellyfish     => { url => 'http://research.cs.wisc.edu/hazy/victor/download/', title => 'Jellyfish' }
      nunit         => { url => 'http://nunit.org/',                              title => 'NUnit' }
      mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
      tastedotnet   => { url => 'https://github.com/ccollie/taste.net',           title => 'Taste.NET' }
@@ -23,6 +24,7 @@
      lenskit       => { url => 'http://lenskit.grouplens.org/',                  title => 'LensKit' }
      crab          => { url => 'http://muricoca.github.com/crab/',               title => 'Crab' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
+     recommenderlab => { url => 'http://cran.r-project.org/web/packages/recommenderlab/index.html', title => 'recommenderlab' }
      featuremf     => { url => 'http://apex.sjtu.edu.cn/apex_wiki/svdfeature',   title => 'SVDFeature' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
