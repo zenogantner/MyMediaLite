@@ -66,7 +66,6 @@ namespace MyMediaLite.Eval
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
-
 				rmse += error * error;
 				mae  += Math.Abs(error);
 			}
