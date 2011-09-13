@@ -10,6 +10,7 @@
     <RootNamespace>MyMediaLiteExperimental</RootNamespace>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ReleaseVersion>1.99</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,7 @@
     <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="Util\NelderMead.cs" />
+    <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

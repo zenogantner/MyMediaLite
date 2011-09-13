@@ -251,7 +251,7 @@ class ItemRecommendation
 
 		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
-			Usage(string.Format("Unknown method: '{0}'", method));
+			Usage(string.Format("Unknown item recommendation method: '{0}'", method));
 
 		CheckParameters(extra_args);
 

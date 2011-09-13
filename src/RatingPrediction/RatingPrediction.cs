@@ -223,10 +223,10 @@ class RatingPrediction
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
-
+		
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
-			Usage(string.Format("Unknown method: '{0}'", method));
+			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
 
 		CheckParameters(extra_args);
 

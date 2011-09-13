@@ -76,7 +76,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
-		/// Literature
+		/// Literature:
 		/// <list type="bullet">
     	///   <item><description>
 		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:

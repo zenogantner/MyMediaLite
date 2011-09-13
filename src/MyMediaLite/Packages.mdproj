@@ -53,5 +53,6 @@
         </Package>
       </Packages>
     </Packages>
+    <ReleaseVersion>1.99</ReleaseVersion>
   </PropertyGroup>
 </Project>
