@@ -90,7 +90,7 @@ namespace MyMediaLite.RatingPrediction
 		// TODO use for incremental updates as well
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
-		double last_loss = double.NegativeInfinity;
+		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>the user biases</summary>
 		protected double[] user_bias;
