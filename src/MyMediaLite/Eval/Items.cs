@@ -83,7 +83,14 @@ namespace MyMediaLite.Eval
 		/// and the number of items that were taken into account.
 		///
 		/// Literature:
+		/// <list type="bullet">
+	    ///   <item><description>
 		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
+		///   </description></item>
+		/// </list>
+		///
+		/// On multi-core/multi-processor systems, the routine tries to use as many cores as possible,
+		/// which should to an almost linear speed-up.
 		/// </remarks>
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
@@ -103,7 +110,7 @@ namespace MyMediaLite.Eval
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
-			// compute evaluation measures
+			int num_users        = 0;
 			double auc_sum       = 0;
 			double map_sum       = 0;
 			double prec_5_sum    = 0;
@@ -112,9 +119,8 @@ namespace MyMediaLite.Eval
 			double recall_10_sum = 0;
 			double ndcg_sum      = 0;
 			double rr_sum        = 0;
-			int num_users        = 0;
 
-			//foreach (int user_id in relevant_users)
+			var locker = new int[0]; // object used for thread locking
 			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
@@ -131,25 +137,33 @@ namespace MyMediaLite.Eval
 				if (num_eval_items - correct_items.Count == 0)
 					return;
 
-				num_users++;
 				IList<int> prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
 				if (prediction.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
 				ICollection<int> ignore_items = ignore_overlap ? train.UserMatrix[user_id] : new int[0];
 
-				auc_sum  += AUC(prediction, correct_items, ignore_items);
-				map_sum  += MAP(prediction, correct_items, ignore_items);
-				ndcg_sum += NDCG(prediction, correct_items, ignore_items);
-				rr_sum   += ReciprocalRank(prediction, correct_items, ignore_items);
-
+				double auc  = AUC(prediction, correct_items, ignore_items);
+				double map  = MAP(prediction, correct_items, ignore_items);
+				double ndcg = NDCG(prediction, correct_items, ignore_items);
+				double rr   = ReciprocalRank(prediction, correct_items, ignore_items);
 				var ns = new int[] { 5, 10, 15 };
 				var prec = PrecisionAt(prediction, correct_items, ignore_items, ns);
-				prec_5_sum  += prec[5];
-				prec_10_sum += prec[10];
 				var recall = RecallAt(prediction, correct_items, ignore_items, ns);
-				recall_5_sum  += recall[5];
-				recall_10_sum += recall[10];
+
+				// thread-safe incrementing
+				lock(locker)
+				{
+					num_users++;
+					auc_sum       += auc;
+					map_sum       += map;
+					ndcg_sum      += ndcg;
+					rr_sum        += rr;
+					prec_5_sum    += prec[5];
+					prec_10_sum   += prec[10];
+					recall_5_sum  += recall[5];
+					recall_10_sum += recall[10];
+				}
 
 				if (num_users % 1000 == 0)
 					Console.Error.Write(".");
