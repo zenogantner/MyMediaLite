@@ -23,8 +23,6 @@ using System.Linq;
 using System.Reflection;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.ItemRecommendation;
-using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
 {
@@ -37,15 +35,15 @@ namespace MyMediaLite.Util
 		/// <returns>a version of the function that remembers past function results</returns>
 		public static Func<A, R> Memoize<A, R>(this Func<A, R> f)
 		{
-  			var map = new Dictionary<A, R>();
-  			return a =>
+			var map = new Dictionary<A, R>();
+			return a =>
 			{
-	  			R value;
-	  			if (map.TryGetValue(a, out value))
+				R value;
+				if (map.TryGetValue(a, out value))
 				return value;
-	  			value = f(a);
-	  			map.Add(a, value);
-	  			return value;
+				value = f(a);
+				map.Add(a, value);
+				return value;
 			};
 		}
 
@@ -124,22 +122,23 @@ namespace MyMediaLite.Util
 		/// <param name="test">the test data</param>
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
-		public static void DisplayDataStats(IRatings train, IRatings test,
-		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
+		public static void DisplayDataStats(
+			IRatings train, IRatings test,
+			SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
 		{
 			DisplayDataStats(train, test, user_attributes, item_attributes, false);
 		}
 
-		// TODO get rid of recommender argument
 		/// <summary>Display dataset statistics</summary>
 		/// <param name="train">the training data</param>
 		/// <param name="test">the test data</param>
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
 		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
-		public static void DisplayDataStats(IRatings train, IRatings test,
-		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes,
-		                                    bool display_overlap)
+		public static void DisplayDataStats(
+			IRatings train, IRatings test,
+			SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes,
+			bool display_overlap)
 		{
 			// training data stats
 			int num_users = train.AllUsers.Count;
@@ -180,8 +179,9 @@ namespace MyMediaLite.Util
 		/// <param name="test_data">the test dataset</param>
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
-		public static void DisplayDataStats(IPosOnlyFeedback training_data, IPosOnlyFeedback test_data,
-		                                    SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
+		public static void DisplayDataStats(
+			IPosOnlyFeedback training_data, IPosOnlyFeedback test_data,
+			SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
 		{
 			// training data stats
 			int num_users = training_data.AllUsers.Count;
@@ -212,14 +212,16 @@ namespace MyMediaLite.Util
 		{
 			if (user_attributes != null)
 			{
-				Console.WriteLine("{0} user attributes for {1} users, {2} assignments, {3} users with attribute assignments",
-				                  user_attributes.NumberOfColumns, user_attributes.NumberOfRows,
-				                  user_attributes.NumberOfEntries, user_attributes.NonEmptyRows);
+				Console.WriteLine(
+					"{0} user attributes for {1} users, {2} assignments, {3} users with attribute assignments",
+					user_attributes.NumberOfColumns, user_attributes.NumberOfRows,
+					user_attributes.NumberOfEntries, user_attributes.NonEmptyRows);
 			}
 			if (item_attributes != null)
-				Console.WriteLine("{0} item attributes for {1} items, {2} assignments, {3} items with attribute assignments",
-				                  item_attributes.NonEmptyColumnIDs.Count, item_attributes.NumberOfRows,
-				                  item_attributes.NumberOfEntries, item_attributes.NonEmptyRowIDs.Count);
+				Console.WriteLine(
+					"{0} item attributes for {1} items, {2} assignments, {3} items with attribute assignments",
+					item_attributes.NonEmptyColumnIDs.Count, item_attributes.NumberOfRows,
+					item_attributes.NumberOfEntries, item_attributes.NonEmptyRowIDs.Count);
 		}
 	}
 }
