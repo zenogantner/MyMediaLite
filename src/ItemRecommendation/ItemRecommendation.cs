@@ -256,6 +256,8 @@ class ItemRecommendation
 		CheckParameters(extra_args);
 
 		Recommender.Configure(recommender, recommender_options, Usage);
+		if (online_eval && !(recommender is IItemRecommender))
+			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
 
 		// load all the data
 		LoadData();
@@ -346,9 +348,9 @@ class ItemRecommendation
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var results = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
+						var results = Items.EvaluateOnline((IItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
 						Console.Write(Items.FormatResults(results));
-				});
+					});
 				else if (group_method != null)
 				{
 					GroupRecommender group_recommender = null;
