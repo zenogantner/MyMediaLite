@@ -227,6 +227,8 @@ class RatingPrediction
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
+		if (online_eval && !(recommender is IIncrementalRatingPredictor))
+			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
 
 		CheckParameters(extra_args);
 
@@ -357,7 +359,7 @@ class RatingPrediction
 			if (!no_eval)
 			{
 				if (online_eval)  // TODO support also for prediction outputs (to allow external evaluation)
-					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.EvaluateOnline(recommender, test_data))); });
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.EvaluateOnline((IIncrementalRatingPredictor) recommender, test_data))); });
 				else
 					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
 

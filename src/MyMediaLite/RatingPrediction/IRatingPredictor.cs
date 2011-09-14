@@ -1,4 +1,3 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -31,15 +30,12 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
-		///
-		void AddRating(int user_id, int item_id, double rating);
-		///
-		void UpdateRating(int user_id, int item_id, double rating);
-		///
-		void RemoveRating(int user_id, int item_id);
-		///
-		void RemoveUser(int user_id);
-		///
-		void RemoveItem(int item_id);
+		/// <summary>Gets or sets the maximum rating.</summary>
+		/// <value>The maximally possible rating</value>
+		double MaxRating { get; set; }
+		
+		/// <summary>Gets or sets the minimum rating.</summary>
+		/// <value>The minimally possible rating</value>
+		double MinRating { get; set; }
 	}
 }
