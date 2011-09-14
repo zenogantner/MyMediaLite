@@ -86,9 +86,12 @@ namespace MyMediaLite.RatingPrediction
 		{
 			var column_blocks = new int[NumBlocks];
 
-			for (int i = 0; i < NumBlocks; i++) // sub-epoch
+			// generate random sub-epoch sequence
+			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumBlocks));
+			Utils.Shuffle(subepoch_sequence);
+
+			foreach (int i in subepoch_sequence) // sub-epoch
 			{
-				// TODO try different sequences
 				for (int j = 0; j < NumBlocks; j++)
 					column_blocks[j] = (i + j) % NumBlocks;
 
