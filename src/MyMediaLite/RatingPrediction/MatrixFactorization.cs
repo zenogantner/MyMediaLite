@@ -38,7 +38,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class MatrixFactorization : RatingPredictor, IIterativeModel
+	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
 		protected Matrix<double> user_factors;

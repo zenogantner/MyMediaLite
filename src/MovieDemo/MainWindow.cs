@@ -48,7 +48,7 @@ public partial class MainWindow : Window
 
 	Gdk.Color white = new Gdk.Color(0xff, 0xff, 0xff);
 
-	RatingPredictor rating_predictor;
+	IncrementalRatingPredictor rating_predictor;
 
 	// depends on dataset
 	string ratings_file          = "../../../../data/ml1m/ratings.txt";

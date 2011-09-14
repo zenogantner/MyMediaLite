@@ -19,8 +19,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
@@ -41,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class UserItemBaseline : RatingPredictor, IIterativeModel
+	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
 		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
