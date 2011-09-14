@@ -48,7 +48,7 @@ We also have a nice GUI demo: http://bit.ly/pvXuSB #MyMediaLite #recsys
 
 #MyMediaLite scales pretty well: For small models, 1 iteration over the Netflix dataset takes < 100 seconds: http://bit.ly/pQxTYZ #recsys
 
-BiasedMatrixFactorization in #MyMediaLite is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys
+BiasedMatrixFactorization is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys #MyMediaLite
 
 #MyMediaLite contains different kNN models for both rating and item prediction: http://bit.ly/pscX4U http://bit.ly/no1sam #recsys
 
