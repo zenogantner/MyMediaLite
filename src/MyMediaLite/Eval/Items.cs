@@ -200,7 +200,7 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> EvaluateOnline(
-			IItemRecommender recommender,
+			IIncrementalItemRecommender recommender,
 			IPosOnlyFeedback test, IPosOnlyFeedback train,
 			ICollection<int> relevant_users, ICollection<int> relevant_items)
 		{

@@ -126,7 +126,6 @@
     <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="ItemRecommendation\BPRMF.cs" />
     <Compile Include="ItemRecommendation\BPR_Linear.cs" />
-    <Compile Include="ItemRecommendation\IItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
     <Compile Include="ItemRecommendation\ItemRecommender.cs" />
@@ -156,6 +155,8 @@
     <Compile Include="IO\Constants.cs" />
     <Compile Include="RatingPrediction\IIncrementalRatingPredictor.cs" />
     <Compile Include="RatingPrediction\IncrementalRatingPredictor.cs" />
+    <Compile Include="ItemRecommendation\IncrementalItemRecommender.cs" />
+    <Compile Include="ItemRecommendation\IIncrementalItemRecommender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
