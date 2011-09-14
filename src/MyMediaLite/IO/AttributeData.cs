@@ -61,18 +61,14 @@ namespace MyMediaLite.IO
 		{
 			var matrix = new SparseBooleanMatrix();
 
-			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
-
-			while (!reader.EndOfStream)
+			while ((line = reader.ReadLine()) != null)
 			{
-			   	line = reader.ReadLine();
-
 				// ignore empty lines
 				if (line.Length == 0)
 					continue;
 
-				string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length != 2)
 					throw new IOException("Expected exactly two columns: " + line);
@@ -80,7 +76,7 @@ namespace MyMediaLite.IO
 				int entity_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int attr_id   = int.Parse(tokens[1]);
 
-			   	matrix[entity_id, attr_id] = true;
+				matrix[entity_id, attr_id] = true;
 			}
 
 			return matrix;
@@ -102,7 +98,7 @@ namespace MyMediaLite.IO
 				int entity_id = mapping.ToInternalID(reader.GetInt32(0));
 				int attr_id   = reader.GetInt32(1);
 
-			   	matrix[entity_id, attr_id] = true;
+				matrix[entity_id, attr_id] = true;
 			}
 
 			return matrix;

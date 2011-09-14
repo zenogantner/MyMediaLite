@@ -37,7 +37,7 @@ namespace MyMediaLite.IO
 			if (filename.Equals("-"))
 				return Read(Console.In, user_mapping, item_mapping);
 			else
-            	using ( var reader = new StreamReader(filename) )
+				using ( var reader = new StreamReader(filename) )
 					return Read(reader, user_mapping, item_mapping);
 		}
 
@@ -48,17 +48,15 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-	        var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
+			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
-			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
-
-			while ( (line = reader.ReadLine()) != null )
+			while ((line = reader.ReadLine()) != null)
 			{
 				if (line.Trim().Length == 0)
 					continue;
 
-	            string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 2)
 					throw new IOException("Expected at least two columns: " + line);
@@ -66,33 +64,33 @@ namespace MyMediaLite.IO
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
 
-               	feedback.Add(user_id, item_id);
+				feedback.Add(user_id, item_id);
 			}
 
 			return feedback;
 		}
 
-        /// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
+		/// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
-        /// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-        /// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
-        /// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-        static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
-        {
-            var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
+		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
+		static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		{
+			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
-            if (reader.FieldCount < 2)
-                throw new IOException("Expected at least two columns.");
+			if (reader.FieldCount < 2)
+				throw new IOException("Expected at least two columns.");
 
-            while (reader.Read())
-            {
-                int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
-                int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+			while (reader.Read())
+			{
+				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
+				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
 
-                feedback.Add(user_id, item_id);
-            }
+				feedback.Add(user_id, item_id);
+			}
 
-            return feedback;
-        }
+			return feedback;
+		}
 	}
 }

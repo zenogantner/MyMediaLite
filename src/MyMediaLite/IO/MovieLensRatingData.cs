@@ -54,7 +54,7 @@ namespace MyMediaLite.IO
 			var separators = new string[] { "::" };
 			string line;
 
-			while ( (line = reader.ReadLine()) != null )
+			while ((line = reader.ReadLine()) != null)
 			{
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 

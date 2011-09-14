@@ -51,15 +51,13 @@ namespace MyMediaLite.IO
 		{
 			var ratings = new Ratings();
 
-			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
-
 			while ( (line = reader.ReadLine()) != null )
 			{
 				if (line.Length == 0)
 					continue;
 
-				string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 3)
 					throw new IOException("Expected at least three columns: " + line);
