@@ -45,8 +45,10 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
 		{
-			return string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} mrr {7:0.#####} num_users {8} num_items {9} num_lists {10}",
-			                     result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["mrr"], result["num_users"], result["num_items"], result["num_lists"]);
+			return string.Format(
+				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} mrr {7:0.#####} num_users {8} num_items {9} num_lists {10}",
+				result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["mrr"], result["num_users"], result["num_items"], result["num_lists"]
+			);
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -69,7 +71,7 @@ namespace MyMediaLite.Eval
 			IItemRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-		    ICollection<int> relevant_users,
+			ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
 			return Evaluate(recommender, test, train, relevant_users, relevant_items, true);
@@ -84,7 +86,7 @@ namespace MyMediaLite.Eval
 		///
 		/// Literature:
 		/// <list type="bullet">
-	    ///   <item><description>
+		///   <item><description>
 		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
 		///   </description></item>
 		/// </list>
@@ -103,7 +105,7 @@ namespace MyMediaLite.Eval
 			IItemRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-		    ICollection<int> relevant_users,
+			ICollection<int> relevant_users,
 			ICollection<int> relevant_items,
 			bool ignore_overlap)
 		{
@@ -200,7 +202,7 @@ namespace MyMediaLite.Eval
 		static public Dictionary<string, double> EvaluateOnline(
 			IItemRecommender recommender,
 			IPosOnlyFeedback test, IPosOnlyFeedback train,
-		    ICollection<int> relevant_users, ICollection<int> relevant_items)
+			ICollection<int> relevant_users, ICollection<int> relevant_items)
 		{
 			// for better handling, move test data points into arrays
 			var users = new int[test.Count];
@@ -274,10 +276,11 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(ItemRecommender recommender,
-		                                                         ISplit<IPosOnlyFeedback> split,
-													 		     ICollection<int> relevant_users,
-																 ICollection<int> relevant_items)
+		static public Dictionary<string, double> EvaluateOnSplit(
+			ItemRecommender recommender,
+			ISplit<IPosOnlyFeedback> split,
+			ICollection<int> relevant_users,
+			ICollection<int> relevant_items)
 		{
 			return EvaluateOnSplit(recommender, split, relevant_users, relevant_items, false);
 		}
@@ -289,11 +292,12 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(ItemRecommender recommender,
-		                                                         ISplit<IPosOnlyFeedback> split,
-													 		     ICollection<int> relevant_users,
-																 ICollection<int> relevant_items,
-		                                                         bool show_results)
+		static public Dictionary<string, double> EvaluateOnSplit(
+			ItemRecommender recommender,
+			ISplit<IPosOnlyFeedback> split,
+			ICollection<int> relevant_users,
+			ICollection<int> relevant_items,
+			bool show_results)
 		{
 			var avg_results = new Dictionary<string, double>();
 
@@ -494,10 +498,11 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="ns">the cutoff positions in the list</param>
 		/// <returns>the precision@N for the given data at the different positions N</returns>
-		public static Dictionary<int, double> PrecisionAt(IList<int> ranked_items,
-		                                                  ICollection<int> correct_items,
-		                                                  ICollection<int> ignore_items,
-		                                                  IList<int> ns)
+		public static Dictionary<int, double> PrecisionAt(
+			IList<int> ranked_items,
+			ICollection<int> correct_items,
+			ICollection<int> ignore_items,
+			IList<int> ns)
 		{
 			var precision_at_n = new Dictionary<int, double>();
 			foreach (int n in ns)
@@ -521,8 +526,9 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items,
-		                                 ICollection<int> ignore_items, int n)
+		public static double PrecisionAt(
+			IList<int> ranked_items, ICollection<int> correct_items,
+			ICollection<int> ignore_items, int n)
 		{
 			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / n;
 		}
@@ -533,10 +539,11 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="ns">the cutoff positions in the list</param>
 		/// <returns>the recall@N for the given data at the different positions N</returns>
-		public static Dictionary<int, double> RecallAt(IList<int> ranked_items,
-		                                                  ICollection<int> correct_items,
-		                                                  ICollection<int> ignore_items,
-		                                                  IList<int> ns)
+		public static Dictionary<int, double> RecallAt(
+			IList<int> ranked_items,
+			ICollection<int> correct_items,
+			ICollection<int> ignore_items,
+			IList<int> ns)
 		{
 			var recall_at_n = new Dictionary<int, double>();
 			foreach (int n in ns)
@@ -560,8 +567,9 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the recall@N for the given data</returns>
-		public static double RecallAt(IList<int> ranked_items, ICollection<int> correct_items,
-		                                 ICollection<int> ignore_items, int n)
+		public static double RecallAt(
+			IList<int> ranked_items, ICollection<int> correct_items,
+			ICollection<int> ignore_items, int n)
 		{
 			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / correct_items.Count;
 		}
@@ -572,8 +580,9 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
 		/// <returns>the hits@N for the given data</returns>
-		public static int HitsAt(IList<int> ranked_items, ICollection<int> correct_items,
-		                                 ICollection<int> ignore_items, int n)
+		public static int HitsAt(
+			IList<int> ranked_items, ICollection<int> correct_items,
+			ICollection<int> ignore_items, int n)
 		{
 			if (n < 1)
 				throw new ArgumentException("n must be at least 1.");

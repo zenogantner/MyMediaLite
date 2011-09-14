@@ -42,8 +42,10 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
 		{
-			return string.Format(CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
-		                         result["RMSE"], result["MAE"], result["NMAE"]);
+			return string.Format(
+				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
+				result["RMSE"], result["MAE"], result["NMAE"]
+			);
 		}
 
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>

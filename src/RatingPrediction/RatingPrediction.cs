@@ -76,8 +76,8 @@ class RatingPrediction
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
 		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
-	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
-        Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
+		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
 	}
 
@@ -140,8 +140,8 @@ class RatingPrediction
 		Environment.Exit(exit_code);
 	}
 
-    static void Main(string[] args)
-    {
+	static void Main(string[] args)
+	{
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
@@ -173,13 +173,13 @@ class RatingPrediction
 		string prediction_file = string.Empty;
 		string prediction_line = "{0}\t{1}\t{2}";
 
-	   	var p = new OptionSet() {
+		var p = new OptionSet() {
 			// string-valued options
 			{ "training-file=",       v              => training_file        = v },
 			{ "test-file=",           v              => test_file            = v },
 			{ "recommender=",         v              => method               = v },
 			{ "recommender-options=", v              => recommender_options += " " + v },
-   			{ "data-dir=",            v              => data_dir             = v },
+			{ "data-dir=",            v              => data_dir             = v },
 			{ "user-attributes=",     v              => user_attributes_file = v },
 			{ "item-attributes=",     v              => item_attributes_file = v },
 			{ "user-relations=",      v              => user_relations_file  = v },
@@ -189,7 +189,7 @@ class RatingPrediction
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "prediction-line=",     v              => prediction_line      = v },
 			// integer-valued options
-   			{ "find-iter=",           (int v)        => find_iter            = v },
+			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
 			{ "random-seed=",         (int v)        => random_seed          = v },
 			{ "cross-validation=",    (uint v)       => cross_validation     = v },
@@ -207,8 +207,8 @@ class RatingPrediction
 			{ "search-hp",            v => search_hp    = v != null },
 			{ "help",                 v => show_help    = v != null },
 			{ "version",              v => show_version = v != null },
-   	  	};
-   		IList<string> extra_args = p.Parse(args);
+		};
+		IList<string> extra_args = p.Parse(args);
 
 		// TODO make sure interaction of --find-iter and --cross-validation works properly
 
@@ -345,7 +345,7 @@ class RatingPrediction
 
 					Console.Write(recommender.ToString());
 					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
-        			Console.Write(" training_time " + seconds + " ");
+					Console.Write(" training_time " + seconds + " ");
 				}
 			}
 			else
@@ -418,7 +418,7 @@ class RatingPrediction
 			Usage("Did not understand " + extra_args[0]);
 	}
 
-    static void LoadData(string data_dir,
+	static void LoadData(string data_dir,
 	                     string user_attributes_file, string item_attributes_file,
 	                     string user_relation_file, string item_relation_file,
 	                     bool static_data)

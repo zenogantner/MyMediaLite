@@ -94,8 +94,8 @@ class ItemRecommendation
 		Console.WriteLine("MyMediaLite Item Prediction from Implicit Feedback {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
 		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
-	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
-        Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
+		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
 	}
 
@@ -191,7 +191,7 @@ class ItemRecommendation
 		num_test_users         = -1;
 		repeat_eval            = false;
 
-	   	var p = new OptionSet() {
+		var p = new OptionSet() {
 			// string-valued options
 			{ "training-file=",       v => training_file          = v },
 			{ "test-file=",           v => test_file              = v },
@@ -234,8 +234,8 @@ class ItemRecommendation
 			{ "test-items",           v => test_items      = v != null },
 			{ "help",                 v => show_help       = v != null },
 			{ "version",              v => show_version    = v != null },
-   	  	};
-   		IList<string> extra_args = p.Parse(args);
+		};
+		IList<string> extra_args = p.Parse(args);
 
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null)
@@ -328,7 +328,7 @@ class ItemRecommendation
 				{
 					Console.Write(recommender.ToString() + " ");
 					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
-	        		Console.Write("training_time " + time_span + " ");
+					Console.Write("training_time " + time_span + " ");
 				}
 			}
 			else
@@ -348,7 +348,7 @@ class ItemRecommendation
 					time_span = Utils.MeasureTime( delegate() {
 						var results = Items.EvaluateOnline(recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
 						Console.Write(Items.FormatResults(results));
-			    	});
+				});
 				else if (group_method != null)
 				{
 					GroupRecommender group_recommender = null;
@@ -373,7 +373,7 @@ class ItemRecommendation
 					time_span = Utils.MeasureTime( delegate() {
 						var results = Evaluate();
 						Console.Write(Items.FormatResults(results));
-			    	});
+				});
 				Console.Write(" testing_time " + time_span);
 			}
 			Console.WriteLine();
@@ -620,8 +620,8 @@ class ItemRecommendation
 
 		if (predict_for_users_file == null)
 			time_span = Utils.MeasureTime( delegate()
-		    	{
-			    	Prediction.WritePredictions(
+			{
+				Prediction.WritePredictions(
 				    	recommender,
 				        training_data,
 				        relevant_items, predict_items_number,
@@ -629,12 +629,12 @@ class ItemRecommendation
 				        prediction_file
 					);
 					Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
-		    	}
+			}
 			);
 		else
 			time_span = Utils.MeasureTime( delegate()
-		    	{
-			    	Prediction.WritePredictions(
+			{
+				Prediction.WritePredictions(
 				    	recommender,
 				        training_data,
 				        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
@@ -643,7 +643,7 @@ class ItemRecommendation
 				        prediction_file
 					);
 					Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
-		    	}
+			}
 			);
 		Console.Write(" predicting_time " + time_span);
 	}
@@ -657,21 +657,21 @@ class ItemRecommendation
 	{
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
+				CultureInfo.InvariantCulture,
+					"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
+					training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"eval_time: min={0:0.###}, max={1:0.###}, avg={2:0.###}",
-	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+				CultureInfo.InvariantCulture,
+					"eval_time: min={0:0.###}, max={1:0.###}, avg={2:0.###}",
+					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
+				CultureInfo.InvariantCulture,
+					"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
+					fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}

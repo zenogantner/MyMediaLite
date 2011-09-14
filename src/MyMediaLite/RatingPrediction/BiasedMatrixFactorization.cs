@@ -22,7 +22,6 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-//using MyMediaLite.Taxonomy;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -34,13 +33,13 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// Literature:
 	/// <list type="bullet">
-    ///   <item><description>
+	///   <item><description>
 	///     Ruslan Salakhutdinov, Andriy Mnih:
 	///     Probabilistic Matrix Factorization.
 	///     NIPS 2007.
 	///     http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
 	///   </description></item>
-    ///   <item><description>
+	///   <item><description>
 	///     Steffen Rendle, Lars Schmidt-Thieme:
 	///     Online-Updating Regularized Kernel Matrix Factorization Models for Large-Scale Recommender Systems.
 	///     RecSys 2008.
@@ -78,13 +77,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <remarks>
 		/// Literature:
 		/// <list type="bullet">
-    	///   <item><description>
+		///   <item><description>
 		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
 		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
 		///     KDD 2011.
 		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
-   	    ///   </description></item>
-	    /// </list>
+		///   </description></item>
+		/// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
 		// TODO use for incremental updates as well
