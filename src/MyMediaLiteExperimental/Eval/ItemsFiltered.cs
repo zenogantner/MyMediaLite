@@ -60,19 +60,19 @@ namespace MyMediaLite.Eval
 		/// <param name="item_attributes">the item attributes to be used for filtering</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <returns>a dictionary containing the evaluation results</returns>		
+		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
+			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-		    SparseBooleanMatrix item_attributes,		                                                  
-		    ICollection<int> relevant_users,
+			SparseBooleanMatrix item_attributes,
+			ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
 			return Evaluate(recommender, test, train, item_attributes, relevant_users, relevant_items, true);
 		}
-		
-		
+
+
 		/// <summary>Evaluation for rankings of filtered items</summary>
 		/// <remarks>
 		/// </remarks>
@@ -85,11 +85,11 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
+			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-		    SparseBooleanMatrix item_attributes,
-		    ICollection<int> relevant_users,
+			SparseBooleanMatrix item_attributes,
+			ICollection<int> relevant_users,
 			ICollection<int> relevant_items,
 			bool ignore_overlap)
 		{

@@ -43,7 +43,7 @@ class ItemRecommendation
 	static ICollection<int> user_groups;
 
 	// recommenders
-	static IItemRecommender recommender = null;
+	static IRecommender recommender = null;
 
 	// ID mapping objects
 	static IEntityMapping user_mapping = new EntityMapping();
@@ -440,7 +440,7 @@ class ItemRecommendation
 			Usage("Did not understand " + extra_args[0]);
 	}
 
-    static void LoadData()
+	static void LoadData()
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// training data
@@ -487,7 +487,7 @@ class ItemRecommendation
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
-	        		test_data = double.IsNaN(rating_threshold)
+					test_data = double.IsNaN(rating_threshold)
 						? ItemData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping)
 						: ItemDataRatingThreshold.Read(Path.Combine(data_dir, test_file), rating_threshold, user_mapping, item_mapping);
 			}
@@ -551,7 +551,7 @@ class ItemRecommendation
 					test_data = new PosOnlyFeedback<SparseBooleanMatrix>((SparseBooleanMatrix) test_data.UserMatrix.Transpose());;
 			}
 
-			if (! (recommender is MyMediaLite.ItemRecommendation.Random))
+			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)
 				((ItemRecommender)recommender).Feedback = training_data;
 
 			// relevant users
@@ -619,32 +619,27 @@ class ItemRecommendation
 		TimeSpan time_span;
 
 		if (predict_for_users_file == null)
-			time_span = Utils.MeasureTime( delegate()
-			{
+			time_span = Utils.MeasureTime( delegate() {
 				Prediction.WritePredictions(
-				    	recommender,
-				        training_data,
-				        relevant_items, predict_items_number,
-				        user_mapping, item_mapping,
-				        prediction_file
-					);
-					Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
-			}
-			);
+					recommender,
+					training_data,
+					relevant_items, predict_items_number,
+					user_mapping, item_mapping,
+					prediction_file);
+				Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
+			});
 		else
-			time_span = Utils.MeasureTime( delegate()
-			{
+			time_span = Utils.MeasureTime( delegate() {
 				Prediction.WritePredictions(
-				    	recommender,
-				        training_data,
-				        user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
-				        relevant_items, predict_items_number,
-				        user_mapping, item_mapping,
-				        prediction_file
-					);
-					Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
-			}
-			);
+					recommender,
+					training_data,
+					user_mapping.ToInternalID(Utils.ReadIntegers(predict_for_users_file)),
+					relevant_items, predict_items_number,
+					user_mapping, item_mapping,
+					prediction_file
+				);
+				Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
+			});
 		Console.Write(" predicting_time " + time_span);
 	}
 

@@ -68,7 +68,7 @@ namespace MyMediaLite.Eval
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
+			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
 			ICollection<int> relevant_users,
@@ -102,7 +102,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
+			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
 			ICollection<int> relevant_users,
