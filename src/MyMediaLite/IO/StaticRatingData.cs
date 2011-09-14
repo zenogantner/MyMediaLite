@@ -20,6 +20,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
+using MyMediaLite.Util; // TODO remove again
 
 namespace MyMediaLite.IO
 {
