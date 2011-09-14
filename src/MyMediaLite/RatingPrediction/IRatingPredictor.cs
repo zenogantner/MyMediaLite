@@ -31,12 +31,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
-		/// <summary>The max rating value</summary>
-		double MaxRating { get; set; }
-
-		/// <summary>The min rating value</summary>
-		double MinRating { get; set; }
-
 		///
 		void AddRating(int user_id, int item_id, double rating);
 		///

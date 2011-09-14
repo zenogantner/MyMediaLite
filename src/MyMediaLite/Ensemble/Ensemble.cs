@@ -40,9 +40,9 @@ namespace MyMediaLite.Ensemble
 			get { return this.max_rating_value; }
 			set {
 				this.max_rating_value = value;
-				foreach (IRecommender recommender in recommenders)
-					if (recommender is IRatingPredictor)
-						((IRatingPredictor)recommender).MaxRating = value;
+				foreach (var recommender in recommenders)
+					if (recommender is RatingPredictor)
+						((RatingPredictor)recommender).MaxRating = value;
 			}
 		}
 
@@ -53,9 +53,9 @@ namespace MyMediaLite.Ensemble
 			get { return this.min_rating_value; }
 			set {
 				this.min_rating_value = value;
-				foreach (IRecommender recommender in recommenders)
-					if (recommender is IRatingPredictor)
-						((IRatingPredictor)recommender).MinRating = value;
+				foreach (var recommender in recommenders)
+					if (recommender is RatingPredictor)
+						((RatingPredictor)recommender).MinRating = value;
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace MyMediaLite.Ensemble
 		///
 		public virtual void Train()
 		{
-			foreach (IRecommender recommender in recommenders)
+			foreach (var recommender in recommenders)
 				recommender.Train();
 		}
 	}

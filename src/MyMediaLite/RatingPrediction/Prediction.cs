@@ -19,7 +19,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
-using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -36,17 +35,18 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		/// <param name="writer">the TextWriter to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor recommender,
+			IRecommender recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
-		    string line_format,
+			string line_format,
 			TextWriter writer)
 		{
 			for (int index = 0; index < ratings.Count; index++)
-				writer.WriteLine(line_format,
-								 user_mapping.ToOriginalID(ratings.Users[index]),
-								 item_mapping.ToOriginalID(ratings.Items[index]),
-								 recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(
+					line_format,
+					user_mapping.ToOriginalID(ratings.Users[index]),
+					item_mapping.ToOriginalID(ratings.Items[index]),
+					recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>Rate a given set of instances and write it to a file</summary>
@@ -57,10 +57,10 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor recommender,
+			IRecommender recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
-		    string line_format,
+			string line_format,
 			string filename)
 		{
 			if (filename.Equals("-"))
@@ -77,7 +77,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor recommender,
+			IRecommender recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
@@ -92,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="writer">the TextWriter to write the predictions to</param>
 		public static void WritePredictions(
-			IRatingPredictor recommender,
+			IRecommender recommender,
 			IRatings ratings,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer)

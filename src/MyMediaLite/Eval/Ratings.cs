@@ -29,6 +29,9 @@ namespace MyMediaLite.Eval
 	public static class Ratings
 	{
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// </remarks>
 		static public ICollection<string> Measures
 		{
 			get	{
@@ -38,6 +41,9 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Format rating prediction results</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// </remarks>
 		/// <param name="result">the result dictionary</param>
 		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
@@ -50,12 +56,14 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
 		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// 
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(IRatingPredictor recommender, IRatings ratings)
+		static public Dictionary<string, double> Evaluate(RatingPredictor recommender, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
@@ -88,7 +96,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateOnline(IRatingPredictor recommender, IRatings ratings)
+		static public Dictionary<string, double> EvaluateOnline(RatingPredictor recommender, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
