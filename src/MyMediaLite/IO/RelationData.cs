@@ -65,7 +65,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length != 2)
-					throw new IOException("Expected exactly two columns: " + line);
+					throw new IOException("Expected exactly 2 columns: " + line);
 
 				int entity1_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int entity2_id = mapping.ToInternalID(int.Parse(tokens[1]));
@@ -83,7 +83,7 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least two columns.");
+				throw new IOException("Expected at least 2 columns.");
 
 			var matrix = new SparseBooleanMatrix();
 

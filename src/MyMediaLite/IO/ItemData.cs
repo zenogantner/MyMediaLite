@@ -59,7 +59,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 2)
-					throw new IOException("Expected at least two columns: " + line);
+					throw new IOException("Expected at least 2 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
@@ -80,7 +80,7 @@ namespace MyMediaLite.IO
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least two columns.");
+				throw new IOException("Expected at least 2 columns.");
 
 			while (reader.Read())
 			{

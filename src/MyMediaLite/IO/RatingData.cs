@@ -60,7 +60,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 3)
-					throw new IOException("Expected at least three columns: " + line);
+					throw new IOException("Expected at least 3 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
@@ -82,7 +82,7 @@ namespace MyMediaLite.IO
 			var ratings = new Ratings();
 
 			if (reader.FieldCount < 3)
-				throw new IOException("Expected at least three columns.");
+				throw new IOException("Expected at least 3 columns.");
 
 			while (reader.Read())
 			{
