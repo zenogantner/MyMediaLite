@@ -30,8 +30,6 @@ You can reach the authors of #MyMediaLite by sending an e-mail to mymedialite@is
 
 Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.net/projects/mymedialite http://mloss.org/software/view/282/
 
-----
-
 If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
 
 WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
@@ -64,6 +62,10 @@ Read about our approach for #kddcup2011: http://ismll.de/pub/pdfs/Gantner_et_al2
 
 Overview of open source/free software recommender system implementations: http://www.ismll.uni-hildesheim.de/mymedialite/links.html
 
-----
+Research that builds on the #MyMediaLite library: http://ismll.de/mymedialite/examples/research.html #recsys
 
-Visit the #MyMediaLite poster at the #recsys2011 poster session tonight. #recsys
+predictive accuracy of different #MyMediaLite recommenders on rating prediction datasets: http://bit.ly/p6Bzbj #recsys
+
+The #MyMediaLite issue/bug tracker: https://github.com/zenogantner/MyMediaLite/issues #recsys
+
+#MyMediaLite feature overview: http://ismll.de/mymedialite/features.html #recsys
