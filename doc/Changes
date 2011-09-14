@@ -27,7 +27,7 @@
             (used by several other IO classes)
 	- documentation
           - API docs:
-            - improved literature references
+            - improved literature references and web links
             - add links to RecSysWiki articles
           - IItemRecommender: explain the task of item recommendation
           - IRatingPredictor: explain the task of rating prediction
