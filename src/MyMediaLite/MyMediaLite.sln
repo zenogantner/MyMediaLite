@@ -101,6 +101,9 @@ Global
 		$0.StandardHeader = $1
 		$1.Text = @// Copyright (C) 2011 Zeno Gantner\n//\n// This file is part of MyMediaLite.\n//\n// MyMediaLite is free software: you can redistribute it and/or modify\n// it under the terms of the GNU General Public License as published by\n// the Free Software Foundation, either version 3 of the License, or\n// (at your option) any later version.\n//\n// MyMediaLite is distributed in the hope that it will be useful,\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n// GNU General Public License for more details.\n//\n//  You should have received a copy of the GNU General Public License\n//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.\n
 		$1.IncludeInNewFiles = True
+		$0.DotNetNamingPolicy = $2
+		$2.DirectoryNamespaceAssociation = None
+		$2.ResourceNamePolicy = FileFormatDefault
 		version = 1.99
 	EndGlobalSection
 EndGlobal
