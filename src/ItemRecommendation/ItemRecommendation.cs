@@ -252,13 +252,12 @@ class ItemRecommendation
 		recommender = Recommender.CreateItemRecommender(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown item recommendation method: '{0}'", method));
+		if (online_eval && !(recommender is IItemRecommender))
+			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
 
 		CheckParameters(extra_args);
 
 		Recommender.Configure(recommender, recommender_options, Usage);
-		if (online_eval && !(recommender is IItemRecommender))
-			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
-
 		// load all the data
 		LoadData();
 		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
