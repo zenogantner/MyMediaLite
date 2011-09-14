@@ -153,6 +153,7 @@
     <Compile Include="IO\TimedRatings.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
+    <Compile Include="IO\Constants.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
