@@ -22,6 +22,9 @@
             output more noticeable
         - evaluation
           - new evaluation measure: mean reciprocal rank (mrr)
+        - I/O
+          - new static class IO.Constants, which for now contains SPLIT_CHARS
+            (used by several other IO classes)
 	- documentation
           - API docs:
             - improved literature references
