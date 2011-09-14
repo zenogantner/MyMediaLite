@@ -3,12 +3,17 @@
         - add multicore support
           - item recommendation eval
         - API changes
-          - move read/write routines from Util.Recommender to the new static
-            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
+          - rename IIItemRecommender to IIncrementalItemRecommender and
+            split off IIncrementalRatingPredictor from IRatingPredictor -
+            to better reflect what those interfaces actually offer method-wise
+          - add classes IncrementalItemRecommender and
+            IncrementalRatingPredictor (classes for the above interfaces)
           - rename IO.RatingPrediction to IO.RatingData and
             IO.RatingPredictionStatic to IO.StaticRatingData
           - rename IO.ItemRecommendation to IO.ItemData and
             IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
+          - move read/write routines from Util.Recommender to the new static
+            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
         - recommenders
           - new rating predictor MultiCoreMatrixFactorization based on
             Distributed SGD paper at KDD 2011 by Gemulla et al.
@@ -465,7 +470,7 @@
           - print newline after Pearson correlation is computed
           - support LoadModel() and SaveModel() for biased MF
           - simpler LoadModel() and SaveModel() for all matrix factorization
-            methods 
+            methods
           - fix LoadModel() and SaveModel() for item prediction kNN
             recommenders
           - differentiate between weighted and unweighted item-based kNN for
@@ -560,7 +565,7 @@
 	- interface changes:
 	  - use IterativeModel interface in rating prediction program
 	  - consistent parameters for RatingData constructor
-	  - SparseBooleanMatrix now allows [x, y] and [x] access, has 
+	  - SparseBooleanMatrix now allows [x, y] and [x] access, has
             properties instead of GetXXX() methods
           - Matrix now allows [x, y] access
           - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
