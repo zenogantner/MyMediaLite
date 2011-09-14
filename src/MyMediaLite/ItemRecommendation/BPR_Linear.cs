@@ -22,12 +22,22 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Linear model optimized for BPR</summary>
 	/// <remarks>
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///     ICDM 2011.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///   </description></item>
+	/// </list>
+	///
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class BPR_Linear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
@@ -92,9 +102,9 @@ namespace MyMediaLite.ItemRecommendation
 			random = Util.Random.GetInstance();
 
 			// prepare fast sampling, if necessary
-			int support_data_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-			Console.Error.WriteLine("sds=" + support_data_size);
-			if (support_data_size <= fast_sampling_memory_limit)
+			int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
+			Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
+			if (fast_sampling_memory_size <= fast_sampling_memory_limit)
 			{
 				fast_sampling = true;
 
@@ -149,13 +159,13 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (fast_sampling)
 			{
-				i = user_pos_items[u][random.Next(0, user_pos_items[u].Count)];
-				j = user_neg_items[u][random.Next (0, user_neg_items[u].Count)];
+				i = user_pos_items[u][random.Next(user_pos_items[u].Count)];
+				j = user_neg_items[u][random.Next (user_neg_items[u].Count)];
 			}
 			else
 			{
 				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next (0, user_items.Count));
+				i = user_items.ElementAt(random.Next (user_items.Count));
 				do
 					j = random.Next (0, MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
@@ -169,7 +179,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(0, MaxUserID + 1);
+				int u = random.Next(MaxUserID + 1);
 				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
@@ -240,14 +250,14 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 				IMatrixUtils.WriteMatrix(writer, item_attribute_weight_by_user);
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 				this.item_attribute_weight_by_user = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 		}
 

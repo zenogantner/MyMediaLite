@@ -8,9 +8,9 @@ Features
  - support for incremental training for most models.
  - Ready to use:
    - Includes evaluation routines for rating and item prediction;
-     quality measures MAE, RMSE, AUC, MAP, prec@N, NDCG; and
+     quality measures MAE, RMSE, AUC, MAP, precision@N, recall@N, NDCG; and
    - command line tools that read a simple text-based input format.
- - Compactness: Core library is about 100 KB "big".
+ - Compactness: Core library is about 150 KB "big".
  - Portability: Written in C#, for the .NET platform;
    runs on every architecture where Mono works: Linux, Windows, Mac OS X.
  - Freedom: Free/Open Source software, distributed under the terms of the
@@ -43,7 +43,7 @@ Zeno Gantner, Steffen Rendle, Christoph Freudenthaler, Lars Schmidt-Thieme:
 MyMediaLite: A Free Recommender System Library. RecSys 2011
 
 @inproceedings{Gantner2011MyMediaLite,
-  author    = { Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
+  author    = {Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
   title     = {{MyMediaLite}: A Free Recommender System Library},
   booktitle = {5th ACM International Conference on Recommender Systems (RecSys 2011)},
   year      = 2011,

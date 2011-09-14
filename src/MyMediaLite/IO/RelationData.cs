@@ -21,12 +21,11 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods to read (binary) relation over entities into SparseBooleanMatrix objects</summary>
-	public class RelationData
+	public static class RelationData
 	{
 		/// <summary>Read binary attribute data from file</summary>
 		/// <remarks>

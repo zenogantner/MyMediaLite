@@ -17,16 +17,17 @@
 
 using System.IO;
 using MyMediaLite.Correlation;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Base class for item recommenders that use some kind of kNN model</summary>
+	/// <summary>Base class for item recommenders that use some kind of k-nearest neighbors (kNN) model</summary>
+	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	public abstract class KNN : ItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K {	get { return k;	} set {	k = value; } }
-		
+
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 
@@ -39,7 +40,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(nearest_neighbors.Length);
 				foreach (int[] nn in nearest_neighbors)
@@ -57,7 +58,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				int num_users = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_users][];

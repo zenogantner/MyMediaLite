@@ -27,6 +27,19 @@ using MyMediaLite.Util;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by kNN</summary>
+	/// <remarks>
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///     ICDM 2011.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///   </description></item>
+	/// </list>
+	///
+	/// This recommender does NOT support incremental updates.
+	/// </remarks>
 	public class BPRMF_ItemMappingKNN : BPRMF_ItemMapping
 	{
 		/// <summary>Number of neighbors to be used for mapping</summary>
@@ -81,8 +94,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"BPRMF_ItemMappingKNN num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} k={6} init_mean={7} init_stdev={8}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == uint.MaxValue ? "inf" : k.ToString(), InitMean, InitStdev
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} k={7} init_mean={8} init_stdev={9}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, k == uint.MaxValue ? "inf" : k.ToString(), InitMean, InitStdev
 			);
 		}
 

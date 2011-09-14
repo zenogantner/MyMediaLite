@@ -58,7 +58,7 @@ namespace MyMediaLite.Data
 
 		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
 
-		/// <summary>Create a new Ratings object</summary>
+		/// <summary>Default constructor</summary>
 		public Ratings()
 		{
 			Users  = new List<int>();
@@ -87,7 +87,8 @@ namespace MyMediaLite.Data
 				return by_user;
 			}
 		}
-		IList<IList<int>> by_user;
+		/// <summary>Rating indices organized by user</summary>
+		protected IList<IList<int>> by_user;
 
 		///
 		public void BuildUserIndices()
@@ -110,7 +111,8 @@ namespace MyMediaLite.Data
 				return by_item;
 			}
 		}
-		IList<IList<int>> by_item;
+		/// <summary>Rating indices organized by item</summary>
+		protected IList<IList<int>> by_item;
 
 		///
 		public void BuildItemIndices()

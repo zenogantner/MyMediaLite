@@ -22,22 +22,22 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Taxonomy;
-using MyMediaLite.Util;
+//using MyMediaLite.Taxonomy;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Matrix factorization with explicit user and item bias</summary>
+	/// <summary>Matrix factorization with explicit user and item bias, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
 	/// Per default optimizes for RMSE.
 	/// Set OptimizeMAE to true if you want to optimize for MAE.
-	/// 
+	///
 	/// Literature:
 	/// <list type="bullet">
     ///   <item><description>
 	///     Ruslan Salakhutdinov, Andriy Mnih:
 	///     Probabilistic Matrix Factorization.
-	///     NIPS 2008.
+	///     NIPS 2007.
 	///     http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
 	///   </description></item>
     ///   <item><description>
@@ -76,16 +76,21 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
-		/// See
-		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent,
-		/// 2011
+		/// Literature:
+		/// <list type="bullet">
+    	///   <item><description>
+		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
+		///     KDD 2011.
+		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
+   	    ///   </description></item>
+	    /// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
 		// TODO use for incremental updates as well
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
-		double last_loss = double.NegativeInfinity;
+		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>the user biases</summary>
 		protected double[] user_bias;
@@ -258,7 +263,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				VectorUtils.WriteVector(writer, user_bias);
@@ -271,7 +276,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
@@ -406,8 +411,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "BiasedMatrixFactorization num_factors={0} bias_reg={1} reg_u={2} reg_i={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8} optimize_mae={9}",
-								 NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev, OptimizeMAE);
+								 "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stdev={9} optimize_mae={10}",
+								 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev, OptimizeMAE);
 		}
 	}
 }

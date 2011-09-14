@@ -23,7 +23,7 @@ using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 // TODO finish implementation
 
@@ -158,7 +158,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				IMatrixUtils.WriteMatrix(writer, user_factors);
@@ -170,7 +170,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
@@ -237,8 +237,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "ConstrainedProbabilisticMatrixFactorization num_factors={0} reg_y={1} reg_v={2} reg_w={3} learn_rate={4} num_iter={5} bold_driver={6} init_mean={7} init_stdev={8}",
-								 NumFactors, RegY, RegV, RegW, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
+								 "{0} num_factors={1} reg_y={2} reg_v={3} reg_w={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stdev={9}",
+								 this.GetType().Name, NumFactors, RegY, RegV, RegW, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
 		}
 	}
 }

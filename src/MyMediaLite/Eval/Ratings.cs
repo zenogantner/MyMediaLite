@@ -22,7 +22,6 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
@@ -38,12 +37,13 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		/// <summary>Write rating prediction results to STDOUT</summary>
-		/// <param name="result">the output of the Evaluate() method</param>
-		static public void DisplayResults(Dictionary<string, double> result)
+		/// <summary>Format rating prediction results</summary>
+		/// <param name="result">the result dictionary</param>
+		/// <returns>a string containing the results</returns>
+		static public string FormatResults(Dictionary<string, double> result)
 		{
-			Console.Write(string.Format(CultureInfo.InvariantCulture, "RMSE {0,0:0.#####} MAE {1,0:0.#####} NMAE {2,0:0.#####}",
-		                                result["RMSE"], result["MAE"], result["NMAE"]));
+			return string.Format(CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
+		                         result["RMSE"], result["MAE"], result["NMAE"]);
 		}
 
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
@@ -66,7 +66,6 @@ namespace MyMediaLite.Eval
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
-
 				rmse += error * error;
 				mae  += Math.Abs(error);
 			}
@@ -134,8 +133,6 @@ namespace MyMediaLite.Eval
 		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
 		{
 			var avg_results = new Dictionary<string, double>();
-			foreach (var key in Measures)
-				avg_results[key] = 0;
 
 			for (int i = 0; i < split.NumberOfFolds; i++)
 			{
@@ -145,9 +142,13 @@ namespace MyMediaLite.Eval
 				var fold_results = Evaluate(split_recommender, split.Test[i]);
 
 				foreach (var key in fold_results.Keys)
-					avg_results[key] += fold_results[key];
+					if (avg_results.ContainsKey(key))
+						avg_results[key] += fold_results[key];
+					else
+						avg_results[key] = fold_results[key];
+
 				if (show_results)
-					Console.Error.WriteLine("fold {0}, RMSE {1,0:0.#####}, MAE {2,0:0.#####}", i, fold_results["RMSE"].ToString(CultureInfo.InvariantCulture), fold_results["MAE"].ToString(CultureInfo.InvariantCulture));
+					Console.Error.WriteLine("fold {0} {1}", i, FormatResults(fold_results));
 			}
 
 			foreach (var key in avg_results.Keys.ToList())

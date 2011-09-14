@@ -1,5 +1,6 @@
+See https://github.com/zenogantner/MyMediaLite/issues
+
 Recommender functionality
- - BMF: consider to make bold_driver the default
  - additional recommenders
    - memory: just give out ratings in the training set, exception otherwise
    - non-negative matrix factorization
@@ -118,4 +119,3 @@ Documentation/website
  - document using MyMediaLite from other languages, implementing recommenders in other languages
    - Java (via IKVM or JaCIL), F#, Perl, Clojure, Scala, IronScheme, Boo, Nemerle
    - JavaScript -- https://github.com/fholm/IronJS/ -- wait until Mono 2.8 is more widely available
- - glossary where we explain commonly used terms

@@ -13,12 +13,14 @@
 
 <div id="content">
 <pre>
-MyMediaLite Item Prediction from Implicit Feedback 1.04
+MyMediaLite Item Prediction from Implicit Feedback 1.05
 
  usage:   ItemPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
    methods (plus arguments and their defaults):
    - ItemAttributeSVM C=1 Gamma=0.002 (needs --item-attributes=FILE)
+   - WeightedBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 bold_driver=False learn_rate=0.05 init_mean=0 init_stdev=0.1
+   - SoftMarginRankingMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.1 bold_driver=False fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
    - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs --item-attributes=FILE)
    - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 bold_driver=False fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
    - ItemAttributeKNN k=80 (needs --item-attributes=FILE)
@@ -29,12 +31,13 @@ MyMediaLite Item Prediction from Implicit Feedback 1.04
    - UserKNN k=80
    - WeightedItemKNN k=80
    - WeightedUserKNN k=80
-   - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=30 init_mean=0 init_stdev=0.1
+   - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=15 init_mean=0 init_stdev=0.1
    - Zero
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
-   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender=METHOD             use METHOD for recommendations (default: MostPopular)
+   --group-recommender=METHOD       use METHOD to combine the predictions for several users
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --training-file=FILE             read training data from FILE
    --test-file=FILE                 read test data from FILE
@@ -56,11 +59,14 @@ MyMediaLite Item Prediction from Implicit Feedback 1.04
    --test-items                 use only the items in the test set for evaluation as candidate items in the evaluation
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
+   --cross-validation=K         perform k-fold crossvalidation on the training data
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
    --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
+   --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
+   --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations

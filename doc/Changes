@@ -1,20 +1,66 @@
-1.05	2011-08-
-        - add preliminary support for group recommendation
+1.99	2011-09-??
+        - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10. recommended)
+        - add multicore support
+          - item recommendation eval
+        - API changes
+          - move read/write routines from Util.Recommender to the new static
+            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
+          - rename IO.RatingPrediction to IO.RatingData and
+            IO.RatingPredictionStatic to IO.StaticRatingData
+          - rename IO.ItemRecommendation to IO.ItemData and
+            IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
+        - recommenders
+          - new rating predictor MultiCoreMatrixFactorization based on
+            Distributed SGD paper at KDD 2011 by Gemulla et al.
+          - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
+          - BiasedMatrixFactorization: make fields needed for the bold-driver
+            learning rate heuristic protected
+        - command-line tools
+          - rename ItemPrediction.exe to ItemRecommendation.exe
+          - check parameters after creating recommender, catching more errors
+          - refer to GitHub issue tracker in exception handler, make handler
+            output more noticeable
+        - evaluation
+          - new evaluation measure: mean reciprocal rank (mrr)
+	- documentation
+          - API docs:
+            - improved literature references
+            - add links to RecSysWiki articles
+          - IItemRecommender: explain the task of item recommendation
+          - IRatingPredictor: explain the task of rating prediction
+        - misc
+          - cleaned up solution and project files for MonoDevelop
+          - improved ToString() methods
+          - declared all classes as static that contain only static methods
+
+1.05	2011-09-01
+	- API changes
+           - ISplit
+              - use IList<T> instead of List<T> for Train and Test
+              - NumberOfFolds is now a uint instead of an int
+           - Eval.Ratings and Eval.Items
+              - replace DisplayResults by FormatResults
+        - add support for group recommendation
         - recommenders
           - add WeightedBPRMF: the item recommender developed for KDD Cup 2011
-          - group recommenders: add aggregation methods Average, Minimum, Maximum,
-                                PairwiseWins, Weighted Average
+                               track 2
+          - group recommenders: add aggregation methods Average, Minimum,
+                                Maximum, PairwiseWins, Weighted Average
           - add SoftMarginRankingMF: item recommender inspired both by CofiRank
             (ranking loss) and BPR-MF (stochastic gradient descent learning)
           - WRMF: set NumIter default value down to 15
           - BiasedMatrixFactorization: improved API doc
+          - BPRMF: do not implement IIterativeModel (this is done indirectly by
+                   inheriting from the MF class)
         - command-line tools
           - display memory stats just once when the program finishes
           - display memory stats after loading data is complete
           - introduce CheckParameters() method for better source readability
           - ensure that 'random' data splitting is reproducible when using
             --random-seed=N
+          - improved attribute statistics output
           - item prediction:
+            - add support for k-fold cross-validation: --cross-validation=K
             - better handling of different prediction scenarios
             - improved error/usage messages
             - new parameter --rating-threshold=NUM uses ratings of at least NUM
@@ -26,6 +72,13 @@
         - evaluation
            - item prediction: more generic method signatures; more compact code
            - item/group/filtered prediction: modify progress output
+           - add class PosOnlyFeedbackCrossValidationSplit
+           - RatingsSimpleSplit and PosOnlyFeedbackSimpleSplit:
+             simplified constructor
+           - RatingsCrossValidationSplit: check in constructor whether num_folds
+             has a legal value
+           - add Eval.Items.RecallAt()
+           - add Eval.Items.EvaluateOnSplit()
         - IO
           - support CSV format also for attribute and relation files
 	- documentation
@@ -33,6 +86,7 @@
           - improved API documentation, with some links to RecSysWiki
             http://recsyswiki.com
         - helper scripts
+          - fix bug in ml100k_genres.pl
           - better --help usage information for crossvalidation.pl
 
 1.04	2011-08-03
@@ -99,7 +153,7 @@
           please contact the authors: mymedialite@ismll.de.
         - web service API
           - add prototype for a SOAP web service for rating prediction, plus
-            three test script
+            three test scripts
         - API changes
           - IRatingPredictor
            - Add() is now AddRating()

@@ -27,9 +27,10 @@ namespace MyMediaLite
 		/// <summary>Run one iteration (= pass over the training data)</summary>
 		void Iterate();
 
-		/// <summary>Compute the fit (RMSE) on the training data</summary>
-		/// <returns>the fit (RMSE) on the training data according to the optimization criterion; -1 if not implemented</returns>
+		/// <summary>Compute the fit (e.g. RMSE for rating prediction or AUC for item prediction/ranking) on the training data</summary>
+		/// <returns>the fit on the training data according to the optimization criterion; -1 if not implemented</returns>
 		double ComputeFit();
+		// TODO "fit" does not sound good for error/loss functions ...
 	}
 }
 

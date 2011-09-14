@@ -22,11 +22,11 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Simple matrix factorization class</summary>
+	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
 	/// Factorizing the observed rating values using a factor matrix for users and one for items.
 	///
@@ -257,7 +257,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				IMatrixUtils.WriteMatrix(writer, user_factors);
@@ -268,7 +268,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
@@ -326,8 +326,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "MatrixFactorization num_factors={0} regularization={1} learn_rate={2} num_iter={3} init_mean={4} init_stdev={5}",
-								 NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+								 "{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
+								 this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }

@@ -23,12 +23,14 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Matrix factorization model for item prediction optimized using BPR-Opt</summary>
+	/// <summary>Matrix factorization model for item prediction (ranking) optimized using BPR-Opt</summary>
 	/// <remarks>
+	/// BPR reduces ranking to pairwise classification.
+	///
 	/// Literature:
 	/// <list type="bullet">
     ///   <item><description>
@@ -37,10 +39,11 @@ namespace MyMediaLite.ItemRecommendation
 	///     UAI 2009.
 	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
 	///   </description></item>
+	/// </list>
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class BPRMF : MF, IIterativeModel
+	public class BPRMF : MF
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
@@ -190,19 +193,19 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				if (item_is_positive)
 				{
-					int rindex = random.Next(0, user_neg_items[u].Count);
+					int rindex = random.Next(user_neg_items[u].Count);
 					j = user_neg_items[u][rindex];
 				}
 				else
 				{
-					int rindex = random.Next(0, user_pos_items[u].Count);
+					int rindex = random.Next(user_pos_items[u].Count);
 					j = user_pos_items[u][rindex];
 				}
 			}
 			else
 			{
 				do
-					j = random.Next(0, MaxItemID + 1);
+					j = random.Next(MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j] != item_is_positive);
 			}
 
@@ -219,18 +222,18 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				int rindex;
 
-				rindex = random.Next(0, user_pos_items[u].Count);
+				rindex = random.Next(user_pos_items[u].Count);
 				i = user_pos_items[u][rindex]; // TODO use this also with slow sampling?
 
-				rindex = random.Next(0, user_neg_items[u].Count);
+				rindex = random.Next(user_neg_items[u].Count);
 				j = user_neg_items[u][rindex];
 			}
 			else
 			{
 				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next(0, user_items.Count));
+				i = user_items.ElementAt(random.Next(user_items.Count));
 				do
-					j = random.Next(0, MaxItemID + 1);
+					j = random.Next(MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j]);
 			}
 		}
@@ -241,7 +244,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(0, MaxUserID + 1);
+				int u = random.Next(MaxUserID + 1);
 				var user_items = Feedback.UserMatrix[u];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
@@ -498,7 +501,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected void CheckSampling() // TODO more descriptive name
+		protected void CheckSampling() // TODO more descriptive name; then also port to BPR_Linear
 		{
 			try
 			{
@@ -534,7 +537,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(file, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				IMatrixUtils.WriteMatrix(writer, user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
@@ -545,7 +548,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Recommender.GetReader(file, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
 				IList<double> item_bias = VectorUtils.ReadVector(reader);

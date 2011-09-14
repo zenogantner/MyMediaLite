@@ -21,12 +21,11 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods for reading in MovieLens 1M and 10M rating data</summary>
-	public class MovieLensRatingData
+	public static class MovieLensRatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
 		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>

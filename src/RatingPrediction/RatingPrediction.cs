@@ -45,6 +45,10 @@ class RatingPrediction
 	static IEntityMapping user_mapping = new EntityMapping();
 	static IEntityMapping item_mapping = new EntityMapping();
 
+	// user and item attributes
+	static SparseBooleanMatrix user_attributes;
+	static SparseBooleanMatrix item_attributes;
+
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
 	static List<double> fit_time_stats      = new List<double>();
@@ -52,25 +56,26 @@ class RatingPrediction
 	static List<double> rmse_eval_stats     = new List<double>();
 
 	// global command line parameters
-	static string training_file         = null;
-	static string test_file             = null;
+	static string training_file;
+	static string test_file;
 	static string save_model_file       = string.Empty;
 	static string load_model_file       = string.Empty;
-	static string user_attributes_file  = null;
-	static string item_attributes_file  = null;
-	static string user_relations_file   = null;
-	static string item_relations_file   = null;
-	static bool compute_fit             = false;
+	static string user_attributes_file;
+	static string item_attributes_file;
+	static string user_relations_file;
+	static string item_relations_file;
+	static bool compute_fit;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
-	static int cross_validation         = 0;
-	static double test_ratio            = 0;
+	static uint cross_validation;
+	static double test_ratio;
 
 	static void ShowVersion()
 	{
 		Version version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2010, 2011 Zeno Gantner, Steffen Rendle");
+		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
+		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
 	    Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
         Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
@@ -187,7 +192,7 @@ class RatingPrediction
    			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
 			{ "random-seed=",         (int v)        => random_seed          = v },
-			{ "cross-validation=",    (int v)        => cross_validation     = v },
+			{ "cross-validation=",    (uint v)       => cross_validation     = v },
 			// double-valued options
 			{ "epsilon=",             (double v)     => epsilon              = v },
 			{ "rmse-cutoff=",         (double v)     => rmse_cutoff          = v },
@@ -216,14 +221,14 @@ class RatingPrediction
 		if (show_help)
 			Usage(0);
 
-		CheckParameters(extra_args);
-
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
-
+		
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
-			Usage(string.Format("Unknown method: '{0}'", method));
+			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
+
+		CheckParameters(extra_args);
 
 		Recommender.Configure(recommender, recommender_options, Usage);
 
@@ -251,7 +256,7 @@ class RatingPrediction
 			test_data     = split.Test[0];
 		}
 
-		Utils.DisplayDataStats(training_data, test_data, recommender);
+		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
 
 		if (find_iter != 0)
 		{
@@ -263,12 +268,12 @@ class RatingPrediction
 			if (load_model_file == string.Empty)
 				recommender.Train();
 			else
-				Recommender.LoadModel(iterative_recommender, load_model_file);
+				Model.Load(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
 
-			MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data));
+			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)));
 			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
 
 			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
@@ -287,17 +292,16 @@ class RatingPrediction
 							fit = iterative_recommender.ComputeFit();
 						});
 						fit_time_stats.Add(time.TotalSeconds);
-						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0,0:0.#####} ", fit));
+						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", fit));
 					}
 
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
 					eval_time_stats.Add(time.TotalSeconds);
-					MyMediaLite.Eval.Ratings.DisplayResults(results);
 					rmse_eval_stats.Add(results["RMSE"]);
-					Console.WriteLine(" iteration " + i);
+					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), i);
 
-					Recommender.SaveModel(recommender, save_model_file, i);
+					Model.Save(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file + "-it-" + i);
 
@@ -321,15 +325,13 @@ class RatingPrediction
 
 			if (load_model_file == string.Empty)
 			{
-				if (cross_validation > 0)
+				if (cross_validation > 1)
 				{
-					Console.Write(recommender.ToString());
-					Console.WriteLine();
+					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
 					var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(recommender, split); // TODO if (search_hp)
-					MyMediaLite.Eval.Ratings.DisplayResults(results);
+					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
-					recommender.Ratings = training_data;
 				}
 				else
 				{
@@ -348,16 +350,16 @@ class RatingPrediction
 			}
 			else
 			{
-				Recommender.LoadModel(recommender, load_model_file);
+				Model.Load(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 			}
 
 			if (!no_eval)
 			{
 				if (online_eval)  // TODO support also for prediction outputs (to allow external evaluation)
-					seconds = Utils.MeasureTime(delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.EvaluateOnline(recommender, test_data)); });
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.EvaluateOnline(recommender, test_data))); });
 				else
-					seconds = Utils.MeasureTime(delegate() { MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)); });
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
 
 				Console.Write(" testing_time " + seconds);
 			}
@@ -366,9 +368,9 @@ class RatingPrediction
 			{
 				Console.Write("fit ");
 				seconds = Utils.MeasureTime(delegate() {
-					MyMediaLite.Eval.Ratings.DisplayResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data));
+					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)));
 				});
-				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0,0:0.#####} ", seconds));
+				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0:0.#####} ", seconds));
 			}
 
 			if (prediction_file != string.Empty)
@@ -382,7 +384,7 @@ class RatingPrediction
 
 			Console.WriteLine();
 		}
-		Recommender.SaveModel(recommender, save_model_file);
+		Model.Save(recommender, save_model_file);
 		DisplayStats();
 	}
 
@@ -391,11 +393,14 @@ class RatingPrediction
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
-		if (cross_validation != 0 && test_ratio != 0)
+		if (cross_validation == 1)
+			Usage("--cross-validation=K requires K to be at least 2.");
+
+		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 && save_model_file == string.Empty)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, or --save-model=FILE.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --save-model=FILE.");
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
 			Usage("Recommender expects --user-attributes=FILE.");
@@ -421,8 +426,8 @@ class RatingPrediction
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
 			if (file_format == RatingFileFormat.DEFAULT)
-				training_data = static_data ? RatingPredictionStatic.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
-					                        : MyMediaLite.IO.RatingPrediction.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				training_data = static_data ? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
+					                        : RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.MOVIELENS_1M)
 				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			else if (file_format == RatingFileFormat.KDDCUP_2011)
@@ -431,12 +436,16 @@ class RatingPrediction
 			recommender.Ratings = training_data;
 
 			// user attributes
-			if (recommender is IUserAttributeAwareRecommender) // TODO also support the MovieLens format here
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			if (user_attributes_file != null)
+				user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+			if (recommender is IUserAttributeAwareRecommender)
+				((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
 
 			// item attributes
+			if (item_attributes_file != null)
+				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
 			if (recommender is IItemAttributeAwareRecommender)
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
 
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
@@ -458,11 +467,11 @@ class RatingPrediction
 				if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else
-					test_data = RatingPredictionStatic.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
+					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
 				// TODO add KDD Cup
 			}
 		});
-		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
+		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
@@ -476,19 +485,19 @@ class RatingPrediction
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
 	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"eval_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
 	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
 			    CultureInfo.InvariantCulture,
-				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+				"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
             	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);

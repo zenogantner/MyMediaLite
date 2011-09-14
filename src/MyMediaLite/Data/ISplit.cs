@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -24,15 +24,15 @@ namespace MyMediaLite.Data
 	{
 		/// <summary>The number of folds in this split</summary>
 		/// <value>The number of folds in this split</value>
-		int NumberOfFolds { get; }
+		uint NumberOfFolds { get; }
 		
 		/// <summary>Training data for the different folds</summary>
 		/// <value>A list of T</value>
-		List<T> Train { get; }
+		IList<T> Train { get; }
 
 		/// <summary>Test data for the different folds</summary>
 		/// <value>A list of T</value>
-		List<T> Test { get; }
+		IList<T> Test { get; }
 	}
 }
 

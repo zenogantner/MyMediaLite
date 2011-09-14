@@ -41,7 +41,7 @@
     </table>
   </p>
 
-  <h3>MovieLens 100k</h3>
+  <h3><a href="http://www.grouplens.org/node/73">MovieLens 100k</a></h3>
   <p>
     5-fold crossvalidation with <tt>--random-seed=1</tt>
     <table border="1">
@@ -52,6 +52,16 @@
     </table>
   </p>
 
+  <h3><a href="http://www.cs.sfu.ca/~sja25/personal/datasets/">Flixster</a></h3>
+  <p>
+    5-fold crossvalidation with <tt>--random-seed=1</tt>
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th>  <th>MAE</th> </tr>
+      [% FOREACH entry IN flixster %]
+      <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>  
 </div>
 
 [% INCLUDE footer %]

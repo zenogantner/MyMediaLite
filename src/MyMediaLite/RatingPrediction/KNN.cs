@@ -19,7 +19,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Correlation;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -29,7 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
 	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
 	///
-	/// <seealso cref="ItemRecommendation.KNN"/>
+	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	/// </remarks>
 	public abstract class KNN : UserItemBaseline
 	{
@@ -50,14 +50,14 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ItemType>PackagingProject</ItemType>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AD1EB4BB-DE14-418B-B704-67D76E468FF0}</ProjectGuid>
+    <Packages>
+      <Packages>
+        <Package name="Mono Makefile Quellen">
+          <Builder targetFile="MyMediaLite-.tar.gz" format="MonoDevelop.Projects.FileFormat" ctype="SourcesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj" />
+              <SolutionItemReference path="..\RatingPrediction\RatingPrediction.csproj" />
+              <SolutionItemReference path="..\ItemRecommendation\ItemRecommendation.csproj" />
+              <SolutionItemReference path="..\MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+        <Package name="Linux Binärdateien">
+          <Builder targetFile="MyMediaLite-linux.tar.gz" platform="Linux" configuration="Debug" ctype="BinariesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj" />
+              <SolutionItemReference path="..\RatingPrediction\RatingPrediction.csproj" />
+              <SolutionItemReference path="..\ItemRecommendation\ItemRecommendation.csproj" />
+              <SolutionItemReference path="..\MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+        <Package name="Microsoft Windows Binärdateien">
+          <Builder targetFile="MyMediaLite-windows.tar.gz" platform="Windows" configuration="Debug" ctype="BinariesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj" />
+              <SolutionItemReference path="..\RatingPrediction\RatingPrediction.csproj" />
+              <SolutionItemReference path="..\ItemRecommendation\ItemRecommendation.csproj" />
+              <SolutionItemReference path="..\MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+        <Package name="Tarball">
+          <Builder TargetDirectory="..\MyMediaLiteExperimental" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
+            <ChildEntries>
+              <SolutionItemReference path="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj" />
+              <SolutionItemReference path="..\RatingPrediction\RatingPrediction.csproj" />
+              <SolutionItemReference path="..\ItemRecommendation\ItemRecommendation.csproj" />
+              <SolutionItemReference path="..\MovieDemo\MovieDemo.csproj" />
+            </ChildEntries>
+            <RootEntry path="MyMediaLite.sln" id=":root:" />
+          </Builder>
+        </Package>
+      </Packages>
+    </Packages>
+    <ReleaseVersion>1.99</ReleaseVersion>
+  </PropertyGroup>
+</Project>

@@ -18,9 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
-using MyMediaLite;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 
@@ -28,114 +26,10 @@ namespace MyMediaLite.Util
 {
 	/// <summary>Helper class with utility methods for handling recommenders</summary>
 	/// <remarks>
-	/// Contains methods for storing and loading recommender models, and for configuring recommenders.
+	/// Contains methods for creating and configuring recommender objects, as well as listing recommender classes.
 	/// </remarks>
-	public class Recommender
+	public static class Recommender
 	{
-		// TODO move IO stuff to IO namespace
-
-		/// <summary>Save the model parameters of a recommender to a file</summary>
-		/// <remarks>
-		/// Does not save if filename is an empty string.
-		/// </remarks>
-		/// <param name="recommender">the recommender to store</param>
-		/// <param name="filename">the filename (may include relative paths)</param>
-		public static void SaveModel(IRecommender recommender, string filename)
-		{
-			if (filename == string.Empty)
-				return;
-
-			Console.Error.WriteLine("Save model to {0}", filename);
-			recommender.SaveModel(filename);
-		}
-
-		/// <summary>Save the model parameters of a recommender (in a given iteration of the training) to a file</summary>
-		/// <remarks>
-		/// Does not save if filename is an empty string.
-		/// </remarks>
-		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
-		/// <param name="filename">the filename template</param>
-		/// <param name="iteration">the iteration (will be appended to the filename)</param>
-		public static void SaveModel(IRecommender recommender, string filename, int iteration)
-		{
-			if (filename == string.Empty)
-				return;
-
-			SaveModel(recommender, filename + "-it-" + iteration);
-		}
-
-		/// <summary>Load the model parameters of a recommender from a file</summary>
-		/// <remarks>
-		/// Does not load model if filename is an empty string.
-		/// </remarks>
-		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
-		/// <param name="filename">the filename template</param>
-		public static void LoadModel(IRecommender recommender, string filename)
-		{
-			if (filename == string.Empty)
-				return;
-
-			Console.Error.WriteLine("Load model from {0}", filename);
-			recommender.LoadModel(filename);
-		}
-
-		/// <summary>Load a recommender from a file, including object creation</summary>
-		/// <param name="filename">the name of the model file</param>
-		/// <returns>the recommender loaded from the file</returns>
-		public static IRecommender Load(string filename)
-		{
-			IRecommender recommender;
-			string type_name;
-
-			using (var reader = new StreamReader(filename))
-			{
-				if (reader.EndOfStream)
-					throw new IOException("Unexpected end of file " + filename);
-				type_name = reader.ReadLine();
-			}
-
-			if (type_name.StartsWith("MyMediaLite.RatingPrediction."))
-				recommender = CreateRatingPredictor(type_name.Substring("MyMediaLite.RatingPrediction.".Length));
-			else if (type_name.StartsWith("MyMediaLite.ItemRecommendation."))
-				recommender = CreateItemRecommender(type_name.Substring("MyMediaLite.ItemRecommendation.".Length));
-			else
-				throw new Exception(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
-
-			Console.WriteLine(recommender.ToString());
-			
-			recommender.LoadModel(filename);
-
-			return recommender;
-		}
-
-		/// <summary>Get a reader object to read in model parameters of a recommender</summary>
-		/// <param name="filename">the filename of the model file</param>
-		/// <param name="recommender_type">the expected recommender type</param>
-		/// <returns>a <see cref="StreamReader"/></returns>
-		public static StreamReader GetReader(string filename, Type recommender_type)
-		{
-			var reader = new StreamReader(filename);
-
-			if (reader.EndOfStream)
-				throw new IOException("Unexpected end of file " + filename);
-
-			string type_name = reader.ReadLine();
-			if (!type_name.Equals(recommender_type.ToString()))
-				Console.Error.WriteLine("WARNING: No correct type name: {0}, expected: {1}", type_name, recommender_type);
-			return reader;
-		}
-
-		/// <summary>Get a writer object to save the model parameters of a recommender</summary>
-		/// <param name="filename">the filename of the model file</param>
-		/// <param name="recommender_type">the recommender type</param>
-		/// <returns>a <see cref="StreamWriter"/></returns>
-		public static StreamWriter GetWriter(string filename, Type recommender_type)
-		{
-			var writer = new StreamWriter(filename);
-			writer.WriteLine(recommender_type);
-			return writer;
-		}
-
 		static string NormalizeName(string s)
 		{
 			int underscore_position;

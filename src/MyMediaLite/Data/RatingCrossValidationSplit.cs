@@ -15,28 +15,34 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
 	/// <summary>k-fold split for rating prediction</summary>
-	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
+	/// <remarks>
+	/// The dataset must not be modified after the split - this would lead to undefined behavior.
+	/// </remarks>
 	public class RatingCrossValidationSplit : ISplit<IRatings>
 	{
 		///
-		public int NumberOfFolds { get; private set; }
+		public uint NumberOfFolds { get; private set; }
 
 		///
-		public List<IRatings> Train { get; private set; }
+		public IList<IRatings> Train { get; private set; }
 
 		///
-		public List<IRatings> Test { get; private set; }
+		public IList<IRatings> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of rating prediction data</summary>
 		/// <param name="ratings">the dataset</param>
 		/// <param name="num_folds">the number of folds</param>
-		public RatingCrossValidationSplit(IRatings ratings, int num_folds)
+		public RatingCrossValidationSplit(IRatings ratings, uint num_folds)
 		{
+			if (num_folds < 2)
+				throw new ArgumentException("num_folds must be at least 2.");
+			
 			NumberOfFolds = num_folds;
 
 			// randomize
@@ -61,8 +67,8 @@ namespace MyMediaLite.Data
 						train_indices[j].Add(i);
 
 			// create split data structures
-			Train = new List<IRatings>(num_folds);
-			Test  = new List<IRatings>(num_folds);
+			Train = new List<IRatings>((int) num_folds);
+			Test  = new List<IRatings>((int) num_folds);
 			for (int i = 0; i < num_folds; i++)
 			{
 				Train.Add(new RatingsProxy(ratings, train_indices[i]));

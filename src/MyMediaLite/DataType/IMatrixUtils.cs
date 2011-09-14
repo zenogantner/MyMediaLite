@@ -24,7 +24,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Utilities to work with matrices</summary>
-	public class IMatrixUtils
+	public static class IMatrixUtils
 	{
 		/// <summary>Write a matrix of doubles to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>

@@ -1,0 +1,69 @@
+How to contribute to #mymedialite: http://ismll.de/mymedialite/contribute.html #recsys #opensource #freesoftware #mono #csharp
+
+If you are interested in recommender systems and personalization, have a look at http://recsyswiki.com #recsys
+
+Implementing new recommenders for #mymedialite: bit.ly/mTX6U3 It is very easy! #recsys #csharp
+
+Using the #mymedialite recommender system library from #Ruby: http://ismll.de/mymedialite/do… #ironruby #recsys
+
+Using the #mymedialite recommender system library from #Python: http://bit.ly/qYBG3L #recsys #ironpython #personalization
+
+Using the #mymedialite recommender system library in C# programs: http://bit.ly/nkPfF0 #csharp #dotnet #cli #recsys #mono
+
+#mymedialite recommender system library: FAQ and documentation overview: http://ismll.de/mymedialite/documentation/index.html #recsys
+
+Using the #mymedialite item prediction command-line tool: http://ismll.de/mymedialite/documentation/item_prediction.html #recsys
+
+The #mymedialite rating prediction tool lets you to train+evaluate rating prediction models: http://bit.ly/nsKUGZ #recsys
+
+Learn how to use the #mymedialite command line tools: http://ismll.de/mymedialite/documentation/command_line.html #recsys
+
+The #mymedialite API documentation can be found here: http://ismll.de/mymedialite/documentation/doxygen/ #recsys
+
+Questions about using #mymedialite? Ask them in our Google group: https://groups.google.com/group/mymedialite #recsys
+
+Follow and/or fork MyMediaLite on github: https://github.com/zenogantner/MyMediaLite #mymedialite #recsys
+
+#MyMediaLite at #mlcomp: mlcomp.org/datasets/335 mlcomp.org/datasets/351 #recsys
+
+You can reach the authors of #MyMediaLite by sending an e-mail to mymedialite@ismll.de.
+
+Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.net/projects/mymedialite http://mloss.org/software/view/282/
+
+----
+
+If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
+
+WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
+
+BPR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/pYrJ7l #MyMediaLite #recsys
+
+#MyMediaLite supports the tasks of rating prediction and item recommendation: http://bit.ly/qhMI5V http://bit.ly/qlNDbY #recsys
+
+Since version 1.05, #MyMediaLite supports recommendations for groups: http://ismll.de/mymedialite/news/index.html#1.05 #recsys
+
+#MyMediaLite supports different evaluation protocols, e.g. simple splits and k-fold cross-validation: http://bit.ly/nbykPh #recsys
+
+We also have a nice GUI demo: http://bit.ly/pvXuSB #MyMediaLite #recsys
+
+#MyMediaLite scales pretty well: For small models, 1 iteration over the Netflix dataset takes less than 100 seconds: http://bit.ly/pQxTYZ #recsys
+
+BiasedMatrixFactorization in #MyMediaLite is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys
+
+#MyMediaLite contains different kNN models for both rating and item prediction: http://bit.ly/pscX4U http://bit.ly/no1sam #recsys
+
+BPR_Linear in #MyMediaLite is an attribute-based model for personalized item ranking: http://bit.ly/mV5lal #recsys
+
+Rate #MyMediaLite on ohloh.net: https://www.ohloh.net/p/mymedialite #recsys
+
+You can download #MyMediaLite here: http://ismll.de/mymedialite/download/index.html #recsys
+
+Read the #recsys2011 paper on #MyMediaLite: http://ismll.de/pub/pdfs/Gantner_et_al2011_MyMediaLite.pdf #recsys
+
+Read about our approach for #kddcup2011: http://ismll.de/pub/pdfs/Gantner_et_al2011_KDDCup.pdf #recsys #MyMediaLite
+
+Overview of open source/free software recommender system implementations: http://www.ismll.uni-hildesheim.de/mymedialite/links.html
+
+----
+
+Visit the #MyMediaLite poster at the #recsys2011 poster session tonight. #recsys

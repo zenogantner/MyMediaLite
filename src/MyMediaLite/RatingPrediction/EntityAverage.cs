@@ -21,7 +21,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -76,7 +76,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				VectorUtils.WriteVector(writer, entity_averages);
@@ -86,7 +86,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				this.entity_averages = VectorUtils.ReadVector(reader);

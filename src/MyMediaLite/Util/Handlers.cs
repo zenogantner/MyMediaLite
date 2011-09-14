@@ -28,15 +28,18 @@ namespace MyMediaLite.Util
 					Console.Error.WriteLine("Could not find file " + file_not_found_exception.FileName);
 					Environment.Exit(-1);
 				}
-				
+
 				if (e is DirectoryNotFoundException)
 				{
 					var dir_not_found_exception = (DirectoryNotFoundException) e;
 					Console.Error.WriteLine(dir_not_found_exception.Message);
 					Environment.Exit(-1);
 				}
-											
-				Console.Error.WriteLine("An uncaught exception occured. Please send a bug report to mymedialite@ismll.de");
+				
+				Console.Error.WriteLine("  *****************************************************************************************************");
+				Console.Error.WriteLine("  *** An uncaught exception occured. Please send a bug report to mymedialite@ismll.de,              ***");
+				Console.Error.WriteLine("  *** or report the problem in our issue tracker: https://github.com/zenogantner/MyMediaLite/issues ***");
+				Console.Error.WriteLine("  *****************************************************************************************************");
 				Console.Error.WriteLine(e.Message + e.StackTrace);
 				Console.Error.WriteLine ("Terminate on unhandled exception.");
 			}

@@ -21,17 +21,17 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects</summary>
 	/// <remarks>
 	/// The expected (sparse) line format is:
-	/// ENTITY_ID whitespace ATTRIBUTE_ID
+	/// ENTITY_ID SEPARATOR ATTRIBUTE_ID
 	/// for attributes that are set.
+	/// SEPARATOR can be space, tab, or comma.
 	/// </remarks>
-	public class AttributeData
+	public static class AttributeData
 	{
 		/// <summary>Read binary attribute data from a file</summary>
 		/// <remarks>

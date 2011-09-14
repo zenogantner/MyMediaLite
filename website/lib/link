@@ -14,6 +14,7 @@
      gitorious     => { url => 'http://gitorious.org/',                          title => 'Gitorious' }
      github        => { url => 'http://github.com/',                             title => 'github' }     
      git           => { url => 'http://git-scm.com/',                            title => 'git' }
+     jellyfish     => { url => 'http://research.cs.wisc.edu/hazy/victor/download/', title => 'Jellyfish' }
      nunit         => { url => 'http://nunit.org/',                              title => 'NUnit' }
      mahout        => { url => 'http://lucene.apache.org/mahout/',               title => 'Apache Mahout' }
      tastedotnet   => { url => 'https://github.com/ccollie/taste.net',           title => 'Taste.NET' }
@@ -23,15 +24,18 @@
      lenskit       => { url => 'http://lenskit.grouplens.org/',                  title => 'LensKit' }
      crab          => { url => 'http://muricoca.github.com/crab/',               title => 'Crab' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
+     recommenderlab => { url => 'http://cran.r-project.org/web/packages/recommenderlab/index.html', title => 'recommenderlab' }
+     featuremf     => { url => 'http://apex.sjtu.edu.cn/apex_wiki/svdfeature',   title => 'SVDFeature' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
+     apprecommender => { url => 'https://github.com/tassia/AppRecommender',                   title => 'AppRecommender' }
      cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'                         title => 'Collection Workflow Integration System' }
      filmaster     => { url => 'http://filmaster.com/'                                        title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                                            title => 'mloss.org' }
      graphlab      => { url => 'http://www.graphlab.ml.cmu.edu/',                title => 'GraphLab' }
      graphlabcf    => { url => 'http://www.graphlab.ml.cmu.edu/pmf.html',        title => 'GraphLab collaborative filtering library' }
-     vw            => { url => 'http://hunch.net/~vw/',                          title => 'Vowpal Wabbit' }
+     vw            => { url => 'https://github.com/JohnLangford/vowpal_wabbit/wiki', title => 'Vowpal Wabbit' }
      liblinear     => { url => 'http://www.csie.ntu.edu.tw/~cjlin/liblinear/',   title => 'LIBLINEAR' }
      libsvm        => { url => 'http://www.csie.ntu.edu.tw/~cjlin/libsvm/',      title => 'LIBSVM' }
      weka          => { url => 'http://www.cs.waikato.ac.nz/ml/weka/',           title => 'Weka' }

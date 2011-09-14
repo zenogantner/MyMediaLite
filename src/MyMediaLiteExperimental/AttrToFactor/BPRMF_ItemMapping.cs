@@ -28,6 +28,19 @@ using MyMediaLite.Util;
 namespace MyMediaLite.AttrToFactor
 {
 	/// <summary>BPR-MF with item mapping learned by regularized least-squares regression</summary>
+	/// <remarks>
+	/// Literature:
+	/// <list type="bullet">
+    ///   <item><description>
+	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///     ICDM 2011.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///   </description></item>
+	/// </list>
+	///
+	/// This recommender does NOT support incremental updates.
+	/// </remarks>
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
 		///
@@ -108,7 +121,7 @@ namespace MyMediaLite.AttrToFactor
 		{
 			while (true)
 			{
-				int item_id = random.Next(0, MaxItemID + 1);
+				int item_id = random.Next(MaxItemID + 1);
 				var item_users = Feedback.ItemMatrix.GetEntriesByRow(item_id);
 				if (item_users.Count == 0)
 					continue;
@@ -183,11 +196,11 @@ namespace MyMediaLite.AttrToFactor
 			for (int i = 0; i < num_factors; i++)
 			{
 				rmse_and_penalty_per_factor[i] = (double) rmse_and_penalty_per_factor[i] / num_items;
-				Console.Error.Write("{0,0:0.####} ", rmse_and_penalty_per_factor[i]);
+				Console.Error.Write("{0:0.####} ", rmse_and_penalty_per_factor[i]);
 			}
 			rmse    = (double) rmse    / (num_factors * num_items);
 			penalty = (double) penalty / (num_factors * num_items);
-			Console.Error.WriteLine(" > {0,0:0.####} ({1,0:0.####})", rmse, penalty);
+			Console.Error.WriteLine(" > {0:0.####} ({1:0.####})", rmse, penalty);
 
 			return rmse_and_penalty_per_factor;
 		}
@@ -234,8 +247,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-			    "BPRMF_ItemMapping num_factors={0} reg_u={1} reg_i={2} reg_j={3} num_iter={4} learn_rate={5} reg_mapping={6} num_iter_mapping={7} learn_rate_mapping={8} init_mean={9} init_stdev={10}",
-				num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+			    "{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stdev={11}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
 			);
 		}
 	}

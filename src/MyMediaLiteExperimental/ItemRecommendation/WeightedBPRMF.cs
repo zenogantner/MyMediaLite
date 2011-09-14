@@ -68,13 +68,13 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void SampleTriple(out int u, out int i, out int j)
 		{
 			// sample user from positive user-item pairs
-			int index = random.Next(0, items.Length - 1);
+			int index = random.Next(items.Length - 1);
 			u = users[index];
 			i = items[index];
 
 			// sample negative item
 			do
-				j = items[random.Next(0, items.Length - 1)];
+				j = items[random.Next(items.Length - 1)];
 			while (Feedback.UserMatrix[u, j]);
 		}
 
@@ -82,8 +82,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-			                     "WeightedBPRMF num_factors={0} bias_reg={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} bold_driver={6} learn_rate={7} init_mean={8} init_stdev={8}",
-								 num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate, InitMean, InitStdev);
+			                     "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} bold_driver={7} learn_rate={8} init_mean={9} init_stdev={10}",
+								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate, InitMean, InitStdev);
 		}
 	}
 }

@@ -19,9 +19,11 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -101,7 +103,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			int[] item_ratings_count = new int[MaxItemID + 1];
 
-			// compute item biases
 			for (int index = 0; index < Ratings.Count; index++)
 			{
 				item_biases[Ratings.Items[index]] += Ratings[index] - global_average - user_biases[Ratings.Users[index]];
@@ -197,7 +198,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				VectorUtils.WriteVector(writer, user_biases);
@@ -208,7 +209,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_biases = VectorUtils.ReadVector(reader);
@@ -229,7 +230,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "UserItemBaseline reg_u={0} reg_i={1} num_iter={2}", RegU, RegI, NumIter);
+			return string.Format(CultureInfo.InvariantCulture, "{0} reg_u={1} reg_i={2} num_iter={3}", this.GetType().Name, RegU, RegI, NumIter);
 		}
 	}
 }

@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MyMediaLite.Util;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -97,7 +97,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Recommender.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(MaxItemID + 1);
 				for (int i = 0; i <= MaxItemID; i++)
@@ -108,10 +108,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Recommender.GetReader(filename, this.GetType()) )
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				int size = int.Parse(reader.ReadLine());
-
 				var view_count = new int[size];
 
 				while (! reader.EndOfStream)
@@ -121,7 +120,9 @@ namespace MyMediaLite.ItemRecommendation
 					int count   = int.Parse(numbers[1]);
 			 		view_count[item_id] = count;
 				}
+
 				this.view_count = view_count;
+				this.MaxItemID = view_count.Length - 1;
 			}
 		}
 	}

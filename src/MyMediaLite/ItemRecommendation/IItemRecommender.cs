@@ -20,7 +20,10 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Interface for item recommenders</summary>
 	/// <remarks>
-	/// see http://recsyswiki/wiki/Item_prediction
+	/// Item prediction or item recommendation is the task of predicting items (movies, books, products, videos, jokes)
+	/// that a user may like, based on past user behavior (and possibly other information).
+	///
+	/// See also http://recsyswiki/wiki/Item_prediction
 	/// </remarks>
 	public interface IItemRecommender : IRecommender
 	{

@@ -23,7 +23,7 @@ using System.IO;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Tools for vector-like data</summary>
-	public class VectorUtils
+	public static class VectorUtils
 	{
 		/// <summary>Write a collection of doubles to a streamwriter</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
@@ -53,7 +53,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the Euclidean norm of the vector</returns>
-		public static double EuclideanNorm(ICollection<double> vector)
+		static public double EuclideanNorm(ICollection<double> vector)
 		{
 			double sum = 0;
 			foreach (double v in vector)
@@ -64,7 +64,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Compute the L1 norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the L1 norm of the vector</returns>
-		public static double L1Norm(ICollection<double> vector)
+		static public double L1Norm(ICollection<double> vector)
 		{
 			double sum = 0;
 			foreach (double v in vector)

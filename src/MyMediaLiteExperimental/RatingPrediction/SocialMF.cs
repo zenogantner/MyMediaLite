@@ -34,6 +34,9 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
+		// TODO implement MAE optimization or throw Exception
+		// TODO implement bold-driver support or throw Exception
+		
         /// <summary>Social network regularization constant</summary>
 		public double SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
         private double social_regularization = 1;
@@ -89,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			// We ignore the method's arguments.
+			// We ignore the method's arguments. FIXME
 			IterateBatch();
 		}
 
@@ -215,13 +218,44 @@ namespace MyMediaLite.RatingPrediction
 					MatrixUtils.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
 			}
 		}
+		
+		///
+		public override double ComputeLoss()
+		{
+			double loss = 0;
 
+			for (int i = 0; i < ratings.Count; i++)
+			{
+				int user_id = ratings.Users[i];
+				int item_id = ratings.Items[i];
+				loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+			}
+
+			double complexity = 0;
+			for (int u = 0; u <= MaxUserID; u++)
+				if (ratings.CountByUser.Count > u)
+				{
+					complexity += ratings.CountByUser[u] * RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
+					complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
+				}
+			for (int i = 0; i <= MaxItemID; i++)
+				if (ratings.CountByItem.Count > i)
+				{
+					complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
+					complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
+				}
+			
+			// TODO add penality term for neighborhood regularization
+			
+			return loss + complexity;
+		}
+		
 		///
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-			                     "SocialMF num_factors={0} regularization={1} social_regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
-				                 NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
+			                     "{0} num_factors={1} regularization={2} social_regularization={3} learn_rate={4} num_iter={5} init_mean={6} init_stdev={7}",
+				                 this.GetType().Name, NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
 		}
 	}
 }

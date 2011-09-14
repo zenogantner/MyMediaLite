@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-//using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.Util;
@@ -50,6 +49,11 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class SoftMarginRankingMF : BPRMF, IIterativeModel
 	{
+		public SoftMarginRankingMF() : base()
+		{
+			LearnRate = 0.1;
+		}
+		
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
 		/// <param name="u">the user ID</param>
 		/// <param name="i">the ID of the first item</param>
