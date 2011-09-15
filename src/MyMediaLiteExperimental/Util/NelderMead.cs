@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
@@ -59,12 +59,12 @@ namespace MyMediaLite.Util
 			return result;
 		}
 
-		static Vector ComputeCenter(Dictionary<string, double> results, Dictionary<string, Vector> hp_values)
+		static DenseVector ComputeCenter(Dictionary<string, double> results, Dictionary<string, DenseVector> hp_values)
 		{
 			if (hp_values.Count == 0)
 				throw new ArgumentException("need at least one vector to build center");
 
-			var center = new Vector(hp_values.Values.First().Length);
+			var center = new DenseVector(hp_values.Values.First().Count);
 
 			foreach (var key in results.Keys)
 				center += hp_values[key];
@@ -85,44 +85,44 @@ namespace MyMediaLite.Util
 			//var split = new RatingCrossValidationSplit(recommender.Ratings, 5);
 
 			IList<string> hp_names;
-			IList<Vector> initial_hp_values;
+			IList<DenseVector> initial_hp_values;
 
 			// TODO manage this via reflection?
 			if (recommender is UserItemBaseline)
 			{
 				hp_names = new string[] { "reg_u", "reg_i" };
-				initial_hp_values = new Vector[] {
-					new Vector(	new double[] { 25, 10 } ),
-					new Vector(	new double[] { 10, 25 } ),
-					new Vector(	new double[] { 2, 5 } ),
-					new Vector(	new double[] { 5, 2 } ),
-					new Vector(	new double[] { 1, 4 } ),
-					new Vector(	new double[] { 4, 1 } ),
-					new Vector(	new double[] { 3, 3 } ),
+				initial_hp_values = new DenseVector[] {
+					new DenseVector( new double[] { 25, 10 } ),
+					new DenseVector( new double[] { 10, 25 } ),
+					new DenseVector( new double[] { 2, 5 } ),
+					new DenseVector( new double[] { 5, 2 } ),
+					new DenseVector( new double[] { 1, 4 } ),
+					new DenseVector( new double[] { 4, 1 } ),
+					new DenseVector( new double[] { 3, 3 } ),
 				};
 			}
 			else if (recommender is BiasedMatrixFactorization)
 			{
 				hp_names = new string[] { "regularization", "bias_reg" };
-				initial_hp_values = new Vector[] { // TODO reg_u and reg_i (in a second step?)
-					new Vector(	new double[] { 0.1,     0 } ),
-					new Vector(	new double[] { 0.01,    0 } ),
-					new Vector(	new double[] { 0.0001,  0 } ),
-					new Vector(	new double[] { 0.00001, 0 } ),
-					new Vector(	new double[] { 0.1,     0.0001 } ),
-					new Vector(	new double[] { 0.01,    0.0001 } ),
-					new Vector(	new double[] { 0.0001,  0.0001 } ),
-					new Vector(	new double[] { 0.00001, 0.0001 } ),
+				initial_hp_values = new DenseVector[] { // TODO reg_u and reg_i (in a second step?)
+					new DenseVector( new double[] { 0.1,     0 } ),
+					new DenseVector( new double[] { 0.01,    0 } ),
+					new DenseVector( new double[] { 0.0001,  0 } ),
+					new DenseVector( new double[] { 0.00001, 0 } ),
+					new DenseVector( new double[] { 0.1,     0.0001 } ),
+					new DenseVector( new double[] { 0.01,    0.0001 } ),
+					new DenseVector( new double[] { 0.0001,  0.0001 } ),
+					new DenseVector( new double[] { 0.00001, 0.0001 } ),
 				};
 			}
 			else if (recommender is MatrixFactorization)
 			{ // TODO normal interval search could be more efficient
 				hp_names = new string[] { "regularization", };
-				initial_hp_values = new Vector[] {
-					new Vector(	new double[] { 0.1     } ),
-					new Vector(	new double[] { 0.01    } ),
-					new Vector(	new double[] { 0.0001  } ),
-					new Vector(	new double[] { 0.00001 } ),
+				initial_hp_values = new DenseVector[] {
+					new DenseVector( new double[] { 0.1     } ),
+					new DenseVector( new double[] { 0.01    } ),
+					new DenseVector( new double[] { 0.0001  } ),
+					new DenseVector( new double[] { 0.00001 } ),
 				};				
 			}
 			// TODO kNN-based methods
@@ -145,17 +145,17 @@ namespace MyMediaLite.Util
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
 		public static double FindMinimum(string evaluation_measure,
 		                                 IList<string> hp_names,
-		                                 IList<Vector> initial_hp_values,
+		                                 IList<DenseVector> initial_hp_values,
 		                                 RatingPredictor recommender, // TODO make more general?
 		                                 ISplit<IRatings> split)
 		{
 			var results    = new Dictionary<string, double>();
-			var hp_vectors = new Dictionary<string, Vector>();
+			var hp_vectors = new Dictionary<string, DenseVector>();
 
 			// initialize
 			foreach (var hp_values in initial_hp_values)
 			{
-				string hp_string = CreateConfigString(hp_names, hp_values);
+				string hp_string = CreateConfigString(hp_names, hp_values.ToArray());
 				results[hp_string] = Run(recommender, split, hp_string, evaluation_measure);
 				hp_vectors[hp_string] = hp_values;
 			}

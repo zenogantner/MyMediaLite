@@ -32,11 +32,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="MathNet.Numerics, Version=2011.4.17.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MathNet\MathNet.Numerics.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
