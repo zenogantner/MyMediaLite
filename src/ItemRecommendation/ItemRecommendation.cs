@@ -128,7 +128,7 @@ class ItemRecommendation
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
-   --random-seed=N                  set the seed of the random number generator to N
+   --random-seed=N                  initialize the random number generator with N
 
   files:
    --training-file=FILE         read training data from FILE
@@ -415,10 +415,10 @@ class ItemRecommendation
 
 		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && relevant_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
-		
+
 		if ((relevant_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (training_items ? 1 : 0) + (test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
 			Usage("--relevant-items=FILE, --all-items, --training-items, --test-items, and --overlap-items are mutually exclusive.");
-		
+
 		if (test_file == null && test_ratio == 0 && overlap_items)
 			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
 

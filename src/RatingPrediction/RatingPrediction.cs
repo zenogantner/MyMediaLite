@@ -105,13 +105,15 @@ class RatingPrediction
   general OPTIONS:
    --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
    --recommender-options=OPTIONS    use OPTIONS as recommender options
-   --training-file=FILE             read training data from FILE
-   --test-file=FILE                 read test data from FILE
-
    --help                           display this usage information and exit
    --version                        display version information and exit
+   --random-seed=N                  initialize the random number generator with N
+   --rating-type=float|byte|double  store ratings internally as floats or bytes or doubles (default)
 
-   --random-seed=N                        set random seed to N
+  files:
+   --training-file=FILE                   read training data from FILE
+   --test-file=FILE                       read test data from FILE
+   --file-format=ml1m|kddcup2011|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information
    --item-attributes=FILE                 file containing item attribute information
@@ -119,11 +121,13 @@ class RatingPrediction
    --item-relations=FILE                  file containing item relation information
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
+
+  prediction options:
    --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
    --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
                                           and predicted rating, respectively; default is {0}\\t{1}\\t{2}
-   --file-format=ml1m|kddcup2011|default
-   --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
+
+  evaluation options:
    --cross-validation=K                   perform k-fold crossvalidation on the training data
    --test-ratio=NUM                       use a ratio of NUM of the training data for evaluation (simple split)
    --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
@@ -223,7 +227,7 @@ class RatingPrediction
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
-		
+
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
