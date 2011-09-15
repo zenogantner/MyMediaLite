@@ -81,7 +81,6 @@ namespace MyMediaLite.ItemRecommendation
 			var HCp         = new double[num_factors];
 
 			var m = new MathNet.Numerics.LinearAlgebra.Double.DenseMatrix(num_factors, num_factors);
-			// TODO speed up using more parts of that library
 
 			// source code comments are in terms of computing the user factors
 			// works the same with users and items exchanged
