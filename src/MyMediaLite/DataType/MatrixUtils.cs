@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MyMediaLite.Util;
+using MathNet.Numerics.Distributions;
 
 namespace MyMediaLite.DataType
 {
@@ -30,37 +30,43 @@ namespace MyMediaLite.DataType
 		/// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
-		/// <param name="stdev">the standard deviation of the normal distribution</param>
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
 		/// <param name="row">the row to be initialized</param>
-		static public void RowInitNormal(Matrix<double> matrix, double mean, double stdev, int row)
+		static public void RowInitNormal(Matrix<double> matrix, double mean, double stddev, int row)
 		{
-			var rnd = Util.Random.GetInstance();
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
 			for (int j = 0; j < matrix.dim2; j++)
-				matrix[row, j] = rnd.NextNormal(mean, stdev);
+				matrix[row, j] = nd.Sample();
 		}
 
 		/// <summary>Initializes one column of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
-		/// <param name="stdev">the standard deviation of the normal distribution</param>
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
 		/// <param name="column">the column to be initialized</param>
-		static public void ColumnInitNormal(Matrix<double> matrix, double mean, double stdev, int column)
+		static public void ColumnInitNormal(Matrix<double> matrix, double mean, double stddev, int column)
 		{
-			var rnd = Util.Random.GetInstance();
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
 			for (int i = 0; i < matrix.dim1; i++)
-				matrix[i, column] = rnd.NextNormal(mean, stdev);
+				matrix[i, column] = nd.Sample();
 		}
 
 		/// <summary>Initializes a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
-		/// <param name="stdev">the standard deviation of the normal distribution</param>
-		static public void InitNormal(Matrix<double> matrix, double mean, double stdev)
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
+		static public void InitNormal(Matrix<double> matrix, double mean, double stddev)
 		{
-			var rnd = Util.Random.GetInstance();
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
 			for (int i = 0; i < matrix.dim1; i++)
 				for (int j = 0; j < matrix.dim2; j++)
-					matrix[i, j] = rnd.NextNormal(mean, stdev);
+					matrix[i, j] = nd.Sample();
 		}
 
 		/// <summary>Increments the specified matrix element by a double value</summary>

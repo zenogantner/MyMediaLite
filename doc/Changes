@@ -41,6 +41,8 @@
           - IRatingPredictor: explain the task of rating prediction
         - misc
           - upgrade from Math.NET Iridium to Math.NET Numerics Beta 2
+            - use Math.NET Numerics for generating normal distributed random
+              numbers (doubles the speed of MF initialization)
           - cleaned up solution and project files for MonoDevelop
           - improved ToString() methods
           - declared all classes as static that contain only static methods

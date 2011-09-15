@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using MathNet.Numerics.Distributions;
 
 namespace MyMediaLite.DataType
 {
@@ -75,12 +76,14 @@ namespace MyMediaLite.DataType
 		/// <summary>Initialize a collection of doubles with values from a normal distribution</summary>
 		/// <param name="vector">the vector to initialize</param>
 		/// <param name="mean">the mean of the normal distribution</param>
-		/// <param name="stdev">the standard deviation of the normal distribution</param>
-		static public void InitNormal(IList<double> vector, double mean, double stdev)
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
+		static public void InitNormal(IList<double> vector, double mean, double stddev)
 		{
-			var rnd = MyMediaLite.Util.Random.GetInstance();
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+			
 			for (int i = 0; i < vector.Count; i++)
-				vector[i] = rnd.NextNormal(mean, stdev);
+				vector[i] = nd.Sample();
 		}
 	}
 }
