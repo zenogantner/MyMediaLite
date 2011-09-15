@@ -46,7 +46,7 @@ class MappingItemRecommendation
 {
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
-	static ICollection<int> relevant_items;
+	static IList<int> relevant_items;
 
 	static BPRMF_Mapping recommender;
 	static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
@@ -163,7 +163,7 @@ class MappingItemRecommendation
 
 		// relevant items
 		if (! relevant_items_file.Equals(string.Empty) )
-			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 		else
 			relevant_items = training_data.AllItems;
 

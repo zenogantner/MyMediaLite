@@ -134,10 +134,10 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> NonEmptyRowIDs
+		public IList<int> NonEmptyRowIDs
 		{
 			get	{
-				var row_ids = new HashSet<int>();
+				var row_ids = new List<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Length > 0)
@@ -149,10 +149,10 @@ namespace MyMediaLite.DataType
 
 		// TODO add unit test
 		///
-		public ICollection<int> NonEmptyColumnIDs
+		public IList<int> NonEmptyColumnIDs
 		{
 			get	{
-				var col_ids = new HashSet<int>();
+				var col_ids = new List<int>();
 
 				// iterate over the complete data structure to find column IDs
 				for (int i = 0; i < row_list.Count; i++)
@@ -203,7 +203,7 @@ namespace MyMediaLite.DataType
 		/// <param name="delete_columns">an array with column IDs</param>
 		public void RemoveColumn(int[] delete_columns)
 		{
-			throw new NotSupportedException();			
+			throw new NotSupportedException();
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>

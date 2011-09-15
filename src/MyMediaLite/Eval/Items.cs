@@ -59,32 +59,6 @@ namespace MyMediaLite.Eval
 		/// and the number of items that were taken into account.
 		///
 		/// Literature:
-		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
-		/// </remarks>
-		/// <param name="recommender">item recommender</param>
-		/// <param name="test">test cases</param>
-		/// <param name="train">training data</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(
-			IRecommender recommender,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback train,
-			ICollection<int> relevant_users,
-			ICollection<int> relevant_items)
-		{
-			return Evaluate(recommender, test, train, relevant_users, relevant_items, false);
-		}
-
-		/// <summary>Evaluation for rankings of items</summary>
-		/// <remarks>
-		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-		/// The evaluation measures are listed in the ItemPredictionMeasures property.
-		/// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
-		/// and the number of items that were taken into account.
-		///
-		/// Literature:
 		/// <list type="bullet">
 		///   <item><description>
 		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
@@ -97,32 +71,29 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="relevant_users">a list of integers with all relevant users</param>
+		/// <param name="relevant_items">a list of integers with all relevant items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
-		/// <returns>a dictionary containing the evaluation results</returns>
+		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public Dictionary<string, double> Evaluate(
 			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-			ICollection<int> relevant_users,
-			ICollection<int> relevant_items,
-			bool repeated_events)
+			IList<int> relevant_users,
+			IList<int> relevant_items,
+			bool repeated_events = false)
 		{
 			if (!repeated_events && train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
-
+			
 			int num_users        = 0;
-			double auc_sum       = 0;
-			double map_sum       = 0;
-			double prec_5_sum    = 0;
-			double prec_10_sum   = 0;
-			double recall_5_sum  = 0;
-			double recall_10_sum = 0;
-			double ndcg_sum      = 0;
-			double rr_sum        = 0;
-
+			
+			var result = new Dictionary<string, double>();
+			foreach (string method in Measures)
+				result[method] = 0;
+			
 			var locker = new int[0]; // object used for thread locking
+			
 			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
@@ -149,22 +120,22 @@ namespace MyMediaLite.Eval
 				double map  = MAP(prediction, correct_items, ignore_items);
 				double ndcg = NDCG(prediction, correct_items, ignore_items);
 				double rr   = ReciprocalRank(prediction, correct_items, ignore_items);
-				var ns = new int[] { 5, 10, 15 };
-				var prec = PrecisionAt(prediction, correct_items, ignore_items, ns);
-				var recall = RecallAt(prediction, correct_items, ignore_items, ns);
+				var positions = new int[] { 5, 10 };
+				var prec = PrecisionAt(prediction, correct_items, ignore_items, positions);
+				var recall = RecallAt(prediction, correct_items, ignore_items, positions);
 
 				// thread-safe incrementing
 				lock(locker)
 				{
 					num_users++;
-					auc_sum       += auc;
-					map_sum       += map;
-					ndcg_sum      += ndcg;
-					rr_sum        += rr;
-					prec_5_sum    += prec[5];
-					prec_10_sum   += prec[10];
-					recall_5_sum  += recall[5];
-					recall_10_sum += recall[10];
+					result["AUC"]       += auc;
+					result["MAP"]       += map;
+					result["NDCG"]      += ndcg;
+					result["mrr"]       += rr;
+					result["prec@5"]    += prec[5];
+					result["prec@10"]   += prec[10];
+					result["recall@5"]  += recall[5];
+					result["recall@10"] += recall[10];
 				}
 
 				if (num_users % 1000 == 0)
@@ -173,15 +144,8 @@ namespace MyMediaLite.Eval
 					Console.Error.WriteLine();
 			});
 
-			var result = new Dictionary<string, double>();
-			result["AUC"]       = auc_sum / num_users;
-			result["prec@5"]    = prec_5_sum / num_users;
-			result["prec@10"]   = prec_10_sum / num_users;
-			result["MAP"]       = map_sum / num_users;
-			result["recall@5"]  = recall_5_sum / num_users;
-			result["recall@10"] = recall_10_sum / num_users;
-			result["NDCG"]      = ndcg_sum / num_users;
-			result["mrr"]       = rr_sum / num_users;
+			foreach (string measure in Measures)
+				result[measure] /= num_users;
 			result["num_users"] = num_users;
 			result["num_lists"] = num_users;
 			result["num_items"] = relevant_items.Count;
@@ -193,16 +157,16 @@ namespace MyMediaLite.Eval
 		/// <summary>Online evaluation for rankings of items</summary>
 		/// <remarks>
 		/// </remarks>
-		/// <param name="recommender">item recommender</param>
+		/// <param name="recommender">the item recommender to be evaluated</param>
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data (must be connected to the recommender's training data)</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="relevant_users">a list of all relevant user IDs</param>
+		/// <param name="relevant_items">a list of all relevant item IDs</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> EvaluateOnline(
 			IIncrementalItemRecommender recommender,
 			IPosOnlyFeedback test, IPosOnlyFeedback train,
-			ICollection<int> relevant_users, ICollection<int> relevant_items)
+			IList<int> relevant_users, IList<int> relevant_items)
 		{
 			// for better handling, move test data points into arrays
 			var users = new int[test.Count];
@@ -275,29 +239,14 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a dataset split</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(
-			ItemRecommender recommender,
-			ISplit<IPosOnlyFeedback> split,
-			ICollection<int> relevant_users,
-			ICollection<int> relevant_items)
-		{
-			return EvaluateOnSplit(recommender, split, relevant_users, relevant_items, false);
-		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">an item recommender</param>
-		/// <param name="split">a dataset split</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> EvaluateOnSplit(
 			ItemRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
-			ICollection<int> relevant_users,
-			ICollection<int> relevant_items,
-			bool show_results)
+			IList<int> relevant_users,
+			IList<int> relevant_items,
+			bool show_results = false)
 		{
 			var avg_results = new Dictionary<string, double>();
 

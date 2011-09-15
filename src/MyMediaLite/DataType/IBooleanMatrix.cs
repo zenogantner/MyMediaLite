@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 
 namespace MyMediaLite.DataType
@@ -31,10 +30,10 @@ namespace MyMediaLite.DataType
 		int NumberOfEntries { get; }
 
 		/// <summary>The IDs of the non-empty rows in the matrix (the ones that contain at least one true entry)</summary>
-		ICollection<int> NonEmptyRowIDs { get; }
+		IList<int> NonEmptyRowIDs { get; }
 
 		/// <summary>The IDs of the non-empty columns in the matrix (the ones that contain at least one true entry)</summary>
-		ICollection<int> NonEmptyColumnIDs { get; }
+		IList<int> NonEmptyColumnIDs { get; }
 
 		/// <summary>Get all true entries (column IDs) of a row</summary>
 		/// <param name="row_id">the row ID</param>

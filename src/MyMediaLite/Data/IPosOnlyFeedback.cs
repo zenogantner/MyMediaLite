@@ -39,10 +39,10 @@ namespace MyMediaLite.Data
 		int Count { get; }
 
 		/// <summary>all users that have given feedback</summary>
-		ICollection<int> AllUsers { get; }
+		IList<int> AllUsers { get; }
 		
 		/// <summary>all items mentioned at least once</summary>
-		ICollection<int> AllItems { get; }
+		IList<int> AllItems { get; }
 		
 		/// <summary>Add a user-item event to the data structure</summary>
 		/// <param name="user_id">the user ID</param>

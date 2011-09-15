@@ -18,6 +18,10 @@
           - RatingPrediction.Prediction.WritePredictions():
             move line_format argument to last position to be able to use it as
             an optional argument
+          - IPosOnlyFeedback AllUsers and AllItems properties:
+            ICollection<int> -> IList<int>
+          - IBooleanMatrix
+            NonEmpty(Row|Column)IDs properties:  ICollection<int> -> IList<int>
         - recommenders
           - new rating predictor MultiCoreMatrixFactorization based on
             Distributed SGD paper at KDD 2011 by Gemulla et al.

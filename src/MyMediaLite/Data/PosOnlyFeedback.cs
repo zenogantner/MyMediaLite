@@ -54,10 +54,10 @@ namespace MyMediaLite.Data
 		public int Count { get { return UserMatrix.NumberOfEntries; } }
 
 		/// <summary>all users that have given feedback</summary>
-		public ICollection<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
+		public IList<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
 
 		/// <summary>all items mentioned at least once</summary>
-		public ICollection<int> AllItems {
+		public IList<int> AllItems {
 			get {
 				if (item_matrix == null)
 					return UserMatrix.NonEmptyColumnIDs;

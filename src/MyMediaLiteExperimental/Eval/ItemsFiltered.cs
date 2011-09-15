@@ -117,7 +117,6 @@ namespace MyMediaLite.Eval
 
 				foreach (int attribute_id in filtered_items.Keys)
 				{
-					// TODO optimize this a bit, currently it is quite naive
 					var relevant_filtered_items = new HashSet<int>(items_by_attribute[attribute_id]);
 					relevant_filtered_items.IntersectWith(relevant_items);
 
@@ -144,16 +143,16 @@ namespace MyMediaLite.Eval
 					}
 
 					// evaluation
-					int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_filtered_items);
+					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_filtered_items.ToArray());
 
-					auc_sum     += Items.AUC(prediction, correct_items, train.UserMatrix[user_id]);
-					map_sum     += Items.MAP(prediction, correct_items, train.UserMatrix[user_id]);
-					ndcg_sum    += Items.NDCG(prediction, correct_items, train.UserMatrix[user_id]);
-					prec_5_sum  += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
-					prec_10_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
-					prec_15_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
+					auc_sum     += Items.AUC(prediction_list, correct_items, train.UserMatrix[user_id]);
+					map_sum     += Items.MAP(prediction_list, correct_items, train.UserMatrix[user_id]);
+					ndcg_sum    += Items.NDCG(prediction_list, correct_items, train.UserMatrix[user_id]);
+					prec_5_sum  += Items.PrecisionAt(prediction_list, correct_items, train.UserMatrix[user_id],  5);
+					prec_10_sum += Items.PrecisionAt(prediction_list, correct_items, train.UserMatrix[user_id], 10);
+					prec_15_sum += Items.PrecisionAt(prediction_list, correct_items, train.UserMatrix[user_id], 15);
 
-					if (prediction.Length != relevant_filtered_items.Count)
+					if (prediction_list.Count != relevant_filtered_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
 					if (num_lists % 5000 == 0)

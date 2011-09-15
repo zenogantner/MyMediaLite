@@ -37,8 +37,8 @@ class ItemRecommendation
 {
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
-	static ICollection<int> relevant_users;
-	static ICollection<int> relevant_items;
+	static IList<int> relevant_users;
+	static IList<int> relevant_items;
 	static SparseBooleanMatrix group_to_user; // rows: groups, columns: users
 	static ICollection<int> user_groups;
 
@@ -574,7 +574,7 @@ class ItemRecommendation
 
 			// relevant users
 			if (relevant_users_file != null)
-				relevant_users = new HashSet<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
+				relevant_users = new List<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
 			else
 				relevant_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
@@ -598,17 +598,17 @@ class ItemRecommendation
 
 			// relevant items
 			if (relevant_items_file != null)
-				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+				relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 			else if (training_items)
 				relevant_items = training_data.AllItems;
 			else if (test_items)
 				relevant_items = test_data.AllItems;
 			else if (overlap_items)
-				relevant_items = new HashSet<int>(test_data.AllItems.Intersect(training_data.AllItems));
+				relevant_items = new List<int>(test_data.AllItems.Intersect(training_data.AllItems));
 			else if (all_items)
-				relevant_items = new HashSet<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
+				relevant_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
 			else
-				relevant_items = new HashSet<int>(test_data.AllItems.Union(training_data.AllItems));
+				relevant_items = new List<int>(test_data.AllItems.Union(training_data.AllItems));
 
 			// display stats about relevant users and items
 			if (group_method != null)
