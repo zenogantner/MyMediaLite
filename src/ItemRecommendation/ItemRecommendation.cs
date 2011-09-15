@@ -63,8 +63,8 @@ class ItemRecommendation
 	static string item_attributes_file;
 	static string user_relations_file;
 	static string item_relations_file;
-	static string save_model_file      = string.Empty;
-	static string load_model_file      = string.Empty;
+	static string save_model_file = string.Empty;
+	static string load_model_file = string.Empty;
 	static string user_groups_file;
 
 	// command-line parameters (other)
@@ -79,6 +79,7 @@ class ItemRecommendation
 	static bool repeat_eval;
 	static string group_method;
 	static bool overlap_items;
+	static bool training_items;
 	static bool test_items;
 	static bool user_prediction;
 	static int random_seed = -1;
@@ -141,6 +142,7 @@ class ItemRecommendation
    --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --relevant-items=FILE        use the items in FILE (one per line) as candidate items in the evaluation
    --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
+   --training-items             use only the items in the training set for evaluation as candidate items in the evaluation
    --test-items                 use only the items in the test set for evaluation as candidate items in the evaluation
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
@@ -198,7 +200,7 @@ class ItemRecommendation
 			{ "recommender=",         v => method                 = v },
 			{ "group-recommender=",   v => group_method           = v },
 			{ "recommender-options=", v => recommender_options   += " " + v },
-   			{ "data-dir=",            v => data_dir               = v },
+			{ "data-dir=",            v => data_dir               = v },
 			{ "user-attributes=",     v => user_attributes_file   = v },
 			{ "item-attributes=",     v => item_attributes_file   = v },
 			{ "user-relations=",      v => user_relations_file    = v },
@@ -231,6 +233,7 @@ class ItemRecommendation
 			{ "filtered-evaluation",  v => filtered_eval   = v != null },
 			{ "repeat-evaluation",    v => repeat_eval     = v != null },
 			{ "overlap-items",        v => overlap_items   = v != null },
+			{ "training-items",       v => training_items  = v != null },
 			{ "test-items",           v => test_items      = v != null },
 			{ "help",                 v => show_help       = v != null },
 			{ "version",              v => show_version    = v != null },
@@ -582,12 +585,19 @@ class ItemRecommendation
 			// relevant items
 			if (relevant_items_file != null)
 				relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			else if (training_items)
+				relevant_items = training_data.AllItems;
 			else if (test_items)
 				relevant_items = test_data.AllItems;
 			else if (overlap_items)
 				relevant_items = new HashSet<int>(test_data.AllItems.Intersect(training_data.AllItems));
 			else
-				relevant_items = training_data.AllItems;
+				relevant_items = new HashSet<int>(test_data.AllItems.Union(training_data.AllItems));
+
+			Console.Error.WriteLine("flags: {0} {1} {2}", training_items, test_items, overlap_items);
+			Console.Error.WriteLine("num_training_items={0}", training_data.AllItems.Count);
+			Console.Error.WriteLine("num_test_items={0}", test_data.AllItems.Count);
+			Console.Error.WriteLine("num_eval_items={0}", relevant_items.Count);
 
 			// display stats about relevant users and items
 			if (group_method != null)
