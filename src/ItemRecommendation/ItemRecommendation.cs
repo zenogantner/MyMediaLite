@@ -81,6 +81,7 @@ class ItemRecommendation
 	static bool overlap_items;
 	static bool training_items;
 	static bool test_items;
+	static bool all_items;
 	static bool user_prediction;
 	static int random_seed = -1;
 
@@ -142,8 +143,9 @@ class ItemRecommendation
    --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --relevant-items=FILE        use the items in FILE (one per line) as candidate items in the evaluation
    --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
-   --training-items             use only the items in the training set for evaluation as candidate items in the evaluation
-   --test-items                 use only the items in the test set for evaluation as candidate items in the evaluation
+   --training-items             use only the items in the training set as candidate items in the evaluation
+   --test-items                 use only the items in the test set as candidate items in the evaluation
+   --all-items                  use all known items as candidate items in the evaluation
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
    --cross-validation=K         perform k-fold crossvalidation on the training data
@@ -234,6 +236,7 @@ class ItemRecommendation
 			{ "repeat-evaluation",    v => repeat_eval     = v != null },
 			{ "overlap-items",        v => overlap_items   = v != null },
 			{ "training-items",       v => training_items  = v != null },
+			{ "all-items",            v => all_items       = v != null },
 			{ "test-items",           v => test_items      = v != null },
 			{ "help",                 v => show_help       = v != null },
 			{ "version",              v => show_version    = v != null },
@@ -591,6 +594,8 @@ class ItemRecommendation
 				relevant_items = test_data.AllItems;
 			else if (overlap_items)
 				relevant_items = new HashSet<int>(test_data.AllItems.Intersect(training_data.AllItems));
+			else if (all_items)
+				relevant_items = new HashSet<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
 			else
 				relevant_items = new HashSet<int>(test_data.AllItems.Union(training_data.AllItems));
 
