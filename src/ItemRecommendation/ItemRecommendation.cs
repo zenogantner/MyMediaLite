@@ -594,11 +594,6 @@ class ItemRecommendation
 			else
 				relevant_items = new HashSet<int>(test_data.AllItems.Union(training_data.AllItems));
 
-			Console.Error.WriteLine("flags: {0} {1} {2}", training_items, test_items, overlap_items);
-			Console.Error.WriteLine("num_training_items={0}", training_data.AllItems.Count);
-			Console.Error.WriteLine("num_test_items={0}", test_data.AllItems.Count);
-			Console.Error.WriteLine("num_eval_items={0}", relevant_items.Count);
-
 			// display stats about relevant users and items
 			if (group_method != null)
 				Console.WriteLine("{0} user groups and {1} items will be used for evaluation.", user_groups.Count, relevant_items.Count);
