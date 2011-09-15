@@ -45,8 +45,8 @@ namespace MyMediaLite.ItemRecommendation
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
-				using (var writer = new StreamWriter(filename))
-					WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+			using (var writer = new StreamWriter(filename))
+				WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) to a file</summary>
