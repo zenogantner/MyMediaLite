@@ -602,9 +602,9 @@ class ItemRecommendation
 	static Dictionary<string, double> Evaluate()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items, !repeat_eval);
+			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items, repeat_eval);
 		else
-			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, !repeat_eval);
+			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)

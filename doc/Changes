@@ -27,6 +27,8 @@
             output more noticeable
         - evaluation
           - new evaluation measure: mean reciprocal rank (mrr)
+          - item recommender evaluation: more descriptive parameter name
+            repeated_events
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)

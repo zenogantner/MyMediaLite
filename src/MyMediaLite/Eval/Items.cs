@@ -74,7 +74,7 @@ namespace MyMediaLite.Eval
 			ICollection<int> relevant_users,
 			ICollection<int> relevant_items)
 		{
-			return Evaluate(recommender, test, train, relevant_users, relevant_items, true);
+			return Evaluate(recommender, test, train, relevant_users, relevant_items, false);
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -99,7 +99,7 @@ namespace MyMediaLite.Eval
 		/// <param name="train">training data</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
+		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
 			IRecommender recommender,
@@ -107,9 +107,9 @@ namespace MyMediaLite.Eval
 			IPosOnlyFeedback train,
 			ICollection<int> relevant_users,
 			ICollection<int> relevant_items,
-			bool ignore_overlap)
+			bool repeated_events)
 		{
-			if (train.Overlap(test) > 0)
+			if (!repeated_events && train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			int num_users        = 0;
@@ -131,7 +131,7 @@ namespace MyMediaLite.Eval
 				// the number of items that are really relevant for this user
 				var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
 				relevant_items_in_train.IntersectWith(relevant_items);
-				int num_eval_items = relevant_items.Count - (ignore_overlap ? relevant_items_in_train.Count() : 0);
+				int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
 
 				// skip all users that have 0 or #relevant_items test items
 				if (correct_items.Count == 0)
@@ -143,7 +143,7 @@ namespace MyMediaLite.Eval
 				if (prediction.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
-				ICollection<int> ignore_items = ignore_overlap ? train.UserMatrix[user_id] : new int[0];
+				ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
 
 				double auc  = AUC(prediction, correct_items, ignore_items);
 				double map  = MAP(prediction, correct_items, ignore_items);
@@ -189,7 +189,7 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
-		// TODO consider micro- (by item) and macro-averaging (by user, the current thing)
+		// TODO consider micro- (by item) and macro-averaging (by user, the current thing); repeated events
 		/// <summary>Online evaluation for rankings of items</summary>
 		/// <remarks>
 		/// </remarks>
