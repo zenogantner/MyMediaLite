@@ -29,8 +29,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// <summary>Class that contains static methods for item prediction</summary>
 	public static class Prediction
 	{
-		// TODO there are too many different versions of this method interface - we should simplify the API
-
 		/// <summary>Write item predictions (scores) for all users to a file</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
@@ -47,10 +45,7 @@ namespace MyMediaLite.ItemRecommendation
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
-			if (filename.Equals("-"))
-				WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
-			else
-				using ( var writer = new StreamWriter(filename) )
+				using (var writer = new StreamWriter(filename))
 					WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
@@ -72,11 +67,8 @@ namespace MyMediaLite.ItemRecommendation
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
-			if (filename.Equals("-"))
-				WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
-			else
-				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+			using (var writer = new StreamWriter(filename))
+				WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) for all users to a TextWriter object</summary>

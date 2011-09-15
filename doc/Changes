@@ -15,6 +15,9 @@
             IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
           - move read/write routines from Util.Recommender to the new static
             class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
+          - RatingPrediction.Prediction.WritePredictions():
+            move line_format argument to last position to be able to use it as
+            an optional argument
         - recommenders
           - new rating predictor MultiCoreMatrixFactorization based on
             Distributed SGD paper at KDD 2011 by Gemulla et al.
@@ -30,6 +33,7 @@
             at all, e.g. in combination with --rating-threshold); thanks go to
             Jagadeesh Gorla for bugging me about the details of the evaluation
             protocol.
+          - drop support for --prediction-file=- (STDOUT)
           - improved usage information            
           - check parameters after creating recommender, catching more errors
           - refer to GitHub issue tracker in exception handler, make handler

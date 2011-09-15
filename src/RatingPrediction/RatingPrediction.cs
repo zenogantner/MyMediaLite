@@ -123,7 +123,7 @@ class RatingPrediction
    --load-model=FILE                      load model from FILE
 
   prediction options:
-   --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
+   --prediction-file=FILE                 write the rating predictions to FILE
    --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
                                           and predicted rating, respectively; default is {0}\\t{1}\\t{2}
 
@@ -309,7 +309,7 @@ class RatingPrediction
 
 					Model.Save(recommender, save_model_file, i);
 					if (prediction_file != string.Empty)
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file + "-it-" + i);
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i, prediction_line);
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
@@ -383,7 +383,7 @@ class RatingPrediction
 			{
 				seconds = Utils.MeasureTime(delegate() {
 						Console.WriteLine();
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_line, prediction_file);
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file, prediction_line);
 				});
 				Console.Error.Write("predicting_time " + seconds);
 			}

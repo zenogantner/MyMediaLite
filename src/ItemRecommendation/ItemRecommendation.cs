@@ -154,7 +154,7 @@ class ItemRecommendation
 
   prediction options:
    --relevant-users=FILE        predict items for users specified in FILE (one user per line)
-   --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
+   --prediction-file=FILE       write ranked predictions to FILE, one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
 
   evaluation options:
