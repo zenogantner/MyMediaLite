@@ -46,7 +46,11 @@ namespace MyMediaLite.RatingPrediction
 		/// <value>The number of blocks (for rows and columns of the rating matrix, each)</value>
 		public int NumBlocks { get; set; }
 
-		public MultiCoreMatrixFactorization() { NumBlocks = 100; }
+		public MultiCoreMatrixFactorization()
+		{
+			BoldDriver = true;
+			NumBlocks = 100;
+		}
 
 		IList<int>[,] Blocks;
 
