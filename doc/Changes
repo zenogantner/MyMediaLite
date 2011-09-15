@@ -30,6 +30,7 @@
             at all, e.g. in combination with --rating-threshold); thanks go to
             Jagadeesh Gorla for bugging me about the details of the evaluation
             protocol.
+          - item recommendation: improved usage information
           - check parameters after creating recommender, catching more errors
           - refer to GitHub issue tracker in exception handler, make handler
             output more noticeable

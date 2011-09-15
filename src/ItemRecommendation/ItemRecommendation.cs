@@ -126,13 +126,13 @@ class ItemRecommendation
    --recommender=METHOD             use METHOD for recommendations (default: MostPopular)
    --group-recommender=METHOD       use METHOD to combine the predictions for several users
    --recommender-options=OPTIONS    use OPTIONS as recommender options
-   --training-file=FILE             read training data from FILE
-   --test-file=FILE                 read test data from FILE
-
    --help                           display this usage information and exit
    --version                        display version information and exit
+   --random-seed=N                  set the seed of the random number generator to N
 
-   --random-seed=N
+  files:
+   --training-file=FILE         read training data from FILE
+   --test-file=FILE             read test data from FILE
    --data-dir=DIR               load all files from DIR
    --user-attributes=FILE       file containing user attribute information
    --item-attributes=FILE       file containing item attribute information
@@ -140,24 +140,32 @@ class ItemRecommendation
    --item-relations=FILE        file containing item relation information
    --save-model=FILE            save computed model to FILE
    --load-model=FILE            load model from FILE
-   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
+
+  data interpretation:
+   --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
+   --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
+
+  choosing the items for evaluation/prediction (mutually exclusive):
    --relevant-items=FILE        use the items in FILE (one per line) as candidate items in the evaluation
    --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
    --training-items             use only the items in the training set as candidate items in the evaluation
    --test-items                 use only the items in the test set as candidate items in the evaluation
    --all-items                  use all known items as candidate items in the evaluation
+
+  prediction options:
+   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --prediction-file=FILE       write ranked predictions to FILE ('-' for STDOUT), one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
+
+  evaluation options:
    --cross-validation=K         perform k-fold crossvalidation on the training data
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
    --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
-   --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
-   --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
 
-  options for finding the right number of iterations (iterative methods)
+  finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
    --max-iter=N                 perform at most N iterations
    --auc-cutoff=NUM             abort if AUC is below NUM
@@ -407,7 +415,10 @@ class ItemRecommendation
 
 		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && relevant_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
-
+		
+		if ((relevant_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (training_items ? 1 : 0) + (test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
+			Usage("--relevant-items=FILE, --all-items, --training-items, --test-items, and --overlap-items are mutually exclusive.");
+		
 		if (test_file == null && test_ratio == 0 && overlap_items)
 			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
 
