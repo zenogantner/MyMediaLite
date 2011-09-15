@@ -80,8 +80,7 @@ namespace MyMediaLite.ItemRecommendation
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
 			var HCp         = new double[num_factors];
 
-			var m = new MathNet.Numerics.LinearAlgebra.Matrix(num_factors, num_factors);
-			MathNet.Numerics.LinearAlgebra.Matrix m_inv;
+			var m = new MathNet.Numerics.LinearAlgebra.Double.DenseMatrix(num_factors, num_factors);
 			// TODO speed up using more parts of that library
 
 			// source code comments are in terms of computing the user factors
@@ -132,7 +131,7 @@ namespace MyMediaLite.ItemRecommendation
 							d += regularization;
 						m[f_1, f_2] = d;
 					}
-				m_inv = m.Inverse();
+				var m_inv = m.Inverse();
 				// write back optimal W
 				for (int f = 0; f < num_factors; f++)
 				{

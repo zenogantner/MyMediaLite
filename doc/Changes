@@ -1,7 +1,8 @@
 1.99	2011-09-??
-        - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10. recommended)
+        - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
-          - item recommendation eval
+          - item recommendation evaluation
+          - distributed SGD (see below)
         - API changes
           - rename IIItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
@@ -39,6 +40,7 @@
           - IItemRecommender: explain the task of item recommendation
           - IRatingPredictor: explain the task of rating prediction
         - misc
+          - upgrade from Math.NET Iridium to Math.NET Numerics Beta 2
           - cleaned up solution and project files for MonoDevelop
           - improved ToString() methods
           - declared all classes as static that contain only static methods
