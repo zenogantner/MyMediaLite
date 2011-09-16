@@ -25,7 +25,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.Correlation
 {
 	/// <summary>Class for testing the BinaryCosine class</summary>
 	[TestFixture()]

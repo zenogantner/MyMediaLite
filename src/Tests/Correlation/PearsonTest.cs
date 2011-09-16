@@ -27,7 +27,7 @@ using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.Taxonomy;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.Correlation
 {
 	/// <summary>Class for testing the Pearson class</summary>
 	[TestFixture()]

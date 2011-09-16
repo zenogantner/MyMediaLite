@@ -21,7 +21,7 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.Data
 {
 	/// <summary>Testing the EntityMapping class</summary>
 	[TestFixture()]

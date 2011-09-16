@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.DataType
 {
 	/// <summary>Testing the MatrixUtils class</summary>
 	[TestFixture()]

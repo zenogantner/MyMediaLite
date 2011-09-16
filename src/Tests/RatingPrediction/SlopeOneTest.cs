@@ -19,7 +19,7 @@ using NUnit.Framework;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.RatingPrediction
 {
 	[TestFixture()]
 	public class SlopeOneTest

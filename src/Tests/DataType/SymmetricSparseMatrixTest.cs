@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace MyMediaLiteTest.DataType
 {
 	/// <summary>Tests for the SymmetricSparseMatrix<T> class</summary>
 	[TestFixture()]
