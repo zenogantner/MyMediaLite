@@ -57,11 +57,13 @@ namespace MyMediaLite.Eval
 					else
 						avg_results[key] = fold_results[key];
 				if (show_results)
-					Console.Error.Write("fold {0} {1}", fold, Items.FormatResults(avg_results));
+					Console.Error.WriteLine("fold {0} {1}", fold, Items.FormatResults(fold_results));
 			}
 
-			foreach (var key in avg_results.Keys)
+			foreach (var key in Items.Measures)
 				avg_results[key] /= split.NumberOfFolds;
+			avg_results["num_users"] /= split.NumberOfFolds;
+			avg_results["num_items"] /= split.NumberOfFolds;
 
 			return avg_results;
 		}

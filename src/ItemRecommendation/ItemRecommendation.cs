@@ -73,6 +73,7 @@ class ItemRecommendation
 	// command-line parameters (other)
 	static bool compute_fit;
 	static uint cross_validation;
+	static bool show_fold_results;
 	static double test_ratio;
 	static double rating_threshold = double.NaN;
 	static int num_test_users;
@@ -162,6 +163,7 @@ class ItemRecommendation
 
   evaluation options:
    --cross-validation=K         perform k-fold crossvalidation on the training data
+   --show-fold-results          show results for individual folds
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
@@ -240,17 +242,18 @@ class ItemRecommendation
 			// enum options
 			//   * currently none *
 			// boolean options
-			{ "user-prediction",      v => user_prediction = v != null },
-			{ "compute-fit",          v => compute_fit     = v != null },
-			{ "online-evaluation",    v => online_eval     = v != null },
-			{ "filtered-evaluation",  v => filtered_eval   = v != null },
-			{ "repeat-evaluation",    v => repeat_eval     = v != null },
-			{ "overlap-items",        v => overlap_items   = v != null },
-			{ "training-items",       v => training_items  = v != null },
-			{ "all-items",            v => all_items       = v != null },
-			{ "test-items",           v => test_items      = v != null },
-			{ "help",                 v => show_help       = v != null },
-			{ "version",              v => show_version    = v != null },
+			{ "user-prediction",      v => user_prediction   = v != null },
+			{ "compute-fit",          v => compute_fit       = v != null },
+			{ "online-evaluation",    v => online_eval       = v != null },
+			{ "filtered-evaluation",  v => filtered_eval     = v != null },
+			{ "repeat-evaluation",    v => repeat_eval       = v != null },
+			{ "show-fold-results",    v => show_fold_results = v != null },
+			{ "overlap-items",        v => overlap_items     = v != null },
+			{ "training-items",       v => training_items    = v != null },
+			{ "all-items",            v => all_items         = v != null },
+			{ "test-items",           v => test_items        = v != null },
+			{ "help",                 v => show_help         = v != null },
+			{ "version",              v => show_version      = v != null },
 		};
 		IList<string> extra_args = p.Parse(args);
 
@@ -338,7 +341,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items, eval_item_mode);
+					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items, eval_item_mode, show_fold_results);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}

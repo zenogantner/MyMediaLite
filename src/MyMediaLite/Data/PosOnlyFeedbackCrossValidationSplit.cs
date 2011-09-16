@@ -56,6 +56,7 @@ namespace MyMediaLite.Data
 
 			// assign events to folds
 			int pos = 0;
+			Console.Error.WriteLine("{0} items", feedback.AllItems.Count);
 			foreach (int item_id in feedback.AllItems)
 			{
 				var item_users = new List<int>(feedback.ItemMatrix[item_id]);
@@ -64,7 +65,6 @@ namespace MyMediaLite.Data
 					foreach (int user_id in item_users)
 						for (int f = 0; f < num_folds; f++)
 							Train[f].Add(user_id, item_id);
-					pos += item_users.Count;
 				}
 				else
 				{
