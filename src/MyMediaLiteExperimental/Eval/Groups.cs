@@ -30,14 +30,6 @@ namespace MyMediaLite.Eval
 	/// <summary>Evaluation class for group recommendation</summary>
 	public static class Groups
 	{
-		/// <summary>the evaluation measures for item prediction offered by the class</summary>
-		static public ICollection<string> Measures
-		{
-			get	{
-				return Items.Measures;
-			}
-		}
-
 		// TODO add recall eval; parallelize; adapt to new shape of Eval.Items
 		
 		/// <summary>Format group recommendation results</summary>
