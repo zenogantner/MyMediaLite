@@ -69,3 +69,7 @@ predictive accuracy of different #MyMediaLite recommenders on rating prediction 
 The #MyMediaLite issue/bug tracker: https://github.com/zenogantner/MyMediaLite/issues #recsys
 
 #MyMediaLite feature overview: http://ismll.de/mymedialite/features.html #recsys
+
+#MyMediaLite item recommendation tool: --rating-threshold=4 interprets all ratings > 4 as positive feedback
+
+If you are a Java developer, this may help you to learn about C#: http://www.25hoursaday.com/CsharpVsJava.html
