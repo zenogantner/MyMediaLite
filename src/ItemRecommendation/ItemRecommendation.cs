@@ -138,10 +138,11 @@ class ItemRecommendation
    --training-file=FILE         read training data from FILE
    --test-file=FILE             read test data from FILE
    --data-dir=DIR               load all files from DIR
-   --user-attributes=FILE       file containing user attribute information
-   --item-attributes=FILE       file containing item attribute information
-   --user-relations=FILE        file containing user relation information
-   --item-relations=FILE        file containing item relation information
+   --user-attributes=FILE       file containing user attribute information, 1 tuple per line
+   --item-attributes=FILE       file containing item attribute information, 1 tuple per line
+   --user-relations=FILE        file containing user relation information, 1 tuple per line
+   --item-relations=FILE        file containing item relation information, 1 tuple per line
+   --user-groups=FILE           file containing group-to-user mappings, 1 tuple per line
    --save-model=FILE            save computed model to FILE
    --load-model=FILE            load model from FILE
 
@@ -504,8 +505,7 @@ class ItemRecommendation
 			// user groups
 			if (user_groups_file != null)
 			{
-				group_to_user = RelationData.Read(Path.Combine(data_dir, user_groups_file), user_mapping);
-				// assumptions: user and user group IDs are disjoint // FIXME?
+				group_to_user = RelationData.Read(Path.Combine(data_dir, user_groups_file), user_mapping); // assumption: user and user group IDs are disjoint
 				user_groups = group_to_user.NonEmptyRowIDs;
 				Console.WriteLine("{0} user groups", user_groups.Count);
 			}

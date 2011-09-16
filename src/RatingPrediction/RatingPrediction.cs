@@ -116,10 +116,10 @@ class RatingPrediction
    --test-file=FILE                       read test data from FILE
    --file-format=ml1m|kddcup2011|default
    --data-dir=DIR                         load all files from DIR
-   --user-attributes=FILE                 file containing user attribute information
-   --item-attributes=FILE                 file containing item attribute information
-   --user-relations=FILE                  file containing user relation information
-   --item-relations=FILE                  file containing item relation information
+   --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
+   --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
+   --user-relations=FILE                  file containing user relation information, 1 tuple per line
+   --item-relations=FILE                  file containing item relation information, 1 tuple per line
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
 
