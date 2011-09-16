@@ -70,7 +70,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(8, ratings.MaxItemID);
 		}
 
-		[Test()] public void TestAddRating()
+		[Test()] public void TestAdd()
 		{
 			var ratings = new StaticRatings(7);
 			ratings.Add(1, 4, 0.3);
