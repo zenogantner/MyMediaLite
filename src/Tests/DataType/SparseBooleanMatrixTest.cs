@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -23,7 +24,7 @@ using NUnit.Framework;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Testing the SparseBooleanMatrix class</summary>
+	/// <summary>Tests for the SparseBooleanMatrix class</summary>
 	[TestFixture()]
 	public class SparseBooleanMatrixTest
 	{
@@ -37,10 +38,8 @@ namespace MyMediaLiteTest
 					matrix[i, 4]= true;
 				}
 			Assert.IsTrue(matrix[0, 1]);
-			IList<KeyValuePair<int, HashSet<int>>> nonEmptyRows = matrix.NonEmptyRows;
+			var nonEmptyRows = matrix.NonEmptyRows;
 			Assert.AreEqual(4, nonEmptyRows.Count);
-
-			// TODO test contents
 		}
 
 		[Test()] public void TestNonEmptyRowIDs()
@@ -52,8 +51,8 @@ namespace MyMediaLiteTest
 					matrix[i, 1]= true;
 					matrix[i, 4]= true;
 				}
-			ICollection<int> rowIDs = matrix.NonEmptyRowIDs;
-			IEnumerator <int> rowIDsEnum = rowIDs.GetEnumerator();
+			var rowIDs = matrix.NonEmptyRowIDs;
+			var rowIDsEnum = rowIDs.GetEnumerator();
 			rowIDsEnum.MoveNext();
 			Assert.AreEqual(0, rowIDsEnum.Current);
 			rowIDsEnum.MoveNext();
@@ -64,6 +63,30 @@ namespace MyMediaLiteTest
 			Assert.IsFalse(rowIDsEnum.MoveNext());
 		}
 
+		[Test()] public void TestNonEmptyColumnIDs()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i !=3)
+				{
+					matrix[1, i]= true;
+					matrix[4, i]= true;
+				}
+			
+			Assert.AreEqual(3, matrix.NonEmptyColumnIDs.Count);
+			
+			ICollection<int> colIDs = matrix.NonEmptyColumnIDs;
+			var colIDsEnum = colIDs.GetEnumerator();
+			colIDsEnum.MoveNext();
+			Assert.AreEqual(0, colIDsEnum.Current);
+			colIDsEnum.MoveNext();
+			Assert.AreEqual(1, colIDsEnum.Current);
+			colIDsEnum.MoveNext();
+			colIDsEnum.MoveNext();
+			Assert.AreEqual(4, colIDsEnum.Current);
+			Assert.IsFalse(colIDsEnum.MoveNext());
+		}		
+		
 		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -152,15 +175,15 @@ namespace MyMediaLiteTest
 			matrix[2, 5] = true;
 			matrix[4, 3] = true;
 			// transpose the matrix
-			var transposedMatrix = (SparseBooleanMatrix) matrix.Transpose();
+			var transposed_matrix = (SparseBooleanMatrix) matrix.Transpose();
 			// test the transposed matrix
-			Assert.IsTrue(transposedMatrix[1,0]);
-			Assert.IsTrue(transposedMatrix[4, 6]);
-			Assert.IsFalse(transposedMatrix[3, 1]);
-			Assert.IsFalse(transposedMatrix[5, 4]);
+			Assert.IsTrue(transposed_matrix[1,0]);
+			Assert.IsTrue(transposed_matrix[4, 6]);
+			Assert.IsFalse(transposed_matrix[3, 1]);
+			Assert.IsFalse(transposed_matrix[5, 4]);
 		}
 
-		[Test()] public void TestOverlap()
+		[Test()] public void TestOverlapCount()
 		{
 			var matrix = new SparseBooleanMatrix();
 			matrix[2, 2] = true;
