@@ -68,18 +68,18 @@ namespace MyMediaLite.Data
 		double Average { get; }
 
 		/// <summary>all user IDs in the dataset</summary>
-		HashSet<int> AllUsers { get; }
+		IList<int> AllUsers { get; }
 		/// <summary>all item IDs in the dataset</summary>
-		HashSet<int> AllItems { get; }
+		IList<int> AllItems { get; }
 
 		/// <summary>Get all users that are referenced by a given list of indices</summary>
 		/// <param name="indices">the indices to take into account</param>
-		/// <returns>the set of users</returns>
-		HashSet<int> GetUsers(IList<int> indices);
+		/// <returns>all users referenced by the list of indices</returns>
+		ISet<int> GetUsers(IList<int> indices);
 		/// <summary>Get all items that are referenced by a given list of indices</summary>
 		/// <param name="indices">the indices to take into account</param>
-		/// <returns>the set of itemss</returns>
-		HashSet<int> GetItems(IList<int> indices);
+		/// <returns>all items referenced by the list of indices</returns>
+		ISet<int> GetItems(IList<int> indices);
 
 		/// <summary>Directly access rating by user and item</summary>
 		/// <param name="user_id">the user ID</param>

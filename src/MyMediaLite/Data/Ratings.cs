@@ -18,13 +18,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMediaLite.Data
 {
-	// TODO use this for optimizing away the ByUser or ByItem indices
-	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
-
-	// TODO optimize some index accesses via slicing
+	// TODO: profile+optimize
+	// use this for optimizing away the ByUser or ByItem indices
+	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM, CHRONOLOGICAL }
 
 	/// <summary>Data structure for storing ratings</summary>
 	/// <remarks>
@@ -186,7 +186,6 @@ namespace MyMediaLite.Data
 				count_by_item[Items[index]]++;
 		}
 
-		// TODO speed up
 		///
 		public double Average
 		{
@@ -198,31 +197,30 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		// TODO think whether we want to have a set or a list here
 		///
-		public HashSet<int> AllUsers
+		public IList<int> AllUsers
 		{
 			get {
 				var result_set = new HashSet<int>();
 				for (int index = 0; index < Users.Count; index++)
 					result_set.Add(Users[index]);
-				return result_set;
+				return result_set.ToArray();
 			}
 		}
 
 		///
-		public HashSet<int> AllItems
+		public IList<int> AllItems
 		{
 			get {
 				var result_set = new HashSet<int>();
 				for (int index = 0; index < Items.Count; index++)
 					result_set.Add(Items[index]);
-				return result_set;
+				return result_set.ToArray();
 			}
 		}
 
 		///
-		public HashSet<int> GetUsers(IList<int> indices)
+		public ISet<int> GetUsers(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
 			foreach (int index in indices)
@@ -231,7 +229,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public HashSet<int> GetItems(IList<int> indices)
+		public ISet<int> GetItems(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
 			foreach (int index in indices)
@@ -243,7 +241,6 @@ namespace MyMediaLite.Data
 		public virtual double this[int user_id, int item_id]
 		{
 			get {
-				// TODO speed up
 				for (int index = 0; index < Values.Count; index++)
 					if (Users[index] == user_id && Items[index] == item_id)
 						return Values[index];
