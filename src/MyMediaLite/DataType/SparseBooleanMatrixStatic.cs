@@ -22,8 +22,13 @@ using System.Linq;
 
 namespace MyMediaLite.DataType
 {
-	/// <summary>Sparse representation of a boolean matrix, using binary search (memory efficient)</summary>
+	/// <summary>
+	/// Sparse representation of a boolean matrix, using binary search (memory efficient).
+	/// </summary>
 	/// <remarks>
+	/// This data structure is static, which means that rows are represented as int arrays,
+	/// and can be assigned, but not modified.
+	///
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
 	/// </remarks>
@@ -46,7 +51,7 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> this [int x] // TODO think about returning IList
+		public ICollection<int> this [int x]
 		{
 			get	{
 				if (x >= row_list.Count)
@@ -67,13 +72,8 @@ namespace MyMediaLite.DataType
 			get	{
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
-					{
-						if (i > j)
-							continue; // check every pair only once
-
 						if (!this[j, i])
 							return false;
-					}
 				return true;
 			}
 		}

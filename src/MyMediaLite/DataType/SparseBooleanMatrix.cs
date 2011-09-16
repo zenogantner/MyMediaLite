@@ -26,7 +26,7 @@ namespace MyMediaLite.DataType
 	/// <remarks>
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
-	/// 
+	///
 	/// If you need a more memory-efficient data structure, try <see cref="SparseBooleanMatrixBinarySearch"/>
 	/// or <see cref="SparseBooleanMatrixStatic"/>.
 	/// </remarks>
@@ -92,8 +92,8 @@ namespace MyMediaLite.DataType
 		public int NumEntriesByRow(int row_id)
 		{
 			return row_list[row_id].Count;
-		}		
-		
+		}
+
 		/// <remarks>Takes O(N) worst-case time, where N is the number of rows, if the internal hash table can be queried in constant time.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
 		{
@@ -114,8 +114,8 @@ namespace MyMediaLite.DataType
 				if (row_list[row_id].Contains(column_id))
 					count++;
 			return count;
-		}		
-				
+		}
+
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
 		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
