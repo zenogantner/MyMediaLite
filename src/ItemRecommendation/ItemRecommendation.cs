@@ -422,11 +422,14 @@ class ItemRecommendation
 		if ((relevant_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (training_items ? 1 : 0) + (test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
 			Usage("--relevant-items=FILE, --all-items, --training-items, --test-items, and --overlap-items are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 && overlap_items)
-			Usage("--overlap-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && overlap_items)
+			Usage("--overlap-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
-		if (test_file == null && test_ratio == 0 && test_items)
-			Usage("--test-items only makes sense if there is either --test-file=FILE or --test-ratio=NUM.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && test_items)
+			Usage("--test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && training_items)
+			Usage("--training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (group_method != null && user_groups_file == null)
 			Usage("--group-recommender needs --user-groups=FILE.");
