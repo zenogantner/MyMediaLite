@@ -85,7 +85,6 @@ namespace MyMediaLite.Eval
 			foreach (string method in Items.Measures)
 				result[method] = 0;
 
-			var locker = new int[0]; // object used for thread locking
 			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var filtered_items = GetFilteredItems(user_id, test, item_attributes);
@@ -123,7 +122,7 @@ namespace MyMediaLite.Eval
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
 
 					// thread-safe incrementing
-					lock(locker)
+					lock(result)
 					{
 						// counting stats
 						num_lists++;
