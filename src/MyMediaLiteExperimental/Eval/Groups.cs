@@ -38,7 +38,7 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		// TODO add recall eval
+		// TODO add recall eval; parallelize; adapt to new shape of Eval.Items
 		
 		/// <summary>Format group recommendation results</summary>
 		/// <param name="result">the result dictionary</param>
@@ -49,41 +49,8 @@ namespace MyMediaLite.Eval
  	                             result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_groups"], result["num_items"], result["num_lists"]);
 		}
 
-		/// <summary>Evaluation for rankings of items</summary>
+		/// <summary>Evaluation for rankings of items recommended to groups</summary>
 		/// <remarks>
-		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-		/// The evaluation measures are listed in the ItemPredictionMeasures property.
-		/// Additionally, 'num_groups' and 'num_items' report the number of user groups that were used to compute the results
-		/// and the number of items that were taken into account.
-		///
-		/// Literature:
-		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
-		/// </remarks>
-		/// <param name="recommender">group recommender</param>
-		/// <param name="test">test cases</param>
-		/// <param name="train">training data</param>
-		/// <param name="group_to_user">group to user relation</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(
-			GroupRecommender recommender,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback train,
-		    SparseBooleanMatrix group_to_user,
-			ICollection<int> relevant_items)
-		{
-			return Evaluate(recommender, test, train, group_to_user, relevant_items, true);
-		}
-
-		/// <summary>Evaluation for rankings of items</summary>
-		/// <remarks>
-		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-		/// The evaluation measures are listed in the ItemPredictionMeasures property.
-		/// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
-		/// and the number of items that were taken into account.
-		///
-		/// Literature:
-		///   C. Manning, P. Raghavan, H. Schütze: Introduction to Information Retrieval, Cambridge University Press, 2008
 		/// </remarks>
 		/// <param name="recommender">group recommender</param>
 		/// <param name="test">test cases</param>
@@ -98,7 +65,7 @@ namespace MyMediaLite.Eval
 			IPosOnlyFeedback train,
 		    SparseBooleanMatrix group_to_user,
 			ICollection<int> relevant_items,
-			bool ignore_overlap)
+			bool ignore_overlap = true)
 		{
 			if (train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
@@ -108,7 +75,6 @@ namespace MyMediaLite.Eval
 			double map_sum     = 0;
 			double prec_5_sum  = 0;
 			double prec_10_sum = 0;
-			double prec_15_sum = 0;
 			double ndcg_sum    = 0;
 			int num_groups     = 0;
 
@@ -145,7 +111,6 @@ namespace MyMediaLite.Eval
 				ndcg_sum    += NDCG.Compute(prediction_list, correct_items, ignore_items);
 				prec_5_sum  += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items,  5);
 				prec_10_sum += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, 10);
-				prec_15_sum += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, 15);
 
 				if (num_groups % 1000 == 0)
 					Console.Error.Write(".");
@@ -159,7 +124,6 @@ namespace MyMediaLite.Eval
 			result["NDCG"]       = ndcg_sum / num_groups;
 			result["prec@5"]     = prec_5_sum / num_groups;
 			result["prec@10"]    = prec_10_sum / num_groups;
-			result["prec@15"]    = prec_15_sum / num_groups;
 			result["num_groups"] = num_groups;
 			result["num_lists"]  = num_groups;
 			result["num_items"]  = relevant_items.Count;

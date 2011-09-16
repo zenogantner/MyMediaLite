@@ -31,7 +31,7 @@ namespace MyMediaLite.Eval
 	/// <summary>Evaluation class for filtered item recommendation</summary>
 	public static class ItemsFiltered
 	{
-		// TODO generalize more to save code ...
+		// TODO generalize more to save some code ...
 
 		/// <summary>For a given user and the test dataset, return a dictionary of items filtered by attributes</summary>
 		/// <param name="user_id">the user ID</param>

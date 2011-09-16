@@ -54,8 +54,10 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Evaluation for rankings of items</summary>
 		/// <remarks>
-		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation.
-		/// The evaluation measures are listed in the ItemPredictionMeasures property.
+		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation,
+		/// except the boolean argument repeated_events is set.
+		/// 
+		/// The evaluation measures are listed in the Measures property.
 		/// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
 		/// and the number of items that were taken into account.
 		///
