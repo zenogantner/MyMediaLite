@@ -70,13 +70,8 @@ namespace MyMediaLite.DataType
 			get	{
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
-					{
-						if (i > j)
-							continue; // check every pair only once
-
 						if (!this[j, i])
 							return false;
-					}
 				return true;
 			}
 		}
@@ -148,19 +143,19 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		// TODO add unit test
 		///
+		/// <remarks>iterates over the complete data structure</remarks>
 		public IList<int> NonEmptyColumnIDs
 		{
 			get	{
-				var col_ids = new List<int>();
+				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (int id in row_list[i])
 						col_ids.Add(id);
 
-				return col_ids;
+				return col_ids.ToArray();
 			}
 		}
 
