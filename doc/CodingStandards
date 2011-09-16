@@ -49,4 +49,10 @@ b. training_data, test_data
 c. row, column, value
 d. min, max
 
+Unit tests
+19. Every class should have a unit test collection called ClassTest.
+20. Every method and every property of a class should have a unit test called
+    ClassTest.(Method|Property)Test.
+21. Indexers do need specific tests if they are used in other test cases.
+
 TODO: add more, discuss, group
