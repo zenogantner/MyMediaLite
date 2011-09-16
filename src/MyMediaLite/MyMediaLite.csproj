@@ -157,6 +157,13 @@
     <Compile Include="RatingPrediction\IncrementalRatingPredictor.cs" />
     <Compile Include="ItemRecommendation\IncrementalItemRecommender.cs" />
     <Compile Include="ItemRecommendation\IIncrementalItemRecommender.cs" />
+    <Compile Include="Eval\Measures\PrecisionAndRecall.cs" />
+    <Compile Include="Eval\Measures\NDCG.cs" />
+    <Compile Include="Eval\Measures\ReciprocalRank.cs" />
+    <Compile Include="Eval\Measures\AUC.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Eval\Measures\" />
+  </ItemGroup>
 </Project>

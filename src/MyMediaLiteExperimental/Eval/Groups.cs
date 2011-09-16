@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval.Measures;
 using MyMediaLite.GroupRecommendation;
 
 namespace MyMediaLite.Eval
@@ -134,17 +135,17 @@ namespace MyMediaLite.Eval
 
 				num_groups++;
 
-				IList<int> prediction = recommender.RankItems(users, relevant_items);
-				if (prediction.Count != relevant_items.Count)
+				IList<int> prediction_list = recommender.RankItems(users, relevant_items);
+				if (prediction_list.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
 				var ignore_items = ignore_overlap ? relevant_items_in_train : new HashSet<int>();
-				auc_sum     += Items.AUC(prediction, correct_items, ignore_items);
-				map_sum     += Items.MAP(prediction, correct_items, ignore_items);
-				ndcg_sum    += Items.NDCG(prediction, correct_items, ignore_items);
-				prec_5_sum  += Items.PrecisionAt(prediction, correct_items, ignore_items,  5);
-				prec_10_sum += Items.PrecisionAt(prediction, correct_items, ignore_items, 10);
-				prec_15_sum += Items.PrecisionAt(prediction, correct_items, ignore_items, 15);
+				auc_sum     += AUC.Compute(prediction_list, correct_items, ignore_items);
+				map_sum     += PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
+				ndcg_sum    += NDCG.Compute(prediction_list, correct_items, ignore_items);
+				prec_5_sum  += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items,  5);
+				prec_10_sum += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, 10);
+				prec_15_sum += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, 15);
 
 				if (num_groups % 1000 == 0)
 					Console.Error.Write(".");

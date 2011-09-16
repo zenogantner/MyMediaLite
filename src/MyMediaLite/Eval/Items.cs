@@ -24,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval.Measures;
 using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
@@ -86,8 +87,7 @@ namespace MyMediaLite.Eval
 			if (!repeated_events && train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 			
-			int num_users        = 0;
-			
+			int num_users = 0;
 			var result = new Dictionary<string, double>();
 			foreach (string method in Measures)
 				result[method] = 0;
@@ -110,19 +110,19 @@ namespace MyMediaLite.Eval
 				if (num_eval_items - correct_items.Count == 0)
 					return;
 
-				IList<int> prediction = Prediction.PredictItems(recommender, user_id, relevant_items);
-				if (prediction.Count != relevant_items.Count)
+				IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_items);
+				if (prediction_list.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
 				ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
 
-				double auc  = AUC(prediction, correct_items, ignore_items);
-				double map  = MAP(prediction, correct_items, ignore_items);
-				double ndcg = NDCG(prediction, correct_items, ignore_items);
-				double rr   = ReciprocalRank(prediction, correct_items, ignore_items);
+				double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
+				double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
+				double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
+				double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
 				var positions = new int[] { 5, 10 };
-				var prec = PrecisionAt(prediction, correct_items, ignore_items, positions);
-				var recall = RecallAt(prediction, correct_items, ignore_items, positions);
+				var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
+				var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
 
 				// thread-safe incrementing
 				lock(locker)
@@ -270,308 +270,6 @@ namespace MyMediaLite.Eval
 				avg_results[key] /= split.NumberOfFolds;
 
 			return avg_results;
-		}
-
-		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <returns>the AUC for the given data</returns>
-		public static double AUC(IList<int> ranked_items, ICollection<int> correct_items)
-		{
-			return AUC(ranked_items, correct_items, new HashSet<int>());
-		}
-
-		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the AUC for the given data</returns>
-		public static double AUC(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
-		{
-			int num_eval_items = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
-			int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
-
-			int num_correct_pairs = 0;
-			int hit_count         = 0;
-
-			foreach (int item_id in ranked_items)
-			{
-				if (ignore_items.Contains(item_id))
-					continue;
-
-				if (!correct_items.Contains(item_id))
-					num_correct_pairs += hit_count;
-				else
-					hit_count++;
-			}
-
-			return ((double) num_correct_pairs) / num_eval_pairs;
-		}
-
-		/// <summary>Compute the reciprocal rank of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>,
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <returns>the reciprocal rank for the given data</returns>
-		public static double ReciprocalRank(IList<int> ranked_items, ICollection<int> correct_items)
-		{
-			return ReciprocalRank(ranked_items, correct_items, new HashSet<int>());
-		}
-
-		/// <summary>Compute the reciprocal rank of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the mean reciprocal rank for the given data</returns>
-		public static double ReciprocalRank(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
-		{
-			int pos = 0;
-
-			foreach (int item_id in ranked_items)
-			{
-				if (ignore_items.Contains(item_id))
-					continue;
-
-				if (correct_items.Contains(ranked_items[pos]))
-					return (double) 1 / (pos + 1);
-
-				pos++;
-			}
-
-			return 0;
-		}
-
-		/// <summary>Compute the mean average precision (MAP) of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <returns>the MAP for the given data</returns>
-		public static double MAP(IList<int> ranked_items, ICollection<int> correct_items)
-		{
-			return MAP(ranked_items, correct_items, new HashSet<int>());
-		}
-
-		/// <summary>Compute the mean average precision (MAP) of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the MAP for the given data</returns>
-		public static double MAP(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
-		{
-			int hit_count       = 0;
-			double avg_prec_sum = 0;
-			int left_out        = 0;
-
-			for (int i = 0; i < ranked_items.Count; i++)
-			{
-				int item_id = ranked_items[i];
-				if (ignore_items.Contains(item_id))
-				{
-					left_out++;
-					continue;
-				}
-
-				if (!correct_items.Contains(item_id))
-					continue;
-
-				hit_count++;
-
-				avg_prec_sum += (double) hit_count / (i + 1 - left_out);
-			}
-
-			if (hit_count != 0)
-				return avg_prec_sum / hit_count;
-			else
-				return 0;
-		}
-
-		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <returns>the NDCG for the given data</returns>
-		public static double NDCG(IList<int> ranked_items, ICollection<int> correct_items)
-		{
-			return NDCG(ranked_items, correct_items, new HashSet<int>());
-		}
-
-		/// <summary>Compute the normalized discounted cumulative gain (NDCG) of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
-		/// </remarks>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the NDCG for the given data</returns>
-		public static double NDCG(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items)
-		{
-			double dcg   = 0;
-			double idcg  = ComputeIDCG(correct_items.Count);
-			int left_out = 0;
-
-			for (int i = 0; i < ranked_items.Count; i++)
-			{
-				int item_id = ranked_items[i];
-				if (ignore_items.Contains(item_id))
-				{
-					left_out++;
-					continue;
-				}
-
-				if (!correct_items.Contains(item_id))
-					continue;
-
-				// compute NDCG part
-				int rank = i + 1 - left_out;
-				dcg += 1 / Math.Log(rank + 1, 2);
-			}
-
-			return dcg / idcg;
-		}
-
-		/// <summary>Compute the precision@N of a list of ranked items at several N</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <param name="ns">the cutoff positions in the list</param>
-		/// <returns>the precision@N for the given data at the different positions N</returns>
-		public static Dictionary<int, double> PrecisionAt(
-			IList<int> ranked_items,
-			ICollection<int> correct_items,
-			ICollection<int> ignore_items,
-			IList<int> ns)
-		{
-			var precision_at_n = new Dictionary<int, double>();
-			foreach (int n in ns)
-				precision_at_n[n] = PrecisionAt(ranked_items, correct_items, ignore_items, n);
-			return precision_at_n;
-		}
-
-		/// <summary>Compute the precision@N of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
-		{
-			return PrecisionAt(ranked_items, correct_items, new HashSet<int>(), n);
-		}
-
-		/// <summary>Compute the precision@N of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the precision@N for the given data</returns>
-		public static double PrecisionAt(
-			IList<int> ranked_items, ICollection<int> correct_items,
-			ICollection<int> ignore_items, int n)
-		{
-			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / n;
-		}
-
-		/// <summary>Compute the recall@N of a list of ranked items at several N</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <param name="ns">the cutoff positions in the list</param>
-		/// <returns>the recall@N for the given data at the different positions N</returns>
-		public static Dictionary<int, double> RecallAt(
-			IList<int> ranked_items,
-			ICollection<int> correct_items,
-			ICollection<int> ignore_items,
-			IList<int> ns)
-		{
-			var recall_at_n = new Dictionary<int, double>();
-			foreach (int n in ns)
-				recall_at_n[n] = RecallAt(ranked_items, correct_items, ignore_items, n);
-			return recall_at_n;
-		}
-
-		/// <summary>Compute the recall@N of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the recall@N for the given data</returns>
-		public static double RecallAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
-		{
-			return RecallAt(ranked_items, correct_items, new HashSet<int>(), n);
-		}
-
-		/// <summary>Compute the recall@N of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the recall@N for the given data</returns>
-		public static double RecallAt(
-			IList<int> ranked_items, ICollection<int> correct_items,
-			ICollection<int> ignore_items, int n)
-		{
-			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / correct_items.Count;
-		}
-
-		/// <summary>Compute the number of hits until position N of a list of ranked items</summary>
-		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the hits@N for the given data</returns>
-		public static int HitsAt(
-			IList<int> ranked_items, ICollection<int> correct_items,
-			ICollection<int> ignore_items, int n)
-		{
-			if (n < 1)
-				throw new ArgumentException("n must be at least 1.");
-
-			int hit_count = 0;
-			int left_out  = 0;
-
-			for (int i = 0; i < ranked_items.Count; i++)
-			{
-				int item_id = ranked_items[i];
-				if (ignore_items.Contains(item_id))
-				{
-					left_out++;
-					continue;
-				}
-
-				if (!correct_items.Contains(item_id))
-					continue;
-
-				if (i < n + left_out)
-					hit_count++;
-				else
-					break;
-			}
-
-			return hit_count;
-		}
-
-		/// <summary>Computes the ideal DCG given the number of positive items.</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Discounted_Cumulative_Gain
-		/// </remarks>
-		/// <returns>the ideal DCG</returns>
-		/// <param name='n'>the number of positive items</param>
-		static double ComputeIDCG(int n)
-		{
-			double idcg = 0;
-			for (int i = 0; i < n; i++)
-				idcg += 1 / Math.Log(i + 2, 2);
-			return idcg;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 1.99	2011-09-??
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
-          - item recommendation evaluation
+          - item recommendation evaluation, filtered item rec. evaluation
           - distributed SGD (see below)
         - API changes
           - rename IIItemRecommender to IIncrementalItemRecommender and
@@ -46,6 +46,8 @@
           - new evaluation measure: mean reciprocal rank (mrr)
           - item recommender evaluation: more descriptive parameter name
             repeated_events
+          - move item recommender evaluation measures into their own classes
+            (Eval.Items class got too big)
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
