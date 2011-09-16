@@ -161,6 +161,8 @@
     <Compile Include="Eval\Measures\NDCG.cs" />
     <Compile Include="Eval\Measures\ReciprocalRank.cs" />
     <Compile Include="Eval\Measures\AUC.cs" />
+    <Compile Include="Eval\ItemsOnline.cs" />
+    <Compile Include="Eval\RatingsOnline.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

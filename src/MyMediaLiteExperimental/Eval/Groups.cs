@@ -31,7 +31,7 @@ namespace MyMediaLite.Eval
 	public static class Groups
 	{
 		// TODO add recall eval; parallelize; adapt to new shape of Eval.Items
-		
+
 		/// <summary>Format group recommendation results</summary>
 		/// <param name="result">the result dictionary</param>
 		/// <returns>the formatted results</returns>

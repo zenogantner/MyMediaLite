@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
@@ -57,7 +56,7 @@ namespace MyMediaLite.Eval
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
 		/// <remarks>
 		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
-		/// 
+		///
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
@@ -78,43 +77,6 @@ namespace MyMediaLite.Eval
 				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
 				rmse += error * error;
 				mae  += Math.Abs(error);
-			}
-			mae  = mae / ratings.Count;
-			rmse = Math.Sqrt(rmse / ratings.Count);
-
-			var result = new Dictionary<string, double>();
-			result["RMSE"] = rmse;
-			result["MAE"]  = mae;
-			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
-			return result;
-		}
-
-		/// <summary>Online evaluation for rating prediction</summary>
-		/// <remarks>
-		/// Every rating that is tested is added to the training set afterwards.
-		/// </remarks>
-		/// <param name="recommender">rating predictor</param>
-		/// <param name="ratings">Test cases</param>
-		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateOnline(IIncrementalRatingPredictor recommender, IRatings ratings)
-		{
-			double rmse = 0;
-			double mae  = 0;
-
-			if (recommender == null)
-				throw new ArgumentNullException("recommender");
-			if (ratings == null)
-				throw new ArgumentNullException("ratings");
-
-			// iterate in random order    // TODO also support chronological order
-			foreach (int index in ratings.RandomIndex)
-			{
-				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
-
-				rmse += error * error;
-				mae  += Math.Abs(error);
-
-				recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
@@ -161,7 +123,7 @@ namespace MyMediaLite.Eval
 					Console.Error.WriteLine("fold {0} {1}", i, FormatResults(fold_results));
 			}
 
-			foreach (var key in avg_results.Keys.ToList())
+			foreach (var key in avg_results.Keys)
 				avg_results[key] /= split.NumberOfFolds;
 
 			return avg_results;

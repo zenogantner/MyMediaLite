@@ -84,13 +84,13 @@ namespace MyMediaLite.Eval
 			var result = new Dictionary<string, double>();
 			foreach (string method in Items.Measures)
 				result[method] = 0;
-			
-			var locker = new int[0]; // object used for thread locking			
-			Parallel.ForEach (relevant_users, user_id =>			
+
+			var locker = new int[0]; // object used for thread locking
+			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var filtered_items = GetFilteredItems(user_id, test, item_attributes);
 				int last_user_id = -1;
-				
+
 				foreach (int attribute_id in filtered_items.Keys)
 				{
 					var relevant_filtered_items = new HashSet<int>(items_by_attribute[attribute_id]);
@@ -113,7 +113,7 @@ namespace MyMediaLite.Eval
 					// evaluation
 					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_filtered_items.ToArray());
 					ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
-					
+
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
 					double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
@@ -121,7 +121,7 @@ namespace MyMediaLite.Eval
 					var positions = new int[] { 5, 10 };
 					var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
-					
+
 					// thread-safe incrementing
 					lock(locker)
 					{
@@ -143,7 +143,7 @@ namespace MyMediaLite.Eval
 						result["recall@5"]  += recall[5];
 						result["recall@10"] += recall[10];
 					}
-					
+
 					if (prediction_list.Count != relevant_filtered_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
@@ -153,7 +153,7 @@ namespace MyMediaLite.Eval
 						Console.Error.WriteLine();
 				}
 			});
-			
+
 			foreach (string measure in Items.Measures)
 				result[measure] /= num_lists;
 			result["num_users"] = num_users;

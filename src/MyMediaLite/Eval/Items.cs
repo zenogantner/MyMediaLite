@@ -56,7 +56,7 @@ namespace MyMediaLite.Eval
 		/// <remarks>
 		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation,
 		/// except the boolean argument repeated_events is set.
-		/// 
+		///
 		/// The evaluation measures are listed in the Measures property.
 		/// Additionally, 'num_users' and 'num_items' report the number of users that were used to compute the results
 		/// and the number of items that were taken into account.
@@ -88,14 +88,14 @@ namespace MyMediaLite.Eval
 		{
 			if (!repeated_events && train.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
-			
+
 			int num_users = 0;
 			var result = new Dictionary<string, double>();
 			foreach (string method in Measures)
 				result[method] = 0;
-			
+
 			var locker = new int[0]; // object used for thread locking
-			
+
 			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
@@ -153,87 +153,6 @@ namespace MyMediaLite.Eval
 			result["num_items"] = relevant_items.Count;
 
 			return result;
-		}
-
-		// TODO consider micro- (by item) and macro-averaging (by user, the current thing); repeated events
-		/// <summary>Online evaluation for rankings of items</summary>
-		/// <remarks>
-		/// </remarks>
-		/// <param name="recommender">the item recommender to be evaluated</param>
-		/// <param name="test">test cases</param>
-		/// <param name="train">training data (must be connected to the recommender's training data)</param>
-		/// <param name="relevant_users">a list of all relevant user IDs</param>
-		/// <param name="relevant_items">a list of all relevant item IDs</param>
-		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
-		static public Dictionary<string, double> EvaluateOnline(
-			IIncrementalItemRecommender recommender,
-			IPosOnlyFeedback test, IPosOnlyFeedback train,
-			IList<int> relevant_users, IList<int> relevant_items)
-		{
-			// for better handling, move test data points into arrays
-			var users = new int[test.Count];
-			var items = new int[test.Count];
-			int pos = 0;
-			foreach (int user_id in test.UserMatrix.NonEmptyRowIDs)
-				foreach (int item_id in test.UserMatrix[user_id])
-				{
-					users[pos] = user_id;
-					items[pos] = item_id;
-					pos++;
-				}
-
-			// random order of the test data points  // TODO chronological order
-			var random_index = new int[test.Count];
-			for (int index = 0; index < random_index.Length; index++)
-				random_index[index] = index;
-			Util.Utils.Shuffle<int>(random_index);
-
-			var results_by_user = new Dictionary<int, Dictionary<string, double>>();
-
-			foreach (int index in random_index)
-			{
-				if (relevant_users.Contains(users[index]) && relevant_items.Contains(items[index]))
-				{
-					// evaluate user
-					var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
-					current_test.Add(users[index], items[index]);
-					var current_result = Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
-
-					if (current_result["num_users"] == 1)
-						if (results_by_user.ContainsKey(users[index]))
-						{
-							foreach (string measure in Measures)
-								results_by_user[users[index]][measure] += current_result[measure];
-							results_by_user[users[index]]["num_items"]++;
-						}
-						else
-						{
-							results_by_user[users[index]] = current_result;
-							results_by_user[users[index]]["num_items"] = 1;
-							results_by_user[users[index]].Remove("num_users");
-						}
-				}
-
-				// update recommender
-				recommender.AddFeedback(users[index], items[index]);
-			}
-
-			var results = new Dictionary<string, double>();
-			foreach (string measure in Measures)
-				results[measure] = 0;
-
-			foreach (int u in results_by_user.Keys)
-				foreach (string measure in Measures)
-					results[measure] += results_by_user[u][measure] / results_by_user[u]["num_items"];
-
-			foreach (string measure in Measures)
-				results[measure] /= results_by_user.Count;
-
-			results["num_users"] = results_by_user.Count;
-			results["num_items"] = relevant_items.Count;
-			results["num_lists"] = test.Count; // FIXME this is not exact
-
-			return results;
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
