@@ -51,13 +51,15 @@ namespace MyMediaLiteTest
 					matrix[i, 1]= true;
 					matrix[i, 4]= true;
 				}
+
+			Assert.AreEqual(3, matrix.NonEmptyRowIDs.Count);
+
 			var rowIDs = matrix.NonEmptyRowIDs;
 			var rowIDsEnum = rowIDs.GetEnumerator();
 			rowIDsEnum.MoveNext();
 			Assert.AreEqual(0, rowIDsEnum.Current);
 			rowIDsEnum.MoveNext();
 			Assert.AreEqual(1, rowIDsEnum.Current);
-			rowIDsEnum.MoveNext();
 			rowIDsEnum.MoveNext();
 			Assert.AreEqual(4, rowIDsEnum.Current);
 			Assert.IsFalse(rowIDsEnum.MoveNext());
@@ -72,9 +74,9 @@ namespace MyMediaLiteTest
 					matrix[1, i]= true;
 					matrix[4, i]= true;
 				}
-			
+
 			Assert.AreEqual(3, matrix.NonEmptyColumnIDs.Count);
-			
+
 			ICollection<int> colIDs = matrix.NonEmptyColumnIDs;
 			var colIDsEnum = colIDs.GetEnumerator();
 			colIDsEnum.MoveNext();
@@ -82,11 +84,10 @@ namespace MyMediaLiteTest
 			colIDsEnum.MoveNext();
 			Assert.AreEqual(1, colIDsEnum.Current);
 			colIDsEnum.MoveNext();
-			colIDsEnum.MoveNext();
 			Assert.AreEqual(4, colIDsEnum.Current);
 			Assert.IsFalse(colIDsEnum.MoveNext());
-		}		
-		
+		}
+
 		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -202,7 +203,24 @@ namespace MyMediaLiteTest
 			overlapMatrix[5, 5] = true; // same entry
 
 			Assert.AreEqual(3, matrix.Overlap(overlapMatrix));
+		}
 
+		[Test()] public void TestIsSymmetric()
+		{
+			var matrix = new SparseBooleanMatrix();
+			Assert.IsTrue(matrix.IsSymmetric);
+
+			matrix[1, 1] = true;
+			Assert.IsTrue(matrix.IsSymmetric);
+
+			matrix[2, 1] = true;
+			Assert.IsFalse(matrix.IsSymmetric);
+
+			matrix[1, 2] = true;
+			Assert.IsTrue(matrix.IsSymmetric);
+
+			matrix[2, 1] = false;
+			Assert.IsFalse(matrix.IsSymmetric);
 		}
 	}
 }
