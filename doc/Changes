@@ -56,6 +56,9 @@
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
+        - data structures
+          - SparseBooleanMatrix: more unit tests
+          - PosOnlyFeedback: add unit tests
 	- documentation
           - API docs:
             - improved literature references and web links
@@ -69,6 +72,7 @@
           - cleaned up solution and project files for MonoDevelop
           - improved ToString() methods
           - declared all classes as static that contain only static methods
+          - move unit tests into namespaces
 
 1.05	2011-09-01
 	- API changes
