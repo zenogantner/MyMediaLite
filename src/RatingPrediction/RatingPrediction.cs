@@ -58,8 +58,8 @@ class RatingPrediction
 	// global command line parameters
 	static string training_file;
 	static string test_file;
-	static string save_model_file       = string.Empty;
-	static string load_model_file       = string.Empty;
+	static string save_model_file = string.Empty;
+	static string load_model_file = string.Empty;
 	static string user_attributes_file;
 	static string item_attributes_file;
 	static string user_relations_file;
@@ -68,6 +68,7 @@ class RatingPrediction
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
 	static uint cross_validation;
+	static bool show_fold_results;
 	static double test_ratio;
 
 	static void ShowVersion()
@@ -123,15 +124,16 @@ class RatingPrediction
    --load-model=FILE                      load model from FILE
 
   prediction options:
-   --prediction-file=FILE                 write the rating predictions to FILE
-   --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
-                                          and predicted rating, respectively; default is {0}\\t{1}\\t{2}
+   --prediction-file=FILE         write the rating predictions to FILE
+   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
+                                  and predicted rating, respectively; default is {0}\\t{1}\\t{2}
 
   evaluation options:
-   --cross-validation=K                   perform k-fold crossvalidation on the training data
-   --test-ratio=NUM                       use a ratio of NUM of the training data for evaluation (simple split)
-   --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
-   --search-hp                            search for good hyperparameter values (experimental)
+   --cross-validation=K           perform k-fold cross-validation on the training data
+   --show-fold-results            show results for individual folds in cross-validation
+   --test-ratio=NUM               use a ratio of NUM of the training data for evaluation (simple split)
+   --online-evaluation            perform online evaluation (use every tested rating for incremental training)
+   --search-hp                    search for good hyperparameter values (experimental)
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -206,11 +208,12 @@ class RatingPrediction
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
-			{ "compute-fit",          v => compute_fit  = v != null },
-			{ "online-evaluation",    v => online_eval  = v != null },
-			{ "search-hp",            v => search_hp    = v != null },
-			{ "help",                 v => show_help    = v != null },
-			{ "version",              v => show_version = v != null },
+			{ "compute-fit",          v => compute_fit       = v != null },
+			{ "online-evaluation",    v => online_eval       = v != null },
+			{ "show-fold-results",    v => show_fold_results = v != null },
+			{ "search-hp",            v => search_hp         = v != null },
+			{ "help",                 v => show_help         = v != null },
+			{ "version",              v => show_version      = v != null },
 		};
 		IList<string> extra_args = p.Parse(args);
 
@@ -335,7 +338,7 @@ class RatingPrediction
 				{
 					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = RatingsCrossValidation.Evaluate(recommender, split); // TODO if (search_hp)
+					var results = RatingsCrossValidation.Evaluate(recommender, split, show_fold_results); // TODO if (search_hp)
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}

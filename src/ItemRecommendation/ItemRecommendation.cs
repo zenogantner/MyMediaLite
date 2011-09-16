@@ -162,8 +162,8 @@ class ItemRecommendation
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
 
   evaluation options:
-   --cross-validation=K         perform k-fold crossvalidation on the training data
-   --show-fold-results          show results for individual folds
+   --cross-validation=K         perform k-fold cross-validation on the training data
+   --show-fold-results          show results for individual folds in cross-validation
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)

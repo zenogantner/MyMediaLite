@@ -52,7 +52,7 @@ namespace MyMediaLite.Eval
 					Console.Error.WriteLine("fold {0} {1}", i, Ratings.FormatResults(fold_results));
 			}
 
-			foreach (var key in avg_results.Keys)
+			foreach (var key in Ratings.Measures)
 				avg_results[key] /= split.NumberOfFolds;
 
 			return avg_results;
