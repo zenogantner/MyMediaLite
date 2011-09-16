@@ -28,41 +28,30 @@ namespace MyMediaLiteTest
 	[TestFixture()]
 	public class SparseBooleanMatrixTest
 	{
-		[Test()] public void TestNonEmptyRows()
+		[Test()] public void TestCreateMatrix()
 		{
 			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 5; i++)
-				if (i != 2)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
-			Assert.IsTrue(matrix[0, 1]);
-			var nonEmptyRows = matrix.NonEmptyRows;
-			Assert.AreEqual(4, nonEmptyRows.Count);
+
+			var other_matrix = matrix.CreateMatrix(2, 2);
+			Assert.IsInstanceOfType(matrix.GetType(), other_matrix);
 		}
 
-		[Test()] public void TestNonEmptyRowIDs()
+		[Test()] public void TestIsSymmetric()
 		{
 			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 5; i++)
-				if (i != 2 && i !=3)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
+			Assert.IsTrue(matrix.IsSymmetric);
 
-			Assert.AreEqual(3, matrix.NonEmptyRowIDs.Count);
+			matrix[1, 1] = true;
+			Assert.IsTrue(matrix.IsSymmetric);
 
-			var rowIDs = matrix.NonEmptyRowIDs;
-			var rowIDsEnum = rowIDs.GetEnumerator();
-			rowIDsEnum.MoveNext();
-			Assert.AreEqual(0, rowIDsEnum.Current);
-			rowIDsEnum.MoveNext();
-			Assert.AreEqual(1, rowIDsEnum.Current);
-			rowIDsEnum.MoveNext();
-			Assert.AreEqual(4, rowIDsEnum.Current);
-			Assert.IsFalse(rowIDsEnum.MoveNext());
+			matrix[2, 1] = true;
+			Assert.IsFalse(matrix.IsSymmetric);
+
+			matrix[1, 2] = true;
+			Assert.IsTrue(matrix.IsSymmetric);
+
+			matrix[2, 1] = false;
+			Assert.IsFalse(matrix.IsSymmetric);
 		}
 
 		[Test()] public void TestNonEmptyColumnIDs()
@@ -71,8 +60,8 @@ namespace MyMediaLiteTest
 			for (int i = 0; i < 5; i++)
 				if (i != 2 && i !=3)
 				{
-					matrix[1, i]= true;
-					matrix[4, i]= true;
+					matrix[1, i] = true;
+					matrix[4, i] = true;
 				}
 
 			Assert.AreEqual(3, matrix.NonEmptyColumnIDs.Count);
@@ -88,26 +77,41 @@ namespace MyMediaLiteTest
 			Assert.IsFalse(colIDsEnum.MoveNext());
 		}
 
-		[Test()] public void TestNumberOfRows()
+		[Test()] public void TestNonEmptyRowIDs()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
-			{
-				matrix[i, 1]= true;
-				matrix[i, 4]= true;
-			}
-			Assert.AreEqual(5, matrix.NumberOfRows);
+				if (i != 2 && i !=3)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+
+			Assert.AreEqual(3, matrix.NonEmptyRowIDs.Count);
+
+			var rowIDs = matrix.NonEmptyRowIDs;
+			var rowIDsEnum = rowIDs.GetEnumerator();
+			rowIDsEnum.MoveNext();
+			Assert.AreEqual(0, rowIDsEnum.Current);
+			rowIDsEnum.MoveNext();
+			Assert.AreEqual(1, rowIDsEnum.Current);
+			rowIDsEnum.MoveNext();
+			Assert.AreEqual(4, rowIDsEnum.Current);
+			Assert.IsFalse(rowIDsEnum.MoveNext());
 		}
 
-		[Test()] public void TestNumberOfColumns()
+		[Test()] public void TestNonEmptyRows()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
-			{
-				matrix[i, 1]= true;
-				matrix[i, 4]= true;
-			}
-			Assert.AreEqual(5, matrix.NumberOfColumns);
+				if (i != 2)
+				{
+					matrix[i, 1]= true;
+					matrix[i, 4]= true;
+				}
+			Assert.IsTrue(matrix[0, 1]);
+			var nonEmptyRows = matrix.NonEmptyRows;
+			Assert.AreEqual(4, nonEmptyRows.Count);
 		}
 
 		[Test()] public void TestNumberOfEntries()
@@ -116,72 +120,32 @@ namespace MyMediaLiteTest
 			for (int i = 0; i < 5; i++)
 				if (i != 2 && i != 4)
 				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= false;
+					matrix[i, 1] = true;
+					matrix[i, 4] = false;
 				}
 			Assert.AreEqual(3, matrix.NumberOfEntries);
 		}
 
-		[Test()] public void TestRemoveColumn()
+		[Test()] public void TestNumberOfColumns()
 		{
 			var matrix = new SparseBooleanMatrix();
 			for (int i = 0; i < 5; i++)
-				if (i != 2 && i != 4)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
-			matrix[2, 2] = true;
-
-			matrix.RemoveColumn(2);
-
-			Assert.IsTrue(matrix[0, 3]);
-			Assert.IsTrue(matrix[1, 3]);
-			Assert.IsTrue(matrix[3, 3]);
-			Assert.IsTrue(matrix[1, 1]);
+			{
+				matrix[i, 1] = true;
+				matrix[i, 4] = true;
+			}
+			Assert.AreEqual(5, matrix.NumberOfColumns);
 		}
 
-		[Test()] public void TestRemoveColumns()
+		[Test()] public void TestNumberOfRows()
 		{
 			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 7; i++)
-				if(i != 2 && i != 4)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
-			matrix[2, 2] = true;
-			matrix[2, 5] = true;
-			matrix[4, 3] = true;
-			int[] delete_columns = {2, 4};
-			matrix.RemoveColumn(delete_columns);
-
-			// test the new columns
-			Assert.IsTrue(matrix[4, 2]);
-			Assert.IsTrue(matrix[2, 3]);
-			Assert.IsFalse(matrix[1, 3]);
-			Assert.IsFalse(matrix[4, 3]);
-		}
-
-		[Test()] public void TestTranspose()
-		{
-			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 7; i++)
-				if(i != 2 && i != 4)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
-			matrix[2, 2] = true;
-			matrix[2, 5] = true;
-			matrix[4, 3] = true;
-			// transpose the matrix
-			var transposed_matrix = (SparseBooleanMatrix) matrix.Transpose();
-			// test the transposed matrix
-			Assert.IsTrue(transposed_matrix[1,0]);
-			Assert.IsTrue(transposed_matrix[4, 6]);
-			Assert.IsFalse(transposed_matrix[3, 1]);
-			Assert.IsFalse(transposed_matrix[5, 4]);
+			for (int i = 0; i < 5; i++)
+			{
+				matrix[i, 1] = true;
+				matrix[i, 4] = true;
+			}
+			Assert.AreEqual(5, matrix.NumberOfRows);
 		}
 
 		[Test()] public void TestOverlapCount()
@@ -205,22 +169,66 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(3, matrix.Overlap(overlapMatrix));
 		}
 
-		[Test()] public void TestIsSymmetric()
+		[Test()] public void TestRemoveColumn()
 		{
 			var matrix = new SparseBooleanMatrix();
-			Assert.IsTrue(matrix.IsSymmetric);
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i != 4)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+			matrix[2, 2] = true;
 
-			matrix[1, 1] = true;
-			Assert.IsTrue(matrix.IsSymmetric);
+			matrix.RemoveColumn(2);
 
-			matrix[2, 1] = true;
-			Assert.IsFalse(matrix.IsSymmetric);
+			Assert.IsTrue(matrix[0, 3]);
+			Assert.IsTrue(matrix[1, 3]);
+			Assert.IsTrue(matrix[3, 3]);
+			Assert.IsTrue(matrix[1, 1]);
+		}
 
-			matrix[1, 2] = true;
-			Assert.IsTrue(matrix.IsSymmetric);
+		[Test()] public void TestRemoveColumns()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 7; i++)
+				if(i != 2 && i != 4)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+			matrix[2, 2] = true;
+			matrix[2, 5] = true;
+			matrix[4, 3] = true;
+			int[] delete_columns = { 2, 4 };
+			matrix.RemoveColumn(delete_columns);
 
-			matrix[2, 1] = false;
-			Assert.IsFalse(matrix.IsSymmetric);
+			// test the new columns
+			Assert.IsTrue(matrix[4, 2]);
+			Assert.IsTrue(matrix[2, 3]);
+			Assert.IsFalse(matrix[1, 3]);
+			Assert.IsFalse(matrix[4, 3]);
+		}
+
+		[Test()] public void TestTranspose()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 7; i++)
+				if(i != 2 && i != 4)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+			matrix[2, 2] = true;
+			matrix[2, 5] = true;
+			matrix[4, 3] = true;
+			// transpose the matrix
+			var transposed_matrix = (SparseBooleanMatrix) matrix.Transpose();
+			// test the transposed matrix
+			Assert.IsTrue(transposed_matrix[1,0]);
+			Assert.IsTrue(transposed_matrix[4, 6]);
+			Assert.IsFalse(transposed_matrix[3, 1]);
+			Assert.IsFalse(transposed_matrix[5, 4]);
 		}
 	}
 }
