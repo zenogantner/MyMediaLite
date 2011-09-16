@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.ItemRecommendation;
 
@@ -44,7 +45,7 @@ namespace MyMediaLite.Eval
 		{
 			var avg_results = new Dictionary<string, double>();
 
-			for (int fold = 0; fold < split.NumberOfFolds; fold++)
+			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
 				var split_recommender = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
 				split_recommender.Feedback = split.Train[fold];
@@ -58,7 +59,7 @@ namespace MyMediaLite.Eval
 						avg_results[key] = fold_results[key];
 				if (show_results)
 					Console.Error.WriteLine("fold {0} {1}", fold, Items.FormatResults(fold_results));
-			}
+			});
 
 			foreach (var key in Items.Measures)
 				avg_results[key] /= split.NumberOfFolds;

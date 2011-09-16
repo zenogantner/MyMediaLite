@@ -2,6 +2,7 @@
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
+          - cross-validation for item recommendation and rating prediction
           - distributed SGD (see below)
         - API changes
           - rename IIItemRecommender to IIncrementalItemRecommender and
