@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -23,10 +24,18 @@ using NUnit.Framework;
 
 namespace MyMediaLiteTest
 {
-	/// <summary>Testing the Matrix class</summary>
+	/// <summary>Tests for the Matrix class</summary>
 	[TestFixture()]
 	public class MatrixTest
 	{
+		[Test()] public void TestCreateMatrix()
+		{
+			var matrix = new Matrix<int>(2, 2);
+
+			var other_matrix = matrix.CreateMatrix(3, 3);
+			Assert.IsInstanceOfType(matrix.GetType(), other_matrix);
+		}
+
 		[Test()] public void TestGetSetRow()
 		{
 			var matrix = new Matrix<int>(5, 5);
