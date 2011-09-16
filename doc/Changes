@@ -46,6 +46,7 @@
         - evaluation
           - different modes for selecting candidate items now also work for
             cross-validation
+          - fixes and improvements for item recommendation CV
           - new evaluation measure: mean reciprocal rank (mrr)
           - item recommender evaluation: more descriptive parameter name
             repeated_events
