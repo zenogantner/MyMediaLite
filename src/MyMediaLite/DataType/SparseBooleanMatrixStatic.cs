@@ -95,7 +95,8 @@ namespace MyMediaLite.DataType
 		{
 			return row_list[row_id].Length;
 		}
-
+		
+		///
 		/// <remarks>Takes O(N log(M)) worst-case time, where N is the number of rows and M is the number of columns.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
 		{
@@ -195,7 +196,7 @@ namespace MyMediaLite.DataType
 		/// <returns>the transpose of the matrix</returns>
 		public IMatrix<bool> Transpose()
 		{
-			var transpose = new SparseBooleanMatrixStatic();
+			var transpose = new SparseBooleanMatrixBinarySearch();
 			for (int i = 0; i < row_list.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;
