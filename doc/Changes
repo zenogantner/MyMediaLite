@@ -23,6 +23,7 @@
             - Overlap() -> OverlapCount()
           - IBooleanMatrix
             NonEmpty(Row|Column)IDs properties:  ICollection<int> -> IList<int>
+          - Data.IRatings.AllUsers/AllItems: HashSet<int> -> IList<int>
         - recommenders
           - new rating predictor MultiCoreMatrixFactorization based on
             Distributed SGD paper at KDD 2011 by Gemulla et al.
