@@ -335,7 +335,7 @@ class RatingPrediction
 				{
 					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(recommender, split); // TODO if (search_hp)
+					var results = RatingsCrossValidation.Evaluate(recommender, split); // TODO if (search_hp)
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}
@@ -362,8 +362,8 @@ class RatingPrediction
 
 			if (!no_eval)
 			{
-				if (online_eval)  // TODO support also for prediction outputs (to allow external evaluation)
-					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.EvaluateOnline((IIncrementalRatingPredictor) recommender, test_data))); });
+				if (online_eval)
+					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(RatingsOnline.Evaluate((IncrementalRatingPredictor) recommender, test_data))); });
 				else
 					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
 

@@ -33,7 +33,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateOnline(IIncrementalRatingPredictor recommender, IRatings ratings)
+		static public Dictionary<string, double> Evaluate(IIncrementalRatingPredictor recommender, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;

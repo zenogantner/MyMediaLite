@@ -87,46 +87,5 @@ namespace MyMediaLite.Eval
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
 			return result;
 		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating predictor</param>
-		/// <param name="split">a rating dataset split</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
-		{
-			return EvaluateOnSplit(recommender, split, false);
-		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating predictor</param>
-		/// <param name="split">a rating dataset split</param>
-		/// <param name="show_results">set to true to print results to STDERR</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
-		{
-			var avg_results = new Dictionary<string, double>();
-
-			for (int i = 0; i < split.NumberOfFolds; i++)
-			{
-				var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-				split_recommender.Ratings = split.Train[i];
-				split_recommender.Train();
-				var fold_results = Evaluate(split_recommender, split.Test[i]);
-
-				foreach (var key in fold_results.Keys)
-					if (avg_results.ContainsKey(key))
-						avg_results[key] += fold_results[key];
-					else
-						avg_results[key] = fold_results[key];
-
-				if (show_results)
-					Console.Error.WriteLine("fold {0} {1}", i, FormatResults(fold_results));
-			}
-
-			foreach (var key in avg_results.Keys)
-				avg_results[key] /= split.NumberOfFolds;
-
-			return avg_results;
-		}
 	}
 }

@@ -335,7 +335,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = MyMediaLite.Eval.Items.EvaluateOnSplit((ItemRecommender) recommender, split, relevant_users, relevant_items);
+					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}
@@ -361,7 +361,7 @@ class ItemRecommendation
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var results = Items.EvaluateOnline((IIncrementalItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items); // TODO support also for prediction outputs (to allow external evaluation)
+						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items);
 						Console.Write(Items.FormatResults(results));
 					});
 				else if (group_method != null)

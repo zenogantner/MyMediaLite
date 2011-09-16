@@ -163,6 +163,8 @@
     <Compile Include="Eval\Measures\AUC.cs" />
     <Compile Include="Eval\ItemsOnline.cs" />
     <Compile Include="Eval\RatingsOnline.cs" />
+    <Compile Include="Eval\ItemsCrossValidation.cs" />
+    <Compile Include="Eval\RatingsCrossValidation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

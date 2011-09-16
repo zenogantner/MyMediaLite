@@ -154,43 +154,5 @@ namespace MyMediaLite.Eval
 
 			return result;
 		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">an item recommender</param>
-		/// <param name="split">a dataset split</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <param name="show_results">set to true to print results to STDERR</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(
-			ItemRecommender recommender,
-			ISplit<IPosOnlyFeedback> split,
-			IList<int> relevant_users,
-			IList<int> relevant_items,
-			bool show_results = false)
-		{
-			var avg_results = new Dictionary<string, double>();
-
-			for (int fold = 0; fold < split.NumberOfFolds; fold++)
-			{
-				var split_recommender = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
-				split_recommender.Feedback = split.Train[fold];
-				split_recommender.Train();
-				var fold_results = Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items);
-
-				foreach (var key in fold_results.Keys)
-					if (avg_results.ContainsKey(key))
-						avg_results[key] += fold_results[key];
-					else
-						avg_results[key] = fold_results[key];
-				if (show_results)
-					Console.Error.Write("fold {0} {1}", fold, FormatResults(avg_results));
-			}
-
-			foreach (var key in avg_results.Keys.ToList())
-				avg_results[key] /= split.NumberOfFolds;
-
-			return avg_results;
-		}
 	}
 }

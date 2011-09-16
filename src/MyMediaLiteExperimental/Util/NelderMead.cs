@@ -20,10 +20,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra.Double;
-using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
-using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.Util
@@ -54,7 +52,7 @@ namespace MyMediaLite.Util
 		{
 			Recommender.Configure(recommender, hp_string);
 
-			double result = Eval.Ratings.EvaluateOnSplit(recommender, split)[evaluation_measure];
+			double result = Eval.RatingsCrossValidation.Evaluate(recommender, split)[evaluation_measure];
 			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(CultureInfo.InvariantCulture));
 			return result;
 		}
