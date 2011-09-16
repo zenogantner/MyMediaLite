@@ -131,7 +131,7 @@ namespace MyMediaLite.Data
 		/// <summary>Compute the number of overlapping events in two feedback datasets</summary>
 		/// <param name="s">the feedback dataset to compare to</param>
 		/// <returns>the number of overlapping events, i.e. events that have the same user and item ID</returns>
-		public int Overlap(IPosOnlyFeedback s)
+		public int OverlapCount(IPosOnlyFeedback s)
 		{
 			return UserMatrix.Overlap(s.UserMatrix);
 		}

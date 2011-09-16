@@ -88,7 +88,7 @@ namespace MyMediaLite.Eval
 			CandidateItems candidate_item_mode,
 			bool repeated_events = false)
 		{
-			if (!repeated_events && training.Overlap(test) > 0)
+			if (!repeated_events && training.OverlapCount(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			switch (candidate_item_mode)

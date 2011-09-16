@@ -1,7 +1,7 @@
 1.99	2011-09-??
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
-          - item recommendation evaluation, filtered item rec. evaluation
+          - item recommendation evaluation and filtered item rec. evaluation
           - distributed SGD (see below)
         - API changes
           - rename IIItemRecommender to IIncrementalItemRecommender and
@@ -18,8 +18,9 @@
           - RatingPrediction.Prediction.WritePredictions():
             move line_format argument to last position to be able to use it as
             an optional argument
-          - IPosOnlyFeedback AllUsers and AllItems properties:
-            ICollection<int> -> IList<int>
+          - IPosOnlyFeedback
+            - AllUsers and AllItems properties: ICollection<int> -> IList<int>
+            - Overlap() -> OverlapCount()
           - IBooleanMatrix
             NonEmpty(Row|Column)IDs properties:  ICollection<int> -> IList<int>
         - recommenders
