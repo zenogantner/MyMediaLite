@@ -36,6 +36,40 @@ namespace MyMediaLiteTest
 			Assert.IsInstanceOfType(matrix.GetType(), other_matrix);
 		}
 
+		[Test()] public void TestGetEntriesByColumn()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i !=3)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+
+			Assert.AreEqual(0, matrix.GetEntriesByColumn(0).Count);
+			Assert.AreEqual(3, matrix.GetEntriesByColumn(1).Count);
+			Assert.AreEqual(0, matrix.GetEntriesByColumn(2).Count);
+			Assert.AreEqual(0, matrix.GetEntriesByColumn(3).Count);
+			Assert.AreEqual(3, matrix.GetEntriesByColumn(4).Count);
+		}
+
+		[Test()] public void TestGetEntriesByRow()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i !=3)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+
+			Assert.AreEqual(2, matrix.GetEntriesByRow(0).Count);
+			Assert.AreEqual(2, matrix.GetEntriesByRow(1).Count);
+			Assert.AreEqual(0, matrix.GetEntriesByRow(2).Count);
+			Assert.AreEqual(0, matrix.GetEntriesByRow(3).Count);
+			Assert.AreEqual(2, matrix.GetEntriesByRow(4).Count);
+		}
+
 		[Test()] public void TestIsSymmetric()
 		{
 			var matrix = new SparseBooleanMatrix();
@@ -146,6 +180,40 @@ namespace MyMediaLiteTest
 				matrix[i, 4] = true;
 			}
 			Assert.AreEqual(5, matrix.NumberOfRows);
+		}
+
+		[Test()] public void TestNumEntriesByColumn()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i !=3)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+
+			Assert.AreEqual(0, matrix.NumEntriesByColumn(0));
+			Assert.AreEqual(3, matrix.NumEntriesByColumn(1));
+			Assert.AreEqual(0, matrix.NumEntriesByColumn(2));
+			Assert.AreEqual(0, matrix.NumEntriesByColumn(3));
+			Assert.AreEqual(3, matrix.NumEntriesByColumn(4));
+		}
+
+		[Test()] public void TestNumEntriesByRow()
+		{
+			var matrix = new SparseBooleanMatrix();
+			for (int i = 0; i < 5; i++)
+				if (i != 2 && i !=3)
+				{
+					matrix[i, 1] = true;
+					matrix[i, 4] = true;
+				}
+
+			Assert.AreEqual(2, matrix.NumEntriesByRow(0));
+			Assert.AreEqual(2, matrix.NumEntriesByRow(1));
+			Assert.AreEqual(0, matrix.NumEntriesByRow(2));
+			Assert.AreEqual(0, matrix.NumEntriesByRow(3));
+			Assert.AreEqual(2, matrix.NumEntriesByRow(4));
 		}
 
 		[Test()] public void TestOverlapCount()
