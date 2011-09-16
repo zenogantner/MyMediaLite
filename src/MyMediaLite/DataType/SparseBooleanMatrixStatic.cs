@@ -147,19 +147,18 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		// TODO add unit test
 		///
 		public IList<int> NonEmptyColumnIDs
 		{
 			get	{
-				var col_ids = new List<int>();
+				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (int id in row_list[i])
 						col_ids.Add(id);
 
-				return col_ids;
+				return col_ids.ToArray();
 			}
 		}
 
@@ -190,20 +189,6 @@ namespace MyMediaLite.DataType
 					n += row.Length;
 				return n;
 			}
-		}
-
-		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one</summary>
-		/// <param name="y">the column ID</param>
-		public void RemoveColumn(int y)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs</summary>
-		/// <param name="delete_columns">an array with column IDs</param>
-		public void RemoveColumn(int[] delete_columns)
-		{
-			throw new NotSupportedException();
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>

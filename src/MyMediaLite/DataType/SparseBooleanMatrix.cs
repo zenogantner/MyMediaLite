@@ -187,53 +187,6 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one</summary>
-		/// <param name="y">the column ID</param>
-		public void RemoveColumn(int y)
-		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					if (col_id >= y)
-						row_list[row_id].Remove(y);
-					if (col_id > y)
-						row_list[row_id].Add(col_id - 1);
-				}
-			}
-		}
-
-		/// <summary>Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs</summary>
-		/// <param name="delete_columns">an array with column IDs</param>
-		public void RemoveColumn(int[] delete_columns)
-		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					int decrease_by = 0;
-					foreach (int y in delete_columns)
-					{
-						if (col_id == y)
-						{
-							row_list[row_id].Remove(y);
-							goto NEXT_COL; // poor man's labeled continue
-						}
-						if (col_id > y)
-							decrease_by++;
-					}
-
-					// decrement column ID
-					row_list[row_id].Remove(col_id);
-					row_list[row_id].Add(col_id - decrease_by);
-
-					NEXT_COL:;
-				}
-			}
-		}
-
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
 		/// <returns>the transpose of the matrix (copy)</returns>
 		public IMatrix<bool> Transpose()

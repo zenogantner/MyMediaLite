@@ -237,47 +237,6 @@ namespace MyMediaLiteTest.DataType
 			Assert.AreEqual(3, matrix.Overlap(overlapMatrix));
 		}
 
-		[Test()] public void TestRemoveColumn()
-		{
-			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 5; i++)
-				if (i != 2 && i != 4)
-				{
-					matrix[i, 1] = true;
-					matrix[i, 4] = true;
-				}
-			matrix[2, 2] = true;
-
-			matrix.RemoveColumn(2);
-
-			Assert.IsTrue(matrix[0, 3]);
-			Assert.IsTrue(matrix[1, 3]);
-			Assert.IsTrue(matrix[3, 3]);
-			Assert.IsTrue(matrix[1, 1]);
-		}
-
-		[Test()] public void TestRemoveColumns()
-		{
-			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 7; i++)
-				if(i != 2 && i != 4)
-				{
-					matrix[i, 1] = true;
-					matrix[i, 4] = true;
-				}
-			matrix[2, 2] = true;
-			matrix[2, 5] = true;
-			matrix[4, 3] = true;
-			int[] delete_columns = { 2, 4 };
-			matrix.RemoveColumn(delete_columns);
-
-			// test the new columns
-			Assert.IsTrue(matrix[4, 2]);
-			Assert.IsTrue(matrix[2, 3]);
-			Assert.IsFalse(matrix[1, 3]);
-			Assert.IsFalse(matrix[4, 3]);
-		}
-
 		[Test()] public void TestTranspose()
 		{
 			var matrix = new SparseBooleanMatrix();
