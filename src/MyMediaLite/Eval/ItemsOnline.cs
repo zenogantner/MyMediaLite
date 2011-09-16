@@ -17,6 +17,7 @@
 //
 
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
@@ -32,15 +33,27 @@ namespace MyMediaLite.Eval
 		/// </remarks>
 		/// <param name="recommender">the item recommender to be evaluated</param>
 		/// <param name="test">test cases</param>
-		/// <param name="train">training data (must be connected to the recommender's training data)</param>
+		/// <param name="training">training data (must be connected to the recommender's training data)</param>
 		/// <param name="relevant_users">a list of all relevant user IDs</param>
 		/// <param name="relevant_items">a list of all relevant item IDs</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
 		static public Dictionary<string, double> Evaluate(
 			IIncrementalItemRecommender recommender,
-			IPosOnlyFeedback test, IPosOnlyFeedback train,
-			IList<int> relevant_users, IList<int> relevant_items)
+			IPosOnlyFeedback test, IPosOnlyFeedback training,
+			IList<int> relevant_users, IList<int> relevant_items,
+			CandidateItems candidate_item_mode)
 		{
+			// prepare candidate items once to avoid recreating them
+			switch (candidate_item_mode)
+			{
+				case CandidateItems.TRAINING: relevant_items = training.AllItems; break;
+				case CandidateItems.TEST:     relevant_items = test.AllItems; break;
+				case CandidateItems.OVERLAP:  relevant_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
+				case CandidateItems.UNION:    relevant_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
+			}
+			candidate_item_mode = CandidateItems.EXPLICIT;
+
 			// for better handling, move test data points into arrays
 			var users = new int[test.Count];
 			var items = new int[test.Count];
@@ -70,7 +83,7 @@ namespace MyMediaLite.Eval
 					// evaluate user
 					var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
 					current_test.Add(users[index], items[index]);
-					var current_result = Items.Evaluate(recommender, current_test, train, current_test.AllUsers, relevant_items);
+					var current_result = Items.Evaluate(recommender, current_test, training, current_test.AllUsers, relevant_items, candidate_item_mode);
 
 					if (current_result["num_users"] == 1)
 						if (results_by_user.ContainsKey(users[index]))

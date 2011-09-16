@@ -31,6 +31,7 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a dataset split</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> Evaluate(
@@ -38,6 +39,7 @@ namespace MyMediaLite.Eval
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> relevant_users,
 			IList<int> relevant_items,
+			CandidateItems candidate_item_mode,
 			bool show_results = false)
 		{
 			var avg_results = new Dictionary<string, double>();
@@ -47,7 +49,7 @@ namespace MyMediaLite.Eval
 				var split_recommender = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
 				split_recommender.Feedback = split.Train[fold];
 				split_recommender.Train();
-				var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items);
+				var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items, candidate_item_mode);
 
 				foreach (var key in fold_results.Keys)
 					if (avg_results.ContainsKey(key))

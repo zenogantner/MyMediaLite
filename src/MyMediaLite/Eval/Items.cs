@@ -73,21 +73,31 @@ namespace MyMediaLite.Eval
 		/// </remarks>
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
-		/// <param name="train">training data</param>
+		/// <param name="training">training data</param>
 		/// <param name="relevant_users">a list of integers with all relevant users</param>
 		/// <param name="relevant_items">a list of integers with all relevant items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public Dictionary<string, double> Evaluate(
 			IRecommender recommender,
 			IPosOnlyFeedback test,
-			IPosOnlyFeedback train,
+			IPosOnlyFeedback training,
 			IList<int> relevant_users,
 			IList<int> relevant_items,
+			CandidateItems candidate_item_mode,
 			bool repeated_events = false)
 		{
-			if (!repeated_events && train.Overlap(test) > 0)
+			if (!repeated_events && training.Overlap(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
+
+			switch (candidate_item_mode)
+			{
+				case CandidateItems.TRAINING: relevant_items = training.AllItems; break;
+				case CandidateItems.TEST:     relevant_items = test.AllItems; break;
+				case CandidateItems.OVERLAP:  relevant_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
+				case CandidateItems.UNION:    relevant_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
+			}
 
 			int num_users = 0;
 			var result = new Dictionary<string, double>();
@@ -100,7 +110,7 @@ namespace MyMediaLite.Eval
 				correct_items.IntersectWith(relevant_items);
 
 				// the number of items that are really relevant for this user
-				var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
+				var relevant_items_in_train = new HashSet<int>(training.UserMatrix[user_id]);
 				relevant_items_in_train.IntersectWith(relevant_items);
 				int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
 
@@ -114,7 +124,7 @@ namespace MyMediaLite.Eval
 				if (prediction_list.Count != relevant_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
-				ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
+				ICollection<int> ignore_items = repeated_events ? new int[0] : training.UserMatrix[user_id];
 
 				double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
 				double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);

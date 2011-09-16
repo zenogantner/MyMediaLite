@@ -35,12 +35,15 @@ using MyMediaLite.Util;
 /// <summary>Item prediction program, see Usage() method for more information</summary>
 class ItemRecommendation
 {
+	// data
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
 	static IList<int> relevant_users;
 	static IList<int> relevant_items;
 	static SparseBooleanMatrix group_to_user; // rows: groups, columns: users
 	static ICollection<int> user_groups;
+
+	static CandidateItems eval_item_mode = CandidateItems.UNION;
 
 	// recommenders
 	static IRecommender recommender = null;
@@ -335,7 +338,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items);
+					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items, eval_item_mode);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}
@@ -361,7 +364,7 @@ class ItemRecommendation
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items);
+						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items, eval_item_mode);
 						Console.Write(Items.FormatResults(results));
 					});
 				else if (group_method != null)
@@ -599,22 +602,19 @@ class ItemRecommendation
 			// relevant items
 			if (relevant_items_file != null)
 				relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
-			else if (training_items)
-				relevant_items = training_data.AllItems;
-			else if (test_items)
-				relevant_items = test_data.AllItems;
-			else if (overlap_items)
-				relevant_items = new List<int>(test_data.AllItems.Intersect(training_data.AllItems));
 			else if (all_items)
 				relevant_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
-			else
-				relevant_items = new List<int>(test_data.AllItems.Union(training_data.AllItems));
 
-			// display stats about relevant users and items
-			if (group_method != null)
-				Console.WriteLine("{0} user groups and {1} items will be used for evaluation.", user_groups.Count, relevant_items.Count);
+			if (relevant_items != null)
+				eval_item_mode = CandidateItems.EXPLICIT;
+			else if (training_items)
+				eval_item_mode = CandidateItems.TRAINING;
+			else if (test_items)
+				eval_item_mode = CandidateItems.TEST;
+			else if (overlap_items)
+				eval_item_mode = CandidateItems.OVERLAP;
 			else
-				Console.WriteLine("{0} users and {1} items will be used for evaluation.", relevant_users.Count, relevant_items.Count);
+				eval_item_mode = CandidateItems.UNION;
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
@@ -625,7 +625,7 @@ class ItemRecommendation
 		if (filtered_eval)
 			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items, repeat_eval);
 		else
-			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, repeat_eval);
+			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, eval_item_mode, repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
