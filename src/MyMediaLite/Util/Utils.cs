@@ -215,7 +215,7 @@ namespace MyMediaLite.Util
 				Console.WriteLine(
 					"{0} user attributes for {1} users, {2} assignments, {3} users with attribute assignments",
 					user_attributes.NumberOfColumns, user_attributes.NumberOfRows,
-					user_attributes.NumberOfEntries, user_attributes.NonEmptyRows);
+					user_attributes.NumberOfEntries, user_attributes.NonEmptyRowIDs.Count);
 			}
 			if (item_attributes != null)
 				Console.WriteLine(
