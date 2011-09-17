@@ -36,13 +36,19 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public virtual void UpdateRating(int user_id, int item_id, double rating)
 		{
-			throw new NotImplementedException();
+			int index;
+			if (ratings.TryGetIndex(user_id, item_id, out index))
+				ratings[index] = rating;
+			else
+				throw new Exception(string.Format("Cannot update rating for user {0} and item {1}: No such rating exists.", user_id, item_id));
 		}
 
 		///
 		public virtual void RemoveRating(int user_id, int item_id)
 		{
-			throw new NotImplementedException();
+			int index;
+			if (ratings.TryGetIndex(user_id, item_id, out index))
+				ratings.RemoveAt(index);
 		}
 
 		///
