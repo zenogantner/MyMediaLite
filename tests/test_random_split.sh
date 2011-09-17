@@ -29,9 +29,9 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemPrediction.exe"
+PROGRAM="mono --debug ItemRecommendation.exe"
 
-cd ../../../ItemPrediction/bin/Debug/
+cd ../../../ItemRecommendation/bin/Debug/
 
 echo $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1
      $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1

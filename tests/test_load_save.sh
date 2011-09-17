@@ -46,9 +46,9 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemPrediction.exe"
+PROGRAM="mono --debug ItemRecommendation.exe"
 
-cd ../../../ItemPrediction/bin/Debug/
+cd ../../../ItemRecommendation/bin/Debug/
 
 for method in WRMF BPRMF MostPopular
 do

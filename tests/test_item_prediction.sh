@@ -1,9 +1,9 @@
 #!/bin/sh -e
 
-PROGRAM="mono --debug ItemPrediction.exe"
+PROGRAM="mono --debug ItemRecommendation.exe"
 THIS_DIR=`pwd`/tests
 
-cd src/ItemPrediction/bin/Debug/
+cd src/ItemRecommendation/bin/Debug/
 
 echo "This may take about 18 minutes ..."
 echo "Do not take the results too serious - we do not use the best hyperparameters here"
@@ -31,7 +31,7 @@ do
 done
 
 
-for method in Random MostPopular
+for method in MostPopular
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=10
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=10
