@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using MyMediaLite.DataType;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	[TestFixture()]
 	public class ListProxyTest

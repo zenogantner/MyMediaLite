@@ -32,11 +32,11 @@ namespace MyMediaLite.Eval.Measures
 	/// </remarks>
 	public static class PrecisionAndRecall
 	{
-		/// <summary>Compute the average precision (MAP) of a list of ranked items</summary>
+		/// <summary>Compute the average precision (AP) of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
-		/// <returns>the MAP for the given data</returns>
+		/// <returns>the AP for the given list</returns>
 		public static double AP(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items = null)
 		{
 			if (ignore_items == null)

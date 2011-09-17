@@ -19,7 +19,7 @@ using System;
 using NUnit.Framework;
 using MyMediaLite.Data;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	[TestFixture()]
 	public class CombinedRatingsTest

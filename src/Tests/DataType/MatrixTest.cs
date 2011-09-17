@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	/// <summary>Tests for the Matrix class</summary>
 	[TestFixture()]

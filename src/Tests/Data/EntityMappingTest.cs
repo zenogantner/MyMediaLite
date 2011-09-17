@@ -15,13 +15,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	/// <summary>Testing the EntityMapping class</summary>
 	[TestFixture()]

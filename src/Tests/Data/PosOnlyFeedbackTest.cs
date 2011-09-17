@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	[TestFixture()]
 	public class PosOnlyFeedbackTest

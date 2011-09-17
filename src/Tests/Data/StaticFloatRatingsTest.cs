@@ -22,7 +22,7 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest.Data
+namespace Tests.Data
 {
 	[TestFixture()]
 	public class StaticFloatRatingsTest

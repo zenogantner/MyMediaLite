@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest.DataType
+namespace Tests.DataType
 {
 	/// <summary>Testing the VectorUtils class</summary>
 	[TestFixture()]
