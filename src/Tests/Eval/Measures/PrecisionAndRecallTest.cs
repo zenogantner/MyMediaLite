@@ -42,14 +42,17 @@ namespace Tests.Eval.Measures
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list1));
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list5));
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list3, list_last));
+			Assert.AreEqual((double) 1/5, PrecisionAndRecall.AP(list5, list_last));
 			
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list1, list_empty));
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list5, list_empty));
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list3, list_last, list_empty));
+			Assert.AreEqual((double) 1/5, PrecisionAndRecall.AP(list5, list_last, list_empty));
 			
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list5, list1, list1)); // special case: empty list
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list5, list1));
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list3, list_last, list1));
+			Assert.AreEqual((double) 1/4, PrecisionAndRecall.AP(list5, list_last, list1));			
 		}
 	}
 }
