@@ -91,15 +91,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= user_factors.dim1))
-			{
-				Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
-			}
 			if ((item_id < 0) || (item_id >= item_factors.dim1))
-			{
-				Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
-			}
 
 			return MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}

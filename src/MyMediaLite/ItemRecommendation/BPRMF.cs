@@ -531,6 +531,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override double Predict(int user_id, int item_id)
 		{
+			if (user_id > MaxUserID || item_id > MaxItemID)
+				return 0;
+			
 			return item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
