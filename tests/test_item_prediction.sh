@@ -5,6 +5,7 @@ THIS_DIR=`pwd`/tests
 
 cd src/ItemRecommendation/bin/Debug/
 
+echo "MyMediaLite item recommendation test script"
 echo "This may take about 4 minutes ..."
 echo "Do not take the prediction results too serious - we do not use the best hyperparameters here"
 

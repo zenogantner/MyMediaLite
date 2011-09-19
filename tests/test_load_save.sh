@@ -7,6 +7,7 @@ DATA_DIR=../../../../data/ml100k
 
 cd src/RatingPrediction/bin/Debug/
 
+echo "MyMediaLite load/save test script"
 echo "This will take about 5 minutes ..."
 
 echo

@@ -6,7 +6,8 @@ LANG=C
 
 cd src/RatingPrediction/bin/Debug/
 
-echo "This will take about 10 minutes ..."
+echo "MyMediaLite random splitting test script"
+echo "This will take about 1 minute ..."
 
 echo
 echo "rating predictors"
@@ -21,7 +22,7 @@ echo $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MatrixFactor
 cut -f 1,2 pred1 > pred1.cut
 cut -f 1,2 pred2 > pred2.cut
 
-diff pred1.txt.cut pred2.txt.cut
+diff pred1.cut pred2.cut
 
 rm pred1 pred2 pred1.cut pred2.cut
 

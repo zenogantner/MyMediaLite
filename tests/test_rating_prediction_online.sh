@@ -2,6 +2,7 @@
 
 PROGRAM="mono --debug RatingPrediction.exe"
 
+echo "MyMediaLite online rating prediction test script"
 echo "This will take about 2 minutes ..."
 
 echo ""
