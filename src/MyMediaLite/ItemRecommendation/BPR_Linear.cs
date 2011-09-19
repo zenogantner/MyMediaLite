@@ -231,15 +231,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= item_attribute_weight_by_user.dim1))
-			{
-				Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
-			}
 			if ((item_id < 0) || (item_id > MaxItemID))
-			{
-				Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
-			}
 
 			double result = 0;
 			foreach (int a in item_attributes[item_id])

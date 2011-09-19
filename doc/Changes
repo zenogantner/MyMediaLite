@@ -31,6 +31,9 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
           - BiasedMatrixFactorization: make fields needed for the bold-driver
             learning rate heuristic protected
+          - kNN models for item recommendation: deal gracefully with unknown
+            users and items
+          - BPR_Linear: no warning when predicting for unknown items
         - command-line tools
           - add --show-fold-results for corss-validation
           - rename ItemPrediction.exe to ItemRecommendation.exe

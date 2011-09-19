@@ -43,9 +43,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id > MaxUserID))
-				throw new ArgumentException("user is unknown: " + user_id);
+				return 0;
 			if ((item_id < 0) || (item_id > MaxItemID))
-				throw new ArgumentException("item is unknown: " + item_id);
+				return 0;
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[item_id])
