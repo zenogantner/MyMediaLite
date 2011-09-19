@@ -81,6 +81,7 @@
           - declared all classes as static that contain only static methods
           - move unit tests into namespaces, rename their top namespace
             from MyMediaLiteTest to Tests
+          - updated and improved test scripts
 
 1.05	2011-09-01
 	- API changes

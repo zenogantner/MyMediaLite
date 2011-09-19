@@ -5,8 +5,8 @@ THIS_DIR=`pwd`/tests
 
 cd src/ItemRecommendation/bin/Debug/
 
-echo "This may take about 18 minutes ..."
-echo "Do not take the results too serious - we do not use the best hyperparameters here"
+echo "This may take about 4 minutes ..."
+echo "Do not take the prediction results too serious - we do not use the best hyperparameters here"
 
 echo
 echo "Tiny example dataset"
@@ -60,8 +60,8 @@ DATA_DIR=../../../../data/ml1m
 
 for method in ItemAttributeKNN
 do
-	echo $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=20" --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=20" --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
+	     $PROGRAM --training-file=ml1m-0.train.txt --test-file=ml1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
 done
 
 for method in BPR_Linear
