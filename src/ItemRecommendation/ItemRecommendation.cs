@@ -69,6 +69,7 @@ class ItemRecommendation
 	static string save_model_file = string.Empty;
 	static string load_model_file = string.Empty;
 	static string user_groups_file;
+	static string prediction_file;
 
 	// command-line parameters (other)
 	static bool compute_fit;
@@ -204,10 +205,9 @@ class ItemRecommendation
 		compute_fit         = false;
 
 		// other parameters
-		string prediction_file = string.Empty;
-		test_ratio             = 0;
-		num_test_users         = -1;
-		repeat_eval            = false;
+		test_ratio     = 0;
+		num_test_users = -1;
+		repeat_eval    = false;
 
 		var p = new OptionSet() {
 			// string-valued options
@@ -360,7 +360,7 @@ class ItemRecommendation
 				// TODO is this the right time to load the model?
 			}
 
-			if (prediction_file != string.Empty)
+			if (prediction_file != null)
 			{
 				Predict(prediction_file, relevant_users_file);
 			}
@@ -418,7 +418,10 @@ class ItemRecommendation
 			Usage("--cross-validation=K requires K to be at least 2.");
 
 		if (cross_validation > 1 && test_ratio != 0)
-			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
+
+		if (cross_validation > 1 && prediction_file != null)
+			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && relevant_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
@@ -636,7 +639,7 @@ class ItemRecommendation
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
 	{
-		if (prediction_file == string.Empty)
+		if (prediction_file == null)
 			return;
 
 		Predict(prediction_file + "-it-" + iteration, predict_for_users_file);

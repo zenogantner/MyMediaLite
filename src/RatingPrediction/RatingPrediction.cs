@@ -64,6 +64,7 @@ class RatingPrediction
 	static string item_attributes_file;
 	static string user_relations_file;
 	static string item_relations_file;
+	static string prediction_file;
 	static bool compute_fit;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.DOUBLE;
@@ -176,7 +177,6 @@ class RatingPrediction
 		bool online_eval       = false;
 		bool search_hp         = false;
 		int random_seed        = -1;
-		string prediction_file = string.Empty;
 		string prediction_line = "{0}\t{1}\t{2}";
 
 		var p = new OptionSet() {
@@ -311,7 +311,7 @@ class RatingPrediction
 					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), i);
 
 					Model.Save(recommender, save_model_file, i);
-					if (prediction_file != string.Empty)
+					if (prediction_file != null)
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i, prediction_line);
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
@@ -382,7 +382,7 @@ class RatingPrediction
 				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0:0.#####} ", seconds));
 			}
 
-			if (prediction_file != string.Empty)
+			if (prediction_file != null)
 			{
 				seconds = Utils.MeasureTime(delegate() {
 						Console.WriteLine();
@@ -406,7 +406,10 @@ class RatingPrediction
 			Usage("--cross-validation=K requires K to be at least 2.");
 
 		if (cross_validation > 1 && test_ratio != 0)
-			Usage("--cross-validation=K and --split-ratio=NUM are mutually exclusive.");
+			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
+
+		if (cross_validation > 1 && prediction_file != null)
+			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --save-model=FILE.");
