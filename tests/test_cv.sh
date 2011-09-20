@@ -9,19 +9,18 @@ K=10
 cd src/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite cross-validation test script."
-echo "This will take about 10 minutes ..."
+echo "This will take about 5 minutes ..."
 
 echo
 echo "rating predictors"
 echo "-----------------"
 
-echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=GlobalAverage --data-dir=$DATA_DIR --random-seed=1 --prediction-file=pred1
-     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=GlobalAverage --data-dir=$DATA_DIR --random-seed=1 --prediction-file=pred1
+echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=GlobalAverage --data-dir=$DATA_DIR --random-seed=1
+     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=GlobalAverage --data-dir=$DATA_DIR --random-seed=1
 
-echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MatrixFactorization --data-dir=$DATA_DIR --random-seed=1 --prediction-file=pred2
-     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MatrixFactorization --data-dir=$DATA_DIR --random-seed=1 --prediction-file=pred2
+echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MatrixFactorization --data-dir=$DATA_DIR --random-seed=1
+     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MatrixFactorization --data-dir=$DATA_DIR --random-seed=1
 
-rm pred1 pred2
 
 echo
 echo "item recommenders"
