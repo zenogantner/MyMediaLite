@@ -103,54 +103,61 @@ namespace MyMediaLite.Eval
 			foreach (string method in Measures)
 				result[method] = 0;
 
-			Parallel.ForEach (relevant_users, user_id =>
+			Parallel.ForEach(relevant_users, user_id =>
 			{
-				var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
-				correct_items.IntersectWith(relevant_items);
-
-				// the number of items that are really relevant for this user
-				var relevant_items_in_train = new HashSet<int>(training.UserMatrix[user_id]);
-				relevant_items_in_train.IntersectWith(relevant_items);
-				int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
-
-				// skip all users that have 0 or #relevant_items test items
-				if (correct_items.Count == 0)
-					return;
-				if (num_eval_items - correct_items.Count == 0)
-					return;
-
-				IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_items);
-				if (prediction_list.Count != relevant_items.Count)
-					throw new Exception("Not all items have been ranked.");
-
-				ICollection<int> ignore_items = repeated_events ? new int[0] : training.UserMatrix[user_id];
-
-				double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
-				double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
-				double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
-				double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
-				var positions = new int[] { 5, 10 };
-				var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
-				var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
-
-				// thread-safe incrementing
-				lock(result)
+				try
 				{
-					num_users++;
-					result["AUC"]       += auc;
-					result["MAP"]       += map;
-					result["NDCG"]      += ndcg;
-					result["mrr"]       += rr;
-					result["prec@5"]    += prec[5];
-					result["prec@10"]   += prec[10];
-					result["recall@5"]  += recall[5];
-					result["recall@10"] += recall[10];
-				}
+					var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
+					correct_items.IntersectWith(relevant_items);
 
-				if (num_users % 1000 == 0)
-					Console.Error.Write(".");
-				if (num_users % 60000 == 0)
-					Console.Error.WriteLine();
+					// the number of items that are really relevant for this user
+					var relevant_items_in_train = new HashSet<int>(training.UserMatrix[user_id]);
+					relevant_items_in_train.IntersectWith(relevant_items);
+					int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
+
+					// skip all users that have 0 or #relevant_items test items
+					if (correct_items.Count == 0)
+						return;
+					if (num_eval_items - correct_items.Count == 0)
+						return;
+
+					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_items);
+					if (prediction_list.Count != relevant_items.Count)
+						throw new Exception("Not all items have been ranked.");
+
+					ICollection<int> ignore_items = repeated_events ? new int[0] : training.UserMatrix[user_id];
+
+					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
+					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
+					double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
+					double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
+					var positions = new int[] { 5, 10 };
+					var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
+					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
+
+					// thread-safe incrementing
+					lock(result)
+					{
+						num_users++;
+						result["AUC"]       += auc;
+						result["MAP"]       += map;
+						result["NDCG"]      += ndcg;
+						result["mrr"]       += rr;
+						result["prec@5"]    += prec[5];
+						result["prec@10"]   += prec[10];
+						result["recall@5"]  += recall[5];
+						result["recall@10"] += recall[10];
+					}
+
+					if (num_users % 1000 == 0)
+						Console.Error.Write(".");
+					if (num_users % 60000 == 0)
+						Console.Error.WriteLine();
+				}
+				catch (Exception e)
+				{
+					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace); throw e;
+				}
 			});
 
 			foreach (string measure in Measures)
