@@ -101,7 +101,7 @@ namespace MyMediaLite.RatingPrediction
 				Parallel.For(0, NumBlocks, j =>	Iterate(Blocks[j, column_blocks[j]], true, true));
 			}
 
-			if (BoldDriver) // TODO move bold-driver heuristics out of the class?
+			if (BoldDriver)
 			{
 				double loss = ComputeLoss();
 
@@ -121,8 +121,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stdev={9} optimize_mae={10} num_blocks={11}",
-				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdev, OptimizeMAE, NumBlocks);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10} num_blocks={11}",
+				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, NumBlocks);
 		}
 	}
 }

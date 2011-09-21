@@ -117,8 +117,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} init_mean={10} init_stdev={11}",
-								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, InitMean, InitStdev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} init_mean={10} init_stddev={11}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, InitMean, InitStdDev);
 		}
 	}
 }

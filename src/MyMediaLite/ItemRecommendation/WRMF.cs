@@ -67,7 +67,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			// perform alternating parameter fitting
 			Optimize(Feedback.UserMatrix, user_factors, item_factors);
-			Optimize(Feedback.ItemMatrix, item_factors, user_factors); // TODO create different formulation to save 50% memory
+			Optimize(Feedback.ItemMatrix, item_factors, user_factors);
 		}
 
 		/// <summary>Optimizes the specified data</summary>
@@ -152,7 +152,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture, "WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-								 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdev);
+								 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

@@ -78,7 +78,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
@@ -239,21 +239,21 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-        ///
-        public override double Predict(int user_id, int item_id)
-        {
-            if ((user_id < 0) || (user_id >= user_factors.dim1))
-            {
-                Console.Error.WriteLine("user is unknown: " + user_id);
+		///
+		public override double Predict(int user_id, int item_id)
+		{
+			if ((user_id < 0) || (user_id >= user_factors.dim1))
+			{
+				Console.Error.WriteLine("user is unknown: " + user_id);
 				return double.MinValue;
-            }
+			}
 
 			double[] est_factors = MapToLatentFactorSpace(item_id);
 			var latent_factors = new double[NumFactors];
 
 			Array.Copy(est_factors, latent_factors, NumFactors);
 
-            double score =
+			double score =
 				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
 				+ user_bias[user_id]
 				+ est_factors[NumFactors] // estimated item bias
@@ -267,8 +267,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-			    "{0} NumFactors={1} regularization={2} num_iter={3} learn_rate={4} reg_mapping={5} num_iter_mapping={6} learn_rate_mapping={7} init_mean={8} init_stdev={9}",
-				this.GetType().Name, NumFactors, Regularization, NumIter, LearnRate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+			    "{0} NumFactors={1} regularization={2} num_iter={3} learn_rate={4} reg_mapping={5} num_iter_mapping={6} learn_rate_mapping={7} init_mean={8} init_stddev={9}",
+				this.GetType().Name, NumFactors, Regularization, NumIter, LearnRate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev
 			);
 		}
 	}

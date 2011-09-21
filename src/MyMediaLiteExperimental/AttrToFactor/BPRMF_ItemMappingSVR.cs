@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.ItemRecommendation;
@@ -123,8 +122,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} c={7} gamma={8} init_mean={9} init_stdev={10}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma, InitMean, InitStdev
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} c={7} gamma={8}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, c, gamma
 			);
 		}
 

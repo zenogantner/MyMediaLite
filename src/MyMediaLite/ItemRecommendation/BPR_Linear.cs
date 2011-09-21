@@ -116,14 +116,14 @@ namespace MyMediaLite.ItemRecommendation
 					user_pos_items[u] = pos_list.ToArray();
 					var neg_list = new List<int>();
 					for (int i = 0; i < MaxItemID; i++)
-						if (!Feedback.UserMatrix[u].Contains(i) && Feedback.ItemMatrix[i].Count != 0) // TODO we can spare the item matrix, thus use less memory
+						if (!Feedback.UserMatrix[u].Contains(i) && Feedback.ItemMatrix[i].Count != 0)
 							neg_list.Add(i);
 					user_neg_items[u] = neg_list.ToArray();
 				}
 			}
 
 			item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
-			MatrixUtils.InitNormal(item_attribute_weight_by_user, InitMean, InitStdev);
+			//MatrixUtils.InitNormal(item_attribute_weight_by_user, InitMean, InitStdev);
 
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
@@ -169,7 +169,6 @@ namespace MyMediaLite.ItemRecommendation
 				do
 					j = random.Next (0, MaxItemID + 1);
 				while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
-				// TODO think about saving the property accesses here
 			}
 		}
 
@@ -258,7 +257,6 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public double ComputeFit()
 		{
-			// TODO
 			return -1;
 		}
 

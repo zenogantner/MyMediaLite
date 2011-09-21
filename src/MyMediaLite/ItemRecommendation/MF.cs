@@ -36,7 +36,7 @@ namespace MyMediaLite.ItemRecommendation
 		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
-		public double InitStdev { get; set; }
+		public double InitStdDev { get; set; }
 
 		/// <summary>Number of latent factors per user/item</summary>
 		public uint NumFactors { get { return (uint) num_factors; } set { num_factors = (int) value; } }
@@ -51,7 +51,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			NumIter = 30;
 			InitMean = 0;
-			InitStdev = 0.1;
+			InitStdDev = 0.1;
 		}
 
 		///
@@ -60,8 +60,8 @@ namespace MyMediaLite.ItemRecommendation
 			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
 		}
 
 		///

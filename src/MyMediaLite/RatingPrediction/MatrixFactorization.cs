@@ -53,7 +53,7 @@ namespace MyMediaLite.RatingPrediction
 		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the factors</summary>
-		public double InitStdev { get; set; }
+		public double InitStdDev { get; set; }
 
 		/// <summary>Number of latent factors</summary>
 		public uint NumFactors { get; set;}
@@ -74,7 +74,7 @@ namespace MyMediaLite.RatingPrediction
 			Regularization = 0.015;
 			LearnRate = 0.01;
 			NumIter = 30;
-			InitStdev = 0.1;
+			InitStdDev = 0.1;
 			NumFactors = 10;
 		}
 
@@ -84,8 +84,8 @@ namespace MyMediaLite.RatingPrediction
 			// init factor matrices
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
 		}
 
 		///
@@ -110,7 +110,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateUsers)
 			{
-				MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
+				MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
 				LearnFactors(Ratings.ByUser[(int)user_id], true, false);
 			}
 		}
@@ -121,7 +121,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateItems)
 			{
-				MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
+				MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
 				LearnFactors(Ratings.ByItem[(int)item_id], false, true);
 			}
 		}
@@ -326,8 +326,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture,
-								 "{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stdev={6}",
-								 this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdev);
+								 "{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stddev={6}",
+								 this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

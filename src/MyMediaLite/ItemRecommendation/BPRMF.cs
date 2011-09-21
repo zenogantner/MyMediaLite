@@ -239,7 +239,7 @@ namespace MyMediaLite.ItemRecommendation
 				i = user_items.ElementAt(random.Next(user_items.Count));
 				do
 					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j]);
+				while (user_items.Contains(j));
 			}
 		}
 
@@ -352,7 +352,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddUser(user_id);
 
 			user_factors.AddRows(user_id + 1);
-			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
 		}
 
 		///
@@ -361,7 +361,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddItem(item_id);
 
 			item_factors.AddRows(item_id + 1);
-			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
 		}
 
 		///
@@ -421,7 +421,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
 
 			var user_items = Feedback.UserMatrix[user_id];
 			for (int i = 0; i < user_items.Count; i++)
@@ -436,7 +436,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
 
 			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
 			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
@@ -616,8 +616,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} update_j={10} init_mean={11} init_stdev={12}",
-								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdev);
+			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} update_j={10} init_mean={11} init_stddev={12}",
+								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
 		}
 	}
 }
