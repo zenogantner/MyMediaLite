@@ -55,7 +55,7 @@ class RatingPrediction
 	static List<double> eval_time_stats     = new List<double>();
 	static List<double> rmse_eval_stats     = new List<double>();
 
-	// global command line parameters
+	// command line parameters
 	static string training_file;
 	static string test_file;
 	static string save_model_file = string.Empty;
@@ -71,6 +71,7 @@ class RatingPrediction
 	static uint cross_validation;
 	static bool show_fold_results;
 	static double test_ratio;
+	static int find_iter;
 
 	static void ShowVersion()
 	{
@@ -135,6 +136,7 @@ class RatingPrediction
    --test-ratio=NUM               use a ratio of NUM of the training data for evaluation (simple split)
    --online-evaluation            perform online evaluation (use every tested rating for incremental training)
    --search-hp                    search for good hyperparameter values (experimental)
+   --compute-fit                  display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -142,8 +144,7 @@ class RatingPrediction
    --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
    --rmse-cutoff=NUM              abort if RMSE is above NUM
    --mae-cutoff=NUM               abort if MAE is above NUM
-   --compute-fit                  display fit on training data every find_iter iterations");
-
+");
 		Environment.Exit(exit_code);
 	}
 
@@ -164,7 +165,6 @@ class RatingPrediction
 		bool show_version = false;
 
 		// arguments for iteration search
-		int find_iter      = 0;
 		int max_iter       = 500;
 		double epsilon     = 0;
 		double rmse_cutoff = double.MaxValue;
@@ -216,8 +216,6 @@ class RatingPrediction
 			{ "version",              v => show_version      = v != null },
 		};
 		IList<string> extra_args = p.Parse(args);
-
-		// TODO make sure interaction of --find-iter and --cross-validation works properly
 
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null)
@@ -280,49 +278,47 @@ class RatingPrediction
 				Model.Load(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), iterative_recommender.NumIter);
 
 			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)));
 			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
 
-			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
+			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 			{
 				TimeSpan time = Utils.MeasureTime(delegate() {
 					iterative_recommender.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
 
-				if (i % find_iter == 0)
+				if (it % find_iter == 0)
 				{
 					if (compute_fit)
 					{
-						double fit = 0;
 						time = Utils.MeasureTime(delegate() {
-							fit = iterative_recommender.ComputeFit();
+							Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), it);
 						});
 						fit_time_stats.Add(time.TotalSeconds);
-						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", fit));
 					}
 
 					Dictionary<string, double> results = null;
 					time = Utils.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
 					eval_time_stats.Add(time.TotalSeconds);
 					rmse_eval_stats.Add(results["RMSE"]);
-					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), i);
+					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), it);
 
-					Model.Save(recommender, save_model_file, i);
+					Model.Save(recommender, save_model_file, it);
 					if (prediction_file != null)
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + i, prediction_line);
+						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + it, prediction_line);
 
 					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 					{
 						Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
-						Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", i);
+						Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
 						break;
 					}
 					if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
 					{
-							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
+							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 							break;
 					}
 				}
@@ -338,7 +334,7 @@ class RatingPrediction
 				{
 					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = RatingsCrossValidation.Evaluate(recommender, split, show_fold_results); // TODO if (search_hp)
+					var results = RatingsCrossValidation.Evaluate(recommender, split, show_fold_results);
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}
@@ -346,10 +342,8 @@ class RatingPrediction
 				{
 					if (search_hp)
 					{
-						// TODO --search-hp-criterion=RMSE
 						double result = NelderMead.FindMinimum("RMSE", recommender);
 						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(CultureInfo.InvariantCulture));
-						// TODO give out hp search time
 					}
 
 					Console.Write(recommender.ToString());
@@ -375,11 +369,11 @@ class RatingPrediction
 
 			if (compute_fit)
 			{
-				Console.Write("fit ");
+				Console.Write("\nfit ");
 				seconds = Utils.MeasureTime(delegate() {
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)));
 				});
-				Console.Write(string.Format(CultureInfo.InvariantCulture, " fit_time {0:0.#####} ", seconds));
+				Console.Write(" fit_time " + seconds);
 			}
 
 			if (prediction_file != null)
@@ -404,6 +398,12 @@ class RatingPrediction
 
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
+
+		if (show_fold_results && cross_validation == 0)
+			Usage("--show-fold-results only works with --cross-validation=K.");
+
+		if (cross_validation > 1 && find_iter != 0)
+			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
@@ -430,10 +430,11 @@ class RatingPrediction
 			Usage("Did not understand " + extra_args[0]);
 	}
 
-	static void LoadData(string data_dir,
-	                     string user_attributes_file, string item_attributes_file,
-	                     string user_relation_file, string item_relation_file,
-	                     bool static_data)
+	static void LoadData(
+		string data_dir,
+		string user_attributes_file, string item_attributes_file,
+		string user_relation_file, string item_relation_file,
+		bool static_data)
 	{
 		TimeSpan loading_time = Utils.MeasureTime(delegate() {
 			// read training data
@@ -480,7 +481,6 @@ class RatingPrediction
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else
 					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
-				// TODO add KDD Cup
 			}
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
