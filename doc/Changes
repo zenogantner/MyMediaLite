@@ -34,7 +34,10 @@
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
           - BPRMF: add UpdateJ option, fully support RemoveItem()
-          - BPR_Linear: no warning when predicting for unknown items
+          - factorization models that need random initialization:
+            rename property Stdev to StdDev
+          - BPR_Linear: no warning when predicting for unknown items; get rid
+            of random initialization - 0 is okay for linear model
         - command-line tools
           - add --show-fold-results for cross-validation
           - support --compute-fit for all kinds of modes, not only in
