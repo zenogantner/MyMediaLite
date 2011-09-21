@@ -46,7 +46,7 @@ class MappingItemRecommendation
 {
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
-	static ICollection<int> relevant_items;
+	static IList<int> relevant_items;
 
 	static BPRMF_Mapping recommender;
 	static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
@@ -89,8 +89,8 @@ class MappingItemRecommendation
 		Environment.Exit (exit_code);
 	}
 
-    public static void Main(string[] args)
-    {
+	public static void Main(string[] args)
+	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 
 		// check number of command line parameters
@@ -163,7 +163,7 @@ class MappingItemRecommendation
 
 		// relevant items
 		if (! relevant_items_file.Equals(string.Empty) )
-			relevant_items = new HashSet<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
 		else
 			relevant_items = training_data.AllItems;
 
@@ -186,7 +186,7 @@ class MappingItemRecommendation
 		}
 
 		// test data
-        test_data = ItemData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+		test_data = ItemData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
@@ -216,13 +216,13 @@ class MappingItemRecommendation
 					Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 				}
 				recommender.NumIterMapping = num_iter; // restore
-	    	} );
+			});
 		}
 		else
 		{
-			seconds = Utils.MeasureTime( delegate() {
+			seconds = Utils.MeasureTime(delegate() {
 				recommender.LearnAttributeToFactorMapping();
-	    	} );
+			});
 		}
 		Console.Write("mapping_time " + seconds + " ");
 
@@ -231,21 +231,21 @@ class MappingItemRecommendation
 		Console.WriteLine();
 	}
 
-    static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, IPosOnlyFeedback test_data, IPosOnlyFeedback train_data)
+	static TimeSpan EvaluateRecommender(BPRMF_Mapping recommender, IPosOnlyFeedback test_data, IPosOnlyFeedback train_data)
 	{
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
-		TimeSpan seconds = Utils.MeasureTime( delegate()
-	    	{
+		TimeSpan seconds = Utils.MeasureTime(delegate() {
 	    		var result = Items.Evaluate(
-                                recommender,
+								recommender,
 								test_data,
-        	                    train_data,
-			                    test_data.AllUsers,
-            	                relevant_items
-			    );
+								train_data,
+								test_data.AllUsers,
+								relevant_items,
+								CandidateItems.EXPLICIT
+				);
 				DisplayResults(result);
-	    	} );
+			} );
 		Console.Write(" testing " + seconds);
 
 		return seconds;
@@ -253,8 +253,9 @@ class MappingItemRecommendation
 
 	static void DisplayResults(Dictionary<string, double> result)
 	{
-		Console.Write(string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6}",
-		                            result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
+		Console.Write(
+			string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6}",
+			result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 	}
 
 	static void DisplayDataStats()
@@ -277,12 +278,14 @@ class MappingItemRecommendation
 
 		// attribute stats
 		if (recommender is IUserAttributeAwareRecommender)
-			Console.WriteLine("{0} user attributes for {1} users",
-			                  ((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
-			                  ((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
+			Console.WriteLine(
+				"{0} user attributes for {1} users",
+				((IUserAttributeAwareRecommender)recommender).NumUserAttributes,
+				((IUserAttributeAwareRecommender)recommender).UserAttributes.NumberOfRows);
 		if (recommender is IItemAttributeAwareRecommender)
-			Console.WriteLine("{0} item attributes for {1} items",
-			                  ((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
-			                  ((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
+			Console.WriteLine(
+				"{0} item attributes for {1} items",
+				((IItemAttributeAwareRecommender)recommender).NumItemAttributes,
+				((IItemAttributeAwareRecommender)recommender).ItemAttributes.NumberOfRows);
 	}
 }

@@ -34,12 +34,13 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
-		// TODO implement MAE optimization or throw Exception
-		// TODO implement bold-driver support or throw Exception
+		// TODO
+		//  - implement MAE optimization or throw Exception
+		//  - implement bold-driver support or throw Exception
 		
-        /// <summary>Social network regularization constant</summary>
+		/// <summary>Social network regularization constant</summary>
 		public double SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
-        private double social_regularization = 1;
+		private double social_regularization = 1;
 
 		/*
 		/// <summary>
@@ -63,17 +64,17 @@ namespace MyMediaLite.RatingPrediction
 			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
 
 			// init latent factor matrices
-	       	user_factors = new Matrix<double>(NumUsers, NumFactors);
-	       	item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
-	       	MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-	       	MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			user_factors = new Matrix<double>(NumUsers, NumFactors);
+			item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
 			// init biases
 			user_bias = new double[NumUsers];
 			item_bias = new double[ratings.MaxItemID + 1];
 		}
 
 		///
-        public override void Train()
+		public override void Train()
 		{
 			InitModel();
 
@@ -84,8 +85,8 @@ namespace MyMediaLite.RatingPrediction
 			global_average = Ratings.Average;
 
 			// learn model parameters
-            global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
-            for (int current_iter = 0; current_iter < NumIter; current_iter++)
+			global_bias = Math.Log( (global_average - MinRating) / (MaxRating - global_average) );
+			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.RandomIndex, true, true);
 		}
 
@@ -107,34 +108,34 @@ namespace MyMediaLite.RatingPrediction
 			// I.1 prediction error
 			double rating_range_size = MaxRating - MinRating;
 			for (int index = 0; index < ratings.Count; index++)
-            {
-            	int u = ratings.Users[index];
-                int i = ratings.Items[index];
+			{
+				int u = ratings.Users[index];
+				int i = ratings.Items[index];
 
 				// prediction
 				double score = global_bias;
 				score += user_bias[u];
 				score += item_bias[i];
-	            for (int f = 0; f < NumFactors; f++)
-    	            score += user_factors[u, f] * item_factors[i, f];
+				for (int f = 0; f < NumFactors; f++)
+					score += user_factors[u, f] * item_factors[i, f];
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
-                double prediction = MinRating + sig_score * rating_range_size;
+				double prediction = MinRating + sig_score * rating_range_size;
 				double error      = ratings[index] - prediction;
 
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
 				// add up error gradient
-                for (int f = 0; f < NumFactors; f++)
-                {
-                 	double u_f = user_factors[u, f];
-                    double i_f = item_factors[i, f];
+				for (int f = 0; f < NumFactors; f++)
+				{
+					double u_f = user_factors[u, f];
+					double i_f = item_factors[i, f];
 
-                    if (f != 0)
+					if (f != 0)
 						MatrixUtils.Inc(user_factors_gradient, u, f, gradient_common * i_f);
-                    if (f != 1)
+					if (f != 1)
 						MatrixUtils.Inc(item_factors_gradient, i, f, gradient_common * u_f);
-                }
+				}
 			}
 
 			// I.2 L2 regularization
@@ -182,7 +183,7 @@ namespace MyMediaLite.RatingPrediction
 
 				// latent factor part
 				foreach (int v in user_neighbors[u])
-                	for (int f = 0; f < NumFactors; f++)
+					for (int f = 0; f < NumFactors; f++)
 						sum_neighbors[f] += user_factors[v, f];
 				if (num_neighbors != 0)
 					for (int f = 0; f < NumFactors; f++)
@@ -253,9 +254,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-			                     "{0} num_factors={1} regularization={2} social_regularization={3} learn_rate={4} num_iter={5} init_mean={6} init_stdev={7}",
-				                 this.GetType().Name, NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} regularization={2} social_regularization={3} learn_rate={4} num_iter={5} init_mean={6} init_stddev={7}",
+				this.GetType().Name, NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

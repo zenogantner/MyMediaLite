@@ -31,7 +31,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class MostPopular : ItemRecommender
+	public class MostPopular : IncrementalItemRecommender
 	{
 		/// <summary>View count</summary>
 		protected IList<int> view_count;

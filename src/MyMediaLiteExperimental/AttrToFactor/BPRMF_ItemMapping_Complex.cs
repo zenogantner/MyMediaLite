@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.DataType;
@@ -36,15 +35,15 @@ namespace MyMediaLite.AttrToFactor
 		///
 		public override void LearnAttributeToFactorMapping()
 		{
-			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors); // TODO change name
+			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_hidden_factors);
 			this.output_layer        = new Matrix<double>(num_hidden_factors, num_factors);
 
 			Console.Error.WriteLine("BPR-MULTILAYER-MAP training");
 			Console.Error.WriteLine("num_item_attributes=" + NumItemAttributes);
 			Console.Error.WriteLine("num_hidden_factors=" + num_hidden_factors);
 
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
-			MatrixUtils.InitNormal(output_layer, InitMean, InitStdev);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+			MatrixUtils.InitNormal(output_layer, InitMean, InitStdDev);
 
 			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
 			for (int i = 0; i < num_iter_mapping; i++)
@@ -174,8 +173,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1}, reg_u={2}, reg_i={3}, reg_j={4}, num_iter={5}, learn_rate={6}, reg_mapping={7}, num_iter_mapping={8}, learn_rate_mapping={9}, num_hidden_factors={10}, init_mean={11}, init_stdev={12}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_factors, InitMean, InitStdev
+				"{0} num_factors={1}, reg_u={2}, reg_i={3}, reg_j={4}, num_iter={5}, learn_rate={6}, reg_mapping={7}, num_iter_mapping={8}, learn_rate_mapping={9}, num_hidden_factors={10}, init_mean={11}, init_stddev={12}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, num_hidden_factors, InitMean, InitStdDev
 			);
 		}
 	}

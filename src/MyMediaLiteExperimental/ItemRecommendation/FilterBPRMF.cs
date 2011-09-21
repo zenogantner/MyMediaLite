@@ -41,7 +41,6 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public int NumItemAttributes { get;	private set; }
 
-		// TODO document
 		IList<Dictionary<int, ICollection<int>>> filtered_items_by_user;
 		SparseBooleanMatrix items_by_attribute;
 

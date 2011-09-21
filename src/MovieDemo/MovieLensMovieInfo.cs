@@ -40,7 +40,7 @@ namespace MovieDemo
 		}
 	}
 
-
+	// TODO move to main library
 	public sealed class MovieLensMovieInfo
 	{
 		public List<Movie> movie_list;
@@ -80,12 +80,12 @@ namespace MovieDemo
 
 			while (!reader.EndOfStream)
 			{
-			   	line = reader.ReadLine();
+				line = reader.ReadLine();
 
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
 				if (tokens.Length != 3)
-					throw new IOException("Expected exactly three columns: " + line);
+					throw new IOException("Expected exactly 3 columns: " + line);
 
 				int movie_id          = item_mapping.ToInternalID(int.Parse(tokens[0]));
 				string movie_imdb_key = tokens[1];

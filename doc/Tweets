@@ -30,8 +30,6 @@ You can reach the authors of #MyMediaLite by sending an e-mail to mymedialite@is
 
 Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.net/projects/mymedialite http://mloss.org/software/view/282/
 
-----
-
 If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
 
 WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
@@ -46,9 +44,9 @@ Since version 1.05, #MyMediaLite supports recommendations for groups: http://ism
 
 We also have a nice GUI demo: http://bit.ly/pvXuSB #MyMediaLite #recsys
 
-#MyMediaLite scales pretty well: For small models, 1 iteration over the Netflix dataset takes less than 100 seconds: http://bit.ly/pQxTYZ #recsys
+#MyMediaLite scales pretty well: For small models, 1 iteration over the Netflix dataset takes < 100 seconds: http://bit.ly/pQxTYZ #recsys
 
-BiasedMatrixFactorization in #MyMediaLite is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys
+BiasedMatrixFactorization is a state-of-the-art matrix factorization model for rating prediction: http://bit.ly/ooNlpb #recsys #MyMediaLite
 
 #MyMediaLite contains different kNN models for both rating and item prediction: http://bit.ly/pscX4U http://bit.ly/no1sam #recsys
 
@@ -64,6 +62,14 @@ Read about our approach for #kddcup2011: http://ismll.de/pub/pdfs/Gantner_et_al2
 
 Overview of open source/free software recommender system implementations: http://www.ismll.uni-hildesheim.de/mymedialite/links.html
 
-----
+Research that builds on the #MyMediaLite library: http://ismll.de/mymedialite/examples/research.html #recsys
 
-Visit the #MyMediaLite poster at the #recsys2011 poster session tonight. #recsys
+predictive accuracy of different #MyMediaLite recommenders on rating prediction datasets: http://bit.ly/p6Bzbj #recsys
+
+The #MyMediaLite issue/bug tracker: https://github.com/zenogantner/MyMediaLite/issues #recsys
+
+#MyMediaLite feature overview: http://ismll.de/mymedialite/features.html #recsys
+
+#MyMediaLite item recommendation tool: --rating-threshold=4 interprets all ratings > 4 as positive feedback
+
+If you are a Java developer, this may help you to learn about C#: http://www.25hoursaday.com/CsharpVsJava.html

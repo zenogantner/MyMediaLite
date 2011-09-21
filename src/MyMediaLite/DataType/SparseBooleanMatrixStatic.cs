@@ -22,8 +22,13 @@ using System.Linq;
 
 namespace MyMediaLite.DataType
 {
-	/// <summary>Sparse representation of a boolean matrix, using binary search (memory efficient)</summary>
+	/// <summary>
+	/// Sparse representation of a boolean matrix, using binary search (memory efficient).
+	/// </summary>
 	/// <remarks>
+	/// This data structure is static, which means that rows are represented as int arrays,
+	/// and can be assigned, but not modified.
+	///
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
 	/// </remarks>
@@ -46,7 +51,7 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> this [int x] // TODO think about returning IList
+		public ICollection<int> this [int x]
 		{
 			get	{
 				if (x >= row_list.Count)
@@ -67,13 +72,8 @@ namespace MyMediaLite.DataType
 			get	{
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
-					{
-						if (i > j)
-							continue; // check every pair only once
-
 						if (!this[j, i])
 							return false;
-					}
 				return true;
 			}
 		}
@@ -95,7 +95,8 @@ namespace MyMediaLite.DataType
 		{
 			return row_list[row_id].Length;
 		}
-
+		
+		///
 		/// <remarks>Takes O(N log(M)) worst-case time, where N is the number of rows and M is the number of columns.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
 		{
@@ -134,10 +135,10 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> NonEmptyRowIDs
+		public IList<int> NonEmptyRowIDs
 		{
 			get	{
-				var row_ids = new HashSet<int>();
+				var row_ids = new List<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Length > 0)
@@ -147,9 +148,8 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		// TODO add unit test
 		///
-		public ICollection<int> NonEmptyColumnIDs
+		public IList<int> NonEmptyColumnIDs
 		{
 			get	{
 				var col_ids = new HashSet<int>();
@@ -159,7 +159,7 @@ namespace MyMediaLite.DataType
 					foreach (int id in row_list[i])
 						col_ids.Add(id);
 
-				return col_ids;
+				return col_ids.ToArray();
 			}
 		}
 
@@ -192,25 +192,11 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one</summary>
-		/// <param name="y">the column ID</param>
-		public void RemoveColumn(int y)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs</summary>
-		/// <param name="delete_columns">an array with column IDs</param>
-		public void RemoveColumn(int[] delete_columns)
-		{
-			throw new NotSupportedException();			
-		}
-
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
 		/// <returns>the transpose of the matrix</returns>
 		public IMatrix<bool> Transpose()
 		{
-			var transpose = new SparseBooleanMatrixStatic();
+			var transpose = new SparseBooleanMatrixBinarySearch();
 			for (int i = 0; i < row_list.Count; i++)
 				foreach (int j in this[i])
 					transpose[j, i] = true;

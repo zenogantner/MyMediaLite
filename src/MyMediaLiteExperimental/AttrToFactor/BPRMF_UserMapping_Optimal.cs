@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.DataType;
@@ -37,7 +36,7 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();
@@ -95,10 +94,9 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-			    "{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stdev={11}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stddev={11}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev
 			);
 		}
-
 	}
 }

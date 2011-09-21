@@ -53,7 +53,7 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> this [int x] // TODO think about returning IList
+		public ICollection<int> this [int x]
 		{
 			get	{
 				if (x >= row_list.Count)
@@ -70,8 +70,6 @@ namespace MyMediaLite.DataType
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
 					{
-						if (i > j)
-							continue; // check every pair only once
 
 						if (!this[j, i])
 							return false;
@@ -135,10 +133,10 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public ICollection<int> NonEmptyRowIDs
+		public IList<int> NonEmptyRowIDs
 		{
 			get	{
-				var row_ids = new HashSet<int>();
+				var row_ids = new List<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
@@ -148,9 +146,8 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		// TODO add unit test
 		///
-		public ICollection<int> NonEmptyColumnIDs
+		public IList<int> NonEmptyColumnIDs
 		{
 			get	{
 				var col_ids = new HashSet<int>();
@@ -160,7 +157,7 @@ namespace MyMediaLite.DataType
 					foreach (int id in row_list[i])
 						col_ids.Add(id);
 
-				return col_ids;
+				return col_ids.ToArray();
 			}
 		}
 
@@ -190,53 +187,6 @@ namespace MyMediaLite.DataType
 				foreach (var row in row_list)
 					n += row.Count;
 				return n;
-			}
-		}
-
-		/// <summary>Removes a column, and fills the gap by decrementing all occurrences of higher column IDs by one</summary>
-		/// <param name="y">the column ID</param>
-		public void RemoveColumn(int y)
-		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					if (col_id >= y)
-						row_list[row_id].Remove(y);
-					if (col_id > y)
-						row_list[row_id].Add(col_id - 1);
-				}
-			}
-		}
-
-		/// <summary>Removes several columns, and fills the gap by decrementing all occurrences of higher column IDs</summary>
-		/// <param name="delete_columns">an array with column IDs</param>
-		public void RemoveColumn(int[] delete_columns)
-		{
-			for (int row_id = 0; row_id < row_list.Count; row_id++)
-			{
-				var cols = new List<int>(row_list[row_id]);
-				foreach (int col_id in cols)
-				{
-					int decrease_by = 0;
-					foreach (int y in delete_columns)
-					{
-						if (col_id == y)
-						{
-							row_list[row_id].Remove(y);
-							goto NEXT_COL; // poor man's labeled continue
-						}
-						if (col_id > y)
-							decrease_by++;
-					}
-
-					// decrement column ID
-					row_list[row_id].Remove(col_id);
-					row_list[row_id].Add(col_id - decrease_by);
-
-					NEXT_COL:;
-				}
 			}
 		}
 

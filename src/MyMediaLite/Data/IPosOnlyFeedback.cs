@@ -39,10 +39,10 @@ namespace MyMediaLite.Data
 		int Count { get; }
 
 		/// <summary>all users that have given feedback</summary>
-		ICollection<int> AllUsers { get; }
+		IList<int> AllUsers { get; }
 		
 		/// <summary>all items mentioned at least once</summary>
-		ICollection<int> AllItems { get; }
+		IList<int> AllItems { get; }
 		
 		/// <summary>Add a user-item event to the data structure</summary>
 		/// <param name="user_id">the user ID</param>
@@ -50,6 +50,9 @@ namespace MyMediaLite.Data
 		void Add(int user_id, int item_id);
 
 		/// <summary>Remove a user-item event from the data structure</summary>
+		/// <remarks>
+		/// If no event for the given user-item combination exists, nothing happens.
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		void Remove(int user_id, int item_id);
@@ -65,7 +68,7 @@ namespace MyMediaLite.Data
 		/// <summary>Compute the number of overlapping events in two feedback datasets</summary>
 		/// <param name="s">the feedback dataset to compare to</param>
 		/// <returns>the number of overlapping events, i.e. events that have the same user and item ID</returns>
-		int Overlap(IPosOnlyFeedback s);
+		int OverlapCount(IPosOnlyFeedback s);
 	}
 }
 

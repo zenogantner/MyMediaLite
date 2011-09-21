@@ -79,6 +79,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Regularization parameter for negative item factors</summary>
 		protected double reg_j = 0.00025;
 
+		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
+		public bool UpdateJ { get { return update_j; } set { update_j = value; } }
+		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
+		protected bool update_j = true;
+
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_pos_items;
 		/// <summary>support data structure for fast sampling</summary>
@@ -157,12 +162,12 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			int num_pos_events = Feedback.Count;
 
-			int user_id, item_id_1, item_id_2;
+			int user_id, pos_item_id, neg_item_id;
 
 			for (int i = 0; i < num_pos_events; i++)
 			{
-				SampleTriple(out user_id, out item_id_1, out item_id_2);
-				UpdateFactors(user_id, item_id_1, item_id_2, true, true, true);
+				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
 
 			if (BoldDriver)
@@ -223,7 +228,7 @@ namespace MyMediaLite.ItemRecommendation
 				int rindex;
 
 				rindex = random.Next(user_pos_items[u].Count);
-				i = user_pos_items[u][rindex]; // TODO use this also with slow sampling?
+				i = user_pos_items[u][rindex];
 
 				rindex = random.Next(user_neg_items[u].Count);
 				j = user_neg_items[u][rindex];
@@ -234,7 +239,7 @@ namespace MyMediaLite.ItemRecommendation
 				i = user_items.ElementAt(random.Next(user_items.Count));
 				do
 					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j]);
+				while (user_items.Contains(j));
 			}
 		}
 
@@ -278,14 +283,14 @@ namespace MyMediaLite.ItemRecommendation
 			// adjust bias terms
 			if (update_i)
 			{
-				double bias_update = one_over_one_plus_ex - BiasReg * item_bias[i];
-				item_bias[i] += learn_rate * bias_update;
+				double update = one_over_one_plus_ex - BiasReg * item_bias[i];
+				item_bias[i] += learn_rate * update;
 			}
 
 			if (update_j)
 			{
-				double bias_update = -one_over_one_plus_ex - BiasReg * item_bias[j];
-				item_bias[j] += learn_rate * bias_update;
+				double update = -one_over_one_plus_ex - BiasReg * item_bias[j];
+				item_bias[j] += learn_rate * update;
 			}
 
 			// adjust factors
@@ -297,20 +302,20 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u)
 				{
-					double uf_update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[u, f] = w_uf + learn_rate * uf_update;
+					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
+					user_factors[u, f] = w_uf + learn_rate * update;
 				}
 
 				if (update_i)
 				{
-					double if_update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[i, f] = h_if + learn_rate * if_update;
+					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
+					item_factors[i, f] = h_if + learn_rate * update;
 				}
 
 				if (update_j)
 				{
-					double jf_update = -w_uf  * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[j, f] = h_jf + learn_rate * jf_update;
+					double update = -w_uf  * one_over_one_plus_ex - reg_j * h_jf;
+					item_factors[j, f] = h_jf + learn_rate * update;
 				}
 			}
 		}
@@ -347,7 +352,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddUser(user_id);
 
 			user_factors.AddRows(user_id + 1);
-			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
 		}
 
 		///
@@ -356,7 +361,7 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddItem(item_id);
 
 			item_factors.AddRows(item_id + 1);
-			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
 		}
 
 		///
@@ -379,8 +384,34 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.RemoveItem(item_id);
 
-			// TODO remove from fast sampling data structures
-			//      (however: not needed if all feedback events have been removed properly before)
+			if (fast_sampling)
+			{
+				for (int i = 0; i < user_pos_items.Count; i++)
+					if (user_pos_items[i].Contains(item_id))
+					{
+						var new_pos_items = new int[user_pos_items.Count - 1];
+						bool found = false;
+						for (int j = 0; j < user_pos_items[i].Count; j++)
+							if (user_pos_items[i][j] != item_id)
+								new_pos_items[j - (found ? 1 : 0)] = user_pos_items[i][j];
+							else
+								found = true;
+						user_pos_items[i] = new_pos_items;
+					}
+
+				for (int i = 0; i < user_neg_items.Count; i++)
+					if (user_neg_items[i].Contains(item_id))
+					{
+						var new_neg_items = new int[user_neg_items.Count - 1];
+						bool found = false;
+						for (int j = 0; j < user_neg_items[i].Count; j++)
+							if (user_neg_items[i][j] != item_id)
+								new_neg_items[j - (found ? 1 : 0)] = user_neg_items[i][j];
+							else
+								found = true;
+						user_neg_items[i] = new_neg_items;
+					}
+			}
 
 			// set item latent factors to zero
 			item_factors.SetRowToOneValue(item_id, 0);
@@ -390,7 +421,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		protected virtual void RetrainUser(int user_id)
 		{
-			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdev, user_id);
+			MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
 
 			var user_items = Feedback.UserMatrix[user_id];
 			for (int i = 0; i < user_items.Count; i++)
@@ -405,7 +436,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdev, item_id);
+			MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
 
 			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
 			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
@@ -449,7 +480,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Compute the fit (AUC on training data)</summary>
 		/// <returns>the fit</returns>
 		public override double ComputeFit()
-		{   // TODO compute smoothed fit?
+		{
 			double sum_auc = 0;
 			int num_user = 0;
 
@@ -458,7 +489,7 @@ namespace MyMediaLite.ItemRecommendation
 				int num_test_items = Feedback.UserMatrix[user_id].Count;
 				if (num_test_items == 0)
 					continue;
-				int[] prediction = Prediction.PredictItems(this, user_id, MaxItemID);
+				IList<int> prediction_list = Prediction.PredictItems(this, user_id, MaxItemID);
 
 				int num_eval_items = MaxItemID + 1;
 				int num_eval_pairs = (num_eval_items - num_test_items) * num_test_items;
@@ -466,9 +497,9 @@ namespace MyMediaLite.ItemRecommendation
 				int num_correct_pairs = 0;
 				int num_pos_above = 0;
 				// start with the highest weighting item...
-				for (int i = 0; i < prediction.Length; i++)
+				for (int i = 0; i < prediction_list.Count; i++)
 				{
-					int item_id = prediction[i];
+					int item_id = prediction_list[i];
 
 					if (Feedback.UserMatrix[user_id, item_id])
 						num_pos_above++;
@@ -491,8 +522,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (u >= user_neg_items.Count)
 				user_neg_items.Add(null);
 
-			var pos_list = new List<int>(Feedback.UserMatrix[u]);
-			user_pos_items[u] = pos_list.ToArray();
+			user_pos_items[u] = Feedback.UserMatrix[u].ToArray();
 			var neg_list = new List<int>();
 			for (int i = 0; i < MaxItemID; i++)
 				if (! Feedback.UserMatrix[u, i])
@@ -501,7 +531,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected void CheckSampling() // TODO more descriptive name; then also port to BPR_Linear
+		protected void CheckSampling()
 		{
 			try
 			{
@@ -531,6 +561,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override double Predict(int user_id, int item_id)
 		{
+			if (user_id > MaxUserID || item_id > MaxItemID)
+				return 0;
+
 			return item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
@@ -583,8 +616,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} init_mean={10} init_stdev={11}",
-								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, InitMean, InitStdev);
+			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} update_j={10} init_mean={11} init_stddev={12}",
+								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
 		}
 	}
 }

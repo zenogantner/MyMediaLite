@@ -21,6 +21,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.DataType;
 using MyMediaLite.Data;
+using MyMediaLite.IO;
 using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
@@ -35,13 +36,13 @@ namespace MyMediaLite.Correlation
 		public override bool IsSymmetric { get { return true; } }
 
 		///
-        public override float this [int i, int j]
-        {
+		public override float this [int i, int j]
+		{
 			get { return data[i * dim2 + j]; }
-			set	{
-            	data[i * dim2 + j] = value;
-            	data[j * dim2 + i] = value;
-        	}
+			set {
+				data[i * dim2 + j] = value;
+				data[j * dim2 + i] = value;
+			}
 		}
 
 		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
@@ -90,11 +91,10 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				cm[i, i] = 1;
 
-			var split_chars = new char[]{ '\t', ' ', ',' };
-
-			while (! reader.EndOfStream)
+			string line;
+			while ((line = reader.ReadLine()) != null)
 			{
-				string[] numbers = reader.ReadLine().Split(split_chars);
+				string[] numbers = line.Split(Constants.SPLIT_CHARS);
 				int i = int.Parse(numbers[0]);
 				int j = int.Parse(numbers[1]);
 				float c = float.Parse(numbers[2], CultureInfo.InvariantCulture);

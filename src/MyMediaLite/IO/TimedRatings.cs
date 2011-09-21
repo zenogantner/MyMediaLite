@@ -33,7 +33,7 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public ITimedRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			using ( var reader = new StreamReader(filename) )
+			using (var reader = new StreamReader(filename))
 				return Read(reader, user_mapping, item_mapping);
 		}
 
@@ -42,31 +42,26 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings
-			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public ITimedRatings Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var ratings = new MyMediaLite.Data.TimedRatings();
 
-			var split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
-
-			while ( (line = reader.ReadLine()) != null )
-			{
+			while ((line = reader.ReadLine()) != null) {
 				if (line.Length == 0)
 					continue;
 
-				string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 4)
 					throw new IOException("Expected at least 4 columns: " + line);
 
-				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
-				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-				string date_string = tokens[3];
-				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\""))
-				{
-					date_string = tokens[3] + " " + tokens[4];
+				int user_id = user_mapping.ToInternalID(int.Parse (tokens [0]));
+				int item_id = item_mapping.ToInternalID(int.Parse (tokens [1]));
+				double rating = double.Parse(tokens [2], CultureInfo.InvariantCulture);
+				string date_string = tokens [3];
+				if (tokens [3].StartsWith("\"") && tokens.Length > 4 && tokens [4].EndsWith("\"")) {
+					date_string = tokens [3] + " " + tokens [4];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
 

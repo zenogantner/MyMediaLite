@@ -28,7 +28,7 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, NumFactors + 1);
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();
@@ -81,7 +81,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 
 			// 3. gradient descent step
-			// TODO
+			// TODO finish
 		}
 	}
 }

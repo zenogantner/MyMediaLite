@@ -25,7 +25,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// See also http://recsyswiki/wiki/Item_prediction
 	/// </remarks>
-	public interface IItemRecommender : IRecommender
+	public interface IIncrementalItemRecommender : IRecommender
 	{
 		// <summary>Check if the recommender can produce meaningful recommendations for a given user</summary>
 		// <param name="user_id">the user ID</param>

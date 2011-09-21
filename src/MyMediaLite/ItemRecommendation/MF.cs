@@ -25,7 +25,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Abstract class for matrix factorization based item predictors</summary>
-	public abstract class MF : ItemRecommender, IIterativeModel
+	public abstract class MF : IncrementalItemRecommender, IIterativeModel
 	{
 		/// <summary>Latent user factor matrix</summary>
 		protected Matrix<double> user_factors;
@@ -36,7 +36,7 @@ namespace MyMediaLite.ItemRecommendation
 		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
-		public double InitStdev { get; set; }
+		public double InitStdDev { get; set; }
 
 		/// <summary>Number of latent factors per user/item</summary>
 		public uint NumFactors { get { return (uint) num_factors; } set { num_factors = (int) value; } }
@@ -51,7 +51,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			NumIter = 30;
 			InitMean = 0;
-			InitStdev = 0.1;
+			InitStdDev = 0.1;
 		}
 
 		///
@@ -60,8 +60,8 @@ namespace MyMediaLite.ItemRecommendation
 			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdev);
+			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
+			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
 		}
 
 		///
@@ -91,15 +91,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= user_factors.dim1))
-			{
-				Console.Error.WriteLine("user is unknown: " + user_id);
 				return 0;
-			}
 			if ((item_id < 0) || (item_id >= item_factors.dim1))
-			{
-				Console.Error.WriteLine("item is unknown: " + item_id);
 				return 0;
-			}
 
 			return MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}

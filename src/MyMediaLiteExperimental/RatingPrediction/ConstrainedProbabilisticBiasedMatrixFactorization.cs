@@ -236,9 +236,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "{0} num_factors={1} reg_y={2} reg_v={3} reg_w={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stdev={9}",
-								 this.GetType().Name, NumFactors, RegY, RegV, RegW, LearnRate, NumIter, BoldDriver, InitMean, InitStdev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} reg_y={2} reg_v={3} reg_w={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9}",
+				this.GetType().Name, NumFactors, RegY, RegV, RegW, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev);
 		}
 	}
 }

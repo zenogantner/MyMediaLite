@@ -22,15 +22,12 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Class that contains static methods for item prediction</summary>
 	public static class Prediction
 	{
-		// TODO there are too many different versions of this method interface - we should simplify the API
-
 		/// <summary>Write item predictions (scores) for all users to a file</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
 		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
@@ -47,11 +44,8 @@ namespace MyMediaLite.ItemRecommendation
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
-			if (filename.Equals("-"))
-				WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
-			else
-				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+			using (var writer = new StreamWriter(filename))
+				WritePredictions(recommender, train, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) to a file</summary>
@@ -72,11 +66,8 @@ namespace MyMediaLite.ItemRecommendation
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename)
 		{
-			if (filename.Equals("-"))
-				WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, Console.Out);
-			else
-				using ( var writer = new StreamWriter(filename) )
-					WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
+			using (var writer = new StreamWriter(filename))
+				WritePredictions(recommender, train, relevant_users, relevant_items, num_predictions, user_mapping, item_mapping, writer);
 		}
 
 		/// <summary>Write item predictions (scores) for all users to a TextWriter object</summary>
@@ -175,20 +166,12 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		/// <param name="max_item_id">the maximum item ID</param>
 		/// <returns>a list sorted list of item IDs</returns>
-		static public int[] PredictItems(IRecommender recommender, int user_id, int max_item_id)
+		static public IList<int> PredictItems(IRecommender recommender, int user_id, int max_item_id)
 		{
-			var result = new List<WeightedItem>();
-			for (int item_id = 0; item_id <= max_item_id; item_id++)
-				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-
-			result.Sort();
-			result.Reverse();
-
-			var return_array = new int[max_item_id + 1];
-			for (int i = 0; i < return_array.Length; i++)
-				return_array[i] = result[i].item_id;
-
-			return return_array;
+			var items = new int[max_item_id + 1];
+			for (int i = 0; i < max_item_id; i++)
+				items[i] = i;
+			return PredictItems(recommender, user_id, items);
 		}
 
 		/// <summary>Predict items for a given user</summary>
@@ -196,19 +179,21 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="relevant_items">a collection of numerical IDs of relevant items</param>
 		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public int[] PredictItems(IRecommender recommender, int user_id, ICollection<int> relevant_items)
+		static public IList<int> PredictItems(IRecommender recommender, int user_id, IList<int> relevant_items)
 		{
-			var result = new List<WeightedItem>();
+			var result = new WeightedItem[relevant_items.Count];
+			for (int i = 0; i < relevant_items.Count; i++)
+			{
+				int item_id = relevant_items[i];
+				result[i] = new WeightedItem(item_id, recommender.Predict(user_id, item_id));
+			}
+			Array.Sort(result);
+			Array.Reverse(result);
 
-			foreach (int item_id in relevant_items)
-				result.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-
-			result.Sort();
-			result.Reverse();
-
-			var return_array = new int[result.Count];
+			var return_array = new int[result.Length];
 			for (int i = 0; i < return_array.Length; i++)
 				return_array[i] = result[i].item_id;
+			
 			return return_array;
 		}
 	}

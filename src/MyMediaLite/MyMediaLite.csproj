@@ -15,16 +15,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,9 +34,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="MathNet.Iridium, Version=2008.8.16.470, Culture=neutral, PublicKeyToken=c061a3ec32cc0c6f">
+    <Reference Include="MathNet.Numerics, Version=2011.4.17.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MathNet\MathNet.Iridium.dll</HintPath>
+      <HintPath>..\..\lib\MathNet\MathNet.Numerics.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +126,6 @@
     <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="ItemRecommendation\BPRMF.cs" />
     <Compile Include="ItemRecommendation\BPR_Linear.cs" />
-    <Compile Include="ItemRecommendation\IItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
     <Compile Include="ItemRecommendation\ItemRecommender.cs" />
@@ -152,6 +152,23 @@
     <Compile Include="IO\TimedRatings.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
+    <Compile Include="IO\Constants.cs" />
+    <Compile Include="RatingPrediction\IIncrementalRatingPredictor.cs" />
+    <Compile Include="RatingPrediction\IncrementalRatingPredictor.cs" />
+    <Compile Include="ItemRecommendation\IncrementalItemRecommender.cs" />
+    <Compile Include="ItemRecommendation\IIncrementalItemRecommender.cs" />
+    <Compile Include="Eval\Measures\PrecisionAndRecall.cs" />
+    <Compile Include="Eval\Measures\NDCG.cs" />
+    <Compile Include="Eval\Measures\ReciprocalRank.cs" />
+    <Compile Include="Eval\Measures\AUC.cs" />
+    <Compile Include="Eval\ItemsOnline.cs" />
+    <Compile Include="Eval\RatingsOnline.cs" />
+    <Compile Include="Eval\ItemsCrossValidation.cs" />
+    <Compile Include="Eval\RatingsCrossValidation.cs" />
+    <Compile Include="Eval\CandidateItems.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Eval\Measures\" />
+  </ItemGroup>
 </Project>

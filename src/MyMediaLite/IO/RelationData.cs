@@ -55,26 +55,22 @@ namespace MyMediaLite.IO
 		{
 			var matrix = new SparseBooleanMatrix();
 
-			char[] split_chars = new char[]{ '\t', ' ', ',' };
 			string line;
-
-			while (!reader.EndOfStream)
+			while ((line = reader.ReadLine()) != null)
 			{
-			   	line = reader.ReadLine();
-
 				// ignore empty lines
 				if (line.Length == 0)
 					continue;
 
-				string[] tokens = line.Split(split_chars);
+				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length != 2)
-					throw new IOException("Expected exactly two columns: " + line);
+					throw new IOException("Expected exactly 2 columns: " + line);
 
 				int entity1_id = mapping.ToInternalID(int.Parse(tokens[0]));
 				int entity2_id = mapping.ToInternalID(int.Parse(tokens[1]));
 
-			   	matrix[entity1_id, entity2_id] = true;
+				matrix[entity1_id, entity2_id] = true;
 			}
 
 			return matrix;
@@ -87,7 +83,7 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least two columns.");
+				throw new IOException("Expected at least 2 columns.");
 
 			var matrix = new SparseBooleanMatrix();
 
@@ -96,7 +92,7 @@ namespace MyMediaLite.IO
 				int entity1_id = mapping.ToInternalID(reader.GetInt32(0));
 				int entity2_id = mapping.ToInternalID(reader.GetInt32(0));
 
-			   	matrix[entity1_id, entity2_id] = true;
+				matrix[entity1_id, entity2_id] = true;
 			}
 
 			return matrix;

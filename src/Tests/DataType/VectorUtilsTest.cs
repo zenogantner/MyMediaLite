@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,7 +22,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace Tests.DataType
 {
 	/// <summary>Testing the VectorUtils class</summary>
 	[TestFixture()]

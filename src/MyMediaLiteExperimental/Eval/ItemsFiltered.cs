@@ -19,8 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval.Measures;
 using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
@@ -28,16 +30,16 @@ namespace MyMediaLite.Eval
 	/// <summary>Evaluation class for filtered item recommendation</summary>
 	public static class ItemsFiltered
 	{
-		// TODO generalize more to save code ...
-		// TODO generalize that normal protocol is just an instance of this? Only if w/o performance penalty ...
+		// TODO generalize more to save some code ...
 
 		/// <summary>For a given user and the test dataset, return a dictionary of items filtered by attributes</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="test">the test dataset</param>
 		/// <param name="item_attributes"></param>
 		/// <returns>a dictionary containing a mapping from attribute IDs to collections of item IDs</returns>
-		static public Dictionary<int, ICollection<int>> GetFilteredItems(int user_id, IPosOnlyFeedback test,
-		                                                                 SparseBooleanMatrix item_attributes)
+		static public Dictionary<int, ICollection<int>> GetFilteredItems(
+			int user_id, IPosOnlyFeedback test,
+			SparseBooleanMatrix item_attributes)
 		{
 			var filtered_items = new Dictionary<int, ICollection<int>>();
 
@@ -60,64 +62,35 @@ namespace MyMediaLite.Eval
 		/// <param name="item_attributes">the item attributes to be used for filtering</param>
 		/// <param name="relevant_users">a collection of integers with all relevant users</param>
 		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <returns>a dictionary containing the evaluation results</returns>		
-		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback train,
-		    SparseBooleanMatrix item_attributes,		                                                  
-		    ICollection<int> relevant_users,
-			ICollection<int> relevant_items)
-		{
-			return Evaluate(recommender, test, train, item_attributes, relevant_users, relevant_items, true);
-		}
-		
-		
-		/// <summary>Evaluation for rankings of filtered items</summary>
-		/// <remarks>
-		/// </remarks>
-		/// <param name="recommender">item recommender</param>
-		/// <param name="test">test cases</param>
-		/// <param name="train">training data</param>
-		/// <param name="item_attributes">the item attributes to be used for filtering</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
-		/// <param name="ignore_overlap">if true, ignore items that appear for a user in the training set when evaluating for that user</param>
+		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			IItemRecommender recommender,
+			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-		    SparseBooleanMatrix item_attributes,
-		    ICollection<int> relevant_users,
-			ICollection<int> relevant_items,
-			bool ignore_overlap)
+			SparseBooleanMatrix item_attributes,
+			IList<int> relevant_users,
+			IList<int> relevant_items,
+			bool repeated_events = false)
 		{
-			if (train.Overlap(test) > 0)
+			if (train.OverlapCount(test) > 0)
 				Console.Error.WriteLine("WARNING: Overlapping train and test data");
 
 			SparseBooleanMatrix items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();
 
-			// compute evaluation measures
-			double auc_sum     = 0;
-			double map_sum     = 0;
-			double prec_5_sum  = 0;
-			double prec_10_sum = 0;
-			double prec_15_sum = 0;
-			double ndcg_sum    = 0;
-
-			// for counting the users and the evaluation lists
-			int num_lists = 0;
 			int num_users = 0;
-			int last_user_id = -1;
+			int num_lists = 0;
+			var result = new Dictionary<string, double>();
+			foreach (string method in Items.Measures)
+				result[method] = 0;
 
-			foreach (int user_id in relevant_users)
+			Parallel.ForEach (relevant_users, user_id =>
 			{
 				var filtered_items = GetFilteredItems(user_id, test, item_attributes);
+				int last_user_id = -1;
 
 				foreach (int attribute_id in filtered_items.Keys)
 				{
-					// TODO optimize this a bit, currently it is quite naive
 					var relevant_filtered_items = new HashSet<int>(items_by_attribute[attribute_id]);
 					relevant_filtered_items.IntersectWith(relevant_items);
 
@@ -131,29 +104,45 @@ namespace MyMediaLite.Eval
 
 					// skip all users that have 0 or #relevant_filtered_items test items
 					if (correct_items.Count == 0)
-						continue;
+						return;
 					if (num_eval_items - correct_items.Count == 0)
-						continue;
-
-					// counting stats
-					num_lists++;
-					if (last_user_id != user_id)
-					{
-						last_user_id = user_id;
-						num_users++;
-					}
+						return;
 
 					// evaluation
-					int[] prediction = Prediction.PredictItems(recommender, user_id, relevant_filtered_items);
+					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_filtered_items.ToArray());
+					ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
 
-					auc_sum     += Items.AUC(prediction, correct_items, train.UserMatrix[user_id]);
-					map_sum     += Items.MAP(prediction, correct_items, train.UserMatrix[user_id]);
-					ndcg_sum    += Items.NDCG(prediction, correct_items, train.UserMatrix[user_id]);
-					prec_5_sum  += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id],  5);
-					prec_10_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 10);
-					prec_15_sum += Items.PrecisionAt(prediction, correct_items, train.UserMatrix[user_id], 15);
+					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
+					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
+					double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
+					double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
+					var positions = new int[] { 5, 10 };
+					var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
+					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
 
-					if (prediction.Length != relevant_filtered_items.Count)
+					// thread-safe incrementing
+					lock(result)
+					{
+						// counting stats
+						num_lists++;
+						if (last_user_id != user_id)
+						{
+							last_user_id = user_id;
+							num_users++;
+						}
+
+						// result bookkeeping
+						result["AUC"]       += auc;
+						result["MAP"]       += map;
+						result["NDCG"]      += ndcg;
+						result["mrr"]       += rr;
+						result["prec@5"]    += prec[5];
+						result["prec@10"]   += prec[10];
+						result["recall@5"]  += recall[5];
+						result["recall@10"] += recall[10];
+					}
+
+					if (prediction_list.Count != relevant_filtered_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
 					if (num_lists % 5000 == 0)
@@ -161,18 +150,13 @@ namespace MyMediaLite.Eval
 					if (num_lists % 300000 == 0)
 						Console.Error.WriteLine();
 				}
-			}
+			});
 
-			var result = new Dictionary<string, double>();
-			result.Add("AUC",     auc_sum / num_lists);
-			result.Add("MAP",     map_sum / num_lists);
-			result.Add("NDCG",    ndcg_sum / num_lists);
-			result.Add("prec@5",  prec_5_sum / num_lists);
-			result.Add("prec@10", prec_10_sum / num_lists);
-			result.Add("prec@15", prec_15_sum / num_lists);
-			result.Add("num_users", num_users);
-			result.Add("num_lists", num_lists);
-			result.Add("num_items", relevant_items.Count);
+			foreach (string measure in Items.Measures)
+				result[measure] /= num_lists;
+			result["num_users"] = num_users;
+			result["num_lists"] = num_lists;
+			result["num_items"] = relevant_items.Count;
 
 			return result;
 		}

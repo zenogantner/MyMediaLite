@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
@@ -29,6 +28,9 @@ namespace MyMediaLite.Eval
 	public static class Ratings
 	{
 		/// <summary>the evaluation measures for rating prediction offered by the class</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// </remarks>
 		static public ICollection<string> Measures
 		{
 			get	{
@@ -38,16 +40,23 @@ namespace MyMediaLite.Eval
 		}
 
 		/// <summary>Format rating prediction results</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// </remarks>
 		/// <param name="result">the result dictionary</param>
 		/// <returns>a string containing the results</returns>
 		static public string FormatResults(Dictionary<string, double> result)
 		{
-			return string.Format(CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
-		                         result["RMSE"], result["MAE"], result["NMAE"]);
+			return string.Format(
+				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
+				result["RMSE"], result["MAE"], result["NMAE"]
+			);
 		}
 
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
 		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		///
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
@@ -77,84 +86,6 @@ namespace MyMediaLite.Eval
 			result["MAE"]  = mae;
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
 			return result;
-		}
-
-		/// <summary>Online evaluation for rating prediction</summary>
-		/// <remarks>
-		/// Every rating that is tested is added to the training set afterwards.
-		/// </remarks>
-		/// <param name="recommender">rating predictor</param>
-		/// <param name="ratings">Test cases</param>
-		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateOnline(IRatingPredictor recommender, IRatings ratings)
-		{
-			double rmse = 0;
-			double mae  = 0;
-
-			if (recommender == null)
-				throw new ArgumentNullException("recommender");
-			if (ratings == null)
-				throw new ArgumentNullException("ratings");
-
-			// iterate in random order    // TODO also support chronological order
-			foreach (int index in ratings.RandomIndex)
-			{
-				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
-
-				rmse += error * error;
-				mae  += Math.Abs(error);
-
-				recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
-			}
-			mae  = mae / ratings.Count;
-			rmse = Math.Sqrt(rmse / ratings.Count);
-
-			var result = new Dictionary<string, double>();
-			result["RMSE"] = rmse;
-			result["MAE"]  = mae;
-			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
-			return result;
-		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating predictor</param>
-		/// <param name="split">a rating dataset split</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split)
-		{
-			return EvaluateOnSplit(recommender, split, false);
-		}
-
-		/// <summary>Evaluate on the folds of a dataset split</summary>
-		/// <param name="recommender">a rating predictor</param>
-		/// <param name="split">a rating dataset split</param>
-		/// <param name="show_results">set to true to print results to STDERR</param>
-		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> EvaluateOnSplit(RatingPredictor recommender, ISplit<IRatings> split, bool show_results)
-		{
-			var avg_results = new Dictionary<string, double>();
-
-			for (int i = 0; i < split.NumberOfFolds; i++)
-			{
-				var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-				split_recommender.Ratings = split.Train[i];
-				split_recommender.Train();
-				var fold_results = Evaluate(split_recommender, split.Test[i]);
-
-				foreach (var key in fold_results.Keys)
-					if (avg_results.ContainsKey(key))
-						avg_results[key] += fold_results[key];
-					else
-						avg_results[key] = fold_results[key];
-
-				if (show_results)
-					Console.Error.WriteLine("fold {0} {1}", i, FormatResults(fold_results));
-			}
-
-			foreach (var key in avg_results.Keys.ToList())
-				avg_results[key] /= split.NumberOfFolds;
-
-			return avg_results;
 		}
 	}
 }

@@ -7,7 +7,8 @@ DATA_DIR=../../../../data/ml100k
 
 cd src/RatingPrediction/bin/Debug/
 
-echo "This will take about 10 minutes ..."
+echo "MyMediaLite load/save test script"
+echo "This will take about 5 minutes ..."
 
 echo
 echo "rating predictors"
@@ -46,9 +47,9 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemPrediction.exe"
+PROGRAM="mono --debug ItemRecommendation.exe"
 
-cd ../../../ItemPrediction/bin/Debug/
+cd ../../../ItemRecommendation/bin/Debug/
 
 for method in WRMF BPRMF MostPopular
 do

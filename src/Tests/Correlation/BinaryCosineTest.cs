@@ -18,14 +18,10 @@
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using MyMediaLite.Correlation;
-using MyMediaLite.Data;
 using MyMediaLite.DataType;
-using MyMediaLite.Taxonomy;
 
-namespace MyMediaLiteTest
+namespace Tests.Correlation
 {
 	/// <summary>Class for testing the BinaryCosine class</summary>
 	[TestFixture()]

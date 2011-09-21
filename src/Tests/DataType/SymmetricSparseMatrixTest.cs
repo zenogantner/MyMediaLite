@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace Tests.DataType
 {
 	/// <summary>Tests for the SymmetricSparseMatrix<T> class</summary>
 	[TestFixture()]
@@ -90,9 +90,9 @@ namespace MyMediaLiteTest
 
 			matrix[3, 1] = 2.0;
 			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
-			
+
 			matrix[3, 3] = 2.0;
-			Assert.AreEqual(3, matrix.NumberOfNonEmptyEntries);			
+			Assert.AreEqual(3, matrix.NumberOfNonEmptyEntries);
 		}
 	}
 }

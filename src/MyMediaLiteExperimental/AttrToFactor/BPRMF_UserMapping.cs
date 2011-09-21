@@ -17,7 +17,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.Data;
@@ -92,7 +91,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdev);
+				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxUserID; i++)
@@ -222,24 +221,24 @@ namespace MyMediaLite.AttrToFactor
 			return factor_representation;
 		}
 
-        ///
-        public override double Predict(int user_id, int item_id)
-        {
+		///
+		public override double Predict(int user_id, int item_id)
+		{
 			double[] est_factors = MapUserToLatentFactorSpace(user_attributes[user_id]);
 
-            double result = 0;
-            for (int f = 0; f < num_factors; f++)
-                result += item_factors[item_id, f] * est_factors[f];
-            return result;
-        }
+			double result = 0;
+			for (int f = 0; f < num_factors; f++)
+				result += item_factors[item_id, f] * est_factors[f];
+			return result;
+		}
 
 		///
 		public override string ToString()
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stdev={11}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdev
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stddev={11}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev
 			);
 		}
 

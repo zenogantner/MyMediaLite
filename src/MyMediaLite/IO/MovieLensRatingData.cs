@@ -1,5 +1,4 @@
 // Copyright (C) 2010, 2011 Zeno Gantner
-// Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
 //
@@ -25,6 +24,9 @@ using MyMediaLite.Data;
 namespace MyMediaLite.IO
 {
 	/// <summary>Class that offers static methods for reading in MovieLens 1M and 10M rating data</summary>
+	/// <remarks>
+	/// See http://www.grouplens.org/node/73#attachments and http://recsyswiki.com/wiki/MovieLens
+	/// </remarks>
 	public static class MovieLensRatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
@@ -54,12 +56,12 @@ namespace MyMediaLite.IO
 			var separators = new string[] { "::" };
 			string line;
 
-			while ( (line = reader.ReadLine()) != null )
+			while ((line = reader.ReadLine()) != null)
 			{
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
 				if (tokens.Length < 3)
-					throw new IOException("Expected at least three columns: " + line);
+					throw new IOException("Expected at least 3 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(int.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(int.Parse(tokens[1]));

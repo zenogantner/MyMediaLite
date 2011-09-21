@@ -18,13 +18,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMediaLite.Data
 {
-	// TODO use this for optimizing away the ByUser or ByItem indices
-	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM }
-
-	// TODO optimize some index accesses via slicing
+	// TODO: profile+optimize
+	// use this for optimizing away the ByUser or ByItem indices
+	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM, CHRONOLOGICAL }
 
 	/// <summary>Data structure for storing ratings</summary>
 	/// <remarks>
@@ -186,7 +186,6 @@ namespace MyMediaLite.Data
 				count_by_item[Items[index]]++;
 		}
 
-		// TODO speed up
 		///
 		public double Average
 		{
@@ -198,31 +197,30 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		// TODO think whether we want to have a set or a list here
 		///
-		public HashSet<int> AllUsers
+		public IList<int> AllUsers
 		{
 			get {
 				var result_set = new HashSet<int>();
 				for (int index = 0; index < Users.Count; index++)
 					result_set.Add(Users[index]);
-				return result_set;
+				return result_set.ToArray();
 			}
 		}
 
 		///
-		public HashSet<int> AllItems
+		public IList<int> AllItems
 		{
 			get {
 				var result_set = new HashSet<int>();
 				for (int index = 0; index < Items.Count; index++)
 					result_set.Add(Items[index]);
-				return result_set;
+				return result_set.ToArray();
 			}
 		}
 
 		///
-		public HashSet<int> GetUsers(IList<int> indices)
+		public ISet<int> GetUsers(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
 			foreach (int index in indices)
@@ -231,7 +229,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public HashSet<int> GetItems(IList<int> indices)
+		public ISet<int> GetItems(IList<int> indices)
 		{
 			var result_set = new HashSet<int>();
 			foreach (int index in indices)
@@ -243,7 +241,6 @@ namespace MyMediaLite.Data
 		public virtual double this[int user_id, int item_id]
 		{
 			get {
-				// TODO speed up
 				for (int index = 0; index < Values.Count; index++)
 					if (Users[index] == user_id && Items[index] == item_id)
 						return Values[index];
@@ -261,7 +258,6 @@ namespace MyMediaLite.Data
 		public virtual bool TryGet(int user_id, int item_id, out double rating)
 		{
 			rating = double.NegativeInfinity;
-			// TODO speed up
 			for (int index = 0; index < Values.Count; index++)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
@@ -275,7 +271,6 @@ namespace MyMediaLite.Data
 		///
 		public virtual double Get(int user_id, int item_id, ICollection<int> indexes)
 		{
-			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 					return Values[index];
@@ -288,7 +283,6 @@ namespace MyMediaLite.Data
 		{
 			rating = double.NegativeInfinity;
 
-			// TODO speed up
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
@@ -304,7 +298,6 @@ namespace MyMediaLite.Data
 		{
 			index = -1;
 
-			// TODO speed up
 			for (int i = 0; i < Count; i++)
 				if (Users[i] == user_id && Items[i] == item_id)
 				{
@@ -320,7 +313,6 @@ namespace MyMediaLite.Data
 		{
 			index = -1;
 
-			// TODO speed up
 			foreach (int i in indexes)
 				if (Users[i] == user_id && Items[i] == item_id)
 				{
@@ -334,7 +326,6 @@ namespace MyMediaLite.Data
 		///
 		public int GetIndex(int user_id, int item_id)
 		{
-			// TODO speed up
 			for (int i = 0; i < Count; i++)
 				if (Users[i] == user_id && Items[i] == item_id)
 					return i;
@@ -345,7 +336,6 @@ namespace MyMediaLite.Data
 		///
 		public int GetIndex(int user_id, int item_id, ICollection<int> indexes)
 		{
-			// TODO speed up
 			foreach (int i in indexes)
 				if (Users[i] == user_id && Items[i] == item_id)
 					return i;
@@ -374,7 +364,6 @@ namespace MyMediaLite.Data
 
 			int pos = Users.Count - 1;
 
-			// TODO maybe avoid for fast reading
 			if (user_id > MaxUserID)
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)

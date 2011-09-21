@@ -302,7 +302,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					{                         // TODO support track2
 						Console.WriteLine();
 						var split = new RatingCrossValidationSplit(training_ratings, cross_validation);
-						var results = MyMediaLite.Eval.Ratings.EvaluateOnSplit(rating_predictor_validate, split);
+						var results = RatingsCrossValidation.Evaluate(rating_predictor_validate, split);
 						Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 						no_eval = true;
 						rating_predictor_validate.Ratings = training_ratings;
@@ -410,22 +410,23 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 	static void DisplayIterationStats()
 	{
 		if (training_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
+			Console.Error.WriteLine(
+				string.Format(
+				CultureInfo.InvariantCulture,
 				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
+				training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
 			));
 		if (eval_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
+				CultureInfo.InvariantCulture,
 				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+				eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 		if (compute_fit && fit_time_stats.Count > 0)
 			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
+				CultureInfo.InvariantCulture,
 				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
+				fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
 			));
 	}
 }

@@ -22,7 +22,7 @@ using System.Linq;
 using MyMediaLite.Data;
 using NUnit.Framework;
 
-namespace MyMediaLiteTest
+namespace Tests.Data
 {
 	[TestFixture()]
 	public class StaticByteRatingsTest
@@ -70,7 +70,7 @@ namespace MyMediaLiteTest
 			Assert.AreEqual(8, ratings.MaxItemID);
 		}
 
-		[Test()] public void TestAddRating()
+		[Test()] public void TestAdd()
 		{
 			var ratings = new StaticByteRatings(7);
 			ratings.Add(1, 4, 3);
