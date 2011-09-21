@@ -296,38 +296,38 @@ class ItemRecommendation
 				Model.Load(iterative_recommender, load_model_file);
 
 			if (compute_fit)
-				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender.ComputeFit()));
+				Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
 
 			var results = Evaluate();
 			Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
 
-			for (int i = (int) iterative_recommender.NumIter + 1; i <= max_iter; i++)
+			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 			{
 				TimeSpan t = Utils.MeasureTime(delegate() {
 					iterative_recommender.Iterate();
 				});
 				training_time_stats.Add(t.TotalSeconds);
 
-				if (i % find_iter == 0)
+				if (it % find_iter == 0)
 				{
 					if (compute_fit)
 					{
-						double fit = 0;
-						t = Utils.MeasureTime(delegate() { fit = iterative_recommender.ComputeFit(); });
+						t = Utils.MeasureTime(delegate() {
+							Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), it);
+						});
 						fit_time_stats.Add(t.TotalSeconds);
-						Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", fit));
 					}
 
 					t = Utils.MeasureTime(delegate() { results = Evaluate(); });
 					eval_time_stats.Add(t.TotalSeconds);
-					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), i);
+					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
 
-					Model.Save(recommender, save_model_file, i);
-					Predict(prediction_file, relevant_users_file, i);
+					Model.Save(recommender, save_model_file, it);
+					Predict(prediction_file, relevant_users_file, it);
 
 					if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
 					{
-							Console.Error.WriteLine("Reached cutoff after {0} iterations.", i);
+							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 							Console.Error.WriteLine("DONE");
 							break;
 					}
@@ -357,9 +357,11 @@ class ItemRecommendation
 			{
 				Model.Load(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
-				// TODO is this the right time to load the model?
 			}
-
+			
+			if (compute_fit)
+				Console.WriteLine("fit: {0}", Items.FormatResults(ComputeFit()));
+			
 			if (prediction_file != null)
 			{
 				Predict(prediction_file, relevant_users_file);
@@ -627,6 +629,14 @@ class ItemRecommendation
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
+	}
+
+	static Dictionary<string, double> ComputeFit()
+	{
+		if (filtered_eval)
+			return ItemsFiltered.Evaluate(recommender, training_data, training_data, item_attributes, relevant_users, relevant_items, true);
+		else
+			return Items.Evaluate(recommender, training_data, training_data, relevant_users, relevant_items, eval_item_mode, true);
 	}
 
 	static Dictionary<string, double> Evaluate()
