@@ -89,6 +89,7 @@ class ItemRecommendation
 	static bool all_items;
 	static bool user_prediction;
 	static int random_seed = -1;
+	static int find_iter = 0;
 
 	// time statistics
 	static List<double> training_time_stats = new List<double>();
@@ -171,13 +172,14 @@ class ItemRecommendation
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
    --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
+   --compute-fit                display fit on training data
 
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
    --max-iter=N                 perform at most N iterations
    --auc-cutoff=NUM             abort if AUC is below NUM
    --prec5-cutoff=NUM           abort if prec@5 is below NUM
-   --compute-fit                display fit on training data every find_iter iterations");
+");
 		Environment.Exit(exit_code);
 	}
 
@@ -198,7 +200,6 @@ class ItemRecommendation
 		bool show_version = false;
 
 		// variables for iteration search
-		int find_iter       = 0;
 		int max_iter        = 500;
 		double auc_cutoff   = 0;
 		double prec5_cutoff = 0;
@@ -418,6 +419,12 @@ class ItemRecommendation
 
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
+
+		if (show_fold_results && cross_validation == 0)
+			Usage("--show-fold-results only works with --cross-validation=K.");
+
+		if (cross_validation > 1 && find_iter != 0)
+			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
