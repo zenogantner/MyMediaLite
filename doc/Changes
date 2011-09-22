@@ -45,12 +45,16 @@
           - rename ItemPrediction.exe to ItemRecommendation.exe
           - item recommendation: all items in training+test are now the default,
             instead of all items in training; get this behavior now via the
-            --training-items option; add --all-items option (makes a difference
-            if there are also items which were not observed - viewed, bought -
-            at all, e.g. in combination with --rating-threshold); thanks go to
-            Jagadeesh Gorla for bugging me about the details of the evaluation
-            protocol.
-          - drop support for --prediction-file=- (STDOUT)
+            --in-training-items option; add --all-items option (makes a
+            difference if there are also items which were not observed - viewed,
+            bought - at all, e.g. in combination with --rating-threshold);
+            thanks go to Jagadeesh Gorla for bugging me about the details of
+            the evaluation protocol.
+          - item recommendation: rename --relevant-items=FILE to
+            --candidate-items=FILE to avoid confusion with the way the word
+            "relevance" is used in information retrieval; rename
+            --relevant-users=FILE to --test-users=FILE
+          - drop support for --prediction-file=- (write to STDOUT)
           - improved usage information            
           - check parameters after creating recommender, catching more errors
           - refer to GitHub issue tracker in exception handler, make handler

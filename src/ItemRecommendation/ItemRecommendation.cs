@@ -60,8 +60,8 @@ class ItemRecommendation
 	static string training_file;
 	static string test_file;
 	static string data_dir = string.Empty;
-	static string relevant_users_file;
-	static string relevant_items_file;
+	static string test_users_file;
+	static string candidate_items_file;
 	static string user_attributes_file;
 	static string item_attributes_file;
 	static string user_relations_file;
@@ -84,8 +84,8 @@ class ItemRecommendation
 	static bool repeat_eval;
 	static string group_method;
 	static bool overlap_items;
-	static bool training_items;
-	static bool test_items;
+	static bool in_training_items;
+	static bool in_test_items;
 	static bool all_items;
 	static bool user_prediction;
 	static int random_seed = -1;
@@ -153,14 +153,16 @@ class ItemRecommendation
    --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
 
   choosing the items for evaluation/prediction (mutually exclusive):
-   --relevant-items=FILE        use the items in FILE (one per line) as candidate items in the evaluation
+   --candidate-items=FILE       use the items in FILE (one per line) as candidate items in the evaluation
    --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
-   --training-items             use only the items in the training set as candidate items in the evaluation
-   --test-items                 use only the items in the test set as candidate items in the evaluation
+   --in-training-items          use only the items in the training set as candidate items in the evaluation
+   --in-test-items              use only the items in the test set as candidate items in the evaluation
    --all-items                  use all known items as candidate items in the evaluation
 
+  choosing the users for evaluation/prediction
+   --test-users=FILE            predict items for users specified in FILE (one user per line)
+
   prediction options:
-   --relevant-users=FILE        predict items for users specified in FILE (one user per line)
    --prediction-file=FILE       write ranked predictions to FILE, one user per line
    --predict-items-number=N     predict N items per user (needs --predict-items-file)
 
@@ -225,8 +227,8 @@ class ItemRecommendation
 			{ "save-model=",          v => save_model_file        = v },
 			{ "load-model=",          v => load_model_file        = v },
 			{ "prediction-file=",     v => prediction_file        = v },
-			{ "relevant-users=",      v => relevant_users_file    = v },
-			{ "relevant-items=",      v => relevant_items_file    = v },
+			{ "test-users=",          v => test_users_file    = v },
+			{ "candidate-items=",     v => candidate_items_file    = v },
 			{ "user-groups=",         v => user_groups_file       = v },
 			// integer-valued options
    			{ "find-iter=",            (int v) => find_iter            = v },
@@ -251,9 +253,9 @@ class ItemRecommendation
 			{ "repeat-evaluation",    v => repeat_eval       = v != null },
 			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "overlap-items",        v => overlap_items     = v != null },
-			{ "training-items",       v => training_items    = v != null },
 			{ "all-items",            v => all_items         = v != null },
-			{ "test-items",           v => test_items        = v != null },
+			{ "in-training-items",    v => in_training_items    = v != null },
+			{ "in-test-items",        v => in_test_items        = v != null },
 			{ "help",                 v => show_help         = v != null },
 			{ "version",              v => show_version      = v != null },
 		};
@@ -324,7 +326,7 @@ class ItemRecommendation
 					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
 
 					Model.Save(recommender, save_model_file, it);
-					Predict(prediction_file, relevant_users_file, it);
+					Predict(prediction_file, test_users_file, it);
 
 					if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
 					{
@@ -359,13 +361,13 @@ class ItemRecommendation
 				Model.Load(recommender, load_model_file);
 				Console.Write(recommender.ToString() + " ");
 			}
-			
+
 			if (compute_fit)
 				Console.WriteLine("fit: {0}", Items.FormatResults(ComputeFit()));
-			
+
 			if (prediction_file != null)
 			{
-				Predict(prediction_file, relevant_users_file);
+				Predict(prediction_file, test_users_file);
 			}
 			else if (!no_eval)
 			{
@@ -432,19 +434,19 @@ class ItemRecommendation
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && relevant_users_file == null)
+		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && test_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
 
-		if ((relevant_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (training_items ? 1 : 0) + (test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
+		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
 			Usage("--relevant-items=FILE, --all-items, --training-items, --test-items, and --overlap-items are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && overlap_items)
 			Usage("--overlap-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && test_items)
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_test_items)
 			Usage("--test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && training_items)
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_training_items)
 			Usage("--training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (group_method != null && user_groups_file == null)
@@ -571,10 +573,10 @@ class ItemRecommendation
 			if (user_prediction)
 			{
 				// swap relevant users and items
-				var ruf = relevant_users_file;
-				var rif = relevant_items_file;
-				relevant_users_file = rif;
-				relevant_items_file = ruf;
+				var ruf = test_users_file;
+				var rif = candidate_items_file;
+				test_users_file = rif;
+				candidate_items_file = ruf;
 
 				// swap user and item mappings
 				var um = user_mapping;
@@ -594,8 +596,8 @@ class ItemRecommendation
 				((ItemRecommender)recommender).Feedback = training_data;
 
 			// relevant users
-			if (relevant_users_file != null)
-				relevant_users = new List<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_users_file))));
+			if (test_users_file != null)
+				relevant_users = new List<int>(user_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, test_users_file))));
 			else
 				relevant_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
@@ -618,16 +620,16 @@ class ItemRecommendation
 			}
 
 			// relevant items
-			if (relevant_items_file != null)
-				relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			if (candidate_items_file != null)
+				relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, candidate_items_file))));
 			else if (all_items)
 				relevant_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
 
 			if (relevant_items != null)
 				eval_item_mode = CandidateItems.EXPLICIT;
-			else if (training_items)
+			else if (in_training_items)
 				eval_item_mode = CandidateItems.TRAINING;
-			else if (test_items)
+			else if (in_test_items)
 				eval_item_mode = CandidateItems.TEST;
 			else if (overlap_items)
 				eval_item_mode = CandidateItems.OVERLAP;
