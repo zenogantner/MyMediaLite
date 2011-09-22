@@ -5,6 +5,7 @@
           - cross-validation for item recommendation and rating prediction
           - distributed SGD (see below)
         - API changes
+          - add (more abstract) IDataSet interface
           - rename IIItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
             to better reflect what those interfaces actually offer method-wise
@@ -76,6 +77,8 @@
         - data structures
           - SparseBooleanMatrix: more unit tests
           - PosOnlyFeedback: add unit tests
+          - Ratings.BuildRandomIndex(): shuffle existing index instead building
+            from scratch
 	- documentation
           - API docs:
             - improved literature references and web links
