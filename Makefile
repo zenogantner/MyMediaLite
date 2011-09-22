@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 CONFIGURE_OPTIONS=--prefix=/usr/local
-VERSION=1.05
+VERSION=1.99
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
@@ -46,9 +46,9 @@ binary-package:
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	cp src/ItemPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp src/ItemPrediction/bin/Debug/*.dll MyMediaLite-${VERSION}
-	cp src/ItemPrediction/bin/Debug/*.mdb MyMediaLite-${VERSION}
+	cp src/ItemRecommendation/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp src/ItemRecommendation/bin/Debug/*.dll MyMediaLite-${VERSION}
+	cp src/ItemRecommendation/bin/Debug/*.mdb MyMediaLite-${VERSION}
 	cp src/RatingPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
@@ -113,7 +113,7 @@ check-for-unnecessary-type-declarations:
 
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/ItemPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/ItemRecommendation/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingRatingPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingItemPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
