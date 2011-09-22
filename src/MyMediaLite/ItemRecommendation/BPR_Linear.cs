@@ -123,7 +123,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
-			//MatrixUtils.InitNormal(item_attribute_weight_by_user, InitMean, InitStdev);
 
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
