@@ -124,7 +124,6 @@ namespace MyMediaLite.Data
 			// one pass over the data
 			for (int index = 0; index < Count; index++)
 				by_item[Items[index]].Add(index);
-
 		}
 
 		///

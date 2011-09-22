@@ -26,7 +26,7 @@ namespace MyMediaLite.Data
 		double MaxRating { get; }
 		/// <summary>the minimum rating in the dataset</summary>
 		double MinRating { get; }
-		
+
 		/// <summary>indices by user</summary>
 		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<IList<int>> ByUser { get; }
@@ -42,8 +42,8 @@ namespace MyMediaLite.Data
 		IList<int> CountByUser { get; }
 		/// <summary>rating count by item</summary>
 		/// <remarks>Should be implemented as a lazy data structure</remarks>
-		IList<int> CountByItem { get; }		
-		
+		IList<int> CountByItem { get; }
+
 		/// <summary>Build the user indices</summary>
 		void BuildUserIndices();
 		/// <summary>Build the item indices</summary>
