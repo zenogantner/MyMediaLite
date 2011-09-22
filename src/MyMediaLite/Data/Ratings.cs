@@ -142,9 +142,12 @@ namespace MyMediaLite.Data
 		///
 		public void BuildRandomIndex()
 		{
-			random_index = new int[Count];
-			for (int index = 0; index < Count; index++)
-				random_index[index] = index;
+			if (random_index == null || random_index.Length != Count)
+			{
+				random_index = new int[Count];
+				for (int index = 0; index < Count; index++)
+					random_index[index] = index;
+			}
 			Util.Utils.Shuffle<int>(random_index);
 		}
 
