@@ -219,9 +219,9 @@ to integrate the library in your application or having to develop your own progr
 
   <p>
   Note that the item prediction evaluation usually takes longer than the rating prediction evaluation,
-  because for each user, scores for every relevant item (possibly all items) have to be computed.
-  You can restrict the number of predictions to be made using the options <tt>predict_for_users=FILE</tt>
-  and <tt>relevant_items=FILE</tt> to save time.
+  because for each user, scores for every candidate item (possibly all items) have to be computed.
+  You can restrict the number of predictions to be made using the options <tt>--test-users=FILE</tt>
+  and <tt>--candidate-items=FILE</tt> to save time.
   </p>
 
   <p>
