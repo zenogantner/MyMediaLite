@@ -25,8 +25,8 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted matrix factorization method proposed by Hu et al. and Pan et al.</summary>
 	/// <remarks>
- 	/// We use the fast computation method proposed by Hu et al. and we use a global
-	/// weight to penalize observed/unobserved values.
+ 	/// We use the fast learning method proposed by Hu et al. (alternating least squares),
+ 	/// and we use a global weight to penalize observed/unobserved values.
 	///
 	/// Literature:
 	/// <list type="bullet">
