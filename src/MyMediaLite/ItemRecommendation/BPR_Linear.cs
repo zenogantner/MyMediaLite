@@ -229,9 +229,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= item_attribute_weight_by_user.dim1))
-				return 0;
+				return double.MinValue;
 			if ((item_id < 0) || (item_id > MaxItemID))
-				return 0;
+				return double.MinValue;
 
 			double result = 0;
 			foreach (int a in item_attributes[item_id])
