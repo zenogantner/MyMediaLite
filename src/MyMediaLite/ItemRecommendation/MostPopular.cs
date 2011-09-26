@@ -43,9 +43,8 @@ namespace MyMediaLite.ItemRecommendation
 			for (int i = 0; i <= MaxItemID; i++)
 				view_count.Add(0);
 
-			for (int u = 0; u < Feedback.UserMatrix.NumberOfRows; u++)
-				foreach (int i in Feedback.UserMatrix[u])
-					view_count[i]++;
+			foreach (int i in Feedback.Items)
+				view_count[i]++;
 		}
 
 		///

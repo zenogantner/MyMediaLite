@@ -167,6 +167,7 @@
     <Compile Include="Eval\RatingsCrossValidation.cs" />
     <Compile Include="Eval\CandidateItems.cs" />
     <Compile Include="Data\IDataSet.cs" />
+    <Compile Include="Data\DataSet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

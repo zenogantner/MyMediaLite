@@ -22,23 +22,14 @@ using System.Linq;
 
 namespace MyMediaLite.Data
 {
-	// TODO: profile+optimize
-	// use this for optimizing away the ByUser or ByItem indices
-	//public enum RatingDataOrg { UNKNOWN, RANDOM, BY_USER, BY_ITEM, CHRONOLOGICAL }
-
 	/// <summary>Data structure for storing ratings</summary>
 	/// <remarks>
 	/// Small memory overhead for added flexibility.
 	///
 	/// This data structure supports incremental updates.
 	/// </remarks>
-	public class Ratings : IRatings
+	public class Ratings : DataSet, IRatings
 	{
-		///
-		public IList<int> Users { get; protected set; }
-		///
-		public IList<int> Items { get; protected set; }
-
 		///
 		protected IList<double> Values;
 
@@ -53,101 +44,12 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		///
-		public virtual int Count { get { return Values.Count; } }
-
-		//public RatingDataOrg organization = RatingDataOrg.UNKNOWN;
-
 		/// <summary>Default constructor</summary>
-		public Ratings()
+		public Ratings() : base()
 		{
-			Users  = new List<int>();
-			Items  = new List<int>();
 			Values = new List<double>();
 			MinRating = double.MaxValue;
 			MaxRating = double.MinValue;
-		}
-
-		///
-		public int MaxUserID { get; protected set; }
-		///
-		public int MaxItemID { get; protected set; }
-
-		///
-		public double MaxRating { get; protected set; }
-		///
-		public double MinRating { get; protected set; }
-
-		///
-		public IList<IList<int>> ByUser
-		{
-			get {
-				if (by_user == null)
-					BuildUserIndices();
-				return by_user;
-			}
-		}
-		/// <summary>Rating indices organized by user</summary>
-		protected IList<IList<int>> by_user;
-
-		///
-		public void BuildUserIndices()
-		{
-			by_user = new List<IList<int>>();
-			for (int u = 0; u <= MaxUserID; u++)
-				by_user.Add(new List<int>());
-
-			// one pass over the data
-			for (int index = 0; index < Count; index++)
-				by_user[Users[index]].Add(index);
-		}
-
-		///
-		public IList<IList<int>> ByItem
-		{
-			get {
-				if (by_item == null)
-					BuildItemIndices();
-				return by_item;
-			}
-		}
-		/// <summary>Rating indices organized by item</summary>
-		protected IList<IList<int>> by_item;
-
-		///
-		public void BuildItemIndices()
-		{
-			by_item = new List<IList<int>>();
-			for (int i = 0; i <= MaxItemID; i++)
-				by_item.Add(new List<int>());
-
-			// one pass over the data
-			for (int index = 0; index < Count; index++)
-				by_item[Items[index]].Add(index);
-		}
-
-		///
-		public IList<int> RandomIndex
-		{
-			get {
-				if (random_index == null || random_index.Length != Count)
-					BuildRandomIndex();
-
-				return random_index;
-			}
-		}
-		private int[] random_index;
-
-		///
-		public void BuildRandomIndex()
-		{
-			if (random_index == null || random_index.Length != Count)
-			{
-				random_index = new int[Count];
-				for (int index = 0; index < Count; index++)
-					random_index[index] = index;
-			}
-			Util.Utils.Shuffle<int>(random_index);
 		}
 
 		///
@@ -196,28 +98,6 @@ namespace MyMediaLite.Data
 				for (int index = 0; index < Count; index++)
 					sum += this[index];
 				return (double) sum / Count;
-			}
-		}
-
-		///
-		public IList<int> AllUsers
-		{
-			get {
-				var result_set = new HashSet<int>();
-				for (int index = 0; index < Users.Count; index++)
-					result_set.Add(Users[index]);
-				return result_set.ToArray();
-			}
-		}
-
-		///
-		public IList<int> AllItems
-		{
-			get {
-				var result_set = new HashSet<int>();
-				for (int index = 0; index < Items.Count; index++)
-					result_set.Add(Items[index]);
-				return result_set.ToArray();
 			}
 		}
 
@@ -399,7 +279,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual void RemoveUser(int user_id)
+		public override void RemoveUser(int user_id)
 		{
 			for (int index = 0; index < Count; index++)
 				if (Users[index] == user_id)
@@ -414,7 +294,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual void RemoveItem(int item_id)
+		public override void RemoveItem(int item_id)
 		{
 			for (int index = 0; index < Count; index++)
 				if (Items[index] == item_id)

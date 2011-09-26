@@ -164,24 +164,5 @@ namespace Tests.Data
 
 			Assert.AreEqual(6, feedback.AllItems.Count);
 		}
-
-		[Test()] public void TestOverlapCount()
-		{
-			var feedback1 = new PosOnlyFeedback<SparseBooleanMatrix>();
-			feedback1.Add(1, 4);
-			feedback1.Add(1, 8);
-			feedback1.Add(2, 4);
-			feedback1.Add(2, 2);
-			feedback1.Add(2, 5);
-
-			var feedback2 = new PosOnlyFeedback<SparseBooleanMatrix>();
-			feedback2.Add(2, 2);
-			feedback2.Add(2, 5);
-			feedback2.Add(3, 7);
-			feedback2.Add(3, 3);
-			feedback2.Add(6, 3);
-
-			Assert.AreEqual(2, feedback1.OverlapCount(feedback2));
-		}
 	}
 }

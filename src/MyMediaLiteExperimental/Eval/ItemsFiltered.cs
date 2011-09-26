@@ -73,9 +73,6 @@ namespace MyMediaLite.Eval
 			IList<int> relevant_items,
 			bool repeated_events = false)
 		{
-			if (train.OverlapCount(test) > 0)
-				Console.Error.WriteLine("WARNING: Overlapping train and test data");
-
 			SparseBooleanMatrix items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();
 
 			int num_users = 0;

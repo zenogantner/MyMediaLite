@@ -38,6 +38,7 @@ namespace MyMediaLite.Data
 		public IList<IPosOnlyFeedback> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of positive-only item prediction data</summary>
+		/// <remarks>See the class description for details.</remarks>
 		/// <param name="feedback">the dataset</param>
 		/// <param name="num_folds">the number of folds</param>
 		public PosOnlyFeedbackCrossValidationSplit(IPosOnlyFeedback feedback, uint num_folds)
@@ -56,24 +57,24 @@ namespace MyMediaLite.Data
 
 			// assign events to folds
 			int pos = 0;
-			Console.Error.WriteLine("{0} items", feedback.AllItems.Count);
 			foreach (int item_id in feedback.AllItems)
 			{
-				var item_users = new List<int>(feedback.ItemMatrix[item_id]);
-				if (item_users.Count < num_folds)
+				var item_indices = feedback.ByItem[item_id];
+
+				if (item_indices.Count < num_folds)
 				{
-					foreach (int user_id in item_users)
+					foreach (int index in item_indices)
 						for (int f = 0; f < num_folds; f++)
-							Train[f].Add(user_id, item_id);
+							Train[f].Add(feedback.Users[index], feedback.Items[index]);
 				}
 				else
 				{
 					// shuffle list for randomness
-					MyMediaLite.Util.Utils.Shuffle(item_users);
+					MyMediaLite.Util.Utils.Shuffle(item_indices);
 
-					for (int index = 0; index < item_users.Count; index++)
+					foreach (int index in item_indices)
 					{
-						int user_id = item_users[index];
+						int user_id = feedback.Users[index];
 						for (int f = 0; f < num_folds; f++)
 							if (pos % num_folds == f)
 								Test[f].Add(user_id, item_id);

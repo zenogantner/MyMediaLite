@@ -2,10 +2,10 @@
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
-          - cross-validation for item recommendation and rating prediction
+          - cross-validation for rating prediction and item recommendation
           - distributed SGD (see below)
         - API changes
-          - add (more abstract) IDataSet interface
+          - add (more abstract) IDataSet interface, and DataSet class
           - rename IIItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
             to better reflect what those interfaces actually offer method-wise
@@ -39,6 +39,7 @@
             rename property Stdev to StdDev
           - BPR_Linear: no warning when predicting for unknown items; get rid
             of random initialization - 0 is okay for linear model
+          - MostPopular: adapt to new PosOnlyFeedback
         - command-line tools
           - add --show-fold-results for cross-validation
           - support --compute-fit for all kinds of modes, not only in
@@ -76,7 +77,7 @@
             (used by several other IO classes)
         - data structures
           - SparseBooleanMatrix: more unit tests
-          - PosOnlyFeedback: add unit tests
+          - PosOnlyFeedback: add unit tests, inherit from DataSet
           - Ratings.BuildRandomIndex(): shuffle existing index instead building
             from scratch
 	- documentation

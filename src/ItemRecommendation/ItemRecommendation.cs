@@ -585,11 +585,11 @@ class ItemRecommendation
 				item_mapping = um;
 
 				// transpose training and test data
-				training_data = new PosOnlyFeedback<SparseBooleanMatrix>((SparseBooleanMatrix) training_data.UserMatrix.Transpose());
+				training_data = training_data.Transpose();
 
 				// transpose test data
 				if (test_data != null)
-					test_data = new PosOnlyFeedback<SparseBooleanMatrix>((SparseBooleanMatrix) test_data.UserMatrix.Transpose());;
+					test_data = test_data.Transpose();
 			}
 
 			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)

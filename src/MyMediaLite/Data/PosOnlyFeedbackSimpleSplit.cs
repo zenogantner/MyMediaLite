@@ -44,21 +44,19 @@ namespace MyMediaLite.Data
 				throw new ArgumentException("ratio must be greater than 0");
 
 			// create train/test data structures
-			var train = new T();
-			var test  = new T();
+			var Train = new T();
+			var Test  = new T();
 
 			// assign indices to training or validation part
 			Random random = MyMediaLite.Util.Random.GetInstance();
-			foreach (int user_id in feedback.AllUsers)
-				foreach (int item_id in feedback.UserMatrix[user_id])
-					if (random.NextDouble() < ratio)
-						test.Add(user_id, item_id);
-					else
-						train.Add(user_id, item_id);
-
-			// create split data structures
-			Train = new IPosOnlyFeedback[] { train };
-			Test  = new IPosOnlyFeedback[] { test };
+			foreach (int index in feedback.RandomIndex)
+				if (random.NextDouble() < ratio)
+					Test.Add(feedback.Users[index], feedback.Items[index]);
+				else
+					Train.Add(feedback.Users[index], feedback.Items[index]);
+			
+			this.Train = new IPosOnlyFeedback[] { Train };
+			this.Test  = new IPosOnlyFeedback[] { Test  };
 		}
 	}
 }
