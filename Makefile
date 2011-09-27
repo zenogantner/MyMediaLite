@@ -82,11 +82,11 @@ example-csharp:
 
 example-python:
 	cd data/ml100k && ipy ../../examples/python/rating_prediction.py
-	cd data/ml100k && ipy ../../examples/python/item_prediction.py
+	cd data/ml100k && ipy ../../examples/python/item_recommendation.py
 
 example-ruby:
 	cd data/ml100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/rating_prediction.rb
-	cd data/ml100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/item_prediction.rb
+	cd data/ml100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/item_recommendation.rb
 
 data:
 	mkdir data/
