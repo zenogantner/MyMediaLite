@@ -6,8 +6,8 @@ require 'MyMediaLite'
 user_mapping = MyMediaLite::Data::EntityMapping.new()
 item_mapping = MyMediaLite::Data::EntityMapping.new()
 
-train_data = MyMediaLite::IO::RatingPrediction.Read("u1.base", user_mapping, item_mapping)
-test_data = MyMediaLite::IO::RatingPrediction.Read("u1.test", user_mapping, item_mapping)
+train_data = MyMediaLite::IO::RatingData.Read("u1.base", user_mapping, item_mapping)
+test_data = MyMediaLite::IO::RatingData.Read("u1.test", user_mapping, item_mapping)
 
 # set up the recommender
 recommender = MyMediaLite::RatingPrediction::UserItemBaseline.new()
