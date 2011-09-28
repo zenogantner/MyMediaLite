@@ -42,7 +42,7 @@ namespace MyMediaLite.Data
 		/// <summary>all internal entity IDs</summary>
 		/// <value>all internal entity IDs</value>
 		public ICollection<int> InternalIDs { get { return internal_to_original.Keys; }	}
-
+		
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
 		/// <returns>the original (external) ID of the entitiy</returns>
