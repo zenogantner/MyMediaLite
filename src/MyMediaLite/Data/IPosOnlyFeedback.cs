@@ -39,6 +39,14 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		void Add(int user_id, int item_id);
 
+		/// <summary>Get a copy of the item matrix</summary>
+		/// <returns>a copy of the item matrix</returns>
+		IBooleanMatrix GetItemMatrixCopy();
+
+		/// <summary>Get a copy of the user matrix</summary>
+		/// <returns>a copy of the user matrix</returns>
+		IBooleanMatrix GetUserMatrixCopy();
+
 		/// <summary>Remove a user-item event from the data structure</summary>
 		/// <remarks>
 		/// If no event for the given user-item combination exists, nothing happens.

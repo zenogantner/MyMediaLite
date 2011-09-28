@@ -33,11 +33,7 @@ namespace MyMediaLite.Data
 		{
 			get {
 				if (user_matrix == null)
-				{
-					user_matrix = new T();
-					for (int index = 0; index < Count; index++)
-						user_matrix[Users[index], Items[index]] = true;
-				}
+					user_matrix = GetUserMatrixCopy();
 
 				return user_matrix;
 			}
@@ -49,11 +45,7 @@ namespace MyMediaLite.Data
 		{
 			get {
 				if (item_matrix == null)
-				{
-					item_matrix = new T();
-					for (int index = 0; index < Count; index++)
-						item_matrix[Items[index], Users[index]] = true;
-				}
+					item_matrix = GetItemMatrixCopy();
 
 				return item_matrix;
 			}
@@ -63,6 +55,24 @@ namespace MyMediaLite.Data
 		/// <summary>Default constructor</summary>
 		public PosOnlyFeedback() : base()
 		{
+		}
+
+		///
+		public IBooleanMatrix GetUserMatrixCopy()
+		{
+			var matrix = new T();
+			for (int index = 0; index < Count; index++)
+				matrix[Users[index], Items[index]] = true;
+			return matrix;
+		}
+
+		///
+		public IBooleanMatrix GetItemMatrixCopy()
+		{
+			var matrix = new T();
+			for (int index = 0; index < Count; index++)
+				matrix[Items[index], Users[index]] = true;
+			return matrix;
 		}
 
 		/// <summary>Add a user-item event to the data structure</summary>
