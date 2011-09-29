@@ -24,15 +24,16 @@
      lenskit       => { url => 'http://lenskit.grouplens.org/',                  title => 'LensKit' }
      crab          => { url => 'http://muricoca.github.com/crab/',               title => 'Crab' }
      cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
+     PyRSVD        => { url => 'http://code.google.com/p/pyrsvd/',               title => 'PyRSVD' }
      recommenderlab => { url => 'http://cran.r-project.org/web/packages/recommenderlab/index.html', title => 'recommenderlab' }
-     waffles       => { url => 'http://waffles.sourceforge.net/command/recommend.html'> 'Waffles' }
+     waffles       => { url => 'http://waffles.sourceforge.net/command/recommend.html', title => 'Waffles' }
      featuremf     => { url => 'http://apex.sjtu.edu.cn/apex_wiki/svdfeature',   title => 'SVDFeature' }
      openslopeone  => { url => 'http://code.google.com/p/openslopeone/'          title => 'OpenSlopeOne' }
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
      apprecommender => { url => 'https://github.com/tassia/AppRecommender',                   title => 'AppRecommender' }
      cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'                         title => 'Collection Workflow Integration System' }
-     filmaster     => { url => 'http://filmaster.com/'                                        title => 'Filmaster' }
+     filmaster     => { url => 'https://bitbucket.org/filmaster/filmaster-test/src'           title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                                            title => 'mloss.org' }
      graphlab      => { url => 'http://www.graphlab.ml.cmu.edu/',                title => 'GraphLab' }
      graphlabcf    => { url => 'http://www.graphlab.ml.cmu.edu/pmf.html',        title => 'GraphLab collaborative filtering library' }
