@@ -56,6 +56,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
 
+		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
+		public bool WithReplacement { get; set; }
+
 		/// <summary>Regularization parameter for the bias term</summary>
 		public double BiasReg { get; set; }
 
@@ -91,15 +94,22 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
-		/// See
-		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent
-		/// 2011
+		/// Does not work too well for BPR-MF.
+		///
+		/// Literature:
+		/// <list type="bullet">
+		///   <item><description>
+		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
+		///     KDD 2011.
+		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
+		///   </description></item>
+		/// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
-		double last_loss = double.NegativeInfinity;
+		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
@@ -164,10 +174,39 @@ namespace MyMediaLite.ItemRecommendation
 
 			int user_id, pos_item_id, neg_item_id;
 
-			for (int i = 0; i < num_pos_events; i++)
+			if (WithReplacement)
 			{
-				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				var user_matrix = Feedback.GetUserMatrixCopy();
+
+				for (int i = 0; i < num_pos_events; i++)
+				{
+					while (true) // sampling with replacement
+					{
+						user_id = SampleUser();
+						var user_items = user_matrix[user_id];
+
+						// reset user if already exhausted
+						if (user_items.Count == 0)
+							foreach (int item_id in Feedback.UserMatrix[user_id])
+								user_matrix[user_id, item_id] = true;
+
+						pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
+						user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
+						do
+							neg_item_id = random.Next(MaxItemID + 1);
+						while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
+						break;
+					}
+					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < num_pos_events; i++)
+				{
+					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				}
 			}
 
 			if (BoldDriver)

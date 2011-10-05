@@ -44,6 +44,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
+			// de-activate until supported
+			WithReplacement = false;
+
 			// prepare helper data structures for training
 			users = new int[Feedback.Count];
 			items = new int[Feedback.Count];

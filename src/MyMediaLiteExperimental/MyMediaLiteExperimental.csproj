@@ -79,6 +79,7 @@
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="Util\NelderMead.cs" />
     <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
+    <Compile Include="ItemRecommendation\BPRMF_Sample.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

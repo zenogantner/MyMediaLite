@@ -140,21 +140,23 @@ namespace MyMediaLite.RatingPrediction
 				double p = Predict(u, i, false);
 				double err = ratings[index] - p;
 
-				 // Adjust factors
+				 // adjust factors
 				 for (int f = 0; f < NumFactors; f++)
 				 {
 					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
-					// compute factor updates
-					double delta_u = err * i_f - Regularization * u_f;
-					double delta_i = err * u_f - Regularization * i_f;
-
-					// if necessary, apply updates
+					// if necessary, compute and apply updates
 					if (update_user)
+					{
+						double delta_u = err * i_f - Regularization * u_f;
 						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
+					}
 					if (update_item)
+					{
+						double delta_i = err * u_f - Regularization * i_f;
 						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
+					}
 				 }
 			}
 		}

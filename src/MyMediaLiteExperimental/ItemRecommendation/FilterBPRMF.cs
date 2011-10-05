@@ -47,6 +47,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
+			// de-activate until supported
+			WithReplacement = false;
+
 			filtered_items_by_user = new Dictionary<int, ICollection<int>>[MaxUserID + 1];
 			items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();
 
@@ -68,7 +71,7 @@ namespace MyMediaLite.ItemRecommendation
 			var user_filter_attributes = filtered_items_by_user[u].Keys;
 			if (user_filter_attributes.Count == 0)
 				throw new ArgumentException("user w/o filter attributes");
-			
+
 			int a = user_filter_attributes.ElementAt(random.Next(user_filter_attributes.Count));
 
 			// TODO catch condition that user has rated all comedies ...

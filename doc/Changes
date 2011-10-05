@@ -32,6 +32,7 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
           - BiasedMatrixFactorization: make fields needed for the bold-driver
             learning rate heuristic protected
+          - MatrixFactroization: avoid unnecessary computation of update terms
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
           - BPRMF: add UpdateJ option, fully support RemoveItem()
