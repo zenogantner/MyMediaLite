@@ -49,6 +49,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			// de-activate until supported
 			WithReplacement = false;
+			// de-activate until false is supported
+			UniformUserSampling = true;
 
 			filtered_items_by_user = new Dictionary<int, ICollection<int>>[MaxUserID + 1];
 			items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();

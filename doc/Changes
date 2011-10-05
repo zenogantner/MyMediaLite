@@ -35,7 +35,12 @@
           - MatrixFactroization: avoid unnecessary computation of update terms
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
-          - BPRMF: add UpdateJ option, fully support RemoveItem()
+          - BPRMF:
+            - add UpdateJ option
+            - fully support RemoveItem()
+            - add WithReplacement option to choose between sampling with and
+              without replacement
+            - add UniformUserSampling option
           - factorization models that need random initialization:
             rename property Stdev to StdDev
           - BPR_Linear: no warning when predicting for unknown items; get rid
