@@ -94,6 +94,7 @@
             - add links to RecSysWiki articles
           - IItemRecommender: explain the task of item recommendation
           - IRatingPredictor: explain the task of rating prediction
+          - add data file format descriptions to website
         - misc
           - upgrade from Math.NET Iridium to Math.NET Numerics Beta 2
             - use Math.NET Numerics for generating normal distributed random
