@@ -27,7 +27,7 @@ namespace MyMediaLite.IO
 	public static class StaticRatingData
 	{
 		/// <summary>Read in static rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="rating_type">the data type to be used for storing the ratings</param>
