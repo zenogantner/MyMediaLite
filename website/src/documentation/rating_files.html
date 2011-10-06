@@ -14,25 +14,84 @@
 <div id="content">
 <h2>Rating data files</h2>
 <p>
-Rating data files have at least three columns.
-
+Rating data files have at least three columns: the user ID, the item ID, and the rating value.
+</p>
 long
 
 input and output
 </p>
 
-<h2>Tab-separated columns (.tsv)</h2>
+<h2>Examples</h2>
+<h3>Tab-separated columns (.tsv)</h3>
+<pre>
+5951    50      5
+5951    223     5
+5951    260     5
+5951    293     5
+5951    356     4
+5951    364     3
+5951    457     3
+</pre>
 
-<h2>Whitespace-separated columns</h2>
+<h3>Whitespace-separated columns</h3>
+<pre>
+5951 50 5
+5951 223 5
+5951 260 5
+5951 293 5
+5951 356 4
+5951 364 3
+5951 457 3
+</pre>
 
-<h2>Comma-separated columns (.csv)</h2>
+<h3>Comma-separated columns (.csv)</h3>
+<pre>
+5951,50,5
+5951,223,5
+5951,260,5
+5951,293,5
+5951,356,4
+5951,364,3
+5951,457,3
+</pre>
 
-<h2>Rating data with timestamps</h2>
+<h3>Rating data with timestamps</h3>
+<pre>
+5951,50,5,978300760
+5951,223,5,978302109
+5951,260,5,978301968
+5951,293,5,978300275
+5951,356,4,978824291
+5951,364,3,978302268
+5951,457,3,978300719
+</pre>
 
 <h2>Command-line tools</h2>
+<h3>Rating prediction</h3>
+<p>
+MyMediaLite's rating prediction tool supports all three variants by default for its <code>--training-data=FILE</code> and <code>--test-data=FILE</code> arguments.
+If you know that all your ratings are integers between 0 and 255, you can use <code>--rating-type=byte</code> to save memory.
+</p>
+For prediction, if you use <code>--prediction-file=FILE</code>, you will get a tab-separated file with predictions for the test data.
+With the <code>--prediction-line="FORMAT"</code> you can modify the line format, e.g. if you want the items to be in the first column: <code>--prediction-line="{1},{0},{2}"</code>.
+</p>
+
+<h3>Item recommendation</h3>
+<p>
+The item recommendation tool also supports this rating data format.
+By default, every rating is interpreted as positive feedback, the rating value is ignored.
+You can use the option <code>--rating-threshold=NUM</code> to define the minimum rating value that is to be interpreted as positive feedback.
+Ratings below this value will be ignored.
+</p>
 
 <h2>Classes</h2>
-
+<p>
+The classes implementing reading in this kind of rating data are
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/RatingData.cs">MyMediaLite.IO.RatingData</a></code>
+and
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/StaticRatingData.cs">MyMediaLite.IO.RatingData</a></code>.
+The former's <code>Read()</code> method returns a data structure that can be updated/modified, while the latter's result cannot be updated.
+</p>
 
 </div>
 
