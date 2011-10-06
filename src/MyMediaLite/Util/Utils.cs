@@ -60,6 +60,31 @@ namespace MyMediaLite.Util
 			return DateTime.Now - startTime;
 		}
 
+		/// <summary>Read a list of longs from a StreamReader</summary>
+		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
+		/// <returns>a list of longs</returns>
+		public static IList<long> ReadLongs(StreamReader reader)
+		{
+			var numbers = new List<long>();
+
+			while (!reader.EndOfStream)
+				numbers.Add(long.Parse( reader.ReadLine() ));
+
+			return numbers;
+		}
+
+		/// <summary>Read a list of longs from a file</summary>
+		/// <param name="filename">the name of the file to be read from</param>
+		/// <returns>a list of longs</returns>
+		public static IList<long> ReadLongs(string filename)
+		{
+			if (filename == null)
+				throw new ArgumentNullException("filename");
+
+			using ( var reader = new StreamReader(filename) )
+				return ReadLongs(reader);
+		}
+
 		/// <summary>Read a list of integers from a StreamReader</summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
 		/// <returns>a list of integers</returns>

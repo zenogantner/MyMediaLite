@@ -56,8 +56,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 4)
 					throw new IOException("Expected at least 4 columns: " + line);
 
-				int user_id = user_mapping.ToInternalID(int.Parse (tokens [0]));
-				int item_id = item_mapping.ToInternalID(int.Parse (tokens [1]));
+				int user_id = user_mapping.ToInternalID(long.Parse (tokens [0]));
+				int item_id = item_mapping.ToInternalID(long.Parse (tokens [1]));
 				double rating = double.Parse(tokens [2], CultureInfo.InvariantCulture);
 				string date_string = tokens [3];
 				if (tokens [3].StartsWith("\"") && tokens.Length > 4 && tokens [4].EndsWith("\"")) {

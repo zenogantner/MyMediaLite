@@ -17,7 +17,6 @@
 
 using System;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -67,8 +66,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length != 2)
 					throw new IOException("Expected exactly 2 columns: " + line);
 
-				int entity1_id = mapping.ToInternalID(int.Parse(tokens[0]));
-				int entity2_id = mapping.ToInternalID(int.Parse(tokens[1]));
+				int entity1_id = mapping.ToInternalID(long.Parse(tokens[0]));
+				int entity2_id = mapping.ToInternalID(long.Parse(tokens[1]));
 
 				matrix[entity1_id, entity2_id] = true;
 			}
