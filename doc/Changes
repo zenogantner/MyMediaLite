@@ -81,7 +81,8 @@
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
-          - support long user and item IDs (instead of 32 bit integer)
+          - support long user and item IDs (instead of 32 bit integer),
+            suggested by Sebastian Schelter
         - data structures
           - SparseBooleanMatrix: more unit tests
           - PosOnlyFeedback: add unit tests, inherit from DataSet
