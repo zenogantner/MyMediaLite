@@ -32,10 +32,24 @@ namespace MyMediaLite.Eval
 	public static class Items
 	{
 		/// <summary>the evaluation measures for item prediction offered by the class</summary>
+		/// <remarks>
+		/// The evaluation measures currently are:
+		/// <list type="bullet">
+		///   <item><term>AUC</term><description>area under the ROC curve</description></item>
+		///   <item><term>prec@5</term><description>precision at 5</description></item>
+		///   <item><term>prec@10</term><description>precision at 10</description></item>
+		///   <item><term>MAP</term><description>mean average precision</description></item>
+		///   <item><term>recall@5</term><description>recall at 5</description></item>
+		///   <item><term>recall@10</term><description>recall at 10</description></item>
+		///   <item><term>NDCG</term><description>normalizad discounted cumulative gain</description></item>
+		///   <item><term>MRR</term><description>mean reciprocal rank</description></item>
+		/// </list>
+		/// An item recommender is better than another according to one of those measures its score is higher.
+		/// </remarks>
 		static public ICollection<string> Measures
 		{
 			get	{
-				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "mrr" };
+				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR" };
 				return new HashSet<string>(measures);
 			}
 		}
@@ -46,8 +60,8 @@ namespace MyMediaLite.Eval
 		static public string FormatResults(Dictionary<string, double> result)
 		{
 			return string.Format(
-				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} mrr {7:0.#####} num_users {8} num_items {9} num_lists {10}",
-				result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["mrr"], result["num_users"], result["num_items"], result["num_lists"]
+				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} MRR {7:0.#####} num_users {8} num_items {9} num_lists {10}",
+				result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["MRR"], result["num_users"], result["num_items"], result["num_lists"]
 			);
 		}
 
@@ -73,8 +87,8 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="training">training data</param>
-		/// <param name="relevant_users">a list of integers with all relevant users</param>
-		/// <param name="relevant_items">a list of integers with all relevant items</param>
+		/// <param name="test_users">a list of integers with all relevant users</param>
+		/// <param name="candidate_items">a list of integers with all relevant items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
@@ -82,39 +96,39 @@ namespace MyMediaLite.Eval
 			IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback training,
-			IList<int> relevant_users,
-			IList<int> relevant_items,
-			CandidateItems candidate_item_mode,
+			IList<int> test_users,
+			IList<int> candidate_items,
+			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
 			bool repeated_events = false)
 		{
 			switch (candidate_item_mode)
 			{
-				case CandidateItems.TRAINING: relevant_items = training.AllItems; break;
-				case CandidateItems.TEST:     relevant_items = test.AllItems; break;
-				case CandidateItems.OVERLAP:  relevant_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
-				case CandidateItems.UNION:    relevant_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
+				case CandidateItems.TRAINING: candidate_items = training.AllItems; break;
+				case CandidateItems.TEST:     candidate_items = test.AllItems; break;
+				case CandidateItems.OVERLAP:  candidate_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
+				case CandidateItems.UNION:    candidate_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
 			}
 
 			int num_users = 0;
 			var result = new Dictionary<string, double>();
 			foreach (string method in Measures)
 				result[method] = 0;
-			
+
 			// make sure that UserMatrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
-			
-			Parallel.ForEach(relevant_users, user_id =>
+
+			Parallel.ForEach(test_users, user_id =>
 			{
 				try
 				{
 					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
-					correct_items.IntersectWith(relevant_items);
+					correct_items.IntersectWith(candidate_items);
 
 					// the number of items that are really relevant for this user
 					var relevant_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
-					relevant_items_in_train.IntersectWith(relevant_items);
-					int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
+					relevant_items_in_train.IntersectWith(candidate_items);
+					int num_eval_items = candidate_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
 
 					// skip all users that have 0 or #relevant_items test items
 					if (correct_items.Count == 0)
@@ -122,8 +136,8 @@ namespace MyMediaLite.Eval
 					if (num_eval_items - correct_items.Count == 0)
 						return;
 
-					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_items);
-					if (prediction_list.Count != relevant_items.Count)
+					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, candidate_items);
+					if (prediction_list.Count != candidate_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
 					ICollection<int> ignore_items = repeated_events ? new int[0] : training_user_matrix[user_id];
@@ -143,7 +157,7 @@ namespace MyMediaLite.Eval
 						result["AUC"]       += auc;
 						result["MAP"]       += map;
 						result["NDCG"]      += ndcg;
-						result["mrr"]       += rr;
+						result["MRR"]       += rr;
 						result["prec@5"]    += prec[5];
 						result["prec@10"]   += prec[10];
 						result["recall@5"]  += recall[5];
@@ -166,7 +180,7 @@ namespace MyMediaLite.Eval
 				result[measure] /= num_users;
 			result["num_users"] = num_users;
 			result["num_lists"] = num_users;
-			result["num_items"] = relevant_items.Count;
+			result["num_items"] = candidate_items.Count;
 
 			return result;
 		}
