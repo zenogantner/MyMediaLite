@@ -11,10 +11,10 @@ public class ItemPrediction
 		// load the data
 		var user_mapping = new EntityMapping();
 		var item_mapping = new EntityMapping();
-		var training_data = ItemRecommendation.Read(args[0], user_mapping, item_mapping);
-		var relevant_users = training_data.AllUsers; // users that will be taken into account in the evaluation
-		var relevant_items = training_data.AllItems; // items that will be taken into account in the evaluation
-		var test_data = ItemRecommendation.Read(args[1], user_mapping, item_mapping);
+		var training_data = ItemData.Read(args[0], user_mapping, item_mapping);
+		var test_users = training_data.AllUsers; // users that will be taken into account in the evaluation
+		var candidate_items = training_data.AllItems; // items that will be taken into account in the evaluation
+		var test_data = ItemData.Read(args[1], user_mapping, item_mapping);
 
 		// set up the recommender
 		var recommender = new MostPopular();
@@ -22,7 +22,7 @@ public class ItemPrediction
 		recommender.Train();
 
 		// measure the accuracy on the test data set
-		var results = Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items);
+		var results = Items.Evaluate(recommender, test_data, training_data, test_users, candidate_items);
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
 
