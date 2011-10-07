@@ -87,8 +87,8 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="training">training data</param>
-		/// <param name="test_users">a list of integers with all relevant users</param>
-		/// <param name="candidate_items">a list of integers with all relevant items</param>
+		/// <param name="test_users">a list of integers with all test users</param>
+		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
@@ -125,12 +125,12 @@ namespace MyMediaLite.Eval
 					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
 					correct_items.IntersectWith(candidate_items);
 
-					// the number of items that are really relevant for this user
-					var relevant_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
-					relevant_items_in_train.IntersectWith(candidate_items);
-					int num_eval_items = candidate_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
+					// the number of items that will be used for this user
+					var candidate_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
+					candidate_items_in_train.IntersectWith(candidate_items);
+					int num_eval_items = candidate_items.Count - (repeated_events ? 0 : candidate_items_in_train.Count());
 
-					// skip all users that have 0 or #relevant_items test items
+					// skip all users that have 0 or #candidate_items test items
 					if (correct_items.Count == 0)
 						return;
 					if (num_eval_items - correct_items.Count == 0)

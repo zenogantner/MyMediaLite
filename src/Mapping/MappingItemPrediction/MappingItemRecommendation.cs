@@ -46,7 +46,7 @@ class MappingItemRecommendation
 {
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
-	static IList<int> relevant_items;
+	static IList<int> candidate_items;
 
 	static BPRMF_Mapping recommender;
 	static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
@@ -79,7 +79,7 @@ class MappingItemRecommendation
 		Console.WriteLine("  - general OPTIONS have the form name=value");
 		Console.WriteLine("    - random_seed=N");
 		Console.WriteLine("    - data_dir=DIR           load all files from DIR");
-		Console.WriteLine("    - relevant_items=FILE    use only item in the given file for evaluation");
+		Console.WriteLine("    - candidate_items=FILE   use only item in the given file for evaluation");
 		Console.WriteLine("    - item_attributes=FILE   file containing item attribute information");
 		Console.WriteLine("    - user_attributes=FILE   file containing user attribute information");
 		//Console.WriteLine("    - save_mappings=FILE     save computed mapping model to FILE");
@@ -104,7 +104,7 @@ class MappingItemRecommendation
 
 		// other parameters
 		string data_dir             = parameters.GetRemoveString( "data_dir");
-		string relevant_items_file  = parameters.GetRemoveString( "relevant_items");
+		string candidate_items_file = parameters.GetRemoveString( "candidate_items");
 		string item_attributes_file = parameters.GetRemoveString( "item_attributes");
 		string user_attributes_file = parameters.GetRemoveString( "user_attributes");
 		//string save_mapping_file    = parameters.GetRemoveString( "save_model");
@@ -161,11 +161,11 @@ class MappingItemRecommendation
 		training_data = ItemData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);
 		recommender.Feedback = training_data;
 
-		// relevant items
-		if (! relevant_items_file.Equals(string.Empty) )
-			relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, relevant_items_file))));
+		// candidate items
+		if (! candidate_items_file.Equals(string.Empty) )
+			candidate_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
 		else
-			relevant_items = training_data.AllItems;
+			candidate_items = training_data.AllItems;
 
 		// user attributes
 		if (recommender is IUserAttributeAwareRecommender)
@@ -241,7 +241,7 @@ class MappingItemRecommendation
 								test_data,
 								train_data,
 								test_data.AllUsers,
-								relevant_items,
+								candidate_items,
 								CandidateItems.EXPLICIT
 				);
 				DisplayResults(result);
