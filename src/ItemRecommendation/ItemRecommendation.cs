@@ -227,8 +227,8 @@ class ItemRecommendation
 			{ "save-model=",          v => save_model_file        = v },
 			{ "load-model=",          v => load_model_file        = v },
 			{ "prediction-file=",     v => prediction_file        = v },
-			{ "test-users=",          v => test_users_file    = v },
-			{ "candidate-items=",     v => candidate_items_file    = v },
+			{ "test-users=",          v => test_users_file        = v },
+			{ "candidate-items=",     v => candidate_items_file   = v },
 			{ "user-groups=",         v => user_groups_file       = v },
 			// integer-valued options
    			{ "find-iter=",            (int v) => find_iter            = v },
@@ -254,8 +254,8 @@ class ItemRecommendation
 			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "overlap-items",        v => overlap_items     = v != null },
 			{ "all-items",            v => all_items         = v != null },
-			{ "in-training-items",    v => in_training_items    = v != null },
-			{ "in-test-items",        v => in_test_items        = v != null },
+			{ "in-training-items",    v => in_training_items = v != null },
+			{ "in-test-items",        v => in_test_items     = v != null },
 			{ "help",                 v => show_help         = v != null },
 			{ "version",              v => show_version      = v != null },
 		};
