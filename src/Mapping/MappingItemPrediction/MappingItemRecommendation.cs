@@ -163,7 +163,7 @@ class MappingItemRecommendation
 
 		// relevant items
 		if (! relevant_items_file.Equals(string.Empty) )
-			relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadIntegers(Path.Combine(data_dir, relevant_items_file))));
+			relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, relevant_items_file))));
 		else
 			relevant_items = training_data.AllItems;
 

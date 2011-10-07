@@ -59,9 +59,6 @@ namespace MyMediaLite.Eval
 			ICollection<int> relevant_items,
 			bool ignore_overlap = true)
 		{
-			if (train.OverlapCount(test) > 0)
-				Console.Error.WriteLine("WARNING: Overlapping train and test data");
-
 			// compute evaluation measures
 			double auc_sum     = 0;
 			double map_sum     = 0;

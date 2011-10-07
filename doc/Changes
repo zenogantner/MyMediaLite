@@ -2,9 +2,10 @@
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
-          - cross-validation for item recommendation and rating prediction
+          - cross-validation for rating prediction and item recommendation
           - distributed SGD (see below)
         - API changes
+          - add (more abstract) IDataSet interface, and DataSet class
           - rename IIItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
             to better reflect what those interfaces actually offer method-wise
@@ -31,13 +32,20 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
           - BiasedMatrixFactorization: make fields needed for the bold-driver
             learning rate heuristic protected
+          - MatrixFactroization: avoid unnecessary computation of update terms
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
-          - BPRMF: add UpdateJ option, fully support RemoveItem()
+          - BPRMF:
+            - add UpdateJ option
+            - fully support RemoveItem()
+            - add WithReplacement option to choose between sampling with and
+              without replacement
+            - add UniformUserSampling option
           - factorization models that need random initialization:
             rename property Stdev to StdDev
           - BPR_Linear: no warning when predicting for unknown items; get rid
             of random initialization - 0 is okay for linear model
+          - MostPopular: adapt to new PosOnlyFeedback
         - command-line tools
           - add --show-fold-results for cross-validation
           - support --compute-fit for all kinds of modes, not only in
@@ -45,12 +53,16 @@
           - rename ItemPrediction.exe to ItemRecommendation.exe
           - item recommendation: all items in training+test are now the default,
             instead of all items in training; get this behavior now via the
-            --training-items option; add --all-items option (makes a difference
-            if there are also items which were not observed - viewed, bought -
-            at all, e.g. in combination with --rating-threshold); thanks go to
-            Jagadeesh Gorla for bugging me about the details of the evaluation
-            protocol.
-          - drop support for --prediction-file=- (STDOUT)
+            --in-training-items option; add --all-items option (makes a
+            difference if there are also items which were not observed - viewed,
+            bought - at all, e.g. in combination with --rating-threshold);
+            thanks go to Jagadeesh Gorla for bugging me about the details of
+            the evaluation protocol.
+          - item recommendation: rename --relevant-items=FILE to
+            --candidate-items=FILE to avoid confusion with the way the word
+            "relevance" is used in information retrieval; rename
+            --relevant-users=FILE to --test-users=FILE
+          - drop support for --prediction-file=- (write to STDOUT)
           - improved usage information            
           - check parameters after creating recommender, catching more errors
           - refer to GitHub issue tracker in exception handler, make handler
@@ -69,15 +81,20 @@
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
+          - support long user and item IDs (instead of 32 bit integer),
+            suggested by Sebastian Schelter
         - data structures
           - SparseBooleanMatrix: more unit tests
-          - PosOnlyFeedback: add unit tests
+          - PosOnlyFeedback: add unit tests, inherit from DataSet
+          - Ratings.BuildRandomIndex(): shuffle existing index instead building
+            from scratch
 	- documentation
           - API docs:
             - improved literature references and web links
             - add links to RecSysWiki articles
           - IItemRecommender: explain the task of item recommendation
           - IRatingPredictor: explain the task of rating prediction
+          - add data file format descriptions to website
         - misc
           - upgrade from Math.NET Iridium to Math.NET Numerics Beta 2
             - use Math.NET Numerics for generating normal distributed random
@@ -89,6 +106,8 @@
             from MyMediaLiteTest to Tests
           - updated and improved test scripts; add test script for the
             cross-validation feature
+          - rename example programs from item_prediction.* to
+            item_recommendation.*
 
 1.05	2011-09-01
 	- API changes

@@ -25,19 +25,19 @@ namespace MyMediaLite.Data
 	{
 		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
 		/// <remarks>
-		/// Never, to repeat NEVER, delete entries from this dictionary!
+		/// Never, to repeat NEVER, directly delete entries from this dictionary!
 		/// </remarks>
-		Dictionary<int, int> original_to_internal = new Dictionary<int, int>();
+		private Dictionary<long, int> original_to_internal = new Dictionary<long, int>();
 
 		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
 		/// <remarks>
-		/// Never, to repeat NEVER, delete entries from this dictionary!
+		/// Never, to repeat NEVER, directly delete entries from this dictionary!
 		/// </remarks>
-		Dictionary<int, int> internal_to_original = new Dictionary<int, int>();
+		private Dictionary<int, long> internal_to_original = new Dictionary<int, long>();
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
-		public ICollection<int> OriginalIDs	{ get { return original_to_internal.Keys; } }
+		public ICollection<long> OriginalIDs	{ get { return original_to_internal.Keys; } }
 
 		/// <summary>all internal entity IDs</summary>
 		/// <value>all internal entity IDs</value>
@@ -46,9 +46,9 @@ namespace MyMediaLite.Data
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
 		/// <returns>the original (external) ID of the entitiy</returns>
-		public int ToOriginalID(int internal_id)
+		public long ToOriginalID(int internal_id)
 		{
-			int original_id;
+			long original_id;
 			if (internal_to_original.TryGetValue(internal_id, out original_id))
 				return original_id;
 			else
@@ -58,7 +58,7 @@ namespace MyMediaLite.Data
 		/// <summary>Get internal ID of a given entity. If the given external ID is unknown, create a new internal ID for it and store the mapping.</summary>
 		/// <param name="original_id">the original (external) ID of the entity</param>
 		/// <returns>the internal ID of the entitiy</returns>
-		public int ToInternalID(int original_id)
+		public int ToInternalID(long original_id)
 		{
 			int internal_id;
 			if (original_to_internal.TryGetValue(original_id, out internal_id))
@@ -73,9 +73,9 @@ namespace MyMediaLite.Data
 		/// <summary>Get original (external) IDs of a list of given entities</summary>
 		/// <param name="internal_id_list">the list of internal IDs</param>
 		/// <returns>the list of original (external) IDs</returns>
-		public IList<int> ToOriginalID(IList<int> internal_id_list)
+		public IList<long> ToOriginalID(IList<int> internal_id_list)
 		{
-			var result = new List<int>(internal_id_list.Count);
+			var result = new List<long>(internal_id_list.Count);
 			foreach (int id in internal_id_list)
 				result.Add(ToOriginalID(id));
 			return result;
@@ -84,10 +84,10 @@ namespace MyMediaLite.Data
 		/// <summary>Get internal IDs of a list of given entities</summary>
 		/// <param name="original_id_list">the list of original (external) IDs</param>
 		/// <returns>a list of internal IDs</returns>
-		public IList<int> ToInternalID(IList<int> original_id_list)
+		public IList<int> ToInternalID(IList<long> original_id_list)
 		{
 			var result = new List<int>(original_id_list.Count);
-			foreach (int id in original_id_list)
+			foreach (long id in original_id_list)
 				result.Add(ToInternalID(id));
 			return result;
 		}

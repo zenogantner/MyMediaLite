@@ -27,7 +27,7 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Matrix factorization model for item prediction (ranking) optimized using BPR-Opt</summary>
+	/// <summary>Matrix factorization model for item prediction (ranking) optimized for BPR </summary>
 	/// <remarks>
 	/// BPR reduces ranking to pairwise classification.
 	///
@@ -40,6 +40,11 @@ namespace MyMediaLite.ItemRecommendation
 	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
 	///   </description></item>
 	/// </list>
+	///
+	/// Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
+	/// To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
+	/// WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
+	/// (approximately) optimizes the average AUC over all users.
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
@@ -55,6 +60,12 @@ namespace MyMediaLite.ItemRecommendation
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
+
+		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
+		public bool WithReplacement { get; set; }
+
+		/// <summary>Sample uniformly from users</summary>
+		public bool UniformUserSampling { get; set; }
 
 		/// <summary>Regularization parameter for the bias term</summary>
 		public double BiasReg { get; set; }
@@ -91,15 +102,22 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
-		/// See
-		/// Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		/// Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent
-		/// 2011
+		/// Does not work too well for BPR-MF.
+		///
+		/// Literature:
+		/// <list type="bullet">
+		///   <item><description>
+		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
+		///     KDD 2011.
+		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
+		///   </description></item>
+		/// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
-		double last_loss = double.NegativeInfinity;
+		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
@@ -110,6 +128,12 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
+
+		/// <summary>Default constructor</summary>
+		public BPRMF()
+		{
+			UniformUserSampling = true;
+		}
 
 		///
 		protected override void InitModel()
@@ -164,10 +188,64 @@ namespace MyMediaLite.ItemRecommendation
 
 			int user_id, pos_item_id, neg_item_id;
 
-			for (int i = 0; i < num_pos_events; i++)
+			if (UniformUserSampling)
 			{
-				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				if (WithReplacement) // case 1: uniform user sampling, with replacement
+				{
+					var user_matrix = Feedback.GetUserMatrixCopy();
+
+					for (int i = 0; i < num_pos_events; i++)
+					{
+						while (true) // sampling with replacement
+						{
+							user_id = SampleUser();
+							var user_items = user_matrix[user_id];
+
+							// reset user if already exhausted
+							if (user_items.Count == 0)
+								foreach (int item_id in Feedback.UserMatrix[user_id])
+									user_matrix[user_id, item_id] = true;
+
+							pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
+							user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
+							do
+								neg_item_id = random.Next(MaxItemID + 1);
+							while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
+							break;
+						}
+						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+					}
+				}
+				else // case 2: uniform user sampling, without replacement
+				{
+					for (int i = 0; i < num_pos_events; i++)
+					{
+						SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+					}
+				}
+			}
+			else
+			{
+				if (WithReplacement) // case 3: uniform pair sampling, with replacement
+					for (int i = 0; i < num_pos_events; i++)
+					{
+						int index = random.Next(num_pos_events);
+						user_id = Feedback.Users[index];
+						pos_item_id = Feedback.Items[index];
+						neg_item_id = -1;
+						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
+						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+					}
+				else // case 4: uniform pair sampling, without replacement
+					foreach (int index in Feedback.RandomIndex)
+					{
+						user_id = Feedback.Users[index];
+						pos_item_id = Feedback.Items[index];
+						neg_item_id = -1;
+						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
+						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+					}
 			}
 
 			if (BoldDriver)
@@ -562,7 +640,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override double Predict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
-				return 0;
+				return double.MinValue;
 
 			return item_bias[item_id] + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
@@ -616,8 +694,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} bold_driver={8} fast_sampling_memory_limit={9} update_j={10} init_mean={11} init_stddev={12}",
-								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
+			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14}",
+								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
 		}
 	}
 }

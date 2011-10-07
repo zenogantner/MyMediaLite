@@ -87,11 +87,10 @@ namespace MovieDemo
 				if (tokens.Length != 3)
 					throw new IOException("Expected exactly 3 columns: " + line);
 
-				int movie_id          = item_mapping.ToInternalID(int.Parse(tokens[0]));
+				int movie_id          = item_mapping.ToInternalID(long.Parse(tokens[0]));
 				string movie_imdb_key = tokens[1];
 				//string[] movie_genres = tokens[2].Split('|');
 
-				// TODO
 				int movie_year = 1900;
 				string movie_title = movie_imdb_key;
 

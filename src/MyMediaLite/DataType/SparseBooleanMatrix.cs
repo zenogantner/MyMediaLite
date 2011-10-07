@@ -32,7 +32,7 @@ namespace MyMediaLite.DataType
 	/// </remarks>
 	public class SparseBooleanMatrix : IBooleanMatrix
 	{
-		private List<HashSet<int>> row_list = new List<HashSet<int>>();
+		private List<ISet<int>> row_list = new List<ISet<int>>();
 
 		/// <summary>Indexer to access the elements of the matrix</summary>
 		/// <param name="x">the row ID</param>
@@ -47,7 +47,11 @@ namespace MyMediaLite.DataType
 			}
 			set	{
 				if (value)
+				{
+					if (this[x] == null)
+						throw new Exception("<<<" + x + ">>>");
 					this[x].Add(y);
+				}
 				else
 					this[x].Remove(y);
 			}
@@ -57,9 +61,13 @@ namespace MyMediaLite.DataType
 		public ICollection<int> this [int x]
 		{
 			get	{
+				//Console.Error.WriteLine("{0} - {1}", row_list.Count, x); Console.Error.Flush();
+				// FIXME
+
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
 						row_list.Add(new HashSet<int>());
+
 				return row_list[x];
 			}
 		}
@@ -118,13 +126,13 @@ namespace MyMediaLite.DataType
 
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
-		public IList<KeyValuePair<int, HashSet<int>>> NonEmptyRows
+		public IList<KeyValuePair<int, ISet<int>>> NonEmptyRows
 		{
 			get	{
-				var return_list = new List<KeyValuePair<int, HashSet<int>>>();
+				var return_list = new List<KeyValuePair<int, ISet<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, HashSet<int>>(i, row_list[i]));
+						return_list.Add(new KeyValuePair<int, ISet<int>>(i, row_list[i]));
 				return return_list;
 			}
 		}

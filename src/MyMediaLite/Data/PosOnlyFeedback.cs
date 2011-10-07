@@ -17,68 +17,62 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
-	// TODO unit tests
-
 	/// <summary>Data structure for implicit, positive-only user feedback</summary>
 	/// <remarks>
-	/// This data structure supports incremental updates if supported by T.
+	/// This data structure supports incremental updates if supported by the type parameter T.
 	/// </remarks>
-	public class PosOnlyFeedback<T> : IPosOnlyFeedback where T : IBooleanMatrix, new()
+	public class PosOnlyFeedback<T> : DataSet, IPosOnlyFeedback where T : IBooleanMatrix, new()
 	{
-		/// <summary>By-user access, users are stored in the rows, items in the culumns</summary>
-		public IBooleanMatrix UserMatrix { get; private set; }
+		/// <summary>By-user access, users are stored in the rows, items in the columns</summary>
+		public IBooleanMatrix UserMatrix
+		{
+			get {
+				if (user_matrix == null)
+					user_matrix = GetUserMatrixCopy();
 
-		/// <summary>By-item access, items are stored in the rows, users in the culumns</summary>
+				return user_matrix;
+			}
+		}
+		IBooleanMatrix user_matrix;
+
+		/// <summary>By-item access, items are stored in the rows, users in the columns</summary>
 		public IBooleanMatrix ItemMatrix
 		{
 			get {
 				if (item_matrix == null)
-					item_matrix = (IBooleanMatrix) UserMatrix.Transpose();
+					item_matrix = GetItemMatrixCopy();
 
 				return item_matrix;
 			}
 		}
 		IBooleanMatrix item_matrix;
 
-		/// <summary>the maximum user ID</summary>
-		public int MaxUserID { get; private set; }
-
-		/// <summary>the maximum item ID</summary>
-		public int MaxItemID { get; private set; }
-
-		/// <summary>the number of feedback events</summary>
-		public int Count { get { return UserMatrix.NumberOfEntries; } }
-
-		/// <summary>all users that have given feedback</summary>
-		public IList<int> AllUsers { get { return UserMatrix.NonEmptyRowIDs; } }
-
-		/// <summary>all items mentioned at least once</summary>
-		public IList<int> AllItems {
-			get {
-				if (item_matrix == null)
-					return UserMatrix.NonEmptyColumnIDs;
-				else
-					return ItemMatrix.NonEmptyRowIDs;
-			}
-		}
-
 		/// <summary>Default constructor</summary>
-		public PosOnlyFeedback()
+		public PosOnlyFeedback() : base()
 		{
-			UserMatrix = new T();
 		}
 
-		/// <summary>Create a PosOnlyFeedback object from an existing user-item matrix</summary>
-		/// <param name="user_matrix">the user-item matrix</param>
-		public PosOnlyFeedback(T user_matrix)
+		///
+		public IBooleanMatrix GetUserMatrixCopy()
 		{
-			UserMatrix = user_matrix;
-			MaxUserID = user_matrix.NumberOfRows;
-			MaxItemID = user_matrix.NumberOfColumns;
+			var matrix = new T();
+			for (int index = 0; index < Count; index++)
+				matrix[Users[index], Items[index]] = true;
+			return matrix;
+		}
+
+		///
+		public IBooleanMatrix GetItemMatrixCopy()
+		{
+			var matrix = new T();
+			for (int index = 0; index < Count; index++)
+				matrix[Items[index], Users[index]] = true;
+			return matrix;
 		}
 
 		/// <summary>Add a user-item event to the data structure</summary>
@@ -86,7 +80,11 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		public void Add(int user_id, int item_id)
 		{
-			UserMatrix[user_id, item_id] = true;
+			Users.Add(user_id);
+			Items.Add(item_id);
+
+			if (user_matrix != null)
+				user_matrix[user_id, item_id] = true;
 			if (item_matrix != null)
 				item_matrix[item_id, user_id] = true;
 
@@ -97,21 +95,64 @@ namespace MyMediaLite.Data
 				MaxItemID = item_id;
 		}
 
-		/// <summary>Remove a user-item event from the data structure</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the item ID</param>
+		///
 		public void Remove(int user_id, int item_id)
 		{
-			UserMatrix[user_id, item_id] = false;
+			int index = -1;
+
+			while (TryGetIndex(user_id, item_id, out index))
+			{
+				Users.RemoveAt(index);
+				Items.RemoveAt(index);
+			}
+
+			if (user_matrix != null)
+				user_matrix[user_id, item_id] = false;
 			if (item_matrix != null)
 				item_matrix[item_id, user_id] = false;
 		}
 
+		/// <summary>Remove the event with a given index</summary>
+		/// <param name="index">the index of the event to be removed</param>
+		public void Remove(int index)
+		{
+			int user_id = Users[index];
+			int item_id = Items[index];
+			Users.RemoveAt(index);
+			Items.RemoveAt(index);
+
+			if (!TryGetIndex(user_id, item_id, out index))
+			{
+				if (user_matrix != null)
+					user_matrix[user_id, item_id] = false;
+				if (item_matrix != null)
+					item_matrix[item_id, user_id] = false;
+			}
+		}
+
 		/// <summary>Remove all feedback by a given user</summary>
 		/// <param name="user_id">the user id</param>
-		public void RemoveUser(int user_id)
+		public override void RemoveUser(int user_id)
 		{
-			UserMatrix[user_id].Clear();
+			IList<int> indices = new List<int>();
+			if (by_user != null)
+				indices = ByUser[user_id];
+			else if (user_matrix != null)
+				indices = new List<int>(user_matrix[user_id]);
+			else
+				for (int index = 0; index < Count; index++)
+					if (Users[index] == user_id)
+						indices.Add(index);
+
+			// assumption: indices is sorted
+			for (int i = indices.Count - 1; i >= 0; i--)
+			{
+				Users.RemoveAt(indices[i]);
+				Items.RemoveAt(indices[i]);
+			}
+
+			if (user_matrix != null)
+				user_matrix[user_id].Clear();
 			if (item_matrix != null)
 				for (int i = 0; i < item_matrix.NumberOfRows; i++)
 					item_matrix[i].Remove(user_id);
@@ -119,21 +160,57 @@ namespace MyMediaLite.Data
 
 		/// <summary>Remove all feedback about a given item</summary>
 		/// <param name="item_id">the item ID</param>
-		public void RemoveItem(int item_id)
+		public override void RemoveItem(int item_id)
 		{
-			for (int u = 0; u < UserMatrix.NumberOfRows; u++)
-				UserMatrix[u].Remove(item_id);
+			IList<int> indices = new List<int>();
+			if (by_item != null)
+				indices = ByItem[item_id];
+			else if (item_matrix != null)
+				indices = new List<int>(item_matrix[item_id]);
+			else
+				for (int index = 0; index < Count; index++)
+					if (Items[index] == item_id)
+						indices.Add(index);
+
+			// assumption: indices is sorted
+			for (int i = indices.Count - 1; i >= 0; i--)
+			{
+				Users.RemoveAt(indices[i]);
+				Items.RemoveAt(indices[i]);
+			}
+
+			if (user_matrix != null)
+				for (int u = 0; u < user_matrix.NumberOfRows; u++)
+					user_matrix[u].Remove(item_id);
 
 			if (item_matrix != null)
 				item_matrix[item_id].Clear();
 		}
 
-		/// <summary>Compute the number of overlapping events in two feedback datasets</summary>
-		/// <param name="s">the feedback dataset to compare to</param>
-		/// <returns>the number of overlapping events, i.e. events that have the same user and item ID</returns>
-		public int OverlapCount(IPosOnlyFeedback s)
+		///
+		public IPosOnlyFeedback Transpose()
 		{
-			return UserMatrix.Overlap(s.UserMatrix);
+			var transpose = new PosOnlyFeedback<T>();
+			transpose.Users = new List<int>(this.Items);
+			transpose.Items = new List<int>(this.Users);
+
+			return transpose;
 		}
+
+		///
+		public bool TryGetIndex(int user_id, int item_id, out int index)
+		{
+			index = -1;
+
+			for (int i = 0; i < Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
 	}
 }

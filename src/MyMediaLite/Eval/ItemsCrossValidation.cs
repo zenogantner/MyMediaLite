@@ -47,7 +47,7 @@ namespace MyMediaLite.Eval
 
 			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
-				var split_recommender = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
+				var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
 				split_recommender.Feedback = split.Train[fold];
 				split_recommender.Train();
 				var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], relevant_users, relevant_items, candidate_item_mode);

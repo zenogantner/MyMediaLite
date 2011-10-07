@@ -87,9 +87,6 @@ namespace MyMediaLite.Eval
 			CandidateItems candidate_item_mode,
 			bool repeated_events = false)
 		{
-			if (!repeated_events && training.OverlapCount(test) > 0)
-				Console.Error.WriteLine("WARNING: Overlapping train and test data");
-
 			switch (candidate_item_mode)
 			{
 				case CandidateItems.TRAINING: relevant_items = training.AllItems; break;
@@ -102,16 +99,20 @@ namespace MyMediaLite.Eval
 			var result = new Dictionary<string, double>();
 			foreach (string method in Measures)
 				result[method] = 0;
-
+			
+			// make sure that UserMatrix is completely initialized before entering parallel code
+			var training_user_matrix = training.UserMatrix;
+			var test_user_matrix     = test.UserMatrix;
+			
 			Parallel.ForEach(relevant_users, user_id =>
 			{
 				try
 				{
-					var correct_items = new HashSet<int>(test.UserMatrix[user_id]);
+					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
 					correct_items.IntersectWith(relevant_items);
 
 					// the number of items that are really relevant for this user
-					var relevant_items_in_train = new HashSet<int>(training.UserMatrix[user_id]);
+					var relevant_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
 					relevant_items_in_train.IntersectWith(relevant_items);
 					int num_eval_items = relevant_items.Count - (repeated_events ? 0 : relevant_items_in_train.Count());
 
@@ -125,7 +126,7 @@ namespace MyMediaLite.Eval
 					if (prediction_list.Count != relevant_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
-					ICollection<int> ignore_items = repeated_events ? new int[0] : training.UserMatrix[user_id];
+					ICollection<int> ignore_items = repeated_events ? new int[0] : training_user_matrix[user_id];
 
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
@@ -156,7 +157,8 @@ namespace MyMediaLite.Eval
 				}
 				catch (Exception e)
 				{
-					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace); throw e;
+					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
+					throw e;
 				}
 			});
 

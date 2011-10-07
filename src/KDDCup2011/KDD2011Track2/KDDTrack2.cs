@@ -408,19 +408,11 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
 	{
-		SparseBooleanMatrixStatic user_item_matrix = new SparseBooleanMatrixStatic();
+		var feedback = new PosOnlyFeedback<SparseBooleanMatrixStatic>();
 
-		for (int u = 0; u <= ratings.MaxUserID; u++)
-		{
-			var items = new List<int>();
-
-			foreach (int index in ratings.ByUser[u])
-				if (ratings[index] >= threshold)
-					items.Add(ratings.Items[index]);
-
-			user_item_matrix[u] = items.ToArray();
-		}
-		var feedback = new PosOnlyFeedback<SparseBooleanMatrixStatic>(user_item_matrix);
+		for (int index = 0; index < ratings.Count; index++)
+			if (ratings[index] >= threshold)
+				feedback.Add(ratings.Users[index], ratings.Items[index]);
 
 		Console.Error.WriteLine("{0} ratings > {1}", feedback.Count, threshold);
 

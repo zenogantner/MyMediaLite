@@ -43,6 +43,25 @@
     Contact us to give feedback on the API documentation.
   </p>
   
+  <h2>File Formats</h2>
+  <p>Descriptions of several file formats supported by the MyMediaLite library and its command line tools:
+    <ul>
+      <li><a href="rating_files.html">ratings</a></li>
+      <li><a href="movielens_files.html">MovieLens 1M/10M format</a></li>
+      <li><a href="kdd_cup_files.html">KDD Cup format</a></li>
+      <li><a href="implicit_feedback_files.html">implicit feedback</a></li>
+      <li><a href="attribute_files.html">attribute files</a></li>
+      <li><a href="relation_files.html">relation files</a></li>
+      <li><a href="entity_files.html">user and item lists</a></li>
+      <li><a href="item_prediction_files">item prediction files</a></li>
+    </ul>
+  </p>
+  <p>
+    Note that you are not bound to using text-based files,
+    you may also <a href="database.html">load your data from a database</a>,
+    or implement your own I/O routines.
+  </p>
+  
   <h2>Frequently Asked Questions (FAQ)</h2>
   
   <h3>What are the differences between MyMediaLite and the [% INCLUDE link link='mymediaframework' %]?</h3>
@@ -93,7 +112,7 @@
   </p>
   <p>
   The <a href="item_prediction.html">item prediction command line tool</a> offers the options
-  <tt>--num-test-users=N</tt>, <tt>--relevant-items=FILE</tt> and <tt>--relevant-users=FILE</tt> for this purpose.
+  <tt>--num-test-users=N</tt>, <tt>--candidate-items=FILE</tt> and <tt>--test-users=FILE</tt> for this purpose.
   </p>
   
   <h3>Is MyMediaLite <a href="http://en.wikipedia.org/wiki/Thread_safety">thread-safe</a>?</h3>
