@@ -19,6 +19,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+/*! \namespace MyMediaLite.Eval.Measures
+*   \brief This namespace contains different evaluation measures.
+*/
 namespace MyMediaLite.Eval.Measures
 {
 	/// <summary>Area under the ROC curve (AUC) of a list of ranked items</summary>

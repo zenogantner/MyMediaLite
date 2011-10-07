@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,6 +15,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+/*! \namespace MyMediaLite.Taxonomy
+ *  \brief This namespace contains taxonomical data structures, i.e. data structures that help us to describe what kind of a thing something is.
+ */
 namespace MyMediaLite.Taxonomy
 {
 	/// <summary>Type to refer to different kinds of entities like users and items</summary>

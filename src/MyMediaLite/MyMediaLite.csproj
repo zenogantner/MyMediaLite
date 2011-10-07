@@ -168,6 +168,7 @@
     <Compile Include="Eval\CandidateItems.cs" />
     <Compile Include="Data\IDataSet.cs" />
     <Compile Include="Data\DataSet.cs" />
+    <Compile Include="IO\NumberFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -19,6 +19,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
+/*! \namespace MyMediaLite.Data
+ *  \brief This namespace contains MyMediaLite's principal data structures,
+ *  which are used e.g. to store the interaction data that is used to train
+ *  personalized recommenders.
+ */
 namespace MyMediaLite.Data
 {
 	/// <summary>Abstract dataset class that implements some common functions</summary>

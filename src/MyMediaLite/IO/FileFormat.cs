@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+/*! \namespace MyMediaLite.IO
+ *  \brief This namespace contains I/O routines, e.g. to load interaction data from files and databases, or for loading recommender models from disk.
+ */
 namespace MyMediaLite.IO
 {
 	/// <summary>Represents different rating file formats</summary>
