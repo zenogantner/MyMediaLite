@@ -1,4 +1,4 @@
-1.99	2011-09-??
+1.99	2011-10-07
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
