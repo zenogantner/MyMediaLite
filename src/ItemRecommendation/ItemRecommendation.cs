@@ -597,7 +597,7 @@ class ItemRecommendation
 
 			// test users
 			if (test_users_file != null)
-				test_users = new List<int>(user_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, test_users_file))));
+				test_users = new List<int>(user_mapping.ToInternalID(NumberFile.ReadLongs(Path.Combine(data_dir, test_users_file))));
 			else
 				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
@@ -621,7 +621,7 @@ class ItemRecommendation
 
 			// candidate items
 			if (candidate_items_file != null)
-				candidate_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
+				candidate_items = new List<int>(item_mapping.ToInternalID(NumberFile.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
 			else if (all_items)
 				candidate_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
 
@@ -683,7 +683,7 @@ class ItemRecommendation
 				Prediction.WritePredictions(
 					recommender,
 					training_data,
-					user_mapping.ToInternalID(Utils.ReadLongs(predict_for_users_file)),
+					user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file)),
 					candidate_items, predict_items_number,
 					user_mapping, item_mapping,
 					prediction_file

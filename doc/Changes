@@ -81,7 +81,9 @@
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
-          - support long user and item IDs (instead of 32 bit integer),
+          - new static class IO.NumberFile (with routines that used to be in
+            Util.Utils)
+          - support long user and item IDs (instead of 32 bit integer), as
             suggested by Sebastian Schelter
         - data structures
           - SparseBooleanMatrix: more unit tests
