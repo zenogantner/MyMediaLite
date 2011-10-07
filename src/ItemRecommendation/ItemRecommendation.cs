@@ -38,8 +38,8 @@ class ItemRecommendation
 	// data
 	static IPosOnlyFeedback training_data;
 	static IPosOnlyFeedback test_data;
-	static IList<int> relevant_users;
-	static IList<int> relevant_items;
+	static IList<int> test_users;
+	static IList<int> candidate_items;
 	static SparseBooleanMatrix group_to_user; // rows: groups, columns: users
 	static ICollection<int> user_groups;
 
@@ -345,7 +345,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, relevant_users, relevant_items, eval_item_mode, show_fold_results);
+					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, test_users, candidate_items, eval_item_mode, show_fold_results);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}
@@ -373,7 +373,7 @@ class ItemRecommendation
 			{
 				if (online_eval)
 					time_span = Utils.MeasureTime( delegate() {
-						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, relevant_users, relevant_items, eval_item_mode);
+						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, test_users, candidate_items, eval_item_mode);
 						Console.Write(Items.FormatResults(results));
 					});
 				else if (group_method != null)
@@ -392,7 +392,7 @@ class ItemRecommendation
 						Usage("Unknown method in --group-recommender=METHOD");
 
 					time_span = Utils.MeasureTime( delegate() {
-						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, relevant_items);
+						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, candidate_items);
 						Console.Write(Groups.FormatResults(result));
 					});
 				}
@@ -435,19 +435,19 @@ class ItemRecommendation
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && test_users_file == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --relevant-users=FILE.");
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
-			Usage("--relevant-items=FILE, --all-items, --training-items, --test-items, and --overlap-items are mutually exclusive.");
+			Usage("--candidate-items=FILE, --all-items, --in-training-items, --in-test-items, and --overlap-items are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && overlap_items)
 			Usage("--overlap-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_test_items)
-			Usage("--test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+			Usage("--in-test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_training_items)
-			Usage("--training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+			Usage("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (group_method != null && user_groups_file == null)
 			Usage("--group-recommender needs --user-groups=FILE.");
@@ -572,7 +572,7 @@ class ItemRecommendation
 
 			if (user_prediction)
 			{
-				// swap relevant users and items
+				// swap file names for test users and candidate items
 				var ruf = test_users_file;
 				var rif = candidate_items_file;
 				test_users_file = rif;
@@ -595,37 +595,37 @@ class ItemRecommendation
 			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)
 				((ItemRecommender)recommender).Feedback = training_data;
 
-			// relevant users
+			// test users
 			if (test_users_file != null)
-				relevant_users = new List<int>(user_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, test_users_file))));
+				test_users = new List<int>(user_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, test_users_file))));
 			else
-				relevant_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
+				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
 			// if necessary, perform user sampling
-			if (num_test_users > 0 && num_test_users < relevant_users.Count)
+			if (num_test_users > 0 && num_test_users < test_users.Count)
 			{
 				// ensure reproducible splitting
 				if (random_seed != -1)
 					MyMediaLite.Util.Random.InitInstance(random_seed);
 
-				var old_relevant_users = new HashSet<int>(relevant_users);
-				var new_relevant_users = new int[num_test_users];
+				var old_test_users = new HashSet<int>(test_users);
+				var new_test_users = new int[num_test_users];
 				for (int i = 0; i < num_test_users; i++)
 				{
-					int random_index = MyMediaLite.Util.Random.GetInstance().Next(old_relevant_users.Count - 1);
-					new_relevant_users[i] = old_relevant_users.ElementAt(random_index);
-					old_relevant_users.Remove(new_relevant_users[i]);
+					int random_index = MyMediaLite.Util.Random.GetInstance().Next(old_test_users.Count - 1);
+					new_test_users[i] = old_test_users.ElementAt(random_index);
+					old_test_users.Remove(new_test_users[i]);
 				}
-				relevant_users = new_relevant_users;
+				test_users = new_test_users;
 			}
 
-			// relevant items
+			// candidate items
 			if (candidate_items_file != null)
-				relevant_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
+				candidate_items = new List<int>(item_mapping.ToInternalID(Utils.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
 			else if (all_items)
-				relevant_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
+				candidate_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
 
-			if (relevant_items != null)
+			if (candidate_items != null)
 				eval_item_mode = CandidateItems.EXPLICIT;
 			else if (in_training_items)
 				eval_item_mode = CandidateItems.TRAINING;
@@ -643,17 +643,17 @@ class ItemRecommendation
 	static Dictionary<string, double> ComputeFit()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, training_data, training_data, item_attributes, relevant_users, relevant_items, true);
+			return ItemsFiltered.Evaluate(recommender, training_data, training_data, item_attributes, test_users, candidate_items, true);
 		else
-			return Items.Evaluate(recommender, training_data, training_data, relevant_users, relevant_items, eval_item_mode, true);
+			return Items.Evaluate(recommender, training_data, training_data, test_users, candidate_items, eval_item_mode, true);
 	}
 
 	static Dictionary<string, double> Evaluate()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, relevant_users, relevant_items, repeat_eval);
+			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
 		else
-			return Items.Evaluate(recommender, test_data, training_data, relevant_users, relevant_items, eval_item_mode, repeat_eval);
+			return Items.Evaluate(recommender, test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
@@ -673,7 +673,7 @@ class ItemRecommendation
 				Prediction.WritePredictions(
 					recommender,
 					training_data,
-					relevant_items, predict_items_number,
+					candidate_items, predict_items_number,
 					user_mapping, item_mapping,
 					prediction_file);
 				Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
@@ -684,7 +684,7 @@ class ItemRecommendation
 					recommender,
 					training_data,
 					user_mapping.ToInternalID(Utils.ReadLongs(predict_for_users_file)),
-					relevant_items, predict_items_number,
+					candidate_items, predict_items_number,
 					user_mapping, item_mapping,
 					prediction_file
 				);
