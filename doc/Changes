@@ -1,4 +1,4 @@
-1.99	2011-09-??
+1.99	2011-10-07
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
@@ -71,7 +71,7 @@
           - different modes for selecting candidate items now also work for
             cross-validation
           - fixes and improvements for item recommendation CV
-          - new evaluation measure: mean reciprocal rank (mrr)
+          - new evaluation measure: mean reciprocal rank (MRR)
           - item recommender evaluation: more descriptive parameter name
             repeated_events
           - move item recommender evaluation measures into their own classes
@@ -81,7 +81,9 @@
         - I/O
           - new static class IO.Constants, which for now contains SPLIT_CHARS
             (used by several other IO classes)
-          - support long user and item IDs (instead of 32 bit integer),
+          - new static class IO.NumberFile (with routines that used to be in
+            Util.Utils)
+          - support long user and item IDs (instead of 32 bit integer), as
             suggested by Sebastian Schelter
         - data structures
           - SparseBooleanMatrix: more unit tests

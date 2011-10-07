@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+/*! \namespace MyMediaLite.DataType
+ *  \brief This namespace contains standard data types that are used by MyMediaLite, e.g. matrices, vectors, etc.
+ */
 namespace MyMediaLite.DataType
 {
 	/// <summary>Generic interface for matrix data types</summary>

@@ -17,10 +17,11 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using MyMediaLite.Data;
 
+/*! \namespace MyMediaLite.ItemRecommendation
+ *  \brief This namespace contains item recommenders and some helper classes for item recommendation.
+ */
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>

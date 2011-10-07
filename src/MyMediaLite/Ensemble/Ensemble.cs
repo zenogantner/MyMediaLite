@@ -18,10 +18,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
+/*! \namespace MyMediaLite.Ensemble
+ *  \brief This namespace contains recommender ensembles.
+ */
 namespace MyMediaLite.Ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>

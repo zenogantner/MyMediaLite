@@ -9,7 +9,7 @@ K=10
 cd src/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite cross-validation test script."
-echo "This will take about 5 minutes ..."
+echo "This will take about 3 minutes ..."
 
 echo
 echo "rating predictors"

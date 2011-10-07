@@ -24,6 +24,9 @@ using MyMediaLite.Data;
 using MyMediaLite.IO;
 using MyMediaLite.Taxonomy;
 
+/*! \namespace MyMediaLite.Correlation
+ *  \brief This namespace contains several correlation/distance measures.
+ */
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
@@ -114,7 +117,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>
 		/// </param>
-		public void Write(StreamWriter writer) // TODO use library routine instead
+		public void Write(StreamWriter writer)
 		{
 			writer.WriteLine(num_entities);
 			for (int i = 0; i < num_entities; i++)

@@ -30,8 +30,6 @@ namespace MyMediaLite.Eval
 	/// <summary>Evaluation class for filtered item recommendation</summary>
 	public static class ItemsFiltered
 	{
-		// TODO generalize more to save some code ...
-
 		/// <summary>For a given user and the test dataset, return a dictionary of items filtered by attributes</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="test">the test dataset</param>
@@ -60,8 +58,8 @@ namespace MyMediaLite.Eval
 		/// <param name="test">test cases</param>
 		/// <param name="train">training data</param>
 		/// <param name="item_attributes">the item attributes to be used for filtering</param>
-		/// <param name="relevant_users">a collection of integers with all relevant users</param>
-		/// <param name="relevant_items">a collection of integers with all relevant items</param>
+		/// <param name="test_users">a collection of integers with all test users</param>
+		/// <param name="candidate_items">a collection of integers with all candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
@@ -69,8 +67,8 @@ namespace MyMediaLite.Eval
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
 			SparseBooleanMatrix item_attributes,
-			IList<int> relevant_users,
-			IList<int> relevant_items,
+			IList<int> test_users,
+			IList<int> candidate_items,
 			bool repeated_events = false)
 		{
 			SparseBooleanMatrix items_by_attribute = (SparseBooleanMatrix) item_attributes.Transpose();
@@ -81,32 +79,32 @@ namespace MyMediaLite.Eval
 			foreach (string method in Items.Measures)
 				result[method] = 0;
 
-			Parallel.ForEach (relevant_users, user_id =>
+			Parallel.ForEach (test_users, user_id =>
 			{
 				var filtered_items = GetFilteredItems(user_id, test, item_attributes);
 				int last_user_id = -1;
 
 				foreach (int attribute_id in filtered_items.Keys)
 				{
-					var relevant_filtered_items = new HashSet<int>(items_by_attribute[attribute_id]);
-					relevant_filtered_items.IntersectWith(relevant_items);
+					var filtered_candidate_items = new HashSet<int>(items_by_attribute[attribute_id]);
+					filtered_candidate_items.IntersectWith(candidate_items);
 
 					var correct_items = new HashSet<int>(filtered_items[attribute_id]);
-					correct_items.IntersectWith(relevant_filtered_items);
+					correct_items.IntersectWith(filtered_candidate_items);
 
-					// the number of items that are really relevant for this user
-					var relevant_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
-					relevant_items_in_train.IntersectWith(relevant_filtered_items);
-					int num_eval_items = relevant_filtered_items.Count - relevant_items_in_train.Count();
+					// the number of candidate items for this user
+					var candidate_items_in_train = new HashSet<int>(train.UserMatrix[user_id]);
+					candidate_items_in_train.IntersectWith(filtered_candidate_items);
+					int num_eval_items = filtered_candidate_items.Count - candidate_items_in_train.Count;
 
-					// skip all users that have 0 or #relevant_filtered_items test items
+					// skip all users that have 0 or #filtered_candidate_items test items
 					if (correct_items.Count == 0)
 						return;
 					if (num_eval_items - correct_items.Count == 0)
 						return;
 
 					// evaluation
-					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, relevant_filtered_items.ToArray());
+					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, filtered_candidate_items.ToArray());
 					ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
 
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
@@ -132,14 +130,14 @@ namespace MyMediaLite.Eval
 						result["AUC"]       += auc;
 						result["MAP"]       += map;
 						result["NDCG"]      += ndcg;
-						result["mrr"]       += rr;
+						result["MRR"]       += rr;
 						result["prec@5"]    += prec[5];
 						result["prec@10"]   += prec[10];
 						result["recall@5"]  += recall[5];
 						result["recall@10"] += recall[10];
 					}
 
-					if (prediction_list.Count != relevant_filtered_items.Count)
+					if (prediction_list.Count != filtered_candidate_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
 					if (num_lists % 5000 == 0)
@@ -153,7 +151,7 @@ namespace MyMediaLite.Eval
 				result[measure] /= num_lists;
 			result["num_users"] = num_users;
 			result["num_lists"] = num_lists;
-			result["num_items"] = relevant_items.Count;
+			result["num_items"] = candidate_items.Count;
 
 			return result;
 		}

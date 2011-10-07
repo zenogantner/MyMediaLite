@@ -1,1 +1,0 @@
-/home/mrg/data/kddcup2011/track2/trainIdx2.firstLines.txt

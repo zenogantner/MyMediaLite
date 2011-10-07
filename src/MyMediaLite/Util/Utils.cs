@@ -18,12 +18,14 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
+/*! \namespace MyMediaLite.Util
+ *  \brief This namespace contains helper code that did not fit anywhere else.
+ */
 namespace MyMediaLite.Util
 {
 	/// <summary>Class containing utility functions</summary>
@@ -58,56 +60,6 @@ namespace MyMediaLite.Util
 			DateTime startTime = DateTime.Now;
 			t();
 			return DateTime.Now - startTime;
-		}
-
-		/// <summary>Read a list of longs from a StreamReader</summary>
-		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
-		/// <returns>a list of longs</returns>
-		public static IList<long> ReadLongs(StreamReader reader)
-		{
-			var numbers = new List<long>();
-
-			while (!reader.EndOfStream)
-				numbers.Add(long.Parse( reader.ReadLine() ));
-
-			return numbers;
-		}
-
-		/// <summary>Read a list of longs from a file</summary>
-		/// <param name="filename">the name of the file to be read from</param>
-		/// <returns>a list of longs</returns>
-		public static IList<long> ReadLongs(string filename)
-		{
-			if (filename == null)
-				throw new ArgumentNullException("filename");
-
-			using ( var reader = new StreamReader(filename) )
-				return ReadLongs(reader);
-		}
-
-		/// <summary>Read a list of integers from a StreamReader</summary>
-		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
-		/// <returns>a list of integers</returns>
-		public static IList<int> ReadIntegers(StreamReader reader)
-		{
-			var numbers = new List<int>();
-
-			while (!reader.EndOfStream)
-				numbers.Add(int.Parse( reader.ReadLine() ));
-
-			return numbers;
-		}
-
-		/// <summary>Read a list of integers from a file</summary>
-		/// <param name="filename">the name of the file to be read from</param>
-		/// <returns>a list of integers</returns>
-		public static IList<int> ReadIntegers(string filename)
-		{
-			if (filename == null)
-				throw new ArgumentNullException("filename");
-
-			using ( var reader = new StreamReader(filename) )
-				return ReadIntegers(reader);
 		}
 
 		/// <summary>Shuffle a list in-place</summary>
