@@ -15,17 +15,19 @@
   <a name="1.99"><h2>MyMediaLite 1.99</h2></a>  
     <p>
     <b>October 8, 2011.</b>
-    Version 1.99 of MyMediaLite has been released. There are many major upgrades:
+    Version 1.99 of MyMediaLite has been released.
+    </p>
+    <p>There are many major upgrades:
     <ul>
-      <li>MyMediaLite now needs Mono 2.8 or later, 2.10.x is recommended</li>
+      <li>MyMediaLite now needs <a href="http://www.mono-project.com/">Mono</a> 2.8 or later, 2.10.x is recommended,
+          or .NET 4.0</li>
       <li>multi-core support for several components:
         <ul>
           <li>item recommendation evaluation</li>
           <li>cross-validation for rating prediction and item recommendation</li>
-          <li>MultiCoreMatrixFactorization:
+          <li><code>MultiCoreMatrixFactorization</code>:
               distributed SGD training for rating prediction matrix factorization</li>
-        </ul>
-      </ul></li>
+        </ul></li>
       <li>support long int user and item IDs</li>
       <li>evaluation improvements:
         <ul>
@@ -36,25 +38,7 @@
           <li>move online evaluation and cross-validation for both items and
             ratings into their own classes, respectively</li>
         </ul></li>
-      <li>API changes:
-          <ul>
-            <li>add (more abstract) IDataSet interface, and DataSet class</li>
-            <li>rename IItemRecommender to IIncrementalItemRecommender and
-            split off IIncrementalRatingPredictor from IRatingPredictor -
-            to better reflect what those interfaces actually offer</li>
-            <li>add classes IncrementalItemRecommender and
-            IncrementalRatingPredictor (classes for the above interfaces)</li>
-            <li>rename IO.RatingPrediction to IO.RatingData and
-            IO.RatingPredictionStatic to IO.StaticRatingData</li>
-            <li>rename IO.ItemRecommendation to IO.ItemData and
-            IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold</li>
-            <li>move read/write routines from Util.Recommender to the new static
-            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()</li>
-            <li>RatingPrediction.Prediction.WritePredictions():
-            move line_format argument to last position to be able to use it as
-            an optional argument</li>
-          </ul></li>        
-      <li>numerous improvements in documentation, command-line tools, helper scripts</li>
+      <li>numerous improvements in documentation, API, command-line tools, and helper scripts</li>
     </ul>
     </p>
 
