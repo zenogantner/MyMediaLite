@@ -12,6 +12,58 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+  <a name="1.99"><h2>MyMediaLite 1.99</h2></a>  
+    <p>
+    <b>October 8, 2011.</b>
+    Version 1.99 of MyMediaLite has been released. There are many major upgrades:
+    <ul>
+      <li>MyMediaLite now needs Mono 2.8 or later, 2.10.x is recommended</li>
+      <li>multi-core support for several components:
+        <ul>
+          <li>item recommendation evaluation</li>
+          <li>cross-validation for rating prediction and item recommendation</li>
+          <li>MultiCoreMatrixFactorization:
+              distributed SGD training for rating prediction matrix factorization</li>
+        </ul>
+      </ul></li>
+      <li>support long int user and item IDs</li>
+      <li>evaluation improvements:
+        <ul>
+          <li>different modes for selecting candidate items now also work for
+            cross-validation</li>
+          <li>new evaluation measure: mean reciprocal rank (MRR)</li>
+          <li>move item recommender evaluation measures into their own classes</li>
+          <li>move online evaluation and cross-validation for both items and
+            ratings into their own classes, respectively</li>
+        </ul></li>
+      <li>API changes:
+          <ul>
+            <li>add (more abstract) IDataSet interface, and DataSet class</li>
+            <li>rename IItemRecommender to IIncrementalItemRecommender and
+            split off IIncrementalRatingPredictor from IRatingPredictor -
+            to better reflect what those interfaces actually offer</li>
+            <li>add classes IncrementalItemRecommender and
+            IncrementalRatingPredictor (classes for the above interfaces)</li>
+            <li>rename IO.RatingPrediction to IO.RatingData and
+            IO.RatingPredictionStatic to IO.StaticRatingData</li>
+            <li>rename IO.ItemRecommendation to IO.ItemData and
+            IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold</li>
+            <li>move read/write routines from Util.Recommender to the new static
+            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()</li>
+            <li>RatingPrediction.Prediction.WritePredictions():
+            move line_format argument to last position to be able to use it as
+            an optional argument</li>
+          </ul></li>        
+      <li>numerous improvements in documentation, command-line tools, helper scripts</li>
+    </ul>
+    </p>
+
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
 
   <a name="1.05"><h2>MyMediaLite 1.05</h2></a>  
     <p>
