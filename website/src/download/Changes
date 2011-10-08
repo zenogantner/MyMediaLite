@@ -1,4 +1,4 @@
-1.99	2011-10-07
+1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
@@ -110,6 +110,8 @@
             cross-validation feature
           - rename example programs from item_prediction.* to
             item_recommendation.*
+          - also add RatingPrediction.exe.mdb (the file with the debug
+            information) to the binary package
 
 1.05	2011-09-01
 	- API changes

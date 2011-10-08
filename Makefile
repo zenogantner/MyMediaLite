@@ -50,6 +50,7 @@ binary-package:
 	cp src/ItemRecommendation/bin/Debug/*.dll MyMediaLite-${VERSION}
 	cp src/ItemRecommendation/bin/Debug/*.mdb MyMediaLite-${VERSION}
 	cp src/RatingPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp src/RatingPrediction/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
