@@ -15,10 +15,7 @@
 <h2>Rating data files</h2>
 <p>
 Rating data files have at least three columns: the user ID, the item ID, and the rating value.
-</p>
-long
-
-input and output
+The user and item IDs are non-negative long (64 bit) integers, and the rating value is a double (64 bit floating point number).
 </p>
 
 <h2>Examples</h2>
@@ -69,7 +66,7 @@ input and output
 <h2>Command-line tools</h2>
 <h3>Rating prediction</h3>
 <p>
-MyMediaLite's rating prediction tool supports all three variants by default for its <code>--training-data=FILE</code> and <code>--test-data=FILE</code> arguments.
+MyMediaLite's <a href="rating_prediction.html">rating prediction tool</a> supports all three variants by default for its <code>--training-data=FILE</code> and <code>--test-data=FILE</code> arguments.
 If you know that all your ratings are integers between 0 and 255, you can use <code>--rating-type=byte</code> to save memory.
 </p>
 For prediction, if you use <code>--prediction-file=FILE</code>, you will get a tab-separated file with predictions for the test data.
@@ -78,19 +75,24 @@ With the <code>--prediction-line="FORMAT"</code> you can modify the line format,
 
 <h3>Item recommendation</h3>
 <p>
-The item recommendation tool also supports this rating data format.
+The <a href="item_prediction.html">item recommendation</a> tool also supports this rating data format.
 By default, every rating is interpreted as positive feedback, the rating value is ignored.
 You can use the option <code>--rating-threshold=NUM</code> to define the minimum rating value that is to be interpreted as positive feedback.
 Ratings below this value will be ignored.
 </p>
 
 <h2>Classes</h2>
+<h3>Reading</h3>
 <p>
 The classes implementing reading in this kind of rating data are
 <code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/RatingData.cs">MyMediaLite.IO.RatingData</a></code>
 and
 <code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/StaticRatingData.cs">MyMediaLite.IO.RatingData</a></code>.
 The former's <code>Read()</code> method returns a data structure that can be updated/modified, while the latter's result cannot be updated.
+</p>
+<h3>Writing</h3>
+<p>
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/RatingPrediction/Prediction.cs">MyMediaLite.RatingPrediction.Prediction</a></code>
 </p>
 
 </div>

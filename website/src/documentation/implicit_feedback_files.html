@@ -1,0 +1,76 @@
+[%
+  title='MyMediaLite: Implicit feedback files'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+<h2>Implicit feedback files</h2>
+<p>
+Implicit feedback files have at least two columns: the user ID and the item ID.
+Additional columns are ignored.
+</p>
+
+<h2>Examples</h2>
+<h3>Tab-separated columns (.tsv)</h3>
+<pre>
+5951    50
+5951    223
+5951    260
+5951    293
+5951    356
+5951    364
+5951    457
+</pre>
+
+<h3>Whitespace-separated columns</h3>
+<pre>
+5951 50
+5951 223
+5951 260
+5951 293
+5951 356
+5951 364
+5951 457
+</pre>
+
+<h3>Comma-separated columns (.csv)</h3>
+<pre>
+5951,50
+5951,223
+5951,260
+5951,293
+5951,356
+5951,364
+5951,457
+</pre>
+
+<h2>Command-line tools</h2>
+<h3>Item recommendation</h3>
+<p>
+The <a href="item_prediction.html">item recommendation tool</a> supports this file format.
+</p>
+
+<h2>Classes</h2>
+<h3>Reading</h3>
+<p>
+The class forg reading in this kind of file is
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/ItemData.cs">
+MyMediaLite.IO.ItemData</a></code>.
+
+</p>
+<h3>Writing</h3>
+<p>
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/ItemRecommendation/Prediction.cs">MyMediaLite.ItemRecommendation.Prediction</a></code>
+</p>
+
+</div>
+
+[% INCLUDE footer %]
