@@ -6,9 +6,9 @@
           - distributed SGD (see below)
         - API changes
           - add (more abstract) IDataSet interface, and DataSet class
-          - rename IIItemRecommender to IIncrementalItemRecommender and
+          - rename IItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
-            to better reflect what those interfaces actually offer method-wise
+            to better reflect what those interfaces actually offer
           - add classes IncrementalItemRecommender and
             IncrementalRatingPredictor (classes for the above interfaces)
           - rename IO.RatingPrediction to IO.RatingData and
@@ -32,7 +32,7 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
           - BiasedMatrixFactorization: make fields needed for the bold-driver
             learning rate heuristic protected
-          - MatrixFactroization: avoid unnecessary computation of update terms
+          - MatrixFactorization: avoid unnecessary computation of update terms
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
           - BPRMF:
