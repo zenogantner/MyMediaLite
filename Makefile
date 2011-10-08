@@ -17,7 +17,7 @@ configure:
 	cd ${SRC_DIR} && ./configure ${CONFIGURE_OPTIONS}
 
 clean:
-	cd ${SRC_DIR} && make clean
+#	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
 	rm -rf ${SRC_DIR}/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/*/bin/Release/*
