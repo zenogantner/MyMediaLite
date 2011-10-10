@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		static public IRatings Read(
 			string filename,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			RatingType rating_type)
+			RatingType rating_type = RatingType.DOUBLE)
 		{
 			int size = 0;
 			using ( var reader = new StreamReader(filename) )
@@ -56,7 +56,7 @@ namespace MyMediaLite.IO
 		static public IRatings Read(
 			TextReader reader, int size,
 			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			RatingType rating_type)
+			RatingType rating_type = RatingType.DOUBLE)
 		{
 			IRatings ratings;
 			if (rating_type == RatingType.BYTE)

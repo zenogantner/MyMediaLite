@@ -1,3 +1,8 @@
+2.00	2011-10-
+	I/O
+         - use default arguments for rating_type argument of methods
+           StaticRatingData.Read()
+
 1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
