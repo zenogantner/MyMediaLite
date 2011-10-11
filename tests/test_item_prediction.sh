@@ -3,7 +3,7 @@
 PROGRAM="mono --debug ItemRecommendation.exe"
 THIS_DIR=`pwd`/tests
 
-cd src/ItemRecommendation/bin/Debug/
+cd src/Programs/ItemRecommendation/bin/Debug/
 
 echo "MyMediaLite item recommendation test script"
 echo "This may take about 4 minutes ..."
@@ -23,7 +23,7 @@ echo
 echo "MovieLens 100K"
 echo "--------------"
 
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../../data/ml100k
 
 for method in BPRMF WRMF
 do
@@ -57,7 +57,7 @@ echo
 echo "MovieLens 1M"
 echo "------------"
 
-DATA_DIR=../../../../data/ml1m
+DATA_DIR=../../../../../data/ml1m
 
 for method in ItemAttributeKNN
 do
@@ -77,4 +77,4 @@ do
              $PROGRAM --training-file=ml1m-new-user-0.train.txt --test-file=ml1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
 done
 
-cd ../../../../
+cd ../../../../..

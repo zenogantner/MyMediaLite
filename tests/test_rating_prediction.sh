@@ -9,10 +9,10 @@ echo ""
 echo "MovieLens 1M"
 echo "------------"
 
-DATA_DIR=../../../../data/ml1m
+DATA_DIR=../../../../../data/ml1m
 
  
-cd src/RatingPrediction/bin/Debug/
+cd src/Programs/RatingPrediction/bin/Debug/
  
 for method in MatrixFactorization BiasedMatrixFactorization FactorWiseMatrixFactorization
 do
@@ -45,7 +45,7 @@ echo ""
 echo "MovieLens 100K"
 echo "--------------"
 
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../../data/ml100k
 
 for method in UserItemBaseline SlopeOne BipolarSlopeOne
 do
@@ -59,4 +59,4 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR
 done
 
-cd ../../../../
+cd ../../../../..

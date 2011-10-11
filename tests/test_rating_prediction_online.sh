@@ -9,10 +9,10 @@ echo ""
 echo "MovieLens 100k"
 echo "--------------"
 
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../../data/ml100k
 
 
-cd src/RatingPrediction/bin/Debug/
+cd src/Programs/RatingPrediction/bin/Debug/
 
 for method in MatrixFactorization BiasedMatrixFactorization UserItemBaseline
 do
@@ -21,4 +21,4 @@ do
 done
 
 
-cd ../../../../
+cd ../../../../..

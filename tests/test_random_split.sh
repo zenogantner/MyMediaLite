@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
 PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../../data/ml100k
 LANG=C
 
-cd src/RatingPrediction/bin/Debug/
+cd src/Programs/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite random splitting test script"
 echo "This will take about 1 minute ..."
@@ -61,4 +61,4 @@ diff log1.grep log2.grep
 rm log1 log2 log1.grep log2.grep
 
 
-cd ../../../../
+cd ../../../../..

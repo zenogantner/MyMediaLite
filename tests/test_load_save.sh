@@ -3,9 +3,9 @@
 # TODO test ALL recommenders: attribute-aware, averages, etc.
 
 PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../../data/ml100k
 
-cd src/RatingPrediction/bin/Debug/
+cd src/Programs/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite load/save test script"
 echo "This will take about 5 minutes ..."
@@ -89,4 +89,4 @@ done
 
 rm tmp.model output1.txt output2.txt
 
-cd ../../../../
+cd ../../../../..
