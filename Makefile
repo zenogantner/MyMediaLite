@@ -7,6 +7,8 @@ VERSION=1.99
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
+ITEM_REC_DIR=$SRC_DIR/Programs/ItemRecommendation
+RATING_PRED_DIR=$SRC_DIR/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
@@ -46,11 +48,11 @@ binary-package:
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	cp src/ItemRecommendation/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp src/ItemRecommendation/bin/Debug/*.dll MyMediaLite-${VERSION}
-	cp src/ItemRecommendation/bin/Debug/*.mdb MyMediaLite-${VERSION}
-	cp src/RatingPrediction/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp src/RatingPrediction/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
+	cp $ITEM_REC_DIR/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp $ITEM_REC_DIR/bin/Debug/*.dll MyMediaLite-${VERSION}
+	cp $ITEM_REC_DIR/bin/Debug/*.mdb MyMediaLite-${VERSION}
+	cp $RATING_PRED_DIR/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp $RATING_PRED_DIR//bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
@@ -66,10 +68,14 @@ source-package: clean
 	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
 	rm -rf MyMediaLite-${VERSION}.src
 
-test: all
+#test: all
+test:
 	time tests/test_rating_prediction.sh
 	time tests/test_item_prediction.sh
 	time tests/test_load_save.sh
+	time tests/test_cv.sh
+	time tests/test_random_split.sh
+	time tests/test_rating_prediction_online.sh
 
 release: binary-package source-package
 	head doc/Changes
@@ -113,10 +119,10 @@ check-for-unnecessary-type-declarations:
 	ack --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
 
 gendarme:
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/RatingPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/ItemRecommendation/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingRatingPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MappingItemPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} $RATING_PRED_DIR//bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} $ITEM_REC_DIR/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/MappingRatingPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/MappingItemPrediction/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/SVM.dll

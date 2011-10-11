@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "SVM\SVM.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{21DB122B-6D35-41F2-AE88-790A55859209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "RatingPrediction\RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "Programs\RatingPrediction\RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "ItemRecommendation\ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "Programs\ItemRecommendation\ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemRecommendation", "Mapping\MappingItemPrediction\MappingItemRecommendation.csproj", "{C475ABE7-84B0-4427-987B-B06E8548676F}"
 EndProject
@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track1", "KDDCup2011
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track2", "KDDCup2011\KDD2011Track2\KDD2011Track2.csproj", "{DB4C4882-DD1D-42FB-8F23-5C269C36A0B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "MovieDemo\MovieDemo.csproj", "{DFDFC30F-6BDE-4D8B-BF84-CE958DD662C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "Programs\MovieDemo\MovieDemo.csproj", "{DFDFC30F-6BDE-4D8B-BF84-CE958DD662C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

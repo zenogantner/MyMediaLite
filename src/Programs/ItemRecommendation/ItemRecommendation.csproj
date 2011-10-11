@@ -35,18 +35,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="..\..\lib\Options.cs">
+    <Compile Include="ItemRecommendation.cs" />
+    <Compile Include="..\..\..\lib\Options.cs">
       <Link>Options.cs</Link>
     </Compile>
-    <Compile Include="ItemRecommendation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
+    <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
+    <ProjectReference Include="..\..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
       <Project>{B350A953-A5D8-4302-8C8C-2399FA43D85F}</Project>
       <Name>MyMediaLiteExperimental</Name>
     </ProjectReference>
