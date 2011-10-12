@@ -11,43 +11,37 @@ echo "This may take a while ..."
 echo
 
 # download MovieLens data
-wget --output-document=data/ml-data.tar.gz         http://www.grouplens.org/system/files/ml-data.tar__0.gz
-wget --output-document=data/million-ml-data.tar.gz http://www.grouplens.org/system/files/million-ml-data.tar__0.gz
-wget --output-document=data/ml-data-10M100K.tar.gz http://www.grouplens.org/system/files/ml-data-10M100K.tar.gz
+wget --output-document=data/ml-100k.zip  http://www.grouplens.org/system/files/ml-100k.zip
+wget --output-document=data/ml-1m.zip    http://www.grouplens.org/system/files/ml-1m.zip
+wget --output-document=data/ml-10m.zip   http://www.grouplens.org/sites/www.grouplens.org/external_files/data/ml-10m.zip
 
 cd data
 
 # unzip data
-tar -zxf ml-data.tar.gz
-mv ml-data ml100k
+unzip ml-100k.zip
+unzip ml-1m.zip
+unzip ml-10m.zip
 
-tar -zxf million-ml-data.tar.gz
-mkdir ml1m
-mv README movies.dat ratings.dat users.dat ml1m
-
-tar -zxf ml-data-10M100K.tar.gz
-mkdir ml10m
-mv movies.dat ratings.dat tags.dat ml10m
-mv allbut.pl README.html split_ratings.sh ml10m
+mv ml-10M100K ml-10m
 
 # remove downloaded archives
-rm ml-data.tar.gz million-ml-data.tar.gz ml-data-10M100K.tar.gz
+rm ml-100k.zip ml-1m.zip ml-10m.zip
 
 # create attribute files for MovieLens 100k
-../scripts/ml100k_genres.pl ml100k/u.item > ml100k/item-attributes-genres.txt
+../scripts/ml100k_genres.pl ml-100k/u.item > ml-100k/item-attributes-genres.txt
 # TODO user attributes
 
 # create attribute files for MovieLens 1M
-../scripts/ml1m_genres.pl ml1m/movies.dat > ml1m/item-attributes-genres.txt
-../scripts/ml1m_user_attributes.pl ml1m/users.dat > ml1m/user-attributes-nozip.txt
+../scripts/ml1m_genres.pl ml-1m/movies.dat > ml-1m/item-attributes-genres.txt
+../scripts/ml1m_user_attributes.pl ml-1m/users.dat > ml-1m/user-attributes-nozip.txt
 
 # create tab-separated file and evaluation splits for MovieLens 1M
-../scripts/import_dataset.pl --separator=:: ml1m/ratings.dat > ml1m/ratings.txt
-../scripts/import_dataset.pl --separator=:: ml1m/ratings.dat | ../scripts/crossvalidation.pl --k=5 --filename=ml1m/ml1m --suffix=.txt
-../scripts/user_cold_start.pl ml1m/ratings.dat --separator=:: --filename=ml1m/ml1m-new-user --k=5 --suffix=.txt
+../scripts/import_dataset.pl --separator=:: ml-1m/ratings.dat > ml-1m/ratings.txt
+../scripts/import_dataset.pl --separator=:: ml-1m/ratings.dat | ../scripts/crossvalidation.pl --k=5 --filename=ml-1m/ml-1m --suffix=.txt
+../scripts/user_cold_start.pl ml-1m/ratings.dat --separator=:: --filename=ml-1m/ml-1m-new-user --k=5 --suffix=.txt
 
 # create tab-separated file for MovieLens 10M
-../scripts/import_dataset.pl --separator=:: ml10m/ratings.dat > ml10m/ratings.txt
-../scripts/ml1m_genres.pl ml10m/movies.dat > ml10m/item-attributes-genres.txt
+../scripts/import_dataset.pl --separator=:: ml-10m/ratings.dat > ml-10m/ratings.txt
+../scripts/ml1m_genres.pl ml-10m/movies.dat > ml-10m/item-attributes-genres.txt
 
 cd ..

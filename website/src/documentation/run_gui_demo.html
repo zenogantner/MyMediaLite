@@ -28,7 +28,7 @@
   To train the initial model, execute
   <pre>
     mkdir data/models
-    mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe --training-file=data/ml1m/ratings.txt --recommender=BiasedMatrixFactorization  --recommender-options="num_iter=60 bias_reg=0.001 regularization=0.045" --save-model=data/models/ml1m-bmf.model
+    mono --debug src/RatingPrediction/bin/Debug/RatingPrediction.exe --training-file=data/ml-1m/ratings.txt --recommender=BiasedMatrixFactorization  --recommender-options="num_iter=60 bias_reg=0.001 regularization=0.045" --save-model=data/models/ml1m-bmf.model
   </pre>
   </p>
   Then you can run the GUI demo e.g. by opening <code>src/MovieDemo/Main.cs</code> and hitting Ctrl-F5 in MonoDevelop.

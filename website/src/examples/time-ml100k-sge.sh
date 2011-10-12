@@ -12,7 +12,7 @@ fi
 
 qsub_args="${qsub_args} -R y -l s_cpu=12:00:00"
 
-dataset=ml100k
+dataset=ml-100k
 data_dir=data/$dataset
 
 method=BiasedMatrixFactorization

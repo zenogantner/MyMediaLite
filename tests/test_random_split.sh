@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../data/ml-100k
 LANG=C
 
 cd src/RatingPrediction/bin/Debug/

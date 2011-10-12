@@ -9,7 +9,7 @@ echo ""
 echo "MovieLens 100k"
 echo "--------------"
 
-DATA_DIR=../../../../data/ml100k
+DATA_DIR=../../../../data/ml-100k
 
 
 cd src/RatingPrediction/bin/Debug/
