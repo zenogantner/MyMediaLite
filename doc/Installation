@@ -13,3 +13,17 @@ Requirements for building MyMediaLite:
  - the above requirements plus
    - Doxygen 1.6.3 or later
    - NUnit (for building the unit tests)
+
+
+Tested configurations:
+ - Ubuntu 10.04
+   - with manually installed Mono 2.10.5 and MonoDevelop 2.6
+   - Doxygen 1.6.3
+ - Debian Wheezy
+   - with Mono 2.10.1 and MonoDevelop 2.4
+
+Let us know on which configuration of .NET or Mono you are using MyMediaLite,
+or whether you experience difficulties.
+
+e-mail contact:   mymedialite@ismll.de
+Google group:     http://groups.google.com/group/mymedialite
