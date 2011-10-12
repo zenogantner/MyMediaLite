@@ -1,10 +1,10 @@
 Requirements for running MyMediaLite:
- - Mono 2.8.x or another recent .NET runtime
+ - Mono 2.8.x or another recent .NET runtime (Mono 2.10.x recommended)
  - Perl and File::Slurp for the download and data processing scripts
    (not necessary for running/building MyMediaLite)
 
 Instructions:
- - For building from source, we recommend to use MonoDevelop.
+ - For building from source, we recommend to use MonoDevelop 2.4 or later (2.6 recommended).
  - If you have the binary package, just copy its contents to wherever you
    want and run the programs from there.
 
@@ -12,3 +12,4 @@ Instructions:
 Requirements for building MyMediaLite:
  - the above requirements plus
    - Doxygen 1.6.3 or later
+   - NUnit (for building the unit tests)
