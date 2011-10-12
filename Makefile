@@ -69,7 +69,7 @@ source-package: clean
 	rm -rf MyMediaLite-${VERSION}.src
 
 #test: all
-test:
+test: data/ml-100k/u.data
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
 	time tests/test_load_save.sh
@@ -99,7 +99,7 @@ data:
 	mkdir data/
 
 data/ml-100k/u.data:
-	download-movielens
+	scripts/download_movielens.sh
 
 download-movielens: data
 	scripts/download_movielens.sh
