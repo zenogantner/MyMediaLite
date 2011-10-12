@@ -68,7 +68,7 @@ source-package: clean
 
 test: all
 	time tests/test_rating_prediction.sh
-	time tests/test_item_prediction.sh
+	time tests/test_item_recommendation.sh
 	time tests/test_load_save.sh
 
 release: binary-package source-package
