@@ -14,5 +14,5 @@ doc/immdoc
 src/Programs/MovieDemo/ml1m-bmf.model
 src/Programs/MovieDemo/ml10m-bmf.model
 src/Programs/MovieDemo/saved_data
-src/Programs/MovieDemo/gtk-gui/
+src/Programs/MovieDemo/gtk-gui/*.cs
 data/*
