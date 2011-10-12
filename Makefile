@@ -71,7 +71,7 @@ source-package: clean
 #test: all
 test:
 	time tests/test_rating_prediction.sh
-	time tests/test_item_prediction.sh
+	time tests/test_item_recommendation.sh
 	time tests/test_load_save.sh
 	time tests/test_cv.sh
 	time tests/test_random_split.sh
@@ -83,20 +83,23 @@ release: binary-package source-package
 	cp doc/Changes website/src/download
 	cat doc/ReleaseChecklist
 
-example-csharp:
+example-csharp: data/ml-100k/u.data
 	cd examples/csharp && make
 	cd examples/csharp && make run
 
-example-python:
-	cd data/ml100k && ipy ../../examples/python/rating_prediction.py
-	cd data/ml100k && ipy ../../examples/python/item_recommendation.py
+example-python: data/ml-100k/u.data
+	cd data/ml-100k && ipy ../../examples/python/rating_prediction.py
+	cd data/ml-100k && ipy ../../examples/python/item_recommendation.py
 
-example-ruby:
-	cd data/ml100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/rating_prediction.rb
-	cd data/ml100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/item_recommendation.rb
+example-ruby: data/ml-100k/u.data
+	cd data/ml-100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/rating_prediction.rb
+	cd data/ml-100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/item_recommendation.rb
 
 data:
 	mkdir data/
+
+data/ml-100k/u.data:
+	download-movielens
 
 download-movielens: data
 	scripts/download_movielens.sh

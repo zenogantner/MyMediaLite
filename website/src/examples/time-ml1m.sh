@@ -2,7 +2,7 @@
 
 prog="mono --debug RatingPrediction.exe"
 
-dataset=ml1m
+dataset=ml-1m
 data_dir=data/$dataset
 
 method=BiasedMatrixFactorization

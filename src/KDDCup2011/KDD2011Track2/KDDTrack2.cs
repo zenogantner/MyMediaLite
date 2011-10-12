@@ -274,7 +274,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		{
 			if (load_model_file == string.Empty)
 			{
-				seconds = Utils.MeasureTime(delegate() { // TODO parallelize
+				seconds = Utils.MeasureTime(delegate() {
 					recommender_validate.Train();
 					if (prediction_file != string.Empty)
 						recommender_final.Train();

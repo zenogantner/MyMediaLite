@@ -3,7 +3,7 @@
 # TODO test ALL recommenders: attribute-aware, averages, etc.
 
 PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../../data/ml100k
+DATA_DIR=../../../../../data/ml-100k
 
 cd src/Programs/RatingPrediction/bin/Debug/
 

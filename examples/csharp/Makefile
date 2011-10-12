@@ -3,8 +3,8 @@ compile:
 	dmcs -debug -r:MyMediaLite.dll rating_prediction.cs
 
 run:
-	mono --debug rating_prediction.exe ../../data/ml100k/u1.base ../..//data/ml100k/u1.test
-	mono --debug item_recommendation.exe   ../../data/ml100k/u1.base ../../data/ml100k/u1.test
+	mono --debug rating_prediction.exe ../../data/ml-100k/u1.base ../../data/ml-100k/u1.test
+	mono --debug item_recommendation.exe   ../../data/ml-100k/u1.base ../../data/ml-100k/u1.test
 
 clean:
 	rm -f *.exe *.mdb

@@ -51,19 +51,19 @@ public partial class MainWindow : Window
 	IncrementalRatingPredictor rating_predictor;
 
 	// depends on dataset
-	string ratings_file          = "../../../../data/ml1m/ratings.txt";
-	string movie_file            = "../../../../data/ml1m/movies.dat";
+	string ratings_file          = "../../../../data/ml-1m/ratings.txt";
+	string movie_file            = "../../../../data/ml-1m/movies.dat";
 	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
-	string model_file            = "../../../../data/models/ml1m-bmf.model";
+	string model_file            = "../../../../data/models/ml-1m-bmf.model";
 
 	// MovieLens 10M
 	/*
 	double min_rating            = 0;
 	double max_rating            = 5;
-	string ratings_file          = "../../../../data/ml10m/ratings.txt";
-	string movie_file            = "../../../../data/ml10m/movies.dat";
+	string ratings_file          = "../../../../data/ml-10m/ratings.txt";
+	string movie_file            = "../../../../data/ml-10m/movies.dat";
 	Encoding movie_file_encoding = Encoding.UTF8;
-	string model_file            = "../../../../data/models/ml10m-bmf.model";
+	string model_file            = "../../../../data/models/ml-10m-bmf.model";
 	*/
 
 	EntityMapping user_mapping = new EntityMapping();
