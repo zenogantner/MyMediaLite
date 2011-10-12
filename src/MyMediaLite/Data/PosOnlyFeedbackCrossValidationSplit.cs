@@ -47,8 +47,8 @@ namespace MyMediaLite.Data
 				throw new ArgumentException("num_folds must be at least 2.");
 
 			NumberOfFolds = num_folds;
-			Train = new T[num_folds];
-			Test  = new T[num_folds];
+			Train = new IPosOnlyFeedback[num_folds];
+			Test  = new IPosOnlyFeedback[num_folds];
 			for (int f = 0; f < num_folds; f++)
 			{
 				Train[f] = new T();
