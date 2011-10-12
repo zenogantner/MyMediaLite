@@ -1,29 +1,29 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLite", "MyMediaLite.csproj", "{73424F09-BEEA-4992-B116-5F123496F5D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLite", "MyMediaLite\MyMediaLite.csproj", "{73424F09-BEEA-4992-B116-5F123496F5D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteExperimental", "..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj", "{B350A953-A5D8-4302-8C8C-2399FA43D85F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLiteExperimental", "MyMediaLiteExperimental\MyMediaLiteExperimental.csproj", "{B350A953-A5D8-4302-8C8C-2399FA43D85F}"
 EndProject
 Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "Packages", "Packages.mdproj", "{AD1EB4BB-DE14-418B-B704-67D76E468FF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "..\SVM\SVM.csproj", "{309290E3-E52B-4E67-9F6E-2A67B5D54320}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVM", "SVM\SVM.csproj", "{309290E3-E52B-4E67-9F6E-2A67B5D54320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{21DB122B-6D35-41F2-AE88-790A55859209}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{21DB122B-6D35-41F2-AE88-790A55859209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "..\RatingPrediction\RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "RatingPrediction\RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "..\ItemRecommendation\ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "ItemRecommendation\ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemRecommendation", "..\Mapping\MappingItemPrediction\MappingItemRecommendation.csproj", "{C475ABE7-84B0-4427-987B-B06E8548676F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemRecommendation", "Mapping\MappingItemPrediction\MappingItemRecommendation.csproj", "{C475ABE7-84B0-4427-987B-B06E8548676F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "..\Mapping\MappingRatingPrediction\MappingRatingPrediction.csproj", "{17190AC9-BEE4-498D-927E-2CB17292AEE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "Mapping\MappingRatingPrediction\MappingRatingPrediction.csproj", "{17190AC9-BEE4-498D-927E-2CB17292AEE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track1", "..\KDDCup2011\KDD2011Track1\KDD2011Track1.csproj", "{4D4FEAB8-30AE-449A-BED5-98074FC9BBF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track1", "KDDCup2011\KDD2011Track1\KDD2011Track1.csproj", "{4D4FEAB8-30AE-449A-BED5-98074FC9BBF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track2", "..\KDDCup2011\KDD2011Track2\KDD2011Track2.csproj", "{DB4C4882-DD1D-42FB-8F23-5C269C36A0B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KDD2011Track2", "KDDCup2011\KDD2011Track2\KDD2011Track2.csproj", "{DB4C4882-DD1D-42FB-8F23-5C269C36A0B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "..\MovieDemo\MovieDemo.csproj", "{DFDFC30F-6BDE-4D8B-BF84-CE958DD662C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDemo", "MovieDemo\MovieDemo.csproj", "{DFDFC30F-6BDE-4D8B-BF84-CE958DD662C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

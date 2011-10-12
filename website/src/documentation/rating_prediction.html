@@ -13,57 +13,62 @@
 
 <div id="content">
 <pre>
-arameter --training-file=FILE is missing.
-
-MyMediaLite Rating Prediction 1.05
+MyMediaLite Rating Prediction 1.99
 
  usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):
-   - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1 (needs --user-relations=FILE)
-   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stdev=0.1 optimize_mae=False
-   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stdev=0.1
-   - GlobalAverage
-   - SlopeOne
+   - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1 (needs --user-relations=FILE)
+   - MultiCoreMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=True init_mean=0 init_stddev=0.1 optimize_mae=False num_blocks=100
    - BiPolarSlopeOne
-   - UserAverage
-   - ItemAverage
-   - UserItemBaseline reg_u=15 reg_i=10 num_iter=10
-   - ItemKNNCosine k=inf reg_u=10 reg_i=5
-   - UserKNNCosine k=inf reg_u=10 reg_i=5
-   - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
-   - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
-   - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs --item-attributes=FILE)
-   - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs --user-attributes=FILE)
+   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1 optimize_mae=False
    - FactorWiseMatrixFactorization num_factors=10 shrinkage=25 sensibility=1E-05  init_mean=0 init_stdev=0.1 num_iter=10
+   - GlobalAverage
+   - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs --item-attributes=FILE)
+   - ItemAverage
+   - ItemKNNCosine k=inf reg_u=10 reg_i=5
+   - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1
+   - SlopeOne
+   - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs --user-attributes=FILE)
+   - UserAverage
+   - UserItemBaseline reg_u=15 reg_i=10 num_iter=10
+   - UserKNNCosine k=inf reg_u=10 reg_i=5
+   - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
    --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
    --recommender-options=OPTIONS    use OPTIONS as recommender options
-   --training-file=FILE             read training data from FILE
-   --test-file=FILE                 read test data from FILE
-
    --help                           display this usage information and exit
    --version                        display version information and exit
+   --random-seed=N                  initialize the random number generator with N
+   --rating-type=float|byte|double  store ratings internally as floats or bytes or doubles (default)
 
-   --random-seed=N                        set random seed to N
+  files:
+   --training-file=FILE                   read training data from FILE
+   --test-file=FILE                       read test data from FILE
+   --file-format=ml1m|kddcup2011|default
    --data-dir=DIR                         load all files from DIR
-   --user-attributes=FILE                 file containing user attribute information
-   --item-attributes=FILE                 file containing item attribute information
-   --user-relations=FILE                  file containing user relation information
-   --item-relations=FILE                  file containing item relation information
+   --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
+   --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
+   --user-relations=FILE                  file containing user relation information, 1 tuple per line
+   --item-relations=FILE                  file containing item relation information, 1 tuple per line
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
-   --prediction-file=FILE                 write the rating predictions to  FILE ('-' for STDOUT)
-   --prediction-line=FORMAT               format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
-                                          and predicted rating, respectively; default is {0}\\t{1}\\t{2}
-   --file-format=ml1m|kddcup2011|default
-   --rating-type=float|byte|double        store ratings as floats or bytes or doubles (default)
-   --cross-validation=K                   perform k-fold crossvalidation on the training data
-   --test-ratio=NUM                       use a ratio of NUM of the training data for evaluation (simple split)
-   --online-evaluation                    perform online evaluation (use every tested rating for incremental training)
-   --search-hp                            search for good hyperparameter values (experimental)
+
+  prediction options:
+   --prediction-file=FILE         write the rating predictions to FILE
+   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
+                                  and predicted rating, respectively; default is {0}\\t{1}\\t{2}
+
+  evaluation options:
+   --cross-validation=K           perform k-fold cross-validation on the training data
+   --show-fold-results            show results for individual folds in cross-validation
+   --test-ratio=NUM               use a ratio of NUM of the training data for evaluation (simple split)
+   --online-evaluation            perform online evaluation (use every tested rating for incremental training)
+   --search-hp                    search for good hyperparameter values (experimental)
+   --compute-fit                  display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -71,7 +76,6 @@ MyMediaLite Rating Prediction 1.05
    --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
    --rmse-cutoff=NUM              abort if RMSE is above NUM
    --mae-cutoff=NUM               abort if MAE is above NUM
-   --compute-fit                  display fit on training data every find_iter iterations
 </pre>
 </div>
 

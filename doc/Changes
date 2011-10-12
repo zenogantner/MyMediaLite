@@ -1,4 +1,9 @@
-1.99	2011-10-07
+2.00	2011-10-
+	I/O
+         - use default arguments for rating_type argument of methods
+           StaticRatingData.Read()
+
+1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
         - add multicore support
           - item recommendation evaluation and filtered item rec. evaluation
@@ -6,9 +11,9 @@
           - distributed SGD (see below)
         - API changes
           - add (more abstract) IDataSet interface, and DataSet class
-          - rename IIItemRecommender to IIncrementalItemRecommender and
+          - rename IItemRecommender to IIncrementalItemRecommender and
             split off IIncrementalRatingPredictor from IRatingPredictor -
-            to better reflect what those interfaces actually offer method-wise
+            to better reflect what those interfaces actually offer
           - add classes IncrementalItemRecommender and
             IncrementalRatingPredictor (classes for the above interfaces)
           - rename IO.RatingPrediction to IO.RatingData and
@@ -32,7 +37,7 @@
           - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
           - BiasedMatrixFactorization: make fields needed for the bold-driver
             learning rate heuristic protected
-          - MatrixFactroization: avoid unnecessary computation of update terms
+          - MatrixFactorization: avoid unnecessary computation of update terms
           - kNN models for item recommendation: deal gracefully with unknown
             users and items
           - BPRMF:
@@ -110,6 +115,8 @@
             cross-validation feature
           - rename example programs from item_prediction.* to
             item_recommendation.*
+          - also add RatingPrediction.exe.mdb (the file with the debug
+            information) to the binary package
 
 1.05	2011-09-01
 	- API changes

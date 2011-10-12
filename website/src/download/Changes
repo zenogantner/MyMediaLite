@@ -1,3 +1,118 @@
+1.99	2011-10-08
+        - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
+        - add multicore support
+          - item recommendation evaluation and filtered item rec. evaluation
+          - cross-validation for rating prediction and item recommendation
+          - distributed SGD (see below)
+        - API changes
+          - add (more abstract) IDataSet interface, and DataSet class
+          - rename IItemRecommender to IIncrementalItemRecommender and
+            split off IIncrementalRatingPredictor from IRatingPredictor -
+            to better reflect what those interfaces actually offer
+          - add classes IncrementalItemRecommender and
+            IncrementalRatingPredictor (classes for the above interfaces)
+          - rename IO.RatingPrediction to IO.RatingData and
+            IO.RatingPredictionStatic to IO.StaticRatingData
+          - rename IO.ItemRecommendation to IO.ItemData and
+            IO.ItemRecommendationRatingThreshold to IO.ItemDataRatingThreshold
+          - move read/write routines from Util.Recommender to the new static
+            class IO.Model; rename LoadModel() to Load(), SaveModel to Save()
+          - RatingPrediction.Prediction.WritePredictions():
+            move line_format argument to last position to be able to use it as
+            an optional argument
+          - IPosOnlyFeedback
+            - AllUsers and AllItems properties: ICollection<int> -> IList<int>
+            - Overlap() -> OverlapCount()
+          - IBooleanMatrix
+            NonEmpty(Row|Column)IDs properties:  ICollection<int> -> IList<int>
+          - Data.IRatings.AllUsers/AllItems: HashSet<int> -> IList<int>
+        - recommenders
+          - new rating predictor MultiCoreMatrixFactorization based on
+            Distributed SGD paper at KDD 2011 by Gemulla et al.
+          - MostPopular: set MaxItemID in LoadModel() (by Chris Newell)
+          - BiasedMatrixFactorization: make fields needed for the bold-driver
+            learning rate heuristic protected
+          - MatrixFactorization: avoid unnecessary computation of update terms
+          - kNN models for item recommendation: deal gracefully with unknown
+            users and items
+          - BPRMF:
+            - add UpdateJ option
+            - fully support RemoveItem()
+            - add WithReplacement option to choose between sampling with and
+              without replacement
+            - add UniformUserSampling option
+          - factorization models that need random initialization:
+            rename property Stdev to StdDev
+          - BPR_Linear: no warning when predicting for unknown items; get rid
+            of random initialization - 0 is okay for linear model
+          - MostPopular: adapt to new PosOnlyFeedback
+        - command-line tools
+          - add --show-fold-results for cross-validation
+          - support --compute-fit for all kinds of modes, not only in
+            conjunction with --find-iter=N
+          - rename ItemPrediction.exe to ItemRecommendation.exe
+          - item recommendation: all items in training+test are now the default,
+            instead of all items in training; get this behavior now via the
+            --in-training-items option; add --all-items option (makes a
+            difference if there are also items which were not observed - viewed,
+            bought - at all, e.g. in combination with --rating-threshold);
+            thanks go to Jagadeesh Gorla for bugging me about the details of
+            the evaluation protocol.
+          - item recommendation: rename --relevant-items=FILE to
+            --candidate-items=FILE to avoid confusion with the way the word
+            "relevance" is used in information retrieval; rename
+            --relevant-users=FILE to --test-users=FILE
+          - drop support for --prediction-file=- (write to STDOUT)
+          - improved usage information            
+          - check parameters after creating recommender, catching more errors
+          - refer to GitHub issue tracker in exception handler, make handler
+            output more noticeable
+        - evaluation
+          - different modes for selecting candidate items now also work for
+            cross-validation
+          - fixes and improvements for item recommendation CV
+          - new evaluation measure: mean reciprocal rank (MRR)
+          - item recommender evaluation: more descriptive parameter name
+            repeated_events
+          - move item recommender evaluation measures into their own classes
+            (Eval.Items class got too big)
+          - move online evaluation and cross-validation for both items and
+            ratings into their own classes, respectively
+        - I/O
+          - new static class IO.Constants, which for now contains SPLIT_CHARS
+            (used by several other IO classes)
+          - new static class IO.NumberFile (with routines that used to be in
+            Util.Utils)
+          - support long user and item IDs (instead of 32 bit integer), as
+            suggested by Sebastian Schelter
+        - data structures
+          - SparseBooleanMatrix: more unit tests
+          - PosOnlyFeedback: add unit tests, inherit from DataSet
+          - Ratings.BuildRandomIndex(): shuffle existing index instead building
+            from scratch
+	- documentation
+          - API docs:
+            - improved literature references and web links
+            - add links to RecSysWiki articles
+          - IItemRecommender: explain the task of item recommendation
+          - IRatingPredictor: explain the task of rating prediction
+          - add data file format descriptions to website
+        - misc
+          - upgrade from Math.NET Iridium to Math.NET Numerics Beta 2
+            - use Math.NET Numerics for generating normal distributed random
+              numbers (doubles the speed of MF initialization)
+          - cleaned up solution and project files for MonoDevelop
+          - improved ToString() methods
+          - declared all classes as static that contain only static methods
+          - move unit tests into namespaces, rename their top namespace
+            from MyMediaLiteTest to Tests
+          - updated and improved test scripts; add test script for the
+            cross-validation feature
+          - rename example programs from item_prediction.* to
+            item_recommendation.*
+          - also add RatingPrediction.exe.mdb (the file with the debug
+            information) to the binary package
+
 1.05	2011-09-01
 	- API changes
            - ISplit
@@ -427,7 +542,7 @@
           - print newline after Pearson correlation is computed
           - support LoadModel() and SaveModel() for biased MF
           - simpler LoadModel() and SaveModel() for all matrix factorization
-            methods 
+            methods
           - fix LoadModel() and SaveModel() for item prediction kNN
             recommenders
           - differentiate between weighted and unweighted item-based kNN for
@@ -522,7 +637,7 @@
 	- interface changes:
 	  - use IterativeModel interface in rating prediction program
 	  - consistent parameters for RatingData constructor
-	  - SparseBooleanMatrix now allows [x, y] and [x] access, has 
+	  - SparseBooleanMatrix now allows [x, y] and [x] access, has
             properties instead of GetXXX() methods
           - Matrix now allows [x, y] access
           - UserAttributeAwareRecommender and ItemAttributeAwareRecommender
