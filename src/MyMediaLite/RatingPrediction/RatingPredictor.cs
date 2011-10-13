@@ -89,10 +89,10 @@ namespace MyMediaLite.RatingPrediction
 		public abstract void Train();
 
 		///
-		public abstract void SaveModel(string filename);
+		public virtual void LoadModel(string file) { throw new NotImplementedException(); }
 
 		///
-		public abstract void LoadModel(string filename);
+		public virtual void SaveModel(string file) { throw new NotImplementedException(); }
 
 		///
 		public virtual bool CanPredict(int user_id, int item_id)
