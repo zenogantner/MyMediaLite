@@ -77,9 +77,9 @@ namespace MyMediaLite.RatingPrediction
 				double p = Predict(u, i);
 				double err = ratings[index] - p;
 
-				 // Adjust factors
-				 for (int f = 0; f < NumFactors; f++)
-				 {
+				// adjust factors
+				for (int f = 0; f < NumFactors; f++)
+				{
 					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
@@ -90,7 +90,7 @@ namespace MyMediaLite.RatingPrediction
 					// apply updates
 					MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
 					MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
-				 }
+				}
 			}
 		}
 
@@ -109,23 +109,12 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public double ComputeFit()
-		{
-			return Eval.Ratings.Evaluate(this, ratings)["RMSE"];
-		}
-
-		///
-		public override void LoadModel(string file) { throw new NotImplementedException(); }
-
-		///
-		public override void SaveModel(string file) { throw new NotImplementedException(); }
-
-		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "MatrixFactorization num_factors={0} regularization={1} learn_rate={2} num_iter={3}",
-								 NumFactors, Regularization, LearnRate, NumIter);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"MatrixFactorization num_factors={0} regularization={1} learn_rate={2} num_iter={3}",
+				NumFactors, Regularization, LearnRate, NumIter);
 		}
 	}
 }
