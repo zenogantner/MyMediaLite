@@ -39,8 +39,6 @@ namespace MyMediaLite.RatingPrediction
   		private SkewSymmetricSparseMatrix diff_matrix;
   		private SymmetricSparseMatrix<int> freq_matrix;
 
-		// TODO one more way to save memory: use short instead of int internally in the SparseMatrix datatypes
-
 		private double global_average;
 
 		///
