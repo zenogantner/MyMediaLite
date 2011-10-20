@@ -1,0 +1,75 @@
+[%
+  title='MyMediaLite: Attribute files'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+<h2>Attribute files</h2>
+<p>
+Binary attribute files have exactly two columns: the entity (user or item) ID and the attribute ID.
+</p>
+
+<h2>Examples</h2>
+<h3>Tab-separated columns (.tsv)</h3>
+<pre>
+51    5
+51    22
+51    26
+51    29
+51    35
+51    36
+51    45
+</pre>
+This means that the entity 51 (may be a user or item) has the attributes 5, 22, 26, ...
+If this example is complete, it also means entity 51 does not have the attributes 0, 1, 2, 3, 4, 6, ...
+
+<h3>Whitespace-separated columns</h3>
+<pre>
+51 5
+51 22
+51 26
+51 29
+51 35
+51 36
+51 45
+</pre>
+
+<h3>Comma-separated columns (.csv)</h3>
+<pre>
+51,5
+51,22
+51,26
+51,29
+51,35
+51,36
+51,45
+</pre>
+
+<h2>Command-line tools</h2>
+<p>
+Both the <a href="item_prediction.html">item recommendation tool</a> and the <a href="rating_prediction.html">rating prediction tool</a>
+support this file format.
+</p>
+
+<h2>Classes</h2>
+<h3>Reading</h3>
+<p>
+The class forg reading in this kind of file is
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/AttributeData.cs">
+MyMediaLite.IO.AttributeData</a></code>.
+</p>
+
+<h3>Writing</h3>
+Writing this file format is trivial, so there is no specific class for that in MyMediaLite.
+
+</div>
+
+[% INCLUDE footer %]
