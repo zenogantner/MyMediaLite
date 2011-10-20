@@ -153,9 +153,6 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		int random_seed  = parameters.GetRemoveInt32(  "random_seed",  -1);
 		prediction_file  = parameters.GetRemoveString( "prediction_file");
 
-		if (predict_rated)
-			predict_score = true;
-
 		Console.Error.WriteLine("predict_score={0}", predict_score);
 
 		if (random_seed != -1)
