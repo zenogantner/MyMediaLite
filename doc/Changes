@@ -10,6 +10,7 @@
 	I/O
          - use default arguments for rating_type argument of methods
            StaticRatingData.Read()
+         - ItemData I/O: on error, display offending line
         misc
          - update script download_movielens.sh because the download URLs have
            changed

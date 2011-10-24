@@ -61,10 +61,16 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 2)
 					throw new IOException("Expected at least 2 columns: " + line);
 
-				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
-				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
-
-				feedback.Add(user_id, item_id);
+				try
+				{
+					int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
+					int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
+					feedback.Add(user_id, item_id);
+				}
+				catch (Exception)
+				{
+					throw new IOException(string.Format("Could not read line '{0}'", line));
+				}
 			}
 
 			return feedback;
