@@ -13,6 +13,7 @@
            StaticRatingData.Read()
          - ItemData I/O: on error, display offending line
          - NumberFile I/O: nicer error messages, add unit tests
+         - rename TimedRatings to TimedRatingData
         misc
          - update script download_movielens.sh because the download URLs have
            changed
