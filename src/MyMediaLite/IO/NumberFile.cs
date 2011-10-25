@@ -28,12 +28,20 @@ namespace MyMediaLite.IO
 		/// <summary>Read a list of longs from a StreamReader</summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
 		/// <returns>a list of longs</returns>
-		public static IList<long> ReadLongs(StreamReader reader)
+		public static IList<long> ReadLongs(TextReader reader)
 		{
 			var numbers = new List<long>();
 
-			while (!reader.EndOfStream)
-				numbers.Add(long.Parse( reader.ReadLine() ));
+			string line = string.Empty;
+			try
+			{
+				while ((line = reader.ReadLine()) != null)
+					numbers.Add(long.Parse(line));
+			}
+			catch (Exception)
+			{
+				throw new IOException(string.Format("Could not read line '{0}'", line));
+			}
 
 			return numbers;
 		}
@@ -46,19 +54,35 @@ namespace MyMediaLite.IO
 			if (filename == null)
 				throw new ArgumentNullException("filename");
 
-			using ( var reader = new StreamReader(filename) )
-				return ReadLongs(reader);
+			try
+			{
+				using ( var reader = new StreamReader(filename) )
+					return ReadLongs(reader);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read long integers from file {0}: {1}", filename, e.Message));
+			}
 		}
 
 		/// <summary>Read a list of integers from a StreamReader</summary>
 		/// <param name="reader">the <see cref="StreamReader"/> to be read from</param>
 		/// <returns>a list of integers</returns>
-		public static IList<int> ReadIntegers(StreamReader reader)
+		public static IList<int> ReadIntegers(TextReader reader)
 		{
 			var numbers = new List<int>();
 
-			while (!reader.EndOfStream)
-				numbers.Add(int.Parse( reader.ReadLine() ));
+			string line = string.Empty;
+			try
+			{
+				while ((line = reader.ReadLine()) != null)
+					numbers.Add(int.Parse(line));
+			}
+			catch (Exception)
+			{
+				throw new IOException(string.Format("Could not read line '{0}'", line));
+			}
+
 
 			return numbers;
 		}
@@ -71,8 +95,16 @@ namespace MyMediaLite.IO
 			if (filename == null)
 				throw new ArgumentNullException("filename");
 
-			using ( var reader = new StreamReader(filename) )
-				return ReadIntegers(reader);
+			try
+			{
+				using ( var reader = new StreamReader(filename) )
+					return ReadIntegers(reader);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read integers from file {0}: {1}", filename, e.Message));
+			}
+
 		}
 	}
 }
