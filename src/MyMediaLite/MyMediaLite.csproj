@@ -150,7 +150,6 @@
     <Compile Include="IO\RatingData.cs" />
     <Compile Include="IO\RelationData.cs" />
     <Compile Include="IO\StaticRatingData.cs" />
-    <Compile Include="IO\TimedRatings.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
     <Compile Include="IO\Constants.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Data\IDataSet.cs" />
     <Compile Include="Data\DataSet.cs" />
     <Compile Include="IO\NumberFile.cs" />
+    <Compile Include="IO\TimedRatingData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
