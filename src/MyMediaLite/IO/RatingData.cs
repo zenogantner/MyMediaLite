@@ -28,7 +28,7 @@ namespace MyMediaLite.IO
 	public static class RatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
@@ -36,11 +36,8 @@ namespace MyMediaLite.IO
 		{
 			try
 			{
-				if (filename.Equals("-"))
-					return Read(Console.In, user_mapping, item_mapping);
-				else
-					using ( var reader = new StreamReader(filename) )
-						return Read(reader, user_mapping, item_mapping);
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, user_mapping, item_mapping);
 			}
 			catch (IOException e)
 			{

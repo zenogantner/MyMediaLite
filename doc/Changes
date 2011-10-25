@@ -9,6 +9,7 @@
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
 	I/O
+         - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way
          - use default arguments for rating_type argument of methods
            StaticRatingData.Read()

@@ -28,7 +28,7 @@ namespace MyMediaLite.IO
 	public static class ItemData
 	{
 		/// <summary>Read in implicit feedback data from a file</summary>
-		/// <param name="filename">name of the file to be read from, "-" if STDIN</param>
+		/// <param name="filename">name of the file to be read from</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
@@ -36,11 +36,8 @@ namespace MyMediaLite.IO
 		{
 			try
 			{
-				if (filename.Equals("-"))
-					return Read(Console.In, user_mapping, item_mapping);
-				else
-					using ( var reader = new StreamReader(filename) )
-						return Read(reader, user_mapping, item_mapping);
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, user_mapping, item_mapping);
 			}
 			catch (IOException e)
 			{
