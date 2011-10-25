@@ -42,8 +42,16 @@ namespace MyMediaLite.IO
 				while (reader.ReadLine() != null)
 					size++;
 
-			using ( var reader = new StreamReader(filename) )
-				return Read(reader, size, user_mapping, item_mapping, rating_type);
+			try
+			{
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, size, user_mapping, item_mapping, rating_type);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
+			}
+			
 		}
 
 		/// <summary>Read in static rating data from a TextReader</summary>

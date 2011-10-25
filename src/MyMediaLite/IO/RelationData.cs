@@ -37,8 +37,15 @@ namespace MyMediaLite.IO
 		/// <returns>the relation data</returns>
 		static public SparseBooleanMatrix Read(string filename, IEntityMapping mapping)
 		{
-			using ( var reader = new StreamReader(filename) )
-				return Read(reader, mapping);
+			try
+			{
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, mapping);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
+			}			
 		}
 
 		/// <summary>Read binary relation data from file</summary>

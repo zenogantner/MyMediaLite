@@ -9,10 +9,11 @@
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
 	I/O
+         - catch line format exceptions in a uniform way
          - use default arguments for rating_type argument of methods
            StaticRatingData.Read()
          - ItemData I/O: on error, display offending line
-         - NumberFile I/O: nicer error messages, add unit tests
+         - NumberFile I/O: add unit tests
          - rename TimedRatings to TimedRatingData
         misc
          - update script download_movielens.sh because the download URLs have

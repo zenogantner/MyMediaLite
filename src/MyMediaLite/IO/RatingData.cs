@@ -34,11 +34,18 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			if (filename.Equals("-"))
-				return Read(Console.In, user_mapping, item_mapping);
-			else
-				using ( var reader = new StreamReader(filename) )
-					return Read(reader, user_mapping, item_mapping);
+			try
+			{
+				if (filename.Equals("-"))
+					return Read(Console.In, user_mapping, item_mapping);
+				else
+					using ( var reader = new StreamReader(filename) )
+						return Read(reader, user_mapping, item_mapping);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
+			}
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>

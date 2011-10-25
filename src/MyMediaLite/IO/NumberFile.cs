@@ -104,7 +104,6 @@ namespace MyMediaLite.IO
 			{
 				throw new IOException(string.Format("Could not read integers from file {0}: {1}", filename, e.Message));
 			}
-
 		}
 	}
 }
