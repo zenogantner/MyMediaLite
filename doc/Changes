@@ -4,6 +4,7 @@
            implementations that throw a NotImplementedException()
         command line programs
          - move source code into Programs/ directory
+         - improved exception handler
 	evaluation
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)

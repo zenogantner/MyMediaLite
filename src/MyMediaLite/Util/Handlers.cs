@@ -31,8 +31,13 @@ namespace MyMediaLite.Util
 
 				if (e is DirectoryNotFoundException)
 				{
-					var dir_not_found_exception = (DirectoryNotFoundException) e;
-					Console.Error.WriteLine(dir_not_found_exception.Message);
+					Console.Error.WriteLine(e.Message);
+					Environment.Exit(-1);
+				}
+				
+				if (e is IOException)
+				{
+					Console.Error.WriteLine(e.Message);
 					Environment.Exit(-1);
 				}
 				
