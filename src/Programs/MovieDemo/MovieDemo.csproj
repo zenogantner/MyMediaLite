@@ -9,7 +9,6 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>MovieDemo</RootNamespace>
     <AssemblyName>MovieDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <StartupObject>MovieDemo.MainClass</StartupObject>
     <ReleaseVersion>1.99</ReleaseVersion>
   </PropertyGroup>
