@@ -86,7 +86,7 @@ namespace MyMediaLite.IO
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 3)
-				throw new IOException("Expected at least 3 columns.");
+				throw new Exception("Expected at least 3 columns.");
 
 			while (reader.Read())
 			{

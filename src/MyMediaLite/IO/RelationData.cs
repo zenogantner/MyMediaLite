@@ -85,7 +85,7 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least 2 columns.");
+				throw new Exception("Expected at least 2 columns.");
 
 			var matrix = new SparseBooleanMatrix();
 

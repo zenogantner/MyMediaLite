@@ -59,7 +59,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 2)
-					throw new IOException("Expected at least 2 columns: " + line);
+					throw new FormatException("Expected at least 2 columns: " + line);
 
 				try
 				{
@@ -69,7 +69,7 @@ namespace MyMediaLite.IO
 				}
 				catch (Exception)
 				{
-					throw new IOException(string.Format("Could not read line '{0}'", line));
+					throw new FormatException(string.Format("Could not read line '{0}'", line));
 				}
 			}
 
@@ -86,7 +86,7 @@ namespace MyMediaLite.IO
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least 2 columns.");
+				throw new Exception("Expected at least 2 columns.");
 
 			while (reader.Read())
 			{
