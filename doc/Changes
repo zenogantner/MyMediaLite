@@ -22,6 +22,7 @@
          - ItemData I/O: on error, display offending line
          - NumberFile I/O: add unit tests
          - rename TimedRatings to TimedRatingData
+         - improved support for MovieLens 1M/10M file format
         misc
          - update script download_movielens.sh because the download URLs have
            changed
