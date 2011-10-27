@@ -34,13 +34,17 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public ITimedRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			if (filename.Equals("-"))
-				return Read(Console.In, user_mapping, item_mapping);
-			else
+			try
+			{
 				using ( var reader = new StreamReader(filename) )
 					return Read(reader, user_mapping, item_mapping);
+			}
+			catch (IOException e)
+			{
+				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
+			}
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>
@@ -48,10 +52,10 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public IRatings
+		static public ITimedRatings
 			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			var ratings = new Ratings();
+			var ratings = new TimedRatings();
 
 			var separators = new string[] { "::" };
 			string line;
@@ -60,14 +64,15 @@ namespace MyMediaLite.IO
 			{
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
-				if (tokens.Length < 3)
-					throw new IOException("Expected at least 3 columns: " + line);
+				if (tokens.Length < 4)
+					throw new IOException("Expected at least 4 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				DateTime time = DateTime.FromBinary(long.Parse(tokens[3]));
 
-				ratings.Add(user_id, item_id, rating);
+				ratings.Add(user_id, item_id, rating, time);
 			}
 			return ratings;
 		}
