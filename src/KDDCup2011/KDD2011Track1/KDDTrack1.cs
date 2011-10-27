@@ -171,7 +171,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			Usage(-1);
 
 		// load all the data
-		TimeSpan loading_time = Utils.MeasureTime(delegate() { LoadData(data_dir); });
+		TimeSpan loading_time = Wrap.MeasureTime(delegate() { LoadData(data_dir); });
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0,0:0.##}", loading_time.TotalSeconds));
 
 		recommender.Ratings = training_ratings;
@@ -223,7 +223,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
-				TimeSpan time = Utils.MeasureTime(delegate() {
+				TimeSpan time = Wrap.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate();
 
 					iterative_recommender_final.Iterate();
@@ -236,7 +236,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					if (compute_fit)
 					{
 						double fit = 0;
-						time = Utils.MeasureTime(delegate() {
+						time = Wrap.MeasureTime(delegate() {
 							fit = iterative_recommender_validate.ComputeFit();
 						});
 						fit_time_stats.Add(time.TotalSeconds);
@@ -245,7 +245,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 					// evaluate and save stats
 					Dictionary<string, double> results = null;
-					time = Utils.MeasureTime(delegate() {
+					time = Wrap.MeasureTime(delegate() {
 						results = MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings);
 						Console.WriteLine(MyMediaLite.Eval.Ratings.FormatResults(results) + " " + i);
 						rmse_eval_stats.Add(results["RMSE"]);
@@ -309,7 +309,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					}
 					else
 					{
-						seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+						seconds = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 	        			Console.Write(" training_time " + seconds + " ");
 						Model.Save(recommender, save_model_file);
 					}
@@ -317,7 +317,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 				Console.Write(recommender.ToString() + " ");
 
-				seconds = Utils.MeasureTime(
+				seconds = Wrap.MeasureTime(
 			    	delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings))); }
 				);
 				Console.Write(" testing_time " + seconds);
@@ -328,7 +328,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			if (prediction_file != string.Empty)
 			{
 				Console.WriteLine("Prediction for KDD Cup Track 1:");
-				seconds = Utils.MeasureTime( delegate() { rating_predictor_final.Train(); } );
+				seconds = Wrap.MeasureTime( delegate() { rating_predictor_final.Train(); } );
         		Console.Write(" training_time " + seconds + " ");
 				if (save_model_file != string.Empty)
 				{
@@ -337,7 +337,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				}
 
 				Console.WriteLine();
-				seconds = Utils.MeasureTime( delegate() {
+				seconds = Wrap.MeasureTime( delegate() {
 						KDDCup.PredictRatingsDouble(rating_predictor_final,    test_data, prediction_file);
 
 						if (track2)

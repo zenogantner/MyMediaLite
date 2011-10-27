@@ -49,19 +49,6 @@ namespace MyMediaLite.Util
 			};
 		}
 
-		/// <summary>Delegate definition necessary to define MeasureTime</summary>
-		public delegate void task();
-
-		/// <summary>Measure how long an action takes</summary>
-		/// <param name="t">A <see cref="task"/> defining the action to be measured</param>
-		/// <returns>The <see cref="TimeSpan"/> it takes to perform the action</returns>
-		public static TimeSpan MeasureTime(task t)
-		{
-			DateTime startTime = DateTime.Now;
-			t();
-			return DateTime.Now - startTime;
-		}
-
 		/// <summary>Shuffle a list in-place</summary>
 		/// <remarks>
 		/// Fisher-Yates shuffle, see
@@ -141,7 +128,7 @@ namespace MyMediaLite.Util
 			{
 				int num_new_users = 0;
 				int num_new_items = 0;
-				TimeSpan seconds = Utils.MeasureTime(delegate() {
+				TimeSpan seconds = Wrap.MeasureTime(delegate() {
 							num_new_users = test.AllUsers.Except(train.AllUsers).Count();
 							num_new_items = test.AllItems.Except(train.AllItems).Count();
 				});

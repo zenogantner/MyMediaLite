@@ -26,6 +26,8 @@
         misc
          - update script download_movielens.sh because the download URLs have
            changed
+         - introduce static Wrap class, which contains MeasureTime() and
+           FormatException() method wrappers
 
 1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)

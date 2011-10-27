@@ -80,13 +80,13 @@ public partial class MainWindow : Window
 	public MainWindow() : base( WindowType.Toplevel)
 	{
 		Console.Error.Write("Reading in movie data ... ");
-		TimeSpan time = Utils.MeasureTime(delegate() {
+		TimeSpan time = Wrap.MeasureTime(delegate() {
 			movies.Read(movie_file, movie_file_encoding, item_mapping);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
 		Console.Error.Write("Reading in German movie titles ... ");
-		time = Utils.MeasureTime(delegate() {
+		time = Wrap.MeasureTime(delegate() {
 			german_names = IMDBAkaTitles.Read("../../../../data/imdb/german-aka-titles.list", "GERMAN", movies.IMDB_KEY_To_ID);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
@@ -107,7 +107,7 @@ public partial class MainWindow : Window
 		BiasedMatrixFactorization recommender = new BiasedMatrixFactorization();
 
 		Console.Error.Write("Reading in ratings ... ");
-		TimeSpan time = Utils.MeasureTime(delegate() {
+		TimeSpan time = Wrap.MeasureTime(delegate() {
 			recommender.Ratings = RatingData.Read(ratings_file, user_mapping, item_mapping);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
@@ -130,7 +130,7 @@ public partial class MainWindow : Window
 		recommender.BiasReg = 0.001;
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
-		time = Utils.MeasureTime(delegate() {
+		time = Wrap.MeasureTime(delegate() {
 			recommender.LoadModel(model_file);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
@@ -484,7 +484,7 @@ public partial class MainWindow : Window
 	{
 		Console.Write("Predicting ... max_item_id={0} ", rating_predictor.MaxItemID);
 
-		TimeSpan time = Utils.MeasureTime(delegate() {
+		TimeSpan time = Wrap.MeasureTime(delegate() {
 			// compute ratings
 			for (int i = 0; i <= rating_predictor.MaxItemID; i++)
 				predictions[i] = rating_predictor.Predict(current_user_id, i);

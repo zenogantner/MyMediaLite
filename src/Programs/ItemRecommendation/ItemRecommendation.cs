@@ -306,7 +306,7 @@ class ItemRecommendation
 
 			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 			{
-				TimeSpan t = Utils.MeasureTime(delegate() {
+				TimeSpan t = Wrap.MeasureTime(delegate() {
 					iterative_recommender.Iterate();
 				});
 				training_time_stats.Add(t.TotalSeconds);
@@ -315,13 +315,13 @@ class ItemRecommendation
 				{
 					if (compute_fit)
 					{
-						t = Utils.MeasureTime(delegate() {
+						t = Wrap.MeasureTime(delegate() {
 							Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), it);
 						});
 						fit_time_stats.Add(t.TotalSeconds);
 					}
 
-					t = Utils.MeasureTime(delegate() { results = Evaluate(); });
+					t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 					eval_time_stats.Add(t.TotalSeconds);
 					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
 
@@ -352,7 +352,7 @@ class ItemRecommendation
 				else
 				{
 					Console.Write(recommender.ToString() + " ");
-					time_span = Utils.MeasureTime( delegate() { recommender.Train(); } );
+					time_span = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 					Console.Write("training_time " + time_span + " ");
 				}
 			}
@@ -372,7 +372,7 @@ class ItemRecommendation
 			else if (!no_eval)
 			{
 				if (online_eval)
-					time_span = Utils.MeasureTime( delegate() {
+					time_span = Wrap.MeasureTime( delegate() {
 						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, test_users, candidate_items, eval_item_mode);
 						Console.Write(Items.FormatResults(results));
 					});
@@ -391,13 +391,13 @@ class ItemRecommendation
 					else
 						Usage("Unknown method in --group-recommender=METHOD");
 
-					time_span = Utils.MeasureTime( delegate() {
+					time_span = Wrap.MeasureTime( delegate() {
 						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, candidate_items);
 						Console.Write(Groups.FormatResults(result));
 					});
 				}
 				else
-					time_span = Utils.MeasureTime( delegate() {
+					time_span = Wrap.MeasureTime( delegate() {
 						var results = Evaluate();
 						Console.Write(Items.FormatResults(results));
 				});
@@ -484,7 +484,7 @@ class ItemRecommendation
 
 	static void LoadData()
 	{
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// training data
 			training_data = double.IsNaN(rating_threshold)
 				? ItemData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping)
@@ -669,7 +669,7 @@ class ItemRecommendation
 		TimeSpan time_span;
 
 		if (predict_for_users_file == null)
-			time_span = Utils.MeasureTime( delegate() {
+			time_span = Wrap.MeasureTime( delegate() {
 				Prediction.WritePredictions(
 					recommender,
 					training_data,
@@ -679,7 +679,7 @@ class ItemRecommendation
 				Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
 			});
 		else
-			time_span = Utils.MeasureTime( delegate() {
+			time_span = Wrap.MeasureTime( delegate() {
 				Prediction.WritePredictions(
 					recommender,
 					training_data,

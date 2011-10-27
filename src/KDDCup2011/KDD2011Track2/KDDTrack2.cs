@@ -208,7 +208,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
-				TimeSpan time = Utils.MeasureTime(delegate() {
+				TimeSpan time = Wrap.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate(); // TODO parallelize
 					if (prediction_file != string.Empty)
 						iterative_recommender_final.Iterate();
@@ -217,7 +217,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 				if (i % find_iter == 0)
 				{
-					time = Utils.MeasureTime(delegate() { // TODO parallelize
+					time = Wrap.MeasureTime(delegate() { // TODO parallelize
 						// evaluate
 						error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 						err_eval_stats.Add(error);
@@ -271,7 +271,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		{
 			if (load_model_file == string.Empty)
 			{
-				seconds = Utils.MeasureTime(delegate() {
+				seconds = Wrap.MeasureTime(delegate() {
 					recommender_validate.Train();
 					if (prediction_file != string.Empty)
 						recommender_final.Train();
@@ -279,7 +279,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 				Console.Write(" training_time " + seconds + " ");
 			}
 
-			seconds = Utils.MeasureTime(delegate() {
+			seconds = Wrap.MeasureTime(delegate() {
 					// evaluate
 					double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 					Console.Write(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######}", error));
@@ -332,7 +332,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			validation_hits_file       = Path.Combine(data_dir, "validationHitsIdx2.firstLines.txt");
 		}
 
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// read training data
 			training_ratings = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
 

@@ -285,7 +285,7 @@ class RatingPrediction
 
 			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 			{
-				TimeSpan time = Utils.MeasureTime(delegate() {
+				TimeSpan time = Wrap.MeasureTime(delegate() {
 					iterative_recommender.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
@@ -294,14 +294,14 @@ class RatingPrediction
 				{
 					if (compute_fit)
 					{
-						time = Utils.MeasureTime(delegate() {
+						time = Wrap.MeasureTime(delegate() {
 							Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), it);
 						});
 						fit_time_stats.Add(time.TotalSeconds);
 					}
 
 					Dictionary<string, double> results = null;
-					time = Utils.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
+					time = Wrap.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
 					eval_time_stats.Add(time.TotalSeconds);
 					rmse_eval_stats.Add(results["RMSE"]);
 					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), it);
@@ -347,7 +347,7 @@ class RatingPrediction
 					}
 
 					Console.Write(recommender.ToString());
-					seconds = Utils.MeasureTime( delegate() { recommender.Train(); } );
+					seconds = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 					Console.Write(" training_time " + seconds + " ");
 				}
 			}
@@ -360,9 +360,9 @@ class RatingPrediction
 			if (!no_eval)
 			{
 				if (online_eval)
-					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(RatingsOnline.Evaluate((IncrementalRatingPredictor) recommender, test_data))); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(RatingsOnline.Evaluate((IncrementalRatingPredictor) recommender, test_data))); });
 				else
-					seconds = Utils.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data))); });
 
 				Console.Write(" testing_time " + seconds);
 			}
@@ -370,7 +370,7 @@ class RatingPrediction
 			if (compute_fit)
 			{
 				Console.Write("\nfit ");
-				seconds = Utils.MeasureTime(delegate() {
+				seconds = Wrap.MeasureTime(delegate() {
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)));
 				});
 				Console.Write(" fit_time " + seconds);
@@ -378,7 +378,7 @@ class RatingPrediction
 
 			if (prediction_file != null)
 			{
-				seconds = Utils.MeasureTime(delegate() {
+				seconds = Wrap.MeasureTime(delegate() {
 						Console.WriteLine();
 						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file, prediction_line);
 				});
@@ -436,17 +436,24 @@ class RatingPrediction
 		string user_relation_file, string item_relation_file,
 		bool static_data)
 	{
-		TimeSpan loading_time = Utils.MeasureTime(delegate() {
+		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// read training data
-			if (file_format == RatingFileFormat.DEFAULT)
-				training_data = static_data ? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
-					                        : RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
-			else if (file_format == RatingFileFormat.MOVIELENS_1M)
-				training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
-			else if (file_format == RatingFileFormat.KDDCUP_2011)
-				training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
-
-			recommender.Ratings = training_data;
+			if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
+			{
+				((TimeAwareRatingPredictor)recommender).TimedRatings = TimedRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				training_data = ((TimeAwareRatingPredictor)recommender).TimedRatings;
+			}
+			else
+			{
+				if (file_format == RatingFileFormat.DEFAULT)
+					training_data = static_data ? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
+						                        : RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				else if (file_format == RatingFileFormat.MOVIELENS_1M)
+					training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				else if (file_format == RatingFileFormat.KDDCUP_2011)
+					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
+				recommender.Ratings = training_data;
+			}
 
 			// user attributes
 			if (user_attributes_file != null)

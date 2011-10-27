@@ -176,7 +176,7 @@ class MappingRatingPrediction
 
 		if (compute_fit)
 		{
-			seconds = Utils.MeasureTime( delegate() {
+			seconds = Wrap.MeasureTime( delegate() {
 				int num_iter = recommender.NumIterMapping;
 				recommender.NumIterMapping = 0;
 				recommender.LearnAttributeToFactorMapping();
@@ -194,7 +194,7 @@ class MappingRatingPrediction
 		}
 		else
 		{
-			seconds = Utils.MeasureTime( delegate() {
+			seconds = Wrap.MeasureTime( delegate() {
 				recommender.LearnAttributeToFactorMapping();
 	    	} );
 		}
@@ -207,7 +207,7 @@ class MappingRatingPrediction
 		if (prediction_file != string.Empty)
 		{
 			Console.WriteLine();
-			seconds = Utils.MeasureTime(
+			seconds = Wrap.MeasureTime(
 		    	delegate() {
 					Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
 				}
@@ -220,7 +220,7 @@ class MappingRatingPrediction
 	{
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
-		TimeSpan seconds = Utils.MeasureTime( delegate()
+		TimeSpan seconds = Wrap.MeasureTime( delegate()
 	    	{
 	    		var result = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
 				Console.Write(MyMediaLite.Eval.Ratings.FormatResults(result));

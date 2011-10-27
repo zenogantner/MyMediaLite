@@ -168,6 +168,7 @@
     <Compile Include="Data\DataSet.cs" />
     <Compile Include="IO\NumberFile.cs" />
     <Compile Include="IO\TimedRatingData.cs" />
+    <Compile Include="Util\Wrap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

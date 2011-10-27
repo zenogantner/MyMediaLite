@@ -202,7 +202,7 @@ class MappingItemRecommendation
 
 		if (compute_fit)
 		{
-			seconds = Utils.MeasureTime( delegate() {
+			seconds = Wrap.MeasureTime( delegate() {
 				int num_iter = recommender.NumIterMapping;
 				recommender.NumIterMapping = 0;
 				recommender.LearnAttributeToFactorMapping();
@@ -220,7 +220,7 @@ class MappingItemRecommendation
 		}
 		else
 		{
-			seconds = Utils.MeasureTime(delegate() {
+			seconds = Wrap.MeasureTime(delegate() {
 				recommender.LearnAttributeToFactorMapping();
 			});
 		}
@@ -235,7 +235,7 @@ class MappingItemRecommendation
 	{
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
-		TimeSpan seconds = Utils.MeasureTime(delegate() {
+		TimeSpan seconds = Wrap.MeasureTime(delegate() {
 	    		var result = Items.Evaluate(
 								recommender,
 								test_data,
