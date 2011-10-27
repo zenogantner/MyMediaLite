@@ -38,7 +38,7 @@ rm ml-100k.zip ml-1m.zip ml-10m.zip
 # create tab-separated file and evaluation splits for MovieLens 1M
 ../scripts/import_dataset.pl --separator=:: ml-1m/ratings.dat > ml-1m/ratings.txt
 ../scripts/import_dataset.pl --separator=:: ml-1m/ratings.dat | ../scripts/crossvalidation.pl --k=5 --filename=ml-1m/ml-1m --suffix=.txt
-../scripts/crossvalidation.pl --k=5 --filename=ml-1m/ml-1m --suffix=.dat
+../scripts/crossvalidation.pl --k=5 --filename=ml-1m/ml-1m --suffix=.dat < ml-1m/ratings.dat
 ../scripts/user_cold_start.pl ml-1m/ratings.dat --separator=:: --filename=ml-1m/ml-1m-new-user --k=5 --suffix=.txt
 
 # create tab-separated file for MovieLens 10M
