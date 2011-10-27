@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -40,7 +41,7 @@ namespace MyMediaLite.IO
 			}
 			catch (Exception)
 			{
-				throw new IOException(string.Format("Could not read line '{0}'", line));
+				throw new FormatException(string.Format("Could not read line '{0}'", line));
 			}
 
 			return numbers;
@@ -54,15 +55,10 @@ namespace MyMediaLite.IO
 			if (filename == null)
 				throw new ArgumentNullException("filename");
 
-			try
-			{
+			return Wrap.FormatException<IList<long>>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 					return ReadLongs(reader);
-			}
-			catch (IOException e)
-			{
-				throw new IOException(string.Format("Could not read long integers from file {0}: {1}", filename, e.Message));
-			}
+			});
 		}
 
 		/// <summary>Read a list of integers from a StreamReader</summary>
@@ -80,9 +76,8 @@ namespace MyMediaLite.IO
 			}
 			catch (Exception)
 			{
-				throw new IOException(string.Format("Could not read line '{0}'", line));
+				throw new FormatException(string.Format("Could not read line '{0}'", line));
 			}
-
 
 			return numbers;
 		}
@@ -95,15 +90,10 @@ namespace MyMediaLite.IO
 			if (filename == null)
 				throw new ArgumentNullException("filename");
 
-			try
-			{
+			return Wrap.FormatException<IList<int>>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 					return ReadIntegers(reader);
-			}
-			catch (IOException e)
-			{
-				throw new IOException(string.Format("Could not read integers from file {0}: {1}", filename, e.Message));
-			}
+			});
 		}
 	}
 }

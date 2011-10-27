@@ -26,6 +26,9 @@ namespace MyMediaLite.Util
 		/// <summary>Delegate definition necessary to define wrappers</summary>
 		public delegate void task();
 		
+		/// <summary>Delegate definition necessary to define wrappers</summary>
+		public delegate T task<T>();
+		
 		/// <summary>Measure how long an action takes</summary>
 		/// <param name="t">A <see cref="task"/> defining the action to be measured</param>
 		/// <returns>The <see cref="TimeSpan"/> it takes to perform the action</returns>
@@ -36,7 +39,7 @@ namespace MyMediaLite.Util
 			return DateTime.Now - startTime;
 		}
 		
-		/// <summary>Catch FormatException and re-throw it including filename.</summary>
+		/// <summary>Catch FormatException and re-throw it including filename</summary>
 		/// <param name='filename'>the name of the file processed inside t</param>
 		/// <param name='t'>the task to be performed</param>
 		/// <exception cref='FormatException'>
@@ -52,8 +55,26 @@ namespace MyMediaLite.Util
 			{
 				throw new FormatException(string.Format("Could not read file {0}: {1}", filename, e.Message));
 			}
-
 		}
+		
+		/// <summary>Catch FormatException and re-throw it including filename; generic version</summary>
+		/// <param name='filename'>the name of the file processed inside t</param>
+		/// <param name='t'>the task to be performed</param>
+		/// <exception cref='FormatException'>
+		/// Represents errors caused by passing incorrectly formatted arguments or invalid format specifiers to methods.
+		/// </exception>
+		public static T FormatException<T>(string filename, task<T> t)
+		{
+			try
+			{
+				return t(); // perform task
+			}
+			catch (FormatException e)
+			{
+				throw new FormatException(string.Format("Could not read file {0}: {1}", filename, e.Message));
+			}
+		}
+
 	}
 }
 

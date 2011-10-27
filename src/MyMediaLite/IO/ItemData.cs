@@ -21,6 +21,7 @@ using System.Data;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -34,15 +35,10 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			try
-			{
+			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 					return Read(reader, user_mapping, item_mapping);
-			}
-			catch (IOException e)
-			{
-				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
-			}
+			});
 		}
 
 		/// <summary>Read in implicit feedback data from a TextReader</summary>

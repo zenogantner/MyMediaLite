@@ -21,6 +21,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -34,15 +35,10 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			try
-			{
+			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 					return Read(reader, user_mapping, item_mapping);
-			}
-			catch (IOException e)
-			{
-				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
-			}
+			});
 		}
 
 		/// <summary>Read in rating data from a TextReader</summary>
@@ -64,7 +60,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 3)
-					throw new IOException("Expected at least 3 columns: " + line);
+					throw new FormatException("Expected at least 3 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
@@ -86,7 +82,7 @@ namespace MyMediaLite.IO
 			var ratings = new Ratings();
 
 			if (reader.FieldCount < 3)
-				throw new IOException("Expected at least 3 columns.");
+				throw new Exception("Expected at least 3 columns.");
 
 			while (reader.Read())
 			{

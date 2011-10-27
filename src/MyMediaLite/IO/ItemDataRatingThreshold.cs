@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -36,8 +37,10 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, double rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			using ( var reader = new StreamReader(filename) )
-				return Read(reader, rating_threshold, user_mapping, item_mapping);
+			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
+				using ( var reader = new StreamReader(filename) )
+					return Read(reader, rating_threshold, user_mapping, item_mapping);
+			});
 		}
 
 		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a TextReader</summary>
@@ -59,7 +62,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length < 3)
-					throw new IOException("Expected at least 3 columns: " + line);
+					throw new FormatException("Expected at least 3 columns: " + line);
 
 				int user_id   = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id   = item_mapping.ToInternalID(long.Parse(tokens[1]));

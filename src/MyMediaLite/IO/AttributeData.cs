@@ -20,6 +20,7 @@ using System.Data;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -43,15 +44,10 @@ namespace MyMediaLite.IO
 		/// <returns>the attribute data</returns>
 		static public SparseBooleanMatrix Read(string filename, IEntityMapping mapping)
 		{
-			try
-			{
+			return Wrap.FormatException<SparseBooleanMatrix>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 					return Read(reader, mapping);
-			}
-			catch (IOException e)
-			{
-				throw new IOException(string.Format("Could not read file {0}: {1}", filename, e.Message));
-			}
+			});
 		}
 
 		/// <summary>Read binary attribute data from a StreamReader</summary>
@@ -77,7 +73,7 @@ namespace MyMediaLite.IO
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
 				if (tokens.Length != 2)
-					throw new IOException("Expected exactly 2 columns: " + line);
+					throw new FormatException("Expected exactly 2 columns: " + line);
 
 				int entity_id = mapping.ToInternalID(long.Parse(tokens[0]));
 				int attr_id   = int.Parse(tokens[1]);
@@ -95,7 +91,7 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new IOException("Expected at least 2 columns.");
+				throw new Exception("Expected at least 2 columns.");
 
 			var matrix = new SparseBooleanMatrix();
 
