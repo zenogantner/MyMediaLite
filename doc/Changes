@@ -10,6 +10,8 @@
 	evaluation
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
+        data structures
+         - (I)TimedRatings: add EarliestTime and LatestTime properties
 	I/O
          - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way

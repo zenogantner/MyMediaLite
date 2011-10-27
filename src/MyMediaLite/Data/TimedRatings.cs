@@ -31,7 +31,13 @@ namespace MyMediaLite.Data
 	{
 		///
 		public IList<DateTime> Times { get; protected set; }
-
+		
+		///
+		public DateTime EarliestTime { get; protected set; }
+		
+		///
+		public DateTime LatestTime { get; protected set; }
+		
 		/// <summary>Default constructor</summary>
 		public TimedRatings() : base()
 		{
@@ -62,7 +68,10 @@ namespace MyMediaLite.Data
 				MinRating = rating;
 			if (rating > MaxRating)
 				MaxRating = rating;
-			// TODO also keep stats about extreme points for ratings
+			if (time < EarliestTime)
+				EarliestTime = time;
+			if (time > LatestTime)
+				LatestTime = time;
 			
 			// update index data structures if necessary
 			if (by_user != null)

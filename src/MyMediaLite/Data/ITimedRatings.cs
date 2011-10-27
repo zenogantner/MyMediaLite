@@ -26,6 +26,12 @@ namespace MyMediaLite.Data
 		/// <summary>the item entries</summary>
 		IList<DateTime> Times { get; }
 		
+		/// <summary>earliest time</summary>
+		DateTime EarliestTime { get; }
+		
+		/// <summary>latest time</summary>
+		DateTime LatestTime { get; }
+		
 		/// <summary>add a rating event including time information</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
