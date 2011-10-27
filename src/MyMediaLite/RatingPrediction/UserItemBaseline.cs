@@ -52,9 +52,14 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public uint NumIter { get; set; }
 
-		private double global_average;
-		private double[] user_biases;
-		private double[] item_biases;
+		/// <summary>the global rating average</summary>
+		protected double global_average;
+
+		/// <summary>the user biases</summary>
+		protected double[] user_biases;
+
+		/// <summary>the item biases</summary>
+		protected double[] item_biases;
 
 		/// <summary>Default constructor</summary>
 		public UserItemBaseline()

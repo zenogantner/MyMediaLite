@@ -2,6 +2,8 @@
 	recommenders
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
+         - UserItemBaseline: make parameters protected so that library users
+           can inherit from the class
         command line programs
          - move source code into Programs/ directory
          - improved exception handler
