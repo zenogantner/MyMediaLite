@@ -36,7 +36,7 @@ namespace MyMediaLite.RatingPrediction
 		protected ITimedRatings timed_ratings;
 		
 		///
-		public virtual IRatings Ratings
+		public override IRatings Ratings
 		{
 			get { return ratings; }
 			set {
@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 		
-		public abstract double Prediction(int user_id, int item_id, DateTime time);
+		public abstract double Predict(int user_id, int item_id, DateTime time);
 	}
 }
 
