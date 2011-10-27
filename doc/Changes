@@ -1,4 +1,6 @@
 2.00	2011-10-
+        API
+         - add abstract class TimeAwareRatingPredictor
 	recommenders
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
