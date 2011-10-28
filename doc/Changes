@@ -2,6 +2,7 @@
         API
          - add abstract class TimeAwareRatingPredictor
 	recommenders
+         - add TimeAwareBaseline rating predictor
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
          - UserItemBaseline: make parameters protected so that library users
@@ -29,6 +30,7 @@
            changed
          - introduce static Wrap class, which contains MeasureTime() and
            FormatException() method wrappers
+         - Utils.DisplayDataStats: use default parameters"
 
 1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
