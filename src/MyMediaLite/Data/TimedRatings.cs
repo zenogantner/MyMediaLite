@@ -42,6 +42,8 @@ namespace MyMediaLite.Data
 		public TimedRatings() : base()
 		{
 			Times = new List<DateTime>();
+			EarliestTime = DateTime.MaxValue;
+			LatestTime = DateTime.MinValue;
 		}
 
 		///
