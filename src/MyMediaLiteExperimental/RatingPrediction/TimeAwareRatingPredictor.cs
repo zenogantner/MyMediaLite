@@ -44,6 +44,7 @@ namespace MyMediaLite.RatingPrediction
 					throw new ArgumentException("Ratings must be of type ITimedRatings.");
 				
 				base.Ratings = value;
+				timed_ratings = (ITimedRatings) value;
 			}
 		}
 		

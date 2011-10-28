@@ -86,23 +86,11 @@ namespace MyMediaLite.Util
 		/// <param name="test">the test data</param>
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
-		public static void DisplayDataStats(
-			IRatings train, IRatings test,
-			SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
-		{
-			DisplayDataStats(train, test, user_attributes, item_attributes, false);
-		}
-
-		/// <summary>Display dataset statistics</summary>
-		/// <param name="train">the training data</param>
-		/// <param name="test">the test data</param>
-		/// <param name="user_attributes">the user attributes</param>
-		/// <param name="item_attributes">the item attributes</param>
 		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
 		public static void DisplayDataStats(
 			IRatings train, IRatings test,
 			SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes,
-			bool display_overlap)
+			bool display_overlap = false)
 		{
 			// training data stats
 			int num_users = train.AllUsers.Count;

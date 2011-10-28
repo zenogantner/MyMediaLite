@@ -57,7 +57,7 @@ namespace MyMediaLite.Data
 			Items.Add(item_id);
 			Values.Add(rating);
 			Times.Add(time);
-
+			
 			int pos = Users.Count - 1;
 
 			if (user_id > MaxUserID)
