@@ -23,13 +23,14 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.RatingPrediction;
+using MyMediaLite.Util;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite.HyperParameter
 {
 	/// <summary>Nealder-Mead algorithm for finding suitable hyperparameters</summary>
 	public static class NelderMead
 	{
-		// TODO avoid zero values e.g. for regularization ...
+		// TODO avoid negative values e.g. for regularization ...
 
 		// TODO make configurable
 		static double alpha = 1.0;
@@ -129,8 +130,9 @@ namespace MyMediaLite.Util
 				throw new Exception("not prepared for type " + recommender.GetType().ToString());
 			}
 
-			return FindMinimum(error_measure,
-			                   hp_names, initial_hp_values, recommender, split);
+			return FindMinimum(
+				error_measure,
+				hp_names, initial_hp_values, recommender, split);
 		}
 
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
@@ -141,11 +143,12 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(string evaluation_measure,
-		                                 IList<string> hp_names,
-		                                 IList<DenseVector> initial_hp_values,
-		                                 RatingPredictor recommender, // TODO make more general?
-		                                 ISplit<IRatings> split)
+		public static double FindMinimum(
+			string evaluation_measure,
+			IList<string> hp_names,
+			IList<DenseVector> initial_hp_values,
+			RatingPredictor recommender, // TODO make more general?
+			ISplit<IRatings> split)
 		{
 			var results    = new Dictionary<string, double>();
 			var hp_vectors = new Dictionary<string, DenseVector>();

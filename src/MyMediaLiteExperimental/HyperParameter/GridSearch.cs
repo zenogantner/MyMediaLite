@@ -24,8 +24,9 @@ using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
+using MyMediaLite.Util;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite.HyperParameter
 {
 	/// <summary>Grid search for finding suitable hyperparameters</summary>
 	public static class GridSearch
@@ -38,11 +39,12 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(string evaluation_measure,
-		                                 string hyperparameter_name,
-		                                 double[] hyperparameter_values,
-		                                 RatingPredictor recommender,
-		                                 ISplit<IRatings> split)
+		public static double FindMinimum(
+			string evaluation_measure,
+			string hyperparameter_name,
+			double[] hyperparameter_values,
+			RatingPredictor recommender,
+			ISplit<IRatings> split)
 		{
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -58,7 +60,6 @@ namespace MyMediaLite.Util
 					min_result = result;
 				}
 			}
-
 			Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[min_i].ToString(CultureInfo.InvariantCulture));
 
 			return min_result;
@@ -74,11 +75,12 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(string evaluation_measure,
-		                                 string hp_name1, string hp_name2,
-		                                 double[] hp_values1, double[] hp_values2,
-		                                 RatingPredictor recommender,
-		                                 ISplit<IRatings> split)
+		public static double FindMinimum(
+			string evaluation_measure,
+			string hp_name1, string hp_name2,
+			double[] hp_values1, double[] hp_values2,
+			RatingPredictor recommender,
+			ISplit<IRatings> split)
 		{
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -118,14 +120,15 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimumExponential(string evaluation_measure,
-		                                 		    string hp_name1,
-		                                            string hp_name2,
-		                                 		    double[] hp_values1,
-		                                            double[] hp_values2,
-		                                            double basis,
-		                                 		    RatingPrediction.RatingPredictor recommender,
-		                                 		    ISplit<IRatings> split)
+		public static double FindMinimumExponential(
+			string evaluation_measure,
+			string hp_name1,
+			string hp_name2,
+			double[] hp_values1,
+			double[] hp_values2,
+			double basis,
+			RatingPrediction.RatingPredictor recommender,
+			ISplit<IRatings> split)
 		{
 			var new_hp_values1 = new double[hp_values1.Length];
 			var new_hp_values2 = new double[hp_values2.Length];
@@ -147,12 +150,13 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimumExponential(string evaluation_measure,
-		                                 		    string hp_name,
-		                                 		    double[] hp_values,
-		                                            double basis,
-		                                 		    RatingPrediction.RatingPredictor recommender,
-		                                 		    ISplit<IRatings> split)
+		public static double FindMinimumExponential(
+			string evaluation_measure,
+			string hp_name,
+			double[] hp_values,
+			double basis,
+			RatingPrediction.RatingPredictor recommender,
+			ISplit<IRatings> split)
 		{
 			var new_hp_values = new double[hp_values.Length];
 
@@ -170,11 +174,12 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">the recommender</param>
 		/// <param name="k">the number of folds to be used for cross-validation</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(string evaluation_measure,
-		                                 string hyperparameter_name,
-		                                 double[] hyperparameter_values,
-		                                 RatingPrediction.RatingPredictor recommender,
-		                                 uint k)
+		public static double FindMinimum(
+			string evaluation_measure,
+			string hyperparameter_name,
+			double[] hyperparameter_values,
+			RatingPrediction.RatingPredictor recommender,
+			uint k)
 		{
 			var data = recommender.Ratings;
 			var split = new RatingCrossValidationSplit(data, k);

@@ -73,12 +73,12 @@
     <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
-    <Compile Include="Util\GridSearch.cs" />
     <Compile Include="Util\GroupUtils.cs" />
-    <Compile Include="Util\NelderMead.cs" />
     <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
+    <Compile Include="HyperParameter\NelderMead.cs" />
+    <Compile Include="HyperParameter\GridSearch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -90,5 +90,8 @@
       <Project>{309290E3-E52B-4E67-9F6E-2A67B5D54320}</Project>
       <Name>SVM</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HyperParameter\" />
   </ItemGroup>
 </Project>
