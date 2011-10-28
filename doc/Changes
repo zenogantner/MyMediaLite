@@ -9,6 +9,7 @@
         command line programs
          - move source code into Programs/ directory
          - improved exception handler
+         - rating prediction: improved usage information
 	evaluation
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
