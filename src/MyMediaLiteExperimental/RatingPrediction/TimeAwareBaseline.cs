@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPrediction;
 
@@ -82,21 +83,21 @@ namespace MyMediaLite.RatingPrediction
 
 			Beta = 0.4;
 
-			UserBiasLearnRate = 3000;
-			ItemBiasLearnRate = 2000;
-			AlphaLearnRate = 10;
-			ItemBiasByTimeBinLearnRate = 5;
-			UserBiasByDayLearnRate = 2500;
-			UserScalingLearnRate = 8000;
-			UserScalingByDayLearnRate = 2000;
+			UserBiasLearnRate = 0.003;
+			ItemBiasLearnRate = 0.002;
+			AlphaLearnRate = 0.00001;
+			ItemBiasByTimeBinLearnRate = 0.000005;
+			UserBiasByDayLearnRate = 0.0025;
+			UserScalingLearnRate = 0.008;
+			UserScalingByDayLearnRate = 0.002;
 
-			RegU = 300;
-			RegI = 300;
-			RegAlpha = 500000;
-			RegItemBiasByTimeBin = 1000;
-			RegUserBiasByDay = 50;
-			RegUserScaling = 100;
-			RegUserScalingByDay = 50;
+			RegU = 0.03;
+			RegI = 0.03;
+			RegAlpha = 50;
+			RegItemBiasByTimeBin = 0.1;
+			RegUserBiasByDay = 0.005;
+			RegUserScaling = 0.01;
+			RegUserScalingByDay = 0.005;
 		}
 
 		public override void Train()
@@ -120,7 +121,7 @@ namespace MyMediaLite.RatingPrediction
 			Console.WriteLine(timed_ratings.EarliestTime);
 			Console.WriteLine(timed_ratings.LatestTime);
 			int number_of_days = (timed_ratings.LatestTime - timed_ratings.EarliestTime).Days;
-			int number_of_bins = number_of_days / BinSize;
+			int number_of_bins = number_of_days / BinSize + 1;
 			Console.WriteLine("{0} days, {1} bins", number_of_days, number_of_bins);
 
 			// initialize parameters
@@ -189,7 +190,7 @@ namespace MyMediaLite.RatingPrediction
 			if (item_id <= MaxItemID && user_id > MaxUserID)
 				result += item_bias[item_id] + item_bias_by_time_bin[item_id, bin];
 			if (item_id <= MaxItemID && user_id <= MaxUserID)
-				result += item_bias[item_id] + item_bias_by_time_bin[item_id, bin];// * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
+				result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
 
 			return result;
 		}
@@ -197,6 +198,23 @@ namespace MyMediaLite.RatingPrediction
 		public double ComputeFit()
 		{
 			return -1;
+		}
+
+		///
+		public override string ToString()
+		{
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_iter={1} bin_size={2} beta={3} user_bias_learn_rate={4} item_bias_learn_rate={5} "
+				+ "alpha_learn_rate={6} item_bias_by_time_bin_learn_rate={7} user_bias_by_day_learn_rate={8} "
+				+ "user_scaling_learn_rate={9} user_scaling_by_day_learn_rate={10} "
+				+ "reg_u={11} reg_i={12} reg_alpha={13} reg_item_bias_by_time_bin={14} reg_user_bias_by_day={15} "
+				+ "reg_user_scaling={16} reg_user_scaling_by_day={17}",
+				this.GetType().Name,
+				NumIter, BinSize, Beta, UserBiasLearnRate, ItemBiasLearnRate, AlphaLearnRate,
+				ItemBiasByTimeBinLearnRate, UserBiasByDayLearnRate, UserScalingLearnRate, UserScalingByDayLearnRate,
+				RegU, RegI, RegAlpha, RegItemBiasByTimeBin, RegUserBiasByDay,
+				RegUserScaling, RegUserScalingByDay);
 		}
 	}
 }
