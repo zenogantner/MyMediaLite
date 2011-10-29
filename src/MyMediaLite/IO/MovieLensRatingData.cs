@@ -66,7 +66,12 @@ namespace MyMediaLite.IO
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-				DateTime time = new DateTime(long.Parse(tokens[3]), DateTimeKind.Utc);
+				DateTime time = DateTime.MinValue;
+				Console.Write("start: " + time);
+				time.AddYears(1970);
+				Console.Write(" add 1970 years: " + time);
+				time.AddSeconds(long.Parse(tokens[3]));
+				Console.WriteLine(" added seconds: " + time);
 
 				ratings.Add(user_id, item_id, rating, time);
 			}
