@@ -21,11 +21,13 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Data structure for storing ratings</summary>
+	/// <summary>Data structure for storing ratings with time information</summary>
 	/// <remarks>
 	/// Small memory overhead for added flexibility.
 	///
 	/// This data structure supports incremental updates.
+	/// 
+	/// Loading the Netflix Prize data set (100,000,000 ratings) into this data structure requires about 3.2 GB of memory.
 	/// </remarks>
 	public class TimedRatings : Ratings, ITimedRatings
 	{

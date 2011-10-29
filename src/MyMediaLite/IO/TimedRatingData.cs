@@ -24,7 +24,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that offers methods for reading in rating data</summary>
+	/// <summary>Class that offers methods for reading in rating data with time information</summary>
 	public static class TimedRatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
