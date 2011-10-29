@@ -103,5 +103,23 @@ namespace Tests.DataType
 			double result = 55;
 			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(matrix, 2, vector));
 		}
+
+		[Test()] public void TestMax()
+		{
+			var int_matrix = new Matrix<int>(3, 3);
+			Assert.AreEqual(0, MatrixUtils.Max(int_matrix));
+			int_matrix[1, 1] = 9;
+			Assert.AreEqual(9, MatrixUtils.Max(int_matrix));
+
+			var double_matrix = new Matrix<double>(3, 3);
+			Assert.AreEqual(0, MatrixUtils.Max(double_matrix));
+			double_matrix[1, 1] = 9.0;
+			Assert.AreEqual(9.0, MatrixUtils.Max(double_matrix));
+
+			var float_matrix = new Matrix<float>(3, 3);
+			Assert.AreEqual(0, MatrixUtils.Max(float_matrix));
+			float_matrix[1, 1] = 9.0f;
+			Assert.AreEqual(9.0, MatrixUtils.Max(float_matrix));
+		}
 	}
 }

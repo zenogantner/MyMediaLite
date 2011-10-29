@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MathNet.Numerics.Distributions;
 
 namespace MyMediaLite.DataType
@@ -258,5 +259,27 @@ namespace MyMediaLite.DataType
 			return result;
 		}
 		// TODO unit tests
+
+		/// <summary>return the maximum value contained in a matrix</summary>
+		/// <param name='m'>the matrix</param>
+		static public int Max(Matrix<int> m)
+		{
+			return m.data.Max();
+		}
+
+		/// <summary>return the maximum value contained in a matrix</summary>
+		/// <param name='m'>the matrix</param>
+
+		static public double Max(Matrix<double> m)
+		{
+			return m.data.Max();
+		}
+
+		/// <summary>return the maximum value contained in a matrix</summary>
+		/// <param name='m'>the matrix</param>
+		static public float Max(Matrix<float> m)
+		{
+			return m.data.Max();
+		}
 	}
 }

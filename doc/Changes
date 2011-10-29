@@ -35,6 +35,7 @@
            FormatException() method wrappers
          - Utils.DisplayDataStats: use default parameters"
          - move hyper-parameter search to its own namespace
+         - MatrixUtils: add Max() method
 
 1.99	2011-10-08
         - MyMediaLite now needs .NET 4.0/Mono 2.8 or later (2.10.x recommended)
