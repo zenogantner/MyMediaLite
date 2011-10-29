@@ -27,7 +27,7 @@ namespace Tests.DataType
 	[TestFixture()]
 	public class MatrixUtilsTest
 	{
-		[Test()] public void TestInc()
+		[Test()] public void TestInc1()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -50,6 +50,18 @@ namespace Tests.DataType
 			double[] testrow = {2, 4, 6, 8, 10};
 			MatrixUtils.Inc(matrix1, matrix2);
 			Assert.AreEqual(testrow, matrix1.GetRow(2));
+		}
+
+		[Test()] public void TestInc3()
+		{
+			var matrix = new Matrix<double>(5, 5);
+			double[] row = { 1, 2, 3, 4, 5 };
+			for (int i = 0; i < 5; i++)
+				matrix.SetRow(i, row);
+			MatrixUtils.Inc(matrix, 1);
+			double[] testrow = { 2, 3, 4, 5, 6 };
+			for (int i = 0; i < 5; i++)
+				Assert.AreEqual(testrow[i], matrix[1, i]);
 		}
 
 		[Test()] public void TestColumnAverage()
@@ -76,7 +88,7 @@ namespace Tests.DataType
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
-			for (int i = 0; i<5; i++)
+			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
 			MatrixUtils.Multiply(matrix, 2.5);
 			double[] testrow = { 2.5, 5, 7.5, 10, 12.5 };
@@ -100,8 +112,42 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
 			double[] vector = { 1, 2, 3, 4, 5 };
-			double result = 55;
-			Assert.AreEqual(result, MatrixUtils.RowScalarProduct(matrix, 2, vector));
+			Assert.AreEqual(55, MatrixUtils.RowScalarProduct(matrix, 2, vector));
+
+			var matrix2 = new Matrix<double>(5, 5);
+			for (int i = 0; i < 5; i++)
+				matrix2.SetRow(i, row);
+			Assert.AreEqual(55, MatrixUtils.RowScalarProduct(matrix, 2, matrix2, 3));
+		}
+
+		[Test()] public void TestRowDifference()
+		{
+			var matrix1 = new Matrix<double>(5, 5);
+			double[] row = { 1, 2, 3, 4, 5 };
+			for (int i = 0; i < 5; i++)
+				matrix1.SetRow(i, row);
+			var matrix2 = new Matrix<double>(5, 5);
+			for (int i = 0; i < 5; i++)
+				matrix2.SetRow(i, row);
+
+			var result = MatrixUtils.RowDifference(matrix1, 2, matrix2, 3);
+			for (int i = 0; i < 5; i++)
+				Assert.AreEqual(0, result[0]);
+		}
+
+		[Test()] public void TestScalarProductWithRowDifference()
+		{
+			var matrix1 = new Matrix<double>(5, 5);
+			double[] row = { 1, 2, 3, 4, 5 };
+			for (int i = 0; i < 5; i++)
+				matrix1.SetRow(i, row);
+			var matrix2 = new Matrix<double>(5, 5);
+			for (int i = 0; i < 5; i++)
+				matrix2.SetRow(i, row);
+			var matrix3 = new Matrix<double>(5, 5);
+			MatrixUtils.Inc(matrix3, 1);
+
+			Assert.AreEqual(40, MatrixUtils.RowScalarProductWithRowDifference(matrix1, 2, matrix2, 3, matrix3, 1));
 		}
 
 		[Test()] public void TestMax()

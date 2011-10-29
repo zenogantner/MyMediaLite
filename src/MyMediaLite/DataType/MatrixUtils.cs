@@ -132,9 +132,17 @@ namespace MyMediaLite.DataType
 			return sum / matrix.dim2;
 		}
 
-		/// <summary>
-		/// Multiply all entries of a matrix with a scalar
-		/// </summary>
+		/// <summary>Increment all entries of a matrix with a scalar</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="d">the number to increment with</param>
+		static public void Inc(Matrix<double> matrix, double d)
+		{
+			for (int x = 0; x < matrix.dim1; x++)
+				for (int y = 0; y < matrix.dim2; y++)
+					matrix.data[x * matrix.dim2 + y] += d;
+		}
+
+		/// <summary>Multiply all entries of a matrix with a scalar</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="d">the number to multiply with</param>
 		static public void Multiply(Matrix<double> matrix, double d)
@@ -201,7 +209,6 @@ namespace MyMediaLite.DataType
 
 			return result;
 		}
-		// TODO unit tests
 
 		/// <summary>Compute the difference vector between two rows of two matrices</summary>
 		/// <param name="matrix1">the first matrix</param>
@@ -225,7 +232,6 @@ namespace MyMediaLite.DataType
 
 			return result;
 		}
-		// TODO unit tests
 
 		/// <summary>Compute the scalar product of a matrix row with the difference vector of two other matrix rows</summary>
 		/// <param name="matrix1">the first matrix</param>
