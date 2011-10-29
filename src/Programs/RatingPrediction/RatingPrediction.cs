@@ -27,6 +27,7 @@ using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
+using MyMediaLite.HyperParameter;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
