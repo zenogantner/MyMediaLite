@@ -88,7 +88,7 @@ namespace MyMediaLite.DataType
 		static public void Inc(Matrix<double> matrix1, Matrix<double> matrix2)
 		{
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
-				throw new ArgumentException("Matrix sizes do not match.");
+				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
 
 			int dim1 = matrix1.dim1;
 			int dim2 = matrix1.dim2;
@@ -105,7 +105,7 @@ namespace MyMediaLite.DataType
 		static public double ColumnAverage(Matrix<double> matrix, int col)
 		{
 			if (matrix.dim1 == 0)
-				throw new Exception("Cannot compute average of 0 entries.");
+				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
 
 			double sum = 0;
 
@@ -122,7 +122,7 @@ namespace MyMediaLite.DataType
 		static public double RowAverage(Matrix<double> matrix, int row)
 		{
 			if (matrix.dim2 == 0)
-				throw new Exception("Cannot compute average of 0 entries.");
+				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
 
 			double sum = 0;
 
@@ -168,9 +168,9 @@ namespace MyMediaLite.DataType
 		static public double RowScalarProduct(Matrix<double> matrix, int i, IList<double> vector)
 		{
 			if (i >= matrix.dim1)
-				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix.dim1);
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
 			if (vector.Count != matrix.dim2)
-				throw new ArgumentException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
+				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			double result = 0;
 			for (int j = 0; j < matrix.dim2; j++)
@@ -187,11 +187,10 @@ namespace MyMediaLite.DataType
 		/// <returns>the scalar product of row i of matrix1 and row j of matrix2</returns>
 		static public double RowScalarProduct(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
 		{
-			// TODO replace by assertion
 			if (i >= matrix1.dim1)
-				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
 			if (j >= matrix2.dim1)
-				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
 
 			if (matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
@@ -212,11 +211,10 @@ namespace MyMediaLite.DataType
 		/// <returns>the difference vector of row i of matrix1 and row j of matrix2</returns>
 		static public IList<double> RowDifference(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
 		{
-			// TODO replace by assertion
 			if (i >= matrix1.dim1)
-				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
 			if (j >= matrix2.dim1)
-				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
 
 			if (matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
@@ -239,13 +237,12 @@ namespace MyMediaLite.DataType
 		/// <returns>see summary</returns>
 		static public double RowScalarProductWithRowDifference(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j, Matrix<double> matrix3, int k)
 		{
-			// TODO replace by assertion
 			if (i >= matrix1.dim1)
-				throw new ArgumentException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
 			if (j >= matrix2.dim1)
-				throw new ArgumentException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
 			if (k >= matrix3.dim1)
-				throw new ArgumentException("k too big: " + k + ", dim1 is " + matrix3.dim1);
+				throw new ArgumentOutOfRangeException("k too big: " + k + ", dim1 is " + matrix3.dim1);
 
 			if (matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (2) " + matrix2.dim2);
