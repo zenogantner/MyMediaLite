@@ -44,7 +44,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Gets or sets the number of blocks.</summary>
 		/// <value>The number of blocks (for rows and columns of the rating matrix, each)</value>
 		public int NumBlocks { get; set; }
-
+		
+		/// <summary>default constructor</summary>
 		public MultiCoreMatrixFactorization()
 		{
 			BoldDriver = true;
