@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B350A953-A5D8-4302-8C8C-2399FA43D85F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MyMediaLiteExperimental</RootNamespace>
+    <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
     <ReleaseVersion>1.99</ReleaseVersion>
   </PropertyGroup>
@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -79,6 +80,7 @@
     <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
+    <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
