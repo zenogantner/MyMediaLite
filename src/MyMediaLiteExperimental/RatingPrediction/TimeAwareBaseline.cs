@@ -50,31 +50,64 @@ namespace MyMediaLite.RatingPrediction
 		SparseMatrix<double> user_scaling_by_day;// c_ut
 
 		// hyperparameters
+
+		/// <summary>number of iterations over the dataset to perform</summary>
 		public uint NumIter { get; set; }
+		/// <summary>bin size in days for modeling the time-dependent item bias</summary>
 		public int BinSize { get; set; }
+
+
+		/// <summary>beta parameter for modeling the drift in the user bias</summary>
 		public double Beta { get; set; }
 
 		// parameter-specific learn rates
+
+		/// <summary>learn rate for the user bias</summary>
 		public double UserBiasLearnRate { get; set; }
+
+		/// <summary>learn rate for the item bias</summary>
 		public double ItemBiasLearnRate { get; set; }
+
+		/// <summary>learn rate for the user-wise alphas</summary>
 		public double AlphaLearnRate { get; set; }
+		/// <summary>learn rate for the bin-wise item bias</summary>
 		public double ItemBiasByTimeBinLearnRate { get; set; }
+
+		/// <summary>learn rate for the day-wise user bias</summary>
 		public double UserBiasByDayLearnRate { get; set; }
+
+		/// <summary>learn rate for the user-wise scaling factor</summary>
 		public double UserScalingLearnRate { get; set; }
+
+		/// <summary>learn rate for the day-wise user scaling factor</summary>
 		public double UserScalingByDayLearnRate { get; set; }
 
 		// parameter-specific regularization constants
+
+		/// <summary>regularization for the user bias</summary>
 		public double RegU { get; set; }
+		/// <summary>regularization for the item bias</summary>
 		public double RegI { get; set; }
+
+		/// <summary>regularization for the user-wise alphas</summary>
 		public double RegAlpha { get; set; }
+
+		/// <summary>regularization for the bin-wise item bias</summary>
 		public double RegItemBiasByTimeBin { get; set; }
+
+		/// <summary>regularization for the day-wise user bias</summary>
 		public double RegUserBiasByDay { get; set; }
+
+		/// <summary>regularization for the user scaling factor</summary>
 		public double RegUserScaling { get; set; }
+
+		/// <summary>regularization for the day-wise user scaling factor</summary>
 		public double RegUserScalingByDay { get; set; }
 
 		// helper data structures
 		IList<double> user_mean_day;
 
+		/// <summary>default constructor</summary>
 		public TimeAwareBaseline()
 		{
 			NumIter = 30;
@@ -100,6 +133,7 @@ namespace MyMediaLite.RatingPrediction
 			RegUserScalingByDay = 0.005;
 		}
 
+		///
 		public override void Train()
 		{
 			InitModel();
@@ -116,6 +150,7 @@ namespace MyMediaLite.RatingPrediction
 				Iterate();
 		}
 
+		/// <summary>Initialize the model parameters</summary>
 		protected virtual void InitModel()
 		{
 			Console.WriteLine(timed_ratings.EarliestTime);
@@ -134,6 +169,7 @@ namespace MyMediaLite.RatingPrediction
 			user_scaling_by_day = new SparseMatrix<double>(Ratings.MaxUserID + 1, number_of_days);
 		}
 
+		///
 		public virtual void Iterate()
 		{
 			foreach (int index in timed_ratings.RandomIndex)
@@ -164,6 +200,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		///
 		public override double Predict(int user_id, int item_id)
 		{
 			double result = global_average;
@@ -175,6 +212,7 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 
+		///
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
 			int day = (timed_ratings.LatestTime - time).Days;
@@ -195,6 +233,7 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 
+		///
 		public double ComputeFit()
 		{
 			return -1;
