@@ -81,6 +81,7 @@
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
+    <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

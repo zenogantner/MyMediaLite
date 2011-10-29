@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <exception cref='ArgumentException'>
 	/// Is thrown when an argument passed to a method is invalid.
 	/// </exception>
-	public abstract class TimeAwareRatingPredictor : RatingPredictor
+	public abstract class TimeAwareRatingPredictor : RatingPredictor, ITimeAwareRatingPredictor
 	{
 		/// <summary>the rating data, including time information</summary>
 		public virtual ITimedRatings TimedRatings

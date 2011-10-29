@@ -1,12 +1,15 @@
 2.00	2011-10-
         API
-         - add abstract class TimeAwareRatingPredictor
+         - add abstract class TimeAwareRatingPredictor and interface
+           ITimeAwareRatingPredictor
+         - add interface IHyperParameterSearch
 	recommenders
          - add TimeAwareBaseline rating predictor
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
          - UserItemBaseline: make parameters protected so that library users
            can inherit from the class
+         - MultiCoreMatrixFactorization: complete API doc
         command line programs
          - move source code into Programs/ directory
          - improved exception handler

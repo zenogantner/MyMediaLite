@@ -19,6 +19,10 @@
 using System;
 using System.Collections.Generic;
 
+/*! \namespace MyMediaLite.HyperParameter
+ *  \brief This namespace contains classes for automated hyper-parameter search.
+ */
+
 namespace MyMediaLite.HyperParameter
 {
 	/// <summary>delegate type for the evaluation task: a closure that returns a dictionary containing the results</summary>
