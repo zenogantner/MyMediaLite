@@ -71,9 +71,9 @@ namespace MyMediaLite.IO
 				DateTime time = DateTime.Parse(date_string, CultureInfo.InvariantCulture);
 				ratings.Add(user_id, item_id, rating, time);
 
-				if (ratings.Count % 20000 == 19999)
+				if (ratings.Count % 200000 == 199999)
 					Console.Error.Write(".");
-				if (ratings.Count % 1200000 == 1199999)
+				if (ratings.Count % 12000000 == 11999999)
 					Console.Error.WriteLine();
 			}
 			return ratings;
