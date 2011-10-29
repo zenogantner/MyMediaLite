@@ -26,7 +26,11 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Time-aware bias model</summary>
 	/// <remarks>
-	/// Model described in equation (12) of BellKor Grand Prize documentation for the Netflix Prize.
+	/// Model described in equation (10) of BellKor Grand Prize documentation for the Netflix Prize (see below).
+	/// The optimization problem is described in equation (12).
+	/// 
+	/// The default hyper-parameter values are set to the ones shown in the report.
+	/// For datasets other than Netflix, you may want to find better parameters.
 	///
 	/// Literature:
 	/// <list type="bullet">
@@ -40,14 +44,15 @@ namespace MyMediaLite.RatingPrediction
 	public class TimeAwareBaseline : TimeAwareRatingPredictor, IIterativeModel
 	{
 		// parameters
+		
 		double global_average;
 		IList<double> user_bias;
 		IList<double> item_bias;
 		IList<double> alpha;
 		Matrix<double> item_bias_by_time_bin;  // items in rows, bins in columns
 		SparseMatrix<double> user_bias_by_day; // users in rows, days in columns
-		IList<double> user_scaling; // c_u
-		SparseMatrix<double> user_scaling_by_day;// c_ut
+		IList<double> user_scaling;               // c_u
+		SparseMatrix<double> user_scaling_by_day; // c_ut
 
 		// hyperparameters
 
@@ -104,7 +109,7 @@ namespace MyMediaLite.RatingPrediction
 		public double RegUserScalingByDay { get; set; }
 
 		// helper data structures
-		IList<double> user_mean_day;
+		protected IList<double> user_mean_day;
 
 		/// <summary>default constructor</summary>
 		public TimeAwareBaseline()
@@ -179,26 +184,37 @@ namespace MyMediaLite.RatingPrediction
 				int bin = day / BinSize;
 
 				// compute error
-				double err = timed_ratings[index] - Predict(u, i, timed_ratings.Times[index]);
+				double err = timed_ratings[index] - Predict(u, i, day, bin);
 
-				// update user biases
-				double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
-				alpha[u]                 += AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
-				user_bias[u]             += UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
-				user_bias_by_day[u, day] += UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
-
-				// update item biases and user scalings
-				double b_i  = item_bias[i];
-				double b_ib = item_bias_by_time_bin[i, bin];
-				double c_u  = user_scaling[u];
-				double c_ud = user_scaling_by_day[u, day];
-				item_bias[i]                  += ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
-				item_bias_by_time_bin[i, bin] += ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
-				user_scaling[u]               += UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
-				user_scaling_by_day[u, day]   += UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
+				UpdateParameters(u, i, day, bin, err);
 			}
 		}
+		
+		/// <summary>Single SGD step: update the parameter values for one user and one item</summary>
+		/// <param name='u'>the user ID</param>
+		/// <param name='i'>the item ID</param>
+		/// <param name='day'>the day of the rating</param>
+		/// <param name='bin'>the day bin of the rating</param>
+		/// <param name='err'>the current error made for this rating</param>
+		protected void UpdateParameters(int u, int i, int day, int bin, double err)
+		{
+			// update user biases
+			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
+			alpha[u]                 += AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
+			user_bias[u]             += UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
+			user_bias_by_day[u, day] += UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
 
+			// update item biases and user scalings
+			double b_i  = item_bias[i];
+			double b_ib = item_bias_by_time_bin[i, bin];
+			double c_u  = user_scaling[u];
+			double c_ud = user_scaling_by_day[u, day];
+			item_bias[i]                  += ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
+			item_bias_by_time_bin[i, bin] += ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
+			user_scaling[u]               += UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
+			user_scaling_by_day[u, day]   += UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
+		}
+		
 		///
 		public override double Predict(int user_id, int item_id)
 		{
@@ -210,7 +226,19 @@ namespace MyMediaLite.RatingPrediction
 
 			return result;
 		}
+		
+		// for internal use only - assumes user and item IDs are valid
+		double Predict(int user_id, int item_id, int day, int bin)
+		{
+			double result = global_average;
 
+			double dev_u = Math.Sign(day - user_mean_day[user_id]) * Math.Pow(Math.Abs(day - user_mean_day[user_id]), Beta);
+			result += user_bias[user_id] + alpha[user_id] * dev_u + user_bias_by_day[user_id, day];
+			result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
+
+			return result;
+		}
+		
 		///
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
