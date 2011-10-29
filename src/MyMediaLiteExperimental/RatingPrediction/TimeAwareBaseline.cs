@@ -56,7 +56,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>bin size in days for modeling the time-dependent item bias</summary>
 		public int BinSize { get; set; }
 
-
 		/// <summary>beta parameter for modeling the drift in the user bias</summary>
 		public double Beta { get; set; }
 
