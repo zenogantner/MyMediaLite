@@ -109,7 +109,7 @@ namespace MyMediaLite.RatingPrediction
 		public double RegUserScalingByDay { get; set; }
 
 		// helper data structures
-		protected IList<double> user_mean_day;
+		IList<double> user_mean_day;
 
 		/// <summary>default constructor</summary>
 		public TimeAwareBaseline()
