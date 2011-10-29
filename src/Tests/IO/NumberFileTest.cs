@@ -36,7 +36,7 @@ namespace Tests.IO
 		}
 		
 		[Test()]
-		[ExpectedException(typeof(IOException))]
+		[ExpectedException(typeof(FormatException))]
 		public void TestReadIntegerFail()
 		{
 			var reader = new StringReader("0,1\n1\n2\n3\n4\n5");
@@ -53,7 +53,7 @@ namespace Tests.IO
 		}
 
 		[Test()]
-		[ExpectedException(typeof(IOException))]
+		[ExpectedException(typeof(FormatException))]
 		public void TestReadLongFail()
 		{
 			var reader = new StringReader("0,1\n1\n2\n3\n4\n5");
