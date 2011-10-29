@@ -183,19 +183,19 @@ namespace MyMediaLite.RatingPrediction
 
 				// update user biases
 				double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
-				alpha[u]                 += 0.5 * AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
-				user_bias[u]             += 0.5 * UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
-				user_bias_by_day[u, day] += 0.5 * UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
+				alpha[u]                 += AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
+				user_bias[u]             += UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
+				user_bias_by_day[u, day] += UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
 
 				// update item biases and user scalings
 				double b_i  = item_bias[i];
 				double b_ib = item_bias_by_time_bin[i, bin];
 				double c_u  = user_scaling[u];
 				double c_ud = user_scaling_by_day[u, day];
-				item_bias[i]                  += 0.5 * ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
-				item_bias_by_time_bin[i, bin] += 0.5 * ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
-				user_scaling[u]               += 0.5 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * c_u);
-				user_scaling_by_day[u, day]   += 0.5 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
+				item_bias[i]                  += ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
+				item_bias_by_time_bin[i, bin] += ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
+				user_scaling[u]               += UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
+				user_scaling_by_day[u, day]   += UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
 			}
 		}
 
