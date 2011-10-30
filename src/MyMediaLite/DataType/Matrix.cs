@@ -62,9 +62,9 @@ namespace MyMediaLite.DataType
 		public Matrix(int dim1, int dim2)
 		{
 			if (dim1 < 0)
-				throw new ArgumentException("dim1 must be at least 0");
+				throw new ArgumentOutOfRangeException("dim1 must be at least 0");
 			if (dim2 < 0)
-				throw new ArgumentException("dim2 must be at least 0");
+				throw new ArgumentOutOfRangeException("dim2 must be at least 0");
 
 			this.dim1 = dim1;
 			this.dim2 = dim2;
@@ -145,18 +145,18 @@ namespace MyMediaLite.DataType
 			get	{
 #if DEBUG
 				if (i >= this.dim1)
-					throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
+					throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + this.dim1);
 				if (j >= this.dim2)
-					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
+					throw new ArgumentOutOfRangeException("j too big: " + j + ", dim2 is " + this.dim2);
 #endif
 				return data[i * dim2 + j];
 			}
 			set	{
 #if DEBUG
 				if (i >= this.dim1)
-					throw new ArgumentException("i too big: " + i + ", dim1 is " + this.dim1);
+					throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + this.dim1);
 				if (j >= this.dim2)
-					throw new ArgumentException("j too big: " + j + ", dim2 is " + this.dim2);
+					throw new ArgumentOutOfRangeException("j too big: " + j + ", dim2 is " + this.dim2);
 #endif
 				data[i * dim2 + j] = value;
 			}
@@ -189,7 +189,7 @@ namespace MyMediaLite.DataType
 		public void SetRow(int i, IList<T> row)
 		{
 			if (row.Count != this.dim2)
-				throw new ArgumentException(string.Format("Array length ({0}) must equal number of columns ({1}",
+				throw new ArgumentOutOfRangeException(string.Format("Array length ({0}) must equal number of columns ({1}",
 														  row.Count, this.dim2));
 
 			row.CopyTo(data, i * dim2);
@@ -201,7 +201,7 @@ namespace MyMediaLite.DataType
 		public void SetColumn(int j, IList<T> column)
 		{
 			if (column.Count != this.dim1)
-				throw new ArgumentException(string.Format("Array length ({0}) must equal number of rows ({1}",
+				throw new ArgumentOutOfRangeException(string.Format("Array length ({0}) must equal number of rows ({1}",
 														  column.Count, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
