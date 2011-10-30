@@ -71,7 +71,7 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>Increments the specified matrix element by a double value</summary>
-		/// <param name="matrix">The matrix.</param>
+		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
 		/// <param name="j">the column</param>
 		/// <param name="v">the value</param>
@@ -80,9 +80,7 @@ namespace MyMediaLite.DataType
 			matrix.data[i * matrix.dim2 + j] += v;
 		}
 
-		/// <summary>
-		/// Increment the elements in one matrix by the ones in another
-		/// </summary>
+		/// <summary>Increment the elements in one matrix by the ones in another</summary>
 		/// <param name="matrix1">the matrix to be incremented</param>
 		/// <param name="matrix2">the other matrix</param>
 		static public void Inc(Matrix<double> matrix1, Matrix<double> matrix2)
@@ -96,6 +94,25 @@ namespace MyMediaLite.DataType
 			for (int x = 0; x < dim1; x++)
 				for (int y = 0; y < dim2; y++)
 					matrix1.data[x * dim2 + y] += matrix2.data[x * dim2 + y];
+		}
+
+		/// <summary>Increments the specified matrix element by 1</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="i">the row</param>
+		/// <param name="j">the column</param>
+		static public void Inc(Matrix<int> matrix, int i, int j)
+		{
+			matrix.data[i * matrix.dim2 + j]++;
+		}
+
+		/// <summary>Increment all entries of a matrix with a scalar</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="d">the number to increment with</param>
+		static public void Inc(Matrix<double> matrix, double d)
+		{
+			for (int x = 0; x < matrix.dim1; x++)
+				for (int y = 0; y < matrix.dim2; y++)
+					matrix.data[x * matrix.dim2 + y] += d;
 		}
 
 		/// <summary>Compute the average value of the entries in a column of a matrix</summary>
@@ -130,16 +147,6 @@ namespace MyMediaLite.DataType
 				sum += matrix.data[row * matrix.dim2 + y];
 
 			return sum / matrix.dim2;
-		}
-
-		/// <summary>Increment all entries of a matrix with a scalar</summary>
-		/// <param name="matrix">the matrix</param>
-		/// <param name="d">the number to increment with</param>
-		static public void Inc(Matrix<double> matrix, double d)
-		{
-			for (int x = 0; x < matrix.dim1; x++)
-				for (int y = 0; y < matrix.dim2; y++)
-					matrix.data[x * matrix.dim2 + y] += d;
 		}
 
 		/// <summary>Multiply all entries of a matrix with a scalar</summary>
@@ -261,7 +268,6 @@ namespace MyMediaLite.DataType
 
 			return result;
 		}
-		// TODO unit tests
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>

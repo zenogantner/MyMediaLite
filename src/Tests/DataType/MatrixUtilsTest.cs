@@ -1,4 +1,5 @@
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
+// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,7 +17,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using MyMediaLite.DataType;
 using NUnit.Framework;
@@ -27,7 +27,7 @@ namespace Tests.DataType
 	[TestFixture()]
 	public class MatrixUtilsTest
 	{
-		[Test()] public void TestInc1()
+		[Test()] public void TestInc()
 		{
 			var matrix = new Matrix<double>(5, 5);
 			double[] row = { 1, 2, 3, 4, 5 };
@@ -35,33 +35,31 @@ namespace Tests.DataType
 				matrix.SetRow(i, row);
 			MatrixUtils.Inc(matrix, 3, 4, 2.5);
 			Assert.AreEqual(7.5, matrix[3, 4]);
-		}
 
-		[Test()] public void TestInc2()
-		{
 			var matrix1 = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix1.SetRow(i, row);
-
 			var matrix2 = new Matrix<double>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
-			double[] testrow = {2, 4, 6, 8, 10};
+			double[] testrow = { 2, 4, 6, 8, 10 };
 			MatrixUtils.Inc(matrix1, matrix2);
 			Assert.AreEqual(testrow, matrix1.GetRow(2));
-		}
 
-		[Test()] public void TestInc3()
-		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix3 = new Matrix<double>(5, 5);
 			for (int i = 0; i < 5; i++)
-				matrix.SetRow(i, row);
-			MatrixUtils.Inc(matrix, 1);
-			double[] testrow = { 2, 3, 4, 5, 6 };
+				matrix3.SetRow(i, row);
+			MatrixUtils.Inc(matrix3, 1.0);
+			for (int j = 0; j < 5; j++)
+				Assert.AreEqual(row[j] + 1, matrix3[1, j]);
+
+			var matrix4 = new Matrix<int>(5, 5);
+			int[] int_row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
-				Assert.AreEqual(testrow[i], matrix[1, i]);
+				matrix4.SetRow(i, int_row);
+			Assert.AreEqual(matrix4[1, 2], 3);
+			MatrixUtils.Inc (matrix4, 1, 2);
+			Assert.AreEqual(matrix4[1, 2], 4);
 		}
 
 		[Test()] public void TestColumnAverage()
