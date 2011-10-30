@@ -62,6 +62,7 @@
     <Compile Include="DataType\SparseBooleanMatrixBinarySearchTest.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecallTest.cs" />
     <Compile Include="IO\NumberFileTest.cs" />
+    <Compile Include="DataType\SparseMatrixUtilsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

@@ -1,4 +1,4 @@
-2.00	2011-10-
+2.00	2011-11-
         API
          - add abstract class TimeAwareRatingPredictor and interface
            ITimeAwareRatingPredictor
@@ -24,6 +24,7 @@
            accessibility of internal data presentation to "protected internal"
          - SparseBooleanMatrix: change datatype of internal representation from
            List<ISet<int> to IList<ISet<int>>
+         - add SparseMatrixUtils (and unit tests)
 	I/O
          - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way

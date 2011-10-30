@@ -169,6 +169,7 @@
     <Compile Include="IO\NumberFile.cs" />
     <Compile Include="IO\TimedRatingData.cs" />
     <Compile Include="Util\Wrap.cs" />
+    <Compile Include="DataType\SparseMatrixUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

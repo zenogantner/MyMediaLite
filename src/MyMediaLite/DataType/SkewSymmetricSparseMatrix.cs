@@ -21,7 +21,7 @@ using System.Collections.Generic;
 namespace MyMediaLite.DataType
 {
 	// TODO default should be double, create a specific FloatSkewSymmetricSparseMatrix
-	
+
 	/// <summary>a skew symmetric (anti-symmetric) sparse matrix; consumes less memory</summary>
 	/// <remarks>
 	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and
@@ -37,7 +37,7 @@ namespace MyMediaLite.DataType
 		{
 			get	{
 				float result = 0f;
-				
+
 				if (x < y)
 				{
 					if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
@@ -57,15 +57,15 @@ namespace MyMediaLite.DataType
 					if (x >= row_list.Count)
 						for (int i = row_list.Count; i <= x; i++)
 							row_list.Add( new Dictionary<int, float>() );
-					
-					row_list[x][y] = value;					
+
+					row_list[x][y] = value;
 				}
 				else if (x > y)
 				{
 					if (y >= row_list.Count)
 						for (int i = row_list.Count; i <= y; i++)
 							row_list.Add( new Dictionary<int, float>() );
-					
+
 					row_list[y][x] = -value;
 				}
 				else

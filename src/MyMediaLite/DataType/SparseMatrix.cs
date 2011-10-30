@@ -88,9 +88,10 @@ namespace MyMediaLite.DataType
 		public Dictionary<int, T> this [int x]
 		{
 			get {
-	            if (x >= row_list.Count)
-	                return new Dictionary<int, T>();
-	            else return row_list[x];
+				if (x >= row_list.Count)
+					return new Dictionary<int, T>();
+				else
+					return row_list[x];
 			}
 		}
 
