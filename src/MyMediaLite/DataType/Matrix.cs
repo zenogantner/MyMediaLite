@@ -30,7 +30,7 @@ namespace MyMediaLite.DataType
 	public class Matrix<T> : IMatrix<T>
 	{
 		/// <summary>Data array: data is stored in columns.</summary>
-		public T[] data;
+		protected internal T[] data;
 		/// <summary>Dimension 1, the number of rows</summary>
 		public int dim1;
 		/// <summary>Dimension 2, the number of columns</summary>

@@ -19,6 +19,11 @@
            Visual Studio 2010 (reported by Saurabh S.)
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
+         - Matrix, SparseMatrix, SparseBooleanMatrix, SparseVector,
+           SparseBooleanMatrixStatic, SparseBooleanMatrixBinarySearch: change
+           accessibility of internal data presentation to "protected internal"
+         - SparseBooleanMatrix: change datatype of internal representation from
+           List<ISet<int> to IList<ISet<int>>
 	I/O
          - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way

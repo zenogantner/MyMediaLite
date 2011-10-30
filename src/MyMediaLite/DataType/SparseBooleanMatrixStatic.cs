@@ -34,7 +34,8 @@ namespace MyMediaLite.DataType
 	/// </remarks>
 	public class SparseBooleanMatrixStatic : IBooleanMatrix
 	{
-		private List<int[]> row_list = new List<int[]>();
+		/// <summary>internal representation of this data: list of rows</summary>
+		protected internal List<int[]> row_list = new List<int[]>();
 
 		///
 		public bool this [int x, int y]

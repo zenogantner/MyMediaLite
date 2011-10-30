@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace MyMediaLite.DataType
 {
 	/// <summary>
@@ -28,7 +27,8 @@ namespace MyMediaLite.DataType
 	/// <typeparam name="T"></typeparam>	
 	public class SparseVector<T> where T:new()
 	{
-		private Dictionary<int, T> data = new Dictionary<int, T>();
+		/// <summary>internal data representation as dictionary</summary>
+		protected internal Dictionary<int, T> data = new Dictionary<int, T>();
 		
 		/// <summary>
 		/// Access an element of the vector

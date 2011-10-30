@@ -32,7 +32,8 @@ namespace MyMediaLite.DataType
 	/// </remarks>
 	public class SparseBooleanMatrix : IBooleanMatrix
 	{
-		private List<ISet<int>> row_list = new List<ISet<int>>();
+		/// <summary>internal data representation: list of sets representing the rows</summary>
+		protected internal IList<ISet<int>> row_list = new List<ISet<int>>();
 
 		/// <summary>Indexer to access the elements of the matrix</summary>
 		/// <param name="x">the row ID</param>

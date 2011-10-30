@@ -29,7 +29,8 @@ namespace MyMediaLite.DataType
 	/// </remarks>
 	public class SparseBooleanMatrixBinarySearch : IBooleanMatrix
 	{
-		private List<List<int>> row_list = new List<List<int>>();
+		/// <summary>internal representation of this data: list of rows</summary>
+		protected internal IList<List<int>> row_list = new List<List<int>>();
 
 		///
 		public bool this [int x, int y]
@@ -121,13 +122,13 @@ namespace MyMediaLite.DataType
 
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
-		public IList<KeyValuePair<int, List<int>>> NonEmptyRows
+		public IList<KeyValuePair<int, IList<int>>> NonEmptyRows
 		{
 			get	{
-				var return_list = new List<KeyValuePair<int, List<int>>>();
+				var return_list = new List<KeyValuePair<int, IList<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, List<int>>(i, row_list[i]));
+						return_list.Add(new KeyValuePair<int, IList<int>>(i, row_list[i]));
 				return return_list;
 			}
 		}
