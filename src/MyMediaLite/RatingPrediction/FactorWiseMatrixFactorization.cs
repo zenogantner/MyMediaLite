@@ -233,8 +233,8 @@ namespace MyMediaLite.RatingPrediction
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new Exception(
-									string.Format("Number of user and item factors must match: {0} != {1}",
-												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+						string.Format("Number of user and item factors must match: {0} != {1}",
+							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 
 				this.MaxUserID = user_factors.NumberOfRows - 1;
 				this.MaxItemID = item_factors.NumberOfRows - 1;

@@ -264,9 +264,9 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
-				VectorUtils.WriteVector(writer, user_bias);
+				writer.WriteVector(user_bias);
 				writer.WriteMatrix(user_factors);
-				VectorUtils.WriteVector(writer, item_bias);
+				writer.WriteVector(item_bias);
 				writer.WriteMatrix(item_factors);
 			}
 		}
@@ -278,9 +278,9 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				IList<double> user_bias = VectorUtils.ReadVector(reader);
+				IList<double> user_bias = reader.ReadVector();
 				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				IList<double> item_bias = VectorUtils.ReadVector(reader);
+				IList<double> item_bias = reader.ReadVector();
 				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
@@ -393,12 +393,12 @@ namespace MyMediaLite.RatingPrediction
 			double complexity = 0;
 			for (int u = 0; u <= MaxUserID; u++)
 			{
-				complexity += ratings.CountByUser[u] * RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
+				complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
 				complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
 			}
 			for (int i = 0; i <= MaxItemID; i++)
 			{
-				complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
+				complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
 				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
@@ -408,9 +408,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10}",
-								 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE);
 		}
 	}
 }

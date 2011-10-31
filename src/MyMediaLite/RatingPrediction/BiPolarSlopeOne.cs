@@ -175,7 +175,7 @@ namespace MyMediaLite.RatingPrediction
 				var freq_matrix_like = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix_like);
 				var diff_matrix_dislike = (SkewSymmetricSparseMatrix) reader.ReadMatrix(this.diff_matrix_dislike);
 				var freq_matrix_dislike = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix_dislike);
-				var user_average = VectorUtils.ReadVector(reader);
+				var user_average = reader.ReadVector();
 
 				// assign new model
 				this.global_average = global_average;
@@ -197,7 +197,7 @@ namespace MyMediaLite.RatingPrediction
 				writer.WriteSparseMatrix(freq_matrix_like);
 				writer.WriteSparseMatrix(diff_matrix_dislike);
 				writer.WriteSparseMatrix(freq_matrix_dislike);
-				VectorUtils.WriteVector(writer, user_average);
+				writer.WriteVector(user_average);
 			}
 		}
 	}

@@ -545,9 +545,9 @@ namespace MyMediaLite.ItemRecommendation
 			double complexity = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)
 			{
-				complexity += RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(loss_sample_u[c])), 2);
-				complexity += RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(loss_sample_i[c])), 2);
-				complexity += RegJ * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(loss_sample_j[c])), 2);
+				complexity += RegU * Math.Pow(user_factors.GetRow(loss_sample_u[c]).EuclideanNorm(), 2);
+				complexity += RegI * Math.Pow(item_factors.GetRow(loss_sample_i[c]).EuclideanNorm(), 2);
+				complexity += RegJ * Math.Pow(item_factors.GetRow(loss_sample_j[c]).EuclideanNorm(), 2);
 				complexity += BiasReg * Math.Pow(item_bias[loss_sample_i[c]], 2);
 				complexity += BiasReg * Math.Pow(item_bias[loss_sample_j[c]], 2);
 			}
@@ -651,7 +651,7 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteMatrix(user_factors);
-				VectorUtils.WriteVector(writer, item_bias);
+				writer.WriteVector(item_bias);
 				writer.WriteMatrix(item_factors);
 			}
 		}
@@ -662,7 +662,7 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				IList<double> item_bias = VectorUtils.ReadVector(reader);
+				IList<double> item_bias = reader.ReadVector();
 				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)

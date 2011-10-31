@@ -26,19 +26,12 @@ namespace Tests.DataType
 {
 	/// <summary>Testing the VectorUtils class</summary>
 	[TestFixture()]
-	public class VectorUtilsTest
+	public class VectorExtensionsTest
 	{
 		[Test()] public void TestEuclideanNorm()
 		{
-			var testVector = new List<double>();
-			testVector.Add(2);
-			testVector.Add(5);
-			testVector.Add(3);
-			testVector.Add(7);
-			testVector.Add(5);
-			testVector.Add(3);
-			double result = 11;
-			Assert.AreEqual(result, VectorUtils.EuclideanNorm(testVector));
+			var test_vector = new List<double>() { 2, 5, 3, 7, 5, 3 };
+			Assert.AreEqual(11, test_vector.EuclideanNorm());
 		}
 	}
 }

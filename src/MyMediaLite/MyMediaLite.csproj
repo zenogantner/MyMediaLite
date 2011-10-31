@@ -90,7 +90,6 @@
     <Compile Include="DataType\SparseMatrix.cs" />
     <Compile Include="DataType\SparseVector.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
-    <Compile Include="DataType\VectorUtils.cs" />
     <Compile Include="Util\Handlers.cs" />
     <Compile Include="Util\Memory.cs" />
     <Compile Include="Util\Pair.cs" />
@@ -174,6 +173,8 @@
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
     <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
     <Compile Include="IO\IMatrixExtensions.cs" />
+    <Compile Include="DataType\VectorExtensions.cs" />
+    <Compile Include="IO\VectorExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

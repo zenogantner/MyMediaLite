@@ -204,8 +204,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
-				VectorUtils.WriteVector(writer, user_biases);
-				VectorUtils.WriteVector(writer, item_biases);
+				writer.WriteVector(user_biases);
+				writer.WriteVector(item_biases);
 			}
 		}
 
@@ -215,8 +215,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				var user_biases = VectorUtils.ReadVector(reader);
-				var item_biases = VectorUtils.ReadVector(reader);
+				var user_biases = reader.ReadVector();
+				var item_biases = reader.ReadVector();
 
 				this.global_average = global_average;
 				this.user_biases = user_biases.ToArray();

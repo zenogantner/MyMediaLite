@@ -17,44 +17,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using MathNet.Numerics.Distributions;
 
 namespace MyMediaLite.DataType
 {
-	/// <summary>Tools for vector-like data</summary>
-	public static class VectorUtils
+	/// <summary>Extensions for vector-like data</summary>
+	public static class VectorExtensions
 	{
-		/// <summary>Write a collection of doubles to a streamwriter</summary>
-		/// <param name="writer">a <see cref="StreamWriter"/></param>
-		/// <param name="vector">a collection of double values</param>
-		static public void WriteVector(StreamWriter writer, ICollection<double> vector)
-		{
-			writer.WriteLine(vector.Count);
-			foreach (var v in vector)
-			   	writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
-		}
-
-		/// <summary>Read a collection of doubles from a TextReader object</summary>
-		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
-		/// <returns>a list of double values</returns>
-		static public IList<double> ReadVector(TextReader reader)
-		{
-			int dim = int.Parse(reader.ReadLine());
-
-			var vector = new double[dim];
-
-			for (int i = 0; i < vector.Length; i++)
-				vector[i] = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-
-			return vector;
-		}
-
 		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the Euclidean norm of the vector</returns>
-		static public double EuclideanNorm(ICollection<double> vector)
+		static public double EuclideanNorm(this ICollection<double> vector)
 		{
 			double sum = 0;
 			foreach (double v in vector)
@@ -65,7 +38,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Compute the L1 norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the L1 norm of the vector</returns>
-		static public double L1Norm(ICollection<double> vector)
+		static public double L1Norm(this ICollection<double> vector)
 		{
 			double sum = 0;
 			foreach (double v in vector)
@@ -77,7 +50,7 @@ namespace MyMediaLite.DataType
 		/// <param name="vector">the vector to initialize</param>
 		/// <param name="mean">the mean of the normal distribution</param>
 		/// <param name="stddev">the standard deviation of the normal distribution</param>
-		static public void InitNormal(IList<double> vector, double mean, double stddev)
+		static public void InitNormal(this IList<double> vector, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = Util.Random.GetInstance();

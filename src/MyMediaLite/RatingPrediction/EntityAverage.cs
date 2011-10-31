@@ -79,7 +79,7 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
-				VectorUtils.WriteVector(writer, entity_averages);
+				writer.WriteVector(entity_averages);
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				this.entity_averages = VectorUtils.ReadVector(reader);
+				this.entity_averages = reader.ReadVector();
 			}
 		}
 	}

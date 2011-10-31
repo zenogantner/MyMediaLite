@@ -316,10 +316,10 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			for (int u = 0; u <= MaxUserID; u++)
-				loss += ratings.CountByUser[u] * Regularization * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
+				loss += ratings.CountByUser[u] * Regularization * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
 
 			for (int i = 0; i <= MaxItemID; i++)
-				loss += ratings.CountByItem[i] * Regularization * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
+				loss += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
 
 			return loss;
 		}
@@ -327,9 +327,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stddev={6}",
-								 this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdDev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4} init_mean={5} init_stddev={6}",
+				this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

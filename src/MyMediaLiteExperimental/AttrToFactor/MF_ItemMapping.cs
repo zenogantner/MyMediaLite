@@ -195,7 +195,7 @@ namespace MyMediaLite.AttrToFactor
 				for (int j = 0; j < NumFactors; j++)
 				{
 					error    = Math.Pow(est_factors[j] - item_factors[i, j], 2);
-					reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(j));
+					reg_term = reg_mapping * VectorExtensions.EuclideanNorm(attribute_to_factor.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
 					rmse_and_penalty_per_factor[j] += error + reg_term;
@@ -203,7 +203,7 @@ namespace MyMediaLite.AttrToFactor
 
 				// error term for item bias term
 				error    = Math.Pow(est_factors[NumFactors] - item_bias[i], 2);
-				reg_term = reg_mapping * Math.Pow(VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn((int) NumFactors)), 2);
+				reg_term = reg_mapping * Math.Pow(VectorExtensions.EuclideanNorm(attribute_to_factor.GetColumn((int) NumFactors)), 2);
 				rmse    += error;
 				penalty += reg_term;
 				rmse_and_penalty_per_factor[NumFactors] += error + reg_term;

@@ -187,7 +187,7 @@ namespace MyMediaLite.AttrToFactor
 				for (int j = 0; j < num_factors; j++)
 				{
 					double error    = Math.Pow(est_factors[j] - user_factors[i, j], 2);
-					double reg_term = reg_mapping * VectorUtils.EuclideanNorm(attribute_to_factor.GetColumn(j));
+					double reg_term = reg_mapping * VectorExtensions.EuclideanNorm(attribute_to_factor.GetColumn(j));
 					rmse    += error;
 					penalty += reg_term;
 					rmse_and_penalty_per_factor[j] += error + reg_term;

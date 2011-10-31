@@ -236,13 +236,13 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u <= MaxUserID; u++)
 				if (ratings.CountByUser.Count > u)
 				{
-					complexity += ratings.CountByUser[u] * RegU * Math.Pow(VectorUtils.EuclideanNorm(user_factors.GetRow(u)), 2);
+					complexity += ratings.CountByUser[u] * RegU * Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(u)), 2);
 					complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 			for (int i = 0; i <= MaxItemID; i++)
 				if (ratings.CountByItem.Count > i)
 				{
-					complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorUtils.EuclideanNorm(item_factors.GetRow(i)), 2);
+					complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(i)), 2);
 					complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 				}
 			
