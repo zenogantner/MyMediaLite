@@ -5,7 +5,8 @@
          - add interface IHyperParameterSearch
          - most methods in *MatrixUtils are now extension methods, allowing
            them to be called in a much more elegant way: mat.method() instead
-           of MatrixUtils.method(mat)
+           of MatrixUtils.method(mat); renamed *MatrixUtils to
+           *MatrixExtensions
 	recommenders
          - add TimeAwareBaseline and TimeAwareBaselineWithFrequencies rating
            predictors (from Koren's Netflix Grand Prize report)
