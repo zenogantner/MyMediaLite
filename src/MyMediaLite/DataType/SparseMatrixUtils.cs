@@ -25,7 +25,7 @@ namespace MyMediaLite.DataType
 	{
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public int Max(SparseMatrix<int> m)
+		static public int Max(this SparseMatrix<int> m)
 		{
 			if (m.row_list.Count == 0)
 				return 0;
@@ -35,7 +35,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public double Max(SparseMatrix<double> m)
+		static public double Max(this SparseMatrix<double> m)
 		{
 			if (m.row_list.Count == 0)
 				return 0.0;
@@ -45,7 +45,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public float Max(SparseMatrix<float> m)
+		static public float Max(this SparseMatrix<float> m)
 		{
 			if (m.row_list.Count == 0)
 				return 0.0f;

@@ -33,7 +33,7 @@ namespace Tests.DataType
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			MatrixUtils.Inc(matrix, 3, 4, 2.5);
+			matrix.Inc(3, 4, 2.5);
 			Assert.AreEqual(7.5, matrix[3, 4]);
 
 			var matrix1 = new Matrix<double>(5, 5);
@@ -43,13 +43,13 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
 			double[] testrow = { 2, 4, 6, 8, 10 };
-			MatrixUtils.Inc(matrix1, matrix2);
+			matrix1.Inc(matrix2);
 			Assert.AreEqual(testrow, matrix1.GetRow(2));
 
 			var matrix3 = new Matrix<double>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix3.SetRow(i, row);
-			MatrixUtils.Inc(matrix3, 1.0);
+			matrix3.Inc(1.0);
 			for (int j = 0; j < 5; j++)
 				Assert.AreEqual(row[j] + 1, matrix3[1, j]);
 
@@ -58,7 +58,7 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix4.SetRow(i, int_row);
 			Assert.AreEqual(matrix4[1, 2], 3);
-			MatrixUtils.Inc (matrix4, 1, 2);
+			matrix4.Inc(1, 2);
 			Assert.AreEqual(matrix4[1, 2], 4);
 		}
 
@@ -68,8 +68,8 @@ namespace Tests.DataType
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			Assert.AreEqual(2.0, MatrixUtils.ColumnAverage(matrix, 1));
-			Assert.AreEqual(5.0, MatrixUtils.ColumnAverage(matrix, 4));
+			Assert.AreEqual(2.0, matrix.ColumnAverage(1));
+			Assert.AreEqual(5.0, matrix.ColumnAverage(4));
 		}
 
 		[Test()] public void TestRowAverage()
@@ -78,8 +78,8 @@ namespace Tests.DataType
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			Assert.AreEqual(3.0, MatrixUtils.RowAverage(matrix, 1));
-			Assert.AreEqual(3.0, MatrixUtils.RowAverage(matrix, 4));
+			Assert.AreEqual(3.0, matrix.RowAverage(1));
+			Assert.AreEqual(3.0, matrix.RowAverage(4));
 		}
 
 		[Test()] public void TestMultiply()
@@ -88,7 +88,7 @@ namespace Tests.DataType
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			MatrixUtils.Multiply(matrix, 2.5);
+			matrix.Multiply(2.5);
 			double[] testrow = { 2.5, 5, 7.5, 10, 12.5 };
 			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
@@ -99,8 +99,8 @@ namespace Tests.DataType
 			double[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			double result =Math.Sqrt(275.0);
-			Assert.AreEqual(result,MatrixUtils.FrobeniusNorm(matrix));
+			double result = Math.Sqrt(275.0);
+			Assert.AreEqual(result, matrix.FrobeniusNorm());
 		}
 
 		[Test()] public void TestRowScalarProduct()
@@ -151,19 +151,19 @@ namespace Tests.DataType
 		[Test()] public void TestMax()
 		{
 			var int_matrix = new Matrix<int>(3, 3);
-			Assert.AreEqual(0, MatrixUtils.Max(int_matrix));
+			Assert.AreEqual(0, int_matrix.Max());
 			int_matrix[1, 1] = 9;
 			Assert.AreEqual(9, MatrixUtils.Max(int_matrix));
 
 			var double_matrix = new Matrix<double>(3, 3);
-			Assert.AreEqual(0, MatrixUtils.Max(double_matrix));
+			Assert.AreEqual(0, double_matrix.Max());
 			double_matrix[1, 1] = 9.0;
-			Assert.AreEqual(9.0, MatrixUtils.Max(double_matrix));
+			Assert.AreEqual(9.0, double_matrix.Max());
 
 			var float_matrix = new Matrix<float>(3, 3);
-			Assert.AreEqual(0, MatrixUtils.Max(float_matrix));
+			Assert.AreEqual(0, float_matrix.Max());
 			float_matrix[1, 1] = 9.0f;
-			Assert.AreEqual(9.0, MatrixUtils.Max(float_matrix));
+			Assert.AreEqual(9.0, float_matrix.Max());
 		}
 	}
 }

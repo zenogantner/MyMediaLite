@@ -28,19 +28,19 @@ namespace Tests.DataType
 		[Test()] public void TestMax()
 		{
 			var int_matrix = new SparseMatrix<int>(3, 3);
-			Assert.AreEqual(0, SparseMatrixUtils.Max(int_matrix));
+			Assert.AreEqual(0, int_matrix.Max());
 			int_matrix[1, 1] = 9;
-			Assert.AreEqual(9, SparseMatrixUtils.Max(int_matrix));
+			Assert.AreEqual(9, int_matrix.Max());
 
 			var double_matrix = new SparseMatrix<double>(3, 3);
-			Assert.AreEqual(0, SparseMatrixUtils.Max(double_matrix));
+			Assert.AreEqual(0, double_matrix.Max());
 			double_matrix[1, 1] = 9.0;
-			Assert.AreEqual(9.0, SparseMatrixUtils.Max(double_matrix));
+			Assert.AreEqual(9.0, double_matrix.Max());
 
 			var float_matrix = new SparseMatrix<float>(3, 3);
-			Assert.AreEqual(0, SparseMatrixUtils.Max(float_matrix));
+			Assert.AreEqual(0, float_matrix.Max());
 			float_matrix[1, 1] = 9.0f;
-			Assert.AreEqual(9.0, SparseMatrixUtils.Max(float_matrix));
+			Assert.AreEqual(9.0, float_matrix.Max());
 		}
 	}
 }

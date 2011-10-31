@@ -60,7 +60,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stddev">the standard deviation of the normal distribution</param>
-		static public void InitNormal(Matrix<double> matrix, double mean, double stddev)
+		static public void InitNormal(this Matrix<double> matrix, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = Util.Random.GetInstance();
@@ -75,7 +75,7 @@ namespace MyMediaLite.DataType
 		/// <param name="i">the row</param>
 		/// <param name="j">the column</param>
 		/// <param name="v">the value</param>
-		static public void Inc(Matrix<double> matrix, int i, int j, double v)
+		static public void Inc(this Matrix<double> matrix, int i, int j, double v)
 		{
 			matrix.data[i * matrix.dim2 + j] += v;
 		}
@@ -83,7 +83,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Increment the elements in one matrix by the ones in another</summary>
 		/// <param name="matrix1">the matrix to be incremented</param>
 		/// <param name="matrix2">the other matrix</param>
-		static public void Inc(Matrix<double> matrix1, Matrix<double> matrix2)
+		static public void Inc(this Matrix<double> matrix1, Matrix<double> matrix2)
 		{
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
@@ -100,7 +100,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
 		/// <param name="j">the column</param>
-		static public void Inc(Matrix<int> matrix, int i, int j)
+		static public void Inc(this Matrix<int> matrix, int i, int j)
 		{
 			matrix.data[i * matrix.dim2 + j]++;
 		}
@@ -108,7 +108,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Increment all entries of a matrix with a scalar</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="d">the number to increment with</param>
-		static public void Inc(Matrix<double> matrix, double d)
+		static public void Inc(this Matrix<double> matrix, double d)
 		{
 			for (int x = 0; x < matrix.dim1; x++)
 				for (int y = 0; y < matrix.dim2; y++)
@@ -119,7 +119,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix</param>
 		/// <param name="col">the column ID</param>
 		/// <returns>the average</returns>
-		static public double ColumnAverage(Matrix<double> matrix, int col)
+		static public double ColumnAverage(this Matrix<double> matrix, int col)
 		{
 			if (matrix.dim1 == 0)
 				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
@@ -136,7 +136,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix">the matrix</param>
 		/// <param name="row">the row ID</param>
 		/// <returns>the average</returns>
-		static public double RowAverage(Matrix<double> matrix, int row)
+		static public double RowAverage(this Matrix<double> matrix, int row)
 		{
 			if (matrix.dim2 == 0)
 				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
@@ -152,7 +152,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Multiply all entries of a matrix with a scalar</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="d">the number to multiply with</param>
-		static public void Multiply(Matrix<double> matrix, double d)
+		static public void Multiply(this Matrix<double> matrix, double d)
 		{
 			for (int x = 0; x < matrix.dim1; x++)
 				for (int y = 0; y < matrix.dim2; y++)
@@ -167,7 +167,7 @@ namespace MyMediaLite.DataType
 		/// </remarks>
 		/// <param name="matrix">the matrix</param>
 		/// <returns>the Frobenius norm of the matrix</returns>
-		static public double FrobeniusNorm(Matrix<double> matrix)
+		static public double FrobeniusNorm(this Matrix<double> matrix)
 		{
 			double squared_entry_sum = 0;
 			for (int x = 0; x < matrix.dim1 * matrix.dim2; x++)
@@ -271,7 +271,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public int Max(Matrix<int> m)
+		static public int Max(this Matrix<int> m)
 		{
 			return m.data.Max();
 		}
@@ -279,14 +279,14 @@ namespace MyMediaLite.DataType
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 
-		static public double Max(Matrix<double> m)
+		static public double Max(this Matrix<double> m)
 		{
 			return m.data.Max();
 		}
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public float Max(Matrix<float> m)
+		static public float Max(this Matrix<float> m)
 		{
 			return m.data.Max();
 		}
