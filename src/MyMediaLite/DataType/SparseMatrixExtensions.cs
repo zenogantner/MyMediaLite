@@ -21,7 +21,7 @@ using System.Linq;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Utilities to work with matrices</summary>
-	public static class SparseMatrixUtils
+	public static class SparseMatrixExtensions
 	{
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>

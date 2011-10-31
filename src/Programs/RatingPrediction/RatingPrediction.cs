@@ -319,8 +319,8 @@ class RatingPrediction
 					}
 					if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
 					{
-							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
-							break;
+						Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
+						break;
 					}
 				}
 			} // for

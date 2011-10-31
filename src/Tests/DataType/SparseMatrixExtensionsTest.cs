@@ -21,9 +21,9 @@ using NUnit.Framework;
 
 namespace Tests.DataType
 {
-	/// <summary>Testing the SparseMatrixUtils class</summary>
+	/// <summary>Testing the SparseMatrixExtensions class</summary>
 	[TestFixture()]
-	public class SparseMatrixUtilsTest
+	public class SparseMatrixExtensionsTest
 	{
 		[Test()] public void TestMax()
 		{

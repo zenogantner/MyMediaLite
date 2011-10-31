@@ -23,9 +23,9 @@ using NUnit.Framework;
 
 namespace Tests.DataType
 {
-	/// <summary>Testing the MatrixUtils class</summary>
+	/// <summary>Tests for the MatrixExtensions class</summary>
 	[TestFixture()]
-	public class MatrixUtilsTest
+	public class MatrixExtensionsTest
 	{
 		[Test()] public void TestInc()
 		{
@@ -110,12 +110,12 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
 			double[] vector = { 1, 2, 3, 4, 5 };
-			Assert.AreEqual(55, MatrixUtils.RowScalarProduct(matrix, 2, vector));
+			Assert.AreEqual(55, MatrixExtensions.RowScalarProduct(matrix, 2, vector));
 
 			var matrix2 = new Matrix<double>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
-			Assert.AreEqual(55, MatrixUtils.RowScalarProduct(matrix, 2, matrix2, 3));
+			Assert.AreEqual(55, MatrixExtensions.RowScalarProduct(matrix, 2, matrix2, 3));
 		}
 
 		[Test()] public void TestRowDifference()
@@ -128,7 +128,7 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
 
-			var result = MatrixUtils.RowDifference(matrix1, 2, matrix2, 3);
+			var result = MatrixExtensions.RowDifference(matrix1, 2, matrix2, 3);
 			for (int i = 0; i < 5; i++)
 				Assert.AreEqual(0, result[0]);
 		}
@@ -143,9 +143,9 @@ namespace Tests.DataType
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
 			var matrix3 = new Matrix<double>(5, 5);
-			MatrixUtils.Inc(matrix3, 1);
+			MatrixExtensions.Inc(matrix3, 1);
 
-			Assert.AreEqual(40, MatrixUtils.RowScalarProductWithRowDifference(matrix1, 2, matrix2, 3, matrix3, 1));
+			Assert.AreEqual(40, MatrixExtensions.RowScalarProductWithRowDifference(matrix1, 2, matrix2, 3, matrix3, 1));
 		}
 
 		[Test()] public void TestMax()
@@ -153,7 +153,7 @@ namespace Tests.DataType
 			var int_matrix = new Matrix<int>(3, 3);
 			Assert.AreEqual(0, int_matrix.Max());
 			int_matrix[1, 1] = 9;
-			Assert.AreEqual(9, MatrixUtils.Max(int_matrix));
+			Assert.AreEqual(9, MatrixExtensions.Max(int_matrix));
 
 			var double_matrix = new Matrix<double>(3, 3);
 			Assert.AreEqual(0, double_matrix.Max());

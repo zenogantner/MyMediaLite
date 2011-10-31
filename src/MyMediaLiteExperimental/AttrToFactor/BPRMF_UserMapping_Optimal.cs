@@ -36,7 +36,7 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+			MatrixExtensions.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();

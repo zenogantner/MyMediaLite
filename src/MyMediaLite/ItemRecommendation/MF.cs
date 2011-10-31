@@ -60,8 +60,8 @@ namespace MyMediaLite.ItemRecommendation
 			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
+			user_factors.InitNormal(InitMean, InitStdDev);
+			item_factors.InitNormal(InitMean, InitStdDev);
 		}
 
 		///
@@ -95,7 +95,7 @@ namespace MyMediaLite.ItemRecommendation
 			if ((item_id < 0) || (item_id >= item_factors.dim1))
 				return 0;
 
-			return MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			return MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
 		///

@@ -150,7 +150,7 @@ namespace MyMediaLite.RatingPrediction
 				return global_bias;
 
 			// TODO
-			double score = MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double score = MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
 		}

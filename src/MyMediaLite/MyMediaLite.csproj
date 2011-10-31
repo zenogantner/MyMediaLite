@@ -82,7 +82,6 @@
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\ListProxy.cs" />
     <Compile Include="DataType\Matrix.cs" />
-    <Compile Include="DataType\MatrixUtils.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
     <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
@@ -167,7 +166,6 @@
     <Compile Include="IO\NumberFile.cs" />
     <Compile Include="IO\TimedRatingData.cs" />
     <Compile Include="Util\Wrap.cs" />
-    <Compile Include="DataType\SparseMatrixUtils.cs" />
     <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
@@ -175,6 +173,8 @@
     <Compile Include="IO\IMatrixExtensions.cs" />
     <Compile Include="DataType\VectorExtensions.cs" />
     <Compile Include="IO\VectorExtensions.cs" />
+    <Compile Include="DataType\MatrixExtensions.cs" />
+    <Compile Include="DataType\SparseMatrixExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

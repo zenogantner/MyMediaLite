@@ -28,7 +28,7 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, NumFactors + 1);
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+			MatrixExtensions.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();
@@ -61,7 +61,7 @@ namespace MyMediaLite.AttrToFactor
 				int item_id = ratings.Items[i];
 
 		        double score =
-					MatrixUtils.RowScalarProduct(user_factors, user_id, item_latent_factors[item_id])
+					MatrixExtensions.RowScalarProduct(user_factors, user_id, item_latent_factors[item_id])
 					+ user_bias[user_id]
 					+ item_est_bias[item_id] // estimated item bias
 					+ global_bias;

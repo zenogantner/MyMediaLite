@@ -49,7 +49,6 @@
     <Compile Include="DataType\CombinedListTest.cs" />
     <Compile Include="DataType\ListProxyTest.cs" />
     <Compile Include="DataType\MatrixTest.cs" />
-    <Compile Include="DataType\MatrixUtilsTest.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrixTest.cs" />
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\SparseMatrixTest.cs" />
@@ -61,8 +60,9 @@
     <Compile Include="DataType\SparseBooleanMatrixBinarySearchTest.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecallTest.cs" />
     <Compile Include="IO\NumberFileTest.cs" />
-    <Compile Include="DataType\SparseMatrixUtilsTest.cs" />
     <Compile Include="DataType\VectorExtensionsTest.cs" />
+    <Compile Include="DataType\MatrixExtensionsTest.cs" />
+    <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

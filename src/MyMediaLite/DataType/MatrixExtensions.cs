@@ -26,7 +26,7 @@ using MathNet.Numerics.Distributions;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Utilities to work with matrices</summary>
-	public static class MatrixUtils
+	public static class MatrixExtensions
 	{
 		/// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>

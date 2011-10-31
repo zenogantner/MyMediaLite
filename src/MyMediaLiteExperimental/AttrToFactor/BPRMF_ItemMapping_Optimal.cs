@@ -49,12 +49,12 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int i = 0; i < num_factors; i++)
 			{
-				factor_bias[i] = MatrixUtils.ColumnAverage(item_factors, i);
+				factor_bias[i] = MatrixExtensions.ColumnAverage(item_factors, i);
 				Console.Error.WriteLine("fb {0}: {1}", i, factor_bias[i]);
 			}
 
 			this.attribute_to_factor = new Matrix<double>(NumItemAttributes, num_factors);
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+			MatrixExtensions.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 
 			for (int i = 0; i < num_iter_mapping; i++)
 				IterateMapping();

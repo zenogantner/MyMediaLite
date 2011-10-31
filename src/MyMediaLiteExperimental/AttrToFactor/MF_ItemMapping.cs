@@ -78,7 +78,7 @@ namespace MyMediaLite.AttrToFactor
 
 			for (int h = 0; h < num_init_mapping; h++)
 			{
-				MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+				MatrixExtensions.InitNormal(attribute_to_factor, InitMean, InitStdDev);
 				Console.Error.WriteLine("----");
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
@@ -146,12 +146,12 @@ namespace MyMediaLite.AttrToFactor
 					{
 						double w = attribute_to_factor[attribute, j];
 						double deriv = diff * w + reg_mapping * w;
-						MatrixUtils.Inc(attribute_to_factor, attribute, j, learn_rate_mapping * -deriv);
+						MatrixExtensions.Inc(attribute_to_factor, attribute, j, learn_rate_mapping * -deriv);
 					}
 					// bias term
 					double w_bias = attribute_to_factor[NumItemAttributes, j];
 					double deriv_bias = diff * w_bias + reg_mapping * w_bias;
-					MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
+					MatrixExtensions.Inc(attribute_to_factor, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
 			}
 
@@ -163,12 +163,12 @@ namespace MyMediaLite.AttrToFactor
 				{
 					double w = attribute_to_factor[attribute, (int) NumFactors];
 					double deriv = bias_diff * w + reg_mapping * w;
-					MatrixUtils.Inc(attribute_to_factor, attribute, (int) NumFactors, learn_rate_mapping * -deriv);
+					MatrixExtensions.Inc(attribute_to_factor, attribute, (int) NumFactors, learn_rate_mapping * -deriv);
 				}
 				// bias term
 				double w_bias = attribute_to_factor[NumItemAttributes, (int) NumFactors];
 				double deriv_bias = bias_diff * w_bias + reg_mapping * w_bias;
-				MatrixUtils.Inc(attribute_to_factor, NumItemAttributes, (int) NumFactors, learn_rate_mapping * -deriv_bias);
+				MatrixExtensions.Inc(attribute_to_factor, NumItemAttributes, (int) NumFactors, learn_rate_mapping * -deriv_bias);
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace MyMediaLite.AttrToFactor
 			Array.Copy(est_factors, latent_factors, NumFactors);
 
 			double score =
-				MatrixUtils.RowScalarProduct(user_factors, user_id, latent_factors)
+				MatrixExtensions.RowScalarProduct(user_factors, user_id, latent_factors)
 				+ user_bias[user_id]
 				+ est_factors[NumFactors] // estimated item bias
 				+ global_bias;

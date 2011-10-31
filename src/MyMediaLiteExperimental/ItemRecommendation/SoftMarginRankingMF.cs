@@ -63,7 +63,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
 		protected override void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = item_bias[i] - item_bias[j] + MatrixUtils.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
+			double x_uij = item_bias[i] - item_bias[j] + MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
 
 			double common_part = x_uij < 0 ? 1 : 0;
 

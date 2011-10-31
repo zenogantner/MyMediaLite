@@ -170,7 +170,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected double Predict(int user_id, int item_id, bool bound)
 		{
-			double result = global_bias + MatrixUtils.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double result = global_bias + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (bound)
 			{

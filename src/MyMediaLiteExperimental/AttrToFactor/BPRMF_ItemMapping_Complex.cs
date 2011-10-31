@@ -42,8 +42,8 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("num_item_attributes=" + NumItemAttributes);
 			Console.Error.WriteLine("num_hidden_factors=" + num_hidden_factors);
 
-			MatrixUtils.InitNormal(attribute_to_factor, InitMean, InitStdDev);
-			MatrixUtils.InitNormal(output_layer, InitMean, InitStdDev);
+			MatrixExtensions.InitNormal(attribute_to_factor, InitMean, InitStdDev);
+			MatrixExtensions.InitNormal(output_layer, InitMean, InitStdDev);
 
 			//Console.Error.WriteLine("iteration -1 fit {0,0:0.#####} ", ComputeFit());
 			for (int i = 0; i < num_iter_mapping; i++)
