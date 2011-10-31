@@ -262,8 +262,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
-				IMatrixExtensions.WriteMatrix(writer, user_factors);
-				IMatrixExtensions.WriteMatrix(writer, item_factors);
+				writer.WriteMatrix(user_factors);
+				writer.WriteMatrix(item_factors);
 			}
 		}
 
@@ -274,13 +274,13 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new Exception(
-									string.Format("Number of user and item factors must match: {0} != {1}",
-												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+						string.Format("Number of user and item factors must match: {0} != {1}",
+							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 
 				this.MaxUserID = user_factors.NumberOfRows - 1;
 				this.MaxItemID = item_factors.NumberOfRows - 1;

@@ -650,9 +650,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
-				IMatrixExtensions.WriteMatrix(writer, user_factors);
+				writer.WriteMatrix(user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
-				IMatrixExtensions.WriteMatrix(writer, item_factors);
+				writer.WriteMatrix(item_factors);
 			}
 		}
 
@@ -661,19 +661,20 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var user_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 				IList<double> item_bias = VectorUtils.ReadVector(reader);
-				var item_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(
-									string.Format("Number of user and item factors must match: {0} != {1}",
-												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+						string.Format(
+							"Number of user and item factors must match: {0} != {1}",
+							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 				if (item_bias.Count != item_factors.dim1)
 					throw new IOException(
-								  string.Format(
-									  "Number of items must be the same for biases and factors: {0} != {1}",
-									  item_bias.Count, item_factors.dim1));
+						string.Format(
+							"Number of items must be the same for biases and factors: {0} != {1}",
+							item_bias.Count, item_factors.dim1));
 
 				this.MaxUserID = user_factors.NumberOfRows - 1;
 				this.MaxItemID = item_factors.NumberOfRows - 1;
@@ -694,8 +695,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14}",
-								 this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
 		}
 	}
 }

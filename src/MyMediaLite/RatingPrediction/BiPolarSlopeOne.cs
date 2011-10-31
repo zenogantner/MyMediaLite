@@ -171,10 +171,10 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var diff_matrix_like = (SkewSymmetricSparseMatrix) IMatrixExtensions.ReadMatrix(reader, this.diff_matrix_like);
-				var freq_matrix_like = (SymmetricSparseMatrix<int>) IMatrixExtensions.ReadMatrix(reader, this.freq_matrix_like);
-				var diff_matrix_dislike = (SkewSymmetricSparseMatrix) IMatrixExtensions.ReadMatrix(reader, this.diff_matrix_dislike);
-				var freq_matrix_dislike = (SymmetricSparseMatrix<int>) IMatrixExtensions.ReadMatrix(reader, this.freq_matrix_dislike);
+				var diff_matrix_like = (SkewSymmetricSparseMatrix) reader.ReadMatrix(this.diff_matrix_like);
+				var freq_matrix_like = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix_like);
+				var diff_matrix_dislike = (SkewSymmetricSparseMatrix) reader.ReadMatrix(this.diff_matrix_dislike);
+				var freq_matrix_dislike = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix_dislike);
 				var user_average = VectorUtils.ReadVector(reader);
 
 				// assign new model
@@ -193,10 +193,10 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
-				IMatrixExtensions.WriteSparseMatrix(writer, diff_matrix_like);
-				IMatrixExtensions.WriteSparseMatrix(writer, freq_matrix_like);
-				IMatrixExtensions.WriteSparseMatrix(writer, diff_matrix_dislike);
-				IMatrixExtensions.WriteSparseMatrix(writer, freq_matrix_dislike);
+				writer.WriteSparseMatrix(diff_matrix_like);
+				writer.WriteSparseMatrix(freq_matrix_like);
+				writer.WriteSparseMatrix(diff_matrix_dislike);
+				writer.WriteSparseMatrix(freq_matrix_dislike);
 				VectorUtils.WriteVector(writer, user_average);
 			}
 		}

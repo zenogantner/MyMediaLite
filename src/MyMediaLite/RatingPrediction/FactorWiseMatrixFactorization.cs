@@ -212,8 +212,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(num_learned_factors);
-				IMatrixUtils.WriteMatrix(writer, user_factors);
-				IMatrixUtils.WriteMatrix(writer, item_factors);
+				writer.WriteMatrix(user_factors);
+				writer.WriteMatrix(item_factors);
 			}
 		}
 
@@ -228,8 +228,8 @@ namespace MyMediaLite.RatingPrediction
 				var global_bias         = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var num_learned_factors = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new Exception(

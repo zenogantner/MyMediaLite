@@ -243,14 +243,14 @@ namespace MyMediaLite.ItemRecommendation
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
-				IMatrixExtensions.WriteMatrix(writer, item_attribute_weight_by_user);
+				writer.WriteMatrix(item_attribute_weight_by_user);
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-				this.item_attribute_weight_by_user = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				this.item_attribute_weight_by_user = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 		}
 
 		///
@@ -262,9 +262,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
-								 Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"BPR_Linear reg={0} num_iter={1} learn_rate={2} fast_sampling_memory_limit={3} init_mean={4} init_stdev={5}",
+				Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
 		}
 
 	}

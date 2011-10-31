@@ -103,8 +103,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
-				IMatrixExtensions.WriteMatrix(writer, user_factors);
-				IMatrixExtensions.WriteMatrix(writer, item_factors);
+				writer.WriteMatrix(user_factors);
+				writer.WriteMatrix(item_factors);
 			}
 		}
 
@@ -113,13 +113,14 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var user_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(
-									string.Format("Number of user and item factors must match: {0} != {1}",
-												  user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+						string.Format(
+							"Number of user and item factors must match: {0} != {1}",
+							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
 
 				this.MaxUserID = user_factors.NumberOfRows - 1;
 				this.MaxItemID = item_factors.NumberOfRows - 1;
