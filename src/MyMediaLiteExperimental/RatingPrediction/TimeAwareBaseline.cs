@@ -46,8 +46,8 @@ namespace MyMediaLite.RatingPrediction
 		// parameters
 		
 		double global_average;
-		IList<double> user_bias;
-		IList<double> item_bias;
+		protected IList<double> user_bias;
+		protected IList<double> item_bias;
 		IList<double> alpha;
 		Matrix<double> item_bias_by_time_bin;  // items in rows, bins in columns
 		SparseMatrix<double> user_bias_by_day; // users in rows, days in columns
@@ -196,7 +196,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='day'>the day of the rating</param>
 		/// <param name='bin'>the day bin of the rating</param>
 		/// <param name='err'>the current error made for this rating</param>
-		protected void UpdateParameters(int u, int i, int day, int bin, double err)
+		protected virtual void UpdateParameters(int u, int i, int day, int bin, double err)
 		{
 			// update user biases
 			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
@@ -227,8 +227,15 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 		
-		// for internal use only - assumes user and item IDs are valid
-		double Predict(int user_id, int item_id, int day, int bin)
+		/// <summary>Predict the specified user_id, item_id, day and bin</summary>
+		/// <remarks>
+		/// Assumes user and item IDs are valid.
+		/// </remarks>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='item_id'>the item ID</param>
+		/// <param name='day'>the day of the rating</param>
+		/// <param name='bin'>the day bin of the rating</param>
+		protected virtual double Predict(int user_id, int item_id, int day, int bin)
 		{
 			double result = global_average;
 

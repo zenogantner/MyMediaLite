@@ -4,7 +4,8 @@
            ITimeAwareRatingPredictor
          - add interface IHyperParameterSearch
 	recommenders
-         - add TimeAwareBaseline rating predictor
+         - add TimeAwareBaseline and TimeAwareBaselineWithFrequencies rating
+           predictors (from Koren's Netflix Grand Prize report)
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
          - UserItemBaseline: make parameters protected so that library users
