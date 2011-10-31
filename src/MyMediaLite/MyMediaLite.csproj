@@ -80,7 +80,6 @@
     <Compile Include="DataType\CombinedList.cs" />
     <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="DataType\IMatrix.cs" />
-    <Compile Include="DataType\IMatrixUtils.cs" />
     <Compile Include="DataType\ListProxy.cs" />
     <Compile Include="DataType\Matrix.cs" />
     <Compile Include="DataType\MatrixUtils.cs" />
@@ -174,6 +173,7 @@
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
     <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
+    <Compile Include="IO\IMatrixExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

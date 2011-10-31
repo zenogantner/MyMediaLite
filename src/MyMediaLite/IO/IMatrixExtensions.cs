@@ -21,15 +21,15 @@ using System.IO;
 using System.Reflection;
 using MyMediaLite.Util;
 
-namespace MyMediaLite.DataType
+namespace MyMediaLite.IO
 {
 	/// <summary>Utilities to work with matrices</summary>
-	public static class IMatrixUtils
+	public static class IMatrixExtensions
 	{
 		/// <summary>Write a matrix of doubles to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of doubles to write out</param>
-		static public void WriteMatrix(StreamWriter writer, IMatrix<double> matrix)
+		static public void WriteMatrix(this TextWriter writer, IMatrix<double> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			for (int i = 0; i < matrix.NumberOfRows; i++)
@@ -41,7 +41,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Write a matrix of floats to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of floats to write out</param>
-		static public void WriteMatrix(StreamWriter writer, IMatrix<float> matrix)
+		static public void WriteMatrix(this TextWriter writer, IMatrix<float> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			for (int i = 0; i < matrix.NumberOfRows; i++)
@@ -53,7 +53,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Write a matrix of integers to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of doubles to write out</param>
-		static public void WriteMatrix(StreamWriter writer, IMatrix<int> matrix)
+		static public void WriteMatrix(this TextWriter writer, IMatrix<int> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			for (int i = 0; i < matrix.NumberOfRows; i++)
@@ -65,7 +65,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Write a sparse matrix of doubles to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of doubles to write out</param>
-		static public void WriteSparseMatrix(StreamWriter writer, SparseMatrix<double> matrix)
+		static public void WriteSparseMatrix(this TextWriter writer, SparseMatrix<double> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
@@ -76,7 +76,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Write a sparse matrix of floats to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of floats to write out</param>
-		static public void WriteSparseMatrix(StreamWriter writer, SparseMatrix<float> matrix)
+		static public void WriteSparseMatrix(this TextWriter writer, SparseMatrix<float> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
@@ -87,7 +87,7 @@ namespace MyMediaLite.DataType
 		/// <summary>Write a sparse matrix of integers to a StreamWriter object</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="matrix">the matrix of doubles to write out</param>
-		static public void WriteSparseMatrix(StreamWriter writer, SparseMatrix<int> matrix)
+		static public void WriteSparseMatrix(this TextWriter writer, SparseMatrix<int> matrix)
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
@@ -99,7 +99,7 @@ namespace MyMediaLite.DataType
 		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
 		/// <param name="example_matrix">matrix of the type of matrix to create</param>
 		/// <returns>a matrix of doubles</returns>
-		static public IMatrix<double> ReadMatrix(TextReader reader, IMatrix<double> example_matrix)
+		static public IMatrix<double> ReadMatrix(this TextReader reader, IMatrix<double> example_matrix)
 		{
 			string[] numbers = reader.ReadLine().Split(' ');
 			int dim1 = int.Parse(numbers[0]);
@@ -128,7 +128,7 @@ namespace MyMediaLite.DataType
 		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
 		/// <param name="example_matrix">matrix of the type of matrix to create</param>
 		/// <returns>a matrix of float</returns>
-		static public IMatrix<float> ReadMatrix(TextReader reader, IMatrix<float> example_matrix)
+		static public IMatrix<float> ReadMatrix(this TextReader reader, IMatrix<float> example_matrix)
 		{
 			string[] numbers = reader.ReadLine().Split(' ');
 			int dim1 = int.Parse(numbers[0]);
@@ -157,7 +157,7 @@ namespace MyMediaLite.DataType
 		/// <param name="reader">the <see cref="TextReader"/> object to read from</param>
 		/// <param name="example_matrix">matrix of the type of matrix to create</param>
 		/// <returns>a matrix of integers</returns>
-		static public IMatrix<int> ReadMatrix(TextReader reader, IMatrix<int> example_matrix)
+		static public IMatrix<int> ReadMatrix(this TextReader reader, IMatrix<int> example_matrix)
 		{
 			string[] numbers = reader.ReadLine().Split(' ');
 			int dim1 = int.Parse(numbers[0]);

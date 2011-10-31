@@ -650,9 +650,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType()) )
 			{
-				IMatrixUtils.WriteMatrix(writer, user_factors);
+				IMatrixExtensions.WriteMatrix(writer, user_factors);
 				VectorUtils.WriteVector(writer, item_bias);
-				IMatrixUtils.WriteMatrix(writer, item_factors);
+				IMatrixExtensions.WriteMatrix(writer, item_factors);
 			}
 		}
 
@@ -661,9 +661,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var user_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
 				IList<double> item_bias = VectorUtils.ReadVector(reader);
-				var item_factors = (Matrix<double>) IMatrixUtils.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var item_factors = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(
