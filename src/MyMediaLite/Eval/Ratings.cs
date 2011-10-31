@@ -58,6 +58,9 @@ namespace MyMediaLite.Eval
 		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
 		///
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
+		/// 
+		/// If the recommender can take time into account, and the rating dataset provides rating times,
+		/// this information will be used for making rating predictions.
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
@@ -72,12 +75,22 @@ namespace MyMediaLite.Eval
 			if (ratings == null)
 				throw new ArgumentNullException("ratings");
 
-			for (int index = 0; index < ratings.Count; index++)
-			{
-				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
-				rmse += error * error;
-				mae  += Math.Abs(error);
-			}
+			if (recommender is ITimeAwareRatingPredictor && ratings is ITimedRatings)
+				for (int index = 0; index < ratings.Count; index++)
+				{
+					var time_aware_recommender = recommender as ITimeAwareRatingPredictor;
+					var timed_ratings = ratings as ITimedRatings;
+					double error = time_aware_recommender.Predict(timed_ratings.Users[index], timed_ratings.Items[index], timed_ratings.Times[index]) - timed_ratings[index];
+					rmse += error * error;
+					mae  += Math.Abs(error);
+				}
+			else
+				for (int index = 0; index < ratings.Count; index++)
+				{
+					double error = recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index];
+					rmse += error * error;
+					mae  += Math.Abs(error);
+				}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
 

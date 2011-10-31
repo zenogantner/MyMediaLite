@@ -18,6 +18,8 @@
 	evaluation
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
+         - rating prediction: transparently support using dates/times in the
+           evaluation (if present)
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
          - Matrix, SparseMatrix, SparseBooleanMatrix, SparseVector,

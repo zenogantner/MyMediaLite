@@ -485,6 +485,8 @@ class RatingPrediction
 			// read test data
 			if (test_file != null)
 			{
+				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
+					test_data = TimedRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else
