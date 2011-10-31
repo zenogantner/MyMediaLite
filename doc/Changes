@@ -3,6 +3,9 @@
          - add abstract class TimeAwareRatingPredictor and interface
            ITimeAwareRatingPredictor
          - add interface IHyperParameterSearch
+         - most methods in *MatrixUtils are now extension methods, allowing
+           them to be called in a much more elegant way: mat.method() instead
+           of MatrixUtils.method(mat)
 	recommenders
          - add TimeAwareBaseline and TimeAwareBaselineWithFrequencies rating
            predictors (from Koren's Netflix Grand Prize report)
@@ -37,6 +40,9 @@
          - NumberFile I/O: add unit tests
          - rename TimedRatings to TimedRatingData
          - improved support for MovieLens 1M/10M file format
+         - move DataType.IMatrixUtils.cs to IO.IMatrixExtensions - the class
+           only contains extension methods for matrix IO
+         - move IO part of VectorUtils to IO.VectorExtensions
         misc
          - update script download_movielens.sh because the download URLs have
            changed
