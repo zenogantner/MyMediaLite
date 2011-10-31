@@ -76,13 +76,9 @@
     <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
-    <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
-    <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
-    <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
-    <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

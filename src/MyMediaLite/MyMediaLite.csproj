@@ -170,6 +170,10 @@
     <Compile Include="IO\TimedRatingData.cs" />
     <Compile Include="Util\Wrap.cs" />
     <Compile Include="DataType\SparseMatrixUtils.cs" />
+    <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
+    <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
+    <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
+    <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
