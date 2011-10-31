@@ -84,8 +84,8 @@ namespace MyMediaLite.RatingPrediction
 			// init factor matrices
 			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
-			MatrixUtils.InitNormal(user_factors, InitMean, InitStdDev);
-			MatrixUtils.InitNormal(item_factors, InitMean, InitStdDev);
+			user_factors.InitNormal(InitMean, InitStdDev);
+			item_factors.InitNormal(InitMean, InitStdDev);
 		}
 
 		///
@@ -110,7 +110,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateUsers)
 			{
-				MatrixUtils.RowInitNormal(user_factors, InitMean, InitStdDev, user_id);
+				user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
 				LearnFactors(Ratings.ByUser[(int)user_id], true, false);
 			}
 		}
@@ -121,7 +121,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateItems)
 			{
-				MatrixUtils.RowInitNormal(item_factors, InitMean, InitStdDev, item_id);
+				item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
 				LearnFactors(Ratings.ByItem[(int)item_id], false, true);
 			}
 		}
@@ -150,12 +150,12 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = err * i_f - Regularization * u_f;
-						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, LearnRate * delta_u);
 					}
 					if (update_item)
 					{
 						double delta_i = err * u_f - Regularization * i_f;
-						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, LearnRate * delta_i);
 					}
 				 }
 			}

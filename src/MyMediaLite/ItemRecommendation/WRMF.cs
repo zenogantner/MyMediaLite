@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
@@ -80,7 +81,7 @@ namespace MyMediaLite.ItemRecommendation
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
 			var HCp         = new double[num_factors];
 
-			var m = new MathNet.Numerics.LinearAlgebra.Double.DenseMatrix(num_factors, num_factors);
+			var m = new DenseMatrix(num_factors, num_factors);
 
 			// source code comments are in terms of computing the user factors
 			// works the same with users and items exchanged
@@ -151,8 +152,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-								 NumFactors, Regularization, CPos, NumIter, InitMean, InitStdDev);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
+				NumFactors, Regularization, CPos, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

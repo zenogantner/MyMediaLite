@@ -120,13 +120,13 @@ namespace MyMediaLite.RatingPrediction
 				int u = Ratings.Users[index];
 				int i = Ratings.Items[index];
 				residuals[index] = Ratings[index] - Predict(u, i);
-				int n_ui = Math.Min(Ratings.ByUser[u].Count, Ratings.ByItem[i].Count); // TODO use less memory
+				int n_ui = Math.Min(Ratings.ByUser[u].Count, Ratings.ByItem[i].Count);
 				residuals[index] *= n_ui / (n_ui + Shrinkage);
 			}
 
 			// initialize new latent factors
-			MatrixUtils.ColumnInitNormal(user_factors, InitMean, InitStdev, num_learned_factors);
-			MatrixUtils.ColumnInitNormal(item_factors, InitMean, InitStdev, num_learned_factors); // TODO make configurable?
+			user_factors.ColumnInitNormal(num_learned_factors, InitMean, InitStdev);
+			item_factors.ColumnInitNormal(num_learned_factors, InitMean, InitStdev);
 
 			// compute the next factor by solving many least squares problems with one variable each
 			double err     = double.MaxValue / 2;
@@ -134,7 +134,6 @@ namespace MyMediaLite.RatingPrediction
 			while (err / err_old < 1 - Sensibility)
 			{
 				{
-					// TODO create only once?
 					var user_factors_update_numerator   = new double[MaxUserID + 1];
 					var user_factors_update_denominator = new double[MaxUserID + 1];
 

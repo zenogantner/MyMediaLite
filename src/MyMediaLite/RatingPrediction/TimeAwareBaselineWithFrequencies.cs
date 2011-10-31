@@ -114,7 +114,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
-			item_bias_at_frequency = new SparseMatrix<double>(MaxItemID + 1, SparseMatrixUtils.Max(log_frequency_by_day));
+			item_bias_at_frequency = new SparseMatrix<double>(MaxItemID + 1, log_frequency_by_day.Max());
 		}
 		
 		///

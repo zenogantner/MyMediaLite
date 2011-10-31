@@ -46,8 +46,8 @@ namespace MyMediaLite.RatingPrediction
 		// parameters
 		
 		double global_average;
-		protected IList<double> user_bias;
-		protected IList<double> item_bias;
+		IList<double> user_bias;
+		IList<double> item_bias;
 		IList<double> alpha;
 		Matrix<double> item_bias_by_time_bin;  // items in rows, bins in columns
 		SparseMatrix<double> user_bias_by_day; // users in rows, days in columns

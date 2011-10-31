@@ -191,12 +191,12 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = i_f * gradient_common - RegU * u_f;
-						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, LearnRate * delta_u);
 					}
 					if (update_item)
 					{
 						double delta_i = u_f * gradient_common - RegI * i_f;
-						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, LearnRate * delta_i);
 					}
 				}
 			}
@@ -234,14 +234,14 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = gradient_common * i_f - RegU * u_f;
-						MatrixUtils.Inc(user_factors, u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, LearnRate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
 						//    user_factors[u, f] += learn_rate * delta_u;
 					}
 					if (update_item)
 					{
 						double delta_i = gradient_common * u_f - RegI * i_f;
-						MatrixUtils.Inc(item_factors, i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, LearnRate * delta_i);
 					}
 				}
 			}
@@ -285,19 +285,19 @@ namespace MyMediaLite.RatingPrediction
 
 				if (user_factors.dim2 != item_factors.dim2)
 					throw new IOException(
-								  string.Format(
-									  "Number of user and item factors must match: {0} != {1}",
-									  user_factors.dim2, item_factors.dim2));
+						string.Format(
+							"Number of user and item factors must match: {0} != {1}",
+							user_factors.dim2, item_factors.dim2));
 				if (user_bias.Count != user_factors.dim1)
 					throw new IOException(
-								  string.Format(
-									  "Number of users must be the same for biases and factors: {0} != {1}",
-									  user_bias.Count, user_factors.dim1));
+						string.Format(
+							"Number of users must be the same for biases and factors: {0} != {1}",
+							user_bias.Count, user_factors.dim1));
 				if (item_bias.Count != item_factors.dim1)
 					throw new IOException(
-								  string.Format(
-									  "Number of items must be the same for biases and factors: {0} != {1}",
-									  item_bias.Count, item_factors.dim1));
+						string.Format(
+							"Number of items must be the same for biases and factors: {0} != {1}",
+							item_bias.Count, item_factors.dim1));
 
 				this.MaxUserID = user_factors.dim1 - 1;
 				this.MaxItemID = item_factors.dim1 - 1;
