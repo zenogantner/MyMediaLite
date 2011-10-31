@@ -30,10 +30,10 @@ namespace MyMediaLite.DataType
 	{
 		/// <summary>Initializes one row of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
+		/// <param name="row">the row to be initialized</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stddev">the standard deviation of the normal distribution</param>
-		/// <param name="row">the row to be initialized</param>
-		static public void RowInitNormal(Matrix<double> matrix, double mean, double stddev, int row)
+		static public void RowInitNormal(this Matrix<double> matrix, int row, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = Util.Random.GetInstance();
@@ -47,7 +47,7 @@ namespace MyMediaLite.DataType
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
 		/// <param name="stddev">the standard deviation of the normal distribution</param>
 		/// <param name="column">the column to be initialized</param>
-		static public void ColumnInitNormal(Matrix<double> matrix, double mean, double stddev, int column)
+		static public void ColumnInitNormal(this Matrix<double> matrix, int column, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = Util.Random.GetInstance();
