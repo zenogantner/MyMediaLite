@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>RatingPrediction</RootNamespace>
     <AssemblyName>RatingPrediction</AssemblyName>
-    <ReleaseVersion>1.99</ReleaseVersion>
+    <ReleaseVersion>2.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
