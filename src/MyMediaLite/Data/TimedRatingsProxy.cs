@@ -18,26 +18,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Data structure that allows access to selected entries of a rating data structure</summary>
-	public class RatingsProxy : Ratings
+	/// <summary>Data structure that allows access to selected entries of a timed rating data structure</summary>
+	public class TimedRatingsProxy : TimedRatings
 	{
-		/// <summary>Create a RatingsProxy object</summary>
+		/// <summary>Create a TimedRatingsProxy object</summary>
 		/// <param name="ratings">a ratings data structure</param>
 		/// <param name="indices">an index list pointing to entries in the ratings</param>
-		public RatingsProxy(IRatings ratings, IList<int> indices)
+		public TimedRatingsProxy(ITimedRatings ratings, IList<int> indices)
 		{
 			Users  = new ListProxy<int>(ratings.Users, indices);
 			Items  = new ListProxy<int>(ratings.Items, indices);
 			Values = new ListProxy<double>(ratings, indices);
+			Times  = new ListProxy<DateTime>(ratings.Times, indices);
 
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;
 			MaxRating = ratings.MaxRating;
 			MinRating = ratings.MinRating;
+
+			EarliestTime = Times.Min();
+			LatestTime = Times.Max();
 		}
 	}
 }

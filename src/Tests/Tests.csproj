@@ -63,6 +63,7 @@
     <Compile Include="DataType\VectorExtensionsTest.cs" />
     <Compile Include="DataType\MatrixExtensionsTest.cs" />
     <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />
+    <Compile Include="Data\RatingsChronologicalSplitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

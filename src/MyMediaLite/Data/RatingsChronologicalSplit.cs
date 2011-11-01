@@ -17,12 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>simple split for rating prediction</summary>
+	/// <summary>chronological split for rating prediction</summary>
 	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
-	public class RatingsSimpleSplit : ISplit<IRatings>
+	public class RatingsChronologicalSplit : ISplit<IRatings>
 	{
 		///
 		public uint NumberOfFolds { get { return 1; } }
@@ -33,29 +35,39 @@ namespace MyMediaLite.Data
 		///
 		public IList<IRatings> Test { get; private set; }
 
-		/// <summary>Create a simple split of rating prediction data</summary>
+		/// <summary>Create a chronological split of rating prediction data</summary>
+		/// <remarks>
+		/// If ratings have exactly the same date and time, and they are close to the threshold between
+		/// train and test, there is no guaranteed order between them (ties are broken according to how the
+		/// sorting procedure sorts the ratings).
+		/// </remarks>
 		/// <param name="ratings">the dataset</param>
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
-		public RatingsSimpleSplit(IRatings ratings, double ratio)
+		public RatingsChronologicalSplit(ITimedRatings ratings, double ratio)
 		{
 			if (ratio <= 0)
-				throw new ArgumentException("ratio");
+				throw new ArgumentException("ratio must be greater than 0");
 
-			// create index lists
-			var train_indices = new List<int>();
-			var test_indices  = new List<int>();
+			var chronological_index = Enumerable.Range(0, ratings.Count).ToList();
+			chronological_index.Sort(
+				(a, b) => ratings.Times[a].CompareTo(ratings.Times[b])
+			);
 
-			// assign indices to training or validation part
-			Random random = MyMediaLite.Util.Random.GetInstance();
-			for (int i = 0; i < ratings.Count; i++)
-				if (random.NextDouble() < ratio)
-					test_indices.Add(i);
-				else
-					train_indices.Add(i);
+			int num_test_ratings = (int) Math.Round(ratings.Count * ratio);
+
+			// assign indices to training part
+			var train_indices = new int[ratings.Count - num_test_ratings];
+			for (int i = 0; i < train_indices.Length; i++)
+				train_indices[i] = chronological_index[i];
+
+			// assign indices to test part
+			var test_indices  = new int[num_test_ratings];
+			for (int i = 0; i < test_indices.Length; i++)
+				test_indices[i] = chronological_index[i + train_indices.Length];
 
 			// create split data structures
-			Train = new IRatings[] { new RatingsProxy(ratings, train_indices) };
-			Test  = new IRatings[] { new RatingsProxy(ratings, test_indices) };
+			Train = new ITimedRatings[] { new TimedRatingsProxy(ratings, train_indices) };
+			Test  = new ITimedRatings[] { new TimedRatingsProxy(ratings, test_indices)  };
 		}
 	}
 }

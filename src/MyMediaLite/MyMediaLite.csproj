@@ -174,6 +174,8 @@
     <Compile Include="IO\VectorExtensions.cs" />
     <Compile Include="DataType\MatrixExtensions.cs" />
     <Compile Include="DataType\SparseMatrixExtensions.cs" />
+    <Compile Include="Data\TimedRatingsProxy.cs" />
+    <Compile Include="Data\RatingsChronologicalSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
