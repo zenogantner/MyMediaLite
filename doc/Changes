@@ -26,12 +26,14 @@
            evaluation (if present)
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
+         - add RatingsChronologicalSplit
          - Matrix, SparseMatrix, SparseBooleanMatrix, SparseVector,
            SparseBooleanMatrixStatic, SparseBooleanMatrixBinarySearch: change
            accessibility of internal data presentation to "protected internal"
          - SparseBooleanMatrix: change datatype of internal representation from
            List<ISet<int> to IList<ISet<int>>
-         - add SparseMatrixUtils (and unit tests)
+         - add SparseMatrixExtensions (and unit tests)
+         - RatingsSimpleSplit: better ArgumentException message
 	I/O
          - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way
