@@ -224,7 +224,7 @@ class RatingPrediction
 			{ "version",              v => show_version      = v != null },
 		};
 		IList<string> extra_args = p.Parse(args);
-		
+
 		// ... some more command line parameter actions ...
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null || chronological_split != null)
@@ -427,15 +427,9 @@ class RatingPrediction
 		if (cross_validation > 1 && find_iter != 0)
 			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
-		if (test_ratio != 0 && find_iter != 0)
-			Usage("--test-ratio=NUM and --find-iter=N cannot (yet) be combined.");
-
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
 
-		if (test_ratio != 0 && prediction_file != null)
-			Usage("--test-ratio=NUM and --prediction-file=FILE are mutually exclusive.");
-		
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
@@ -453,7 +447,7 @@ class RatingPrediction
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --item-relations=FILE.");
-		
+
 		// handling of --chronological-split
 		if (chronological_split != null)
 		{
@@ -471,21 +465,15 @@ class RatingPrediction
 				{
 					Usage(string.Format("Could not interpret argument of --chronological-split as number or date and time: '{0}'", chronological_split));
 				}
-			
+
 			// check for conflicts
 			if (cross_validation > 1)
 				Usage("--cross-validation=K and --chronological-split=NUM|DATETIME are mutually exclusive.");
-	
+
 			if (test_ratio > 1)
 				Usage("--test-ratio=NUM and --chronological-split=NUM|DATETIME are mutually exclusive.");
-			
-			if (prediction_file != null)
-				Usage("--chronological-split=NUM|DATETIME and --prediction-file=FILE are mutually exclusive.");
-			
-			if (find_iter != 0)
-				Usage("--chronological-split=NUM|DATETIME and --find-iter=N cannot (yet) be combined.");
 		}
-		
+
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
 	}
@@ -505,8 +493,9 @@ class RatingPrediction
 			else
 			{
 				if (file_format == RatingFileFormat.DEFAULT)
-					training_data = static_data ? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
-						                        : RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+					training_data = static_data
+						? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
+						: RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
@@ -563,23 +552,23 @@ class RatingPrediction
 	static void DisplayStats()
 	{
 		if (training_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
+					training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()));
 		if (eval_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"eval_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"eval_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
+					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()));
 		if (compute_fit && fit_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-            	fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
+					fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 }
