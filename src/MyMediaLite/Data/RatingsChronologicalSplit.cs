@@ -22,7 +22,18 @@ using System.Linq;
 namespace MyMediaLite.Data
 {
 	/// <summary>chronological split for rating prediction</summary>
-	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
+	/// <remarks>
+	/// <para>
+	///   Chronological splits (splits according to the time of the rating) treat all ratings before
+	///   a certain time as training ratings, and the ones after that time as test/validation ratings.
+	///   This kind of split is the most realistic kind of split, because in a real application
+	///   you also can only use past data to make predictions for the future.
+	/// </para>
+	/// 
+	/// <para>
+	///   The dataset must not be modified after the split - this would lead to undefined behavior.
+	/// </para>
+	/// </remarks>
 	public class RatingsChronologicalSplit : ISplit<IRatings>
 	{
 		///

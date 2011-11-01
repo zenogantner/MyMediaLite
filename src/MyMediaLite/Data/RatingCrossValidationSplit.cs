@@ -20,9 +20,17 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>k-fold split for rating prediction</summary>
+	/// <summary>k-fold  cross-validation split for rating prediction</summary>
 	/// <remarks>
-	/// The dataset must not be modified after the split - this would lead to undefined behavior.
+	///   <para>
+	///     Please note that k-fold cross-validation is not the best/most realistic way of evaluating
+	///     recommender system algorithms.
+	///     In particular, chronological splits (<see cref="RatingsChronologicalSplit"/>) are more realistic.
+	///   </para>
+	///
+	///   <para>
+	///     The dataset must not be modified after the split - this would lead to undefined behavior.
+	///   </para>
 	/// </remarks>
 	public class RatingCrossValidationSplit : ISplit<IRatings>
 	{
@@ -41,7 +49,7 @@ namespace MyMediaLite.Data
 		public RatingCrossValidationSplit(IRatings ratings, uint num_folds)
 		{
 			if (num_folds < 2)
-				throw new ArgumentException("num_folds must be at least 2.");
+				throw new ArgumentOutOfRangeException("num_folds must be at least 2.");
 			
 			NumberOfFolds = num_folds;
 

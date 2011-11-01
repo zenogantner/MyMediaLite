@@ -21,7 +21,17 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>simple split for rating prediction</summary>
-	/// <remarks>the dataset must not be modified after the split - this would lead to undefined behavior</remarks>
+	/// <remarks>
+	///   <para>
+	///     Please note that simple splits are not the best/most realistic way of evaluating
+	///     recommender system algorithms.
+	///     In particular, chronological splits (<see cref="RatingsChronologicalSplit"/>) are more realistic.
+	///   </para>
+	/// 
+	///   <para>
+	///     The dataset must not be modified after the split - this would lead to undefined behavior.
+	///   </para>
+	/// </remarks>
 	public class RatingsSimpleSplit : ISplit<IRatings>
 	{
 		///
