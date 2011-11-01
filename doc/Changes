@@ -20,10 +20,13 @@
          - improved exception handler
          - rating prediction: improved usage information
 	evaluation
+         - add chronological splits for rating prediction
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
          - rating prediction: transparently support using dates/times in the
            evaluation (if present)
+         - RatingsSimpleSplit: better ArgumentException message; guaranteed
+           sizes for train and test parts; add unit tests
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
          - add RatingsChronologicalSplit
@@ -32,8 +35,7 @@
            accessibility of internal data presentation to "protected internal"
          - SparseBooleanMatrix: change datatype of internal representation from
            List<ISet<int> to IList<ISet<int>>
-         - add SparseMatrixExtensions (and unit tests)
-         - RatingsSimpleSplit: better ArgumentException message
+         - add SparseMatrixExtensions
 	I/O
          - completely drop support for reading from STDIN
          - catch line format exceptions in a uniform way
