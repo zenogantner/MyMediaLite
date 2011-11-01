@@ -72,6 +72,9 @@ class RatingPrediction
 	static uint cross_validation;
 	static bool show_fold_results;
 	static double test_ratio;
+	static string chronological_split = null;
+	static double chronological_split_ratio = -1;
+	static DateTime chronological_split_time = DateTime.MinValue;
 	static int find_iter;
 
 	static void ShowVersion()
@@ -132,12 +135,15 @@ class RatingPrediction
                                   and predicted rating, respectively; default is {0}\\t{1}\\t{2}
 
   evaluation options:
-   --cross-validation=K           perform k-fold cross-validation on the training data
-   --show-fold-results            show results for individual folds in cross-validation
-   --test-ratio=NUM               use a ratio of NUM of the training data for evaluation (simple split)
-   --online-evaluation            perform online evaluation (use every tested rating for incremental training)
-   --search-hp                    search for good hyperparameter values (experimental)
-   --compute-fit                  display fit on training data
+   --cross-validation=K                perform k-fold cross-validation on the training data
+   --show-fold-results                 show results for individual folds in cross-validation
+   --test-ratio=NUM                    use a ratio of NUM of the training data for evaluation (simple split)
+   --chronological-split=NUM|DATETIME  use the last ratio of NUM of the training data ratings for evaluation,
+                                       or use the ratings from DATETIME on for evaluation (requires time information
+                                       in the training data)
+   --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
+   --search-hp                         search for good hyperparameter values (experimental)
+   --compute-fit                       display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -172,13 +178,13 @@ class RatingPrediction
 		double mae_cutoff  = double.MaxValue;
 
 		// data arguments
-		string data_dir             = string.Empty;
+		string data_dir = string.Empty;
 
 		// other arguments
-		bool online_eval       = false;
-		bool search_hp         = false;
-		int random_seed        = -1;
-		string prediction_line = "{0}\t{1}\t{2}";
+		bool online_eval           = false;
+		bool search_hp             = false;
+		int random_seed            = -1;
+		string prediction_line     = "{0}\t{1}\t{2}";
 
 		var p = new OptionSet() {
 			// string-valued options
@@ -195,6 +201,7 @@ class RatingPrediction
 			{ "load-model=",          v              => load_model_file      = v },
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "prediction-line=",     v              => prediction_line      = v },
+			{ "chronological-split=", v              => chronological_split  = v },
 			// integer-valued options
 			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
@@ -217,9 +224,10 @@ class RatingPrediction
 			{ "version",              v => show_version      = v != null },
 		};
 		IList<string> extra_args = p.Parse(args);
-
+		
+		// ... some more command line parameter actions ...
 		bool no_eval = true;
-		if (test_ratio > 0 || test_file != null)
+		if (test_ratio > 0 || test_file != null || chronological_split != null)
 			no_eval = false;
 
 		if (show_version)
@@ -230,6 +238,7 @@ class RatingPrediction
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
+		// set up recommender
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
@@ -259,9 +268,21 @@ class RatingPrediction
 				MyMediaLite.Util.Random.InitInstance(random_seed);
 
 			var split = new RatingsSimpleSplit(training_data, test_ratio);
-			recommender.Ratings = split.Train[0];
-			training_data = split.Train[0];
-			test_data     = split.Test[0];
+			recommender.Ratings = training_data = split.Train[0];
+			test_data = split.Test[0];
+			Console.Error.WriteLine(string.Format( CultureInfo.InvariantCulture, "test ratio {0}", test_ratio));
+		}
+		if (chronological_split != null)
+		{
+			var split = chronological_split_ratio != -1
+							? new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_ratio)
+							: new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_time);
+			recommender.Ratings = training_data = split.Train[0];
+			test_data = split.Test[0];
+			if (test_ratio != -1)
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "test ratio (chronological) {0}", chronological_split_ratio));
+			else
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "split time {0}", chronological_split_time));
 		}
 
 		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
@@ -406,14 +427,20 @@ class RatingPrediction
 		if (cross_validation > 1 && find_iter != 0)
 			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
+		if (test_ratio != 0 && find_iter != 0)
+			Usage("--test-ratio=NUM and --find-iter=N cannot (yet) be combined.");
+
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
 
+		if (test_ratio != 0 && prediction_file != null)
+			Usage("--test-ratio=NUM and --prediction-file=FILE are mutually exclusive.");
+		
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --save-model=FILE.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty && chronological_split == null)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
 			Usage("Recommender expects --user-attributes=FILE.");
@@ -426,7 +453,39 @@ class RatingPrediction
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --item-relations=FILE.");
-
+		
+		// handling of --chronological-split
+		if (chronological_split != null)
+		{
+			try
+			{
+				chronological_split_ratio = double.Parse(chronological_split, CultureInfo.InvariantCulture);
+			}
+			catch { }
+			if (chronological_split_ratio == -1)
+				try
+				{
+					chronological_split_time = DateTime.Parse(chronological_split, CultureInfo.InvariantCulture);
+				}
+				catch (FormatException)
+				{
+					Usage(string.Format("Could not interpret argument of --chronological-split as number or date and time: '{0}'", chronological_split));
+				}
+			
+			// check for conflicts
+			if (cross_validation > 1)
+				Usage("--cross-validation=K and --chronological-split=NUM|DATETIME are mutually exclusive.");
+	
+			if (test_ratio > 1)
+				Usage("--test-ratio=NUM and --chronological-split=NUM|DATETIME are mutually exclusive.");
+			
+			if (prediction_file != null)
+				Usage("--chronological-split=NUM|DATETIME and --prediction-file=FILE are mutually exclusive.");
+			
+			if (find_iter != 0)
+				Usage("--chronological-split=NUM|DATETIME and --find-iter=N cannot (yet) be combined.");
+		}
+		
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
 	}
@@ -439,10 +498,9 @@ class RatingPrediction
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// read training data
-			if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
+			if ((recommender is TimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
-				((TimeAwareRatingPredictor)recommender).TimedRatings = TimedRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
-				training_data = ((TimeAwareRatingPredictor)recommender).TimedRatings;
+				training_data = TimedRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 			}
 			else
 			{
@@ -453,8 +511,8 @@ class RatingPrediction
 					training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
 					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
-				recommender.Ratings = training_data;
 			}
+			recommender.Ratings = training_data;
 
 			// user attributes
 			if (user_attributes_file != null)
