@@ -114,10 +114,10 @@ namespace MyMediaLite.Util
 				empty_size  = (long) matrix_size - test.Count; // TODO depends on the eval scheme whether this is correct
 				sparsity = (double) 100L * empty_size / matrix_size;
 				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "test data:     {0} users, {1} items, {2} ratings, sparsity {3,0:0.#####}", num_users, num_items, test.Count, sparsity));
-				if (train is ITimedRatings)
+				if (test is ITimedRatings)
 				{
-					var time_train = train as ITimedRatings;
-					Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "rating period: {0} to {1}", time_train.EarliestTime, time_train.LatestTime));
+					var time_test = test as ITimedRatings;
+					Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "rating period: {0} to {1}", time_test.EarliestTime, time_test.LatestTime));
 				}
 			}
 
