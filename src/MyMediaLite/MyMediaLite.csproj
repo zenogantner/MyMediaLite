@@ -68,7 +68,6 @@
     <Compile Include="Data\Ratings.cs" />
     <Compile Include="Data\RatingsProxy.cs" />
     <Compile Include="Data\RatingsSimpleSplit.cs" />
-    <Compile Include="Data\RatingsWithDateTime.cs" />
     <Compile Include="Data\StaticByteRatings.cs" />
     <Compile Include="Data\StaticFloatRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
