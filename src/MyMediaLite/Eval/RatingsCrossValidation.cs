@@ -58,6 +58,44 @@ namespace MyMediaLite.Eval
 
 			return avg_results;
 		}
+
+		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
+		/// <param name="recommender">a rating predictor</param>
+		/// <param name="split">a rating dataset split</param>
+		/// <param name="max_iter">the maximum number of iterations</param>
+		/// <param name="find_iter">the report interval</param>
+		static public void EvaluateIterative(RatingPredictor recommender, ISplit<IRatings> split, int max_iter, int find_iter = 1)
+		{
+			if (!(recommender is IIterativeModel))
+				throw new ArithmeticException("recommender must be of type IIterativeModel");
+
+			var split_recommenders     = new RatingPredictor[split.NumberOfFolds];
+			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
+
+			// initial training and evaluation
+			Parallel.For(0, (int) split.NumberOfFolds, i =>
+			{
+				split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
+				split_recommenders[i].Ratings = split.Train[i];
+				split_recommenders[i].Train();
+				iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
+				var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
+				Console.WriteLine("{0} iteration {1}", Ratings.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+			});
+
+			// iterative training and evaluation
+			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
+				Parallel.For(0, (int) split.NumberOfFolds, i =>
+				{
+					iterative_recommenders[i].Iterate();
+
+					if (it % find_iter == 0)
+					{
+						var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
+						Console.WriteLine("{0} iteration {1}", Ratings.FormatResults(fold_results), it);
+					}
+				});
+		}
 	}
 }
 
