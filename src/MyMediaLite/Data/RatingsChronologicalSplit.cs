@@ -29,7 +29,7 @@ namespace MyMediaLite.Data
 	///   This kind of split is the most realistic kind of split, because in a real application
 	///   you also can only use past data to make predictions for the future.
 	/// </para>
-	/// 
+	///
 	/// <para>
 	///   The dataset must not be modified after the split - this would lead to undefined behavior.
 	/// </para>
@@ -55,8 +55,8 @@ namespace MyMediaLite.Data
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
 		public RatingsChronologicalSplit(ITimedRatings ratings, double ratio)
 		{
-			if (ratio <= 0)
-				throw new ArgumentOutOfRangeException("ratio must be greater than 0");
+			if (ratio <= 0 && ratio >= 1)
+				throw new ArgumentOutOfRangeException("ratio must be between 0 and 1");
 
 			var chronological_index = Enumerable.Range(0, ratings.Count).ToList();
 			chronological_index.Sort(

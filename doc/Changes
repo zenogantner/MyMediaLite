@@ -21,7 +21,7 @@
          - improved exception handler
          - rating prediction: improved usage information
 	evaluation
-         - add chronological splits for rating prediction
+         - add chronological splits (global and per user) for rating prediction
          - PosOnlyFeedbackCrossValidationSplit: fix compilation problem with
            Visual Studio 2010 (reported by Saurabh S.)
          - rating prediction: transparently support using dates/times in the

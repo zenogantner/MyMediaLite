@@ -48,8 +48,8 @@ namespace MyMediaLite.Data
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
 		public RatingsSimpleSplit(IRatings ratings, double ratio)
 		{
-			if (ratio <= 0)
-				throw new ArgumentOutOfRangeException("ratio must be greater than 0");
+			if (ratio <= 0 && ratio >= 1)
+				throw new ArgumentOutOfRangeException("ratio must be between 0 and 1");
 
 			var random_index = ratings.RandomIndex;
 
