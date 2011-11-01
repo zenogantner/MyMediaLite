@@ -290,7 +290,7 @@ class RatingPrediction
 		if (find_iter != 0)
 		{
 			if ( !(recommender is IIterativeModel) )
-				Usage("Only iterative recommenders support find_iter.");
+				Usage("Only iterative recommenders support --find-iter=N.");
 			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender.ToString() + " ");
 
@@ -302,8 +302,7 @@ class RatingPrediction
 			if (compute_fit)
 				Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), iterative_recommender.NumIter);
 
-			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)));
-			Console.WriteLine(" iteration " + iterative_recommender.NumIter);
+			Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)), iterative_recommender.NumIter);
 
 			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 			{
@@ -311,7 +310,7 @@ class RatingPrediction
 					iterative_recommender.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
-
+				
 				if (it % find_iter == 0)
 				{
 					if (compute_fit)
