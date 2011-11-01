@@ -41,21 +41,23 @@ namespace MyMediaLite.Data
 			if (ratio <= 0)
 				throw new ArgumentException("ratio must be greater than 0");
 
-			// create index lists
-			var train_indices = new List<int>();
-			var test_indices  = new List<int>();
+			var random_index = ratings.RandomIndex;
 
-			// assign indices to training or validation part
-			Random random = MyMediaLite.Util.Random.GetInstance();
-			for (int i = 0; i < ratings.Count; i++)
-				if (random.NextDouble() < ratio)
-					test_indices.Add(i);
-				else
-					train_indices.Add(i);
+			int num_test_ratings = (int) Math.Round(ratings.Count * ratio);
+
+			// assign indices to training part
+			var train_indices = new int[ratings.Count - num_test_ratings];
+			for (int i = 0; i < train_indices.Length; i++)
+				train_indices[i] = random_index[i];
+
+			// assign indices to test part
+			var test_indices  = new int[num_test_ratings];
+			for (int i = 0; i < test_indices.Length; i++)
+				test_indices[i] = random_index[i + train_indices.Length];
 
 			// create split data structures
 			Train = new IRatings[] { new RatingsProxy(ratings, train_indices) };
-			Test  = new IRatings[] { new RatingsProxy(ratings, test_indices) };
+			Test  = new IRatings[] { new RatingsProxy(ratings, test_indices)  };
 		}
 	}
 }
