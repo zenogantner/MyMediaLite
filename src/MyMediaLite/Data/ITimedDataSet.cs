@@ -12,22 +12,25 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+//  You should have received a copy of the GNU General Public License
+//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Interface for rating datasets with time information</summary>
-	public interface ITimedRatings : IRatings, ITimedDataSet
+	/// <summary>interface for data sets with time information</summary>
+	public interface ITimedDataSet : IDataSet
 	{
-		/// <summary>add a rating event including time information</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the item ID</param>
-		/// <param name="rating">the rating value</param>
-		/// <param name="time">A <see cref="DateTime"/> specifying the time of the rating event</param>
-		void Add(int user_id, int item_id, double rating, DateTime time);
+		/// <summary>the item entries</summary>
+		IList<DateTime> Times { get; }
+
+		/// <summary>earliest time</summary>
+		DateTime EarliestTime { get; }
+
+		/// <summary>latest time</summary>
+		DateTime LatestTime { get; }
 	}
 }

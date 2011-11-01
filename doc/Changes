@@ -2,6 +2,7 @@
         API
          - add abstract class TimeAwareRatingPredictor and interface
            ITimeAwareRatingPredictor
+         - add interface ITimedDataSet
          - add interface IHyperParameterSearch
          - most methods in *MatrixUtils are now extension methods, allowing
            them to be called in a much more elegant way: mat.method() instead

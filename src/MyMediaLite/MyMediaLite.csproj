@@ -175,6 +175,7 @@
     <Compile Include="DataType\SparseMatrixExtensions.cs" />
     <Compile Include="Data\TimedRatingsProxy.cs" />
     <Compile Include="Data\RatingsChronologicalSplit.cs" />
+    <Compile Include="Data\ITimedDataSet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
