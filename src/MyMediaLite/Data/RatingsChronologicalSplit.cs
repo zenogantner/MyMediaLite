@@ -34,16 +34,16 @@ namespace MyMediaLite.Data
 	///   The dataset must not be modified after the split - this would lead to undefined behavior.
 	/// </para>
 	/// </remarks>
-	public class RatingsChronologicalSplit : ISplit<IRatings>
+	public class RatingsChronologicalSplit : ISplit<ITimedRatings>
 	{
 		///
 		public uint NumberOfFolds { get { return 1; } }
 
 		///
-		public IList<IRatings> Train { get; private set; }
+		public IList<ITimedRatings> Train { get; private set; }
 
 		///
-		public IList<IRatings> Test { get; private set; }
+		public IList<ITimedRatings> Test { get; private set; }
 
 		/// <summary>Create a chronological split of rating prediction data</summary>
 		/// <remarks>

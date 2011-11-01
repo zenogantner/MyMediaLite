@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMediaLite.DataType
 {
@@ -52,7 +53,10 @@ namespace MyMediaLite.DataType
 
 		///
 		public bool IsReadOnly { get { return true; } }
-
+		
+		///
+		public bool IsFixedSize { get { return true; } }
+		
 		///
 		public void Add(T item) { throw new NotSupportedException(); }
 
@@ -83,9 +87,15 @@ namespace MyMediaLite.DataType
 		public void RemoveAt(int index) { throw new NotSupportedException(); }
 
 		///
-		IEnumerator IEnumerable.GetEnumerator() { return list.GetEnumerator(); }
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return (from i in indices select list[i]).GetEnumerator();
+		}
 
 		///
-		IEnumerator<T> IEnumerable<T>.GetEnumerator() { return list.GetEnumerator(); }
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			return (from i in indices select list[i]).GetEnumerator();
+		}
 	}
 }

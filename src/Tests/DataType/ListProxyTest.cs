@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using MyMediaLite.DataType;
 
-namespace Tests.Data
+namespace Tests.DataType
 {
 	[TestFixture()]
 	public class ListProxyTest
@@ -71,6 +71,18 @@ namespace Tests.Data
 
 			foreach (int num in CreateOddSequence())
 				Assert.IsFalse(list_proxy.Contains(num));
+		}
+		
+		[Test()] public void TestGetEnumerator()
+		{
+			IEnumerable<int> list_proxy = new ListProxy<int>(CreateSequence(), CreateOddSequence());
+			
+			var enumerator = list_proxy.GetEnumerator();
+			foreach (int e in CreateEvenSequence())
+			{
+				enumerator.MoveNext();
+				Assert.AreEqual(e, enumerator.Current);
+			}
 		}
 	}
 }

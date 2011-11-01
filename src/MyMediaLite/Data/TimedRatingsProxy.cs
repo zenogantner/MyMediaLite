@@ -41,8 +41,8 @@ namespace MyMediaLite.Data
 			MaxRating = ratings.MaxRating;
 			MinRating = ratings.MinRating;
 
-			EarliestTime = Times.Min();
-			LatestTime = Times.Max();
+			EarliestTime = Count > 0 ? Times.Min() : DateTime.MaxValue;
+			LatestTime   = Count > 0 ? Times.Max() : DateTime.MinValue;
 		}
 	}
 }

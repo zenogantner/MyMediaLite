@@ -41,6 +41,11 @@ namespace Tests.Data
 			Assert.AreEqual(1, split1.Train[0].ByUser[1].Count);
 			Assert.AreEqual(0, split1.Test[0].ByUser[0].Count);
 			Assert.AreEqual(1, split1.Test[0].ByUser[1].Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestTime);
+
 
 			var split2 = new RatingsChronologicalSplit(ratings, 0.5);
 			Assert.AreEqual(2, split2.Train[0].Count);
@@ -49,6 +54,10 @@ namespace Tests.Data
 			Assert.AreEqual(1, split2.Train[0].ByUser[1].Count);
 			Assert.AreEqual(1, split2.Test[0].ByUser[0].Count);
 			Assert.AreEqual(1, split2.Test[0].ByUser[1].Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 10, 31),  split2.Train[0].LatestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestTime);
 		}
 
 		[Test()]
@@ -67,6 +76,10 @@ namespace Tests.Data
 			Assert.AreEqual(1, split1.Train[0].ByUser[1].Count);
 			Assert.AreEqual(0, split1.Test[0].ByUser[0].Count);
 			Assert.AreEqual(1, split1.Test[0].ByUser[1].Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestTime);
 
 			var split2 = new RatingsChronologicalSplit(ratings, new DateTime(2011, 11, 1));
 			Assert.AreEqual(2, split2.Train[0].Count);
@@ -75,6 +88,10 @@ namespace Tests.Data
 			Assert.AreEqual(1, split2.Train[0].ByUser[1].Count);
 			Assert.AreEqual(1, split2.Test[0].ByUser[0].Count);
 			Assert.AreEqual(1, split2.Test[0].ByUser[1].Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].LatestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestTime);
 		}
 
 	}
