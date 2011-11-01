@@ -19,7 +19,8 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>Generic dataset splitter interface</summary>
+	/// <summary>generic dataset splitter interface</summary>
+	/// <typeparam name="T">the kind of dataset that is split into pieces</typeparam>
 	public interface ISplit<T>
 	{
 		/// <summary>The number of folds in this split</summary>
