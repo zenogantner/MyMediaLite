@@ -45,7 +45,7 @@ namespace MyMediaLite.Data
 		public RatingsChronologicalSplit(ITimedRatings ratings, double ratio)
 		{
 			if (ratio <= 0)
-				throw new ArgumentException("ratio must be greater than 0");
+				throw new ArgumentOutOfRangeException("ratio must be greater than 0");
 
 			var chronological_index = Enumerable.Range(0, ratings.Count).ToList();
 			chronological_index.Sort(
@@ -68,5 +68,35 @@ namespace MyMediaLite.Data
 			Train = new ITimedRatings[] { new TimedRatingsProxy(ratings, train_indices) };
 			Test  = new ITimedRatings[] { new TimedRatingsProxy(ratings, test_indices)  };
 		}
+
+		/// <summary>Create a chronological split of rating prediction data</summary>
+		/// <param name="ratings">the dataset</param>
+		/// <param name="split_time">
+		/// the point in time to use for splitting the data set;
+		/// everything from that point on will be used for validation
+		/// </param>
+		public RatingsChronologicalSplit(ITimedRatings ratings, DateTime split_time)
+		{
+			if (split_time < ratings.EarliestTime)
+				throw new ArgumentOutOfRangeException("split_time must be after the earliest event in the data set");
+			if (split_time > ratings.LatestTime)
+				throw new ArgumentOutOfRangeException("split_time must be before the latest event in the data set");
+
+			// create indices
+			var train_indices = new List<int>();
+			var test_indices  = new List<int>();
+
+			// assign ratings to where they belong
+			for (int i = 0; i < ratings.Count; i++)
+				if (ratings.Times[i] < split_time)
+					train_indices.Add(i);
+				else
+					test_indices.Add(i);
+
+			// create split data structures
+			Train = new ITimedRatings[] { new TimedRatingsProxy(ratings, train_indices) };
+			Test  = new ITimedRatings[] { new TimedRatingsProxy(ratings, test_indices)  };
+		}
+
 	}
 }

@@ -39,7 +39,7 @@ namespace MyMediaLite.Data
 		public RatingsSimpleSplit(IRatings ratings, double ratio)
 		{
 			if (ratio <= 0)
-				throw new ArgumentException("ratio must be greater than 0");
+				throw new ArgumentOutOfRangeException("ratio must be greater than 0");
 
 			var random_index = ratings.RandomIndex;
 
