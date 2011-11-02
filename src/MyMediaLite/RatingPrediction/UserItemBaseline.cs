@@ -227,7 +227,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public double ComputeFit()
 		{
-			return Eval.Ratings.Evaluate(this, ratings)["RMSE"];
+			return
+				Eval.Ratings.Evaluate(this, ratings)["RMSE"]
+				+ RegU * Math.Pow(user_biases.EuclideanNorm(), 2)
+				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2);
 		}
 
 		///
