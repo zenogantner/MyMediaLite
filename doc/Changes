@@ -31,6 +31,7 @@
            evaluation (if present)
          - RatingsSimpleSplit: better ArgumentException message; guaranteed
            sizes for train and test parts; add unit tests
+         - catch exceptions in parallel CV code
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
          - add RatingsChronologicalSplit
