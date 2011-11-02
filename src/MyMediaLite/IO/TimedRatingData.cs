@@ -48,6 +48,7 @@ namespace MyMediaLite.IO
 		static public ITimedRatings Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var ratings = new MyMediaLite.Data.TimedRatings();
+			var time_split_chars = new char[] { ' ', '-', ':' };
 
 			string line;
 			while ((line = reader.ReadLine()) != null) {
@@ -59,17 +60,30 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 4)
 					throw new FormatException("Expected at least 4 columns: " + line);
 
-				int user_id = user_mapping.ToInternalID(long.Parse (tokens [0]));
-				int item_id = item_mapping.ToInternalID(long.Parse (tokens [1]));
-				double rating = double.Parse(tokens [2], CultureInfo.InvariantCulture);
-				string date_string = tokens [3];
-				if (tokens [3].StartsWith("\"") && tokens.Length > 4 && tokens [4].EndsWith("\"")) {
-					date_string = tokens [3] + " " + tokens [4];
+				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
+				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
+				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				string date_string = tokens[3];
+				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\"")) {
+					date_string = tokens[3] + " " + tokens[4];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
-
-				DateTime time = DateTime.Parse(date_string, CultureInfo.InvariantCulture);
-				ratings.Add(user_id, item_id, rating, time);
+				
+				if (date_string.Length == 19)
+				{
+					var date_time_tokens = date_string.Split(time_split_chars);
+					ratings.Add(
+						user_id, item_id, rating,
+						new DateTime(
+							int.Parse(date_time_tokens[0]),
+							int.Parse(date_time_tokens[1]),
+							int.Parse(date_time_tokens[2]),
+							int.Parse(date_time_tokens[3]),
+							int.Parse(date_time_tokens[4]),
+							int.Parse(date_time_tokens[5])));
+				}
+				else
+					ratings.Add(user_id, item_id, rating, DateTime.Parse(date_string, CultureInfo.InvariantCulture));
 
 				if (ratings.Count % 200000 == 199999)
 					Console.Error.Write(".");
