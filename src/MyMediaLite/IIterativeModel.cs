@@ -18,8 +18,7 @@
 namespace MyMediaLite
 {
 	/// <summary>Interface representing iteratively trained models</summary>
-	/// <remarks></remarks>
-	public interface IIterativeModel : IRecommender
+	public interface IIterativeModel
 	{
 		/// <summary>Number of iterations to run the training</summary>
 		uint NumIter { get; set; }
@@ -30,7 +29,6 @@ namespace MyMediaLite
 		/// <summary>Compute the fit (e.g. RMSE for rating prediction or AUC for item prediction/ranking) on the training data</summary>
 		/// <returns>the fit on the training data according to the optimization criterion; -1 if not implemented</returns>
 		double ComputeFit();
-		// TODO "fit" does not sound good for error/loss functions ...
 	}
 }
 

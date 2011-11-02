@@ -207,8 +207,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 			if (load_model_file == string.Empty)
 			{
-				iterative_recommender_validate.Train();
-				iterative_recommender_final.Train();
+				rating_predictor_validate.Train();
+				rating_predictor_final.Train();
 			}
 			else
 			{

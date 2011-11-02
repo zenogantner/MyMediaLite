@@ -8,6 +8,8 @@
            them to be called in a much more elegant way: mat.method() instead
            of MatrixUtils.method(mat); renamed *MatrixUtils to
            *MatrixExtensions
+         - IIterativeModel is no sub-interface of IRecommender any more
+           (not necessary)
 	recommenders
          - add TimeAwareBaseline and TimeAwareBaselineWithFrequencies rating
            predictors (from Koren's Netflix Grand Prize report)

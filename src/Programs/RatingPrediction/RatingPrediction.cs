@@ -306,7 +306,7 @@ class RatingPrediction
 				if (load_model_file == string.Empty)
 					recommender.Train();
 				else
-					Model.Load(iterative_recommender, load_model_file);
+					Model.Load(recommender, load_model_file);
 
 				if (compute_fit)
 					Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), iterative_recommender.NumIter);

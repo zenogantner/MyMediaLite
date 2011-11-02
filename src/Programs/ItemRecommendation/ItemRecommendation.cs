@@ -304,9 +304,9 @@ class ItemRecommendation
 			else
 			{
 				if (load_model_file == string.Empty)
-					iterative_recommender.Train();
+					recommender.Train();
 				else
-					Model.Load(iterative_recommender, load_model_file);
+					Model.Load(recommender, load_model_file);
 	
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
