@@ -78,10 +78,16 @@ namespace MyMediaLite.Data
 			Train = new List<IRatings>((int) num_folds);
 			Test  = new List<IRatings>((int) num_folds);
 			for (int i = 0; i < num_folds; i++)
-			{
-				Train.Add(new RatingsProxy(ratings, train_indices[i]));
-				Test.Add(new RatingsProxy(ratings, test_indices[i]));
-			}
+				if (ratings is ITimedRatings)
+				{
+					Train.Add(new TimedRatingsProxy((ITimedRatings) ratings, train_indices[i]));
+					Test.Add(new TimedRatingsProxy((ITimedRatings) ratings, test_indices[i]));
+				}
+				else
+				{
+					Train.Add(new RatingsProxy(ratings, train_indices[i]));
+					Test.Add(new RatingsProxy(ratings, test_indices[i]));
+				}
 		}
 	}
 }
