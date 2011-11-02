@@ -14,7 +14,8 @@
          - RatingPredictor: LoadModel() and SaveModel() now have default
            implementations that throw a NotImplementedException()
          - UserItemBaseline: make parameters protected so that library users
-           can inherit from the class
+           can inherit from the class; ComputeFit now returns the exact loss
+           instead of the training error
          - MultiCoreMatrixFactorization: complete API doc
         command line programs
          - move source code into Programs/ directory
