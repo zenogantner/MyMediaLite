@@ -290,52 +290,63 @@ class ItemRecommendation
 
 		if (find_iter != 0)
 		{
+			if ( !(recommender is IIterativeModel) )
+				Usage("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
+			
 			var iterative_recommender = (IIterativeModel) recommender;
-			Console.WriteLine(recommender + " ");
-
-			if (load_model_file == string.Empty)
-				iterative_recommender.Train();
-			else
-				Model.Load(iterative_recommender, load_model_file);
-
-			if (compute_fit)
-				Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
-
-			var results = Evaluate();
-			Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
-
-			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
+			Console.WriteLine(recommender);
+			
+			if (cross_validation > 1)
 			{
-				TimeSpan t = Wrap.MeasureTime(delegate() {
-					iterative_recommender.Iterate();
-				});
-				training_time_stats.Add(t.TotalSeconds);
-
-				if (it % find_iter == 0)
+				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
+				MyMediaLite.Eval.ItemsCrossValidation.EvaluateIterative((ItemRecommender) recommender, split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
+			}
+			else
+			{
+				if (load_model_file == string.Empty)
+					iterative_recommender.Train();
+				else
+					Model.Load(iterative_recommender, load_model_file);
+	
+				if (compute_fit)
+					Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
+	
+				var results = Evaluate();
+				Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
+	
+				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
-					if (compute_fit)
+					TimeSpan t = Wrap.MeasureTime(delegate() {
+						iterative_recommender.Iterate();
+					});
+					training_time_stats.Add(t.TotalSeconds);
+	
+					if (it % find_iter == 0)
 					{
-						t = Wrap.MeasureTime(delegate() {
-							Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), it);
-						});
-						fit_time_stats.Add(t.TotalSeconds);
+						if (compute_fit)
+						{
+							t = Wrap.MeasureTime(delegate() {
+								Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), it);
+							});
+							fit_time_stats.Add(t.TotalSeconds);
+						}
+	
+						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
+						eval_time_stats.Add(t.TotalSeconds);
+						Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
+	
+						Model.Save(recommender, save_model_file, it);
+						Predict(prediction_file, test_users_file, it);
+	
+						if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
+						{
+								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
+								Console.Error.WriteLine("DONE");
+								break;
+						}
 					}
-
-					t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
-					eval_time_stats.Add(t.TotalSeconds);
-					Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
-
-					Model.Save(recommender, save_model_file, it);
-					Predict(prediction_file, test_users_file, it);
-
-					if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
-					{
-							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
-							Console.Error.WriteLine("DONE");
-							break;
-					}
-				}
-			} // for
+				} // for
+			}
 		}
 		else
 		{
@@ -424,9 +435,6 @@ class ItemRecommendation
 
 		if (show_fold_results && cross_validation == 0)
 			Usage("--show-fold-results only works with --cross-validation=K.");
-
-		if (cross_validation > 1 && find_iter != 0)
-			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");

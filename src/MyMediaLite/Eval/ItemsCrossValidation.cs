@@ -79,8 +79,10 @@ namespace MyMediaLite.Eval
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
 		static public void EvaluateIterative(
-			ItemRecommender recommender, ISplit<IPosOnlyFeedback> split,
-			IList<int> test_users, IList<int> candidate_items,
+			ItemRecommender recommender,
+			ISplit<IPosOnlyFeedback> split,
+			IList<int> test_users,
+			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
 			int max_iter, int find_iter = 1)
