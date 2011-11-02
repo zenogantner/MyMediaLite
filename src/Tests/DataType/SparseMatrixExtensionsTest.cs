@@ -42,5 +42,15 @@ namespace Tests.DataType
 			float_matrix[1, 1] = 9.0f;
 			Assert.AreEqual(9.0, float_matrix.Max());
 		}
+
+		[Test()] public void TestFrobeniusNorm()
+		{
+			var matrix = new SparseMatrix<double>(5, 5);
+			Assert.AreEqual(0, matrix.FrobeniusNorm());
+			matrix[1, 1] = 5;
+			Assert.AreEqual(Math.Sqrt(25), matrix.FrobeniusNorm());
+
+		}
+
 	}
 }
