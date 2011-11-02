@@ -116,7 +116,7 @@ namespace MyMediaLite.RatingPrediction
 
 			item_bias_at_frequency = new SparseMatrix<double>(MaxItemID + 1, log_frequency_by_day.Max());
 		}
-		
+
 		///
 		protected override void UpdateParameters(int u, int i, int day, int bin, double err)
 		{
@@ -145,6 +145,13 @@ namespace MyMediaLite.RatingPrediction
 			result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
 			return result;
+		}
+
+		///
+		public double ComputeFit()
+		{
+			return base.ComputeFit()
+				+ RegItemBiasAtFrequency * Math.Pow(item_bias_at_frequency.FrobeniusNorm(), 2);
 		}
 
 		///

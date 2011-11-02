@@ -28,7 +28,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// Model described in equation (10) of BellKor Grand Prize documentation for the Netflix Prize (see below).
 	/// The optimization problem is described in equation (12).
-	/// 
+	///
 	/// The default hyper-parameter values are set to the ones shown in the report.
 	/// For datasets other than Netflix, you may want to find better parameters.
 	///
@@ -44,7 +44,7 @@ namespace MyMediaLite.RatingPrediction
 	public class TimeAwareBaseline : TimeAwareRatingPredictor, IIterativeModel
 	{
 		// parameters
-		
+
 		double global_average;
 		IList<double> user_bias;
 		IList<double> item_bias;
@@ -188,7 +188,7 @@ namespace MyMediaLite.RatingPrediction
 				UpdateParameters(u, i, day, bin, err);
 			}
 		}
-		
+
 		/// <summary>Single SGD step: update the parameter values for one user and one item</summary>
 		/// <param name='u'>the user ID</param>
 		/// <param name='i'>the item ID</param>
@@ -213,7 +213,7 @@ namespace MyMediaLite.RatingPrediction
 			user_scaling[u]               += 2 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
 			user_scaling_by_day[u, day]   += 2 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
 		}
-		
+
 		///
 		public override double Predict(int user_id, int item_id)
 		{
@@ -225,7 +225,7 @@ namespace MyMediaLite.RatingPrediction
 
 			return result;
 		}
-		
+
 		/// <summary>Predict the specified user_id, item_id, day and bin</summary>
 		/// <remarks>
 		/// Assumes user and item IDs are valid.
@@ -244,7 +244,7 @@ namespace MyMediaLite.RatingPrediction
 
 			return result;
 		}
-		
+
 		///
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
@@ -269,7 +269,22 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public double ComputeFit()
 		{
-			return -1;
+			double loss =
+				Eval.Ratings.Evaluate(this, ratings)["RMSE"]
+					+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
+					+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
+ 					+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)
+					+ RegUserBiasByDay     * Math.Pow(user_bias_by_day.FrobeniusNorm(),      2)
+					+ RegItemBiasByTimeBin * Math.Pow(item_bias_by_time_bin.FrobeniusNorm(), 2)
+					+ RegUserScalingByDay  * Math.Pow(user_scaling_by_day.FrobeniusNorm(),   2);
+
+			double user_scaling_reg_term = 0;
+			foreach (var e in user_scaling)
+				user_scaling_reg_term += Math.Pow(1 - e, 2);
+			user_scaling_reg_term *= RegUserScaling;
+			loss += user_scaling_reg_term;
+
+			return loss;
 		}
 
 		///
@@ -278,10 +293,10 @@ namespace MyMediaLite.RatingPrediction
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_iter={1} bin_size={2} beta={3} user_bias_learn_rate={4} item_bias_learn_rate={5} "
-				+ "alpha_learn_rate={6} item_bias_by_time_bin_learn_rate={7} user_bias_by_day_learn_rate={8} "
-				+ "user_scaling_learn_rate={9} user_scaling_by_day_learn_rate={10} "
-				+ "reg_u={11} reg_i={12} reg_alpha={13} reg_item_bias_by_time_bin={14} reg_user_bias_by_day={15} "
-				+ "reg_user_scaling={16} reg_user_scaling_by_day={17}",
+					+ "alpha_learn_rate={6} item_bias_by_time_bin_learn_rate={7} user_bias_by_day_learn_rate={8} "
+					+ "user_scaling_learn_rate={9} user_scaling_by_day_learn_rate={10} "
+					+ "reg_u={11} reg_i={12} reg_alpha={13} reg_item_bias_by_time_bin={14} reg_user_bias_by_day={15} "
+					+ "reg_user_scaling={16} reg_user_scaling_by_day={17}",
 				this.GetType().Name,
 				NumIter, BinSize, Beta, UserBiasLearnRate, ItemBiasLearnRate, AlphaLearnRate,
 				ItemBiasByTimeBinLearnRate, UserBiasByDayLearnRate, UserScalingLearnRate, UserScalingByDayLearnRate,
