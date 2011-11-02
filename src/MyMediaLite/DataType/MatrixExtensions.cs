@@ -159,9 +159,7 @@ namespace MyMediaLite.DataType
 					matrix.data[x * matrix.dim2 + y] *= d;
 		}
 
-		/// <summary>
-		/// Compute the Frobenius norm (square root of the sum of squared entries) of a matrix
-		/// </summary>
+		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
 		/// <remarks>
 		/// See http://en.wikipedia.org/wiki/Matrix_norm
 		/// </remarks>
