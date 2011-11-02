@@ -7,8 +7,8 @@ VERSION=2.0
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
-ITEM_REC_DIR=$SRC_DIR/Programs/ItemRecommendation
-RATING_PRED_DIR=$SRC_DIR/Programs/RatingPrediction
+ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
+RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
 .PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
@@ -48,11 +48,11 @@ binary-package:
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	cp $ITEM_REC_DIR/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp $ITEM_REC_DIR/bin/Debug/*.dll MyMediaLite-${VERSION}
-	cp $ITEM_REC_DIR/bin/Debug/*.mdb MyMediaLite-${VERSION}
-	cp $RATING_PRED_DIR/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp $RATING_PRED_DIR//bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
+	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}
+	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}
+	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}
+	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
