@@ -267,7 +267,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public double ComputeFit()
+		public virtual double ComputeFit()
 		{
 			double loss =
 				Eval.Ratings.Evaluate(this, ratings)["RMSE"]
