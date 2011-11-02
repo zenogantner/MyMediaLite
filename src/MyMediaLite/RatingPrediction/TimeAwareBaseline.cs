@@ -148,7 +148,8 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < timed_ratings.Count; i++)
 				user_mean_day[ratings.Users[i]] += (timed_ratings.LatestTime - timed_ratings.Times[i]).Days;
 			for (int u = 0; u <= MaxUserID; u++)
-				user_mean_day[u] /= ratings.CountByUser[u];
+				if (ratings.CountByUser[u] != 0)
+					user_mean_day[u] /= ratings.CountByUser[u];
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
@@ -157,8 +158,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Initialize the model parameters</summary>
 		protected virtual void InitModel()
 		{
-			Console.WriteLine(timed_ratings.EarliestTime);
-			Console.WriteLine(timed_ratings.LatestTime);
 			int number_of_days = (timed_ratings.LatestTime - timed_ratings.EarliestTime).Days;
 			int number_of_bins = number_of_days / BinSize + 1;
 			Console.WriteLine("{0} days, {1} bins", number_of_days, number_of_bins);
