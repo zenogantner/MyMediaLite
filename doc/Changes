@@ -20,7 +20,7 @@
         command line programs
          - move source code into Programs/ directory
          - improved exception handler
-         - allow combination of --cross-validation and --find-iter
+         - #76: allow combination of --cross-validation and --find-iter
          - rating prediction:
            - improved usage information
            - --chronological-split parameter
