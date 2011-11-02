@@ -68,6 +68,53 @@ namespace MyMediaLite.Eval
 
 			return avg_results;
 		}
+
+		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
+		/// <param name="recommender">an item recommender</param>
+		/// <param name="split">a positive-only feedback dataset split</param>
+		/// <param name="test_users">a collection of integers with all test users</param>
+		/// <param name="candidate_items">a collection of integers with all candidate items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
+		/// <param name="max_iter">the maximum number of iterations</param>
+		/// <param name="find_iter">the report interval</param>
+		static public void EvaluateIterative(
+			ItemRecommender recommender, ISplit<IPosOnlyFeedback> split,
+			IList<int> test_users, IList<int> candidate_items,
+			CandidateItems candidate_item_mode,
+			bool repeated_events,
+			int max_iter, int find_iter = 1)
+		{
+			if (!(recommender is IIterativeModel))
+				throw new ArithmeticException("recommender must be of type IIterativeModel");
+
+			var split_recommenders     = new ItemRecommender[split.NumberOfFolds];
+			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
+
+			// initial training and evaluation
+			Parallel.For(0, (int) split.NumberOfFolds, i =>
+			{
+				split_recommenders[i] = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
+				split_recommenders[i].Feedback = split.Train[i];
+				split_recommenders[i].Train();
+				iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
+				var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+				Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+			});
+
+			// iterative training and evaluation
+			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
+				Parallel.For(0, (int) split.NumberOfFolds, i =>
+				{
+					iterative_recommenders[i].Iterate();
+
+					if (it % find_iter == 0)
+					{
+						var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+						Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), it);
+					}
+				});
+		}
 	}
 }
 
