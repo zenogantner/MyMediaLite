@@ -290,60 +290,70 @@ class RatingPrediction
 		if (find_iter != 0)
 		{
 			if ( !(recommender is IIterativeModel) )
-				Usage("Only iterative recommenders support --find-iter=N.");
-			var iterative_recommender = (IIterativeModel) recommender;
-			Console.WriteLine(recommender.ToString() + " ");
+				Usage("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
 
-			if (load_model_file == string.Empty)
-				recommender.Train();
-			else
-				Model.Load(iterative_recommender, load_model_file);
+			Console.WriteLine(recommender.ToString());
 
-			if (compute_fit)
-				Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), iterative_recommender.NumIter);
-
-			Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)), iterative_recommender.NumIter);
-
-			for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
+			if (cross_validation > 1)
 			{
-				TimeSpan time = Wrap.MeasureTime(delegate() {
-					iterative_recommender.Iterate();
-				});
-				training_time_stats.Add(time.TotalSeconds);
-				
-				if (it % find_iter == 0)
+				var split = new RatingCrossValidationSplit(training_data, cross_validation);
+				MyMediaLite.Eval.RatingsCrossValidation.EvaluateIterative(recommender, split, max_iter, find_iter);
+			}
+			else
+			{
+				var iterative_recommender = (IIterativeModel) recommender;
+
+				if (load_model_file == string.Empty)
+					recommender.Train();
+				else
+					Model.Load(iterative_recommender, load_model_file);
+
+				if (compute_fit)
+					Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), iterative_recommender.NumIter);
+
+				Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data)), iterative_recommender.NumIter);
+
+				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
-					if (compute_fit)
-					{
-						time = Wrap.MeasureTime(delegate() {
-							Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), it);
-						});
-						fit_time_stats.Add(time.TotalSeconds);
-					}
+					TimeSpan time = Wrap.MeasureTime(delegate() {
+						iterative_recommender.Iterate();
+					});
+					training_time_stats.Add(time.TotalSeconds);
 
-					Dictionary<string, double> results = null;
-					time = Wrap.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
-					eval_time_stats.Add(time.TotalSeconds);
-					rmse_eval_stats.Add(results["RMSE"]);
-					Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), it);
-
-					Model.Save(recommender, save_model_file, it);
-					if (prediction_file != null)
-						Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + it, prediction_line);
-
-					if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
+					if (it % find_iter == 0)
 					{
-						Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
-						Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
-						break;
+						if (compute_fit)
+						{
+							time = Wrap.MeasureTime(delegate() {
+								Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(recommender, training_data)), it);
+							});
+							fit_time_stats.Add(time.TotalSeconds);
+						}
+
+						Dictionary<string, double> results = null;
+						time = Wrap.MeasureTime(delegate() { results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data); });
+						eval_time_stats.Add(time.TotalSeconds);
+						rmse_eval_stats.Add(results["RMSE"]);
+						Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), it);
+
+						Model.Save(recommender, save_model_file, it);
+						if (prediction_file != null)
+							Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file + "-it-" + it, prediction_line);
+
+						if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
+						{
+							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
+							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
+							break;
+						}
+						if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
+						{
+							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
+							break;
+						}
 					}
-					if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
-					{
-						Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
-						break;
-					}
-				}
-			} // for
+				} // for
+			}
 		}
 		else
 		{
@@ -422,9 +432,6 @@ class RatingPrediction
 
 		if (show_fold_results && cross_validation == 0)
 			Usage("--show-fold-results only works with --cross-validation=K.");
-
-		if (cross_validation > 1 && find_iter != 0)
-			Usage("--cross-validation=K and --find-iter=N cannot (yet) be combined.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");

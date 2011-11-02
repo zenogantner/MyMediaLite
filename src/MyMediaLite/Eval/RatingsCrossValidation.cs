@@ -80,7 +80,7 @@ namespace MyMediaLite.Eval
 				split_recommenders[i].Train();
 				iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 				var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-				Console.WriteLine("{0} iteration {1}", Ratings.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+				Console.WriteLine("fold {0} {1} iteration {2}", i, Ratings.FormatResults(fold_results), iterative_recommenders[i].NumIter);
 			});
 
 			// iterative training and evaluation
@@ -92,7 +92,7 @@ namespace MyMediaLite.Eval
 					if (it % find_iter == 0)
 					{
 						var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-						Console.WriteLine("{0} iteration {1}", Ratings.FormatResults(fold_results), it);
+						Console.WriteLine("fold {0} {1} iteration {2}", i, Ratings.FormatResults(fold_results), it);
 					}
 				});
 		}
