@@ -47,18 +47,26 @@ namespace MyMediaLite.Eval
 
 			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
-				var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
-				split_recommender.Feedback = split.Train[fold];
-				split_recommender.Train();
-				var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
-
-				foreach (var key in fold_results.Keys)
-					if (avg_results.ContainsKey(key))
-						avg_results[key] += fold_results[key];
-					else
-						avg_results[key] = fold_results[key];
-				if (show_results)
-					Console.Error.WriteLine("fold {0} {1}", fold, Items.FormatResults(fold_results));
+				try
+				{
+					var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
+					split_recommender.Feedback = split.Train[fold];
+					split_recommender.Train();
+					var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
+	
+					foreach (var key in fold_results.Keys)
+						if (avg_results.ContainsKey(key))
+							avg_results[key] += fold_results[key];
+						else
+							avg_results[key] = fold_results[key];
+					if (show_results)
+						Console.Error.WriteLine("fold {0} {1}", fold, Items.FormatResults(fold_results));
+				}
+				catch (Exception e)
+				{
+					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
+					throw e;
+				}
 			});
 
 			foreach (var key in Items.Measures)
@@ -96,24 +104,40 @@ namespace MyMediaLite.Eval
 			// initial training and evaluation
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
 			{
-				split_recommenders[i] = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
-				split_recommenders[i].Feedback = split.Train[i];
-				split_recommenders[i].Train();
-				iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-				var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-				Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+				try
+				{
+					split_recommenders[i] = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
+					split_recommenders[i].Feedback = split.Train[i];
+					split_recommenders[i].Train();
+					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
+					var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+					Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+				}
+				catch (Exception e)
+				{
+					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
+					throw e;
+				}
 			});
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
 				Parallel.For(0, (int) split.NumberOfFolds, i =>
 				{
-					iterative_recommenders[i].Iterate();
-
-					if (it % find_iter == 0)
+					try
 					{
-						var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-						Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), it);
+						iterative_recommenders[i].Iterate();
+	
+						if (it % find_iter == 0)
+						{
+							var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+							Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), it);
+						}
+					}
+					catch (Exception e)
+					{
+						Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
+						throw e;
 					}
 				});
 		}
