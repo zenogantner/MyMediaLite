@@ -66,8 +66,16 @@ namespace MyMediaLite.Data
 				test_indices[i] = random_index[i + train_indices.Length];
 
 			// create split data structures
-			Train = new IRatings[] { new RatingsProxy(ratings, train_indices) };
-			Test  = new IRatings[] { new RatingsProxy(ratings, test_indices)  };
+			if (ratings is ITimedRatings)
+			{
+				Train = new IRatings[] { new TimedRatingsProxy((ITimedRatings) ratings, train_indices) };
+				Test  = new IRatings[] { new TimedRatingsProxy((ITimedRatings) ratings, test_indices)  };
+			}
+			else
+			{
+				Train = new IRatings[] { new RatingsProxy(ratings, train_indices) };
+				Test  = new IRatings[] { new RatingsProxy(ratings, test_indices)  };
+			}
 		}
 	}
 }
