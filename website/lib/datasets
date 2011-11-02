@@ -67,12 +67,12 @@
      { method => 'UserItemBaseline',          hp => 'reg_u=150 reg_i=2',                                     rmse => '17.40', mae => '12.88' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=30 reg=50 learn_rate=0.00003 num_iter=133', rmse => '16.86', mae => '12.41' }
    ]
-   # random 80-20 split; TODO chronological split
+   # 90-10 chronological split
    camra_2011 = [
-     { method => 'GlobalAverage',             hp => '',                                                      rmse => '23.23', mae => '17.79', nmae => '0.1779' }
-     { method => 'UserAverage',               hp => '',                                                      rmse => '21.05', mae => '15.58', nmae => '0.15577' }
-     { method => 'ItemAverage',               hp => '',                                                      rmse => '21.27', mae => '15.88', nmae => '0.15884' }
-     { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10 num_iter=4',                          rmse => '19.38', mae => '14.30', nmae => '0.14303' }
+     { method => 'GlobalAverage',             hp => '',                                                      rmse => '23.24', mae => '17.78', nmae => '0.17783' }
+     { method => 'UserAverage',               hp => '',                                                      rmse => '23.10', mae => '17.59', nmae => '0.17585' }
+     { method => 'ItemAverage',               hp => '',                                                      rmse => '21.55', mae => '15.89', nmae => '0.15893' }
+     { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10 num_iter=2',                          rmse => '21.31', mae => '15.68', nmae => '0.15678' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 reg=0.015 learn_rate=0.0001 num_iter=2', rmse => '18.41', mae => '13.45', name => '0.13451' }
    ]
 %]
