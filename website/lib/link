@@ -42,7 +42,7 @@
      libsvm        => { url => 'http://www.csie.ntu.edu.tw/~cjlin/libsvm/',      title => 'LIBSVM' }
      weka          => { url => 'http://www.cs.waikato.ac.nz/ml/weka/',           title => 'Weka' }
      r             => { url => 'http://www.r-project.org/',                      title => 'R' }
-     iridium       => { url => 'http://www.mathdotnet.com/Iridium.aspx',         title => 'Math.NET Iridium' }
+     mathdotnetnumerics => { url => 'http://numerics.mathdotnet.com',         title => 'Math.NET Numerics' }
      libsvmdotnet  => { url => 'http://www.matthewajohnson.org/software/svm.html', title => 'SVM.NET' }
      mymediaframework => { url => 'http://mymediaproject.codeplex.com/',         title => 'MyMedia Framework' }
      ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx',         title => 'User Centric Media Cluster' }
