@@ -30,7 +30,7 @@ namespace MyMediaLite.Eval.Measures
 	///     <list type="bullet">
 	///       <item><description>
 	///         E.M. Voorhees "Proceedings of the 8th Text Retrieval Conference". TREC-8 Question Answering Track Report. 1999.
-	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.38.6392&rep=rep1&type=pdf
+	///         http://gate.ac.uk/sale/dd/related-work/qa/TREC+1999+TREC-8+QA+Report.pdf
 	///       </description></item>
 	///     </list>
 	///   </para>
