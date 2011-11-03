@@ -19,10 +19,22 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Eval.Measures
 {
-		/// <summary>The reciprocal rank of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
-		/// </remarks>
+	/// <summary>The reciprocal rank of a list of ranked items</summary>
+	/// <remarks>
+	///   <para>
+	///     See http://en.wikipedia.org/wiki/Mean_reciprocal_rank
+	///   </para>
+	///
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         E.M. Voorhees "Proceedings of the 8th Text Retrieval Conference". TREC-8 Question Answering Track Report. 1999.
+	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.38.6392&rep=rep1&type=pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
+	/// </remarks>
 	public static class ReciprocalRank
 	{
 		/// <summary>Compute the reciprocal rank of a list of ranked items</summary>
