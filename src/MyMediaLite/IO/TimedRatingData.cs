@@ -68,8 +68,8 @@ namespace MyMediaLite.IO
 					date_string = tokens[3] + " " + tokens[4];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
-				
-				if (date_string.Length == 19)
+
+				if (date_string.Length == 19) // format "yyyy-mm-dd hh:mm:ss"
 				{
 					var date_time_tokens = date_string.Split(time_split_chars);
 					ratings.Add(
@@ -81,6 +81,16 @@ namespace MyMediaLite.IO
 							int.Parse(date_time_tokens[3]),
 							int.Parse(date_time_tokens[4]),
 							int.Parse(date_time_tokens[5])));
+				}
+				else if (date_string.Length == 10) // format "yyyy-mm-dd"
+				{
+					var date_time_tokens = date_string.Split(time_split_chars);
+					ratings.Add(
+						user_id, item_id, rating,
+						new DateTime(
+							int.Parse(date_time_tokens[0]),
+							int.Parse(date_time_tokens[1]),
+							int.Parse(date_time_tokens[2])));
 				}
 				else
 					ratings.Add(user_id, item_id, rating, DateTime.Parse(date_string, CultureInfo.InvariantCulture));
