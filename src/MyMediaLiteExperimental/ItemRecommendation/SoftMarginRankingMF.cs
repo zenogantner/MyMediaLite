@@ -32,22 +32,22 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// Literature:
 	/// <list type="bullet">
-    ///   <item><description>
-    ///     Markus Weimer, Alexandros Karatzoglou, Alex Smola:
-    ///     Improving Maximum Margin Matrix Factorization.
-    ///     Machine Learning Journal 2008.
+	///   <item><description>
+	///     Markus Weimer, Alexandros Karatzoglou, Alex Smola:
+	///     Improving Maximum Margin Matrix Factorization.
+	///     Machine Learning Journal 2008.
 	///   </description></item>
-    ///   <item><description>
+	///   <item><description>
 	///     Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
 	///     BPR: Bayesian Personalized Ranking from Implicit Feedback.
 	///     UAI 2009.
 	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
 	///   </description></item>
-    /// </list>
-    /// 
+	/// </list>
+	/// 
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class SoftMarginRankingMF : BPRMF, IIterativeModel
+	public class SoftMarginRankingMF : BPRMF
 	{
 		public SoftMarginRankingMF() : base()
 		{
