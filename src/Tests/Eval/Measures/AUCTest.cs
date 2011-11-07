@@ -76,6 +76,14 @@ namespace Tests.Eval.Measures
 			Assert.AreEqual(0.5, AUC.Compute(ranking, new int[] { 1, 3 }, ignore));
 		}
 
+		[Test()]
+		[ExpectedException(typeof(ArgumentException))]
+		public void TestComputeFail()
+		{
+			var ranking = new int[] { 1, 2, 3, 4 };
+
+			AUC.Compute(ranking, new int[] { 1, 2, 3, 4, 5 });
+		}
 	}
 }
 

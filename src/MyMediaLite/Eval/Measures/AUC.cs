@@ -16,6 +16,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,17 +43,18 @@ namespace MyMediaLite.Eval.Measures
 		{
 			if (ignore_items == null)
 				ignore_items = new HashSet<int>();
-			
+
 			int num_correct_items = correct_items.Count - ignore_items.Intersect(correct_items).Count();
 			int num_eval_items    = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
 			int num_eval_pairs    = (num_eval_items - num_correct_items) * num_correct_items;
-			
+			if (num_eval_pairs < 0)
+				throw new ArgumentException("correct_items cannot be larger than ranked_items");
+
 			if (num_eval_pairs == 0)
 				return 0.5;
-			
+
 			int num_correct_pairs = 0;
 			int hit_count         = 0;
-
 			foreach (int item_id in ranked_items)
 			{
 				if (ignore_items.Contains(item_id))
