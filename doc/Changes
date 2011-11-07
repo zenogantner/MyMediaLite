@@ -35,6 +35,8 @@
          - RatingsSimpleSplit: better ArgumentException message; guaranteed
            sizes for train and test parts; add unit tests
          - catch exceptions in parallel CV code
+         - AUC: fix computation involving ignore_items; handle empty and
+           complete correct item lists; add unit tests
         data structures
          - (I)TimedRatings: add EarliestTime and LatestTime properties
          - add RatingsChronologicalSplit

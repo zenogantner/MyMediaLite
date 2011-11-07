@@ -42,10 +42,14 @@ namespace MyMediaLite.Eval.Measures
 		{
 			if (ignore_items == null)
 				ignore_items = new HashSet<int>();
-
-			int num_eval_items = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
-			int num_eval_pairs = (num_eval_items - correct_items.Count) * correct_items.Count;
-
+			
+			int num_correct_items = correct_items.Count - ignore_items.Intersect(correct_items).Count();
+			int num_eval_items    = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
+			int num_eval_pairs    = (num_eval_items - num_correct_items) * num_correct_items;
+			
+			if (num_eval_pairs == 0)
+				return 0.5;
+			
 			int num_correct_pairs = 0;
 			int hit_count         = 0;
 
@@ -60,7 +64,7 @@ namespace MyMediaLite.Eval.Measures
 					hit_count++;
 			}
 
-			return ((double) num_correct_pairs) / num_eval_pairs;
+			return (double) num_correct_pairs / num_eval_pairs;
 		}
 	}
 }

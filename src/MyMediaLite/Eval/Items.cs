@@ -137,7 +137,7 @@ namespace MyMediaLite.Eval
 					// skip all users that have 0 or #candidate_items test items
 					if (correct_items.Count == 0)
 						return;
-					if (num_eval_items - correct_items.Count == 0)
+					if (num_eval_items == correct_items.Count)
 						return;
 
 					IList<int> prediction_list = Prediction.PredictItems(recommender, user_id, candidate_items);
