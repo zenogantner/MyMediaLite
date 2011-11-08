@@ -2,6 +2,8 @@
   <a href="[% prefix %]contact.html">Contact</a>
   –
   <a href="http://twitter.com/mymedialite">Follow us on Twitter</a>
+  –
+  <g:plusone size="small" annotation="inline"></g:plusone>
 </p>
 
 </body></html>
