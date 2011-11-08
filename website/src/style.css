@@ -93,7 +93,7 @@ ul#navigation li ul li {
 
 div#infobox {
     font-size: 0.9em;
-    float: right; width: 12em;
+    float: right; width: 16em;
     margin: 0 0 1.1em; padding: 0;
     border: 1px dashed silver;
 }
@@ -110,7 +110,7 @@ div#infobox p {
 div#rightcolumn {
     font-size: 0.9em;
     float: right;
-    width: 12em;
+    width: 16em;
     margin: 0 0 1.1em; padding: 0;
     background-color: white; border: none;
 }
@@ -132,7 +132,7 @@ div#rightcolumn div {
 }
 
 div#content {
-    margin: 0 11.5em 1em 10em;
+    margin: 0 15.5em 1em 10em;
     padding: 0 1em;
     border: 1px dashed silver;
 }
