@@ -1,0 +1,67 @@
+[%
+  title='MyMediaLite: User and item lists'
+  prefix='../'
+%]
+
+[% INCLUDE header %]
+
+<h1><a href="index.html">[% title %]</a></h1>
+
+[% INCLUDE menu %]
+
+[% INCLUDE infobox %]
+
+<div id="content">
+<h2>User and item lists</h2>
+<p>
+User and item lists are trivial: One entity ID per line
+</p>
+
+
+<h2>Example</h2>
+<pre>
+5
+22
+26
+29
+35
+36
+45
+</pre>
+
+
+<h2>Command-line tools</h2>
+<p>
+The <a href="item_prediction.html">item recommendation tool</a> supports this file format.
+</p>
+
+<p>
+Files with this format are expected by the following arguments:
+<ul>
+  <li><code>--candidate-items=FILE</code></li>
+  <li><code>--test-users=FILE</code></li>
+</ul>
+</p>
+
+
+<h2>Classes</h2>
+
+<h3>Reading</h3>
+<p>
+The class for reading in this kind of file is
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/NumberFile.cs">
+MyMediaLite.IO.NumberFile</a></code>.
+</p>
+<p>
+When reading from such a file, do not forget to map the user/item IDs to their internal representation:
+<pre>
+    test_users = new List<int>(user_mapping.ToInternalID(NumberFile.ReadLongs(file))));
+</pre>
+</p>
+
+<h3>Writing</h3>
+Writing this file format is trivial, so there is no specific class for that in MyMediaLite.
+
+</div>
+
+[% INCLUDE footer %]

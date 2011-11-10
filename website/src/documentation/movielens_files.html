@@ -44,7 +44,9 @@ The user and item IDs are non-negative long (64 bit) integers, and the rating va
 5951::457::3::978300719
 </pre>
 
+
 <h2>Command-line tools</h2>
+
 <h3>Rating prediction</h3>
 <p>
 MyMediaLite's <a href="rating_prediction.html">rating prediction tool</a> supports the MovieLens 1M/10M file format for its <code>--training-data=FILE</code> and <code>--test-data=FILE</code> arguments.
@@ -63,7 +65,9 @@ The <a href="item_prediction.html">item recommendation</a> tool currently does n
 Have a look at the <a href="../contribute.html">Contribute page</a> if you want to help us.
 </p>
 
+
 <h2>Classes</h2>
+
 <h3>Reading</h3>
 <p>
 The classes implementing reading in this kind of rating data are
@@ -73,6 +77,10 @@ The classes implementing reading in this kind of rating data are
 <h3>Writing</h3>
 <p>
 <code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/RatingPrediction/Prediction.cs">MyMediaLite.RatingPrediction.Prediction</a></code>
+contains a static method <code>WritePredictions()</code> that lets you write the predictions to a target, either a file or a <code>TextWriter</code>, for example:
+<pre>
+    Prediction.WritePredictions(recommender, ratings, user_mapping, item_mapping, target, "{0}::{1}::{2}");
+</pre>
 </p>
 
 </div>
