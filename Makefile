@@ -21,10 +21,17 @@ configure:
 clean:
 #	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
+	rm -rf ${SRC_DIR}/Programs/*/bin/Debug/*
+	rm -rf ${SRC_DIR}/Programs/*/bin/Release/*
+	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Debug/*
+	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Release/*
+	rm -rf ${SRC_DIR}/Mapping/*/bin/Debug/*
+	rm -rf ${SRC_DIR}/Mapping/*/bin/Release/*
 	rm -rf ${SRC_DIR}/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/*/bin/Release/*
 	rm -rf ${SRC_DIR}/RatingService/bin/*
 	rm -rf ${SRC_DIR}/test-results
+	rm -rf ${SRC_DIR}/*/*.tar.gz
 	rm -rf ${SRC_DIR}/*/*.pidb
 	rm -rf doc/monodoc/*
 	rm -rf MyMediaLite-*/
