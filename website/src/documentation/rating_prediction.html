@@ -13,7 +13,7 @@
 
 <div id="content">
 <pre>
-MyMediaLite Rating Prediction 1.99
+MyMediaLite Rating Prediction 2.00
 
  usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
 
@@ -35,6 +35,8 @@ MyMediaLite Rating Prediction 1.99
    - UserItemBaseline reg_u=15 reg_i=10 num_iter=10
    - UserKNNCosine k=inf reg_u=10 reg_i=5
    - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+   - TimeAwareBaseline num_iter=30 bin_size=70 beta=0.4 user_bias_learn_rate=0.003 item_bias_learn_rate=0.002 alpha_learn_rate=1E-05 item_bias_by_time_bin_learn_rate=5E-06 user_bias_by_day_learn_rate=0.0025 user_scaling_learn_rate=0.008 user_scaling_by_day_learn_rate=0.002 reg_u=0.03 reg_i=0.03 reg_alpha=50 reg_item_bias_by_time_bin=0.1 reg_user_bias_by_day=0.005 reg_user_scaling=0.01 reg_user_scaling_by_day=0.005
+   - TimeAwareBaselineWithFrequencies num_iter=40 bin_size=70 beta=0.4 user_bias_learn_rate=0.00267 item_bias_learn_rate=0.000488 alpha_learn_rate=3.11E-06 item_bias_by_time_bin_learn_rate=1.15E-06 user_bias_by_day_learn_rate=0.000257 user_scaling_learn_rate=0.00564 user_scaling_by_day_learn_rate=0.00103 reg_u=0.0255 reg_i=0.0255 reg_alpha=3.95 reg_item_bias_by_time_bin=0.0929 reg_user_bias_by_day=0.00231 reg_user_scaling=0.0476 reg_user_scaling_by_day=0.019 frequency_log_base=6.76 item_bias_at_frequency_learn_rate=0.00236 reg_item_bias_at_frequency=1.1E-08
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
@@ -48,7 +50,7 @@ MyMediaLite Rating Prediction 1.99
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
-   --file-format=ml1m|kddcup2011|default
+   --file-format=movielens_1m|kddcup2011|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
    --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
@@ -63,12 +65,15 @@ MyMediaLite Rating Prediction 1.99
                                   and predicted rating, respectively; default is {0}\\t{1}\\t{2}
 
   evaluation options:
-   --cross-validation=K           perform k-fold cross-validation on the training data
-   --show-fold-results            show results for individual folds in cross-validation
-   --test-ratio=NUM               use a ratio of NUM of the training data for evaluation (simple split)
-   --online-evaluation            perform online evaluation (use every tested rating for incremental training)
-   --search-hp                    search for good hyperparameter values (experimental)
-   --compute-fit                  display fit on training data
+   --cross-validation=K                perform k-fold cross-validation on the training data
+   --show-fold-results                 show results for individual folds in cross-validation
+   --test-ratio=NUM                    use a ratio of NUM of the training data for evaluation (simple split)
+   --chronological-split=NUM|DATETIME  use the last ratio of NUM of the training data ratings for evaluation,
+                                       or use the ratings from DATETIME on for evaluation (requires time information
+                                       in the training data)
+   --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
+   --search-hp                         search for good hyperparameter values (experimental)
+   --compute-fit                       display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
