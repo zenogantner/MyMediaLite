@@ -53,7 +53,7 @@ namespace MyMediaLite.HyperParameter
 		{
 			Recommender.Configure(recommender, hp_string);
 
-			double result = Eval.RatingsCrossValidation.Evaluate(recommender, split)[evaluation_measure];
+			double result = recommender.DoCrossValidation(split)[evaluation_measure];
 			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(CultureInfo.InvariantCulture));
 			return result;
 		}

@@ -297,7 +297,7 @@ class RatingPrediction
 			if (cross_validation > 1)
 			{
 				var split = new RatingCrossValidationSplit(training_data, cross_validation);
-				recommender.EvaluateIterative(split, max_iter, find_iter);
+				recommender.DoIterativeCrossValidation(split, max_iter, find_iter);
 			}
 			else
 			{
@@ -365,7 +365,7 @@ class RatingPrediction
 				{
 					Console.WriteLine(recommender.ToString());
 					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = recommender.Evaluate(split, show_fold_results);
+					var results = recommender.DoCrossValidation(split, show_fold_results);
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}

@@ -32,7 +32,7 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> Evaluate(this RatingPredictor recommender, ISplit<IRatings> split, bool show_results = false)
+		static public Dictionary<string, double> DoCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, bool show_results = false)
 		{
 			var avg_results = new Dictionary<string, double>();
 
@@ -72,7 +72,7 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
-		static public void EvaluateIterative(this RatingPredictor recommender, ISplit<IRatings> split, int max_iter, int find_iter = 1)
+		static public void DoIterativeCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, int max_iter, int find_iter = 1)
 		{
 			if (!(recommender is IIterativeModel))
 				throw new ArithmeticException("recommender must be of type IIterativeModel");

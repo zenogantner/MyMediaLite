@@ -52,7 +52,7 @@ namespace MyMediaLite.HyperParameter
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
 				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(CultureInfo.InvariantCulture));
-				double result = Eval.RatingsCrossValidation.Evaluate(recommender, split)[evaluation_measure];
+				double result = recommender.DoCrossValidation(split)[evaluation_measure];
 
 				if (result < min_result)
 				{
@@ -93,7 +93,7 @@ namespace MyMediaLite.HyperParameter
 					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(CultureInfo.InvariantCulture));
 
 					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(CultureInfo.InvariantCulture), hp_values2[j].ToString(CultureInfo.InvariantCulture)); // TODO this is not generic
-					double result = Eval.RatingsCrossValidation.Evaluate(recommender, split)[evaluation_measure];
+					double result = recommender.DoCrossValidation(split)[evaluation_measure];
 					if (result < min_result)
 					{
 						min_i = i;

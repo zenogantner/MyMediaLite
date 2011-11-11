@@ -1,11 +1,16 @@
 2.01	2011-12-??
         API
 	 - IDataSet: add Count property
-	 - *.Prediction API: make mapping arguments optional
+	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
+           are now extension methods, rename to Extensions
+           - make mapping arguments optional
+           - less method overloads
 	command-line programs
          - #61: add the option to ignore first line of training/test file
          - item recommendation
            - add --file-format= option
+        evaluation
+         - #109: formulate evaluation routines as extension methods
         I/O
          - add enum IO.ItemDataFileFormat
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
