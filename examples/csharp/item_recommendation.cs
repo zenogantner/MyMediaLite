@@ -20,7 +20,7 @@ public class ItemPrediction
 		recommender.Train();
 
 		// measure the accuracy on the test data set
-		var results = Items.Evaluate(recommender, test_data, training_data, test_users, candidate_items);
+		var results = recommender.Evaluate(test_data, training_data, candidate_items, test_users);
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
 

@@ -18,7 +18,7 @@ public class RatingPrediction
 		recommender.Train();
 
 		// measure the accuracy on the test data set
-		var results = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
+		var results = recommender.Evaluate(test_data);
 		Console.WriteLine("RMSE={0} MAE={1}", results["RMSE"], results["MAE"]);
 
 		// make a prediction for a certain user and item
