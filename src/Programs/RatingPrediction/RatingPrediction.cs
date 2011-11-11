@@ -338,7 +338,7 @@ class RatingPrediction
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
-							Prediction.WritePredictions(recommender, test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line);
+							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line);
 
 						if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
 						{
@@ -409,9 +409,9 @@ class RatingPrediction
 
 			if (prediction_file != null)
 			{
+				Console.WriteLine();
 				seconds = Wrap.MeasureTime(delegate() {
-						Console.WriteLine();
-						Prediction.WritePredictions(recommender, test_data, prediction_file, user_mapping, item_mapping, prediction_line);
+						recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line);
 				});
 				Console.Error.Write("predicting_time " + seconds);
 			}

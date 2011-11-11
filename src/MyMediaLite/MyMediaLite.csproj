@@ -109,7 +109,6 @@
     <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
     <Compile Include="RatingPrediction\KNN.cs" />
     <Compile Include="RatingPrediction\MatrixFactorization.cs" />
-    <Compile Include="RatingPrediction\Prediction.cs" />
     <Compile Include="RatingPrediction\RatingPredictor.cs" />
     <Compile Include="RatingPrediction\SlopeOne.cs" />
     <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
@@ -126,7 +125,6 @@
     <Compile Include="ItemRecommendation\KNN.cs" />
     <Compile Include="ItemRecommendation\MF.cs" />
     <Compile Include="ItemRecommendation\MostPopular.cs" />
-    <Compile Include="ItemRecommendation\Prediction.cs" />
     <Compile Include="ItemRecommendation\Random.cs" />
     <Compile Include="ItemRecommendation\UserAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\UserKNN.cs" />
@@ -177,6 +175,8 @@
     <Compile Include="Data\RatingsChronologicalSplit.cs" />
     <Compile Include="Data\ITimedDataSet.cs" />
     <Compile Include="Data\RatingsPerUserChronologicalSplit.cs" />
+    <Compile Include="RatingPrediction\Extensions.cs" />
+    <Compile Include="ItemRecommendation\Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -209,7 +209,7 @@ class MappingRatingPrediction
 			Console.WriteLine();
 			seconds = Wrap.MeasureTime(
 				delegate() {
-					Prediction.WritePredictions(recommender, test_data, prediction_file, user_mapping, item_mapping);
+					Extensions.WritePredictions(recommender, test_data, prediction_file, user_mapping, item_mapping);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);

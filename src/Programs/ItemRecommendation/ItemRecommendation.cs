@@ -679,30 +679,18 @@ class ItemRecommendation
 
 	static void Predict(string prediction_file, string predict_for_users_file)
 	{
-		TimeSpan time_span;
-
+		IList<int> user_list = null;
 		if (predict_for_users_file == null)
-			time_span = Wrap.MeasureTime( delegate() {
-				Prediction.WritePredictions(
-					recommender,
-					training_data,
-					candidate_items, predict_items_number,
-					prediction_file,
-					user_mapping, item_mapping);
-				Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
-			});
-		else
-			time_span = Wrap.MeasureTime( delegate() {
-				Prediction.WritePredictions(
-					recommender,
-					training_data,
-					user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file)),
-					candidate_items, predict_items_number,
-					prediction_file,
-					user_mapping, item_mapping
-				);
-				Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
-			});
+			user_list = user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file));
+
+		TimeSpan time_span = Wrap.MeasureTime( delegate() {
+			recommender.WritePredictions(
+				training_data,
+				candidate_items, predict_items_number,
+				prediction_file, user_list,
+				user_mapping, item_mapping);
+			Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
+		});
 		Console.Write(" predicting_time " + time_span);
 	}
 

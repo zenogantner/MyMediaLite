@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Class that contains static methods for rating prediction</summary>
-	public class Prediction
+	public static class Extensions
 	{
 		/// <summary>Rate a given set of instances and write it to a TextWriter</summary>
 		/// <param name="recommender">rating predictor</param>
@@ -32,7 +32,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		public static void WritePredictions(
-			IRecommender recommender,
+			this IRecommender recommender,
 			IRatings ratings,
 			TextWriter writer,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
@@ -59,7 +59,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		public static void WritePredictions(
-			IRecommender recommender,
+			this IRecommender recommender,
 			IRatings ratings,
 			string filename,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
