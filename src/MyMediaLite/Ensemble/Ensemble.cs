@@ -33,7 +33,13 @@ namespace MyMediaLite.Ensemble
 
 		private double max_rating_value = 5;
 		private double min_rating_value = 1;
-
+		
+		/// <summary>create a shallow copy of the object</summary>
+		public Object Clone()
+		{
+			return this.MemberwiseClone();
+		}
+		
 		/// <summary>The max rating value</summary>
 		/// <value>The max rating value</value>
 		public double MaxRatingValue

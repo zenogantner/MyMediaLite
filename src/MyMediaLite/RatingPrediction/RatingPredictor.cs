@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)</summary>
-	public abstract class RatingPredictor : IRatingPredictor, ICloneable
+	public abstract class RatingPredictor : IRatingPredictor
 	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID  { get; set; }

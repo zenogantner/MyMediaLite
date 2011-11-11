@@ -38,7 +38,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// See http://recsyswiki/wiki/Item_recommendation and http://recsyswiki/wiki/Implicit_feedback
 	/// </remarks>
-	public abstract class ItemRecommender : IRecommender, ICloneable
+	public abstract class ItemRecommender : IRecommender
 	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID { get; set; }

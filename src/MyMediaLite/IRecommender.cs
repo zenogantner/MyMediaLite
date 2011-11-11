@@ -15,6 +15,8 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+
 namespace MyMediaLite
 {
 	// Doxygen main page
@@ -28,7 +30,7 @@ namespace MyMediaLite
 
 	/// <summary>Generic interface for simple recommenders</summary>
 	/// <remarks></remarks>
-	public interface IRecommender
+	public interface IRecommender : ICloneable
 	{
 		/// <summary>Predict rating or score for a given user-item combination</summary>
 		/// <remarks></remarks>
