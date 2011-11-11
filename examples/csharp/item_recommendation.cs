@@ -9,12 +9,10 @@ public class ItemPrediction
 	public static void Main(string[] args)
 	{
 		// load the data
-		var user_mapping = new EntityMapping();
-		var item_mapping = new EntityMapping();
-		var training_data = ItemData.Read(args[0], user_mapping, item_mapping);
-		var test_users = training_data.AllUsers; // users that will be taken into account in the evaluation
+		var training_data = ItemData.Read(args[0]);
+		var test_users = training_data.AllUsers;      // users that will be taken into account in the evaluation
 		var candidate_items = training_data.AllItems; // items that will be taken into account in the evaluation
-		var test_data = ItemData.Read(args[1], user_mapping, item_mapping);
+		var test_data = ItemData.Read(args[1]);
 
 		// set up the recommender
 		var recommender = new MostPopular();
@@ -26,8 +24,8 @@ public class ItemPrediction
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
 
-		// make a prediction for a certain user and item
-		Console.WriteLine(recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1)));
+		// make a score prediction for a certain user and item
+		Console.WriteLine(recommender.Predict(1, 1));
 	}
 }
 

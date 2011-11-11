@@ -9,10 +9,8 @@ public class RatingPrediction
 	public static void Main(string[] args)
 	{
 		// load the data
-		var user_mapping = new EntityMapping();
-		var item_mapping = new EntityMapping();
-		var training_data = RatingData.Read(args[0], user_mapping, item_mapping);
-		var test_data = RatingData.Read(args[1], user_mapping, item_mapping);
+		var training_data = RatingData.Read(args[0]);
+		var test_data = RatingData.Read(args[1]);
 
 		// set up the recommender
 		var recommender = new UserItemBaseline();
@@ -24,6 +22,6 @@ public class RatingPrediction
 		Console.WriteLine("RMSE={0} MAE={1}", results["RMSE"], results["MAE"]);
 
 		// make a prediction for a certain user and item
-		Console.WriteLine(recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1)));
+		Console.WriteLine(recommender.Predict(1, 1));
 	}
 }
