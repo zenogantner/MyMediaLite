@@ -33,19 +33,19 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="candidate_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="filename">the name of the file to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			IPosOnlyFeedback train,
 			ICollection<int> candidate_items,
 			int num_predictions,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			string filename)
+			string filename,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			using (var writer = new StreamWriter(filename))
-				WritePredictions(recommender, train, candidate_items, num_predictions, user_mapping, item_mapping, writer);
+				WritePredictions(recommender, train, candidate_items, num_predictions, writer, user_mapping, item_mapping);
 		}
 
 		/// <summary>Write item predictions (scores) to a file</summary>
@@ -54,20 +54,20 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="users">a list of users to make recommendations for</param>
 		/// <param name="candidate_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="filename">the name of the file to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		/// <param name="filename">the name of the file to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			IPosOnlyFeedback train,
 			IList<int> users,
 			ICollection<int> candidate_items,
 			int num_predictions,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			string filename)
+			string filename,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			using (var writer = new StreamWriter(filename))
-				WritePredictions(recommender, train, users, candidate_items, num_predictions, user_mapping, item_mapping, writer);
+				WritePredictions(recommender, train, users, candidate_items, num_predictions, writer, user_mapping, item_mapping);
 		}
 
 		/// <summary>Write item predictions (scores) for all users to a TextWriter object</summary>
@@ -75,19 +75,19 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
 		/// <param name="candidate_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			IPosOnlyFeedback train,
 			ICollection<int> candidate_items,
 			int num_predictions,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			TextWriter writer)
+			TextWriter writer,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var users = new List<int>(user_mapping.InternalIDs);
-			WritePredictions(recommender, train, users, candidate_items, num_predictions, user_mapping, item_mapping, writer);
+			WritePredictions(recommender, train, users, candidate_items, num_predictions, writer, user_mapping, item_mapping);
 		}
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
@@ -96,22 +96,22 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="users">a list of users to make recommendations for</param>
 		/// <param name="candidate_items">the list of candidate items</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			IPosOnlyFeedback train,
 			IList<int> users,
 			ICollection<int> candidate_items,
 			int num_predictions,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			TextWriter writer)
+			TextWriter writer,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			foreach (int user_id in users)
 			{
 				var ignore_items = train.UserMatrix[user_id];
-				WritePredictions(recommender, user_id, candidate_items, ignore_items, num_predictions, user_mapping, item_mapping, writer);
+				WritePredictions(recommender, user_id, candidate_items, ignore_items, num_predictions, writer, user_mapping, item_mapping);
 			}
 		}
 
@@ -121,17 +121,17 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="candidate_items">the list of candidate items</param>
 		/// <param name="ignore_items">a list of items for which no predictions should be made</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		static public void WritePredictions(
 			IRecommender recommender,
 			int user_id,
 			ICollection<int> candidate_items,
 			ICollection<int> ignore_items,
 			int num_predictions,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
-			TextWriter writer)
+			TextWriter writer,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var score_list = new List<WeightedItem>();
 			foreach (int item_id in candidate_items)

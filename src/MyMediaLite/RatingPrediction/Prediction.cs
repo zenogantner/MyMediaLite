@@ -27,17 +27,22 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Rate a given set of instances and write it to a TextWriter</summary>
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
+		/// <param name="writer">the TextWriter to write the predictions to</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
-		/// <param name="writer">the TextWriter to write the predictions to</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		public static void WritePredictions(
 			IRecommender recommender,
 			IRatings ratings,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			TextWriter writer,
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
 			string line_format = "{0}\t{1}\t{2}")
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+
 			for (int index = 0; index < ratings.Count; index++)
 				writer.WriteLine(
 					line_format,
@@ -49,19 +54,19 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Rate a given set of instances and write it to a file</summary>
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
+		/// <param name="filename">the name of the file to write the predictions to</param>
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
-		/// <param name="filename">the name of the file to write the predictions to</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		public static void WritePredictions(
 			IRecommender recommender,
 			IRatings ratings,
-			IEntityMapping user_mapping, IEntityMapping item_mapping,
 			string filename,
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
 			string line_format = "{0}\t{1}\t{2}")
 		{
 			using (var writer = new StreamWriter(filename))
-				WritePredictions(recommender, ratings, user_mapping, item_mapping, writer, line_format);
+				WritePredictions(recommender, ratings, writer, user_mapping, item_mapping, line_format);
 		}
 	}
 }

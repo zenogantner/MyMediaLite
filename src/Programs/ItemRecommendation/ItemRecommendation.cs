@@ -687,8 +687,8 @@ class ItemRecommendation
 					recommender,
 					training_data,
 					candidate_items, predict_items_number,
-					user_mapping, item_mapping,
-					prediction_file);
+					prediction_file,
+					user_mapping, item_mapping);
 				Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
 			});
 		else
@@ -698,8 +698,8 @@ class ItemRecommendation
 					training_data,
 					user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file)),
 					candidate_items, predict_items_number,
-					user_mapping, item_mapping,
-					prediction_file
+					prediction_file,
+					user_mapping, item_mapping
 				);
 				Console.Error.WriteLine("Wrote predictions for selected users to {0}", prediction_file);
 			});

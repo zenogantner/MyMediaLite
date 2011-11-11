@@ -73,8 +73,8 @@ class MappingRatingPrediction
 		Environment.Exit (exit_code);
 	}
 
-    public static void Main(string[] args)
-    {
+	public static void Main(string[] args)
+	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 
 		// check number of command line parameters
@@ -158,7 +158,7 @@ class MappingRatingPrediction
 		}
 
 		// test data
-        test_data = RatingData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
+		test_data = RatingData.Read( Path.Combine(data_dir, testfile), user_mapping, item_mapping );
 
 		TimeSpan seconds;
 
@@ -190,13 +190,13 @@ class MappingRatingPrediction
 					Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "iteration {0} fit {1}", i, recommender.ComputeFit()));
 				}
 				recommender.NumIterMapping = num_iter; // restore
-	    	} );
+			} );
 		}
 		else
 		{
 			seconds = Wrap.MeasureTime( delegate() {
 				recommender.LearnAttributeToFactorMapping();
-	    	} );
+			});
 		}
 		Console.Write("mapping_time " + seconds + " ");
 
@@ -208,23 +208,23 @@ class MappingRatingPrediction
 		{
 			Console.WriteLine();
 			seconds = Wrap.MeasureTime(
-		    	delegate() {
-					Prediction.WritePredictions(recommender, test_data, user_mapping, item_mapping, prediction_file);
+				delegate() {
+					Prediction.WritePredictions(recommender, test_data, prediction_file, user_mapping, item_mapping);
 				}
 			);
 			Console.Error.WriteLine("predicting_time " + seconds);
 		}
 	}
 
-    static TimeSpan EvaluateRecommender(MF_Mapping recommender)
+	static TimeSpan EvaluateRecommender(MF_Mapping recommender)
 	{
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
-		TimeSpan seconds = Wrap.MeasureTime( delegate()
-	    	{
-	    		var result = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
+		TimeSpan seconds = Wrap.MeasureTime(
+			delegate() {
+				var result = MyMediaLite.Eval.Ratings.Evaluate(recommender, test_data);
 				Console.Write(MyMediaLite.Eval.Ratings.FormatResults(result));
-	    	} );
+			} );
 		Console.Write(" testing " + seconds);
 
 		return seconds;
