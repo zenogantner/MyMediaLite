@@ -42,7 +42,7 @@ namespace MyMediaLite.ItemRecommendation
 			ICollection<int> candidate_items,
 			int num_predictions,
 			string filename,
-			IEntityMapping user_mapping, IEntityMapping item_mapping)
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
 			using (var writer = new StreamWriter(filename))
 				WritePredictions(recommender, train, candidate_items, num_predictions, writer, user_mapping, item_mapping);
@@ -64,7 +64,7 @@ namespace MyMediaLite.ItemRecommendation
 			ICollection<int> candidate_items,
 			int num_predictions,
 			string filename,
-			IEntityMapping user_mapping, IEntityMapping item_mapping)
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
 			using (var writer = new StreamWriter(filename))
 				WritePredictions(recommender, train, users, candidate_items, num_predictions, writer, user_mapping, item_mapping);
@@ -84,7 +84,7 @@ namespace MyMediaLite.ItemRecommendation
 			ICollection<int> candidate_items,
 			int num_predictions,
 			TextWriter writer,
-			IEntityMapping user_mapping, IEntityMapping item_mapping)
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
 			var users = new List<int>(user_mapping.InternalIDs);
 			WritePredictions(recommender, train, users, candidate_items, num_predictions, writer, user_mapping, item_mapping);
@@ -106,7 +106,7 @@ namespace MyMediaLite.ItemRecommendation
 			ICollection<int> candidate_items,
 			int num_predictions,
 			TextWriter writer,
-			IEntityMapping user_mapping, IEntityMapping item_mapping)
+			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
 			foreach (int user_id in users)
 			{
@@ -133,6 +133,11 @@ namespace MyMediaLite.ItemRecommendation
 			TextWriter writer,
 			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+
 			var score_list = new List<WeightedItem>();
 			foreach (int item_id in candidate_items)
 				score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));

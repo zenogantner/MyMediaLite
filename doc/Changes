@@ -1,6 +1,7 @@
 2.01	2011-12-??
         API
 	 - IDataSet: add Count property
+	 - *.Prediction API: make mapping arguments optional
 	command-line programs
          - #61: add the option to ignore first line of training/test file
          - item recommendation
