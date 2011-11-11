@@ -20,13 +20,16 @@ Files containing item recommendations contain the recommended items for one user
 An entry line contains the user ID followed by a tab character, followed by the top N recommended items with their score.
 </p>
 
+
 <h2>Example</h2>
 <pre>
 0    [9:3.5,7:3.4,3:3.1]
 </pre>
 means that we recommend the items 9, 7, and 3 to user 0, and that their respective scores are 3.5, 3.4, and 3.1.
 
+
 <h2>Command-line tools</h2>
+
 <h3>Item recommendation</h3>
 <p>
 The <a href="item_prediction.html">item recommendation tool</a> supports this file format.
@@ -34,15 +37,46 @@ Use <code>--prediction-file=FILE</code> to specify the file name and
 <code>--predict-items-number=N</code> to specify the number of items to recommend to each user.
 </p>
 
+
 <h2>Classes</h2>
+
 <h3>Reading</h3>
 <p>
 There is currently no class for reading this kind of file in MyMediaLite.
 Given the information here it should be easy to implement.
 </p>
+
 <h3>Writing</h3>
 <p>
-<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/ItemRecommendation/Prediction.cs">MyMediaLite.ItemRecommendation.Prediction</a></code>
+<code>
+Writing item recommendations to a stream or file can be performed using the extension methods defined in
+<a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/ItemRecommendation/Extensions.cs">MyMediaLite.ItemRecommendation.Extensions</a></code>
+</p>
+
+<p>
+All you need to do is to import the <code>MyMediaLite.ItemRecommendation</code> namespace via the <code>using</code> statement.
+Then writing out predictions is simple:
+<pre>
+using MyMediaLite.ItemRecommendation;
+
+...
+
+recommender.WritePredictions(training_data, candidate_items, predict_items_number, prediction_file);
+</pre>
+</p>
+
+<p>
+If you only want predictions for specific users, provide a list of user IDs to the method:
+<pre>
+recommender.WritePredictions(training_data, candidate_items, predict_items_number, prediction_file, user_list);
+</pre>
+</p>
+
+<p>
+If you mapped the user and item IDs to internal IDs, supply the mapping data as arguments to the method so that the internal IDs can be turned into their original counterparts again:
+<pre>
+recommender.WritePredictions(training_data, candidate_items, predict_items_number, prediction_file, user_list, user_mapping, item_mapping);
+</pre>
 </p>
 
 </div>

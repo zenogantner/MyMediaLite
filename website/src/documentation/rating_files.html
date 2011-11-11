@@ -140,10 +140,18 @@ If you also want to read in time information, use the static class <code><a href
 
 <h3>Writing</h3>
 <p>
-<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/RatingPrediction/Prediction.cs">MyMediaLite.RatingPrediction.Prediction</a></code>
-contains a static method <code>WritePredictions()</code> that lets you write the predictions to a target, either a file or a <code>TextWriter</code>, for example:
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/RatingPrediction/Extensions.cs">MyMediaLite.RatingPrediction.Extensions</a></code>
+contains an extension method <code>WritePredictions()</code> that lets you write the predictions to a target, either a file or a <code>TextWriter</code>, for example:
 <pre>
-    Prediction.WritePredictions(recommender, ratings, user_mapping, item_mapping, target, "{0},{1},{2}");
+    recommender.WritePredictions(ratings, user_mapping, item_mapping, target);
+</pre>
+This will use tabs as column separators.
+</p>
+
+<p>
+If you want other separators, provide a line format string to the method:
+<pre>
+    recommender.WritePredictions(ratings, user_mapping, item_mapping, target, "{0}|{1}|{2}");
 </pre>
 </p>
 
