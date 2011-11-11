@@ -23,9 +23,6 @@ namespace MyMediaLite.Data
 	/// <summary>Interface for implicit, positive-only user feedback</summary>
 	public interface IPosOnlyFeedback : IDataSet
 	{
-		/// <summary>the number of feedback events</summary>
-		int Count { get; }
-
 		/// <summary>By-user access, users are stored in the rows, items in the culumns</summary>
 		/// <remarks>should be implemented as lazy data structure</remarks>
 		IBooleanMatrix UserMatrix { get; }

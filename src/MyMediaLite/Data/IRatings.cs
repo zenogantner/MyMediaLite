@@ -20,8 +20,11 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Interface for rating datasets</summary>
-	public interface IRatings : IList<double>, IDataSet
+	public interface IRatings : IDataSet, IList<double>
 	{
+		///
+		new int Count { get; }
+
 		/// <summary>the maximum rating in the dataset</summary>
 		double MaxRating { get; }
 		/// <summary>the minimum rating in the dataset</summary>

@@ -34,6 +34,9 @@ namespace MyMediaLite.Data
 	/// </remarks>
 	public interface IDataSet
 	{
+		/// <summary>the number of interaction events in the dataset</summary>
+		int Count { get; }
+
 		/// <summary>the user entries</summary>
 		IList<int> Users { get; }
 		/// <summary>the item entries</summary>

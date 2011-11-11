@@ -27,7 +27,7 @@ namespace MyMediaLite.Data
 	///     recommender system algorithms.
 	///     In particular, chronological splits (<see cref="RatingsChronologicalSplit"/>) are more realistic.
 	///   </para>
-	/// 
+	///
 	///   <para>
 	///     The dataset must not be modified after the split - this would lead to undefined behavior.
 	///   </para>
