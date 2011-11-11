@@ -35,7 +35,7 @@ namespace MyMediaLite.Eval
 		static public Dictionary<string, double> DoCrossValidation(this RatingPredictor recommender, uint num_folds = 5, bool show_results = false)
 		{
 			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
-			return DoCrossValidation(recommender, split, show_results);
+			return recommender.DoCrossValidation(split, show_results);
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
@@ -80,13 +80,24 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
 		/// <param name="recommender">a rating predictor</param>
+		/// <param name="num_folds">the number of folds</param>
+		/// <param name="max_iter">the maximum number of iterations</param>
+		/// <param name="find_iter">the report interval</param>
+		static public void DoIterativeCrossValidation(this RatingPredictor recommender, uint num_folds, int max_iter, int find_iter = 1)
+		{
+			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			recommender.DoIterativeCrossValidation(split, max_iter, find_iter);
+		}
+
+		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
+		/// <param name="recommender">a rating predictor</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
 		static public void DoIterativeCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, int max_iter, int find_iter = 1)
 		{
 			if (!(recommender is IIterativeModel))
-				throw new ArithmeticException("recommender must be of type IIterativeModel");
+				throw new ArgumentException("recommender must be of type IIterativeModel");
 
 			var split_recommenders     = new RatingPredictor[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];

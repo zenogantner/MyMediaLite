@@ -296,8 +296,7 @@ class RatingPrediction
 
 			if (cross_validation > 1)
 			{
-				var split = new RatingCrossValidationSplit(training_data, cross_validation);
-				recommender.DoIterativeCrossValidation(split, max_iter, find_iter);
+				recommender.DoIterativeCrossValidation(cross_validation, max_iter, find_iter);
 			}
 			else
 			{
