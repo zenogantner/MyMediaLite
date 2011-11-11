@@ -364,8 +364,7 @@ class RatingPrediction
 				if (cross_validation > 1)
 				{
 					Console.WriteLine(recommender.ToString());
-					var split = new RatingCrossValidationSplit(training_data, cross_validation);
-					var results = recommender.DoCrossValidation(split, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, show_fold_results);
 					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 					no_eval = true;
 				}

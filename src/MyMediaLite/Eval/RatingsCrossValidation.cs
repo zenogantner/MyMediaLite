@@ -29,6 +29,17 @@ namespace MyMediaLite.Eval
 	{
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="recommender">a rating predictor</param>
+		/// <param name="num_folds">the number of folds</param>
+		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> DoCrossValidation(this RatingPredictor recommender, uint num_folds = 5, bool show_results = false)
+		{
+			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			return DoCrossValidation(recommender, split, show_results);
+		}
+
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">a rating predictor</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
@@ -44,13 +55,13 @@ namespace MyMediaLite.Eval
 					split_recommender.Ratings = split.Train[i];
 					split_recommender.Train();
 					var fold_results = Ratings.Evaluate(split_recommender, split.Test[i]);
-	
+
 					foreach (var key in fold_results.Keys)
 						if (avg_results.ContainsKey(key))
 							avg_results[key] += fold_results[key];
 						else
 							avg_results[key] = fold_results[key];
-	
+
 					if (show_results)
 						Console.Error.WriteLine("fold {0} {1}", i, Ratings.FormatResults(fold_results));
 				}
@@ -106,7 +117,7 @@ namespace MyMediaLite.Eval
 					try
 					{
 						iterative_recommenders[i].Iterate();
-	
+
 						if (it % find_iter == 0)
 						{
 							var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);

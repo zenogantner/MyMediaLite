@@ -35,8 +35,8 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> Evaluate(
-			this ItemRecommender recommender,
+		static public Dictionary<string, double> DoCrossValidation(
+			this IRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> test_users,
 			IList<int> candidate_items,
@@ -44,7 +44,10 @@ namespace MyMediaLite.Eval
 			bool show_results = false)
 		{
 			var avg_results = new Dictionary<string, double>();
-
+			
+			if (!(recommender is ItemRecommender))
+				throw new ArgumentException("recommender must be of type ItemRecommender");
+			
 			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
 				try
@@ -86,8 +89,8 @@ namespace MyMediaLite.Eval
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
-		static public void EvaluateIterative(
-			this ItemRecommender recommender,
+		static public void DoIterativeCrossValidation(
+			this IRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> test_users,
 			IList<int> candidate_items,
@@ -97,7 +100,9 @@ namespace MyMediaLite.Eval
 			int find_iter = 1)
 		{
 			if (!(recommender is IIterativeModel))
-				throw new ArithmeticException("recommender must be of type IIterativeModel");
+				throw new ArgumentException("recommender must be of type IIterativeModel");
+			if (!(recommender is ItemRecommender))
+				throw new ArgumentException("recommender must be of type ItemRecommender");
 
 			var split_recommenders     = new ItemRecommender[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];

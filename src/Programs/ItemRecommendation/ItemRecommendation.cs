@@ -300,7 +300,7 @@ class ItemRecommendation
 			if (cross_validation > 1)
 			{
 				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-				((ItemRecommender) recommender).EvaluateIterative(split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
+				recommender.DoIterativeCrossValidation(split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
 			}
 			else
 			{
