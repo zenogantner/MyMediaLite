@@ -299,8 +299,7 @@ class ItemRecommendation
 
 			if (cross_validation > 1)
 			{
-				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-				recommender.DoIterativeCrossValidation(split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
+				recommender.DoIterativeCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
 			}
 			else
 			{
@@ -356,8 +355,7 @@ class ItemRecommendation
 				if (cross_validation > 1)
 				{
 					Console.WriteLine(recommender);
-					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = ((ItemRecommender) recommender).Evaluate(split, test_users, candidate_items, eval_item_mode, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, show_fold_results);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}

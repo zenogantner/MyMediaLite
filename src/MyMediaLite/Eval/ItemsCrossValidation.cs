@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.Eval
@@ -27,6 +28,29 @@ namespace MyMediaLite.Eval
 	/// <summary>Cross-validation for item recommendation</summary>
 	public static class ItemsCrossValidation
 	{
+		/// <summary>Evaluate on the folds of a dataset split</summary>
+		/// <param name="recommender">an item recommender</param>
+		/// <param name="num_folds">the number of folds</param>
+		/// <param name="test_users">a collection of integers with all test users</param>
+		/// <param name="candidate_items">a collection of integers with all candidate items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
+		static public Dictionary<string, double> DoCrossValidation(
+			this IRecommender recommender,
+			uint num_folds,
+			IList<int> test_users,
+			IList<int> candidate_items,
+			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
+			bool show_results = false)
+		{
+			if (!(recommender is ItemRecommender))
+				throw new ArgumentException("recommender must be of type ItemRecommender");
+
+			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(((ItemRecommender) recommender).Feedback, num_folds);
+			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, show_results);
+		}
+
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="recommender">an item recommender</param>
 		/// <param name="split">a dataset split</param>
@@ -44,10 +68,10 @@ namespace MyMediaLite.Eval
 			bool show_results = false)
 		{
 			var avg_results = new Dictionary<string, double>();
-			
+
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
-			
+
 			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
 				try
@@ -56,7 +80,7 @@ namespace MyMediaLite.Eval
 					split_recommender.Feedback = split.Train[fold];
 					split_recommender.Train();
 					var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
-	
+
 					foreach (var key in fold_results.Keys)
 						if (avg_results.ContainsKey(key))
 							avg_results[key] += fold_results[key];
@@ -78,6 +102,32 @@ namespace MyMediaLite.Eval
 			avg_results["num_items"] /= split.NumberOfFolds;
 
 			return avg_results;
+		}
+
+		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
+		/// <param name="recommender">an item recommender</param>
+		/// <param name="num_folds">the number of folds</param>
+		/// <param name="test_users">a collection of integers with all test users</param>
+		/// <param name="candidate_items">a collection of integers with all candidate items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
+		/// <param name="max_iter">the maximum number of iterations</param>
+		/// <param name="find_iter">the report interval</param>
+		static public void DoIterativeCrossValidation(
+			this IRecommender recommender,
+			uint num_folds,
+			IList<int> test_users,
+			IList<int> candidate_items,
+			CandidateItems candidate_item_mode,
+			bool repeated_events,
+			int max_iter,
+			int find_iter = 1)
+		{
+			if (!(recommender is ItemRecommender))
+				throw new ArgumentException("recommender must be of type ItemRecommender");
+
+			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(((ItemRecommender) recommender).Feedback, num_folds);
+			recommender.DoIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 
 		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
@@ -133,7 +183,7 @@ namespace MyMediaLite.Eval
 					try
 					{
 						iterative_recommenders[i].Iterate();
-	
+
 						if (it % find_iter == 0)
 						{
 							var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
