@@ -300,7 +300,7 @@ class ItemRecommendation
 			if (cross_validation > 1)
 			{
 				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-				MyMediaLite.Eval.ItemsCrossValidation.EvaluateIterative((ItemRecommender) recommender, split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
+				((ItemRecommender) recommender).EvaluateIterative(split, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
 			}
 			else
 			{
@@ -357,7 +357,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					ISplit<IPosOnlyFeedback> split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
-					var results = ItemsCrossValidation.Evaluate((ItemRecommender) recommender, split, test_users, candidate_items, eval_item_mode, show_fold_results);
+					var results = ((ItemRecommender) recommender).Evaluate(split, test_users, candidate_items, eval_item_mode, show_fold_results);
 					Console.Write(Items.FormatResults(results));
 					no_eval = true;
 				}
@@ -385,7 +385,7 @@ class ItemRecommendation
 			{
 				if (online_eval)
 					time_span = Wrap.MeasureTime( delegate() {
-						var results = ItemsOnline.Evaluate((IIncrementalItemRecommender) recommender, test_data, training_data, test_users, candidate_items, eval_item_mode);
+						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
 						Console.Write(Items.FormatResults(results));
 					});
 				else if (group_method != null)
@@ -404,7 +404,7 @@ class ItemRecommendation
 						Usage("Unknown method in --group-recommender=METHOD");
 
 					time_span = Wrap.MeasureTime( delegate() {
-						var result = Groups.Evaluate(group_recommender, test_data, training_data, group_to_user, candidate_items);
+						var result = group_recommender.Evaluate(test_data, training_data, group_to_user, candidate_items);
 						Console.Write(Groups.FormatResults(result));
 					});
 				}
@@ -656,17 +656,17 @@ class ItemRecommendation
 	static Dictionary<string, double> ComputeFit()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, training_data, training_data, item_attributes, test_users, candidate_items, true);
+			return recommender.Evaluate(training_data, training_data, item_attributes, test_users, candidate_items, true);
 		else
-			return Items.Evaluate(recommender, training_data, training_data, test_users, candidate_items, eval_item_mode, true);
+			return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true);
 	}
 
 	static Dictionary<string, double> Evaluate()
 	{
 		if (filtered_eval)
-			return ItemsFiltered.Evaluate(recommender, test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
+			return recommender.Evaluate(test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
 		else
-			return Items.Evaluate(recommender, test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
+			return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)

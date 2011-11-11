@@ -36,7 +36,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> Evaluate(
-			ItemRecommender recommender,
+			this ItemRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> test_users,
 			IList<int> candidate_items,
@@ -87,13 +87,14 @@ namespace MyMediaLite.Eval
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
 		static public void EvaluateIterative(
-			ItemRecommender recommender,
+			this ItemRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
-			int max_iter, int find_iter = 1)
+			int max_iter,
+			int find_iter = 1)
 		{
 			if (!(recommender is IIterativeModel))
 				throw new ArithmeticException("recommender must be of type IIterativeModel");

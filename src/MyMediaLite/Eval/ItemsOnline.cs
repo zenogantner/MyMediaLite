@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
@@ -38,12 +39,16 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of all candidate item IDs</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
-		static public Dictionary<string, double> Evaluate(
-			IIncrementalItemRecommender recommender,
+		static public Dictionary<string, double> EvaluateOnline(
+			this IRecommender recommender,
 			IPosOnlyFeedback test, IPosOnlyFeedback training,
 			IList<int> test_users, IList<int> candidate_items,
 			CandidateItems candidate_item_mode)
 		{
+			var incremental_recommender = recommender as IIncrementalItemRecommender;
+			if (incremental_recommender == null)
+				throw new ArgumentException("recommender must be of type IIncrementalItemRecommender");
+
 			// prepare candidate items once to avoid recreating them
 			switch (candidate_item_mode)
 			{
@@ -102,7 +107,7 @@ namespace MyMediaLite.Eval
 				}
 
 				// update recommender
-				recommender.AddFeedback(users[index], items[index]);
+				incremental_recommender.AddFeedback(users[index], items[index]);
 			}
 
 			var results = new Dictionary<string, double>();
@@ -122,7 +127,6 @@ namespace MyMediaLite.Eval
 
 			return results;
 		}
-
 	}
 }
 

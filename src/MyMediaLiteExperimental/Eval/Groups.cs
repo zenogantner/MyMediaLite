@@ -53,7 +53,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ignore_overlap">if true, ignore items that appear for a group in the training set when evaluating for that user</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
 		static public Dictionary<string, double> Evaluate(
-			GroupRecommender recommender,
+			this GroupRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
 		    SparseBooleanMatrix group_to_user,

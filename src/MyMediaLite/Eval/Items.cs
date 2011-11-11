@@ -97,7 +97,7 @@ namespace MyMediaLite.Eval
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public Dictionary<string, double> Evaluate(
-			IRecommender recommender,
+			this IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback training,
 			IList<int> test_users,

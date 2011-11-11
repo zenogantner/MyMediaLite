@@ -33,25 +33,29 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(IIncrementalRatingPredictor recommender, IRatings ratings)
+		static public Dictionary<string, double> EvaluateOnline(this IRatingPredictor recommender, IRatings ratings)
 		{
-			double rmse = 0;
-			double mae  = 0;
-
 			if (recommender == null)
 				throw new ArgumentNullException("recommender");
 			if (ratings == null)
 				throw new ArgumentNullException("ratings");
 
-			// iterate in random order    // TODO also support chronological order
+			var incremental_recommender = recommender as IIncrementalRatingPredictor;
+			if (incremental_recommender == null)
+				throw new ArgumentException("recommender must be of type IIncrementalRatingPredictor");
+
+			double rmse = 0;
+			double mae  = 0;
+
+			// iterate in random order
 			foreach (int index in ratings.RandomIndex)
 			{
-				double error = (recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index]);
+				double error = recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index];
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
 
-				recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
+				incremental_recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);

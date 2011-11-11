@@ -25,13 +25,13 @@ using MyMediaLite.Data;
 namespace MyMediaLite.Eval
 {
 	/// <summary>Evaluation and prediction routines for the KDD Cup 2011</summary>
-	public class KDDCup
+	public static class KDDCup
 	{
 		/// <summary>Predict items for Track 2</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
+		public static void PredictTrack2(this IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
 		{
 			using (FileStream file_stream = File.Create(filename))
 				using (var writer = new StreamWriter(file_stream))
@@ -42,7 +42,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictScoresTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
+		public static void PredictScoresTrack2(this IRecommender recommender, Dictionary<int, IList<int>> candidates, string filename)
 		{
 			using (FileStream file_stream = File.Create(filename))
 				using (var writer = new BinaryWriter(file_stream))
@@ -53,7 +53,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="writer">the writer to write the scores to</param>
-		public static void PredictScoresTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, BinaryWriter writer)
+		public static void PredictScoresTrack2(this IRecommender recommender, Dictionary<int, IList<int>> candidates, BinaryWriter writer)
 		{
 			foreach (int user_id in candidates.Keys)
 				foreach (int item_id in candidates[user_id])
@@ -64,7 +64,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="candidates">a mapping from user IDs to the candidate items</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, TextWriter writer)
+		public static void PredictTrack2(this IRecommender recommender, Dictionary<int, IList<int>> candidates, TextWriter writer)
 		{
 			foreach (int user_id in candidates.Keys) // this is ordered, but is it guaranteed?
 			{
@@ -90,7 +90,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidates">the candidate items (per user)</param>
 		/// <param name="hits">the real items (per user)</param>
 		/// <returns>the error rate on this validation split</returns>
-		public static double EvaluateTrack2(IRecommender recommender, Dictionary<int, IList<int>> candidates, Dictionary<int, IList<int>> hits)
+		public static double EvaluateTrack2(this IRecommender recommender, Dictionary<int, IList<int>> candidates, Dictionary<int, IList<int>> hits)
 		{
 			int hit_count = 0;
 
@@ -143,7 +143,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictRatings(IRecommender recommender, IRatings ratings, string filename)
+		public static void PredictRatings(this IRecommender recommender, IRatings ratings, string filename)
 		{
 			using (var stream = new FileStream(filename, FileMode.Create))
 				using (var writer = new BinaryWriter(stream))
@@ -154,7 +154,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictRatings(IRecommender recommender, IRatings ratings, BinaryWriter writer)
+		public static void PredictRatings(this IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
 			for (int i = 0; i < ratings.Count; i++)
 			{
@@ -168,7 +168,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="filename">the file to write the predictions to</param>
-		public static void PredictRatingsDouble(IRecommender recommender, IRatings ratings, string filename)
+		public static void PredictRatingsDouble(this IRecommender recommender, IRatings ratings, string filename)
 		{
 			using (var stream = new FileStream(filename, FileMode.Create))
 				using (var writer = new BinaryWriter(stream))
@@ -179,7 +179,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="ratings">the ratings to predict</param>
 		/// <param name="writer">the writer object to write the predictions to</param>
-		public static void PredictRatingsDouble(IRecommender recommender, IRatings ratings, BinaryWriter writer)
+		public static void PredictRatingsDouble(this IRecommender recommender, IRatings ratings, BinaryWriter writer)
 		{
 			for (int i = 0; i < ratings.Count; i++)
 				writer.Write(recommender.Predict(ratings.Users[i], ratings.Items[i]).ToString(CultureInfo.InvariantCulture));
