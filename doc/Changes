@@ -1,3 +1,16 @@
+2.01	2011-12-??
+        API
+	 - IDataSet: add Count property
+	command-line programs
+         - #61: add the option to ignore first line of training/test file
+         - item recommendation
+           - add --file-format= option
+        I/O
+         - add enum IO.ItemDataFileFormat
+         - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
+         - user/item mappings are now optional arguments for all IO routines
+         - add unit tests for all interaction data reading classes
+
 2.00	2011-11-10
         API
          - add abstract class TimeAwareRatingPredictor and interface
