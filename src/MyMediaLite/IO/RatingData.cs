@@ -32,8 +32,9 @@ namespace MyMediaLite.IO
 		/// <param name="filename">the name of the file to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
@@ -45,10 +46,18 @@ namespace MyMediaLite.IO
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
+			Read(TextReader reader,	IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+			if (ignore_first_line)
+				reader.ReadLine();
+
 			var ratings = new Ratings();
 
 			string line;

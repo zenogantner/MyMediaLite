@@ -32,8 +32,9 @@ namespace MyMediaLite.IO
 		/// <param name="filename">name of the file to be read from</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
@@ -45,9 +46,17 @@ namespace MyMediaLite.IO
 		/// <param name="reader">the TextReader to be read from</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+			if (ignore_first_line)
+				reader.ReadLine();
+
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			string line;

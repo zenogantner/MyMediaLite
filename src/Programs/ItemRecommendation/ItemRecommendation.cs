@@ -59,6 +59,7 @@ class ItemRecommendation
 	// command-line parameters (data)
 	static string training_file;
 	static string test_file;
+	static ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
 	static string data_dir = string.Empty;
 	static string test_users_file;
 	static string candidate_items_file;
@@ -139,6 +140,7 @@ class ItemRecommendation
   files:
    --training-file=FILE         read training data from FILE
    --test-file=FILE             read test data from FILE
+   --file-format=ignore_first_line|default
    --data-dir=DIR               load all files from DIR
    --user-attributes=FILE       file containing user attribute information, 1 tuple per line
    --item-attributes=FILE       file containing item attribute information, 1 tuple per line
@@ -238,13 +240,12 @@ class ItemRecommendation
 			{ "num-test-users=",       (int v) => num_test_users       = v },
 			{ "cross-validation=",     (uint v) => cross_validation    = v },
 			// double-valued options
-//			{ "epsilon=",             (double v) => epsilon          = v },
 			{ "auc-cutoff=",          (double v) => auc_cutoff       = v },
 			{ "prec5-cutoff=",        (double v) => prec5_cutoff     = v },
 			{ "test-ratio=",          (double v) => test_ratio       = v },
 			{ "rating-threshold=",    (double v) => rating_threshold = v },
 			// enum options
-			//   * currently none *
+			{ "file-format=",         (ItemDataFileFormat v) => file_format = v },
 			// boolean options
 			{ "user-prediction",      v => user_prediction   = v != null },
 			{ "compute-fit",          v => compute_fit       = v != null },
@@ -292,10 +293,10 @@ class ItemRecommendation
 		{
 			if ( !(recommender is IIterativeModel) )
 				Usage("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
-			
+
 			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender);
-			
+
 			if (cross_validation > 1)
 			{
 				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
@@ -307,20 +308,20 @@ class ItemRecommendation
 					recommender.Train();
 				else
 					Model.Load(recommender, load_model_file);
-	
+
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
-	
+
 				var results = Evaluate();
 				Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
-	
+
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
 					TimeSpan t = Wrap.MeasureTime(delegate() {
 						iterative_recommender.Iterate();
 					});
 					training_time_stats.Add(t.TotalSeconds);
-	
+
 					if (it % find_iter == 0)
 					{
 						if (compute_fit)
@@ -330,14 +331,14 @@ class ItemRecommendation
 							});
 							fit_time_stats.Add(t.TotalSeconds);
 						}
-	
+
 						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(t.TotalSeconds);
 						Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
-	
+
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
-	
+
 						if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
@@ -494,9 +495,10 @@ class ItemRecommendation
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// training data
+			training_file = Path.Combine(data_dir, training_file);
 			training_data = double.IsNaN(rating_threshold)
-				? ItemData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping)
-				: ItemDataRatingThreshold.Read(Path.Combine(data_dir, training_file), rating_threshold, user_mapping, item_mapping);
+				? ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
+				: ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
 
 			// user attributes
 			if (user_attributes_file != null)
@@ -536,9 +538,12 @@ class ItemRecommendation
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
+				{
+					test_file = Path.Combine(data_dir, test_file);
 					test_data = double.IsNaN(rating_threshold)
-						? ItemData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping)
-						: ItemDataRatingThreshold.Read(Path.Combine(data_dir, test_file), rating_threshold, user_mapping, item_mapping);
+						? ItemData.Read(test_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
+						: ItemDataRatingThreshold.Read(test_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
+				}
 			}
 			else
 			{

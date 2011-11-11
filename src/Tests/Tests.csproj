@@ -67,6 +67,11 @@
     <Compile Include="Data\RatingsSimpleSplitTest.cs" />
     <Compile Include="Data\RatingsPerUserChronologicalSplitTest.cs" />
     <Compile Include="Eval\Measures\AUCTest.cs" />
+    <Compile Include="IO\RatingDataTest.cs" />
+    <Compile Include="IO\StaticRatingDataTest.cs" />
+    <Compile Include="IO\TimedRatingDataTest.cs" />
+    <Compile Include="IO\ItemDataTest.cs" />
+    <Compile Include="IO\ItemDataRatingThresholdTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

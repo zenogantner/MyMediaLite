@@ -120,7 +120,7 @@ class RatingPrediction
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
-   --file-format=movielens_1m|kddcup2011|default
+   --file-format=movielens_1m|kddcup2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
    --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
@@ -502,6 +502,10 @@ class RatingPrediction
 					training_data = static_data
 						? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
 						: RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				else if(file_format == RatingFileFormat.IGNORE_FIRST_LINE)
+					training_data = static_data
+						? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type, true)
+						: RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, true);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
@@ -540,10 +544,12 @@ class RatingPrediction
 			{
 				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
 					test_data = TimedRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
-				if (file_format == RatingFileFormat.MOVIELENS_1M)
+				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
+				else if (file_format == RatingFileFormat.KDDCUP_2011)
+					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
 				else
-					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type);
+					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
 			}
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
