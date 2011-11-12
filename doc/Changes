@@ -1,5 +1,6 @@
 2.01	2011-12-??
         API
+         - IRecommender: now inherits from IClonable
 	 - IDataSet: add Count property
 	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
            are now extension methods, rename to Extensions
@@ -11,6 +12,7 @@
            - add --file-format= option
         evaluation
          - #109: formulate evaluation routines as extension methods
+         - #122: introduce specific datatypes for evaluation results
         I/O
          - add enum IO.ItemDataFileFormat
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
