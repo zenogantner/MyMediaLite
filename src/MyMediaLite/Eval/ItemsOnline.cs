@@ -39,7 +39,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of all candidate item IDs</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <returns>a dictionary containing the evaluation results (averaged by user)</returns>
-		static public Dictionary<string, double> EvaluateOnline(
+		static public ItemRecommendationEvaluationResults EvaluateOnline(
 			this IRecommender recommender,
 			IPosOnlyFeedback test, IPosOnlyFeedback training,
 			IList<int> test_users, IList<int> candidate_items,
@@ -110,9 +110,7 @@ namespace MyMediaLite.Eval
 				incremental_recommender.AddFeedback(users[index], items[index]);
 			}
 
-			var results = new Dictionary<string, double>();
-			foreach (string measure in Items.Measures)
-				results[measure] = 0;
+			var results = new ItemRecommendationEvaluationResults();
 
 			foreach (int u in results_by_user.Keys)
 				foreach (string measure in Items.Measures)
