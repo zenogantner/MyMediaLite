@@ -137,7 +137,7 @@ namespace MyMediaLite.Eval
 					double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
 					double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
 					var positions = new int[] { 5, 10 };
-					var prec = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
+					var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
 
 					// thread-safe incrementing

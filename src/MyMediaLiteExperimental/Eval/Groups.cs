@@ -30,18 +30,6 @@ namespace MyMediaLite.Eval
 	/// <summary>Evaluation class for group recommendation</summary>
 	public static class Groups
 	{
-		// TODO add recall and MRR eval; parallelize; adapt to new shape of Eval.Items
-
-		/// <summary>Format group recommendation results</summary>
-		/// <param name="result">the result dictionary</param>
-		/// <returns>the formatted results</returns>
-		static public string FormatResults(Dictionary<string, double> result)
-		{
-			return string.Format(
-				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6} num_lists {7}",
-				result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_groups"], result["num_items"], result["num_lists"]);
-		}
-
 		/// <summary>Evaluation for rankings of items recommended to groups</summary>
 		/// <remarks>
 		/// </remarks>
@@ -52,7 +40,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a collection of integers with all candidate items</param>
 		/// <param name="ignore_overlap">if true, ignore items that appear for a group in the training set when evaluating for that user</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(
+		static public ItemRecommendationEvaluationResults Evaluate(
 			this GroupRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
@@ -60,14 +48,10 @@ namespace MyMediaLite.Eval
 			ICollection<int> candidate_items,
 			bool ignore_overlap = true)
 		{
-			// compute evaluation measures
-			double auc_sum     = 0;
-			double map_sum     = 0;
-			double prec_5_sum  = 0;
-			double prec_10_sum = 0;
-			double ndcg_sum    = 0;
-			int num_groups     = 0;
-
+			var result = new ItemRecommendationEvaluationResults();
+			
+			int num_groups = 0;
+			
 			foreach (int group_id in group_to_user.NonEmptyRowIDs)
 			{
 				var users = group_to_user.GetEntriesByRow(group_id);
@@ -89,18 +73,33 @@ namespace MyMediaLite.Eval
 				if (num_eval_items - correct_items.Count == 0)
 					continue;
 
-				num_groups++;
-
 				IList<int> prediction_list = recommender.RankItems(users, candidate_items);
 				if (prediction_list.Count != candidate_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
 				var ignore_items = ignore_overlap ? candidate_items_in_train : new HashSet<int>();
-				auc_sum     += AUC.Compute(prediction_list, correct_items, ignore_items);
-				map_sum     += PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
-				ndcg_sum    += NDCG.Compute(prediction_list, correct_items, ignore_items);
-				prec_5_sum  += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items,  5);
-				prec_10_sum += PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, 10);
+
+				double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
+				double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
+				double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
+				double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
+				var positions = new int[] { 5, 10 };
+				var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
+				var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
+
+				// thread-safe incrementing
+				lock(result)
+				{
+					num_groups++;
+					result["AUC"]       += auc;
+					result["MAP"]       += map;
+					result["NDCG"]      += ndcg;
+					result["MRR"]       += rr;
+					result["prec@5"]    += prec[5];
+					result["prec@10"]   += prec[10];
+					result["recall@5"]  += recall[5];
+					result["recall@10"] += recall[10];
+				}
 
 				if (num_groups % 1000 == 0)
 					Console.Error.Write(".");
@@ -108,18 +107,11 @@ namespace MyMediaLite.Eval
 					Console.Error.WriteLine();
 			}
 
-			var result = new Dictionary<string, double>();
-			result["AUC"]        = auc_sum / num_groups;
-			result["MAP"]        = map_sum / num_groups;
-			result["NDCG"]       = ndcg_sum / num_groups;
-			result["prec@5"]     = prec_5_sum / num_groups;
-			result["prec@10"]    = prec_10_sum / num_groups;
 			result["num_groups"] = num_groups;
 			result["num_lists"]  = num_groups;
 			result["num_items"]  = candidate_items.Count;
 
 			return result;
-
 		}
 	}
 }

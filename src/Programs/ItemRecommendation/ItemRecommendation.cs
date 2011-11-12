@@ -403,7 +403,7 @@ class ItemRecommendation
 
 					time_span = Wrap.MeasureTime( delegate() {
 						var result = group_recommender.Evaluate(test_data, training_data, group_to_user, candidate_items);
-						Console.Write(Groups.FormatResults(result));
+						Console.Write(result);
 					});
 				}
 				else
