@@ -309,10 +309,10 @@ class ItemRecommendation
 					Model.Load(recommender, load_model_file);
 
 				if (compute_fit)
-					Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
+					Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), iterative_recommender.NumIter);
 
 				var results = Evaluate();
-				Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", results, iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -326,14 +326,14 @@ class ItemRecommendation
 						if (compute_fit)
 						{
 							t = Wrap.MeasureTime(delegate() {
-								Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), it);
+								Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), it);
 							});
 							fit_time_stats.Add(t.TotalSeconds);
 						}
 
 						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(t.TotalSeconds);
-						Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
+						Console.WriteLine("{0} iteration {1}", results, it);
 
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
@@ -356,7 +356,7 @@ class ItemRecommendation
 				{
 					Console.WriteLine(recommender);
 					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, show_fold_results);
-					Console.Write(Items.FormatResults(results));
+					Console.Write(results);
 					no_eval = true;
 				}
 				else
@@ -373,7 +373,7 @@ class ItemRecommendation
 			}
 
 			if (compute_fit)
-				Console.WriteLine("fit: {0}", Items.FormatResults(ComputeFit()));
+				Console.WriteLine("fit: {0}", ComputeFit());
 
 			if (prediction_file != null)
 			{
@@ -384,7 +384,7 @@ class ItemRecommendation
 				if (online_eval)
 					time_span = Wrap.MeasureTime( delegate() {
 						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
-						Console.Write(Items.FormatResults(results));
+						Console.Write(results);
 					});
 				else if (group_method != null)
 				{
@@ -407,10 +407,7 @@ class ItemRecommendation
 					});
 				}
 				else
-					time_span = Wrap.MeasureTime( delegate() {
-						var results = Evaluate();
-						Console.Write(Items.FormatResults(results));
-				});
+					time_span = Wrap.MeasureTime( delegate() { Console.Write(Evaluate()); });
 				Console.Write(" testing_time " + time_span);
 			}
 			Console.WriteLine();
@@ -651,18 +648,18 @@ class ItemRecommendation
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-	static Dictionary<string, double> ComputeFit()
+	static ItemRecommendationEvaluationResults ComputeFit()
 	{
 		if (filtered_eval)
-			return recommender.Evaluate(training_data, training_data, item_attributes, test_users, candidate_items, true);
+			return recommender.EvaluateFiltered(training_data, training_data, item_attributes, test_users, candidate_items, true);
 		else
 			return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true);
 	}
 
-	static Dictionary<string, double> Evaluate()
+	static ItemRecommendationEvaluationResults Evaluate()
 	{
 		if (filtered_eval)
-			return recommender.Evaluate(test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
+			return recommender.EvaluateFiltered(test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
 		else
 			return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
 	}

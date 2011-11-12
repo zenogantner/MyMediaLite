@@ -62,7 +62,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a collection of integers with all candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(
+		static public ItemRecommendationEvaluationResults EvaluateFiltered(
 			this IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
@@ -75,9 +75,7 @@ namespace MyMediaLite.Eval
 
 			int num_users = 0;
 			int num_lists = 0;
-			var result = new Dictionary<string, double>();
-			foreach (string method in Items.Measures)
-				result[method] = 0;
+			var result = new ItemRecommendationEvaluationResults();
 
 			Parallel.ForEach (test_users, user_id =>
 			{

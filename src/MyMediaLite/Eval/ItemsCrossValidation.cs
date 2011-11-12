@@ -59,7 +59,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> DoCrossValidation(
+		static public ItemRecommendationEvaluationResults DoCrossValidation(
 			this IRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
 			IList<int> test_users,
@@ -67,7 +67,7 @@ namespace MyMediaLite.Eval
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
 			bool show_results = false)
 		{
-			var avg_results = new Dictionary<string, double>();
+			var avg_results = new ItemRecommendationEvaluationResults();
 
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
@@ -87,7 +87,7 @@ namespace MyMediaLite.Eval
 						else
 							avg_results[key] = fold_results[key];
 					if (show_results)
-						Console.Error.WriteLine("fold {0} {1}", fold, Items.FormatResults(fold_results));
+						Console.Error.WriteLine("fold {0} {1}", fold, fold_results);
 				}
 				catch (Exception e)
 				{
@@ -167,7 +167,7 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-					Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 				}
 				catch (Exception e)
 				{
@@ -187,7 +187,7 @@ namespace MyMediaLite.Eval
 						if (it % find_iter == 0)
 						{
 							var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-							Console.WriteLine("fold {0} {1} iteration {2}", i, Items.FormatResults(fold_results), it);
+							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
 						}
 					}
 					catch (Exception e)

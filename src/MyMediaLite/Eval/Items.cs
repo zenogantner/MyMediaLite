@@ -52,21 +52,10 @@ namespace MyMediaLite.Eval
 		/// </remarks>
 		static public ICollection<string> Measures
 		{
-			get	{
+			get {
 				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR" };
 				return new HashSet<string>(measures);
 			}
-		}
-
-		/// <summary>Format item prediction results</summary>
-		/// <param name="result">the result dictionary</param>
-		/// <returns>a string containing the results</returns>
-		static public string FormatResults(Dictionary<string, double> result)
-		{
-			return string.Format(
-				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} MRR {7:0.#####} num_users {8} num_items {9} num_lists {10}",
-				result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["recall@5"], result["recall@10"], result["NDCG"], result["MRR"], result["num_users"], result["num_items"], result["num_lists"]
-			);
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
@@ -96,7 +85,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
-		static public Dictionary<string, double> Evaluate(
+		static public ItemRecommendationEvaluationResults Evaluate(
 			this IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback training,
@@ -114,9 +103,7 @@ namespace MyMediaLite.Eval
 			}
 
 			int num_users = 0;
-			var result = new Dictionary<string, double>();
-			foreach (string method in Measures)
-				result[method] = 0;
+			var result = new ItemRecommendationEvaluationResults();
 
 			// make sure that UserMatrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
