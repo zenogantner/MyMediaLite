@@ -6,6 +6,8 @@
            are now extension methods, rename to Extensions
            - make mapping arguments optional
            - less method overloads
+        recommenders
+           - move group recommenders from experimental to main section
 	command-line programs
          - #61: add the option to ignore first line of training/test file
          - item recommendation
@@ -13,6 +15,8 @@
         evaluation
          - #109: formulate evaluation routines as extension methods
          - #122: introduce specific datatypes for evaluation results
+         - move filtered evaluation and group recommendation evaluation from
+           experimental to main section
         I/O
          - add enum IO.ItemDataFileFormat
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
