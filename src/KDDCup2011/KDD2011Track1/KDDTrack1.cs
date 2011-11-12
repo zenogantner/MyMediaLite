@@ -298,11 +298,10 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				if (load_model_file == string.Empty)
 				{
 					Console.Write(recommender.ToString());
-					if (cross_validation > 0) // TODO cross-validation could also be performed on the complete dataset
-					{                         // TODO support track2
+					if (cross_validation > 0)
+					{
 						Console.WriteLine();
-						var split = new RatingCrossValidationSplit(training_ratings, cross_validation);
-						var results = RatingsCrossValidation.Evaluate(rating_predictor_validate, split);
+						var results = rating_predictor_validate.DoCrossValidation(cross_validation);
 						Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
 						no_eval = true;
 						rating_predictor_validate.Ratings = training_ratings;
@@ -310,7 +309,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					else
 					{
 						seconds = Wrap.MeasureTime( delegate() { recommender.Train(); } );
-	        			Console.Write(" training_time " + seconds + " ");
+						Console.Write(" training_time " + seconds + " ");
 						Model.Save(recommender, save_model_file);
 					}
 				}
