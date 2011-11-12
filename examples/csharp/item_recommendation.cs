@@ -23,6 +23,7 @@ public class ItemPrediction
 		var results = recommender.Evaluate(test_data, training_data, candidate_items, test_users);
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
+		Console.WriteLine(results);
 
 		// make a score prediction for a certain user and item
 		Console.WriteLine(recommender.Predict(1, 1));

@@ -20,6 +20,7 @@ public class RatingPrediction
 		// measure the accuracy on the test data set
 		var results = recommender.Evaluate(test_data);
 		Console.WriteLine("RMSE={0} MAE={1}", results["RMSE"], results["MAE"]);
+		Console.WriteLine(results);
 
 		// make a prediction for a certain user and item
 		Console.WriteLine(recommender.Predict(1, 1));
