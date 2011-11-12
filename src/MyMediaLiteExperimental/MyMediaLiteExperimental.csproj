@@ -52,16 +52,7 @@
     <Compile Include="AttrToFactor\MF_Mapping.cs" />
     <Compile Include="Data\KDDCupItems.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="Eval\Groups.cs" />
-    <Compile Include="Eval\ItemsFiltered.cs" />
     <Compile Include="Eval\KDDCup.cs" />
-    <Compile Include="GroupRecommendation\Average.cs" />
-    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\Maximum.cs" />
-    <Compile Include="GroupRecommendation\Minimum.cs" />
-    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
-    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />

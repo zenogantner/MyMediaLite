@@ -179,6 +179,15 @@
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
     <Compile Include="Eval\RatingPredictionEvaluationResults.cs" />
+    <Compile Include="Eval\Groups.cs" />
+    <Compile Include="Eval\ItemsFiltered.cs" />
+    <Compile Include="GroupRecommendation\Average.cs" />
+    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
+    <Compile Include="GroupRecommendation\Maximum.cs" />
+    <Compile Include="GroupRecommendation\Minimum.cs" />
+    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
+    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

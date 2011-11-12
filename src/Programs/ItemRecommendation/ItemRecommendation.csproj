@@ -35,10 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ItemRecommendation.cs" />
     <Compile Include="..\..\..\lib\Options.cs">
       <Link>Options.cs</Link>
     </Compile>
+    <Compile Include="ItemRecommendation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
