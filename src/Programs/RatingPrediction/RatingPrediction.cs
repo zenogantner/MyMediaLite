@@ -308,9 +308,9 @@ class RatingPrediction
 					Model.Load(recommender, load_model_file);
 
 				if (compute_fit)
-					Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(recommender.Evaluate(training_data)), iterative_recommender.NumIter);
+					Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), iterative_recommender.NumIter);
 
-				Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(recommender.Evaluate(test_data)), iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", recommender.Evaluate(test_data), iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -324,7 +324,7 @@ class RatingPrediction
 						if (compute_fit)
 						{
 							time = Wrap.MeasureTime(delegate() {
-								Console.WriteLine("fit {0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(recommender.Evaluate(training_data)), it);
+								Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), it);
 							});
 							fit_time_stats.Add(time.TotalSeconds);
 						}
@@ -333,7 +333,7 @@ class RatingPrediction
 						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data); });
 						eval_time_stats.Add(time.TotalSeconds);
 						rmse_eval_stats.Add(results["RMSE"]);
-						Console.WriteLine("{0} iteration {1}", MyMediaLite.Eval.Ratings.FormatResults(results), it);
+						Console.WriteLine("{0} iteration {1}", results, it);
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
@@ -362,9 +362,9 @@ class RatingPrediction
 			{
 				if (cross_validation > 1)
 				{
-					Console.WriteLine(recommender.ToString());
+					Console.WriteLine(recommender);
 					var results = recommender.DoCrossValidation(cross_validation, show_fold_results);
-					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
+					Console.Write(results);
 					no_eval = true;
 				}
 				else
@@ -375,7 +375,7 @@ class RatingPrediction
 						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(CultureInfo.InvariantCulture));
 					}
 
-					Console.Write(recommender.ToString());
+					Console.Write(recommender);
 					seconds = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 					Console.Write(" training_time " + seconds + " ");
 				}
@@ -389,9 +389,9 @@ class RatingPrediction
 			if (!no_eval)
 			{
 				if (online_eval)
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(recommender.EvaluateOnline(test_data))); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.EvaluateOnline(test_data)); });
 				else
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(recommender.Evaluate(test_data))); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.Evaluate(test_data)); });
 
 				Console.Write(" testing_time " + seconds);
 			}
@@ -400,7 +400,7 @@ class RatingPrediction
 			{
 				Console.Write("\nfit ");
 				seconds = Wrap.MeasureTime(delegate() {
-					Console.Write(MyMediaLite.Eval.Ratings.FormatResults(recommender.Evaluate(training_data)));
+					Console.Write(recommender.Evaluate(training_data));
 				});
 				Console.Write(" fit_time " + seconds);
 			}

@@ -18,7 +18,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
@@ -39,20 +38,6 @@ namespace MyMediaLite.Eval
 			}
 		}
 
-		/// <summary>Format rating prediction results</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
-		/// </remarks>
-		/// <param name="result">the result dictionary</param>
-		/// <returns>a string containing the results</returns>
-		static public string FormatResults(Dictionary<string, double> result)
-		{
-			return string.Format(
-				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
-				result["RMSE"], result["MAE"], result["NMAE"]
-			);
-		}
-
 		/// <summary>Evaluates a rating predictor for RMSE, MAE, and NMAE</summary>
 		/// <remarks>
 		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
@@ -65,7 +50,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> Evaluate(this IRatingPredictor recommender, IRatings ratings)
+		static public RatingPredictionEvaluationResults Evaluate(this IRatingPredictor recommender, IRatings ratings)
 		{
 			double rmse = 0;
 			double mae  = 0;
@@ -94,7 +79,7 @@ namespace MyMediaLite.Eval
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
 
-			var result = new Dictionary<string, double>();
+			var result = new RatingPredictionEvaluationResults();
 			result["RMSE"] = rmse;
 			result["MAE"]  = mae;
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);

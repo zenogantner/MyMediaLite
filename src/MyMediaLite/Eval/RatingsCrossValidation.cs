@@ -32,7 +32,7 @@ namespace MyMediaLite.Eval
 		/// <param name="num_folds">the number of folds</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> DoCrossValidation(this RatingPredictor recommender, uint num_folds = 5, bool show_results = false)
+		static public RatingPredictionEvaluationResults DoCrossValidation(this RatingPredictor recommender, uint num_folds = 5, bool show_results = false)
 		{
 			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
 			return recommender.DoCrossValidation(split, show_results);
@@ -43,9 +43,9 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> DoCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, bool show_results = false)
+		static public RatingPredictionEvaluationResults DoCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, bool show_results = false)
 		{
-			var avg_results = new Dictionary<string, double>();
+			var avg_results = new RatingPredictionEvaluationResults();
 
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
 			{
@@ -63,7 +63,7 @@ namespace MyMediaLite.Eval
 							avg_results[key] = fold_results[key];
 
 					if (show_results)
-						Console.Error.WriteLine("fold {0} {1}", i, Ratings.FormatResults(fold_results));
+						Console.Error.WriteLine("fold {0} {1}", i, fold_results);
 				}
 				catch (Exception e)
 				{
@@ -112,7 +112,7 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-					Console.WriteLine("fold {0} {1} iteration {2}", i, Ratings.FormatResults(fold_results), iterative_recommenders[i].NumIter);
+					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 						}
 				catch (Exception e)
 				{
@@ -132,7 +132,7 @@ namespace MyMediaLite.Eval
 						if (it % find_iter == 0)
 						{
 							var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-							Console.WriteLine("fold {0} {1} iteration {2}", i, Ratings.FormatResults(fold_results), it);
+							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
 						}
 					}
 					catch (Exception e)

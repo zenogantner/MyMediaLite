@@ -33,7 +33,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public Dictionary<string, double> EvaluateOnline(this IRatingPredictor recommender, IRatings ratings)
+		static public RatingPredictionEvaluationResults EvaluateOnline(this IRatingPredictor recommender, IRatings ratings)
 		{
 			if (recommender == null)
 				throw new ArgumentNullException("recommender");
@@ -60,7 +60,7 @@ namespace MyMediaLite.Eval
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
 
-			var result = new Dictionary<string, double>();
+			var result = new RatingPredictionEvaluationResults();
 			result["RMSE"] = rmse;
 			result["MAE"]  = mae;
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);

@@ -15,15 +15,32 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 // 
+
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace MyMediaLite.Eval
 {
-	public class RatingPredictionEvaluationResults
+	/// <summary>Rating prediction evaluation results</summary>
+	/// <remarks>
+	/// This class is basically a Dictionary with a custom-made ToString() method.
+	/// </remarks>
+	public class RatingPredictionEvaluationResults : Dictionary<string, double>
 	{
-		public RatingPredictionEvaluationResults ()
+		/// <summary>Format rating prediction results</summary>
+		/// <remarks>
+		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		/// </remarks>
+		/// <returns>a string containing the results</returns>
+		public override string ToString()
 		{
+			return string.Format(
+				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
+				this["RMSE"], this["MAE"], this["NMAE"]
+			);
 		}
+
 	}
 }
 

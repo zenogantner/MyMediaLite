@@ -218,7 +218,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			if (compute_fit)
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "fit {0:0.#####} ", iterative_recommender_validate.ComputeFit()));
 
-			Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings)));
+			Console.Write(rating_predictor_validate.Evaluate(validation_ratings));
 			Console.WriteLine(" " + iterative_recommender_validate.NumIter);
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
@@ -246,8 +246,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					// evaluate and save stats
 					Dictionary<string, double> results = null;
 					time = Wrap.MeasureTime(delegate() {
-						results = MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings);
-						Console.WriteLine(MyMediaLite.Eval.Ratings.FormatResults(results) + " " + i);
+						results = rating_predictor_validate.Evaluate(validation_ratings);
+						Console.WriteLine(results + " " + i);
 						rmse_eval_stats.Add(results["RMSE"]);
 					});
 					eval_time_stats.Add(time.TotalSeconds);
@@ -302,7 +302,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					{
 						Console.WriteLine();
 						var results = rating_predictor_validate.DoCrossValidation(cross_validation);
-						Console.Write(MyMediaLite.Eval.Ratings.FormatResults(results));
+						Console.Write(results);
 						no_eval = true;
 						rating_predictor_validate.Ratings = training_ratings;
 					}
@@ -317,7 +317,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				Console.Write(recommender.ToString() + " ");
 
 				seconds = Wrap.MeasureTime(
-			    	delegate() { Console.Write(MyMediaLite.Eval.Ratings.FormatResults(MyMediaLite.Eval.Ratings.Evaluate(rating_predictor_validate, validation_ratings))); }
+			    	delegate() { Console.Write(rating_predictor_validate.Evaluate(validation_ratings)); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}

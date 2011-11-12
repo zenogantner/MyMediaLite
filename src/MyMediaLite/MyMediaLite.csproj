@@ -178,6 +178,7 @@
     <Compile Include="RatingPrediction\Extensions.cs" />
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
+    <Compile Include="Eval\RatingPredictionEvaluationResults.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
