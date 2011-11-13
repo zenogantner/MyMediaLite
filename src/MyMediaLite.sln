@@ -62,6 +62,8 @@ Global
 		{4D4FEAB8-30AE-449A-BED5-98074FC9BBF2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73424F09-BEEA-4992-B116-5F123496F5D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{73424F09-BEEA-4992-B116-5F123496F5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73424F09-BEEA-4992-B116-5F123496F5D3}.Default|Any CPU.ActiveCfg = Debug|Any CPU
+		{73424F09-BEEA-4992-B116-5F123496F5D3}.Default|Any CPU.Build.0 = Debug|Any CPU
 		{73424F09-BEEA-4992-B116-5F123496F5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73424F09-BEEA-4992-B116-5F123496F5D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -74,6 +76,8 @@ Global
 		{AD1EB4BB-DE14-418B-B704-67D76E468FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Default|Any CPU.ActiveCfg = Debug|Any CPU
+		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Default|Any CPU.Build.0 = Debug|Any CPU
 		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B350A953-A5D8-4302-8C8C-2399FA43D85F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C475ABE7-84B0-4427-987B-B06E8548676F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -132,6 +136,6 @@ Global
 		$6.inheritsSet = Mono
 		$6.inheritsScope = text/x-csharp
 		$6.scope = text/x-csharp
-		version = 2.0
+		version = 2.01
 	EndGlobalSection
 EndGlobal
