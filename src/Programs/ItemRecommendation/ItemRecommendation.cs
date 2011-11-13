@@ -292,10 +292,10 @@ class ItemRecommendation
 		{
 			if ( !(recommender is IIterativeModel) )
 				Usage("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
-			
+
 			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender);
-			
+
 			if (cross_validation > 1)
 			{
 				var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, cross_validation);
@@ -307,20 +307,20 @@ class ItemRecommendation
 					recommender.Train();
 				else
 					Model.Load(recommender, load_model_file);
-	
+
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", Items.FormatResults(ComputeFit()), iterative_recommender.NumIter);
-	
+
 				var results = Evaluate();
 				Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), iterative_recommender.NumIter);
-	
+
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
 					TimeSpan t = Wrap.MeasureTime(delegate() {
 						iterative_recommender.Iterate();
 					});
 					training_time_stats.Add(t.TotalSeconds);
-	
+
 					if (it % find_iter == 0)
 					{
 						if (compute_fit)
@@ -330,14 +330,14 @@ class ItemRecommendation
 							});
 							fit_time_stats.Add(t.TotalSeconds);
 						}
-	
+
 						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(t.TotalSeconds);
 						Console.WriteLine("{0} iteration {1}", Items.FormatResults(results), it);
-	
+
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
-	
+
 						if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
@@ -674,8 +674,10 @@ class ItemRecommendation
 
 	static void Predict(string prediction_file, string predict_for_users_file)
 	{
-		TimeSpan time_span;
+		if (candidate_items == null)
+			candidate_items = training_data.AllItems;
 
+		TimeSpan time_span;
 		if (predict_for_users_file == null)
 			time_span = Wrap.MeasureTime( delegate() {
 				Prediction.WritePredictions(

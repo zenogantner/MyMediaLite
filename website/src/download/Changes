@@ -1,3 +1,7 @@
+2.01	2011-11-13
+	bugfix release: fix a null pointer exception in the item recommendation
+        tool (reported by Damir Logar)
+
 2.00	2011-11-10
         API
          - add abstract class TimeAwareRatingPredictor and interface
