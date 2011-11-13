@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>KDD2011Track2</RootNamespace>
     <AssemblyName>KDD2011Track2</AssemblyName>
-    <ReleaseVersion>2.0</ReleaseVersion>
+    <ReleaseVersion>2.01</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
