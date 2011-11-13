@@ -675,7 +675,7 @@ class ItemRecommendation
 	static void Predict(string prediction_file, string predict_for_users_file)
 	{
 		IList<int> user_list = null;
-		if (predict_for_users_file == null)
+		if (predict_for_users_file != null)
 			user_list = user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file));
 
 		TimeSpan time_span = Wrap.MeasureTime( delegate() {
