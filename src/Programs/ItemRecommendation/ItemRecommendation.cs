@@ -674,6 +674,9 @@ class ItemRecommendation
 
 	static void Predict(string prediction_file, string predict_for_users_file)
 	{
+		if (candidate_items == null)
+			candidate_items = training_data.AllItems;
+		
 		IList<int> user_list = null;
 		if (predict_for_users_file != null)
 			user_list = user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file));
