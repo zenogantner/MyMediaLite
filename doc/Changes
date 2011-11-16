@@ -26,6 +26,8 @@
          - add unit tests for all interaction data reading classes
         documentation
          - improve API doc of Correlation.Jaccard
+         - improve GUI Demo documentation on website
+         - update doc/Installation
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation

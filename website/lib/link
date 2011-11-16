@@ -51,6 +51,7 @@
      source_code   => { url => 'https://github.com/zenogantner/MyMediaLite',     title => 'https://github.com/zenogantner/MyMediaLite' }
      ironpython    => { url => 'http://ironpython.net/'                          title => 'IronPython' }
      ironruby      => { url => 'http://ironruby.net/'                            title => 'IronRuby' }
+     strawberryperl => { url => 'http://strawberryperl.com'                      title => 'Strawberry Perl' }
      recsyswiki    => { url => 'http://recsyswiki.com/'                          title => 'RecSysWiki' }
      recsysconf    => { url => 'http://recsys.acm.org/'                          title => 'ACM Conference on Recommender Systems' }
      ndcg          => { url => 'http://recsyswiki.com/wiki/NDCG'                 title => 'NDCG' }
