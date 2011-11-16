@@ -1,4 +1,4 @@
-2.01	2011-12-??
+2.02	2011-12-??
         API
          - IRecommender: now inherits from IClonable
 	 - IDataSet: add Count property
@@ -13,7 +13,7 @@
          - item recommendation
            - add --file-format= option
            - fix wrong check "predict_for_users_file == null" to "!=" in
-             Predict() method (reported by Damir Logar)
+             Predict() method
         evaluation
          - #109: formulate evaluation routines as extension methods
          - #122: introduce specific datatypes for evaluation results
@@ -24,6 +24,12 @@
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
          - user/item mappings are now optional arguments for all IO routines
          - add unit tests for all interaction data reading classes
+        documentation
+         - improve API doc of Correlation.Jaccard
+
+2.01	2011-11-13
+	bugfix release: fix a null pointer exception in the item recommendation
+        tool (reported by Damir Logar)
 
 2.00	2011-11-10
         API
