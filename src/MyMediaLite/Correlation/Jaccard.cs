@@ -24,8 +24,10 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Class for storing the Jaccard index</summary>
+	/// <summary>Class for storing and computing the Jaccard index (Tanimoto coefficient)</summary>
 	/// <remarks>
+	/// The Jaccard index is often also called the Tanimiti coefficient.
+	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
 	public sealed class Jaccard : BinaryDataCorrelationMatrix
