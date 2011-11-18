@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -300,7 +301,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public double ComputeFit()
 		{
-			return Eval.Ratings.Evaluate(this, ratings)["RMSE"];
+			return this.Evaluate(ratings)["RMSE"];
 		}
 
 		/// <summary>Compute the regularized loss</summary>
