@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Eval;
@@ -43,30 +44,30 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Random number generator</summary>
 		System.Random random;
 
-		int[] user_clustering;
-		int[] item_clustering;
+		IList<int> user_clustering;
+		IList<int> item_clustering;
 
-		double[] user_averages;
-		double[] item_averages;
-		int[] user_counts;
-		int[] item_counts;
+		IList<double> user_averages;
+		IList<double> item_averages;
+		IList<int> user_counts;
+		IList<int> item_counts;
 
-		double[] user_cluster_averages;
-		double[] item_cluster_averages;
+		IList<double> user_cluster_averages;
+		IList<double> item_cluster_averages;
 		double[,] cocluster_averages;
 
 		double global_average;
 
 		/// <summary>The number of user clusters</summary>
 		public int NumUserClusters { get; set; }
-		
+
 		/// <summary>The number of item clusters</summary>
 		public int NumItemClusters { get; set; }
-		
+
 		/// <summary>The maximum number of iterations</summary>
 		/// <remarks>If the algorithm converges to a stable solution, it will terminate earlier.</remarks>
 		public uint NumIter { get; set; }
-		
+
 		/// <summary>Default constructor</summary>
 		public CoClustering()
 		{
@@ -74,13 +75,12 @@ namespace MyMediaLite.RatingPrediction
 			NumItemClusters = 3;
 			NumIter = 30;
 		}
-		
+
 		int[] InitIntArray(int length, int max_id) // TODO find better name
 		{
 			var array = new int[length];
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < length; i++)
 				array[i] = random.Next(max_id);
-			}
 			return array;
 		}
 
@@ -91,7 +91,7 @@ namespace MyMediaLite.RatingPrediction
 			this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
 		}
 
-		bool IterateCheck()
+		bool IterateCheckModified()
 		{
 			bool clustering_modified = false;
 			ComputeClusterAverages();
@@ -105,16 +105,16 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < MaxItemID; i++)
 				if (FindOptimalItemClustering(i))
 					clustering_modified = true;
-			
+
 			return clustering_modified;
 		}
-		
+
 		///
 		public void Iterate()
 		{
-			IterateCheck();
+			IterateCheckModified();
 		}
-		
+
 		///
 		public override void Train()
 		{
@@ -125,14 +125,8 @@ namespace MyMediaLite.RatingPrediction
 			item_clustering = InitIntArray(MaxItemID + 1, NumItemClusters);
 
 			for (uint i = 0; i < NumIter; i++)
-			{
-				bool clustering_modified = IterateCheck();
-
-				if (! clustering_modified) {
-					Console.Error.WriteLine("No modification since last iteration (" + i + ").");
+				if (! IterateCheckModified())
 					break;
-				}
-			}
 		}
 
 		///
@@ -249,7 +243,7 @@ namespace MyMediaLite.RatingPrediction
 			var user_cluster_counts = new int[NumUserClusters];
 			var item_cluster_counts = new int[NumItemClusters];
 			var cocluster_counts    = new int[NumUserClusters, NumItemClusters];
-			
+
 			for (int i = 0; i < Ratings.Count; i++)
 			{
 				int user_id = Ratings.Users[i];
@@ -265,33 +259,32 @@ namespace MyMediaLite.RatingPrediction
 				cocluster_counts[user_clustering[user_id], item_clustering[item_id]]++;
 			}
 
-			for (uint i = 0; i < NumUserClusters; i++)
+			for (int i = 0; i < NumUserClusters; i++)
 				if (user_cluster_counts[i] > 0)
 					user_cluster_averages[i] /= user_cluster_counts[i];
 				else
 					user_cluster_averages[i] = global_average;
-			for (uint i = 0; i < NumItemClusters; i++)
+			for (int i = 0; i < NumItemClusters; i++)
 				if (item_cluster_counts[i] > 0)
 					item_cluster_averages[i] /= item_cluster_counts[i];
 				else
 					item_cluster_averages[i] = global_average;
 
-			for (uint i = 0; i < NumUserClusters; i++)
-				for (uint j = 0; j < NumItemClusters; j++)
+			for (int i = 0; i < NumUserClusters; i++)
+				for (int j = 0; j < NumItemClusters; j++)
 					if (cocluster_counts[i, j] > 0)
 						cocluster_averages[i, j] /= cocluster_counts[i, j];
-					else 
+					else
 						cocluster_averages[i, j] = global_average;
 		}
 
-		int GetMinimumIndex(double[] array, int default_index) {
+		int GetMinimumIndex(double[] array, int default_index)
+		{
 			int minimumIndex = default_index;
 
-			for (int i = 0; i < array.Length; i++) {
-				if (array[i] < array[minimumIndex]) {
+			for (int i = 0; i < array.Length; i++)
+				if (array[i] < array[minimumIndex])
 					minimumIndex = i;
-				}
-			}
 
 			return minimumIndex;
 		}
@@ -301,17 +294,58 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
+				writer.WriteLine(NumUserClusters);
+				writer.WriteLine(NumItemClusters);
 				writer.WriteVector(user_clustering);
 				writer.WriteVector(item_clustering);
 			}
 		}
-		
+
+		///
+		public override void LoadModel(string filename)
+		{
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
+			{
+				var num_user_clusters = int.Parse(reader.ReadLine());
+				var num_item_clusters = int.Parse(reader.ReadLine());
+
+				var user_clustering = reader.ReadIntVector();
+				var item_clustering = reader.ReadIntVector();
+
+				this.MaxUserID = user_clustering.Count - 1;
+				this.MaxItemID = item_clustering.Count - 1;
+
+				// assign new model
+				if (this.NumUserClusters != num_user_clusters)
+				{
+					Console.Error.WriteLine("Set num_user_clusters to {0}", num_user_clusters);
+					this.NumUserClusters = num_user_clusters;
+				}
+				if (this.NumItemClusters != num_item_clusters)
+				{
+					Console.Error.WriteLine("Set num_item_clusters to {0}", num_item_clusters);
+					this.NumItemClusters = num_item_clusters;
+				}
+				this.user_clustering = user_clustering;
+				this.item_clustering = item_clustering;
+				
+				// create averages data structures
+				this.user_cluster_averages = new double[NumUserClusters];
+				this.item_cluster_averages = new double[NumItemClusters];
+				this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
+				
+				// compute averages
+				ComputeAverages();
+				ComputeClusterAverages();
+			}
+		}
+
 		///
 		public double ComputeFit()
 		{
 			return this.Evaluate(ratings)["RMSE"];
 		}
-		
+
 		///
 		public override string ToString()
 		{
