@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-# TODO test ALL recommenders: attribute-aware, averages, etc.
-
 PROGRAM="mono --debug RatingPrediction.exe"
 DATA_DIR=../../../../../data/ml-100k
 
@@ -14,7 +12,7 @@ echo
 echo "rating predictors"
 echo "-----------------"
 
-for method in SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage ItemAverage FactorWiseMatrixFactorization
+for method in SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage ItemAverage FactorWiseMatrixFactorization CoClustering
 do
      echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR
           $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+ing_time \S+ ?//g" > output1.txt
