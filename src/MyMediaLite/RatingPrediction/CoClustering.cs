@@ -76,16 +76,11 @@ namespace MyMediaLite.RatingPrediction
 			NumIter = 30;
 		}
 
-		int[] InitIntArray(int length, int max_id) // TODO find better name
-		{
-			var array = new int[length];
-			for (int i = 0; i < length; i++)
-				array[i] = random.Next(max_id);
-			return array;
-		}
-
 		void InitModel()
 		{
+			this.user_clustering = new int[MaxUserID + 1];
+			this.item_clustering = new int[MaxItemID + 1];
+			
 			this.user_cluster_averages = new double[NumUserClusters];
 			this.item_cluster_averages = new double[NumItemClusters];
 			this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
@@ -118,12 +113,16 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			InitModel();
-			ComputeAverages();
 			random = Util.Random.GetInstance();
-			user_clustering = InitIntArray(MaxUserID + 1, NumUserClusters);
-			item_clustering = InitIntArray(MaxItemID + 1, NumItemClusters);
+			
+			InitModel();
+			for (int i = 0; i < user_clustering.Count; i++)
+				user_clustering[i] = random.Next(NumUserClusters);
+			for (int i = 0; i < item_clustering.Count; i++)
+				item_clustering[i] = random.Next(NumItemClusters);
 
+			ComputeAverages();
+			
 			for (uint i = 0; i < NumIter; i++)
 				if (! IterateCheckModified())
 					break;
@@ -316,6 +315,9 @@ namespace MyMediaLite.RatingPrediction
 				this.MaxItemID = item_clustering.Count - 1;
 
 				// assign new model
+				//   create averages data structures
+				InitModel();
+				//   adapt hyperparameters
 				if (this.NumUserClusters != num_user_clusters)
 				{
 					Console.Error.WriteLine("Set num_user_clusters to {0}", num_user_clusters);
@@ -326,15 +328,10 @@ namespace MyMediaLite.RatingPrediction
 					Console.Error.WriteLine("Set num_item_clusters to {0}", num_item_clusters);
 					this.NumItemClusters = num_item_clusters;
 				}
+				//   assign clusterings
 				this.user_clustering = user_clustering;
 				this.item_clustering = item_clustering;
-				
-				// create averages data structures
-				this.user_cluster_averages = new double[NumUserClusters];
-				this.item_cluster_averages = new double[NumItemClusters];
-				this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
-				
-				// compute averages
+				//   compute averages
 				ComputeAverages();
 				ComputeClusterAverages();
 			}
