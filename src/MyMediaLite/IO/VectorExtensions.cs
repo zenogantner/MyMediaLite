@@ -48,5 +48,30 @@ namespace MyMediaLite.IO
 
 			return vector;
 		}
+		
+		/// <summary>Write a collection of ints to a streamwriter</summary>
+		/// <param name="writer">a <see cref="StreamWriter"/></param>
+		/// <param name="vector">a collection of int values</param>
+		static public void WriteVector(this TextWriter writer, ICollection<int> vector)
+		{
+			writer.WriteLine(vector.Count);
+			foreach (var v in vector)
+				writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>Read a collection of ints from a TextReader object</summary>
+		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
+		/// <returns>a list of int values</returns>
+		static public IList<int> ReadIntVector(this TextReader reader)
+		{
+			int dim = int.Parse(reader.ReadLine());
+
+			var vector = new int[dim];
+
+			for (int i = 0; i < vector.Length; i++)
+				vector[i] = int.Parse(reader.ReadLine());
+
+			return vector;
+		}
 	}
 }
