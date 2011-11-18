@@ -188,6 +188,7 @@
     <Compile Include="GroupRecommendation\Minimum.cs" />
     <Compile Include="GroupRecommendation\PairwiseWins.cs" />
     <Compile Include="GroupRecommendation\WeightedAverage.cs" />
+    <Compile Include="RatingPrediction\CoClustering.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
