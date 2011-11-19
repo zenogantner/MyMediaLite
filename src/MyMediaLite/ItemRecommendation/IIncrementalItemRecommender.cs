@@ -27,18 +27,23 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public interface IIncrementalItemRecommender : IRecommender
 	{
-		// <summary>Check if the recommender can produce meaningful recommendations for a given user</summary>
-		// <param name="user_id">the user ID</param>
-		// <returns>true if the recommender can produce recommendations for the given user, false otherwise</returns>
-		// bool CanPredict(int user_id);
-
+		/// <summary>Add a positive feedback event</summary>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='item_id'>the item ID</param>
 		///
 		void AddFeedback(int user_id, int item_id);
-		///
+
+		/// <summary>Remove all feedback events by the given user-item combination</summary>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='item_id'>the item ID</param>
 		void RemoveFeedback(int user_id, int item_id);
-		///
+
+		/// <summary>Remove all feedback by one user</summary>
+		/// <param name='user_id'>the user ID</param>
 		void RemoveUser(int user_id);
-		///
+
+		/// <summary>Remove all feedback by one item</summary>
+		/// <param name='item_id'>the item ID</param>
 		void RemoveItem(int item_id);
 	}
 }

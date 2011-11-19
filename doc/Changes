@@ -28,7 +28,8 @@
          - user/item mappings are now optional arguments for all IO routines
          - add unit tests for all interaction data reading classes
         documentation
-         - improve API doc of Correlation.Jaccard
+         - improve API doc of Correlation.Jaccard and
+           ItemRecommendation.IIncrementalItemRecommender
          - improve GUI Demo documentation on website
          - update doc/Installation
 
