@@ -54,7 +54,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected bool fast_sampling = false;
 
 		/// <summary>Item bias terms</summary>
-		protected IList<double> item_bias;
+		protected double[] item_bias;
 
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
@@ -440,6 +440,11 @@ namespace MyMediaLite.ItemRecommendation
 
 			item_factors.AddRows(item_id + 1);
 			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
+
+			// create new item bias array
+			var item_bias = new double[item_id + 1];
+			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
+			this.item_bias = item_bias;
 		}
 
 		///
@@ -662,7 +667,7 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				IList<double> item_bias = reader.ReadVector();
+				var item_bias = reader.ReadVector();
 				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
@@ -686,7 +691,7 @@ namespace MyMediaLite.ItemRecommendation
 					this.num_factors = user_factors.NumberOfColumns;
 				}
 				this.user_factors = user_factors;
-				this.item_bias    = item_bias;
+				this.item_bias    = (double[]) item_bias;
 				this.item_factors = item_factors;
 			}
 			random = Util.Random.GetInstance();

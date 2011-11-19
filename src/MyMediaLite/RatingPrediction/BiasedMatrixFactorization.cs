@@ -324,7 +324,7 @@ namespace MyMediaLite.RatingPrediction
 			base.AddUser(user_id);
 
 			// create new user bias array
-			double[] user_bias = new double[user_id + 1];
+			var user_bias = new double[user_id + 1];
 			Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
 			this.user_bias = user_bias;
 		}
@@ -335,7 +335,7 @@ namespace MyMediaLite.RatingPrediction
 			base.AddItem(item_id);
 
 			// create new item bias array
-			double[] item_bias = new double[item_id + 1];
+			var item_bias = new double[item_id + 1];
 			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
 			this.item_bias = item_bias;
 		}
