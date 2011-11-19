@@ -31,13 +31,6 @@ do
    	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --data-dir=$DATA_DIR
 done
 
-
-for method in MostPopular
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=10
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=10
-done
-
 method=MostPopular
 for item_arg in all-items overlap-items in-test-items in-training-items
 do

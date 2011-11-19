@@ -21,6 +21,7 @@
          - #122: introduce specific datatypes for evaluation results
          - move filtered evaluation and group recommendation evaluation from
            experimental to main section
+         - move online eval for item recommendation into its own test script
         I/O
          - add enum IO.ItemDataFileFormat
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
