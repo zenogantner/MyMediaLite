@@ -34,6 +34,8 @@
            ItemRecommendation.IIncrementalItemRecommender
          - improve GUI Demo documentation on website
          - update doc/Installation
+	misc
+	 - ship NUnit DLLs so that we won't have any versioning problems
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation
