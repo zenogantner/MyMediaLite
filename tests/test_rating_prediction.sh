@@ -13,7 +13,7 @@ DATA_DIR=../../../../../data/ml-1m
  
 cd src/Programs/RatingPrediction/bin/Debug/
  
-for method in MatrixFactorization BiasedMatrixFactorization FactorWiseMatrixFactorization
+for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization
 do
        echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
             $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
@@ -48,14 +48,20 @@ DATA_DIR=../../../../../data/ml-100k
 
 for method in UserItemBaseline SlopeOne BipolarSlopeOne
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
+done
+
+for method in FactorWiseMatrixFactorization CoClustering
+do
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
 done
 
 for method in UserKNNPearson UserKNNCosine ItemKNNPearson ItemKNNCosine
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --rating-type=double
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --rating-type=double
 done
 
 cd ../../../../..
