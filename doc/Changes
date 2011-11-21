@@ -1,6 +1,6 @@
 2.02	2011-12-??
         API
-         - IRecommender: now inherits from IClonable
+         - IRecommender: now inherits from IClonable, improve API doc
 	 - IDataSet: add Count property
          - IRatings: get rid of Get() method
          - IIncrementalRatingPredictor: add UpdateUsers and UpdateItems
@@ -43,6 +43,8 @@
          - update doc/Installation
 	misc
 	 - ship NUnit DLLs so that we won't have any versioning problems
+         - add test cases for CoClustering, MultiCoreMatrixFactorization,
+           --rating-format=float|byte|double to rating prediction test script
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation
