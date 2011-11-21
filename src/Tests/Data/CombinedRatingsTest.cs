@@ -108,15 +108,9 @@ namespace Tests.Data
 		}
 		*/
 
-		[Test()] public void TestGet()
+		[Test()] public void TestIndex()
 		{
 			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-
-			// test Get
-			Assert.AreEqual(0.2, ratings.Get(2, 4));
-			Assert.AreEqual(0.3, ratings.Get(6, 3));
-			Assert.AreEqual(0.3, ratings.Get(6, 3));
-			Assert.AreEqual(0.9, ratings.Get(1, 5));
 
 			// test index[,]
 			Assert.AreEqual(0.3, ratings[1, 4]);

@@ -68,9 +68,9 @@ namespace Tests.Data
 			ratings.Add(3, 7, 0.2);
 			ratings.Add(6, 3, 0.3);
 
-			Assert.AreEqual(0.4, ratings.Get(2, 5));
-			Assert.AreEqual(0.3, ratings.Get(1, 4));
-			Assert.AreEqual(0.3, ratings.Get(6, 3));
+			Assert.AreEqual(0.4, ratings[2, 5]);
+			Assert.AreEqual(0.3, ratings[1, 4]);
+			Assert.AreEqual(0.3, ratings[6, 3]);
 			Assert.AreEqual(7, ratings.Count);
 		}
 
@@ -87,7 +87,7 @@ namespace Tests.Data
 			ratings.Add(6, 3, 0.3);
 
 			Assert.AreEqual(8, ratings.Count);
-			Assert.AreEqual(0.4, ratings.Get(2, 5));
+			Assert.AreEqual(0.4, ratings[2, 5]);
 			ratings.RemoveAt(ratings.GetIndex(2, 5));
 			Assert.AreEqual(7, ratings.Count);
 			ratings.RemoveAt(ratings.GetIndex(6, 3));
@@ -109,7 +109,7 @@ namespace Tests.Data
 			ratings.Add(3, 3, 0.3);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.4, ratings.Get(2, 5));
+			Assert.AreEqual(0.4, ratings[2, 5]);
 			ratings.RemoveUser(2);
 			Assert.AreEqual(5, ratings.Count);
 
@@ -129,14 +129,14 @@ namespace Tests.Data
 			ratings.Add(3, 3, 0.3);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.2, ratings.Get(2, 4));
+			Assert.AreEqual(0.2, ratings[2, 4]);
 			ratings.RemoveItem(4);
 			Assert.AreEqual(4, ratings.Count);
 			double r;
 			Assert.IsFalse(ratings.TryGet(2, 4, out r));
 		}
 
-		[Test()] public void TestGet()
+		[Test()] public void TestIndex()
 		{
 			var ratings = new Ratings();
 			ratings.Add(1, 4, 0.3);
@@ -147,11 +147,6 @@ namespace Tests.Data
 			ratings.Add(3, 4, 0.2);
 			ratings.Add(3, 3, 0.3);
 			ratings.Add(6, 3, 0.3);
-
-			// test Get
-			Assert.AreEqual(0.2, ratings.Get(2, 4));
-			Assert.AreEqual(0.3, ratings.Get(3, 3));
-			Assert.AreEqual(0.3, ratings.Get(6, 3));
 
 			// test index[,]
 			Assert.AreEqual(0.3, ratings[1, 4]);

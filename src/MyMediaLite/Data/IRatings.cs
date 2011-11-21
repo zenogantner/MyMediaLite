@@ -45,12 +45,6 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		double this[int user_id, int item_id] { get; }
 
-		/// <summary>Directly access rating by user and item</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the item ID</param>
-		/// <returns>the first found rating of the given item by the given user</returns>
-		double Get(int user_id, int item_id);
-
 		/// <summary>Get all users that are referenced by a given list of indices</summary>
 		/// <param name="indices">the indices to take into account</param>
 		/// <returns>all users referenced by the list of indices</returns>

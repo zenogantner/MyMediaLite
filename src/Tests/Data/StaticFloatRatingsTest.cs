@@ -83,9 +83,9 @@ namespace Tests.Data
 			ratings.Add(3, 7, 0.2f);
 			ratings.Add(6, 3, 0.3f);
 
-			Assert.AreEqual(0.4f, ratings.Get(2, 5));
-			Assert.AreEqual(0.3f, ratings.Get(1, 4));
-			Assert.AreEqual(0.3f, ratings.Get(6, 3));
+			Assert.AreEqual(0.4f, ratings[2, 5]);
+			Assert.AreEqual(0.3f, ratings[1, 4]);
+			Assert.AreEqual(0.3f, ratings[6, 3]);
 			Assert.AreEqual(7, ratings.Count);
 		}
 
@@ -141,7 +141,7 @@ namespace Tests.Data
 			ratings.RemoveItem(4);
 		}
 
-		[Test()] public void TestGet()
+		[Test()] public void TestIndex()
 		{
 			var ratings = new StaticFloatRatings(8);
 			ratings.Add(1, 4, 0.3f);
@@ -152,11 +152,6 @@ namespace Tests.Data
 			ratings.Add(3, 4, 0.2f);
 			ratings.Add(3, 3, 0.3f);
 			ratings.Add(6, 3, 0.3f);
-
-			// test Get
-			Assert.AreEqual(0.2f, ratings.Get(2, 4));
-			Assert.AreEqual(0.3f, ratings.Get(3, 3));
-			Assert.AreEqual(0.3f, ratings.Get(6, 3));
 
 			// test index[,]
 			Assert.AreEqual(0.3f, ratings[1, 4]);

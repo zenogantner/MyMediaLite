@@ -131,12 +131,6 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public double Get(int user_id, int item_id)
-		{
-			return this[user_id, item_id];
-		}
-
-		///
 		public virtual bool TryGet(int user_id, int item_id, out double rating)
 		{
 			rating = double.NegativeInfinity;
