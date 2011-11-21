@@ -67,8 +67,8 @@ class ItemRecommendation
 	static string item_attributes_file;
 	static string user_relations_file;
 	static string item_relations_file;
-	static string save_model_file = string.Empty;
-	static string load_model_file = string.Empty;
+	static string save_model_file = null;
+	static string load_model_file = null;
 	static string user_groups_file;
 	static string prediction_file;
 
@@ -196,7 +196,7 @@ class ItemRecommendation
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 
 		// recommender arguments
-		string method              = "MostPopular";
+		string method              = null;
 		string recommender_options = string.Empty;
 
 		// help/version
@@ -274,11 +274,18 @@ class ItemRecommendation
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
-		recommender = Recommender.CreateItemRecommender(method);
-		if (recommender == null)
-			Usage(string.Format("Unknown item recommendation method: '{0}'", method));
-		if (online_eval && !(recommender is IIncrementalItemRecommender))
-			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+		// set up recommender
+		if (method != null)
+			recommender = Recommender.CreateItemRecommender(method);
+		else if (load_model_file != null)
+			recommender = Model.Load(load_model_file);
+		else
+			Usage("Please provide either --recommender=METHOD or --load-model=FILE.");
+		// in case something went wrong ...
+		if (recommender == null && method != null)
+			Usage(string.Format("Unknown recommendation method: '{0}'", method));
+		if (recommender == null && load_model_file != null)
+			Usage(string.Format("Could not load model from file {0}.", load_model_file));
 
 		CheckParameters(extra_args);
 
@@ -303,10 +310,8 @@ class ItemRecommendation
 			}
 			else
 			{
-				if (load_model_file == string.Empty)
+				if (load_model_file == null)
 					recommender.Train();
-				else
-					Model.Load(recommender, load_model_file);
 
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), iterative_recommender.NumIter);
@@ -350,26 +355,21 @@ class ItemRecommendation
 		}
 		else
 		{
-			if (load_model_file == string.Empty)
+			Console.WriteLine(recommender + " ");
+			
+			if (load_model_file == null)
 			{
 				if (cross_validation > 1)
 				{
-					Console.WriteLine(recommender);
 					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, show_fold_results);
 					Console.Write(results);
 					no_eval = true;
 				}
 				else
 				{
-					Console.Write(recommender.ToString() + " ");
 					time_span = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 					Console.Write("training_time " + time_span + " ");
 				}
-			}
-			else
-			{
-				Model.Load(recommender, load_model_file);
-				Console.Write(recommender.ToString() + " ");
 			}
 
 			if (compute_fit)
@@ -426,6 +426,9 @@ class ItemRecommendation
 		if (online_eval && filtered_eval)
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
+		if (online_eval && !(recommender is IIncrementalItemRecommender))
+			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
 
@@ -438,7 +441,7 @@ class ItemRecommendation
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == string.Empty && test_users_file == null)
+		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == null && test_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
@@ -676,7 +679,7 @@ class ItemRecommendation
 	{
 		if (candidate_items == null)
 			candidate_items = training_data.AllItems;
-		
+
 		IList<int> user_list = null;
 		if (predict_for_users_file != null)
 			user_list = user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file));
