@@ -39,8 +39,11 @@ namespace MyMediaLite
 		/// <returns>the predicted score/rating for the given user-item combination</returns>
 		double Predict(int user_id, int item_id);
 
-		/// <summary>Check whether a useful prediction can be made for a given user-item combination</summary>
-		/// <remarks></remarks>
+		/// <summary>Check whether a useful prediction (i.e. not using a fallback/default answer) can be made for a given user-item combination</summary>
+		/// <remarks>
+		/// It is up to the recommender implementor to decide when a prediction is useful,
+		/// and to document it accordingly.
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>true if a useful prediction can be made, false otherwise</returns>
