@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,7 +16,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using MyMediaLite.DataType;
-
 
 namespace MyMediaLite
 {

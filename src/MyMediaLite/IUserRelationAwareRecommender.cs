@@ -1,4 +1,4 @@
-// Copyright (C) 2010 Zeno Gantner
+// Copyright (C) 2010, 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,6 +29,6 @@ namespace MyMediaLite
 
 		/// <value>Number of users</value>
 		/// <remarks></remarks>
-		int NumUsers { get; } // TODO think about getting rid of this again
+		int NumUsers { get; }
 	}
 }

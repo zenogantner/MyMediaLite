@@ -25,7 +25,6 @@ using MyMediaLite.DataType;
 using MyMediaLite.Eval.Measures;
 using MyMediaLite.ItemRecommendation;
 
-
 /*! \namespace MyMediaLite.Eval
  *  \brief This namespace contains evaluation routines.
  */
