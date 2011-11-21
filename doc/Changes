@@ -1,7 +1,5 @@
 2.02	2011-12-??
         API
-         - new rating predictor: CoClustering (based on a 2005 paper by George
-           and Merugu)
          - IRecommender: now inherits from IClonable
 	 - IDataSet: add Count property
 	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
@@ -10,8 +8,11 @@
            - less method overloads
          - move Pair and Triple from Util namespace to DataType
         recommenders
-	   - BPRMF: fix bug in incremental updates
-           - move group recommenders from experimental to main section
+         - new rating predictor: CoClustering (based on a 2005 paper by George
+           and Merugu)
+         - BPRMF: fix bug in incremental updates
+         - FactorWiseMatrixFactorization: remove unused field global_bias
+         - move group recommenders from experimental to main section
 	command-line programs
          - #61: add the option to ignore first line of training/test file
          - item recommendation

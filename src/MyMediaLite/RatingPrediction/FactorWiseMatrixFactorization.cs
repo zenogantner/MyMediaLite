@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -41,9 +42,6 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Matrix containing the latent item factors</summary>
 		Matrix<double> item_factors;
-
-		/// <summary>The bias (global average)</summary>
-		double global_bias;
 
 		UserItemBaseline global_effects = new UserItemBaseline();
 
@@ -90,14 +88,12 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			// init factor matrices
-			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 
 			// init+train global effects model
-			global_effects.Ratings = Ratings;
+			global_effects.Ratings = ratings;
 			global_effects.Train();
-
-			global_bias = Ratings.Average;
 
 			// initialize learning data structure
 			residuals = new double[Ratings.Count];
@@ -210,7 +206,6 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(num_learned_factors);
 				writer.WriteMatrix(user_factors);
 				writer.WriteMatrix(item_factors);
@@ -225,7 +220,6 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var global_bias         = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var num_learned_factors = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
@@ -240,7 +234,6 @@ namespace MyMediaLite.RatingPrediction
 				this.MaxItemID = item_factors.NumberOfRows - 1;
 
 				// assign new model
-				this.global_bias         = global_bias;
 				this.num_learned_factors = num_learned_factors;
 				if (this.NumFactors != user_factors.NumberOfColumns)
 				{
@@ -255,15 +248,16 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public double ComputeFit()
 		{
-			return Eval.Ratings.Evaluate(this, ratings)["RMSE"];
+			return this.Evaluate(ratings)["RMSE"];
 		}
 
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture,
-								 "{0} num_factors={1} shrinkage={2} sensibility={3}  init_mean={4} init_stdev={5} num_iter={6}",
-								 this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
+			return string.Format(
+				CultureInfo.InvariantCulture,
+				"{0} num_factors={1} shrinkage={2} sensibility={3}  init_mean={4} init_stdev={5} num_iter={6}",
+				this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
 		}
 	}
 }
