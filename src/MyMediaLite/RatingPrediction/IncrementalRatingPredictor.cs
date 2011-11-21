@@ -23,6 +23,19 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class IncrementalRatingPredictor : RatingPredictor, IIncrementalRatingPredictor
 	{
 		///
+		public bool UpdateUsers { get; set; }
+
+		///
+		public bool UpdateItems { get; set; }
+
+		/// <summary>Default constructor</summary>
+		public IncrementalRatingPredictor()
+		{
+			UpdateUsers = true;
+			UpdateItems = true;
+		}
+
+		///
 		public virtual void AddRating(int user_id, int item_id, double rating)
 		{
 			if (user_id > MaxUserID)

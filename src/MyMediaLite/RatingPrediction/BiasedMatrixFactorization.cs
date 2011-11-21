@@ -96,7 +96,7 @@ namespace MyMediaLite.RatingPrediction
 		protected double[] item_bias;
 
 		/// <summary>Default constructor</summary>
-		public BiasedMatrixFactorization()
+		public BiasedMatrixFactorization() : base()
 		{
 			BiasReg = 0.0001;
 		}

@@ -63,5 +63,19 @@ namespace MyMediaLite.RatingPrediction
 		/// </remarks>
 		/// <param name='item_id'>the ID of the user to be removed</param>
 		void RemoveItem(int item_id);
+
+		/// <summary>true if users shall be updated when doing incremental updates</summary>
+		/// <remarks>
+		/// Default should be true.
+		/// Set to false if you do not want any updates to the user model parameters when doing incremental updates.
+		/// </remarks>
+		bool UpdateUsers { get; set; }
+
+		/// <summary>true if items shall be updated when doing incremental updates</summary>
+		/// <remarks>
+		/// Default should true.
+		/// Set to false if you do not want any updates to the item model parameters when doing incremental updates.
+		/// </remarks>
+		bool UpdateItems { get; set; }
 	}
 }

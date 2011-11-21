@@ -74,7 +74,7 @@ namespace MyMediaLite.RatingPrediction
 		public double InitStdev { get; set; }
 
 		/// <summary>Default constructor</summary>
-		public FactorWiseMatrixFactorization()
+		public FactorWiseMatrixFactorization() : base()
 		{
 			// set default values
 			Shrinkage = 25;

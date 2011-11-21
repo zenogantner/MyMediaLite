@@ -69,7 +69,7 @@ namespace MyMediaLite.RatingPrediction
 		public uint NumIter { get; set; }
 
 		/// <summary>Default constructor</summary>
-		public MatrixFactorization()
+		public MatrixFactorization() : base()
 		{
 			// set default values
 			Regularization = 0.015;

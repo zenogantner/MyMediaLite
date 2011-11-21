@@ -61,7 +61,7 @@ namespace MyMediaLite.RatingPrediction
 		protected double[] item_biases;
 
 		/// <summary>Default constructor</summary>
-		public UserItemBaseline()
+		public UserItemBaseline() : base()
 		{
 			RegU = 15;
 			RegI = 10;

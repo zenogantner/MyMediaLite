@@ -3,6 +3,8 @@
          - IRecommender: now inherits from IClonable
 	 - IDataSet: add Count property
          - IRatings: get rid of Get() method
+         - IIncrementalRatingPredictor: add UpdateUsers and UpdateItems
+           properties
 	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
            are now extension methods, rename to Extensions
            - make mapping arguments optional
