@@ -282,7 +282,7 @@ class ItemRecommendation
 
 		CheckParameters(extra_args);
 
-		Recommender.Configure(recommender, recommender_options, Usage);
+		recommender.Configure(recommender_options, Usage);
 		// load all the data
 		LoadData();
 		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);

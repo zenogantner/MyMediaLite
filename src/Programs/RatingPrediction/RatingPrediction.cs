@@ -247,7 +247,7 @@ class RatingPrediction
 
 		CheckParameters(extra_args);
 
-		Recommender.Configure(recommender, recommender_options, Usage);
+		recommender.Configure(recommender_options, Usage);
 
 		// ID mapping objects
 		if (file_format == RatingFileFormat.KDDCUP_2011)

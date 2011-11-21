@@ -46,7 +46,7 @@ namespace MyMediaLite.Util
 		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
 		/// <returns>the configured recommender</returns>
-		public static T Configure<T>(T recommender, string parameters, takes_string report_error)
+		public static T Configure<T>(this T recommender, string parameters, takes_string report_error)
 		{
 			var parameters_dictionary = new RecommenderParameters(parameters);
 			return Configure(recommender, parameters_dictionary, report_error);
@@ -55,7 +55,7 @@ namespace MyMediaLite.Util
 		/// <summary>Configure a recommender</summary>
 		/// <param name="recommender">the recommender to configure</param>
 		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
-		public static T Configure<T>(T recommender, string parameters)
+		public static T Configure<T>(this T recommender, string parameters)
 		{
 			return Configure(recommender, parameters, delegate(string s) { Console.Error.WriteLine(s); });
 		}
