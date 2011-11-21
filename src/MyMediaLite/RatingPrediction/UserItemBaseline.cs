@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -42,11 +43,9 @@ namespace MyMediaLite.RatingPrediction
 	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
-		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
 		public double RegU { get; set; }
 
 		/// <summary>Regularization parameter for the item biases</summary>
-		/// <remarks>If not set, the recommender will try to find suitable values.</remarks>
 		public double RegI { get; set; }
 
 		///
@@ -75,7 +74,7 @@ namespace MyMediaLite.RatingPrediction
 			user_biases = new double[MaxUserID + 1];
 			item_biases = new double[MaxItemID + 1];
 
-			global_average = Ratings.Average;
+			global_average = ratings.Average;
 
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
@@ -92,10 +91,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			int[] user_ratings_count = new int[MaxUserID + 1];
 
-			for (int index = 0; index < Ratings.Count; index++)
+			for (int index = 0; index < ratings.Count; index++)
 			{
-				user_biases[Ratings.Users[index]] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
-				user_ratings_count[Ratings.Users[index]]++;
+				user_biases[ratings.Users[index]] += ratings[index] - global_average - item_biases[ratings.Items[index]];
+				user_ratings_count[ratings.Users[index]]++;
 			}
 			for (int u = 0; u < user_biases.Length; u++)
 				if (user_ratings_count[u] != 0)
@@ -106,10 +105,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			int[] item_ratings_count = new int[MaxItemID + 1];
 
-			for (int index = 0; index < Ratings.Count; index++)
+			for (int index = 0; index < ratings.Count; index++)
 			{
-				item_biases[Ratings.Items[index]] += Ratings[index] - global_average - user_biases[Ratings.Users[index]];
-				item_ratings_count[Ratings.Items[index]]++;
+				item_biases[ratings.Items[index]] += ratings[index] - global_average - user_biases[ratings.Users[index]];
+				item_ratings_count[ratings.Items[index]]++;
 			}
 			for (int i = 0; i < item_biases.Length; i++)
 				if (item_ratings_count[i] != 0)
@@ -136,7 +135,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				foreach (int index in ratings.ByUser[user_id])
-					user_biases[user_id] += Ratings[index] - global_average - item_biases[Ratings.Items[index]];
+					user_biases[user_id] += ratings[index] - global_average - item_biases[ratings.Items[index]];
 				if (ratings.ByUser[user_id].Count != 0)
 					user_biases[user_id] = user_biases[user_id] / (RegU + ratings.ByUser[user_id].Count);
 			}
@@ -148,7 +147,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateItems)
 			{
 				foreach (int index in ratings.ByItem[item_id])
-					item_biases[item_id] += Ratings[index] - global_average;
+					item_biases[item_id] += ratings[index] - global_average;
 				if (ratings.ByItem[item_id].Count != 0)
 					item_biases[item_id] = item_biases[item_id] / (RegI + ratings.ByItem[item_id].Count);
 			}
@@ -228,7 +227,7 @@ namespace MyMediaLite.RatingPrediction
 		public double ComputeFit()
 		{
 			return
-				Eval.Ratings.Evaluate(this, ratings)["RMSE"]
+				this.Evaluate(ratings)["RMSE"]
 				+ RegU * Math.Pow(user_biases.EuclideanNorm(), 2)
 				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2);
 		}
