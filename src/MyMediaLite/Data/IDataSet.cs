@@ -22,15 +22,21 @@ namespace MyMediaLite.Data
 {
 	/// <summary>Interface for different kinds of collaborative filtering data sets</summary>
 	/// <remarks>
+	/// <para>
 	/// Implementing classes/inheriting interfaces are e.g. for rating data and for positive-only implicit feedback.
-	///
+	/// </para>
+	/// 
+	/// <para>
 	/// The main feature of a dataset is that it has some kind of order (not explicitly stated)
 	/// - random, chronological, user-wise, or item-wise - and that it contains tuples of users and
 	/// items (not necessarily unique tuples).
-	///
+	/// </para>
+	/// 
+	/// <para>
 	/// Implementing classes and inheriting interfaces can add additional data to each user-item tuple,
 	/// e.g. the date/time of an event, location, context, etc., as well as additional index structures
 	/// to access the dataset in a certain fashion.
+	/// </para>
 	/// </remarks>
 	public interface IDataSet
 	{

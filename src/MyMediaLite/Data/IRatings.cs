@@ -60,7 +60,6 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the index of the first event encountered that matches the user ID and item ID</returns>
 		int GetIndex(int user_id, int item_id);
-
 		/// <summary>Get index for given user and item</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
@@ -74,7 +73,6 @@ namespace MyMediaLite.Data
 		/// <param name="index">will contain the index of the first event encountered that matches the user ID and item ID</param>
 		/// <returns>true if an index was found for the user and item</returns>
 		bool TryGetIndex(int user_id, int item_id, out int index);
-
 		/// <summary>Try to get the index for given user and item</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
