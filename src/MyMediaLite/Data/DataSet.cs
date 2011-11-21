@@ -62,8 +62,8 @@ namespace MyMediaLite.Data
 		/// <summary>Default constructor</summary>
 		public DataSet()
 		{
-			Users  = new List<int>();
-			Items  = new List<int>();
+			Users = new List<int>();
+			Items = new List<int>();
 		}
 
 		///

@@ -43,6 +43,7 @@ namespace MyMediaLite.Data
 		/// <summary>Directly access rating by user and item</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
+		/// <value>the rating value for the given user and item</value>
 		double this[int user_id, int item_id] { get; }
 
 		/// <summary>Get all users that are referenced by a given list of indices</summary>
