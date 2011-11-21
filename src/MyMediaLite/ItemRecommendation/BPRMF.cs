@@ -154,7 +154,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (BoldDriver)
 			{
-				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100;         // TODO make configurable
+				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100;         // TODO make configurable
 				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
 
 				// create the sample to estimate loss from
