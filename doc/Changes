@@ -34,6 +34,8 @@
          - add read/write methods for integer vectors to IO.VectorExtensions
          - user/item mappings are now optional arguments for all IO routines
          - add unit tests for all interaction data reading classes
+	data structures
+         - move MinRating and MaxRating from DataSet to Ratings
         documentation
          - improve API doc of Correlation.Jaccard and
            ItemRecommendation.IIncrementalItemRecommender
