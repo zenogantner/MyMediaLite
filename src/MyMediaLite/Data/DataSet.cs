@@ -43,11 +43,6 @@ namespace MyMediaLite.Data
 		public int MaxItemID { get; protected set; }
 
 		///
-		public double MaxRating { get; protected set; }
-		///
-		public double MinRating { get; protected set; }
-
-		///
 		public IList<IList<int>> ByUser
 		{
 			get {
@@ -56,7 +51,7 @@ namespace MyMediaLite.Data
 				return by_user;
 			}
 		}
-		/// <summary>Rating indices organized by user</summary>
+		/// <summary>Indices organized by user</summary>
 		protected IList<IList<int>> by_user;
 
 		/// <summary>Default constructor</summary>
@@ -75,7 +70,7 @@ namespace MyMediaLite.Data
 				return by_item;
 			}
 		}
-		/// <summary>Rating indices organized by item</summary>
+		/// <summary>Indices organized by item</summary>
 		protected IList<IList<int>> by_item;
 
 		///

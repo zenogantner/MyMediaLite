@@ -44,6 +44,11 @@ namespace MyMediaLite.Data
 			}
 		}
 
+		///
+		public double MaxRating { get; protected set; }
+		///
+		public double MinRating { get; protected set; }
+
 		/// <summary>Default constructor</summary>
 		public Ratings() : base()
 		{
