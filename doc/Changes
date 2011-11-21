@@ -8,6 +8,7 @@
            are now extension methods, rename to Extensions
            - make mapping arguments optional
            - less method overloads
+         - move Pair and Triple from Util namespace to DataType
         recommenders
 	   - BPRMF: fix bug in incremental updates
            - move group recommenders from experimental to main section

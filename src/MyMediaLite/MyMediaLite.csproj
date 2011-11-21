@@ -89,11 +89,9 @@
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
     <Compile Include="Util\Handlers.cs" />
     <Compile Include="Util\Memory.cs" />
-    <Compile Include="Util\Pair.cs" />
     <Compile Include="Util\Random.cs" />
     <Compile Include="Util\Recommender.cs" />
     <Compile Include="Util\RecommenderParameters.cs" />
-    <Compile Include="Util\Triple.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
@@ -189,6 +187,8 @@
     <Compile Include="GroupRecommendation\PairwiseWins.cs" />
     <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="RatingPrediction\CoClustering.cs" />
+    <Compile Include="DataType\Pair.cs" />
+    <Compile Include="DataType\Triple.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

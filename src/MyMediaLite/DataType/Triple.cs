@@ -1,7 +1,7 @@
 // This file is part of MyMediaLite.
 // Its content is in the public domain.
 
-namespace MyMediaLite.Util
+namespace MyMediaLite.DataType
 {
 	/// <summary>Generic triple class</summary>
 	public class Triple<T, U, V>
