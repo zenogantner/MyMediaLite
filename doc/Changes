@@ -10,7 +10,8 @@
            - make mapping arguments optional
            - less method overloads
          - move Pair and Triple from Util namespace to DataType
-         - Recommender.Configure() is now an extension method
+         - Recommender.Configure() and SetProperty() are now an extension
+	   methods
         recommenders
          - new rating predictor: CoClustering (based on a 2005 paper by George
            and Merugu)

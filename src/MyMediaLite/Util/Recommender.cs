@@ -140,7 +140,7 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">An <see cref="IRecommender"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
-		public static void SetProperty(IRecommender recommender, string key, string val)
+		public static void SetProperty(this IRecommender recommender, string key, string val)
 		{
 			Type type = recommender.GetType();
 			var property_names = new List<string>();

@@ -51,7 +51,7 @@ namespace MyMediaLite.HyperParameter
 
 			for (int i = 0; i < hyperparameter_values.Length; i++)
 			{
-				Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[i].ToString(CultureInfo.InvariantCulture));
+				recommender.SetProperty(hyperparameter_name, hyperparameter_values[i].ToString(CultureInfo.InvariantCulture));
 				double result = recommender.DoCrossValidation(split)[evaluation_measure];
 
 				if (result < min_result)
@@ -60,7 +60,7 @@ namespace MyMediaLite.HyperParameter
 					min_result = result;
 				}
 			}
-			Recommender.SetProperty(recommender, hyperparameter_name, hyperparameter_values[min_i].ToString(CultureInfo.InvariantCulture));
+			recommender.SetProperty(hyperparameter_name, hyperparameter_values[min_i].ToString(CultureInfo.InvariantCulture));
 
 			return min_result;
 		}
@@ -89,8 +89,8 @@ namespace MyMediaLite.HyperParameter
 			for (int i = 0; i < hp_values1.Length; i++)
 				for (int j = 0; j < hp_values2.Length; j++)
 				{
-					Recommender.SetProperty(recommender, hp_name1, hp_values1[i].ToString(CultureInfo.InvariantCulture));
-					Recommender.SetProperty(recommender, hp_name2, hp_values2[j].ToString(CultureInfo.InvariantCulture));
+					recommender.SetProperty(hp_name1, hp_values1[i].ToString(CultureInfo.InvariantCulture));
+					recommender.SetProperty(hp_name2, hp_values2[j].ToString(CultureInfo.InvariantCulture));
 
 					Console.Error.WriteLine("reg_u={0} reg_i={1}", hp_values1[i].ToString(CultureInfo.InvariantCulture), hp_values2[j].ToString(CultureInfo.InvariantCulture)); // TODO this is not generic
 					double result = recommender.DoCrossValidation(split)[evaluation_measure];
@@ -103,8 +103,8 @@ namespace MyMediaLite.HyperParameter
 				}
 
 			// set to best hyperparameter values
-			Recommender.SetProperty(recommender, hp_name1, hp_values1[min_i].ToString(CultureInfo.InvariantCulture));
-			Recommender.SetProperty(recommender, hp_name2, hp_values2[min_j].ToString(CultureInfo.InvariantCulture));
+			recommender.SetProperty(hp_name1, hp_values1[min_i].ToString(CultureInfo.InvariantCulture));
+			recommender.SetProperty(hp_name2, hp_values2[min_j].ToString(CultureInfo.InvariantCulture));
 
 			return min_result;
 		}
