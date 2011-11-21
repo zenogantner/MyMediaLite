@@ -32,7 +32,7 @@ namespace MyMediaLite.IO
 		/// <param name="filename">the filename (may include relative paths)</param>
 		public static void Save(IRecommender recommender, string filename)
 		{
-			if (filename == string.Empty)
+			if (filename == null)
 				return;
 
 			Console.Error.WriteLine("Save model to {0}", filename);
@@ -48,7 +48,7 @@ namespace MyMediaLite.IO
 		/// <param name="iteration">the iteration (will be appended to the filename)</param>
 		public static void Save(IRecommender recommender, string filename, int iteration)
 		{
-			if (filename == string.Empty)
+			if (filename == null)
 				return;
 
 			Save(recommender, filename + "-it-" + iteration);
@@ -85,14 +85,13 @@ namespace MyMediaLite.IO
 			}
 
 			if (type_name.StartsWith("MyMediaLite.RatingPrediction."))
-				recommender = Recommender.CreateRatingPredictor(type_name.Substring("MyMediaLite.RatingPrediction.".Length));
+				recommender = Recommender.CreateRatingPredictor(type_name);
 			else if (type_name.StartsWith("MyMediaLite.ItemRecommendation."))
-				recommender = Recommender.CreateItemRecommender(type_name.Substring("MyMediaLite.ItemRecommendation.".Length));
+				recommender = Recommender.CreateItemRecommender(type_name);
 			else
-				throw new Exception(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
+				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
 
 			Console.WriteLine(recommender.ToString());
-
 			recommender.LoadModel(filename);
 
 			return recommender;
