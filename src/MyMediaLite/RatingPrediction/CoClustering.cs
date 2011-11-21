@@ -80,7 +80,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			this.user_clustering = new int[MaxUserID + 1];
 			this.item_clustering = new int[MaxItemID + 1];
-			
+
 			this.user_cluster_averages = new double[NumUserClusters];
 			this.item_cluster_averages = new double[NumItemClusters];
 			this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
@@ -114,7 +114,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			random = Util.Random.GetInstance();
-			
+
 			InitModel();
 			for (int i = 0; i < user_clustering.Count; i++)
 				user_clustering[i] = random.Next(NumUserClusters);
@@ -122,7 +122,7 @@ namespace MyMediaLite.RatingPrediction
 				item_clustering[i] = random.Next(NumItemClusters);
 
 			ComputeAverages();
-			
+
 			for (uint i = 0; i < NumIter; i++)
 				if (! IterateCheckModified())
 					break;
@@ -131,6 +131,13 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override double Predict(int u, int i)
 		{
+			if (u > MaxUserID && i > MaxItemID)
+				return global_average;
+			if (u > MaxUserID)
+				return item_cluster_averages[item_clustering[i]];
+			if (i > MaxItemID)
+				return user_cluster_averages[user_clustering[u]];
+
 			double prediction = Predict(u, i, user_clustering[u], item_clustering[i]);
 			if (prediction < MinRating)
 				return MinRating;
