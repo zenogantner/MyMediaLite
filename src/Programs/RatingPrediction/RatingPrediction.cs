@@ -59,8 +59,8 @@ class RatingPrediction
 	// command line parameters
 	static string training_file;
 	static string test_file;
-	static string save_model_file = string.Empty;
-	static string load_model_file = string.Empty;
+	static string save_model_file = null;
+	static string load_model_file = null;
 	static string user_attributes_file;
 	static string item_attributes_file;
 	static string user_relations_file;
@@ -76,6 +76,7 @@ class RatingPrediction
 	static double chronological_split_ratio = -1;
 	static DateTime chronological_split_time = DateTime.MinValue;
 	static int find_iter;
+	static bool online_eval = false;
 
 	static void ShowVersion()
 	{
@@ -164,7 +165,7 @@ class RatingPrediction
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 
 		// recommender arguments
-		string method              = "BiasedMatrixFactorization";
+		string method              = null;
 		string recommender_options = string.Empty;
 
 		// help/version
@@ -172,7 +173,7 @@ class RatingPrediction
 		bool show_version = false;
 
 		// arguments for iteration search
-		int max_iter       = 500;
+		int max_iter       = 100;
 		double epsilon     = 0;
 		double rmse_cutoff = double.MaxValue;
 		double mae_cutoff  = double.MaxValue;
@@ -181,7 +182,6 @@ class RatingPrediction
 		string data_dir = string.Empty;
 
 		// other arguments
-		bool online_eval           = false;
 		bool search_hp             = false;
 		int random_seed            = -1;
 		string prediction_line     = "{0}\t{1}\t{2}";
@@ -239,11 +239,17 @@ class RatingPrediction
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		// set up recommender
-		recommender = Recommender.CreateRatingPredictor(method);
-		if (recommender == null)
+		if (method != null)
+			recommender = Recommender.CreateRatingPredictor(method);
+		else if (load_model_file != null)
+			recommender = (RatingPredictor) Model.Load(load_model_file);
+		else
+			Usage("Please provide either --recommender=METHOD or --load-model=FILE.");
+		// in case something went wrong ...
+		if (recommender == null && method != null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
-		if (online_eval && !(recommender is IIncrementalRatingPredictor))
-			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+		if (recommender == null && load_model_file != null)
+			Usage(string.Format("Could not load model from file {0}.", load_model_file));
 
 		CheckParameters(extra_args);
 
@@ -302,10 +308,8 @@ class RatingPrediction
 			{
 				var iterative_recommender = (IIterativeModel) recommender;
 
-				if (load_model_file == string.Empty)
+				if (load_model_file == null)
 					recommender.Train();
-				else
-					Model.Load(recommender, load_model_file);
 
 				if (compute_fit)
 					Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), iterative_recommender.NumIter);
@@ -358,11 +362,13 @@ class RatingPrediction
 		{
 			TimeSpan seconds;
 
-			if (load_model_file == string.Empty)
+			Console.Write(recommender + " ");
+			
+			if (load_model_file == null)
 			{
 				if (cross_validation > 1)
 				{
-					Console.WriteLine(recommender);
+					Console.WriteLine();
 					var results = recommender.DoCrossValidation(cross_validation, show_fold_results);
 					Console.Write(results);
 					no_eval = true;
@@ -375,15 +381,9 @@ class RatingPrediction
 						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(CultureInfo.InvariantCulture));
 					}
 
-					Console.Write(recommender);
 					seconds = Wrap.MeasureTime( delegate() { recommender.Train(); } );
 					Console.Write(" training_time " + seconds + " ");
 				}
-			}
-			else
-			{
-				Model.Load(recommender, load_model_file);
-				Console.Write(recommender.ToString() + " ");
 			}
 
 			if (!no_eval)
@@ -422,8 +422,11 @@ class RatingPrediction
 
 	static void CheckParameters(IList<string> extra_args)
 	{
-		if (training_file == null)
-			Usage("Parameter --training-file=FILE is missing.");
+		if (online_eval && !(recommender is IIncrementalRatingPredictor))
+			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+		
+		if (training_file == null && load_model_file == null)
+			Usage("Please provide either --training-file=FILE or --load-model=FILE.");
 
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
