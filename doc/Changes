@@ -12,6 +12,8 @@
          - move Pair and Triple from Util namespace to DataType
          - Recommender.Configure() and SetProperty() are now an extension
 	   methods
+         - Recommender.CreateRatingPredictor() and CreateItemRecommender() now
+           also accept complete type names (including namespaces)
         recommenders
          - new rating predictor: CoClustering (based on a 2005 paper by George
            and Merugu)

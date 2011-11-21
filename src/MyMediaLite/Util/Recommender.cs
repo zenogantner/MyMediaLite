@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
@@ -187,9 +188,12 @@ namespace MyMediaLite.Util
 		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
 		public static RatingPredictor CreateRatingPredictor(string typename)
 		{
+			if (! typename.StartsWith("MyMediaLite.RatingPrediction."))
+				typename = "MyMediaLite.RatingPrediction." + typename;
+			
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				Type type = assembly.GetType("MyMediaLite.RatingPrediction." + typename, false, true);
+				Type type = assembly.GetType(typename, false, true);
 				if (type != null)
 					return CreateRatingPredictor(type);
 			}
@@ -217,9 +221,12 @@ namespace MyMediaLite.Util
 		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
 		public static ItemRecommender CreateItemRecommender(string typename)
 		{
+			if (! typename.StartsWith("MyMediaLite.ItemRecommendation"))
+				typename = "MyMediaLite.ItemRecommendation." + typename;
+			
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
-				Type type = assembly.GetType("MyMediaLite.ItemRecommendation." + typename, false, true);
+				Type type = assembly.GetType(typename, false, true);
 				if (type != null)
 					return CreateItemRecommender(type);
 			}
@@ -241,7 +248,7 @@ namespace MyMediaLite.Util
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
 		}
-
+		
 		/// <summary>Describes the kind of data needed by this recommender</summary>
 		/// <param name="recommender">a recommender</param>
 		/// <returns>a string containing the additional datafiles needed for training this recommender</returns>
