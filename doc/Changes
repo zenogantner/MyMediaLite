@@ -22,6 +22,8 @@
          - move group recommenders from experimental to main section
 	command-line programs
          - #61: add the option to ignore first line of training/test file
+         - #27: command-line programs: load from model file without specifying
+           recommender type
          - item recommendation
            - add --file-format= option
            - fix wrong check "predict_for_users_file == null" to "!=" in
