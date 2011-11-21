@@ -96,7 +96,7 @@ namespace MyMediaLite.RatingPrediction
 			global_effects.Train();
 
 			// initialize learning data structure
-			residuals = new double[Ratings.Count];
+			residuals = new double[ratings.Count];
 
 			// learn model parameters
 			num_learned_factors = 0;
@@ -111,12 +111,12 @@ namespace MyMediaLite.RatingPrediction
 				return;
 
 			// compute residuals
-			for (int index = 0; index < Ratings.Count; index++)
+			for (int index = 0; index < ratings.Count; index++)
 			{
-				int u = Ratings.Users[index];
-				int i = Ratings.Items[index];
-				residuals[index] = Ratings[index] - Predict(u, i);
-				int n_ui = Math.Min(Ratings.ByUser[u].Count, Ratings.ByItem[i].Count);
+				int u = ratings.Users[index];
+				int i = ratings.Items[index];
+				residuals[index] = ratings[index] - Predict(u, i);
+				int n_ui = Math.Min(ratings.ByUser[u].Count, ratings.ByItem[i].Count);
 				residuals[index] *= n_ui / (n_ui + Shrinkage);
 			}
 
@@ -134,10 +134,10 @@ namespace MyMediaLite.RatingPrediction
 					var user_factors_update_denominator = new double[MaxUserID + 1];
 
 					// compute updates in one pass over the data
-					for (int index = 0; index < Ratings.Count; index++)
+					for (int index = 0; index < ratings.Count; index++)
 					{
-						int u = Ratings.Users[index];
-						int i = Ratings.Items[index];
+						int u = ratings.Users[index];
+						int i = ratings.Items[index];
 
 						user_factors_update_numerator[u]   += residuals[index] * item_factors[i, num_learned_factors];
 						user_factors_update_denominator[u] += item_factors[i, num_learned_factors] * item_factors[i, num_learned_factors];
@@ -154,10 +154,10 @@ namespace MyMediaLite.RatingPrediction
 					var item_factors_update_denominator = new double[MaxItemID + 1];
 
 					// compute updates in one pass over the data
-					for (int index = 0; index < Ratings.Count; index++)
+					for (int index = 0; index < ratings.Count; index++)
 					{
-						int u = Ratings.Users[index];
-						int i = Ratings.Items[index];
+						int u = ratings.Users[index];
+						int i = ratings.Items[index];
 
 						item_factors_update_numerator[i]   += residuals[index] * user_factors[u, num_learned_factors];
 						item_factors_update_denominator[i] += user_factors[u, num_learned_factors] * user_factors[u, num_learned_factors];
@@ -216,7 +216,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			global_effects.LoadModel(filename + "-global-effects");
-			global_effects.Ratings = Ratings;
+			global_effects.Ratings = ratings;
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{

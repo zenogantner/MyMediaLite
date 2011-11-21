@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 			set	{
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
-				for (int index = 0; index < Ratings.Count; index++)
+				for (int index = 0; index < ratings.Count; index++)
 					data_user[ratings.Users[index], ratings.Items[index]] = true;
 			}
 		}

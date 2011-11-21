@@ -57,14 +57,14 @@ namespace MyMediaLite.RatingPrediction
 				entity_averages.Add(0);
 			}
 
-			for (int i = 0; i < Ratings.Count; i++)
+			for (int i = 0; i < ratings.Count; i++)
 			{
 				int entity_id = entity_ids[i];
 				rating_counts[entity_id]++;
-				entity_averages[entity_id] += Ratings[i];
+				entity_averages[entity_id] += ratings[i];
 			}
 
-			global_average = Ratings.Average;
+			global_average = ratings.Average;
 
 			for (int i = 0; i <= max_entity_id; i++)
 				if (rating_counts[i] > 0)

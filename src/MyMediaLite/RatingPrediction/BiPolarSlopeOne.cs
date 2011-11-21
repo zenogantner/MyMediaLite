@@ -54,11 +54,11 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return false;
 
-			foreach (int index in Ratings.ByUser[user_id])
+			foreach (int index in ratings.ByUser[user_id])
 			{
-				if (freq_matrix_like[item_id, Ratings.Items[index]] != 0)
+				if (freq_matrix_like[item_id, ratings.Items[index]] != 0)
 					return true;
-				if (freq_matrix_dislike[item_id, Ratings.Items[index]] != 0)
+				if (freq_matrix_dislike[item_id, ratings.Items[index]] != 0)
 					return true;
 			}
 			return false;
@@ -73,23 +73,23 @@ namespace MyMediaLite.RatingPrediction
 			double prediction = 0.0;
 			int frequencies = 0;
 
-			foreach (int index in Ratings.ByUser[user_id])
+			foreach (int index in ratings.ByUser[user_id])
 				{
-					if (Ratings[index] > user_average[user_id])
+					if (ratings[index] > user_average[user_id])
 					{
-						int f = freq_matrix_like[item_id, Ratings.Items[index]];
+						int f = freq_matrix_like[item_id, ratings.Items[index]];
 						if (f != 0)
 						{
-							prediction  += ( diff_matrix_like[item_id, Ratings.Items[index]] + Ratings[index] ) * f;
+							prediction  += ( diff_matrix_like[item_id, ratings.Items[index]] + ratings[index] ) * f;
 							frequencies += f;
 						}
 					}
 					else
 					{
-						int f = freq_matrix_dislike[item_id, Ratings.Items[index]];
+						int f = freq_matrix_dislike[item_id, ratings.Items[index]];
 						if (f != 0)
 						{
-							prediction  += ( diff_matrix_dislike[item_id, Ratings.Items[index]] + Ratings[index] ) * f;
+							prediction  += ( diff_matrix_dislike[item_id, ratings.Items[index]] + ratings[index] ) * f;
 							frequencies += f;
 						}
 					}
@@ -113,30 +113,30 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// default value if no prediction can be made
-			global_average = Ratings.Average;
+			global_average = ratings.Average;
 
 			// compute difference sums and frequencies
-			foreach (int user_id in Ratings.AllUsers)
+			foreach (int user_id in ratings.AllUsers)
 			{
 				double user_avg = 0;
-				foreach (int index in Ratings.ByUser[user_id])
-					user_avg += Ratings[index];
-				user_avg /= Ratings.ByUser[user_id].Count;
+				foreach (int index in ratings.ByUser[user_id])
+					user_avg += ratings[index];
+				user_avg /= ratings.ByUser[user_id].Count;
 
 				// store for later use
 				user_average[user_id] = user_avg;
 
-				foreach (int index in Ratings.ByUser[user_id])
-					foreach (int index2 in Ratings.ByUser[user_id])
-						if (Ratings[index] > user_avg && Ratings[index2] > user_avg)
+				foreach (int index in ratings.ByUser[user_id])
+					foreach (int index2 in ratings.ByUser[user_id])
+						if (ratings[index] > user_avg && ratings[index2] > user_avg)
 						{
-							freq_matrix_like[Ratings.Items[index], Ratings.Items[index2]] += 1;
-							diff_matrix_like[Ratings.Items[index], Ratings.Items[index2]] += (float) (Ratings[index] - Ratings[index2]);
+							freq_matrix_like[ratings.Items[index], ratings.Items[index2]] += 1;
+							diff_matrix_like[ratings.Items[index], ratings.Items[index2]] += (float) (ratings[index] - ratings[index2]);
 						}
-						else if (Ratings[index] < user_avg && Ratings[index2] < user_avg)
+						else if (ratings[index] < user_avg && ratings[index2] < user_avg)
 						{
-							freq_matrix_dislike[Ratings.Items[index], Ratings.Items[index2]] += 1;
-							diff_matrix_dislike[Ratings.Items[index], Ratings.Items[index2]] += (float) (Ratings[index] - Ratings[index2]);
+							freq_matrix_dislike[ratings.Items[index], ratings.Items[index2]] += 1;
+							diff_matrix_dislike[ratings.Items[index], ratings.Items[index2]] += (float) (ratings[index] - ratings[index2]);
 						}
 
 			}

@@ -30,19 +30,19 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			base.Train(Ratings.Items, Ratings.MaxItemID);
+			base.Train(ratings.Items, MaxItemID);
 		}
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			return (item_id <= Ratings.MaxItemID);
+			return (item_id <= MaxItemID);
 		}
 
 		///
 		public override double Predict(int user_id, int item_id)
 		{
-			if (item_id <= Ratings.MaxItemID)
+			if (item_id <= MaxItemID)
 				return entity_averages[item_id];
 			else
 				return global_average;

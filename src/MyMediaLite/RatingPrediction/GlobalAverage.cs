@@ -33,7 +33,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			global_average = Ratings.Average;
+			global_average = ratings.Average;
 		}
 
 		///

@@ -132,10 +132,10 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int u, int i)
 		{
 			double prediction = Predict(u, i, user_clustering[u], item_clustering[i]);
-			if (prediction < Ratings.MinRating)
-				return Ratings.MinRating;
-			if (prediction > Ratings.MaxRating)
-				return Ratings.MaxRating;
+			if (prediction < MinRating)
+				return MinRating;
+			if (prediction > MaxRating)
+				return MaxRating;
 			return prediction;
 		}
 
@@ -154,10 +154,10 @@ namespace MyMediaLite.RatingPrediction
 
 			double[] errors = new double[NumUserClusters];
 			for (int uc = 0; uc < NumUserClusters; uc++)
-				foreach (int index in Ratings.ByUser[user_id])
+				foreach (int index in ratings.ByUser[user_id])
 				{
-					int item_id   = Ratings.Items[index];
-					double rating = Ratings[index];
+					int item_id   = ratings.Items[index];
+					double rating = ratings[index];
 
 					errors[uc] += Math.Pow(rating - Predict(user_id, item_id, uc, item_clustering[item_id]), 2);
 				}
@@ -178,10 +178,10 @@ namespace MyMediaLite.RatingPrediction
 
 			double[] errors = new double[NumItemClusters];
 			for (int ic = 0; ic < NumItemClusters; ic++)
-				foreach (int index in Ratings.ByItem[item_id])
+				foreach (int index in ratings.ByItem[item_id])
 				{
-					int user_id = Ratings.Users[index];
-					double rating = Ratings[index];
+					int user_id = ratings.Users[index];
+					double rating = ratings[index];
 
 					errors[ic] += Math.Pow(rating - Predict(user_id, item_id, user_clustering[user_id], ic), 2);
 				}
@@ -206,11 +206,11 @@ namespace MyMediaLite.RatingPrediction
 			this.item_counts = new int[MaxItemID + 1];
 
 
-			for (int i = 0; i < Ratings.Count; i++)
+			for (int i = 0; i < ratings.Count; i++)
 			{
-				int user_id   = Ratings.Users[i];
-				int item_id   = Ratings.Items[i];
-				double rating = Ratings[i];
+				int user_id   = ratings.Users[i];
+				int item_id   = ratings.Items[i];
+				double rating = ratings[i];
 
 				user_sums[user_id] += rating;
 				item_sums[item_id] += rating;
@@ -220,7 +220,7 @@ namespace MyMediaLite.RatingPrediction
 				item_counts[item_id]++;
 			}
 
-			this.global_average = sum / Ratings.Count;
+			this.global_average = sum / ratings.Count;
 
 			this.user_averages = new double[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
@@ -243,11 +243,11 @@ namespace MyMediaLite.RatingPrediction
 			var item_cluster_counts = new int[NumItemClusters];
 			var cocluster_counts    = new int[NumUserClusters, NumItemClusters];
 
-			for (int i = 0; i < Ratings.Count; i++)
+			for (int i = 0; i < ratings.Count; i++)
 			{
-				int user_id = Ratings.Users[i];
-				int item_id = Ratings.Items[i];
-				double rating = Ratings[i];
+				int user_id = ratings.Users[i];
+				int item_id = ratings.Items[i];
+				double rating = ratings[i];
 
 				user_cluster_averages[user_clustering[user_id]] += rating;
 				item_cluster_averages[item_clustering[item_id]] += rating;

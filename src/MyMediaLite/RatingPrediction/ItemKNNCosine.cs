@@ -50,8 +50,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override string ToString()
 		{
-			return string.Format("{0} k={1} reg_u={2} reg_i={3}",
-								 this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+			return string.Format(
+				"{0} k={1} reg_u={2} reg_i={3}",
+				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
 		}
 	}
 }

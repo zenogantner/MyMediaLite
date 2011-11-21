@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using MyMediaLite.Eval;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPrediction;
 
@@ -163,13 +164,13 @@ namespace MyMediaLite.RatingPrediction
 			Console.WriteLine("{0} days, {1} bins", number_of_days, number_of_bins);
 
 			// initialize parameters
-			user_bias = new double[Ratings.MaxUserID + 1];
-			item_bias = new double[Ratings.MaxItemID + 1];
-			alpha = new double[Ratings.MaxUserID + 1];
-			item_bias_by_time_bin = new Matrix<double>(Ratings.MaxItemID + 1, number_of_bins);
-			user_bias_by_day = new SparseMatrix<double>(Ratings.MaxUserID + 1, number_of_days);
-			user_scaling = new double[Ratings.MaxUserID + 1];
-			user_scaling_by_day = new SparseMatrix<double>(Ratings.MaxUserID + 1, number_of_days);
+			user_bias = new double[MaxUserID + 1];
+			item_bias = new double[MaxItemID + 1];
+			alpha = new double[MaxUserID + 1];
+			item_bias_by_time_bin = new Matrix<double>(MaxItemID + 1, number_of_bins);
+			user_bias_by_day = new SparseMatrix<double>(MaxUserID + 1, number_of_days);
+			user_scaling = new double[MaxUserID + 1];
+			user_scaling_by_day = new SparseMatrix<double>(MaxUserID + 1, number_of_days);
 		}
 
 		///
@@ -270,7 +271,7 @@ namespace MyMediaLite.RatingPrediction
 		public virtual double ComputeFit()
 		{
 			double loss =
-				Eval.Ratings.Evaluate(this, ratings)["RMSE"]
+				this.Evaluate(ratings)["RMSE"]
 					+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
 					+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
  					+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)

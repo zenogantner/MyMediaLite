@@ -83,8 +83,8 @@ namespace MyMediaLite.RatingPrediction
 		protected virtual void InitModel()
 		{
 			// init factor matrices
-			user_factors = new Matrix<double>(Ratings.MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<double>(Ratings.MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);
 		}
@@ -95,14 +95,14 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// learn model parameters
-			global_bias = Ratings.Average;
-			LearnFactors(Ratings.RandomIndex, true, true);
+			global_bias = ratings.Average;
+			LearnFactors(ratings.RandomIndex, true, true);
 		}
 
 		///
 		public virtual void Iterate()
 		{
-			Iterate(Ratings.RandomIndex, true, true);
+			Iterate(ratings.RandomIndex, true, true);
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -112,7 +112,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-				LearnFactors(Ratings.ByUser[(int)user_id], true, false);
+				LearnFactors(ratings.ByUser[(int)user_id], true, false);
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateItems)
 			{
 				item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-				LearnFactors(Ratings.ByItem[(int)item_id], false, true);
+				LearnFactors(ratings.ByItem[(int)item_id], false, true);
 			}
 		}
 

@@ -47,8 +47,8 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return false;
 
-			foreach (int index in Ratings.ByUser[user_id])
-				if (freq_matrix[item_id, Ratings.Items[index]] != 0)
+			foreach (int index in ratings.ByUser[user_id])
+				if (freq_matrix[item_id, ratings.Items[index]] != 0)
 					return true;
 			return false;
 		}
@@ -62,14 +62,14 @@ namespace MyMediaLite.RatingPrediction
 			double prediction = 0.0;
 			int frequency = 0;
 
-			foreach (int index in Ratings.ByUser[user_id])
+			foreach (int index in ratings.ByUser[user_id])
 
 			{
-				int other_item_id = Ratings.Items[index];
+				int other_item_id = ratings.Items[index];
 				int f = freq_matrix[item_id, other_item_id];
 				if (f != 0)
 				{
-					prediction += ( diff_matrix[item_id, other_item_id] + Ratings[index] ) * f;
+					prediction += ( diff_matrix[item_id, other_item_id] + ratings[index] ) * f;
 					frequency += f;
 				}
 			}
@@ -92,10 +92,10 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// default value if no prediction can be made
-			global_average = Ratings.Average;
+			global_average = ratings.Average;
 
 			// compute difference sums and frequencies
-			foreach (var by_user_indices in Ratings.ByUser)
+			foreach (var by_user_indices in ratings.ByUser)
 			{
 				for (int i = 0; i < by_user_indices.Count; i++)
 				{
@@ -105,8 +105,8 @@ namespace MyMediaLite.RatingPrediction
 					{
 						int index2 = by_user_indices[j];
 
-						freq_matrix[Ratings.Items[index1], Ratings.Items[index2]] += 1;
-						diff_matrix[Ratings.Items[index1], Ratings.Items[index2]] += (float) (Ratings[index1] - Ratings[index2]);
+						freq_matrix[ratings.Items[index1], ratings.Items[index2]] += 1;
+						diff_matrix[ratings.Items[index1], ratings.Items[index2]] += (float) (ratings[index1] - ratings[index2]);
 					}
 				}
 			}
