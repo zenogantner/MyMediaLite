@@ -244,7 +244,7 @@ class RatingPrediction
 		else if (load_model_file != null)
 			recommender = (RatingPredictor) Model.Load(load_model_file);
 		else
-			Usage("Please provide either --recommender=METHOD or --load-model=FILE.");
+			recommender = Recommender.CreateRatingPredictor("BiasedMatrixFactorization");
 		// in case something went wrong ...
 		if (recommender == null && method != null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));

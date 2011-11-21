@@ -280,7 +280,7 @@ class ItemRecommendation
 		else if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
 		else
-			Usage("Please provide either --recommender=METHOD or --load-model=FILE.");
+			recommender = Recommender.CreateItemRecommender("MostPopular");
 		// in case something went wrong ...
 		if (recommender == null && method != null)
 			Usage(string.Format("Unknown recommendation method: '{0}'", method));
