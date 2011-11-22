@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ItemRecommendation</RootNamespace>
     <AssemblyName>ItemRecommendation</AssemblyName>
-    <ReleaseVersion>2.01</ReleaseVersion>
+    <ReleaseVersion>2.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
