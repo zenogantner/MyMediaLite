@@ -5,6 +5,8 @@
          - IRatings: get rid of Get() method
          - IIncrementalRatingPredictor: add UpdateUsers and UpdateItems
            properties
+         - TimeAwareBaseline: fix crash when trying to predict a rating after
+           the training period
 	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
            are now extension methods, rename to Extensions
            - make mapping arguments optional
@@ -52,6 +54,7 @@
 	 - ship NUnit DLLs so that we won't have any versioning problems
          - add test cases for CoClustering, MultiCoreMatrixFactorization,
            --rating-format=float|byte|double to rating prediction test script
+         - add test script for time-aware rating prediction
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation

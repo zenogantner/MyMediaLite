@@ -249,19 +249,25 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
-			int day = (timed_ratings.LatestTime - time).Days;
+			int day = (time - timed_ratings.EarliestTime).Days;
 			int bin = day / BinSize;
+			
+			// use latest day bin if the rating time is after the training time period
+			if (bin >= item_bias_by_time_bin.NumberOfColumns)
+				bin = item_bias_by_time_bin.NumberOfColumns - 1;
 
 			double result = global_average;
 			if (user_id <= MaxUserID)
 			{
 				double dev_u = Math.Sign(day - user_mean_day[user_id]) * Math.Pow(Math.Abs(day - user_mean_day[user_id]), Beta);
-				result += user_bias[user_id] + alpha[user_id] * dev_u + user_bias_by_day[user_id, day];
+				result += user_bias[user_id] + alpha[user_id] * dev_u;
+				if (day <= timed_ratings.LatestTime.Day)
+					result += user_bias_by_day[user_id, day];
 			}
 
 			if (item_id <= MaxItemID && user_id > MaxUserID)
 				result += item_bias[item_id] + item_bias_by_time_bin[item_id, bin];
-			if (item_id <= MaxItemID && user_id <= MaxUserID)
+			if (item_id <= MaxItemID && user_id <= MaxUserID && day < user_scaling_by_day.NumberOfColumns)
 				result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
 
 			return result;

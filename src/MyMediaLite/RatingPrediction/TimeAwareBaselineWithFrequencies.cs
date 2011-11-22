@@ -129,10 +129,11 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override double Predict (int user_id, int item_id, int day, int bin)
+		protected override double Predict(int user_id, int item_id, int day, int bin)
 		{
-			double result = base.Predict (user_id, item_id, day, bin);
-			result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
+			double result = base.Predict(user_id, item_id, day, bin);
+			if (day <= timed_ratings.LatestTime.Day)
+				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
 			return result;
 		}
@@ -141,8 +142,9 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
 			double result = base.Predict(user_id, item_id, time);
-			int day = (timed_ratings.LatestTime - time).Days;
-			result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
+			int day = (time - timed_ratings.EarliestTime).Days;
+			if (day <= timed_ratings.LatestTime.Day)
+				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
 			return result;
 		}
