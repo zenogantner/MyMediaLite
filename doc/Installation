@@ -4,7 +4,7 @@ Requirements for running MyMediaLite:
    (not necessary for running/building MyMediaLite)
 
 Instructions:
- - For building from source, we recommend to use MonoDevelop 2.4 or later (2.6 recommended).
+ - For building from source, we recommend to use MonoDevelop 2.6 or later (2.8 recommended).
  - If you have the binary package, just copy its contents to wherever you
    want and run the programs from there.
 
@@ -23,7 +23,7 @@ Tested configurations:
  - Ubuntu 11.10
    - with Mono 2.10.5
  - Debian Wheezy
-   - with Mono 2.10.1 and MonoDevelop 2.4
+   - with Mono 2.10.1 and MonoDevelop 2.8.2
  - Windows with Visual Studio 2010
 
 Let us know on which configuration of .NET or Mono you are using MyMediaLite,
