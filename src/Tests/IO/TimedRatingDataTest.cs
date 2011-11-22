@@ -60,6 +60,22 @@ namespace Tests.IO
 			Assert.AreEqual(7, data.Count);
 		}
 
+		[Test()]
+		public void TestTimeStamp()
+		{
+			var reader = new StringReader(@"# first line
+5951,50,5,881250949
+5951,223,5,891717742
+5951,260,5,878887116
+5951,293,5,880606923
+5951,356,4,886397596
+5951,364,3,884182806
+5951,457,3,879270459
+");
+
+			IRatings data = TimedRatingData.Read(reader, null, null, true);
+			Assert.AreEqual(7, data.Count);
+		}
+
 	}
 }
-

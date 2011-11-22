@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public ITimedRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
 			return Wrap.FormatException<ITimedRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
@@ -49,8 +49,13 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public ITimedRatings
-			Read(TextReader reader,	IEntityMapping user_mapping, IEntityMapping item_mapping)
+			Read(TextReader reader,	IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+
 			var ratings = new TimedRatings();
 
 			string[] separators = { "::" };
@@ -66,12 +71,11 @@ namespace MyMediaLite.IO
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
-				DateTime time = DateTime.MinValue;
-				Console.Write("start: " + time);
-				time.AddYears(1970);
-				Console.Write(" add 1970 years: " + time);
-				time.AddSeconds(long.Parse(tokens[3]));
-				Console.WriteLine(" added seconds: " + time);
+				long seconds = uint.Parse(tokens[3]);
+
+				var time = new DateTime(seconds * 10000000L).AddYears(1969);
+				var offset = TimeZone.CurrentTimeZone.GetUtcOffset(time);
+				time -= offset;
 
 				ratings.Add(user_id, item_id, rating, time);
 			}

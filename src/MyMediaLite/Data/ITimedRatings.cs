@@ -24,6 +24,10 @@ namespace MyMediaLite.Data
 	public interface ITimedRatings : IRatings, ITimedDataSet
 	{
 		/// <summary>add a rating event including time information</summary>
+		/// <remarks>
+		/// It is up to the user of a class implementing this interface to decide whether the DateTime
+		/// object represent local time, UTC, or any other time.
+		/// </remarks>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating value</param>

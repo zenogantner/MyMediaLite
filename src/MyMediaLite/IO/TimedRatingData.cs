@@ -77,7 +77,8 @@ namespace MyMediaLite.IO
 					date_string = tokens[3] + " " + tokens[4];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
-
+				
+				uint seconds;
 				if (date_string.Length == 19) // format "yyyy-mm-dd hh:mm:ss"
 				{
 					var date_time_tokens = date_string.Split(time_split_chars);
@@ -100,6 +101,12 @@ namespace MyMediaLite.IO
 							int.Parse(date_time_tokens[0]),
 							int.Parse(date_time_tokens[1]),
 							int.Parse(date_time_tokens[2])));
+				}
+				else if (uint.TryParse(date_string, out seconds)) // unsigned integer value, interpreted as seconds since Unix epoch
+				{
+					var time = new DateTime(seconds * 10000000L).AddYears(1969);
+					var offset = TimeZone.CurrentTimeZone.GetUtcOffset(time);
+					ratings.Add(user_id, item_id, rating, time - offset);
 				}
 				else
 					ratings.Add(user_id, item_id, rating, DateTime.Parse(date_string, CultureInfo.InvariantCulture));

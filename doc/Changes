@@ -35,6 +35,7 @@
            experimental to main section
          - move online eval for item recommendation into its own test script
         I/O
+         - fix reading in timestamps in TimedRatingData and MovieLensRatingData
          - add enum IO.ItemDataFileFormat
          - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
          - add read/write methods for integer vectors to IO.VectorExtensions
