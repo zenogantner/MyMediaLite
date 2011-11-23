@@ -61,8 +61,8 @@
          - add test cases for CoClustering, MultiCoreMatrixFactorization,
            --rating-format=float|byte|double to rating prediction test script
          - add test script for time-aware rating prediction
-         - create Makefile in src/ that calls xbuild to build MyMediaLite on
-           the command line
+         - #87: create Makefile in src/ that calls xbuild to build MyMediaLite
+           on the command line
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation
