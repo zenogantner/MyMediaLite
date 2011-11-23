@@ -2,7 +2,7 @@ PDF_VIEWER=evince
 EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
-CONFIGURE_OPTIONS=--prefix=/usr/local
+PREFIX=/usr/local
 VERSION=2.02
 HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
@@ -11,8 +11,10 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
-all:
+.PHONY: clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+all: mymedialite
+
+mymedialite:
 	cd ${SRC_DIR} && make all
 
 clean:
@@ -31,6 +33,7 @@ clean:
 	rm -rf ${SRC_DIR}/*/*.tar.gz
 	rm -rf ${SRC_DIR}/*/*.pidb
 	rm -rf doc/monodoc/*
+	rm -rf lib/mymedialite/*
 	rm -rf MyMediaLite-*/
 
 veryclean: clean
@@ -39,7 +42,7 @@ veryclean: clean
 	rm -rf website/public_html/*
 
 install:
-	cd ${SRC_DIR} && make install
+	cd ${SRC_DIR} && make install PREFIX=${PREFIX}
 
 uninstall:
 	cd ${SRC_DIR} && make uninstall
