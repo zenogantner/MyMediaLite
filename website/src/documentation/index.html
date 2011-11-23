@@ -21,9 +21,13 @@
         <li><a href="item_prediction.html">usage: item prediction</a></li>
       </ul>
     </li>
-    <li><a href="use_from_csharp.html">How to use a recommender in C#</a></li>
-    <li><a href="use_from_python.html">How to use a recommender in Python</a></li>
-    <li><a href="use_from_ruby.html">How to use a recommender in Ruby</a></li>
+    <li>Using the MyMediaLite library in different programming languages:
+      <ul>
+        <li><a href="use_from_csharp.html">C#</a></li>
+        <li><a href="use_from_fsharp.html">F#</a></li>
+        <li><a href="use_from_python.html">Python</a></li>
+        <li><a href="use_from_ruby.html">Ruby</a></li>
+      </ul>
     <li><a href="run_gui_demo.html">How to run the GUI demo</a></li>
     <!--<li>How to implement a new recommender</li>-->
     <li><a href="implement_recommender_in_csharp.html">How to implement a new recommender</a></li>
@@ -129,8 +133,6 @@
   </p>
   <p>
   The <tt>Predict()</tt> method <it>is</it> thread-safe because it does not write any data.
-  The example web service included with MyMediaLite can be called from more than one client at once
-  because all method calls that write data are properly synchronized.
   </p>
   
   <h3>What can I do to make MyMediaLite consume less memory?</h3>
