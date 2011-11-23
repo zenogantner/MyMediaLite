@@ -11,10 +11,7 @@ Instructions:
 
 Requirements for building MyMediaLite:
  - the above requirements plus
-   - MonoDevelop 2.6 or later
    - Doxygen 1.6.3 or later
-   - NUnit (for building the unit tests)
-
 
 Tested configurations:
  - Ubuntu 10.04
