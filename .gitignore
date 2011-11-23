@@ -17,3 +17,4 @@ src/Programs/MovieDemo/saved_data
 src/Programs/MovieDemo/gtk-gui/*.cs
 data/*
 lib/mymedialite/*
+obj
