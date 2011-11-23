@@ -1,3 +1,79 @@
+2.02	2011-12-??
+        MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build
+        API
+         - IRecommender: now inherits from IClonable, improve API doc
+	 - IDataSet: add Count property
+         - IRatings: get rid of Get() method
+         - IIncrementalRatingPredictor: add UpdateUsers and UpdateItems
+           properties
+         - TimeAwareBaseline: fix crash when trying to predict a rating after
+           the training period
+	 - #114: methods in (ItemRecommendation|RatingPrediction).Prediction
+           are now extension methods, rename to Extensions
+           - make mapping arguments optional
+           - less method overloads
+         - move Pair and Triple from Util namespace to DataType
+         - Recommender.Configure() and SetProperty() are now an extension
+	   methods
+         - Recommender.CreateRatingPredictor() and CreateItemRecommender() now
+           also accept complete type names (including namespaces)
+        recommenders
+         - new rating predictor: CoClustering (based on a 2005 paper by George
+           and Merugu)
+         - BPRMF: fix bug in incremental updates
+         - FactorWiseMatrixFactorization: remove unused field global_bias
+         - move group recommenders from experimental to main section
+	command-line programs
+         - rename from ItemRecommendation.exe to item_recommendation.exe and
+           RatingPrediction.exe to rating_prediction.exe
+         - add scripts that call Mono on Unix-like systems: item_recommendation
+           and rating_prediction
+         - #61: add the option to ignore first line of training/test file
+         - #27: command-line programs: load from model file without specifying
+           recommender type
+         - item recommendation
+           - add --file-format= option
+           - fix wrong check "predict_for_users_file == null" to "!=" in
+             Predict() method
+        examples
+         - simplify the C#, Python, and Ruby examples
+         - add F# example
+        evaluation
+         - #109: formulate evaluation routines as extension methods
+         - #122: introduce specific datatypes for evaluation results
+         - move filtered evaluation and group recommendation evaluation from
+           experimental to main section
+         - move online eval for item recommendation into its own test script
+         - provide defaults for test_users and candidate_items in
+           Items.Evaluate()
+        I/O
+         - fix reading in timestamps in TimedRatingData and MovieLensRatingData
+         - add enum IO.ItemDataFileFormat
+         - add IGNORE_FIRST_LINE to enum IO.RatingFileFormat
+         - add read/write methods for integer vectors to IO.VectorExtensions
+         - user/item mappings are now optional arguments for all IO routines
+         - add unit tests for all interaction data reading classes
+	data structures
+         - move MinRating and MaxRating from DataSet to Ratings
+        documentation
+         - improve API doc of Correlation.Jaccard and
+           ItemRecommendation.IIncrementalItemRecommender
+         - improve GUI Demo documentation on website
+         - update doc/Installation
+	misc
+	 - ship NUnit DLLs so that we won't have any versioning problems
+         - add test cases for CoClustering, MultiCoreMatrixFactorization,
+           --rating-format=float|byte|double to rating prediction test script
+         - add test script for time-aware rating prediction
+         - #87: create Makefile in src/ that calls xbuild to build MyMediaLite
+           on the command line
+         - add make targets "install" and "uninstall" for installation on
+           Unix-like systems
+
+2.01	2011-11-13
+	bugfix release: fix a null pointer exception in the item recommendation
+        tool (reported by Damir Logar)
+
 2.00	2011-11-10
         API
          - add abstract class TimeAwareRatingPredictor and interface

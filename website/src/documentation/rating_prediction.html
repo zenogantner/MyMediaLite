@@ -13,9 +13,9 @@
 
 <div id="content">
 <pre>
-MyMediaLite Rating Prediction 2.00
+MyMediaLite rating prediction 2.02
 
- usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
+ usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):
    - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1 (needs --user-relations=FILE)
@@ -37,6 +37,7 @@ MyMediaLite Rating Prediction 2.00
    - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
    - TimeAwareBaseline num_iter=30 bin_size=70 beta=0.4 user_bias_learn_rate=0.003 item_bias_learn_rate=0.002 alpha_learn_rate=1E-05 item_bias_by_time_bin_learn_rate=5E-06 user_bias_by_day_learn_rate=0.0025 user_scaling_learn_rate=0.008 user_scaling_by_day_learn_rate=0.002 reg_u=0.03 reg_i=0.03 reg_alpha=50 reg_item_bias_by_time_bin=0.1 reg_user_bias_by_day=0.005 reg_user_scaling=0.01 reg_user_scaling_by_day=0.005
    - TimeAwareBaselineWithFrequencies num_iter=40 bin_size=70 beta=0.4 user_bias_learn_rate=0.00267 item_bias_learn_rate=0.000488 alpha_learn_rate=3.11E-06 item_bias_by_time_bin_learn_rate=1.15E-06 user_bias_by_day_learn_rate=0.000257 user_scaling_learn_rate=0.00564 user_scaling_by_day_learn_rate=0.00103 reg_u=0.0255 reg_i=0.0255 reg_alpha=3.95 reg_item_bias_by_time_bin=0.0929 reg_user_bias_by_day=0.00231 reg_user_scaling=0.0476 reg_user_scaling_by_day=0.019 frequency_log_base=6.76 item_bias_at_frequency_learn_rate=0.00236 reg_item_bias_at_frequency=1.1E-08
+   - CoClustering num_user_clusters=3 num_item_clusters=3 num_iter=30
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
@@ -50,7 +51,7 @@ MyMediaLite Rating Prediction 2.00
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
-   --file-format=movielens_1m|kddcup2011|default
+   --file-format=movielens_1m|kddcup2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
    --item-attributes=FILE                 file containing item attribute information, 1 tuple per line

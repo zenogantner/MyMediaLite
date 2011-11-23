@@ -13,9 +13,9 @@
 
 <div id="content">
 <pre>
-MyMediaLite Item Prediction from Implicit Feedback 2.00
+MyMediaLite item recommendation from positive-only feedback 2.02
 
- usage:   ItemPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
+ usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]
 
    methods (plus arguments and their defaults):
    - ItemAttributeSVM C=1 Gamma=0.002 (needs --item-attributes=FILE)
@@ -46,6 +46,7 @@ MyMediaLite Item Prediction from Implicit Feedback 2.00
   files:
    --training-file=FILE         read training data from FILE
    --test-file=FILE             read test data from FILE
+   --file-format=ignore_first_line|default
    --data-dir=DIR               load all files from DIR
    --user-attributes=FILE       file containing user attribute information, 1 tuple per line
    --item-attributes=FILE       file containing item attribute information, 1 tuple per line
@@ -88,7 +89,6 @@ MyMediaLite Item Prediction from Implicit Feedback 2.00
    --max-iter=N                 perform at most N iterations
    --auc-cutoff=NUM             abort if AUC is below NUM
    --prec5-cutoff=NUM           abort if prec@5 is below NUM
-
 </pre>
 </div>
 

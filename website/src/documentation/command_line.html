@@ -43,9 +43,8 @@ to integrate the library in your application or having to develop your own progr
   <p>
     The general <a href="rating_prediction.html">usage of the rating prediction program</a> is as follows:
     <pre>
-    mono RatingPrediction.exe --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]
+    rating_prediction --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]
     </pre>
-    If you use Windows, just leave out the <tt>mono</tt>.
     METHOD is the recommender to use, which will be trained using the contents
     of TRAINING_FILE. The recommender will then predict the data in TEST_FILE, and the program
     will display the RMSE (root mean square error) and MAE (mean absolute error) of the
@@ -54,7 +53,7 @@ to integrate the library in your application or having to develop your own progr
 
   <p>
     <a href="rating_prediction.html">
-      If you call RatingPrediction.exe without arguments, it will provide a list of recommenders
+      If you call <tt>rating_prediction</tt> without arguments, it will provide a list of recommenders
       to choose from, plus their arguments and further options.
     </a>
   </p>
@@ -71,7 +70,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     To try out a simple baseline method on the data, you just need to enter
     <pre>
-    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=UserAverage
+    rating_prediction --training-file=u1.base --test-file=u1.test --recommender=UserAverage
     </pre>
     which should give a result like
     <pre>
@@ -82,7 +81,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
     To use a more advanced recommender, enter
     <pre>
-    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization
+    rating_prediction --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization
     </pre>
     which yields better result than the user average:
     <pre>
@@ -94,7 +93,7 @@ to integrate the library in your application or having to develop your own progr
     that may be modified to get even better results. For instance, we could use more latent factors
     per user and item, which leads to a more complex (and hopefully more accurate) model:
     <pre>
-    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recommender-options="num_factors=20"
+    rating_prediction --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recommender-options="num_factors=20"
     ...
     ... RMSE 0.98029 MAE 0.76558
     </pre>
@@ -108,7 +107,7 @@ to integrate the library in your application or having to develop your own progr
     &quot;From iteration B on, give out the evaluation results on the test set every A iterations,
     until you reach iteration C.&quot;
     <pre>
-    mono RatingPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recomender-options="num_factors=20 num_iter=0" --max-iter=25 --num-iter=0
+    rating_prediction --training-file=u1.base --test-file=u1.test --recommender=BiasedMatrixFactorization --recomender-options="num_factors=20 num_iter=0" --max-iter=25 --num-iter=0
     ...
     RMSE 1.17083 MAE 0.96918 iteration 0
     RMSE 1.01383 MAE 0.8143 iteration 1
@@ -154,21 +153,20 @@ to integrate the library in your application or having to develop your own progr
 
 <h2>Item Prediction from Implicit Feedback</h2>
 <p>
-  The item prediction program behaves similarly to the rating prediction program,
+  The item recommendation program behaves similarly to the rating prediction program,
   so we concentrate on the differences here.
 </p>
 
 <p>
-  <pre>mono ItemPrediction.exe --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]</pre>
+  <pre>item_recommendation --training-file=TRAINING_FILE --test-file=TEST_FILE --recommender=METHOD [OPTIONS]</pre>
 </p>
 
 <p>
   Again,
   <a href="item_prediction.html">
-    if you call ItemPrediction.exe without arguments, it will provide a list of recommenders
+    if you call <tt>item_recommendation</tt> without arguments, it will provide a list of recommenders
     to choose from, plus their arguments and further options.
   </a>
-  If you use Windows, leave out the <tt>mono</tt> in the call above.
 </p>
 
 <p>
@@ -195,12 +193,12 @@ to integrate the library in your application or having to develop your own progr
   <p>
   Let us start again with some baseline methods, <tt>Random</tt> and <tt>MostPopular</tt>:
   <pre>
-  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=Random
+  item_recommendation --training-file=u1.base --test-file=u1.test --recommender=Random
   random training_time 00:00:00.0001040
     AUC 0.49924 prec@5 0.02789 prec@10 0.02898 MAP 0.00122 NDCG 0.37214
     num_users 459 num_items 1650 testing_time 00:00:02.7115540
 
-  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=MostPopular
+  item_recommendation --training-file=u1.base --test-file=u1.test --recommender=MostPopular
   MostPopular training_time 00:00:00.0015710
     AUC 0.8543 prec@5 0.322 prec@10 0.30458 MAP 0.02187 NDCG 0.57038
     num_users 459 num_items 1650 testing_time 00:00:02.3813790
@@ -210,7 +208,7 @@ to integrate the library in your application or having to develop your own progr
   <p>
   User-based collaborative filtering:
   <pre>
-  mono ItemPrediction.exe --training-file=u1.base --test-file=u1.test --recommender=UserKNN
+  item_recommendation --training-file=u1.base --test-file=u1.test --recommender=UserKNN
   UserKNN k=80 training_time 00:00:05.6057200
     AUC 0.91682 prec@5 0.52505 prec@10 0.46776 MAP 0.06482 NDCG 0.68793
     num_users 459 num_items 1650 testing_time 00:00:08.8362840
@@ -218,14 +216,14 @@ to integrate the library in your application or having to develop your own progr
   </p>
 
   <p>
-  Note that the item prediction evaluation usually takes longer than the rating prediction evaluation,
+  Note that the item recommendation evaluation usually takes longer than the rating prediction evaluation,
   because for each user, scores for every candidate item (possibly all items) have to be computed.
   You can restrict the number of predictions to be made using the options <tt>--test-users=FILE</tt>
   and <tt>--candidate-items=FILE</tt> to save time.
   </p>
 
   <p>
-  The item prediction program supports the same options (<tt>--find-iter=N</tt> etc.)
+  The item recommendation program supports the same options (<tt>--find-iter=N</tt> etc.)
   for iteratively trained recommenders like <tt>BPRMF</tt> and <tt>WRMF</tt>.
   </p>
 
