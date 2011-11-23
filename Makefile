@@ -11,7 +11,7 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
 all: mymedialite
 
 mymedialite:
@@ -45,7 +45,7 @@ install:
 	cd ${SRC_DIR} && make install PREFIX=${PREFIX}
 
 uninstall:
-	cd ${SRC_DIR} && make uninstall
+	cd ${SRC_DIR} && make uninstall PREFIX=${PREFIX}
 
 binary-package:
 	mkdir MyMediaLite-${VERSION}
