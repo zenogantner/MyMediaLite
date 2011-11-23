@@ -32,7 +32,8 @@
            - fix wrong check "predict_for_users_file == null" to "!=" in
              Predict() method
         examples
-         - simplified the C#, Python, and Ruby examples
+         - simplify the C#, Python, and Ruby examples
+         - add F# example
         evaluation
          - #109: formulate evaluation routines as extension methods
          - #122: introduce specific datatypes for evaluation results

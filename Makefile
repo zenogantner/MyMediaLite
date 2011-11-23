@@ -11,12 +11,9 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: add configure clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
-all: configure
+.PHONY: clean veryclean install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+all:
 	cd ${SRC_DIR} && make all
-
-configure:
-	cd ${SRC_DIR} && ./configure ${CONFIGURE_OPTIONS}
 
 clean:
 #	cd ${SRC_DIR} && make clean
@@ -93,6 +90,12 @@ release: binary-package source-package
 example-csharp: data/ml-100k/u.data
 	cd examples/csharp && make
 	cd examples/csharp && make run
+
+example-fsharp: data/ml-100k/u.data
+	cd examples/fsharp && make
+	cd data/ml-100k && mono ../../examples/fsharp/rating_prediction.exe
+	cd data/ml-100k && mono ../../examples/fsharp/item_recommendation.exe
+
 
 example-python: data/ml-100k/u.data
 	cd data/ml-100k && ipy ../../examples/python/rating_prediction.py
