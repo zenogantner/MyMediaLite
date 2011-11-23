@@ -39,6 +39,8 @@
          - move filtered evaluation and group recommendation evaluation from
            experimental to main section
          - move online eval for item recommendation into its own test script
+         - provide defaults for test_users and candidate_items in
+           Items.Evaluate()
         I/O
          - fix reading in timestamps in TimedRatingData and MovieLensRatingData
          - add enum IO.ItemDataFileFormat

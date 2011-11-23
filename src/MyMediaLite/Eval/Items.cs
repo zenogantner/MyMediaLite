@@ -78,7 +78,7 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">item recommender</param>
 		/// <param name="test">test cases</param>
 		/// <param name="training">training data</param>
-		/// <param name="test_users">a list of integers with all test users</param>
+		/// <param name="test_users">a list of integers with all test users; if null, use all users in the test cases</param>
 		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
@@ -87,8 +87,8 @@ namespace MyMediaLite.Eval
 			this IRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback training,
-			IList<int> test_users,
-			IList<int> candidate_items,
+			IList<int> test_users = null,
+			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
 			bool repeated_events = false)
 		{
@@ -99,6 +99,10 @@ namespace MyMediaLite.Eval
 				case CandidateItems.OVERLAP:  candidate_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
 				case CandidateItems.UNION:    candidate_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
 			}
+			if (candidate_items == null)
+				throw new ArgumentNullException("candidate_items");
+			if (test_users == null)
+				test_users = test.AllUsers;
 
 			int num_users = 0;
 			var result = new ItemRecommendationEvaluationResults();
