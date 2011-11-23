@@ -16,7 +16,7 @@ all:
 	cd ${SRC_DIR} && make all
 
 clean:
-#	cd ${SRC_DIR} && make clean
+	cd ${SRC_DIR} && make clean
 	cd examples/csharp && make clean
 	rm -rf ${SRC_DIR}/Programs/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/Programs/*/bin/Release/*
