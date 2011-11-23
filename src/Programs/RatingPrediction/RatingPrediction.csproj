@@ -8,7 +8,7 @@
     <ProjectGuid>{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>RatingPrediction</RootNamespace>
-    <AssemblyName>RatingPrediction</AssemblyName>
+    <AssemblyName>rating_prediction</AssemblyName>
     <ReleaseVersion>2.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

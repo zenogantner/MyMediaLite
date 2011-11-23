@@ -8,8 +8,9 @@
     <ProjectGuid>{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ItemRecommendation</RootNamespace>
-    <AssemblyName>ItemRecommendation</AssemblyName>
+    <AssemblyName>item_recommendation</AssemblyName>
     <ReleaseVersion>2.02</ReleaseVersion>
+    <StartupObject>ItemRecommendation</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
