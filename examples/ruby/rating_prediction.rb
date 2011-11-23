@@ -3,11 +3,8 @@
 require 'MyMediaLite'
 
 # load the data
-user_mapping = MyMediaLite::Data::EntityMapping.new()
-item_mapping = MyMediaLite::Data::EntityMapping.new()
-
-train_data = MyMediaLite::IO::RatingData.Read("u1.base", user_mapping, item_mapping)
-test_data = MyMediaLite::IO::RatingData.Read("u1.test", user_mapping, item_mapping)
+train_data = MyMediaLite::IO::RatingData.Read("u1.base")
+test_data = MyMediaLite::IO::RatingData.Read("u1.test")
 
 # set up the recommender
 recommender = MyMediaLite::RatingPrediction::UserItemBaseline.new()
@@ -21,4 +18,4 @@ eval_results.each do |entry|
 end
 
 # make a prediction for a certain user and item
-puts recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
+puts recommender.Predict(1, 1)

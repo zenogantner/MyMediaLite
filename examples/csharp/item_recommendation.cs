@@ -10,8 +10,6 @@ public class ItemPrediction
 	{
 		// load the data
 		var training_data = ItemData.Read(args[0]);
-		var test_users = training_data.AllUsers;      // users that will be taken into account in the evaluation
-		var candidate_items = training_data.AllItems; // items that will be taken into account in the evaluation
 		var test_data = ItemData.Read(args[1]);
 
 		// set up the recommender
@@ -20,7 +18,7 @@ public class ItemPrediction
 		recommender.Train();
 
 		// measure the accuracy on the test data set
-		var results = recommender.Evaluate(test_data, training_data, candidate_items, test_users);
+		var results = recommender.Evaluate(test_data, training_data);
 		foreach (var key in results.Keys)
 			Console.WriteLine("{0}={1}", key, results[key]);
 		Console.WriteLine(results);

@@ -2,16 +2,11 @@
 
 import clr
 clr.AddReference("MyMediaLite.dll")
-
-"MyMediaLite" 
-
 from MyMediaLite import *
 
 # load the data
-user_mapping = Data.EntityMapping()
-item_mapping = Data.EntityMapping()
-train_data = IO.RatingData.Read("u1.base", user_mapping, item_mapping)
-test_data  = IO.RatingData.Read("u1.test", user_mapping, item_mapping)
+train_data = IO.RatingData.Read("u1.base")
+test_data  = IO.RatingData.Read("u1.test")
 
 # set up the recommender
 recommender = RatingPrediction.UserItemBaseline()
@@ -22,4 +17,4 @@ recommender.Train()
 print Eval.Ratings.Evaluate(recommender, test_data)
 
 # make a prediction for a certain user and item
-print recommender.Predict(user_mapping.ToInternalID(1), item_mapping.ToInternalID(1))
+print recommender.Predict(1, 1)

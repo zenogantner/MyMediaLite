@@ -31,6 +31,8 @@
            - add --file-format= option
            - fix wrong check "predict_for_users_file == null" to "!=" in
              Predict() method
+        examples
+         - simplified the C#, Python, and Ruby examples
         evaluation
          - #109: formulate evaluation routines as extension methods
          - #122: introduce specific datatypes for evaluation results
