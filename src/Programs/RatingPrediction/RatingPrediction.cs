@@ -99,9 +99,9 @@ class RatingPrediction
 	static void Usage(int exit_code)
 	{
 		Version version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("MyMediaLite rating prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine(@"
- usage:  RatingPrediction.exe --training-file=FILE --recommender=METHOD [OPTIONS]
+ usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):");
 
