@@ -17,7 +17,7 @@ clean:
 	rm -rf */obj
 	rm -rf */*/obj
 
-install:
+install: uninstall
 	mkdir ${PREFIX}/lib/mymedialite
 	cp ../lib/mymedialite/* ${PREFIX}/lib/mymedialite
 	cp ../bin/* ${PREFIX}/bin

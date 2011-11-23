@@ -53,7 +53,7 @@ binary-package:
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
 	mkdir MyMediaLite-${VERSION}/doc/api
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
-	cp -r examples scripts MyMediaLite-${VERSION}
+	cp -r bin examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}
 	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}
@@ -69,7 +69,7 @@ source-package: clean
 	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
 	mkdir MyMediaLite-${VERSION}.src/doc/api
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}.src/doc/api
-	cp -r src examples scripts tests lib MyMediaLite-${VERSION}.src
+	cp -r src bin examples scripts tests lib MyMediaLite-${VERSION}.src
 	cp Makefile README MyMediaLite-${VERSION}.src
 	mkdir MyMediaLite-${VERSION}.src/data
 	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
