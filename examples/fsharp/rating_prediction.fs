@@ -12,7 +12,7 @@ let recommender = new UserItemBaseline(Ratings=train_data)
 recommender.Train()
 
 (* measure the accuracy on the test data set *)
-let result = Ratings.Evaluate(recommender, test_data)
+let result = recommender.Evaluate(test_data)
 Console.WriteLine(result)
 
 (* make a prediction for a certain user and item *)
