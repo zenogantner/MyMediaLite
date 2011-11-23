@@ -24,6 +24,10 @@
          - FactorWiseMatrixFactorization: remove unused field global_bias
          - move group recommenders from experimental to main section
 	command-line programs
+         - rename from ItemRecommendation.exe to item_recommendation.exe and
+           RatingPrediction.exe to rating_prediction.exe
+         - add scripts that call Mono on Unix-like systems: item_recommendation
+           and rating_prediction
          - #61: add the option to ignore first line of training/test file
          - #27: command-line programs: load from model file without specifying
            recommender type
@@ -63,6 +67,8 @@
          - add test script for time-aware rating prediction
          - #87: create Makefile in src/ that calls xbuild to build MyMediaLite
            on the command line
+         - add make targets "install" and "uninstall" for installation on
+           Unix-like systems
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation

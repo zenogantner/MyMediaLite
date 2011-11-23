@@ -4,10 +4,12 @@ Requirements for running MyMediaLite:
    (not necessary for running/building MyMediaLite)
 
 Instructions:
- - For building from source, we recommend to use MonoDevelop 2.6 or later (2.8 recommended).
  - If you have the binary package, just copy its contents to wherever you
    want and run the programs from there.
-
+ - To build from source:
+   - On Unix systems: run "make all", set the PREFIX varible in the Makefile,
+                      then run "make install"
+   - On Windows, compile using Visual Studio or MonoDevelop
 
 Requirements for building MyMediaLite:
  - the above requirements plus
