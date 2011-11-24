@@ -1,9 +1,7 @@
 #!/bin/bash -e
 
-PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../../data/ml-100k
-
-cd src/Programs/RatingPrediction/bin/Debug/
+PROGRAM="bin/rating_prediction"
+DATA_DIR=data/ml-100k
 
 echo "MyMediaLite load/save test script"
 echo "This will take about 5 minutes ..."
@@ -45,9 +43,7 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemRecommendation.exe"
-
-cd ../../../ItemRecommendation/bin/Debug/
+PROGRAM="bin/item_recommendation"
 
 for method in WRMF BPRMF MostPopular
 do
@@ -87,4 +83,3 @@ done
 
 rm tmp.model output1.txt output2.txt
 
-cd ../../../../..

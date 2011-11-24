@@ -1,10 +1,8 @@
 #!/bin/bash -e
 
-PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../../data/ml-100k
+PROGRAM="bin/rating_prediction"
+DATA_DIR=data/ml-100k
 LANG=C
-
-cd src/Programs/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite random splitting test script"
 echo "This will take about 1 minute ..."
@@ -30,9 +28,7 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemRecommendation.exe"
-
-cd ../../../ItemRecommendation/bin/Debug/
+PROGRAM="bin/item_recommendation"
 
 echo $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1
      $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1
@@ -60,5 +56,3 @@ diff log1.grep log2.grep
 
 rm log1 log2 log1.grep log2.grep
 
-
-cd ../../../../..

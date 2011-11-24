@@ -1,12 +1,10 @@
 #!/bin/bash -e
 
-PROGRAM="mono --debug RatingPrediction.exe"
-DATA_DIR=../../../../../data/ml-100k
+PROGRAM="bin/rating_prediction"
+DATA_DIR=data/ml-100k
 LANG=C
 
 K=10
-
-cd src/Programs/RatingPrediction/bin/Debug/
 
 echo "MyMediaLite cross-validation test script."
 echo "This will take about 3 minutes ..."
@@ -26,9 +24,7 @@ echo
 echo "item recommenders"
 echo "-----------------"
 
-PROGRAM="mono --debug ItemRecommendation.exe"
-
-cd ../../../ItemRecommendation/bin/Debug/
+PROGRAM="bin/item_recommendation"
 
 echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1
      $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 > log1
@@ -56,5 +52,3 @@ diff log1.grep log2.grep
 
 rm log1 log2 log1.grep log2.grep
 
-
-cd ../../../../../

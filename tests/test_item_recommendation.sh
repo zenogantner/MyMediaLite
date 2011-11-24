@@ -1,9 +1,6 @@
 #!/bin/sh -e
 
-PROGRAM="mono --debug ItemRecommendation.exe"
-THIS_DIR=`pwd`/tests
-
-cd src/Programs/ItemRecommendation/bin/Debug/
+PROGRAM="bin/item_recommendation"
 
 echo "MyMediaLite item recommendation test script"
 echo "This may take about 4 minutes ..."
@@ -23,7 +20,7 @@ echo
 echo "MovieLens 100K"
 echo "--------------"
 
-DATA_DIR=../../../../../data/ml-100k
+DATA_DIR=data/ml-100k
 
 for method in BPRMF WRMF
 do
@@ -50,7 +47,7 @@ echo
 echo "MovieLens 1M"
 echo "------------"
 
-DATA_DIR=../../../../../data/ml-1m
+DATA_DIR=data/ml-1m
 
 for method in ItemAttributeKNN
 do
@@ -67,7 +64,6 @@ done
 for method in UserAttributeKNN
 do
 	echo $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
-             $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
+         $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=20" --data-dir=$DATA_DIR --num-test-users=100
 done
 
-cd ../../../../..

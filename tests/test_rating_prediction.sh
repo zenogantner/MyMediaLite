@@ -1,18 +1,17 @@
 #!/bin/sh -e
 
-PROGRAM="mono --debug RatingPrediction.exe"
+PROGRAM="bin/rating_prediction"
 
 echo "MyMediaLite rating prediction test script"
 echo "This will take about 5 minutes ..."
 
-echo ""
+echo
 echo "MovieLens 1M"
 echo "------------"
 
-DATA_DIR=../../../../../data/ml-1m
+DATA_DIR=data/ml-1m
  
-cd src/Programs/RatingPrediction/bin/Debug/
- 
+
 for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization
 do
        echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
@@ -40,11 +39,9 @@ do
 done
 
 
-echo ""
+echo
 echo "MovieLens 100K"
 echo "--------------"
-
-DATA_DIR=../../../../../data/ml-100k
 
 for method in UserItemBaseline SlopeOne BipolarSlopeOne
 do
@@ -64,4 +61,3 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --rating-type=double
 done
 
-cd ../../../../..
