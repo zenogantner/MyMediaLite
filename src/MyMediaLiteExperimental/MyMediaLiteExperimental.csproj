@@ -10,6 +10,7 @@
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLiteExperimental</AssemblyName>
     <ReleaseVersion>2.02</ReleaseVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="MathNet.Numerics">
+    <Reference Include="MathNet.Numerics, Version=2011.4.17.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37">
       <HintPath>..\..\lib\MathNet\MathNet.Numerics.dll</HintPath>
     </Reference>
   </ItemGroup>

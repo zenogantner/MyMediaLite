@@ -10,6 +10,7 @@
     <RootNamespace>MappingRatingPrediction</RootNamespace>
     <AssemblyName>MappingRatingPrediction</AssemblyName>
     <ReleaseVersion>2.02</ReleaseVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -1,5 +1,5 @@
 all: ../lib/mymedialite
-	xbuild /p:Configuration=Debug MyMediaLite.sln
+	xbuild /p:Configuration=Debug MyMediaLite-nogui.sln
 	cp -r Programs/ItemRecommendation/bin/Debug/*.dll ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.exe ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.mdb ../lib/mymedialite
