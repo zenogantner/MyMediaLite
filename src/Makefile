@@ -17,7 +17,13 @@ clean:
 	rm -rf */obj
 	rm -rf */*/obj
 
-install: uninstall
+${PREFIX}/lib:
+	mkdir ${PREFIX}/lib
+
+${PREFIX}/bin:
+	mkdir ${PREFIX}/bin
+
+install: uninstall ${PREFIX}/lib ${PREFIX}/bin
 	mkdir ${PREFIX}/lib/mymedialite
 	cp ../lib/mymedialite/* ${PREFIX}/lib/mymedialite
 	cp ../bin/* ${PREFIX}/bin
@@ -26,5 +32,4 @@ uninstall:
 	rm -rf ${PREFIX}/lib/mymedialite
 	rm -rf ${PREFIX}/bin/item_recommendation
 	rm -rf ${PREFIX}/bin/rating_prediction
-
 

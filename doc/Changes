@@ -68,7 +68,8 @@
          - #87: create Makefile in src/ that calls xbuild to build MyMediaLite
            on the command line
          - add make targets "install" and "uninstall" for installation on
-           Unix-like systems
+           Unix-like systems (thanks go to Simon Dooms for valuable feedback on
+           this)
 
 2.01	2011-11-13
 	bugfix release: fix a null pointer exception in the item recommendation
