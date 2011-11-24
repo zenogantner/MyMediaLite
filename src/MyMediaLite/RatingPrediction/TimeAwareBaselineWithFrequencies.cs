@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 			// first count the frequencies ...
 			for (int i = 0; i < timed_ratings.Count; i++)
 			{
-				int day = (timed_ratings.LatestTime - timed_ratings.Times[i]).Days;
+				int day = RelativeDay(timed_ratings.Times[i]);
 				log_frequency_by_day[timed_ratings.Users[i], day]++;
 			}
 			// ... then apply (rounded) logarithm
@@ -142,7 +142,7 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
 			double result = base.Predict(user_id, item_id, time);
-			int day = (time - timed_ratings.EarliestTime).Days;
+			int day = RelativeDay(time);
 			if (day <= timed_ratings.LatestTime.Day)
 				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 

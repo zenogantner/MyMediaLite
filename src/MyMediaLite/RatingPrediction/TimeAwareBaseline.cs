@@ -145,15 +145,26 @@ namespace MyMediaLite.RatingPrediction
 
 			global_average = ratings.Average;
 
+			// compute mean day of rating by user
 			user_mean_day = new double[MaxUserID + 1];
 			for (int i = 0; i < timed_ratings.Count; i++)
-				user_mean_day[ratings.Users[i]] += (timed_ratings.LatestTime - timed_ratings.Times[i]).Days;
+				user_mean_day[ratings.Users[i]] += RelativeDay(timed_ratings.Times[i]);
 			for (int u = 0; u <= MaxUserID; u++)
 				if (ratings.CountByUser[u] != 0)
 					user_mean_day[u] /= ratings.CountByUser[u];
+				else // no ratings yet?
+					user_mean_day[u] = RelativeDay(timed_ratings.LatestTime); // set to latest day
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
+		}
+
+		/// <summary>Given a DateTime object, return the day relative to the first rating day in the dataset</summary>
+		/// <returns>the day relative to the first rating day in the dataset</returns>
+		/// <param name='datetime'>the date/time of the rating event</param>
+		protected int RelativeDay(DateTime datetime)
+		{
+			return (datetime - timed_ratings.EarliestTime).Days;
 		}
 
 		/// <summary>Initialize the model parameters</summary>
@@ -180,7 +191,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				int u = timed_ratings.Users[index];
 				int i = timed_ratings.Items[index];
-				int day = (timed_ratings.LatestTime - timed_ratings.Times[index]).Days;
+				int day = RelativeDay(timed_ratings.Times[index]);
 				int bin = day / BinSize;
 
 				// compute error
@@ -249,9 +260,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override double Predict(int user_id, int item_id, DateTime time)
 		{
-			int day = (time - timed_ratings.EarliestTime).Days;
+			int day = RelativeDay(time);
 			int bin = day / BinSize;
-			
+
 			// use latest day bin if the rating time is after the training time period
 			if (bin >= item_bias_by_time_bin.NumberOfColumns)
 				bin = item_bias_by_time_bin.NumberOfColumns - 1;
