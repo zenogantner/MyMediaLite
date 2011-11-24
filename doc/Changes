@@ -21,6 +21,7 @@
          - new rating predictor: CoClustering (based on a 2005 paper by George
            and Merugu)
          - BPRMF: fix bug in incremental updates
+         - MulticoreMatrixFactorization: simplify implementation
          - FactorWiseMatrixFactorization: remove unused field global_bias
          - move group recommenders from experimental to main section
 	command-line programs
