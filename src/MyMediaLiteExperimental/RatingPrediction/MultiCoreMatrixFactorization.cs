@@ -88,19 +88,12 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Iterate()
 		{
-			var column_blocks = new int[NumBlocks];
-
 			// generate random sub-epoch sequence
 			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumBlocks));
 			Utils.Shuffle(subepoch_sequence);
 
 			foreach (int i in subepoch_sequence) // sub-epoch
-			{
-				for (int j = 0; j < NumBlocks; j++)
-					column_blocks[j] = (i + j) % NumBlocks;
-
-				Parallel.For(0, NumBlocks, j =>	Iterate(Blocks[j, column_blocks[j]], true, true));
-			}
+				Parallel.For(0, NumBlocks, j => Iterate(Blocks[j, (i + j) % NumBlocks], true, true));
 
 			if (BoldDriver)
 			{
