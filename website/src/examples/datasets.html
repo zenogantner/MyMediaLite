@@ -24,10 +24,20 @@
     Results on the <it>probe</it> dataset:
     <table border="1">
       <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th></tr>
-      [% FOREACH entry IN netflix_data %]
+      [% FOREACH entry IN netflix_probe %]
         <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
       [% END %]
     </table>
+  </p>
+  <p>
+    Results on the <it>quiz</it> dataset:
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th></tr>
+      [% FOREACH entry IN netflix_quiz %]
+        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+
   </p>
   
   <a href="http://www.grouplens.org/node/73"><h3>MovieLens 1M</h3></a>
