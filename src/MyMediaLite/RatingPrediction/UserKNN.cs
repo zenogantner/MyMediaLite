@@ -29,9 +29,6 @@ namespace MyMediaLite.RatingPrediction
 		protected SparseBooleanMatrix data_user;
 
 		///
-		public UserKNN() : base() { }
-
-		///
 		public override IRatings Ratings
 		{
 			set	{
@@ -58,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 				throw new ArgumentException("item is unknown: " + item_id);
 
 			if ((user_id > correlation.NumberOfRows - 1) || (item_id > MaxItemID))
-				return base.Predict(user_id, item_id);
+				return baseline_predictor.Predict(user_id, item_id);
 
 			IList<int> relevant_users = correlation.GetPositivelyCorrelatedEntities(user_id);
 
@@ -73,14 +70,14 @@ namespace MyMediaLite.RatingPrediction
 
 					double weight = correlation[user_id, user_id2];
 					weight_sum += weight;
-					sum += weight * (rating - base.Predict(user_id2, item_id));
+					sum += weight * (rating - baseline_predictor.Predict(user_id2, item_id));
 
 					if (--neighbors == 0)
 						break;
 				}
 			}
 
-			double result = base.Predict(user_id, item_id);
+			double result = baseline_predictor.Predict(user_id, item_id);
 			if (weight_sum != 0)
 			{
 				double modification = sum / weight_sum;
@@ -93,11 +90,15 @@ namespace MyMediaLite.RatingPrediction
 				result = MinRating;
 			return result;
 		}
+		
+		/// <summary>Retrain model for a given user</summary>
+		/// <param name='user_id'>the user ID</param>
+		abstract protected void RetrainUser(int user_id);
 
 		///
 		public override void AddRating(int user_id, int item_id, double rating)
 		{
-			base.AddRating(user_id, item_id, rating);
+			baseline_predictor.AddRating(user_id, item_id, rating);
 			data_user[user_id, item_id] = true;
 			RetrainUser(user_id);
 		}
@@ -105,14 +106,14 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void UpdateRating(int user_id, int item_id, double rating)
 		{
-			base.UpdateRating(user_id, item_id, rating);
+			baseline_predictor.UpdateRating(user_id, item_id, rating);
 			RetrainUser(user_id);
 		}
 
 		///
 		public override void RemoveRating(int user_id, int item_id)
 		{
-			base.RemoveRating(user_id, item_id);
+			baseline_predictor.RemoveRating(user_id, item_id);
 			data_user[user_id, item_id] = false;
 			RetrainUser(user_id);
 		}
@@ -120,7 +121,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void AddUser(int user_id)
 		{
-			base.AddUser(user_id);
 			correlation.AddEntity(user_id);
 		}
 	}

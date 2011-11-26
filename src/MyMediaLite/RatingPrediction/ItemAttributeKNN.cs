@@ -42,12 +42,18 @@ namespace MyMediaLite.RatingPrediction
 		private SparseBooleanMatrix item_attributes;
 
 		///
+		protected override void RetrainItem(int item_id)
+		{
+			baseline_predictor.RetrainItem(item_id);
+		}
+
+		///
 		public int NumItemAttributes { get;	private set; }
 
 		///
 		public override void Train()
 		{
-			base.Train();
+			baseline_predictor.Train();
 			this.correlation = BinaryCosine.Create(ItemAttributes);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
 		}

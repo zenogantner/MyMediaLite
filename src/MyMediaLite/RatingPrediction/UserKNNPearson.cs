@@ -33,19 +33,16 @@ namespace MyMediaLite.RatingPrediction
 		private float shrinkage = 10;
 
 		///
-		public UserKNNPearson() : base() { }
-
-		///
 		public override void Train()
 		{
-			base.Train();
+			baseline_predictor.Train();
 			this.correlation = Pearson.Create(ratings, EntityType.USER, Shrinkage);
 		}
 
 		///
 		protected override void RetrainUser(int user_id)
 		{
-			base.RetrainUser(user_id);
+			baseline_predictor.RetrainUser(user_id);
 			if (UpdateUsers)
 				for (int i = 0; i <= MaxUserID; i++)
 					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings, EntityType.USER, user_id, i, Shrinkage);

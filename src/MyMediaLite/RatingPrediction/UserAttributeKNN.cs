@@ -47,9 +47,15 @@ namespace MyMediaLite.RatingPrediction
 		public int NumUserAttributes { get; private set; }
 
 		///
+		protected override void RetrainUser(int user_id)
+		{
+			baseline_predictor.RetrainUser(user_id);
+		}
+
+		///
 		public override void Train()
 		{
-			base.Train();
+			baseline_predictor.Train();
 			this.correlation = BinaryCosine.Create(user_attributes);
 		}
 
