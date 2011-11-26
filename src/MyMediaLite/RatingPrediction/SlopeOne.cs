@@ -63,7 +63,6 @@ namespace MyMediaLite.RatingPrediction
 			int frequency = 0;
 
 			foreach (int index in ratings.ByUser[user_id])
-
 			{
 				int other_item_id = ratings.Items[index];
 				int f = freq_matrix[item_id, other_item_id];
@@ -77,7 +76,7 @@ namespace MyMediaLite.RatingPrediction
 			if (frequency == 0)
 				return global_average;
 
-			return (double) prediction / frequency;
+			return prediction / frequency;
 		}
 
 		void InitModel()
