@@ -23,6 +23,7 @@
          - BPRMF: fix bug in incremental updates
          - MulticoreMatrixFactorization: simplify implementation
          - FactorWiseMatrixFactorization: remove unused field global_bias
+         - (BiPolar)SlopeOne: remove unnecessary cast to double
          - move group recommenders from experimental to main section
 	command-line programs
          - rename from ItemRecommendation.exe to item_recommendation.exe and
@@ -32,6 +33,7 @@
          - #61: add the option to ignore first line of training/test file
          - #27: command-line programs: load from model file without specifying
            recommender type
+         - print "prediction_time" instead of "predicting_time"
          - item recommendation
            - add --file-format= option
            - fix wrong check "predict_for_users_file == null" to "!=" in
@@ -54,6 +56,7 @@
          - add read/write methods for integer vectors to IO.VectorExtensions
          - user/item mappings are now optional arguments for all IO routines
          - add unit tests for all interaction data reading classes
+         - Model.Load: do not check for empty string any more
 	data structures
          - move MinRating and MaxRating from DataSet to Ratings
         documentation
