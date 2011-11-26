@@ -49,11 +49,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the predicted rating</returns>
 		public override double Predict(int user_id, int item_id)
 		{
-			if (user_id < 0)
-				throw new ArgumentException("user is unknown: " + user_id);
-			if (item_id < 0)
-				throw new ArgumentException("item is unknown: " + item_id);
-
 			if ((user_id > correlation.NumberOfRows - 1) || (item_id > MaxItemID))
 				return baseline_predictor.Predict(user_id, item_id);
 
