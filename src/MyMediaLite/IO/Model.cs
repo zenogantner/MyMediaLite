@@ -84,8 +84,6 @@ namespace MyMediaLite.IO
 				recommender = Recommender.CreateItemRecommender(type_name);
 			else
 				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
-
-			Console.WriteLine(recommender.ToString());
 			recommender.LoadModel(filename);
 
 			return recommender;
