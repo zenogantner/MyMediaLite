@@ -35,8 +35,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class FactorWiseMatrixFactorization : RatingPredictor, IIterativeModel
 	{
-		// TODO have common base class with MatrixFactorization
-
 		///
 		public override IRatings Ratings
 		{
