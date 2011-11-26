@@ -239,10 +239,10 @@ class RatingPrediction
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		// set up recommender
-		if (method != null)
-			recommender = Recommender.CreateRatingPredictor(method);
-		else if (load_model_file != null)
+		if (load_model_file != null)
 			recommender = (RatingPredictor) Model.Load(load_model_file);
+		else if (method != null)
+			recommender = Recommender.CreateRatingPredictor(method);
 		else
 			recommender = Recommender.CreateRatingPredictor("BiasedMatrixFactorization");
 		// in case something went wrong ...
@@ -363,7 +363,7 @@ class RatingPrediction
 			TimeSpan seconds;
 
 			Console.Write(recommender + " ");
-			
+
 			if (load_model_file == null)
 			{
 				if (cross_validation > 1)
@@ -411,7 +411,7 @@ class RatingPrediction
 				seconds = Wrap.MeasureTime(delegate() {
 						recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line);
 				});
-				Console.Error.Write("predicting_time " + seconds);
+				Console.Error.Write("prediction_time " + seconds);
 			}
 
 			Console.WriteLine();
@@ -424,7 +424,7 @@ class RatingPrediction
 	{
 		if (online_eval && !(recommender is IIncrementalRatingPredictor))
 			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
-		
+
 		if (training_file == null && load_model_file == null)
 			Usage("Please provide either --training-file=FILE or --load-model=FILE.");
 
