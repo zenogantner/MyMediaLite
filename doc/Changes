@@ -22,7 +22,8 @@
            and Merugu)
          - BPRMF: fix bug in incremental updates
          - MulticoreMatrixFactorization: simplify implementation
-         - FactorWiseMatrixFactorization: remove unused field global_bias
+         - FactorWiseMatrixFactorization: remove unused field global_bias,
+           turn field residuals into a local variable
          - (BiPolar)SlopeOne: remove unnecessary cast to double
          - move group recommenders from experimental to main section
 	command-line programs
