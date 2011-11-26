@@ -43,7 +43,7 @@ namespace MyMediaLite.Eval
 		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
 		///
 		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
-		/// 
+		///
 		/// If the recommender can take time into account, and the rating dataset provides rating times,
 		/// this information will be used for making rating predictions.
 		/// </remarks>
