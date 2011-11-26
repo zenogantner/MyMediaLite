@@ -37,6 +37,15 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO have common base class with MatrixFactorization
 
+		///
+		public override IRatings Ratings
+		{
+			set {
+				base.Ratings = value;
+				global_effects.Ratings = value;
+			}
+		}
+
 		/// <summary>Matrix containing the latent user factors</summary>
 		Matrix<double> user_factors;
 
@@ -212,7 +221,8 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			global_effects.LoadModel(filename + "-global-effects");
-			global_effects.Ratings = ratings;
+			if (ratings != null)
+				global_effects.Ratings = ratings;
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
