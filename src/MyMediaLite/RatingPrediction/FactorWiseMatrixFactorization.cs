@@ -47,8 +47,6 @@ namespace MyMediaLite.RatingPrediction
 
 		int num_learned_factors;
 
-		double[] residuals;
-
 		/// <summary>Number of latent factors</summary>
 		public uint NumFactors { get; set;}
 
@@ -95,9 +93,6 @@ namespace MyMediaLite.RatingPrediction
 			global_effects.Ratings = ratings;
 			global_effects.Train();
 
-			// initialize learning data structure
-			residuals = new double[ratings.Count];
-
 			// learn model parameters
 			num_learned_factors = 0;
 			for (int i = 0; i < NumIter; i++)
@@ -111,6 +106,7 @@ namespace MyMediaLite.RatingPrediction
 				return;
 
 			// compute residuals
+			var residuals = new double[ratings.Count];
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				int u = ratings.Users[index];
@@ -256,7 +252,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} shrinkage={2} sensibility={3}  init_mean={4} init_stdev={5} num_iter={6}",
+				"{0} num_factors={1} shrinkage={2} sensibility={3} init_mean={4} init_stdev={5} num_iter={6}",
 				this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
 		}
 	}
