@@ -220,10 +220,10 @@ namespace MyMediaLite.RatingPrediction
 			double b_ib = item_bias_by_time_bin[i, bin];
 			double c_u  = user_scaling[u];
 			double c_ud = user_scaling_by_day[u, day];
-			item_bias[i]                  += ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
-			item_bias_by_time_bin[i, bin] += ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
-			user_scaling[u]               += UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
-			user_scaling_by_day[u, day]   += UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
+			item_bias[i]                  += 2 * ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
+			item_bias_by_time_bin[i, bin] += 2 * ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
+			user_scaling[u]               += 2 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
+			user_scaling_by_day[u, day]   += 2 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
 		}
 
 		///
