@@ -6,7 +6,11 @@
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=80 learn_rate=0.005 reg=0.035 num_iter=26',                 rmse => '0.9169', mae => '0.7126' }
    ]
 	netflix_quiz = [
-     { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=120 learn_rate=0.005 bias_reg=0.0001 reg_u=0.035 reg_i=0.035 num_iter=50 bold_driver=True', rmse => '0.9086', mae => '0.70775', nmae => '0.17694' }
+     { method => 'GlobalAverage',                hp => '',                                                                                                      rmse => '1.13092', mae => '0.95377', nmae => '0.23844' }
+     { method => 'UserAverage',                  hp => '',                                                                                                      rmse => '1.06506', mae => '0.84848', nmae => '0.21212' }
+     { method => 'ItemAverage',                  hp => '',                                                                                                      rmse => '1.05326', mae => '0.85045', nmae => '0.21261' }
+     { method => 'UserItemBaseline',             hp => 'reg_u=4.5 reg_i=1.137 num_iter=10',                                                                     rmse => '0.98013', mae => '0.76673', nmae => '0.19168' }
+     { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=120 learn_rate=0.005 bias_reg=0.0001 reg_u=0.035 reg_i=0.035 num_iter=50 bold_driver=True', rmse => '0.9086',  mae => '0.70775', nmae => '0.17694' }
    ]
    ml1m_data = [
      { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.9113', mae => '0.7226' }
