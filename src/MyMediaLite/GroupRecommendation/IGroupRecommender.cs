@@ -15,9 +15,11 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 
+/*! \namespace MyMediaLite.GroupRecommendations
+ *  \brief This namespace contains recommenders that make recommendations to groups of users.
+ */
 namespace MyMediaLite.GroupRecommendation
 {
 	/// <summary>Interface for group recommenders</summary>
