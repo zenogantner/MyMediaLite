@@ -1,6 +1,7 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 PROGRAM="bin/item_recommendation"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "MyMediaLite item recommendation test script"
 echo "This may take about 4 minutes ..."
@@ -12,8 +13,8 @@ echo "--------------------"
 
 for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
 do
-	echo $PROGRAM --training-file=$THIS_DIR/example.train --test-file=$THIS_DIR/example.test --recommender=$method --recommender-options="k=20"
-	     $PROGRAM --training-file=$THIS_DIR/example.train --test-file=$THIS_DIR/example.test --recommender=$method --recommender-options="k=20"
+	echo $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=20"
+	     $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=20"
 done
 
 echo

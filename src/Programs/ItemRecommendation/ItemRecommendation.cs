@@ -275,10 +275,10 @@ class ItemRecommendation
 			MyMediaLite.Util.Random.InitInstance(random_seed);
 
 		// set up recommender
-		if (method != null)
-			recommender = Recommender.CreateItemRecommender(method);
-		else if (load_model_file != null)
+ 		if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
+		else if (method != null)
+			recommender = Recommender.CreateItemRecommender(method);
 		else
 			recommender = Recommender.CreateItemRecommender("MostPopular");
 		// in case something went wrong ...
@@ -356,7 +356,7 @@ class ItemRecommendation
 		else
 		{
 			Console.WriteLine(recommender + " ");
-			
+
 			if (load_model_file == null)
 			{
 				if (cross_validation > 1)
@@ -692,7 +692,7 @@ class ItemRecommendation
 				user_mapping, item_mapping);
 			Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
 		});
-		Console.Write(" predicting_time " + time_span);
+		Console.Write(" prediction_time " + time_span);
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)

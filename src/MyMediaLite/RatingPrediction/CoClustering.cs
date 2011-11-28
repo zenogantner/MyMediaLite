@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
@@ -54,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 
 		IList<double> user_cluster_averages;
 		IList<double> item_cluster_averages;
-		double[,] cocluster_averages;
+		IMatrix<double> cocluster_averages;
 
 		double global_average;
 
@@ -83,7 +84,7 @@ namespace MyMediaLite.RatingPrediction
 
 			this.user_cluster_averages = new double[NumUserClusters];
 			this.item_cluster_averages = new double[NumItemClusters];
-			this.cocluster_averages    = new double[NumUserClusters, NumItemClusters];
+			this.cocluster_averages    = new Matrix<double>(NumUserClusters, NumItemClusters);
 		}
 
 		bool IterateCheckModified()
@@ -300,10 +301,14 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 			{
-				writer.WriteLine(NumUserClusters);
-				writer.WriteLine(NumItemClusters);
 				writer.WriteVector(user_clustering);
 				writer.WriteVector(item_clustering);
+				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
+				writer.WriteVector(user_averages);
+				writer.WriteVector(item_averages);
+				writer.WriteVector(user_cluster_averages);
+				writer.WriteVector(item_cluster_averages);
+				writer.WriteMatrix(cocluster_averages);
 			}
 		}
 
@@ -312,19 +317,23 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var num_user_clusters = int.Parse(reader.ReadLine());
-				var num_item_clusters = int.Parse(reader.ReadLine());
-
 				var user_clustering = reader.ReadIntVector();
 				var item_clustering = reader.ReadIntVector();
+				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var user_averages = reader.ReadVector();
+				var item_averages = reader.ReadVector();
+				var user_cluster_averages = reader.ReadVector();
+				var item_cluster_averages = reader.ReadVector();
+				var cocluster_averages = reader.ReadMatrix(new Matrix<double>(0, 0));
 
+				int num_user_clusters = user_cluster_averages.Count;
+				int num_item_clusters = item_cluster_averages.Count;
+
+				// adjust maximum IDs
 				this.MaxUserID = user_clustering.Count - 1;
 				this.MaxItemID = item_clustering.Count - 1;
 
-				// assign new model
-				//   create averages data structures
-				InitModel();
-				//   adapt hyperparameters
+				// adjust hyperparameters
 				if (this.NumUserClusters != num_user_clusters)
 				{
 					Console.Error.WriteLine("Set num_user_clusters to {0}", num_user_clusters);
@@ -335,12 +344,15 @@ namespace MyMediaLite.RatingPrediction
 					Console.Error.WriteLine("Set num_item_clusters to {0}", num_item_clusters);
 					this.NumItemClusters = num_item_clusters;
 				}
-				//   assign clusterings
+				// assign model
+				this.global_average = global_average;
+				this.user_cluster_averages = user_cluster_averages;
+				this.item_cluster_averages = item_cluster_averages;
+				this.cocluster_averages = cocluster_averages;
+				this.user_averages = user_averages;
+				this.item_averages = item_averages;
 				this.user_clustering = user_clustering;
 				this.item_clustering = item_clustering;
-				//   compute averages
-				ComputeAverages();
-				ComputeClusterAverages();
 			}
 		}
 

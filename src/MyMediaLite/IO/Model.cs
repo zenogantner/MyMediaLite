@@ -55,16 +55,10 @@ namespace MyMediaLite.IO
 		}
 
 		/// <summary>Load the model parameters of a recommender from a file</summary>
-		/// <remarks>
-		/// Does not load model if filename is an empty string.
-		/// </remarks>
-		/// <param name="recommender">the <see cref="IRecommender"/> to save</param>
+		/// <param name="recommender">the <see cref="IRecommender"/> to load</param>
 		/// <param name="filename">the filename template</param>
 		public static void Load(IRecommender recommender, string filename)
 		{
-			if (filename == string.Empty)
-				return;
-
 			Console.Error.WriteLine("Load model from {0}", filename);
 			recommender.LoadModel(filename);
 		}
@@ -90,8 +84,6 @@ namespace MyMediaLite.IO
 				recommender = Recommender.CreateItemRecommender(type_name);
 			else
 				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
-
-			Console.WriteLine(recommender.ToString());
 			recommender.LoadModel(filename);
 
 			return recommender;

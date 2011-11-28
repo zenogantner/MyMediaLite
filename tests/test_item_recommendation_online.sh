@@ -3,7 +3,6 @@
 PROGRAM="bin/item_recommendation"
 
 echo "MyMediaLite item recommendation online eval test script"
-echo "This may take about 4 minutes ..."
 
 echo
 echo "MovieLens 100K"

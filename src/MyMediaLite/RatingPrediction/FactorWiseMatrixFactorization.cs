@@ -35,7 +35,14 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class FactorWiseMatrixFactorization : RatingPredictor, IIterativeModel
 	{
-		// TODO have common base class with MatrixFactorization
+		///
+		public override IRatings Ratings
+		{
+			set {
+				base.Ratings = value;
+				global_effects.Ratings = value;
+			}
+		}
 
 		/// <summary>Matrix containing the latent user factors</summary>
 		Matrix<double> user_factors;
@@ -46,8 +53,6 @@ namespace MyMediaLite.RatingPrediction
 		UserItemBaseline global_effects = new UserItemBaseline();
 
 		int num_learned_factors;
-
-		double[] residuals;
 
 		/// <summary>Number of latent factors</summary>
 		public uint NumFactors { get; set;}
@@ -95,9 +100,6 @@ namespace MyMediaLite.RatingPrediction
 			global_effects.Ratings = ratings;
 			global_effects.Train();
 
-			// initialize learning data structure
-			residuals = new double[ratings.Count];
-
 			// learn model parameters
 			num_learned_factors = 0;
 			for (int i = 0; i < NumIter; i++)
@@ -111,6 +113,7 @@ namespace MyMediaLite.RatingPrediction
 				return;
 
 			// compute residuals
+			var residuals = new double[ratings.Count];
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				int u = ratings.Users[index];
@@ -216,7 +219,8 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			global_effects.LoadModel(filename + "-global-effects");
-			global_effects.Ratings = ratings;
+			if (ratings != null)
+				global_effects.Ratings = ratings;
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
@@ -256,7 +260,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} shrinkage={2} sensibility={3}  init_mean={4} init_stdev={5} num_iter={6}",
+				"{0} num_factors={1} shrinkage={2} sensibility={3} init_mean={4} init_stdev={5} num_iter={6}",
 				this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
 		}
 	}

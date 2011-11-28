@@ -130,7 +130,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected virtual void RetrainUser(int user_id)
+		public virtual void RetrainUser(int user_id)
 		{
 			if (UpdateUsers)
 			{
@@ -142,7 +142,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected virtual void RetrainItem(int item_id)
+		public virtual void RetrainItem(int item_id)
 		{
 			if (UpdateItems)
 			{

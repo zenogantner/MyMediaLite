@@ -29,19 +29,16 @@ namespace MyMediaLite.RatingPrediction
 	public class UserKNNCosine : UserKNN
 	{
 		///
-		public UserKNNCosine() : base() { }
-
-		///
 		public override void Train()
 		{
-			base.Train();
+			baseline_predictor.Train();
 			this.correlation = BinaryCosine.Create(data_user);
 		}
 
 		///
 		protected override void RetrainUser(int user_id)
 		{
-			base.RetrainUser(user_id);
+			baseline_predictor.RetrainUser(user_id);
 			if (UpdateUsers)
 				for (int i = 0; i <= MaxUserID; i++)
 					correlation[user_id, i] = BinaryCosine.ComputeCorrelation(new HashSet<int>(data_user[user_id]), new HashSet<int>(data_user[i]));

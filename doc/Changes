@@ -1,4 +1,4 @@
-2.02	2011-12-??
+2.02	2011-11-26
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build
         API
          - IRecommender: now inherits from IClonable, improve API doc
@@ -22,7 +22,16 @@
            and Merugu)
          - BPRMF: fix bug in incremental updates
          - MulticoreMatrixFactorization: simplify implementation
-         - FactorWiseMatrixFactorization: remove unused field global_bias
+         - UserItemBaseline: make RetrainUser(user_id) and RetrainItem(item_id)
+           public instead of protected
+         - TimeAwareBaseline(WithFrequencies): several bug fixes
+         - FactorWiseMatrixFactorization:
+           - remove unused field global_bias
+           - turn field residuals into a local variable
+           - fix crash on LoadModel() with Ratings == null
+         - #49: kNN recommenders: use UserItemBaseline via composition, not
+           inheritance
+         - (BiPolar)SlopeOne: remove unnecessary cast to double
          - move group recommenders from experimental to main section
 	command-line programs
          - rename from ItemRecommendation.exe to item_recommendation.exe and
@@ -32,6 +41,7 @@
          - #61: add the option to ignore first line of training/test file
          - #27: command-line programs: load from model file without specifying
            recommender type
+         - print "prediction_time" instead of "predicting_time"
          - item recommendation
            - add --file-format= option
            - fix wrong check "predict_for_users_file == null" to "!=" in
@@ -54,6 +64,7 @@
          - add read/write methods for integer vectors to IO.VectorExtensions
          - user/item mappings are now optional arguments for all IO routines
          - add unit tests for all interaction data reading classes
+         - Model.Load: do not check for empty string any more
 	data structures
          - move MinRating and MaxRating from DataSet to Ratings
         documentation

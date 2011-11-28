@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 			if (frequencies == 0)
 				return global_average;
 
-			double result = (double) (prediction / frequencies);
+			double result = prediction / frequencies;
 
 			if (result > MaxRating)
 				return MaxRating;
