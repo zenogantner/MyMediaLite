@@ -1,4 +1,4 @@
-2.02	2011-11-26
+2.02	2011-11-28
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build
         API
          - IRecommender: now inherits from IClonable, improve API doc
