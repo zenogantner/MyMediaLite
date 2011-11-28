@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Number of neighbors to take into account for predictions</summary>
 		public uint K { get { return k;	} set {	k = value; } }
 		private uint k = uint.MaxValue;
-		
+
 		///
 		public override IRatings Ratings
 		{
@@ -45,27 +45,25 @@ namespace MyMediaLite.RatingPrediction
 				base.Ratings = value;
 				baseline_predictor.Ratings = value;
 			}
-		}		
-		
+		}
+
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
 		public double RegU { get { return baseline_predictor.RegU; } set { baseline_predictor.RegU = value; } }
-		
+
 		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
 		public double RegI { get { return baseline_predictor.RegI; } set { baseline_predictor.RegI = value; } }
-		
+
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected CorrelationMatrix correlation;
-		
+
 		/// <summary>underlying baseline predictor</summary>
 		protected UserItemBaseline baseline_predictor = new UserItemBaseline() { RegU = 10, RegI = 5 };
-		
+
 		///
 		public override void SaveModel(string filename)
 		{
-			baseline_predictor.LoadModel(filename + "-global-effects");
-			if (ratings != null)
-				baseline_predictor.Ratings = ratings;
-	
+			baseline_predictor.SaveModel(filename + "-global-effects");
+
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
 				correlation.Write(writer);
 		}
@@ -76,7 +74,7 @@ namespace MyMediaLite.RatingPrediction
 			baseline_predictor.LoadModel(filename + "-global-effects");
 			if (ratings != null)
 				baseline_predictor.Ratings = ratings;
-			
+
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
