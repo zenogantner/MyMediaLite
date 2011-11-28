@@ -34,7 +34,7 @@ public partial class MainWindow
 	private global::Gtk.HBox hbox1;
 	private global::Gtk.ScrolledWindow scrolledwindow2;
 	private global::Gtk.TreeView treeview1;
-    
+	
 	protected virtual void Build ()
 	{
 		global::Stetic.Gui.Initialize (this);
