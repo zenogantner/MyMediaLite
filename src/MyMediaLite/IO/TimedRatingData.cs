@@ -55,12 +55,13 @@ namespace MyMediaLite.IO
 				item_mapping = new IdentityMapping();
 			if (ignore_first_line)
 				reader.ReadLine();
-			
+
 			var ratings = new MyMediaLite.Data.TimedRatings();
 			var time_split_chars = new char[] { ' ', '-', ':' };
 
 			string line;
-			while ((line = reader.ReadLine()) != null) {
+			while ((line = reader.ReadLine()) != null)
+			{
 				if (line.Length == 0)
 					continue;
 
@@ -73,11 +74,12 @@ namespace MyMediaLite.IO
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
 				string date_string = tokens[3];
-				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\"")) {
+				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\""))
+				{
 					date_string = tokens[3] + " " + tokens[4];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
-				
+
 				uint seconds;
 				if (date_string.Length == 19) // format "yyyy-mm-dd hh:mm:ss"
 				{
