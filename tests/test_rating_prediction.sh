@@ -10,7 +10,6 @@ echo "MovieLens 1M"
 echo "------------"
 
 DATA_DIR=data/ml-1m
- 
 
 for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization
 do
@@ -42,6 +41,8 @@ done
 echo
 echo "MovieLens 100K"
 echo "--------------"
+
+DATA_DIR=data/ml-100k
 
 for method in UserItemBaseline SlopeOne BipolarSlopeOne
 do
