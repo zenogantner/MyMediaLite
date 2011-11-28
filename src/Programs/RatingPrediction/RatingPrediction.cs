@@ -440,7 +440,7 @@ class RatingPrediction
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == string.Empty && chronological_split == null)
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && chronological_split == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
