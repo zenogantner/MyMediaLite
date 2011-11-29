@@ -12,6 +12,36 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+  <a name="2.02"><h2>MyMediaLite 2.02</h2></a>  
+    <p>
+    <b>November 29, 2011.</b>
+    Version 2.02 of MyMediaLite has been released.
+    </p>
+    <p>
+    New features:
+    <ul>
+      <li>MyMediaLite can now be built without an IDE.</li>
+      <li>command line tools:
+        <ul>
+          <li>add scripts for easy deployment on Unix systems</li>
+          <li>change executable names to lower case</li>
+          <li>add option to ignore the first line of data files</li>
+        </ul></li>
+      <li>new examples in <a href="[% prefix %]documentation/use_from_fsharp.html">F#</a>,
+          simplified examples in <a href="[% prefix %]documentation/use_from_csharp.html">C#</a>, <a href="[% prefix %]documentation/use_from_python.html">Python</a>,
+          and <a href="[% prefix %]documentation/use_from_ruby.html">Ruby</a></li>
+      <li>evaluation routines are now extension methods and return custom objects with overwritten <tt>ToString()</tt> methods, which makes evaluation methods much easier to call</li>
+      <li>new baseline rating predictor: co-clustering</li>
+      <li>bug fixes and other improvements for the following recommenders: BPRMF, MultiCoreMatrixFactorization, TimeAwareBaseline, KNN</li>
+    </ul>
+    </p>
+
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
   <a name="2.01"><h2>MyMediaLite 2.01</h2></a>  
     <p>
     <b>November 13, 2011.</b>
