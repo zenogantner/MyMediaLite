@@ -55,11 +55,13 @@ binary-package:
 	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r bin examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
-	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}
-	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}
-	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}
-	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}
+	mkdir MyMediaLite-${VERSION}/lib/
+	mkdir MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
