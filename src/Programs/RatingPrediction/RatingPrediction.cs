@@ -394,24 +394,24 @@ class RatingPrediction
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.Evaluate(test_data)); });
 
 				Console.Write(" testing_time " + seconds);
-			}
 
-			if (compute_fit)
-			{
-				Console.Write("\nfit ");
-				seconds = Wrap.MeasureTime(delegate() {
-					Console.Write(recommender.Evaluate(training_data));
-				});
-				Console.Write(" fit_time " + seconds);
-			}
-
-			if (prediction_file != null)
-			{
-				Console.WriteLine();
-				seconds = Wrap.MeasureTime(delegate() {
-						recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line);
-				});
-				Console.Error.Write("prediction_time " + seconds);
+				if (compute_fit)
+				{
+					Console.Write("\nfit ");
+					seconds = Wrap.MeasureTime(delegate() {
+						Console.Write(recommender.Evaluate(training_data));
+					});
+					Console.Write(" fit_time " + seconds);
+				}
+	
+				if (prediction_file != null)
+				{
+					Console.WriteLine();
+					seconds = Wrap.MeasureTime(delegate() {
+							recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line);
+					});
+					Console.Error.Write("prediction_time " + seconds);
+				}
 			}
 
 			Console.WriteLine();

@@ -372,15 +372,15 @@ class ItemRecommendation
 				}
 			}
 
-			if (compute_fit)
-				Console.WriteLine("fit: {0}", ComputeFit());
-
 			if (prediction_file != null)
 			{
 				Predict(prediction_file, test_users_file);
 			}
 			else if (!no_eval)
 			{
+				if (compute_fit)
+					Console.WriteLine("fit: {0}", ComputeFit());
+
 				if (online_eval)
 					time_span = Wrap.MeasureTime( delegate() {
 						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
