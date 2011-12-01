@@ -292,7 +292,7 @@ class ItemRecommendation
 		recommender.Configure(recommender_options, Usage);
 		// load all the data
 		LoadData();
-		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
+		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
 		TimeSpan time_span;
 

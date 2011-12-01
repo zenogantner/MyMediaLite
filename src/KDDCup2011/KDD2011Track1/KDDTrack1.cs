@@ -192,10 +192,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		var rating_predictor_final     = rating_predictor_validate.Clone() as RatingPredictor;
 		rating_predictor_final.Ratings = complete_ratings;
 
-		Console.WriteLine("Validation split:");
-		Utils.DisplayDataStats(training_ratings, validation_ratings, null, null);
-		Console.WriteLine("Test split:");
-		Utils.DisplayDataStats(complete_ratings, test_data, null, null);
+		Console.WriteLine("Validation split:" + training_ratings.Statistics(validation_ratings));
+		Console.WriteLine("Test split:" + complete_ratings.Statistics(test_data));
 
 		if (find_iter != 0)
 		{

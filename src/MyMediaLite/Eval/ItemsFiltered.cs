@@ -102,7 +102,7 @@ namespace MyMediaLite.Eval
 						return;
 
 					// evaluation
-					IList<int> prediction_list = Extensions.PredictItems(recommender, user_id, filtered_candidate_items.ToArray());
+					IList<int> prediction_list = recommender.PredictItems(user_id, filtered_candidate_items.ToArray());
 					ICollection<int> ignore_items = repeated_events ? new int[0] : train.UserMatrix[user_id];
 
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);

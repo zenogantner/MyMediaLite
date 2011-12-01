@@ -291,7 +291,7 @@ class RatingPrediction
 				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "split time {0}", chronological_split_time));
 		}
 
-		Utils.DisplayDataStats(training_data, test_data, user_attributes, item_attributes);
+		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
 		if (find_iter != 0)
 		{

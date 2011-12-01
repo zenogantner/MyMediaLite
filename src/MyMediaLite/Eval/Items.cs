@@ -129,7 +129,7 @@ namespace MyMediaLite.Eval
 					if (num_eval_items == correct_items.Count)
 						return;
 
-					IList<int> prediction_list = Extensions.PredictItems(recommender, user_id, candidate_items);
+					IList<int> prediction_list = recommender.PredictItems(user_id, candidate_items);
 					if (prediction_list.Count != candidate_items.Count)
 						throw new Exception("Not all items have been ranked.");
 
