@@ -16,11 +16,6 @@ Features
  - Freedom: Free/Open Source software, distributed under the terms of the
             GNU General Public License (GPL).
 
-Remark
-------
-MyMediaLite is under development, its API and architecture may change over
-time. Major API and structure changes will be denoted by a major version
-number jump, i.e. from 1.x to 2.0.
 
 Installation
 ------------
