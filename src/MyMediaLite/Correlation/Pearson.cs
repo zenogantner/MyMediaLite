@@ -159,16 +159,16 @@ namespace MyMediaLite.Correlation
 						var index2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? ratings.Users[index2] : ratings.Items[index2];
 
-						double rating1 = ratings[index1];
-						double rating2 = ratings[index2];
+						float rating1 = (float) ratings[index1];
+						float rating2 = (float) ratings[index2];
 
 						// update sums
 						freqs[x, y]   += 1;
-						i_sums[x, y]  += (float) rating1;
-						j_sums[x, y]  += (float) rating2;
-						ij_sums[x, y] += (float) rating1 * (float) rating2;
-						ii_sums[x, y] += (float) rating1 * (float) rating1;
-						jj_sums[x, y] += (float) rating2 * (float) rating2;
+						i_sums[x, y]  += rating1;
+						j_sums[x, y]  += rating2;
+						ij_sums[x, y] += rating1 * rating2;
+						ii_sums[x, y] += rating1 * rating1;
+						jj_sums[x, y] += rating2 * rating2;
 					}
 				}
 
