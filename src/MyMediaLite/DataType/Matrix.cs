@@ -142,7 +142,7 @@ namespace MyMediaLite.DataType
 		///
 		public virtual T this [int i, int j]
 		{
-			get	{
+			get {
 #if DEBUG
 				if (i >= this.dim1)
 					throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + this.dim1);
@@ -151,7 +151,7 @@ namespace MyMediaLite.DataType
 #endif
 				return data[i * dim2 + j];
 			}
-			set	{
+			set {
 #if DEBUG
 				if (i >= this.dim1)
 					throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + this.dim1);
@@ -189,8 +189,9 @@ namespace MyMediaLite.DataType
 		public void SetRow(int i, IList<T> row)
 		{
 			if (row.Count != this.dim2)
-				throw new ArgumentOutOfRangeException(string.Format("Array length ({0}) must equal number of columns ({1}",
-														  row.Count, this.dim2));
+				throw new ArgumentOutOfRangeException(
+					string.Format("Array length ({0}) must equal number of columns ({1}",
+					row.Count, this.dim2));
 
 			row.CopyTo(data, i * dim2);
 		}
