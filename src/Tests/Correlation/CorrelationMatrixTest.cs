@@ -47,10 +47,10 @@ namespace Tests.Correlation
 			Assert.AreEqual(1f,   corr_matrix[0, 0]);
 			Assert.AreEqual(1f,   corr_matrix[1, 1]);
 			Assert.AreEqual(1f,   corr_matrix[2, 2]);
-			
+
 			Assert.AreEqual(0.1f, corr_matrix[0, 1]);
-			Assert.AreEqual(0.1f, corr_matrix[1, 0]);			
-			
+			Assert.AreEqual(0.1f, corr_matrix[1, 0]);
+
 			Assert.AreEqual(0.2f, corr_matrix[0, 2]);
 			Assert.AreEqual(0.2f, corr_matrix[2, 0]);
 
@@ -71,26 +71,32 @@ namespace Tests.Correlation
 		{
 			// create a test CorrelationMatrix
 			var matrix = new CorrelationMatrix(3);
-			float[] row1 = { 1f, 0.1f, 0.2f };
-			float[] row2 = { 0.1f, 1f, 0.3f };
-			float[] row3 = { 0.2f, 0.3f, 1f };
 
-			matrix.SetRow(0, row1);
-			matrix.SetRow(1, row2);
-			matrix.SetRow(2, row3);
+			matrix[0, 0] = 1f;
+			matrix[0, 1] = 0.1f;
+			matrix[0, 2] = 0.2f;
+			matrix[1, 0] = 0.1f;
+			matrix[1, 1] = 1f;
+			matrix[1, 2] = 0.3f;
+			matrix[2, 0] = 0.2f;
+			matrix[2, 1] = 0.3f;
+			matrix[2, 2] = 1f;
 
 			// test
 			string filename = "testCorrelationMatrixWriter.txt";
 			var writer = new StreamWriter(filename);
 			matrix.Write(writer);
 			writer.Close();
-
+			
+			// check file format
 			var reader1 = new StreamReader(filename);
 			Assert.AreEqual("3",       reader1.ReadLine().Trim());
 			Assert.AreEqual("0 1 0.1", reader1.ReadLine().Trim());
 			Assert.AreEqual("0 2 0.2", reader1.ReadLine().Trim());
 			Assert.AreEqual("1 2 0.3", reader1.ReadLine().Trim());
-
+			reader1.Close();
+			
+			// check result of reading in the file
 			var reader2 = new StreamReader(filename);
 			var corr_matrix = CorrelationMatrix.ReadCorrelationMatrix(reader2);
 
@@ -103,75 +109,73 @@ namespace Tests.Correlation
 			Assert.AreEqual(0.2f, corr_matrix[2, 0]);
 			Assert.AreEqual(0.3f, corr_matrix[2, 1]);
 			Assert.AreEqual(1f,   corr_matrix[2, 2]);
-			// close streams and delete the text file
-			reader1.Close();
 			reader2.Close();
-			//File.Delete(filename);
+			
+			// clean up
+			File.Delete(filename);
 		}
 
 		[Test()]
 		public void TestAddEntity()
 		{
 			// create a test CorrelationMatrix
-			var matrix = new CorrelationMatrix(4);
-			float[] row1 = { 0.1f, 0.4f, 0.2f, 0.3f };
-			float[] row2 = { 0.3f, 0.1f, 0.6f, 0.7f };
-			float[] row3 = { 0.2f, 0.6f, 0.3f, 0.5f };
-			float[] row4 = { 0.4f, 0.2f, 0.5f, 0.1f };
+			var matrix = new CorrelationMatrix(3);
 
-			matrix.SetRow(0, row1);
-			matrix.SetRow(1, row2);
-			matrix.SetRow(2, row3);
-			matrix.SetRow(3, row4);
+			matrix[0, 0] = 1f;
+			matrix[0, 2] = 0.2f;
+			matrix[1, 1] = 1f;
+			matrix[1, 2] = 0.3f;
+			matrix[2, 1] = 0.3f;
+			matrix[2, 2] = 1f;
 
 			// test
-			matrix.AddEntity(4);
-			Assert.AreEqual(5, matrix.dim1);
+			Assert.AreEqual(3, matrix.NumberOfRows);
+			matrix.AddEntity(3);
+			Assert.AreEqual(4, matrix.NumberOfRows);
 		}
 
 		[Test()]
 		public void TestSumUp()
 		{
 			// create a test CorrelationMatrix
-			var matrix = new CorrelationMatrix(4);
-			float[] row1 = { 0.1f, 0.4f, 0.2f, 0.3f };
-			float[] row2 = { 0.3f, 0.1f, 0.6f, 0.7f };
-			float[] row3 = { 0.2f, 0.6f, 0.3f, 0.5f };
-			float[] row4 = { 0.4f, 0.2f, 0.5f, 0.1f };
-
-			matrix.SetRow(0, row1);
-			matrix.SetRow(1, row2);
-			matrix.SetRow(2, row3);
-			matrix.SetRow(3, row4);
+			var matrix = new CorrelationMatrix(3);
+			matrix[0, 0] = 1f;
+			matrix[0, 1] = 0.1f;
+			matrix[0, 2] = 0.2f;
+			matrix[1, 0] = 0.1f;
+			matrix[1, 1] = 1f;
+			matrix[1, 2] = 0.3f;
+			matrix[2, 0] = 0.2f;
+			matrix[2, 1] = 0.3f;
+			matrix[2, 2] = 1f;
 
 			// test
-			matrix.AddEntity(4);
-			Assert.AreEqual(5, matrix.dim1);
+			Assert.AreEqual(0.3f, matrix.SumUp(0, new int[] {1, 2}), 0.00001);
 		}
 
 		[Test()]
 		public void TestGetPositivelyCorrelatedEntities()
 		{
 			// create a test CorrelationMatrix
-			var matrix = new CorrelationMatrix(4);
-			float[] row1 = { 0.1f, 0.4f, 0.2f, 0.3f };
-			float[] row2 = { 0.3f, 0.1f, 0.6f, 0.7f };
-			float[] row3 = { 0.2f, 0.6f, 0.3f, 0.5f };
-			float[] row4 = { 0.4f, 0.2f, 0.5f, 0.1f };
+			var matrix = new CorrelationMatrix(3);
+			matrix[0, 0] = 1f;
+			matrix[0, 1] = 0.1f;
+			matrix[0, 2] = -0.2f;
+			matrix[1, 0] = 0.1f;
+			matrix[1, 1] = 1f;
+			matrix[1, 2] = 0.3f;
+			matrix[2, 0] = -0.2f;
+			matrix[2, 1] = 0.3f;
+			matrix[2, 2] = 1f;
 
-			matrix.SetRow(0, row1);
-			matrix.SetRow(1, row2);
-			matrix.SetRow(2, row3);
-			matrix.SetRow(3, row4);
-
-			Assert.AreEqual(0.1f, matrix[0, 0]);
-			Assert.AreEqual(0.5f, matrix[3, 2]);
+			Assert.AreEqual(1f, matrix[0, 0]);
+			Assert.AreEqual(0.3f, matrix[1, 2]);
 
 			// test
 			IList<int> cor_entities_list = matrix.GetPositivelyCorrelatedEntities(2);
-			int[] cor_entities = new int[5];
+			int[] cor_entities = new int[1];
 			cor_entities_list.CopyTo(cor_entities, 0);
-			int[] pos_cor_entities = { 1, 3, 0, 0, 0 };
+			int[] pos_cor_entities = { 1 };
 			Assert.AreEqual(pos_cor_entities, cor_entities);
 		}
 
@@ -179,20 +183,20 @@ namespace Tests.Correlation
 		public void TestGetNearestNeighbors()
 		{
 			// create a test CorrelationMatrix
-			var matrix = new CorrelationMatrix(4);
-			float[] row1 = { 0.1f, 0.4f, 0.2f, 0.3f };
-			float[] row2 = { 0.3f, 0.1f, 0.6f, 0.7f };
-			float[] row3 = { 0.2f, 0.6f, 0.3f, 0.5f };
-			float[] row4 = { 0.4f, 0.2f, 0.5f, 0.1f };
-
-			matrix.SetRow(0, row1);
-			matrix.SetRow(1, row2);
-			matrix.SetRow(2, row3);
-			matrix.SetRow(3, row4);
+			var matrix = new CorrelationMatrix(3);
+			matrix[0, 0] = 1f;
+			matrix[0, 1] = 0.1f;
+			matrix[0, 2] = 0.2f;
+			matrix[1, 0] = 0.1f;
+			matrix[1, 1] = 1f;
+			matrix[1, 2] = 0.3f;
+			matrix[2, 0] = 0.2f;
+			matrix[2, 1] = 0.3f;
+			matrix[2, 2] = 1f;
 
 			// test
 			int[] nn_test = matrix.GetNearestNeighbors(2, 2);
-			int[] nn_sol = { 1, 3 };
+			int[] nn_sol = { 1, 0 };
 			Assert.AreEqual(nn_sol, nn_test);
 		}
 	}
