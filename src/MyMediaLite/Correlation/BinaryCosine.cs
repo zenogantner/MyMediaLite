@@ -59,7 +59,7 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose();
 
-			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
+			var overlap = new Matrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
@@ -86,15 +86,13 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
+			Console.Error.WriteLine("{0}", overlap.NumberOfRows);
+			Console.Error.WriteLine("{0}", this.NumberOfRows);
+
 			// compute cosine
-			foreach (var index_pair in overlap.NonEmptyEntryIDs)
-			{
-				int x = index_pair.First;
-				int y = index_pair.Second;
-
-				this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
-			}
-
+			for (int x = 0; x < num_entities; x++)
+				for (int y = x + 1; y < num_entities; y++)
+					this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
 		}
 
 		/// <summary>Computes the cosine similarity of two binary vectors</summary>
