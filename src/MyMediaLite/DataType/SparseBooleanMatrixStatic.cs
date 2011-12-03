@@ -40,13 +40,13 @@ namespace MyMediaLite.DataType
 		///
 		public bool this [int x, int y]
 		{
-			get	{
+			get {
 				if (x < row_list.Count)
 					return Array.BinarySearch(row_list[x], y) >= 0;
 				else
 					return false;
 			}
-			set	{
+			set {
 				throw new NotSupportedException();
 			}
 		}
@@ -54,7 +54,7 @@ namespace MyMediaLite.DataType
 		///
 		public ICollection<int> this [int x]
 		{
-			get	{
+			get {
 				if (x >= row_list.Count)
 					return new int[0];
 				return row_list[x];
@@ -70,7 +70,7 @@ namespace MyMediaLite.DataType
 		///
 		public virtual bool IsSymmetric
 		{
-			get	{
+			get {
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
 						if (!this[j, i])
@@ -96,7 +96,7 @@ namespace MyMediaLite.DataType
 		{
 			return row_list[row_id].Length;
 		}
-		
+
 		///
 		/// <remarks>Takes O(N log(M)) worst-case time, where N is the number of rows and M is the number of columns.</remarks>
 		public IList<int> GetEntriesByColumn(int column_id)
@@ -124,7 +124,7 @@ namespace MyMediaLite.DataType
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		public IList<KeyValuePair<int, IList<int>>> NonEmptyRows
 		{
-			get	{
+			get {
 				var return_list = new List<KeyValuePair<int, IList<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 				{
@@ -138,7 +138,7 @@ namespace MyMediaLite.DataType
 		///
 		public IList<int> NonEmptyRowIDs
 		{
-			get	{
+			get {
 				var row_ids = new List<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
@@ -152,7 +152,7 @@ namespace MyMediaLite.DataType
 		///
 		public IList<int> NonEmptyColumnIDs
 		{
-			get	{
+			get {
 				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
@@ -171,7 +171,7 @@ namespace MyMediaLite.DataType
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>
 		public int NumberOfColumns {
-			get	{
+			get {
 				int max_column_id = -1;
 				foreach (var row in row_list)
 					if (row.Length > 0)
@@ -185,12 +185,18 @@ namespace MyMediaLite.DataType
 		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
-			get	{
+			get {
 				int n = 0;
 				foreach (var row in row_list)
 					n += row.Length;
 				return n;
 			}
+		}
+
+		///
+		public void Grow(int num_rows, int num_cols)
+		{
+			throw new NotSupportedException();
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>

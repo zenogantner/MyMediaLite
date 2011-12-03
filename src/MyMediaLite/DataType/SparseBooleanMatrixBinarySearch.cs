@@ -197,7 +197,7 @@ namespace MyMediaLite.DataType
 			// if necessary, grow rows
 			if (num_rows > NumberOfRows)
 				for (int i = row_list.Count; i < num_rows; i++)
-					row_list.Add( new HashSet<int>() );
+					row_list.Add( new List<int>() );
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
