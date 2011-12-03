@@ -9,9 +9,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ItemRecommendation</RootNamespace>
     <AssemblyName>item_recommendation</AssemblyName>
-    <ReleaseVersion>2.02</ReleaseVersion>
+    <ReleaseVersion>2.03</ReleaseVersion>
     <StartupObject>ItemRecommendation</StartupObject>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
