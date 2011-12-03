@@ -57,9 +57,49 @@ namespace MyMediaLite.Correlation
 		///
 		public override void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
+			// if possible, save some memory
+			if (entity_data.NumberOfColumns > ushort.MaxValue)
+				ComputeCorrelationsUIntOverlap(entity_data);
+			else
+				ComputeCorrelationsUShortOverlap(entity_data);
+		}
+
+		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)
+		{
 			var transpose = entity_data.Transpose();
 
-			var overlap = new SymmetricMatrix<int>(entity_data.NumberOfRows);
+			var overlap = new SymmetricMatrix<uint>(entity_data.NumberOfRows);
+
+			// go over all (other) entities
+			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
+			{
+				var row = ((IBooleanMatrix) transpose).GetEntriesByRow(row_id);
+				for (int i = 0; i < row.Count; i++)
+				{
+					int x = row[i];
+					for (int j = i + 1; j < row.Count; j++)
+					{
+						int y = row[j];
+						overlap[x, y]++;
+					}
+				}
+			}
+
+			// the diagonal of the correlation matrix
+			for (int i = 0; i < num_entities; i++)
+				this[i, i] = 1;
+
+			// compute cosine
+			for (int x = 0; x < num_entities; x++)
+				for (int y = 0; y < x; y++)
+					this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
+		}
+
+		void ComputeCorrelationsUShortOverlap(IBooleanMatrix entity_data)
+		{
+			var transpose = entity_data.Transpose();
+
+			var overlap = new SymmetricMatrix<ushort>(entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
