@@ -30,47 +30,17 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
-	public class CorrelationMatrix : Matrix<float>
+	public class CorrelationMatrix : SymmetricMatrix<float>
 	{
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
-		
-		/*
-		///
-		public override float this [int i, int j]
-		{
-			get { return data[i * dim2 + j]; }
-			set {
-				data[i * dim2 + j] = value;
-				data[j * dim2 + i] = value;
-			}
-		}
-		*/
 
-		///
-		public override float this [int i, int j]
-		{
-			get {
-				if (i < j)
-					return base[i, j];
-				if (j < i)
-					return base[j, i];
-				return 1f;
-			}
-			set {
-				if (i < j)
-					base[i, j] = value;
-				if (j < i)
-					base[j, i] = value;
-			}
-		}
-		
 		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
 		/// <param name="num_entities">number of entities</param>
-		public CorrelationMatrix(int num_entities) : base(num_entities, num_entities)
+		public CorrelationMatrix(int num_entities) : base(num_entities)
 		{
 			this.num_entities = num_entities;
 		}
