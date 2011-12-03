@@ -9,7 +9,7 @@ train_data = IO.ItemData.Read("u1.base")
 test_data = IO.ItemData.Read("u1.test")
 
 # set up the recommender
-recommender = ItemRecommendation.UserKNN()
+recommender = ItemRecommendation.UserKNN() # don't forget ()
 recommender.K = 20
 recommender.Feedback = train_data
 recommender.Train()

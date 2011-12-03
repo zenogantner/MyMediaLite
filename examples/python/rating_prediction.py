@@ -9,7 +9,7 @@ train_data = IO.RatingData.Read("u1.base")
 test_data  = IO.RatingData.Read("u1.test")
 
 # set up the recommender
-recommender = RatingPrediction.UserItemBaseline()
+recommender = RatingPrediction.UserItemBaseline() # don't forget ()
 recommender.Ratings = train_data
 recommender.Train()
 

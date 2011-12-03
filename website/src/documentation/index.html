@@ -148,6 +148,26 @@
   If you use the <a href="rating_prediction.html">rating prediction command-line tool</a>,
   you may use the <tt>--rating-type=byte|float|double</tt> argument.
   </p>
+
+  <h3>When working with large datasets, Mono complains that there is not enough heap space. What can I do about this?</h3>
+  <p>
+  Compile Mono with the configure option <code>--with-large-heap=yes</code>.
+  </p>
+
+  <h3>What to do with <code>AttributeError</code>s in IronPython?</h3>
+  <p>
+  <code>AttributeError: static property 'Ratings' of 'RatingPredictor' can only be assigned to through a type, not an instance</code>
+  </p>
+  <p>
+  You get this error for example when you try to create a recommender like this:
+  <pre>
+     recommender = RatingPrediction.MatrixFactorization
+  </pre>
+  You can fix this by adding <code>()</code> after the type name:
+  <pre>
+     recommender = RatingPrediction.MatrixFactorization()
+  </pre>
+  </p>
 </div>
 
 [% INCLUDE footer %]
