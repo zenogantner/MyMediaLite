@@ -34,10 +34,7 @@ namespace MyMediaLite.DataType
 		public int dim;
 
 		///
-		public virtual bool IsSymmetric
-		{
-			get { return true; }
-		}
+		public virtual bool IsSymmetric { get { return true; } }
 
 		///
 		public int NumberOfRows { get { return dim; } }
@@ -55,7 +52,7 @@ namespace MyMediaLite.DataType
 			this.dim = dim;
 			this.data = new T[dim][];
 			for (int i = 0; i < dim; i++)
-				data[i] = new T[dim - i];
+				data[i] = new T[i + 1];
 		}
 
 		///
@@ -76,13 +73,13 @@ namespace MyMediaLite.DataType
 		public virtual T this [int i, int j]
 		{
 			get {
-				if (i <= j)
+				if (i >= j)
 					return data[i][j];
 				else
 					return data[j][i];
 			}
 			set {
-				if (i <= j)
+				if (i >= j)
 					data[i][j] = value;
 				else
 					data[j][i] = value;
@@ -100,10 +97,10 @@ namespace MyMediaLite.DataType
 				// create new data structure
 				var new_data = new T[num_rows][];
 				for (int i = 0; i < num_rows; i++)
-					new_data[i] = new T[num_rows - i];
+					new_data[i] = new T[i + 1];
 
 				for (int i = 0; i < dim; i++)
-					for (int j = i; j < dim; j++)
+					for (int j = 0; j <= i; j++)
 						new_data[i][j] = this[i, j];
 
 				// replace old data structure
