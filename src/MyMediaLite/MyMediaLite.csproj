@@ -190,6 +190,7 @@
     <Compile Include="DataType\Pair.cs" />
     <Compile Include="DataType\Triple.cs" />
     <Compile Include="Data\Extensions.cs" />
+    <Compile Include="DataType\SymmetricMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

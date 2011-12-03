@@ -73,6 +73,7 @@
     <Compile Include="IO\ItemDataTest.cs" />
     <Compile Include="IO\ItemDataRatingThresholdTest.cs" />
     <Compile Include="IO\MovieLensRatingDataTest.cs" />
+    <Compile Include="DataType\SymmetricMatrixTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
