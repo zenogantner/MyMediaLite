@@ -8,6 +8,8 @@
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing BinaryCosine and Jaccard, to avoid
            the overhead of sparse matrices
+	 - use SymmetricMatrix as base class of CorrelationMatrix, saving some
+           memory
 	data types
          - add data type SymmetricMatrix
         misc
