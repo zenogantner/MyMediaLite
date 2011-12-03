@@ -140,12 +140,12 @@ namespace MyMediaLite.Correlation
 
 			IList<IList<int>> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
 
-			var freqs   = new SparseMatrix<int>(num_entities, num_entities);
-			var i_sums  = new SparseMatrix<double>(num_entities, num_entities);
-			var j_sums  = new SparseMatrix<double>(num_entities, num_entities);
-			var ij_sums = new SparseMatrix<double>(num_entities, num_entities);
-			var ii_sums = new SparseMatrix<double>(num_entities, num_entities);
-			var jj_sums = new SparseMatrix<double>(num_entities, num_entities);
+			var freqs   = new SymmetricMatrix<int>(num_entities);
+			var i_sums  = new SymmetricMatrix<float>(num_entities);
+			var j_sums  = new SymmetricMatrix<float>(num_entities);
+			var ij_sums = new SymmetricMatrix<float>(num_entities);
+			var ii_sums = new SymmetricMatrix<float>(num_entities);
+			var jj_sums = new SymmetricMatrix<float>(num_entities);
 
 			foreach (IList<int> other_entity_ratings in ratings_by_other_entity)
 				for (int i = 0; i < other_entity_ratings.Count; i++)
@@ -154,7 +154,7 @@ namespace MyMediaLite.Correlation
 					int x = (entity_type == EntityType.USER) ? ratings.Users[index1] : ratings.Items[index1];
 
 					// update pairwise scalar product and frequency
-	        		for (int j = i + 1; j < other_entity_ratings.Count; j++)
+					for (int j = i + 1; j < other_entity_ratings.Count; j++)
 					{
 						var index2 = other_entity_ratings[j];
 						int y = (entity_type == EntityType.USER) ? ratings.Users[index2] : ratings.Items[index2];
@@ -163,56 +163,42 @@ namespace MyMediaLite.Correlation
 						double rating2 = ratings[index2];
 
 						// update sums
-						if (x < y)
-						{
-							freqs[x, y]   += 1;
-							i_sums[x, y]  += rating1;
-							j_sums[x, y]  += rating2;
-							ij_sums[x, y] += rating1 * rating2;
-							ii_sums[x, y] += rating1 * rating1;
-							jj_sums[x, y] += rating2 * rating2;
-						}
-						else
-						{
-							freqs[y, x]   += 1;
-							i_sums[y, x]  += rating1;
-							j_sums[y, x]  += rating2;
-							ij_sums[y, x] += rating1 * rating2;
-							ii_sums[y, x] += rating1 * rating1;
-							jj_sums[y, x] += rating2 * rating2;
-						}
-	        		}
+						freqs[x, y]   += 1;
+						i_sums[x, y]  += (float) rating1;
+						j_sums[x, y]  += (float) rating2;
+						ij_sums[x, y] += (float) rating1 * (float) rating2;
+						ii_sums[x, y] += (float) rating1 * (float) rating1;
+						jj_sums[x, y] += (float) rating2 * (float) rating2;
+					}
 				}
 
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// fill the entries with interactions
-			foreach (var index_pair in freqs.NonEmptyEntryIDs)
-			{
-				int i = index_pair.First;
-				int j = index_pair.Second;
-				int n = freqs[i, j];
-
-				if (n < 2)
+			for (int i = 0; i < num_entities; i++)
+				for (int j = i + 1; j < num_entities; j++)
 				{
-					this[i, j] = 0;
-					continue;
+					int n = freqs[i, j];
+
+					if (n < 2)
+					{
+						this[i, j] = 0;
+						continue;
+					}
+
+					double numerator = ij_sums[i, j] * n - i_sums[i, j] * j_sums[i, j];
+
+					double denominator = Math.Sqrt( (n * ii_sums[i, j] - i_sums[i, j] * i_sums[i, j]) * (n * jj_sums[i, j] - j_sums[i, j] * j_sums[i, j]) );
+					if (denominator == 0)
+					{
+						this[i, j] = 0;
+						continue;
+					}
+
+					double pmcc = numerator / denominator;
+					this[i, j] = (float) (pmcc * (n / (n + shrinkage)));
 				}
-
-				double numerator = ij_sums[i, j] * n - i_sums[i, j] * j_sums[i, j];
-
-				double denominator = Math.Sqrt( (n * ii_sums[i, j] - i_sums[i, j] * i_sums[i, j]) * (n * jj_sums[i, j] - j_sums[i, j] * j_sums[i, j]) );
-				if (denominator == 0)
-				{
-					this[i, j] = 0;
-					continue;
-				}
-
-				double pmcc = numerator / denominator;
-				this[i, j] = (float) (pmcc * (n / (n + shrinkage)));
-			}
 		}
 	}
 }

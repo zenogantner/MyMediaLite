@@ -6,8 +6,8 @@
 	   --compute-fit
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
-         - use dense matrices for computing BinaryCosine and Jaccard, to avoid
-           the overhead of sparse matrices
+         - use dense matrices for computing Pearson, BinaryCosine and Jaccard,
+           to avoid the overhead of our sparse matrices
 	 - use SymmetricMatrix as base class of CorrelationMatrix, saving some
            memory
          - make BinaryDataCorrelationMatrix and RatingCorrelationMatrix
