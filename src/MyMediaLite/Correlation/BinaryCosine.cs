@@ -59,25 +59,19 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose();
 
-			var overlap = new Matrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
+			var overlap = new SymmetricMatrix<int>(entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
 			{
 				var row = ((IBooleanMatrix) transpose).GetEntriesByRow(row_id);
-
 				for (int i = 0; i < row.Count; i++)
 				{
 					int x = row[i];
-
 					for (int j = i + 1; j < row.Count; j++)
 					{
 						int y = row[j];
-
-						if (x < y)
-							overlap[x, y]++;
-						else
-							overlap[y, x]++;
+						overlap[x, y]++;
 					}
 				}
 			}
@@ -88,7 +82,7 @@ namespace MyMediaLite.Correlation
 
 			// compute cosine
 			for (int x = 0; x < num_entities; x++)
-				for (int y = x + 1; y < num_entities; y++)
+				for (int y = 0; y < x; y++)
 					this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
 		}
 
