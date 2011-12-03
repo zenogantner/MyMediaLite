@@ -37,7 +37,8 @@ namespace MyMediaLite.Correlation
 
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
-
+		
+		/*
 		///
 		public override float this [int i, int j]
 		{
@@ -47,7 +48,26 @@ namespace MyMediaLite.Correlation
 				data[j * dim2 + i] = value;
 			}
 		}
+		*/
 
+		///
+		public override float this [int i, int j]
+		{
+			get {
+				if (i < j)
+					return base[i, j];
+				if (j < i)
+					return base[j, i];
+				return 1f;
+			}
+			set {
+				if (i < j)
+					base[i, j] = value;
+				if (j < i)
+					base[j, i] = value;
+			}
+		}
+		
 		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
 		/// <param name="num_entities">number of entities</param>
 		public CorrelationMatrix(int num_entities) : base(num_entities, num_entities)
@@ -103,9 +123,9 @@ namespace MyMediaLite.Correlation
 				float c = float.Parse(numbers[2], CultureInfo.InvariantCulture);
 
 				if (i >= num_entities)
-					throw new IOException("Entity ID is too big: i = " + i);
+					throw new IOException("Row index is too big: i = " + i);
 				if (j >= num_entities)
-					throw new IOException("Entity ID is too big: j = " + j);
+					throw new IOException("Column index is too big: j = " + j);
 
 				cm[i, j] = c;
 			}
@@ -149,9 +169,9 @@ namespace MyMediaLite.Correlation
 				throw new ArgumentException("Invalid entity ID: " + entity_id);
 
 			double result = 0;
-            foreach (int entity_id2 in entities)
+			foreach (int entity_id2 in entities)
 				if (entity_id2 >= 0 && entity_id2 < num_entities)
-                	result += this[entity_id, entity_id2];
+					result += this[entity_id, entity_id2];
 			return result;
 		}
 
