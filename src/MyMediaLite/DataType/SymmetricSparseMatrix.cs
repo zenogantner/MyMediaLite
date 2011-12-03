@@ -33,7 +33,7 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public override T this [int x, int y]
 		{
-			get	{
+			get {
 				// ensure x <= y
 				if (x > y)
 				{
