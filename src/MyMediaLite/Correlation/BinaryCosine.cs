@@ -86,9 +86,6 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			Console.Error.WriteLine("{0}", overlap.NumberOfRows);
-			Console.Error.WriteLine("{0}", this.NumberOfRows);
-
 			// compute cosine
 			for (int x = 0; x < num_entities; x++)
 				for (int y = x + 1; y < num_entities; y++)

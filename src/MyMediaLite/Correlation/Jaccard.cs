@@ -61,7 +61,7 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
-			var overlap = new SparseMatrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
+			var overlap = new Matrix<int>(entity_data.NumberOfRows, entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
@@ -89,14 +89,9 @@ namespace MyMediaLite.Correlation
 				this[i, i] = 1;
 
 			// compute Jaccard index
-			foreach (var index_pair in overlap.NonEmptyEntryIDs)
-			{
-				int x = index_pair.First;
-				int y = index_pair.Second;
-
-				this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
-			}
-
+			for (int x = 0; x < num_entities; x++)
+				for (int y = x + 1; y < num_entities; y++)
+					this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
 		}
 
 		/// <summary>Computes the Jaccard index of two binary vectors</summary>
