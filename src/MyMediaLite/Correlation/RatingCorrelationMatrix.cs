@@ -22,7 +22,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>CorrelationMatrix that computes correlations over rating data</summary>
-	public class RatingCorrelationMatrix : CorrelationMatrix
+	public abstract class RatingCorrelationMatrix : CorrelationMatrix
 	{
 		/// <summary>Constructor</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -31,10 +31,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute the correlations for a given entity type from a rating dataset</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
-		public virtual void ComputeCorrelations(IRatings ratings, EntityType entity_type)
-		{
-			throw new NotSupportedException();
-		}
+		abstract public void ComputeCorrelations(IRatings ratings, EntityType entity_type);
 	}
 }
 

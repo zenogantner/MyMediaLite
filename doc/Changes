@@ -10,7 +10,8 @@
            the overhead of sparse matrices
 	 - use SymmetricMatrix as base class of CorrelationMatrix, saving some
            memory
-         - make BinaryDataCorrelationMatrix abstract
+         - make BinaryDataCorrelationMatrix and RatingCorrelationMatrix
+	   abstract
 	data types
          - add data type SymmetricMatrix
         misc
