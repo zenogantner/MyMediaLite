@@ -59,7 +59,7 @@ namespace Tests.Correlation
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
 			// test
-			var cosine = new BinaryCosine(5);
+			var cosine = new BinaryCosine(4);
 			cosine.ComputeCorrelations(sparse_boolean_matrix);
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[0, 1], 4));
 			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[1, 0], 4));
