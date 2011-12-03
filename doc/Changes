@@ -1,4 +1,6 @@
 2.03	2011-12-??
+	API
+         - add method Grow(x, y) to IMatrix interface
 	command-line programs
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit

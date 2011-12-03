@@ -156,7 +156,7 @@ namespace MyMediaLite.DataType
 		/// <remarks>iterates over the complete data structure</remarks>
 		public IList<int> NonEmptyColumnIDs
 		{
-			get	{
+			get {
 				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
@@ -175,7 +175,7 @@ namespace MyMediaLite.DataType
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>
 		public int NumberOfColumns {
-			get	{
+			get {
 				int max_column_id = -1;
 				foreach (var row in row_list)
 					if (row.Count > 0)
@@ -188,12 +188,21 @@ namespace MyMediaLite.DataType
 		///
 		public int NumberOfEntries
 		{
-			get	{
+			get {
 				int n = 0;
 				foreach (var row in row_list)
 					n += row.Count;
 				return n;
 			}
+		}
+
+		///
+		public void Grow(int num_rows, int num_cols)
+		{
+			// if necessary, grow rows
+			if (num_rows > NumberOfRows)
+				for (int i = row_list.Count; i < num_rows; i++)
+					row_list.Add( new HashSet<int>() );
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>

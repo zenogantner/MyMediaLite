@@ -50,6 +50,14 @@ namespace MyMediaLite.DataType
 		/// <param name="num_columns">the number of columns</param>
 		/// <returns>A matrix with num_rows rows and num_column columns</returns>
 		IMatrix<T> CreateMatrix(int num_rows, int num_columns);
+
+		/// <summary>Grows the matrix to the requested size, if necessary</summary>
+		/// <remarks>
+		/// The new entries are filled with zeros.
+		/// </remarks>
+		/// <param name="num_rows">the minimum number of rows</param>
+		/// <param name="num_cols">the minimum number of columns</param>
+		void Grow(int num_rows, int num_cols);
 	}
 }
 

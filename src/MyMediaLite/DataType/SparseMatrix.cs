@@ -58,31 +58,6 @@ namespace MyMediaLite.DataType
 		///
 		public int NumberOfColumns { get; private set; }
 
-		/// <summary>Create a sparse matrix with a given number of rows</summary>
-		/// <param name="num_rows">the number of rows</param>
-		/// <param name="num_cols">the number of columns</param>
-		public SparseMatrix(int num_rows, int num_cols)
-		{
-			for (int i = 0; i < num_rows; i++)
-				row_list.Add( new Dictionary<int, T>() );
-			NumberOfColumns = num_cols;
-		}
-
-		///
-		public virtual IMatrix<T> CreateMatrix(int num_rows, int num_columns)
-		{
-			return new SparseMatrix<T>(num_rows, num_columns);
-		}
-
-		///
-		public virtual IMatrix<T> Transpose()
-		{
-			var transpose = new SparseMatrix<T>(NumberOfColumns, NumberOfRows);
-			foreach (Pair<int, int> p in NonEmptyEntryIDs)
-				transpose[p.Second, p.First] = this[p.First, p.Second];
-			return transpose;
-		}
-		
 		/// <summary>Get a row of the matrix</summary>
 		/// <param name="x">the row ID</param>
 		public Dictionary<int, T> this [int x]
@@ -100,7 +75,7 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public virtual T this [int x, int y]
 		{
-			get	{
+			get {
 				T result;
 				if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
 					return result;
@@ -122,7 +97,7 @@ namespace MyMediaLite.DataType
 		/// </summary>
 		public IList<KeyValuePair<int, Dictionary<int, T>>> NonEmptyRows
 		{
-			get	{
+			get {
 				var return_list = new List<KeyValuePair<int, Dictionary<int, T>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
@@ -135,7 +110,7 @@ namespace MyMediaLite.DataType
 		/// <value>The row and column IDs of non-empty entries in the matrix</value>
 		public virtual IList<Pair<int, int>> NonEmptyEntryIDs
 		{
-			get	{
+			get {
 				var return_list = new List<Pair<int, int>>();
 				foreach (var id_row in this.NonEmptyRows)
 					foreach (var col_id in id_row.Value.Keys)
@@ -148,12 +123,50 @@ namespace MyMediaLite.DataType
 		/// <value>The number of non-empty entries in the matrix</value>
 		public virtual int NumberOfNonEmptyEntries
 		{
-			get	{
+			get {
 				int counter = 0;
 				foreach (var row in row_list)
 					counter += row.Count;
 				return counter;
 			}
+		}
+
+		/// <summary>Create a sparse matrix with a given number of rows</summary>
+		/// <param name="num_rows">the number of rows</param>
+		/// <param name="num_cols">the number of columns</param>
+		public SparseMatrix(int num_rows, int num_cols)
+		{
+			for (int i = 0; i < num_rows; i++)
+				row_list.Add( new Dictionary<int, T>() );
+			NumberOfColumns = num_cols;
+		}
+
+		///
+		public virtual IMatrix<T> CreateMatrix(int num_rows, int num_columns)
+		{
+			return new SparseMatrix<T>(num_rows, num_columns);
+		}
+
+		///
+		public void Grow(int num_rows, int num_cols)
+		{
+			// if necessary, grow rows
+			if (num_rows > NumberOfRows)
+				for (int i = row_list.Count; i < num_rows; i++)
+					row_list.Add( new Dictionary<int, T>() );
+
+			// if necessary, grow columns
+			if (num_cols > NumberOfColumns)
+				NumberOfColumns = num_cols;
+		}
+
+		///
+		public virtual IMatrix<T> Transpose()
+		{
+			var transpose = new SparseMatrix<T>(NumberOfColumns, NumberOfRows);
+			foreach (Pair<int, int> p in NonEmptyEntryIDs)
+				transpose[p.Second, p.First] = this[p.First, p.Second];
+			return transpose;
 		}
 	}
 }

@@ -236,12 +236,7 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		/// <summary>Grows the matrix to the requested size, if necessary</summary>
-		/// <remarks>
-		/// The new entries are filled with zeros.
-		/// </remarks>
-		/// <param name="num_rows">the minimum number of rows</param>
-		/// <param name="num_cols">the minimum number of columns</param>
+		///
 		public void Grow(int num_rows, int num_cols)
 		{
 			if (num_rows > dim1 || num_cols > dim2)

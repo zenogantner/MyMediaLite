@@ -35,7 +35,7 @@ namespace MyMediaLite.DataType
 		///
 		public bool this [int x, int y]
 		{
-			get	{
+			get {
 				if (x < row_list.Count)
 					return row_list[x].BinarySearch(y) >= 0;
 				else
@@ -56,7 +56,7 @@ namespace MyMediaLite.DataType
 		///
 		public ICollection<int> this [int x]
 		{
-			get	{
+			get {
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
 						row_list.Add(new List<int>());
@@ -67,7 +67,7 @@ namespace MyMediaLite.DataType
 		///
 		public virtual bool IsSymmetric
 		{
-			get	{
+			get {
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
 					{
@@ -189,6 +189,15 @@ namespace MyMediaLite.DataType
 					n += row.Count;
 				return n;
 			}
+		}
+
+		///
+		public void Grow(int num_rows, int num_cols)
+		{
+			// if necessary, grow rows
+			if (num_rows > NumberOfRows)
+				for (int i = row_list.Count; i < num_rows; i++)
+					row_list.Add( new HashSet<int>() );
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
