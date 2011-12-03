@@ -2,6 +2,8 @@
 	command-line programs
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
+        correlations
+         - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
         misc
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT

@@ -78,7 +78,7 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				CorrelationMatrix correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
-				this.correlation = new BinaryCosine(correlation);
+				this.correlation = correlation;
 			}
 		}
 	}

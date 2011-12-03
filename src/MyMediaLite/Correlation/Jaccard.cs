@@ -36,13 +36,6 @@ namespace MyMediaLite.Correlation
 		/// <param name="num_entities">the number of entities</param>
 		public Jaccard(int num_entities) : base(num_entities) { }
 
-		/// <summary>Copy constructor. Creates an object of type Jaccard from an existing correlation matrix</summary>
-		/// <param name ="correlation_matrix">the correlation matrix to copy</param>
-		public Jaccard(CorrelationMatrix correlation_matrix) : base(correlation_matrix.NumberOfRows)
-		{
-			this.data = correlation_matrix.data;
-		}
-
 		/// <summary>Creates a Jaccard index matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
