@@ -21,7 +21,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>CorrelationMatrix that computes correlations over binary data</summary>
-	public class BinaryDataCorrelationMatrix : CorrelationMatrix
+	public abstract class BinaryDataCorrelationMatrix : CorrelationMatrix
 	{
 		/// <summary>Constructor</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -29,10 +29,7 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
-		public virtual void ComputeCorrelations(IBooleanMatrix entity_data)
-		{
-			throw new NotSupportedException();
-		}
+		abstract public void ComputeCorrelations(IBooleanMatrix entity_data);
 	}
 }
 
