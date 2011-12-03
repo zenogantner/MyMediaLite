@@ -6,6 +6,10 @@
 	   --compute-fit
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
+         - use dense matrices for computing BinaryCosine and Jaccard, to avoid
+           the overhead of sparse matrices
+	data types
+         - add data type SymmetricMatrix
         misc
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT
