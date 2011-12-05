@@ -14,6 +14,7 @@
            memory
          - make BinaryDataCorrelationMatrix and RatingCorrelationMatrix
 	   abstract
+         - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
         misc
