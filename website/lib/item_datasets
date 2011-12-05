@@ -1,13 +1,13 @@
 [% netflix_data = [
      { method => 'MostPopular', hp => '' }
-     { method => 'BPRMF', hp => '' }
-     { method => 'WRMF', hp => '' }
+     { method => 'BPRMF',       hp => '' }
+     { method => 'WRMF',        hp => '' }
    ]
    ml100k = [
-     { method => 'MostPopular', hp => '',    AUC => '0.85478', prec5 => '0.322', prec10 => '0.30458', MAP => '0.18939', recall5 => '0.0553', recall10 => '0.09752', NDCG => '0.57069', mrr => '0.39656' }
-     { method => 'ItemKNN',  hp => 'k=1000', AUC => '0.75021' prec@5 => '0.07712' prec@10 => '0.08954' MAP => '0.08397' recall@5 => '0.01026' recall@10 => '0.02122' NDCG => '0.44553' mrr => '0.15064' }
-     { method => 'UserKNN',  hp => '',       AUC => '0.91736', prec5 => '0.52505', prec10 => '0.46776', MAP => '0.32653', recall5 => '0.10712', recall10 => '0.1767', NDCG => '0.68831',  mrr => '0.34072' }
-     { method => 'WRMF', hp => '',           AUC => '0.92635', prec5 => '0.55556', prec10 => '0.49107', MAP => '0.35469', recall5 => '0.10907', recall10 => '0.18402', NDCG => '0.70504', mrr => '0.45752' }
-     { method => 'BPRMF', hp => '',          AUC => '0.9204', prec5 => '0.47451', prec10 => '0.42462', MAP => '0.30543', recall5 => '0.0901', recall10 => '0.1566', NDCG => '0.66693', mrr => '0.44003' }
+     { method => 'MostPopular', hp => '',       AUC => '0.85478', prec5 => '0.322',   prec10 => '0.30458', MAP => '0.18939', recall5 => '0.0553',  recall10 => '0.09752', NDCG => '0.57069', mrr => '0.39656' }
+     { method => 'ItemKNN',     hp => 'k=1000', AUC => '0.75021'  prec5 => '0.07712'  prec10 => '0.08954'  MAP => '0.08397'  recall5 => '0.01026'  recall10 => '0.02122'  NDCG => '0.44553'  mrr => '0.15064' }
+     { method => 'UserKNN',     hp => '',       AUC => '0.91736', prec5 => '0.52505', prec10 => '0.46776', MAP => '0.32653', recall5 => '0.10712', recall10 => '0.1767',  NDCG => '0.68831', mrr => '0.34072' }
+     { method => 'WRMF',        hp => '',       AUC => '0.92635', prec5 => '0.55556', prec10 => '0.49107', MAP => '0.35469', recall5 => '0.10907', recall10 => '0.18402', NDCG => '0.70504', mrr => '0.45752' }
+     { method => 'BPRMF',       hp => '',       AUC => '0.9204',  prec5 => '0.47451', prec10 => '0.42462', MAP => '0.30543', recall5 => '0.0901',  recall10 => '0.1566',  NDCG => '0.66693', mrr => '0.44003' }
    ]
 %]
