@@ -1,6 +1,8 @@
 2.03	2011-12-??
 	API
          - add method Grow(x, y) to IMatrix interface
+	recommenders
+	 - ItemKNNCosine: fix bug in online updates
 	command-line programs
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit

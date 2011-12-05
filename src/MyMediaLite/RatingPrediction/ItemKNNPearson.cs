@@ -43,7 +43,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void RetrainItem(int item_id)
 		{
-			baseline_predictor.RetrainUser(item_id);
+			baseline_predictor.RetrainItem(item_id);
 			if (UpdateItems)
 				for (int i = 0; i <= MaxItemID; i++)
 					correlation[item_id, i] = Pearson.ComputeCorrelation(ratings, EntityType.ITEM, item_id, i, Shrinkage);
