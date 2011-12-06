@@ -28,17 +28,28 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>baseline method for rating prediction</summary>
 	/// <remarks>
-	/// Uses the average rating value, plus a regularized user and item bias
-	/// for prediction.
-	///
-	/// The method is described in section 2.1 of
-	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
-	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
-	///
-	/// One difference is that we support several iterations of alternating optimization,
-	/// instead of just one.
-	///
-	/// This recommender supports incremental updates.
+	///   <para>
+	///     Uses the average rating value, plus a regularized user and item bias
+	///     for prediction.
+	///   </para>
+	///   <para>
+	///     The method is described in section 2.1 of the paper below.
+	///     One difference is that we support several iterations of alternating optimization,
+	///     instead of just one.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
+	///         Transactions on Knowledge Discovery from Data (TKDD), 2009.
+	///         http://public.research.att.com/~volinsky/netflix/factorizedNeighborhood.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
+	///   <para>
+	///     This recommender supports incremental updates.
+	///   </para>
 	/// </remarks>
 	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
