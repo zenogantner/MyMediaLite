@@ -41,15 +41,15 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class MultiCoreMatrixFactorization : BiasedMatrixFactorization
 	{
-		/// <summary>Gets or sets the number of blocks.</summary>
-		/// <value>The number of blocks (for rows and columns of the rating matrix, each)</value>
-		public int NumBlocks { get; set; }
+ 		/// <summary>Gets or sets the number of groups.</summary>
+		/// <value>The number of groups (for rows and columns of the rating matrix, each)</value>
+		public int NumGroups { get; set; }
 		
 		/// <summary>default constructor</summary>
 		public MultiCoreMatrixFactorization()
 		{
 			BoldDriver = true;
-			NumBlocks = 100;
+			NumGroups = 100;
 		}
 
 		IList<int>[,] blocks;
@@ -63,9 +63,9 @@ namespace MyMediaLite.RatingPrediction
 			Utils.Shuffle(user_permutation);
 			Utils.Shuffle(item_permutation);
 
-			blocks = new IList<int>[NumBlocks, NumBlocks];
-			for (int i = 0; i < NumBlocks; i++)
-				for (int j = 0; j < NumBlocks; j++)
+			blocks = new IList<int>[NumGroups, NumGroups];
+			for (int i = 0; i < NumGroups; i++)
+				for (int j = 0; j < NumGroups; j++)
 					blocks[i, j] = new List<int>();
 
 			for (int index = 0; index < ratings.Count; index++)
@@ -73,12 +73,12 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				blocks[user_permutation[u] % NumBlocks, item_permutation[i] % NumBlocks].Add(index);
+				blocks[user_permutation[u] % NumGroups, item_permutation[i] % NumGroups].Add(index);
 			}
 
 			// randomize index sequences inside the blocks
-			for (int i = 0; i < NumBlocks; i++)
-				for (int j = 0; j < NumBlocks; j++)
+			for (int i = 0; i < NumGroups; i++)
+				for (int j = 0; j < NumGroups; j++)
 					Utils.Shuffle(blocks[i, j]);
 
 			// perform training
@@ -89,11 +89,11 @@ namespace MyMediaLite.RatingPrediction
 		public override void Iterate()
 		{
 			// generate random sub-epoch sequence
-			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumBlocks));
+			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumGroups));
 			Utils.Shuffle(subepoch_sequence);
 
 			foreach (int i in subepoch_sequence) // sub-epoch
-				Parallel.For(0, NumBlocks, j => Iterate(blocks[j, (i + j) % NumBlocks], true, true));
+				Parallel.For(0, NumGroups, j => Iterate(blocks[j, (i + j) % NumGroups], true, true));
 
 			if (BoldDriver)
 			{
@@ -115,8 +115,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10} num_blocks={11}",
-				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, NumBlocks);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10} num_groups={11}",
+				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, NumGroups);
 		}
 	}
 }
