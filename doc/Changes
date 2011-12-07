@@ -2,6 +2,8 @@
 	API
          - add method Grow(x, y) to IMatrix interface
 	recommenders
+         - BPRMF: fix bug in negative item sampling with fast sampling
+           deactivated
 	 - ItemKNNCosine: fix bug in incremental updates
          - UserItemBaseline: improved API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a

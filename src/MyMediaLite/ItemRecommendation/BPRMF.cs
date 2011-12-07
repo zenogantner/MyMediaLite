@@ -289,7 +289,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				do
 					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j] != item_is_positive);
+				while (Feedback.UserMatrix[u, j] == item_is_positive);
 			}
 
 			return item_is_positive;
