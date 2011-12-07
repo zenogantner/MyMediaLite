@@ -4,6 +4,8 @@
 	recommenders
 	 - ItemKNNCosine: fix bug in incremental updates
          - UserItemBaseline: improved API doc
+         - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
+           property)
 	command-line programs
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit

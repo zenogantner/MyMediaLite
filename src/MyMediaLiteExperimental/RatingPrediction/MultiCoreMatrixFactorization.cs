@@ -52,7 +52,7 @@ namespace MyMediaLite.RatingPrediction
 			NumBlocks = 100;
 		}
 
-		IList<int>[,] Blocks;
+		IList<int>[,] blocks;
 
 		///
 		public override void Train()
@@ -63,23 +63,23 @@ namespace MyMediaLite.RatingPrediction
 			Utils.Shuffle(user_permutation);
 			Utils.Shuffle(item_permutation);
 
-			Blocks = new IList<int>[NumBlocks, NumBlocks];
+			blocks = new IList<int>[NumBlocks, NumBlocks];
 			for (int i = 0; i < NumBlocks; i++)
 				for (int j = 0; j < NumBlocks; j++)
-					Blocks[i, j] = new List<int>();
+					blocks[i, j] = new List<int>();
 
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				Blocks[user_permutation[u] % NumBlocks, item_permutation[i] % NumBlocks].Add(index);
+				blocks[user_permutation[u] % NumBlocks, item_permutation[i] % NumBlocks].Add(index);
 			}
 
 			// randomize index sequences inside the blocks
 			for (int i = 0; i < NumBlocks; i++)
 				for (int j = 0; j < NumBlocks; j++)
-					Utils.Shuffle(Blocks[i, j]);
+					Utils.Shuffle(blocks[i, j]);
 
 			// perform training
 			base.Train();
@@ -93,7 +93,7 @@ namespace MyMediaLite.RatingPrediction
 			Utils.Shuffle(subepoch_sequence);
 
 			foreach (int i in subepoch_sequence) // sub-epoch
-				Parallel.For(0, NumBlocks, j => Iterate(Blocks[j, (i + j) % NumBlocks], true, true));
+				Parallel.For(0, NumBlocks, j => Iterate(blocks[j, (i + j) % NumBlocks], true, true));
 
 			if (BoldDriver)
 			{
