@@ -192,6 +192,7 @@
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="Correlation\WeightedBinaryCosine.cs" />
+    <Compile Include="Util\MultiCore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
