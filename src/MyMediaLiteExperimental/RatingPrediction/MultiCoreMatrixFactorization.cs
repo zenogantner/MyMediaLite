@@ -57,29 +57,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			// divide rating matrix into blocks
-			var user_permutation = new List<int>(Enumerable.Range(0, MaxUserID + 1));
-			var item_permutation = new List<int>(Enumerable.Range(0, MaxItemID + 1));
-			Utils.Shuffle(user_permutation);
-			Utils.Shuffle(item_permutation);
-
-			blocks = new IList<int>[NumGroups, NumGroups];
-			for (int i = 0; i < NumGroups; i++)
-				for (int j = 0; j < NumGroups; j++)
-					blocks[i, j] = new List<int>();
-
-			for (int index = 0; index < ratings.Count; index++)
-			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
-
-				blocks[user_permutation[u] % NumGroups, item_permutation[i] % NumGroups].Add(index);
-			}
-
-			// randomize index sequences inside the blocks
-			for (int i = 0; i < NumGroups; i++)
-				for (int j = 0; j < NumGroups; j++)
-					Utils.Shuffle(blocks[i, j]);
+			blocks = ratings.PartitionUsersAndItems(NumGroups);
 
 			// perform training
 			base.Train();
