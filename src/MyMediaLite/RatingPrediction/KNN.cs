@@ -26,11 +26,25 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Base class for rating predictors that use some kind of kNN</summary>
 	/// <remarks>
-	/// The method is described in section 2.2 of
-	/// Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
-	/// Transactions on Knowledge Discovery from Data (TKDD), 2009.
-	///
-	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
+	///   <para>
+	///     The method is described in section 2.2 of the paper below.
+	///     One difference is that we support several iterations of alternating optimization,
+	///     instead of just one.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
+	///         Transactions on Knowledge Discovery from Data (TKDD), 2009.
+	///         http://public.research.att.com/~volinsky/netflix/factorizedNeighborhood.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
+	///   <para>
+	///     This recommender supports incremental updates.
+	///   </para>
+	///   <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	/// </remarks>
 	public abstract class KNN : IncrementalRatingPredictor
 	{
