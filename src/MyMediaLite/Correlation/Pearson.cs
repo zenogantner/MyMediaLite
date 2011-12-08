@@ -24,9 +24,36 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Correlation class for Pearson correlation</summary>
+	/// <summary>Shrunk Pearson correlation for rating data</summary>
 	/// <remarks>
-	/// http://en.wikipedia.org/wiki/Pearson_correlation
+	///   <para>
+	///     The correlation values are shrunk towards zero, depending on the number of ratings the estimate is based on.
+	///     Otherwise, we would give too much weight to similarities estimated from just a few examples.
+	///   </para>
+	///   <para>
+	///     http://en.wikipedia.org/wiki/Pearson_correlation
+	///   </para>
+	///   <para>
+	///     We apply shrinkage as in formula (5.16) of chapter 5 of the Recommender Systems Handbook.
+	///     Note that the shrinkage formula has changed betweem the two publications.
+	///     It is now based on the assumption that the true correlations are normally distributed;
+	///     the shrunk estimate is the posterior mean of the empirical estimate.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
+	///         Transactions on Knowledge Discovery from Data (TKDD), 2009.
+	///         http://public.research.att.com/~volinsky/netflix/factorizedNeighborhood.pdf
+	///       </description></item>
+	///       <item><description>
+	///         Yehuda Koren, Robert Bell: Advances in Collaborative Filtering,
+	///         Chapter 5 of the Recommender Systems Handbook, Springer, 2011.
+	///         http://research.yahoo.net/files/korenBellChapterSpringer.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
 	/// </remarks>
 	public sealed class Pearson : RatingCorrelationMatrix
 	{
@@ -127,7 +154,7 @@ namespace MyMediaLite.Correlation
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
 
-			return (float) pmcc * (n / (n + shrinkage));
+			return (float) pmcc * ((n - 1) / (n - 1 + shrinkage));
 		}
 
 		/// <summary>Compute correlations for given ratings</summary>
@@ -197,7 +224,7 @@ namespace MyMediaLite.Correlation
 					}
 
 					double pmcc = numerator / denominator;
-					this[i, j] = (float) (pmcc * (n / (n + shrinkage)));
+					this[i, j] = (float) (pmcc * ((n - 1) / (n - 1 + shrinkage)));
 				}
 		}
 	}
