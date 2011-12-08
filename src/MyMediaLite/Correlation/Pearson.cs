@@ -57,8 +57,8 @@ namespace MyMediaLite.Correlation
 	/// </remarks>
 	public sealed class Pearson : RatingCorrelationMatrix
 	{
-		/// <summary>shrinkage parameter</summary>
-		public float shrinkage = 10;
+		/// <summary>shrinkage parameter, if set to 0 we have the standard Pearson correlation without shrinkage</summary>
+		float shrinkage = 10;
 
 		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -67,7 +67,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Create a Pearson correlation matrix from given data</summary>
 		/// <param name="ratings">the ratings data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		/// <param name="shrinkage">a shrinkage parameter</param>
+		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
 		/// <returns>the complete Pearson correlation matrix</returns>
 		static public CorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
 		{
@@ -99,7 +99,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="i">the ID of first entity</param>
 		/// <param name="j">the ID of second entity</param>
-		/// <param name="shrinkage">the shrinkage parameter</param>
+		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
 		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
