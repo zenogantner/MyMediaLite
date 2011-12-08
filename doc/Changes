@@ -2,10 +2,11 @@
 	API
          - add method Grow(x, y) to IMatrix interface
 	recommenders
+         - new experimental recommender: MultiCoreBPRMF
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
 	 - ItemKNNCosine: fix bug in incremental updates
-         - UserItemBaseline: improved API doc
+         - UserItemBaseline, RatingPrediction.KNN: improved API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
            property), rename NumBlocks to NumGroups
 	command-line programs
@@ -19,6 +20,8 @@
            memory
          - make BinaryDataCorrelationMatrix and RatingCorrelationMatrix
 	   abstract
+         - Pearson: perform shrinkage as in chapter 5 of the RecSys Handbook,
+           which describes an MAP estimate; improve API doc
          - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
