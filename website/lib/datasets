@@ -13,12 +13,12 @@
      { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=120 learn_rate=0.005 bias_reg=0.0001 reg_u=0.035 reg_i=0.035 num_iter=50 bold_driver=True', rmse => '0.9086',  mae => '0.70775', nmae => '0.17694' }
    ]
    ml1m_data = [
-     { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.9113', mae => '0.7226' }
-     { method => 'SlopeOne',                  hp => '',                                                                      rmse => '0.9032', mae => '0.7131', nmae => '0.1783' }
-     { method => 'UserKNNPearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                  rmse => '0.9193', mae => '0.7221' }
-     { method => 'ItemKNNCosine',             hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8970', mae => '0.7083', nmae => '0.1771' }
-     { method => 'ItemKNNPearson',            hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8829', mae => '0.6946', nmae => '0.1736' }
-     { method => 'ItemAttributeKNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                                rmse => '0.8958', mae => '0.7056' }
+     { method => 'UserItemBaseline',          hp => 'reg_u=25 reg_i=10',                                                     rmse => '0.9113',  mae => '0.7226' }
+     { method => 'SlopeOne',                  hp => '',                                                                      rmse => '0.9032',  mae => '0.7131', nmae => '0.1783' }
+     { method => 'ItemKNNCosine',             hp => 'k=inf shrinkage=10 reg_u=25 reg_i=10',                                  rmse => '0.8970',  mae => '0.7083', nmae => '0.1771' }
+     { method => 'ItemAttributeKNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                                rmse => '0.8958',  mae => '0.7056' }
+     { method => 'UserKNNPearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10' ,                                  rmse => '0.88666', mae => '0.6959', nmae => '0.17398' }
+     { method => 'ItemKNNPearson',            hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10',                                   rmse => '0.87699', mae => '0.68916', nmae => '0.17229' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=6  bias_reg=0.001 regularization=0.025 learn_rate=0.01 num_iter=57',   rmse => '0.8554', mae => '0.6744' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.001 regularization=0.045 learn_rate=0.01 num_iter=66',   rmse => '0.8534', mae => '0.6742' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 regularization=0.055 learn_rate=0.01 num_iter=110',  rmse => '0.8521', mae => '0.6739' }
@@ -43,11 +43,11 @@
      { method => 'BipolarSlopeOne',           hp => '',                                                                    rmse => '0.96754', mae => '0.74462', nmae => '0.18615' }
      { method => 'UserItemBaseline',          hp => 'reg_u=5 reg_i=2',                                                     rmse => '0.94192', mae => '0.74503', nmae => '0.18626' }
      { method => 'SlopeOne',                  hp => '',                                                                    rmse => '0.93978', mae => '0.74038'  nmae => '0.1851' }
-     { method => 'UserKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.937', mae => '0.737', nmae => '0.1842' }
-     { method => 'UserKNNPearson',            hp => 'k=60 shrinkage=100 reg_u=12 reg_i=1' ,                                rmse => '0.930', mae => '0.729', nmae => '0.1823' }
-     { method => 'ItemKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.924', mae => '0.727', nmae => '0.1817' }
-     { method => 'ItemKNNPearson',            hp => 'k=40 shrinkage=200 reg_u=12 reg_i=1',                                 rmse => '0.915', mae => '0.717', nmae => '0.1792' }
-     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=5 num_iter=5 shrinkage=150',                        rmse => '0.9212', mae => '0.7252', nmae => '0.1813' }     
+     { method => 'UserKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.937',   mae => '0.737',   nmae => '0.1842' }
+     { method => 'UserKNNPearson',            hp => 'k=60 shrinkage=25 reg_u=12 reg_i=1' ,                                 rmse => '0.92971', mae => '0.72805', nmae => '0.18201' }
+     { method => 'ItemKNNCosine'              hp => 'k=40 reg_u=12 reg_i=1'                                                rmse => '0.924',   mae => '0.727',   nmae => '0.1817' }
+     { method => 'ItemKNNPearson',            hp => 'k=40 shrinkage=2500 reg_u=12 reg_i=1',                                rmse => '0.91327', mae => '0.7144',  nmae => '0.1786' }
+     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=5 num_iter=5 shrinkage=150',                          rmse => '0.9212',  mae => '0.7252',  nmae => '0.1813' }     
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=5 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91622', mae => '0.72242', nmae => '0.18061' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.007 reg_u=0.1 reg_i=0.12 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91588', mae => '0.72271', nmae => '0.18068' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=40 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true', rmse => '0.91242', mae => '0.72119', nmae => '0.1803' }
