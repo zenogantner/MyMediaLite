@@ -26,12 +26,18 @@ using MyMediaLite.Util;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>
-	/// Matrix factorization model for item prediction optimized for a soft margin ranking loss,
+	/// Matrix factorization model for item prediction optimized for a soft margin (hinge) ranking loss,
 	/// using stochastic gradient descent (as in BPR-MF).
 	/// </summary>
 	/// <remarks>
 	/// Literature:
 	/// <list type="bullet">
+	///   <item><description>
+	///     Steffen Rendle:
+	///     Context-Aware Ranking with Factorization Models.
+	///     Studies in Computational Intelligence. Springer 2011.
+	///     http://www.springer.com/engineering/computational+intelligence+and+complexity/book/978-3-642-16897-0
+	///   </description></item>
 	///   <item><description>
 	///     Markus Weimer, Alexandros Karatzoglou, Alex Smola:
 	///     Improving Maximum Margin Matrix Factorization.
