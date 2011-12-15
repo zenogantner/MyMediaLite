@@ -173,7 +173,7 @@ namespace MyMediaLite.HyperParameter
 				var min_key = keys.First();
 				var max_key = keys.Last();
 
-				Console.Error.WriteLine("Nelder-Mead: iteration {0} ({1})", i, results[min_key]);
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "Nelder-Mead: iteration {0} ({1})", i, results[min_key]));
 
 				var worst_vector = hp_vectors[max_key];
 				var worst_result = results[max_key];
