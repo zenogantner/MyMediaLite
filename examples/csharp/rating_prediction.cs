@@ -24,5 +24,8 @@ public class RatingPrediction
 
 		// make a prediction for a certain user and item
 		Console.WriteLine(recommender.Predict(1, 1));
+		
+		var bmf = new BiasedMatrixFactorization {Ratings = training_data};
+		Console.WriteLine(bmf.DoCrossValidation());
 	}
 }
