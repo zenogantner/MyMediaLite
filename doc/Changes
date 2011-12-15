@@ -6,7 +6,8 @@
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
 	 - ItemKNNCosine: fix bug in incremental updates
-         - UserItemBaseline, RatingPrediction.KNN: improved API doc
+	 - SoftMarginRankingMF: move to main package, improve API doc
+         - UserItemBaseline, RatingPrediction.KNN: improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
            property), rename NumBlocks to NumGroups
 	command-line programs
@@ -28,6 +29,8 @@
         misc
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT
+	 - C# rating prediction example: add DoCrossValidation() example
+	 - Nelder-Mead: use InvariantCulture for output formatting
 
 2.02	2011-11-29
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build
