@@ -22,11 +22,16 @@
          - make BinaryDataCorrelationMatrix and RatingCorrelationMatrix
 	   abstract
          - Pearson: perform shrinkage as in chapter 5 of the RecSys Handbook,
-           which describes an MAP estimate; improve API doc
+           which describes an MAP estimate; improve API doc; turn shrinkage
+           field into property 'Shrinkage'
          - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
         misc
+	 - fix #176: DoCrossValidation() hangs forever; random number
+           generation now should be thread-safe and reproducible
+           (thanks to Tom Tung for reporting the issue and suggesting the
+           solution)
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT
 	 - C# rating prediction example: add DoCrossValidation() example
