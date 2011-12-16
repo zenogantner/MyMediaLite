@@ -71,7 +71,7 @@ namespace Tests.Correlation
 			rating_data.Add(2, 0, 0.1);
 			rating_data.Add(2, 1, 0.3);
 			// test
-			pearson.shrinkage = 0;
+			pearson.Shrinkage = 0;
 			pearson.ComputeCorrelations(rating_data, EntityType.USER);
 
 			Assert.AreEqual(0, pearson[0, 2]);
@@ -84,7 +84,7 @@ namespace Tests.Correlation
 			var item_mapping = new EntityMapping();
 			var ratings = RatingData.Read("../../../../data/ml-100k/u1.base", user_mapping, item_mapping);
 
-			Assert.AreEqual(-0.02855815f, Pearson.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311, 200f), 0.00001);
+			Assert.AreEqual(-0.02788301f, Pearson.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311, 200f), 0.00001);
 		}
 	}
 }
