@@ -58,11 +58,14 @@ namespace MyMediaLite.Correlation
 	public sealed class Pearson : RatingCorrelationMatrix
 	{
 		/// <summary>shrinkage parameter, if set to 0 we have the standard Pearson correlation without shrinkage</summary>
-		float shrinkage = 10;
+		public float Shrinkage { get; set; }
 
 		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public Pearson(int num_entities) : base(num_entities) { }
+		public Pearson(int num_entities) : base(num_entities)
+		{
+			Shrinkage = 10;
+		}
 
 		/// <summary>Create a Pearson correlation matrix from given data</summary>
 		/// <param name="ratings">the ratings data</param>
@@ -89,7 +92,7 @@ namespace MyMediaLite.Correlation
 				Console.Error.WriteLine("Too many entities: " + num_entities);
 				throw;
 			}
-			cm.shrinkage = shrinkage;
+			cm.Shrinkage = shrinkage;
 			cm.ComputeCorrelations(ratings, entity_type);
 			return cm;
 		}
@@ -224,7 +227,7 @@ namespace MyMediaLite.Correlation
 					}
 
 					double pmcc = numerator / denominator;
-					this[i, j] = (float) (pmcc * ((n - 1) / (n - 1 + shrinkage)));
+					this[i, j] = (float) (pmcc * ((n - 1) / (n - 1 + Shrinkage)));
 				}
 		}
 	}
