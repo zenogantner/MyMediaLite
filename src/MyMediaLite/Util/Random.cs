@@ -23,7 +23,10 @@ namespace MyMediaLite.Util
 	/// <summary>Random number generator singleton class</summary>
 	public class Random : System.Random
 	{
-		private static Random instance = null;
+		[ThreadStatic]
+		private static Random instance;
+
+		private static Nullable<int> seed;
 
 		/// <summary>Default constructor</summary>
 		public Random() : base() { }
@@ -33,11 +36,11 @@ namespace MyMediaLite.Util
 		public Random(int seed) : base(seed) { }
 
 		/// <summary>Initializes the instance with a given random seed</summary>
-		/// <param name="seed">a seed value</param>
-		public static void InitInstance(int seed)
+		/// <param name="s">a seed value</param>
+		public static void InitInstance(int s)
 		{
-			Console.Error.WriteLine("Set random seed to {0}.", seed);
-			instance = new Random(seed);
+			Console.Error.WriteLine("Set random seed to {0}.", s);
+			seed = s;
 		}
 
 		/// <summary>Gets the instance. If it does not exist yet, it will be created.</summary>
@@ -45,7 +48,10 @@ namespace MyMediaLite.Util
 		public static Random GetInstance()
 		{
 			if (instance == null)
-				instance = new Random();
+				if (seed == null)
+					instance = new Random();
+				else
+					instance = new Random(seed.Value);
 			return instance;
 		}
 	}
