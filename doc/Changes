@@ -10,6 +10,8 @@
          - UserItemBaseline, RatingPrediction.KNN: improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
            property), rename NumBlocks to NumGroups
+	 - FactorWiseMatrixFactorization: add RegU and RegI properties
+           (of the underlying baseline predictor)
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs

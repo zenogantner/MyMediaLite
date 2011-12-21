@@ -44,6 +44,12 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
+		public double RegU { get { return global_effects.RegU; } set { global_effects.RegU = value; } }
+
+		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
+		public double RegI { get { return global_effects.RegI; } set { global_effects.RegI = value; } }
+
 		/// <summary>Matrix containing the latent user factors</summary>
 		Matrix<double> user_factors;
 
@@ -260,8 +266,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} shrinkage={2} sensibility={3} init_mean={4} init_stdev={5} num_iter={6}",
-				this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter);
+				"{0} num_factors={1} shrinkage={2} sensibility={3} init_mean={4} init_stdev={5} num_iter={6} reg_u={7} reg_i={8}",
+				this.GetType().Name, NumFactors, Shrinkage, Sensibility, InitMean, InitStdev, NumIter, RegU, RegI);
 		}
 	}
 }
