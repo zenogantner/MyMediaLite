@@ -14,7 +14,7 @@ release checklist:
 7a. Check whether the Doxygen output has the correct version number
 8. Run 'make release'
 9. Packages
-9a. Inspect the contents of the source code package
+9a. Inspect the contents of the source code package from GitHub:
 9b. Make a test installation
 9c. Inspect the contents of the binary package
 10. Create the release announcement

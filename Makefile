@@ -11,7 +11,7 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package source-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
 all: mymedialite
 
 mymedialite:
@@ -65,20 +65,7 @@ binary-package:
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
-source-package: clean
-	mkdir MyMediaLite-${VERSION}.src
-	mkdir MyMediaLite-${VERSION}.src/doc
-	cp doc/Authors doc/Changes doc/CodingStandards doc/ComponentLicenses doc/GPL-3 doc/Installation doc/ReleaseChecklist doc/TODO MyMediaLite-${VERSION}.src/doc
-	mkdir MyMediaLite-${VERSION}.src/doc/api
-	cp -r doc/doxygen/html MyMediaLite-${VERSION}.src/doc/api
-	cp -r src bin examples scripts tests lib MyMediaLite-${VERSION}.src
-	cp Makefile README MyMediaLite-${VERSION}.src
-	mkdir MyMediaLite-${VERSION}.src/data
-	tar -cvzf MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.src
-	rm -rf MyMediaLite-${VERSION}.src
-
-#test: all
-test: data/ml-100k/u.data
+test: data/ml-100k/u.data all
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
 	time tests/test_load_save.sh
@@ -86,7 +73,8 @@ test: data/ml-100k/u.data
 	time tests/test_random_split.sh
 	time tests/test_rating_prediction_online.sh
 
-release: binary-package source-package
+release: binary-package
+	wget --output-document=MyMediaLite-${VERSION}.src.tar.gz https://github.com/zenogantner/MyMediaLite/tarball/master
 	head doc/Changes
 	git status
 	cp doc/Changes website/src/download
