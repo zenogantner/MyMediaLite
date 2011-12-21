@@ -16,6 +16,7 @@
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs
+	 - starter scripts: use --gc=sgen to allow very large datasets
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
          - remove redundant code for setting the random seed
