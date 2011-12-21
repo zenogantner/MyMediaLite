@@ -193,6 +193,11 @@
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="Correlation\WeightedBinaryCosine.cs" />
     <Compile Include="Util\MultiCore.cs" />
+    <Compile Include="ItemRecommendation\MultiCoreBPRMF.cs" />
+    <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
+    <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
+    <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\SocialMF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
