@@ -113,7 +113,7 @@ class MappingItemRecommendation
 		bool compute_fit            = parameters.GetRemoveBool(   "compute_fit", false);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		// main data files and method
 		string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);

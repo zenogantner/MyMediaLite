@@ -272,7 +272,7 @@ class ItemRecommendation
 			Usage(0);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		// set up recommender
  		if (load_model_file != null)
@@ -545,10 +545,6 @@ class ItemRecommendation
 			}
 			else
 			{
-				// ensure reproducible splitting
-				if (random_seed != -1)
-					MyMediaLite.Util.Random.InitInstance(random_seed);
-
 				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
@@ -615,10 +611,6 @@ class ItemRecommendation
 			// if necessary, perform user sampling
 			if (num_test_users > 0 && num_test_users < test_users.Count)
 			{
-				// ensure reproducible splitting
-				if (random_seed != -1)
-					MyMediaLite.Util.Random.InitInstance(random_seed);
-
 				var old_test_users = new HashSet<int>(test_users);
 				var new_test_users = new int[num_test_users];
 				for (int i = 0; i < num_test_users; i++)

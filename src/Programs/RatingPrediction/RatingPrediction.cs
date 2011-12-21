@@ -236,7 +236,7 @@ class RatingPrediction
 			Usage(0);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		// set up recommender
 		if (load_model_file != null)
@@ -269,10 +269,6 @@ class RatingPrediction
 
 		if (test_ratio > 0)
 		{
-			// ensure reproducible splitting
-			if (random_seed != -1)
-				MyMediaLite.Util.Random.InitInstance(random_seed);
-
 			var split = new RatingsSimpleSplit(training_data, test_ratio);
 			recommender.Ratings = training_data = split.Train[0];
 			test_data = split.Test[0];

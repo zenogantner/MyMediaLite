@@ -35,12 +35,13 @@ namespace MyMediaLite.Util
 		/// <param name="seed">An integer for initializing the random number generator</param>
 		public Random(int seed) : base(seed) { }
 
-		/// <summary>Initializes the instance with a given random seed</summary>
-		/// <param name="s">a seed value</param>
-		public static void InitInstance(int s)
+		/// <summary>the random seed</summary>
+		public static int Seed
 		{
-			Console.Error.WriteLine("Set random seed to {0}.", s);
-			seed = s;
+			set {
+				Console.Error.WriteLine("Set random seed to {0}.", value);
+				seed = value;
+			}
 		}
 
 		/// <summary>Gets the instance. If it does not exist yet, it will be created.</summary>

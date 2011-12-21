@@ -156,7 +156,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		Console.Error.WriteLine("predict_score={0}", predict_score);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		recommender_validate = Recommender.CreateItemRecommender(method);
 		if (recommender_validate == null)

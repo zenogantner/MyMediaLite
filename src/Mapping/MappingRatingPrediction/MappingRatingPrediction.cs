@@ -98,7 +98,7 @@ class MappingRatingPrediction
 		string prediction_file      = parameters.GetRemoveString( "prediction_file");
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		// main data files and method
 		string trainfile = args[0].Equals("-") ? "-" : Path.Combine(data_dir, args[0]);

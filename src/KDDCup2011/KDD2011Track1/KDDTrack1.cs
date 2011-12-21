@@ -159,7 +159,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		good_rating_prob = parameters.GetRemoveBool(   "good_rating_prob", false);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.InitInstance(random_seed);
+			MyMediaLite.Util.Random.Seed = random_seed;
 
 		recommender = Recommender.CreateRatingPredictor(method);
 		if (recommender == null)
