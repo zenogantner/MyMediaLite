@@ -39,6 +39,17 @@
     </table>
 
   </p>
+
+  <a href="http://kddcup.yahoo.com"><h3>KDD Cup 2011, Track 1</h3></a>
+  <p>
+   Results on the validation set:
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th> </tr>
+      [% FOREACH entry IN kddcup_validation %]
+        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
   
   <a href="http://www.grouplens.org/node/73"><h3>MovieLens 1M</h3></a>
   <p>
