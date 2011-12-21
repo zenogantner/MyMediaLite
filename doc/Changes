@@ -18,6 +18,8 @@
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
          - remove redundant code for setting the random seed
+	 - rating prediction: fix usage --file-format=kddcup_2011 instead of
+           --file-format=kddcup2011
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,

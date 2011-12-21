@@ -121,7 +121,7 @@ class RatingPrediction
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
-   --file-format=movielens_1m|kddcup2011|ignore_first_line|default
+   --file-format=movielens_1m|kddcup_2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
    --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
