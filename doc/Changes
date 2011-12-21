@@ -3,6 +3,7 @@
          - add method Grow(x, y) to IMatrix interface
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
+	 - #171: add random and constant rating predictors
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
 	 - ItemKNNCosine: fix bug in incremental updates

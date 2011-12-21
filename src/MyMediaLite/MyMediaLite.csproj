@@ -198,6 +198,8 @@
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
     <Compile Include="RatingPrediction\MultiCoreMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\SocialMF.cs" />
+    <Compile Include="RatingPrediction\Random.cs" />
+    <Compile Include="RatingPrediction\Constant.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

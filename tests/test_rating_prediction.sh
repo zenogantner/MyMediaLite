@@ -25,7 +25,7 @@ do
 done
 rm $DATA_DIR/empty
 
-for method in UserItemBaseline GlobalAverage UserAverage ItemAverage
+for method in UserItemBaseline GlobalAverage UserAverage ItemAverage Constant Random
 do
 	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --data-dir=$DATA_DIR
 	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --data-dir=$DATA_DIR
