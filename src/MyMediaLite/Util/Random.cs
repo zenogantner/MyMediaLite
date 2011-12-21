@@ -41,6 +41,7 @@ namespace MyMediaLite.Util
 			set {
 				Console.Error.WriteLine("Set random seed to {0}.", value);
 				seed = value;
+				instance = new Random(seed.Value);
 			}
 		}
 
