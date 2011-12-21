@@ -13,6 +13,7 @@
            property), rename NumBlocks to NumGroups
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
+         - #161: rename BPR_Linear to BPRLinear
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs

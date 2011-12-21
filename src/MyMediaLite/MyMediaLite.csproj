@@ -116,7 +116,6 @@
     <Compile Include="RatingPrediction\UserKNNCosine.cs" />
     <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="ItemRecommendation\BPRMF.cs" />
-    <Compile Include="ItemRecommendation\BPR_Linear.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
     <Compile Include="ItemRecommendation\ItemRecommender.cs" />
@@ -200,6 +199,7 @@
     <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="RatingPrediction\Random.cs" />
     <Compile Include="RatingPrediction\Constant.cs" />
+    <Compile Include="ItemRecommendation\BPRLinear.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
