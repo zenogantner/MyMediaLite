@@ -13,6 +13,7 @@
 	command-line programs
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
+         - remove redundant code for setting the random seed
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,
