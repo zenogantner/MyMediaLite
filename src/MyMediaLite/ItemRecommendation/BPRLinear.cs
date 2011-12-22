@@ -40,13 +40,13 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class BPR_Linear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
+	public class BPRLinear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
 		///
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set	{
+			set {
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
