@@ -10,7 +10,7 @@
 	 - SoftMarginRankingMF: move to main package, improve API doc
          - UserItemBaseline, RatingPrediction.KNN: improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
-           property), rename NumBlocks to NumGroups
+           property), rename NumBlocks to MaxThreads
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
          - FactorWiseMatrixFactorization: improve API doc

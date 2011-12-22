@@ -44,14 +44,16 @@ namespace MyMediaLite.ItemRecommendation
 		// TODO support uniform user sampling
 		//ISparseBooleanMatrix replacement_user_matrix;
 
-		/// <summary>Gets or sets the number of groups.</summary>
-		/// <value>The number of groups (for rows and columns of the rating matrix, each)</value>
-		public int NumGroups { get; set; }
+		/// <summary>the maximum number of threads to use</summary>
+		/// <remarks>
+		///   Determines the number of sections the users and items will be divided into.
+		/// </remarks>
+		public int MaxThreads { get; set; }
 
 		/// <summary>default constructor</summary>
 		public MultiCoreBPRMF()
 		{
-			NumGroups = 100;
+			MaxThreads = 100;
 		}
 
 		IList<int>[,] blocks;
@@ -65,12 +67,12 @@ namespace MyMediaLite.ItemRecommendation
 			if (WithReplacement)
 				throw new NotSupportedException("with_replacement");
 
-			blocks = Feedback.PartitionUsersAndItems(NumGroups);
-			items_by_group = new IList<int>[NumGroups];
-			for (int item_group = 0; item_group < NumGroups; item_group++)
+			blocks = Feedback.PartitionUsersAndItems(MaxThreads);
+			items_by_group = new IList<int>[MaxThreads];
+			for (int item_group = 0; item_group < MaxThreads; item_group++)
 			{
 				var items_in_group = new HashSet<int>();
-				for (int user_group = 0; user_group < NumGroups; user_group++)
+				for (int user_group = 0; user_group < MaxThreads; user_group++)
 					foreach (int index in blocks[user_group, item_group])
 						items_in_group.Add(Feedback.Items[index]);
 				items_by_group[item_group] = items_in_group.ToArray();
@@ -84,13 +86,13 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Iterate()
 		{
 			// generate random sub-epoch sequence
-			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumGroups));
+			var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
 			Utils.Shuffle(subepoch_sequence);
 
 			foreach (int i in subepoch_sequence) // sub-epoch
 				//Parallel.For(0, NumGroups, j => Iterate(j, (i + j) % NumGroups));
-				for (int j = 0; j < NumGroups; j++)
-					Iterate(j, (i + j) % NumGroups);
+				for (int j = 0; j < MaxThreads; j++)
+					Iterate(j, (i + j) % MaxThreads);
 
 			if (BoldDriver)
 			{
@@ -162,8 +164,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14} num_groups={15}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev, NumGroups);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14} max_threads={15}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev, MaxThreads);
 		}
 
 	}

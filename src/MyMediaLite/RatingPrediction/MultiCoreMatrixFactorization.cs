@@ -41,15 +41,17 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class MultiCoreMatrixFactorization : BiasedMatrixFactorization
 	{
- 		/// <summary>Gets or sets the number of groups.</summary>
-		/// <value>The number of groups (for rows and columns of the rating matrix, each)</value>
-		public int NumGroups { get; set; }
-		
+		/// <summary>the maximum number of threads to use</summary>
+		/// <remarks>
+		///   Determines the number of sections the users and items will be divided into.
+		/// </remarks>
+		public int MaxThreads { get; set; }
+
 		/// <summary>default constructor</summary>
 		public MultiCoreMatrixFactorization()
 		{
 			BoldDriver = true;
-			NumGroups = 100;
+			MaxThreads = 100;
 		}
 
 		IList<int>[,] blocks;
@@ -57,7 +59,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			blocks = ratings.PartitionUsersAndItems(NumGroups);
+			blocks = ratings.PartitionUsersAndItems(MaxThreads);
 
 			// perform training
 			base.Train();
@@ -67,11 +69,11 @@ namespace MyMediaLite.RatingPrediction
 		public override void Iterate()
 		{
 			// generate random sub-epoch sequence
-			var subepoch_sequence = new List<int>(Enumerable.Range(0, NumGroups));
+			var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
 			Utils.Shuffle(subepoch_sequence);
 
 			foreach (int i in subepoch_sequence) // sub-epoch
-				Parallel.For(0, NumGroups, j => Iterate(blocks[j, (i + j) % NumGroups], true, true));
+				Parallel.For(0, MaxThreads, j => Iterate(blocks[j, (i + j) % MaxThreads], true, true));
 
 			if (BoldDriver)
 			{
@@ -93,8 +95,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10} num_groups={11}",
-				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, NumGroups);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10} max_threads={11}",
+				 this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, MaxThreads);
 		}
 	}
 }
