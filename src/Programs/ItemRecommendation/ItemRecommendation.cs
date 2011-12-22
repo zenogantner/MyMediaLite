@@ -99,7 +99,7 @@ class ItemRecommendation
 
 	static void ShowVersion()
 	{
-		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Item Prediction from Implicit Feedback {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
 		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
@@ -117,7 +117,7 @@ class ItemRecommendation
 
 	static void Usage(int exit_code)
 	{
-		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite item recommendation from positive-only feedback {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine(@"
  usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]

@@ -80,7 +80,7 @@ class RatingPrediction
 
 	static void ShowVersion()
 	{
-		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
 		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
@@ -98,7 +98,7 @@ class RatingPrediction
 
 	static void Usage(int exit_code)
 	{
-		Version version = Assembly.GetEntryAssembly().GetName().Version;
+		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite rating prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine(@"
  usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
