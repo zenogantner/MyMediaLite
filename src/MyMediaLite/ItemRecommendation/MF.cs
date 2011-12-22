@@ -76,9 +76,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Iterate once over the data</summary>
 		public abstract void Iterate();
 
-		/// <summary>Computes the fit (optimization criterion) on the training data</summary>
-		/// <returns>a double representing the fit, lower is better</returns>
-		public abstract double ComputeFit();
+		///
+		public abstract double ComputeLoss();
 
 		/// <summary>Predict the weight for a given user-item combination</summary>
 		/// <remarks>

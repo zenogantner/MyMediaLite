@@ -254,7 +254,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public double ComputeFit()
+		public double ComputeLoss()
 		{
 			return -1;
 		}

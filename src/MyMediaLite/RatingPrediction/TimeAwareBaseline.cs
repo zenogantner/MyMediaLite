@@ -211,9 +211,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			// update user biases
 			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
-			alpha[u]                 += AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
-			user_bias[u]             += UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
-			user_bias_by_day[u, day] += UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
+			alpha[u]                 += 2 * AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
+			user_bias[u]             += 2 * UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
+			user_bias_by_day[u, day] += 2 * UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
 
 			// update item biases and user scalings
 			double b_i  = item_bias[i];
@@ -285,16 +285,16 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual double ComputeFit()
+		public virtual double ComputeLoss()
 		{
 			double loss =
-				this.Evaluate(ratings)["RMSE"]
-					+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
-					+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
- 					+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)
-					+ RegUserBiasByDay     * Math.Pow(user_bias_by_day.FrobeniusNorm(),      2)
-					+ RegItemBiasByTimeBin * Math.Pow(item_bias_by_time_bin.FrobeniusNorm(), 2)
-					+ RegUserScalingByDay  * Math.Pow(user_scaling_by_day.FrobeniusNorm(),   2);
+				2 * this.Evaluate(ratings)["RMSE"]
+				+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
+				+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
+ 				+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)
+				+ RegUserBiasByDay     * Math.Pow(user_bias_by_day.FrobeniusNorm(),      2)
+				+ RegItemBiasByTimeBin * Math.Pow(item_bias_by_time_bin.FrobeniusNorm(), 2)
+				+ RegUserScalingByDay  * Math.Pow(user_scaling_by_day.FrobeniusNorm(),   2);
 
 			double user_scaling_reg_term = 0;
 			foreach (var e in user_scaling)

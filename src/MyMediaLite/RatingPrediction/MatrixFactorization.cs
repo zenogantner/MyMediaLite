@@ -298,12 +298,6 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		///
-		public double ComputeFit()
-		{
-			return this.Evaluate(ratings)["RMSE"];
-		}
-
 		/// <summary>Compute the regularized loss</summary>
 		/// <returns>the regularized loss</returns>
 		public virtual double ComputeLoss()

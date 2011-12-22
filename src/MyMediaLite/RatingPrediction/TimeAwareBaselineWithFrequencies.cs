@@ -150,9 +150,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double ComputeFit()
+		public override double ComputeLoss()
 		{
-			return base.ComputeFit()
+			return base.ComputeLoss()
 				+ RegItemBiasAtFrequency * Math.Pow(item_bias_at_frequency.FrobeniusNorm(), 2);
 		}
 

@@ -536,9 +536,8 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>Compute approximate loss</summary>
-		/// <returns>the approximate loss</returns>
-		public virtual double ComputeLoss()
+		///
+		public override double ComputeLoss()
 		{
 			double ranking_loss = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)
@@ -558,44 +557,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			return ranking_loss + 0.5 * complexity;
-		}
-
-		/// <summary>Compute the fit (AUC on training data)</summary>
-		/// <returns>the fit</returns>
-		public override double ComputeFit()
-		{
-			double sum_auc = 0;
-			int num_user = 0;
-
-			for (int user_id = 0; user_id < MaxUserID + 1; user_id++)
-			{
-				int num_test_items = Feedback.UserMatrix[user_id].Count;
-				if (num_test_items == 0)
-					continue;
-				IList<int> prediction_list = Extensions.PredictItems(this, user_id, MaxItemID);
-
-				int num_eval_items = MaxItemID + 1;
-				int num_eval_pairs = (num_eval_items - num_test_items) * num_test_items;
-
-				int num_correct_pairs = 0;
-				int num_pos_above = 0;
-				// start with the highest weighting item...
-				for (int i = 0; i < prediction_list.Count; i++)
-				{
-					int item_id = prediction_list[i];
-
-					if (Feedback.UserMatrix[user_id, item_id])
-						num_pos_above++;
-					else
-						num_correct_pairs += num_pos_above;
-				}
-				double user_auc = (double) num_correct_pairs / num_eval_pairs;
-				sum_auc += user_auc;
-				num_user++;
-			}
-
-			double auc = sum_auc / num_user;
-			return auc;
 		}
 
 		private void CreateFastSamplingData(int u)

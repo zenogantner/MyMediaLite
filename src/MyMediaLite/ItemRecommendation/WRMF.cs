@@ -144,7 +144,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double ComputeFit()
+		public override double ComputeLoss()
 		{
 			return -1;
 		}

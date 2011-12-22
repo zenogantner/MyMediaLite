@@ -187,7 +187,7 @@ namespace MyMediaLite.RatingPrediction
 				}
 
 				err_old = err;
-				err = ComputeFit();
+				err = this.ComputeFit();
 			}
 
 			num_learned_factors++;
@@ -264,9 +264,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public double ComputeFit()
+		public double ComputeLoss()
 		{
-			return this.Evaluate(ratings)["RMSE"];
+			return -1;
 		}
 
 		///

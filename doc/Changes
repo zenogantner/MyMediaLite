@@ -1,6 +1,9 @@
 2.03	2011-12-23
 	API
          - add method Grow(x, y) to IMatrix interface
+         - #72: method ComputeFit() renamed to ComputeLoss(),
+           ComputeFit() is now an extension method for rating prediction
+           (see below under 'evaluation')
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
 	 - #171: add random and constant rating predictors
@@ -14,6 +17,8 @@
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
          - FactorWiseMatrixFactorization: improve API doc
+	 - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
+           ComputeLoss() functions
          - #161: rename BPR_Linear to BPRLinear
 	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
@@ -41,6 +46,9 @@
          - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
+	evaluation
+	 - introduce extension method ComputeFit() which computes the fit
+           (RMSE) on the training data of the recommender
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible

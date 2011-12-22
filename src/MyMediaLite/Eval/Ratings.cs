@@ -85,5 +85,13 @@ namespace MyMediaLite.Eval
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
 			return result;
 		}
+
+		/// <summary>Computes the RMSE fit of a recommender on the training data</summary>
+		/// <returns>the RMSE on the training data</returns>
+		/// <param name='recommender'>the rating predictor to evaluate</param>
+		public static double ComputeFit(this RatingPredictor recommender)
+		{
+			return recommender.Evaluate(recommender.Ratings)["RMSE"];
+		}
 	}
 }
