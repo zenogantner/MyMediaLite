@@ -200,6 +200,11 @@
     <Compile Include="RatingPrediction\Random.cs" />
     <Compile Include="RatingPrediction\Constant.cs" />
     <Compile Include="ItemRecommendation\BPRLinear.cs" />
+    <Compile Include="IO\KDDCup2011\Items.cs" />
+    <Compile Include="IO\KDDCup2011\Ratings.cs" />
+    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
+    <Compile Include="Diversification\SequentialDiversification.cs" />
+    <Compile Include="Data\KDDCupItems.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

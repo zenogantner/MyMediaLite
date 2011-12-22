@@ -50,15 +50,10 @@
     <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
     <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
     <Compile Include="AttrToFactor\MF_Mapping.cs" />
-    <Compile Include="Data\KDDCupItems.cs" />
-    <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="Eval\KDDCup.cs" />
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="IO\KDDCup2011\Items.cs" />
-    <Compile Include="IO\KDDCup2011\Ratings.cs" />
-    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
     <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
@@ -80,5 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HyperParameter\" />
+    <Folder Include="IO\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 </Project>
