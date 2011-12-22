@@ -34,6 +34,7 @@ namespace MyMediaLite.Eval
 		/// <param name="test_users">a collection of integers with all test users</param>
 		/// <param name="candidate_items">a collection of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="compute_fit">if set to true measure fit on the training data as well</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public Dictionary<string, double> DoCrossValidation(
@@ -42,13 +43,14 @@ namespace MyMediaLite.Eval
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
+			bool compute_fit = false,
 			bool show_results = false)
 		{
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
 			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(((ItemRecommender) recommender).Feedback, num_folds);
-			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, show_results);
+			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
@@ -57,6 +59,7 @@ namespace MyMediaLite.Eval
 		/// <param name="test_users">a collection of integers with all test users</param>
 		/// <param name="candidate_items">a collection of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="compute_fit">if set to true measure fit on the training data as well</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public ItemRecommendationEvaluationResults DoCrossValidation(
@@ -65,6 +68,7 @@ namespace MyMediaLite.Eval
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
+			bool compute_fit = false,
 			bool show_results = false)
 		{
 			var avg_results = new ItemRecommendationEvaluationResults();
@@ -80,12 +84,17 @@ namespace MyMediaLite.Eval
 					split_recommender.Feedback = split.Train[fold];
 					split_recommender.Train();
 					var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
+					if (compute_fit)
+						fold_results["fit"] = split_recommender.ComputeFit();
 
-					foreach (var key in fold_results.Keys)
-						if (avg_results.ContainsKey(key))
-							avg_results[key] += fold_results[key];
-						else
-							avg_results[key] = fold_results[key];
+					// thread-safe stats
+					lock (avg_results)
+						foreach (var key in fold_results.Keys)
+							if (avg_results.ContainsKey(key))
+								avg_results[key] += fold_results[key];
+							else
+								avg_results[key] = fold_results[key];
+
 					if (show_results)
 						Console.Error.WriteLine("fold {0} {1}", fold, fold_results);
 				}

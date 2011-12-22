@@ -365,7 +365,7 @@ class RatingPrediction
 				if (cross_validation > 1)
 				{
 					Console.WriteLine();
-					var results = recommender.DoCrossValidation(cross_validation, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, compute_fit, show_fold_results);
 					Console.Write(results);
 					no_eval = true;
 				}

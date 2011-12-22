@@ -144,7 +144,7 @@ namespace MyMediaLite.Eval
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
 
 					// thread-safe incrementing
-					lock(result)
+					lock (result)
 					{
 						num_users++;
 						result["AUC"]       += auc;

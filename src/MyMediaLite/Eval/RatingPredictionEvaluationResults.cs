@@ -35,10 +35,13 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		public override string ToString()
 		{
-			return string.Format(
+			string s = string.Format(
 				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####}",
 				this["RMSE"], this["MAE"], this["NMAE"]
 			);
+			if (this.ContainsKey("fit"))
+				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
+			return s;
 		}
 
 	}

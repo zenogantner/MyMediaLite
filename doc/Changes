@@ -47,8 +47,10 @@
 	data types
          - add data type SymmetricMatrix
 	evaluation
+	 - #75: allow combination of --cross-validation=K and --compute-fit
 	 - introduce extension method ComputeFit() which computes the fit
            (RMSE/AUC) on the training data of the recommender
+	 - fix potential race condition in DoCrossValidation()
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible

@@ -361,7 +361,7 @@ class ItemRecommendation
 			{
 				if (cross_validation > 1)
 				{
-					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, compute_fit, show_fold_results);
 					Console.Write(results);
 					no_eval = true;
 				}

@@ -39,10 +39,13 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		public override string ToString()
 		{
-			return string.Format(
+			string s = string.Format(
 				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} MRR {7:0.#####} num_users {8} num_items {9} num_lists {10}",
 				this["AUC"], this["prec@5"], this["prec@10"], this["MAP"], this["recall@5"], this["recall@10"], this["NDCG"], this["MRR"], this["num_users"], this["num_items"], this["num_lists"]
 			);
+			if (this.ContainsKey("fit"))
+				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
+			return s;
 		}
 	}
 }
