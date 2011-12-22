@@ -54,7 +54,6 @@
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
@@ -77,5 +76,6 @@
     <Folder Include="HyperParameter\" />
     <Folder Include="IO\" />
     <Folder Include="Data\" />
+    <Folder Include="Taxonomy\" />
   </ItemGroup>
 </Project>

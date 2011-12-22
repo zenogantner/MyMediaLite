@@ -27,11 +27,19 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Matrix factorization with factor-wise learning</summary>
 	/// <remarks>
-	/// Robert Bell, Yehuda Koren, Chris Volinsky:
-	/// Modeling Relationships at Multiple Scales to Improve Accuracy of Large Recommender Systems,
-	/// ACM Int. Conference on Knowledge Discovery and Data Mining (KDD'07), 2007.
-	///
-	/// This recommender does NOT support incremental updates.
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Robert Bell, Yehuda Koren, Chris Volinsky:
+	///         Modeling Relationships at Multiple Scales to Improve Accuracy of Large Recommender Systems,
+	///         ACM Int. Conference on Knowledge Discovery and Data Mining (KDD'07), 2007.
+	///       </description></item>
+	///     </list>
+	///   </para>
+	///   <para>
+	///      This recommender does NOT support incremental updates.
+	///   </para>
 	/// </remarks>
 	public class FactorWiseMatrixFactorization : RatingPredictor, IIterativeModel
 	{

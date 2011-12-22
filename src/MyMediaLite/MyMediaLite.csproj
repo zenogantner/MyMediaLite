@@ -205,6 +205,7 @@
     <Compile Include="IO\KDDCup2011\Track2Items.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
     <Compile Include="Data\KDDCupItems.cs" />
+    <Compile Include="Taxonomy\KDDCupItemType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

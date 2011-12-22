@@ -13,6 +13,7 @@
            property), rename NumBlocks to NumGroups
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
+         - FactorWiseMatrixFactorization: improve API doc
          - #161: rename BPR_Linear to BPRLinear
 	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
@@ -40,9 +41,6 @@
          - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
-	I/O
-	 - move code related to the KDD Cup 2011 file formats from experimental
-           to normal section
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible
@@ -54,6 +52,9 @@
 	 - Nelder-Mead: use InvariantCulture for output formatting
 	 - #173: remove Makefile target 'source-package'
 	 - move Diversification namespace from experimental to normal section
+	 - Diversification: improve API doc
+	 - move code related to the KDD Cup 2011 data from experimental to
+           normal section
 
 2.02	2011-11-29
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build

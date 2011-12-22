@@ -25,15 +25,12 @@ namespace MyMediaLite.IO.KDDCup2011
 	public class Track2Items
 	{
 		/// <summary>Read track 2 candidates from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <returns>the candidates</returns>
 		static public Dictionary<int, IList<int>> Read(string filename)
 		{
-			if (filename.Equals("-"))
-				return Read(Console.In);
-			else
-				using ( var reader = new StreamReader(filename) )
-					return Read(reader);
+			using ( var reader = new StreamReader(filename) )
+				return Read(reader);
 		}
 
 		/// <summary>Read track 2 candidates from a TextReader</summary>
@@ -60,7 +57,7 @@ namespace MyMediaLite.IO.KDDCup2011
 
 					user_candidates[i] = int.Parse(line);
 				}
-				
+
 				candidates.Add(user_id, user_candidates);
 			}
 			return candidates;

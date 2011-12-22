@@ -25,9 +25,14 @@ namespace MyMediaLite.Diversification
 {
 	/// <summary>Sequential Diversification</summary>
 	/// <remarks>
-	/// Cai-Nicolas Ziegler, Sean McNee, Joseph A. Konstan, Georg Lausen:
-	/// Improving Recommendation Lists Through Topic Diversification.
-	/// WWW 2005
+	/// Literature:
+	/// <list type="bullet">
+	///   <item><description>
+	///   Cai-Nicolas Ziegler, Sean McNee, Joseph A. Konstan, Georg Lausen:
+	///   Improving Recommendation Lists Through Topic Diversification.
+	///   WWW 2005
+	///   </description></item>
+	/// </list>
 	/// </remarks>
 	public class SequentialDiversification
 	{
@@ -69,7 +74,6 @@ namespace MyMediaLite.Diversification
 				}
 				items_by_diversity.Sort();
 
-				// if too slow: replace by priority queue from C5
 				var items_by_merged_rank = new List<WeightedItem>();
 				for (int i = 0; i < items_by_diversity.Count; i++)
 				{
@@ -88,8 +92,6 @@ namespace MyMediaLite.Diversification
 			}
 			return diversified_item_list;
 		}
-
-		// TODO think about moving the next two methods to their own class
 
 		/// <summary>Compute similarity between one item and a collection of items</summary>
 		/// <param name="item_id">the item ID</param>
