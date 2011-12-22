@@ -2,8 +2,8 @@
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
-           ComputeFit() is now an extension method for rating prediction
-           (see below under 'evaluation')
+           ComputeFit() is now an extension method (see below under
+	   'evaluation')
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
 	 - #171: add random and constant rating predictors
@@ -48,7 +48,7 @@
          - add data type SymmetricMatrix
 	evaluation
 	 - introduce extension method ComputeFit() which computes the fit
-           (RMSE) on the training data of the recommender
+           (RMSE/AUC) on the training data of the recommender
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible

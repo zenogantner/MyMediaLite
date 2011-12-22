@@ -221,7 +221,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			global_effects.SaveModel(filename + "-global-effects");
 
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
 				writer.WriteLine(num_learned_factors);
 				writer.WriteMatrix(user_factors);

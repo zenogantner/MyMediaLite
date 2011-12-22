@@ -97,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(entity_averages);

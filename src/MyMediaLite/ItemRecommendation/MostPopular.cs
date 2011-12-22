@@ -96,7 +96,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
 				writer.WriteLine(MaxItemID + 1);
 				for (int i = 0; i <= MaxItemID; i++)

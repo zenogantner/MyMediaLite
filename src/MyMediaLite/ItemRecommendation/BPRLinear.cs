@@ -242,7 +242,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 				writer.WriteMatrix(item_attribute_weight_by_user);
 		}
 

@@ -103,17 +103,20 @@ namespace MyMediaLite.IO
 			string type_name = reader.ReadLine();
 			if (!type_name.Equals(recommender_type.ToString()))
 				Console.Error.WriteLine("WARNING: No correct type name: {0}, expected: {1}", type_name, recommender_type);
+			reader.ReadLine(); // read version line, and ignore it for now
 			return reader;
 		}
 
 		/// <summary>Get a writer object to save the model parameters of a recommender</summary>
 		/// <param name="filename">the filename of the model file</param>
 		/// <param name="recommender_type">the recommender type</param>
+		/// <param name="version">the version string (for backwards compatibility)</param>
 		/// <returns>a <see cref="StreamWriter"/></returns>
-		public static StreamWriter GetWriter(string filename, Type recommender_type)
+		public static StreamWriter GetWriter(string filename, Type recommender_type, string version)
 		{
 			var writer = new StreamWriter(filename);
 			writer.WriteLine(recommender_type);
+			writer.WriteLine(version);
 			return writer;
 		}
 	}

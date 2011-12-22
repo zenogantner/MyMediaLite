@@ -78,7 +78,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.SaveModel(filename + "-global-effects");
 
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType()) )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 				correlation.Write(writer);
 		}
 
