@@ -26,13 +26,13 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class that uses an average (by entity) rating value for predictions</summary>
-	public abstract class EntityAverage : RatingPredictor
+	public abstract class EntityAverage : IncrementalRatingPredictor
 	{
 		/// <summary>The average rating for each entity</summary>
 		protected IList<double> entity_averages = new List<double>();
 
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
-		protected double global_average = 0;
+		protected double global_average;
 
 		/// <summary>return the average rating for a given entity</summary>
 		/// <param name="index">the entity index</param>
@@ -46,7 +46,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>Train the recommender according to the given entity type</summary>
-		/// <param name="entity_ids">list of the relevant entity IDs in the training data</param>
+		/// <param name="entity_ids">list of all entity IDs in the training data (per rating)</param>
 		/// <param name="max_entity_id">the maximum entity ID</param>
 		protected void Train(IList<int> entity_ids, int max_entity_id)
 		{
@@ -71,6 +71,27 @@ namespace MyMediaLite.RatingPrediction
 					entity_averages[i] /= rating_counts[i];
 				else
 					entity_averages[i] = global_average;
+		}
+
+		/// <summary>Retrain the recommender according to the given entity type</summary>
+		/// <param name="entity_id">the ID of the entity to update</param>
+		/// <param name="indices">list of indices to use for retraining</param>
+		/// <param name="entity_ids">list of all entity IDs in the training data (per rating)</param>
+		protected void Retrain(int entity_id, IList<int> indices, IList<int> entity_ids)
+		{
+			double sum = 0;
+			int count = 0;
+			
+			foreach (int i in indices)
+			{
+				count++;
+				sum += ratings[i];
+			}
+			
+			if (count > 0)
+				entity_averages[entity_id] = sum / count;
+			else
+				entity_averages[entity_id] = global_average;
 		}
 
 		///

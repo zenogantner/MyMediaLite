@@ -47,5 +47,39 @@ namespace MyMediaLite.RatingPrediction
 			else
 				return global_average;
 		}
+
+		///
+		public override void AddRating(int user_id, int item_id, double rating)
+		{
+			base.AddRating(user_id, item_id, rating);
+			Retrain(user_id, ratings.ByUser[user_id], ratings.Users);
+		}
+
+		///
+		public override void UpdateRating(int user_id, int item_id, double rating)
+		{
+			base.UpdateRating(user_id, item_id, rating);
+			Retrain(user_id, ratings.ByUser[user_id], ratings.Users);
+		}
+
+		///
+		public override void RemoveRating(int user_id, int item_id)
+		{
+			base.RemoveRating(user_id, item_id);
+			Retrain(user_id, ratings.ByUser[user_id], ratings.Users);
+		}
+
+		///
+		protected override void AddUser(int user_id)
+		{
+			while (entity_averages.Count < user_id + 1)
+				entity_averages.Add(0);
+		}
+
+		///
+		public override void RemoveUser(int user_id)
+		{
+			entity_averages[user_id] = global_average;
+		}
 	}
 }

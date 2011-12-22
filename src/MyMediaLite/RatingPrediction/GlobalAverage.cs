@@ -26,7 +26,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class GlobalAverage : RatingPredictor
+	public class GlobalAverage : IncrementalRatingPredictor
 	{
 		private double global_average = 0;
 
@@ -46,6 +46,27 @@ namespace MyMediaLite.RatingPrediction
 		public override double Predict(int user_id, int item_id)
 		{
 			return global_average;
+		}
+
+		///
+		public override void AddRating(int user_id, int item_id, double rating)
+		{
+			base.AddRating(user_id, item_id, rating);
+			Train();
+		}
+
+		///
+		public override void UpdateRating(int user_id, int item_id, double rating)
+		{
+			base.UpdateRating(user_id, item_id, rating);
+			Train();
+		}
+
+		///
+		public override void RemoveRating(int user_id, int item_id)
+		{
+			base.RemoveRating(user_id, item_id);
+			Train();
 		}
 
 		///

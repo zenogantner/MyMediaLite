@@ -14,6 +14,7 @@
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
          - #161: rename BPR_Linear to BPRLinear
+	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs
