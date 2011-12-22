@@ -177,5 +177,21 @@ namespace MyMediaLite.Eval
 
 			return result;
 		}
+
+		/// <summary>Computes the AUC fit of a recommender on the training data</summary>
+		/// <returns>the AUC on the training data</returns>
+		/// <param name='recommender'>the item recommender to evaluate</param>
+		/// <param name="test_users">a list of integers with all test users; if null, use all users in the test cases</param>
+		/// <param name="candidate_items">a list of integers with all candidate items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		public static double ComputeFit(
+			this ItemRecommender recommender,
+			IList<int> test_users = null,
+			IList<int> candidate_items = null,
+			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)
+		{
+			return recommender.Evaluate(recommender.Feedback, recommender.Feedback, test_users, candidate_items, candidate_item_mode, true)["RMSE"];
+		}
+
 	}
 }
