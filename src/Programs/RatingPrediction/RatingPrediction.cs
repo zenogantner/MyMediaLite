@@ -419,7 +419,7 @@ class RatingPrediction
 	static void CheckParameters(IList<string> extra_args)
 	{
 		if (online_eval && !(recommender is IIncrementalRatingPredictor))
-			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+			Usage(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (training_file == null && load_model_file == null)
 			Usage("Please provide either --training-file=FILE or --load-model=FILE.");

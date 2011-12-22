@@ -1,4 +1,4 @@
-2.03	2011-12-??
+2.03	2011-12-23
 	API
          - add method Grow(x, y) to IMatrix interface
 	recommenders
@@ -21,6 +21,8 @@
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
          - remove redundant code for setting the random seed
+	 - fix error message when using --online-evaluation with a
+           non-incremental recommender
 	 - rating prediction: fix usage --file-format=kddcup_2011 instead of
            --file-format=kddcup2011
         correlations

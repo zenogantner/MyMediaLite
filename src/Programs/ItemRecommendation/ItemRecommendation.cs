@@ -427,7 +427,7 @@ class ItemRecommendation
 			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
 
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
-			Usage("Recommender {0} does not support incremental updates, which are necessary for an online experiment.");
+			Usage(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (cross_validation == 1)
 			Usage("--cross-validation=K requires K to be at least 2.");
