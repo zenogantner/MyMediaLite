@@ -148,5 +148,73 @@ namespace MyMediaLite.Data
 
 		///
 		public abstract void RemoveItem(int item_id);
+
+		///
+		public ISet<int> GetUsers(IList<int> indices)
+		{
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(Users[index]);
+			return result_set;
+		}
+
+		///
+		public ISet<int> GetItems(IList<int> indices)
+		{
+			var result_set = new HashSet<int>();
+			foreach (int index in indices)
+				result_set.Add(Items[index]);
+			return result_set;
+		}
+
+		///
+		public bool TryGetIndex(int user_id, int item_id, out int index)
+		{
+			index = -1;
+
+			for (int i = 0; i < Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
+		///
+		public bool TryGetIndex(int user_id, int item_id, ICollection<int> indexes, out int index)
+		{
+			index = -1;
+
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+				{
+					index = i;
+					return true;
+				}
+
+			return false;
+		}
+
+		///
+		public int GetIndex(int user_id, int item_id)
+		{
+			for (int i = 0; i < Count; i++)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
+		///
+		public int GetIndex(int user_id, int item_id, ICollection<int> indexes)
+		{
+			foreach (int i in indexes)
+				if (Users[i] == user_id && Items[i] == item_id)
+					return i;
+
+			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
 	}
 }

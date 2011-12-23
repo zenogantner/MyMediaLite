@@ -196,21 +196,5 @@ namespace MyMediaLite.Data
 
 			return transpose;
 		}
-
-		///
-		public bool TryGetIndex(int user_id, int item_id, out int index)
-		{
-			index = -1;
-
-			for (int i = 0; i < Count; i++)
-				if (Users[i] == user_id && Items[i] == item_id)
-				{
-					index = i;
-					return true;
-				}
-
-			return false;
-		}
-
 	}
 }

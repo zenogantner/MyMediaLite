@@ -4,6 +4,7 @@
          - #72: method ComputeFit() renamed to ComputeLoss(),
            ComputeFit() is now an extension method (see below under
 	   'evaluation')
+	 - #145: move index-related methods from IRatings to IDataSet
 	 - #147: add interfaces IItemSimilarityProvider and
 	   IUserSimilarityProvider
 	recommenders
