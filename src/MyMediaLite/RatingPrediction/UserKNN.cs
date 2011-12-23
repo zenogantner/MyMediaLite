@@ -31,7 +31,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override IRatings Ratings
 		{
-			set	{
+			set {
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
 				for (int index = 0; index < ratings.Count; index++)
