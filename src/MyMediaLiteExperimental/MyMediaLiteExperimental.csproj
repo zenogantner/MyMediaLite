@@ -57,9 +57,6 @@
     <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
-    <Compile Include="HyperParameter\NelderMead.cs" />
-    <Compile Include="HyperParameter\GridSearch.cs" />
-    <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -73,7 +70,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HyperParameter\" />
     <Folder Include="IO\" />
     <Folder Include="Data\" />
     <Folder Include="Taxonomy\" />
