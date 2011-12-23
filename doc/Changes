@@ -4,6 +4,8 @@
          - #72: method ComputeFit() renamed to ComputeLoss(),
            ComputeFit() is now an extension method (see below under
 	   'evaluation')
+	 - #147: add interfaces IItemSimilarityProvider and
+	   IUserSimilarityProvider
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
 	 - #171: add random and constant rating predictors
@@ -17,6 +19,7 @@
            (of the underlying baseline predictor)
 	 - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
            ComputeLoss() functions
+	 - UserKNN, ItemKNN: implement SimilarityProvider interfaces
          - #161: rename BPR_Linear to BPRLinear
 	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
