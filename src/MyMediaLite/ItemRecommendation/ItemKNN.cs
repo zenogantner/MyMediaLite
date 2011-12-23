@@ -17,6 +17,8 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Correlation;
 using MyMediaLite.Util;
 
@@ -26,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class ItemKNN : KNN
+	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
 		///
 		public override void Train()
@@ -56,9 +58,26 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
+		public float GetItemSimilarity(int item_id1, int item_id2)
+		{
+			return correlation[item_id1, item_id2];
+		}
+
+		///
+		public IList<int> GetMostSimilarItems(int item_id, uint n = 10)
+		{
+			if (n == k)
+				return nearest_neighbors[item_id];
+			else if (n < k)
+				return nearest_neighbors[item_id].Take((int) n).ToArray();
+			else
+				return correlation.GetNearestNeighbors(item_id, n);
+		}
+
+		///
 		public override string ToString()
 		{
-			return string.Format("ItemKNN k={0}" , k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("ItemKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
 	}
 }

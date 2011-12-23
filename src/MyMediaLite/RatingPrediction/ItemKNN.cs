@@ -24,7 +24,7 @@ using MyMediaLite.Util;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN</summary>
-	public abstract class ItemKNN : KNN
+	public abstract class ItemKNN : KNN, IItemSimilarityProvider
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
 		protected SparseBooleanMatrix data_item;
@@ -116,6 +116,18 @@ namespace MyMediaLite.RatingPrediction
 		protected override void AddItem(int item_id)
 		{
 			correlation.AddEntity(item_id);
+		}
+
+		///
+		public float GetItemSimilarity(int item_id1, int item_id2)
+		{
+			return correlation[item_id1, item_id2];
+		}
+
+		///
+		public IList<int> GetMostSimilarItems(int item_id, uint n = 10)
+		{
+			return correlation.GetNearestNeighbors(item_id, n);
 		}
 
 		///

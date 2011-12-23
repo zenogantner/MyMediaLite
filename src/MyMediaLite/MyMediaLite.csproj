@@ -209,6 +209,7 @@
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
+    <Compile Include="IItemSimilarityProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
