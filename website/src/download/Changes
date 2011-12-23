@@ -1,23 +1,35 @@
-2.03	2011-12-??
+2.03	2011-12-24
 	API
          - add method Grow(x, y) to IMatrix interface
+         - #72: method ComputeFit() renamed to ComputeLoss(),
+           ComputeFit() is now an extension method (see below under
+	   'evaluation')
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
+	 - #171: add random and constant rating predictors
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
 	 - ItemKNNCosine: fix bug in incremental updates
 	 - SoftMarginRankingMF: move to main package, improve API doc
-         - UserItemBaseline, RatingPrediction.KNN: improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
-           property), rename NumBlocks to NumGroups
+           property), rename NumBlocks to MaxThreads
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
+	 - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
+           ComputeLoss() functions
+         - #161: rename BPR_Linear to BPRLinear
+	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs
+	 - starter scripts: use --gc=sgen to allow very large datasets
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
          - remove redundant code for setting the random seed
+	 - fix error message when using --online-evaluation with a
+           non-incremental recommender
+	 - rating prediction: fix usage --file-format=kddcup_2011 instead of
+           --file-format=kddcup2011
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,
@@ -32,6 +44,16 @@
          - implement weighted cosine similarity (Xie et al., )
 	data types
          - add data type SymmetricMatrix
+	evaluation
+	 - #75: allow combination of --cross-validation=K and --compute-fit
+	 - introduce extension method ComputeFit() which computes the fit
+           (RMSE/AUC) on the training data of the recommender
+	 - fix potential race condition in DoCrossValidation()
+	documentation
+	 - #158: put API documentation into a separate package
+	 - Diversification: improve API doc
+         - UserItemBaseline, RatingPrediction.KNN: improve API doc
+         - FactorWiseMatrixFactorization: improve API doc
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible
@@ -42,6 +64,10 @@
 	 - C# rating prediction example: add DoCrossValidation() example
 	 - Nelder-Mead: use InvariantCulture for output formatting
 	 - #173: remove Makefile target 'source-package'
+	 - move Diversification namespace from experimental to normal section
+	 - move code related to the KDD Cup 2011 data from experimental to
+           normal section
+	 - move namespace HyperParameter from experimental to normal section
 
 2.02	2011-11-29
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build

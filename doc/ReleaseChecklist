@@ -17,6 +17,7 @@ release checklist:
 9a. Inspect the contents of the source code package from GitHub:
 9b. Make a test installation
 9c. Inspect the contents of the binary package
+9d. Inspect the contents of the documentation package
 10. Create the release announcement
 11. Add the new version to the website
 11a. Copy the --help output of the two command-line tools to the website

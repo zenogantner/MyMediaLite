@@ -11,7 +11,8 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website binary-package test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+
 all: mymedialite
 
 mymedialite:
@@ -47,12 +48,10 @@ install:
 uninstall:
 	cd ${SRC_DIR} && make uninstall PREFIX=${PREFIX}
 
-binary-package:
+MyMediaLite-${VERSION}.tar.gz:
 	mkdir MyMediaLite-${VERSION}
-	mkdir MyMediaLite-${VERSION}/doc
+	mkdir MyMediaLite-${VERSION}/doc/
 	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
-	mkdir MyMediaLite-${VERSION}/doc/api
-	cp -r doc/doxygen/html MyMediaLite-${VERSION}/doc/api
 	cp -r bin examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/lib/
@@ -65,6 +64,17 @@ binary-package:
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
+MyMediaLite-${VERSION}.doc.tar.gz: doxygen
+	mkdir MyMediaLite-${VERSION}.doc/
+	mkdir MyMediaLite-${VERSION}.doc/doc/
+	mkdir MyMediaLite-${VERSION}.doc/doc/api
+	cp -r doc/doxygen/html MyMediaLite-${VERSION}.doc/doc/api
+	tar -cvzf MyMediaLite-${VERSION}.doc.tar.gz MyMediaLite-${VERSION}.doc
+	rm -rf MyMediaLite-${VERSION}.doc
+
+MyMediaLite-${VERSION}.src.tar.gz:
+	wget --output-document=MyMediaLite-${VERSION}.src.tar.gz https://github.com/zenogantner/MyMediaLite/tarball/master
+
 test: data/ml-100k/u.data all
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
@@ -73,8 +83,7 @@ test: data/ml-100k/u.data all
 	time tests/test_random_split.sh
 	time tests/test_rating_prediction_online.sh
 
-release: binary-package
-	wget --output-document=MyMediaLite-${VERSION}.src.tar.gz https://github.com/zenogantner/MyMediaLite/tarball/master
+release: mymedialite MyMediaLite-${VERSION}.doc.tar.gz MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz
 	head doc/Changes
 	git status
 	cp doc/Changes website/src/download

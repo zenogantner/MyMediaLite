@@ -1,4 +1,4 @@
-2.03	2011-12-23
+2.03	2011-12-24
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
@@ -11,12 +11,10 @@
            deactivated
 	 - ItemKNNCosine: fix bug in incremental updates
 	 - SoftMarginRankingMF: move to main package, improve API doc
-         - UserItemBaseline, RatingPrediction.KNN: improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
            property), rename NumBlocks to MaxThreads
 	 - #177: FactorWiseMatrixFactorization: add RegU and RegI properties
            (of the underlying baseline predictor)
-         - FactorWiseMatrixFactorization: improve API doc
 	 - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
            ComputeLoss() functions
          - #161: rename BPR_Linear to BPRLinear
@@ -51,6 +49,11 @@
 	 - introduce extension method ComputeFit() which computes the fit
            (RMSE/AUC) on the training data of the recommender
 	 - fix potential race condition in DoCrossValidation()
+	documentation
+	 - #158: put API documentation into a separate package
+	 - Diversification: improve API doc
+         - UserItemBaseline, RatingPrediction.KNN: improve API doc
+         - FactorWiseMatrixFactorization: improve API doc
         misc
 	 - fix #176: DoCrossValidation() hangs forever; random number
            generation now should be thread-safe and reproducible
@@ -62,7 +65,6 @@
 	 - Nelder-Mead: use InvariantCulture for output formatting
 	 - #173: remove Makefile target 'source-package'
 	 - move Diversification namespace from experimental to normal section
-	 - Diversification: improve API doc
 	 - move code related to the KDD Cup 2011 data from experimental to
            normal section
 	 - move namespace HyperParameter from experimental to normal section
