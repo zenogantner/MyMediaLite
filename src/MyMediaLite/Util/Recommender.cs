@@ -186,16 +186,16 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating predictor from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static RatingPredictor CreateRatingPredictor(string typename)
+		public static RatingPredictor CreateRatingPredictor(this string typename)
 		{
 			if (! typename.StartsWith("MyMediaLite.RatingPrediction."))
 				typename = "MyMediaLite.RatingPrediction." + typename;
-			
+
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
 				Type type = assembly.GetType(typename, false, true);
 				if (type != null)
-					return CreateRatingPredictor(type);
+					return type.CreateRatingPredictor();
 			}
 			return null;
 		}
@@ -203,7 +203,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create a rating predictor from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>a rating recommender object of type type</returns>
-		public static RatingPredictor CreateRatingPredictor(Type type)
+		public static RatingPredictor CreateRatingPredictor(this Type type)
 		{
 			if (type.IsAbstract)
 				return null;
@@ -219,16 +219,16 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static ItemRecommender CreateItemRecommender(string typename)
+		public static ItemRecommender CreateItemRecommender(this string typename)
 		{
 			if (! typename.StartsWith("MyMediaLite.ItemRecommendation"))
 				typename = "MyMediaLite.ItemRecommendation." + typename;
-			
+
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
 				Type type = assembly.GetType(typename, false, true);
 				if (type != null)
-					return CreateItemRecommender(type);
+					return type.CreateItemRecommender();
 			}
 			return null;
 		}
@@ -236,7 +236,7 @@ namespace MyMediaLite.Util
 		/// <summary>Create an item recommender from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>an item recommender object of type type</returns>
-		public static ItemRecommender CreateItemRecommender(Type type)
+		public static ItemRecommender CreateItemRecommender(this Type type)
 		{
 			if (type.IsAbstract)
 				return null;
@@ -248,11 +248,11 @@ namespace MyMediaLite.Util
 			else
 				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
 		}
-		
+
 		/// <summary>Describes the kind of data needed by this recommender</summary>
 		/// <param name="recommender">a recommender</param>
-		/// <returns>a string containing the additional datafiles needed for training this recommender</returns>
-		public static string Needs(IRecommender recommender)
+		/// <returns>a string containing the additional data file arguments needed for training this recommender</returns>
+		public static string Needs(this IRecommender recommender)
 		{
 			// determine necessary data
 			var needs = new List<string>();
@@ -268,6 +268,30 @@ namespace MyMediaLite.Util
 			return string.Join(", ", needs.ToArray());
 		}
 
+		/// <summary>Describes the kind of arguments supported by this recommender</summary>
+		/// <param name="recommender">a recommender</param>
+		/// <returns>a string containing the additional arguments supported by this recommender</returns>
+		public static string Supports(this IRecommender recommender)
+		{
+			// determine necessary data
+			var supports = new List<string>();
+			/*
+			if (recommender is IUserSimilarityProvider)
+				needs.Add("");
+			if (recommender is IItemSimilarityProvider)
+				needs.Add("");
+			*/
+			if (recommender is IIterativeModel)
+				supports.Add("--find-iter=N");
+			if (recommender is IIncrementalItemRecommender)
+				supports.Add("--online-evaluation");
+			if (recommender is IIncrementalRatingPredictor)
+				supports.Add("--online-evaluation");
+
+			return string.Join(", ", supports.ToArray());
+		}
+
+
 		/// <summary>List all recommenders in a given namespace</summary>
 		/// <param name="prefix">a string representing the namespace</param>
 		/// <returns>an array of strings containing the recommender descriptions</returns>
@@ -278,12 +302,15 @@ namespace MyMediaLite.Util
 			foreach (Type type in Utils.GetTypesInNamespace(prefix))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
 				{
-					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) Recommender.CreateRatingPredictor(type) : (IRecommender) Recommender.CreateItemRecommender(type);
+					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) type.CreateRatingPredictor() : (IRecommender) type.CreateItemRecommender();
 
 					string description = recommender.ToString();
-					string needs = Recommender.Needs(recommender);
+					string needs = recommender.Needs();
 					if (needs.Length > 0)
-						description += " (needs " + needs + ")";
+						description += "\n       needs " + needs;
+					string supports = recommender.Supports();
+					if (supports.Length > 0)
+						description += "\n       supports " + supports;
 					result.Add(description);
 				}
 

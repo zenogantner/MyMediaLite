@@ -26,6 +26,7 @@
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs
+	 - #51: mark iterative and incremental recommenders
 	 - starter scripts: use --gc=sgen to allow very large datasets
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
@@ -65,6 +66,7 @@
            solution)
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT
+	 - turn more methods in Util.Recommender into extension methods
 	 - C# rating prediction example: add DoCrossValidation() example
 	 - Nelder-Mead: use InvariantCulture for output formatting
 	 - #173: remove Makefile target 'source-package'
