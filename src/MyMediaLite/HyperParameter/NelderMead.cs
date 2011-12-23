@@ -77,8 +77,9 @@ namespace MyMediaLite.HyperParameter
 		/// <param name="error_measure">an error measure (lower is better)</param>
 		/// <param name="recommender">a rating predictor (will be set to best hyperparameter combination)</param>
 		/// <returns>the estimated error of the best hyperparameter combination</returns>
-		public static double FindMinimum(string error_measure,
-		                                 RatingPredictor recommender)
+		public static double FindMinimum(
+			string error_measure,
+			RatingPredictor recommender)
 		{
 			var split = new RatingsSimpleSplit(recommender.Ratings, split_ratio);
 			//var split = new RatingCrossValidationSplit(recommender.Ratings, 5);
