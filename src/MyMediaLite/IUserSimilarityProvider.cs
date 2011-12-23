@@ -19,19 +19,19 @@ using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	/// <summary>Interface for classes that provide item similarities</summary>
-	public interface IItemSimilarityProvider
+	/// <summary>Interface for classes that provide user similarities</summary>
+	public interface IUserSimilarityProvider
 	{
-		/// <summary>get the similarity between two items</summary>
-		/// <returns>the item similarity; higher means more similar</returns>
-		/// <param name='item_id1'>the ID of the first item</param>
-		/// <param name='item_id2'>the ID of the second item</param>
-		float GetItemSimilarity(int item_id1, int item_id2);
-		/// <summary>get the most similar items</summary>
-		/// <returns>the items most similar to a given item</returns>
-		/// <param name='item_id'>the ID of the item</param>
-		/// <param name='n'>the number of similar items to return</param>
-		IList<int> GetMostSimilarItems(int item_id, uint n = 10);
+		/// <summary>get the similarity between two users</summary>
+		/// <returns>the user similarity; higher means more similar</returns>
+		/// <param name='user_id1'>the ID of the first user</param>
+		/// <param name='user_id2'>the ID of the second user</param>
+		float GetUserSimilarity(int user_id1, int user_id2);
+		/// <summary>get the most similar users</summary>
+		/// <returns>the users most similar to a given user</returns>
+		/// <param name='user_id'>the ID of the user</param>
+		/// <param name='n'>the number of similar users to return</param>
+		IList<int> GetMostSimilarUsers(int user_id, uint n = 10);
 	}
 }
 

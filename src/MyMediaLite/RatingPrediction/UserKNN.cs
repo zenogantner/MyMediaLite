@@ -23,7 +23,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted user-based kNN</summary>
-	public abstract class UserKNN : KNN
+	public abstract class UserKNN : KNN, IUserSimilarityProvider
 	{
 		/// <summary>boolean matrix indicating which user rated which item</summary>
 		protected SparseBooleanMatrix data_user;
@@ -85,7 +85,7 @@ namespace MyMediaLite.RatingPrediction
 				result = MinRating;
 			return result;
 		}
-		
+
 		/// <summary>Retrain model for a given user</summary>
 		/// <param name='user_id'>the user ID</param>
 		abstract protected void RetrainUser(int user_id);
@@ -117,6 +117,18 @@ namespace MyMediaLite.RatingPrediction
 		protected override void AddUser(int user_id)
 		{
 			correlation.AddEntity(user_id);
+		}
+
+		///
+		public float GetUserSimilarity(int user_id1, int user_id2)
+		{
+			return correlation[user_id1, user_id2];
+		}
+
+		///
+		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
+		{
+			return correlation.GetNearestNeighbors(user_id, n);
 		}
 	}
 }
