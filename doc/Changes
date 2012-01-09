@@ -1,4 +1,4 @@
-2.03	2011-12-24
+2.03	2011-01-09
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
@@ -12,6 +12,8 @@
 	 - #171: add random and constant rating predictors
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
+	 - UserItemBaseline: fix wrong initialization in OptimizeUserBiases()
+           and OptimizeItemBiases(), reported by Tom Tung
 	 - ItemKNNCosine: fix bug in incremental updates
 	 - SoftMarginRankingMF: move to main package, improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a

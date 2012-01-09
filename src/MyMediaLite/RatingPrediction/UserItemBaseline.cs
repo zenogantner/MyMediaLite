@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -101,7 +101,9 @@ namespace MyMediaLite.RatingPrediction
 		void OptimizeUserBiases()
 		{
 			int[] user_ratings_count = new int[MaxUserID + 1];
-
+			for (int u = 0; u <= MaxUserID; u++)
+				user_biases[u] = 0;
+			
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				user_biases[ratings.Users[index]] += ratings[index] - global_average - item_biases[ratings.Items[index]];
@@ -115,6 +117,8 @@ namespace MyMediaLite.RatingPrediction
 		void OptimizeItemBiases()
 		{
 			int[] item_ratings_count = new int[MaxItemID + 1];
+			for (int i = 0; i <= MaxItemID; i++)
+				item_biases[i] = 0;
 
 			for (int index = 0; index < ratings.Count; index++)
 			{
