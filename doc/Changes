@@ -39,7 +39,6 @@
            --file-format=kddcup2011
          - KDD Cup tool (track 2): support compute_fit, align iteration output
            with the other MyMediaLite programs
-
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,
@@ -79,6 +78,7 @@
 	 - move code related to the KDD Cup 2011 data from experimental to
            normal section
 	 - move namespace HyperParameter from experimental to normal section
+	 - add script visualize-iterations.pl
 
 2.02	2011-11-29
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build
