@@ -57,7 +57,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected double[] item_bias;
 
 		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
+		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; } }
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
 
@@ -663,7 +663,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9}, bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14}",
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} bold_driver={10} fast_sampling_memory_limit={11} update_j={12} init_mean={13} init_stddev={14}",
 				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ, InitMean, InitStdDev);
 		}
 	}
