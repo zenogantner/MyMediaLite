@@ -37,6 +37,9 @@
            non-incremental recommender
 	 - rating prediction: fix usage --file-format=kddcup_2011 instead of
            --file-format=kddcup2011
+         - KDD Cup tool (track 2): support compute_fit, align iteration output
+           with the other MyMediaLite programs
+
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,

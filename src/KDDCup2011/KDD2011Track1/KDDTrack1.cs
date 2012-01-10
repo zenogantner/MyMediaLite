@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -80,8 +80,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
  usage:  KDDCup.exe METHOD [ARGUMENTS] [OPTIONS]
 
-  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
-
   methods (plus arguments and their defaults):");
 
 			Console.Write("   - ");
@@ -113,8 +111,8 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		Environment.Exit(exit_code);
 	}
 
-    static void Main(string[] args)
-    {
+	static void Main(string[] args)
+	{
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
@@ -315,7 +313,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 				Console.Write(recommender.ToString() + " ");
 
 				seconds = Wrap.MeasureTime(
-			    	delegate() { Console.Write(rating_predictor_validate.Evaluate(validation_ratings)); }
+					delegate() { Console.Write(rating_predictor_validate.Evaluate(validation_ratings)); }
 				);
 				Console.Write(" testing_time " + seconds);
 			}
@@ -326,7 +324,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 			{
 				Console.WriteLine("Prediction for KDD Cup Track 1:");
 				seconds = Wrap.MeasureTime( delegate() { rating_predictor_final.Train(); } );
-        		Console.Write(" training_time " + seconds + " ");
+				Console.Write(" training_time " + seconds + " ");
 				if (save_model_file != string.Empty)
 				{
 					Model.Save(rating_predictor_validate, save_model_file + "-validate");
@@ -347,7 +345,7 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		}
 	}
 
-    static void LoadData(string data_dir)
+	static void LoadData(string data_dir)
 	{
 		string training_file   = Path.Combine(data_dir, track2 ? "trainIdx2.txt"      : "trainIdx1.txt");
 		string test_file       = Path.Combine(data_dir, track2 ? "testIdx2.txt"       : "testIdx1.txt");
@@ -409,21 +407,20 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		if (training_time_stats.Count > 0)
 			Console.Error.WriteLine(
 				string.Format(
-				CultureInfo.InvariantCulture,
-				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-				training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-			));
+					CultureInfo.InvariantCulture,
+					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+					training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()));
 		if (eval_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-				CultureInfo.InvariantCulture,
-				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-				eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()));
 		if (compute_fit && fit_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-				CultureInfo.InvariantCulture,
-				"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-				fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"fit_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+					fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()));
 	}
 }

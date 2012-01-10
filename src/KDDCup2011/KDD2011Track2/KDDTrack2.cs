@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -68,6 +68,7 @@ class KDDTrack2
 	static bool predict_score;
 	static bool sample_data;
 	static bool predict_rated;
+	static bool compute_fit;
 
 	static void Usage(string message)
 	{
@@ -82,8 +83,6 @@ class KDDTrack2
 MyMediaLite KDD Cup 2011 Track 2 tool
 
  usage:  KDDTrack2.exe METHOD [ARGUMENTS] [OPTIONS]
-
-  use '-' for either TRAINING_FILE or TEST_FILE to read the data from STDIN
 
   methods (plus arguments and their defaults):");
 
@@ -106,6 +105,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
   options for finding the right number of iterations (MF methods)
    - find_iter=N                give out statistics every N iterations
    - max_iter=N                 perform at most N iterations
+   - compute_fit=BOOL           compute the fit on the training data every N iterations
    - epsilon=NUM                abort iterations if error is more than best result plus NUM
    - err_cutoff=NUM             abort if error is above NUM");
 
@@ -129,13 +129,14 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 		RecommenderParameters parameters = null;
 		try	{ parameters = new RecommenderParameters(args, 1); }
-		catch (ArgumentException e) { Usage(e.Message);	}
+		catch (ArgumentException e) { Usage(e.Message); }
 
 		// arguments for iteration search
-		find_iter   = parameters.GetRemoveInt32(  "find_iter",   0);
-		max_iter    = parameters.GetRemoveInt32(  "max_iter",    500);
-		epsilon     = parameters.GetRemoveDouble( "epsilon",     1);
-		err_cutoff  = parameters.GetRemoveDouble( "err_cutoff",  2);
+		find_iter   = parameters.GetRemoveInt32(  "find_iter",  0);
+		max_iter    = parameters.GetRemoveInt32(  "max_iter",   500);
+		epsilon     = parameters.GetRemoveDouble( "epsilon",    1);
+		err_cutoff  = parameters.GetRemoveDouble( "err_cutoff", 2);
+		compute_fit = parameters.GetRemoveBool("compute_fit", false);
 
 		// data arguments
 		string data_dir  = parameters.GetRemoveString( "data_dir");
@@ -143,14 +144,14 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			data_dir = data_dir + "/mml-track2";
 		else
 			data_dir = "mml-track2";
-		sample_data      = parameters.GetRemoveBool(   "sample_data",   false);
-		predict_rated    = parameters.GetRemoveBool(   "predict_rated", false);
-		predict_score    = parameters.GetRemoveBool(   "predict_score", false);
+		sample_data      = parameters.GetRemoveBool("sample_data",   false);
+		predict_rated    = parameters.GetRemoveBool("predict_rated", false);
+		predict_score    = parameters.GetRemoveBool("predict_score", false);
 
 		// other arguments
 		save_model_file  = parameters.GetRemoveString( "save_model");
 		load_model_file  = parameters.GetRemoveString( "load_model");
-		int random_seed  = parameters.GetRemoveInt32(  "random_seed",  -1);
+		int random_seed  = parameters.GetRemoveInt32(  "random_seed", -1);
 		prediction_file  = parameters.GetRemoveString( "prediction_file");
 
 		Console.Error.WriteLine("predict_score={0}", predict_score);
@@ -197,19 +198,19 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 			if (load_model_file == string.Empty)
 			{
-				recommender_validate.Train(); // TODO parallelize
+				recommender_validate.Train();
 				if (prediction_file != string.Empty)
 					recommender_final.Train();
 			}
 
 			// evaluate and display results
 			double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
-			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} {1}", error, iterative_recommender_validate.NumIter));
+			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} iteration {1}", error, iterative_recommender_validate.NumIter));
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan time = Wrap.MeasureTime(delegate() {
-					iterative_recommender_validate.Iterate(); // TODO parallelize
+					iterative_recommender_validate.Iterate();
 					if (prediction_file != string.Empty)
 						iterative_recommender_final.Iterate();
 				});
@@ -217,12 +218,18 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 				if (i % find_iter == 0)
 				{
-					time = Wrap.MeasureTime(delegate() { // TODO parallelize
+					time = Wrap.MeasureTime(delegate() {
 						// evaluate
 						error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 						err_eval_stats.Add(error);
-						Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} {1}", error, i));
-
+						Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} iteration {1}", error, i));
+						
+						if (compute_fit)
+						{
+							double fit = KDDCup.EvaluateTrack2(recommender_final, validation_candidates, validation_hits);
+							Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit: ERR {0:0.######} iteration {1}", fit, i));
+						}
+						
 						if (prediction_file != string.Empty)
 						{
 							if (predict_score)
@@ -280,23 +287,23 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			}
 
 			seconds = Wrap.MeasureTime(delegate() {
-					// evaluate
-					double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
-					Console.Write(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######}", error));
-
-					if (prediction_file != string.Empty)
+				// evaluate
+				double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
+				Console.Write(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######}", error));
+		
+				if (prediction_file != string.Empty)
+				{
+					if (predict_score)
 					{
-						if (predict_score)
-						{
-							KDDCup.PredictScoresTrack2(recommender_validate, validation_candidates, prediction_file + "-validate");
-							KDDCup.PredictScoresTrack2(recommender_final, test_candidates, prediction_file);
-						}
-						else
-						{
-							KDDCup.PredictTrack2(recommender_validate, validation_candidates, prediction_file + "-validate");
-							KDDCup.PredictTrack2(recommender_final, test_candidates, prediction_file);
-						}
+						KDDCup.PredictScoresTrack2(recommender_validate, validation_candidates, prediction_file + "-validate");
+						KDDCup.PredictScoresTrack2(recommender_final, test_candidates, prediction_file);
 					}
+					else
+					{
+						KDDCup.PredictTrack2(recommender_validate, validation_candidates, prediction_file + "-validate");
+						KDDCup.PredictTrack2(recommender_final, test_candidates, prediction_file);
+					}
+				}
 			});
 			Console.Write(" evaluation_time " + seconds + " ");
 
@@ -311,7 +318,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		Console.WriteLine();
 	}
 
-    static void LoadData(string data_dir)
+	static void LoadData(string data_dir)
 	{
 		string training_file              = Path.Combine(data_dir, "trainIdx2.txt");
 		string test_file                  = Path.Combine(data_dir, "testIdx2.txt");
@@ -424,16 +431,16 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 	static void DisplayStats()
 	{
 		if (training_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-	            training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()
-			));
+			Console.Error.WriteLine(
+				string.Format(CultureInfo.InvariantCulture,
+					"iteration_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+					training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()));
 		if (eval_time_stats.Count > 0)
-			Console.Error.WriteLine(string.Format(
-			    CultureInfo.InvariantCulture,
-				"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-	            eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
+			Console.Error.WriteLine(
+				string.Format(
+					CultureInfo.InvariantCulture,
+					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
+					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
 			));
 
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
