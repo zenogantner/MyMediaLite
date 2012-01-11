@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -66,6 +66,5 @@ namespace MyMediaLite.DataType
 				squared_entry_sum += Math.Pow(matrix.row_list[entry.First][entry.Second], 2);
 			return Math.Sqrt(squared_entry_sum);
 		}
-
 	}
 }

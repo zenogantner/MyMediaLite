@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,7 +27,7 @@ namespace MyMediaLite.DataType
 	/// </summary>
 	/// <remarks>
 	/// This data structure is static, which means that rows are represented as int arrays,
-	/// and can be assigned, but not modified.
+	/// a can be assigned, but not modified.
 	///
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
@@ -127,10 +127,8 @@ namespace MyMediaLite.DataType
 			get {
 				var return_list = new List<KeyValuePair<int, IList<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
-				{
 					if (row_list[i].Length > 0)
 						return_list.Add(new KeyValuePair<int, IList<int>>(i, row_list[i]));
-				}
 				return return_list;
 			}
 		}
@@ -222,5 +220,5 @@ namespace MyMediaLite.DataType
 
 			return c;
 		}
-   }
+	}
 }

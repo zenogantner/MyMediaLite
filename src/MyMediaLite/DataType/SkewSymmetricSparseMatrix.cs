@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,8 +20,6 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.DataType
 {
-	// TODO default should be double, create a specific FloatSkewSymmetricSparseMatrix
-
 	/// <summary>a skew symmetric (anti-symmetric) sparse matrix; consumes less memory</summary>
 	/// <remarks>
 	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and

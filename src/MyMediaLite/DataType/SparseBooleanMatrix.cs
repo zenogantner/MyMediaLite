@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -40,13 +40,13 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public bool this [int x, int y]
 		{
-			get	{
+			get {
 				if (x < row_list.Count)
 					return row_list[x].Contains(y);
 				else
 					return false;
 			}
-			set	{
+			set {
 				if (value)
 				{
 					if (this[x] == null)
@@ -61,7 +61,7 @@ namespace MyMediaLite.DataType
 		///
 		public ICollection<int> this [int x]
 		{
-			get	{
+			get {
 				//Console.Error.WriteLine("{0} - {1}", row_list.Count, x); Console.Error.Flush();
 				// FIXME
 
@@ -76,7 +76,7 @@ namespace MyMediaLite.DataType
 		///
 		public virtual bool IsSymmetric
 		{
-			get	{
+			get {
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
 						if (!this[j, i])
@@ -230,5 +230,5 @@ namespace MyMediaLite.DataType
 
 			return c;
 		}
-   }
+	}
 }

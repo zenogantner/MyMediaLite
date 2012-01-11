@@ -82,7 +82,6 @@
     <Compile Include="DataType\Matrix.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
-    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
     <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
     <Compile Include="DataType\SparseMatrix.cs" />
     <Compile Include="DataType\SparseVector.cs" />
@@ -211,6 +210,7 @@
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
     <Compile Include="IItemSimilarityProvider.cs" />
     <Compile Include="IUserSimilarityProvider.cs" />
+    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

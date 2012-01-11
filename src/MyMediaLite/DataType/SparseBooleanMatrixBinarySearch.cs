@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -42,7 +42,7 @@ namespace MyMediaLite.DataType
 					return false;
 			}
 			set	{
-				if (value)         // if true
+				if (value) // if true
 				{
 					int index = ((List<int>) this[x]).BinarySearch(y);
 					if (index < 0) // ... and not there yet
@@ -70,11 +70,8 @@ namespace MyMediaLite.DataType
 			get {
 				for (int i = 0; i < row_list.Count; i++)
 					foreach (var j in row_list[i])
-					{
-
 						if (!this[j, i])
 							return false;
-					}
 				return true;
 			}
 		}
@@ -223,5 +220,5 @@ namespace MyMediaLite.DataType
 
 			return c;
 		}
-   }
+	}
 }
