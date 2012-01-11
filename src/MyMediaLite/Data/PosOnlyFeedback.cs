@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -53,9 +53,7 @@ namespace MyMediaLite.Data
 		IBooleanMatrix item_matrix;
 
 		/// <summary>Default constructor</summary>
-		public PosOnlyFeedback() : base()
-		{
-		}
+		public PosOnlyFeedback() : base() { }
 
 		///
 		public IBooleanMatrix GetUserMatrixCopy()
