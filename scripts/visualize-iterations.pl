@@ -8,15 +8,19 @@ use warnings;
 
 use File::Slurp;
 use Getopt::Long;
-use Regexp::Common qw /number/;
+use List::Util qw(min max);
+use Regexp::Common qw(number);
+
+my @legend_filter = ();
 
 GetOptions(
-	'height=f'      => \(my $img_height = 4.4),
-	'width=f'       => \(my $img_width = 4.4),
-	'plot-type=s'   => \(my $plot_type = 'b'),
-	'fit'           => \(my $fit),
-	'measure=s'     => \(my $measure = ''),
-	'output-file=s' => \(my $output_file = 'out.pdf'),
+	'height=f'         => \(my $img_height = 10),
+	'width=f'          => \(my $img_width = 10),
+	'plot-type=s'      => \(my $plot_type = 'b'),
+	'fit'              => \(my $fit),
+	'measure=s'        => \(my $measure = ''),
+	'output-file=s'    => \(my $output_file = 'out.pdf'),
+	'legend-filter=s'  => \@legend_filter,
 ) or die 'Error while parsing command line parameters';
 
 my @files = @ARGV;
@@ -41,20 +45,40 @@ foreach my $key (sort keys %results) {
 	$i++;
 }
 
+say scalar @legend_filter;
+if (@legend_filter) {
+	my $legend_filter_regex = '(?:' . (join '|', @legend_filter) . ')=(?:\w+|$RE{num}{real})';
+	
+	foreach my $key (keys %method) {
+		my @filtered_method = ();
+		while ($method{$key} =~ s/($legend_filter_regex)//) {
+			push @filtered_method, $1;
+		}
+		$method{$key} = join ' ', @filtered_method;
+	}
+}
+my $methods = '"' . (join '", "', map { $method{$_} } (sort keys %method)) . '"';
+
+my $measure_max = max (map @$_, (values %results));
+my $start_epoch = min (map @$_, (values %epochs));
+my $end_epoch   = max (map @$_, (values %epochs));
+
 say <<"END";
 img_height <- $img_height
 img_width  <- $img_width
 
+methods <- c($methods)
 colors <- rainbow($i)
 pdf(file="$output_file", width=img_width, height=img_height)
-plot(v0, e0, type="$plot_type", ylab="$measure", xlab="epoch", col=colors[1])
+plot(e0, v0, type="$plot_type", ylab="$measure", xlab="epoch", col=colors[1], xlim=c($start_epoch, $end_epoch), ylim=c(0, $measure_max))
 END
 
 foreach my $j (1 .. $i - 1) {
 	my $color_index = $j + 1;
-	say "points(v$j, e$j, type=\"$plot_type\", col=colors[$color_index])";
+	say "points(e$j, v$j, type=\"$plot_type\", col=colors[$color_index])";
 }
 
+say 'legend(x="topright", methods, col=colors)';
 
 # turns an array ref into an R vector
 sub as_r_vector {
@@ -92,12 +116,15 @@ sub process_file {
 	
 	LINE:
 	foreach my $line (@lines) {
+		chomp $line;
+		next LINE if $line =~ /^\s*$/;
 		next LINE if $line =~ /^training data:/;
 		next LINE if $line =~ /^test data:/;
 		
 		if ($line =~ /=/) {
 			$line =~ s/,//;
 			$method = $line;
+			next LINE;
 		}
 		
 		if ($line =~ s/fit: //) {
@@ -124,7 +151,7 @@ sub process_line {
 	if ($line =~ m/$measure ($RE{num}{real}).*iteration ($RE{num}{int})\s*/) {
 		my $value     = $1;
 		my $iteration = $2;
-		return ($iteration, $value);
+		return ($value, $iteration);
 	}
 	else {
 		warn "Could not parse line '$line' measure: '$measure'\n";
