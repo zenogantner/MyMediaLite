@@ -199,19 +199,25 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			if (load_model_file == string.Empty)
 			{
 				recommender_validate.Train();
-				if (prediction_file != string.Empty)
+				if (prediction_file != string.Empty || compute_fit)
 					recommender_final.Train();
 			}
 
 			// evaluate and display results
 			double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} iteration {1}", error, iterative_recommender_validate.NumIter));
+			
+			if (compute_fit)
+			{
+				double fit = KDDCup.EvaluateTrack2(recommender_final, validation_candidates, validation_hits);
+				Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit: ERR {0:0.######} iteration {1}", fit, iterative_recommender_final.NumIter));
+			}
 
 			for (int i = (int) iterative_recommender_validate.NumIter + 1; i <= max_iter; i++)
 			{
 				TimeSpan time = Wrap.MeasureTime(delegate() {
 					iterative_recommender_validate.Iterate();
-					if (prediction_file != string.Empty)
+					if (prediction_file != string.Empty || compute_fit)
 						iterative_recommender_final.Iterate();
 				});
 				training_time_stats.Add(time.TotalSeconds);
@@ -412,7 +418,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 	static IPosOnlyFeedback CreateFeedback(IRatings ratings, double threshold)
 	{
-		var feedback = new PosOnlyFeedback<SparseBooleanMatrixStatic>();
+		var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 		for (int index = 0; index < ratings.Count; index++)
 			if (ratings[index] >= threshold)
