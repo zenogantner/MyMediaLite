@@ -192,6 +192,5 @@ namespace MyMediaLite.Eval
 		{
 			return recommender.Evaluate(recommender.Feedback, recommender.Feedback, test_users, candidate_items, candidate_item_mode, true)["RMSE"];
 		}
-
 	}
 }

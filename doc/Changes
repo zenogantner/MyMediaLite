@@ -1,4 +1,4 @@
-2.03	2011-01-10
+2.03	2011-01-??
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
@@ -54,6 +54,7 @@
 	data types
          - add data type SymmetricMatrix
 	evaluation
+	 - new rating prediction measure: CBD (capped binomial deviance)
 	 - #75: allow combination of --cross-validation=K and --compute-fit
 	 - introduce extension method ComputeFit() which computes the fit
            (RMSE/AUC) on the training data of the recommender
