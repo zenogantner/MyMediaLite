@@ -37,6 +37,7 @@ GetOptions(
        'item-column=i'       => \(my $item_column       = $ITEM_COLUMN),
        'event-column=i'      => \(my $event_column      = $EVENT_COLUMN),
        'date-column=i'       => \(my $date_column       = -1),
+       'mapping!'            => \(my $do_mapping        = 1),
        'save-item-mapping=s' => \(my $save_item_mapping = ''),
        'save-user-mapping=s' => \(my $save_user_mapping = ''),
        'load-item-mapping=s' => \(my $load_item_mapping = ''),
@@ -84,10 +85,12 @@ while (<>) {
     next LINE if defined $ignore_event && $event =~ m/$ignore_event_regex/;
 
     if (! exists $user_id{$user}) {
-	$user_id{$user} = $user_count++;
+	$user_id{$user} = $do_mapping ? $user_count : $user;
+	$user_count++;
     }
     if (! exists $item_id{$item}) {
-	$item_id{$item} = $item_count++;
+	$item_id{$item} = $do_mapping ? $item_count : $item;
+	$item_count++;
     }
 
     $event = $event_constant if $event_constant;
@@ -157,6 +160,7 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --item-column=N           specifies the item column (0-based), default is $ITEM_COLUMN
     --event-column=N          specifies the event column (0-based), default is $EVENT_COLUMN
     --date-column=N           specifies the date column (0-based); if set, date will be appended to the output
+    --no-mapping              do not map IDs (keep the original ones)
     --save-user-mapping=FILE  write user ID mappings to FILE
     --save-item-mapping=FILE  write item ID mappings to FILE
     --load-user-mapping=FILE  use user ID mappings from FILE
