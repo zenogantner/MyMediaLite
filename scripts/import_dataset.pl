@@ -43,6 +43,7 @@ GetOptions(
        'load-item-mapping=s' => \(my $load_item_mapping = ''),
        'load-user-mapping=s' => \(my $load_user_mapping = ''),
        'ignore-event=s'      => \(my $ignore_event      = undef),
+       'ignore-line-regex=s' => \(my $ignore_line_regex = undef),
        'event-constant=s'    => \(my $event_constant    = ''),
        'libsvm-format'       => \(my $libsvm_format     = 0),
 ) or usage(-1);
@@ -70,6 +71,9 @@ while (<>) {
 
     # ignore empty lines
     next LINE if $line eq '';
+
+    # check whether line should be filtered out
+    next LINE if $ignore_line_regex && $line =~ m/$ignore_line_regex/;
 
     my @fields = split $separator_regex, $line;
     die "Could not parse line: '$line'\n" if $number_of_columns && scalar @fields != $number_of_columns;
@@ -151,23 +155,24 @@ convert column-oriented dataset into a standard, MovieLens-like format
 
 usage: $PROGRAM_NAME [OPTIONS] [INPUT]
 
-    --help                    display this usage information
-    --ignore-lines=N          ignore the first N lines
-    --number-of-columns=N     check whether there are exactly N columns in each line
-    --separator=REGEX         the separator regex used to split the lines into columns,
-                              default is \\s+ (one or more whitespace characters)
-    --user-column=N           specifies the user column (0-based), default is $USER_COLUMN
-    --item-column=N           specifies the item column (0-based), default is $ITEM_COLUMN
-    --event-column=N          specifies the event column (0-based), default is $EVENT_COLUMN
-    --date-column=N           specifies the date column (0-based); if set, date will be appended to the output
-    --no-mapping              do not map IDs (keep the original ones)
-    --save-user-mapping=FILE  write user ID mappings to FILE
-    --save-item-mapping=FILE  write item ID mappings to FILE
-    --load-user-mapping=FILE  use user ID mappings from FILE
-    --load-item-mapping=FILE  use item ID mappings from FILE
-    --ignore-event=REGEX      don't include events into the resulting dataset that match REGEX
-    --event-constant=STRING   set the value for each event to STRING
-    --libsvm-format           output in LIBSVM format (ignores date/timestamp information)
+    --help                      display this usage information
+    --ignore-lines=N            ignore the first N lines
+    --number-of-columns=N       check whether there are exactly N columns in each line
+    --separator=REGEX           the separator regex used to split the lines into columns,
+                                default is \\s+ (one or more whitespace characters)
+    --user-column=N             specifies the user column (0-based), default is $USER_COLUMN
+    --item-column=N             specifies the item column (0-based), default is $ITEM_COLUMN
+    --event-column=N            specifies the event column (0-based), default is $EVENT_COLUMN
+    --date-column=N             specifies the date column (0-based); if set, date will be appended to the output
+    --no-mapping                do not map IDs (keep the original ones)
+    --save-user-mapping=FILE    write user ID mappings to FILE
+    --save-item-mapping=FILE    write item ID mappings to FILE
+    --load-user-mapping=FILE    use user ID mappings from FILE
+    --load-item-mapping=FILE    use item ID mappings from FILE
+    --ignore-event=REGEX        do not include events into the resulting dataset that match REGEX
+    --ignore-line-regex=REGEX   ignore lines that match REGEX
+    --event-constant=STRING     set the value for each event to STRING
+    --libsvm-format             output in LIBSVM format (ignores date/timestamp information)
 END
     exit $return_code;
 }
