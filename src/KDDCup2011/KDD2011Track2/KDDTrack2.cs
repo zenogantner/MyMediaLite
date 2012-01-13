@@ -112,8 +112,8 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		Environment.Exit(exit_code);
 	}
 
-    static void Main(string[] args)
-    {
+	static void Main(string[] args)
+	{
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
 
@@ -163,7 +163,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		if (recommender_validate == null)
 			Usage(string.Format("Unknown method: '{0}'", method));
 
- 		Recommender.Configure(recommender_validate, parameters, Usage);
+		Recommender.Configure(recommender_validate, parameters, Usage);
 		recommender_final = recommender_validate.Clone() as ItemRecommender;
 
 		if (parameters.CheckForLeftovers())
@@ -446,8 +446,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 				string.Format(
 					CultureInfo.InvariantCulture,
 					"eval_time: min={0,0:0.##}, max={1,0:0.##}, avg={2,0:0.##}",
-					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()
-			));
+					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()));
 
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
