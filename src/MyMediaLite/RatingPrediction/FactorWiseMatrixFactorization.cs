@@ -28,6 +28,9 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Matrix factorization with factor-wise learning</summary>
 	/// <remarks>
 	///   <para>
+	///     Similar to the approach described in Simon Funk's seminal blog post: http://sifter.org/~simon/journal/20061211.html
+	///   </para>
+	///   <para>
 	///     Literature:
 	///     <list type="bullet">
 	///       <item><description>
