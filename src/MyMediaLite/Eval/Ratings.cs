@@ -126,7 +126,7 @@ namespace MyMediaLite.Eval
 		/// <param name='max_rating'>the upper bound of the rating scale</param>
 		static public double ComputeCBD(double actual_rating, double prediction, double min_rating, double max_rating)
 		{
-			// transfer into [0, 1] interval
+			// map into [0, 1] interval
 			prediction    = (prediction - min_rating) / (max_rating - min_rating);
 			actual_rating = (actual_rating - min_rating) / (max_rating - min_rating);
 
