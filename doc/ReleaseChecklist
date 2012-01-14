@@ -7,22 +7,21 @@ release checklist:
 3c. Check if the version number is correctly set in the MonoDevelop project
 3d. Check if the version number is correctly set in the Doxyfile
 3e. Check if the rating prediction and item prediction tools give out the right version numbers
-4. Create a copy of the solution file and de-activate the gui parts
-5. Check the output of 'git status' - is everything in the repository?
-6. Rebuild everything (there should be no warnings)
-7. Re-create the API documentation (make apidoc) and visually inspect the results
-7a. Check whether the Doxygen output has the correct version number
-8. Run 'make release'
-9. Packages
-9a. Inspect the contents of the source code package from GitHub:
-9b. Make a test installation
-9c. Inspect the contents of the binary package
-9d. Inspect the contents of the documentation package
-10. Create the release announcement
-11. Add the new version to the website
-11a. Copy the --help output of the two command-line tools to the website
-12. Commit the website changes
-13. Create a git tag: 'git tag -a v2.XX -m "MyMediaLite release 2.XX"'
-14. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
-15. Upload the files to GitHub
-16. Announce it in the Google Group, on mloss.org, freecode.com, Google+, and Twitter
+4. Check the output of 'git status' - is everything in the repository?
+5. Rebuild everything (there should be no warnings)
+6. Re-create the API documentation (make apidoc) and visually inspect the results
+6a. Check whether the Doxygen output has the correct version number
+7. Run 'make release'
+8. Packages
+8a. Inspect the contents of the source code package from GitHub:
+8b. Make a test installation
+8c. Inspect the contents of the binary package
+8d. Inspect the contents of the documentation package
+9. Create the release announcement
+10. Add the new version to the website
+10a. Copy the --help output of the two command-line tools to the website
+11. Commit the website changes
+12. Create a git tag: 'git tag -a v2.XX -m "MyMediaLite release 2.XX"'
+13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
+14. Upload the files to GitHub
+15. Announce it in the Google Group, on mloss.org, freecode.com, Google+, and Twitter
