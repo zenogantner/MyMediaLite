@@ -96,14 +96,20 @@ namespace MyMediaLite.RatingPrediction
 			double rating_range_size = MaxRating - MinRating;
 
 			double loss = 0;
-
 			for (int i = 0; i < ratings.Count; i++)
 			{
-				int user_id = ratings.Users[i];
-				int item_id = ratings.Items[i];
-				double prediction = Predict(user_id, item_id);
-				loss -= (ratings[i] - MinRating) * Math.Log(prediction - MinRating);
-				loss -= (rating_range_size - ratings[i]) * Math.Log(rating_range_size - prediction);
+				double prediction = Predict(ratings.Users[i], ratings.Items[i]);
+				
+				// map into [0, 1] interval
+				prediction = (prediction - MinRating) / rating_range_size;
+				if (prediction < 0.0)
+					prediction = 0.0;
+				if (prediction > 1.0)
+					prediction = 1.0;
+				double actual_rating = (ratings[i] - MinRating) / rating_range_size;
+				
+				loss -= (actual_rating) * Math.Log(prediction);
+				loss -= (1 - actual_rating) * Math.Log(1 - prediction);
 			}
 
 			double complexity = 0;
