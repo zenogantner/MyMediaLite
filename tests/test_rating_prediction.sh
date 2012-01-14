@@ -11,7 +11,7 @@ echo "------------"
 
 DATA_DIR=data/ml-1m
 
-for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization
+for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization LogisticRegressionMatrixFactorization
 do
        echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
             $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
