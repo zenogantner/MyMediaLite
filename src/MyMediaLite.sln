@@ -29,8 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ICDM2010", "ICDM2010", "{1C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingItemRecommendation", "Mapping\MappingItemPrediction\MappingItemRecommendation.csproj", "{C475ABE7-84B0-4427-987B-B06E8548676F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MappingRatingPrediction", "Mapping\MappingRatingPrediction\MappingRatingPrediction.csproj", "{17190AC9-BEE4-498D-927E-2CB17292AEE0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,12 +36,6 @@ Global
 		Default|Any CPU = Default|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Default|Any CPU.ActiveCfg = Debug|Any CPU
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Default|Any CPU.Build.0 = Debug|Any CPU
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21DB122B-6D35-41F2-AE88-790A55859209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{21DB122B-6D35-41F2-AE88-790A55859209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21DB122B-6D35-41F2-AE88-790A55859209}.Default|Any CPU.ActiveCfg = Debug|Any CPU
@@ -112,7 +104,6 @@ Global
 		{4D4FEAB8-30AE-449A-BED5-98074FC9BBF2} = {1495D149-1BDB-402C-8C46-6BBD50AA9F4D}
 		{DB4C4882-DD1D-42FB-8F23-5C269C36A0B3} = {1495D149-1BDB-402C-8C46-6BBD50AA9F4D}
 		{C475ABE7-84B0-4427-987B-B06E8548676F} = {1C7C686A-EE91-488B-8523-2FF009F1BAB2}
-		{17190AC9-BEE4-498D-927E-2CB17292AEE0} = {1C7C686A-EE91-488B-8523-2FF009F1BAB2}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = MyMediaLite\MyMediaLite.csproj

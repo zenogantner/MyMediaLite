@@ -47,9 +47,6 @@
     <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\MF_ItemMapping.cs" />
-    <Compile Include="AttrToFactor\MF_Item_Mapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\MF_Mapping.cs" />
     <Compile Include="Eval\KDDCup.cs" />
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
