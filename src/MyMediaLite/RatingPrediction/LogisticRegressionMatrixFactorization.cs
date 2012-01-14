@@ -99,7 +99,7 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < ratings.Count; i++)
 			{
 				double prediction = Predict(ratings.Users[i], ratings.Items[i]);
-				
+
 				// map into [0, 1] interval
 				prediction = (prediction - MinRating) / rating_range_size;
 				if (prediction < 0.0)
@@ -107,7 +107,7 @@ namespace MyMediaLite.RatingPrediction
 				if (prediction > 1.0)
 					prediction = 1.0;
 				double actual_rating = (ratings[i] - MinRating) / rating_range_size;
-				
+
 				loss -= (actual_rating) * Math.Log(prediction);
 				loss -= (1 - actual_rating) * Math.Log(1 - prediction);
 			}
