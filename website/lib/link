@@ -57,6 +57,7 @@
      ndcg          => { url => 'http://recsyswiki.com/wiki/NDCG'                 title => 'NDCG' }
      mae           => { url => 'http://recsyswiki.com/wiki/MAE'                  title => 'MAE' }
      rmse          => { url => 'http://recsyswiki.com/wiki/RMSE'                 title => 'RMSE' }
+	 cbd           => { url => 'http://www.kaggle.com/c/ChessRatings2/Details/Evaluation' title => 'CBD' }
      auc           => { url => 'http://recsyswiki.com/wiki/AUC'                  title => 'AUC' }
   }
 %]

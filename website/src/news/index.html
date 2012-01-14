@@ -12,6 +12,35 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+  <a name="2.03"><h2>MyMediaLite 2.03</h2></a>  
+    <p>
+    <b>January 14, 2012.</b>
+    Version 2.03 of MyMediaLite has been released.
+    </p>
+    <p>
+    Some highlights of this version
+    <ul>
+      <li>similarity computations are now faster and consume less memory</li>
+      <li>new rating prediction evaluation criterion: [% INCLUDE link link='cbd' %] (capped binomial deviance)</li>
+      <li>new recommenders:
+        <ul>
+          <li><tt>MultiCoreBPRMF</tt></li>
+          <li><tt>LogisticRegressionMatrixFactorization</tt></li>
+        </ul></li>
+      <li>bug fixes and other improvements for the following recommenders: <tt>BPRMF</tt>,
+          <tt>MultiCoreMatrixFactorization</tt>, <tt>TimeAwareBaseline</tt>, <tt>UserItemBaseline</tt> (thanks to Tom Tung),
+          <tt>ItemKNNCosine</tt></li>
+      <li>average rating predictors now also support incremental updates</tt>
+    </ul>
+    </p>
+
+    <p>
+    See the <a href="[% prefix %]download/Changes">Changes file</a> for details
+    and further improvements.
+    <a href="[% prefix %]download/index.html">Download it.</a>
+    </p>
+
+
   <a name="2.02"><h2>MyMediaLite 2.02</h2></a>  
     <p>
     <b>November 29, 2011.</b>
