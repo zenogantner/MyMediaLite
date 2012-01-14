@@ -40,14 +40,30 @@ namespace MyMediaLite.Eval
 
 		/// <summary>Evaluates a rating predictor for RMSE, (N)MAE, and CBD</summary>
 		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
-		///
-		/// For NMAE, see "Eigentaste: A Constant Time Collaborative Filtering Algorithm" by Goldberg et al.
-		///
-		/// For CBD (capped binomial deviance) see http://www.kaggle.com/c/ChessRatings2/Details/Evaluation
-		///
-		/// If the recommender can take time into account, and the rating dataset provides rating times,
-		/// this information will be used for making rating predictions.
+		///   <para>
+		///     See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
+		///   </para>
+		///   <para>
+		///     For NMAE, see the paper by Goldberg et al.
+		///   </para>
+		///   <para>
+		///     For CBD (capped binomial deviance), see http://www.kaggle.com/c/ChessRatings2/Details/Evaluation
+		///   </para>
+		///   <para>
+		///     If the recommender can take time into account, and the rating dataset provides rating times,
+		///     this information will be used for making rating predictions.
+		///   </para>
+		///   <para>
+		///     Literature:
+		///     <list type="bullet">
+		///       <item><description>
+		///         Ken Goldberg, Theresa Roeder, Dhruv Gupta, and Chris Perkins:
+		///         Eigentaste: A Constant Time Collaborative Filtering Algorithm.
+		///         nformation Retrieval Journal 2001.
+		///         http://goldberg.berkeley.edu/pubs/eigentaste.pdf
+		///       </description></item>
+		///     </list>
+		///   </para>
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">Test cases</param>
@@ -99,7 +115,16 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
-		static double ComputeCBD(double actual_rating, double prediction, double min_rating, double max_rating)
+		/// <summary>Compute the capped binomial deviation (CBD)</summary>
+		/// <remarks>
+		///   http://www.kaggle.com/c/ChessRatings2/Details/Evaluation
+		/// </remarks>
+		/// <returns>The CBD of a given rating and a prediction</returns>
+		/// <param name='actual_rating'>the actual rating</param>
+		/// <param name='prediction'>the predicted rating</param>
+		/// <param name='min_rating'>the lower bound of the rating scale</param>
+		/// <param name='max_rating'>the upper bound of the rating scale</param>
+		static public double ComputeCBD(double actual_rating, double prediction, double min_rating, double max_rating)
 		{
 			// transfer into [0, 1] interval
 			prediction    = prediction / (max_rating - min_rating) - min_rating;

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -46,24 +46,29 @@ namespace MyMediaLite.Eval
 
 			double rmse = 0;
 			double mae  = 0;
+			double cbd  = 0;
 
 			// iterate in random order
 			foreach (int index in ratings.RandomIndex)
 			{
-				double error = recommender.Predict(ratings.Users[index], ratings.Items[index]) - ratings[index];
+				double prediction = recommender.Predict(ratings.Users[index], ratings.Items[index]);
+				double error = prediction - ratings[index];
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
+				cbd  += Eval.Ratings.ComputeCBD(ratings[index], prediction, ratings.MinRating, ratings.MaxRating);
 
 				incremental_recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);
+			cbd  = cbd / ratings.Count;
 
 			var result = new RatingPredictionEvaluationResults();
 			result["RMSE"] = rmse;
 			result["MAE"]  = mae;
 			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
+			result["CBD"]  = cbd;
 			return result;
 		}
 
