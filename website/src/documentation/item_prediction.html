@@ -13,26 +13,41 @@
 
 <div id="content">
 <pre>
-MyMediaLite item recommendation from positive-only feedback 2.02
+MyMediaLite item recommendation from positive-only feedback 2.03
 
  usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]
 
    methods (plus arguments and their defaults):
-   - ItemAttributeSVM C=1 Gamma=0.002 (needs --item-attributes=FILE)
-   - SoftMarginRankingMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.1 bold_driver=False fast_sampling_memory_limit=1024 init_mean=0 init_stddev=0.1
-   - WeightedBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 bold_driver=False learn_rate=0.05 init_mean=0 init_stddev=0.1
-   - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False, bold_driver=False fast_sampling_memory_limit=1024 update_j=True init_mean=0 init_stddev=0.1
-   - BPR_Linear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1 (needs --item-attributes=FILE)
-   - ItemAttributeKNN k=80 (needs --item-attributes=FILE)
+   - FilterBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False bold_driver=False fast_sampling_memory_limit=1024 update_j=True init_mean=0 init_stddev=0.1
+       needs --item-attributes=FILE
+       supports --find-iter=N, --online-evaluation
+   - ItemAttributeSVM C=1 Gamma=0.002
+       needs --item-attributes=FILE
+   - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False bold_driver=False fast_sampling_memory_limit=1024 update_j=True init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
+   - ItemAttributeKNN k=80
+       needs --item-attributes=FILE
    - ItemKNN k=80
    - MostPopular
+       supports --online-evaluation
    - Random
-   - UserAttributeKNN k=80 (needs --user-attributes=FILE)
+   - UserAttributeKNN k=80
+       needs --user-attributes=FILE
    - UserKNN k=80
    - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=15 init_mean=0 init_stdev=0.1
+       supports --find-iter=N, --online-evaluation
    - WeightedItemKNN k=80
    - WeightedUserKNN k=80
    - Zero
+   - MultiCoreBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False, bold_driver=False fast_sampling_memory_limit=1024 update_j=True init_mean=0 init_stddev=0.1 max_threads=100
+       supports --find-iter=N, --online-evaluation
+   - SoftMarginRankingMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.1 bold_driver=False fast_sampling_memory_limit=1024 init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
+   - WeightedBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 bold_driver=False learn_rate=0.05 init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
+   - BPRLinear reg=0.015 num_iter=10 learn_rate=0.05 fast_sampling_memory_limit=1024 init_mean=0 init_stdev=0.1
+       needs --item-attributes=FILE
+       supports --find-iter=N
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
@@ -89,6 +104,7 @@ MyMediaLite item recommendation from positive-only feedback 2.02
    --max-iter=N                 perform at most N iterations
    --auc-cutoff=NUM             abort if AUC is below NUM
    --prec5-cutoff=NUM           abort if prec@5 is below NUM
+
 </pre>
 </div>
 

@@ -13,31 +13,58 @@
 
 <div id="content">
 <pre>
-MyMediaLite rating prediction 2.02
+MyMediaLite rating prediction 2.03
 
  usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):
-   - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1 (needs --user-relations=FILE)
-   - MultiCoreMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=True init_mean=0 init_stddev=0.1 optimize_mae=False num_blocks=100
    - BiPolarSlopeOne
    - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1 optimize_mae=False
-   - FactorWiseMatrixFactorization num_factors=10 shrinkage=25 sensibility=1E-05  init_mean=0 init_stdev=0.1 num_iter=10
+       supports --find-iter=N, --online-evaluation
+   - FactorWiseMatrixFactorization num_factors=10 shrinkage=25 sensibility=1E-05 init_mean=0 init_stdev=0.1 num_iter=10 reg_u=15 reg_i=10
+       supports --find-iter=N
    - GlobalAverage
-   - ItemAttributeKNN k=inf reg_u=10 reg_i=5 (needs --item-attributes=FILE)
+       supports --online-evaluation
+   - ItemAttributeKNN k=inf reg_u=10 reg_i=5
+       needs --item-attributes=FILE
+       supports --online-evaluation
    - ItemAverage
+       supports --online-evaluation
    - ItemKNNCosine k=inf reg_u=10 reg_i=5
+       supports --online-evaluation
    - ItemKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+       supports --online-evaluation
    - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
    - SlopeOne
-   - UserAttributeKNN k=inf reg_u=10 reg_i=5 (needs --user-attributes=FILE)
+   - UserAttributeKNN k=inf reg_u=10 reg_i=5
+       needs --user-attributes=FILE
+       supports --online-evaluation
    - UserAverage
+       supports --online-evaluation
    - UserItemBaseline reg_u=15 reg_i=10 num_iter=10
+       supports --find-iter=N, --online-evaluation
    - UserKNNCosine k=inf reg_u=10 reg_i=5
+       supports --online-evaluation
    - UserKNNPearson k=inf shrinkage=10 reg_u=10 reg_i=5
+       supports --online-evaluation
    - TimeAwareBaseline num_iter=30 bin_size=70 beta=0.4 user_bias_learn_rate=0.003 item_bias_learn_rate=0.002 alpha_learn_rate=1E-05 item_bias_by_time_bin_learn_rate=5E-06 user_bias_by_day_learn_rate=0.0025 user_scaling_learn_rate=0.008 user_scaling_by_day_learn_rate=0.002 reg_u=0.03 reg_i=0.03 reg_alpha=50 reg_item_bias_by_time_bin=0.1 reg_user_bias_by_day=0.005 reg_user_scaling=0.01 reg_user_scaling_by_day=0.005
+       supports --find-iter=N
    - TimeAwareBaselineWithFrequencies num_iter=40 bin_size=70 beta=0.4 user_bias_learn_rate=0.00267 item_bias_learn_rate=0.000488 alpha_learn_rate=3.11E-06 item_bias_by_time_bin_learn_rate=1.15E-06 user_bias_by_day_learn_rate=0.000257 user_scaling_learn_rate=0.00564 user_scaling_by_day_learn_rate=0.00103 reg_u=0.0255 reg_i=0.0255 reg_alpha=3.95 reg_item_bias_by_time_bin=0.0929 reg_user_bias_by_day=0.00231 reg_user_scaling=0.0476 reg_user_scaling_by_day=0.019 frequency_log_base=6.76 item_bias_at_frequency_learn_rate=0.00236 reg_item_bias_at_frequency=1.1E-08
+       supports --find-iter=N
    - CoClustering num_user_clusters=3 num_item_clusters=3 num_iter=30
+       supports --find-iter=N
+   - MultiCoreMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=True init_mean=0 init_stddev=0.1 optimize_mae=False max_threads=100
+       supports --find-iter=N, --online-evaluation
+   - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1
+       needs --user-relations=FILE
+       supports --find-iter=N, --online-evaluation
+   - Random
+       supports --online-evaluation
+   - Constant constant_rating=1
+       supports --online-evaluation
+   - LogisticRegressionMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
@@ -51,7 +78,7 @@ MyMediaLite rating prediction 2.02
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
-   --file-format=movielens_1m|kddcup2011|ignore_first_line|default
+   --file-format=movielens_1m|kddcup_2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
    --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
