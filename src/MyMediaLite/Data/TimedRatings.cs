@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,20 +26,20 @@ namespace MyMediaLite.Data
 	/// Small memory overhead for added flexibility.
 	///
 	/// This data structure supports incremental updates.
-	/// 
+	///
 	/// Loading the Netflix Prize data set (100,000,000 ratings) into this data structure requires about 3.2 GB of memory.
 	/// </remarks>
 	public class TimedRatings : Ratings, ITimedRatings
 	{
 		///
 		public IList<DateTime> Times { get; protected set; }
-		
+
 		///
 		public DateTime EarliestTime { get; protected set; }
-		
+
 		///
 		public DateTime LatestTime { get; protected set; }
-		
+
 		/// <summary>Default constructor</summary>
 		public TimedRatings() : base()
 		{
@@ -49,19 +49,19 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public override void Add(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, float rating)
 		{
 			throw new NotSupportedException();
 		}
 
 		///
-		public virtual void Add(int user_id, int item_id, double rating, DateTime time)
+		public virtual void Add(int user_id, int item_id, float rating, DateTime time)
 		{
 			Users.Add(user_id);
 			Items.Add(item_id);
 			Values.Add(rating);
 			Times.Add(time);
-			
+
 			int pos = Users.Count - 1;
 
 			if (user_id > MaxUserID)
@@ -76,7 +76,7 @@ namespace MyMediaLite.Data
 				EarliestTime = time;
 			if (time > LatestTime)
 				LatestTime = time;
-			
+
 			// update index data structures if necessary
 			if (by_user != null)
 			{
@@ -90,8 +90,8 @@ namespace MyMediaLite.Data
 					by_item.Add(new List<int>());
 				by_item[item_id].Add(pos);
 			}
-			//if (by_time != null)	
+			//if (by_time != null)
 		}
-		
+
 	}
 }

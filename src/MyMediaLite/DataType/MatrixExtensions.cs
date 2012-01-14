@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -42,6 +42,20 @@ namespace MyMediaLite.DataType
 				matrix[row, j] = nd.Sample();
 		}
 
+		/// <summary>Initializes one row of a float matrix with normal distributed (Gaussian) noise</summary>
+		/// <param name="matrix">the matrix to initialize</param>
+		/// <param name="row">the row to be initialized</param>
+		/// <param name="mean">the mean of the normal distribution drawn from</param>
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
+		static public void RowInitNormal(this Matrix<float> matrix, int row, double mean, double stddev)
+		{
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
+			for (int j = 0; j < matrix.dim2; j++)
+				matrix[row, j] = (float) nd.Sample();
+		}
+
 		/// <summary>Initializes one column of a double matrix with normal distributed (Gaussian) noise</summary>
 		/// <param name="matrix">the matrix to initialize</param>
 		/// <param name="mean">the mean of the normal distribution drawn from</param>
@@ -54,6 +68,20 @@ namespace MyMediaLite.DataType
 
 			for (int i = 0; i < matrix.dim1; i++)
 				matrix[i, column] = nd.Sample();
+		}
+
+		/// <summary>Initializes one column of a float matrix with normal distributed (Gaussian) noise</summary>
+		/// <param name="matrix">the matrix to initialize</param>
+		/// <param name="mean">the mean of the normal distribution drawn from</param>
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
+		/// <param name="column">the column to be initialized</param>
+		static public void ColumnInitNormal(this Matrix<float> matrix, int column, double mean, double stddev)
+		{
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
+			for (int i = 0; i < matrix.dim1; i++)
+				matrix[i, column] = (float) nd.Sample();
 		}
 
 		/// <summary>Initializes a double matrix with normal distributed (Gaussian) noise</summary>
@@ -70,6 +98,20 @@ namespace MyMediaLite.DataType
 					matrix[i, j] = nd.Sample();
 		}
 
+		/// <summary>Initializes a float matrix with normal distributed (Gaussian) noise</summary>
+		/// <param name="matrix">the matrix to initialize</param>
+		/// <param name="mean">the mean of the normal distribution drawn from</param>
+		/// <param name="stddev">the standard deviation of the normal distribution</param>
+		static public void InitNormal(this Matrix<float> matrix, double mean, double stddev)
+		{
+			var nd = new Normal(mean, stddev);
+			nd.RandomSource = Util.Random.GetInstance();
+
+			for (int i = 0; i < matrix.dim1; i++)
+				for (int j = 0; j < matrix.dim2; j++)
+					matrix[i, j] = (float) nd.Sample();
+		}
+
 		/// <summary>Increments the specified matrix element by a double value</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
@@ -80,10 +122,36 @@ namespace MyMediaLite.DataType
 			matrix.data[i * matrix.dim2 + j] += v;
 		}
 
+		/// <summary>Increments the specified matrix element by a double value</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="i">the row</param>
+		/// <param name="j">the column</param>
+		/// <param name="v">the value</param>
+		static public void Inc(this Matrix<float> matrix, int i, int j, double v)
+		{
+			matrix.data[i * matrix.dim2 + j] += (float) v;
+		}
+
 		/// <summary>Increment the elements in one matrix by the ones in another</summary>
 		/// <param name="matrix1">the matrix to be incremented</param>
 		/// <param name="matrix2">the other matrix</param>
 		static public void Inc(this Matrix<double> matrix1, Matrix<double> matrix2)
+		{
+			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
+
+			int dim1 = matrix1.dim1;
+			int dim2 = matrix1.dim2;
+
+			for (int x = 0; x < dim1; x++)
+				for (int y = 0; y < dim2; y++)
+					matrix1.data[x * dim2 + y] += matrix2.data[x * dim2 + y];
+		}
+
+		/// <summary>Increment the elements in one matrix by the ones in another</summary>
+		/// <param name="matrix1">the matrix to be incremented</param>
+		/// <param name="matrix2">the other matrix</param>
+		static public void Inc(this Matrix<float> matrix1, Matrix<float> matrix2)
 		{
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
@@ -192,6 +260,25 @@ namespace MyMediaLite.DataType
 			return result;
 		}
 
+		/// <summary>Compute the scalar product between a vector and a row of the matrix</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="i">the row ID</param>
+		/// <param name="vector">the numeric vector</param>
+		/// <returns>the scalar product of row i and the vector</returns>
+		static public float RowScalarProduct(Matrix<float> matrix, int i, IList<float> vector)
+		{
+			if (i >= matrix.dim1)
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
+			if (vector.Count != matrix.dim2)
+				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
+
+			float result = 0;
+			for (int j = 0; j < matrix.dim2; j++)
+				result += matrix.data[i * matrix.dim2 + j] * vector[j];
+
+			return result;
+		}
+
 		/// <summary>Compute the scalar product between two rows of two matrices</summary>
 		/// <param name="matrix1">the first matrix</param>
 		/// <param name="i">the first row ID</param>
@@ -209,6 +296,29 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
 
 			double result = 0;
+			for (int c = 0; c < matrix1.dim2; c++)
+				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
+
+			return result;
+		}
+
+		/// <summary>Compute the scalar product between two rows of two matrices</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <returns>the scalar product of row i of matrix1 and row j of matrix2</returns>
+		static public float RowScalarProduct(Matrix<float> matrix1, int i, Matrix<float> matrix2, int j)
+		{
+			if (i >= matrix1.dim1)
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
+
+			float result = 0;
 			for (int c = 0; c < matrix1.dim2; c++)
 				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
 

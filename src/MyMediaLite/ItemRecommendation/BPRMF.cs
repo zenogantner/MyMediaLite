@@ -54,7 +54,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected bool fast_sampling = false;
 
 		/// <summary>Item bias terms</summary>
-		protected double[] item_bias;
+		protected float[] item_bias;
 
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; } }
@@ -140,7 +140,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.InitModel();
 
-			item_bias = new double[MaxItemID + 1];
+			item_bias = new float[MaxItemID + 1];
 		}
 
 		///
@@ -362,13 +362,13 @@ namespace MyMediaLite.ItemRecommendation
 			if (update_i)
 			{
 				double update = one_over_one_plus_ex - BiasReg * item_bias[i];
-				item_bias[i] += learn_rate * update;
+				item_bias[i] += (float) (learn_rate * update);
 			}
 
 			if (update_j)
 			{
 				double update = -one_over_one_plus_ex - BiasReg * item_bias[j];
-				item_bias[j] += learn_rate * update;
+				item_bias[j] += (float) (learn_rate * update);
 			}
 
 			// adjust factors
@@ -442,7 +442,7 @@ namespace MyMediaLite.ItemRecommendation
 			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
 
 			// create new item bias array
-			var item_bias = new double[item_id + 1];
+			var item_bias = new float[item_id + 1];
 			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
 			this.item_bias = item_bias;
 		}
@@ -652,7 +652,7 @@ namespace MyMediaLite.ItemRecommendation
 					this.num_factors = user_factors.NumberOfColumns;
 				}
 				this.user_factors = user_factors;
-				this.item_bias    = (double[]) item_bias;
+				this.item_bias    = (float[]) item_bias;
 				this.item_factors = item_factors;
 			}
 			random = Util.Random.GetInstance();

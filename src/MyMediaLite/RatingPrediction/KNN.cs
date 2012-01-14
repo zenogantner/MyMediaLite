@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -62,10 +62,10 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
-		public double RegU { get { return baseline_predictor.RegU; } set { baseline_predictor.RegU = value; } }
+		public float RegU { get { return baseline_predictor.RegU; } set { baseline_predictor.RegU = value; } }
 
 		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
-		public double RegI { get { return baseline_predictor.RegI; } set { baseline_predictor.RegI = value; } }
+		public float RegI { get { return baseline_predictor.RegI; } set { baseline_predictor.RegI = value; } }
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected CorrelationMatrix correlation;

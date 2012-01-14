@@ -59,8 +59,8 @@ namespace MyMediaLite.RatingPrediction
 				double dot_product = user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
-				double prediction = MinRating + sig_dot * rating_range_size;
-				double gradient_common = ratings[index] - prediction;
+				float prediction = (float) (MinRating + sig_dot * rating_range_size);
+				float gradient_common = ratings[index] - prediction;
 
 				// adjust biases
 				if (update_user)

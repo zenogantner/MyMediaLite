@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,13 +27,13 @@ namespace Tests.Data
 		IRatings CreateRatings1()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			return ratings;
 		}
@@ -41,8 +41,8 @@ namespace Tests.Data
 		IRatings CreateRatings2()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 5, 0.9);
-			ratings.Add(7, 9, 0.5);
+			ratings.Add(1, 5, 0.9f);
+			ratings.Add(7, 9, 0.5f);
 
 			return ratings;
 		}
@@ -69,7 +69,7 @@ namespace Tests.Data
 		{
 			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
 
-			ratings.Add(7, 5, 0.3);
+			ratings.Add(7, 5, 0.3f);
 		}
 
 		/*
@@ -83,7 +83,7 @@ namespace Tests.Data
 			Assert.AreEqual(CreateRatings1().Count + CreateRatings2().Count - 1, ratings.Count);
 			double r;
 			Assert.IsFalse(ratings.TryGet(2, 5, out r));
-			
+
 			ratings.RemoveAt(ratings.GetIndex(7, 9));
 			Assert.AreEqual(CreateRatings1().Count + CreateRatings2().Count - 2, ratings.Count);
 			Assert.IsFalse(ratings.TryGet(7, 9, out r));
@@ -113,10 +113,10 @@ namespace Tests.Data
 			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
 
 			// test index[,]
-			Assert.AreEqual(0.3, ratings[1, 4]);
-			Assert.AreEqual(0.2, ratings[1, 8]);
-			Assert.AreEqual(0.6, ratings[2, 2]);
-			Assert.AreEqual(0.5, ratings[7, 9]);
+			Assert.AreEqual(0.3f, ratings[1, 4]);
+			Assert.AreEqual(0.2f, ratings[1, 8]);
+			Assert.AreEqual(0.6f, ratings[2, 2]);
+			Assert.AreEqual(0.5f, ratings[7, 9]);
 		}
 	}
 }

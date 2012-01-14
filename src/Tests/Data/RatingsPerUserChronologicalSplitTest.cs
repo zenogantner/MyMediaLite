@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,14 +29,14 @@ namespace Tests.Data
 		public void TestRatioSplit()
 		{
 			var ratings = new TimedRatings();
-			ratings.Add(0, 0, 5.0, new DateTime(2011, 10, 31));
-			ratings.Add(0, 1, 4.5, new DateTime(2011, 11, 1));
-			ratings.Add(0, 2, 5.0, new DateTime(2011, 11, 3));
-			ratings.Add(0, 3, 4.5, new DateTime(2011, 11, 4));
-			ratings.Add(1, 0, 1.0, new DateTime(2011, 10, 31));
-			ratings.Add(1, 1, 2.5, new DateTime(2011, 11, 2));
-			ratings.Add(1, 2, 1.0, new DateTime(2011, 12, 1));
-			ratings.Add(1, 3, 2.5, new DateTime(2011, 12, 4));
+			ratings.Add(0, 0, 5.0f, new DateTime(2011, 10, 31));
+			ratings.Add(0, 1, 4.5f, new DateTime(2011, 11, 1));
+			ratings.Add(0, 2, 5.0f, new DateTime(2011, 11, 3));
+			ratings.Add(0, 3, 4.5f, new DateTime(2011, 11, 4));
+			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
+			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
+			ratings.Add(1, 2, 1.0f, new DateTime(2011, 12, 1));
+			ratings.Add(1, 3, 2.5f, new DateTime(2011, 12, 4));
 
 			var split1 = new RatingsPerUserChronologicalSplit(ratings, 0.25);
 			Assert.AreEqual(6, split1.Train[0].Count);
@@ -59,14 +59,14 @@ namespace Tests.Data
 		public void TestNumberSplit()
 		{
 			var ratings = new TimedRatings();
-			ratings.Add(0, 0, 5.0, new DateTime(2011, 10, 31));
-			ratings.Add(0, 1, 4.5, new DateTime(2011, 11, 1));
-			ratings.Add(0, 2, 5.0, new DateTime(2011, 11, 3));
-			ratings.Add(0, 3, 4.5, new DateTime(2011, 11, 4));
-			ratings.Add(1, 0, 1.0, new DateTime(2011, 10, 31));
-			ratings.Add(1, 1, 2.5, new DateTime(2011, 11, 2));
-			ratings.Add(1, 2, 1.0, new DateTime(2011, 12, 1));
-			ratings.Add(1, 3, 2.5, new DateTime(2011, 12, 4));
+			ratings.Add(0, 0, 5.0f, new DateTime(2011, 10, 31));
+			ratings.Add(0, 1, 4.5f, new DateTime(2011, 11, 1));
+			ratings.Add(0, 2, 5.0f, new DateTime(2011, 11, 3));
+			ratings.Add(0, 3, 4.5f, new DateTime(2011, 11, 4));
+			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
+			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
+			ratings.Add(1, 2, 1.0f, new DateTime(2011, 12, 1));
+			ratings.Add(1, 3, 2.5f, new DateTime(2011, 12, 4));
 
 			var split1 = new RatingsPerUserChronologicalSplit(ratings, 1);
 			Assert.AreEqual(6, split1.Train[0].Count);
@@ -83,7 +83,7 @@ namespace Tests.Data
 			Assert.AreEqual(2, split2.Train[0].ByUser[1].Count);
 			Assert.AreEqual(2, split2.Test[0].ByUser[0].Count);
 			Assert.AreEqual(2, split2.Test[0].ByUser[1].Count);
-			
+
 			var split3 = new RatingsPerUserChronologicalSplit(ratings, 3);
 			Assert.AreEqual(2, split3.Train[0].Count);
 			Assert.AreEqual(6, split3.Test[0].Count);

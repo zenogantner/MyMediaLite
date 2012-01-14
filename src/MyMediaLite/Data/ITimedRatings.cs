@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -32,6 +32,6 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating value</param>
 		/// <param name="time">A <see cref="DateTime"/> specifying the time of the rating event</param>
-		void Add(int user_id, int item_id, double rating, DateTime time);
+		void Add(int user_id, int item_id, float rating, DateTime time);
 	}
 }

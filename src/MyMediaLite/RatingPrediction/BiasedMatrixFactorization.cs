@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -52,7 +52,7 @@ namespace MyMediaLite.RatingPrediction
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
 		/// <summary>regularization constant for the bias terms</summary>
-		public double BiasReg { get; set; }
+		public float BiasReg { get; set; }
 
 		/// <summary>regularization constant for the user factors</summary>
 		public double RegU { get; set; }
@@ -91,14 +91,14 @@ namespace MyMediaLite.RatingPrediction
 		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>the user biases</summary>
-		protected double[] user_bias;
+		protected float[] user_bias;
 		/// <summary>the item biases</summary>
-		protected double[] item_bias;
+		protected float[] item_bias;
 
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
 		{
-			BiasReg = 0.0001;
+			BiasReg = 0.0001f;
 		}
 
 		///
@@ -106,10 +106,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
-			user_bias = new double[MaxUserID + 1];
+			user_bias = new float[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
 				user_bias[u] = 0;
-			item_bias = new double[MaxItemID + 1];
+			item_bias = new float[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
 				item_bias[i] = 0;
 
@@ -139,9 +139,9 @@ namespace MyMediaLite.RatingPrediction
 				double loss = ComputeLoss();
 
 				if (loss > last_loss)
-					LearnRate *= 0.5;
+					LearnRate *= 0.5f;
 				else if (loss < last_loss)
-					LearnRate *= 1.05;
+					LearnRate *= 1.05f;
 
 				last_loss = loss;
 
@@ -174,7 +174,7 @@ namespace MyMediaLite.RatingPrediction
 				double err = ratings[index] - p;
 
 				// the only difference to RMSE optimization is here:
-				double gradient_common = Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size;
+				float gradient_common = (float) (Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size);
 
 				// adjust biases
 				if (update_user)
@@ -185,7 +185,7 @@ namespace MyMediaLite.RatingPrediction
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
 				{
-				 	double u_f = user_factors[u, f];
+					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
 					if (update_user)
@@ -217,7 +217,7 @@ namespace MyMediaLite.RatingPrediction
 				double p = MinRating + sig_dot * rating_range_size;
 				double err = ratings[index] - p;
 
-				double gradient_common = err * sig_dot * (1 - sig_dot) * rating_range_size;
+				float gradient_common = (float) (err * sig_dot * (1 - sig_dot) * rating_range_size);
 
 				// adjust biases
 				if (update_user)
@@ -279,9 +279,9 @@ namespace MyMediaLite.RatingPrediction
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_bias = reader.ReadVector();
-				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
 					throw new IOException(
@@ -311,9 +311,9 @@ namespace MyMediaLite.RatingPrediction
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;
-				this.user_bias = new double[user_factors.dim1];
+				this.user_bias = new float[user_factors.dim1];
 				user_bias.CopyTo(this.user_bias, 0);
-				this.item_bias = new double[item_factors.dim1];
+				this.item_bias = new float[item_factors.dim1];
 				item_bias.CopyTo(this.item_bias, 0);
 			}
 		}
@@ -324,7 +324,7 @@ namespace MyMediaLite.RatingPrediction
 			base.AddUser(user_id);
 
 			// create new user bias array
-			var user_bias = new double[user_id + 1];
+			var user_bias = new float[user_id + 1];
 			Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
 			this.user_bias = user_bias;
 		}
@@ -335,7 +335,7 @@ namespace MyMediaLite.RatingPrediction
 			base.AddItem(item_id);
 
 			// create new item bias array
-			var item_bias = new double[item_id + 1];
+			var item_bias = new float[item_id + 1];
 			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
 			this.item_bias = item_bias;
 		}

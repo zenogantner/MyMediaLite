@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,10 +35,10 @@ namespace MyMediaLite.RatingPrediction
 	{
 		/// <summary>Gets or sets the maximum rating.</summary>
 		/// <value>The maximally possible rating</value>
-		double MaxRating { get; set; }
-		
+		float MaxRating { get; set; }
+
 		/// <summary>Gets or sets the minimum rating.</summary>
 		/// <value>The minimally possible rating</value>
-		double MinRating { get; set; }
+		float MinRating { get; set; }
 	}
 }

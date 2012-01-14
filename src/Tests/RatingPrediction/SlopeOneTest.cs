@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,8 +31,8 @@ namespace Tests.RatingPrediction
 			var recommender = new SlopeOne();
 
 			var training_data = new Ratings();
-			training_data.Add(0, 0, 1.0);
-			training_data.Add(1, 1, 5.0);
+			training_data.Add(0, 0, 1.0f);
+			training_data.Add(1, 1, 5.0f);
 
 			recommender.Ratings = training_data;
 			recommender.Train();
@@ -46,8 +46,8 @@ namespace Tests.RatingPrediction
 			var recommender = new SlopeOne();
 
 			var training_data = new Ratings();
-			training_data.Add(0, 0, 1.0);
-			training_data.Add(1, 1, 5.0);
+			training_data.Add(0, 0, 1.0f);
+			training_data.Add(1, 1, 5.0f);
 
 			recommender.Ratings = training_data;
 			recommender.Train();

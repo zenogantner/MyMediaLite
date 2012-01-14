@@ -42,10 +42,10 @@ namespace MyMediaLite.RatingPrediction
 	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
-		protected Matrix<double> user_factors;
+		protected Matrix<float> user_factors;
 
 		/// <summary>Matrix containing the latent item factors</summary>
-		protected Matrix<double> item_factors;
+		protected Matrix<float> item_factors;
 
 		/// <summary>The bias (global average)</summary>
 		protected double global_bias;
@@ -60,7 +60,7 @@ namespace MyMediaLite.RatingPrediction
 		public uint NumFactors { get; set;}
 
 		/// <summary>Learn rate</summary>
-		public double LearnRate { get; set; }
+		public float LearnRate { get; set; }
 
 		/// <summary>Regularization parameter</summary>
 		public virtual double Regularization { get; set; }
@@ -73,7 +73,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			// set default values
 			Regularization = 0.015;
-			LearnRate = 0.01;
+			LearnRate = 0.01f;
 			NumIter = 30;
 			InitStdDev = 0.1;
 			NumFactors = 10;
@@ -83,8 +83,8 @@ namespace MyMediaLite.RatingPrediction
 		protected virtual void InitModel()
 		{
 			// init factor matrices
-			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);
 		}
@@ -202,7 +202,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void AddRating(int user_id, int item_id, float rating)
 		{
 			base.AddRating(user_id, item_id, rating);
 			RetrainUser(user_id);
@@ -210,7 +210,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, double rating)
+		public override void UpdateRating(int user_id, int item_id, float rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
 			RetrainUser(user_id);
@@ -260,7 +260,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteMatrix(user_factors);
@@ -275,8 +275,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new Exception(

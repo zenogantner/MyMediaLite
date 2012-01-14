@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -32,7 +32,7 @@ namespace MyMediaLite.Data
 		{
 			Users  = new ListProxy<int>(ratings.Users, indices);
 			Items  = new ListProxy<int>(ratings.Items, indices);
-			Values = new ListProxy<double>(ratings, indices);
+			Values = new ListProxy<float>(ratings, indices);
 
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;

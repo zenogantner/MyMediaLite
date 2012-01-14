@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -24,8 +24,8 @@ namespace MyMediaLite.IO
 	/// <summary>Extensions for vector-like data</summary>
 	public static class VectorExtensions
 	{
-		/// <summary>Write a collection of doubles to a streamwriter</summary>
-		/// <param name="writer">a <see cref="StreamWriter"/></param>
+		/// <summary>Write a collection of doubles to a TextWriter</summary>
+		/// <param name="writer">a <see cref="TextWriter"/></param>
 		/// <param name="vector">a collection of double values</param>
 		static public void WriteVector(this TextWriter writer, ICollection<double> vector)
 		{
@@ -34,21 +34,31 @@ namespace MyMediaLite.IO
 				writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
 		}
 
-		/// <summary>Read a collection of doubles from a TextReader object</summary>
+		/// <summary>Write a collection of floats to a TextWriter</summary>
+		/// <param name="writer">a <see cref="TextWriter"/></param>
+		/// <param name="vector">a collection of float values</param>
+		static public void WriteVector(this TextWriter writer, ICollection<float> vector)
+		{
+			writer.WriteLine(vector.Count);
+			foreach (var v in vector)
+				writer.WriteLine(v.ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>Read a collection of floats from a TextReader object</summary>
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <returns>a list of double values</returns>
-		static public IList<double> ReadVector(this TextReader reader)
+		static public IList<float> ReadVector(this TextReader reader)
 		{
 			int dim = int.Parse(reader.ReadLine());
 
-			var vector = new double[dim];
+			var vector = new float[dim];
 
 			for (int i = 0; i < vector.Length; i++)
-				vector[i] = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				vector[i] = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 			return vector;
 		}
-		
+
 		/// <summary>Write a collection of ints to a streamwriter</summary>
 		/// <param name="writer">a <see cref="StreamWriter"/></param>
 		/// <param name="vector">a collection of int values</param>

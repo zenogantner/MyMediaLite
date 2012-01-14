@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,18 +31,18 @@ namespace MyMediaLite.Ensemble
 		/// <summary>list of recommenders</summary>
 		public List<IRecommender> recommenders = new List<IRecommender>();
 
-		private double max_rating_value = 5;
-		private double min_rating_value = 1;
-		
+		private float max_rating_value = 5;
+		private float min_rating_value = 1;
+
 		/// <summary>create a shallow copy of the object</summary>
 		public Object Clone()
 		{
 			return this.MemberwiseClone();
 		}
-		
+
 		/// <summary>The max rating value</summary>
 		/// <value>The max rating value</value>
-		public double MaxRatingValue
+		public float MaxRating
 		{
 			get { return this.max_rating_value; }
 			set {
@@ -55,7 +55,7 @@ namespace MyMediaLite.Ensemble
 
 		/// <summary>The min rating value</summary>
 		/// <value>The min rating value</value>
-		public double MinRatingValue
+		public float MinRating
 		{
 			get { return this.min_rating_value; }
 			set {

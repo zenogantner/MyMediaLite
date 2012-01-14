@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -44,11 +44,11 @@ namespace MyMediaLite.Data
 		{
 			Users  = new int[size];
 			Items  = new int[size];
-			Values = new double[size];
+			Values = new float[size];
 		}
 
 		///
-		public override void Add(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, float rating)
 		{
 			if (pos == Values.Count)
 				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));

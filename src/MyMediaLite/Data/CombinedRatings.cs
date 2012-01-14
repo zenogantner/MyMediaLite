@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,8 +30,8 @@ namespace MyMediaLite.Data
 		{
 			Users = new CombinedList<int>(ratings1.Users, ratings2.Users);
 			Items = new CombinedList<int>(ratings1.Items, ratings2.Items);
-			Values = new CombinedList<double>(ratings1, ratings2);
-			
+			Values = new CombinedList<float>(ratings1, ratings2);
+
 			MaxUserID = Math.Max(ratings1.MaxUserID, ratings2.MaxUserID);
 			MaxItemID = Math.Max(ratings1.MaxItemID, ratings2.MaxItemID);
 		}

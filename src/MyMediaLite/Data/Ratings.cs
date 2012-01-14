@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,10 +31,10 @@ namespace MyMediaLite.Data
 	public class Ratings : DataSet, IRatings
 	{
 		///
-		protected IList<double> Values;
+		protected IList<float> Values;
 
 		///
-		public virtual double this[int index]
+		public virtual float this[int index]
 		{
 			get {
 				return Values[index];
@@ -45,16 +45,16 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public double MaxRating { get; protected set; }
+		public float MaxRating { get; protected set; }
 		///
-		public double MinRating { get; protected set; }
+		public float MinRating { get; protected set; }
 
 		/// <summary>Default constructor</summary>
 		public Ratings() : base()
 		{
-			Values = new List<double>();
-			MinRating = double.MaxValue;
-			MaxRating = double.MinValue;
+			Values = new List<float>();
+			MinRating = float.MaxValue;
+			MaxRating = float.MinValue;
 		}
 
 		///
@@ -96,18 +96,18 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public double Average
+		public float Average
 		{
 			get {
 				double sum = 0;
 				for (int index = 0; index < Count; index++)
 					sum += this[index];
-				return (double) sum / Count;
+				return (float) sum / Count;
 			}
 		}
 
 		///
-		public virtual double this[int user_id, int item_id]
+		public virtual float this[int user_id, int item_id]
 		{
 			get {
 				for (int index = 0; index < Values.Count; index++)
@@ -118,9 +118,9 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual bool TryGet(int user_id, int item_id, out double rating)
+		public virtual bool TryGet(int user_id, int item_id, out float rating)
 		{
-			rating = double.NegativeInfinity;
+			rating = float.NegativeInfinity;
 			for (int index = 0; index < Values.Count; index++)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
@@ -132,7 +132,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual double Get(int user_id, int item_id, ICollection<int> indexes)
+		public virtual float Get(int user_id, int item_id, ICollection<int> indexes)
 		{
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
@@ -142,9 +142,9 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
+		public virtual bool TryGet(int user_id, int item_id, ICollection<int> indexes, out float rating)
 		{
-			rating = double.NegativeInfinity;
+			rating = float.NegativeInfinity;
 
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
@@ -157,19 +157,13 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public virtual void Add(int user_id, int item_id, float rating)
-		{
-			Add(user_id, item_id, (double) rating);
-		}
-
-		///
 		public virtual void Add(int user_id, int item_id, byte rating)
 		{
-			Add(user_id, item_id, (double) rating);
+			Add(user_id, item_id, (float) rating);
 		}
 
 		///
-		public virtual void Add(int user_id, int item_id, double rating)
+		public virtual void Add(int user_id, int item_id, float rating)
 		{
 			Users.Add(user_id);
 			Items.Add(item_id);
@@ -243,30 +237,30 @@ namespace MyMediaLite.Data
 		public bool IsReadOnly { get { return true; } }
 
 		///
-		public void Add(double item) { throw new NotSupportedException(); }
+		public void Add(float item) { throw new NotSupportedException(); }
 
 		///
 		public void Clear() { throw new NotSupportedException(); }
 
 		///
-		public bool Contains(double item) { throw new NotSupportedException(); }
+		public bool Contains(float item) { throw new NotSupportedException(); }
 
 		///
-		public void CopyTo(double[] array, int index) { throw new NotSupportedException(); }
+		public void CopyTo(float[] array, int index) { throw new NotSupportedException(); }
 
 		///
-		public int IndexOf(double item) { throw new NotSupportedException(); }
+		public int IndexOf(float item) { throw new NotSupportedException(); }
 
 		///
-		public void Insert(int index, double item) { throw new NotSupportedException(); }
+		public void Insert(int index, float item) { throw new NotSupportedException(); }
 
 		///
-		public bool Remove(double item) { throw new NotSupportedException(); }
+		public bool Remove(float item) { throw new NotSupportedException(); }
 
 		///
 		IEnumerator IEnumerable.GetEnumerator() { throw new NotSupportedException(); }
 
 		///
-		IEnumerator<double> IEnumerable<double>.GetEnumerator() { throw new NotSupportedException(); }
+		IEnumerator<float> IEnumerable<float>.GetEnumerator() { throw new NotSupportedException(); }
 	}
 }

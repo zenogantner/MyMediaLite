@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -40,13 +40,13 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class BiPolarSlopeOne : RatingPredictor
 	{
-  		private SkewSymmetricSparseMatrix  diff_matrix_like;
-  		private SymmetricSparseMatrix<int> freq_matrix_like;
-  		private SkewSymmetricSparseMatrix  diff_matrix_dislike;
-  		private SymmetricSparseMatrix<int> freq_matrix_dislike;
+		private SkewSymmetricSparseMatrix  diff_matrix_like;
+		private SymmetricSparseMatrix<int> freq_matrix_like;
+		private SkewSymmetricSparseMatrix  diff_matrix_dislike;
+		private SymmetricSparseMatrix<int> freq_matrix_dislike;
 
 		private double global_average;
-		private IList<double> user_average;
+		private IList<float> user_average;
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 			// compute difference sums and frequencies
 			foreach (int user_id in ratings.AllUsers)
 			{
-				double user_avg = 0;
+				float user_avg = 0;
 				foreach (int index in ratings.ByUser[user_id])
 					user_avg += ratings[index];
 				user_avg /= ratings.ByUser[user_id].Count;
@@ -159,7 +159,7 @@ namespace MyMediaLite.RatingPrediction
 			freq_matrix_like = new SymmetricSparseMatrix<int>(MaxItemID + 1);
 			diff_matrix_dislike = new SkewSymmetricSparseMatrix(MaxItemID + 1);
 			freq_matrix_dislike = new SymmetricSparseMatrix<int>(MaxItemID + 1);
-			user_average = new double[MaxUserID + 1];
+			user_average = new float[MaxUserID + 1];
 		}
 
 		///

@@ -31,10 +31,10 @@ namespace MyMediaLite.Data
 		byte[] byte_values;
 
 		///
-		public override double this[int index]
+		public override float this[int index]
 		{
 			get {
-				return (double) byte_values[index];
+				return (float) byte_values[index];
 			}
 			set {
 				throw new NotSupportedException();
@@ -42,13 +42,13 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public override double this[int user_id, int item_id]
+		public override float this[int user_id, int item_id]
 		{
 			get {
 				// TODO speed up
 				for (int index = 0; index < pos; index++)
 					if (Users[index] == user_id && Items[index] == item_id)
-						return (double) byte_values[index];
+						return (float) byte_values[index];
 
 				throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
@@ -63,7 +63,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public override void Add(int user_id, int item_id, double rating)
+		public override void Add(int user_id, int item_id, float rating)
 		{
 			Add(user_id, item_id, (byte) rating);
 		}
@@ -92,14 +92,14 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public override bool TryGet(int user_id, int item_id, out double rating)
+		public override bool TryGet(int user_id, int item_id, out float rating)
 		{
-			rating = double.NegativeInfinity;
+			rating = float.NegativeInfinity;
 			// TODO speed up
 			for (int index = 0; index < pos; index++)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
-					rating = (double) byte_values[index];
+					rating = (float) byte_values[index];
 					return true;
 				}
 
@@ -107,30 +107,29 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public override double Get(int user_id, int item_id, ICollection<int> indexes)
+		public override float Get(int user_id, int item_id, ICollection<int> indexes)
 		{
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
-					return (double) byte_values[index];
+					return (float) byte_values[index];
 
 			throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 		}
 
 		///
-		public override bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating)
+		public override bool TryGet(int user_id, int item_id, ICollection<int> indexes, out float rating)
 		{
-			rating = double.NegativeInfinity;
+			rating = float.NegativeInfinity;
 
 			foreach (int index in indexes)
 				if (Users[index] == user_id && Items[index] == item_id)
 				{
-					rating = (double) byte_values[index];
+					rating = (float) byte_values[index];
 					return true;
 				}
 
 			return false;
 		}
-
 	}
 }
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,10 +29,10 @@ namespace Tests.Data
 		public void TestRatioSplit()
 		{
 			var ratings = new TimedRatings();
-			ratings.Add(0, 0, 5.0, new DateTime(2011, 10, 31));
-			ratings.Add(0, 1, 4.5, new DateTime(2011, 11, 1));
-			ratings.Add(1, 0, 1.0, new DateTime(2011, 10, 31));
-			ratings.Add(1, 1, 2.5, new DateTime(2011, 11, 2));
+			ratings.Add(0, 0, 5.0f, new DateTime(2011, 10, 31));
+			ratings.Add(0, 1, 4.5f, new DateTime(2011, 11, 1));
+			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
+			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
 
 			var split1 = new RatingsChronologicalSplit(ratings, 0.25);
 			Assert.AreEqual(3, split1.Train[0].Count);
@@ -64,10 +64,10 @@ namespace Tests.Data
 		public void TestTimeSplit()
 		{
 			var ratings = new TimedRatings();
-			ratings.Add(0, 0, 5.0, new DateTime(2011, 10, 31));
-			ratings.Add(0, 1, 4.5, new DateTime(2011, 11, 1));
-			ratings.Add(1, 0, 1.0, new DateTime(2011, 10, 31));
-			ratings.Add(1, 1, 2.5, new DateTime(2011, 11, 2));
+			ratings.Add(0, 0, 5.0f, new DateTime(2011, 10, 31));
+			ratings.Add(0, 1, 4.5f, new DateTime(2011, 11, 1));
+			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
+			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
 
 			var split1 = new RatingsChronologicalSplit(ratings, new DateTime(2011, 11, 2));
 			Assert.AreEqual(3, split1.Train[0].Count);

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -56,10 +56,10 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
-		public double RegU { get { return global_effects.RegU; } set { global_effects.RegU = value; } }
+		public float RegU { get { return global_effects.RegU; } set { global_effects.RegU = value; } }
 
 		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
-		public double RegI { get { return global_effects.RegI; } set { global_effects.RegI = value; } }
+		public float RegI { get { return global_effects.RegI; } set { global_effects.RegI = value; } }
 
 		/// <summary>Matrix containing the latent user factors</summary>
 		Matrix<double> user_factors;

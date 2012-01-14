@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 // Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
@@ -73,7 +73,7 @@ namespace MyMediaLite.IO
 
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				ratings.Add(user_id, item_id, rating);
 			}
@@ -97,7 +97,7 @@ namespace MyMediaLite.IO
 			{
 				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
 				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
-				double rating = reader.GetDouble(2);
+				float rating = reader.GetFloat(2);
 
 				ratings.Add(user_id, item_id, rating);
 			}

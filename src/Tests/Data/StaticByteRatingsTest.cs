@@ -162,13 +162,13 @@ namespace Tests.Data
 		[Test()] public void TestByUserByItem()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.IsTrue(new HashSet<int>( new int[] { 0, 1 } ).SetEquals(ratings.ByUser[1]));
 			Assert.IsTrue(new HashSet<int>( new int[] { 0, 2 } ).SetEquals(ratings.ByItem[4]));
@@ -177,13 +177,13 @@ namespace Tests.Data
 		[Test()] public void TestCountByUserCountByItem()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.AreEqual(0, ratings.CountByUser[0]);
 			Assert.AreEqual(2, ratings.CountByUser[1]);

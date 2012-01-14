@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Christina Lichtenthäler
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,28 +30,28 @@ namespace Tests.Data
 		[Test()] public void TestMinRatingMaxRating()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
-			Assert.AreEqual(0.6, ratings.MaxRating);
-			Assert.AreEqual(0.2, ratings.MinRating);
+			Assert.AreEqual(0.6f, ratings.MaxRating);
+			Assert.AreEqual(0.2f, ratings.MinRating);
 		}
 
 		[Test()] public void TestMaxUserIDMaxItemID()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.AreEqual(6, ratings.MaxUserID);
 			Assert.AreEqual(8, ratings.MaxItemID);
@@ -60,110 +60,110 @@ namespace Tests.Data
 		[Test()] public void TestAdd()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
-			Assert.AreEqual(0.4, ratings[2, 5]);
-			Assert.AreEqual(0.3, ratings[1, 4]);
-			Assert.AreEqual(0.3, ratings[6, 3]);
+			Assert.AreEqual(0.4f, ratings[2, 5]);
+			Assert.AreEqual(0.3f, ratings[1, 4]);
+			Assert.AreEqual(0.3f, ratings[6, 3]);
 			Assert.AreEqual(7, ratings.Count);
 		}
 
 		[Test()] public void TestRemoveAt()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(3, 3, 0.3);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(3, 3, 0.3f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.AreEqual(8, ratings.Count);
-			Assert.AreEqual(0.4, ratings[2, 5]);
+			Assert.AreEqual(0.4f, ratings[2, 5]);
 			ratings.RemoveAt(ratings.GetIndex(2, 5));
 			Assert.AreEqual(7, ratings.Count);
 			ratings.RemoveAt(ratings.GetIndex(6, 3));
 			Assert.AreEqual(6, ratings.Count);
 
-			double r;
+			float r;
 			Assert.IsFalse(ratings.TryGet(2, 5, out r));
 		}
 
 		[Test()] public void TestRemoveUser()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(3, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(3, 3, 0.3f);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.4, ratings[2, 5]);
+			Assert.AreEqual(0.4f, ratings[2, 5]);
 			ratings.RemoveUser(2);
 			Assert.AreEqual(5, ratings.Count);
 
-			double rating;
+			float rating;
 			Assert.IsFalse(ratings.TryGet(2, 5, out rating));
 		}
 
 		[Test()] public void TestRemoveItem()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 4, 0.2);
-			ratings.Add(3, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 4, 0.2f);
+			ratings.Add(3, 3, 0.3f);
 
 			Assert.AreEqual(7, ratings.Count);
-			Assert.AreEqual(0.2, ratings[2, 4]);
+			Assert.AreEqual(0.2f, ratings[2, 4]);
 			ratings.RemoveItem(4);
 			Assert.AreEqual(4, ratings.Count);
-			double r;
+			float r;
 			Assert.IsFalse(ratings.TryGet(2, 4, out r));
 		}
 
 		[Test()] public void TestIndex()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 4, 0.2);
-			ratings.Add(3, 3, 0.3);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 4, 0.2f);
+			ratings.Add(3, 3, 0.3f);
+			ratings.Add(6, 3, 0.3f);
 
 			// test index[,]
-			Assert.AreEqual(0.3, ratings[1, 4]);
-			Assert.AreEqual(0.2, ratings[1, 8]);
-			Assert.AreEqual(0.6, ratings[2, 2]);
+			Assert.AreEqual(0.3f, ratings[1, 4]);
+			Assert.AreEqual(0.2f, ratings[1, 8]);
+			Assert.AreEqual(0.6f, ratings[2, 2]);
 		}
 
 		[Test()] public void TestByUserByItem()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.IsTrue(new HashSet<int>( new int[] { 0, 1 } ).SetEquals(ratings.ByUser[1]));
 			Assert.IsTrue(new HashSet<int>( new int[] { 0, 2 } ).SetEquals(ratings.ByItem[4]));
@@ -172,13 +172,13 @@ namespace Tests.Data
 		[Test()] public void TestCountByUserCountByItem()
 		{
 			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3);
-			ratings.Add(1, 8, 0.2);
-			ratings.Add(2, 4, 0.2);
-			ratings.Add(2, 2, 0.6);
-			ratings.Add(2, 5, 0.4);
-			ratings.Add(3, 7, 0.2);
-			ratings.Add(6, 3, 0.3);
+			ratings.Add(1, 4, 0.3f);
+			ratings.Add(1, 8, 0.2f);
+			ratings.Add(2, 4, 0.2f);
+			ratings.Add(2, 2, 0.6f);
+			ratings.Add(2, 5, 0.4f);
+			ratings.Add(3, 7, 0.2f);
+			ratings.Add(6, 3, 0.3f);
 
 			Assert.AreEqual(0, ratings.CountByUser[0]);
 			Assert.AreEqual(2, ratings.CountByUser[1]);

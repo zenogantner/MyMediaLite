@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,15 +20,15 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Interface for rating datasets</summary>
-	public interface IRatings : IDataSet, IList<double>
+	public interface IRatings : IDataSet, IList<float>
 	{
 		///
 		new int Count { get; }
 
 		/// <summary>the maximum rating in the dataset</summary>
-		double MaxRating { get; }
+		float MaxRating { get; }
 		/// <summary>the minimum rating in the dataset</summary>
-		double MinRating { get; }
+		float MinRating { get; }
 
 		/// <summary>rating count by user</summary>
 		/// <remarks>Should be implemented as a lazy data structure</remarks>
@@ -38,20 +38,20 @@ namespace MyMediaLite.Data
 		IList<int> CountByItem { get; }
 
 		/// <summary>average rating in the dataset</summary>
-		double Average { get; }
+		float Average { get; }
 
 		/// <summary>Directly access rating by user and item</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <value>the rating value for the given user and item</value>
-		double this[int user_id, int item_id] { get; }
+		float this[int user_id, int item_id] { get; }
 
 		/// <summary>Try to retrieve a rating for a given user-item combination</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">will contain the first rating encountered that matches the user ID and item ID</param>
 		/// <returns>true if a rating was found for the user and item</returns>
-		bool TryGet(int user_id, int item_id, out double rating);
+		bool TryGet(int user_id, int item_id, out float rating);
 
 		/// <summary>Try to retrieve a rating for a given user-item combination</summary>
 		/// <param name="user_id">the user ID</param>
@@ -59,14 +59,14 @@ namespace MyMediaLite.Data
 		/// <param name="indexes">the indexes to look at</param>
 		/// <param name="rating">will contain the first rating encountered that matches the user ID and item ID</param>
 		/// <returns>true if a rating was found for the user and item</returns>
-		bool TryGet(int user_id, int item_id, ICollection<int> indexes, out double rating);
+		bool TryGet(int user_id, int item_id, ICollection<int> indexes, out float rating);
 
 		/// <summary>Directly access rating by user and item</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="indexes">the indexes to look at</param>
 		/// <returns>the first rating encountered that matches the user ID and item ID</returns>
-		double Get(int user_id, int item_id, ICollection<int> indexes);
+		float Get(int user_id, int item_id, ICollection<int> indexes);
 
 		/// <summary>Add byte-valued rating to the collection</summary>
 		/// <param name="user_id">the user ID</param>
@@ -79,12 +79,6 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating</param>
 		void Add(int user_id, int item_id, float rating);
-
-		/// <summary>Add a new rating</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the item ID</param>
-		/// <param name="rating">the rating value</param>
-		void Add(int user_id, int item_id, double rating);
 	}
 }
 

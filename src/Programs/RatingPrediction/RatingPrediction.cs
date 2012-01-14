@@ -399,7 +399,7 @@ class RatingPrediction
 					});
 					Console.Write(" fit_time " + seconds);
 				}
-	
+
 				if (prediction_file != null)
 				{
 					Console.WriteLine();

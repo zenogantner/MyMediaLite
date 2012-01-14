@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -127,7 +127,7 @@ public partial class MainWindow : Window
 		Console.Error.Write("Loading prediction model ... ");
 		recommender.UpdateUsers = true;
 		recommender.UpdateItems = false;
-		recommender.BiasReg = 0.001;
+		recommender.BiasReg = 0.001f;
 		recommender.Regularization = 0.045;
 		recommender.NumIter = 60;
 		time = Wrap.MeasureTime(delegate() {
@@ -366,7 +366,7 @@ public partial class MainWindow : Window
 
 		try
 		{
-			double rating = double.Parse(input, CultureInfo.InvariantCulture);
+			float rating = float.Parse(input, CultureInfo.InvariantCulture);
 
 			if (rating > rating_predictor.MaxRating)
 				rating = rating_predictor.MaxRating;
@@ -375,7 +375,7 @@ public partial class MainWindow : Window
 
 			// if rating already exists, remove it first
 			if (ratings.ContainsKey(movie.ID))
-			    rating_predictor.RemoveRating(current_user_id, movie.ID);
+				rating_predictor.RemoveRating(current_user_id, movie.ID);
 
 			// add the new rating
 			rating_predictor.AddRating(current_user_id, movie.ID, rating);

@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 		// TODO
 		//  - implement MAE optimization or throw Exception
 		//  - implement bold-driver support or throw Exception
-		
+
 		/// <summary>Social network regularization constant</summary>
 		public double SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
 		private double social_regularization = 1;
@@ -64,13 +64,13 @@ namespace MyMediaLite.RatingPrediction
 			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
 
 			// init latent factor matrices
-			user_factors = new Matrix<double>(NumUsers, NumFactors);
-			item_factors = new Matrix<double>(ratings.MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<float>(NumUsers, NumFactors);
+			item_factors = new Matrix<float>(ratings.MaxItemID + 1, NumFactors);
 			MatrixExtensions.InitNormal(user_factors, InitMean, InitStdDev);
 			MatrixExtensions.InitNormal(item_factors, InitMean, InitStdDev);
 			// init biases
-			user_bias = new double[NumUsers];
-			item_bias = new double[ratings.MaxItemID + 1];
+			user_bias = new float[NumUsers];
+			item_bias = new float[ratings.MaxItemID + 1];
 		}
 
 		///
@@ -208,18 +208,18 @@ namespace MyMediaLite.RatingPrediction
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
-				user_bias[u] += user_bias_gradient[u] * LearnRate;
+				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate);
 				for (int f = 2; f < NumFactors; f++)
 					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * LearnRate);
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
-				item_bias[i] += item_bias_gradient[i] * LearnRate;
+				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate);
 				for (int f = 2; f < NumFactors; f++)
 					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
 			}
 		}
-		
+
 		///
 		public override double ComputeLoss()
 		{
@@ -245,12 +245,12 @@ namespace MyMediaLite.RatingPrediction
 					complexity += ratings.CountByItem[i] * RegI * Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(i)), 2);
 					complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 				}
-			
+
 			// TODO add penality term for neighborhood regularization
-			
+
 			return loss + complexity;
 		}
-		
+
 		///
 		public override string ToString()
 		{

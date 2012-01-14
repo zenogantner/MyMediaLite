@@ -54,22 +54,22 @@ namespace MyMediaLite.RatingPrediction
 	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
-		public double RegU { get; set; }
+		public float RegU { get; set; }
 
 		/// <summary>Regularization parameter for the item biases</summary>
-		public double RegI { get; set; }
+		public float RegI { get; set; }
 
 		///
 		public uint NumIter { get; set; }
 
 		/// <summary>the global rating average</summary>
-		protected double global_average;
+		protected float global_average;
 
 		/// <summary>the user biases</summary>
-		protected double[] user_biases;
+		protected float[] user_biases;
 
 		/// <summary>the item biases</summary>
-		protected double[] item_biases;
+		protected float[] item_biases;
 
 		/// <summary>Default constructor</summary>
 		public UserItemBaseline() : base()
@@ -82,8 +82,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			user_biases = new double[MaxUserID + 1];
-			item_biases = new double[MaxItemID + 1];
+			user_biases = new float[MaxUserID + 1];
+			item_biases = new float[MaxItemID + 1];
 
 			global_average = ratings.Average;
 
@@ -103,7 +103,7 @@ namespace MyMediaLite.RatingPrediction
 			int[] user_ratings_count = new int[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
 				user_biases[u] = 0;
-			
+
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				user_biases[ratings.Users[index]] += ratings[index] - global_average - item_biases[ratings.Items[index]];
@@ -169,7 +169,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void AddRating(int user_id, int item_id, float rating)
 		{
 			base.AddRating(user_id, item_id, rating);
 			RetrainItem(item_id);
@@ -177,7 +177,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, double rating)
+		public override void UpdateRating(int user_id, int item_id, float rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
 			RetrainItem(item_id);
@@ -197,7 +197,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.AddUser(user_id);
 
-			double[] user_biases = new double[this.MaxUserID + 1];
+			float[] user_biases = new float[this.MaxUserID + 1];
 			Array.Copy(this.user_biases, user_biases, this.user_biases.Length);
 			this.user_biases = user_biases;
 		}
@@ -207,7 +207,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.AddItem(item_id);
 
-			double[] item_biases = new double[this.MaxItemID + 1];
+			float[] item_biases = new float[this.MaxItemID + 1];
 			Array.Copy(this.item_biases, item_biases, this.item_biases.Length);
 			this.item_biases = item_biases;
 		}
@@ -215,7 +215,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(user_biases);
@@ -228,7 +228,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_biases = reader.ReadVector();
 				var item_biases = reader.ReadVector();
 

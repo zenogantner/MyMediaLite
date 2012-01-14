@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -49,14 +49,14 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void AddRating(int user_id, int item_id, float rating)
 		{
 			base.AddRating(user_id, item_id, rating);
 			Train();
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, double rating)
+		public override void UpdateRating(int user_id, int item_id, float rating)
 		{
 			base.UpdateRating(user_id, item_id, rating);
 			Train();
@@ -72,7 +72,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 		}
 

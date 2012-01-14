@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,7 +37,7 @@ namespace MyMediaLite.IO
 		static public IRatings Read(
 			string filename,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
-			RatingType rating_type = RatingType.DOUBLE,
+			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{
 			int size = 0;
@@ -64,7 +64,7 @@ namespace MyMediaLite.IO
 		static public IRatings Read(
 			TextReader reader, int size,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
-			RatingType rating_type = RatingType.DOUBLE,
+			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
@@ -73,12 +73,10 @@ namespace MyMediaLite.IO
 				item_mapping = new IdentityMapping();
 			if (ignore_first_line)
 				reader.ReadLine();
-			
+
 			IRatings ratings;
 			if (rating_type == RatingType.BYTE)
 				ratings = new StaticByteRatings(size);
-			else if (rating_type == RatingType.FLOAT)
-				ratings = new StaticFloatRatings(size);
 			else
 				ratings = new StaticRatings(size);
 
@@ -95,7 +93,7 @@ namespace MyMediaLite.IO
 
 				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
 				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
-				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				ratings.Add(user_id, item_id, rating);
 			}

@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,13 +35,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='user_id'>the ID of the user who performed the rating</param>
 		/// <param name='item_id'>the ID of the rated item</param>
 		/// <param name='rating'>the rating value</param>
-		void AddRating(int user_id, int item_id, double rating);
+		void AddRating(int user_id, int item_id, float rating);
 
 		/// <summary>Update an existing rating and perform incremental training</summary>
 		/// <param name='user_id'>the ID of the user who performed the rating</param>
 		/// <param name='item_id'>the ID of the rated item</param>
 		/// <param name='rating'>the rating value</param>
-		void UpdateRating(int user_id, int item_id, double rating);
+		void UpdateRating(int user_id, int item_id, float rating);
 
 		/// <summary>Remove an existing rating and perform "incremental" training</summary>
 		/// <param name='user_id'>the ID of the user who performed the rating</param>

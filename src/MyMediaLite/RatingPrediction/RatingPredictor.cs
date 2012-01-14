@@ -31,14 +31,14 @@ namespace MyMediaLite.RatingPrediction
 		public int MaxItemID  {	get; set; }
 
 		/// <summary>Maximum rating value</summary>
-		public virtual double MaxRating { get { return max_rating; } set { max_rating = value; } }
+		public virtual float MaxRating { get { return max_rating; } set { max_rating = value; } }
 		/// <summary>Maximum rating value</summary>
-		protected double max_rating;
+		protected float max_rating;
 
 		/// <summary>Minimum rating value</summary>
-		public virtual double MinRating { get { return min_rating; } set { min_rating = value; } }
+		public virtual float MinRating { get { return min_rating; } set { min_rating = value; } }
 		/// <summary>Minimum rating value</summary>
-		protected double min_rating;
+		protected float min_rating;
 
 		/// <summary>The rating data</summary>
 		public virtual IRatings Ratings

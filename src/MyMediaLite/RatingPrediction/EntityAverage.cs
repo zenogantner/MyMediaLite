@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,14 +29,14 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class EntityAverage : IncrementalRatingPredictor
 	{
 		/// <summary>The average rating for each entity</summary>
-		protected IList<double> entity_averages = new List<double>();
+		protected IList<float> entity_averages = new List<float>();
 
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
-		protected double global_average;
+		protected float global_average;
 
 		/// <summary>return the average rating for a given entity</summary>
 		/// <param name="index">the entity index</param>
-		public double this [int index] {
+		public float this [int index] {
 			get {
 				if (index < entity_averages.Count)
 					return entity_averages[index];
@@ -81,15 +81,15 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double sum = 0;
 			int count = 0;
-			
+
 			foreach (int i in indices)
 			{
 				count++;
 				sum += ratings[i];
 			}
-			
+
 			if (count > 0)
-				entity_averages[entity_id] = sum / count;
+				entity_averages[entity_id] =(float) (sum / count);
 			else
 				entity_averages[entity_id] = global_average;
 		}
@@ -109,7 +109,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				this.global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				this.entity_averages = reader.ReadVector();
 			}
 		}

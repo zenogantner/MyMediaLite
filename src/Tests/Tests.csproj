@@ -44,7 +44,6 @@
     <Compile Include="Data\EntityMappingTest.cs" />
     <Compile Include="Data\RatingsTest.cs" />
     <Compile Include="Data\StaticByteRatingsTest.cs" />
-    <Compile Include="Data\StaticFloatRatingsTest.cs" />
     <Compile Include="Data\StaticRatingsTest.cs" />
     <Compile Include="DataType\CombinedListTest.cs" />
     <Compile Include="DataType\ListProxyTest.cs" />

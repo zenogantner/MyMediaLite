@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -48,16 +48,16 @@ namespace MyMediaLite.RatingPrediction
 		IList<int> user_clustering;
 		IList<int> item_clustering;
 
-		IList<double> user_averages;
-		IList<double> item_averages;
+		IList<float> user_averages;
+		IList<float> item_averages;
 		IList<int> user_counts;
 		IList<int> item_counts;
 
-		IList<double> user_cluster_averages;
-		IList<double> item_cluster_averages;
-		IMatrix<double> cocluster_averages;
+		IList<float> user_cluster_averages;
+		IList<float> item_cluster_averages;
+		IMatrix<float> cocluster_averages;
 
-		double global_average;
+		float global_average;
 
 		/// <summary>The number of user clusters</summary>
 		public int NumUserClusters { get; set; }
@@ -82,9 +82,9 @@ namespace MyMediaLite.RatingPrediction
 			this.user_clustering = new int[MaxUserID + 1];
 			this.item_clustering = new int[MaxItemID + 1];
 
-			this.user_cluster_averages = new double[NumUserClusters];
-			this.item_cluster_averages = new double[NumItemClusters];
-			this.cocluster_averages    = new Matrix<double>(NumUserClusters, NumItemClusters);
+			this.user_cluster_averages = new float[NumUserClusters];
+			this.item_cluster_averages = new float[NumItemClusters];
+			this.cocluster_averages    = new Matrix<float>(NumUserClusters, NumItemClusters);
 		}
 
 		bool IterateCheckModified()
@@ -228,19 +228,19 @@ namespace MyMediaLite.RatingPrediction
 				item_counts[item_id]++;
 			}
 
-			this.global_average = sum / ratings.Count;
+			this.global_average = (float) sum / ratings.Count;
 
-			this.user_averages = new double[MaxUserID + 1];
+			this.user_averages = new float[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)
 				if (user_counts[u] > 0)
-					user_averages[u] = user_sums[u] / user_counts[u];
+					user_averages[u] = (float) (user_sums[u] / user_counts[u]);
 				else
 					user_averages[u] = global_average;
 
-			this.item_averages = new double[MaxItemID + 1];
+			this.item_averages = new float[MaxItemID + 1];
 			for (int i = 0; i <= MaxItemID; i++)
 				if (item_counts[i] > 0)
-					item_averages[i] = item_sums[i] / item_counts[i];
+					item_averages[i] = (float) (item_sums[i] / item_counts[i]);
 				else
 					item_averages[i] = global_average;
 		}
@@ -255,7 +255,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				int user_id = ratings.Users[i];
 				int item_id = ratings.Items[i];
-				double rating = ratings[i];
+				float rating = ratings[i];
 
 				user_cluster_averages[user_clustering[user_id]] += rating;
 				item_cluster_averages[item_clustering[item_id]] += rating;
@@ -299,7 +299,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 			{
 				writer.WriteVector(user_clustering);
 				writer.WriteVector(item_clustering);
@@ -319,12 +319,12 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var user_clustering = reader.ReadIntVector();
 				var item_clustering = reader.ReadIntVector();
-				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				float global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_averages = reader.ReadVector();
 				var item_averages = reader.ReadVector();
 				var user_cluster_averages = reader.ReadVector();
 				var item_cluster_averages = reader.ReadVector();
-				var cocluster_averages = reader.ReadMatrix(new Matrix<double>(0, 0));
+				var cocluster_averages = reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				int num_user_clusters = user_cluster_averages.Count;
 				int num_item_clusters = item_cluster_averages.Count;
@@ -372,4 +372,3 @@ namespace MyMediaLite.RatingPrediction
 		}
 	}
 }
-

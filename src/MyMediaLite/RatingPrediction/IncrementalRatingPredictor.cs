@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,7 +36,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual void AddRating(int user_id, int item_id, double rating)
+		public virtual void AddRating(int user_id, int item_id, float rating)
 		{
 			if (user_id > MaxUserID)
 				AddUser(user_id);
@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual void UpdateRating(int user_id, int item_id, double rating)
+		public virtual void UpdateRating(int user_id, int item_id, float rating)
 		{
 			int index;
 			if (ratings.TryGetIndex(user_id, item_id, out index))
@@ -93,4 +93,3 @@ namespace MyMediaLite.RatingPrediction
 		}
 	}
 }
-

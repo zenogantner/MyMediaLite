@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -90,7 +90,7 @@ namespace MyMediaLite.RatingPrediction
 		abstract protected void RetrainItem(int item_id);
 
 		///
-		public override void AddRating(int user_id, int item_id, double rating)
+		public override void AddRating(int user_id, int item_id, float rating)
 		{
 			baseline_predictor.AddRating(user_id, item_id, rating);
 			data_item[item_id, user_id] = true;
@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, double rating)
+		public override void UpdateRating(int user_id, int item_id, float rating)
 		{
 			baseline_predictor.UpdateRating(user_id, item_id, rating);
 			RetrainItem(item_id);

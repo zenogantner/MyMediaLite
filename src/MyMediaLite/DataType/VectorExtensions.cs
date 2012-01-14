@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,6 +35,17 @@ namespace MyMediaLite.DataType
 			return Math.Sqrt(sum);
 		}
 
+		/// <summary>Compute the Euclidean norm of a collection of floats</summary>
+		/// <param name="vector">the vector to compute the norm for</param>
+		/// <returns>the Euclidean norm of the vector</returns>
+		static public double EuclideanNorm(this ICollection<float> vector)
+		{
+			double sum = 0;
+			foreach (double v in vector)
+				sum += Math.Pow(v, 2);
+			return Math.Sqrt(sum);
+		}
+
 		/// <summary>Compute the L1 norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the L1 norm of the vector</returns>
@@ -54,7 +65,7 @@ namespace MyMediaLite.DataType
 		{
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = Util.Random.GetInstance();
-			
+
 			for (int i = 0; i < vector.Count; i++)
 				vector[i] = nd.Sample();
 		}

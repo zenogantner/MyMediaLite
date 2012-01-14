@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -50,7 +50,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
 	///   </description></item>
 	/// </list>
-	/// 
+	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class SoftMarginRankingMF : BPRMF
@@ -59,7 +59,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			LearnRate = 0.1;
 		}
-		
+
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
 		/// <param name="u">the user ID</param>
 		/// <param name="i">the ID of the first item</param>
@@ -77,13 +77,13 @@ namespace MyMediaLite.ItemRecommendation
 			if (update_i)
 			{
 				double bias_update = common_part - BiasReg * item_bias[i];
-				item_bias[i] += learn_rate * bias_update;
+				item_bias[i] += (float) (learn_rate * bias_update);
 			}
 
 			if (update_j)
 			{
 				double bias_update = -common_part - BiasReg * item_bias[j];
-				item_bias[j] += learn_rate * bias_update;
+				item_bias[j] += (float) (learn_rate * bias_update);
 			}
 
 			// adjust factors

@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -79,7 +79,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		//double last_loss = double.NegativeInfinity;
 
-		Matrix<double> similarity_constraint_matrix;
+		Matrix<float> similarity_constraint_matrix;
 
 		/// <summary>Default constructor</summary>
 		public ConstrainedProbabilisticMatrixFactorization()
@@ -92,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
-			similarity_constraint_matrix = new Matrix<double>(NumFactors, MaxItemID + 1);
+			similarity_constraint_matrix = new Matrix<float>(NumFactors, MaxItemID + 1);
 
 			//if (BoldDriver)
 			//	last_loss = ComputeLoss();
@@ -174,15 +174,15 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors                 = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
-				var item_factors                 = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
-				var similarity_constraint_matrix = (Matrix<double>) IMatrixExtensions.ReadMatrix(reader, new Matrix<double>(0, 0));
+				var user_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
+				var item_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
+				var similarity_constraint_matrix = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
 					throw new IOException(
-								  string.Format(
-									  "Number of user and item factors must match: {0} != {1}",
-									  user_factors.dim2, item_factors.dim2));
+								string.Format(
+									"Number of user and item factors must match: {0} != {1}",
+									user_factors.dim2, item_factors.dim2));
 				if (similarity_constraint_matrix.dim2 != item_factors.dim1)
 					throw new IOException(
 								  string.Format(
