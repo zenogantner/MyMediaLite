@@ -1,14 +1,20 @@
-2.03	2011-12-24
+2.03	2011-01-14
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
            ComputeFit() is now an extension method (see below under
 	   'evaluation')
+	 - #145: move index-related methods from IRatings to IDataSet
+	 - #147: add interfaces IItemSimilarityProvider and
+	   IUserSimilarityProvider
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
+	 - new recommender: LogisticRegressionMatrixFactorization
 	 - #171: add random and constant rating predictors
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
+	 - UserItemBaseline: fix wrong initialization in OptimizeUserBiases()
+           and OptimizeItemBiases(), reported by Tom Tung
 	 - ItemKNNCosine: fix bug in incremental updates
 	 - SoftMarginRankingMF: move to main package, improve API doc
          - MultiCoreMatrixFactorization: rename Blocks to blocks (not a
@@ -17,11 +23,13 @@
            (of the underlying baseline predictor)
 	 - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
            ComputeLoss() functions
+	 - UserKNN, ItemKNN: implement SimilarityProvider interfaces
          - #161: rename BPR_Linear to BPRLinear
 	 - #160: incremental updates for (Global|User|Item)Average
          - move MultiCoreMatrixFactorization, SoftMarginRankingMF, SocialMF,
            and WeightedBPRMF from experimental to normal section
 	command-line programs
+	 - #51: mark iterative and incremental recommenders
 	 - starter scripts: use --gc=sgen to allow very large datasets
          - avoid exception when combining --cross-validation=K and
 	   --compute-fit
@@ -30,6 +38,8 @@
            non-incremental recommender
 	 - rating prediction: fix usage --file-format=kddcup_2011 instead of
            --file-format=kddcup2011
+         - KDD Cup tool (track 2): support compute_fit, align iteration output
+           with the other MyMediaLite programs
         correlations
          - get rid of unnecessary copy constructor in Jaccard and BinaryCosine
          - use dense matrices for computing Pearson, BinaryCosine and Jaccard,
@@ -45,6 +55,7 @@
 	data types
          - add data type SymmetricMatrix
 	evaluation
+	 - new rating prediction measure: CBD (capped binomial deviance)
 	 - #75: allow combination of --cross-validation=K and --compute-fit
 	 - introduce extension method ComputeFit() which computes the fit
            (RMSE/AUC) on the training data of the recommender
@@ -61,6 +72,7 @@
            solution)
          - #165: move statistics routines in Util.Utils to Data.Extensions,
            now return string instead of writing to STDOUT
+	 - turn more methods in Util.Recommender into extension methods
 	 - C# rating prediction example: add DoCrossValidation() example
 	 - Nelder-Mead: use InvariantCulture for output formatting
 	 - #173: remove Makefile target 'source-package'
@@ -68,6 +80,9 @@
 	 - move code related to the KDD Cup 2011 data from experimental to
            normal section
 	 - move namespace HyperParameter from experimental to normal section
+	 - add script visualize_iterations.pl
+	 - add options --no-mapping and --ignore-line-regex=REGEX to script
+           import_dataset.pl
 
 2.02	2011-11-29
         MyMediaLite now needs MonoDevelop 2.6 or later or xbuild to build

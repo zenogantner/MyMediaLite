@@ -1,11 +1,9 @@
  - add flyer
  - explain the two scenarios/tasks
- - link to engine list
+ - link to recommender list
  - API doc (integrated w/ website design)
    - via templates?
  - rename files, e.g. from download/index.html to download.html
- - add item prediction results to the examples page
- - add runtimes and MAE to the examples page
- - add a glossary
+ - add runtimes to the examples page
  - check HTML and links
  - add sub-menus
