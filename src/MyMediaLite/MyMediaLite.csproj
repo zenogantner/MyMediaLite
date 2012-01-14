@@ -211,6 +211,7 @@
     <Compile Include="IItemSimilarityProvider.cs" />
     <Compile Include="IUserSimilarityProvider.cs" />
     <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
+    <Compile Include="RatingPrediction\LogisticRegressionMatrixFactorization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

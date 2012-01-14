@@ -1,4 +1,4 @@
-2.03	2011-01-??
+2.03	2011-01-14
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
@@ -9,6 +9,7 @@
 	   IUserSimilarityProvider
 	recommenders
          - new (experimental) recommender: MultiCoreBPRMF
+	 - new recommender: LogisticRegressionMatrixFactorization
 	 - #171: add random and constant rating predictors
          - BPRMF: fix bug in negative item sampling with fast sampling
            deactivated
