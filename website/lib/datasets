@@ -17,7 +17,7 @@
      { method => 'UserAverage',                  hp => '',                                                                                                         rmse => '29.30487', mae => '22.91169', nmae => '0.22912' }
      { method => 'ItemAverage',                  hp => '',                                                                                                         rmse => '34.27364', mae => '29.41114', nmae => '0.29411' }
      { method => 'UserItemBaseline',             hp => 'reg_u=4.5 reg_i=1.137 num_iter=10',                                                                        rmse => '27.415',   mae => '21.14358', nmae => '0.21144' }
-     { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 reg_u=1 reg_i=1 learn_rate=0.0005 num_iter=0 num_iter=370 bold_driver=True', rmse => '22.2001',  mae => '14.01087', nmae => '0.14011' }
+     { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=20 bias_reg=0.001 reg_u=1 reg_i=1 learn_rate=0.0005 num_iter=370 bold_driver=True', rmse => '22.2001',  mae => '14.01087', nmae => '0.14011' }
    ]
 	yahoo_r2 = [ ## currently a subset
      { method => 'GlobalAverage',                hp => '',                                                                                                      rmse => '1.58333', mae => '1.4266',  nmae => '0.35665' }
