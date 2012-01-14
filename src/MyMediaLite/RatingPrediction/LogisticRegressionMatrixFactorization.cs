@@ -33,9 +33,9 @@ namespace MyMediaLite.RatingPrediction
 	///     Literature:
 	///     <list type="bullet">
 	///       <item><description>
-	///         Aditya Krishna Menon, Charles Elkan
-	///         A log-linear model with latent features for dyadic prediction
-	///         ICDM 2010
+	///         Aditya Krishna Menon, Charles Elkan:
+	///         A log-linear model with latent features for dyadic prediction.
+	///         ICDM 2010.
 	///         http://cseweb.ucsd.edu/~akmenon/LFL-ICDM10.pdf
 	///       </description></item>
 	///     </list>
