@@ -127,9 +127,14 @@ namespace MyMediaLite.Eval
 		static public double ComputeCBD(double actual_rating, double prediction, double min_rating, double max_rating)
 		{
 			// transfer into [0, 1] interval
-			prediction    = prediction / (max_rating - min_rating) - min_rating;
-			actual_rating = actual_rating / (max_rating - min_rating) - min_rating;
-
+			prediction    = (prediction - min_rating) / (max_rating - min_rating);
+			actual_rating = (actual_rating - min_rating) / (max_rating - min_rating);
+			
+			if (actual_rating < 0)
+				throw new Exception("negative rating " + actual_rating);
+			if (actual_rating > 1)
+				throw new Exception("rating > 1 " + actual_rating);
+			
 			// cap predictions
 			if (prediction < 0.01)
 				prediction = 0.01;
