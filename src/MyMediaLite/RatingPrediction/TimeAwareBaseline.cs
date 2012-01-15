@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -46,14 +46,14 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// parameters
 
-		double global_average;
-		IList<double> user_bias;
-		IList<double> item_bias;
-		IList<double> alpha;
-		Matrix<double> item_bias_by_time_bin;  // items in rows, bins in columns
-		SparseMatrix<double> user_bias_by_day; // users in rows, days in columns
-		IList<double> user_scaling;               // c_u
-		SparseMatrix<double> user_scaling_by_day; // c_ut
+		float global_average;
+		IList<float> user_bias;
+		IList<float> item_bias;
+		IList<float> alpha;
+		Matrix<float> item_bias_by_time_bin;  // items in rows, bins in columns
+		SparseMatrix<float> user_bias_by_day; // users in rows, days in columns
+		IList<float> user_scaling;               // c_u
+		SparseMatrix<float> user_scaling_by_day; // c_ut
 
 		// hyperparameters
 
@@ -175,13 +175,13 @@ namespace MyMediaLite.RatingPrediction
 			Console.WriteLine("{0} days, {1} bins", number_of_days, number_of_bins);
 
 			// initialize parameters
-			user_bias = new double[MaxUserID + 1];
-			item_bias = new double[MaxItemID + 1];
-			alpha = new double[MaxUserID + 1];
-			item_bias_by_time_bin = new Matrix<double>(MaxItemID + 1, number_of_bins);
-			user_bias_by_day = new SparseMatrix<double>(MaxUserID + 1, number_of_days);
-			user_scaling = new double[MaxUserID + 1];
-			user_scaling_by_day = new SparseMatrix<double>(MaxUserID + 1, number_of_days);
+			user_bias = new float[MaxUserID + 1];
+			item_bias = new float[MaxItemID + 1];
+			alpha = new float[MaxUserID + 1];
+			item_bias_by_time_bin = new Matrix<float>(MaxItemID + 1, number_of_bins);
+			user_bias_by_day = new SparseMatrix<float>(MaxUserID + 1, number_of_days);
+			user_scaling = new float[MaxUserID + 1];
+			user_scaling_by_day = new SparseMatrix<float>(MaxUserID + 1, number_of_days);
 		}
 
 		///
@@ -211,19 +211,19 @@ namespace MyMediaLite.RatingPrediction
 		{
 			// update user biases
 			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
-			alpha[u]                 += 2 * AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]);
-			user_bias[u]             += 2 * UserBiasLearnRate      * (err         - RegU             * user_bias[u]);
-			user_bias_by_day[u, day] += 2 * UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]);
+			alpha[u]                 += (float) (2 * AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]));
+			user_bias[u]             += (float) (2 * UserBiasLearnRate      * (err         - RegU             * user_bias[u]));
+			user_bias_by_day[u, day] += (float) (2 * UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]));
 
 			// update item biases and user scalings
-			double b_i  = item_bias[i];
-			double b_ib = item_bias_by_time_bin[i, bin];
-			double c_u  = user_scaling[u];
-			double c_ud = user_scaling_by_day[u, day];
-			item_bias[i]                  += 2 * ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i);
-			item_bias_by_time_bin[i, bin] += 2 * ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib);
-			user_scaling[u]               += 2 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1));
-			user_scaling_by_day[u, day]   += 2 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud);
+			float b_i  = item_bias[i];
+			float b_ib = item_bias_by_time_bin[i, bin];
+			float c_u  = user_scaling[u];
+			float c_ud = user_scaling_by_day[u, day];
+			item_bias[i]                  += (float) (2 * ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i));
+			item_bias_by_time_bin[i, bin] += (float) (2 * ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib));
+			user_scaling[u]               += (float) (2 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1)));
+			user_scaling_by_day[u, day]   += (float) (2 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud));
 		}
 
 		///

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 	public class TimeAwareBaselineWithFrequencies : TimeAwareBaseline
 	{
 		// additional parameters
-		SparseMatrix<double> item_bias_at_frequency;
+		SparseMatrix<float> item_bias_at_frequency;
 
 		// additional hyper-parameters
 
@@ -114,7 +114,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
-			item_bias_at_frequency = new SparseMatrix<double>(MaxItemID + 1, log_frequency_by_day.Max());
+			item_bias_at_frequency = new SparseMatrix<float>(MaxItemID + 1, log_frequency_by_day.Max());
 		}
 
 		///
@@ -125,7 +125,7 @@ namespace MyMediaLite.RatingPrediction
 			// update additional bias
 			int f = log_frequency_by_day[u, day];
 			double b_i_f_ui  = item_bias_at_frequency[i, f];
-			item_bias_at_frequency[i, f] += 2 * ItemBiasAtFrequencyLearnRate * (err * b_i_f_ui - RegItemBiasAtFrequency * b_i_f_ui);
+			item_bias_at_frequency[i, f] += (float) (2 * ItemBiasAtFrequencyLearnRate * (err * b_i_f_ui - RegItemBiasAtFrequency * b_i_f_ui));
 		}
 
 		///

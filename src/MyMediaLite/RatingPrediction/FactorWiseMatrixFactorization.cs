@@ -62,10 +62,10 @@ namespace MyMediaLite.RatingPrediction
 		public float RegI { get { return global_effects.RegI; } set { global_effects.RegI = value; } }
 
 		/// <summary>Matrix containing the latent user factors</summary>
-		Matrix<double> user_factors;
+		Matrix<float> user_factors;
 
 		/// <summary>Matrix containing the latent item factors</summary>
-		Matrix<double> item_factors;
+		Matrix<float> item_factors;
 
 		UserItemBaseline global_effects = new UserItemBaseline();
 
@@ -110,8 +110,8 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			// init factor matrices
-			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 
 			// init+train global effects model
 			global_effects.Ratings = ratings;
@@ -130,14 +130,14 @@ namespace MyMediaLite.RatingPrediction
 				return;
 
 			// compute residuals
-			var residuals = new double[ratings.Count];
+			var residuals = new float[ratings.Count];
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
-				residuals[index] = ratings[index] - Predict(u, i);
+				residuals[index] = (float) (ratings[index] - Predict(u, i));
 				int n_ui = Math.Min(ratings.ByUser[u].Count, ratings.ByItem[i].Count);
-				residuals[index] *= n_ui / (n_ui + Shrinkage);
+				residuals[index] *= (float) (n_ui / (n_ui + Shrinkage));
 			}
 
 			// initialize new latent factors
@@ -150,8 +150,8 @@ namespace MyMediaLite.RatingPrediction
 			while (err / err_old < 1 - Sensibility)
 			{
 				{
-					var user_factors_update_numerator   = new double[MaxUserID + 1];
-					var user_factors_update_denominator = new double[MaxUserID + 1];
+					var user_factors_update_numerator   = new float[MaxUserID + 1];
+					var user_factors_update_denominator = new float[MaxUserID + 1];
 
 					// compute updates in one pass over the data
 					for (int index = 0; index < ratings.Count; index++)
@@ -186,7 +186,7 @@ namespace MyMediaLite.RatingPrediction
 					// update item factors
 					for (int i = 0; i <= MaxItemID; i++)
 						if (item_factors_update_numerator[i] != 0)
-							item_factors[i, num_learned_factors] = item_factors_update_numerator[i] / item_factors_update_denominator[i];
+							item_factors[i, num_learned_factors] = (float) (item_factors_update_numerator[i] / item_factors_update_denominator[i]);
 				}
 
 				err_old = err;
@@ -243,8 +243,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var num_learned_factors = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new Exception(

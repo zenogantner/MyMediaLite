@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -58,7 +58,7 @@ namespace MyMediaLite.ItemRecommendation
 		public int NumItemAttributes { get;	private set; }
 
 		// Item attribute weights
-		private Matrix<double> item_attribute_weight_by_user;
+		private Matrix<float> item_attribute_weight_by_user;
 
 		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
 		protected int iteration_length = 5;
@@ -122,7 +122,7 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			}
 
-			item_attribute_weight_by_user = new Matrix<double>(MaxUserID + 1, NumItemAttributes);
+			item_attribute_weight_by_user = new Matrix<float>(MaxUserID + 1, NumItemAttributes);
 
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
@@ -213,15 +213,15 @@ namespace MyMediaLite.ItemRecommendation
 
 			foreach (int a in attr_i_over_j)
 			{
-				double w_uf = item_attribute_weight_by_user[u, a];
+				float w_uf = item_attribute_weight_by_user[u, a];
 				double uf_update = one_over_one_plus_ex - regularization * w_uf;
-				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
+				item_attribute_weight_by_user[u, a] = (float) (w_uf + learn_rate * uf_update);
 			}
 			foreach (int a in attr_j_over_i)
 			{
-				double w_uf = item_attribute_weight_by_user[u, a];
+				float w_uf = item_attribute_weight_by_user[u, a];
 				double uf_update = -one_over_one_plus_ex - regularization * w_uf;
-				item_attribute_weight_by_user[u, a] = w_uf + learn_rate * uf_update;
+				item_attribute_weight_by_user[u, a] = (float) (w_uf + learn_rate * uf_update);
 			}
 		}
 
@@ -250,7 +250,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-				this.item_attribute_weight_by_user = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				this.item_attribute_weight_by_user = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 		}
 
 		///

@@ -66,5 +66,19 @@ namespace MyMediaLite.DataType
 				squared_entry_sum += Math.Pow(matrix.row_list[entry.First][entry.Second], 2);
 			return Math.Sqrt(squared_entry_sum);
 		}
+
+		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
+		/// <remarks>
+		/// See http://en.wikipedia.org/wiki/Matrix_norm
+		/// </remarks>
+		/// <param name="matrix">the matrix</param>
+		/// <returns>the Frobenius norm of the matrix</returns>
+		static public float FrobeniusNorm(this SparseMatrix<float> matrix)
+		{
+			double squared_entry_sum = 0;
+			foreach (var entry in matrix.NonEmptyEntryIDs)
+				squared_entry_sum += Math.Pow(matrix.row_list[entry.First][entry.Second], 2);
+			return (float) Math.Sqrt(squared_entry_sum);
+		}
 	}
 }
