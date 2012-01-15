@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,7 +17,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.DataType;
@@ -75,7 +74,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="data">data</param>
 		/// <param name="W">W</param>
 		/// <param name="H">H</param>
-		protected virtual void Optimize(IBooleanMatrix data, Matrix<double> W, Matrix<double> H)
+		protected virtual void Optimize(IBooleanMatrix data, Matrix<float> W, Matrix<float> H)
 		{
 			var HH          = new Matrix<double>(num_factors, num_factors);
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
@@ -138,7 +137,7 @@ namespace MyMediaLite.ItemRecommendation
 					double d = 0;
 					for (int f_2 = 0; f_2 < num_factors; f_2++)
 						d += m_inv[f, f_2] * HCp[f_2];
-					W[u, f] = d;
+					W[u, f] = (float) d;
 				}
 			}
 		}

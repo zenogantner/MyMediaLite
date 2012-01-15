@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -92,16 +92,16 @@ namespace MyMediaLite.AttrToFactor
 				models[f] = SVM.Training.Train(svm_problem, svm_parameters);
 			}
 
-			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, float[]>(__MapToLatentFactorSpace);
 		}
 
 		///
-		protected override double[] __MapToLatentFactorSpace(int item_id)
+		protected override float[] __MapToLatentFactorSpace(int item_id)
 		{
-			var item_factors = new double[num_factors];
+			var item_factors = new float[num_factors];
 
 			for (int f = 0; f < num_factors; f++)
-				item_factors[f] = SVM.Prediction.Predict(models[f], CreateNodes(item_id));
+				item_factors[f] = (float) SVM.Prediction.Predict(models[f], CreateNodes(item_id));
 
 			return item_factors;
 		}

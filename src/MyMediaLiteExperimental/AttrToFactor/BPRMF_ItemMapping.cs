@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -46,7 +46,7 @@ namespace MyMediaLite.AttrToFactor
 		public SparseBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set	{
+			set {
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
@@ -56,18 +56,18 @@ namespace MyMediaLite.AttrToFactor
 		protected SparseBooleanMatrix item_attributes;
 
 		///
-	    public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	set; }
 
 		/// <summary>array to store the bias for each mapping</summary>
-		protected double[] factor_bias;
+		protected float[] factor_bias;
 
 		///
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-latent factor weight matrix
-			this.attribute_to_factor = new Matrix<double>(NumItemAttributes + 1, num_factors);
+			this.attribute_to_factor = new Matrix<float>(NumItemAttributes + 1, num_factors);
 			// store the results of the different runs in the following array
-			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
+			var old_attribute_to_factor = new Matrix<float>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
 
@@ -80,7 +80,7 @@ namespace MyMediaLite.AttrToFactor
 
 				for (int i = 0; i < num_iter_mapping * MaxItemID; i++)
 					IterateMapping();
-				old_attribute_to_factor[h] = new Matrix<double>(attribute_to_factor);
+				old_attribute_to_factor[h] = new Matrix<float>(attribute_to_factor);
 				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 
@@ -108,7 +108,7 @@ namespace MyMediaLite.AttrToFactor
 				);
 			}
 
-			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, float[]>(__MapToLatentFactorSpace);
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace MyMediaLite.AttrToFactor
 			// stochastic gradient descent
 			int item_id = SampleItem();
 
-			double[] est_factors = MapToLatentFactorSpace(item_id);
+			float[] est_factors = MapToLatentFactorSpace(item_id);
 
 			for (int j = 0; j < num_factors; j++) {
 				// TODO do we need an absolute term here???
@@ -181,7 +181,7 @@ namespace MyMediaLite.AttrToFactor
 
 				num_items++;
 
-				double[] est_factors = MapToLatentFactorSpace(i);
+				float[] est_factors = MapToLatentFactorSpace(i);
 				for (int j = 0; j < num_factors; j++)
 				{
 					double error    = Math.Pow(est_factors[j] - item_factors[i, j], 2);
@@ -205,18 +205,18 @@ namespace MyMediaLite.AttrToFactor
 		}
 
 		/// <summary>map to latent factor space (field)</summary>
-		protected Func<int, double[]> _MapToLatentFactorSpace;
+		protected Func<int, float[]> _MapToLatentFactorSpace;
 
 		/// <summary>map to latent factor space (method to be called)</summary>
-		protected virtual double[] MapToLatentFactorSpace(int item_id)
+		protected virtual float[] MapToLatentFactorSpace(int item_id)
 		{
 			return _MapToLatentFactorSpace(item_id);
 		}
 
 		/// <summary>map to latent factor space (actual function)</summary>
-		protected virtual double[] __MapToLatentFactorSpace(int item_id)
+		protected virtual float[] __MapToLatentFactorSpace(int item_id)
 		{
-			var factor_representation = new double[num_factors];
+			var factor_representation = new float[num_factors];
 			for (int j = 0; j < num_factors; j++)
 				// bias
 				factor_representation[j] = attribute_to_factor[NumItemAttributes, j];
@@ -237,7 +237,7 @@ namespace MyMediaLite.AttrToFactor
 				return double.MinValue;
 			}
 
-			double[] est_factors = MapToLatentFactorSpace(item_id);
+			float[] est_factors = MapToLatentFactorSpace(item_id);
 			return MatrixExtensions.RowScalarProduct(user_factors, user_id, est_factors);
 		}
 
@@ -247,8 +247,7 @@ namespace MyMediaLite.AttrToFactor
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stddev={11}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev
-			);
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev);
 		}
 	}
 }

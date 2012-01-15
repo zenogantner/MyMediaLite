@@ -16,12 +16,8 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using MyMediaLite.DataType;
-using MyMediaLite.Eval;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -89,26 +85,26 @@ namespace MyMediaLite.ItemRecommendation
 			// adjust factors
 			for (int f = 0; f < num_factors; f++)
 			{
-				double w_uf = user_factors[u, f];
-				double h_if = item_factors[i, f];
-				double h_jf = item_factors[j, f];
+				float w_uf = user_factors[u, f];
+				float h_if = item_factors[i, f];
+				float h_jf = item_factors[j, f];
 
 				if (update_u)
 				{
 					double uf_update = (h_if - h_jf) * common_part - reg_u * w_uf;
-					user_factors[u, f] = w_uf + learn_rate * uf_update;
+					user_factors[u, f] = (float) (w_uf + learn_rate * uf_update);
 				}
 
 				if (update_i)
 				{
 					double if_update = w_uf * common_part - reg_i * h_if;
-					item_factors[i, f] = h_if + learn_rate * if_update;
+					item_factors[i, f] = (float) (h_if + learn_rate * if_update);
 				}
 
 				if (update_j)
 				{
 					double jf_update = -w_uf  * common_part - reg_j * h_jf;
-					item_factors[j, f] = h_jf + learn_rate * jf_update;
+					item_factors[j, f] = (float) (h_jf + learn_rate * jf_update);
 				}
 			}
 		}

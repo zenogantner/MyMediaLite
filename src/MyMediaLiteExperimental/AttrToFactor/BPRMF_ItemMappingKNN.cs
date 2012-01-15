@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -54,17 +54,17 @@ namespace MyMediaLite.AttrToFactor
 			Console.Error.WriteLine("training with max_item_id={0}", MaxItemID);
 			cosine_correlation.ComputeCorrelations(item_attributes);
 			this.item_correlation = cosine_correlation;
-			_MapToLatentFactorSpace = Utils.Memoize<int, double[]>(__MapToLatentFactorSpace);
+			_MapToLatentFactorSpace = Utils.Memoize<int, float[]>(__MapToLatentFactorSpace);
 		}
 
 		/// <summary>map to latent factor space (actual function)</summary>
-		protected override double[] __MapToLatentFactorSpace(int item_id)
+		protected override float[] __MapToLatentFactorSpace(int item_id)
 		{
-			var est_factors = new double[num_factors];
+			var est_factors = new float[num_factors];
 
 			IList<int> relevant_items = item_correlation.GetPositivelyCorrelatedEntities(item_id);
 
-			double weight_sum = 0;
+			float weight_sum = 0;
 			uint neighbors =  k;
 			foreach (int item_id2 in relevant_items)
 			{
@@ -73,7 +73,7 @@ namespace MyMediaLite.AttrToFactor
 				if (Feedback.ItemMatrix[item_id2].Count == 0)
 					continue;
 
-				double weight = item_correlation[item_id, item_id2];
+				float weight = item_correlation[item_id, item_id2];
 				weight_sum += weight;
 				for (int f = 0; f < num_factors; f++)
 					est_factors[f] += weight * item_factors[item_id2, f];

@@ -374,26 +374,26 @@ namespace MyMediaLite.ItemRecommendation
 			// adjust factors
 			for (int f = 0; f < num_factors; f++)
 			{
-				double w_uf = user_factors[u, f];
-				double h_if = item_factors[i, f];
-				double h_jf = item_factors[j, f];
+				float w_uf = user_factors[u, f];
+				float h_if = item_factors[i, f];
+				float h_jf = item_factors[j, f];
 
 				if (update_u)
 				{
 					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[u, f] = w_uf + learn_rate * update;
+					user_factors[u, f] = (float) (w_uf + learn_rate * update);
 				}
 
 				if (update_i)
 				{
 					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[i, f] = h_if + learn_rate * update;
+					item_factors[i, f] = (float) (h_if + learn_rate * update);
 				}
 
 				if (update_j)
 				{
 					double update = -w_uf  * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[j, f] = h_jf + learn_rate * update;
+					item_factors[j, f] = (float) (h_jf + learn_rate * update);
 				}
 			}
 		}
@@ -627,9 +627,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(

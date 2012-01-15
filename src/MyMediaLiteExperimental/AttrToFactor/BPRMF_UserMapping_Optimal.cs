@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,7 +31,7 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-factor weight matrix
-			attribute_to_factor = new Matrix<double>(NumUserAttributes, num_factors);
+			attribute_to_factor = new Matrix<float>(NumUserAttributes, num_factors);
 
 			Console.Error.WriteLine("\nBPR-OPT-USERMAP training");
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
@@ -70,9 +70,9 @@ namespace MyMediaLite.AttrToFactor
 
 				foreach (int a in user_attributes[u])
 				{
-					double m_af = attribute_to_factor[a, f];
+					float m_af = attribute_to_factor[a, f];
 					double update = diff / (1 + Math.Exp(x_uij)) - reg_mapping * m_af;
-					attribute_to_factor[a, f] = m_af + learn_rate_mapping * update;
+					attribute_to_factor[a, f] = (float) (m_af + learn_rate_mapping * update);
 				}
 			}
 		}
@@ -95,8 +95,7 @@ namespace MyMediaLite.AttrToFactor
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stddev={11}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev
-			);
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev);
 		}
 	}
 }

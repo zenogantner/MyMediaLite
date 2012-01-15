@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -51,7 +51,6 @@ class MappingItemRecommendation
 	static BPRMF_Mapping recommender;
 	static BPRMF_ItemMapping bprmf_map             = new BPRMF_ItemMapping();
 	static BPRMF_ItemMapping_Optimal bprmf_map_bpr = new BPRMF_ItemMapping_Optimal();
-	static BPRMF_ItemMapping bprmf_map_com         = new BPRMF_ItemMapping_Complex();
 	static BPRMF_ItemMapping bprmf_map_knn         = new BPRMF_ItemMappingKNN();
 	static BPRMF_ItemMapping bprmf_map_svr         = new BPRMF_ItemMappingSVR();
 	static BPRMF_Mapping bprmf_user_map            = new BPRMF_UserMapping();
@@ -70,7 +69,6 @@ class MappingItemRecommendation
 		Console.WriteLine("  - methods (plus arguments and their defaults):");
 		Console.WriteLine("    - " + bprmf_map     + " (needs item_attributes)");
 		Console.WriteLine("    - " + bprmf_map_bpr + " (needs item_attributes)");
-		Console.WriteLine("    - " + bprmf_map_com + " (needs item_attributes)");
 		Console.WriteLine("    - " + bprmf_map_knn + " (needs item_attributes)");
 		Console.WriteLine("    - " + bprmf_map_svr + " (needs item_attributes)");
 		Console.WriteLine("    - " + bprmf_user_map     + " (needs user_attributes)");
@@ -129,9 +127,6 @@ class MappingItemRecommendation
 				break;
 			case "BPR-MF-ItemMapping-Optimal":
 				recommender = Recommender.Configure(bprmf_map_bpr, parameters, Usage);
-				break;
-			case "BPR-MF-ItemMapping-Complex":
-				recommender = Recommender.Configure(bprmf_map_com, parameters, Usage);
 				break;
 			case "BPR-MF-ItemMapping-kNN":
 				recommender = Recommender.Configure(bprmf_map_knn, parameters, Usage);
@@ -236,14 +231,13 @@ class MappingItemRecommendation
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit {0}", recommender.ComputeFit()));
 
 		TimeSpan seconds = Wrap.MeasureTime(delegate() {
-	    		var result = Items.Evaluate(
+				var result = Items.Evaluate(
 								recommender,
 								test_data,
 								train_data,
 								test_data.AllUsers,
 								candidate_items,
-								CandidateItems.EXPLICIT
-				);
+								CandidateItems.EXPLICIT);
 				DisplayResults(result);
 			} );
 		Console.Write(" testing " + seconds);

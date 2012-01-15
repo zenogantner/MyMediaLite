@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -80,10 +80,10 @@ namespace MyMediaLite.AttrToFactor
 		public override void LearnAttributeToFactorMapping()
 		{
 			// create attribute-to-factor weight matrix
-			this.attribute_to_factor = new Matrix<double>(NumUserAttributes + 1, num_factors);
+			this.attribute_to_factor = new Matrix<float>(NumUserAttributes + 1, num_factors);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
 			// store the results of the different runs in the following array
-			var old_attribute_to_factor = new Matrix<double>[num_init_mapping];
+			var old_attribute_to_factor = new Matrix<float>[num_init_mapping];
 
 			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxUserID);
 
@@ -102,7 +102,7 @@ namespace MyMediaLite.AttrToFactor
 				}
 				ComputeMappingFit();
 
-				old_attribute_to_factor[h] = new Matrix<double>(attribute_to_factor);
+				old_attribute_to_factor[h] = new Matrix<float>(attribute_to_factor);
 				old_rmse_per_factor[h] = ComputeMappingFit();
 			}
 

@@ -42,7 +42,6 @@
     <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Complex.cs" />
     <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
     <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
     <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />

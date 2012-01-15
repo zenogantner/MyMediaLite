@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -59,7 +59,7 @@ namespace MyMediaLite.AttrToFactor
 
 		/// <summary>The matrix representing the attribute-to-factor mapping</summary>
 		/// <remarks>includes bias</remarks>
-		protected Matrix<double> attribute_to_factor;
+		protected Matrix<float> attribute_to_factor;
 
 		/// <summary>Learn the mapping</summary>
 		public abstract void LearnAttributeToFactorMapping();

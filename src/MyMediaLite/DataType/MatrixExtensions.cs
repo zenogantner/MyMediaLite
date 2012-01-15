@@ -200,6 +200,23 @@ namespace MyMediaLite.DataType
 			return sum / matrix.dim1;
 		}
 
+		/// <summary>Compute the average value of the entries in a column of a matrix</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="col">the column ID</param>
+		/// <returns>the average</returns>
+		static public float ColumnAverage(this Matrix<float> matrix, int col)
+		{
+			if (matrix.dim1 == 0)
+				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
+
+			double sum = 0;
+
+			for (int x = 0; x < matrix.dim1; x++)
+				sum += matrix.data[x * matrix.dim2 + col];
+
+			return (float) (sum / matrix.dim1);
+		}
+		
 		/// <summary>Compute the average value of the entries in a row of a matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="row">the row ID</param>
@@ -377,6 +394,35 @@ namespace MyMediaLite.DataType
 			return result;
 		}
 
+		/// <summary>Compute the scalar product of a matrix row with the difference vector of two other matrix rows</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <param name="matrix3">the third matrix</param>
+		/// <param name="k">the third row ID</param>///
+		/// <returns>see summary</returns>
+		static public double RowScalarProductWithRowDifference(Matrix<float> matrix1, int i, Matrix<float> matrix2, int j, Matrix<float> matrix3, int k)
+		{
+			if (i >= matrix1.dim1)
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+			if (k >= matrix3.dim1)
+				throw new ArgumentOutOfRangeException("k too big: " + k + ", dim1 is " + matrix3.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (2) " + matrix2.dim2);
+			if (matrix1.dim2 != matrix3.dim2)
+				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (3) " + matrix3.dim2);
+
+			double result = 0;
+			for (int c = 0; c < matrix1.dim2; c++)
+				result += matrix1.data[i * matrix1.dim2 + c] * (matrix2.data[j * matrix2.dim2 + c] - matrix3.data[k * matrix3.dim2 + c]);
+
+			return result;
+		}
+		
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 		static public int Max(this Matrix<int> m)

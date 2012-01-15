@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner, Christoph Freudenthaler
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -28,9 +28,9 @@ namespace MyMediaLite.ItemRecommendation
 	public abstract class MF : IncrementalItemRecommender, IIterativeModel
 	{
 		/// <summary>Latent user factor matrix</summary>
-		protected Matrix<double> user_factors;
+		protected Matrix<float> user_factors;
 		/// <summary>Latent item factor matrix</summary>
-		protected Matrix<double> item_factors;
+		protected Matrix<float> item_factors;
 
 		/// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
 		public double InitMean { get; set; }
@@ -57,8 +57,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected virtual void InitModel()
 		{
-			user_factors = new Matrix<double>(MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<double>(MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);
@@ -112,8 +112,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var user_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
-				var item_factors = (Matrix<double>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(
