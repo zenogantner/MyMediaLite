@@ -221,9 +221,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += LearnRate * (gradient_common - BiasReg * user_bias[u]);
+					user_bias[u] += LearnRate * (gradient_common - BiasReg * RegU * user_bias[u]);
 				if (update_item)
-					item_bias[i] += LearnRate * (gradient_common - BiasReg * item_bias[i]);
+					item_bias[i] += LearnRate * (gradient_common - BiasReg * RegI * item_bias[i]);
 
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)

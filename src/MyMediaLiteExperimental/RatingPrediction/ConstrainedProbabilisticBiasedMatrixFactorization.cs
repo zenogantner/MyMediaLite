@@ -48,16 +48,16 @@ namespace MyMediaLite.RatingPrediction
 	public class ConstrainedProbabilisticMatrixFactorization : MatrixFactorization
 	{
 		/// <summary>regularization constant for the user factors</summary>
-		public double RegY { get; set; }
+		public float RegY { get; set; }
 
 		/// <summary>regularization constant for the item factors</summary>
-		public double RegV { get; set; }
+		public float RegV { get; set; }
 
 		/// <summary>regularization constant for the latent similarity constraint matrix</summary>
-		public double RegW { get; set; }
+		public float RegW { get; set; }
 
 		///
-		public override double Regularization
+		public override float Regularization
 		{
 			set {
 				base.Regularization = value;
@@ -84,7 +84,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public ConstrainedProbabilisticMatrixFactorization()
 		{
-			Regularization = 0.004;
+			Regularization = 0.004f;
 		}
 
 		///
@@ -158,7 +158,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				IMatrixExtensions.WriteMatrix(writer, user_factors);
@@ -172,7 +172,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
 				var item_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));

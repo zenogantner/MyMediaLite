@@ -128,7 +128,7 @@ public partial class MainWindow : Window
 		recommender.UpdateUsers = true;
 		recommender.UpdateItems = false;
 		recommender.BiasReg = 0.001f;
-		recommender.Regularization = 0.045;
+		recommender.Regularization = 0.045f;
 		recommender.NumIter = 60;
 		time = Wrap.MeasureTime(delegate() {
 			recommender.LoadModel(model_file);
