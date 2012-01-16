@@ -2,8 +2,13 @@
 	API
 	 - most rating stuff is now using float instead of double
 	recommenders
-	 - matrix factorization recommenders use float to store the latent
-           factors
+	 - #157: matrix factorization recommenders use float to store the
+           latent factors
+	command-line programs
+	 - #202, #203: the criterion to be used for cut-off/convergence
+           checking can now be configured via the --measure=MEASURE option
+           for both rating prediction and item recommendation, --epsilon=NUM
+           is now also supported by the item recommendation tool
 
 2.03	2011-01-14
 	API

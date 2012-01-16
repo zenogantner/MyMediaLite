@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -54,7 +54,6 @@ class RatingPrediction
 	static List<double> training_time_stats = new List<double>();
 	static List<double> fit_time_stats      = new List<double>();
 	static List<double> eval_time_stats     = new List<double>();
-	static List<double> rmse_eval_stats     = new List<double>();
 
 	// command line parameters
 	static string training_file;
@@ -83,7 +82,7 @@ class RatingPrediction
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
-		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
+		Console.WriteLine("Copyright (C) 2011, 2012 Zeno Gantner");
 		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
 		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
@@ -143,15 +142,15 @@ class RatingPrediction
                                        or use the ratings from DATETIME on for evaluation (requires time information
                                        in the training data)
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
-   --search-hp                         search for good hyperparameter values (experimental)
+   --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --max-iter=N                   perform at most N iterations
-   --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
-   --rmse-cutoff=NUM              abort if RMSE is above NUM
-   --mae-cutoff=NUM               abort if MAE is above NUM
+   --measure=RMSE|MAE|NMAE|CBD    the evaluation measure to use for the abort conditions below (default is RMSE)
+   --epsilon=NUM                  abort iterations if evaluation measure is more than best result plus NUM
+   --cutoff=NUM                   abort if evaluation measure is above NUM
 ");
 		Environment.Exit(exit_code);
 	}
@@ -173,10 +172,10 @@ class RatingPrediction
 		bool show_version = false;
 
 		// arguments for iteration search
-		int max_iter       = 100;
-		double epsilon     = 0;
-		double rmse_cutoff = double.MaxValue;
-		double mae_cutoff  = double.MaxValue;
+		int max_iter   = 100;
+		string measure = "RMSE";
+		double epsilon = 0;
+		double cutoff  = double.MaxValue;
 
 		// data arguments
 		string data_dir = string.Empty;
@@ -202,6 +201,7 @@ class RatingPrediction
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "prediction-line=",     v              => prediction_line      = v },
 			{ "chronological-split=", v              => chronological_split  = v },
+			{ "measure=",             v              => measure              = v },
 			// integer-valued options
 			{ "find-iter=",           (int v)        => find_iter            = v },
 			{ "max-iter=",            (int v)        => max_iter             = v },
@@ -209,8 +209,7 @@ class RatingPrediction
 			{ "cross-validation=",    (uint v)       => cross_validation     = v },
 			// double-valued options
 			{ "epsilon=",             (double v)     => epsilon              = v },
-			{ "rmse-cutoff=",         (double v)     => rmse_cutoff          = v },
-			{ "mae-cutoff=",          (double v)     => mae_cutoff           = v },
+			{ "cutoff=",              (double v)     => cutoff               = v },
 			{ "test-ratio=",          (double v)     => test_ratio           = v },
 			// enum options
 			{ "rating-type=",         (RatingType v) => rating_type          = v },
@@ -303,6 +302,7 @@ class RatingPrediction
 			else
 			{
 				var iterative_recommender = (IIterativeModel) recommender;
+				var eval_stats = new List<double>();
 
 				if (load_model_file == null)
 					recommender.Train();
@@ -332,20 +332,20 @@ class RatingPrediction
 						Dictionary<string, double> results = null;
 						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data); });
 						eval_time_stats.Add(time.TotalSeconds);
-						rmse_eval_stats.Add(results["RMSE"]);
+						eval_stats.Add(results[measure]);
 						Console.WriteLine("{0} iteration {1}", results, it);
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
 							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line);
 
-						if (epsilon > 0.0 && results["RMSE"] - rmse_eval_stats.Min() > epsilon)
+						if (epsilon > 0.0 && results[measure] - eval_stats.Min() > epsilon)
 						{
-							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], rmse_eval_stats.Min()));
+							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], eval_stats.Min()));
 							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
 							break;
 						}
-						if (results["RMSE"] > rmse_cutoff || results["MAE"] > mae_cutoff)
+						if (results[measure] > cutoff)
 						{
 							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 							break;

@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -100,9 +100,9 @@ class ItemRecommendation
 	static void ShowVersion()
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite Item Prediction from Implicit Feedback {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("MyMediaLite Item Prediction from Positive-Only Feedback {0}.{1:00}", version.Major, version.Minor);
 		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
-		Console.WriteLine("Copyright (C) 2011 Zeno Gantner");
+		Console.WriteLine("Copyright (C) 2011, 2012 Zeno Gantner");
 		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
 		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
@@ -181,8 +181,9 @@ class ItemRecommendation
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
    --max-iter=N                 perform at most N iterations
-   --auc-cutoff=NUM             abort if AUC is below NUM
-   --prec5-cutoff=NUM           abort if prec@5 is below NUM
+   --measure=MEASURE            the evaluation measure to use for the abort conditions below (default is AUC)
+   --epsilon=NUM                abort iterations if MEASURE is less than best result plus NUM
+   --cutoff=NUM                 abort if MEASURE is below NUM
 ");
 		Environment.Exit(exit_code);
 	}
@@ -204,9 +205,11 @@ class ItemRecommendation
 		bool show_version = false;
 
 		// variables for iteration search
-		int max_iter        = 500;
-		double auc_cutoff   = 0;
-		double prec5_cutoff = 0;
+		int max_iter   = 500;
+		double cutoff  = 0;
+		double epsilon = 0;
+		string measure = "AUC";
+
 		compute_fit         = false;
 
 		// other parameters
@@ -232,16 +235,17 @@ class ItemRecommendation
 			{ "test-users=",          v => test_users_file        = v },
 			{ "candidate-items=",     v => candidate_items_file   = v },
 			{ "user-groups=",         v => user_groups_file       = v },
+			{ "measure=",             v => measure                = v },
 			// integer-valued options
-   			{ "find-iter=",            (int v) => find_iter            = v },
+			{ "find-iter=",            (int v) => find_iter            = v },
 			{ "max-iter=",             (int v) => max_iter             = v },
 			{ "random-seed=",          (int v) => random_seed          = v },
 			{ "predict-items-number=", (int v) => predict_items_number = v },
 			{ "num-test-users=",       (int v) => num_test_users       = v },
 			{ "cross-validation=",     (uint v) => cross_validation    = v },
 			// double-valued options
-			{ "auc-cutoff=",          (double v) => auc_cutoff       = v },
-			{ "prec5-cutoff=",        (double v) => prec5_cutoff     = v },
+			{ "epsilon=",             (double v)     => epsilon      = v },
+			{ "cutoff=",              (double v)     => cutoff       = v },
 			{ "test-ratio=",          (double v) => test_ratio       = v },
 			{ "rating-threshold=",    (double v) => rating_threshold = v },
 			// enum options
@@ -303,6 +307,7 @@ class ItemRecommendation
 
 			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender);
+			var eval_stats = new List<double>();
 
 			if (cross_validation > 1)
 			{
@@ -338,12 +343,19 @@ class ItemRecommendation
 
 						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(t.TotalSeconds);
+						eval_stats.Add(results[measure]);
 						Console.WriteLine("{0} iteration {1}", results, it);
 
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
 
-						if (results["AUC"] < auc_cutoff || results["prec@5"] < prec5_cutoff)
+						if (epsilon > 0.0 && eval_stats.Max() - results[measure] > epsilon)
+						{
+							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], eval_stats.Min()));
+							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
+							break;
+						}
+						if (results[measure] < cutoff)
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 								Console.Error.WriteLine("DONE");
