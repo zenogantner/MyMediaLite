@@ -4,6 +4,9 @@
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
+         - BiasedMatrixFactorization, LogisticRegressionMatrixFactorization:
+           differentiate regularization of user and item biases, by using
+           reg_u * bias_reg and reg_i * bias_reg
 	command-line programs
 	 - #202, #203: the criterion to be used for cut-off/convergence
            checking can now be configured via the --measure=MEASURE option

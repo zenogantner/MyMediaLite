@@ -55,13 +55,13 @@ namespace MyMediaLite.RatingPrediction
 		public float BiasReg { get; set; }
 
 		/// <summary>regularization constant for the user factors</summary>
-		public double RegU { get; set; }
+		public float RegU { get; set; }
 
 		/// <summary>regularization constant for the item factors</summary>
-		public double RegI { get; set; }
+		public float RegI { get; set; }
 
 		///
-		public override double Regularization
+		public override float Regularization
 		{
 			set {
 				base.Regularization = value;
@@ -261,7 +261,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(user_bias);
@@ -276,7 +276,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_bias = reader.ReadVector();
 				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));

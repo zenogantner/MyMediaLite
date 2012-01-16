@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 		protected Matrix<float> item_factors;
 
 		/// <summary>The bias (global average)</summary>
-		protected double global_bias;
+		protected float global_bias;
 
 		/// <summary>Mean of the normal distribution used to initialize the factors</summary>
 		public double InitMean { get; set; }
@@ -63,7 +63,7 @@ namespace MyMediaLite.RatingPrediction
 		public float LearnRate { get; set; }
 
 		/// <summary>Regularization parameter</summary>
-		public virtual double Regularization { get; set; }
+		public virtual float Regularization { get; set; }
 
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
@@ -72,7 +72,7 @@ namespace MyMediaLite.RatingPrediction
 		public MatrixFactorization() : base()
 		{
 			// set default values
-			Regularization = 0.015;
+			Regularization = 0.015f;
 			LearnRate = 0.01f;
 			NumIter = 30;
 			InitStdDev = 0.1;
@@ -273,7 +273,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var bias = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
