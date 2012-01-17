@@ -51,7 +51,10 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
-		/// <summary>regularization constant for the bias terms</summary>
+		/// <summary>Learn rate factor for the bias terms</summary>
+		public float BiasLearnRate { get; set; }
+
+		/// <summary>regularization factor for the bias terms</summary>
 		public float BiasReg { get; set; }
 
 		/// <summary>regularization constant for the user factors</summary>
@@ -98,7 +101,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
 		{
-			BiasReg = 0.0001f;
+			BiasReg = 0.01f;
+			BiasLearnRate = 1.0f;
 		}
 
 		///
@@ -178,9 +182,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += LearnRate * (user_bias[u] * gradient_common - BiasReg * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * (user_bias[u] * gradient_common - BiasReg * RegU * user_bias[u]);
 				if (update_item)
-					item_bias[i] += LearnRate * (item_bias[i] * gradient_common - BiasReg * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * (item_bias[i] * gradient_common - BiasReg * RegI * item_bias[i]);
 
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
@@ -228,7 +232,7 @@ namespace MyMediaLite.RatingPrediction
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
 				{
-				 	double u_f = user_factors[u, f];
+					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
 					if (update_user)
@@ -408,8 +412,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} num_iter={6} bold_driver={7} init_mean={8} init_stddev={9} optimize_mae={10}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} optimize_mae={11}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE);
 		}
 	}
 }

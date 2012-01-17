@@ -141,9 +141,9 @@ namespace MyMediaLite.RatingPrediction
 				double p = Predict(u, i, false);
 				double err = ratings[index] - p;
 
-				 // adjust factors
-				 for (int f = 0; f < NumFactors; f++)
-				 {
+				// adjust factors
+				for (int f = 0; f < NumFactors; f++)
+				{
 					double u_f = user_factors[u, f];
 					double i_f = item_factors[i, f];
 
@@ -158,7 +158,7 @@ namespace MyMediaLite.RatingPrediction
 						double delta_i = err * u_f - Regularization * i_f;
 						item_factors.Inc(i, f, LearnRate * delta_i);
 					}
-				 }
+				}
 			}
 		}
 
