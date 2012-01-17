@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using MyMediaLite.Util;
 
 /*! \namespace MyMediaLite.Data
  *  \brief This namespace contains MyMediaLite's principal data structures,
@@ -140,7 +141,7 @@ namespace MyMediaLite.Data
 				for (int index = 0; index < Count; index++)
 					random_index[index] = index;
 			}
-			Util.Utils.Shuffle<int>(random_index);
+			random_index.Shuffle();
 		}
 
 		///

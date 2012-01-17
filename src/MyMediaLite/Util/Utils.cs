@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -54,7 +54,7 @@ namespace MyMediaLite.Util
 		/// Fisher-Yates shuffle, see
 		/// http://en.wikipedia.org/wiki/Fisher–Yates_shuffle
 		/// </remarks>
-		public static void Shuffle<T>(IList<T> list)
+		public static void Shuffle<T>(this IList<T> list)
 		{
 			Random random = MyMediaLite.Util.Random.GetInstance();
 			for (int i = list.Count - 1; i >= 0; i--)
