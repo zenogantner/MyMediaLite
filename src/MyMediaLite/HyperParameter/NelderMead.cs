@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -187,7 +187,8 @@ namespace MyMediaLite.HyperParameter
 				// reflection
 				//Console.Error.WriteLine("ref");
 				var reflection = center + alpha * (center - worst_vector);
-				string ref_string = CreateConfigString(hp_names, reflection);
+				string ref_string = CreateConfigString(hp_names, reflection.ToArray());
+				// .ToArray() is necessary to compile with Visual Studio
 				double ref_result = Run(recommender, split, ref_string, evaluation_measure);
 				if (results[min_key] <= ref_result && ref_result < results.Values.Max())
 				{
@@ -202,7 +203,7 @@ namespace MyMediaLite.HyperParameter
 					//Console.Error.WriteLine("exp");
 
 					var expansion = center + gamma * (center - worst_vector);
-					string exp_string = CreateConfigString(hp_names, expansion);
+					string exp_string = CreateConfigString(hp_names, expansion.ToArray());
 					double exp_result = Run(recommender, split, exp_string, evaluation_measure);
 					if (exp_result < ref_result)
 					{
@@ -220,7 +221,7 @@ namespace MyMediaLite.HyperParameter
 				// contraction
 				//Console.Error.WriteLine("con");
 				var contraction = worst_vector + rho * (center - worst_vector);
-				string con_string = CreateConfigString(hp_names, contraction);
+				string con_string = CreateConfigString(hp_names, contraction.ToArray());
 				double con_result = Run(recommender, split, con_string, evaluation_measure);
 				if (con_result < worst_result)
 				{
@@ -238,7 +239,7 @@ namespace MyMediaLite.HyperParameter
 				foreach (var key in new List<string>(results.Keys))
 				{
 					var reduction = hp_vectors[key] + sigma * (hp_vectors[key] - best_vector);
-					string red_string = CreateConfigString(hp_names, reduction);
+					string red_string = CreateConfigString(hp_names, reduction.ToArray());
 					double red_result = Run(recommender, split, red_string, evaluation_measure);
 
 					// replace by reduced vector
