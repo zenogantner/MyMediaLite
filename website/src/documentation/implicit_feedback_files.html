@@ -62,10 +62,15 @@ The <a href="item_prediction.html">item recommendation tool</a> supports this fi
 <h3>Reading</h3>
 <p>
 The class for reading in this kind of file is
-<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/ItemData.cs">
-MyMediaLite.IO.ItemData</a></code>.
-
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/ItemData.cs">MyMediaLite.IO.ItemData</a></code>.
 </p>
+
+<p>
+If you have rating data, and do not want to keep all the ratings, but only the ones above a certain threshold,
+you can use
+<code><a href="https://github.com/zenogantner/MyMediaLite/blob/master/src/MyMediaLite/IO/ItemDataRatingThreshold.cs">MyMediaLite.IO.ItemDataRatingThreshold</a></code>.
+</p>
+
 <h3>Writing</h3>
 <p>
 Writing the file format described is trivial, thus there is no code in MyMediaLite for that particular task.
