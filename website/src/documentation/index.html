@@ -146,13 +146,17 @@
   </p>
   <p>
   If you use the <a href="rating_prediction.html">rating prediction command-line tool</a>,
-  you may use the <tt>--rating-type=byte|float|double</tt> argument.
+  you may use the <tt>--rating-type=byte|float</tt> argument.
+  </p>
+  <p>
+  If your user and item IDs start at 0 and do not have gaps, you can use the <tt>--no-id-mapping</tt> option with both command-line tools.
+  This disables the mapping of the user and item IDs to internal IDs without gaps.
   </p>
 
   <h3>When working with large datasets, Mono complains that there is not enough heap space. What can I do about this?</h3>
   <p>
-  Compile Mono with the configure option <code>--with-large-heap=yes</code>,
-  and use <code>mono --gc=sgen program.exe</code> to start your programs.
+    Compile Mono with the configure option <code>--with-large-heap=yes</code>.
+    <!-- and use <code>mono --gc=sgen program.exe</code> to start your programs. -->
   </p>
 
   <h3>What to do with <code>AttributeError</code>s in IronPython?</h3>
