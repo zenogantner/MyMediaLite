@@ -547,7 +547,7 @@ class RatingPrediction
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
+					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, test_file));
 				else
 					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
 			}

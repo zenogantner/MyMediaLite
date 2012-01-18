@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -87,7 +87,7 @@ namespace MyMediaLite.IO.KDDCup2011
 			{
 				string[] tokens = line.Split('|');
 
-				int user_id     = int.Parse(tokens[0]);
+				int user_id          = int.Parse(tokens[0]);
 				int num_user_ratings = int.Parse(tokens[1]); // number of ratings for this user
 
 				for (int i = 0; i < num_user_ratings; i++)
