@@ -8,6 +8,8 @@
            differentiate regularization of user and item biases, by using
            reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
 	command-line programs
+	 - add --no-id-mapping option to save memory for large-scale datasets
+           where the user and item IDs have no gaps
 	 - #202, #203: the criterion to be used for cut-off/convergence
            checking can now be configured via the --measure=MEASURE option
            for both rating prediction and item recommendation, --epsilon=NUM
