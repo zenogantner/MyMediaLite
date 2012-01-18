@@ -138,17 +138,18 @@ class ItemRecommendation
    --random-seed=N                  initialize the random number generator with N
 
   files:
-   --training-file=FILE         read training data from FILE
-   --test-file=FILE             read test data from FILE
+   --training-file=FILE                     read training data from FILE
+   --test-file=FILE                         read test data from FILE
    --file-format=ignore_first_line|default
-   --data-dir=DIR               load all files from DIR
-   --user-attributes=FILE       file containing user attribute information, 1 tuple per line
-   --item-attributes=FILE       file containing item attribute information, 1 tuple per line
-   --user-relations=FILE        file containing user relation information, 1 tuple per line
-   --item-relations=FILE        file containing item relation information, 1 tuple per line
-   --user-groups=FILE           file containing group-to-user mappings, 1 tuple per line
-   --save-model=FILE            save computed model to FILE
-   --load-model=FILE            load model from FILE
+   --no-id-mapping                          do not map user and item IDs to internal IDs, keep the original IDs
+   --data-dir=DIR                           load all files from DIR
+   --user-attributes=FILE                   file containing user attribute information, 1 tuple per line
+   --item-attributes=FILE                   file containing item attribute information, 1 tuple per line
+   --user-relations=FILE                    file containing user relation information, 1 tuple per line
+   --item-relations=FILE                    file containing item relation information, 1 tuple per line
+   --user-groups=FILE                       file containing group-to-user mappings, 1 tuple per line
+   --save-model=FILE                        save computed model to FILE
+   --load-model=FILE                        load model from FILE
 
   data interpretation:
    --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
@@ -213,9 +214,10 @@ class ItemRecommendation
 		compute_fit         = false;
 
 		// other parameters
-		test_ratio     = 0;
-		num_test_users = -1;
-		repeat_eval    = false;
+		bool no_id_mapping = false;
+		test_ratio         = 0;
+		num_test_users     = -1;
+		repeat_eval        = false;
 
 		var p = new OptionSet() {
 			// string-valued options
@@ -257,6 +259,7 @@ class ItemRecommendation
 			{ "filtered-evaluation",  v => filtered_eval     = v != null },
 			{ "repeat-evaluation",    v => repeat_eval       = v != null },
 			{ "show-fold-results",    v => show_fold_results = v != null },
+			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "overlap-items",        v => overlap_items     = v != null },
 			{ "all-items",            v => all_items         = v != null },
 			{ "in-training-items",    v => in_training_items = v != null },
@@ -294,6 +297,13 @@ class ItemRecommendation
 		CheckParameters(extra_args);
 
 		recommender.Configure(recommender_options, Usage);
+
+		if (no_id_mapping)
+		{
+			user_mapping = new IdentityMapping();
+			item_mapping = new IdentityMapping();
+		}
+
 		// load all the data
 		LoadData();
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));

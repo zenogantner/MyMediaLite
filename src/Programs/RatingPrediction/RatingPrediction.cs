@@ -116,6 +116,7 @@ class RatingPrediction
    --version                        display version information and exit
    --random-seed=N                  initialize the random number generator with N
    --rating-type=float|byte|double  store ratings internally as floats or bytes or doubles (default)
+   --no-id-mapping                  do not map user and item IDs to internal IDs, keep the original IDs
 
   files:
    --training-file=FILE                   read training data from FILE
@@ -182,6 +183,7 @@ class RatingPrediction
 
 		// other arguments
 		bool search_hp             = false;
+		bool no_id_mapping         = false;
 		int random_seed            = -1;
 		string prediction_line     = "{0}\t{1}\t{2}";
 
@@ -219,6 +221,7 @@ class RatingPrediction
 			{ "online-evaluation",    v => online_eval       = v != null },
 			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "search-hp",            v => search_hp         = v != null },
+			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "help",                 v => show_help         = v != null },
 			{ "version",              v => show_version      = v != null },
 		};
@@ -255,7 +258,7 @@ class RatingPrediction
 		recommender.Configure(recommender_options, Usage);
 
 		// ID mapping objects
-		if (file_format == RatingFileFormat.KDDCUP_2011)
+		if (file_format == RatingFileFormat.KDDCUP_2011 || no_id_mapping)
 		{
 			user_mapping = new IdentityMapping();
 			item_mapping = new IdentityMapping();
