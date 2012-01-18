@@ -51,6 +51,17 @@
     </table>
   </p>
   
+  <a href="http://webscope.sandbox.yahoo.com/catalog.php?datatype=r"><h3>Yahoo! Music (about 700 million ratings)</h3></a>
+  <p>
+   Results on the validation set:
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> <th>MAE</th> </tr>
+      [% FOREACH entry IN yahoo_r2 %]
+        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+
   <a href="http://www.grouplens.org/node/73"><h3>MovieLens 1M</h3></a>
   <p>
    Results for 5-fold cross-validation on the complete dataset:

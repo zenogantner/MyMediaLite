@@ -23,8 +23,8 @@
      { method => 'GlobalAverage',                hp => '',                                                                                                      rmse => '1.58333', mae => '1.4266',  nmae => '0.35665' }
      { method => 'UserAverage',                  hp => '',                                                                                                      rmse => '1.29421', mae => '1.03074', name => '0.25768' }
      { method => 'ItemAverage',                  hp => '',                                                                                                      rmse => '1.49744', mae => '1.31978', nmae => '0.32995' }
-     { method => 'UserItemBaseline',             hp => 'reg_u=4.5 reg_i=1.137 num_iter=10',                                                                     rmse => '1.23747', mae => '0.97561', nmae => '0.2439', cbd => '0.23396' }
-   #  { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=10 learn_rate=0.00005 bias_reg=0.0001 reg_u=1.0 reg_i=1.0 num_iter=50 bold_driver=True',    rmse => '',  mae => '', nmae => '' }
+     { method => 'UserItemBaseline',             hp => 'reg_u=4.5 reg_i=1.137 num_iter=10',                                                                     rmse => '1.23747', mae => '0.97561', nmae => '0.2439',  cbd => '0.23396' }
+     { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=10 bias_reg=0.00001 reg_u=0.01 reg_i=0.01 learn_rate=0.0005 num_iter=100 bold_driver=True',  rmse => '1.07446', mae => '0.81445', nmae => '0.20361', cbd => '0.20772' }
    ]
    ml1m_data = [
     # { method => 'ItemKNNCosine',             hp => 'k=inf reg_u=25 reg_i=10',                                               rmse => '0.8970',  mae => '0.7083', nmae => '0.1771' }
