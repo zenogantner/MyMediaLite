@@ -58,7 +58,6 @@
     <Compile Include="DataType\SparseBooleanMatrixStaticTest.cs" />
     <Compile Include="DataType\SparseBooleanMatrixBinarySearchTest.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecallTest.cs" />
-    <Compile Include="IO\NumberFileTest.cs" />
     <Compile Include="DataType\VectorExtensionsTest.cs" />
     <Compile Include="DataType\MatrixExtensionsTest.cs" />
     <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />

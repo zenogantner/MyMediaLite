@@ -15,6 +15,10 @@
            for both rating prediction and item recommendation, --epsilon=NUM
            is now also supported by the item recommendation tool
 	 - rating prediction: fix bug in KDD Cup data handling
+	I/O
+	 - #206 string user, item, and attribute IDs (instead of long)
+	 - DB: support integer, long, and string IDs
+	 - remove class NumberFile (not used any more)
 	misc
 	 - NelderMead: fix compilation in VisualStudio (reported by
            Artus Krohn-Grimberghe and user LHCGreg on reddit)

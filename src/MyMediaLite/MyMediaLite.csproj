@@ -154,7 +154,6 @@
     <Compile Include="Eval\CandidateItems.cs" />
     <Compile Include="Data\IDataSet.cs" />
     <Compile Include="Data\DataSet.cs" />
-    <Compile Include="IO\NumberFile.cs" />
     <Compile Include="IO\TimedRatingData.cs" />
     <Compile Include="Util\Wrap.cs" />
     <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
