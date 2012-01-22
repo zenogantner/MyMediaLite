@@ -125,27 +125,5 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			writer.WriteLine("]");
 		}
-
-		/// <summary>Predict items for a given user</summary>
-		/// <param name="recommender">the recommender to use</param>
-		/// <param name="user_id">the numerical ID of the user</param>
-		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
-		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public IList<int> PredictItems(this IRecommender recommender, int user_id, IList<int> candidate_items)
-		{
-			var result = new WeightedItem[candidate_items.Count];
-			for (int i = 0; i < candidate_items.Count; i++)
-			{
-				int item_id = candidate_items[i];
-				result[i] = new WeightedItem(item_id, recommender.Predict(user_id, item_id));
-			}
-			result = result.OrderByDescending(x => x.weight).ToArray();
-
-			var return_array = new int[result.Length];
-			for (int i = 0; i < return_array.Length; i++)
-				return_array[i] = result[i].item_id;
-
-			return return_array;
-		}
 	}
 }

@@ -212,6 +212,7 @@
     <Compile Include="RatingPrediction\LogisticRegressionMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\LatentFeatureLogLinearModel.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
