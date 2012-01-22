@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
@@ -103,12 +104,9 @@ namespace MyMediaLite.ItemRecommendation
 			var score_list = new List<WeightedItem>();
 			foreach (int item_id in candidate_items)
 				score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-
-			score_list.Sort();
-			score_list.Reverse();
+			score_list = score_list.OrderByDescending(x => x.weight).ToList();
 
 			int prediction_count = 0;
-
 			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
 			foreach (var wi in score_list)
 			{
@@ -128,19 +126,6 @@ namespace MyMediaLite.ItemRecommendation
 			writer.WriteLine("]");
 		}
 
-		/// <summary>predict items for a specific users</summary>
-		/// <param name="recommender">the <see cref="IRecommender"/> object to use for the predictions</param>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="max_item_id">the maximum item ID</param>
-		/// <returns>a list sorted list of item IDs</returns>
-		static public IList<int> PredictItems(this IRecommender recommender, int user_id, int max_item_id)
-		{
-			var items = new int[max_item_id + 1];
-			for (int i = 0; i < max_item_id; i++)
-				items[i] = i;
-			return PredictItems(recommender, user_id, items);
-		}
-
 		/// <summary>Predict items for a given user</summary>
 		/// <param name="recommender">the recommender to use</param>
 		/// <param name="user_id">the numerical ID of the user</param>
@@ -154,8 +139,7 @@ namespace MyMediaLite.ItemRecommendation
 				int item_id = candidate_items[i];
 				result[i] = new WeightedItem(item_id, recommender.Predict(user_id, item_id));
 			}
-			Array.Sort(result);
-			Array.Reverse(result);
+			result = result.OrderByDescending(x => x.weight).ToArray();
 
 			var return_array = new int[result.Length];
 			for (int i = 0; i < return_array.Length; i++)

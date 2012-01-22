@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Gtk;
 using MovieDemo;
@@ -119,8 +120,7 @@ public partial class MainWindow : Window
 		foreach (var indices_for_item in recommender.Ratings.ByItem)
 			if (indices_for_item.Count > 0)
 				movies_by_frequency.Add( new WeightedItem(recommender.Ratings.Items[indices_for_item[0]], indices_for_item.Count) );
-		movies_by_frequency.Sort();
-		movies_by_frequency.Reverse();
+		movies_by_frequency = movies_by_frequency.OrderByDescending(x => x.weight).ToList();
 		for (int i = 0; i < n_movies; i++)
 			top_n_movies.Add( movies_by_frequency[i].item_id );
 

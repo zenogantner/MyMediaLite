@@ -18,12 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using MyMediaLite.Correlation;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.Diversification
 {
-	/// <summary>Sequential Diversification</summary>
+	/// <summary>Sequential diversification</summary>
 	/// <remarks>
 	/// Literature:
 	/// <list type="bullet">
@@ -72,7 +73,7 @@ namespace MyMediaLite.Diversification
 					float similarity = Similarity(item_id, diversified_item_list, ItemCorrelations);
 					items_by_diversity.Add(new WeightedItem(item_id, similarity));
 				}
-				items_by_diversity.Sort();
+				items_by_diversity = items_by_diversity.OrderBy(x => x.weight).ToList();
 
 				var items_by_merged_rank = new List<WeightedItem>();
 				for (int i = 0; i < items_by_diversity.Count; i++)
@@ -84,7 +85,7 @@ namespace MyMediaLite.Diversification
 
 					items_by_merged_rank.Add(new WeightedItem(item_id, score));
 				}
-				items_by_merged_rank.Sort();
+				items_by_merged_rank = items_by_merged_rank.OrderBy(x => x.weight).ToList();
 
 				int next_item_id = items_by_merged_rank[0].item_id;
 				diversified_item_list.Add(next_item_id);
