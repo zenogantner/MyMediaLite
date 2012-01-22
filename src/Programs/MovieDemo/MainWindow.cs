@@ -137,7 +137,7 @@ public partial class MainWindow : Window
 
 		rating_predictor = recommender;
 
-		current_user_id = user_mapping.ToInternalID(current_user_external_id);
+		current_user_id = user_mapping.ToInternalID(current_user_external_id.ToString());
 		//rating_predictor.AddUser(current_user_id);
 
 		// add movies that were not in the training set
@@ -617,7 +617,7 @@ public partial class MainWindow : Window
 
 			ratings.Clear();
 			rating_predictor.RemoveUser(current_user_id);
-			user_mapping.ToInternalID(++current_user_external_id);
+			user_mapping.ToInternalID( (++current_user_external_id).ToString() );
 			PredictAllRatings();
 		}
 		else

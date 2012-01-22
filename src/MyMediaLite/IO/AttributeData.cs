@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -75,7 +75,7 @@ namespace MyMediaLite.IO
 				if (tokens.Length != 2)
 					throw new FormatException("Expected exactly 2 columns: " + line);
 
-				int entity_id = mapping.ToInternalID(long.Parse(tokens[0]));
+				int entity_id = mapping.ToInternalID(tokens[0]);
 				int attr_id   = int.Parse(tokens[1]);
 
 				matrix[entity_id, attr_id] = true;
@@ -97,7 +97,7 @@ namespace MyMediaLite.IO
 
 			while (!reader.Read())
 			{
-				int entity_id = mapping.ToInternalID(reader.GetInt32(0));
+				int entity_id = mapping.ToInternalID(reader.GetString(0));
 				int attr_id   = reader.GetInt32(1);
 
 				matrix[entity_id, attr_id] = true;

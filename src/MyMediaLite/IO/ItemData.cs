@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 // Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
@@ -72,8 +72,8 @@ namespace MyMediaLite.IO
 
 				try
 				{
-					int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
-					int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
+					int user_id = user_mapping.ToInternalID(tokens[0]);
+					int item_id = item_mapping.ToInternalID(tokens[1]);
 					feedback.Add(user_id, item_id);
 				}
 				catch (Exception)
@@ -85,6 +85,8 @@ namespace MyMediaLite.IO
 			return feedback;
 		}
 
+
+		
 		/// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
@@ -95,12 +97,15 @@ namespace MyMediaLite.IO
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 2)
-				throw new Exception("Expected at least 2 columns.");
-
+				throw new FormatException("Expected at least 2 columns.");
+			
+			return_string get_user_id = reader.GetGetter(0);
+			return_string get_item_id = reader.GetGetter(1);
+				
 			while (reader.Read())
 			{
-				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
-				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+				int user_id = user_mapping.ToInternalID(get_user_id());
+				int item_id = item_mapping.ToInternalID(get_item_id());
 
 				feedback.Add(user_id, item_id);
 			}

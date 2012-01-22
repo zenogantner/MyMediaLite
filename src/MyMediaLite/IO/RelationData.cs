@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -69,8 +69,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length != 2)
 					throw new FormatException("Expected exactly 2 columns: " + line);
 
-				int entity1_id = mapping.ToInternalID(long.Parse(tokens[0]));
-				int entity2_id = mapping.ToInternalID(long.Parse(tokens[1]));
+				int entity1_id = mapping.ToInternalID(tokens[0]);
+				int entity2_id = mapping.ToInternalID(tokens[1]);
 
 				matrix[entity1_id, entity2_id] = true;
 			}
@@ -85,14 +85,17 @@ namespace MyMediaLite.IO
 		static public SparseBooleanMatrix Read(IDataReader reader, IEntityMapping mapping)
 		{
 			if (reader.FieldCount < 2)
-				throw new Exception("Expected at least 2 columns.");
+				throw new FormatException("Expected at least 2 columns.");
 
 			var matrix = new SparseBooleanMatrix();
 
+			return_string get_e1_id = reader.GetGetter(0);
+			return_string get_e2_id = reader.GetGetter(1);
+
 			while (!reader.Read())
 			{
-				int entity1_id = mapping.ToInternalID(reader.GetInt32(0));
-				int entity2_id = mapping.ToInternalID(reader.GetInt32(0));
+				int entity1_id = mapping.ToInternalID(get_e1_id());
+				int entity2_id = mapping.ToInternalID(get_e2_id());
 
 				matrix[entity1_id, entity2_id] = true;
 			}

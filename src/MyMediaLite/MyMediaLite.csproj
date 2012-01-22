@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>2.03</ReleaseVersion>
+    <ReleaseVersion>2.04</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -211,6 +211,8 @@
     <Compile Include="IUserSimilarityProvider.cs" />
     <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
     <Compile Include="RatingPrediction\LogisticRegressionMatrixFactorization.cs" />
+    <Compile Include="RatingPrediction\LatentFeatureLogLinearModel.cs" />
+    <Compile Include="IO\DataReaderExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -67,8 +67,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 4)
 					throw new FormatException(string.Format("Expected at least 4 columns: {0}", line));
 
-				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
-				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
+				int user_id = user_mapping.ToInternalID(tokens[0]);
+				int item_id = item_mapping.ToInternalID(tokens[1]);
 				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
 				long seconds = uint.Parse(tokens[3]);
 

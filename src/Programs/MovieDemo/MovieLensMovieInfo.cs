@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -85,9 +85,9 @@ namespace MovieDemo
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
 				if (tokens.Length != 3)
-					throw new IOException("Expected exactly 3 columns: " + line);
+					throw new FormatException("Expected exactly 3 columns: " + line);
 
-				int movie_id          = item_mapping.ToInternalID(long.Parse(tokens[0]));
+				int movie_id          = item_mapping.ToInternalID(tokens[0]);
 				string movie_imdb_key = tokens[1];
 				//string[] movie_genres = tokens[2].Split('|');
 

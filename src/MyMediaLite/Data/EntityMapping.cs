@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
-//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+//  astring with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
@@ -27,17 +27,17 @@ namespace MyMediaLite.Data
 		/// <remarks>
 		/// Never, to repeat NEVER, directly delete entries from this dictionary!
 		/// </remarks>
-		private Dictionary<long, int> original_to_internal = new Dictionary<long, int>();
+		private Dictionary<string, int> original_to_internal = new Dictionary<string, int>();
 
 		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
 		/// <remarks>
 		/// Never, to repeat NEVER, directly delete entries from this dictionary!
 		/// </remarks>
-		private Dictionary<int, long> internal_to_original = new Dictionary<int, long>();
+		private Dictionary<int, string> internal_to_original = new Dictionary<int, string>();
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
-		public ICollection<long> OriginalIDs	{ get { return original_to_internal.Keys; } }
+		public ICollection<string> OriginalIDs	{ get { return original_to_internal.Keys; } }
 
 		/// <summary>all internal entity IDs</summary>
 		/// <value>all internal entity IDs</value>
@@ -46,9 +46,9 @@ namespace MyMediaLite.Data
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
 		/// <returns>the original (external) ID of the entitiy</returns>
-		public long ToOriginalID(int internal_id)
+		public string ToOriginalID(int internal_id)
 		{
-			long original_id;
+			string original_id;
 			if (internal_to_original.TryGetValue(internal_id, out original_id))
 				return original_id;
 			else
@@ -58,7 +58,7 @@ namespace MyMediaLite.Data
 		/// <summary>Get internal ID of a given entity. If the given external ID is unknown, create a new internal ID for it and store the mapping.</summary>
 		/// <param name="original_id">the original (external) ID of the entity</param>
 		/// <returns>the internal ID of the entitiy</returns>
-		public int ToInternalID(long original_id)
+		public int ToInternalID(string original_id)
 		{
 			int internal_id;
 			if (original_to_internal.TryGetValue(original_id, out internal_id))
@@ -73,9 +73,9 @@ namespace MyMediaLite.Data
 		/// <summary>Get original (external) IDs of a list of given entities</summary>
 		/// <param name="internal_id_list">the list of internal IDs</param>
 		/// <returns>the list of original (external) IDs</returns>
-		public IList<long> ToOriginalID(IList<int> internal_id_list)
+		public IList<string> ToOriginalID(IList<int> internal_id_list)
 		{
-			var result = new List<long>(internal_id_list.Count);
+			var result = new List<string>(internal_id_list.Count);
 			foreach (int id in internal_id_list)
 				result.Add(ToOriginalID(id));
 			return result;
@@ -84,10 +84,10 @@ namespace MyMediaLite.Data
 		/// <summary>Get internal IDs of a list of given entities</summary>
 		/// <param name="original_id_list">the list of original (external) IDs</param>
 		/// <returns>a list of internal IDs</returns>
-		public IList<int> ToInternalID(IList<long> original_id_list)
+		public IList<int> ToInternalID(IList<string> original_id_list)
 		{
 			var result = new List<int>(original_id_list.Count);
-			foreach (long id in original_id_list)
+			foreach (string id in original_id_list)
 				result.Add(ToInternalID(id));
 			return result;
 		}

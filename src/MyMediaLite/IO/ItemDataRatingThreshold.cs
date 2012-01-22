@@ -73,8 +73,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 3)
 					throw new FormatException("Expected at least 3 columns: " + line);
 
-				int user_id   = user_mapping.ToInternalID(long.Parse(tokens[0]));
-				int item_id   = item_mapping.ToInternalID(long.Parse(tokens[1]));
+				int user_id   = user_mapping.ToInternalID(tokens[0]);
+				int item_id   = item_mapping.ToInternalID(tokens[1]);
 				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				if (rating >= rating_threshold)
@@ -95,12 +95,14 @@ namespace MyMediaLite.IO
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 3)
-				throw new Exception("Expected at least 3 columns.");
+				throw new FormatException("Expected at least 3 columns.");
+			return_string get_user_id = reader.GetGetter(0);
+			return_string get_item_id = reader.GetGetter(1);
 
 			while (reader.Read())
 			{
-				int user_id = user_mapping.ToInternalID(reader.GetInt32(0));
-				int item_id = item_mapping.ToInternalID(reader.GetInt32(1));
+				int user_id = user_mapping.ToInternalID(get_user_id());
+				int item_id = item_mapping.ToInternalID(get_item_id());
 				double rating = reader.GetDouble(2);
 
 				if (rating >= rating_threshold)

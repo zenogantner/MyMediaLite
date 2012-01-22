@@ -626,7 +626,7 @@ class ItemRecommendation
 
 			// test users
 			if (test_users_file != null)
-				test_users = new List<int>(user_mapping.ToInternalID(NumberFile.ReadLongs(Path.Combine(data_dir, test_users_file))));
+				test_users = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, test_users_file)).ToArray() );
 			else
 				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
 
@@ -646,9 +646,9 @@ class ItemRecommendation
 
 			// candidate items
 			if (candidate_items_file != null)
-				candidate_items = new List<int>(item_mapping.ToInternalID(NumberFile.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
+				candidate_items = item_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, candidate_items_file)).ToArray() );
 			else if (all_items)
-				candidate_items = new List<int>(Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1));
+				candidate_items = Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1).ToArray();
 
 			if (candidate_items != null)
 				eval_item_mode = CandidateItems.EXPLICIT;
@@ -696,7 +696,7 @@ class ItemRecommendation
 
 		IList<int> user_list = null;
 		if (predict_for_users_file != null)
-			user_list = user_mapping.ToInternalID(NumberFile.ReadLongs(predict_for_users_file));
+			user_list = user_mapping.ToInternalID( File.ReadLines(predict_for_users_file).ToArray() );
 
 		TimeSpan time_span = Wrap.MeasureTime( delegate() {
 			recommender.WritePredictions(

@@ -91,8 +91,8 @@ namespace MyMediaLite.IO
 				if (tokens.Length < 3)
 					throw new FormatException("Expected at least 3 columns: " + line);
 
-				int user_id = user_mapping.ToInternalID(long.Parse(tokens[0]));
-				int item_id = item_mapping.ToInternalID(long.Parse(tokens[1]));
+				int user_id = user_mapping.ToInternalID(tokens[0]);
+				int item_id = item_mapping.ToInternalID(tokens[1]);
 				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				ratings.Add(user_id, item_id, rating);

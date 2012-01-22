@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+// astring with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
@@ -27,11 +27,11 @@ namespace MyMediaLite.Data
 		private int MaxEntityID { get; set; }
 
 		///
-		public ICollection<long> OriginalIDs {
+		public ICollection<string> OriginalIDs {
 			get {
-				var id_list = new long[MaxEntityID + 1];
+				var id_list = new string[MaxEntityID + 1];
 				for (int i = 0; i <= MaxEntityID; i++)
-					id_list[i] = i;
+					id_list[i] = i.ToString();
 
 				return id_list;
 			}
@@ -49,47 +49,40 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public long ToOriginalID(int internal_id)
+		public string ToOriginalID(int internal_id)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, internal_id);
-			return internal_id;
+			return internal_id.ToString();
 		}
 
 		///
-		public int ToInternalID(long original_id)
+		public int ToInternalID(string original_id)
 		{
-			if (original_id > int.MaxValue)
-				throw new ArgumentOutOfRangeException("original_id", "cannot be greater than int.MaxValue");
-
-			MaxEntityID = Math.Max(MaxEntityID, (int) original_id);
-			return (int) original_id;
+			int id = int.Parse(original_id);
+			MaxEntityID = Math.Max(MaxEntityID, id);
+			return id;
 		}
 
 		///
-		public IList<long> ToOriginalID(IList<int> internal_id_list)
+		public IList<string> ToOriginalID(IList<int> internal_id_list)
 		{
 			MaxEntityID = Math.Max(MaxEntityID, internal_id_list.Max());
 
-			var original_ids = new long[internal_id_list.Count];
+			var original_ids = new string[internal_id_list.Count];
 			for (int i = 0; i < internal_id_list.Count; i++)
-				original_ids[i] = internal_id_list[i];
+				original_ids[i] = internal_id_list[i].ToString();
 
 			return original_ids;
 		}
 
 		///
-		public IList<int> ToInternalID(IList<long> original_id_list)
+		public IList<int> ToInternalID(IList<string> original_id_list)
 		{
 			var internal_ids = new int[original_id_list.Count];
 			for (int i = 0; i < original_id_list.Count; i++)
-			{
-				if (original_id_list[i] > int.MaxValue)
-					throw new ArgumentOutOfRangeException(string.Format("original_ids[{0}]", i), "cannot be greater than int.MaxValue");
+				internal_ids[i] = int.Parse(original_id_list[i]);
 
-				internal_ids[i] = (int) original_id_list[i];
-			}
-
-			MaxEntityID = (int) Math.Max(MaxEntityID, original_id_list.Max());
+			MaxEntityID = Math.Max(MaxEntityID, internal_ids.Max());
 
 			return internal_ids;
 		}

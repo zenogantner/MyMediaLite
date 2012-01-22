@@ -158,7 +158,7 @@ class MappingItemRecommendation
 
 		// candidate items
 		if (! candidate_items_file.Equals(string.Empty) )
-			candidate_items = new List<int>(item_mapping.ToInternalID(NumberFile.ReadLongs(Path.Combine(data_dir, candidate_items_file))));
+			candidate_items = item_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, candidate_items_file)).ToArray() );
 		else
 			candidate_items = training_data.AllItems;
 
