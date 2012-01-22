@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,17 +20,19 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Interface for item recommenders</summary>
 	/// <remarks>
-	/// Item prediction or item recommendation is the task of predicting items (movies, books, products, videos, jokes)
-	/// that a user may like, based on past user behavior (and possibly other information).
-	///
-	/// See also http://recsyswiki/wiki/Item_prediction
+	///   <para>
+	///     Item prediction or item recommendation is the task of predicting items (movies, books, products, videos, jokes)
+	///     that a user may like, based on past user behavior (and possibly other information).
+	///   </para>
+	///   <para>
+	///     See also http://recsyswiki/wiki/Item_prediction
+	///   </para>
 	/// </remarks>
 	public interface IIncrementalItemRecommender : IRecommender
 	{
 		/// <summary>Add a positive feedback event</summary>
 		/// <param name='user_id'>the user ID</param>
 		/// <param name='item_id'>the item ID</param>
-		///
 		void AddFeedback(int user_id, int item_id);
 
 		/// <summary>Remove all feedback events by the given user-item combination</summary>

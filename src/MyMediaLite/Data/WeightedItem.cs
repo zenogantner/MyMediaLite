@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -25,10 +25,10 @@ namespace MyMediaLite.Data
 	/// <summary>Weighted items class</summary>
 	public sealed class WeightedItem : IComparable
 	{
-		/// <summary>Item ID</summary>
+		/// <summary>item ID</summary>
 		public int item_id;
-		/// <summary>Weight</summary>
-		public double weight;
+		/// <summary>weight</summary>
+		public float weight;
 
 		/// <summary>Default constructor</summary>
 		public WeightedItem() {}
@@ -36,7 +36,7 @@ namespace MyMediaLite.Data
 		/// <summary>Constructor</summary>
 		/// <param name="item_id">the item ID</param>
 		/// <param name="weight">the weight</param>
-		public WeightedItem(int item_id, double weight)
+		public WeightedItem(int item_id, float weight)
 		{
 			this.item_id = item_id;
 			this.weight  = weight;
@@ -56,7 +56,7 @@ namespace MyMediaLite.Data
 				return false;
 
 			var otherItem = o as WeightedItem;
-			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
+			return Math.Abs(this.weight - otherItem.weight) < 0.000001f;
 		}
 
 		///
@@ -65,7 +65,7 @@ namespace MyMediaLite.Data
 			if (otherItem == null)
 				return false;
 
-			return Math.Abs(this.weight - otherItem.weight) < 0.000001;
+			return Math.Abs(this.weight - otherItem.weight) < 0.000001f;
 		}
 
 		///

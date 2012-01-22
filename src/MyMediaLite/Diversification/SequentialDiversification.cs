@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -49,7 +49,7 @@ namespace MyMediaLite.Diversification
 		/// <param name="item_list">a list of items</param>
 		/// <param name="diversification_parameter">the diversification parameter (higher means more diverse)</param>
 		/// <returns>a list re-ordered to ensure maximum diversity at the top of the list</returns>
-		public IList<int> DiversifySequential(IList<int> item_list, double diversification_parameter)
+		public IList<int> DiversifySequential(IList<int> item_list, float diversification_parameter)
 		{
 			Trace.Assert(item_list.Count > 0);
 
@@ -69,7 +69,7 @@ namespace MyMediaLite.Diversification
 				var items_by_diversity = new List<WeightedItem>();
 				foreach (int item_id in item_set)
 				{
-					double similarity = Similarity(item_id, diversified_item_list, ItemCorrelations);
+					float similarity = Similarity(item_id, diversified_item_list, ItemCorrelations);
 					items_by_diversity.Add(new WeightedItem(item_id, similarity));
 				}
 				items_by_diversity.Sort();
@@ -80,7 +80,7 @@ namespace MyMediaLite.Diversification
 					int item_id = items_by_diversity[i].item_id;
 					// i is the dissimilarity rank
 					// TODO adjust for ties
-					double score = item_rank_by_rating[item_id] * (1 - diversification_parameter) + i * diversification_parameter;
+					float score = item_rank_by_rating[item_id] * (1f - diversification_parameter) + i * diversification_parameter;
 
 					items_by_merged_rank.Add(new WeightedItem(item_id, score));
 				}
@@ -98,26 +98,26 @@ namespace MyMediaLite.Diversification
 		/// <param name="items">a collection of items</param>
 		/// <param name="item_correlation">the similarity measure to use</param>
 		/// <returns>the similarity between the item and the collection</returns>
-		public static double Similarity(int item_id, ICollection<int> items, CorrelationMatrix item_correlation)
+		public static float Similarity(int item_id, ICollection<int> items, CorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			foreach (int other_item_id in items)
 				similarity += item_correlation[item_id, other_item_id];
-			return similarity;
+			return (float) similarity;
 		}
 
 		/// <summary>Compute the intra-set similarity of an item collection</summary>
 		/// <param name="items">a collection of items</param>
 		/// <param name="item_correlation">the similarity measure to use</param>
 		/// <returns>the intra-set similarity of the collection</returns>
-		public static double Similarity(ICollection<int> items, CorrelationMatrix item_correlation)
+		public static float Similarity(ICollection<int> items, CorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			for (int i = 0; i < items.Count; i++)
 				for (int j = i + 1; j < items.Count; j++)
 					similarity += item_correlation[i, j];
 
-			return similarity;
+			return (float) similarity;
 		}
 	}
 }

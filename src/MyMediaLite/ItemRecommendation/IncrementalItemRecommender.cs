@@ -37,7 +37,7 @@ namespace MyMediaLite.ItemRecommendation
 				AddUser(user_id);
 			if (item_id > MaxItemID)
 				AddItem(item_id);
-
+			
 			Feedback.Add(user_id, item_id);
 		}
 

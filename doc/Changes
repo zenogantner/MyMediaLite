@@ -22,6 +22,7 @@
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
 	misc
+	 - WeightedItem: use float instead of double
 	 - NelderMead: fix compilation in VisualStudio (reported by
            Artus Krohn-Grimberghe and user LHCGreg on reddit)
 	 - Utils.Shuffle is now an extension method
