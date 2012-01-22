@@ -87,12 +87,12 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted weight</returns>
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= user_factors.dim1))
-				return 0;
+				return 0f;
 			if ((item_id < 0) || (item_id >= item_factors.dim1))
-				return 0;
+				return 0f;
 
 			return MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
@@ -100,7 +100,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
 			{
 				writer.WriteMatrix(user_factors);
 				writer.WriteMatrix(item_factors);

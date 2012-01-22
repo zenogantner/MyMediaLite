@@ -67,7 +67,7 @@ namespace MyMediaLite.Ensemble
 		}
 
 		///
-		public abstract double Predict(int user_id, int item_id);
+		public abstract float Predict(int user_id, int item_id);
 
 		///
 		public virtual bool CanPredict(int user_id, int item_id)

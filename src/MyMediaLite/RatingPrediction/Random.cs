@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -39,9 +39,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
-			return MinRating + Util.Random.GetInstance().NextDouble() * (MaxRating - MinRating);
+			return (float) (MinRating + Util.Random.GetInstance().NextDouble() * (MaxRating - MinRating));
 		}
 
 		///

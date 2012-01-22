@@ -63,54 +63,54 @@ namespace MyMediaLite.RatingPrediction
 		public int BinSize { get; set; }
 
 		/// <summary>beta parameter for modeling the drift in the user bias</summary>
-		public double Beta { get; set; }
+		public float Beta { get; set; }
 
 		// parameter-specific learn rates
 
 		/// <summary>learn rate for the user bias</summary>
-		public double UserBiasLearnRate { get; set; }
+		public float UserBiasLearnRate { get; set; }
 
 		/// <summary>learn rate for the item bias</summary>
-		public double ItemBiasLearnRate { get; set; }
+		public float ItemBiasLearnRate { get; set; }
 
 		/// <summary>learn rate for the user-wise alphas</summary>
-		public double AlphaLearnRate { get; set; }
+		public float AlphaLearnRate { get; set; }
 		/// <summary>learn rate for the bin-wise item bias</summary>
-		public double ItemBiasByTimeBinLearnRate { get; set; }
+		public float ItemBiasByTimeBinLearnRate { get; set; }
 
 		/// <summary>learn rate for the day-wise user bias</summary>
-		public double UserBiasByDayLearnRate { get; set; }
+		public float UserBiasByDayLearnRate { get; set; }
 
 		/// <summary>learn rate for the user-wise scaling factor</summary>
-		public double UserScalingLearnRate { get; set; }
+		public float UserScalingLearnRate { get; set; }
 
 		/// <summary>learn rate for the day-wise user scaling factor</summary>
-		public double UserScalingByDayLearnRate { get; set; }
+		public float UserScalingByDayLearnRate { get; set; }
 
 		// parameter-specific regularization constants
 
 		/// <summary>regularization for the user bias</summary>
-		public double RegU { get; set; }
+		public float RegU { get; set; }
 		/// <summary>regularization for the item bias</summary>
-		public double RegI { get; set; }
+		public float RegI { get; set; }
 
 		/// <summary>regularization for the user-wise alphas</summary>
-		public double RegAlpha { get; set; }
+		public float RegAlpha { get; set; }
 
 		/// <summary>regularization for the bin-wise item bias</summary>
-		public double RegItemBiasByTimeBin { get; set; }
+		public float RegItemBiasByTimeBin { get; set; }
 
 		/// <summary>regularization for the day-wise user bias</summary>
-		public double RegUserBiasByDay { get; set; }
+		public float RegUserBiasByDay { get; set; }
 
 		/// <summary>regularization for the user scaling factor</summary>
-		public double RegUserScaling { get; set; }
+		public float RegUserScaling { get; set; }
 
 		/// <summary>regularization for the day-wise user scaling factor</summary>
-		public double RegUserScalingByDay { get; set; }
+		public float RegUserScalingByDay { get; set; }
 
 		// helper data structures
-		IList<double> user_mean_day;
+		IList<float> user_mean_day;
 
 		/// <summary>default constructor</summary>
 		public TimeAwareBaseline()
@@ -119,23 +119,23 @@ namespace MyMediaLite.RatingPrediction
 
 			BinSize = 70;
 
-			Beta = 0.4;
+			Beta = 0.4f;
 
-			UserBiasLearnRate = 0.003;
-			ItemBiasLearnRate = 0.002;
-			AlphaLearnRate = 0.00001;
-			ItemBiasByTimeBinLearnRate = 0.000005;
-			UserBiasByDayLearnRate = 0.0025;
-			UserScalingLearnRate = 0.008;
-			UserScalingByDayLearnRate = 0.002;
+			UserBiasLearnRate = 0.003f;
+			ItemBiasLearnRate = 0.002f;
+			AlphaLearnRate = 0.00001f;
+			ItemBiasByTimeBinLearnRate = 0.000005f;
+			UserBiasByDayLearnRate = 0.0025f;
+			UserScalingLearnRate = 0.008f;
+			UserScalingByDayLearnRate = 0.002f;
 
-			RegU = 0.03;
-			RegI = 0.03;
+			RegU = 0.03f;
+			RegI = 0.03f;
 			RegAlpha = 50;
-			RegItemBiasByTimeBin = 0.1;
-			RegUserBiasByDay = 0.005;
-			RegUserScaling = 0.01;
-			RegUserScalingByDay = 0.005;
+			RegItemBiasByTimeBin = 0.1f;
+			RegUserBiasByDay = 0.005f;
+			RegUserScaling = 0.01f;
+			RegUserScalingByDay = 0.005f;
 		}
 
 		///
@@ -146,7 +146,7 @@ namespace MyMediaLite.RatingPrediction
 			global_average = ratings.Average;
 
 			// compute mean day of rating by user
-			user_mean_day = new double[MaxUserID + 1];
+			user_mean_day = new float[MaxUserID + 1];
 			for (int i = 0; i < timed_ratings.Count; i++)
 				user_mean_day[ratings.Users[i]] += RelativeDay(timed_ratings.Times[i]);
 			for (int u = 0; u <= MaxUserID; u++)
@@ -195,7 +195,7 @@ namespace MyMediaLite.RatingPrediction
 				int bin = day / BinSize;
 
 				// compute error
-				double err = timed_ratings[index] - Predict(u, i, day, bin);
+				float err = timed_ratings[index] - Predict(u, i, day, bin);
 
 				UpdateParameters(u, i, day, bin, err);
 			}
@@ -207,7 +207,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='day'>the day of the rating</param>
 		/// <param name='bin'>the day bin of the rating</param>
 		/// <param name='err'>the current error made for this rating</param>
-		protected virtual void UpdateParameters(int u, int i, int day, int bin, double err)
+		protected virtual void UpdateParameters(int u, int i, int day, int bin, float err)
 		{
 			// update user biases
 			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
@@ -227,9 +227,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
-			double result = global_average;
+			float result = global_average;
 			if (user_id <= MaxUserID)
 				result += user_bias[user_id];
 			if (item_id <= MaxItemID)
@@ -246,7 +246,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='item_id'>the item ID</param>
 		/// <param name='day'>the day of the rating</param>
 		/// <param name='bin'>the day bin of the rating</param>
-		protected virtual double Predict(int user_id, int item_id, int day, int bin)
+		protected virtual float Predict(int user_id, int item_id, int day, int bin)
 		{
 			double result = global_average;
 
@@ -254,11 +254,11 @@ namespace MyMediaLite.RatingPrediction
 			result += user_bias[user_id] + alpha[user_id] * dev_u + user_bias_by_day[user_id, day];
 			result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
 
-			return result;
+			return (float) result;
 		}
 
 		///
-		public override double Predict(int user_id, int item_id, DateTime time)
+		public override float Predict(int user_id, int item_id, DateTime time)
 		{
 			int day = RelativeDay(time);
 			int bin = day / BinSize;
@@ -281,7 +281,7 @@ namespace MyMediaLite.RatingPrediction
 			if (item_id <= MaxItemID && user_id <= MaxUserID && day < user_scaling_by_day.NumberOfColumns)
 				result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
 
-			return result;
+			return (float) result;
 		}
 
 		///

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
   		private SkewSymmetricSparseMatrix diff_matrix;
   		private SymmetricSparseMatrix<int> freq_matrix;
 
-		private double global_average;
+		private float global_average;
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
@@ -54,7 +54,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id > MaxItemID || user_id > MaxUserID)
 				return global_average;
@@ -76,7 +76,7 @@ namespace MyMediaLite.RatingPrediction
 			if (frequency == 0)
 				return global_average;
 
-			return prediction / frequency;
+			return (float) (prediction / frequency);
 		}
 
 		void InitModel()
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var diff_matrix = (SkewSymmetricSparseMatrix) reader.ReadMatrix(this.diff_matrix);
 				var freq_matrix = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix);
@@ -138,7 +138,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteSparseMatrix(diff_matrix);

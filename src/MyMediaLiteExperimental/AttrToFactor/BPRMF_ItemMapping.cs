@@ -229,12 +229,12 @@ namespace MyMediaLite.AttrToFactor
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= user_factors.dim1))
 			{
 				Console.Error.WriteLine("user is unknown: " + user_id);
-				return double.MinValue;
+				return float.MinValue;
 			}
 
 			float[] est_factors = MapToLatentFactorSpace(item_id);

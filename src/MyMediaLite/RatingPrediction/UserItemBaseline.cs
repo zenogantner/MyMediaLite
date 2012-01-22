@@ -131,11 +131,11 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
-			double user_bias = (user_id < user_biases.Length && user_id >= 0) ? user_biases[user_id] : 0;
-			double item_bias = (item_id < item_biases.Length && item_id >= 0) ? item_biases[item_id] : 0;
-			double result = global_average + user_bias + item_bias;
+			float user_bias = (user_id < user_biases.Length && user_id >= 0) ? user_biases[user_id] : 0;
+			float item_bias = (item_id < item_biases.Length && item_id >= 0) ? item_biases[item_id] : 0;
+			float result = global_average + user_bias + item_bias;
 
 			if (result > MaxRating)
 				return MaxRating;

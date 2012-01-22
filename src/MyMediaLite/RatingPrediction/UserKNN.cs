@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id > correlation.NumberOfRows - 1) || (item_id > MaxItemID))
 				return baseline_predictor.Predict(user_id, item_id);
@@ -61,9 +61,9 @@ namespace MyMediaLite.RatingPrediction
 			{
 				if (data_user[user_id2, item_id])
 				{
-					double rating = ratings.Get(user_id2, item_id, ratings.ByUser[user_id2]);
+					float rating = ratings.Get(user_id2, item_id, ratings.ByUser[user_id2]);
 
-					double weight = correlation[user_id, user_id2];
+					float weight = correlation[user_id, user_id2];
 					weight_sum += weight;
 					sum += weight * (rating - baseline_predictor.Predict(user_id2, item_id));
 
@@ -72,12 +72,9 @@ namespace MyMediaLite.RatingPrediction
 				}
 			}
 
-			double result = baseline_predictor.Predict(user_id, item_id);
+			float result = baseline_predictor.Predict(user_id, item_id);
 			if (weight_sum != 0)
-			{
-				double modification = sum / weight_sum;
-				result += modification;
-			}
+				result += (float) (sum / weight_sum);
 
 			if (result > MaxRating)
 				result = MaxRating;

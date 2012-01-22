@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -33,7 +33,7 @@ namespace MyMediaLite.Ensemble
 	public class WeightedEnsemble : Ensemble
 	{
 		/// <summary>List of component weights</summary>
-		public List<double> weights = new List<double>();
+		public List<float> weights = new List<float>();
 
 		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
@@ -48,14 +48,14 @@ namespace MyMediaLite.Ensemble
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			double result = 0;
 
 			for (int i = 0; i < recommenders.Count; i++)
-			   	result += weights[i] * recommenders[i].Predict(user_id, item_id);
+				result += weights[i] * recommenders[i].Predict(user_id, item_id);
 
-			return (double) result / weight_sum;
+			return (float) (result / weight_sum);
 		}
 
 		///
@@ -79,7 +79,7 @@ namespace MyMediaLite.Ensemble
 			{
 				int numberOfComponents = int.Parse(reader.ReadLine());
 
-				var weights = new List<double>();
+				var weights = new List<float>();
 				var recommenders = new List<IRecommender>();
 
 				for (int i = 0; i < numberOfComponents; i++)
@@ -92,7 +92,7 @@ namespace MyMediaLite.Ensemble
 
 					// TODO make sure the recommenders get their data?
 
-					weights.Add(double.Parse(data[1], CultureInfo.InvariantCulture));
+					weights.Add(float.Parse(data[1], CultureInfo.InvariantCulture));
 				}
 
 				this.weights = weights;

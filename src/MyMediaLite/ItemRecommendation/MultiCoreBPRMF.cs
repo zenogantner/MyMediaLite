@@ -99,9 +99,9 @@ namespace MyMediaLite.ItemRecommendation
 				double loss = ComputeLoss();
 
 				if (loss > last_loss)
-					LearnRate *= 0.5;
+					LearnRate *= 0.5f;
 				else if (loss < last_loss)
-					LearnRate *= 1.05;
+					LearnRate *= 1.05f;
 
 				last_loss = loss;
 

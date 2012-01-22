@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,12 +30,12 @@ namespace MyMediaLite.RatingPrediction
 	public class Constant : IncrementalRatingPredictor
 	{
 		/// <summary>the constant rating</summary>
-		public double ConstantRating { get; set; }
+		public float ConstantRating { get; set; }
 
 		/// <summary>Default constructor</summary>
 		public Constant()
 		{
-			ConstantRating = 1.0;
+			ConstantRating = 1.0f;
 		}
 
 		///
@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			return ConstantRating;
 		}

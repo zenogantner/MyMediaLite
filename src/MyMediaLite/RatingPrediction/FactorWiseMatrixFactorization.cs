@@ -204,7 +204,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return global_effects.Predict(user_id, item_id);
@@ -216,7 +216,7 @@ namespace MyMediaLite.RatingPrediction
 			if (result < MinRating)
 				return MinRating;
 
-			return result;
+			return (float) result;
 		}
 
 		///

@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,7 +37,7 @@ namespace MyMediaLite
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted score/rating for the given user-item combination</returns>
-		double Predict(int user_id, int item_id);
+		float Predict(int user_id, int item_id);
 
 		/// <summary>Check whether a useful prediction (i.e. not using a fallback/default answer) can be made for a given user-item combination</summary>
 		/// <remarks>

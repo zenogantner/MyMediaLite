@@ -68,27 +68,27 @@ namespace MyMediaLite.ItemRecommendation
 		public bool UniformUserSampling { get; set; }
 
 		/// <summary>Regularization parameter for the bias term</summary>
-		public double BiasReg { get; set; }
+		public float BiasReg { get; set; }
 
 		/// <summary>Learning rate alpha</summary>
-		public double LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
+		public float LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
 		/// <summary>Learning rate alpha</summary>
-		protected double learn_rate = 0.05;
+		protected float learn_rate = 0.05f;
 
 		/// <summary>Regularization parameter for user factors</summary>
-		public double RegU { get { return reg_u; } set { reg_u = value; } }
+		public float RegU { get { return reg_u; } set { reg_u = value; } }
 		/// <summary>Regularization parameter for user factors</summary>
-		protected double reg_u = 0.0025;
+		protected float reg_u = 0.0025f;
 
 		/// <summary>Regularization parameter for positive item factors</summary>
-		public double RegI { get { return reg_i; } set { reg_i = value;	} }
+		public float RegI { get { return reg_i; } set { reg_i = value;	} }
 		/// <summary>Regularization parameter for positive item factors</summary>
-		protected double reg_i = 0.0025;
+		protected float reg_i = 0.0025f;
 
 		/// <summary>Regularization parameter for negative item factors</summary>
-		public double RegJ { get { return reg_j; } set { reg_j = value; } }
+		public float RegJ { get { return reg_j; } set { reg_j = value; } }
 		/// <summary>Regularization parameter for negative item factors</summary>
-		protected double reg_j = 0.00025;
+		protected float reg_j = 0.00025f;
 
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		public bool UpdateJ { get { return update_j; } set { update_j = value; } }
@@ -253,9 +253,9 @@ namespace MyMediaLite.ItemRecommendation
 				double loss = ComputeLoss();
 
 				if (loss > last_loss)
-					LearnRate *= 0.5;
+					LearnRate *= 0.5f;
 				else if (loss < last_loss)
-					LearnRate *= 1.1;
+					LearnRate *= 1.1f;
 
 				last_loss = loss;
 
@@ -603,10 +603,10 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
-				return double.MinValue;
+				return float.MinValue;
 
 			return item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
@@ -614,7 +614,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
 			{
 				writer.WriteMatrix(user_factors);
 				writer.WriteVector(item_bias);

@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -42,19 +42,19 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id > MaxUserID))
-				return 0;
+				return float.MinValue;
 			if ((item_id < 0) || (item_id > MaxItemID))
-				return 0;
+				return float.MinValue;
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[item_id])
 				if (Feedback.UserMatrix[neighbor, user_id])
 					count++;
 
-			return (double) count / k;
+			return (float) (count / k);
 		}
 
 		///

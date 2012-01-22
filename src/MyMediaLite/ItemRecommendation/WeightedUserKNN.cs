@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,16 +27,16 @@ namespace MyMediaLite.ItemRecommendation
 	public class WeightedUserKNN : UserKNN
 	{
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id > MaxUserID))
-				return 0;
+				return float.MinValue;
 			if ((item_id < 0) || (item_id > MaxItemID))
-				return 0;
+				return float.MinValue;
 
 			if (k == uint.MaxValue)
 			{
-				return correlation.SumUp(user_id, Feedback.ItemMatrix[item_id]);
+				return (float) correlation.SumUp(user_id, Feedback.ItemMatrix[item_id]);
 			}
 			else
 			{
@@ -44,15 +44,14 @@ namespace MyMediaLite.ItemRecommendation
 				foreach (int neighbor in nearest_neighbors[user_id])
 					if (Feedback.UserMatrix[neighbor, item_id])
 						result += correlation[user_id, neighbor];
-				return result;
+				return (float) result;
 			}
 		}
 
 		///
 		public override string ToString()
 		{
-			return string.Format("WeightedUserKNN k={0}",
-								 k == uint.MaxValue ? "inf" : k.ToString());
+			return string.Format("WeightedUserKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
 	}
 }

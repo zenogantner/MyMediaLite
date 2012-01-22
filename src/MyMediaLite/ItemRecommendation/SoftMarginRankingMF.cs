@@ -53,7 +53,7 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		public SoftMarginRankingMF() : base()
 		{
-			LearnRate = 0.1;
+			LearnRate = 0.1f;
 		}
 
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>

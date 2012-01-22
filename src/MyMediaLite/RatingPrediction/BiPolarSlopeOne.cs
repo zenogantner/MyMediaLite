@@ -45,7 +45,7 @@ namespace MyMediaLite.RatingPrediction
 		private SkewSymmetricSparseMatrix  diff_matrix_dislike;
 		private SymmetricSparseMatrix<int> freq_matrix_dislike;
 
-		private double global_average;
+		private float global_average;
 		private IList<float> user_average;
 
 		///
@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id > MaxItemID || user_id > MaxUserID)
 				return global_average;
@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 			if (frequencies == 0)
 				return global_average;
 
-			double result = prediction / frequencies;
+			float result = (float) (prediction / frequencies);
 
 			if (result > MaxRating)
 				return MaxRating;
@@ -169,7 +169,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var diff_matrix_like = (SkewSymmetricSparseMatrix) reader.ReadMatrix(this.diff_matrix_like);
 				var freq_matrix_like = (SymmetricSparseMatrix<int>) reader.ReadMatrix(this.freq_matrix_like);
@@ -190,7 +190,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteSparseMatrix(diff_matrix_like);

@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,7 +31,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// Factorizing the observed rating values using a factor matrix for users and one for items.
 	///
-	/// NaN values in the model occur if values become too large or too small to be represented by the type double.
+	/// NaN values in the model occur if values become too large or too small to be represented by the type float.
 	/// If you encounter such problems, there are three ways to fix them:
 	/// (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
 	/// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
@@ -138,14 +138,14 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double p = Predict(u, i, false);
-				double err = ratings[index] - p;
+				float p = Predict(u, i, false);
+				float err = ratings[index] - p;
 
 				// adjust factors
 				for (int f = 0; f < NumFactors; f++)
 				{
-					double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];
+					float u_f = user_factors[u, f];
+					float i_f = item_factors[i, f];
 
 					// if necessary, compute and apply updates
 					if (update_user)
@@ -169,9 +169,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected double Predict(int user_id, int item_id, bool bound)
+		protected float Predict(int user_id, int item_id, bool bound)
 		{
-			double result = global_bias + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			float result = global_bias + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (bound)
 			{
@@ -191,7 +191,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted rating</returns>
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id >= user_factors.dim1)
 				return global_bias;

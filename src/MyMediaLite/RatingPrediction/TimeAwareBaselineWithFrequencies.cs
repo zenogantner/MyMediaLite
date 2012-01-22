@@ -47,13 +47,13 @@ namespace MyMediaLite.RatingPrediction
 		// additional hyper-parameters
 
 		/// <summary>logarithmic base for the frequency counts</summary>
-		public double FrequencyLogBase { get; set; }
+		public float FrequencyLogBase { get; set; }
 
 		/// <summary>regularization constant for b_{i, f_{ui}}</summary>
-		public double RegItemBiasAtFrequency { get; set; }
+		public float RegItemBiasAtFrequency { get; set; }
 
 		/// <summary>learn rate for b_{i, f_{ui}}</summary>
-		public double ItemBiasAtFrequencyLearnRate { get; set; }
+		public float ItemBiasAtFrequencyLearnRate { get; set; }
 
 		// additional helper data structures
 		SparseMatrix<int> log_frequency_by_day { get; set; }
@@ -63,29 +63,29 @@ namespace MyMediaLite.RatingPrediction
 		{
 			NumIter = 40;
 
-			FrequencyLogBase = 6.76;
+			FrequencyLogBase = 6.76f;
 
 			BinSize = 70;
 
-			Beta = 0.4;
+			Beta = 0.4f;
 
-			UserBiasLearnRate = 0.00267;
-			ItemBiasLearnRate = 0.000488;
-			AlphaLearnRate = 0.00000311;
-			ItemBiasByTimeBinLearnRate = 0.00000115;
-			UserBiasByDayLearnRate = 0.000257;
-			UserScalingLearnRate = 0.00564;
-			UserScalingByDayLearnRate = 0.00103;
-			ItemBiasAtFrequencyLearnRate = 0.00236;
+			UserBiasLearnRate = 0.00267f;
+			ItemBiasLearnRate = 0.000488f;
+			AlphaLearnRate = 0.00000311f;
+			ItemBiasByTimeBinLearnRate = 0.00000115f;
+			UserBiasByDayLearnRate = 0.000257f;
+			UserScalingLearnRate = 0.00564f;
+			UserScalingByDayLearnRate = 0.00103f;
+			ItemBiasAtFrequencyLearnRate = 0.00236f;
 
-			RegU = 0.0255;
-			RegI = 0.0255;
-			RegAlpha = 3.95;
-			RegItemBiasByTimeBin = 0.0929;
-			RegUserBiasByDay = 0.00231;
-			RegUserScaling = 0.0476;
-			RegUserScalingByDay = 0.019;
-			RegItemBiasAtFrequency = 0.000000011;
+			RegU = 0.0255f;
+			RegI = 0.0255f;
+			RegAlpha = 3.95f;
+			RegItemBiasByTimeBin = 0.0929f;
+			RegUserBiasByDay = 0.00231f;
+			RegUserScaling = 0.0476f;
+			RegUserScalingByDay = 0.019f;
+			RegItemBiasAtFrequency = 0.000000011f;
 		}
 
 		///
@@ -118,20 +118,20 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void UpdateParameters(int u, int i, int day, int bin, double err)
+		protected override void UpdateParameters(int u, int i, int day, int bin, float err)
 		{
 			base.UpdateParameters(u, i, day, bin, err);
 
 			// update additional bias
 			int f = log_frequency_by_day[u, day];
-			double b_i_f_ui  = item_bias_at_frequency[i, f];
+			float b_i_f_ui  = item_bias_at_frequency[i, f];
 			item_bias_at_frequency[i, f] += (float) (2 * ItemBiasAtFrequencyLearnRate * (err * b_i_f_ui - RegItemBiasAtFrequency * b_i_f_ui));
 		}
 
 		///
-		protected override double Predict(int user_id, int item_id, int day, int bin)
+		protected override float Predict(int user_id, int item_id, int day, int bin)
 		{
-			double result = base.Predict(user_id, item_id, day, bin);
+			float result = base.Predict(user_id, item_id, day, bin);
 			if (day <= timed_ratings.LatestTime.Day)
 				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
@@ -139,9 +139,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id, DateTime time)
+		public override float Predict(int user_id, int item_id, DateTime time)
 		{
-			double result = base.Predict(user_id, item_id, time);
+			float result = base.Predict(user_id, item_id, time);
 			int day = RelativeDay(time);
 			if (day <= timed_ratings.LatestTime.Day)
 				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];

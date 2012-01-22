@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,7 +27,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Train() { /* do nothing */ }
 
 		///
-		public override double Predict(int user_id, int item_id) { return 0; }
+		public override float Predict(int user_id, int item_id) { return 0f; }
 
 		///
 		public override void SaveModel(string filename) { /* do nothing */ }

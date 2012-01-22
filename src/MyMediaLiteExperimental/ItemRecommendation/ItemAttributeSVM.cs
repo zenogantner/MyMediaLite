@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -28,8 +28,8 @@ namespace MyMediaLite.ItemRecommendation
     /// <remarks>
     /// This recommender does NOT support incremental updates.
     /// </remarks>
-    public class ItemAttributeSVM : ItemRecommender, IItemAttributeAwareRecommender
-    {
+	public class ItemAttributeSVM : ItemRecommender, IItemAttributeAwareRecommender
+	{
 		///
 		public SparseBooleanMatrix ItemAttributes
 		{
@@ -43,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		///
-	    public int NumItemAttributes { get;	set; }
+		public int NumItemAttributes { get;	set; }
 
 		/// <summary>C hyperparameter for the SVM</summary>
 		public double C { get { return c; } set { c = value; } }
@@ -55,9 +55,9 @@ namespace MyMediaLite.ItemRecommendation
 
 		private SVM.Model[] models;
 
-        ///
-        public override void Train()
-        {
+		///
+		public override void Train()
+		{
 			int num_users = Feedback.UserMatrix.NumberOfRows;
 			int num_items = Feedback.ItemMatrix.NumberOfRows;
 
@@ -81,7 +81,7 @@ namespace MyMediaLite.ItemRecommendation
 				Problem svm_problem = new Problem(svm_features.Count, targets, svm_features_array, NumItemAttributes - 1); // TODO check
 				models[u] = SVM.Training.Train(svm_problem, svm_parameters);
 			}
-        }
+		}
 
 		// TODO share this among different classes
 		private Node[] CreateNodes(int item_id)
@@ -96,10 +96,10 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			// TODO speed improvement: do not create nodes on the fly
-			return SVM.Prediction.Predict(models[user_id], CreateNodes(item_id));
+			return (float) SVM.Prediction.Predict(models[user_id], CreateNodes(item_id));
 			// TODO make sure we return score, not class
 		}
 
@@ -115,7 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 			throw new NotImplementedException();
 		}
 
-        ///
+		///
 		public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture, "{0} C={1} Gamma={2}", this.GetType().Name, c, gamma);

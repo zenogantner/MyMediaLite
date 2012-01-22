@@ -135,7 +135,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 		
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id >= user_factors.dim1)
 				throw new ArgumentException("Unknown user ID");
@@ -144,7 +144,7 @@ namespace MyMediaLite.RatingPrediction
 
 			double score = user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
-			return MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating);
+			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating));
 		}
 		
 		///

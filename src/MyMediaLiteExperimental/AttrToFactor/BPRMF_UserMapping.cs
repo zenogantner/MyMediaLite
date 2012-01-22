@@ -45,7 +45,7 @@ namespace MyMediaLite.AttrToFactor
 		public SparseBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
-			set	{
+			set {
 				this.user_attributes = value;
 				this.NumUserAttributes = user_attributes.NumberOfColumns;
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
@@ -222,14 +222,14 @@ namespace MyMediaLite.AttrToFactor
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			double[] est_factors = MapUserToLatentFactorSpace(user_attributes[user_id]);
 
 			double result = 0;
 			for (int f = 0; f < num_factors; f++)
 				result += item_factors[item_id, f] * est_factors[f];
-			return result;
+			return (float) result;
 		}
 
 		///

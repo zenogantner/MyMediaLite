@@ -53,7 +53,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public abstract double Predict(int user_id, int item_id, DateTime time);
+		public abstract float Predict(int user_id, int item_id, DateTime time);
 	}
 }
 

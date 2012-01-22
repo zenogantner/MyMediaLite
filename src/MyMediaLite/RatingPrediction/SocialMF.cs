@@ -39,8 +39,8 @@ namespace MyMediaLite.RatingPrediction
 		//  - implement bold-driver support or throw Exception
 
 		/// <summary>Social network regularization constant</summary>
-		public double SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
-		private double social_regularization = 1;
+		public float SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
+		private float social_regularization = 1;
 
 		/*
 		/// <summary>
@@ -81,7 +81,7 @@ namespace MyMediaLite.RatingPrediction
 			Console.Error.WriteLine("num_users={0}, num_items={1}", NumUsers, item_bias.Length);
 
 			// compute global average
-			double global_average = 0;
+			float global_average = 0;
 			global_average = Ratings.Average;
 
 			// learn model parameters
@@ -100,36 +100,36 @@ namespace MyMediaLite.RatingPrediction
 		private void IterateBatch()
 		{
 			// I. compute gradients
-			var user_factors_gradient = new Matrix<double>(user_factors.dim1, user_factors.dim2);
-			var item_factors_gradient = new Matrix<double>(item_factors.dim1, item_factors.dim2);
-			var user_bias_gradient    = new double[user_factors.dim1];
-			var item_bias_gradient    = new double[item_factors.dim1];
+			var user_factors_gradient = new Matrix<float>(user_factors.dim1, user_factors.dim2);
+			var item_factors_gradient = new Matrix<float>(item_factors.dim1, item_factors.dim2);
+			var user_bias_gradient    = new float[user_factors.dim1];
+			var item_bias_gradient    = new float[item_factors.dim1];
 
 			// I.1 prediction error
-			double rating_range_size = MaxRating - MinRating;
+			float rating_range_size = MaxRating - MinRating;
 			for (int index = 0; index < ratings.Count; index++)
 			{
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
 				// prediction
-				double score = global_bias;
+				float score = global_bias;
 				score += user_bias[u];
 				score += item_bias[i];
 				for (int f = 0; f < NumFactors; f++)
 					score += user_factors[u, f] * item_factors[i, f];
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double prediction = MinRating + sig_score * rating_range_size;
-				double error      = ratings[index] - prediction;
+				float prediction = (float) (MinRating + sig_score * rating_range_size);
+				float error      = ratings[index] - prediction;
 
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
 				// add up error gradient
 				for (int f = 0; f < NumFactors; f++)
 				{
-					double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];
+					float u_f = user_factors[u, f];
+					float i_f = item_factors[i, f];
 
 					if (f != 0)
 						MatrixExtensions.Inc(user_factors_gradient, u, f, gradient_common * i_f);
@@ -157,8 +157,8 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
 				// see eq. (13) in the paper
-				double[] sum_neighbors    = new double[NumFactors];
-				double bias_sum_neighbors = 0;
+				float[] sum_neighbors    = new float[NumFactors];
+				float bias_sum_neighbors = 0;
 				int      num_neighbors    = user_neighbors[u].Count;
 
 				// user bias part
@@ -169,8 +169,8 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int v in user_neighbors[u])
 					if (user_neighbors[v].Count != 0)
 					{
-						double trust_v = (double) 1 / user_neighbors[v].Count;
-						double diff = 0;
+						float trust_v = (float) 1 / user_neighbors[v].Count;
+						float diff = 0;
 						foreach (int w in user_neighbors[v])
 							diff -= user_bias[w];
 
@@ -191,10 +191,10 @@ namespace MyMediaLite.RatingPrediction
 				foreach (int v in user_neighbors[u])
 					if (user_neighbors[v].Count != 0)
 					{
-						double trust_v = (double) 1 / user_neighbors[v].Count;
+						float trust_v = (float) 1 / user_neighbors[v].Count;
 						for (int f = 0; f < NumFactors; f++)
 						{
-							double diff = 0;
+							float diff = 0;
 							foreach (int w in user_neighbors[v])
 								diff -= user_factors[w, f];
 							diff = diff * trust_v;

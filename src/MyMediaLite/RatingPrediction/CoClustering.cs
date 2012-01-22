@@ -130,7 +130,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int u, int i)
+		public override float Predict(int u, int i)
 		{
 			if (u > MaxUserID && i > MaxItemID)
 				return global_average;
@@ -139,7 +139,7 @@ namespace MyMediaLite.RatingPrediction
 			if (i > MaxItemID)
 				return user_cluster_averages[user_clustering[u]];
 
-			double prediction = Predict(u, i, user_clustering[u], item_clustering[i]);
+			float prediction = Predict(u, i, user_clustering[u], item_clustering[i]);
 			if (prediction < MinRating)
 				return MinRating;
 			if (prediction > MaxRating)
@@ -147,7 +147,7 @@ namespace MyMediaLite.RatingPrediction
 			return prediction;
 		}
 
-		double Predict(int u, int i, int uc, int ic)
+		float Predict(int u, int i, int uc, int ic)
 		{
 			return cocluster_averages[uc, ic]
 				+ user_averages[u]

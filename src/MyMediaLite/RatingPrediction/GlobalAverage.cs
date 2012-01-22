@@ -28,7 +28,7 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class GlobalAverage : IncrementalRatingPredictor
 	{
-		private double global_average = 0;
+		private float global_average = 0;
 
 		///
 		public override void Train()
@@ -43,7 +43,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			return global_average;
 		}
@@ -80,7 +80,7 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-				this.global_average = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				this.global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 		}
 	}
 }

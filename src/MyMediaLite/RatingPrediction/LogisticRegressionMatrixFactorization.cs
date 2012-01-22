@@ -49,7 +49,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			double rating_range_size = MaxRating - MinRating;
+			float rating_range_size = MaxRating - MinRating;
 
 			foreach (int index in rating_indices)
 			{
@@ -72,8 +72,8 @@ namespace MyMediaLite.RatingPrediction
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
 				{
-					double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];
+					float u_f = user_factors[u, f];
+					float i_f = item_factors[i, f];
 
 					if (update_user)
 					{

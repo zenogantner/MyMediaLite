@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -62,7 +62,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public abstract double Predict(int user_id, int item_id);
+		public abstract float Predict(int user_id, int item_id);
 
 		///
 		public abstract void Train();

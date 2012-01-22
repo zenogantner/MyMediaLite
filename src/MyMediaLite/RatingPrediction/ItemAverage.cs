@@ -40,7 +40,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id <= MaxItemID)
 				return entity_averages[item_id];

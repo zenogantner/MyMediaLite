@@ -84,12 +84,12 @@ namespace MyMediaLite.ItemRecommendation
 		double init_stdev = 0.1;
 
 		/// <summary>Learning rate alpha</summary>
-		public double LearnRate { get { return learn_rate; } set { learn_rate = value; } }
-		double learn_rate = 0.05;
+		public float LearnRate { get { return learn_rate; } set { learn_rate = value; } }
+		float learn_rate = 0.05f;
 
 		/// <summary>Regularization parameter</summary>
-		public double Regularization { get { return regularization; }	set { regularization = value; } }
-		double regularization = 0.015;
+		public float Regularization { get { return regularization; } set { regularization = value; } }
+		float regularization = 0.015f;
 
 		// support data structure for fast sampling
 		private IList<int>[] user_pos_items;
@@ -226,23 +226,23 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double Predict(int user_id, int item_id)
+		public override float Predict(int user_id, int item_id)
 		{
 			if ((user_id < 0) || (user_id >= item_attribute_weight_by_user.dim1))
-				return double.MinValue;
+				return float.MinValue;
 			if ((item_id < 0) || (item_id > MaxItemID))
-				return double.MinValue;
+				return float.MinValue;
 
 			double result = 0;
 			foreach (int a in item_attributes[item_id])
 				result += item_attribute_weight_by_user[user_id, a];
-			return result;
+			return (float) result;
 		}
 
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
 				writer.WriteMatrix(item_attribute_weight_by_user);
 		}
 
