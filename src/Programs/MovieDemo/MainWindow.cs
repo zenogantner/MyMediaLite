@@ -24,6 +24,7 @@ using System.Text;
 using Gtk;
 using MovieDemo;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
@@ -34,7 +35,7 @@ public partial class MainWindow : Window
 
 	MovieLensMovieInfo movies = new MovieLensMovieInfo();
 	Dictionary<int, string> german_names;
-	List<WeightedItem> movies_by_frequency = new List<WeightedItem>();
+	List<Pair<int, float>> movies_by_frequency = new List<Pair<int, float>>();
 	int n_movies = 200;
 	HashSet<int> top_n_movies = new HashSet<int>();
 
@@ -119,10 +120,10 @@ public partial class MainWindow : Window
 
 		foreach (var indices_for_item in recommender.Ratings.ByItem)
 			if (indices_for_item.Count > 0)
-				movies_by_frequency.Add( new WeightedItem(recommender.Ratings.Items[indices_for_item[0]], indices_for_item.Count) );
-		movies_by_frequency = movies_by_frequency.OrderByDescending(x => x.weight).ToList();
+				movies_by_frequency.Add( new Pair<int, float>(recommender.Ratings.Items[indices_for_item[0]], indices_for_item.Count) );
+		movies_by_frequency = movies_by_frequency.OrderByDescending(x => x.Second).ToList();
 		for (int i = 0; i < n_movies; i++)
-			top_n_movies.Add( movies_by_frequency[i].item_id );
+			top_n_movies.Add( movies_by_frequency[i].First );
 
 		Console.Error.Write("Loading prediction model ... ");
 		recommender.UpdateUsers = true;

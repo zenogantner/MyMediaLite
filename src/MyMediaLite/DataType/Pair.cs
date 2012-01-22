@@ -4,11 +4,10 @@
 namespace MyMediaLite.DataType
 {
 	/// <summary>Generic pair class</summary>
-	public class Pair<T, U>
+	public sealed class Pair<T, U>
 	{
-		/// <summary>Default constructor</summary>
-		public Pair() { }
-
+		// TODO consider having a value type here
+		
 		/// <summary>Create a Pair object from existing data</summary>
 		/// <param name="first">the first component</param>
 		/// <param name="second">the second component</param>
@@ -19,9 +18,9 @@ namespace MyMediaLite.DataType
 		}
 
 		/// <summary>the first component</summary>
-		public T First { get; set; }
+		public T First { get; private set; }
 
 		/// <summary>the second component</summary>
-		public U Second { get; set; }
+		public U Second { get; private set; }
 	}
 }

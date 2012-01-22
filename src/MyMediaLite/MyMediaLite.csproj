@@ -71,7 +71,6 @@
     <Compile Include="Data\StaticByteRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
-    <Compile Include="Data\WeightedItem.cs" />
     <Compile Include="Ensemble\Ensemble.cs" />
     <Compile Include="Ensemble\WeightedEnsemble.cs" />
     <Compile Include="DataType\CombinedList.cs" />

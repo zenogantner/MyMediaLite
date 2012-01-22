@@ -18,7 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite
 {
@@ -32,14 +32,14 @@ namespace MyMediaLite
 		/// <returns>an ordered list of items, the most likely item first</returns>
 		static public IList<int> PredictItems(this IRecommender recommender, int user_id, IList<int> candidate_items)
 		{
-			var result = ScoreItems(recommender, user_id, candidate_items);
-			result = result.OrderByDescending(x => x.weight).ToArray();
+			var scored_items = ScoreItems(recommender, user_id, candidate_items);
+			scored_items = scored_items.OrderByDescending(x => x.Second).ToArray();
 
-			var return_array = new int[result.Count];
-			for (int i = 0; i < return_array.Length; i++)
-				return_array[i] = result[i].item_id;
+			var result = new int[scored_items.Count];
+			for (int i = 0; i < result.Length; i++)
+				result[i] = scored_items[i].First;
 
-			return return_array;
+			return result;
 		}
 		
 		/// <summary>Score items for a given user</summary>
@@ -47,13 +47,13 @@ namespace MyMediaLite
 		/// <param name="user_id">the numerical ID of the user</param>
 		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
 		/// <returns>a list of pairs, each pair consisting of the item ID and the predicted score</returns>
-		static public IList<WeightedItem> ScoreItems(this IRecommender recommender, int user_id, IList<int> candidate_items)
+		static public IList<Pair<int, float>> ScoreItems(this IRecommender recommender, int user_id, IList<int> candidate_items)
 		{
-			var result = new WeightedItem[candidate_items.Count];
+			var result = new Pair<int, float>[candidate_items.Count];
 			for (int i = 0; i < candidate_items.Count; i++)
 			{
 				int item_id = candidate_items[i];
-				result[i] = new WeightedItem(item_id, recommender.Predict(user_id, item_id));
+				result[i] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
 			}
 			return result;
 		}

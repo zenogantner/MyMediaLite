@@ -3,6 +3,8 @@
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
            double
+	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
+	   add method ScoreItems
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
@@ -22,7 +24,7 @@
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
 	misc
-	 - WeightedItem: use float instead of double
+	 - remove Data.WeightedItem (use Pair<S, T> instead)
 	 - NelderMead: fix compilation in VisualStudio (reported by
            Artus Krohn-Grimberghe and user LHCGreg on reddit)
 	 - Utils.Shuffle is now an extension method

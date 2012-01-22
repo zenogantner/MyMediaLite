@@ -101,21 +101,23 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
 
-			var score_list = new List<WeightedItem>();
+			var score_list = new List<Pair<int, float>>();
 			foreach (int item_id in candidate_items)
-				score_list.Add( new WeightedItem(item_id, recommender.Predict(user_id, item_id)));
-			score_list = score_list.OrderByDescending(x => x.weight).ToList();
+				score_list.Add( new Pair<int, float>(item_id, recommender.Predict(user_id, item_id)));
+			score_list = score_list.OrderByDescending(x => x.Second).ToList();
 
 			int prediction_count = 0;
 			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
 			foreach (var wi in score_list)
 			{
-				if (!ignore_items.Contains(wi.item_id) && wi.weight > double.MinValue)
+				int item_id = wi.First;
+				float score = wi.Second;
+				if (!ignore_items.Contains(item_id) && score > float.MinValue)
 				{
 					if (prediction_count == 0)
-						writer.Write("{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(CultureInfo.InvariantCulture));
+						writer.Write("{0}:{1}", item_mapping.ToOriginalID(item_id), score.ToString(CultureInfo.InvariantCulture));
 					else
-						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(wi.item_id), wi.weight.ToString(CultureInfo.InvariantCulture));
+						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(item_id), score.ToString(CultureInfo.InvariantCulture));
 
 					prediction_count++;
 				}
