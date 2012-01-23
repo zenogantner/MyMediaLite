@@ -112,7 +112,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-				LearnFactors(ratings.ByUser[(int)user_id], true, false);
+				LearnFactors(ratings.ByUser[user_id], true, false);
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateItems)
 			{
 				item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-				LearnFactors(ratings.ByItem[(int)item_id], false, true);
+				LearnFactors(ratings.ByItem[item_id], false, true);
 			}
 		}
 
