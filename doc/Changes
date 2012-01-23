@@ -23,6 +23,8 @@
 	 - #206 string user, item, and attribute IDs (instead of long)
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
+	documentation
+	 - improve API doc of IIncrementalItemRecommender
 	misc
 	 - remove Data.WeightedItem (use Pair<S, T> instead)
 	 - NelderMead: fix compilation in VisualStudio (reported by
