@@ -183,8 +183,17 @@ namespace MyMediaLite.RatingPrediction
 			return result;
 		}
 
+		/// <summary>Predict rating for a fold-in user and an item</summary>
+		/// <param name='user_vector'>a float vector representing the user</param>
+		/// <param name='item_id'>the item ID</param>
+		/// <returns>the predicted rating</returns>
+		protected virtual float Predict(IList<float> user_vector, int item_id)
+		{
+			return Predict(user_vector, item_id);
+		}
+
 		///
-		float Predict(IList<float> user_vector, int item_id, bool bound = true)
+		float Predict(IList<float> user_vector, int item_id, bool bound)
 		{
 			float result = global_bias + MatrixExtensions.RowScalarProduct(item_factors, item_id, user_vector);
 

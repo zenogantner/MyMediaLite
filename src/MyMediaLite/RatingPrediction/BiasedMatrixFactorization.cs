@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
@@ -164,7 +165,7 @@ namespace MyMediaLite.RatingPrediction
 
 		void IterateMAE(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			double rating_range_size = MaxRating - MinRating;
+			float rating_range_size = MaxRating - MinRating;
 
 			foreach (int index in rating_indices)
 			{
@@ -370,6 +371,58 @@ namespace MyMediaLite.RatingPrediction
 		{
 			item_bias[item_id] = 0;
 			base.RemoveItem(item_id);
+		}
+
+		///
+		protected override float Predict(IList<float> user_vector, int item_id)
+		{
+			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumIter).ToArray() );
+			double dot_product = user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+			double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+			return (float) (MinRating + sig_dot * (MaxRating - MinRating));
+		}
+
+		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			// initialize user parameters
+			var user_vector = new float[NumFactors + 1];
+			//IEnumerable<int> factor_indices = Enumerable.Range(1, (int) NumIter);
+			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumIter).ToArray() );
+			factors.InitNormal(InitMean, InitStdDev);
+
+			// perform training
+			Util.Utils.Shuffle(rated_items);
+			float rating_range_size = MaxRating - MinRating;
+			for (uint it = 0; it < NumIter; it++)
+				for (int i = 0; i < rated_items.Count; i++)
+				{
+					int item_id = rated_items[i].First;
+
+					// compute rating and error
+					double dot_product = user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+					double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+					double p = MinRating + sig_dot * rating_range_size;
+					double err = rated_items[i].Second - p;
+
+					float gradient_common = (float) (OptimizeMAE
+											? (Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size)
+											: (err * sig_dot * (1 - sig_dot) * rating_range_size));
+
+					// adjust bias
+					user_vector[0] += LearnRate * (gradient_common - BiasReg * RegU * user_vector[0]);
+
+					// adjust factors
+					for (int f = 0; f < NumFactors; f++)
+					{
+						float u_f = user_vector[f + 1];
+						float i_f = item_factors[i, f];
+
+						double delta_u = gradient_common * i_f - RegU * u_f;;
+						user_vector[f + 1] += (float) (LearnRate * delta_u);
+					}
+				}
+			return user_vector;
 		}
 
 		///
