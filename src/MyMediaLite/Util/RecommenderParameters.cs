@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -57,7 +57,7 @@ namespace MyMediaLite.Util
 			}
 		}
 
-		/// <summary>Create a CommandLineParameters object</summary>
+		/// <summary>Create a RecommenderParameters object</summary>
 		/// <param name="args">a list of strings that contains the command line parameters</param>
 		/// <param name="start">ignore all parameters before this position</param>
 		public RecommenderParameters(IList<string> args, int start)

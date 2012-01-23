@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -68,72 +68,11 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender</returns>
 		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, takes_string report_error)
 		{
-			Type type = recommender.GetType();
-			var property_names = new List<string>();
-			foreach (var p in type.GetProperties())
-				property_names.Add(p.Name);
-			property_names.Sort();
-
-			// TODO consider using SetProperty
 			foreach (var key in new List<string>(parameters.Keys))
 			{
-				string param_name = NormalizeName(key);
-				foreach (string property_name in property_names)
-				{
-					if (NormalizeName(property_name).StartsWith(param_name))
-					{
-						var property = type.GetProperty(property_name);
-
-						if (!property.CanWrite)
-							throw new Exception(string.Format("Property '{0}' is read-only.", property.Name));
-
-						if (property.GetSetMethod() == null)
-							goto NEXT_PROPERTY; // poor man's labeled break ...
-
-						switch (property.PropertyType.ToString())
-						{
-							case "System.Double":
-								property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(parameters[key], CultureInfo.InvariantCulture) });
-								break;
-							case "System.Single":
-								property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(parameters[key], CultureInfo.InvariantCulture) });
-								break;
-							case "System.Int32":
-								if (parameters[key].Equals("inf"))
-									property.GetSetMethod().Invoke(recommender, new Object[] { int.MaxValue });
-								else
-									property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(parameters[key]) });
-								break;
-							case "System.UInt32":
-								if (parameters[key].Equals("inf"))
-									property.GetSetMethod().Invoke(recommender, new Object[] { uint.MaxValue });
-								else
-									property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(parameters[key]) });
-								break;
-							case "System.Boolean":
-								property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(parameters[key]) });
-								break;
-							case "System.String":
-								property.GetSetMethod().Invoke(recommender, new Object[] { parameters[key] });
-								break;
-							default:
-								report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
-								break;
-						}
-						parameters.Remove(key);
-						goto NEXT_KEY; // poor man's labeled break ...
-					}
-
-					NEXT_PROPERTY:
-					Console.Write(string.Empty); // the C# compiler wants some statement here
-				}
-
-				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
-
-				NEXT_KEY:
-				Console.Write(string.Empty); // the C# compiler wants some statement here
+				recommender.SetProperty(key, parameters[key], report_error);
+				parameters.Remove(key);
 			}
-
 			return recommender;
 		}
 
@@ -141,23 +80,36 @@ namespace MyMediaLite.Util
 		/// <param name="recommender">An <see cref="IRecommender"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
-		public static void SetProperty(this IRecommender recommender, string key, string val)
+		public static void SetProperty<T>(this T recommender, string key, string val)
+		{
+			SetProperty(recommender, key, val, delegate(string s) { Console.Error.WriteLine(s); });
+		}
+		
+		/// <summary>Sets a property of a MyMediaLite recommender</summary>
+		/// <param name="recommender">An <see cref="IRecommender"/></param>
+		/// <param name="key">the name of the property (case insensitive)</param>
+		/// <param name="val">the string representation of the value</param>
+		/// <param name="report_error">delegate to report errors</param>
+		public static void SetProperty<T>(this T recommender, string key, string val, takes_string report_error)
 		{
 			Type type = recommender.GetType();
 			var property_names = new List<string>();
 			foreach (var p in type.GetProperties())
 				property_names.Add(p.Name);
 			property_names.Sort();
-
+			
+			bool property_found = false;
+			
 			key = NormalizeName(key);
 			foreach (string property_name in property_names)
 			{
 				if (NormalizeName(property_name).StartsWith(key))
 				{
+					property_found = true;
 					var property = type.GetProperty(property_name);
 
 					if (property.GetSetMethod() == null)
-						throw new ArgumentException(string.Format("Parameter '{0}' has no setter", key));
+						throw new ArgumentException(string.Format("Property '{0}' is read-only", key));
 
 					switch (property.PropertyType.ToString())
 					{
@@ -168,19 +120,32 @@ namespace MyMediaLite.Util
 							property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, CultureInfo.InvariantCulture) });
 							break;
 						case "System.Int32":
-							property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
+							if (val.Equals("inf"))
+								property.GetSetMethod().Invoke(recommender, new Object[] { int.MaxValue });
+							else
+								property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
 							break;
 						case "System.UInt32":
-							property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
+							if (val.Equals("inf"))
+								property.GetSetMethod().Invoke(recommender, new Object[] { uint.MaxValue });
+							else
+								property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
 							break;
 						case "System.Boolean":
 							property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
 							break;
+						case "System.String":
+							property.GetSetMethod().Invoke(recommender, new Object[] {val });
+							break;
 						default:
-							throw new ArgumentException(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
+							report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
+							break;
 					}
 				}
 			}
+			
+			if (!property_found)
+				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
 		}
 
 		/// <summary>Create a rating predictor from the type name</summary>
