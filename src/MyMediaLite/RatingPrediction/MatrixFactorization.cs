@@ -24,6 +24,7 @@ using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -39,7 +40,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel
+	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
 		protected Matrix<float> user_factors;
@@ -138,8 +139,7 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				float p = Predict(u, i, false);
-				float err = ratings[index] - p;
+				float err = ratings[index] - Predict(u, i, false);
 
 				// adjust factors
 				for (int f = 0; f < NumFactors; f++)
@@ -169,9 +169,24 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected float Predict(int user_id, int item_id, bool bound)
+		float Predict(int user_id, int item_id, bool bound)
 		{
 			float result = global_bias + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+
+			if (bound)
+			{
+				if (result > MaxRating)
+					return MaxRating;
+				if (result < MinRating)
+					return MinRating;
+			}
+			return result;
+		}
+
+		///
+		float Predict(IList<float> user_vector, int item_id, bool bound = true)
+		{
+			float result = global_bias + MatrixExtensions.RowScalarProduct(item_factors, item_id, user_vector);
 
 			if (bound)
 			{
@@ -255,6 +270,48 @@ namespace MyMediaLite.RatingPrediction
 
 			// set item factors to zero
 			item_factors.SetRowToOneValue(item_id, 0);
+		}
+
+		/// <summary>Compute parameters (latent factors) for a user represented by ratings</summary>
+		/// <returns>a vector of latent factors</returns>
+		/// <param name='rated_items'>a list of (item ID, rating value) pairs</param>
+		protected virtual IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			var user_vector = new float[NumFactors];
+			user_vector.InitNormal(InitMean, InitStdDev);
+			Util.Utils.Shuffle(rated_items);
+			for (uint it = 0; it < NumIter; it++)
+				for (int i = 0; i < rated_items.Count; i++)
+				{
+					int item_id = rated_items[i].First;
+					float err = rated_items[i].Second - Predict(user_vector, item_id, false);
+
+					// adjust factors
+					for (int f = 0; f < NumFactors; f++)
+					{
+						float u_f = user_vector[f];
+						float i_f = item_factors[i, f];
+
+						double delta_u = err * i_f - Regularization * u_f;
+						user_vector[f] += (float) (LearnRate * delta_u);
+					}
+				}
+			return user_vector;
+		}
+
+		///
+		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		{
+			var user_vector = FoldIn(rated_items);
+
+			// score the items
+			var result = new Pair<int, float>[candidate_items.Count];
+			for (int i = 0; i < candidate_items.Count; i++)
+			{
+				int item_id = candidate_items[i];
+				result[i] = new Pair<int, float>(item_id, Predict(user_vector, item_id));
+			}
+			return result;
 		}
 
 		///
