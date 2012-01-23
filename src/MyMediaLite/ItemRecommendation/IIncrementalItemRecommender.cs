@@ -30,7 +30,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public interface IIncrementalItemRecommender : IRecommender
 	{
-		/// <summary>Add a positive feedback event</summary>
+		/// <summary>Add a positive feedback event and perform incremental training</summary>
 		/// <param name='user_id'>the user ID</param>
 		/// <param name='item_id'>the item ID</param>
 		void AddFeedback(int user_id, int item_id);
