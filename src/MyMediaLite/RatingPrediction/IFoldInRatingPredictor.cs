@@ -23,8 +23,21 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Rating predictor that allows folding in new users</summary>
 	/// <remarks>
-	/// The process of folding in is computing a predictive model for a new user based on their ratings
-	/// and the existing recommender, without modifying the parameters of the existing recommender.
+	///   <para>
+	///     The process of folding in is computing a predictive model for a new user based on their ratings
+	///     and the existing recommender, without modifying the parameters of the existing recommender.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Badrul Sarwar and George Karypis, Joseph Konstan, John Riedl:
+	///         Incremental singular value decomposition algorithms for highly scalable recommender systems.
+	///         Fifth International Conference on Computer and Information Science, 2002.
+	///         http://grouplens.org/papers/pdf/sarwar_SVD.pdf
+	///       </description></item>
+	///       </list>
+	///   </para>
 	/// </remarks>
 	public interface IFoldInRatingPredictor
 	{
