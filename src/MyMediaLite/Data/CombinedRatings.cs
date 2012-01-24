@@ -34,7 +34,7 @@ namespace MyMediaLite.Data
 
 			MaxUserID = Math.Max(ratings1.MaxUserID, ratings2.MaxUserID);
 			MaxItemID = Math.Max(ratings1.MaxItemID, ratings2.MaxItemID);
-			
+
 			MinRating = Math.Min(ratings1.MinRating, ratings2.MinRating);
 			MaxRating = Math.Max(ratings1.MaxRating, ratings2.MaxRating);
 		}
