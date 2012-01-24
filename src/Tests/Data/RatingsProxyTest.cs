@@ -22,9 +22,9 @@ using MyMediaLite.Data;
 namespace Tests.Data
 {
 	[TestFixture()]
-	public class CombinedRatingsTest
+	public class RatingsProxyTest
 	{
-		IRatings CreateRatings1()
+		IRatings CreateRatings()
 		{
 			var ratings = new Ratings();
 			ratings.Add(1, 4, 0.3f);
@@ -38,52 +38,42 @@ namespace Tests.Data
 			return ratings;
 		}
 
-		IRatings CreateRatings2()
-		{
-			var ratings = new Ratings();
-			ratings.Add(1, 5, 0.9f);
-			ratings.Add(7, 9, 0.5f);
-
-			return ratings;
-		}
-
 		[Test()] public void TestMaxUserID()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-			Assert.AreEqual(7, ratings.MaxUserID);
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
+			Assert.AreEqual(3, ratings.MaxUserID);
 		}
 
 		[Test()] public void TestMaxItemID()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-			Assert.AreEqual(9, ratings.MaxItemID);
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
+			Assert.AreEqual(8, ratings.MaxItemID);
 		}
 
 		[Test()] public void TestMinRating()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
 			Assert.AreEqual(0.2f, ratings.MinRating);
 		}
 
 		[Test()] public void TestMaxRating()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-			Assert.AreEqual(0.9f, ratings.MaxRating);
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
+			Assert.AreEqual(0.6f, ratings.MaxRating);
 		}
 
 		[Test()] public void TestCount()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
 
-			Assert.AreEqual(CreateRatings1().Count + CreateRatings2().Count, ratings.Count);
-			Assert.AreEqual(9, ratings.Count);
+			Assert.AreEqual(3, ratings.Count);
 		}
 
 		[Test()]
 		[ExpectedException(typeof(NotSupportedException))]
 		public void TestAdd()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
 
 			ratings.Add(7, 5, 0.3f);
 		}
@@ -126,13 +116,12 @@ namespace Tests.Data
 
 		[Test()] public void TestIndex()
 		{
-			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
+			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
 
 			// test index[,]
-			Assert.AreEqual(0.3f, ratings[1, 4]);
 			Assert.AreEqual(0.2f, ratings[1, 8]);
 			Assert.AreEqual(0.6f, ratings[2, 2]);
-			Assert.AreEqual(0.5f, ratings[7, 9]);
+			Assert.AreEqual(0.2f, ratings[3, 7]);
 		}
 	}
 }
