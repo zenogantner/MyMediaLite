@@ -213,6 +213,7 @@
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
+    <Compile Include="Eval\FoldIn.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
