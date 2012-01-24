@@ -189,7 +189,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the predicted rating</returns>
 		protected virtual float Predict(IList<float> user_vector, int item_id)
 		{
-			return Predict(user_vector, item_id);
+			return Predict(user_vector, item_id, true);
 		}
 
 		///
@@ -288,8 +288,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			var user_vector = new float[NumFactors];
 			user_vector.InitNormal(InitMean, InitStdDev);
-			Util.Utils.Shuffle(rated_items);
+			rated_items.Shuffle();
 			for (uint it = 0; it < NumIter; it++)
+			{
 				for (int i = 0; i < rated_items.Count; i++)
 				{
 					int item_id = rated_items[i].First;
@@ -305,6 +306,7 @@ namespace MyMediaLite.RatingPrediction
 						user_vector[f] += (float) (LearnRate * delta_u);
 					}
 				}
+			}
 			return user_vector;
 		}
 
