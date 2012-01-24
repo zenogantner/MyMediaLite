@@ -23,6 +23,8 @@
 	 - #206 string user, item, and attribute IDs (instead of long)
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
+	data structures
+	 - correctly handle MinRating and MaxRating in CombinedRatings
 	documentation
 	 - improve API doc of IIncrementalItemRecommender
 	misc
