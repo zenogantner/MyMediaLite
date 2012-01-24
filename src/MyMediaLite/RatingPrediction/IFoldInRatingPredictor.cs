@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
 	///       </list>
 	///   </para>
 	/// </remarks>
-	public interface IFoldInRatingPredictor
+	public interface IFoldInRatingPredictor : IRatingPredictor
 	{
 		/// <summary>Rate a list of items given a list of ratings that represent a new user</summary>
 		/// <returns>a list of int and float pairs, representing item IDs and predicted ratings</returns>
