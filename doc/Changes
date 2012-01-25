@@ -1,10 +1,12 @@
-2.04	2011-02-
+2.99	2011-02-
 	API
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
            double
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
+	 - add interfaces IFeedbackEvent, ITimedFeedbackEvent, IRatingEvent,
+           ITimedRatingEvent
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
