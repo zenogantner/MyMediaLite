@@ -357,7 +357,11 @@ public partial class MainWindow : Window
 		{
 			Console.Error.WriteLine("Remove rating.");
 			if (ratings.Remove(movie.ID))
-				rating_predictor.RemoveRating(current_user_id, movie.ID);
+			{
+				var ds = new Ratings();
+				ds.Add(current_user_id, movie.ID, 0);
+				rating_predictor.RemoveRatings(ds);
+			}
 
 			PredictAllRatings();
 			return;
@@ -374,12 +378,15 @@ public partial class MainWindow : Window
 			if (rating < rating_predictor.MinRating)
 				rating = rating_predictor.MinRating;
 
+			var r = new Ratings();
+			r.Add(current_user_id, movie.ID, rating);
+
 			// if rating already exists, remove it first
 			if (ratings.ContainsKey(movie.ID))
-				rating_predictor.RemoveRating(current_user_id, movie.ID);
+				rating_predictor.RemoveRatings(r);
 
 			// add the new rating
-			rating_predictor.AddRating(current_user_id, movie.ID, rating);
+			rating_predictor.AddRatings(r);
 			ratings[movie.ID] = rating;
 
 			// recompute ratings
