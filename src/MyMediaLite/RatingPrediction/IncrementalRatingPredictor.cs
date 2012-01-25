@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using MyMediaLite.Data;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -36,32 +37,45 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual void AddRating(int user_id, int item_id, float rating)
+		public virtual void AddRatings(IRatings new_ratings)
 		{
-			if (user_id > MaxUserID)
-				AddUser(user_id);
-			if (item_id > MaxItemID)
-				AddItem(item_id);
+			foreach (int user_id in new_ratings.AllUsers)
+				if (user_id > MaxUserID)
+					AddUser(user_id);
+			foreach (int item_id in new_ratings.AllItems)
+				if (item_id > MaxItemID)
+					AddItem(item_id);
 
-			ratings.Add(user_id, item_id, rating);
+			for (int index = 0; index < new_ratings.Count; index++)
+				Ratings.Add(new_ratings.Users[index], new_ratings.Items[index], new_ratings[index]);
 		}
 
 		///
-		public virtual void UpdateRating(int user_id, int item_id, float rating)
+		public virtual void UpdateRatings(IRatings new_ratings)
 		{
-			int index;
-			if (ratings.TryGetIndex(user_id, item_id, out index))
-				ratings[index] = rating;
-			else
-				throw new Exception(string.Format("Cannot update rating for user {0} and item {1}: No such rating exists.", user_id, item_id));
+			for (int i = 0; i < new_ratings.Count; i++)
+			{
+				int user_id = new_ratings.Users[i];
+				int item_id = new_ratings.Items[i];
+				float rating = new_ratings[i];
+
+				int index;
+				if (Ratings.TryGetIndex(user_id, item_id, out index))
+					Ratings[index] = rating;
+				else
+					throw new Exception(string.Format("Cannot update rating for user {0} and item {1}: No such rating exists.", user_id, item_id));
+			}
 		}
 
 		///
-		public virtual void RemoveRating(int user_id, int item_id)
+		public virtual void RemoveRatings(IDataSet ratings_to_delete)
 		{
-			int index;
-			if (ratings.TryGetIndex(user_id, item_id, out index))
-				ratings.RemoveAt(index);
+			for (int i = 0; i < ratings_to_delete.Count; i++)
+			{
+				int index;
+				if (ratings_to_delete.TryGetIndex(ratings_to_delete.Users[i], ratings_to_delete.Items[i], out index))
+					Ratings.RemoveAt(index);
+			}
 		}
 
 		///

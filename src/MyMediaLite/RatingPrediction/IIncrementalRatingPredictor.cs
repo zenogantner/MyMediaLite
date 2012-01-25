@@ -16,6 +16,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
+using MyMediaLite.Data;
+
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Interface for rating predictors which support incremental training</summary>
@@ -31,22 +34,17 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IIncrementalRatingPredictor : IRatingPredictor
 	{
-		/// <summary>Add a new rating and perform incremental training</summary>
-		/// <param name='user_id'>the ID of the user who performed the rating</param>
-		/// <param name='item_id'>the ID of the rated item</param>
-		/// <param name='rating'>the rating value</param>
-		void AddRating(int user_id, int item_id, float rating);
+		/// <summary>Add new ratings and perform incremental training</summary>
+		/// <param name='ratings'>the ratings</param>
+		void AddRatings(IRatings ratings);
 
-		/// <summary>Update an existing rating and perform incremental training</summary>
-		/// <param name='user_id'>the ID of the user who performed the rating</param>
-		/// <param name='item_id'>the ID of the rated item</param>
-		/// <param name='rating'>the rating value</param>
-		void UpdateRating(int user_id, int item_id, float rating);
+		/// <summary>Update existing ratings and perform incremental training</summary>
+		/// <param name='ratings'>the ratings</param>
+		void UpdateRatings(IRatings ratings);
 
-		/// <summary>Remove an existing rating and perform "incremental" training</summary>
-		/// <param name='user_id'>the ID of the user who performed the rating</param>
-		/// <param name='item_id'>the ID of the rated item</param>
-		void RemoveRating(int user_id, int item_id);
+		/// <summary>Remove existing ratings and perform "incremental" training</summary>
+		/// <param name='ratings'>the user and item IDs of the ratings to be removed</param>
+		void RemoveRatings(IDataSet ratings);
 
 		/// <summary>Remove a user from the recommender model, and delete all their ratings</summary>
 		/// <remarks>

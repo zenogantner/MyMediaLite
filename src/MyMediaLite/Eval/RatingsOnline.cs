@@ -58,7 +58,7 @@ namespace MyMediaLite.Eval
 				mae  += Math.Abs(error);
 				cbd  += Eval.Ratings.ComputeCBD(ratings[index], prediction, recommender.MinRating, recommender.MaxRating);
 
-				incremental_recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
+				incremental_recommender.AddRatings(new RatingsProxy(ratings, new int[] { index }));
 			}
 			mae  = mae / ratings.Count;
 			rmse = Math.Sqrt(rmse / ratings.Count);

@@ -18,6 +18,7 @@
 
 using System.Globalization;
 using System.IO;
+using MyMediaLite.Data;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -49,23 +50,23 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRating(int user_id, int item_id, float rating)
+		public override void AddRatings(IRatings ratings)
 		{
-			base.AddRating(user_id, item_id, rating);
+			base.AddRatings(ratings);
 			Train();
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, float rating)
+		public override void UpdateRatings(IRatings ratings)
 		{
-			base.UpdateRating(user_id, item_id, rating);
+			base.UpdateRatings(ratings);
 			Train();
 		}
 
 		///
-		public override void RemoveRating(int user_id, int item_id)
+		public override void RemoveRatings(IDataSet ratings)
 		{
-			base.RemoveRating(user_id, item_id);
+			base.RemoveRatings(ratings);
 			Train();
 		}
 

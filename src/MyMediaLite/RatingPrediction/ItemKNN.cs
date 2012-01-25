@@ -90,26 +90,31 @@ namespace MyMediaLite.RatingPrediction
 		abstract protected void RetrainItem(int item_id);
 
 		///
-		public override void AddRating(int user_id, int item_id, float rating)
+		public override void AddRatings(IRatings ratings)
 		{
-			baseline_predictor.AddRating(user_id, item_id, rating);
-			data_item[item_id, user_id] = true;
-			RetrainItem(item_id);
+			baseline_predictor.AddRatings(ratings);
+			for (int index = 0; index < ratings.Count; index++)
+				data_item[ratings.Items[index], ratings.Users[index]] = true;
+			foreach (int item_id in ratings.AllItems)
+				RetrainItem(item_id);
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, float rating)
+		public override void UpdateRatings(IRatings ratings)
 		{
-			baseline_predictor.UpdateRating(user_id, item_id, rating);
-			RetrainItem(item_id);
+			baseline_predictor.UpdateRatings(ratings);
+			foreach (int item_id in ratings.AllItems)
+				RetrainItem(item_id);
 		}
 
 		///
-		public override void RemoveRating(int user_id, int item_id)
+		public override void RemoveRatings(IDataSet ratings)
 		{
-			baseline_predictor.RemoveRating(user_id, item_id);
-			data_item[item_id, user_id] = false;
-			RetrainItem(user_id);
+			baseline_predictor.RemoveRatings(ratings);
+			for (int index = 0; index < ratings.Count; index++)
+				data_item[ratings.Items[index], ratings.Users[index]] = false;
+			foreach (int item_id in ratings.AllItems)
+				RetrainItem(item_id);
 		}
 
 		///

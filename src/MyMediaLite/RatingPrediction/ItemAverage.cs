@@ -49,24 +49,27 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRating(int user_id, int item_id, float rating)
+		public override void AddRatings(IRatings ratings)
 		{
-			base.AddRating(user_id, item_id, rating);
-			Retrain(item_id, ratings.ByItem[item_id], ratings.Items);
+			base.AddRatings(ratings);
+			foreach (int item_id in ratings.AllItems)
+				Retrain(item_id, Ratings.ByItem[item_id]);
 		}
 
 		///
-		public override void UpdateRating(int user_id, int item_id, float rating)
+		public override void UpdateRatings(IRatings ratings)
 		{
-			base.UpdateRating(user_id, item_id, rating);
-			Retrain(item_id, ratings.ByItem[item_id], ratings.Items);
+			base.UpdateRatings(ratings);
+			foreach (int item_id in ratings.AllItems)
+				Retrain(item_id, Ratings.ByItem[item_id]);
 		}
 
 		///
-		public override void RemoveRating(int user_id, int item_id)
+		public override void RemoveRatings(IDataSet ratings)
 		{
-			base.RemoveRating(user_id, item_id);
-			Retrain(item_id, ratings.ByItem[item_id], ratings.Items);
+			base.RemoveRatings(ratings);
+			foreach (int item_id in ratings.AllItems)
+				Retrain(item_id, Ratings.ByItem[item_id]);
 		}
 
 		///
