@@ -127,7 +127,7 @@ namespace MyMediaLite.Eval
 			result["CBD"]  = cbd;
 			return result;
 		}
-		
+
 		/// <summary>Performs user-wise fold-in evaluation, but instead of folding in perform incremental training with the new data</summary>
 		/// <remarks>
 		/// </remarks>
@@ -135,7 +135,7 @@ namespace MyMediaLite.Eval
 		/// <param name='recommender'>a rating predictor capable of performing a user fold-in</param>
 		/// <param name='update_data'>the rating data used to represent the users</param>
 		/// <param name='eval_data'>the evaluation data</param>
-		static public RatingPredictionEvaluationResults EvaluateFoldInCompleteRetraining(this IncrementalRatingPredictor recommender, IRatings update_data, IRatings eval_data)
+		static public RatingPredictionEvaluationResults EvaluateFoldInIncrementalTraining(this IncrementalRatingPredictor recommender, IRatings update_data, IRatings eval_data)
 		{
 			double rmse = 0;
 			double mae  = 0;
@@ -147,7 +147,9 @@ namespace MyMediaLite.Eval
 				{
 					var local_recommender = (IncrementalRatingPredictor) recommender.Clone();
 
-					//local_recommender.AddRating
+					// add ratings and perform incremental training
+					var user_ratings = new RatingsProxy(update_data, update_data.ByUser[user_id]);
+					local_recommender.AddRatings(user_ratings);
 
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
 					var predicted_ratings = recommender.ScoreItems(user_id, items_to_rate);
@@ -164,6 +166,10 @@ namespace MyMediaLite.Eval
 					}
 
 					rating_count += eval_data.ByUser[user_id].Count;
+
+					// remove ratings again
+					local_recommender.RemoveRatings(user_ratings);
+
 					Console.Error.Write(".");
 				}
 
