@@ -53,10 +53,10 @@ namespace MyMediaLite.DataType
 
 		///
 		public bool IsReadOnly { get { return true; } }
-		
+
 		///
 		public bool IsFixedSize { get { return true; } }
-		
+
 		///
 		public void Add(T item) { throw new NotSupportedException(); }
 
