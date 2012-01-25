@@ -198,21 +198,80 @@ namespace MyMediaLite.Data
 		///
 		public virtual void RemoveAt(int index)
 		{
+			int user_id = Users[index];
+			int item_id = Items[index];
+
 			Users.RemoveAt(index);
 			Items.RemoveAt(index);
 			Values.RemoveAt(index);
+
+			UpdateCountsAndIndices(new HashSet<int>() { user_id }, new HashSet<int>() { item_id });
+		}
+
+		void UpdateCountsAndIndices(ISet<int> users, ISet<int> items)
+		{
+			// update indices
+			if (by_user != null)
+				foreach (int user_id in users)
+					by_user[user_id] = new List<int>();
+			if (by_item != null)
+				foreach (int item_id in items)
+					by_item[item_id] = new List<int>();
+
+			if (by_user != null || by_item != null)
+				for (int i = 0; i < Count; i++) // one pass over the data
+				{
+					if (by_user != null && users.Contains(Users[i]))
+						by_user[Users[i]].Add(i);
+					if (by_item != null && items.Contains(Items[i]))
+						by_item[Items[i]].Add(i);
+				}
+
+			// update counts
+			if (count_by_user != null && by_user != null)
+				foreach (int user_id in users)
+					count_by_user[user_id] = by_user[user_id].Count;
+			if (count_by_item != null && by_item != null)
+				foreach (int item_id in items)
+					count_by_item[item_id] = by_item[item_id].Count;
+			if ((count_by_user != null || count_by_item != null) && (by_user == null || by_item == null))
+			{
+				if (count_by_user != null)
+					foreach (int user_id in users)
+						count_by_user[user_id] = 0;
+				if (count_by_item != null)
+					foreach (int item_id in items)
+						count_by_item[item_id] = 0;
+
+				for (int i = 0; i < Count; i++) // one pass over the data
+				{
+					if (count_by_user != null && users.Contains(Users[i]))
+						count_by_user[Users[i]]++;
+					if (count_by_item != null && items.Contains(Items[i]))
+						count_by_item[Items[i]]++;
+				}
+			}
 		}
 
 		///
 		public override void RemoveUser(int user_id)
 		{
+			var items_to_update = new HashSet<int>();
+
 			for (int index = 0; index < Count; index++)
 				if (Users[index] == user_id)
 				{
+					Console.Error.WriteLine("remove {0}: {1} {2} {3}", index, Users[index], Items[index], Values[index]);
+					items_to_update.Add(Items[index]);
+
 					Users.RemoveAt(index);
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
+
+					index--; // avoid missing an entry
 				}
+
+			UpdateCountsAndIndices(new HashSet<int>() { user_id }, items_to_update);
 
 			if (MaxUserID == user_id)
 				MaxUserID--;
@@ -221,13 +280,21 @@ namespace MyMediaLite.Data
 		///
 		public override void RemoveItem(int item_id)
 		{
+			var users_to_update = new HashSet<int>();
+
 			for (int index = 0; index < Count; index++)
 				if (Items[index] == item_id)
 				{
+					users_to_update.Add(Users[index]);
+
 					Users.RemoveAt(index);
 					Items.RemoveAt(index);
 					Values.RemoveAt(index);
+
+					index--; // avoid missing an entry
 				}
+
+			UpdateCountsAndIndices(users_to_update, new HashSet<int>() { item_id });
 
 			if (MaxItemID == item_id)
 				MaxItemID--;

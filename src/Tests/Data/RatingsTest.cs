@@ -88,10 +88,28 @@ namespace Tests.Data
 
 			Assert.AreEqual(8, ratings.Count);
 			Assert.AreEqual(0.4f, ratings[2, 5]);
+			Assert.AreEqual(3, ratings.ByUser[2].Count);
+			Assert.AreEqual(1, ratings.ByUser[6].Count);
+			Assert.AreEqual(2, ratings.ByItem[3].Count);
+			Assert.AreEqual(1, ratings.ByItem[5].Count);
+			Assert.AreEqual(3, ratings.CountByUser[2]);
+			Assert.AreEqual(1, ratings.CountByUser[6]);
+			Assert.AreEqual(2, ratings.CountByItem[3]);
+			Assert.AreEqual(1, ratings.CountByItem[5]);
+
 			ratings.RemoveAt(ratings.GetIndex(2, 5));
 			Assert.AreEqual(7, ratings.Count);
+			Assert.AreEqual(2, ratings.ByUser[2].Count);
+			Assert.AreEqual(0, ratings.ByItem[5].Count);
+			Assert.AreEqual(2, ratings.CountByUser[2]);
+			Assert.AreEqual(0, ratings.CountByItem[5]);
+
 			ratings.RemoveAt(ratings.GetIndex(6, 3));
 			Assert.AreEqual(6, ratings.Count);
+			Assert.AreEqual(0, ratings.ByUser[6].Count);
+			Assert.AreEqual(1, ratings.ByItem[3].Count);
+			Assert.AreEqual(0, ratings.CountByUser[6]);
+			Assert.AreEqual(1, ratings.CountByItem[3]);
 
 			float r;
 			Assert.IsFalse(ratings.TryGet(2, 5, out r));
@@ -110,11 +128,26 @@ namespace Tests.Data
 
 			Assert.AreEqual(7, ratings.Count);
 			Assert.AreEqual(0.4f, ratings[2, 5]);
+			Assert.AreEqual(1, ratings.ByItem[2].Count);
+			Assert.AreEqual(2, ratings.ByItem[4].Count);
+			Assert.AreEqual(1, ratings.ByItem[5].Count);
+			Assert.AreEqual(1, ratings.CountByItem[2]);
+			Assert.AreEqual(2, ratings.CountByItem[4]);
+			Assert.AreEqual(1, ratings.CountByItem[5]);
+
 			ratings.RemoveUser(2);
-			Assert.AreEqual(5, ratings.Count);
+			Assert.AreEqual(4, ratings.Count);
+			Assert.AreEqual(0, ratings.ByItem[2].Count);
+			Assert.AreEqual(1, ratings.ByItem[4].Count);
+			Assert.AreEqual(0, ratings.ByItem[5].Count);
+			Assert.AreEqual(0, ratings.CountByItem[2]);
+			Assert.AreEqual(1, ratings.CountByItem[4]);
+			Assert.AreEqual(0, ratings.CountByItem[5]);
 
 			float rating;
 			Assert.IsFalse(ratings.TryGet(2, 5, out rating));
+			Assert.IsFalse(ratings.TryGet(2, 4, out rating));
+			Assert.IsFalse(ratings.TryGet(2, 2, out rating));
 		}
 
 		[Test()] public void TestRemoveItem()
@@ -130,10 +163,26 @@ namespace Tests.Data
 
 			Assert.AreEqual(7, ratings.Count);
 			Assert.AreEqual(0.2f, ratings[2, 4]);
+			Assert.AreEqual(2, ratings.ByUser[1].Count);
+			Assert.AreEqual(3, ratings.ByUser[2].Count);
+			Assert.AreEqual(2, ratings.ByUser[3].Count);
+			Assert.AreEqual(2, ratings.CountByUser[1]);
+			Assert.AreEqual(3, ratings.CountByUser[2]);
+			Assert.AreEqual(2, ratings.CountByUser[3]);
+
 			ratings.RemoveItem(4);
 			Assert.AreEqual(4, ratings.Count);
+			Assert.AreEqual(1, ratings.ByUser[1].Count);
+			Assert.AreEqual(2, ratings.ByUser[2].Count);
+			Assert.AreEqual(1, ratings.ByUser[3].Count);
+			Assert.AreEqual(1, ratings.CountByUser[1]);
+			Assert.AreEqual(2, ratings.CountByUser[2]);
+			Assert.AreEqual(1, ratings.CountByUser[3]);
+
 			float r;
+			Assert.IsFalse(ratings.TryGet(1, 4, out r));
 			Assert.IsFalse(ratings.TryGet(2, 4, out r));
+			Assert.IsFalse(ratings.TryGet(3, 4, out r));
 		}
 
 		[Test()] public void TestIndex()

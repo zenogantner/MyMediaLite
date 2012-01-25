@@ -31,6 +31,8 @@
 	 - remove class NumberFile (not used any more)
 	data structures
 	 - correctly handle MinRating and MaxRating in CombinedRatings
+	 - Ratings: update indices after removing ratings, fix bug in
+           RemoveUser() and RemoveItem()
 	documentation
 	 - improve API doc of IIncrementalItemRecommender
 	misc
