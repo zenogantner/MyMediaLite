@@ -208,7 +208,11 @@ namespace MyMediaLite.Data
 			UpdateCountsAndIndices(new HashSet<int>() { user_id }, new HashSet<int>() { item_id });
 		}
 
-		void UpdateCountsAndIndices(ISet<int> users, ISet<int> items)
+		/// <summary>update user- and item-wise counts and indices</summary>
+		/// <param name='users'>the modified users</param>
+		/// <param name='items'>the modified itemsItems.
+		/// </param>
+		protected void UpdateCountsAndIndices(ISet<int> users, ISet<int> items)
 		{
 			// update indices
 			if (by_user != null)
@@ -261,7 +265,6 @@ namespace MyMediaLite.Data
 			for (int index = 0; index < Count; index++)
 				if (Users[index] == user_id)
 				{
-					Console.Error.WriteLine("remove {0}: {1} {2} {3}", index, Users[index], Items[index], Values[index]);
 					items_to_update.Add(Items[index]);
 
 					Users.RemoveAt(index);
