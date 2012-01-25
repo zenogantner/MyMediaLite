@@ -51,12 +51,12 @@ namespace MyMediaLite.Eval
 			// iterate in random order
 			foreach (int index in ratings.RandomIndex)
 			{
-				double prediction = recommender.Predict(ratings.Users[index], ratings.Items[index]);
-				double error = prediction - ratings[index];
+				float prediction = recommender.Predict(ratings.Users[index], ratings.Items[index]);
+				float error = prediction - ratings[index];
 
 				rmse += error * error;
 				mae  += Math.Abs(error);
-				cbd  += Eval.Ratings.ComputeCBD(ratings[index], prediction, ratings.MinRating, ratings.MaxRating);
+				cbd  += Eval.Ratings.ComputeCBD(ratings[index], prediction, recommender.MinRating, recommender.MaxRating);
 
 				incremental_recommender.AddRating(ratings.Users[index], ratings.Items[index], ratings[index]);
 			}
@@ -71,7 +71,6 @@ namespace MyMediaLite.Eval
 			result["CBD"]  = cbd;
 			return result;
 		}
-
 	}
 }
 
