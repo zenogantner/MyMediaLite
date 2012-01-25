@@ -33,6 +33,8 @@
 	 - correctly handle MinRating and MaxRating in CombinedRatings
 	 - Ratings: update indices after removing ratings, fix bug in
            RemoveUser() and RemoveItem()
+	 - RatingsProxy: proper handling of MaxUserID and MaxItemID,
+           implement Remover(At|User|Item)
 	documentation
 	 - improve API doc of IIncrementalItemRecommender
 	misc
