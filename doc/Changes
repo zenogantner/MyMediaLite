@@ -13,6 +13,7 @@
          - BiasedMatrixFactorization, LogisticRegressionMatrixFactorization:
            differentiate regularization of user and item biases, by using
            reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
+	 - EntityAverage: remove unnecessary parameter from Retrain()
 	command-line programs
 	 - add --no-id-mapping option to save memory for large-scale datasets
            where the user and item IDs have no gaps

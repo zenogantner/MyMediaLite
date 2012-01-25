@@ -76,8 +76,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Retrain the recommender according to the given entity type</summary>
 		/// <param name="entity_id">the ID of the entity to update</param>
 		/// <param name="indices">list of indices to use for retraining</param>
-		/// <param name="entity_ids">list of all entity IDs in the training data (per rating)</param>
-		protected void Retrain(int entity_id, IList<int> indices, IList<int> entity_ids)
+		protected void Retrain(int entity_id, IList<int> indices)
 		{
 			double sum = 0;
 			int count = 0;
@@ -89,7 +88,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			if (count > 0)
-				entity_averages[entity_id] =(float) (sum / count);
+				entity_averages[entity_id] = (float) (sum / count);
 			else
 				entity_averages[entity_id] = global_average;
 		}
