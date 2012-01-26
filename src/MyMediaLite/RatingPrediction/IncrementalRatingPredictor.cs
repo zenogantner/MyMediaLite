@@ -73,7 +73,7 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < ratings_to_delete.Count; i++)
 			{
 				int index;
-				if (ratings_to_delete.TryGetIndex(ratings_to_delete.Users[i], ratings_to_delete.Items[i], out index))
+				if (Ratings.TryGetIndex(ratings_to_delete.Users[i], ratings_to_delete.Items[i], out index))
 					Ratings.RemoveAt(index);
 			}
 		}
