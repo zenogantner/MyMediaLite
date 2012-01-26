@@ -34,8 +34,6 @@ namespace MyMediaLite.Eval
 		/// <param name='eval_data'>the evaluation data</param>
 		static public RatingPredictionEvaluationResults EvaluateFoldIn(this IFoldInRatingPredictor recommender, IRatings update_data, IRatings eval_data)
 		{
-			Console.Error.WriteLine("EvaluateFoldIn()");
-
 			double rmse = 0;
 			double mae  = 0;
 			double cbd  = 0;
@@ -60,6 +58,7 @@ namespace MyMediaLite.Eval
 					}
 
 					rating_count += eval_data.ByUser[user_id].Count;
+					Console.Error.Write(".");
 				}
 
 			mae  = mae / rating_count;
