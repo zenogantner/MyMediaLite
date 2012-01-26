@@ -26,7 +26,8 @@
            is now also supported by the item recommendation tool
 	 - rating prediction: fix bug in KDD Cup data handling
 	I/O
-	 - #206 string user, item, and attribute IDs (instead of long)
+	 - #206 (suggested by Simon Dooms): string user, item, and attribute
+           IDs (instead of long)
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
 	data structures
