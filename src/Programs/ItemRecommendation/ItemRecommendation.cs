@@ -167,7 +167,7 @@ class ItemRecommendation
 
   prediction options:
    --prediction-file=FILE       write ranked predictions to FILE, one user per line
-   --predict-items-number=N     predict N items per user (needs --predict-items-file)
+   --predict-items-number=N     predict N items per user (needs --prediction-file)
 
   evaluation options:
    --cross-validation=K         perform k-fold cross-validation on the training data
