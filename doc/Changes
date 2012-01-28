@@ -27,7 +27,7 @@
 	 - rating prediction: fix bug in KDD Cup data handling
 	 - item recommendation: add dependency to System.Data assembly
 	 - item recommendation: fix usage description of --predict-items-number
-           (reported by Simon Renaud)
+           and --repeat-evaluation (reported by Simon Renaud)
 	I/O
 	 - #206 (suggested by Simon Dooms): string user, item, and attribute
            IDs (instead of long)

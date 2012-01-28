@@ -176,7 +176,7 @@ class ItemRecommendation
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
-   --repeat-evaluation          assume that items can be accessed repeatedly - items can occur both in the training and the test data for one user
+   --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
    --compute-fit                display fit on training data
 
   finding the right number of iterations (iterative methods)
