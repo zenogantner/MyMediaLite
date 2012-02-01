@@ -49,7 +49,7 @@ namespace MyMediaLite.ItemRecommendation
 		public double C { get { return c; } set { c = value; } }
 		double c = 1;
 
-		/// <summary>Gamma parameter for RBF kernel</summary>
+		/// <summary>Gamma parameter for the RBF kernel</summary>
 		public double Gamma { get {	return gamma; }	set { gamma = value; } }
 		double gamma = (double) 1 / 500;
 
@@ -118,7 +118,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "{0} C={1} Gamma={2}", this.GetType().Name, c, gamma);
+			return string.Format(CultureInfo.InvariantCulture, "{0} c={1} gamma={2}", this.GetType().Name, C, Gamma);
 		}
 	}
 }
