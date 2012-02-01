@@ -181,6 +181,7 @@ namespace MyMediaLite.RatingPrediction
 			item_bias_by_time_bin = new Matrix<float>(MaxItemID + 1, number_of_bins);
 			user_bias_by_day = new SparseMatrix<float>(MaxUserID + 1, number_of_days);
 			user_scaling = new float[MaxUserID + 1];
+			user_scaling.Init(1f);
 			user_scaling_by_day = new SparseMatrix<float>(MaxUserID + 1, number_of_days);
 		}
 
