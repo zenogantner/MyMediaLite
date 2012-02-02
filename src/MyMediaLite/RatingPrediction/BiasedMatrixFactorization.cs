@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 		protected float[] user_bias;
 		/// <summary>the item biases</summary>
 		protected float[] item_bias;
-		
+
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
 
@@ -130,10 +130,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			// compute global average
-			global_bias = ratings.Average;
-
 			rating_range_size = MaxRating - MinRating;
+
+			// compute global bias
+			double avg = (ratings.Average - MinRating) / rating_range_size;
+			global_bias = (float) Math.Log(avg/(1 - avg));
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
@@ -175,7 +176,7 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
+				double dot_product = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
@@ -217,7 +218,7 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
+				double dot_product = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
 
 				double p = MinRating + sig_dot * rating_range_size;
@@ -259,7 +260,7 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return global_bias;
 
-			double score = user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double score = global_bias + user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
 		}
@@ -378,9 +379,8 @@ namespace MyMediaLite.RatingPrediction
 		protected override float Predict(IList<float> user_vector, int item_id)
 		{
 			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumIter).ToArray() );
-			double dot_product = user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
-			double sig_dot = 1 / (1 + Math.Exp(-dot_product));
-			return (float) (MinRating + sig_dot * (MaxRating - MinRating));
+			double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+			return (float) (MinRating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
 		}
 
 		///
@@ -401,14 +401,14 @@ namespace MyMediaLite.RatingPrediction
 					int item_id = rated_items[i].First;
 
 					// compute rating and error
-					double dot_product = user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
-					double sig_dot = 1 / (1 + Math.Exp(-dot_product));
-					double p = MinRating + sig_dot * rating_range_size;
+					double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+					double sig_score = 1 / (1 + Math.Exp(-score));
+					double p = MinRating + sig_score * rating_range_size;
 					double err = rated_items[i].Second - p;
 
 					float gradient_common = (float) (OptimizeMAE
-											? (Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size)
-											: (err * sig_dot * (1 - sig_dot) * rating_range_size));
+											? (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size)
+											: (err * sig_score * (1 - sig_score) * rating_range_size));
 
 					// adjust bias
 					user_vector[0] += LearnRate * (gradient_common - BiasReg * RegU * user_vector[0]);
