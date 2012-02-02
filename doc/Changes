@@ -17,6 +17,7 @@
          - BiasedMatrixFactorization, LogisticRegressionMatrixFactorization:
            differentiate regularization of user and item biases, by using
            reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
+	 - BiasedMatrixFactorization: compute rating_range_size only once
 	 - TimeAwareBaseline: fix initialization of c_u parameter
 	 - EntityAverage: remove unnecessary parameter from Retrain()
 	 - ItemAttributeSVM: improve API doc and ToString() method
