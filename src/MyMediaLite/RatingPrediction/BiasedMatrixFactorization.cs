@@ -98,6 +98,9 @@ namespace MyMediaLite.RatingPrediction
 		protected float[] user_bias;
 		/// <summary>the item biases</summary>
 		protected float[] item_bias;
+		
+		/// <summary>size of the interval of valid ratings</summary>
+		double rating_range_size;
 
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
@@ -129,6 +132,8 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute global average
 			global_bias = ratings.Average;
+
+			rating_range_size = MaxRating - MinRating;
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
@@ -165,8 +170,6 @@ namespace MyMediaLite.RatingPrediction
 
 		void IterateMAE(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			float rating_range_size = MaxRating - MinRating;
-
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
@@ -209,8 +212,6 @@ namespace MyMediaLite.RatingPrediction
 
 		void IterateRMSE(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			double rating_range_size = MaxRating - MinRating;
-
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
@@ -260,7 +261,7 @@ namespace MyMediaLite.RatingPrediction
 
 			double score = user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
-			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating));
+			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
 		}
 
 		///
