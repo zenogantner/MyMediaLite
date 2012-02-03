@@ -21,34 +21,51 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Matrix factorization with explicit user and item bias, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
-	/// Per default optimizes for RMSE.
-	/// Set OptimizeMAE to true if you want to optimize for MAE.
-	///
-	/// Literature:
-	/// <list type="bullet">
-	///   <item><description>
-	///     Ruslan Salakhutdinov, Andriy Mnih:
-	///     Probabilistic Matrix Factorization.
-	///     NIPS 2007.
-	///     http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
-	///   </description></item>
-	///   <item><description>
-	///     Steffen Rendle, Lars Schmidt-Thieme:
-	///     Online-Updating Regularized Kernel Matrix Factorization Models for Large-Scale Recommender Systems.
-	///     RecSys 2008.
-	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2008-Online_Updating_Regularized_Kernel_Matrix_Factorization_Models.pdf
-	///   </description></item>
-	/// </list>
-	///
-	/// This recommender supports incremental updates.
+	///   <para>
+	///     Per default optimizes for RMSE.
+	///     Set OptimizeMAE to true if you want to optimize for MAE.
+	///   </para>
+	///   <para>
+	///     This recommender makes use of multi-core machines if requested.
+	///     Just set MaxThreads to a large enough number (usually multiples of the number of available cores).
+	///     The parallelization is based on ideas presented in the paper by Gemulla et al.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Ruslan Salakhutdinov, Andriy Mnih:
+	///         Probabilistic Matrix Factorization.
+	///         NIPS 2007.
+	///         http://www.mit.edu/~rsalakhu/papers/nips07_pmf.pdf
+	///       </description></item>
+	///       <item><description>
+	///         Steffen Rendle, Lars Schmidt-Thieme:
+	///         Online-Updating Regularized Kernel Matrix Factorization Models for Large-Scale Recommender Systems.
+	///         RecSys 2008.
+	///         http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2008-Online_Updating_Regularized_Kernel_Matrix_Factorization_Models.pdf
+	///       </description></item>
+	///       <item><description>
+	///         Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
+	///         Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
+	///         KDD 2011.
+	///         http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
+	///   <para>
+	///       This recommender supports incremental updates.
+	///   </para>
 	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
@@ -76,7 +93,13 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>If set to true, optimize model for MAE instead of RMSE</summary>
 		public bool OptimizeMAE { get; set; }
-
+		
+		/// <summary>the maximum number of threads to use</summary>
+		/// <remarks>
+		///   Determines the number of sections the users and items will be divided into.
+		/// </remarks>
+		public int MaxThreads { get; set; }
+		
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
 		/// Literature:
@@ -90,7 +113,7 @@ namespace MyMediaLite.RatingPrediction
 		/// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
-
+		
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		protected double last_loss = double.NegativeInfinity;
 
@@ -101,12 +124,15 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
-
+		
+		IList<int>[,] blocks;
+		
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
 		{
 			BiasReg = 0.01f;
 			BiasLearnRate = 1.0f;
+			MaxThreads = 1;
 		}
 
 		///
@@ -129,7 +155,10 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			InitModel();
-
+			
+			if (MaxThreads > 1)
+				blocks = ratings.PartitionUsersAndItems(MaxThreads);
+			
 			rating_range_size = MaxRating - MinRating;
 
 			// compute global bias
@@ -143,7 +172,17 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Iterate()
 		{
-			base.Iterate();
+			if (MaxThreads > 1)
+			{
+				// generate random sub-epoch sequence
+				var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
+				Utils.Shuffle(subepoch_sequence);
+	
+				foreach (int i in subepoch_sequence) // sub-epoch
+					Parallel.For(0, MaxThreads, j => Iterate(blocks[j, (i + j) % MaxThreads], true, true));
+			}
+			else
+				base.Iterate();
 
 			if (BoldDriver)
 			{
@@ -176,14 +215,14 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
-				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
+				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double p = MinRating + sig_dot * rating_range_size;
+				double p = MinRating + sig_score * rating_range_size;
 				double err = ratings[index] - p;
 
 				// the only difference to RMSE optimization is here:
-				float gradient_common = (float) (Math.Sign(err) * sig_dot * (1 - sig_dot) * rating_range_size);
+				float gradient_common = (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
 
 				// adjust biases
 				if (update_user)
@@ -218,13 +257,13 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double dot_product = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
-				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
+				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double p = MinRating + sig_dot * rating_range_size;
+				double p = MinRating + sig_score * rating_range_size;
 				double err = ratings[index] - p;
 
-				float gradient_common = (float) (err * sig_dot * (1 - sig_dot) * rating_range_size);
+				float gradient_common = (float) (err * sig_score * (1 - sig_score) * rating_range_size);
 
 				// adjust biases
 				if (update_user)
@@ -466,8 +505,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} optimize_mae={11}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} optimize_mae={11} max_threads={12}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, MaxThreads);
 		}
 	}
 }
