@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -202,8 +202,9 @@ namespace MyMediaLite.DataType
 		public void SetColumn(int j, IList<T> column)
 		{
 			if (column.Count != this.dim1)
-				throw new ArgumentOutOfRangeException(string.Format("Array length ({0}) must equal number of rows ({1}",
-														  column.Count, this.dim1));
+				throw new ArgumentOutOfRangeException(
+					string.Format("Array length ({0}) must equal number of rows ({1}",
+					column.Count, this.dim1));
 
 			for (int i = 0; i < this.dim1; i++)
 				this[i, j] = column[i];
