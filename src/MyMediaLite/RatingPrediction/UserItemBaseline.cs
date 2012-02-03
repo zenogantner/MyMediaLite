@@ -202,20 +202,14 @@ namespace MyMediaLite.RatingPrediction
 		protected override void AddUser(int user_id)
 		{
 			base.AddUser(user_id);
-
-			float[] user_biases = new float[this.MaxUserID + 1];
-			Array.Copy(this.user_biases, user_biases, this.user_biases.Length);
-			this.user_biases = user_biases;
+			Array.Resize(ref user_biases, MaxUserID + 1);
 		}
 
 		///
 		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
-
-			float[] item_biases = new float[this.MaxItemID + 1];
-			Array.Copy(this.item_biases, item_biases, this.item_biases.Length);
-			this.item_biases = item_biases;
+			Array.Resize(ref item_biases, MaxItemID + 1);
 		}
 
 		///

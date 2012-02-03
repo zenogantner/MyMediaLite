@@ -441,10 +441,7 @@ namespace MyMediaLite.ItemRecommendation
 			item_factors.AddRows(item_id + 1);
 			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
 
-			// create new item bias array
-			var item_bias = new float[item_id + 1];
-			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
-			this.item_bias = item_bias;
+			Array.Resize(ref item_bias, MaxItemID + 1);
 		}
 
 		///
