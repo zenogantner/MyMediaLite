@@ -23,7 +23,7 @@
      reclab        => { url => 'http://code.richrelevance.com/reclab-core/',     title => 'RecLab' }
      lenskit       => { url => 'http://lenskit.grouplens.org/',                  title => 'LensKit' }
      crab          => { url => 'http://muricoca.github.com/crab/',               title => 'Crab' }
-     cofirank      => { url => 'http://cofirank.org',                            title => 'CofiRank' }
+     cofirank      => { url => 'http://www.cofirank.org',                        title => 'CofiRank' }
      PyRSVD        => { url => 'http://code.google.com/p/pyrsvd/',               title => 'PyRSVD' }
      recommenderlab => { url => 'http://cran.r-project.org/web/packages/recommenderlab/index.html', title => 'recommenderlab' }
      waffles       => { url => 'http://waffles.sourceforge.net/command/recommend.html', title => 'Waffles' }
