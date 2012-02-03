@@ -159,10 +159,10 @@ namespace MyMediaLite.RatingPrediction
 			if (MaxThreads > 1)
 				thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
 
-			rating_range_size = MaxRating - MinRating;
+			rating_range_size = max_rating - min_rating;
 
 			// compute global bias
-			double avg = (ratings.Average - MinRating) / rating_range_size;
+			double avg = (ratings.Average - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg/(1 - avg));
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
@@ -218,7 +218,7 @@ namespace MyMediaLite.RatingPrediction
 				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double p = MinRating + sig_score * rating_range_size;
+				double p = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - p;
 
 				// the only difference to RMSE optimization is here:
@@ -260,7 +260,7 @@ namespace MyMediaLite.RatingPrediction
 				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double p = MinRating + sig_score * rating_range_size;
+				double p = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - p;
 
 				float gradient_common = (float) (err * sig_score * (1 - sig_score) * rating_range_size);
@@ -301,7 +301,7 @@ namespace MyMediaLite.RatingPrediction
 
 			double score = global_bias + user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
-			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
+			return (float) (min_rating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
 		}
 
 		///
@@ -368,22 +368,14 @@ namespace MyMediaLite.RatingPrediction
 		protected override void AddUser(int user_id)
 		{
 			base.AddUser(user_id);
-
-			// create new user bias array
-			var user_bias = new float[user_id + 1];
-			Array.Copy(this.user_bias, user_bias, this.user_bias.Length);
-			this.user_bias = user_bias;
+			Array.Resize(ref user_bias, MaxUserID + 1);
 		}
 
 		///
 		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
-
-			// create new item bias array
-			var item_bias = new float[item_id + 1];
-			Array.Copy(this.item_bias, item_bias, this.item_bias.Length);
-			this.item_bias = item_bias;
+			Array.Resize(ref item_bias, MaxItemID + 1);
 		}
 
 		///
@@ -417,9 +409,9 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override float Predict(IList<float> user_vector, int item_id)
 		{
-			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumIter).ToArray() );
+			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
 			double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
-			return (float) (MinRating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
+			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
 		}
 
 		///
@@ -428,7 +420,7 @@ namespace MyMediaLite.RatingPrediction
 			// initialize user parameters
 			var user_vector = new float[NumFactors + 1];
 			//IEnumerable<int> factor_indices = Enumerable.Range(1, (int) NumIter);
-			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumIter).ToArray() );
+			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
 			factors.InitNormal(InitMean, InitStdDev);
 
 			// perform training
@@ -441,7 +433,7 @@ namespace MyMediaLite.RatingPrediction
 					// compute rating and error
 					double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
-					double p = MinRating + sig_score * rating_range_size;
+					double p = min_rating + sig_score * rating_range_size;
 					double err = rated_items[i].Second - p;
 
 					float gradient_common = (float) (OptimizeMAE
