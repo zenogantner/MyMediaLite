@@ -432,8 +432,7 @@ namespace MyMediaLite.RatingPrediction
 			factors.InitNormal(InitMean, InitStdDev);
 
 			// perform training
-			Util.Utils.Shuffle(rated_items);
-			float rating_range_size = MaxRating - MinRating;
+			rated_items.Shuffle();
 			for (uint it = 0; it < NumIter; it++)
 				for (int i = 0; i < rated_items.Count; i++)
 				{
