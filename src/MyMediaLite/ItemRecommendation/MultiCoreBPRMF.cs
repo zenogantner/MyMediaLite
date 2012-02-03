@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -87,7 +87,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			// generate random sub-epoch sequence
 			var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
-			Utils.Shuffle(subepoch_sequence);
+			subepoch_sequence.Shuffle();
 
 			foreach (int i in subepoch_sequence) // sub-epoch
 				//Parallel.For(0, NumGroups, j => Iterate(j, (i + j) % NumGroups));

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -46,8 +46,8 @@ namespace MyMediaLite.Util
 			// divide rating matrix into blocks
 			var user_permutation = new List<int>(Enumerable.Range(0, dataset.MaxUserID + 1));
 			var item_permutation = new List<int>(Enumerable.Range(0, dataset.MaxItemID + 1));
-			Utils.Shuffle(user_permutation);
-			Utils.Shuffle(item_permutation);
+			user_permutation.Shuffle();
+			item_permutation.Shuffle();
 
 			var blocks = new IList<int>[num_groups, num_groups];
 			for (int i = 0; i < num_groups; i++)
@@ -65,7 +65,7 @@ namespace MyMediaLite.Util
 			// randomize index sequences inside the blocks
 			for (int i = 0; i < num_groups; i++)
 				for (int j = 0; j < num_groups; j++)
-					Utils.Shuffle(blocks[i, j]);
+					blocks[i, j].Shuffle();
 
 			return blocks;
 		}

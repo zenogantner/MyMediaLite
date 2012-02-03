@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.Data
 {
@@ -69,8 +70,7 @@ namespace MyMediaLite.Data
 				}
 				else
 				{
-					// shuffle list for randomness
-					MyMediaLite.Util.Utils.Shuffle(item_indices);
+					item_indices.Shuffle();
 
 					foreach (int index in item_indices)
 					{

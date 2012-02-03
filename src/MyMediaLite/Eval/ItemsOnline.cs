@@ -22,6 +22,7 @@ using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.Eval
 {
@@ -75,7 +76,7 @@ namespace MyMediaLite.Eval
 			var random_index = new int[test.Count];
 			for (int index = 0; index < random_index.Length; index++)
 				random_index[index] = index;
-			Util.Utils.Shuffle<int>(random_index);
+			random_index.Shuffle();
 
 			var results_by_user = new Dictionary<int, ItemRecommendationEvaluationResults>();
 
