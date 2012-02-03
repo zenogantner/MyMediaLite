@@ -182,7 +182,6 @@
     <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="RatingPrediction\CoClustering.cs" />
     <Compile Include="DataType\Pair.cs" />
-    <Compile Include="DataType\Triple.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="Correlation\WeightedBinaryCosine.cs" />
