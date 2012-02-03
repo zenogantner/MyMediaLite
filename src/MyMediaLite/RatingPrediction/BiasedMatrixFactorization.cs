@@ -125,7 +125,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
 		
-		IList<int>[,] blocks;
+		IList<int>[,] thread_blocks;
 		
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
@@ -157,7 +157,7 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 			
 			if (MaxThreads > 1)
-				blocks = ratings.PartitionUsersAndItems(MaxThreads);
+				thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
 			
 			rating_range_size = MaxRating - MinRating;
 
@@ -179,7 +179,7 @@ namespace MyMediaLite.RatingPrediction
 				Utils.Shuffle(subepoch_sequence);
 	
 				foreach (int i in subepoch_sequence) // sub-epoch
-					Parallel.For(0, MaxThreads, j => Iterate(blocks[j, (i + j) % MaxThreads], true, true));
+					Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
 			}
 			else
 				base.Iterate();
