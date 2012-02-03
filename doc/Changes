@@ -60,7 +60,7 @@
 	 - NelderMead: fix compilation in VisualStudio (reported by
            Artus Krohn-Grimberghe and user LHCGreg on reddit)
 	 - Utils.Shuffle is now an extension method
-	 - simplify Utils.Recommender
+	 - Utils.Recommender: simplify, allow enum options
 
 2.03	2011-01-14
 	API

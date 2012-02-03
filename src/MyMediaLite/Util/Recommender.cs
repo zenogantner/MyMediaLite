@@ -84,7 +84,7 @@ namespace MyMediaLite.Util
 		{
 			SetProperty(recommender, key, val, delegate(string s) { Console.Error.WriteLine(s); });
 		}
-		
+
 		/// <summary>Sets a property of a MyMediaLite recommender</summary>
 		/// <param name="recommender">An <see cref="IRecommender"/></param>
 		/// <param name="key">the name of the property (case insensitive)</param>
@@ -97,9 +97,9 @@ namespace MyMediaLite.Util
 			foreach (var p in type.GetProperties())
 				property_names.Add(p.Name);
 			property_names.Sort();
-			
+
 			bool property_found = false;
-			
+
 			key = NormalizeName(key);
 			foreach (string property_name in property_names)
 			{
@@ -110,6 +110,12 @@ namespace MyMediaLite.Util
 
 					if (property.GetSetMethod() == null)
 						throw new ArgumentException(string.Format("Property '{0}' is read-only", key));
+
+					if (property.PropertyType.IsEnum)
+					{
+						property.GetSetMethod().Invoke(recommender, new Object[] { Enum.Parse(property.PropertyType, val) });
+						continue;
+					}
 
 					switch (property.PropertyType.ToString())
 					{
@@ -135,7 +141,7 @@ namespace MyMediaLite.Util
 							property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
 							break;
 						case "System.String":
-							property.GetSetMethod().Invoke(recommender, new Object[] {val });
+							property.GetSetMethod().Invoke(recommender, new Object[] { val });
 							break;
 						default:
 							report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
@@ -143,7 +149,7 @@ namespace MyMediaLite.Util
 					}
 				}
 			}
-			
+
 			if (!property_found)
 				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
 		}
