@@ -111,7 +111,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Compute approximate loss</summary>
 		/// <returns>the approximate loss</returns>
-		public override double ComputeLoss()
+		public override float ComputeLoss()
 		{
 			throw new NotImplementedException();
 		}

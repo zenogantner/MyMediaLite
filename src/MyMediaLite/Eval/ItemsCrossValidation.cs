@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,7 +37,7 @@ namespace MyMediaLite.Eval
 		/// <param name="compute_fit">if set to true measure fit on the training data as well</param>
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
-		static public Dictionary<string, double> DoCrossValidation(
+		static public ItemRecommendationEvaluationResults DoCrossValidation(
 			this IRecommender recommender,
 			uint num_folds,
 			IList<int> test_users,
@@ -85,7 +85,7 @@ namespace MyMediaLite.Eval
 					split_recommender.Train();
 					var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
-						fold_results["fit"] = split_recommender.ComputeFit();
+						fold_results["fit"] = (float) split_recommender.ComputeFit();
 
 					// thread-safe stats
 					lock (avg_results)

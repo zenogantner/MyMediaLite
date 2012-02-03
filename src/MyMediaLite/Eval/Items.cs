@@ -147,14 +147,14 @@ namespace MyMediaLite.Eval
 					lock (result)
 					{
 						num_users++;
-						result["AUC"]       += auc;
-						result["MAP"]       += map;
-						result["NDCG"]      += ndcg;
-						result["MRR"]       += rr;
-						result["prec@5"]    += prec[5];
-						result["prec@10"]   += prec[10];
-						result["recall@5"]  += recall[5];
-						result["recall@10"] += recall[10];
+						result["AUC"]       += (float) auc;
+						result["MAP"]       += (float) map;
+						result["NDCG"]      += (float) ndcg;
+						result["MRR"]       += (float) rr;
+						result["prec@5"]    += (float) prec[5];
+						result["prec@10"]   += (float) prec[10];
+						result["recall@5"]  += (float) recall[5];
+						result["recall@10"] += (float) recall[10];
 					}
 
 					if (num_users % 1000 == 0)

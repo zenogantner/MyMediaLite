@@ -240,14 +240,13 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 					}
 
 					// evaluate and save stats
-					Dictionary<string, double> results = null;
+					RatingPredictionEvaluationResults results = null;
 					time = Wrap.MeasureTime(delegate() {
 						results = rating_predictor_validate.Evaluate(validation_ratings);
 						Console.WriteLine(results + " " + i);
 						rmse_eval_stats.Add(results["RMSE"]);
 					});
 					eval_time_stats.Add(time.TotalSeconds);
-
 
 					// write out model files and predictions
 					if (save_model_file != string.Empty)

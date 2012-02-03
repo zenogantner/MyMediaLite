@@ -92,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double ComputeLoss()
+		public override float ComputeLoss()
 		{
 			double rating_range_size = MaxRating - MinRating;
 
@@ -125,7 +125,7 @@ namespace MyMediaLite.RatingPrediction
 				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
-			return loss + complexity;
+			return (float) (loss + complexity);
 		}
 
 		///

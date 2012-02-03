@@ -77,7 +77,7 @@ namespace MyMediaLite.ItemRecommendation
 		public abstract void Iterate();
 
 		///
-		public abstract double ComputeLoss();
+		public abstract float ComputeLoss();
 
 		/// <summary>Predict the weight for a given user-item combination</summary>
 		/// <remarks>

@@ -289,7 +289,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual double ComputeLoss()
+		public virtual float ComputeLoss()
 		{
 			double loss =
 				this.Evaluate(ratings)["RMSE"]
@@ -306,7 +306,7 @@ namespace MyMediaLite.RatingPrediction
 			user_scaling_reg_term *= RegUserScaling;
 			loss += user_scaling_reg_term;
 
-			return loss;
+			return (float) loss;
 		}
 
 		///

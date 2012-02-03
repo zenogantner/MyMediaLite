@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -77,7 +77,7 @@ namespace MyMediaLite.Eval
 				random_index[index] = index;
 			Util.Utils.Shuffle<int>(random_index);
 
-			var results_by_user = new Dictionary<int, Dictionary<string, double>>();
+			var results_by_user = new Dictionary<int, ItemRecommendationEvaluationResults>();
 
 			int num_lists = 0;
 

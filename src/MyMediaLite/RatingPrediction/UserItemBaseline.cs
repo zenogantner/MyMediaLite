@@ -245,12 +245,12 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public double ComputeLoss()
+		public float ComputeLoss()
 		{
-			return
+			return (float) (
 				this.Evaluate(ratings)["RMSE"]
 				+ RegU * Math.Pow(user_biases.EuclideanNorm(), 2)
-				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2);
+				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2));
 		}
 
 		///

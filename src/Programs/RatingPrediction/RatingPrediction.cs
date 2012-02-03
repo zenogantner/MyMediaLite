@@ -332,7 +332,7 @@ class RatingPrediction
 							fit_time_stats.Add(time.TotalSeconds);
 						}
 
-						Dictionary<string, double> results = null;
+						RatingPredictionEvaluationResults results = null;
 						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data); });
 						eval_time_stats.Add(time.TotalSeconds);
 						eval_stats.Add(results[measure]);

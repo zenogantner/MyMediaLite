@@ -221,7 +221,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override double ComputeLoss()
+		public override float ComputeLoss()
 		{
 			double loss = 0;
 
@@ -248,7 +248,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// TODO add penality term for neighborhood regularization
 
-			return loss + complexity;
+			return (float) (loss + complexity);
 		}
 
 		///

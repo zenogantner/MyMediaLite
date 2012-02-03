@@ -238,18 +238,11 @@ class MappingItemRecommendation
 								test_data.AllUsers,
 								candidate_items,
 								CandidateItems.EXPLICIT);
-				DisplayResults(result);
+				Console.Write(result);
 			} );
 		Console.Write(" testing " + seconds);
 
 		return seconds;
-	}
-
-	static void DisplayResults(Dictionary<string, double> result)
-	{
-		Console.Write(
-			string.Format(CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} NDCG {4:0.#####} num_users {5} num_items {6}",
-			result["AUC"], result["prec@5"], result["prec@10"], result["MAP"], result["NDCG"], result["num_users"], result["num_items"]));
 	}
 
 	static void DisplayDataStats()

@@ -374,7 +374,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Compute the regularized loss</summary>
 		/// <returns>the regularized loss</returns>
-		public virtual double ComputeLoss()
+		public virtual float ComputeLoss()
 		{
 			double loss = 0;
 			for (int i = 0; i < ratings.Count; i++)
@@ -390,7 +390,7 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i <= MaxItemID; i++)
 				loss += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
 
-			return loss;
+			return (float) loss;
 		}
 
 		///

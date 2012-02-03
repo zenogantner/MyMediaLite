@@ -28,7 +28,7 @@ namespace MyMediaLite
 
 		/// <summary>Compute the current loss of the model</summary>
 		/// <returns>the current loss; -1 if not implemented</returns>
-		double ComputeLoss();
+		float ComputeLoss();
 	}
 }
 

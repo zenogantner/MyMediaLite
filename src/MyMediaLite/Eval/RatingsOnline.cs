@@ -65,10 +65,10 @@ namespace MyMediaLite.Eval
 			cbd  = cbd / ratings.Count;
 
 			var result = new RatingPredictionEvaluationResults();
-			result["RMSE"] = rmse;
-			result["MAE"]  = mae;
-			result["NMAE"] = mae / (recommender.MaxRating - recommender.MinRating);
-			result["CBD"]  = cbd;
+			result["RMSE"] = (float) rmse;
+			result["MAE"]  = (float) mae;
+			result["NMAE"] = (float) mae / (recommender.MaxRating - recommender.MinRating);
+			result["CBD"]  = (float) cbd;
 			return result;
 		}
 	}

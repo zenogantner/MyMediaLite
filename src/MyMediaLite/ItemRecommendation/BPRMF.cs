@@ -537,7 +537,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override double ComputeLoss()
+		public override float ComputeLoss()
 		{
 			double ranking_loss = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)
@@ -556,7 +556,7 @@ namespace MyMediaLite.ItemRecommendation
 				complexity += BiasReg * Math.Pow(item_bias[loss_sample_j[c]], 2);
 			}
 
-			return ranking_loss + 0.5 * complexity;
+			return (float) (ranking_loss + 0.5 * complexity);
 		}
 
 		private void CreateFastSamplingData(int u)

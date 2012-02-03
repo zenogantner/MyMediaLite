@@ -9,6 +9,7 @@
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
 	 - add interface IFoldInRatingPredictor with extension methods
+	 - IIterativeModel.ComputeLoss(): return float instead of double
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
@@ -49,6 +50,8 @@
            RemoveUser() and RemoveItem()
 	 - RatingsProxy: proper handling of MaxUserID and MaxItemID,
            implement Remover(At|User|Item)
+	evaluation
+	 - save results as float instead of double
 	documentation
 	 - improve API doc of IIncrementalItemRecommender
 	misc

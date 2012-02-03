@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -66,7 +66,7 @@ namespace MyMediaLite.Eval
 					split_recommender.Train();
 					var fold_results = Ratings.Evaluate(split_recommender, split.Test[i]);
 					if (compute_fit)
-						fold_results["fit"] = split_recommender.ComputeFit();
+						fold_results["fit"] = (float) split_recommender.ComputeFit();
 					
 					// thread-safe stats
 					lock (avg_results)

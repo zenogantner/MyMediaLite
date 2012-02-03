@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -125,14 +125,14 @@ namespace MyMediaLite.Eval
 						}
 
 						// result bookkeeping
-						result["AUC"]       += auc;
-						result["MAP"]       += map;
-						result["NDCG"]      += ndcg;
-						result["MRR"]       += rr;
-						result["prec@5"]    += prec[5];
-						result["prec@10"]   += prec[10];
-						result["recall@5"]  += recall[5];
-						result["recall@10"] += recall[10];
+						result["AUC"]       += (float) auc;
+						result["MAP"]       += (float) map;
+						result["NDCG"]      += (float) ndcg;
+						result["MRR"]       += (float) rr;
+						result["prec@5"]    += (float) prec[5];
+						result["prec@10"]   += (float) prec[10];
+						result["recall@5"]  += (float) recall[5];
+						result["recall@10"] += (float) recall[10];
 					}
 
 					if (prediction_list.Count != filtered_candidate_items.Count)
