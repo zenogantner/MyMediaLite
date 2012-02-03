@@ -129,6 +129,6 @@ Global
 		$6.scope = text/x-csharp
 		$0.VersionControlPolicy = $7
 		$7.inheritsSet = Mono
-		version = 2.04
+		version = 2.99
 	EndGlobalSection
 EndGlobal

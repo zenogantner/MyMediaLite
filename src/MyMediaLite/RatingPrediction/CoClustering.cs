@@ -299,7 +299,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
 			{
 				writer.WriteVector(user_clustering);
 				writer.WriteVector(item_clustering);

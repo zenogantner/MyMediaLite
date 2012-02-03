@@ -334,7 +334,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.04") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteMatrix(user_factors);

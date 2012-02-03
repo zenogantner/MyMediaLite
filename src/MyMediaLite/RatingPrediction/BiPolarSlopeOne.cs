@@ -190,7 +190,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
 			{
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteSparseMatrix(diff_matrix_like);

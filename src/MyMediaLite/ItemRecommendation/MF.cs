@@ -100,7 +100,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.04") )
+			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
 			{
 				writer.WriteMatrix(user_factors);
 				writer.WriteMatrix(item_factors);
