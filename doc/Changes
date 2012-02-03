@@ -13,12 +13,13 @@
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
-         - BiasedMatrixFactorization, LogisticRegressionMatrixFactorization:
-           differentiate regularization of user and item biases, by using
-           reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
-	 - BiasedMatrixFactorization: compute rating_range_size only once,
-	   use global average (#162)
-	 - merge MultiCoreMatrixFactorization into BiasedMatrixFactorization
+         - BiasedMatrixFactorization: differentiate regularization of user and
+           item biases, by using reg_u * bias_reg and reg_i * bias_reg,
+           same with the learn rate;: compute rating_range_size only once;
+	   use global average (#162), use user/item bias whenever possible
+           (#163)
+	 - merge MultiCoreMatrixFactorization and
+           LogisticRegressionMatrixFactorization into BiasedMatrixFactorization
 	 - RatingPredictor: fix setting MaxUserID and MaxItemID
 	 - TimeAwareBaseline: fix initialization of c_u parameter, proper use
            of user_scaling

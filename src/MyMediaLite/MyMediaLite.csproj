@@ -91,7 +91,6 @@
     <Compile Include="Util\Utils.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
-    <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\EntityAverage.cs" />
     <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\GlobalAverage.cs" />
@@ -205,13 +204,14 @@
     <Compile Include="IItemSimilarityProvider.cs" />
     <Compile Include="IUserSimilarityProvider.cs" />
     <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
-    <Compile Include="RatingPrediction\LogisticRegressionMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\LatentFeatureLogLinearModel.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
     <Compile Include="Eval\FoldIn.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensions.cs" />
+    <Compile Include="RatingPrediction\OptimizationTarget.cs" />
+    <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

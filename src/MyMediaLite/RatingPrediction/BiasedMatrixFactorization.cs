@@ -33,7 +33,10 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	///   <para>
 	///     Per default optimizes for RMSE.
-	///     Set OptimizeMAE to true if you want to optimize for MAE.
+	///     Alternatively, you can set Target to MAE or LogLikelihood.
+	///     If set to log likelihood and with binary ratings, the recommender
+	///     implements a simple version Menon and Elkan's LFL model,
+	///     which predicts binary labels, has no advanced regularization, and uses no side information.
 	///   </para>
 	///   <para>
 	///     This recommender makes use of multi-core machines if requested.
@@ -56,6 +59,12 @@ namespace MyMediaLite.RatingPrediction
 	///         http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2008-Online_Updating_Regularized_Kernel_Matrix_Factorization_Models.pdf
 	///       </description></item>
 	///       <item><description>
+	///         Aditya Krishna Menon, Charles Elkan:
+	///         A log-linear model with latent features for dyadic prediction.
+	///         ICDM 2010.
+	///         http://cseweb.ucsd.edu/~akmenon/LFL-ICDM10.pdf
+	///       </description></item>
+	///       <item><description>
 	///         Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
 	///         Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
 	///         KDD 2011.
@@ -64,7 +73,7 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	///   <para>
-	///       This recommender supports incremental updates.
+	///       This recommender supports incremental updates. See the paper by Rendle and Schmidt-Thieme.
 	///   </para>
 	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
@@ -91,8 +100,8 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <summary>If set to true, optimize model for MAE instead of RMSE</summary>
-		public bool OptimizeMAE { get; set; }
+		/// <summary>The optimization target</summary>
+		public OptimizationTarget Target { get; set; }
 
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
@@ -125,6 +134,9 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
 
+		delegate float TwoDoubleToFloat(double arg1, double arg2);
+		TwoDoubleToFloat compute_gradient_common;
+
 		IList<int>[,] thread_blocks;
 
 		/// <summary>Default constructor</summary>
@@ -156,6 +168,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
+			// if necessary, prepare stuff for parallel processing
 			if (MaxThreads > 1)
 				thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
 
@@ -163,7 +176,20 @@ namespace MyMediaLite.RatingPrediction
 
 			// compute global bias
 			double avg = (ratings.Average - min_rating) / rating_range_size;
-			global_bias = (float) Math.Log(avg/(1 - avg));
+			global_bias = (float) Math.Log(avg / (1 - avg));
+
+			switch (Target)
+			{
+				case OptimizationTarget.MAE:
+					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.RMSE:
+					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.LogLikelihood:
+					compute_gradient_common = (sig_score, err) => (float) err;
+					break;
+			}
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
@@ -202,14 +228,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			if (OptimizeMAE)
-				IterateMAE(rating_indices, update_user, update_item);
-			else
-				IterateRMSE(rating_indices, update_user, update_item);
-		}
-
-		void IterateMAE(IList<int> rating_indices, bool update_user, bool update_item)
-		{
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
@@ -218,58 +236,16 @@ namespace MyMediaLite.RatingPrediction
 				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
-				double p = min_rating + sig_score * rating_range_size;
-				double err = ratings[index] - p;
+				double prediction = min_rating + sig_score * rating_range_size;
+				double err = ratings[index] - prediction;
 
-				// the only difference to RMSE optimization is here:
-				float gradient_common = (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
-
-				// adjust biases
-				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (user_bias[u] * gradient_common - BiasReg * RegU * user_bias[u]);
-				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (item_bias[i] * gradient_common - BiasReg * RegI * item_bias[i]);
-
-				// adjust latent factors
-				for (int f = 0; f < NumFactors; f++)
-				{
-					double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];
-
-					if (update_user)
-					{
-						double delta_u = i_f * gradient_common - RegU * u_f;
-						user_factors.Inc(u, f, LearnRate * delta_u);
-					}
-					if (update_item)
-					{
-						double delta_i = u_f * gradient_common - RegI * i_f;
-						item_factors.Inc(i, f, LearnRate * delta_i);
-					}
-				}
-			}
-		}
-
-		void IterateRMSE(IList<int> rating_indices, bool update_user, bool update_item)
-		{
-			foreach (int index in rating_indices)
-			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
-
-				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
-				double sig_score = 1 / (1 + Math.Exp(-score));
-
-				double p = min_rating + sig_score * rating_range_size;
-				double err = ratings[index] - p;
-
-				float gradient_common = (float) (err * sig_score * (1 - sig_score) * rating_range_size);
+				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += LearnRate * (gradient_common - BiasReg * RegU * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegU * user_bias[u]);
 				if (update_item)
-					item_bias[i] += LearnRate * (gradient_common - BiasReg * RegI * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegI * item_bias[i]);
 
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
@@ -296,12 +272,24 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
-				return global_bias;
-
-			double score = global_bias + user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double score = global_bias;
+			
+			if (user_id < user_factors.dim1)
+				score += user_bias[user_id];
+			if (item_id < item_factors.dim1)
+				score += item_bias[item_id];
+			if (user_id < user_factors.dim1 && item_id < item_factors.dim1)
+				score += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return (float) (min_rating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
+		}
+
+		///
+		protected override float Predict(IList<float> user_vector, int item_id)
+		{
+			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
+			double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
 		}
 
 		///
@@ -407,14 +395,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float Predict(IList<float> user_vector, int item_id)
-		{
-			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
-			double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
-			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
-		}
-
-		///
 		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
 		{
 			// initialize user parameters
@@ -436,12 +416,10 @@ namespace MyMediaLite.RatingPrediction
 					double p = min_rating + sig_score * rating_range_size;
 					double err = rated_items[i].Second - p;
 
-					float gradient_common = (float) (OptimizeMAE
-											? (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size)
-											: (err * sig_score * (1 - sig_score) * rating_range_size));
+					float gradient_common = compute_gradient_common(sig_score, err);
 
 					// adjust bias
-					user_vector[0] += LearnRate * (gradient_common - BiasReg * RegU * user_vector[0]);
+					user_vector[0] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegU * user_vector[0]);
 
 					// adjust factors
 					for (int f = 0; f < NumFactors; f++)
@@ -460,21 +438,42 @@ namespace MyMediaLite.RatingPrediction
 		public override float ComputeLoss()
 		{
 			double loss = 0;
+			switch (Target)
+			{
+				case OptimizationTarget.MAE:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						int user_id = ratings.Users[i];
+						int item_id = ratings.Items[i];
+						loss += Math.Abs(Predict(user_id, item_id) - ratings[i]);
+					}
+					break;
+				case OptimizationTarget.RMSE:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						int user_id = ratings.Users[i];
+						int item_id = ratings.Items[i];
+						loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+					}
+					break;
+				case OptimizationTarget.LogLikelihood:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						double prediction = Predict(ratings.Users[i], ratings.Items[i]);
 
-			if (OptimizeMAE)
-				for (int i = 0; i < ratings.Count; i++)
-				{
-					int user_id = ratings.Users[i];
-					int item_id = ratings.Items[i];
-					loss += Math.Abs(Predict(user_id, item_id) - ratings[i]);
-				}
-			else
-				for (int i = 0; i < ratings.Count; i++)
-				{
-					int user_id = ratings.Users[i];
-					int item_id = ratings.Items[i];
-					loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
-				}
+						// map into [0, 1] interval
+						prediction = (prediction - min_rating) / rating_range_size;
+						if (prediction < 0.0)
+							prediction = 0.0;
+						if (prediction > 1.0)
+							prediction = 1.0;
+						double actual_rating = (ratings[i] - min_rating) / rating_range_size;
+
+						loss -= (actual_rating) * Math.Log(prediction);
+						loss -= (1 - actual_rating) * Math.Log(1 - prediction);
+					}
+					break;
+			}
 
 			double complexity = 0;
 			for (int u = 0; u <= MaxUserID; u++)
@@ -496,8 +495,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} optimize_mae={11} max_threads={12}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, OptimizeMAE, MaxThreads);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} target={11} max_threads={12}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, Target, MaxThreads);
 		}
+
 	}
 }
