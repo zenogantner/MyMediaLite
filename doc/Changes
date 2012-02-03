@@ -43,6 +43,8 @@
            IDs (instead of long)
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
+	data types
+	 - remove SparseVector: not used any more
 	data structures
 	 - correctly handle MinRating and MaxRating in CombinedRatings
 	 - Ratings: update indices after removing ratings, fix bug in

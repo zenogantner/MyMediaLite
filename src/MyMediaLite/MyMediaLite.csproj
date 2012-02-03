@@ -82,7 +82,6 @@
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
     <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
     <Compile Include="DataType\SparseMatrix.cs" />
-    <Compile Include="DataType\SparseVector.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
     <Compile Include="Util\Handlers.cs" />
     <Compile Include="Util\Memory.cs" />
