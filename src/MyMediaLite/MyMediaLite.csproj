@@ -218,6 +218,7 @@
     <Compile Include="Data\IFeedbackEvent.cs" />
     <Compile Include="Data\ITimedFeedbackEvent.cs" />
     <Compile Include="Data\ITimedRatingEvent.cs" />
+    <Compile Include="RatingPrediction\FoldInRatingPredictorExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

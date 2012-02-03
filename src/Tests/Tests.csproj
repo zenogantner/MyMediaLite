@@ -73,6 +73,7 @@
     <Compile Include="IO\MovieLensRatingDataTest.cs" />
     <Compile Include="DataType\SymmetricMatrixTest.cs" />
     <Compile Include="Data\RatingsProxyTest.cs" />
+    <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

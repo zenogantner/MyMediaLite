@@ -69,7 +69,7 @@ namespace MyMediaLite.DataType
 			for (int i = 0; i < vector.Count; i++)
 				vector[i] = nd.Sample();
 		}
-		
+
 		/// <summary>Initialize a collection of floats with values from a normal distribution</summary>
 		/// <param name="vector">the vector to initialize</param>
 		/// <param name="mean">the mean of the normal distribution</param>
@@ -82,5 +82,15 @@ namespace MyMediaLite.DataType
 			for (int i = 0; i < vector.Count; i++)
 				vector[i] = (float) nd.Sample();
 		}
+
+		/// <summary>Initialize a collection of floats with one value</summary>
+		/// <param name="vector">the vector to initialize</param>
+		/// <param name="val">the value to set each element to</param>
+		static public void Init(this IList<float> vector, float val)
+		{
+			for (int i = 0; i < vector.Count; i++)
+				vector[i] = val;
+		}
+
 	}
 }

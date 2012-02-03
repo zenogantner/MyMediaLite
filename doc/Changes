@@ -3,11 +3,12 @@
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
            double
-	 - IIncrementalRatingPrediction:
+	 - IIncrementalRatingPredictor:
 	   (Add|Update)Rating(u,i,r) -> (Add|Update)Ratings(ratings),
 	   RemoveRating(u,i) -> RemoveRatings(ratings)
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
+	 - add interface IFoldInRatingPredictor with extension methods
 	 - add interfaces IFeedbackEvent, ITimedFeedbackEvent, IRatingEvent,
            ITimedRatingEvent
 	recommenders
@@ -16,7 +17,11 @@
          - BiasedMatrixFactorization, LogisticRegressionMatrixFactorization:
            differentiate regularization of user and item biases, by using
            reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
+	 - BiasedMatrixFactorization: compute rating_range_size only once,
+	   use global average (#162)
+	 - TimeAwareBaseline: fix initialization of c_u parameter
 	 - EntityAverage: remove unnecessary parameter from Retrain()
+	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
 	 - add --no-id-mapping option to save memory for large-scale datasets
            where the user and item IDs have no gaps
