@@ -93,13 +93,13 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>If set to true, optimize model for MAE instead of RMSE</summary>
 		public bool OptimizeMAE { get; set; }
-		
+
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
 		///   Determines the number of sections the users and items will be divided into.
 		/// </remarks>
 		public int MaxThreads { get; set; }
-		
+
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
 		/// Literature:
@@ -113,7 +113,7 @@ namespace MyMediaLite.RatingPrediction
 		/// </list>
 		/// </remarks>
 		public bool BoldDriver { set; get; }
-		
+
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		protected double last_loss = double.NegativeInfinity;
 
@@ -124,9 +124,9 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
-		
+
 		IList<int>[,] thread_blocks;
-		
+
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
 		{
@@ -155,10 +155,10 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			InitModel();
-			
+
 			if (MaxThreads > 1)
 				thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
-			
+
 			rating_range_size = MaxRating - MinRating;
 
 			// compute global bias
@@ -176,8 +176,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				// generate random sub-epoch sequence
 				var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
-				Utils.Shuffle(subepoch_sequence);
-	
+				subepoch_sequence.Shuffle();
+
 				foreach (int i in subepoch_sequence) // sub-epoch
 					Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
 			}
