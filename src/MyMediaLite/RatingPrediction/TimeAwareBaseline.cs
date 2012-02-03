@@ -202,7 +202,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <summary>Single SGD step: update the parameter values for one user and one item</summary>
+		/// <summary>Single stochastic gradient descent step: update the parameter values for one user and one item</summary>
 		/// <param name='u'>the user ID</param>
 		/// <param name='i'>the item ID</param>
 		/// <param name='day'>the day of the rating</param>
