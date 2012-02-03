@@ -212,19 +212,19 @@ namespace MyMediaLite.RatingPrediction
 		{
 			// update user biases
 			double dev_u = Math.Sign(day - user_mean_day[u]) * Math.Pow(Math.Abs(day - user_mean_day[u]), Beta);
-			alpha[u]                 += (float) (2 * AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]));
-			user_bias[u]             += (float) (2 * UserBiasLearnRate      * (err         - RegU             * user_bias[u]));
-			user_bias_by_day[u, day] += (float) (2 * UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]));
+			alpha[u]                 += (float) (AlphaLearnRate         * (err * dev_u - RegAlpha         * alpha[u]));
+			user_bias[u]             += (float) (UserBiasLearnRate      * (err         - RegU             * user_bias[u]));
+			user_bias_by_day[u, day] += (float) (UserBiasByDayLearnRate * (err         - RegUserBiasByDay * user_bias_by_day[u, day]));
 
 			// update item biases and user scalings
 			float b_i  = item_bias[i];
 			float b_ib = item_bias_by_time_bin[i, bin];
 			float c_u  = user_scaling[u];
 			float c_ud = user_scaling_by_day[u, day];
-			item_bias[i]                  += (float) (2 * ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i));
-			item_bias_by_time_bin[i, bin] += (float) (2 * ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib));
-			user_scaling[u]               += (float) (2 * UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1)));
-			user_scaling_by_day[u, day]   += (float) (2 * UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud));
+			item_bias[i]                  += (float) (ItemBiasLearnRate          * (err * (c_u + c_ud) - RegI                 * b_i));
+			item_bias_by_time_bin[i, bin] += (float) (ItemBiasByTimeBinLearnRate * (err * (c_u + c_ud) - RegItemBiasByTimeBin * b_ib));
+			user_scaling[u]               += (float) (UserScalingLearnRate       * (err * (b_i + b_ib) - RegUserScaling       * (c_u - 1)));
+			user_scaling_by_day[u, day]   += (float) (UserScalingByDayLearnRate  * (err * (b_i + b_ib) - RegUserScalingByDay  * c_ud));
 		}
 
 		///
@@ -269,18 +269,21 @@ namespace MyMediaLite.RatingPrediction
 				bin = item_bias_by_time_bin.NumberOfColumns - 1;
 
 			double result = global_average;
+			double scaling = 1;
 			if (user_id <= MaxUserID)
 			{
 				double dev_u = Math.Sign(day - user_mean_day[user_id]) * Math.Pow(Math.Abs(day - user_mean_day[user_id]), Beta);
 				result += user_bias[user_id] + alpha[user_id] * dev_u;
 				if (day <= timed_ratings.LatestTime.Day)
 					result += user_bias_by_day[user_id, day];
+
+				scaling = user_scaling[user_id];
+				if (day < user_scaling_by_day.NumberOfColumns)
+					scaling += user_scaling_by_day[user_id, day];
 			}
 
-			if (item_id <= MaxItemID && user_id > MaxUserID)
-				result += item_bias[item_id] + item_bias_by_time_bin[item_id, bin];
-			if (item_id <= MaxItemID && user_id <= MaxUserID && day < user_scaling_by_day.NumberOfColumns)
-				result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * (user_scaling[user_id] + user_scaling_by_day[user_id, day]);
+			if (item_id <= MaxItemID)
+				result += (item_bias[item_id] + item_bias_by_time_bin[item_id, bin]) * scaling;
 
 			return (float) result;
 		}
@@ -289,7 +292,7 @@ namespace MyMediaLite.RatingPrediction
 		public virtual double ComputeLoss()
 		{
 			double loss =
-				2 * this.Evaluate(ratings)["RMSE"]
+				this.Evaluate(ratings)["RMSE"]
 				+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
 				+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
  				+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)

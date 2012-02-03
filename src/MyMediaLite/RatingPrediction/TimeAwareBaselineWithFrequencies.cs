@@ -125,7 +125,7 @@ namespace MyMediaLite.RatingPrediction
 			// update additional bias
 			int f = log_frequency_by_day[u, day];
 			float b_i_f_ui  = item_bias_at_frequency[i, f];
-			item_bias_at_frequency[i, f] += (float) (2 * ItemBiasAtFrequencyLearnRate * (err * b_i_f_ui - RegItemBiasAtFrequency * b_i_f_ui));
+			item_bias_at_frequency[i, f] += (float) (ItemBiasAtFrequencyLearnRate * (err * b_i_f_ui - RegItemBiasAtFrequency * b_i_f_ui));
 		}
 
 		///
