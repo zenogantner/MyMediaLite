@@ -11,11 +11,22 @@ echo "------------"
 
 DATA_DIR=data/ml-1m
 
-for method in MatrixFactorization BiasedMatrixFactorization MultiCoreMatrixFactorization LogisticRegressionMatrixFactorization
+for method in MatrixFactorization BiasedMatrixFactorization
 do
        echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
             $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1" --compute-fit --data-dir=$DATA_DIR
 done
+
+method=BiasedMatrixFactorization
+echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 max_threads=100" --compute-fit --data-dir=$DATA_DIR
+     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 max_threads=100" --compute-fit --data-dir=$DATA_DIR
+
+for target in MAE LogLikelihood
+do
+       echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 --target=$target" --compute-fit --data-dir=$DATA_DIR
+            $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 --target=$target" --compute-fit --data-dir=$DATA_DIR
+done
+
 
 touch $DATA_DIR/empty
 for method in SocialMF
