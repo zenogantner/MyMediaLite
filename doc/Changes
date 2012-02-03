@@ -9,8 +9,6 @@
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
 	 - add interface IFoldInRatingPredictor with extension methods
-	 - add interfaces IFeedbackEvent, ITimedFeedbackEvent, IRatingEvent,
-           ITimedRatingEvent
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
