@@ -19,7 +19,12 @@
            reg_u * bias_reg and reg_i * bias_reg, same with the learn rate
 	 - BiasedMatrixFactorization: compute rating_range_size only once,
 	   use global average (#162)
-	 - TimeAwareBaseline: fix initialization of c_u parameter
+	 - merge MultiCoreMatrixFactorization into BiasedMatrixFactorization
+	 - RatingPredictor: fix setting MaxUserID and MaxItemID
+	 - TimeAwareBaseline: fix initialization of c_u parameter, proper use
+           of user_scaling
+         - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
+	   ComputeLoss()
 	 - EntityAverage: remove unnecessary parameter from Retrain()
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
