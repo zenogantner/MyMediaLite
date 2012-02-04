@@ -357,7 +357,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public float ComputeLoss()
+		public float ComputeObjective()
 		{
 			return this.Evaluate(ratings)["RMSE"];
 		}

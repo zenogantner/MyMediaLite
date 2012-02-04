@@ -9,7 +9,7 @@
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
 	 - add interface IFoldInRatingPredictor with extension methods
-	 - IIterativeModel.ComputeLoss(): return float instead of double
+	 - IIterativeModel: double ComputeLoss() => float ComputeObjective()
 	recommenders
 	 - #157: matrix factorization recommenders use float to store the
            latent factors

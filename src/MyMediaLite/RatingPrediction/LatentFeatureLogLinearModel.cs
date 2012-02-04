@@ -98,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeLoss()
+		public override float ComputeObjective()
 		{
 			double rating_range_size = MaxRating - MinRating;
 

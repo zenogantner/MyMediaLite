@@ -267,7 +267,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public float ComputeLoss()
+		public float ComputeObjective()
 		{
 			return -1;
 		}

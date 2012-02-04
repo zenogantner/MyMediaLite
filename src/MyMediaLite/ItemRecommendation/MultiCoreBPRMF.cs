@@ -96,7 +96,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (BoldDriver)
 			{
-				double loss = ComputeLoss();
+				double loss = ComputeObjective();
 
 				if (loss > last_loss)
 					LearnRate *= 0.5f;

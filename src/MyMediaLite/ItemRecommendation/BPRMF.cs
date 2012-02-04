@@ -171,7 +171,7 @@ namespace MyMediaLite.ItemRecommendation
 					loss_sample_j[c] = j;
 				}
 
-				last_loss = ComputeLoss();
+				last_loss = ComputeObjective();
 			}
 
 			for (int i = 0; i < NumIter; i++)
@@ -250,7 +250,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (BoldDriver)
 			{
-				double loss = ComputeLoss();
+				double loss = ComputeObjective();
 
 				if (loss > last_loss)
 					LearnRate *= 0.5f;
@@ -534,7 +534,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override float ComputeLoss()
+		public override float ComputeObjective()
 		{
 			double ranking_loss = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)

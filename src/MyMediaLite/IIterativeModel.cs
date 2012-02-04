@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,9 +26,9 @@ namespace MyMediaLite
 		/// <summary>Run one iteration (= pass over the training data)</summary>
 		void Iterate();
 
-		/// <summary>Compute the current loss of the model</summary>
-		/// <returns>the current loss; -1 if not implemented</returns>
-		float ComputeLoss();
+		/// <summary>Compute the current optimization objective (usually loss plus regularization term) of the model</summary>
+		/// <returns>the current objective; -1 if not implemented</returns>
+		float ComputeObjective();
 	}
 }
 

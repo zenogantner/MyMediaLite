@@ -95,7 +95,7 @@ namespace MyMediaLite.RatingPrediction
 			similarity_constraint_matrix = new Matrix<float>(NumFactors, MaxItemID + 1);
 
 			//if (BoldDriver)
-			//	last_loss = ComputeLoss();
+			//	last_loss = ComputeObjective();
 		}
 
 		///
@@ -118,7 +118,7 @@ namespace MyMediaLite.RatingPrediction
 			/*
 			if (BoldDriver)
 			{
-				double loss = ComputeLoss();
+				double loss = ComputeObjective();
 
 				if (loss > last_loss)
 					LearnRate *= 0.5;
@@ -227,7 +227,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeLoss()
+		public override float ComputeObjective()
 		{
 			// TODO
 			return -1;

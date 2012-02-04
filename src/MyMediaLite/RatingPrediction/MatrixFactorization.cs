@@ -374,7 +374,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Compute the regularized loss</summary>
 		/// <returns>the regularized loss</returns>
-		public virtual float ComputeLoss()
+		public virtual float ComputeObjective()
 		{
 			double loss = 0;
 			for (int i = 0; i < ratings.Count; i++)

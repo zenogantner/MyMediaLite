@@ -289,7 +289,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual float ComputeLoss()
+		public virtual float ComputeObjective()
 		{
 			double loss =
 				this.Evaluate(ratings)["RMSE"]

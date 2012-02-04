@@ -221,7 +221,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeLoss()
+		public override float ComputeObjective()
 		{
 			double loss = 0;
 
