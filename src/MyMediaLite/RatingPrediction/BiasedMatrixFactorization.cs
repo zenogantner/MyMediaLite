@@ -100,6 +100,13 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		/// <summary>Regularization based on rating frequency</summary>
+		/// <description>
+		/// Regularization proportional to the inverse of the square root of the number of ratings associated with the user or item.
+		/// As described in the paper by Menon and Elkan.
+		/// </description>
+		public bool FrequencyRegularization { get; set; }
+
 		/// <summary>The optimization target</summary>
 		public OptimizationTarget Loss { get; set; }
 
@@ -241,11 +248,14 @@ namespace MyMediaLite.RatingPrediction
 
 				float gradient_common = compute_gradient_common(sig_score, err);
 
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
+
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegU * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegI * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
@@ -255,14 +265,14 @@ namespace MyMediaLite.RatingPrediction
 
 					if (update_user)
 					{
-						double delta_u = gradient_common * i_f - RegU * u_f;
+						double delta_u = gradient_common * i_f - user_reg_weight * u_f;
 						user_factors.Inc(u, f, LearnRate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
 						//    user_factors[u, f] += learn_rate * delta_u;
 					}
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_f - RegI * i_f;
+						double delta_i = gradient_common * u_f - item_reg_weight * i_f;
 						item_factors.Inc(i, f, LearnRate * delta_i);
 					}
 				}
@@ -273,7 +283,7 @@ namespace MyMediaLite.RatingPrediction
 		public override float Predict(int user_id, int item_id)
 		{
 			double score = global_bias;
-			
+
 			if (user_id < user_factors.dim1)
 				score += user_bias[user_id];
 			if (item_id < item_factors.dim1)
@@ -399,9 +409,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			// initialize user parameters
 			var user_vector = new float[NumFactors + 1];
-			//IEnumerable<int> factor_indices = Enumerable.Range(1, (int) NumIter);
 			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
 			factors.InitNormal(InitMean, InitStdDev);
+
+			float reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(rated_items.Count)) : RegU;
 
 			// perform training
 			rated_items.Shuffle();
@@ -413,13 +424,13 @@ namespace MyMediaLite.RatingPrediction
 					// compute rating and error
 					double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
-					double p = min_rating + sig_score * rating_range_size;
-					double err = rated_items[i].Second - p;
+					double prediction = min_rating + sig_score * rating_range_size;
+					double err = rated_items[i].Second - prediction;
 
 					float gradient_common = compute_gradient_common(sig_score, err);
 
 					// adjust bias
-					user_vector[0] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegU * user_vector[0]);
+					user_vector[0] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * reg_weight * user_vector[0]);
 
 					// adjust factors
 					for (int f = 0; f < NumFactors; f++)
@@ -427,7 +438,7 @@ namespace MyMediaLite.RatingPrediction
 						float u_f = user_vector[f + 1];
 						float i_f = item_factors[i, f];
 
-						double delta_u = gradient_common * i_f - RegU * u_f;;
+						double delta_u = gradient_common * i_f - reg_weight * u_f;
 						user_vector[f + 1] += (float) (LearnRate * delta_u);
 					}
 				}
@@ -476,15 +487,31 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			double complexity = 0;
-			for (int u = 0; u <= MaxUserID; u++)
+			if (FrequencyRegularization)
 			{
-				complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-				complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
+				for (int u = 0; u <= MaxUserID; u++)
+				{
+					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+				}
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
 			}
-			for (int i = 0; i <= MaxItemID; i++)
+			else
 			{
-				complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
+				for (int u = 0; u <= MaxUserID; u++)
+				{
+					complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += ratings.CountByUser[u] * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+				}
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += ratings.CountByItem[i] * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
 			}
 
 			return (float) (loss + complexity);
@@ -495,8 +522,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} loss={11} max_threads={12}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, Loss, MaxThreads);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} init_mean={10} init_stddev={11} loss={12} max_threads={13}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, Loss, MaxThreads);
 		}
 
 	}
