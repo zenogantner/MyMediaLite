@@ -26,6 +26,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>mean absolute error</summary>
 		MAE,
 		/// <summary>log likelihood of the data (as in logistic regression)</summary>
-		LogLikelihood
+		LogisticLoss
 	}
 }

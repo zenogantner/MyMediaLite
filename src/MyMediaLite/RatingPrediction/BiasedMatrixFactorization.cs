@@ -33,7 +33,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	///   <para>
 	///     Per default optimizes for RMSE.
-	///     Alternatively, you can set Target to MAE or LogLikelihood.
+	///     Alternatively, you can set the Loss property to MAE or LogisticLoss.
 	///     If set to log likelihood and with binary ratings, the recommender
 	///     implements a simple version Menon and Elkan's LFL model,
 	///     which predicts binary labels, has no advanced regularization, and uses no side information.
@@ -101,7 +101,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>The optimization target</summary>
-		public OptimizationTarget Target { get; set; }
+		public OptimizationTarget Loss { get; set; }
 
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
@@ -178,7 +178,7 @@ namespace MyMediaLite.RatingPrediction
 			double avg = (ratings.Average - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
-			switch (Target)
+			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
 					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
@@ -186,7 +186,7 @@ namespace MyMediaLite.RatingPrediction
 				case OptimizationTarget.RMSE:
 					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
 					break;
-				case OptimizationTarget.LogLikelihood:
+				case OptimizationTarget.LogisticLoss:
 					compute_gradient_common = (sig_score, err) => (float) err;
 					break;
 			}
@@ -438,7 +438,7 @@ namespace MyMediaLite.RatingPrediction
 		public override float ComputeLoss()
 		{
 			double loss = 0;
-			switch (Target)
+			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
 					for (int i = 0; i < ratings.Count; i++)
@@ -456,7 +456,7 @@ namespace MyMediaLite.RatingPrediction
 						loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
 					}
 					break;
-				case OptimizationTarget.LogLikelihood:
+				case OptimizationTarget.LogisticLoss:
 					for (int i = 0; i < ratings.Count; i++)
 					{
 						double prediction = Predict(ratings.Users[i], ratings.Items[i]);
@@ -495,8 +495,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} target={11} max_threads={12}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, Target, MaxThreads);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10} loss={11} max_threads={12}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev, Loss, MaxThreads);
 		}
 
 	}
