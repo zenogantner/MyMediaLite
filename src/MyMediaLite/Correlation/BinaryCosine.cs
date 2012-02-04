@@ -1,5 +1,5 @@
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -97,7 +97,7 @@ namespace MyMediaLite.Correlation
 
 		void ComputeCorrelationsUShortOverlap(IBooleanMatrix entity_data)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;;
+			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
 			var overlap = new SymmetricMatrix<ushort>(entity_data.NumberOfRows);
 
