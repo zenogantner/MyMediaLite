@@ -17,7 +17,7 @@
            item biases, by using reg_u * bias_reg and reg_i * bias_reg,
            same with the learn rate;: compute rating_range_size only once;
 	   use global average (#162), use user/item bias whenever possible
-           (#163)
+           (#163), frequency-based regularization
 	 - merge MultiCoreMatrixFactorization and
            LogisticRegressionMatrixFactorization into BiasedMatrixFactorization
 	 - RatingPredictor: fix setting MaxUserID and MaxItemID
