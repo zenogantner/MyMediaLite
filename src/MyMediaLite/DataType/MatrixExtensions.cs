@@ -216,7 +216,7 @@ namespace MyMediaLite.DataType
 
 			return (float) (sum / matrix.dim1);
 		}
-		
+
 		/// <summary>Compute the average value of the entries in a row of a matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="row">the row ID</param>
@@ -271,7 +271,7 @@ namespace MyMediaLite.DataType
 				squared_entry_sum += Math.Pow(matrix.data[x], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
-		
+
 		/// <summary>Compute the scalar product between a vector and a row of the matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row ID</param>
@@ -304,6 +304,25 @@ namespace MyMediaLite.DataType
 				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			float result = 0;
+			for (int j = 0; j < matrix.dim2; j++)
+				result += matrix.data[i * matrix.dim2 + j] * vector[j];
+
+			return result;
+		}
+
+		/// <summary>Compute the scalar product between a vector and a row of the matrix</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="i">the row ID</param>
+		/// <param name="vector">the numeric vector</param>
+		/// <returns>the scalar product of row i and the vector</returns>
+		static public double RowScalarProduct(Matrix<float> matrix, int i, IList<double> vector)
+		{
+			if (i >= matrix.dim1)
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
+			if (vector.Count != matrix.dim2)
+				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
+
+			double result = 0;
 			for (int j = 0; j < matrix.dim2; j++)
 				result += matrix.data[i * matrix.dim2 + j] * vector[j];
 
@@ -436,7 +455,7 @@ namespace MyMediaLite.DataType
 
 			return result;
 		}
-		
+
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 		static public int Max(this Matrix<int> m)

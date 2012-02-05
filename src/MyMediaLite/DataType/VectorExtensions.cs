@@ -24,6 +24,60 @@ namespace MyMediaLite.DataType
 	/// <summary>Extensions for vector-like data</summary>
 	public static class VectorExtensions
 	{
+		/// <summary>Increment a vector by another one</summary>
+		/// <param name='vector1'>the vector to be incremented</param>
+		/// <param name='vector2'>the vector to be added to the first one</param>
+		static public void Inc(this IList<double> vector1, IList<double> vector2)
+		{
+			for (int i = 0; i < vector1.Count; i++)
+				vector1[i] += vector2[i];
+		}
+
+		/// <summary>Increment a vector by another one</summary>
+		/// <param name='vector1'>the vector to be incremented</param>
+		/// <param name='vector2'>the vector to be added to the first one</param>
+		static public void Inc(this IList<float> vector1, IList<float> vector2)
+		{
+			for (int i = 0; i < vector1.Count; i++)
+				vector1[i] += vector2[i];
+		}
+
+		/// <summary>Increment a vector by another one</summary>
+		/// <param name='vector1'>the vector to be incremented</param>
+		/// <param name='vector2'>the vector to be added to the first one</param>
+		static public void Inc(this IList<double> vector1, IList<float> vector2)
+		{
+			for (int i = 0; i < vector1.Count; i++)
+				vector1[i] += vector2[i];
+		}
+
+		/// <summary>Multiply a vector by a scalar</summary>
+		/// <param name='vector'>the vector to be multiplied</param>
+		/// <param name='x'>the scalar</param>
+		static public void Multiply(this IList<double> vector, double x)
+		{
+			for (int i = 0; i < vector.Count; i++)
+				vector[i] *= x;
+		}
+
+		/// <summary>Multiply a vector by a scalar</summary>
+		/// <param name='vector'>the vector to be multiplied</param>
+		/// <param name='x'>the scalar</param>
+		static public void Multiply(this IList<float> vector, float x)
+		{
+			for (int i = 0; i < vector.Count; i++)
+				vector[i] *= x;
+		}
+
+		/// <summary>Multiply a vector by a scalar</summary>
+		/// <param name='vector'>the vector to be multiplied</param>
+		/// <param name='x'>the scalar</param>
+		static public void Multiply(this IList<float> vector, double x)
+		{
+			for (int i = 0; i < vector.Count; i++)
+				vector[i] = (float) (vector[i] * x);
+		}
+
 		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the Euclidean norm of the vector</returns>
