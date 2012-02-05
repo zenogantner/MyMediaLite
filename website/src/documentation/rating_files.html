@@ -15,7 +15,7 @@
 <h2>Rating data files</h2>
 <p>
 Rating data files have at least three columns: the user ID, the item ID, and the rating value.
-The user and item IDs are non-negative long (64 bit) integers, and the rating value is a double (64 bit floating point number).
+Valid user and item IDs are strings, and the rating value is a single precision (32 bit, <code>float</code>) floating point number.
 </p>
 <p>
 Date/time information or numerical timestamps will be used if necessary, and ignored otherwise.
@@ -33,15 +33,15 @@ Date/time information or numerical timestamps will be used if necessary, and ign
 5951    457     3
 </pre>
 
-<h3>Tab-separated columns (.tsv) with non-integer values</h3>
+<h3>Tab-separated columns (.tsv) with non-integer ratings</h3>
 <pre>
-5951    50      5.0
-5951    223     5.0
-5951    260     5.0
-5951    293     4.5
-5951    356     4.0
-5951    364     3.5
-5951    457     3.0
+u5951    i50      5.0
+u5951    i223     5.0
+u5951    i260     5.0
+u5951    i293     4.5
+u5951    i356     4.0
+u5951    i364     3.5
+u5951    i457     3.0
 </pre>
 
 
