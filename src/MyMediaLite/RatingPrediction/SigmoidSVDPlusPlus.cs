@@ -26,7 +26,7 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>SVD++: Matrix factorization that also takes into account _what_ users have rated</summary>
+	/// <summary>SVD++: Matrix factorization that also takes into account _what_ users have rated; variant that uses a sigmoid function</summary>
 	/// <remarks>
 	///   <para>
 	///     Literature:
@@ -40,21 +40,11 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SVDPlusPlus : MatrixFactorization
+	public class SigmoidSVDPlusPlus : MatrixFactorization
 	{
 		// TODO
 		// - implement ComputeObjective
 		// - handle fold-in
-		// - use knowledge of which items will have to be rated ...
-		// - implement also with fixed biases (progress prize 2008)
-		// - implement integrated model (section 5 of the KDD 2008 paper)
-		// - try bold driver heuristics
-		// - try learning rate decay
-		// - try rating-based weights from http://recsyswiki.com/wiki/SVD%2B%2B
-		// - try frequency regularization
-		// - try different learn rates/regularization for user and item parameters
-		// - implement parallel learning
-		// - implement ALS learning
 
 		float[] user_bias;
 		float[] item_bias;
@@ -64,13 +54,22 @@ namespace MyMediaLite.RatingPrediction
 		// TODO update this structure on incremental updates
 		int[][] items_rated_by_user;
 
+		/// <summary>size of the interval of valid ratings</summary>
+		double rating_range_size;
+
+		delegate float TwoDoubleToFloat(double arg1, double arg2);
+		TwoDoubleToFloat compute_gradient_common;
+
+		/// <summary>The optimization target</summary>
+		public OptimizationTarget Loss { get; set; }
+
 		/// <summary>bias learn rate</summary>
 		public float BiasLearnRate { get; set; }
 		/// <summary>regularization constant for biases</summary>
 		public float BiasReg { get; set; }
 
 		/// <summary>Default constructor</summary>
-		public SVDPlusPlus() : base()
+		public SigmoidSVDPlusPlus() : base()
 		{
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
@@ -85,27 +84,44 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u <= MaxUserID; u++)
 				items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
 
+			rating_range_size = max_rating - min_rating;
+
+			// compute global bias
+			double avg = (ratings.Average - min_rating) / rating_range_size;
+			global_bias = (float) Math.Log(avg / (1 - avg));
+
+			switch (Loss)
+			{
+				case OptimizationTarget.MAE:
+					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.RMSE:
+					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.LogisticLoss:
+					compute_gradient_common = (sig_score, err) => (float) err;
+					break;
+			}
+
 			base.Train();
 		}
 
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			double result = global_bias;
+			double score = global_bias;
 
 			if (user_id <= MaxUserID)
-				result += user_bias[user_id];
+				score += user_bias[user_id];
 			if (item_id <= MaxItemID)
-				result += item_bias[item_id];
+				score += item_bias[item_id];
 			if (user_id <= MaxUserID && item_id <= MaxItemID)
-				result += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+				score += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
-			if (result > MaxRating)
-				return MaxRating;
-			if (result < MinRating)
-				return MinRating;
+			double sig_score = 1 / (1 + Math.Exp(-score));
+			double prediction = min_rating + sig_score * rating_range_size;
 
-			return (float) result;
+			return (float) prediction;
 		}
 
 		///
@@ -133,24 +149,28 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double prediction = global_bias + user_bias[u] + item_bias[i];
+				double score = global_bias + user_bias[u] + item_bias[i];
 				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
 				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
 					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				prediction += MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				score += MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				double sig_score = 1 / (1 + Math.Exp(-score));
 
+				double prediction = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - prediction;
+
+				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * ((float) err - BiasReg * user_bias[u]);
+					user_bias[u] += BiasLearnRate * (gradient_common - BiasReg * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * ((float) err - BiasReg * item_bias[i]);
+					item_bias[i] += BiasLearnRate * (gradient_common - BiasReg * item_bias[i]);
 
-				// adjust factors -- TODO vectorize
-				double x = err / norm_denominator; // TODO better name than x
+				// adjust factors
+				double x = gradient_common / norm_denominator; // TODO better name than x
 				for (int f = 0; f < NumFactors; f++)
 				{
 					float i_f = item_factors[i, f];
@@ -158,12 +178,12 @@ namespace MyMediaLite.RatingPrediction
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = err * i_f - reg * p[u, f];
+						double delta_u = gradient_common * i_f - reg * p[u, f];
 						p.Inc(u, f, lr * delta_u);
 					}
 					if (update_item)
 					{
-						double delta_i = err * u_plus_y_sum_vector[f] - reg * i_f;
+						double delta_i = gradient_common * u_plus_y_sum_vector[f] - reg * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 
 						double common_update = x * i_f;
@@ -291,8 +311,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} learn_rate={4} bias_learn_rate={5} num_iter={6} init_mean={7} init_stddev={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, LearnRate,  BiasLearnRate, NumIter, InitMean, InitStdDev);
+				"{0} num_factors={1} regularization={2} bias_reg={3} learn_rate={4} bias_learn_rate={5} num_iter={6} loss={7} init_mean={8} init_stddev={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, LearnRate,  BiasLearnRate, NumIter, Loss, InitMean, InitStdDev);
 		}
 	}
 }

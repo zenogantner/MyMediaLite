@@ -11,7 +11,7 @@
 	 - add interface IFoldInRatingPredictor with extension methods
 	 - IIterativeModel: double ComputeLoss() => float ComputeObjective()
 	recommenders
-	 - new rating predictor: SVDPlusPlus
+	 - new rating predictors: SVDPlusPlus and SigmoidSVDPlusPlus
 	 - #157: matrix factorization recommenders use float to store the
            latent factors
          - BiasedMatrixFactorization: differentiate regularization of user and

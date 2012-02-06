@@ -213,6 +213,7 @@
     <Compile Include="RatingPrediction\OptimizationTarget.cs" />
     <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\SVDPlusPlus.cs" />
+    <Compile Include="RatingPrediction\SigmoidSVDPlusPlus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
