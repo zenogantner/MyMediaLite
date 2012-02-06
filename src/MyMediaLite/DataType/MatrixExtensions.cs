@@ -179,8 +179,11 @@ namespace MyMediaLite.DataType
 		static public void Inc(this Matrix<double> matrix, double d)
 		{
 			for (int x = 0; x < matrix.dim1; x++)
+			{
+				int offset = x * matrix.dim2;
 				for (int y = 0; y < matrix.dim2; y++)
-					matrix.data[x * matrix.dim2 + y] += d;
+					matrix.data[offset + y] += d;
+			}
 		}
 
 		/// <summary>Multiplies one column of a matrix with a scalar</summary>
@@ -254,9 +257,9 @@ namespace MyMediaLite.DataType
 				throw new ArgumentOutOfRangeException("Cannot compute average of 0 entries.");
 
 			double sum = 0;
-
+			int offset = row * matrix.dim2;
 			for (int y = 0; y < matrix.dim2; y++)
-				sum += matrix.data[row * matrix.dim2 + y];
+				sum += matrix.data[offset + y];
 
 			return sum / matrix.dim2;
 		}
@@ -267,8 +270,11 @@ namespace MyMediaLite.DataType
 		static public void Multiply(this Matrix<double> matrix, double d)
 		{
 			for (int x = 0; x < matrix.dim1; x++)
+			{
+				int offset = x * matrix.dim2;
 				for (int y = 0; y < matrix.dim2; y++)
-					matrix.data[x * matrix.dim2 + y] *= d;
+					matrix.data[offset + y] *= d;
+			}
 		}
 
 		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
@@ -312,8 +318,9 @@ namespace MyMediaLite.DataType
 				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			double result = 0;
+			int offset = i * matrix.dim2;
 			for (int j = 0; j < matrix.dim2; j++)
-				result += matrix.data[i * matrix.dim2 + j] * vector[j];
+				result += matrix.data[offset + j] * vector[j];
 
 			return result;
 		}
@@ -331,8 +338,9 @@ namespace MyMediaLite.DataType
 				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			float result = 0;
+			int offset = i * matrix.dim2;
 			for (int j = 0; j < matrix.dim2; j++)
-				result += matrix.data[i * matrix.dim2 + j] * vector[j];
+				result += matrix.data[offset + j] * vector[j];
 
 			return result;
 		}
@@ -350,8 +358,9 @@ namespace MyMediaLite.DataType
 				throw new ArgumentOutOfRangeException("wrong vector size: " + vector.Count + ", dim2 is " + matrix.dim2);
 
 			double result = 0;
+			int offset = i * matrix.dim2;
 			for (int j = 0; j < matrix.dim2; j++)
-				result += matrix.data[i * matrix.dim2 + j] * vector[j];
+				result += matrix.data[offset + j] * vector[j];
 
 			return result;
 		}
@@ -373,8 +382,10 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
 
 			double result = 0;
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
 			for (int c = 0; c < matrix1.dim2; c++)
-				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
+				result += matrix1.data[offset1 + c] * matrix2.data[offset2 + c];
 
 			return result;
 		}
@@ -396,8 +407,10 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
 
 			float result = 0;
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
 			for (int c = 0; c < matrix1.dim2; c++)
-				result += matrix1.data[i * matrix1.dim2 + c] * matrix2.data[j * matrix2.dim2 + c];
+				result += matrix1.data[offset1 + c] * matrix2.data[offset2 + c];
 
 			return result;
 		}
@@ -419,8 +432,10 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
 
 			var result = new double[matrix1.dim2];
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
 			for (int c = 0; c < matrix1.dim2; c++)
-				result[c] = matrix1.data[i * matrix1.dim2 + c] - matrix2.data[j * matrix2.dim2 + c];
+				result[c] = matrix1.data[offset1 + c] - matrix2.data[offset2 + c];
 
 			return result;
 		}
@@ -448,8 +463,11 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (3) " + matrix3.dim2);
 
 			double result = 0;
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
+			int offset3 = k * matrix3.dim2;
 			for (int c = 0; c < matrix1.dim2; c++)
-				result += matrix1.data[i * matrix1.dim2 + c] * (matrix2.data[j * matrix2.dim2 + c] - matrix3.data[k * matrix3.dim2 + c]);
+				result += matrix1.data[offset1 + c] * (matrix2.data[offset2 + c] - matrix3.data[offset3 + c]);
 
 			return result;
 		}
@@ -477,8 +495,11 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("wrong row size: (1) " + matrix1.dim2 + " vs. (3) " + matrix3.dim2);
 
 			double result = 0;
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
+			int offset3 = k * matrix3.dim2;
 			for (int c = 0; c < matrix1.dim2; c++)
-				result += matrix1.data[i * matrix1.dim2 + c] * (matrix2.data[j * matrix2.dim2 + c] - matrix3.data[k * matrix3.dim2 + c]);
+				result += matrix1.data[offset1 + c] * (matrix2.data[offset2 + c] - matrix3.data[offset3 + c]);
 
 			return result;
 		}

@@ -46,6 +46,7 @@
 	 - DB: support integer, long, and string IDs
 	 - remove class NumberFile (not used any more)
 	data types
+	 - MatrixExtensions: speed up some operations by precomputing offsets
 	 - remove SparseVector and Triple: not used any more
 	data structures
 	 - correctly handle MinRating and MaxRating in CombinedRatings
