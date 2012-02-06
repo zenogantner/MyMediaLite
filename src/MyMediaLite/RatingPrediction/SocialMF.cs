@@ -132,9 +132,9 @@ namespace MyMediaLite.RatingPrediction
 					float i_f = item_factors[i, f];
 
 					if (f != 0)
-						MatrixExtensions.Inc(user_factors_gradient, u, f, gradient_common * i_f);
+						user_factors_gradient.Inc( u, f, gradient_common * i_f);
 					if (f != 1)
-						MatrixExtensions.Inc(item_factors_gradient, i, f, gradient_common * u_f);
+						item_factors_gradient.Inc(i, f, gradient_common * u_f);
 				}
 			}
 
@@ -147,11 +147,11 @@ namespace MyMediaLite.RatingPrediction
 			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 				for (int f = 2; f < NumFactors; f++)
-					MatrixExtensions.Inc(user_factors_gradient, u, f, user_factors[u, f] * Regularization);
+					user_factors_gradient.Inc(u, f, user_factors[u, f] * Regularization);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 				for (int f = 2; f < NumFactors; f++)
-					MatrixExtensions.Inc(item_factors_gradient, i, f, item_factors[i, f] * Regularization);
+					item_factors_gradient.Inc(i, f, item_factors[i, f] * Regularization);
 
 			// I.3 social network regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
@@ -187,7 +187,7 @@ namespace MyMediaLite.RatingPrediction
 						sum_neighbors[f] += user_factors[v, f];
 				if (num_neighbors != 0)
 					for (int f = 0; f < NumFactors; f++)
-						MatrixExtensions.Inc(user_factors_gradient, u, f, social_regularization * (user_factors[u, f] - sum_neighbors[f] / num_neighbors));
+						user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_neighbors[f] / num_neighbors));
 				foreach (int v in user_neighbors[u])
 					if (user_neighbors[v].Count != 0)
 					{
@@ -200,7 +200,7 @@ namespace MyMediaLite.RatingPrediction
 							diff = diff * trust_v;
 							diff += user_factors[v, f];
 							if (num_neighbors != 0)
-								MatrixExtensions.Inc(user_factors_gradient, u, f, -social_regularization * trust_v * diff / num_neighbors);
+								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_neighbors);
 						}
 					}
 			}
