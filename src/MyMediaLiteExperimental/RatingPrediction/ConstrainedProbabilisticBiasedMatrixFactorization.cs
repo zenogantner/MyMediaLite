@@ -161,9 +161,9 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
-				IMatrixExtensions.WriteMatrix(writer, user_factors);
-				IMatrixExtensions.WriteMatrix(writer, item_factors);
-				IMatrixExtensions.WriteMatrix(writer, similarity_constraint_matrix);
+				MatrixExtensions.WriteMatrix(writer, user_factors);
+				MatrixExtensions.WriteMatrix(writer, item_factors);
+				MatrixExtensions.WriteMatrix(writer, similarity_constraint_matrix);
 			}
 		}
 
@@ -174,9 +174,9 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
-				var user_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
-				var item_factors                 = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
-				var similarity_constraint_matrix = (Matrix<float>) IMatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
+				var user_factors                 = (Matrix<float>) MatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
+				var item_factors                 = (Matrix<float>) MatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
+				var similarity_constraint_matrix = (Matrix<float>) MatrixExtensions.ReadMatrix(reader, new Matrix<float>(0, 0));
 
 				if (user_factors.dim2 != item_factors.dim2)
 					throw new IOException(

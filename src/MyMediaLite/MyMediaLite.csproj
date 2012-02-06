@@ -157,7 +157,6 @@
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
     <Compile Include="RatingPrediction\TimeAwareRatingPredictor.cs" />
-    <Compile Include="IO\IMatrixExtensions.cs" />
     <Compile Include="DataType\VectorExtensions.cs" />
     <Compile Include="IO\VectorExtensions.cs" />
     <Compile Include="DataType\MatrixExtensions.cs" />
@@ -214,6 +213,7 @@
     <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\SVDPlusPlus.cs" />
     <Compile Include="RatingPrediction\SigmoidSVDPlusPlus.cs" />
+    <Compile Include="IO\MatrixExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
