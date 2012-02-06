@@ -355,10 +355,8 @@ namespace MyMediaLite.RatingPrediction
 				}
 				this.user_factors = user_factors;
 				this.item_factors = item_factors;
-				this.user_bias = new float[user_factors.dim1];
-				user_bias.CopyTo(this.user_bias, 0);
-				this.item_bias = new float[item_factors.dim1];
-				item_bias.CopyTo(this.item_bias, 0);
+				this.user_bias = user_bias.ToArray();
+				this.item_bias = item_bias.ToArray();
 			}
 		}
 
