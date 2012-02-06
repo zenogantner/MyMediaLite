@@ -45,6 +45,7 @@ namespace MyMediaLite.RatingPrediction
 		// TODO
 		// - implement ComputeObjective
 		// - handle fold-in
+		// - merge with SVDPlusPlus
 
 		float[] user_bias;
 		float[] item_bias;
@@ -73,8 +74,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
-			BiasLearnRate = 0.007f;
-			BiasReg = 0.005f;
+			BiasLearnRate = 0.7f;
+			BiasReg = 0.33f;
 		}
 
 		///
@@ -165,9 +166,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * (gradient_common - BiasReg * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * Regularization * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * (gradient_common - BiasReg * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * Regularization * item_bias[i]);
 
 				// adjust factors
 				double x = gradient_common / norm_denominator; // TODO better name than x

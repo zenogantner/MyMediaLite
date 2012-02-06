@@ -54,6 +54,7 @@ namespace MyMediaLite.RatingPrediction
 		// - try frequency regularization
 		// - try different learn rates/regularization for user and item parameters
 		// - implement parallel learning
+		// - implement normal gradient descent learning
 		// - implement ALS learning
 
 		float[] user_bias;
@@ -74,8 +75,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
-			BiasLearnRate = 0.007f;
-			BiasReg = 0.005f;
+			BiasLearnRate = 0.7f;
+			BiasReg = 0.33f;
 		}
 
 		///
@@ -145,9 +146,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * ((float) err - BiasReg * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * Regularization * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * ((float) err - BiasReg * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * Regularization * item_bias[i]);
 
 				// adjust factors -- TODO vectorize
 				double x = err / norm_denominator; // TODO better name than x
