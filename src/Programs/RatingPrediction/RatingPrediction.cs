@@ -115,7 +115,7 @@ class RatingPrediction
    --help                           display this usage information and exit
    --version                        display version information and exit
    --random-seed=N                  initialize the random number generator with N
-   --rating-type=float|byte|double  store ratings internally as floats or bytes or doubles (default)
+   --rating-type=float|byte         store ratings internally as floats (default) or bytes
    --no-id-mapping                  do not map user and item IDs to internal IDs, keep the original IDs
 
   files:
