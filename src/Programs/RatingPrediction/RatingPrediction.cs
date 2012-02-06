@@ -114,26 +114,26 @@ class RatingPrediction
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
-   --random-seed=N                  initialize the random number generator with N
+   --random-seed=N                  initialize random number generator with N
    --rating-type=float|byte         store ratings internally as floats (default) or bytes
-   --no-id-mapping                  do not map user and item IDs to internal IDs, keep the original IDs
+   --no-id-mapping                  do not map user and item IDs to internal IDs, keep original IDs
 
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
    --file-format=movielens_1m|kddcup_2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
-   --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
-   --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
-   --user-relations=FILE                  file containing user relation information, 1 tuple per line
-   --item-relations=FILE                  file containing item relation information, 1 tuple per line
+   --user-attributes=FILE                 file with user attribute information, 1 tuple per line
+   --item-attributes=FILE                 file with item attribute information, 1 tuple per line
+   --user-relations=FILE                  file with user relation information, 1 tuple per line
+   --item-relations=FILE                  file with item relation information, 1 tuple per line
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
 
   prediction options:
    --prediction-file=FILE         write the rating predictions to FILE
-   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
-                                  and predicted rating, respectively; default is {0}\\t{1}\\t{2}
+   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID,
+                                  item ID, and predicted rating; default is {0}\\t{1}\\t{2}
    --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:
@@ -150,7 +150,7 @@ class RatingPrediction
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --max-iter=N                   perform at most N iterations
-   --measure=RMSE|MAE|NMAE|CBD    the evaluation measure to use for the abort conditions below (default is RMSE)
+   --measure=RMSE|MAE|NMAE|CBD    evaluation measure to use for the abort conditions below (default is RMSE)
    --epsilon=NUM                  abort iterations if evaluation measure is more than best result plus NUM
    --cutoff=NUM                   abort if evaluation measure is above NUM
 ");

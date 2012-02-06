@@ -135,7 +135,7 @@ class ItemRecommendation
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
-   --random-seed=N                  initialize the random number generator with N
+   --random-seed=N                  initialize random number generator with N
 
   files:
    --training-file=FILE                     read training data from FILE
@@ -143,24 +143,24 @@ class ItemRecommendation
    --file-format=ignore_first_line|default
    --no-id-mapping                          do not map user and item IDs to internal IDs, keep the original IDs
    --data-dir=DIR                           load all files from DIR
-   --user-attributes=FILE                   file containing user attribute information, 1 tuple per line
-   --item-attributes=FILE                   file containing item attribute information, 1 tuple per line
-   --user-relations=FILE                    file containing user relation information, 1 tuple per line
-   --item-relations=FILE                    file containing item relation information, 1 tuple per line
-   --user-groups=FILE                       file containing group-to-user mappings, 1 tuple per line
+   --user-attributes=FILE                   file with user attribute information, 1 tuple per line
+   --item-attributes=FILE                   file with item attribute information, 1 tuple per line
+   --user-relations=FILE                    file with user relation information, 1 tuple per line
+   --item-relations=FILE                    file with item relation information, 1 tuple per line
+   --user-groups=FILE                       file with group-to-user mappings, 1 tuple per line
    --save-model=FILE                        save computed model to FILE
    --load-model=FILE                        load model from FILE
 
   data interpretation:
    --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
-   --rating-threshold=NUM       (for rating datasets) interpret rating >= NUM as positive feedback
+   --rating-threshold=NUM       (for rating data) interpret rating >= NUM as positive feedback
 
   choosing the items for evaluation/prediction (mutually exclusive):
-   --candidate-items=FILE       use the items in FILE (one per line) as candidate items in the evaluation
-   --overlap-items              use only the items that are both in the training and the test set as candidate items in the evaluation
-   --in-training-items          use only the items in the training set as candidate items in the evaluation
-   --in-test-items              use only the items in the test set as candidate items in the evaluation
-   --all-items                  use all known items as candidate items in the evaluation
+   --candidate-items=FILE       use items in FILE (one per line) as candidate items
+   --overlap-items              use only items that are both in the training and the test set as candidate items
+   --in-training-items          use only items in the training set as candidate items
+   --in-test-items              use only items in the test set as candidate items
+   --all-items                  use all known items as candidate items
 
   choosing the users for evaluation/prediction
    --test-users=FILE            predict items for users specified in FILE (one user per line)
@@ -175,7 +175,7 @@ class ItemRecommendation
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
-   --filtered-evaluation        perform evaluation filtered by item attribute (expects --item-attributes=FILE)
+   --filtered-evaluation        perform evaluation filtered by item attribute (requires --item-attributes=FILE)
    --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
    --compute-fit                display fit on training data
 

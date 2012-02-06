@@ -29,6 +29,7 @@
 	 - EntityAverage: remove unnecessary parameter from Retrain()
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
+	 - more compact usage information
 	 - rating prediction: add option --prediction-header=LINE
 	 - add --no-id-mapping option to save memory for large-scale datasets
            where the user and item IDs have no gaps
