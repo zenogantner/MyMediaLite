@@ -32,6 +32,7 @@
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
      apprecommender => { url => 'https://github.com/tassia/AppRecommender',                   title => 'AppRecommender' }
+	 wooflix       => { url => 'http://gustavonarea.net/blog/posts/korens-svd-python-implementation/', title => 'wooflix' }
      cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'                         title => 'Collection Workflow Integration System' }
      filmaster     => { url => 'https://bitbucket.org/filmaster/filmaster-test/src'           title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                                            title => 'mloss.org' }
