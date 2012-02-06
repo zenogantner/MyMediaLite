@@ -42,9 +42,8 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO
 		// - LoadModel/SaveModel
+		// - implement ComputeObjective
 		// - handle fold-in
-		// - handle incremental updates
-		// - after each iteration, compute combined user factors for faster prediction
 		// - use knowledge of which items will have to be rated ...
 		// - implement also with fixed biases (progress prize 2008)
 		// - implement integrated model (section 5 of the KDD 2008 paper)
@@ -60,6 +59,7 @@ namespace MyMediaLite.RatingPrediction
 		float[] user_bias;
 		float[] item_bias;
 		Matrix<float> y;
+		Matrix<float> p;
 
 		int[][] items_rated_by_user;
 
@@ -96,19 +96,8 @@ namespace MyMediaLite.RatingPrediction
 				result += user_bias[user_id];
 			if (item_id <= MaxItemID)
 				result += item_bias[item_id];
-
 			if (user_id <= MaxUserID && item_id <= MaxItemID)
-			{
-				var u_plus_y_sum_vector = new double[NumFactors];
-				foreach (int other_item_id in items_rated_by_user[user_id])
-					for (int f = 0; f < u_plus_y_sum_vector.Length; f++) // TODO vectorize
-						u_plus_y_sum_vector[f] += y[other_item_id, f];
-				double denom = Math.Sqrt(ratings.CountByUser[user_id]);
-				for (int f = 0; f < u_plus_y_sum_vector.Length; f++)
-					u_plus_y_sum_vector[f] = u_plus_y_sum_vector[f] / denom + user_factors[user_id, f];
-
-				result += MatrixExtensions.RowScalarProduct(item_factors, item_id, u_plus_y_sum_vector);
-			}
+				result += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (result > MaxRating)
 				return MaxRating;
@@ -123,6 +112,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.InitModel();
 
+			p = new Matrix<float>(MaxUserID + 1, NumFactors);
+			p.InitNormal(InitMean, InitStdDev);
 			y = new Matrix<float>(MaxItemID + 1, NumFactors);
 			y.InitNormal(InitMean, InitStdDev);
 
@@ -148,7 +139,7 @@ namespace MyMediaLite.RatingPrediction
 						u_plus_y_sum_vector[f] += y[other_item_id, f];
 				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
 				for (int f = 0; f < u_plus_y_sum_vector.Length; f++) // TODO get rid of this loop?
-					u_plus_y_sum_vector[f] = u_plus_y_sum_vector[f] / norm_denominator + user_factors[u, f];
+					u_plus_y_sum_vector[f] = u_plus_y_sum_vector[f] / norm_denominator + p[u, f];
 
 				prediction += MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
 
@@ -169,8 +160,8 @@ namespace MyMediaLite.RatingPrediction
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = err * i_f - reg * user_factors[u, f];
-						user_factors.Inc(u, f, lr * delta_u);
+						double delta_u = err * i_f - reg * p[u, f];
+						p.Inc(u, f, lr * delta_u);
 					}
 					if (update_item)
 					{
@@ -185,6 +176,37 @@ namespace MyMediaLite.RatingPrediction
 						}
 					}
 				}
+			}
+
+			// pre-compute complete user factors
+			for (int u = 0; u <= MaxUserID; u++)
+				PrecomputeFactors(u);
+		}
+
+		void PrecomputeFactors(int u)
+		{
+			// compute
+			var factors = new double[NumFactors];
+			for (int f = 0; f < factors.Length; f++)
+				factors[f] = p[u, f];
+			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+			foreach (int other_item_id in items_rated_by_user[u])
+				for (int f = 0; f < factors.Length; f++) // TODO vectorize
+					factors[f] += y[other_item_id, f] / norm_denominator;
+
+			// assign
+			for (int f = 0; f < factors.Length; f++)
+				user_factors[u, f] = (float) factors[f];
+		}
+
+		/// <summary>Updates the latent factors on a user</summary>
+		/// <param name="user_id">the user ID</param>
+		public override void RetrainUser(int user_id)
+		{
+			if (UpdateUsers)
+			{
+				base.RetrainUser(user_id);
+				PrecomputeFactors(user_id);
 			}
 		}
 
