@@ -10,7 +10,7 @@ echo
 echo "rating predictors"
 echo "-----------------"
 
-for method in SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage ItemAverage FactorWiseMatrixFactorization CoClustering
+for method in SVDPlusPlus SlopeOne BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage ItemAverage FactorWiseMatrixFactorization CoClustering
 do
      echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR
           $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+_time\s*\S+//g" > output1.txt
