@@ -258,7 +258,7 @@ namespace MyMediaLite.RatingPrediction
 				this.num_learned_factors = num_learned_factors;
 				if (this.NumFactors != user_factors.NumberOfColumns)
 				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
+					Console.Error.WriteLine("Set NumFactors to {0}", user_factors.NumberOfColumns);
 					this.NumFactors = (uint) user_factors.NumberOfColumns;
 				}
 				this.user_factors = user_factors;
