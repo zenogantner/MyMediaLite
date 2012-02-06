@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,17 +31,23 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
+		/// <param name="header">if specified, write this string at the start of the output</param>
 		public static void WritePredictions(
 			this IRecommender recommender,
 			IRatings ratings,
 			TextWriter writer,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
-			string line_format = "{0}\t{1}\t{2}")
+			IEntityMapping user_mapping = null,
+			IEntityMapping item_mapping = null,
+			string line_format = "{0}\t{1}\t{2}",
+			string header = null)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
+
+			if (header != null)
+				writer.WriteLine(header);
 
 			for (int index = 0; index < ratings.Count; index++)
 				writer.WriteLine(
@@ -58,12 +64,14 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
+		/// <param name="header">if specified, write this string to the first line</param>
 		public static void WritePredictions(
 			this IRecommender recommender,
 			IRatings ratings,
 			string filename,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
-			string line_format = "{0}\t{1}\t{2}")
+			string line_format = "{0}\t{1}\t{2}",
+			string header = null)
 		{
 			using (var writer = new StreamWriter(filename))
 				WritePredictions(recommender, ratings, writer, user_mapping, item_mapping, line_format);

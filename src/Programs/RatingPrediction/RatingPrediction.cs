@@ -134,6 +134,7 @@ class RatingPrediction
    --prediction-file=FILE         write the rating predictions to FILE
    --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
                                   and predicted rating, respectively; default is {0}\\t{1}\\t{2}
+   --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:
    --cross-validation=K                perform k-fold cross-validation on the training data
@@ -186,6 +187,7 @@ class RatingPrediction
 		bool no_id_mapping         = false;
 		int random_seed            = -1;
 		string prediction_line     = "{0}\t{1}\t{2}";
+		string prediction_header   = null;
 
 		var p = new OptionSet() {
 			// string-valued options
@@ -202,6 +204,7 @@ class RatingPrediction
 			{ "load-model=",          v              => load_model_file      = v },
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "prediction-line=",     v              => prediction_line      = v },
+			{ "prediction-header=",   v              => prediction_header    = v },
 			{ "chronological-split=", v              => chronological_split  = v },
 			{ "measure=",             v              => measure              = v },
 			// integer-valued options
@@ -340,7 +343,7 @@ class RatingPrediction
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
-							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line);
+							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
 
 						if (epsilon > 0.0 && results[measure] - eval_stats.Min() > epsilon)
 						{
