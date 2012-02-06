@@ -62,6 +62,7 @@ namespace MyMediaLite.RatingPrediction
 		Matrix<float> y;
 		Matrix<float> p;
 
+		// TODO update this structure on incremental updates
 		int[][] items_rated_by_user;
 
 		/// <summary>bias learn rate</summary>
@@ -134,13 +135,10 @@ namespace MyMediaLite.RatingPrediction
 				int i = ratings.Items[index];
 
 				double prediction = global_bias + user_bias[u] + item_bias[i];
-				var u_plus_y_sum_vector = new double[NumFactors];
-				foreach (int other_item_id in items_rated_by_user[u])
-					for (int f = 0; f < u_plus_y_sum_vector.Length; f++) // TODO vectorize
-						u_plus_y_sum_vector[f] += y[other_item_id, f];
+				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
-				for (int f = 0; f < u_plus_y_sum_vector.Length; f++) // TODO get rid of this loop?
-					u_plus_y_sum_vector[f] = u_plus_y_sum_vector[f] / norm_denominator + p[u, f];
+				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
+					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
 				prediction += MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
 
@@ -187,16 +185,13 @@ namespace MyMediaLite.RatingPrediction
 		void PrecomputeFactors(int u)
 		{
 			// compute
-			var factors = new double[NumFactors];
-			for (int f = 0; f < factors.Length; f++)
-				factors[f] = p[u, f];
+			var factors = y.SumOfRows(items_rated_by_user[u]);
 			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
-			foreach (int other_item_id in items_rated_by_user[u])
-				for (int f = 0; f < factors.Length; f++) // TODO vectorize
-					factors[f] += y[other_item_id, f] / norm_denominator;
+			for (int f = 0; f < factors.Count; f++)
+				factors[f] = (float) (factors[f] / norm_denominator + p[u, f]);
 
 			// assign
-			for (int f = 0; f < factors.Length; f++)
+			for (int f = 0; f < factors.Count; f++)
 				user_factors[u, f] = (float) factors[f];
 		}
 

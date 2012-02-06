@@ -183,6 +183,33 @@ namespace MyMediaLite.DataType
 					matrix.data[x * matrix.dim2 + y] += d;
 		}
 
+		/// <summary>Multiplies one column of a matrix with a scalar</summary>
+		/// <param name='matrix'>the matrix</param>
+		/// <param name='j'>the column ID</param>
+		/// <param name='scalar'>the scalar value to multiply with</param>
+		static public void MultiplyColumn(this Matrix<float> matrix, int j, float scalar)
+		{
+			for (int i = 0; i < matrix.dim1; i++)
+				matrix.data[i * matrix.dim2 + j] *= scalar;
+		}
+
+		/// <summary>Sum up a given number of rows of a matrix</summary>
+		/// <returns>The vector representing the sum of the given rows</returns>
+		/// <param name='matrix'>the matrix</param>
+		/// <param name='row_ids'>a collection of row IDs</param>
+		static public IList<float> SumOfRows(this Matrix<float> matrix, ICollection<int> row_ids)
+		{
+			var result = new float[matrix.dim2];
+			foreach (int row_id in row_ids)
+			{
+				int offset = row_id * matrix.dim2;
+				for (int j = 0; j < matrix.dim2; j++)
+					result[j] += matrix.data[offset + j];
+			}
+
+			return result;
+		}
+
 		/// <summary>Compute the average value of the entries in a column of a matrix</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="col">the column ID</param>
