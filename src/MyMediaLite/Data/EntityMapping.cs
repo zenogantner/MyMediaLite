@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMediaLite.Data
 {
@@ -31,9 +32,9 @@ namespace MyMediaLite.Data
 
 		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
 		/// <remarks>
-		/// Never, to repeat NEVER, directly delete entries from this dictionary!
+		/// Never, to repeat NEVER, directly delete entries from this list!
 		/// </remarks>
-		private Dictionary<int, string> internal_to_original = new Dictionary<int, string>();
+		private List<string> internal_to_original = new List<string>();
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
@@ -41,16 +42,15 @@ namespace MyMediaLite.Data
 
 		/// <summary>all internal entity IDs</summary>
 		/// <value>all internal entity IDs</value>
-		public ICollection<int> InternalIDs { get { return internal_to_original.Keys; }	}
+		public ICollection<int> InternalIDs { get { return Enumerable.Range(0, internal_to_original.Count).ToArray(); } }
 
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
 		/// <returns>the original (external) ID of the entitiy</returns>
 		public string ToOriginalID(int internal_id)
 		{
-			string original_id;
-			if (internal_to_original.TryGetValue(internal_id, out original_id))
-				return original_id;
+			if (internal_id < internal_to_original.Count)
+				return internal_to_original[internal_id];
 			else
 				throw new ArgumentException("Unknown internal ID: " + internal_id);
 		}
@@ -66,7 +66,7 @@ namespace MyMediaLite.Data
 
 			internal_id = original_to_internal.Count;
 			original_to_internal.Add(original_id, internal_id);
-			internal_to_original.Add(internal_id, original_id);
+			internal_to_original.Add(original_id);
 			return internal_id;
 		}
 

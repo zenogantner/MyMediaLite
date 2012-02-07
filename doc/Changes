@@ -56,6 +56,8 @@
            RemoveUser() and RemoveItem()
 	 - RatingsProxy: proper handling of MaxUserID and MaxItemID,
            implement Remover(At|User|Item)
+	 - EntityMappings: use List instead of Dictionary to store internal to
+           external mappings
 	evaluation
 	 - save results as float instead of double
 	documentation
