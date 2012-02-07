@@ -94,7 +94,7 @@ namespace MyMediaLite.ItemRecommendation
 			if ((item_id < 0) || (item_id >= item_factors.dim1))
 				return 0f;
 
-			return MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			return DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
 		///

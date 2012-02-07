@@ -50,7 +50,6 @@
     <Compile Include="ItemRecommendation\FilterBPRMF.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="RatingPrediction\ConstrainedProbabilisticBiasedMatrixFactorization.cs" />
     <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
   </ItemGroup>

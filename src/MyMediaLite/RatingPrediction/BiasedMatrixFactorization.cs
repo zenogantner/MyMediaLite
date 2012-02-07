@@ -240,7 +240,7 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 
-				double score = global_bias + user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
+				double score = global_bias + user_bias[u] + item_bias[i] + DataType.MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -289,7 +289,7 @@ namespace MyMediaLite.RatingPrediction
 			if (item_id < item_factors.dim1)
 				score += item_bias[item_id];
 			if (user_id < user_factors.dim1 && item_id < item_factors.dim1)
-				score += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+				score += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			return (float) (min_rating + ( 1 / (1 + Math.Exp(-score)) ) * rating_range_size);
 		}
@@ -298,7 +298,7 @@ namespace MyMediaLite.RatingPrediction
 		protected override float Predict(IList<float> user_vector, int item_id)
 		{
 			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
-			double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+			double score = global_bias + user_vector[0] + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
 		}
 
@@ -420,7 +420,7 @@ namespace MyMediaLite.RatingPrediction
 					int item_id = rated_items[i].First;
 
 					// compute rating and error
-					double score = global_bias + user_vector[0] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+					double score = global_bias + user_vector[0] + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
 					double err = rated_items[i].Second - prediction;

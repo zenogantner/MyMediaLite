@@ -99,7 +99,7 @@ namespace MyMediaLite.RatingPrediction
 			if (item_id <= MaxItemID)
 				result += item_bias[item_id];
 			if (user_id <= MaxUserID && item_id <= MaxItemID)
-				result += MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+				result += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (result > MaxRating)
 				return MaxRating;
@@ -140,7 +140,7 @@ namespace MyMediaLite.RatingPrediction
 				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
 					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				prediction += MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
 
 				double err = ratings[index] - prediction;
 

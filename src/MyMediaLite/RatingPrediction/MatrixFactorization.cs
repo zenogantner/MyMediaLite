@@ -171,7 +171,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		private float Predict(int user_id, int item_id, bool bound)
 		{
-			float result = global_bias + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			float result = global_bias + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (bound)
 			{
@@ -195,7 +195,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		float Predict(IList<float> user_vector, int item_id, bool bound)
 		{
-			float result = global_bias + MatrixExtensions.RowScalarProduct(item_factors, item_id, user_vector);
+			float result = global_bias + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_vector);
 
 			if (bound)
 			{

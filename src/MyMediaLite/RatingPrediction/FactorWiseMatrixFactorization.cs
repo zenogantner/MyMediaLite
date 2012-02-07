@@ -209,7 +209,7 @@ namespace MyMediaLite.RatingPrediction
 			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return global_effects.Predict(user_id, item_id);
 
-			double result = global_effects.Predict(user_id, item_id) + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			double result = global_effects.Predict(user_id, item_id) + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
 			if (result > MaxRating)
 				return MaxRating;
