@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# (c) 2009, 2010 by Zeno Gantner <zeno.gantner@gmail.com>
+# (c) 2009, 2010, 2012 by Zeno Gantner <zeno.gantner@gmail.com>
 #
 # This file is part of MyMediaLite.
 #
@@ -45,6 +45,7 @@ GetOptions(
        'ignore-event=s'      => \(my $ignore_event      = undef),
        'ignore-line-regex=s' => \(my $ignore_line_regex = undef),
        'event-constant=s'    => \(my $event_constant    = ''),
+	   'alphanumeric-sort'   => \(my $alphanumeric_sort = 0),
        'libsvm-format'       => \(my $libsvm_format     = 0),
 ) or usage(-1);
 
@@ -89,26 +90,26 @@ while (<>) {
     next LINE if defined $ignore_event && $event =~ m/$ignore_event_regex/;
 
     if (! exists $user_id{$user}) {
-	$user_id{$user} = $do_mapping ? $user_count : $user;
-	$user_count++;
+		$user_id{$user} = $do_mapping ? $user_count : $user;
+		$user_count++;
     }
     if (! exists $item_id{$item}) {
-	$item_id{$item} = $do_mapping ? $item_count : $item;
-	$item_count++;
+		$item_id{$item} = $do_mapping ? $item_count : $item;
+		$item_count++;
     }
 
     $event = $event_constant if $event_constant;
 
     if ($libsvm_format) {
-	print "$event $user_id{$user}:1 $item_id{$item}:1\n";
+		print "$event $user_id{$user}:1 $item_id{$item}:1\n";
     }
     else {
-	print "$user_id{$user}\t$item_id{$item}\t$event";
-	if ($date_column != -1) {
-	    my $date = $fields[$date_column];
-	    print "\t$date";
-	}
-	print "\n";
+		print "$user_id{$user}\t$item_id{$item}\t$event";
+		if ($date_column != -1) {
+		    my $date = $fields[$date_column];
+		    print "\t$date";
+		}
+		print "\n";
     }
 
     $event_count++;
@@ -130,9 +131,16 @@ sub write_hash {
 
     open(my $FH, '>', $filename) or die $!;
 
-    foreach my $key (sort keys %$hash_ref) {   # TODO make sorting configurable
-	print $FH "$key\t$hash_ref->{$key}\n";
-    }
+	if ($alphanumeric_sort) {
+		foreach my $key (sort keys %$hash_ref) {
+			print $FH "$key\t$hash_ref->{$key}\n";
+		}
+	}
+	else {
+		foreach my $key (sort { $a <=> $b } keys %$hash_ref) {
+			print $FH "$key\t$hash_ref->{$key}\n";
+		}
+	}
 }
 
 # TODO move this into a library
@@ -173,6 +181,7 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --ignore-line-regex=REGEX   ignore lines that match REGEX
     --event-constant=STRING     set the value for each event to STRING
     --libsvm-format             output in LIBSVM format (ignores date/timestamp information)
+	--alphanumeric-sort         sort mapping files alphanumerically instead of numerically
 END
     exit $return_code;
 }
