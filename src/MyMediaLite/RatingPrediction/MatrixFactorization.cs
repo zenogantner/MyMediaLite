@@ -88,6 +88,14 @@ namespace MyMediaLite.RatingPrediction
 			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);
+
+			// set factors to zero for users and items without training examples
+			for (int u = 0; u <= MaxUserID; u++)
+				if (ratings.CountByUser[u] == 0)
+					user_factors.SetRowToOneValue(u, 0);
+			for (int i = 0; i <= MaxItemID; i++)
+				if (ratings.CountByItem[i] == 0)
+					item_factors.SetRowToOneValue(i, 0);
 		}
 
 		///

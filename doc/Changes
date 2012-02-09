@@ -19,6 +19,8 @@
            same with the learn rate;: compute rating_range_size only once;
 	   use global average (#162), use user/item bias whenever possible
            (#163), frequency-based regularization
+	 - MatrixFactorization: proper intialization of latent factors for
+           users and items without known feedback
 	 - merge MultiCoreMatrixFactorization and
            LogisticRegressionMatrixFactorization into BiasedMatrixFactorization
 	 - RatingPredictor: fix setting MaxUserID and MaxItemID
