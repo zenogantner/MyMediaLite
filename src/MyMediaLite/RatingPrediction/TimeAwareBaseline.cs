@@ -111,6 +111,7 @@ namespace MyMediaLite.RatingPrediction
 
 		// helper data structures
 		IList<float> user_mean_day;
+		/// <summary>last day in the training data, counting from the first day</summary>
 		protected int latest_relative_day;
 
 		/// <summary>default constructor</summary>
