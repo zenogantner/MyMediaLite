@@ -160,11 +160,7 @@ namespace MyMediaLite.RatingPrediction
 			base.InitModel();
 
 			user_bias = new float[MaxUserID + 1];
-			for (int u = 0; u <= MaxUserID; u++)
-				user_bias[u] = 0;
 			item_bias = new float[MaxItemID + 1];
-			for (int i = 0; i <= MaxItemID; i++)
-				item_bias[i] = 0;
 
 			if (BoldDriver)
 				last_loss = ComputeObjective();
