@@ -110,7 +110,7 @@ class RatingPrediction
 			Console.WriteLine(@"  method ARGUMENTS have the form name=value
 
   general OPTIONS:
-   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender=METHOD             set recommender method (default BiasedMatrixFactorization)
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
