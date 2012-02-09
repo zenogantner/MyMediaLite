@@ -22,8 +22,8 @@
 	 - merge MultiCoreMatrixFactorization and
            LogisticRegressionMatrixFactorization into BiasedMatrixFactorization
 	 - RatingPredictor: fix setting MaxUserID and MaxItemID
-	 - TimeAwareBaseline: fix initialization of c_u parameter, proper use
-           of user_scaling
+	 - TimeAwareBaseline: fix day computation (reported by Chris Newell),
+           fix initialization of c_u parameter, proper use of user_scaling
          - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
 	   ComputeLoss()
 	 - EntityAverage: remove unnecessary parameter from Retrain()

@@ -132,7 +132,7 @@ namespace MyMediaLite.RatingPrediction
 		protected override float Predict(int user_id, int item_id, int day, int bin)
 		{
 			float result = base.Predict(user_id, item_id, day, bin);
-			if (day <= timed_ratings.LatestTime.Day)
+			if (day <= latest_relative_day)
 				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
 			return result;
@@ -143,7 +143,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			float result = base.Predict(user_id, item_id, time);
 			int day = RelativeDay(time);
-			if (day <= timed_ratings.LatestTime.Day)
+			if (day <= latest_relative_day)
 				result += item_bias_at_frequency[item_id, log_frequency_by_day[user_id, day]];
 
 			return result;

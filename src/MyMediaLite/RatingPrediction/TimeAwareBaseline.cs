@@ -111,6 +111,7 @@ namespace MyMediaLite.RatingPrediction
 
 		// helper data structures
 		IList<float> user_mean_day;
+		protected int latest_relative_day;
 
 		/// <summary>default constructor</summary>
 		public TimeAwareBaseline()
@@ -144,6 +145,7 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			global_average = ratings.Average;
+			latest_relative_day = RelativeDay(timed_ratings.LatestTime);
 
 			// compute mean day of rating by user
 			user_mean_day = new float[MaxUserID + 1];
@@ -274,7 +276,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				double dev_u = Math.Sign(day - user_mean_day[user_id]) * Math.Pow(Math.Abs(day - user_mean_day[user_id]), Beta);
 				result += user_bias[user_id] + alpha[user_id] * dev_u;
-				if (day <= timed_ratings.LatestTime.Day)
+				if (day <= latest_relative_day)
 					result += user_bias_by_day[user_id, day];
 
 				scaling = user_scaling[user_id];
