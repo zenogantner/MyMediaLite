@@ -1,4 +1,4 @@
-// // Copyright (C) 2011 Zeno Gantner
+// // Copyright (C) 2011, 2012 Zeno Gantner
 // //
 // // This file is part of MyMediaLite.
 // //
@@ -21,7 +21,7 @@ namespace MyMediaLite.IO
 	/// <summary>Static class containing constants used by the MyMediaLite Input/Output routines</summary>
 	public static class Constants
 	{
-		/// <summary>Characters used for splitting tab/whitespace/comma separated lines</summary>
+		/// <summary>Characters used for splitting tab/space/comma separated lines</summary>
 		static public readonly char[] SPLIT_CHARS = new char[]{ '\t', ' ', ',' };
 	}
 }

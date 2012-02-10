@@ -36,7 +36,7 @@ namespace MyMediaLite.IO
 		/// <summary>Read binary attribute data from a file</summary>
 		/// <remarks>
 		/// The expected (sparse) line format is:
-		/// ENTITY_ID whitespace/comma ATTRIBUTE_ID
+		/// ENTITY_ID tab/space/comma ATTRIBUTE_ID
 		/// for the relations that hold.
 		/// </remarks>
 		/// <param name="filename">the name of the file to be read from</param>
