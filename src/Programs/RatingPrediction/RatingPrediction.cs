@@ -58,8 +58,12 @@ class RatingPrediction
 	// command line parameters
 	static string training_file;
 	static string test_file;
-	static string save_model_file = null;
-	static string load_model_file = null;
+	static string save_model_file;
+	static string load_model_file;
+	static string save_user_mapping_file;
+	static string save_item_mapping_file;
+	static string load_user_mapping_file;
+	static string load_item_mapping_file;
 	static string user_attributes_file;
 	static string item_attributes_file;
 	static string user_relations_file;
@@ -71,11 +75,12 @@ class RatingPrediction
 	static uint cross_validation;
 	static bool show_fold_results;
 	static double test_ratio;
-	static string chronological_split = null;
+	static string chronological_split;
 	static double chronological_split_ratio = -1;
 	static DateTime chronological_split_time = DateTime.MinValue;
 	static int find_iter;
-	static bool online_eval = false;
+	static bool online_eval   = false;
+	static bool no_id_mapping = false;
 
 	static void ShowVersion()
 	{
@@ -129,6 +134,10 @@ class RatingPrediction
    --item-relations=FILE                  file with item relation information, 1 tuple per line
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
+   --save-user-mapping=FILE               save user ID mapping to FILE
+   --save-item-mapping=FILE               save item ID mapping to FILE
+   --load-user-mapping=FILE               load user ID mapping from FILE
+   --load-item-mapping=FILE               load item ID mapping from FILE
 
   prediction options:
    --prediction-file=FILE         write the rating predictions to FILE
@@ -184,7 +193,6 @@ class RatingPrediction
 
 		// other arguments
 		bool search_hp             = false;
-		bool no_id_mapping         = false;
 		int random_seed            = -1;
 		string prediction_line     = "{0}\t{1}\t{2}";
 		string prediction_header   = null;
@@ -266,9 +274,19 @@ class RatingPrediction
 			user_mapping = new IdentityMapping();
 			item_mapping = new IdentityMapping();
 		}
+		if (load_user_mapping_file != null)
+			user_mapping = EntityMappingExtensions.LoadMapping(load_user_mapping_file);
+		if (load_item_mapping_file != null)
+			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
 		// load all the data
 		LoadData(data_dir, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
+		
+		// if requested, save ID mappings
+		if (save_user_mapping_file != null)
+			user_mapping.SaveMapping(save_user_mapping_file);
+		if (save_item_mapping_file != null)
+			item_mapping.SaveMapping(save_item_mapping_file);
 
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
@@ -456,6 +474,18 @@ class RatingPrediction
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --item-relations=FILE.");
+		
+		if (no_id_mapping)
+		{
+			if (save_user_mapping_file != null)
+				Usage("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (save_item_mapping_file != null)
+				Usage("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (load_user_mapping_file != null)
+				Usage("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (load_item_mapping_file != null)
+				Usage("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+		}
 
 		// handling of --chronological-split
 		if (chronological_split != null)
