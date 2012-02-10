@@ -67,8 +67,12 @@ class ItemRecommendation
 	static string item_attributes_file;
 	static string user_relations_file;
 	static string item_relations_file;
-	static string save_model_file = null;
-	static string load_model_file = null;
+	static string save_model_file;
+	static string load_model_file;
+	static string save_user_mapping_file;
+	static string save_item_mapping_file;
+	static string load_user_mapping_file;
+	static string load_item_mapping_file;
 	static string user_groups_file;
 	static string prediction_file;
 
@@ -89,6 +93,7 @@ class ItemRecommendation
 	static bool in_test_items;
 	static bool all_items;
 	static bool user_prediction;
+	static bool no_id_mapping = false;
 	static int random_seed = -1;
 	static int find_iter = 0;
 
@@ -214,7 +219,6 @@ class ItemRecommendation
 		compute_fit         = false;
 
 		// other parameters
-		bool no_id_mapping = false;
 		test_ratio         = 0;
 		num_test_users     = -1;
 		repeat_eval        = false;
@@ -233,6 +237,10 @@ class ItemRecommendation
 			{ "item-relations=",      v => item_relations_file    = v },
 			{ "save-model=",          v => save_model_file        = v },
 			{ "load-model=",          v => load_model_file        = v },
+			{ "save-user-mapping=",   v => save_user_mapping_file = v },
+			{ "save-item-mapping=",   v => save_item_mapping_file = v },
+			{ "load-user-mapping=",   v => load_user_mapping_file = v },
+			{ "load-item-mapping=",   v => load_item_mapping_file = v },
 			{ "prediction-file=",     v => prediction_file        = v },
 			{ "test-users=",          v => test_users_file        = v },
 			{ "candidate-items=",     v => candidate_items_file   = v },
@@ -307,6 +315,12 @@ class ItemRecommendation
 		// load all the data
 		LoadData();
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
+
+		// if requested, save ID mappings
+		if (save_user_mapping_file != null)
+			user_mapping.SaveMapping(save_user_mapping_file);
+		if (save_item_mapping_file != null)
+			item_mapping.SaveMapping(save_item_mapping_file);
 
 		TimeSpan time_span;
 
@@ -506,6 +520,18 @@ class ItemRecommendation
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --item-relations=FILE.");
+
+		if (no_id_mapping)
+		{
+			if (save_user_mapping_file != null)
+				Usage("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (save_item_mapping_file != null)
+				Usage("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (load_user_mapping_file != null)
+				Usage("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+			if (load_item_mapping_file != null)
+				Usage("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+		}
 
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
