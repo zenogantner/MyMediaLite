@@ -57,18 +57,30 @@ namespace MyMediaLite.RatingPrediction
 		// - implement normal gradient descent learning
 		// - implement ALS learning
 
-		float[] user_bias;
-		float[] item_bias;
-		Matrix<float> y;
-		Matrix<float> p;
+		/// <summary>rating biases of the users</summary>
+		protected float[] user_bias;
+		/// <summary>rating biases of the items</summary>
+		protected float[] item_bias;
+		/// <summary>user factors (part expressed via the rated items)</summary>
+		protected Matrix<float> y;
+		/// <summary>user factors (individual part)</summary>
+		protected Matrix<float> p;
 
 		// TODO update this structure on incremental updates
-		int[][] items_rated_by_user;
+		/// <summary>The items rated by the users</summary>
+		protected int[][] items_rated_by_user;
 
 		/// <summary>bias learn rate</summary>
 		public float BiasLearnRate { get; set; }
 		/// <summary>regularization constant for biases</summary>
 		public float BiasReg { get; set; }
+
+		/// <summary>Regularization based on rating frequency</summary>
+		/// <description>
+		/// Regularization proportional to the inverse of the square root of the number of ratings associated with the user or item.
+		/// As described in the paper by Menon and Elkan.
+		/// </description>
+		public bool FrequencyRegularization { get; set; }
 
 		/// <summary>Default constructor</summary>
 		public SVDPlusPlus() : base()
@@ -93,6 +105,9 @@ namespace MyMediaLite.RatingPrediction
 		public override float Predict(int user_id, int item_id)
 		{
 			double result = global_bias;
+
+			if (user_factors == null)
+				PrecomputeFactors();
 
 			if (user_id <= MaxUserID)
 				result += user_bias[user_id];
@@ -119,6 +134,8 @@ namespace MyMediaLite.RatingPrediction
 			y = new Matrix<float>(MaxItemID + 1, NumFactors);
 			y.InitNormal(InitMean, InitStdDev);
 
+			user_factors = null;
+
 			user_bias = new float[MaxUserID + 1];
 			item_bias = new float[MaxItemID + 1];
 		}
@@ -144,11 +161,14 @@ namespace MyMediaLite.RatingPrediction
 
 				double err = ratings[index] - prediction;
 
+				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
+
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * Regularization * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * reg * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * Regularization * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * reg * item_bias[i]);
 
 				// adjust factors -- TODO vectorize
 				double x = err / norm_denominator; // TODO better name than x
@@ -159,30 +179,45 @@ namespace MyMediaLite.RatingPrediction
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = err * i_f - reg * p[u, f];
+						double delta_u = err * i_f - user_reg_weight * p[u, f];
 						p.Inc(u, f, lr * delta_u);
 					}
 					if (update_item)
 					{
-						double delta_i = err * u_plus_y_sum_vector[f] - reg * i_f;
+						double delta_i = err * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							double delta_oi = common_update - reg * y[other_item_id, f];
+							double delta_oi = common_update - reg * y[other_item_id, f]; // TODO - what to do here?
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
 					}
 				}
 			}
+		}
 
-			// pre-compute complete user factors
+		/// <summary>Precompute all user factors</summary>
+		protected void PrecomputeFactors()
+		{
+			if (user_factors == null)
+				user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+
+			if (items_rated_by_user == null)
+			{
+				items_rated_by_user = new int[MaxUserID + 1][];
+				for (int u = 0; u <= MaxUserID; u++)
+					items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
+			}
+
 			for (int u = 0; u <= MaxUserID; u++)
 				PrecomputeFactors(u);
 		}
 
-		void PrecomputeFactors(int u)
+		/// <summary>Precompute the user factors for a given user</summary>
+		/// <param name='u'>the ID of the user</param>
+		protected void PrecomputeFactors(int u)
 		{
 			// compute
 			var factors = y.SumOfRows(items_rated_by_user[u]);
@@ -281,9 +316,6 @@ namespace MyMediaLite.RatingPrediction
 				this.p = p;
 				this.y = y;
 				this.item_factors = item_factors;
-
-				for (int u = 0; u <= MaxUserID; u++)
-					PrecomputeFactors(u);
 			}
 		}
 
@@ -292,8 +324,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} learn_rate={4} bias_learn_rate={5} num_iter={6} init_mean={7} init_stddev={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, LearnRate,  BiasLearnRate, NumIter, InitMean, InitStdDev);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} init_mean={8} init_stddev={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate,  BiasLearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

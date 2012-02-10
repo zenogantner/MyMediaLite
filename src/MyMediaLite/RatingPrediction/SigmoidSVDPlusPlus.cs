@@ -40,20 +40,12 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SigmoidSVDPlusPlus : MatrixFactorization
+	public class SigmoidSVDPlusPlus : SVDPlusPlus
 	{
 		// TODO
 		// - implement ComputeObjective
 		// - handle fold-in
 		// - merge with SVDPlusPlus
-
-		float[] user_bias;
-		float[] item_bias;
-		Matrix<float> y;
-		Matrix<float> p;
-
-		// TODO update this structure on incremental updates
-		int[][] items_rated_by_user;
 
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
@@ -63,12 +55,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>The optimization target</summary>
 		public OptimizationTarget Loss { get; set; }
-
-		/// <summary>bias learn rate</summary>
-		public float BiasLearnRate { get; set; }
-		/// <summary>regularization constant for biases</summary>
-		public float BiasReg { get; set; }
-
+		
 		/// <summary>Default constructor</summary>
 		public SigmoidSVDPlusPlus() : base()
 		{
@@ -123,20 +110,6 @@ namespace MyMediaLite.RatingPrediction
 			double prediction = min_rating + sig_score * rating_range_size;
 
 			return (float) prediction;
-		}
-
-		///
-		protected override void InitModel()
-		{
-			base.InitModel();
-
-			p = new Matrix<float>(MaxUserID + 1, NumFactors);
-			p.InitNormal(InitMean, InitStdDev);
-			y = new Matrix<float>(MaxItemID + 1, NumFactors);
-			y.InitNormal(InitMean, InitStdDev);
-
-			user_bias = new float[MaxUserID + 1];
-			item_bias = new float[MaxItemID + 1];
 		}
 
 		///
@@ -200,111 +173,6 @@ namespace MyMediaLite.RatingPrediction
 			// pre-compute complete user factors
 			for (int u = 0; u <= MaxUserID; u++)
 				PrecomputeFactors(u);
-		}
-
-		void PrecomputeFactors(int u)
-		{
-			// compute
-			var factors = y.SumOfRows(items_rated_by_user[u]);
-			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
-			for (int f = 0; f < factors.Count; f++)
-				factors[f] = (float) (factors[f] / norm_denominator + p[u, f]);
-
-			// assign
-			for (int f = 0; f < factors.Count; f++)
-				user_factors[u, f] = (float) factors[f];
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			Array.Resize(ref user_bias, MaxUserID + 1);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			Array.Resize(ref item_bias, MaxItemID + 1);
-		}
-
-		/// <summary>Updates the latent factors on a user</summary>
-		/// <param name="user_id">the user ID</param>
-		public override void RetrainUser(int user_id)
-		{
-			if (UpdateUsers)
-			{
-				base.RetrainUser(user_id);
-				PrecomputeFactors(user_id);
-			}
-		}
-
-		///
-		public override void SaveModel(string filename)
-		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
-			{
-				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
-				writer.WriteVector(user_bias);
-				writer.WriteVector(item_bias);
-				writer.WriteMatrix(p);
-				writer.WriteMatrix(y);
-				writer.WriteMatrix(item_factors);
-			}
-		}
-
-		///
-		public override void LoadModel(string filename)
-		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var global_bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				var user_bias = reader.ReadVector();
-				var item_bias = reader.ReadVector();
-				var p            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var y            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				if (user_bias.Count != p.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of users must be the same for biases and factors: {0} != {1}",
-							user_bias.Count, p.dim1));
-				if (item_bias.Count != item_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of items must be the same for biases and factors: {0} != {1}",
-							item_bias.Count, item_factors.dim1));
-
-				if (p.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new Exception(
-						string.Format("Number of user (p) and item factors must match: {0} != {1}",
-							p.NumberOfColumns, item_factors.NumberOfColumns));
-				if (y.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new Exception(
-						string.Format("Number of user (y) and item factors must match: {0} != {1}",
-							y.NumberOfColumns, item_factors.NumberOfColumns));
-
-				this.MaxUserID = p.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				this.global_bias = global_bias;
-				if (this.NumFactors != item_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set NumFactors to {0}", item_factors.NumberOfColumns);
-					this.NumFactors = (uint) item_factors.NumberOfColumns;
-				}
-				this.user_bias = user_bias.ToArray();
-				this.item_bias = item_bias.ToArray();
-				this.p = p;
-				this.y = y;
-				this.item_factors = item_factors;
-
-				for (int u = 0; u <= MaxUserID; u++)
-					PrecomputeFactors(u);
-			}
 		}
 
 		///
