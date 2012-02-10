@@ -49,6 +49,9 @@ namespace MyMediaLite.Data
 		/// <param name="original_id_list">the list of original (external) IDs</param>
 		/// <returns>a list of internal IDs</returns>
 		IList<int> ToInternalID(IList<string> original_id_list);
+
+		/// <summary>the number of entities</summary>
+		int NumberOfEntities { get; }
 	}
 }
 

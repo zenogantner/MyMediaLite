@@ -27,6 +27,9 @@ namespace MyMediaLite.Data
 		private int MaxEntityID { get; set; }
 
 		///
+		public int NumberOfEntities { get { return MaxEntityID + 1; } }
+
+		///
 		public ICollection<string> OriginalIDs {
 			get {
 				var id_list = new string[MaxEntityID + 1];

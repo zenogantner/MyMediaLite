@@ -28,21 +28,23 @@ namespace MyMediaLite.Data
 		/// <remarks>
 		/// Never, to repeat NEVER, directly delete entries from this dictionary!
 		/// </remarks>
-		private Dictionary<string, int> original_to_internal = new Dictionary<string, int>();
+		internal Dictionary<string, int> original_to_internal = new Dictionary<string, int>();
 
 		/// <summary>Contains the mapping from the internal IDs to the original (external) IDs</summary>
 		/// <remarks>
 		/// Never, to repeat NEVER, directly delete entries from this list!
 		/// </remarks>
-		private List<string> internal_to_original = new List<string>();
+		internal List<string> internal_to_original = new List<string>();
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
 		public ICollection<string> OriginalIDs	{ get { return original_to_internal.Keys; } }
 
-		/// <summary>all internal entity IDs</summary>
-		/// <value>all internal entity IDs</value>
+		///
 		public ICollection<int> InternalIDs { get { return Enumerable.Range(0, internal_to_original.Count).ToArray(); } }
+
+		///
+		public int NumberOfEntities { get { return internal_to_original.Count; } }
 
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
