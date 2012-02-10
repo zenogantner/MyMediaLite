@@ -285,7 +285,7 @@ class RatingPrediction
 
 		// load all the data
 		LoadData(data_dir, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
-		
+
 		// if requested, save ID mappings
 		if (save_user_mapping_file != null)
 			user_mapping.SaveMapping(save_user_mapping_file);
@@ -478,7 +478,7 @@ class RatingPrediction
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --item-relations=FILE.");
-		
+
 		if (no_id_mapping)
 		{
 			if (save_user_mapping_file != null)
