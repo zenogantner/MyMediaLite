@@ -62,17 +62,14 @@ namespace MyMediaLite.RatingPrediction
 		public TimeAwareBaselineWithFrequencies()
 		{
 			NumIter = 40;
-
 			FrequencyLogBase = 6.76f;
-
 			BinSize = 70;
-
 			Beta = 0.4f;
 
 			UserBiasLearnRate = 0.00267f;
 			ItemBiasLearnRate = 0.000488f;
 			AlphaLearnRate = 0.00000311f;
-			ItemBiasByTimeBinLearnRate = 0.00000115f;
+			ItemBiasByTimeBinLearnRate = 0.000115f;
 			UserBiasByDayLearnRate = 0.000257f;
 			UserScalingLearnRate = 0.00564f;
 			UserScalingByDayLearnRate = 0.00103f;
