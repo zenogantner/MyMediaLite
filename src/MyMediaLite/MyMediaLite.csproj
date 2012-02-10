@@ -214,6 +214,7 @@
     <Compile Include="RatingPrediction\SVDPlusPlus.cs" />
     <Compile Include="RatingPrediction\SigmoidSVDPlusPlus.cs" />
     <Compile Include="IO\MatrixExtensions.cs" />
+    <Compile Include="IO\EntityMappingExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
