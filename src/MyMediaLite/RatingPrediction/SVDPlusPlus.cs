@@ -51,7 +51,6 @@ namespace MyMediaLite.RatingPrediction
 		// - try bold driver heuristics
 		// - try learning rate decay
 		// - try rating-based weights from http://recsyswiki.com/wiki/SVD%2B%2B
-		// - try frequency regularization
 		// - try different learn rates/regularization for user and item parameters
 		// - implement parallel learning
 		// - implement normal gradient descent learning
@@ -134,7 +133,10 @@ namespace MyMediaLite.RatingPrediction
 			y = new Matrix<float>(MaxItemID + 1, NumFactors);
 			y.InitNormal(InitMean, InitStdDev);
 
-			user_factors = null;
+			// set factors to zero for items without training examples
+			for (int i = 0; i <= MaxItemID; i++)
+				if (ratings.CountByItem[i] == 0)
+					y.SetRowToOneValue(i, 0);
 
 			user_bias = new float[MaxUserID + 1];
 			item_bias = new float[MaxItemID + 1];
@@ -143,6 +145,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
 			float lr  = LearnRate;
 
@@ -166,9 +169,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * reg * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * reg * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors -- TODO vectorize
 				double x = err / norm_denominator; // TODO better name than x
@@ -186,11 +189,11 @@ namespace MyMediaLite.RatingPrediction
 					{
 						double delta_i = err * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
-
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							double delta_oi = common_update - reg * y[other_item_id, f]; // TODO - what to do here?
+							float rated_item_reg = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg;
+							double delta_oi = common_update - rated_item_reg * y[other_item_id, f];
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
 					}
@@ -261,6 +264,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(min_rating.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(max_rating.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(user_bias);
 				writer.WriteVector(item_bias);
 				writer.WriteMatrix(p);
@@ -275,6 +280,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				var global_bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var min_rating  = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var max_rating  = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_bias = reader.ReadVector();
 				var item_bias = reader.ReadVector();
 				var p            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
@@ -316,6 +323,8 @@ namespace MyMediaLite.RatingPrediction
 				this.p = p;
 				this.y = y;
 				this.item_factors = item_factors;
+				this.min_rating = min_rating;
+				this.max_rating = max_rating;
 			}
 		}
 
@@ -325,7 +334,7 @@ namespace MyMediaLite.RatingPrediction
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} init_mean={8} init_stddev={9}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate,  BiasLearnRate, NumIter, InitMean, InitStdDev);
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }

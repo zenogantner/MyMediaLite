@@ -55,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>The optimization target</summary>
 		public OptimizationTarget Loss { get; set; }
-		
+
 		/// <summary>Default constructor</summary>
 		public SigmoidSVDPlusPlus() : base()
 		{
@@ -99,6 +99,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double score = global_bias;
 
+			if (user_factors == null)
+				PrecomputeFactors();
+
 			if (user_id <= MaxUserID)
 				score += user_bias[user_id];
 			if (item_id <= MaxItemID)
@@ -115,6 +118,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
 			float lr  = LearnRate;
 
@@ -135,13 +139,15 @@ namespace MyMediaLite.RatingPrediction
 				double prediction = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - prediction;
 
+				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
 				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * Regularization * user_bias[u]);
+					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * Regularization * item_bias[i]);
+					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
 				double x = gradient_common / norm_denominator; // TODO better name than x
@@ -152,27 +158,31 @@ namespace MyMediaLite.RatingPrediction
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = gradient_common * i_f - reg * p[u, f];
+						double delta_u = gradient_common * i_f - user_reg_weight * p[u, f];
 						p.Inc(u, f, lr * delta_u);
 					}
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_plus_y_sum_vector[f] - reg * i_f;
+						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							double delta_oi = common_update - reg * y[other_item_id, f];
+							float rated_item_reg = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg;
+							double delta_oi = common_update - rated_item_reg * y[other_item_id, f];
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
 					}
 				}
 			}
+		}
 
-			// pre-compute complete user factors
-			for (int u = 0; u <= MaxUserID; u++)
-				PrecomputeFactors(u);
+		///
+		public override void LoadModel(string filename)
+		{
+			base.LoadModel(filename);
+			rating_range_size = max_rating - min_rating;
 		}
 
 		///
@@ -180,8 +190,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} learn_rate={4} bias_learn_rate={5} num_iter={6} loss={7} init_mean={8} init_stddev={9}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, LearnRate,  BiasLearnRate, NumIter, Loss, InitMean, InitStdDev);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} loss={8} init_mean={9} init_stddev={10}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, Loss, InitMean, InitStdDev);
 		}
 	}
 }

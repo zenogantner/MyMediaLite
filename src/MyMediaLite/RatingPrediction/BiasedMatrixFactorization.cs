@@ -304,6 +304,8 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
 			{
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(min_rating.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(max_rating.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(user_bias);
 				writer.WriteMatrix(user_factors);
 				writer.WriteVector(item_bias);
@@ -316,7 +318,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var bias       = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var min_rating = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var max_rating = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
 				var user_bias = reader.ReadVector();
 				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
@@ -353,6 +357,10 @@ namespace MyMediaLite.RatingPrediction
 				this.item_factors = item_factors;
 				this.user_bias = user_bias.ToArray();
 				this.item_bias = item_bias.ToArray();
+				this.min_rating = min_rating;
+				this.max_rating = max_rating;
+
+				rating_range_size = max_rating - min_rating;
 			}
 		}
 
