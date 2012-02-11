@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -44,8 +45,7 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO
 		// - implement ComputeObjective
-		// - handle fold-in
-		// - merge with SVDPlusPlus
+		// - merge with SVDPlusPlus?
 
 		/// <summary>size of the interval of valid ratings</summary>
 		double rating_range_size;
@@ -78,6 +78,11 @@ namespace MyMediaLite.RatingPrediction
 			double avg = (ratings.Average - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
+			base.Train();
+		}
+
+		void SetupLoss()
+		{
 			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
@@ -90,8 +95,6 @@ namespace MyMediaLite.RatingPrediction
 					compute_gradient_common = (sig_score, err) => (float) err;
 					break;
 			}
-
-			base.Train();
 		}
 
 		///
@@ -118,6 +121,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			SetupLoss();
+
 			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
 			float lr  = LearnRate;
@@ -183,6 +188,63 @@ namespace MyMediaLite.RatingPrediction
 		{
 			base.LoadModel(filename);
 			rating_range_size = max_rating - min_rating;
+		}
+
+		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			SetupLoss();
+
+			var user_p = new float[NumFactors];
+			user_p.InitNormal(InitMean, InitStdDev);
+			float user_bias = 0;
+
+			var items = (from pair in rated_items select pair.First).ToArray();
+			float user_reg_weight = FrequencyRegularization ? (float) (Regularization / Math.Sqrt(items.Length)) : Regularization;
+
+			// compute stuff that will not change
+			var y_sum_vector = y.SumOfRows(items);
+			double norm_denominator = Math.Sqrt(items.Length);
+			for (int f = 0; f < y_sum_vector.Count; f++)
+				y_sum_vector[f] = (float) (y_sum_vector[f] / norm_denominator);
+
+			rated_items.Shuffle();
+			for (uint it = 0; it < NumIter; it++)
+			{
+				for (int i = 0; i < rated_items.Count; i++)
+				{
+					int item_id = rated_items[i].First;
+
+					double score = global_bias + user_bias + item_bias[item_id];
+					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
+					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
+					double sig_score = 1 / (1 + Math.Exp(-score));
+					double prediction = min_rating + sig_score * rating_range_size;
+					float err = (float) (rated_items[i].Second - prediction);
+					float gradient_common = compute_gradient_common(sig_score, err);
+
+					// adjust bias
+					user_bias += BiasLearnRate * LearnRate * ((float) gradient_common - BiasReg * user_reg_weight * user_bias);
+
+					// adjust factors
+					for (int f = 0; f < NumFactors; f++)
+					{
+						float u_f = user_p[f];
+						float i_f = item_factors[item_id, f];
+
+						double delta_u = gradient_common * i_f - user_reg_weight * u_f;
+						user_p[f] += (float) (LearnRate * delta_u);
+					}
+				}
+			}
+
+			// assign final parameter values to return vector
+			var user_vector = new float[NumFactors + 1];
+			user_vector[0] = user_bias;
+			for (int f = 0; f < NumFactors; f++)
+				user_vector[f + 1] = (float) y_sum_vector[f] + user_p[f];
+
+			return user_vector;
 		}
 
 		///
