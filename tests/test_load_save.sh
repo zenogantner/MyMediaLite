@@ -76,6 +76,7 @@ do
           $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --load-user-mapping=um.txt --load-item-mapping=im.txt | perl -pe "s/\w+_time \S+//g" > output2.txt
      diff --ignore-all-space output1.txt output2.txt
      rm tmp.model*
+     rm um.txt im.txt
 done
 
 for method in UserKNN ItemKNN WeightedUserKNN WeightedItemKNN
