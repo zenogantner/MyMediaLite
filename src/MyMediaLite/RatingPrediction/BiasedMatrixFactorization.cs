@@ -181,19 +181,6 @@ namespace MyMediaLite.RatingPrediction
 			double avg = (ratings.Average - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
-			switch (Loss)
-			{
-				case OptimizationTarget.MAE:
-					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
-					break;
-				case OptimizationTarget.RMSE:
-					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
-					break;
-				case OptimizationTarget.LogisticLoss:
-					compute_gradient_common = (sig_score, err) => (float) err;
-					break;
-			}
-
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate();
 		}
@@ -228,9 +215,27 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		void SetupLoss()
+		{
+			switch (Loss)
+			{
+				case OptimizationTarget.MAE:
+					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.RMSE:
+					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.LogisticLoss:
+					compute_gradient_common = (sig_score, err) => (float) err;
+					break;
+			}
+		}
+
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			SetupLoss();
+
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
@@ -409,6 +414,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
 		{
+			SetupLoss();
+
 			// initialize user parameters
 			var user_vector = new float[NumFactors + 1];
 			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
