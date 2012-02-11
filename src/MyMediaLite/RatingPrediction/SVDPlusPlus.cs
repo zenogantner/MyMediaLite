@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -44,7 +45,6 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO
 		// - implement ComputeObjective
-		// - handle fold-in
 		// - use knowledge of which items will have to be rated ...
 		// - implement also with fixed biases (progress prize 2008)
 		// - implement integrated model (section 5 of the KDD 2008 paper)
@@ -155,12 +155,12 @@ namespace MyMediaLite.RatingPrediction
 				int i = ratings.Items[index];
 
 				double prediction = global_bias + user_bias[u] + item_bias[i];
-				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
+				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
-				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
-					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
+				for (int f = 0; f < p_plus_y_sum_vector.Count; f++)
+					p_plus_y_sum_vector[f] = (float) (p_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);
 
 				double err = ratings[index] - prediction;
 
@@ -187,7 +187,7 @@ namespace MyMediaLite.RatingPrediction
 					}
 					if (update_item)
 					{
-						double delta_i = err * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
+						double delta_i = err * p_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
@@ -326,6 +326,59 @@ namespace MyMediaLite.RatingPrediction
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
 			}
+		}
+
+		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			var user_p = new float[NumFactors];
+			user_p.InitNormal(InitMean, InitStdDev);
+			float user_bias = 0;
+
+			var items = (from pair in rated_items select pair.First).ToArray();
+			float user_reg_weight = FrequencyRegularization ? (float) (Regularization / Math.Sqrt(items.Length)) : Regularization;
+
+			// compute stuff that will not change
+			var y_sum_vector = y.SumOfRows(items);
+			double norm_denominator = Math.Sqrt(items.Length);
+			for (int f = 0; f < y_sum_vector.Count; f++)
+				y_sum_vector[f] = (float) (y_sum_vector[f] / norm_denominator);
+
+			rated_items.Shuffle();
+			for (uint it = 0; it < NumIter; it++)
+			{
+				for (int i = 0; i < rated_items.Count; i++)
+				{
+					int item_id = rated_items[i].First;
+
+					double prediction = global_bias + user_bias + item_bias[item_id];
+					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
+					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
+
+					float err = (float) (rated_items[i].Second - prediction);
+
+					// adjust bias
+					user_bias += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias);
+
+					// adjust factors
+					for (int f = 0; f < NumFactors; f++)
+					{
+						float u_f = user_p[f];
+						float i_f = item_factors[item_id, f];
+
+						double delta_u = err * i_f - user_reg_weight * u_f;
+						user_p[f] += (float) (LearnRate * delta_u);
+					}
+				}
+			}
+
+			// assign final parameter values to return vector
+			var user_vector = new float[NumFactors + 1];
+			user_vector[0] = user_bias;
+			for (int f = 0; f < NumFactors; f++)
+				user_vector[f + 1] = (float) y_sum_vector[f] + user_p[f];
+
+			return user_vector;
 		}
 
 		///
