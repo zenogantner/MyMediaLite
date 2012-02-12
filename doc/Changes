@@ -28,6 +28,8 @@
            fix initialization of c_u parameter, proper use of user_scaling
          - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
 	   ComputeLoss()
+	 - ItemRecommender.ItemKNN: fix wrong prediction
+           (reported by Chris Newell)
 	 - EntityAverage: remove unnecessary parameter from Retrain()
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs

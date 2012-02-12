@@ -51,7 +51,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			int count = 0;
 			foreach (int neighbor in nearest_neighbors[item_id])
-				if (Feedback.UserMatrix[neighbor, user_id])
+				if (Feedback.ItemMatrix[neighbor, user_id])
 					count++;
 
 			return (float) (count / k);
