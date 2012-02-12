@@ -166,6 +166,7 @@ class ItemRecommendation
    --in-training-items          use only items in the training set as candidate items
    --in-test-items              use only items in the test set as candidate items
    --all-items                  use all known items as candidate items
+  The default is to use both the items in the training and the test set as candidate items.
 
   choosing the users for evaluation/prediction
    --test-users=FILE            predict items for users specified in FILE (one user per line)
