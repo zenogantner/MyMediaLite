@@ -730,7 +730,7 @@ class ItemRecommendation
 				candidate_items, predict_items_number,
 				prediction_file, user_list,
 				user_mapping, item_mapping);
-			Console.Error.WriteLine("Wrote predictions to {0}", prediction_file);
+			Console.Error.WriteLine("Wrote predictions for {0} users to {1}", user_list.Count, prediction_file);
 		});
 		Console.Write(" prediction_time " + time_span);
 	}

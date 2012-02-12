@@ -46,6 +46,8 @@
 	 - item recommendation: add dependency to System.Data assembly
 	 - item recommendation: fix usage description of --predict-items-number
            and --repeat-evaluation (reported by Simon Renaud)
+	 - item recommendation: show number of test users when writing out
+           predictions
 	I/O
 	 - #206 (suggested by Simon Dooms): string user, item, and attribute
            IDs (instead of long)
