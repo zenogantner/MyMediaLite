@@ -34,6 +34,8 @@
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
 	 - more compact usage information
+	 - item recommendation: actually take user list into account when writing
+           predictions (reported by Yue Shi)
 	 - add --(save|load)-(user|item)-mapping=FILE options
 	 - rating prediction: add option --prediction-header=LINE
 	 - add --no-id-mapping option to save memory for large-scale datasets

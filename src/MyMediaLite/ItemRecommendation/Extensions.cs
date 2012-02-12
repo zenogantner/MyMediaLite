@@ -69,7 +69,8 @@ namespace MyMediaLite.ItemRecommendation
 			IList<int> users = null,
 			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
 		{
-			users = new List<int>(train.AllUsers);
+			if (users == null)
+				users = new List<int>(train.AllUsers);
 
 			foreach (int user_id in users)
 			{
