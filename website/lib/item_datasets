@@ -4,10 +4,13 @@
      { method => 'WRMF',        hp => '' }
    ]
    ml100k = [
-     { method => 'MostPopular', hp => '',       AUC => '0.85478', prec5 => '0.322',   prec10 => '0.30458', MAP => '0.18939', recall5 => '0.0553',  recall10 => '0.09752', NDCG => '0.57069', mrr => '0.39656' }
-     { method => 'ItemKNN',     hp => 'k=1000', AUC => '0.75021'  prec5 => '0.07712'  prec10 => '0.08954'  MAP => '0.08397'  recall5 => '0.01026'  recall10 => '0.02122'  NDCG => '0.44553'  mrr => '0.15064' }
-     { method => 'UserKNN',     hp => '',       AUC => '0.91736', prec5 => '0.52505', prec10 => '0.46776', MAP => '0.32653', recall5 => '0.10712', recall10 => '0.1767',  NDCG => '0.68831', mrr => '0.34072' }
-     { method => 'WRMF',        hp => '',       AUC => '0.92635', prec5 => '0.55556', prec10 => '0.49107', MAP => '0.35469', recall5 => '0.10907', recall10 => '0.18402', NDCG => '0.70504', mrr => '0.45752' }
-     { method => 'BPRMF',       hp => '',       AUC => '0.9204',  prec5 => '0.47451', prec10 => '0.42462', MAP => '0.30543', recall5 => '0.0901',  recall10 => '0.1566',  NDCG => '0.66693', mrr => '0.44003' }
+     { method => 'MostPopular',     hp => '',     AUC => '0.8614',  prec5 => '0.49268', prec10 => '0.46242', MAP => '0.27751', recall5 => '0.04629', recall10 => '0.08681', NDCG => '0.68972', mrr => '0.66143' }
+     { method => 'ItemKNN',         hp => 'k=10', AUC => '0.77907', prec5 => '0.2154',  prec10 => '0.19001', MAP => '0.14175', recall5 => '0.01457', recall10 => '0.02188', NDCG => '0.56725', mrr => '0.409'   }
+     { method => 'WeightedItemKNN', hp => 'k=10', AUC => '0.93485', prec5 => '0.65926', prec10 => '0.64129', MAP => '0.48065', recall5 => '0.06428', recall10 => '0.12399', NDCG => '0.79894', mrr => '0.69702' }
+     { method => 'UserKNN',         hp => '',     AUC => '0.91736', prec5 => '0.52505', prec10 => '0.46776', MAP => '0.32653', recall5 => '0.10712', recall10 => '0.1767',  NDCG => '0.68831', mrr => '0.34072' }
+	 { method => 'WeightedUserKNN', hp => 'k=10', AUC => '0.92814', prec5 => '0.88275', prec10 => '0.82675', MAP => '0.58355', recall5 => '0.10726', recall10 => '0.19346', NDCG => '0.87517', mrr => '0.93459' }
+	 { method => 'WeightedUserKNN', hp => 'k=80', AUC => '0.94032', prec5 => '0.90231', prec10 => '0.83644', MAP => '0.57747', recall5 => '0.10625', recall10 => '0.1888',  NDCG => '0.87603', mrr => '0.95808' }
+     { method => 'WRMF',            hp => '',     AUC => '0.94934', prec5 => '0.80322', prec10 => '0.74216', MAP => '0.53847 ', recall5 => '0.0873', recall10 => '0.15371', NDCG => '0.8468',  mrr => '0.87025' }
+     { method => 'BPRMF',           hp => '',     AUC => '0.9204',  prec5 => '0.47451', prec10 => '0.42462', MAP => '0.30543', recall5 => '0.0901',  recall10 => '0.1566',  NDCG => '0.66693', mrr => '0.44003' }
    ]
 %]
