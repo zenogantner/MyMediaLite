@@ -38,7 +38,17 @@
     <table border="1">
       <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>AUC</th> <th>prec@5</th> <th>prec@10</th> <th>MAP</th> <th>recall@5</th> <th>recall@10</th> <th>NDCG</th> <th>mrr</th> </tr>
       [% FOREACH entry IN ml1m_data %]
-        <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> <td>[% entry.mae %]</td> </tr>
+      <tr>
+        <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td>
+        <td>[% entry.AUC %]</td>
+        <td>[% entry.prec5 %]</td>
+        <td>[% entry.prec10 %]</td>
+        <td>[% entry.MAP %]</td>
+        <td>[% entry.recall5 %]</td>
+        <td>[% entry.recall10 %]</td>
+        <td>[% entry.NDCG %]</td>
+        <td>[% entry.mrr %]</td>
+      </tr>
       [% END %]
     </table>
   </p>
@@ -49,7 +59,17 @@
     <table border="1">
       <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>AUC</th> <th>prec@5</th> <th>prec@10</th> <th>MAP</th> <th>recall@5</th> <th>recall@10</th> <th>NDCG</th> <th>mrr</th> </tr>
       [% FOREACH entry IN ml100k %]
-      <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.AUC %]</td> <td>[% entry.prec5 %]</td> </tr>
+      <tr>
+        <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td>
+        <td>[% entry.AUC %]</td>
+        <td>[% entry.prec5 %]</td>
+        <td>[% entry.prec10 %]</td>
+        <td>[% entry.MAP %]</td>
+        <td>[% entry.recall5 %]</td>
+        <td>[% entry.recall10 %]</td>
+        <td>[% entry.NDCG %]</td>
+        <td>[% entry.mrr %]</td>
+      </tr>
       [% END %]
     </table>
   </p>
