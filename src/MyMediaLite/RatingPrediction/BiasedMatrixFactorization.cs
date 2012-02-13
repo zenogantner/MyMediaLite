@@ -417,8 +417,8 @@ namespace MyMediaLite.RatingPrediction
 			SetupLoss();
 
 			// initialize user parameters
-			var user_vector = new float[NumFactors + 1];
-			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
+			float user_bias = 0;
+			var factors = new float[NumFactors];
 			factors.InitNormal(InitMean, InitStdDev);
 
 			float reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(rated_items.Count)) : RegU;
@@ -431,7 +431,7 @@ namespace MyMediaLite.RatingPrediction
 					int item_id = rated_items[i].First;
 
 					// compute rating and error
-					double score = global_bias + user_vector[0] + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
+					double score = global_bias + user_bias + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
 					double err = rated_items[i].Second - prediction;
@@ -439,18 +439,23 @@ namespace MyMediaLite.RatingPrediction
 					float gradient_common = compute_gradient_common(sig_score, err);
 
 					// adjust bias
-					user_vector[0] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * reg_weight * user_vector[0]);
+					user_bias += BiasLearnRate * LearnRate * (gradient_common - BiasReg * reg_weight * user_bias);
 
 					// adjust factors
 					for (int f = 0; f < NumFactors; f++)
 					{
-						float u_f = user_vector[f + 1];
+						float u_f = factors[f];
 						float i_f = item_factors[i, f];
 
 						double delta_u = gradient_common * i_f - reg_weight * u_f;
-						user_vector[f + 1] += (float) (LearnRate * delta_u);
+						factors[f] += (float) (LearnRate * delta_u);
 					}
 				}
+
+			var user_vector = new float[NumFactors + 1];
+			user_vector[0] = user_bias;
+			Array.Copy(factors, 0, user_vector, 1, NumFactors);
+
 			return user_vector;
 		}
 
