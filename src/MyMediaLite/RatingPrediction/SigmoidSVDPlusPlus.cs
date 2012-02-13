@@ -191,7 +191,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
 		{
 			SetupLoss();
 

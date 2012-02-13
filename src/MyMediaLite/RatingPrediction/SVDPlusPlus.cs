@@ -329,7 +329,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
 		{
 			var user_p = new float[NumFactors];
 			user_p.InitNormal(InitMean, InitStdDev);

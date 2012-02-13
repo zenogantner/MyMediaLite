@@ -195,13 +195,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='user_vector'>a float vector representing the user</param>
 		/// <param name='item_id'>the item ID</param>
 		/// <returns>the predicted rating</returns>
-		protected virtual float Predict(IList<float> user_vector, int item_id)
+		protected virtual float Predict(float[] user_vector, int item_id)
 		{
 			return Predict(user_vector, item_id, true);
 		}
 
 		///
-		float Predict(IList<float> user_vector, int item_id, bool bound)
+		float Predict(float[] user_vector, int item_id, bool bound)
 		{
 			float result = global_bias + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_vector);
 
@@ -298,7 +298,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Compute parameters (latent factors) for a user represented by ratings</summary>
 		/// <returns>a vector of latent factors</returns>
 		/// <param name='rated_items'>a list of (item ID, rating value) pairs</param>
-		protected virtual IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected virtual float[] FoldIn(IList<Pair<int, float>> rated_items)
 		{
 			var user_vector = new float[NumFactors];
 			user_vector.InitNormal(InitMean, InitStdDev);

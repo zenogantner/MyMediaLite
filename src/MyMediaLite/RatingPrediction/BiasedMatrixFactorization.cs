@@ -296,9 +296,10 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float Predict(IList<float> user_vector, int item_id)
+		protected override float Predict(float[] user_vector, int item_id)
 		{
-			var factors = new ListProxy<float>(user_vector, Enumerable.Range(1, (int) NumFactors).ToArray() );
+			var factors = new float[NumFactors];
+			Array.Copy(user_vector, 1, factors, 0, NumFactors);
 			double score = global_bias + user_vector[0] + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
 		}
@@ -412,7 +413,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
 		{
 			SetupLoss();
 
