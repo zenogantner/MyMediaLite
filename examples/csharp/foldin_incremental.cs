@@ -6,20 +6,25 @@ using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
+using MyMediaLite.Util;
 
 public class FoldInAndIncrementalTraining
 {
 	public static void Main(string[] args)
 	{
 		// TODO add random seed
-		// TODO make recommender type configurable
 		// TODO report per-user times
 
+		string data_file = args[0];
+		string method    = args[1];
+		string options   = args[2];
+		int num_test_users = int.Parse(args[3]);
+
 		// load the data
-		var all_data = RatingData.Read(args[0]);
+		var all_data = RatingData.Read(data_file);
 
 		// TODO randomize
-		var test_users = new HashSet<int>(Enumerable.Range(0, 200));
+		var test_users = new HashSet<int>(Enumerable.Range(0, num_test_users));
 
 		var update_indices = new List<int>();
 		var eval_indices = new List<int>();
@@ -49,7 +54,8 @@ public class FoldInAndIncrementalTraining
         Console.Write(eval_data.Statistics());
 
 		// prepare recommender
-		var recommender = new MatrixFactorization();
+		RatingPredictor recommender = Recommender.CreateRatingPredictor(method);
+		recommender.Configure(options);
 		recommender.Ratings = training_data;
 		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 		Console.WriteLine("recommender: {0}", recommender);
@@ -59,9 +65,9 @@ public class FoldInAndIncrementalTraining
 		Console.WriteLine("complete training: {0}", recommender.EvaluateFoldInCompleteRetraining(update_data, eval_data));
 
 		// II. online updates
-		Console.WriteLine("incremental training: {0}", recommender.EvaluateFoldInIncrementalTraining(update_data, eval_data));
+		Console.WriteLine("incremental training: {0}", ((IncrementalRatingPredictor)recommender).EvaluateFoldInIncrementalTraining(update_data, eval_data));
 
 		// III. fold-in
-		Console.WriteLine("fold-in: {0}", recommender.EvaluateFoldIn(update_data, eval_data));
+		Console.WriteLine("fold-in: {0}", ((IFoldInRatingPredictor)recommender).EvaluateFoldIn(update_data, eval_data));
 	}
 }
