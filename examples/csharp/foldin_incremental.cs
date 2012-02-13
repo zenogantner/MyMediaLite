@@ -62,12 +62,18 @@ public class FoldInAndIncrementalTraining
 		recommender.Train();
 
 		// I. complete retraining
-		Console.WriteLine("complete training: {0}", recommender.EvaluateFoldInCompleteRetraining(update_data, eval_data));
+		Console.WriteLine(
+			"complete training: {0}",
+			recommender.EvaluateFoldInCompleteRetraining(update_data, eval_data));
 
 		// II. online updates
-		Console.WriteLine("incremental training: {0}", ((IncrementalRatingPredictor)recommender).EvaluateFoldInIncrementalTraining(update_data, eval_data));
+		Console.WriteLine(
+			"incremental training: {0}",
+			((IncrementalRatingPredictor)recommender).EvaluateFoldInIncrementalTraining(update_data, eval_data));
 
 		// III. fold-in
-		Console.WriteLine("fold-in: {0}", ((IFoldInRatingPredictor)recommender).EvaluateFoldIn(update_data, eval_data));
+		Console.WriteLine(
+			"fold-in: {0}",
+			((IFoldInRatingPredictor)recommender).EvaluateFoldIn(update_data, eval_data));
 	}
 }
