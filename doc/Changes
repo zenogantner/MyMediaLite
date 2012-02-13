@@ -34,7 +34,9 @@
 	   ComputeLoss()
 	 - ItemRecommender.ItemKNN: fix wrong prediction
            (reported by Chris Newell)
-	 - EntityAverage: remove unnecessary parameter from Retrain()
+	 - EntityAverage:
+            - remove unnecessary parameter from Retrain()
+            - compute averages using doubles instead of floats
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
 	 - more compact usage information

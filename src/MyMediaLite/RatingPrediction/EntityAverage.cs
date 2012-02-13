@@ -48,9 +48,11 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="max_entity_id">the maximum entity ID</param>
 		protected void Train(IList<int> entity_ids, int max_entity_id)
 		{
+			var rating_sums   = new List<double>();
 			var rating_counts = new List<int>();
 			for (int i = 0; i <= max_entity_id; i++)
 			{
+				rating_sums.Add(0);
 				rating_counts.Add(0);
 				entity_averages.Add(0);
 			}
@@ -59,14 +61,14 @@ namespace MyMediaLite.RatingPrediction
 			{
 				int entity_id = entity_ids[i];
 				rating_counts[entity_id]++;
-				entity_averages[entity_id] += ratings[i];
+				rating_sums[entity_id] += ratings[i];
 			}
 
 			global_average = ratings.Average;
 
 			for (int i = 0; i <= max_entity_id; i++)
 				if (rating_counts[i] > 0)
-					entity_averages[i] /= rating_counts[i];
+					entity_averages[i] = (float) (rating_sums[i] / rating_counts[i]);
 				else
 					entity_averages[i] = global_average;
 		}
