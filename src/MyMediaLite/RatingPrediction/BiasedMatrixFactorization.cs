@@ -427,15 +427,15 @@ namespace MyMediaLite.RatingPrediction
 			// perform training
 			rated_items.Shuffle();
 			for (uint it = 0; it < NumIter; it++)
-				for (int i = 0; i < rated_items.Count; i++)
+				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[i].First;
+					int item_id = rated_items[index].First;
 
 					// compute rating and error
 					double score = global_bias + user_bias + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
-					double err = rated_items[i].Second - prediction;
+					double err = rated_items[index].Second - prediction;
 
 					float gradient_common = compute_gradient_common(sig_score, err);
 
@@ -446,7 +446,7 @@ namespace MyMediaLite.RatingPrediction
 					for (int f = 0; f < NumFactors; f++)
 					{
 						float u_f = factors[f];
-						float i_f = item_factors[i, f];
+						float i_f = item_factors[item_id, f];
 
 						double delta_u = gradient_common * i_f - reg_weight * u_f;
 						factors[f] += (float) (LearnRate * delta_u);

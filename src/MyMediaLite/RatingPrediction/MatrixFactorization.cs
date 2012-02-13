@@ -305,16 +305,16 @@ namespace MyMediaLite.RatingPrediction
 			rated_items.Shuffle();
 			for (uint it = 0; it < NumIter; it++)
 			{
-				for (int i = 0; i < rated_items.Count; i++)
+				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[i].First;
-					float err = rated_items[i].Second - Predict(user_vector, item_id, false);
+					int item_id = rated_items[index].First;
+					float err = rated_items[index].Second - Predict(user_vector, item_id, false);
 
 					// adjust factors
 					for (int f = 0; f < NumFactors; f++)
 					{
 						float u_f = user_vector[f];
-						float i_f = item_factors[i, f];
+						float i_f = item_factors[item_id, f];
 
 						double delta_u = err * i_f - Regularization * u_f;
 						user_vector[f] += (float) (LearnRate * delta_u);

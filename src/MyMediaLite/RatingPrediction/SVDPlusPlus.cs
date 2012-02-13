@@ -347,15 +347,15 @@ namespace MyMediaLite.RatingPrediction
 			rated_items.Shuffle();
 			for (uint it = 0; it < NumIter; it++)
 			{
-				for (int i = 0; i < rated_items.Count; i++)
+				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[i].First;
+					int item_id = rated_items[index].First;
 
 					double prediction = global_bias + user_bias + item_bias[item_id];
 					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
 					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
 
-					float err = (float) (rated_items[i].Second - prediction);
+					float err = (float) (rated_items[index].Second - prediction);
 
 					// adjust bias
 					user_bias += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias);
