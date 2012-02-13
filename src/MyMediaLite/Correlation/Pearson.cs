@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -97,23 +98,23 @@ namespace MyMediaLite.Correlation
 			return cm;
 		}
 
-		/// <summary>Compute correlations between two entities for given ratings</summary>
+		/// <summary>Compute correlation between two entities for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		/// <param name="i">the ID of first entity</param>
-		/// <param name="j">the ID of second entity</param>
+		/// <param name="i">the ID of the first entity</param>
+		/// <param name="j">the ID of the second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
 		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j, float shrinkage)
 		{
 			if (i == j)
 				return 1;
 
-			IList<int> ratings1 = (entity_type == EntityType.USER) ? ratings.ByUser[i] : ratings.ByItem[i];
-			IList<int> ratings2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
+			IList<int> indexes1 = (entity_type == EntityType.USER) ? ratings.ByUser[i] : ratings.ByItem[i];
+			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
 
 			// get common ratings for the two entities
-			var e1 = (entity_type == EntityType.USER) ? ratings.GetItems(ratings1) : ratings.GetUsers(ratings1);
-			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(ratings2) : ratings.GetUsers(ratings2);
+			var e1 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes1) : ratings.GetUsers(indexes1);
+			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes2) : ratings.GetUsers(indexes2);
 
 			e1.IntersectWith(e2);
 
@@ -130,18 +131,75 @@ namespace MyMediaLite.Correlation
 			foreach (int other_entity_id in e1)
 			{
 				// get ratings
-				double r1 = 0;
-				double r2 = 0;
+				float r1 = 0;
+				float r2 = 0;
 				if (entity_type == EntityType.USER)
 				{
-					r1 = ratings.Get(i, other_entity_id, ratings1);
-					r2 = ratings.Get(j, other_entity_id, ratings2);
+					r1 = ratings.Get(i, other_entity_id, indexes1);
+					r2 = ratings.Get(j, other_entity_id, indexes2);
 				}
 				else
 				{
-					r1 = ratings.Get(other_entity_id, i, ratings1);
-					r2 = ratings.Get(other_entity_id, j, ratings2);
+					r1 = ratings.Get(other_entity_id, i, indexes1);
+					r2 = ratings.Get(other_entity_id, j, indexes2);
 				}
+
+				// update sums
+				i_sum  += r1;
+				j_sum  += r2;
+				ij_sum += r1 * r2;
+				ii_sum += r1 * r1;
+				jj_sum += r2 * r2;
+			}
+
+			double denominator = Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
+
+			if (denominator == 0)
+				return 0;
+			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
+
+			return (float) pmcc * ((n - 1) / (n - 1 + shrinkage));
+		}
+
+		/// <summary>Compute correlation between two entities for given ratings</summary>
+		/// <param name="ratings">the rating data</param>
+		/// <param name="entity_type">the entity type, either USER or ITEM</param>
+		/// <param name="entity_ratings">ratings identifying the first entity</param>
+		/// <param name="j">the ID of second entity</param>
+		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
+		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Pair<int, float>> entity_ratings, int j, float shrinkage)
+		{
+			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
+
+			// get common ratings for the two entities
+			var e1 = new HashSet<int>(from pair in entity_ratings select pair.First);
+			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes2) : ratings.GetUsers(indexes2);
+
+			e1.IntersectWith(e2);
+			var ratings1 = new Dictionary<int, float>();
+			for (int index = 0; index < entity_ratings.Count; index++)
+				if (e1.Contains(entity_ratings[index].First))
+					ratings1.Add(entity_ratings[index].First, entity_ratings[index].Second);
+
+			int n = e1.Count;
+			if (n < 2)
+				return 0;
+
+			// single-pass variant
+			double i_sum = 0;
+			double j_sum = 0;
+			double ij_sum = 0;
+			double ii_sum = 0;
+			double jj_sum = 0;
+			foreach (int other_entity_id in e1)
+			{
+				// get ratings
+				float r1 = ratings1[other_entity_id];
+				float r2 = 0;
+				if (entity_type == EntityType.USER)
+					r2 = ratings.Get(j, other_entity_id, indexes2);
+				else
+					r2 = ratings.Get(other_entity_id, j, indexes2);
 
 				// update sums
 				i_sum  += r1;

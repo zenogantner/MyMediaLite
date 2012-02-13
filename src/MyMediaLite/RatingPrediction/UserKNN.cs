@@ -17,13 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted user-based kNN</summary>
-	public abstract class UserKNN : KNN, IUserSimilarityProvider
+	public abstract class UserKNN : KNN, IUserSimilarityProvider, IFoldInRatingPredictor
 	{
 		/// <summary>boolean matrix indicating which user rated which item</summary>
 		protected SparseBooleanMatrix data_user;
@@ -131,6 +132,71 @@ namespace MyMediaLite.RatingPrediction
 		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
 		{
 			return correlation.GetNearestNeighbors(user_id, n);
+		}
+		
+		/// <summary>Fold in one user, identified by their ratings</summary>
+		/// <returns>a vector containing the similarity with all users</returns>
+		/// <param name='rated_items'>the ratings to take into account</param>
+		abstract protected IList<float> FoldIn(IList<Pair<int, float>> rated_items);
+		
+		float Predict(IList<float> user_similarities, IList<Pair<int, float>> rated_items, int item_id)
+		{
+			if (item_id > MaxItemID)
+				return baseline_predictor.Predict(int.MaxValue, item_id);
+
+			IList<int> relevant_users = (
+				from user_id in Enumerable.Range(0, user_similarities.Count)
+				where user_similarities[user_id] > 0 
+				select user_id).ToArray();
+			
+			/*
+			var ratings = new Dictionary<int, float>();
+			foreach (var pair in rated_items)
+				ratings.Add(pair.First, pair.Second);
+			*/
+			
+			double sum = 0;
+			double weight_sum = 0;
+			uint neighbors = K;
+			foreach (int user_id in relevant_users)
+			{
+				if (data_user[user_id, item_id])
+				{
+					float rating = ratings.Get(user_id, item_id, ratings.ByUser[user_id]);
+
+					float weight = user_similarities[user_id];
+					weight_sum += weight;
+					sum += weight * (rating - baseline_predictor.Predict(user_id, item_id));
+
+					if (--neighbors == 0)
+						break;
+				}
+			}
+
+			float result = baseline_predictor.Predict(int.MaxValue, item_id); // TODO implement fold-in for baseline predictor
+			if (weight_sum != 0)
+				result += (float) (sum / weight_sum);
+
+			if (result > MaxRating)
+				result = MaxRating;
+			if (result < MinRating)
+				result = MinRating;
+			return result;
+		}
+		
+		///
+		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		{
+			var user_similarities = FoldIn(rated_items);
+
+			// score the items
+			var result = new Pair<int, float>[candidate_items.Count];
+			for (int i = 0; i < candidate_items.Count; i++)
+			{
+				int item_id = candidate_items[i];
+				result[i] = new Pair<int, float>(item_id, Predict(user_similarities, rated_items, item_id));
+			}
+			return result;
 		}
 	}
 }

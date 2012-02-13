@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -40,8 +42,24 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.RetrainUser(user_id);
 			if (UpdateUsers)
-				for (int i = 0; i <= MaxUserID; i++)
-					correlation[user_id, i] = BinaryCosine.ComputeCorrelation(new HashSet<int>(data_user[user_id]), new HashSet<int>(data_user[i]));
+			{
+				var user_items = new HashSet<int>(data_user[user_id]);
+
+				for (int u = 0; u <= MaxUserID; u++)
+					correlation[user_id, u] = BinaryCosine.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
+			}
+		}
+
+		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			var user_items = new HashSet<int>(from pair in rated_items select pair.First);
+
+			var user_similarities = new float[MaxUserID + 1];
+			for (int u = 0; u <= MaxUserID; u++)
+				user_similarities[u] = BinaryCosine.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
+
+			return user_similarities;
 		}
 
 		///

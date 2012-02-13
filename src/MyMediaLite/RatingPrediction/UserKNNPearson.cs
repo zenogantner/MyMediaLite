@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Globalization;
+using System.Collections.Generic;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 using MyMediaLite.Taxonomy;
@@ -44,10 +45,20 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.RetrainUser(user_id);
 			if (UpdateUsers)
-				for (int i = 0; i <= MaxUserID; i++)
-					correlation[user_id, i] = Pearson.ComputeCorrelation(ratings, EntityType.USER, user_id, i, Shrinkage);
+				for (int u = 0; u <= MaxUserID; u++)
+					correlation[user_id, u] = Pearson.ComputeCorrelation(ratings, EntityType.USER, user_id, u, Shrinkage);
 		}
 
+		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			var user_similarities = new float[MaxUserID + 1];
+			for (int u = 0; u <= MaxUserID; u++)
+				user_similarities[u] = Pearson.ComputeCorrelation(ratings, EntityType.USER, rated_items, u, Shrinkage);
+
+			return user_similarities;
+		}
+		
 		///
 		public override string ToString()
 		{

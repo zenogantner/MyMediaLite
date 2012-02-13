@@ -60,6 +60,12 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
+		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		{
+			throw new NotSupportedException();
+		}
+
+		///
 		public override string ToString()
 		{
 			return string.Format(
