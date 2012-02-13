@@ -17,7 +17,9 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -25,7 +27,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class UserAverage : EntityAverage
+	public class UserAverage : EntityAverage, IFoldInRatingPredictor
 	{
 		///
 		public override void Train()
@@ -83,6 +85,21 @@ namespace MyMediaLite.RatingPrediction
 		public override void RemoveUser(int user_id)
 		{
 			entity_averages[user_id] = global_average;
+		}
+
+		///
+		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		{
+			float user_average = (float) (from pair in rated_items select pair.Second).Average();
+
+			// score the items
+			var result = new Pair<int, float>[candidate_items.Count];
+			for (int i = 0; i < candidate_items.Count; i++)
+			{
+				int item_id = candidate_items[i];
+				result[i] = new Pair<int, float>(item_id, user_average);
+			}
+			return result;
 		}
 	}
 }

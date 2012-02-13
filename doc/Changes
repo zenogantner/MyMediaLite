@@ -9,8 +9,9 @@
 	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
 	   add method ScoreItems
 	 - add interface IFoldInRatingPredictor with extension methods
-           - implement this interface for MatrixFactorization,
-             BiasedMatrixFactorization, UserKNNCosine, and UserKNNPearson
+           - implement this interface for (Biased)MatrixFactorization,
+             UserKNN(Cosine|Pearson), UserAverage, and
+             (Sigmoid)SVDPlusPlus
 	 - add interface IFoldInItemRecommender
 	 - IIterativeModel: double ComputeLoss() => float ComputeObjective()
 	recommenders
