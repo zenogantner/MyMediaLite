@@ -42,7 +42,10 @@ namespace MyMediaLite.Eval
 			foreach (int user_id in update_data.AllUsers)
 				if (eval_data.AllUsers.Contains(user_id))
 				{
-					var known_ratings = (from index in update_data.ByUser[user_id] select new Pair<int, float>(update_data.Items[index], update_data[index])).ToArray();
+					var known_ratings = (
+						from index in update_data.ByUser[user_id]
+						select new Pair<int, float>(update_data.Items[index], update_data[index])
+					).ToArray();
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
 					var predicted_ratings = recommender.ScoreItems(known_ratings, items_to_rate);
 
@@ -55,9 +58,8 @@ namespace MyMediaLite.Eval
 						rmse += error * error;
 						mae  += Math.Abs(error);
 						cbd  += Eval.Ratings.ComputeCBD(actual_rating, prediction, recommender.MinRating, recommender.MaxRating);
+						rating_count++;
 					}
-
-					rating_count += eval_data.ByUser[user_id].Count;
 					Console.Error.Write(".");
 				}
 
@@ -109,9 +111,8 @@ namespace MyMediaLite.Eval
 						rmse += error * error;
 						mae  += Math.Abs(error);
 						cbd  += Eval.Ratings.ComputeCBD(actual_rating, prediction, recommender.MinRating, recommender.MaxRating);
+						rating_count++;
 					}
-
-					rating_count += eval_data.ByUser[user_id].Count;
 					Console.Error.Write(".");
 				}
 
@@ -162,9 +163,8 @@ namespace MyMediaLite.Eval
 						rmse += error * error;
 						mae  += Math.Abs(error);
 						cbd  += Eval.Ratings.ComputeCBD(actual_rating, prediction, recommender.MinRating, recommender.MaxRating);
+						rating_count++;
 					}
-
-					rating_count += eval_data.ByUser[user_id].Count;
 
 					// remove ratings again
 					local_recommender.RemoveRatings(user_ratings);
