@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.RatingPrediction
@@ -42,118 +43,222 @@ namespace MyMediaLite.RatingPrediction
 	///     This recommender supports incremental updates.
 	///   </para>
 	/// </remarks>
-	public class LatentFeatureLogLinearModel : BiasedMatrixFactorization
+	public class LatentFeatureLogLinearModel : RatingPredictor, IIterativeModel
 	{
-		// base category does not need biases and latent factors
-		// second category is represented by the inherited parameters
-		// all further categories are represented by the following structure
-		IList<Matrix<float>> additional_user_factors;
-		IList<Matrix<float>> additional_item_factors;
-		IList<float> additional_user_biases;
-		IList<float> additional_item_biases;
-		
-		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
-		{
-			double rating_range_size = MaxRating - MinRating;
+		// TODO
+		//  - load/save
+		//  - ComputeObjective()
+		//  - RMSE/MAE optimization
+		//  - incremental updates
+		//  - fold-in
 
+		/// <summary>Mean of the normal distribution used to initialize the factors</summary>
+		public double InitMean { get; set; }
+
+		/// <summary>Standard deviation of the normal distribution used to initialize the factors</summary>
+		public double InitStdDev { get; set; }
+
+		/// <summary>Number of latent factors</summary>
+		public uint NumFactors { get; set;}
+
+		/// <summary>Learn rate</summary>
+		public float LearnRate { get; set; }
+
+		/// <summary>Number of iterations over the training data</summary>
+		public uint NumIter { get; set; }
+
+		/// <summary>Regularization based on rating frequency</summary>
+		/// <description>
+		/// Regularization proportional to the inverse of the square root of the number of ratings associated with the user or item.
+		/// As described in the paper by Menon and Elkan.
+		/// </description>
+		public bool FrequencyRegularization { get; set; }
+
+		/// <summary>The optimization target</summary>
+		public OptimizationTarget Loss { get; set; }
+
+		/// <summary>Learn rate factor for the bias terms</summary>
+		public float BiasLearnRate { get; set; }
+
+		/// <summary>regularization factor for the bias terms</summary>
+		public float BiasReg { get; set; }
+
+		/// <summary>regularization constant for the user factors</summary>
+		public float RegU { get; set; }
+
+		/// <summary>regularization constant for the item factors</summary>
+		public float RegI { get; set; }
+
+		// base category does not need biases and latent factors
+		// all further categories are represented by the following structure
+		IList<Matrix<float>> user_factors;
+		IList<Matrix<float>> item_factors;
+		Matrix<float> user_biases;
+		Matrix<float> item_biases;
+
+		// base category is last one
+		IList<float> label_id_to_value;
+		Dictionary<float, int> value_to_label_id;
+
+		/// <summary>Default constructor</summary>
+		public LatentFeatureLogLinearModel()
+		{
+			BiasReg = 0.01f;
+			BiasLearnRate = 1.0f;
+			RegU = 0.015f;
+			RegI = 0.015f;
+			LearnRate = 0.01f;
+			NumIter = 30;
+			InitStdDev = 0.1;
+			NumFactors = 10;
+		}
+
+		///
+		public override void Train()
+		{
+			InitModel();
+
+			for (int it = 0; it <= NumIter; it++)
+				Iterate();
+		}
+
+		///
+		public void Iterate()
+		{
+			Iterate(ratings.RandomIndex, true, true);
+		}
+
+		void InitModel()
+		{
+			// determine base class
+			var label_frequency = new Dictionary<float, int>();
+			for (int i = 0; i < ratings.Count; i++)
+			{
+				float label = ratings[i];
+				if (label_frequency.ContainsKey(label))
+					label_frequency[label]++;
+				else
+					label_frequency.Add(label, 1);
+			}
+			var label_id_to_value = label_frequency.Keys.ToList();
+			label_id_to_value.Sort(
+				delegate(float x1, float x2) {
+					return label_frequency[x1].CompareTo(label_frequency[x2]);
+				});
+
+			//  assign label ID <-> value mappings
+			this.label_id_to_value = label_id_to_value;
+			value_to_label_id = new Dictionary<float, int>();
+			for (int label = 0; label < label_id_to_value.Count; label++)
+				value_to_label_id[label_id_to_value[label]] = label;
+
+			// init model parameters
+			int num_labels = label_id_to_value.Count;
+			user_biases = new Matrix<float>(num_labels - 1, MaxUserID + 1);
+			item_biases = new Matrix<float>(num_labels - 1, MaxItemID + 1);
+			user_factors = new Matrix<float>[num_labels - 1];
+			item_factors = new Matrix<float>[num_labels - 1];
+			for (int label = 0; label < num_labels - 1; label++)
+			{
+				user_factors[label] = new Matrix<float>(MaxUserID + 1, NumFactors);
+				item_factors[label] = new Matrix<float>(MaxItemID + 1, NumFactors);
+				user_factors[label].InitNormal(InitMean, InitStdDev);
+				item_factors[label].InitNormal(InitMean, InitStdDev);
+			}
+		}
+
+		///
+		void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		{
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
+				int correct_label = value_to_label_id[ratings[index]];
 
-				double dot_product = user_bias[u] + item_bias[i] + MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
-				double sig_dot = 1 / (1 + Math.Exp(-dot_product));
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
 
-				float prediction = (float) (min_rating + sig_dot * rating_range_size);
-
-				float gradient_common = ratings[index] - prediction;
-
-				// adjust biases
-				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegU * user_bias[u]);
-				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * RegI * item_bias[i]);
-
-				// adjust latent factors
-				for (int f = 0; f < NumFactors; f++)
+				for (int l = 0; l < label_id_to_value.Count - 1; l++)
 				{
-					double u_f = user_factors[u, f];
-					double i_f = item_factors[i, f];
+					double dot_product = user_biases[l, u] + item_biases[l, i] + MatrixExtensions.RowScalarProduct(user_factors[l], u, item_factors[l], i);
+					double label_percentage = 1 / (1 + Math.Exp(-dot_product));
 
+					float gradient_common = (float) -label_percentage;
+					if (l == correct_label)
+						gradient_common += 1;
+
+					// adjust biases
 					if (update_user)
-					{
-						double delta_u = gradient_common * i_f - RegU * u_f;
-						user_factors.Inc(u, f, LearnRate * delta_u);
-						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
-						//    user_factors[u, f] += learn_rate * delta_u;
-					}
+						user_biases.Inc(l, u, BiasLearnRate * LearnRate * (gradient_common - BiasReg * user_reg_weight * user_biases[l, u]));
 					if (update_item)
+						item_biases.Inc(l, i, BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_biases[l, i]));
+
+					// adjust latent factors
+					for (int f = 0; f < NumFactors; f++)
 					{
-						double delta_i = gradient_common * u_f - RegI * i_f;
-						item_factors.Inc(i, f, LearnRate * delta_i);
+						double u_f = user_factors[l][u, f];
+						double i_f = item_factors[l][i, f];
+
+						if (update_user)
+						{
+							double delta_u = gradient_common * i_f - user_reg_weight * u_f;
+							user_factors[l].Inc(u, f, LearnRate * delta_u);
+						}
+						if (update_item)
+						{
+							double delta_i = gradient_common * u_f - item_reg_weight * i_f;
+							item_factors[l].Inc(i, f, LearnRate * delta_i);
+						}
 					}
 				}
 			}
 		}
 
 		///
-		public override float ComputeObjective()
+		public float ComputeObjective()
 		{
-			double rating_range_size = MaxRating - MinRating;
-
-			double loss = 0;
-			for (int i = 0; i < ratings.Count; i++)
-			{
-				double prediction = Predict(ratings.Users[i], ratings.Items[i]);
-
-				// map into [0, 1] interval
-				prediction = (prediction - MinRating) / rating_range_size;
-				if (prediction < 0.0)
-					prediction = 0.0;
-				if (prediction > 1.0)
-					prediction = 1.0;
-				double actual_rating = (ratings[i] - MinRating) / rating_range_size;
-
-				loss -= (actual_rating) * Math.Log(prediction);
-				loss -= (1 - actual_rating) * Math.Log(1 - prediction);
-			}
-
-			double complexity = 0;
-			for (int u = 0; u <= MaxUserID; u++)
-			{
-				complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-				complexity += ratings.CountByUser[u] * BiasReg * Math.Pow(user_bias[u], 2);
-			}
-			for (int i = 0; i <= MaxItemID; i++)
-			{
-				complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-				complexity += ratings.CountByItem[i] * BiasReg * Math.Pow(item_bias[i], 2);
-			}
-
-			return (float) (loss + complexity);
+			return -1;
 		}
-		
+
+		IList<float> PredictPercentages(int user_id, int item_id)
+		{
+			var percentages = new float[label_id_to_value.Count];
+			float percentage_sum = 0;
+
+			for (int label = 0; label < percentages.Length - 1; label++)
+			{
+				double score = user_biases[label, user_id] + item_biases[label, item_id] + MatrixExtensions.RowScalarProduct(user_factors[label], user_id, item_factors[label], item_id);
+				float p = (float) ( 1 / (1 + Math.Exp(-score)) );
+				percentages[label] = p;
+				percentage_sum += p;
+			}
+			percentages[percentages.Length - 1] = 1 - percentage_sum;
+
+			return percentages;
+		}
+
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if (user_id >= user_factors.dim1)
-				throw new ArgumentException("Unknown user ID");
-			if (item_id >= item_factors.dim1)
-				throw new ArgumentException("Unknown item ID");
+			var percentages = PredictPercentages(user_id, item_id);
+			double prediction = 0;
+			for (int l = 0; l < label_id_to_value.Count; l++)
+				prediction += label_id_to_value[l] * percentages[l];
 
-			double score = user_bias[user_id] + item_bias[item_id] + MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			// TODO maybe cap values
 
-			return (float) (MinRating + ( 1 / (1 + Math.Exp(-score)) ) * (MaxRating - MinRating));
+			return (float) prediction;
 		}
-		
+
+
 		///
 		public override string ToString()
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} learn_rate={5} bias_learn_rate={6} num_iter={7} bold_driver={8} init_mean={9} init_stddev={10}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, LearnRate, BiasLearnRate, NumIter, BoldDriver, InitMean, InitStdDev);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} init_mean={9} init_stddev={10} loss={11}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, InitMean, InitStdDev, Loss);
 		}
 	}
 }
