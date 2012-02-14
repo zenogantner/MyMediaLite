@@ -26,6 +26,15 @@
      { method => 'UserItemBaseline',             hp => 'reg_u=4.5 reg_i=1.137 num_iter=10',                                                                     rmse => '1.23747', mae => '0.97561', nmae => '0.2439',  cbd => '0.23396' }
      { method => 'MultiCoreMatrixFactorization', hp => 'num_factors=10 bias_reg=0.00001 reg_u=0.01 reg_i=0.01 learn_rate=0.0005 num_iter=100 bold_driver=True',  rmse => '1.07446', mae => '0.81445', nmae => '0.20361', cbd => '0.20772' }
    ]
+   ml1m_data_chronological = [
+	 { method => 'GlobalAverage',    hp => '',                             rmse => '1.11123', mae => '0.92354', nmae => '0.23088', cbd => '0.28562' }
+	 { method => 'UserAverage',      hp => '',                             rmse => '1.10054', mae => '0.89459', nmae => '0.22365', cbd => '0.28471' }
+	 { method => 'ItemAverage',      hp => '',                             rmse => '0.97356', mae => '0.77441', nmae => '0.1936',  cbd => '0.26878' }
+	 { method => 'UserItemBaseline', hp => 'reg_u=15 reg_i=10 num_iter=1', rmse => '0.95578', mae => '0.7582', nmae => '0.18955', cbd => '0.26664' }
+	 { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 num_iter=40 frequency_regularization=true', rmse => '0.94454', mae => '0.74632', nmae => '0.18658', cbd => '0.26522' }
+	 { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 bias_reg=0.5 reg_u=1.0 reg_i=0.8 num_iter=100 frequency_regularization=true bold_driver=true', rmse => '0.94151', mae => '0.74684', nmae => '0.18671', cbd => '0.26483' }
+	 { method => 'BiasedMatrixFactorization', hp => 'num_factors=12 bias_reg=0.5 reg_u=1.0 reg_i=0.8 num_iter=100 frequency_regularization=true bold_driver=true', rmse => '0.94145', mae => '0.74688', nmae => '0.18672', cbd => '0.26482' }
+   ]
    ml1m_data = [
     # { method => 'ItemKNNCosine',             hp => 'k=inf reg_u=25 reg_i=10',                                               rmse => '0.8970',  mae => '0.7083', nmae => '0.1771' }
     # { method => 'ItemAttributeKNN (genres)', hp => 'k=80 reg_u=25 reg_i=10',                                                rmse => '0.8958',  mae => '0.7056' }
@@ -44,6 +53,9 @@
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=60 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true',  rmse => '0.854', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=80 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true',  rmse => '0.854', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=120 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1690' }
+   ]
+   ml100k_data_chronological = [
+	 { method => 'UserAverage', hp => '', rmse => '1.13523', mae => '0.95191', nmae => '0.23798', cbd => '0.28607' }
    ]
    # MovieLens 100k, 5-fold CV with --random-seed=1
    ml100k = [
@@ -91,6 +103,7 @@
    camra_2011 = [
      { method => 'GlobalAverage',             hp => '',                                                      rmse => '23.24', mae => '17.78', nmae => '0.17783' }
      { method => 'UserAverage',               hp => '',                                                      rmse => '23.10', mae => '17.59', nmae => '0.17585' }
+	 { method => 'TimeAwareBaseline',         hp => 'num_iter=5',                                            rmse => '22.04', mae => '16.57', nmae => '0.16572', cbd => '26799' }
      { method => 'ItemAverage',               hp => '',                                                      rmse => '21.55', mae => '15.89', nmae => '0.15893' }
      { method => 'UserItemBaseline',          hp => 'reg_u=15 reg_i=10 num_iter=2',                          rmse => '21.31', mae => '15.68', nmae => '0.15678' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=10 reg=0.015 learn_rate=0.0001 num_iter=2', rmse => '18.41', mae => '13.45', name => '0.13451' }
