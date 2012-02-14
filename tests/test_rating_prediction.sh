@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 PROGRAM="bin/rating_prediction"
+LANG=C
 
 echo "MyMediaLite rating prediction test script"
 echo "This will take about 5 minutes ..."
@@ -27,7 +28,6 @@ do
             $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 --target=$target" --compute-fit --data-dir=$DATA_DIR
 done
 
-
 touch $DATA_DIR/empty
 for method in SocialMF
 do
@@ -36,11 +36,18 @@ do
 done
 rm $DATA_DIR/empty
 
-for method in UserItemBaseline GlobalAverage UserAverage ItemAverage Constant Random
+for method in UserItemBaseline ItemAverage Constant Random
 do
 	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --data-dir=$DATA_DIR
 	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --data-dir=$DATA_DIR
 done
+
+for method in GlobalAverage UserAverage
+do
+	echo $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR
+	     $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR
+done
+
 
 for method in ItemAttributeKNN
 do
