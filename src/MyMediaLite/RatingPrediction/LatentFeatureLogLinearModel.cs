@@ -51,6 +51,7 @@ namespace MyMediaLite.RatingPrediction
 		//  - RMSE/MAE optimization
 		//  - incremental updates
 		//  - fold-in
+		//  - centered: instead if  rating look at rating - global_bias
 
 		/// <summary>Mean of the normal distribution used to initialize the factors</summary>
 		public double InitMean { get; set; }
