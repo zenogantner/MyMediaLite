@@ -50,6 +50,8 @@
            checking can now be configured via the --measure=MEASURE option
            for both rating prediction and item recommendation, --epsilon=NUM
            is now also supported by the item recommendation tool
+	 - explicitly prevent combination of --cross-validation=K and
+           --(load|save)-model=FILE
 	 - rating prediction: fix bug in KDD Cup data handling
 	 - item recommendation: add dependency to System.Data assembly
 	 - item recommendation: fix usage description of --predict-items-number

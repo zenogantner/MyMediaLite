@@ -464,6 +464,12 @@ class RatingPrediction
 		if (cross_validation > 1 && prediction_file != null)
 			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
+		if (cross_validation > 1 && save_model_file != null)
+			Usage("--cross-validation=K and --save-model=FILE are mutually exclusive.");
+
+		if (cross_validation > 1 && load_model_file != null)
+			Usage("--cross-validation=K and --load-model=FILE are mutually exclusive.");
+
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && chronological_split == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
 
