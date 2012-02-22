@@ -27,7 +27,7 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class EntityAverage : IncrementalRatingPredictor
 	{
 		/// <summary>The average rating for each entity</summary>
-		protected IList<float> entity_averages = new List<float>();
+		protected IList<float> entity_averages;
 
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected float global_average;
@@ -50,6 +50,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			var rating_sums   = new List<double>();
 			var rating_counts = new List<int>();
+			entity_averages = new List<float>();
 			for (int i = 0; i <= max_entity_id; i++)
 			{
 				rating_sums.Add(0);

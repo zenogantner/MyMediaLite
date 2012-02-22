@@ -37,6 +37,7 @@
 	 - EntityAverage:
             - remove unnecessary parameter from Retrain()
             - compute averages using doubles instead of floats
+	    - initialize entity_averages in Train() (reported by Chris Newell)
 	 - ItemAttributeSVM: improve API doc and ToString() method
 	command-line programs
 	 - more compact usage information
