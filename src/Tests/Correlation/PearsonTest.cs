@@ -1,5 +1,5 @@
-// Copyright(C) 2010 Christina Lichtenthäler
-// Copyright(C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Christina Lichtenthäler
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,7 +30,6 @@ namespace Tests.Correlation
 	{
 		[Test()] public void TestCreate()
 		{
-			// create test objects
 			var ratings = new Ratings();
 			ratings.Add(0, 1, 0.3f);
 			ratings.Add(0, 2, 0.6f);
@@ -39,9 +38,11 @@ namespace Tests.Correlation
 			ratings.Add(1, 4, 0.2f);
 			ratings.Add(2, 0, 0.1f);
 			ratings.Add(2, 1, 0.3f);
-			// test
-			var pearson = Pearson.Create(ratings, EntityType.USER, 0f);
-			Assert.AreEqual(0, pearson[0, 1]);
+
+			var correlation_matrix = Pearson.Create(ratings, EntityType.USER, 0f);
+			Assert.AreEqual(3, correlation_matrix.dim);
+			Assert.IsTrue(correlation_matrix.IsSymmetric);
+			Assert.AreEqual(0, correlation_matrix[0, 1]);
 		}
 
 		[Test()] public void TestComputeCorrelation()
