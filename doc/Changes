@@ -75,6 +75,8 @@
            implement Remover(At|User|Item)
 	 - EntityMappings: use List instead of Dictionary to store internal to
            external mappings
+	correlations
+	 - BinaryCosine: fix division by zero (reported by Chris Newell)
 	evaluation
 	 - save results as float instead of double
 	documentation

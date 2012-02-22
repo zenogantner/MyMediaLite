@@ -1,4 +1,5 @@
-// Copyright(C) 2010 Christina Lichtenthäler
+// Copyright (C) 2010 Christina Lichtenthäler
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,9 +28,10 @@ namespace Tests.Correlation
 	[TestFixture()]
 	public class BinaryCosineTest
 	{
+		static float delta = 0.0001f;
+		
 		[Test()] public void TestCreate()
 		{
-			// create test objects
 			var sparse_boolean_matrix = new SparseBooleanMatrix();
 			sparse_boolean_matrix[0, 1] = true;
 			sparse_boolean_matrix[0, 4] = true;
@@ -39,16 +41,28 @@ namespace Tests.Correlation
 			sparse_boolean_matrix[3, 1] = true;
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
-			// test
+
 			var correlation_matrix = BinaryCosine.Create(sparse_boolean_matrix);
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[0, 1], 4));
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(correlation_matrix[1, 0], 4));
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(correlation_matrix[1, 3], 4));
+			
+			Assert.AreEqual(4, correlation_matrix.dim);
+			Assert.IsTrue(correlation_matrix.IsSymmetric);
+			
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[0, 1], delta);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[1, 0], delta);
+			Assert.AreEqual(1 / 3d, correlation_matrix[1, 3], delta);
+
+			Assert.AreEqual(0f, correlation_matrix[2, 0]);
+			Assert.AreEqual(0f, correlation_matrix[2, 1]);
+			Assert.AreEqual(1f, correlation_matrix[2, 2]);
+			Assert.AreEqual(0f, correlation_matrix[2, 3]);
+
+			Assert.AreEqual(0f, correlation_matrix[0, 2]);
+			Assert.AreEqual(0f, correlation_matrix[1, 2]);
+			Assert.AreEqual(0f, correlation_matrix[3, 2]);
 		}
 
 		[Test()] public void TestComputeCorrelations()
 		{
-			// create test objects
 			var sparse_boolean_matrix = new SparseBooleanMatrix();
 			sparse_boolean_matrix[0, 1] = true;
 			sparse_boolean_matrix[0, 4] = true;
@@ -58,17 +72,16 @@ namespace Tests.Correlation
 			sparse_boolean_matrix[3, 1] = true;
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
-			// test
-			var cosine = new BinaryCosine(4);
-			cosine.ComputeCorrelations(sparse_boolean_matrix);
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[0, 1], 4));
-			Assert.AreEqual(Math.Round(1 / Math.Sqrt(6), 4), Math.Round(cosine[1, 0], 4));
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(cosine[1, 3], 4));
+
+			var correlation = new BinaryCosine(4);
+			correlation.ComputeCorrelations(sparse_boolean_matrix);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation[0, 1], delta);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation[1, 0], delta);
+			Assert.AreEqual(1 / 3d, correlation[1, 3], delta);
 		}
 
 		[Test()] public void TestComputeCorrelation()
 		{
-			// create test objects
 			var vector1 = new HashSet<int>();
 			vector1.Add(0);
 			vector1.Add(2);
@@ -77,8 +90,9 @@ namespace Tests.Correlation
 			vector2.Add(1);
 			vector2.Add(3);
 			vector2.Add(4);
-			// test
-			Assert.AreEqual(Math.Round(1 / 3d, 4), Math.Round(BinaryCosine.ComputeCorrelation(vector1, vector2), 4));
+			
+			Assert.AreEqual(1 / 3f, BinaryCosine.ComputeCorrelation(vector1, vector2), delta);
+			Assert.AreEqual(0f, BinaryCosine.ComputeCorrelation(vector1, new HashSet<int>()));
 		}
 	}
 }

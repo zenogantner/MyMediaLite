@@ -78,10 +78,7 @@ namespace MyMediaLite.Correlation
 				{
 					int x = row[i];
 					for (int j = i + 1; j < row.Count; j++)
-					{
-						int y = row[j];
-						overlap[x, y]++;
-					}
+						overlap[x, row[j]]++;
 				}
 			}
 
@@ -109,10 +106,7 @@ namespace MyMediaLite.Correlation
 				{
 					int x = row[i];
 					for (int j = i + 1; j < row.Count; j++)
-					{
-						int y = row[j];
-						overlap[x, y]++;
-					}
+						overlap[x, row[j]]++;
 				}
 			}
 
@@ -123,7 +117,11 @@ namespace MyMediaLite.Correlation
 			// compute cosine
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
-					this[x, y] = (float) (overlap[x, y] / Math.Sqrt(entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y) ));
+				{
+					long size_product = entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y);
+					if (size_product > 0)
+						this[x, y] = (float) (overlap[x, y] / Math.Sqrt(size_product));
+				}
 		}
 
 		/// <summary>Computes the cosine similarity of two binary vectors</summary>
@@ -132,11 +130,16 @@ namespace MyMediaLite.Correlation
 		/// <returns>the cosine similarity between the two vectors</returns>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
-			int cntr = 0;
+			int count = 0;
 			foreach (int k in vector_j)
 				if (vector_i.Contains(k))
-					cntr++;
-			return (float) cntr / (float) Math.Sqrt(vector_i.Count * vector_j.Count);
+					count++;
+
+			long size_product = vector_i.Count * vector_j.Count;
+			if (size_product > 0)
+				return (float) count / (float) Math.Sqrt(size_product);
+			//else
+				return 0;
 		}
 	}
 }
