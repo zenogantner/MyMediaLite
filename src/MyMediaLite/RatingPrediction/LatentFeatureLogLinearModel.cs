@@ -249,7 +249,14 @@ namespace MyMediaLite.RatingPrediction
 
 			for (int label = 0; label < percentages.Length - 1; label++)
 			{
-				double score = user_biases[label, user_id] + item_biases[label, item_id] + MatrixExtensions.RowScalarProduct(user_factors[label], user_id, item_factors[label], item_id);
+				double score = 0;
+				if (user_id <= MaxUserID)
+					score += user_biases[label, user_id];
+				if (item_id <= MaxItemID)
+					score += item_biases[label, item_id];
+				if (user_id <= MaxUserID && item_id <= MaxItemID)
+					score += MatrixExtensions.RowScalarProduct(user_factors[label], user_id, item_factors[label], item_id);
+				
 				float p = (float) ( 1 / (1 + Math.Exp(-score)) );
 				percentages[label] = p;
 				percentage_sum += p;
