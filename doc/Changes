@@ -1,4 +1,4 @@
-2.99	2011-02-
+2.99	2011-03-03
 	API
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
