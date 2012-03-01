@@ -53,7 +53,7 @@ namespace MyMediaLite.IO
 		/// <summary>Read binary attribute data from a StreamReader</summary>
 		/// <remarks>
 		/// The expected (sparse) line format is:
-		/// ENTITY_ID whitespace/comma ATTRIBUTE_ID
+		/// ENTITY_ID tab/space/comma ATTRIBUTE_ID
 		/// for the relations that hold.
 		/// </remarks>
 		/// <param name="reader">a StreamReader to be read from</param>

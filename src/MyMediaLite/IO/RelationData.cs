@@ -47,7 +47,7 @@ namespace MyMediaLite.IO
 		/// <summary>Read binary relation data from file</summary>
 		/// <remarks>
 		/// The expected (sparse) line format is:
-		/// ENTITY_ID whitespace/comma ENTITY_ID
+		/// ENTITY_ID space/tab/comma ENTITY_ID
 		/// for the relations that hold.
 		/// </remarks>
 		/// <param name="reader">a StreamReader to be read from</param>

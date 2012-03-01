@@ -129,6 +129,24 @@ namespace MyMediaLite.RatingPrediction
 			Iterate(ratings.RandomIndex, true, true);
 		}
 
+		/*
+		void SetupLoss()
+		{
+			switch (Loss)
+			{
+				case OptimizationTarget.MAE:
+					throw new NotSupportedException();
+					break;
+				case OptimizationTarget.RMSE:
+					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
+					break;
+				case OptimizationTarget.LogisticLoss:
+					compute_gradient_common = (sig_score, err) => (float) err;
+					break;
+			}
+		}
+		*/
+
 		void InitModel()
 		{
 			// determine base class
@@ -171,6 +189,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			//SetupLoss();
+
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
@@ -251,7 +271,6 @@ namespace MyMediaLite.RatingPrediction
 
 			return (float) prediction;
 		}
-
 
 		///
 		public override string ToString()
