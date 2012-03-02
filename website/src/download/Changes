@@ -1,3 +1,94 @@
+2.99	2011-03-04
+	API
+	 - most rating stuff is now using float instead of double
+	 - IRecommender: Predict(user, item) now returns float instead of
+           double
+	 - IIncrementalRatingPredictor:
+	   (Add|Update)Rating(u,i,r) -> (Add|Update)Ratings(ratings),
+	   RemoveRating(u,i) -> RemoveRatings(ratings)
+	 - move PredictItems from ItemRecommendation.Extensions to Extensions,
+	   add method ScoreItems
+	 - add interface IFoldInRatingPredictor with extension methods
+           - implement this interface for (Biased)MatrixFactorization,
+             UserKNN(Cosine|Pearson), UserAverage, and
+             (Sigmoid)SVDPlusPlus
+	 - add interface IFoldInItemRecommender
+	 - IIterativeModel: double ComputeLoss() => float ComputeObjective()
+	recommenders
+	 - new rating predictors: SVDPlusPlus and SigmoidSVDPlusPlus
+	 - #157: matrix factorization recommenders use float to store the
+           latent factors
+         - BiasedMatrixFactorization: differentiate regularization of user and
+           item biases, by using reg_u * bias_reg and reg_i * bias_reg,
+           same with the learn rate;: compute rating_range_size only once;
+	   use global average (#162), use user/item bias whenever possible
+           (#163), frequency-based regularization
+	 - MatrixFactorization: proper intialization of latent factors for
+           users and items without known feedback
+	 - merge MultiCoreMatrixFactorization and
+           LogisticRegressionMatrixFactorization into BiasedMatrixFactorization
+	 - RatingPredictor: fix setting MaxUserID and MaxItemID
+	 - TimeAwareBaseline: fix day computation (reported by Chris Newell),
+           fix initialization of c_u parameter, proper use of user_scaling
+         - TimeAwareBaseline(WithFrequencies): fixes in UpdateParameters() and
+	   ComputeLoss()
+	 - ItemRecommender.ItemKNN: fix wrong prediction
+           (reported by Chris Newell)
+	 - EntityAverage:
+            - remove unnecessary parameter from Retrain()
+            - compute averages using doubles instead of floats
+	    - initialize entity_averages in Train() (reported by Chris Newell)
+	 - ItemAttributeSVM: improve API doc and ToString() method
+	command-line programs
+	 - more compact usage information
+	 - item recommendation: actually take user list into account when writing
+           predictions (reported by Yue Shi)
+	 - add --(save|load)-(user|item)-mapping=FILE options
+	 - rating prediction: add option --prediction-header=LINE
+	 - add --no-id-mapping option to save memory for large-scale datasets
+           where the user and item IDs have no gaps
+	 - #202, #203: the criterion to be used for cut-off/convergence
+           checking can now be configured via the --measure=MEASURE option
+           for both rating prediction and item recommendation, --epsilon=NUM
+           is now also supported by the item recommendation tool
+	 - explicitly prevent combination of --cross-validation=K and
+           --(load|save)-model=FILE
+	 - rating prediction: fix bug in KDD Cup data handling
+	 - item recommendation: add dependency to System.Data assembly
+	 - item recommendation: fix usage description of --predict-items-number
+           and --repeat-evaluation (reported by Simon Renaud)
+	 - item recommendation: show number of test users when writing out
+           predictions
+	I/O
+	 - #206 (suggested by Simon Dooms): string user, item, and attribute
+           IDs (instead of long)
+	 - DB: support integer, long, and string IDs
+	 - rename IO.IMatrixExtensions to IO.MatrixExtensions
+	 - remove class NumberFile (not used any more)
+	data types
+	 - MatrixExtensions: speed up some operations by precomputing offsets
+	 - remove SparseVector and Triple: not used any more
+	data structures
+	 - correctly handle MinRating and MaxRating in CombinedRatings
+	 - Ratings: update indices after removing ratings, fix bug in
+           RemoveUser() and RemoveItem()
+	 - RatingsProxy: proper handling of MaxUserID and MaxItemID,
+           implement Remover(At|User|Item)
+	 - EntityMappings: use List instead of Dictionary to store internal to
+           external mappings
+	correlations
+	 - BinaryCosine: fix division by zero (reported by Chris Newell)
+	evaluation
+	 - save results as float instead of double
+	documentation
+	 - improve API doc of IIncrementalItemRecommender
+	misc
+	 - remove Data.WeightedItem (use Pair<S, T> instead)
+	 - NelderMead: fix compilation in VisualStudio (reported by
+           Artus Krohn-Grimberghe and user LHCGreg on reddit)
+	 - Utils.Shuffle is now an extension method
+	 - Utils.Recommender: simplify, allow enum options
+
 2.03	2011-01-14
 	API
          - add method Grow(x, y) to IMatrix interface
