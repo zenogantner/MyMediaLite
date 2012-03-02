@@ -22,10 +22,10 @@ method=BiasedMatrixFactorization
 echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 max_threads=100" --compute-fit --data-dir=$DATA_DIR
      $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 max_threads=100" --compute-fit --data-dir=$DATA_DIR
 
-for target in MAE LogLikelihood
+for target in MAE LogisticLoss
 do
-       echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 --target=$target" --compute-fit --data-dir=$DATA_DIR
-            $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 --target=$target" --compute-fit --data-dir=$DATA_DIR
+       echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 loss=$target" --compute-fit --data-dir=$DATA_DIR
+            $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=5 --recommender-options="num_iter=1 loss=$target" --compute-fit --data-dir=$DATA_DIR
 done
 
 touch $DATA_DIR/empty
@@ -44,8 +44,8 @@ done
 
 for method in GlobalAverage UserAverage
 do
-	echo $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR --file-format=movielens_1m
+	     $PROGRAM --training-file=ratings.dat --chronological-split=0.25 --recommender=$method --data-dir=$DATA_DIR --file-format=movielens_1m
 done
 
 
