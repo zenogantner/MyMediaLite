@@ -13,14 +13,12 @@
 
 <div id="content">
 <pre>
-MyMediaLite rating prediction 2.03
+MyMediaLite rating prediction 2.99
 
  usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 
   recommenders (plus options and their defaults):
    - BiPolarSlopeOne
-   - BiasedMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1 optimize_mae=False
-       supports --find-iter=N, --online-evaluation
    - FactorWiseMatrixFactorization num_factors=10 shrinkage=25 sensibility=1E-05 init_mean=0 init_stdev=0.1 num_iter=10 reg_u=15 reg_i=10
        supports --find-iter=N
    - GlobalAverage
@@ -50,12 +48,10 @@ MyMediaLite rating prediction 2.03
        supports --online-evaluation
    - TimeAwareBaseline num_iter=30 bin_size=70 beta=0.4 user_bias_learn_rate=0.003 item_bias_learn_rate=0.002 alpha_learn_rate=1E-05 item_bias_by_time_bin_learn_rate=5E-06 user_bias_by_day_learn_rate=0.0025 user_scaling_learn_rate=0.008 user_scaling_by_day_learn_rate=0.002 reg_u=0.03 reg_i=0.03 reg_alpha=50 reg_item_bias_by_time_bin=0.1 reg_user_bias_by_day=0.005 reg_user_scaling=0.01 reg_user_scaling_by_day=0.005
        supports --find-iter=N
-   - TimeAwareBaselineWithFrequencies num_iter=40 bin_size=70 beta=0.4 user_bias_learn_rate=0.00267 item_bias_learn_rate=0.000488 alpha_learn_rate=3.11E-06 item_bias_by_time_bin_learn_rate=1.15E-06 user_bias_by_day_learn_rate=0.000257 user_scaling_learn_rate=0.00564 user_scaling_by_day_learn_rate=0.00103 reg_u=0.0255 reg_i=0.0255 reg_alpha=3.95 reg_item_bias_by_time_bin=0.0929 reg_user_bias_by_day=0.00231 reg_user_scaling=0.0476 reg_user_scaling_by_day=0.019 frequency_log_base=6.76 item_bias_at_frequency_learn_rate=0.00236 reg_item_bias_at_frequency=1.1E-08
+   - TimeAwareBaselineWithFrequencies num_iter=40 bin_size=70 beta=0.4 user_bias_learn_rate=0.00267 item_bias_learn_rate=0.000488 alpha_learn_rate=3.11E-06 item_bias_by_time_bin_learn_rate=0.000115 user_bias_by_day_learn_rate=0.000257 user_scaling_learn_rate=0.00564 user_scaling_by_day_learn_rate=0.00103 reg_u=0.0255 reg_i=0.0255 reg_alpha=3.95 reg_item_bias_by_time_bin=0.0929 reg_user_bias_by_day=0.00231 reg_user_scaling=0.0476 reg_user_scaling_by_day=0.019 frequency_log_base=6.76 item_bias_at_frequency_learn_rate=0.00236 reg_item_bias_at_frequency=1.1E-08
        supports --find-iter=N
    - CoClustering num_user_clusters=3 num_item_clusters=3 num_iter=30
        supports --find-iter=N
-   - MultiCoreMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=True init_mean=0 init_stddev=0.1 optimize_mae=False max_threads=100
-       supports --find-iter=N, --online-evaluation
    - SocialMF num_factors=10 regularization=0.015 social_regularization=1 learn_rate=0.01 num_iter=30 init_mean=0 init_stddev=0.1
        needs --user-relations=FILE
        supports --find-iter=N, --online-evaluation
@@ -63,34 +59,46 @@ MyMediaLite rating prediction 2.03
        supports --online-evaluation
    - Constant constant_rating=1
        supports --online-evaluation
-   - LogisticRegressionMatrixFactorization num_factors=10 bias_reg=0.0001 reg_u=0.015 reg_i=0.015 learn_rate=0.01 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1
+   - LatentFeatureLogLinearModel num_factors=10 bias_reg=0.01 reg_u=0.015 reg_i=0.015 frequency_regularization=False learn_rate=0.01 bias_learn_rate=1 num_iter=30 init_mean=0 init_stddev=0.1 loss=RMSE
+       supports --find-iter=N
+   - BiasedMatrixFactorization num_factors=10 bias_reg=0.01 reg_u=0.015 reg_i=0.015 frequency_regularization=False learn_rate=0.01 bias_learn_rate=1 num_iter=30 bold_driver=False init_mean=0 init_stddev=0.1 loss=RMSE max_threads=1
+       supports --find-iter=N, --online-evaluation
+   - SVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 init_mean=0 init_stddev=0.1
+       supports --find-iter=N, --online-evaluation
+   - SigmoidSVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 loss=RMSE init_mean=0 init_stddev=0.1
        supports --find-iter=N, --online-evaluation
   method ARGUMENTS have the form name=value
 
   general OPTIONS:
-   --recommender=METHOD             set recommender method (default: BiasedMatrixFactorization)
+   --recommender=METHOD             set recommender method (default BiasedMatrixFactorization)
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
-   --random-seed=N                  initialize the random number generator with N
-   --rating-type=float|byte|double  store ratings internally as floats or bytes or doubles (default)
+   --random-seed=N                  initialize random number generator with N
+   --rating-type=float|byte         store ratings internally as floats (default) or bytes
+   --no-id-mapping                  do not map user and item IDs to internal IDs, keep original IDs
 
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
    --file-format=movielens_1m|kddcup_2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
-   --user-attributes=FILE                 file containing user attribute information, 1 tuple per line
-   --item-attributes=FILE                 file containing item attribute information, 1 tuple per line
-   --user-relations=FILE                  file containing user relation information, 1 tuple per line
-   --item-relations=FILE                  file containing item relation information, 1 tuple per line
+   --user-attributes=FILE                 file with user attribute information, 1 tuple per line
+   --item-attributes=FILE                 file with item attribute information, 1 tuple per line
+   --user-relations=FILE                  file with user relation information, 1 tuple per line
+   --item-relations=FILE                  file with item relation information, 1 tuple per line
    --save-model=FILE                      save computed model to FILE
    --load-model=FILE                      load model from FILE
+   --save-user-mapping=FILE               save user ID mapping to FILE
+   --save-item-mapping=FILE               save item ID mapping to FILE
+   --load-user-mapping=FILE               load user ID mapping from FILE
+   --load-item-mapping=FILE               load item ID mapping from FILE
 
   prediction options:
    --prediction-file=FILE         write the rating predictions to FILE
-   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID, item ID,
-                                  and predicted rating, respectively; default is {0}\\t{1}\\t{2}
+   --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID,
+                                  item ID, and predicted rating; default is {0}\\t{1}\\t{2}
+   --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:
    --cross-validation=K                perform k-fold cross-validation on the training data
@@ -100,15 +108,15 @@ MyMediaLite rating prediction 2.03
                                        or use the ratings from DATETIME on for evaluation (requires time information
                                        in the training data)
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
-   --search-hp                         search for good hyperparameter values (experimental)
+   --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --max-iter=N                   perform at most N iterations
-   --epsilon=NUM                  abort iterations if RMSE is more than best result plus NUM
-   --rmse-cutoff=NUM              abort if RMSE is above NUM
-   --mae-cutoff=NUM               abort if MAE is above NUM
+   --measure=RMSE|MAE|NMAE|CBD    evaluation measure to use for the abort conditions below (default is RMSE)
+   --epsilon=NUM                  abort iterations if evaluation measure is more than best result plus NUM
+   --cutoff=NUM                   abort if evaluation measure is above NUM
 </pre>
 </div>
 
