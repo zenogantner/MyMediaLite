@@ -139,7 +139,7 @@ namespace MyMediaLite.RatingPrediction
 		protected float[] item_bias;
 
 		/// <summary>size of the interval of valid ratings</summary>
-		double rating_range_size;
+		protected double rating_range_size;
 
 		delegate float TwoDoubleToFloat(double arg1, double arg2);
 		TwoDoubleToFloat compute_gradient_common;

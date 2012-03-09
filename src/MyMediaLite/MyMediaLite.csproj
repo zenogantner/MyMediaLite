@@ -187,7 +187,6 @@
     <Compile Include="ItemRecommendation\MultiCoreBPRMF.cs" />
     <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
-    <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="RatingPrediction\Random.cs" />
     <Compile Include="RatingPrediction\Constant.cs" />
     <Compile Include="ItemRecommendation\BPRLinear.cs" />
@@ -216,6 +215,8 @@
     <Compile Include="IO\MatrixExtensions.cs" />
     <Compile Include="IO\EntityMappingExtensions.cs" />
     <Compile Include="ItemRecommendation\IFoldInItemRecommender.cs" />
+    <Compile Include="RatingPrediction\SocialMF.cs" />
+    <Compile Include="RatingPrediction\SigmoidSocialMF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -32,7 +32,7 @@ namespace MyMediaLite.RatingPrediction
     /// A matrix factorization technique with trust propagation for recommendation in social networks
     /// RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
 	/// </remarks>
-	public class SocialMF : MatrixFactorization, IUserRelationAwareRecommender
+	public class SigmoidSocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
 		// TODO
 		//  - implement MAE optimization or throw Exception
@@ -41,6 +41,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Social network regularization constant</summary>
 		public float SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
 		private float social_regularization = 1;
+
+		/*
+		/// <summary>
+		/// Use stochastic gradient descent instead of batch gradient descent
+		/// </summary>
+		public bool StochasticLearning { get; set; }
+		*/
 
 		///
 		public SparseBooleanMatrix UserRelation { get { return this.user_neighbors; } set {	this.user_neighbors = value; } }
@@ -60,6 +67,9 @@ namespace MyMediaLite.RatingPrediction
 			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 			MatrixExtensions.InitNormal(user_factors, InitMean, InitStdDev);
 			MatrixExtensions.InitNormal(item_factors, InitMean, InitStdDev);
+			// init biases
+			user_bias = new float[MaxUserID + 1];
+			item_bias = new float[MaxItemID + 1];
 		}
 
 		///
@@ -67,10 +77,12 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			// compute global average
-			global_bias = Ratings.Average;
+			rating_range_size = max_rating - min_rating;
 
 			// learn model parameters
+			double avg = (ratings.Average - min_rating) / rating_range_size;
+			global_bias = (float) Math.Log(avg / (1 - avg));
+
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(ratings.RandomIndex, true, true);
 		}
@@ -87,6 +99,8 @@ namespace MyMediaLite.RatingPrediction
 			// I. compute gradients
 			var user_factors_gradient = new Matrix<float>(user_factors.dim1, user_factors.dim2);
 			var item_factors_gradient = new Matrix<float>(item_factors.dim1, item_factors.dim2);
+			var user_bias_gradient    = new float[user_factors.dim1];
+			var item_bias_gradient    = new float[item_factors.dim1];
 
 			// I.1 prediction error
 			for (int index = 0; index < ratings.Count; index++)
@@ -95,7 +109,17 @@ namespace MyMediaLite.RatingPrediction
 				int item_id = ratings.Items[index];
 
 				// prediction
-				float error = ratings[index] - Predict(user_id, item_id, false);
+				float score = global_bias;
+				score += user_bias[user_id];
+				score += item_bias[item_id];
+				for (int f = 0; f < NumFactors; f++)
+					score += user_factors[user_id, f] * item_factors[item_id, f];
+				double sig_score = 1 / (1 + Math.Exp(-score));
+
+				float prediction = (float) (MinRating + sig_score * rating_range_size);
+				float error      = ratings[index] - prediction;
+
+				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
 				// add up error gradient
 				for (int f = 0; f < NumFactors; f++)
@@ -103,26 +127,53 @@ namespace MyMediaLite.RatingPrediction
 					float u_f = user_factors[user_id, f];
 					float i_f = item_factors[item_id, f];
 
-					user_factors_gradient.Inc(user_id, f, error * i_f);
-					item_factors_gradient.Inc(item_id, f, error * u_f);
+					user_factors_gradient.Inc(user_id, f, gradient_common * i_f);
+					item_factors_gradient.Inc(item_id, f, gradient_common * u_f);
 				}
 			}
 
 			// I.2 L2 regularization
+			//        biases
+			for (int u = 0; u < user_bias_gradient.Length; u++)
+				user_bias_gradient[u] += user_bias[u] * RegU * BiasReg;
+			for (int i = 0; i < item_bias_gradient.Length; i++)
+				item_bias_gradient[i] += item_bias[i] * RegI * BiasReg;
+			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 				for (int f = 0; f < NumFactors; f++)
-					user_factors_gradient.Inc(u, f, user_factors[u, f] * Regularization);
+					user_factors_gradient.Inc(u, f, user_factors[u, f] * RegU);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 				for (int f = 0; f < NumFactors; f++)
-					item_factors_gradient.Inc(i, f, item_factors[i, f] * Regularization);
+					item_factors_gradient.Inc(i, f, item_factors[i, f] * RegI);
 
 			// I.3 social network regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
 				// see eq. (13) in the paper
 				float[] sum_neighbors    = new float[NumFactors];
+				float bias_sum_neighbors = 0;
 				int num_neighbors        = user_neighbors[u].Count;
+
+				// user bias part
+				foreach (int v in user_neighbors[u])
+					bias_sum_neighbors += user_bias[v];
+				if (num_neighbors != 0)
+					user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_neighbors / num_neighbors);
+				foreach (int v in user_neighbors[u])
+					if (user_neighbors[v].Count != 0)
+					{
+						float trust_v = (float) 1 / user_neighbors[v].Count;
+						float diff = 0;
+						foreach (int w in user_neighbors[v])
+							diff -= user_bias[w];
+
+						diff = diff * trust_v;
+						diff += user_bias[v];
+
+						if (num_neighbors != 0)
+							user_bias_gradient[u] -= social_regularization * trust_v * diff / num_neighbors;
+					}
 
 				// latent factor part
 				foreach (int v in user_neighbors[u])
@@ -151,11 +202,13 @@ namespace MyMediaLite.RatingPrediction
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
+				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate);
 				for (int f = 0; f < NumFactors; f++)
 					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * LearnRate);
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
+				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate);
 				for (int f = 0; f < NumFactors; f++)
 					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
 			}
@@ -176,10 +229,16 @@ namespace MyMediaLite.RatingPrediction
 			double complexity = 0;
 			for (int u = 0; u <= MaxUserID; u++)
 				if (ratings.CountByUser.Count > u)
-					complexity += Regularization * Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(u)), 2);
+				{
+					complexity += RegU * Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(u)), 2);
+					complexity += BiasReg * Math.Pow(user_bias[u], 2);
+				}
 			for (int i = 0; i <= MaxItemID; i++)
 				if (ratings.CountByItem.Count > i)
-					complexity += Regularization * Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(i)), 2);
+				{
+					complexity += RegI * Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(i)), 2);
+					complexity += BiasReg * Math.Pow(item_bias[i], 2);
+				}
 
 			// TODO add penality term for neighborhood regularization
 
