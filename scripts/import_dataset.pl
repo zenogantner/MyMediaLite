@@ -104,7 +104,10 @@ while (<>) {
 		print "$event $user_id{$user}:1 $item_id{$item}:1\n";
     }
     else {
-		print "$user_id{$user}\t$item_id{$item}\t$event";
+		print "$user_id{$user}\t$item_id{$item}";
+		if ($event_column != -1) {
+			print "\t$event";
+		}
 		if ($date_column != -1) {
 		    my $date = $fields[$date_column];
 		    print "\t$date";
@@ -143,7 +146,6 @@ sub write_hash {
 	}
 }
 
-# TODO move this into a library
 sub read_hash {
     my ($filename) = @_;
 
@@ -181,7 +183,7 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --ignore-line-regex=REGEX   ignore lines that match REGEX
     --event-constant=STRING     set the value for each event to STRING
     --libsvm-format             output in LIBSVM format (ignores date/timestamp information)
-	--alphanumeric-sort         sort mapping files alphanumerically instead of numerically
+    --alphanumeric-sort         sort mapping files alphanumerically instead of numerically
 END
     exit $return_code;
 }

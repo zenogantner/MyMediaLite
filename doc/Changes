@@ -1,3 +1,8 @@
+3.0	2011-03-
+	scripts
+	 - import_dataset.pl: fix indentation of usage message; allow output
+           without event column
+
 2.99	2011-03-02
 	API
 	 - most rating stuff is now using float instead of double
