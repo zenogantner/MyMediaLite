@@ -1,7 +1,10 @@
 3.0	2011-03-
 	recommenders
 	 - SocialMF, SigmoidSocialMF: split up into two different recommenders,
-	   bug fixes
+	   bug fixes (reported by Nicholas Ampazis)
+	command-line programs
+	 - item recommendation: fix crash when predicting for all users
+	 - item recommendation: always use --data-dir for --test-users-file
 	scripts
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column
