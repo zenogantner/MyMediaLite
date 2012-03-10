@@ -1,4 +1,7 @@
 3.0	2011-03-
+	recommenders
+	 - SocialMF, SigmoidSocialMF: split up into two different recommenders,
+	   bug fixes
 	scripts
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column
