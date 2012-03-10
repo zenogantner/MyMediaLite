@@ -5,6 +5,9 @@
 	command-line programs
 	 - item recommendation: fix crash when predicting for all users
 	 - item recommendation: always use --data-dir for --test-users-file
+	I/O
+	 - ItemRecommendation.Extensions: speed up WritePredictions by using
+           array instead of List
 	scripts
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column

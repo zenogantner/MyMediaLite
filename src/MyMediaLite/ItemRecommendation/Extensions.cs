@@ -101,10 +101,18 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
 
+			/*
 			var score_list = new List<Pair<int, float>>();
 			foreach (int item_id in candidate_items)
-				score_list.Add( new Pair<int, float>(item_id, recommender.Predict(user_id, item_id)));
+				score_list.Add( new Pair<int, float>(item_id, recommender.Predict(user_id, item_id)) );
 			score_list = score_list.OrderByDescending(x => x.Second).ToList();
+			*/
+
+			var score_list = new Pair<int, float>[candidate_items.Count];
+			int count = 0;
+			foreach (int item_id in candidate_items)
+				score_list[count++] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+			score_list = score_list.OrderByDescending(x => x.Second).ToArray();
 
 			int prediction_count = 0;
 			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
