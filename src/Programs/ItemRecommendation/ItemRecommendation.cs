@@ -484,7 +484,7 @@ class ItemRecommendation
 		if (cross_validation > 1 && load_model_file != null)
 			Usage("--cross-validation=K and --load-model=FILE are mutually exclusive.");
 
-		if (test_file == null && test_ratio == 0 &&  cross_validation == 0 && save_model_file == null && test_users_file == null)
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && test_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
@@ -729,7 +729,7 @@ class ItemRecommendation
 
 		IList<int> user_list = null;
 		if (predict_for_users_file != null)
-			user_list = user_mapping.ToInternalID( File.ReadLines(predict_for_users_file).ToArray() );
+			user_list = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, predict_for_users_file)).ToArray() );
 
 		TimeSpan time_span = Wrap.MeasureTime( delegate() {
 			recommender.WritePredictions(
@@ -737,7 +737,10 @@ class ItemRecommendation
 				candidate_items, predict_items_number,
 				prediction_file, user_list,
 				user_mapping, item_mapping);
-			Console.Error.WriteLine("Wrote predictions for {0} users to {1}", user_list.Count, prediction_file);
+			if (user_list != null)
+				Console.Error.WriteLine("Wrote predictions for {0} users to file {1}.", user_list.Count, prediction_file);
+			else
+				Console.Error.WriteLine("Wrote predictions to file {0}.", prediction_file);
 		});
 		Console.Write(" prediction_time " + time_span);
 	}
