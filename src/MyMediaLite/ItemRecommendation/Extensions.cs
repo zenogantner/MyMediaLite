@@ -16,10 +16,13 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+//using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+//using System.Threading;
+//using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
@@ -102,9 +105,25 @@ namespace MyMediaLite.ItemRecommendation
 				item_mapping = new IdentityMapping();
 
 			var score_list = new Pair<int, float>[candidate_items.Count];
-			int count = 0;
-			foreach (int item_id in candidate_items)
-				score_list[count++] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+
+			for (int i = 0; i < score_list.Length; i++)
+			{
+				int item_id = candidate_items[i];
+				score_list[i] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+			}
+
+			/*
+			// was not faster (10% slower in experiments on 2 and 8 cores) - kept here for reference
+			Parallel.ForEach(Partitioner.Create(0, candidate_items.Count), (range, loop_state) =>
+			{
+				for (int i = range.Item1; i < range.Item2; i++)
+				{
+					int item_id = candidate_items[i];
+					score_list[i] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+				}
+			});
+			*/
+
 			score_list = score_list.OrderByDescending(x => x.Second).ToArray();
 
 			int prediction_count = 0;
