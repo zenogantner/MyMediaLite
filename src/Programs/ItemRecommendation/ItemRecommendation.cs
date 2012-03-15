@@ -312,6 +312,10 @@ class ItemRecommendation
 			user_mapping = new IdentityMapping();
 			item_mapping = new IdentityMapping();
 		}
+		if (load_user_mapping_file != null)
+			user_mapping = EntityMappingExtensions.LoadMapping(load_user_mapping_file);
+		if (load_item_mapping_file != null)
+			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
 		// load all the data
 		LoadData();
