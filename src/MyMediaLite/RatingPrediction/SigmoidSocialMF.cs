@@ -26,7 +26,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>
-	/// This implementation assumes a binary and symmetrical trust network.
+	/// This implementation assumes a binary trust network.
 	///
 	/// Mohsen Jamali, Martin Ester:
     /// A matrix factorization technique with trust propagation for recommendation in social networks
@@ -50,8 +50,8 @@ namespace MyMediaLite.RatingPrediction
 		*/
 
 		///
-		public SparseBooleanMatrix UserRelation { get { return this.user_neighbors; } set {	this.user_neighbors = value; } }
-		private SparseBooleanMatrix user_neighbors;
+		public SparseBooleanMatrix UserRelation { get { return this.user_connections; } set {	this.user_connections = value; } }
+		private SparseBooleanMatrix user_connections;
 
 		/// <summary>the number of users</summary>
 		public int NumUsers { get { return MaxUserID + 1; } }
@@ -59,8 +59,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void InitModel()
 		{
-			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfRows - 1);
-			this.MaxUserID = Math.Max(MaxUserID, user_neighbors.NumberOfColumns - 1);
+			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfRows - 1);
+			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfColumns - 1);
 
 			// init latent factor matrices
 			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
@@ -151,50 +151,50 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
 				// see eq. (13) in the paper
-				float[] sum_neighbors    = new float[NumFactors];
-				float bias_sum_neighbors = 0;
-				int num_neighbors        = user_neighbors[u].Count;
+				float[] sum_connections    = new float[NumFactors];
+				float bias_sum_connections = 0;
+				int num_connections        = user_connections[u].Count;
 
 				// user bias part
-				foreach (int v in user_neighbors[u])
-					bias_sum_neighbors += user_bias[v];
-				if (num_neighbors != 0)
-					user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_neighbors / num_neighbors);
-				foreach (int v in user_neighbors[u])
-					if (user_neighbors[v].Count != 0)
+				foreach (int v in user_connections[u])
+					bias_sum_connections += user_bias[v];
+				if (num_connections != 0)
+					user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
+				foreach (int v in user_connections[u])
+					if (user_connections[v].Count != 0)
 					{
-						float trust_v = (float) 1 / user_neighbors[v].Count;
+						float trust_v = (float) 1 / user_connections[v].Count;
 						float diff = 0;
-						foreach (int w in user_neighbors[v])
+						foreach (int w in user_connections[v])
 							diff -= user_bias[w];
 
 						diff = diff * trust_v;
 						diff += user_bias[v];
 
-						if (num_neighbors != 0)
-							user_bias_gradient[u] -= social_regularization * trust_v * diff / num_neighbors;
+						if (num_connections != 0)
+							user_bias_gradient[u] -= social_regularization * trust_v * diff / num_connections;
 					}
 
 				// latent factor part
-				foreach (int v in user_neighbors[u])
+				foreach (int v in user_connections[u])
 					for (int f = 0; f < NumFactors; f++)
-						sum_neighbors[f] += user_factors[v, f];
-				if (num_neighbors != 0)
+						sum_connections[f] += user_factors[v, f];
+				if (num_connections != 0)
 					for (int f = 0; f < NumFactors; f++)
-						user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_neighbors[f] / num_neighbors));
-				foreach (int v in user_neighbors[u])
-					if (user_neighbors[v].Count != 0)
+						user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
+				foreach (int v in user_connections[u])
+					if (user_connections[v].Count != 0)
 					{
-						float trust_v = (float) 1 / user_neighbors[v].Count;
+						float trust_v = (float) 1 / user_connections[v].Count;
 						for (int f = 0; f < NumFactors; f++)
 						{
 							float diff = 0;
-							foreach (int w in user_neighbors[v])
+							foreach (int w in user_connections[v])
 								diff -= user_factors[w, f];
 							diff = diff * trust_v;
 							diff += user_factors[v, f];
-							if (num_neighbors != 0)
-								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_neighbors);
+							if (num_connections != 0)
+								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_connections);
 						}
 					}
 			}
