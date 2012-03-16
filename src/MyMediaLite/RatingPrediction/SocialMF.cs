@@ -34,10 +34,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SocialMF : MatrixFactorization, IUserRelationAwareRecommender
 	{
-		// TODO
-		//  - implement MAE optimization or throw Exception
-		//  - implement bold-driver support or throw Exception
-
 		/// <summary>Social network regularization constant</summary>
 		public float SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
 		private float social_regularization = 1;
@@ -111,11 +107,11 @@ namespace MyMediaLite.RatingPrediction
 			// I.2 L2 regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 				for (int f = 0; f < NumFactors; f++)
-					user_factors_gradient.Inc(u, f, user_factors[u, f] * Regularization);
+					user_factors_gradient.Inc(u, f, user_factors[u, f] * -Regularization);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 				for (int f = 0; f < NumFactors; f++)
-					item_factors_gradient.Inc(i, f, item_factors[i, f] * Regularization);
+					item_factors_gradient.Inc(i, f, item_factors[i, f] * -Regularization);
 
 			// I.3 social network regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)

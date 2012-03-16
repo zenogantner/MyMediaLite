@@ -35,8 +35,9 @@ namespace MyMediaLite.RatingPrediction
 	public class SigmoidSocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
 		// TODO
-		//  - implement MAE optimization or throw Exception
-		//  - implement bold-driver support or throw Exception
+		//  - MAE optimization or throw Exception
+		//  - bold-driver support or throw Exception
+		//  - frequency-based regularization
 
 		/// <summary>Social network regularization constant</summary>
 		public float SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
@@ -135,17 +136,17 @@ namespace MyMediaLite.RatingPrediction
 			// I.2 L2 regularization
 			//        biases
 			for (int u = 0; u < user_bias_gradient.Length; u++)
-				user_bias_gradient[u] += user_bias[u] * RegU * BiasReg;
+				user_bias_gradient[u] -= user_bias[u] * RegU * BiasReg;
 			for (int i = 0; i < item_bias_gradient.Length; i++)
-				item_bias_gradient[i] += item_bias[i] * RegI * BiasReg;
+				item_bias_gradient[i] -= item_bias[i] * RegI * BiasReg;
 			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 				for (int f = 0; f < NumFactors; f++)
-					user_factors_gradient.Inc(u, f, user_factors[u, f] * RegU);
+					user_factors_gradient.Inc(u, f, user_factors[u, f] * -RegU);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 				for (int f = 0; f < NumFactors; f++)
-					item_factors_gradient.Inc(i, f, item_factors[i, f] * RegI);
+					item_factors_gradient.Inc(i, f, item_factors[i, f] * -RegI);
 
 			// I.3 social network regularization
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
@@ -202,13 +203,13 @@ namespace MyMediaLite.RatingPrediction
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 			{
-				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate);
+				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate * BiasLearnRate);
 				for (int f = 0; f < NumFactors; f++)
 					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * LearnRate);
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
-				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate);
+				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate * BiasLearnRate);
 				for (int f = 0; f < NumFactors; f++)
 					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
 			}
@@ -250,8 +251,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} social_regularization={3} learn_rate={4} num_iter={5} init_mean={6} init_stddev={7}",
-				this.GetType().Name, NumFactors, Regularization, SocialRegularization, LearnRate, NumIter, InitMean, InitStdDev);
+				"{0} num_factors={1} reg_u={2} reg_i={3} bias_reg={4} social_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} init_mean={9} init_stddev={10}",
+				this.GetType().Name, NumFactors, RegU, RegI, BiasReg, SocialRegularization, LearnRate, BiasLearnRate, NumIter, InitMean, InitStdDev);
 		}
 	}
 }
