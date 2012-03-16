@@ -49,7 +49,7 @@ namespace MyMediaLite.IO
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(TextReader reader,	IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+			Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
