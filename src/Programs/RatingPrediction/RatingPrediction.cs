@@ -33,7 +33,7 @@ using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
-class RatingPrediction
+static class RatingPrediction
 {
 	// data sets
 	static IRatings training_data;
@@ -56,6 +56,7 @@ class RatingPrediction
 	static List<double> eval_time_stats     = new List<double>();
 
 	// command line parameters
+	static string data_dir = string.Empty;
 	static string training_file;
 	static string test_file;
 	static string save_model_file;
@@ -188,9 +189,6 @@ class RatingPrediction
 		double epsilon = 0;
 		double cutoff  = double.MaxValue;
 
-		// data arguments
-		string data_dir = string.Empty;
-
 		// other arguments
 		bool search_hp             = false;
 		int random_seed            = -1;
@@ -284,7 +282,7 @@ class RatingPrediction
 			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
 		// load all the data
-		LoadData(data_dir, user_attributes_file, item_attributes_file, user_relations_file, item_relations_file, !online_eval);
+		LoadData(!online_eval);
 
 		// if requested, save ID mappings
 		if (save_user_mapping_file != null)
@@ -527,32 +525,30 @@ class RatingPrediction
 			Usage("Did not understand " + extra_args[0]);
 	}
 
-	static void LoadData(
-		string data_dir,
-		string user_attributes_file, string item_attributes_file,
-		string user_relation_file, string item_relation_file,
-		bool static_data)
+	static void LoadData(bool static_data)
 	{
+		training_file = Path.Combine(data_dir, training_file);
+
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// read training data
 			if ((recommender is TimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
-				training_data = TimedRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+				training_data = TimedRatingData.Read(training_file, user_mapping, item_mapping);
 			}
 			else
 			{
 				if (file_format == RatingFileFormat.DEFAULT)
 					training_data = static_data
-						? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type)
-						: RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type)
+						: RatingData.Read(training_file, user_mapping, item_mapping);
 				else if(file_format == RatingFileFormat.IGNORE_FIRST_LINE)
 					training_data = static_data
-						? StaticRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, rating_type, true)
-						: RatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping, true);
+						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type, true)
+						: RatingData.Read(training_file, user_mapping, item_mapping, true);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					training_data = MovieLensRatingData.Read(Path.Combine(data_dir, training_file), user_mapping, item_mapping);
+					training_data = MovieLensRatingData.Read(training_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, training_file));
+					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
 			}
 			recommender.Ratings = training_data;
 
@@ -571,28 +567,30 @@ class RatingPrediction
 			// user relation
 			if (recommender is IUserRelationAwareRecommender)
 			{
-				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relation_file), user_mapping);
+				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
 				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
 			}
 
 			// item relation
 			if (recommender is IItemRelationAwareRecommender)
 			{
-				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relation_file), item_mapping);
+				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
 				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 			}
 
 			// read test data
 			if (test_file != null)
 			{
+				test_file = Path.Combine(data_dir, test_file);
+
 				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
-					test_data = TimedRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
+					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					test_data = MovieLensRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping);
+					test_data = MovieLensRatingData.Read(test_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(Path.Combine(data_dir, test_file));
+					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file);
 				else
-					test_data = StaticRatingData.Read(Path.Combine(data_dir, test_file), user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
+					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
 			}
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
