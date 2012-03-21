@@ -52,7 +52,7 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public StaticRatings(SerializationInfo info, StreamingContext context) : base(info, context)
+		public StaticRatings(SerializationInfo info, StreamingContext context)
 		{
 			Users = (int[]) info.GetValue("Users", typeof(int[]));
 			Items = (int[]) info.GetValue("Items", typeof(int[]));
