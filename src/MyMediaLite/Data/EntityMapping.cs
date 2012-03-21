@@ -18,11 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MyMediaLite.Data
 {
 	/// <summary>Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
-	public sealed class EntityMapping : IEntityMapping
+	[Serializable()]
+	public sealed class EntityMapping : IEntityMapping, ISerializable
 	{
 		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
 		/// <remarks>
@@ -45,6 +47,16 @@ namespace MyMediaLite.Data
 
 		///
 		public int NumberOfEntities { get { return internal_to_original.Count; } }
+
+		/// <summary>default constructor</summary>
+		public EntityMapping() { }
+
+		///
+		public EntityMapping(SerializationInfo info, StreamingContext context)
+		{
+			original_to_internal = (Dictionary<string, int>) info.GetValue("original_to_internal", typeof(Dictionary<string, int>));
+			internal_to_original = (List<string>) info.GetValue("internal_to_original", typeof(List<string>));
+		}
 
 		/// <summary>Get original (external) ID of a given entity, if the given internal ID is unknown, throw an exception.</summary>
 		/// <param name="internal_id">the internal ID of the entity</param>
@@ -92,6 +104,13 @@ namespace MyMediaLite.Data
 			foreach (string id in original_id_list)
 				result.Add(ToInternalID(id));
 			return result;
+		}
+
+		///
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("original_to_internal", this.original_to_internal);
+			info.AddValue("internal_to_original", this.internal_to_original);
 		}
 	}
 }
