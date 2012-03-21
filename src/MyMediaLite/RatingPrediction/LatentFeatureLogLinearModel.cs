@@ -284,8 +284,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} init_mean={9} init_stddev={10} loss={11}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, InitMean, InitStdDev, Loss);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} loss={9}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, Loss);
 		}
 	}
 }

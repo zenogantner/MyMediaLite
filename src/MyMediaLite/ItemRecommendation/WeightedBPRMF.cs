@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -88,8 +88,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} bold_driver={7} learn_rate={8} init_mean={9} init_stddev={10}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate, InitMean, InitStdDev);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} bold_driver={7} learn_rate={8}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, BoldDriver, learn_rate);
 		}
 	}
 }

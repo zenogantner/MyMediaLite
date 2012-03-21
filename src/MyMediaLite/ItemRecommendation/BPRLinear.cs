@@ -264,8 +264,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} reg={1} num_iter={2} learn_rate={3} fast_sampling_memory_limit={4} init_mean={5} init_stdev={6}",
-				this.GetType().Name, Regularization, NumIter, LearnRate, FastSamplingMemoryLimit, InitMean, InitStdev);
+				"{0} reg={1} num_iter={2} learn_rate={3} fast_sampling_memory_limit={4}",
+				this.GetType().Name, Regularization, NumIter, LearnRate, FastSamplingMemoryLimit);
 		}
 
 	}

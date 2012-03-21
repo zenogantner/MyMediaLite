@@ -5,6 +5,8 @@
            - split up into two different recommenders,
 	   - bug fixes (error reported by Nicholas Ampazis)
 	   - speed up case with social_regularization=0
+	 - remove the seldomly used InitMean and InitStdDev from the ToString()
+           method of all recommenders that have it
 	command-line programs
 	 - make the program classes static
 	 - item recommendation: load user and item ID mappings if requested

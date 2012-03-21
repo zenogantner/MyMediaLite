@@ -91,7 +91,7 @@ namespace MyMediaLite.IO
 			else if (rating_type == RatingType.FLOAT)
 				ratings = new StaticRatings(size);
 			else
-				throw new FormatException("Unknown rating type: {0}", rating_type);
+				throw new FormatException(string.Format("Unknown rating type: {0}", rating_type));
 
 			string line;
 			while ((line = reader.ReadLine()) != null)

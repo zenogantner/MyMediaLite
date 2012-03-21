@@ -153,8 +153,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3} init_mean={4} init_stdev={5}",
-				NumFactors, Regularization, CPos, NumIter, InitMean, InitStdDev);
+				"WRMF num_factors={0} regularization={1} c_pos={2} num_iter={3}",
+				NumFactors, Regularization, CPos, NumIter);
 		}
 	}
 }
