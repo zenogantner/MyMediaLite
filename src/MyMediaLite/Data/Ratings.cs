@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MyMediaLite.Data
 {
@@ -28,6 +29,8 @@ namespace MyMediaLite.Data
 	///
 	/// This data structure supports incremental updates.
 	/// </remarks>
+	///
+	[Serializable()]
 	public class Ratings : DataSet, IRatings
 	{
 		///
@@ -55,6 +58,15 @@ namespace MyMediaLite.Data
 			Values = new List<float>();
 			MinRating = float.MaxValue;
 			MaxRating = float.MinValue;
+		}
+
+		///
+		public Ratings(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+			Values = (List<float>) info.GetValue("Values", typeof(List<float>));
+
+			MaxRating = Values.Max();
+			MinRating = Values.Min();
 		}
 
 		///
@@ -332,5 +344,12 @@ namespace MyMediaLite.Data
 
 		///
 		IEnumerator<float> IEnumerable<float>.GetEnumerator() { throw new NotSupportedException(); }
+
+		///
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddValue("Values", this.Values);
+		}
 	}
 }

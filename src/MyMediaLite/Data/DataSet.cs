@@ -16,8 +16,10 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using MyMediaLite.Util;
 
 /*! \namespace MyMediaLite.Data
@@ -28,7 +30,8 @@ using MyMediaLite.Util;
 namespace MyMediaLite.Data
 {
 	/// <summary>Abstract dataset class that implements some common functions</summary>
-	public abstract class DataSet : IDataSet
+	[Serializable()]
+	public abstract class DataSet : IDataSet, ISerializable
 	{
 		///
 		public IList<int> Users { get; protected set; }
@@ -60,6 +63,16 @@ namespace MyMediaLite.Data
 		{
 			Users = new List<int>();
 			Items = new List<int>();
+		}
+
+		///
+		public DataSet(SerializationInfo info, StreamingContext context)
+		{
+			Users = (List<int>) info.GetValue("Users", typeof(List<int>));
+			Items = (List<int>) info.GetValue("Items", typeof(List<int>));
+
+			MaxUserID = Users.Max();
+			MaxItemID = Items.Max();
 		}
 
 		///
@@ -216,6 +229,13 @@ namespace MyMediaLite.Data
 					return i;
 
 			throw new KeyNotFoundException(string.Format("index {0}, {1} not found.", user_id, item_id));
+		}
+
+		///
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("Users", this.Users);
+			info.AddValue("Items", this.Items);
 		}
 	}
 }

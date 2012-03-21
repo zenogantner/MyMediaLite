@@ -18,17 +18,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MyMediaLite.Data
 {
 	/// <summary>Data structure for storing ratings with time information</summary>
 	/// <remarks>
-	/// Small memory overhead for added flexibility.
-	///
-	/// This data structure supports incremental updates.
-	///
+	/// <para>This data structure supports incremental updates.</para>
+	/// <para>
 	/// Loading the Netflix Prize data set (100,000,000 ratings) into this data structure requires about 3.2 GB of memory.
+	/// </para>
 	/// </remarks>
+	[Serializable()]
 	public class TimedRatings : Ratings, ITimedRatings
 	{
 		///
@@ -46,6 +48,15 @@ namespace MyMediaLite.Data
 			Times = new List<DateTime>();
 			EarliestTime = DateTime.MaxValue;
 			LatestTime = DateTime.MinValue;
+		}
+
+		///
+		public TimedRatings(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+			Times = (List<DateTime>) info.GetValue("Times", typeof(List<DateTime>));
+
+			EarliestTime = Times.Min();
+			LatestTime   = Times.Max();
 		}
 
 		///
@@ -90,8 +101,13 @@ namespace MyMediaLite.Data
 					by_item.Add(new List<int>());
 				by_item[item_id].Add(pos);
 			}
-			//if (by_time != null)
 		}
 
+		///
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddValue("Times", this.Times);
+		}
 	}
 }

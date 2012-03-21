@@ -17,6 +17,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace MyMediaLite.Data
 {
@@ -26,6 +28,7 @@ namespace MyMediaLite.Data
 	///
 	/// This data structure does NOT support incremental updates.
 	/// </remarks>
+	[Serializable()]
 	public class StaticByteRatings : StaticRatings
 	{
 		byte[] byte_values;
@@ -60,6 +63,19 @@ namespace MyMediaLite.Data
 			Users  = new int[size];
 			Items  = new int[size];
 			byte_values = new byte[size];
+		}
+
+		///
+		public StaticByteRatings(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+			Users = (int[]) info.GetValue("Users", typeof(int[]));
+			Items = (int[]) info.GetValue("Items", typeof(int[]));
+			byte_values = (byte[]) info.GetValue("Values", typeof(byte[]));
+
+			MaxUserID = Users.Max();
+			MaxItemID = Items.Max();
+			MaxRating = byte_values.Max();
+			MinRating = byte_values.Min();
 		}
 
 		///
