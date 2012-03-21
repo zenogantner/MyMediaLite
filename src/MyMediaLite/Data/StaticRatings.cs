@@ -114,7 +114,6 @@ namespace MyMediaLite.Data
 			info.AddValue("Items", this.Items);
 			info.AddValue("Values", this.Values);
 		}
-
 	}
 }
 
