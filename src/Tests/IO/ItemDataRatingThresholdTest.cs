@@ -42,7 +42,7 @@ namespace Tests.IO
 			IDataSet data = ItemDataRatingThreshold.Read(new StringReader(s), 0);
 			Assert.AreEqual(7, data.Count);
 
-			data = ItemDataRatingThreshold.Read(new StringReader(s), 5.0);
+			data = ItemDataRatingThreshold.Read(new StringReader(s), 5.0f);
 			Assert.AreEqual(4, data.Count);
 
 			data = ItemDataRatingThreshold.Read(new StringReader(s), 4);

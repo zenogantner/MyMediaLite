@@ -37,20 +37,21 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(string filename, double rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public IPosOnlyFeedback Read(string filename, float rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
-			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold)))
-				return (IPosOnlyFeedback) FileSerializer.Deserialize(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold));
+			string binary_filename = string.Format(CultureInfo.InvariantCulture, "{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold);
+
+			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(binary_filename))
+				return (IPosOnlyFeedback) FileSerializer.Deserialize(binary_filename);
 
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
 					var feedback_data = (ISerializable) Read(reader, rating_threshold, user_mapping, item_mapping);
 					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
-						feedback_data.Serialize(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold));
+						feedback_data.Serialize(binary_filename);
 					return (IPosOnlyFeedback) feedback_data;
 				}
-
 			});
 		}
 
@@ -61,7 +62,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(TextReader reader, double rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public IPosOnlyFeedback Read(TextReader reader, float rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -85,7 +86,7 @@ namespace MyMediaLite.IO
 
 				int user_id   = user_mapping.ToInternalID(tokens[0]);
 				int item_id   = item_mapping.ToInternalID(tokens[1]);
-				double rating = double.Parse(tokens[2], CultureInfo.InvariantCulture);
+				float rating  = float.Parse(tokens[2], CultureInfo.InvariantCulture);
 
 				if (rating >= rating_threshold)
 					feedback.Add(user_id, item_id);
@@ -116,7 +117,7 @@ namespace MyMediaLite.IO
 				double rating = reader.GetDouble(2);
 
 				if (rating >= rating_threshold)
-				feedback.Add(user_id, item_id);
+					feedback.Add(user_id, item_id);
 			}
 
 			return feedback;

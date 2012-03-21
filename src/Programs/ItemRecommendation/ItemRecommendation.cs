@@ -81,7 +81,7 @@ static class ItemRecommendation
 	static uint cross_validation;
 	static bool show_fold_results;
 	static double test_ratio;
-	static double rating_threshold = double.NaN;
+	static float rating_threshold = float.NaN;
 	static int num_test_users;
 	static int predict_items_number = -1;
 	static bool online_eval;
@@ -254,11 +254,11 @@ static class ItemRecommendation
 			{ "predict-items-number=", (int v) => predict_items_number = v },
 			{ "num-test-users=",       (int v) => num_test_users       = v },
 			{ "cross-validation=",     (uint v) => cross_validation    = v },
-			// double-valued options
+			// floating point options
 			{ "epsilon=",             (double v)     => epsilon      = v },
 			{ "cutoff=",              (double v)     => cutoff       = v },
 			{ "test-ratio=",          (double v) => test_ratio       = v },
-			{ "rating-threshold=",    (double v) => rating_threshold = v },
+			{ "rating-threshold=",    (float v)  => rating_threshold = v },
 			// enum options
 			{ "file-format=",         (ItemDataFileFormat v) => file_format = v },
 			// boolean options
