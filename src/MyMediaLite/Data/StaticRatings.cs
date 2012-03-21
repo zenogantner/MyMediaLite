@@ -62,6 +62,8 @@ namespace MyMediaLite.Data
 			MaxItemID = Items.Max();
 			MaxRating = Values.Max();
 			MinRating = Values.Min();
+
+			pos = Values.Count;
 		}
 
 		///
@@ -104,6 +106,15 @@ namespace MyMediaLite.Data
 		{
 			throw new NotSupportedException();
 		}
+
+		///
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("Users", this.Users);
+			info.AddValue("Items", this.Items);
+			info.AddValue("Values", this.Values);
+		}
+
 	}
 }
 

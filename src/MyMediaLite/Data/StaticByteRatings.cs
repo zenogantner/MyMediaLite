@@ -76,6 +76,8 @@ namespace MyMediaLite.Data
 			MaxItemID = Items.Max();
 			MaxRating = byte_values.Max();
 			MinRating = byte_values.Min();
+
+			pos = byte_values.Length;
 		}
 
 		///
@@ -145,6 +147,14 @@ namespace MyMediaLite.Data
 				}
 
 			return false;
+		}
+
+		///
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("Users", this.Users);
+			info.AddValue("Items", this.Items);
+			info.AddValue("Values", this.byte_values);
 		}
 	}
 }
