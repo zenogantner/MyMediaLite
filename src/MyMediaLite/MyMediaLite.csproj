@@ -217,6 +217,7 @@
     <Compile Include="ItemRecommendation\IFoldInItemRecommender.cs" />
     <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="RatingPrediction\SigmoidSocialMF.cs" />
+    <Compile Include="IO\FileSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
