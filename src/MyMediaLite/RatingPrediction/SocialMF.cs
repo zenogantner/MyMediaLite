@@ -114,35 +114,36 @@ namespace MyMediaLite.RatingPrediction
 					item_factors_gradient.Inc(i, f, item_factors[i, f] * -Regularization);
 
 			// I.3 social network regularization
-			for (int u = 0; u < user_factors_gradient.dim1; u++)
-			{
-				// see eq. (13) in the paper
-				float[] sum_connections = new float[NumFactors];
-				int num_connections     = user_connections[u].Count;
+			if (SocialRegularization != 0)
+				for (int u = 0; u < user_factors_gradient.dim1; u++)
+				{
+					// see eq. (13) in the paper
+					float[] sum_connections = new float[NumFactors];
+					int num_connections     = user_connections[u].Count;
 
-				// latent factor part
-				foreach (int v in user_connections[u])
-					for (int f = 0; f < NumFactors; f++)
-						sum_connections[f] += user_factors[v, f];
-				if (num_connections != 0)
-					for (int f = 0; f < NumFactors; f++)
-						user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
-				foreach (int v in user_connections[u])
-					if (user_connections[v].Count != 0)
-					{
-						float trust_v = (float) 1 / user_connections[v].Count;
+					// latent factor part
+					foreach (int v in user_connections[u])
 						for (int f = 0; f < NumFactors; f++)
+							sum_connections[f] += user_factors[v, f];
+					if (num_connections != 0)
+						for (int f = 0; f < NumFactors; f++)
+							user_factors_gradient.Inc(u, f, -social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
+					foreach (int v in user_connections[u])
+						if (user_connections[v].Count != 0)
 						{
-							float diff = 0;
-							foreach (int w in user_connections[v])
-								diff -= user_factors[w, f];
-							diff = diff * trust_v;
-							diff += user_factors[v, f];
-							if (num_connections != 0)
-								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_connections);
+							float trust_v = (float) 1 / user_connections[v].Count;
+							for (int f = 0; f < NumFactors; f++)
+							{
+								float diff = 0;
+								foreach (int w in user_connections[v])
+									diff -= user_factors[w, f];
+								diff = diff * trust_v;
+								diff += user_factors[v, f];
+								if (num_connections != 0)
+									user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_connections);
+							}
 						}
-					}
-			}
+				}
 
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
