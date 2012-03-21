@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 // Copyright (C) 2011 Artus Krohn-Grimberghe
 //
 // This file is part of MyMediaLite.
@@ -20,6 +20,7 @@ using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
@@ -38,9 +39,18 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, double rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
+			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold)))
+				return (IPosOnlyFeedback) FileSerializer.Deserialize(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold));
+
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
-					return Read(reader, rating_threshold, user_mapping, item_mapping);
+				{
+					var feedback_data = (ISerializable) Read(reader, rating_threshold, user_mapping, item_mapping);
+					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+						feedback_data.Serialize(string.Format("{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold));
+					return (IPosOnlyFeedback) feedback_data;
+				}
+
 			});
 		}
 

@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
@@ -26,7 +27,9 @@ namespace MyMediaLite.Data
 	/// <remarks>
 	/// This data structure supports incremental updates if supported by the type parameter T.
 	/// </remarks>
-	public class PosOnlyFeedback<T> : DataSet, IPosOnlyFeedback where T : IBooleanMatrix, new()
+	///
+	[Serializable()]
+	public class PosOnlyFeedback<T> : DataSet, IPosOnlyFeedback, ISerializable where T : IBooleanMatrix, new()
 	{
 		/// <summary>By-user access, users are stored in the rows, items in the columns</summary>
 		public IBooleanMatrix UserMatrix
@@ -54,6 +57,9 @@ namespace MyMediaLite.Data
 
 		/// <summary>Default constructor</summary>
 		public PosOnlyFeedback() : base() { }
+
+		///
+		public PosOnlyFeedback(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
 		///
 		public IBooleanMatrix GetUserMatrixCopy()

@@ -19,6 +19,7 @@
 using System;
 using System.Data;
 using System.IO;
+using System.Runtime.Serialization;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
@@ -36,9 +37,17 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
+			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.PosOnlyFeedback"))
+				return (IPosOnlyFeedback) FileSerializer.Deserialize(filename + ".bin.PosOnlyFeedback");
+
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
-					return Read(reader, user_mapping, item_mapping);
+				{
+					var feedback_data = (ISerializable) Read(reader, user_mapping, item_mapping);
+					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+						feedback_data.Serialize(filename + ".bin.PosOnlyFeedback");
+					return (IPosOnlyFeedback) feedback_data;
+				}
 			});
 		}
 
@@ -85,8 +94,6 @@ namespace MyMediaLite.IO
 			return feedback;
 		}
 
-
-		
 		/// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
@@ -98,10 +105,10 @@ namespace MyMediaLite.IO
 
 			if (reader.FieldCount < 2)
 				throw new FormatException("Expected at least 2 columns.");
-			
+
 			return_string get_user_id = reader.GetGetter(0);
 			return_string get_item_id = reader.GetGetter(1);
-				
+
 			while (reader.Read())
 			{
 				int user_id = user_mapping.ToInternalID(get_user_id());
