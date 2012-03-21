@@ -1,16 +1,31 @@
 3.0	2011-03-
+	API
 	recommenders
-	 - SocialMF, SigmoidSocialMF: split up into two different recommenders,
-	   bug fixes (reported by Nicholas Ampazis)
+	 - SocialMF, SigmoidSocialMF:
+           - split up into two different recommenders,
+	   - bug fixes (error reported by Nicholas Ampazis)
+	   - speed up case with social_regularization=0
 	command-line programs
+	 - make the program classes static
+	 - item recommendation: load user and item ID mappings if requested
 	 - item recommendation: fix crash when predicting for all users
 	 - item recommendation: always use --data-dir for --test-users-file
+	 - rating prediction: simplify LoadData() method
 	I/O
 	 - ItemRecommendation.Extensions: speed up WritePredictions by using
-           array instead of List
+           array instead of List (reported by Brian McFee)
+	 - add static class IO.FileSerializer
+	 - perform fast binary (de)serialization if user and item IDs are not
+           mapped
+	data structures
+	 - make DataSet, Ratings, StaticRatings, StaticByteRatings,
+	   TimedRatings, and EntityMapping serializable
+	 - RatingType: represent enum by byte
 	scripts
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column
+	misc
+	 - speed up rating prediction test cases
 
 2.99	2011-03-02
 	API
