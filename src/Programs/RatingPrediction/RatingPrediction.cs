@@ -72,7 +72,7 @@ static class RatingPrediction
 	static string prediction_file;
 	static bool compute_fit;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
-	static RatingType rating_type       = RatingType.DOUBLE;
+	static RatingType rating_type       = RatingType.FLOAT;
 	static uint cross_validation;
 	static bool show_fold_results;
 	static double test_ratio;
