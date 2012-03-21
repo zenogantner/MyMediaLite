@@ -40,6 +40,12 @@ namespace MyMediaLite.IO
 			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{
+			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.StaticRatings"))
+			{
+				var ratings = (IRatings) FileSerializer.Deserialize(filename + ".bin.StaticRatings");
+				return ratings;
+			}
+
 			int size = 0;
 			using ( var reader = new StreamReader(filename) )
 				while (reader.ReadLine() != null)
@@ -49,7 +55,12 @@ namespace MyMediaLite.IO
 
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
-					return Read(reader, size, user_mapping, item_mapping, rating_type);
+				{
+					var ratings = (StaticRatings) Read(reader, size, user_mapping, item_mapping, rating_type);
+					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+						ratings.Serialize(filename + ".bin.StaticRatings");
+					return ratings;
+				}
 			});
 		}
 
@@ -77,8 +88,10 @@ namespace MyMediaLite.IO
 			IRatings ratings;
 			if (rating_type == RatingType.BYTE)
 				ratings = new StaticByteRatings(size);
-			else
+			else if (rating_type == RatingType.FLOAT)
 				ratings = new StaticRatings(size);
+			else
+				throw new FormatException("Unknown rating type: {0}", rating_type);
 
 			string line;
 			while ((line = reader.ReadLine()) != null)

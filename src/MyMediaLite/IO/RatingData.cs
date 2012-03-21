@@ -36,9 +36,17 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public IRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
+			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.Ratings"))
+				return (IRatings) FileSerializer.Deserialize(filename + ".bin.Ratings");
+
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
-					return Read(reader, user_mapping, item_mapping);
+				{
+					var ratings = (Ratings) Read(reader, user_mapping, item_mapping);
+					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+						ratings.Serialize(filename + ".bin.Ratings");
+					return ratings;
+				}
 			});
 		}
 
