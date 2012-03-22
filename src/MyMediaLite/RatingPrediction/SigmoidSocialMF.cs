@@ -215,7 +215,6 @@ namespace MyMediaLite.RatingPrediction
 		public override float ComputeObjective()
 		{
 			double loss = 0;
-
 			for (int i = 0; i < ratings.Count; i++)
 			{
 				int user_id = ratings.Users[i];
@@ -223,23 +222,47 @@ namespace MyMediaLite.RatingPrediction
 				loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
 			}
 
-			double complexity = 0;
-			for (int u = 0; u <= MaxUserID; u++)
-				if (ratings.CountByUser.Count > u)
+			double user_complexity = 0;
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				if (ratings.CountByUser.Count > user_id)
 				{
-					complexity += RegU * Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(u)), 2);
-					complexity += BiasReg * Math.Pow(user_bias[u], 2);
+					user_complexity += Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(user_id)), 2);
+					user_complexity += BiasReg * Math.Pow(user_bias[user_id], 2);
 				}
-			for (int i = 0; i <= MaxItemID; i++)
-				if (ratings.CountByItem.Count > i)
+			double item_complexity = 0;
+			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+				if (ratings.CountByItem.Count > item_id)
 				{
-					complexity += RegI * Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(i)), 2);
-					complexity += BiasReg * Math.Pow(item_bias[i], 2);
+					item_complexity += Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(item_id)), 2);
+					item_complexity += BiasReg * Math.Pow(item_bias[item_id], 2);
+				}
+			double complexity = RegU * user_complexity + RegI * item_complexity;
+
+			double social_regularization = 0;
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+			{
+				double bias_diff = 0;
+				var factor_diffs = new double[NumFactors];
+				foreach (int v in user_connections[user_id])
+				{
+					bias_diff -= user_bias[v];
+					for (int f = 0; f < factor_diffs.Length; f++)
+						factor_diffs[f] -= user_factors[v, f];
 				}
 
-			// TODO add penality term for neighborhood regularization
+				bias_diff /= user_connections[user_id].Count;
+				bias_diff += user_bias[user_id];
+				social_regularization += Math.Pow(bias_diff, 2);
 
-			return (float) (loss + complexity);
+				for (int f = 0; f < factor_diffs.Length; f++)
+				{
+					factor_diffs[f] /= user_connections[user_id].Count;
+					factor_diffs[f] += user_factors[user_id, f];
+					social_regularization += Math.Pow(factor_diffs[f], 2);
+				}
+			}
+
+			return (float) (loss + complexity + social_regularization);
 		}
 
 		///
