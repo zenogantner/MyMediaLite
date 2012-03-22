@@ -110,15 +110,12 @@ namespace MyMediaLite.RatingPrediction
 				int item_id = ratings.Items[index];
 
 				// prediction
-				float score = global_bias;
-				score += user_bias[user_id];
-				score += item_bias[item_id];
-				for (int f = 0; f < NumFactors; f++)
-					score += user_factors[user_id, f] * item_factors[item_id, f];
+				float score = global_bias + user_bias[user_id] + item_bias[item_id];
+				score += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				float prediction = (float) (MinRating + sig_score * rating_range_size);
-				float error      = ratings[index] - prediction;
+				float error      = prediction - ratings[index];
 
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
@@ -136,17 +133,17 @@ namespace MyMediaLite.RatingPrediction
 			// I.2 L2 regularization
 			//        biases
 			for (int u = 0; u < user_bias_gradient.Length; u++)
-				user_bias_gradient[u] -= user_bias[u] * RegU * BiasReg;
+				user_bias_gradient[u] += user_bias[u] * RegU * BiasReg;
 			for (int i = 0; i < item_bias_gradient.Length; i++)
-				item_bias_gradient[i] -= item_bias[i] * RegI * BiasReg;
+				item_bias_gradient[i] += item_bias[i] * RegI * BiasReg;
 			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
 				for (int f = 0; f < NumFactors; f++)
-					user_factors_gradient.Inc(u, f, user_factors[u, f] * -RegU);
+					user_factors_gradient.Inc(u, f, user_factors[u, f] * RegU);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 				for (int f = 0; f < NumFactors; f++)
-					item_factors_gradient.Inc(i, f, item_factors[i, f] * -RegI);
+					item_factors_gradient.Inc(i, f, item_factors[i, f] * RegI);
 
 			// I.3 social network regularization
 			if (SocialRegularization != 0)
@@ -161,7 +158,7 @@ namespace MyMediaLite.RatingPrediction
 					foreach (int v in user_connections[u])
 						bias_sum_connections += user_bias[v];
 					if (num_connections != 0)
-						user_bias_gradient[u] -= social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
+						user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
 					foreach (int v in user_connections[u])
 						if (user_connections[v].Count != 0)
 						{
@@ -169,12 +166,10 @@ namespace MyMediaLite.RatingPrediction
 							float diff = 0;
 							foreach (int w in user_connections[v])
 								diff -= user_bias[w];
-
-							diff = diff * trust_v;
+							diff *= trust_v; // normalize
 							diff += user_bias[v];
 
-							if (num_connections != 0)
-								user_bias_gradient[u] -= social_regularization * trust_v * diff / num_connections;
+							user_bias_gradient[u] -= social_regularization * trust_v * diff;
 						}
 
 					// latent factor part
@@ -183,7 +178,7 @@ namespace MyMediaLite.RatingPrediction
 							sum_connections[f] += user_factors[v, f];
 					if (num_connections != 0)
 						for (int f = 0; f < NumFactors; f++)
-							user_factors_gradient.Inc(u, f, -social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
+							user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
 					foreach (int v in user_connections[u])
 						if (user_connections[v].Count != 0)
 						{
@@ -193,10 +188,10 @@ namespace MyMediaLite.RatingPrediction
 								float diff = 0;
 								foreach (int w in user_connections[v])
 									diff -= user_factors[w, f];
-								diff = diff * trust_v;
+								diff *= trust_v; // normalize
 								diff += user_factors[v, f];
-								if (num_connections != 0)
-									user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_connections);
+
+								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff);
 							}
 						}
 				}
@@ -206,13 +201,13 @@ namespace MyMediaLite.RatingPrediction
 			{
 				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate * BiasLearnRate);
 				for (int f = 0; f < NumFactors; f++)
-					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * LearnRate);
+					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * -LearnRate);
 			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
 			{
 				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate * BiasLearnRate);
 				for (int f = 0; f < NumFactors; f++)
-					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * LearnRate);
+					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * -LearnRate);
 			}
 		}
 

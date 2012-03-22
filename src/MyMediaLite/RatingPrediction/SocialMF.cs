@@ -137,10 +137,10 @@ namespace MyMediaLite.RatingPrediction
 								float diff = 0;
 								foreach (int w in user_connections[v])
 									diff -= user_factors[w, f];
-								diff = diff * trust_v;
+								diff *= trust_v; // normalize
 								diff += user_factors[v, f];
-								if (num_connections != 0)
-									user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff / num_connections);
+
+								user_factors_gradient.Inc(u, f, social_regularization * trust_v * diff);
 							}
 						}
 				}
