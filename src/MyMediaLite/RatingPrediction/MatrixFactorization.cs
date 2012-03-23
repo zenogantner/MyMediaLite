@@ -90,10 +90,10 @@ namespace MyMediaLite.RatingPrediction
 			item_factors.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for users and items without training examples
-			for (int u = 0; u <= MaxUserID; u++)
+			for (int u = 0; u < ratings.CountByUser.Count; u++)
 				if (ratings.CountByUser[u] == 0)
 					user_factors.SetRowToOneValue(u, 0);
-			for (int i = 0; i <= MaxItemID; i++)
+			for (int i = 0; i < ratings.CountByItem.Count; i++)
 				if (ratings.CountByItem[i] == 0)
 					item_factors.SetRowToOneValue(i, 0);
 		}
