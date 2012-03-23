@@ -20,12 +20,30 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using MyMediaLite.Data;
 
 namespace MyMediaLite.IO
 {
 	/// <summary>Static class for serializing objects to binary files</summary>
 	public static class FileSerializer
 	{
+		/// <summary>Determine from the mapping objects whether we should serialize the data or not</summary>
+		/// <returns><c>true</c> if we should serialize; otherwise, <c>false</c></returns>
+		/// <param name='user_mapping'>user ID mapping</param>
+		/// <param name='item_mapping'>item ID mapping</param>
+		public static bool Should(IEntityMapping user_mapping, IEntityMapping item_mapping)
+		{
+			return !(user_mapping is EntityMapping) && !(item_mapping is EntityMapping);
+		}
+
+		/// <summary>Determine whether we can write our data to the disk</summary>
+		/// <returns><c>true</c> if we can write to filename; otherwise, <c>false</c></returns>
+		/// <param name='filename'>name of the file to write to</param>
+		public static bool CanWrite(string filename)
+		{
+			return true;
+		}
+
 		/// <summary>Serialize the specified object to a binary file</summary>
 		/// <param name='object_to_serialize'>object to serialize</param>
 		/// <param name='filename'>name of the file to save to</param>

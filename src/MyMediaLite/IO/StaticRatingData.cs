@@ -40,11 +40,9 @@ namespace MyMediaLite.IO
 			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{
-			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.StaticRatings"))
-			{
-				var ratings = (IRatings) FileSerializer.Deserialize(filename + ".bin.StaticRatings");
-				return ratings;
-			}
+			string binary_filename = filename + ".bin.StaticRatings";
+			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
+				return (IRatings) FileSerializer.Deserialize(binary_filename);
 
 			int size = 0;
 			using ( var reader = new StreamReader(filename) )
@@ -57,8 +55,8 @@ namespace MyMediaLite.IO
 				using ( var reader = new StreamReader(filename) )
 				{
 					var ratings = (StaticRatings) Read(reader, size, user_mapping, item_mapping, rating_type);
-					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
-						ratings.Serialize(filename + ".bin.StaticRatings");
+					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
+						ratings.Serialize(binary_filename);
 					return ratings;
 				}
 			});

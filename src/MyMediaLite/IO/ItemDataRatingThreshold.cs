@@ -27,7 +27,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that contains static methods for reading in implicit feedback data for ItemRecommender</summary>
+	/// <summary>Class that contains static methods for reading in implicit feedback data for ItemRecommender, derived from rating data</summary>
 	public static class ItemDataRatingThreshold
 	{
 		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a file</summary>
@@ -40,15 +40,14 @@ namespace MyMediaLite.IO
 		static public IPosOnlyFeedback Read(string filename, float rating_threshold, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			string binary_filename = string.Format(CultureInfo.InvariantCulture, "{0}.bin.PosOnlyFeedbackThreshold-{1}", filename, rating_threshold);
-
-			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(binary_filename))
+			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
 				return (IPosOnlyFeedback) FileSerializer.Deserialize(binary_filename);
 
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
 					var feedback_data = (ISerializable) Read(reader, rating_threshold, user_mapping, item_mapping);
-					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
 						feedback_data.Serialize(binary_filename);
 					return (IPosOnlyFeedback) feedback_data;
 				}

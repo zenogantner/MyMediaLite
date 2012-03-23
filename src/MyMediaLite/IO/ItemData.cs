@@ -37,15 +37,16 @@ namespace MyMediaLite.IO
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
 		{
-			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.PosOnlyFeedback"))
-				return (IPosOnlyFeedback) FileSerializer.Deserialize(filename + ".bin.PosOnlyFeedback");
+			string binary_filename = filename + ".bin.PosOnlyFeedback";
+			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
+				return (IPosOnlyFeedback) FileSerializer.Deserialize(binary_filename);
 
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
 					var feedback_data = (ISerializable) Read(reader, user_mapping, item_mapping);
-					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
-						feedback_data.Serialize(filename + ".bin.PosOnlyFeedback");
+					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
+						feedback_data.Serialize(binary_filename);
 					return (IPosOnlyFeedback) feedback_data;
 				}
 			});
