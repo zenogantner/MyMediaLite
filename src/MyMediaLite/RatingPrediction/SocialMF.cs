@@ -110,11 +110,11 @@ namespace MyMediaLite.RatingPrediction
 				item_bias_gradient[i] += item_bias[i] * RegI * BiasReg;
 			//        latent factors
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
-				for (int f = 0; f < NumFactors; f++)
+				for (int f = 0; f < user_factors_gradient.dim2; f++)
 					user_factors_gradient.Inc(u, f, user_factors[u, f] * RegU);
 
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
-				for (int f = 0; f < NumFactors; f++)
+				for (int f = 0; f < item_factors_gradient.dim2; f++)
 					item_factors_gradient.Inc(i, f, item_factors[i, f] * RegI);
 
 			// I.3 social network regularization
@@ -129,13 +129,13 @@ namespace MyMediaLite.RatingPrediction
 					foreach (int v in user_connections[u])
 					{
 						bias_sum_connections += user_bias[v];
-						for (int f = 0; f < NumFactors; f++)
+						for (int f = 0; f < sum_connections.Length; f++)
 							sum_connections[f] += user_factors[v, f];
 					}
 					if (num_connections != 0)
 					{
 						user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
-						for (int f = 0; f < NumFactors; f++)
+						for (int f = 0; f < user_factors_gradient.dim2; f++)
 							user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
 					}
 					foreach (int v in user_connections[u])
