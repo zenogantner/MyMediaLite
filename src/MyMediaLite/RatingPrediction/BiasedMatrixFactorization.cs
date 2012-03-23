@@ -141,8 +141,10 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>size of the interval of valid ratings</summary>
 		protected double rating_range_size;
 
-		delegate float TwoDoubleToFloat(double arg1, double arg2);
-		TwoDoubleToFloat compute_gradient_common;
+		/// <summary>delegate type that takes two double values and returns a float</summary>
+		protected delegate float TwoDoubleToFloat(double arg1, double arg2);
+		/// <summary>delegate to compute the common term of the error gradient</summary>
+		protected TwoDoubleToFloat compute_gradient_common;
 
 		IList<int>[,] thread_blocks;
 
@@ -215,7 +217,8 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		void SetupLoss()
+		/// <summary>Set up the common part of the error gradient of the loss function to optimize</summary>
+		protected void SetupLoss()
 		{
 			switch (Loss)
 			{

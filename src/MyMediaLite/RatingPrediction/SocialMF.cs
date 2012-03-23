@@ -67,6 +67,8 @@ namespace MyMediaLite.RatingPrediction
 
 		private void IterateBatch()
 		{
+			SetupLoss();
+
 			// I. compute gradients
 			var user_factors_gradient = new Matrix<float>(user_factors.dim1, user_factors.dim2);
 			var item_factors_gradient = new Matrix<float>(item_factors.dim1, item_factors.dim2);
@@ -87,10 +89,10 @@ namespace MyMediaLite.RatingPrediction
 				float prediction = (float) (MinRating + sig_score * rating_range_size);
 				float error      = prediction - ratings[index];
 
-				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
+				float gradient_common = compute_gradient_common(sig_score, error);
 
-				user_bias_gradient[user_id] += (float) gradient_common;
-				item_bias_gradient[item_id] += (float) gradient_common;
+				user_bias_gradient[user_id] += gradient_common;
+				item_bias_gradient[item_id] += gradient_common;
 
 				for (int f = 0; f < NumFactors; f++)
 				{
@@ -180,11 +182,41 @@ namespace MyMediaLite.RatingPrediction
 		public override float ComputeObjective()
 		{
 			double loss = 0;
-			for (int i = 0; i < ratings.Count; i++)
+			switch (Loss)
 			{
-				int user_id = ratings.Users[i];
-				int item_id = ratings.Items[i];
-				loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+				case OptimizationTarget.MAE:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						int user_id = ratings.Users[i];
+						int item_id = ratings.Items[i];
+						loss += Math.Abs(Predict(user_id, item_id) - ratings[i]);
+					}
+					break;
+				case OptimizationTarget.RMSE:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						int user_id = ratings.Users[i];
+						int item_id = ratings.Items[i];
+						loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
+					}
+					break;
+				case OptimizationTarget.LogisticLoss:
+					for (int i = 0; i < ratings.Count; i++)
+					{
+						double prediction = Predict(ratings.Users[i], ratings.Items[i]);
+
+						// map into [0, 1] interval
+						prediction = (prediction - min_rating) / rating_range_size;
+						if (prediction < 0.0)
+							prediction = 0.0;
+						if (prediction > 1.0)
+							prediction = 1.0;
+						double actual_rating = (ratings[i] - min_rating) / rating_range_size;
+
+						loss -= (actual_rating) * Math.Log(prediction);
+						loss -= (1 - actual_rating) * Math.Log(1 - prediction);
+					}
+					break;
 			}
 
 			double user_complexity = 0;
@@ -238,8 +270,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} reg_u={2} reg_i={3} bias_reg={4} social_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9}",
-				this.GetType().Name, NumFactors, RegU, RegI, BiasReg, SocialRegularization, LearnRate, BiasLearnRate, NumIter, BoldDriver);
+				"{0} num_factors={1} reg_u={2} reg_i={3} bias_reg={4} social_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} loss={10}",
+				this.GetType().Name, NumFactors, RegU, RegI, BiasReg, SocialRegularization, LearnRate, BiasLearnRate, NumIter, BoldDriver, Loss);
 		}
 	}
 }
