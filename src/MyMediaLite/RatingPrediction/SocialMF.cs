@@ -55,14 +55,7 @@ namespace MyMediaLite.RatingPrediction
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfRows - 1);
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfColumns - 1);
 
-			// init latent factor matrices
-			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
-			MatrixExtensions.InitNormal(user_factors, InitMean, InitStdDev);
-			MatrixExtensions.InitNormal(item_factors, InitMean, InitStdDev);
-			// init biases
-			user_bias = new float[MaxUserID + 1];
-			item_bias = new float[MaxItemID + 1];
+			base.InitModel();
 		}
 
 		///
