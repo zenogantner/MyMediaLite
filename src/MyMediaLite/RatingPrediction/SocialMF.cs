@@ -124,35 +124,35 @@ namespace MyMediaLite.RatingPrediction
 					float bias_sum_connections = 0;
 					int num_connections        = user_connections[u].Count;
 
-					// user bias part
 					foreach (int v in user_connections[u])
+					{
 						bias_sum_connections += user_bias[v];
-					if (num_connections != 0)
-						user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
-					foreach (int v in user_connections[u])
-						if (user_connections[v].Count != 0)
-						{
-							float trust_v = (float) 1 / user_connections[v].Count;
-							float diff = 0;
-							foreach (int w in user_connections[v])
-								diff -= user_bias[w];
-							diff *= trust_v; // normalize
-							diff += user_bias[v];
-
-							user_bias_gradient[u] -= social_regularization * trust_v * diff;
-						}
-
-					// latent factor part
-					foreach (int v in user_connections[u])
 						for (int f = 0; f < NumFactors; f++)
 							sum_connections[f] += user_factors[v, f];
+					}
 					if (num_connections != 0)
+					{
+						user_bias_gradient[u] += social_regularization * (user_bias[u] - bias_sum_connections / num_connections);
 						for (int f = 0; f < NumFactors; f++)
 							user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
+					}
 					foreach (int v in user_connections[u])
 						if (user_connections[v].Count != 0)
 						{
 							float trust_v = (float) 1 / user_connections[v].Count;
+
+							// bias
+							{
+								float diff = 0;
+								foreach (int w in user_connections[v])
+									diff -= user_bias[w];
+								diff *= trust_v; // normalize
+								diff += user_bias[v];
+
+								user_bias_gradient[u] -= social_regularization * trust_v * diff;
+							}
+
+							// latent factors
 							for (int f = 0; f < NumFactors; f++)
 							{
 								float diff = 0;
