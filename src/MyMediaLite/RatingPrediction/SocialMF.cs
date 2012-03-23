@@ -89,7 +89,9 @@ namespace MyMediaLite.RatingPrediction
 
 				double gradient_common = error * sig_score * (1 - sig_score) * rating_range_size;
 
-				// add up error gradient
+				user_bias_gradient[user_id] += (float) gradient_common;
+				item_bias_gradient[item_id] += (float) gradient_common;
+
 				for (int f = 0; f < NumFactors; f++)
 				{
 					float u_f = user_factors[user_id, f];
@@ -164,10 +166,10 @@ namespace MyMediaLite.RatingPrediction
 				}
 
 			// II. apply gradient descent step
-			for (int u = 0; u < user_factors_gradient.dim1; u++)
-				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate * BiasLearnRate);
-			for (int i = 0; i < item_factors_gradient.dim1; i++)
-				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate * BiasLearnRate);
+			for (int user_id = 0; user_id < user_factors_gradient.dim1; user_id++)
+				user_bias[user_id] -= user_bias_gradient[user_id] * LearnRate * BiasLearnRate;
+			for (int item_id = 0; item_id < item_factors_gradient.dim1; item_id++)
+				item_bias[item_id] -= item_bias_gradient[item_id] * LearnRate * BiasLearnRate;
 			user_factors_gradient.Multiply(-LearnRate);
 			user_factors.Inc(user_factors_gradient);
 			item_factors_gradient.Multiply(-LearnRate);
