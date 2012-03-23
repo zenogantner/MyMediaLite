@@ -117,15 +117,13 @@ namespace MyMediaLite.RatingPrediction
 				for (int f = 0; f < item_factors_gradient.dim2; f++)
 					item_factors_gradient.Inc(i, f, item_factors[i, f] * RegI);
 
-			// I.3 social network regularization
+			// I.3 social network regularization -- see eq. (13) in the paper
 			if (SocialRegularization != 0)
 				for (int u = 0; u < user_factors_gradient.dim1; u++)
 				{
-					// see eq. (13) in the paper
-					float[] sum_connections    = new float[NumFactors];
+					var sum_connections        = new float[NumFactors];
 					float bias_sum_connections = 0;
 					int num_connections        = user_connections[u].Count;
-
 					foreach (int v in user_connections[u])
 					{
 						bias_sum_connections += user_bias[v];
@@ -138,6 +136,7 @@ namespace MyMediaLite.RatingPrediction
 						for (int f = 0; f < user_factors_gradient.dim2; f++)
 							user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
 					}
+
 					foreach (int v in user_connections[u])
 						if (user_connections[v].Count != 0)
 						{
