@@ -36,7 +36,6 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO
 		//  - MAE optimization or throw Exception
-		//  - bold-driver support or throw Exception
 		//  - frequency-based regularization
 
 		/// <summary>Social network regularization constant</summary>
@@ -64,21 +63,6 @@ namespace MyMediaLite.RatingPrediction
 			// init biases
 			user_bias = new float[MaxUserID + 1];
 			item_bias = new float[MaxItemID + 1];
-		}
-
-		///
-		public override void Train()
-		{
-			InitModel();
-
-			rating_range_size = max_rating - min_rating;
-
-			// learn model parameters
-			double avg = (ratings.Average - min_rating) / rating_range_size;
-			global_bias = (float) Math.Log(avg / (1 - avg));
-
-			for (int current_iter = 0; current_iter < NumIter; current_iter++)
-				Iterate(ratings.RandomIndex, true, true);
 		}
 
 		///
@@ -243,15 +227,17 @@ namespace MyMediaLite.RatingPrediction
 						factor_diffs[f] -= user_factors[v, f];
 				}
 
-				bias_diff /= user_connections[user_id].Count;
+				if (user_connections[user_id].Count > 0)
+					bias_diff /= user_connections[user_id].Count;
 				bias_diff += user_bias[user_id];
-				social_regularization += Math.Pow(bias_diff, 2);
+				social_regularization += this.social_regularization * Math.Pow(bias_diff, 2);
 
 				for (int f = 0; f < factor_diffs.Length; f++)
 				{
-					factor_diffs[f] /= user_connections[user_id].Count;
+					if (user_connections[user_id].Count > 0)
+						factor_diffs[f] /= user_connections[user_id].Count;
 					factor_diffs[f] += user_factors[user_id, f];
-					social_regularization += Math.Pow(factor_diffs[f], 2);
+					social_regularization += this.social_regularization * Math.Pow(factor_diffs[f], 2);
 				}
 			}
 
@@ -263,8 +249,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} reg_u={2} reg_i={3} bias_reg={4} social_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8}",
-				this.GetType().Name, NumFactors, RegU, RegI, BiasReg, SocialRegularization, LearnRate, BiasLearnRate, NumIter);
+				"{0} num_factors={1} reg_u={2} reg_i={3} bias_reg={4} social_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9}",
+				this.GetType().Name, NumFactors, RegU, RegI, BiasReg, SocialRegularization, LearnRate, BiasLearnRate, NumIter, BoldDriver);
 		}
 	}
 }
