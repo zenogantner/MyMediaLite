@@ -230,16 +230,17 @@ namespace MyMediaLite.RatingPrediction
 				if (user_connections[user_id].Count > 0)
 					bias_diff /= user_connections[user_id].Count;
 				bias_diff += user_bias[user_id];
-				social_regularization += this.social_regularization * Math.Pow(bias_diff, 2);
+				social_regularization += Math.Pow(bias_diff, 2);
 
 				for (int f = 0; f < factor_diffs.Length; f++)
 				{
 					if (user_connections[user_id].Count > 0)
 						factor_diffs[f] /= user_connections[user_id].Count;
 					factor_diffs[f] += user_factors[user_id, f];
-					social_regularization += this.social_regularization * Math.Pow(factor_diffs[f], 2);
+					social_regularization += Math.Pow(factor_diffs[f], 2);
 				}
 			}
+			social_regularization *= this.social_regularization;
 
 			return (float) (loss + complexity + social_regularization);
 		}
