@@ -277,6 +277,19 @@ namespace MyMediaLite.DataType
 			}
 		}
 
+		/// <summary>Multiply all entries of a matrix with a scalar</summary>
+		/// <param name="matrix">the matrix</param>
+		/// <param name="f">the number to multiply with</param>
+		static public void Multiply(this Matrix<float> matrix, float f)
+		{
+			for (int x = 0; x < matrix.dim1; x++)
+			{
+				int offset = x * matrix.dim2;
+				for (int y = 0; y < matrix.dim2; y++)
+					matrix.data[offset + y] *= f;
+			}
+		}
+
 		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
 		/// <remarks>
 		/// See http://en.wikipedia.org/wiki/Matrix_norm

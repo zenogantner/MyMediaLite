@@ -165,17 +165,13 @@ namespace MyMediaLite.RatingPrediction
 
 			// II. apply gradient descent step
 			for (int u = 0; u < user_factors_gradient.dim1; u++)
-			{
 				user_bias[u] += (float) (user_bias_gradient[u] * LearnRate * BiasLearnRate);
-				for (int f = 0; f < NumFactors; f++)
-					MatrixExtensions.Inc(user_factors, u, f, user_factors_gradient[u, f] * -LearnRate);
-			}
 			for (int i = 0; i < item_factors_gradient.dim1; i++)
-			{
 				item_bias[i] += (float) (item_bias_gradient[i] * LearnRate * BiasLearnRate);
-				for (int f = 0; f < NumFactors; f++)
-					MatrixExtensions.Inc(item_factors, i, f, item_factors_gradient[i, f] * -LearnRate);
-			}
+			user_factors_gradient.Multiply(-LearnRate);
+			user_factors.Inc(user_factors_gradient);
+			item_factors_gradient.Multiply(-LearnRate);
+			item_factors.Inc(item_factors_gradient);
 		}
 
 		///
