@@ -269,7 +269,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public float ComputeObjective()
 		{
-			return -1;
+			return (float) Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
 		}
 
 		///

@@ -33,11 +33,7 @@ namespace MyMediaLite.Eval.Measures
 		{
 			double sum = 0;
 			for (int i = 0; i < ratings.Count; i++)
-			{
-				int user_id = ratings.Users[i];
-				int item_id = ratings.Items[i];
-				sum += Math.Abs(recommender.Predict(user_id, item_id) - ratings[i]);
-			}
+				sum += Math.Abs(recommender.Predict(ratings.Users[i], ratings.Items[i]) - ratings[i]);
 			return sum;
 		}
 	}

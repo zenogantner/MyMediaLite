@@ -462,48 +462,30 @@ namespace MyMediaLite.RatingPrediction
 
 			return user_vector;
 		}
-
-		///
-		public override float ComputeObjective()
+		
+		/// <summary>Computes the value of the loss function that is currently being optimized</summary>
+		/// <returns>the loss</returns>
+		protected double ComputeLoss()
 		{
 			double loss = 0;
 			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
-					for (int i = 0; i < ratings.Count; i++)
-					{
-						int user_id = ratings.Users[i];
-						int item_id = ratings.Items[i];
-						loss += Math.Abs(Predict(user_id, item_id) - ratings[i]);
-					}
+					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, ratings);
 					break;
 				case OptimizationTarget.RMSE:
-					for (int i = 0; i < ratings.Count; i++)
-					{
-						int user_id = ratings.Users[i];
-						int item_id = ratings.Items[i];
-						loss += Math.Pow(Predict(user_id, item_id) - ratings[i], 2);
-					}
+					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
 					break;
 				case OptimizationTarget.LogisticLoss:
-					for (int i = 0; i < ratings.Count; i++)
-					{
-						double prediction = Predict(ratings.Users[i], ratings.Items[i]);
-
-						// map into [0, 1] interval
-						prediction = (prediction - min_rating) / rating_range_size;
-						if (prediction < 0.0)
-							prediction = 0.0;
-						if (prediction > 1.0)
-							prediction = 1.0;
-						double actual_rating = (ratings[i] - min_rating) / rating_range_size;
-
-						loss -= (actual_rating) * Math.Log(prediction);
-						loss -= (1 - actual_rating) * Math.Log(1 - prediction);
-					}
+					loss += Eval.Measures.LogisticLoss.ComputeSum(this, ratings, min_rating, rating_range_size);
 					break;
 			}
-
+			return loss;
+		}
+		
+		///
+		public override float ComputeObjective()
+		{
 			double complexity = 0;
 			if (FrequencyRegularization)
 			{
@@ -532,7 +514,7 @@ namespace MyMediaLite.RatingPrediction
 				}
 			}
 
-			return (float) (loss + complexity);
+			return (float) (ComputeLoss() + complexity);
 		}
 
 		///

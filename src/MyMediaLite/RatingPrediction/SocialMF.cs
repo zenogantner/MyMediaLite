@@ -181,20 +181,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override float ComputeObjective()
 		{
-			double loss = 0;
-			switch (Loss)
-			{
-				case OptimizationTarget.MAE:
-					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, ratings);
-					break;
-				case OptimizationTarget.RMSE:
-					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
-					break;
-				case OptimizationTarget.LogisticLoss:
-					loss += Eval.Measures.LogisticLoss.ComputeSum(this, ratings, min_rating, rating_range_size);
-					break;
-			}
-
 			double user_complexity = 0;
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
 				if (ratings.CountByUser.Count > user_id)
@@ -238,7 +224,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 			social_regularization *= this.social_regularization;
 
-			return (float) (loss + complexity + social_regularization);
+			return (float) (ComputeLoss() + complexity + social_regularization);
 		}
 
 		///

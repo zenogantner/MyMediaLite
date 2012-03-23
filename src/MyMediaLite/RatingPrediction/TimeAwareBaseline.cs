@@ -295,7 +295,7 @@ namespace MyMediaLite.RatingPrediction
 		public virtual float ComputeObjective()
 		{
 			double loss =
-				this.Evaluate(ratings)["RMSE"]
+				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings)
 				+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
 				+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
  				+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)
