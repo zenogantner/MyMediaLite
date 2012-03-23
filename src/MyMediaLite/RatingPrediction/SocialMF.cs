@@ -141,27 +141,24 @@ namespace MyMediaLite.RatingPrediction
 						{
 							float trust_v = (float) 1 / user_connections[v].Count;
 
-							// bias
+							float bias_diff = 0;
+							var factor_diffs = new float[NumFactors];
+							foreach (int w in user_connections[v])
 							{
-								float diff = 0;
-								foreach (int w in user_connections[v])
-									diff -= user_bias[w];
-								diff *= trust_v; // normalize
-								diff += user_bias[v];
-
-								user_bias_gradient[u] -= social_regularization * trust_v * diff;
+								bias_diff -= user_bias[w];
+								for (int f = 0; f < factor_diffs.Length; f++)
+									factor_diffs[f] -= user_factors[w, f];
 							}
 
-							// latent factors
-							for (int f = 0; f < NumFactors; f++)
-							{
-								float diff = 0;
-								foreach (int w in user_connections[v])
-									diff -= user_factors[w, f];
-								diff *= trust_v; // normalize
-								diff += user_factors[v, f];
+							bias_diff *= trust_v; // normalize
+							bias_diff += user_bias[v];
+							user_bias_gradient[u] -= social_regularization * trust_v * bias_diff;
 
-								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * diff);
+							for (int f = 0; f < factor_diffs.Length; f++)
+							{
+								factor_diffs[f] *= trust_v; // normalize
+								factor_diffs[f] += user_factors[v, f];
+								user_factors_gradient.Inc(u, f, -social_regularization * trust_v * factor_diffs[f]);
 							}
 						}
 				}
