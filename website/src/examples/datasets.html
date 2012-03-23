@@ -84,6 +84,17 @@
     </table>
   </p>
 
+  <h3><a href="">Epinions</a></h3>
+  <p>
+    5-fold crossvalidation with <tt>--random-seed=1</tt>
+    <table border="1">
+      <tr> <th>Method</th> <th><tt>--recommender-options</tt></th> <th>RMSE</th> </tr>
+      [% FOREACH entry IN epinions %]
+      <tr> <td>[% entry.method %]</td> <td><tt>[% entry.hp %]</tt></td> <td>[% entry.rmse %]</td> </tr>
+      [% END %]
+    </table>
+  </p>
+
   <h3><a href="http://www.cs.sfu.ca/~sja25/personal/datasets/">Flixster</a></h3>
   <p>
     5-fold crossvalidation with <tt>--random-seed=1</tt>
