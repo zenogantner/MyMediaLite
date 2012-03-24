@@ -15,9 +15,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -49,12 +52,25 @@ namespace MyMediaLite.RatingPrediction
 			if (header != null)
 				writer.WriteLine(header);
 
-			for (int index = 0; index < ratings.Count; index++)
-				writer.WriteLine(
-					line_format,
-					user_mapping.ToOriginalID(ratings.Users[index]),
-					item_mapping.ToOriginalID(ratings.Items[index]),
-					recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
+			if (line_format == "ranking")
+			{
+				foreach (int user_id in ratings.AllUsers)
+					if (ratings.ByUser[user_id].Count > 0)
+						recommender.WritePredictions(
+							user_id,
+							new List<int>(from index in ratings.ByUser[user_id] select ratings.Items[index]),
+							new int[] { },
+							ratings.ByUser[user_id].Count,
+							writer,
+							user_mapping, item_mapping);
+			}
+			else
+				for (int index = 0; index < ratings.Count; index++)
+					writer.WriteLine(
+						line_format,
+						user_mapping.ToOriginalID(ratings.Users[index]),
+						item_mapping.ToOriginalID(ratings.Items[index]),
+						recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>Rate a given set of instances and write it to a file</summary>

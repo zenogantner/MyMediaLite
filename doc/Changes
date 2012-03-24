@@ -11,6 +11,8 @@
            method of all recommenders that have it
 	 - generalize parts of ComputeObjective()
 	command-line programs
+	 - rating prediction: --prediction-line=ranking writes a ranked list of
+           items for each user
 	 - make the program classes static
 	 - item recommendation: load user and item ID mappings if requested
 	 - item recommendation: fix crash when predicting for all users

@@ -143,7 +143,9 @@ static class RatingPrediction
   prediction options:
    --prediction-file=FILE         write the rating predictions to FILE
    --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID,
-                                  item ID, and predicted rating; default is {0}\\t{1}\\t{2}
+                                  item ID, and predicted rating; default is {0}\\t{1}\\t{2};
+                                  if set to 'ranking', each line contains a list of ranked items
+                                  for one user
    --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:
