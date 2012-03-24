@@ -1,12 +1,15 @@
 3.0	2011-03-
 	API
 	recommenders
-	 - SocialMF, SigmoidSocialMF:
-           - split up into two different recommenders,
-	   - bug fixes (error reported by Nicholas Ampazis)
-	   - speed up case with social_regularization=0
+	 - SocialMF:
+	   - implement with sigmoid function
+	   - training bug fixes (error reported by Nicholas Ampazis)
+	   - speed up case social_regularization=0
+	   - add bold-driver heuristics
+	   - add support for MAE and logistic loss optimization
 	 - remove the seldomly used InitMean and InitStdDev from the ToString()
            method of all recommenders that have it
+	 - generalize parts of ComputeObjective()
 	command-line programs
 	 - make the program classes static
 	 - item recommendation: load user and item ID mappings if requested
@@ -19,15 +22,18 @@
 	 - add static class IO.FileSerializer
 	 - perform fast binary (de)serialization if user and item IDs are not
            mapped
+	 - TimedRatingData: improved handling of different time/date formats
 	data structures
 	 - make DataSet, Ratings, StaticRatings, StaticByteRatings,
-	   TimedRatings, and EntityMapping serializable
+	   TimedRatings, PosOnlyFeedback, and EntityMapping serializable
 	 - RatingType: represent enum by byte
+	evaluation
+	 - add static classes to Eval.Measures: MAE, RMSE, LogisticLoss
 	scripts
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column
 	misc
-	 - speed up rating prediction test cases
+	 - speed up test scipts
 
 2.99	2011-03-02
 	API
