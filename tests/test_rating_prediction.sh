@@ -76,7 +76,7 @@ done
 
 for method in UserKNNPearson UserKNNCosine ItemKNNPearson ItemKNNCosine
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=double
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=double
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=float
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=float
 done
 
