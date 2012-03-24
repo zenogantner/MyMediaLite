@@ -41,6 +41,16 @@ namespace MyMediaLite.IO
 		/// <param name='filename'>name of the file to write to</param>
 		public static bool CanWrite(string filename)
 		{
+			try
+			{
+				Stream stream = File.Open(filename + "-mymedialite-test", FileMode.Create);
+				stream.Close();
+				File.Delete(filename + "-mymedialite-test");
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 			return true;
 		}
 
