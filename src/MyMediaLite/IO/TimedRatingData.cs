@@ -103,7 +103,7 @@ namespace MyMediaLite.IO
 							int.Parse(date_time_tokens[4]),
 							int.Parse(date_time_tokens[5])));
 				}
-				else if (date_string.Length == 10) // format "yyyy-mm-dd"
+				else if (date_string.Length == 10 && date_string[4] == '-') // format "yyyy-mm-dd"
 				{
 					var date_time_tokens = date_string.Split(time_split_chars);
 					ratings.Add(
