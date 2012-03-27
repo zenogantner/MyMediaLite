@@ -95,8 +95,8 @@ You should have received a copy of the GNU General Public License
 along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 ----
-This package contains Mono.Options, the Math.NET Numerics library, a C# port
-of LIBSVM, and NUnit.
+This package contains Mono.Options, C5, the Math.NET Numerics library,
+a C# port of LIBSVM, and NUnit.
 
 The original packages can be found here:
 http://numerics.mathdotnet.com
