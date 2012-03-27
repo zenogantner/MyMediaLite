@@ -22,8 +22,8 @@
 	 - item recommendation: always use --data-dir for --test-users-file
 	 - rating prediction: simplify LoadData() method
 	I/O
-	 - ItemRecommendation.Extensions: speed up WritePredictions by using
-           array instead of List (reported by Brian McFee)
+	 - speed up writing out item recommendations by using a heap to store
+           intermediate results (suggested by Brian McFee)
 	 - add static class IO.FileSerializer
 	 - perform fast binary (de)serialization if user and item IDs are not
            mapped
