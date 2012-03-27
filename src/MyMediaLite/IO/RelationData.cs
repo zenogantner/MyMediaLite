@@ -89,8 +89,8 @@ namespace MyMediaLite.IO
 
 			var matrix = new SparseBooleanMatrix();
 
-			return_string get_e1_id = reader.GetGetter(0);
-			return_string get_e2_id = reader.GetGetter(1);
+			Func<string> get_e1_id = reader.GetGetter(0);
+			Func<string> get_e2_id = reader.GetGetter(1);
 
 			while (!reader.Read())
 			{

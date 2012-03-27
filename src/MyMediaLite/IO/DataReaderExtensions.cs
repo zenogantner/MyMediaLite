@@ -21,9 +21,6 @@ using System.Data;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Function with no arguments returning a string</summary>
-	public delegate string return_string();
-
 	/// <summary>Extension methods for IDataReader objects</summary>
 	public static class DataReaderExtensions
 	{
@@ -34,7 +31,7 @@ namespace MyMediaLite.IO
 		/// <exception cref='FormatException'>
 		///   thrown if field i is not of type String, Int32, or Int64
 		/// </exception>
-		public static return_string GetGetter(this IDataReader reader, int i)
+		public static Func<string> GetGetter(this IDataReader reader, int i)
 		{
 			Type t = reader.GetFieldType(i);
 			if (t.Equals(String.Empty.GetType()))

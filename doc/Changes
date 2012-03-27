@@ -38,6 +38,7 @@
            without event column
 	misc
 	 - speed up test scipts
+	 - get rid of delegate definitions in some classes, use Func<> instead
 
 2.99	2011-03-02
 	API

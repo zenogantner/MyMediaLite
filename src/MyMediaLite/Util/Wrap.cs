@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -23,16 +23,10 @@ namespace MyMediaLite.Util
 	/// <summary>Static methods to wrap around other code.</summary>
 	public static class Wrap
 	{
-		/// <summary>Delegate definition necessary to define wrappers</summary>
-		public delegate void task();
-		
-		/// <summary>Delegate definition necessary to define wrappers</summary>
-		public delegate T task<T>();
-		
 		/// <summary>Measure how long an action takes</summary>
-		/// <param name="t">A <see cref="task"/> defining the action to be measured</param>
+		/// <param name="t">An <see cref="Action"/> defining the action to be measured</param>
 		/// <returns>The <see cref="TimeSpan"/> it takes to perform the action</returns>
-		public static TimeSpan MeasureTime(task t)
+		public static TimeSpan MeasureTime(Action t)
 		{
 			DateTime startTime = DateTime.Now;
 			t(); // perform task
@@ -45,7 +39,7 @@ namespace MyMediaLite.Util
 		/// <exception cref='FormatException'>
 		/// Represents errors caused by passing incorrectly formatted arguments or invalid format specifiers to methods.
 		/// </exception>
-		public static void FormatException(string filename, task t)
+		public static void FormatException(string filename, Action t)
 		{
 			try
 			{
@@ -63,7 +57,7 @@ namespace MyMediaLite.Util
 		/// <exception cref='FormatException'>
 		/// Represents errors caused by passing incorrectly formatted arguments or invalid format specifiers to methods.
 		/// </exception>
-		public static T FormatException<T>(string filename, task<T> t)
+		public static T FormatException<T>(string filename, Func<T> t)
 		{
 			try
 			{

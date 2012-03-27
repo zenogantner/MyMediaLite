@@ -39,15 +39,12 @@ namespace MyMediaLite.Util
 			return s.ToUpperInvariant();
 		}
 
-		/// <summary>Delegate definition necessary to define Configure</summary>
-		public delegate void takes_string(string s);
-
 		/// <summary>Configure a recommender</summary>
 		/// <param name="recommender">the recommender to configure</param>
 		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
 		/// <returns>the configured recommender</returns>
-		public static T Configure<T>(this T recommender, string parameters, takes_string report_error)
+		public static T Configure<T>(this T recommender, string parameters, Action<string> report_error)
 		{
 			var parameters_dictionary = new RecommenderParameters(parameters);
 			return Configure(recommender, parameters_dictionary, report_error);
@@ -66,7 +63,7 @@ namespace MyMediaLite.Util
 		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
 		/// <param name="report_error">void function that takes a string for error reporting</param>
 		/// <returns>the configured recommender</returns>
-		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, takes_string report_error)
+		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, Action<string> report_error)
 		{
 			foreach (var key in new List<string>(parameters.Keys))
 			{
@@ -90,7 +87,7 @@ namespace MyMediaLite.Util
 		/// <param name="key">the name of the property (case insensitive)</param>
 		/// <param name="val">the string representation of the value</param>
 		/// <param name="report_error">delegate to report errors</param>
-		public static void SetProperty<T>(this T recommender, string key, string val, takes_string report_error)
+		public static void SetProperty<T>(this T recommender, string key, string val, Action<string> report_error)
 		{
 			Type type = recommender.GetType();
 			var property_names = new List<string>();

@@ -141,10 +141,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>size of the interval of valid ratings</summary>
 		protected float rating_range_size;
 
-		/// <summary>delegate type that takes two double values and returns a float</summary>
-		protected delegate float TwoDoubleToFloat(double arg1, double arg2);
 		/// <summary>delegate to compute the common term of the error gradient</summary>
-		protected TwoDoubleToFloat compute_gradient_common;
+		protected Func<double, double, float> compute_gradient_common;
 
 		IList<int>[,] thread_blocks;
 
