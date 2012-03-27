@@ -66,7 +66,10 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
 		public float RegI { get { return baseline_predictor.RegI; } set { baseline_predictor.RegI = value; } }
-
+		
+		/// <summary>number of iterations used for training the underlying baseline predictor</summary>
+		public uint NumIter { get { return baseline_predictor.NumIter; } set { baseline_predictor.NumIter = value; } }
+		
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected CorrelationMatrix correlation;
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -53,8 +53,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} shrinkage={2} reg_u={3} reg_i={4}",
-				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI);
+				"{0} k={1} shrinkage={2} reg_u={3} reg_i={4} num_iter={5}",
+				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), Shrinkage, RegU, RegI, NumIter);
 		}
 	}
 }

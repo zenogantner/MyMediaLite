@@ -67,8 +67,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} k={1} reg_u={2} reg_i={3}",
-				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI);
+				"{0} k={1} reg_u={2} reg_i={3} num_iter={4}",
+				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI, NumIter);
 		}
 	}
 }
