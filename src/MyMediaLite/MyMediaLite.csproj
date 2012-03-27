@@ -37,6 +37,7 @@
     <Reference Include="MathNet.Numerics, Version=2011.4.17.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37">
       <HintPath>..\..\lib\MathNet\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.C5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />

@@ -23,6 +23,8 @@ using System.IO;
 using System.Linq;
 //using System.Threading;
 //using System.Threading.Tasks;
+//using C5;
+//using C5.Comparers;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
@@ -90,7 +92,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
-		static public void WritePredictions(
+		static public void WritePredictionsOld(
 			this IRecommender recommender,
 			int user_id,
 			IList<int> candidate_items,
@@ -147,5 +149,64 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			writer.WriteLine("]");
 		}
+
+		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
+		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
+		/// <param name="user_id">ID of the user to make recommendations for</param>
+		/// <param name="candidate_items">list of candidate items</param>
+		/// <param name="ignore_items">list of items for which no predictions should be made</param>
+		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
+		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
+		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
+		static public void WritePredictions(
+			this IRecommender recommender,
+			int user_id,
+			IList<int> candidate_items,
+			ICollection<int> ignore_items,
+			int num_predictions,
+			TextWriter writer,
+			IEntityMapping user_mapping, IEntityMapping item_mapping)
+		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+
+			//C5.Comparer<Pair<int, float>> = ComparerFactory.CreateComparer(delegate(Pair<int, float> a, Pair<int, float> b) { return b.Second.CompareTo(a); });
+			//new IntervalHeap<Pair<int, float>>(num_predictions, Comparer);
+
+			var score_list = new Pair<int, float>[candidate_items.Count];
+
+			for (int i = 0; i < score_list.Length; i++)
+			{
+				int item_id = candidate_items[i];
+				score_list[i] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+			}
+
+			score_list = score_list.OrderByDescending(x => x.Second).ToArray();
+
+			int prediction_count = 0;
+			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
+			foreach (var wi in score_list)
+			{
+				int item_id = wi.First;
+				float score = wi.Second;
+				if (!ignore_items.Contains(item_id) && score > float.MinValue)
+				{
+					if (prediction_count == 0)
+						writer.Write("{0}:{1}", item_mapping.ToOriginalID(item_id), score.ToString(CultureInfo.InvariantCulture));
+					else
+						writer.Write(",{0}:{1}", item_mapping.ToOriginalID(item_id), score.ToString(CultureInfo.InvariantCulture));
+
+					prediction_count++;
+				}
+
+				if (prediction_count == num_predictions)
+					break;
+			}
+			writer.WriteLine("]");
+		}
+
 	}
 }
