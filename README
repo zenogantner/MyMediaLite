@@ -99,6 +99,7 @@ This package contains Mono.Options, C5, the Math.NET Numerics library,
 a C# port of LIBSVM, and NUnit.
 
 The original packages can be found here:
+http://www.itu.dk/research/c5/
 http://numerics.mathdotnet.com
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 http://www.matthewajohnson.org/software/svm.html
