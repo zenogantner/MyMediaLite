@@ -47,10 +47,10 @@ while (<$fh2>) {
 close $fh2;
 
 # consistency check
-my $num_users_with_pred = scalar keys %predicted_items_by_user;
-my $num_users_with_gt = scalar keys %accessed_items_by_user;
-if ($num_users_with_pred != $num_users_with_gt) {
-	warn "$num_users_with_pred users with predictions vs. $num_users_with_gt users with ground truth\n";
+my $num_prediction_users = scalar keys %predicted_items_by_user;
+my $num_validation_users = scalar keys %accessed_items_by_user;
+if ($num_prediction_users != $num_validation_users) {
+	warn "$num_prediction_users users with predictions vs. $num_validation_users users with ground truth\n";
 }
 
 print STDERR "Evaluating ...\n";
@@ -75,5 +75,5 @@ foreach my $user_id (keys %accessed_items_by_user) {
 	}
 	$map_at_3 += $ap;
 }
-$map_at_3 /= $num_users_with_gt;
+$map_at_3 /= $num_validation_users;
 printf "%.6f\n",  $map_at_3;
