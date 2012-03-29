@@ -178,7 +178,7 @@ sub mini_stats {
     }
 
     if ($date_column && $first_date ne '9999-99-99') {
-	print STDERR "first rating on $first_date, last rating on $last_date\n";
+	print STDERR "first event on $first_date, last event on $last_date\n";
     }
 
     if ($date_column && $first_timestamp < 2500000000) {
@@ -188,7 +188,7 @@ sub mini_stats {
 	($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $last_timestamp;
 	$hour += $hour_offset;
 	my $last_datetime = strftime '%F %T', $sec, $min, $hour, $mday, $mon, $year;
-	print STDERR "first rating: $first_datetime, last rating: $last_datetime\n";
+	print STDERR "first event: $first_datetime, last event: $last_datetime\n";
     }
 
     if (scalar keys %event_level_count > 0) {
