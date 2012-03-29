@@ -38,6 +38,7 @@
 	 - import_dataset.pl: fix indentation of usage message; allow output
            without event column
 	 - add some helper scripts for KDD Cup 2012
+         - add overlap.pl
 	misc
 	 - speed up test scipts
 	 - get rid of delegate definitions in some classes, use Func<> instead
