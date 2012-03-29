@@ -1,6 +1,7 @@
 3.0	2011-03-
 	API
 	recommenders
+	 - new recommender: SigmoidItemAsymmetricFactorModel
 	 - SocialMF:
 	   - implement with sigmoid function
 	   - training bug fixes (error reported by Nicholas Ampazis)

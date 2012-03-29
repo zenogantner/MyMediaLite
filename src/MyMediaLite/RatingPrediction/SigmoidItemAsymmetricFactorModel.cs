@@ -27,36 +27,32 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>SVD++: Matrix factorization that also takes into account _what_ users have rated; variant that uses a sigmoid function</summary>
+	/// <summary>Asymmetric factor model</summary>
 	/// <remarks>
 	///   <para>
 	///     Literature:
 	///     <list type="bullet">
 	///       <item><description>
-	///         Yehuda Koren:
-	///         Factorization Meets the Neighborhood: a Multifaceted Collaborative Filtering Model.
-	///         KDD 2008.
-	///         http://research.yahoo.com/files/kdd08koren.pdf
+	///         Arkadiusz Paterek:
+	///         Improving regularized singular value decomposition for collaborative filtering.
+	///         KDD Cup 2007.
+	///         http://arek-paterek.com/ap_kdd.pdf
 	///       </description></item>
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SigmoidSVDPlusPlus : SVDPlusPlus
+	public class SigmoidItemAsymmetricFactorModel : BiasedMatrixFactorization
 	{
 		// TODO
-		// - implement ComputeObjective
-		// - merge with SVDPlusPlus?
+		//  - implement ComputeObjective and FoldIn
 
-		/// <summary>size of the interval of valid ratings</summary>
-		double rating_range_size;
+		int[][] items_rated_by_user;
 
-		Func<double, double, float> compute_gradient_common;
-
-		/// <summary>The optimization target</summary>
-		public OptimizationTarget Loss { get; set; }
+		/// <summary>user factors (part expressed via the rated items)</summary>
+		protected Matrix<float> y;
 
 		/// <summary>Default constructor</summary>
-		public SigmoidSVDPlusPlus() : base()
+		public SigmoidItemAsymmetricFactorModel() : base()
 		{
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
@@ -78,22 +74,6 @@ namespace MyMediaLite.RatingPrediction
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
 			base.Train();
-		}
-
-		void SetupLoss()
-		{
-			switch (Loss)
-			{
-				case OptimizationTarget.MAE:
-					compute_gradient_common = (sig_score, err) => (float) (Math.Sign(err) * sig_score * (1 - sig_score) * rating_range_size);
-					break;
-				case OptimizationTarget.RMSE:
-					compute_gradient_common = (sig_score, err) => (float) (err * sig_score * (1 - sig_score) * rating_range_size);
-					break;
-				case OptimizationTarget.LogisticLoss:
-					compute_gradient_common = (sig_score, err) => (float) err;
-					break;
-			}
 		}
 
 		///
@@ -135,7 +115,7 @@ namespace MyMediaLite.RatingPrediction
 				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
 				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
-					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
+					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator);
 
 				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
 				double sig_score = 1 / (1 + Math.Exp(-score));
@@ -160,11 +140,6 @@ namespace MyMediaLite.RatingPrediction
 					float i_f = item_factors[i, f];
 
 					// if necessary, compute and apply updates
-					if (update_user)
-					{
-						double delta_u = gradient_common * i_f - user_reg_weight * p[u, f];
-						p.Inc(u, f, lr * delta_u);
-					}
 					if (update_item)
 					{
 						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
@@ -185,8 +160,13 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			base.LoadModel(filename);
-			rating_range_size = max_rating - min_rating;
+			// TODO
+		}
+
+		///
+		public override void SaveModel(string filename)
+		{
+			// TODO
 		}
 
 		///
@@ -194,8 +174,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			SetupLoss();
 
-			var user_p = new float[NumFactors];
-			user_p.InitNormal(InitMean, InitStdDev);
 			float user_bias = 0;
 
 			var items = (from pair in rated_items select pair.First).ToArray();
@@ -216,7 +194,6 @@ namespace MyMediaLite.RatingPrediction
 
 					double score = global_bias + user_bias + item_bias[item_id];
 					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
-					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
 					float err = (float) (rated_items[index].Second - prediction);
@@ -224,16 +201,6 @@ namespace MyMediaLite.RatingPrediction
 
 					// adjust bias
 					user_bias += BiasLearnRate * LearnRate * ((float) gradient_common - BiasReg * user_reg_weight * user_bias);
-
-					// adjust factors
-					for (int f = 0; f < NumFactors; f++)
-					{
-						float u_f = user_p[f];
-						float i_f = item_factors[item_id, f];
-
-						double delta_u = gradient_common * i_f - user_reg_weight * u_f;
-						user_p[f] += (float) (LearnRate * delta_u);
-					}
 				}
 			}
 
@@ -241,9 +208,55 @@ namespace MyMediaLite.RatingPrediction
 			var user_vector = new float[NumFactors + 1];
 			user_vector[0] = user_bias;
 			for (int f = 0; f < NumFactors; f++)
-				user_vector[f + 1] = (float) y_sum_vector[f] + user_p[f];
+				user_vector[f + 1] = (float) y_sum_vector[f];
 
 			return user_vector;
+		}
+
+		///
+		protected override void InitModel()
+		{
+			base.InitModel();
+
+			y = new Matrix<float>(MaxItemID + 1, NumFactors);
+			y.InitNormal(InitMean, InitStdDev);
+
+			// set factors to zero for items without training examples
+			for (int i = 0; i <= MaxItemID; i++)
+				if (ratings.CountByItem[i] == 0)
+					y.SetRowToOneValue(i, 0);
+		}
+
+		/// <summary>Precompute all user factors</summary>
+		protected void PrecomputeFactors()
+		{
+			if (user_factors == null)
+				user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+
+			if (items_rated_by_user == null)
+			{
+				items_rated_by_user = new int[MaxUserID + 1][];
+				for (int u = 0; u <= MaxUserID; u++)
+					items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
+			}
+
+			for (int u = 0; u <= MaxUserID; u++)
+				PrecomputeFactors(u);
+		}
+
+		/// <summary>Precompute the user factors for a given user</summary>
+		/// <param name='u'>the ID of the user</param>
+		protected void PrecomputeFactors(int u)
+		{
+			// compute
+			var factors = y.SumOfRows(items_rated_by_user[u]);
+			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+			for (int f = 0; f < factors.Count; f++)
+				factors[f] = (float) (factors[f] / norm_denominator);
+
+			// assign
+			for (int f = 0; f < factors.Count; f++)
+				user_factors[u, f] = (float) factors[f];
 		}
 
 		///

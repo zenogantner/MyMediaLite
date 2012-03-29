@@ -223,6 +223,7 @@
     <Compile Include="Eval\Measures\RMSE.cs" />
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
+    <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
