@@ -125,6 +125,7 @@ while (<>) {
 	}
 	elsif ($date =~ /^\d+$/) {
 	    my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $date;
+	    $year += 1900;
 	    $month_count{"$year-$mon"}++;
 	}
 	else {
