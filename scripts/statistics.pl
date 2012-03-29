@@ -27,7 +27,6 @@ use strict;
 use warnings;
 
 use English qw( -no_match_vars );
-use File::Slurp;
 use Getopt::Long;
 
 my $USER_COLUMN  = 0;
@@ -67,6 +66,9 @@ my %event_level_count   = ();
 my %month_count = ();
 # TODO time statistics
 
+if ($user_file || $item_file) {
+	require File::Slurp;
+}
 my %watch_user = ();
 my %watch_item = ();
 %watch_user = map { chomp $_; $_ => 1 } read_file($user_file) if $user_file;
@@ -120,6 +122,10 @@ while (<>) {
 	if ($date =~ /^(\d\d\d\d)-(\d\d)-(\d\d)$/) {
 	    my ($year, $month, $day) = ($1, $2, $3);
 	    $month_count{"$year-$month"}++;
+	}
+	elsif ($date =~ /^\d+$/) {
+	    my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $date;
+	    $month_count{"$year-$mon"}++;
 	}
 	else {
 	    die "Could not parse date '$date'. Expected format: YYYY-MM-DD\n";
@@ -221,8 +227,8 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --event-column=N         specifies the event column (0-based), default is $EVENT_COLUMN
     --date-column=N          specifies the date column (0-based), default is $DATE_COLUMN; -1 if no date column
     --time-column=N          specifies the time column (0-based), default is $TIME_COLUMN
-    --user-file=FILE         only get statistics for users listed in FILE
-    --item-file=FILE         only get statistics for items listed in FILE
+    --user-file=FILE         only get statistics for users listed in FILE (requires File::Slurp)
+    --item-file=FILE         only get statistics for items listed in FILE (requires File::Slurp)
 END
     exit $return_code;
 }
