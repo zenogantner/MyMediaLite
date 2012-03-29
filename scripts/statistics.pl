@@ -28,6 +28,7 @@ use warnings;
 
 use English qw( -no_match_vars );
 use Getopt::Long;
+use POSIX qw(strftime);
 
 my $USER_COLUMN  = 0;
 my $ITEM_COLUMN  = 1;
@@ -51,6 +52,7 @@ GetOptions(
            'event-column=i'      => \(my $event_column      = $EVENT_COLUMN),
            'date-column=i'       => \(my $date_column       = $DATE_COLUMN),
            'time-column=i'       => \(my $time_column       = $TIME_COLUMN),
+           'hour-offset=i'       => \(my $hour_offset       = 0),
 	  ) or usage(-1);
 
 usage(0) if $help;
@@ -76,6 +78,11 @@ my %watch_item = ();
 
 # skip lines
 for (my $i = 0; $i < $ignore_lines; $i++) { <>; }
+
+my $first_date = '9999-99-99';
+my $last_date  = '0000-00-00';
+my $first_timestamp = 2500000000;
+my $last_timestamp  = 0;
 
 LINE:
 while (<>) {
@@ -117,19 +124,26 @@ while (<>) {
     $event_count_by_comb{"$user $item"}++ if !$save_memory;
     $event_level_count{$fields[$event_column]}++ if !$save_memory && defined $fields[$event_column];
 
-    if (!$save_memory && $date_column != -1 && defined $fields[$date_column]) {
+    if ($date_column != -1 && defined $fields[$date_column]) {
 	my $date = $fields[$date_column];
 	if ($date =~ /^(\d\d\d\d)-(\d\d)-(\d\d)$/) {
 	    my ($year, $month, $day) = ($1, $2, $3);
 	    $month_count{"$year-$month"}++;
+
+	    $first_date = $date if $date le $first_date;
+	    $last_date  = $date if $date ge $last_date;
 	}
 	elsif ($date =~ /^\d+$/) {
-	    my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $date;
+	    my ($sec, $min, $hour, $day_of_month, $month, $year) = gmtime $date;
 	    $year += 1900;
-	    $month_count{"$year-$mon"}++;
+	    $month++;
+	    $month_count{sprintf "%04d-%02d", $year, $month}++;
+
+	    $first_timestamp = $date if $date < $first_timestamp;
+	    $last_timestamp  = $date if $date > $last_timestamp;
 	}
 	else {
-	    die "Could not parse date '$date'. Expected format: YYYY-MM-DD\n";
+	    die "Could not parse date '$date'. Expected format: YYYY-MM-DD or timestamp\n";
 	}
     }
 
@@ -162,17 +176,32 @@ sub mini_stats {
 	my $sparsity = 100 * ( $user_count * $item_count - $comb_count ) / ($user_count * $item_count);
 	printf STDERR "sparsity: %.4f percent\n", $sparsity;
     }
-    
+
+    if ($date_column && $first_date ne '9999-99-99') {
+	print STDERR "first rating on $first_date, last rating on $last_date\n";
+    }
+
+    if ($date_column && $first_timestamp < 2500000000) {
+	my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $first_timestamp;
+	$hour += $hour_offset;
+	my $first_datetime = strftime '%F %T', $sec, $min, $hour, $mday, $mon, $year;
+	($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = gmtime $last_timestamp;
+	$hour += $hour_offset;
+	my $last_datetime = strftime '%F %T', $sec, $min, $hour, $mday, $mon, $year;
+	print STDERR "first rating: $first_datetime, last rating: $last_datetime\n";
+    }
+
     if (scalar keys %event_level_count > 0) {
 	my %event_level_freq = map { $_ => sprintf("%s\t(%.4f)", $event_level_count{$_}, $event_level_count{$_} / $event_count) } keys %event_level_count;
-	print STDERR "Event levels and frequencies:\n";	
+	print STDERR "Event levels and frequencies:\n";
 	print_hash(\%event_level_freq);
     }
 
     if (scalar keys %month_count > 0) {
 	print STDERR "Event frequencies by month:\n";
 	print_hash(\%month_count);
-    }    
+    }
+
 }
 
 sub contains_only_numbers {
@@ -230,6 +259,7 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --time-column=N          specifies the time column (0-based), default is $TIME_COLUMN
     --user-file=FILE         only get statistics for users listed in FILE (requires File::Slurp)
     --item-file=FILE         only get statistics for items listed in FILE (requires File::Slurp)
+    --hour-offset            difference of the times to GMT
 END
     exit $return_code;
 }
