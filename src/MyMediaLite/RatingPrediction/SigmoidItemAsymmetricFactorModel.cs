@@ -43,10 +43,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SigmoidItemAsymmetricFactorModel : BiasedMatrixFactorization
 	{
-		// TODO
-		//  - implement ComputeObjective
-		//  - profile and optimize
-
 		int[][] items_rated_by_user;
 
 		/// <summary>user factors (part expressed via the rated items)</summary>
@@ -124,8 +120,8 @@ namespace MyMediaLite.RatingPrediction
 				double prediction = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
-				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU  / Math.Sqrt(ratings.CountByUser[u])) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg_i / Math.Sqrt(ratings.CountByItem[i])) : reg_i;
 				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
@@ -221,6 +217,36 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		///
+		public override float ComputeObjective()
+		{
+			double complexity = 0;
+			if (FrequencyRegularization)
+			{
+				for (int u = 0; u <= MaxUserID; u++)
+					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI           * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
+			}
+			else
+			{
+				for (int u = 0; u <= MaxUserID; u++)
+					complexity += ratings.CountByUser[u] * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += ratings.CountByItem[i] * RegI * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					complexity += ratings.CountByItem[i] * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
+			}
+
+			return (float) (ComputeLoss() + complexity);
+		}
 
 		///
 		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
