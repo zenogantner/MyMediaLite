@@ -44,7 +44,8 @@ namespace MyMediaLite.RatingPrediction
 	public class SigmoidItemAsymmetricFactorModel : BiasedMatrixFactorization
 	{
 		// TODO
-		//  - implement ComputeObjective and FoldIn
+		//  - implement ComputeObjective
+		//  - profile and optimize
 
 		int[][] items_rated_by_user;
 
@@ -103,7 +104,7 @@ namespace MyMediaLite.RatingPrediction
 			SetupLoss();
 
 			user_factors = null; // delete old user factors
-			float reg = Regularization; // to limit property accesses
+			float reg_i = RegI;  // to limit property accesses
 			float lr  = LearnRate;
 
 			foreach (int index in rating_indices)
@@ -123,8 +124,8 @@ namespace MyMediaLite.RatingPrediction
 				double prediction = min_rating + sig_score * rating_range_size;
 				double err = ratings[index] - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
-				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
 				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
@@ -148,7 +149,7 @@ namespace MyMediaLite.RatingPrediction
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							float rated_item_reg = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg;
+							float rated_item_reg = FrequencyRegularization ? (float) (reg_i / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg_i;
 							double delta_oi = common_update - rated_item_reg * y[other_item_id, f];
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
@@ -158,16 +159,68 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void LoadModel(string filename)
+		public override void SaveModel(string filename)
 		{
-			// TODO
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.00") )
+			{
+				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(min_rating.ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(max_rating.ToString(CultureInfo.InvariantCulture));
+				writer.WriteVector(user_bias);
+				writer.WriteVector(item_bias);
+				writer.WriteMatrix(y);
+				writer.WriteMatrix(item_factors);
+			}
 		}
 
 		///
-		public override void SaveModel(string filename)
+		public override void LoadModel(string filename)
 		{
-			// TODO
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
+			{
+				var global_bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var min_rating  = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var max_rating  = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+				var user_bias = reader.ReadVector();
+				var item_bias = reader.ReadVector();
+				var y            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+
+				if (user_bias.Count != item_factors.dim1)
+					throw new IOException(
+						string.Format(
+							"Number of users must be the same for biases and factors: {0} != {1}",
+							user_bias.Count, item_factors.dim1));
+				if (item_bias.Count != item_factors.dim1)
+					throw new IOException(
+						string.Format(
+							"Number of items must be the same for biases and factors: {0} != {1}",
+							item_bias.Count, item_factors.dim1));
+
+				if (y.NumberOfColumns != item_factors.NumberOfColumns)
+					throw new Exception(
+						string.Format("Number of user (y) and item factors must match: {0} != {1}",
+							y.NumberOfColumns, item_factors.NumberOfColumns));
+
+				this.MaxUserID = user_bias.Count - 1;
+				this.MaxItemID = item_bias.Count - 1;
+
+				// assign new model
+				this.global_bias = global_bias;
+				if (this.NumFactors != item_factors.NumberOfColumns)
+				{
+					Console.Error.WriteLine("Set NumFactors to {0}", item_factors.NumberOfColumns);
+					this.NumFactors = (uint) item_factors.NumberOfColumns;
+				}
+				this.user_bias = user_bias.ToArray();
+				this.item_bias = item_bias.ToArray();
+				this.y = y;
+				this.item_factors = item_factors;
+				this.min_rating = min_rating;
+				this.max_rating = max_rating;
+			}
 		}
+
 
 		///
 		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
@@ -236,27 +289,27 @@ namespace MyMediaLite.RatingPrediction
 			if (items_rated_by_user == null)
 			{
 				items_rated_by_user = new int[MaxUserID + 1][];
-				for (int u = 0; u <= MaxUserID; u++)
-					items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
+				for (int user_id = 0; user_id <= MaxUserID; user_id++)
+					items_rated_by_user[user_id] = (from index in ratings.ByUser[user_id] select ratings.Items[index]).ToArray();
 			}
 
-			for (int u = 0; u <= MaxUserID; u++)
-				PrecomputeFactors(u);
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				PrecomputeFactors(user_id);
 		}
 
 		/// <summary>Precompute the user factors for a given user</summary>
-		/// <param name='u'>the ID of the user</param>
-		protected void PrecomputeFactors(int u)
+		/// <param name='user_id'>the ID of the user</param>
+		protected void PrecomputeFactors(int user_id)
 		{
 			// compute
-			var factors = y.SumOfRows(items_rated_by_user[u]);
-			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+			var factors = y.SumOfRows(items_rated_by_user[user_id]);
+			double norm_denominator = Math.Sqrt(ratings.CountByUser[user_id]);
 			for (int f = 0; f < factors.Count; f++)
 				factors[f] = (float) (factors[f] / norm_denominator);
 
 			// assign
 			for (int f = 0; f < factors.Count; f++)
-				user_factors[u, f] = (float) factors[f];
+				user_factors[user_id, f] = (float) factors[f];
 		}
 
 		///
