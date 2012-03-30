@@ -29,7 +29,7 @@ while (<>) {
 
     $event_count++;
 
-    my $key = "$user $item";
+    my $key = "$user\t$item";
     if (exists $result{$key} && $result != 1) {
         if ($result{$key} == $result) {
             $timestamp{$key} = $timestamp;
@@ -43,6 +43,6 @@ while (<>) {
 
 print STDERR "Sorting and printing to STDOUT ...\n";
 foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
-    print "$key $result{$key} $timestamp{$key}\n";
+    print "$key\t$result{$key}\t$timestamp{$key}\n";
 }
 print STDERR "Done.\n";
