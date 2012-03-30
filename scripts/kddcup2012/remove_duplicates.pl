@@ -44,13 +44,14 @@ while (<>) {
     }
 }
 
-print STDERR "Sorting and printing to STDOUT ...\n";
 if ($sorted_output) {
+    print STDERR "Sorting and printing to STDOUT ...\n";
     foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
 	print "$key\t$result{$key}\t$timestamp{$key}\n";
     }
 }
 else {
+    print STDERR "Printing to STDOUT ...\n";
     foreach my $key (keys %result) {
 	if ($write_timestamps) {
 	    print "$key\t$result{$key}\t$timestamp{$key}\n";
