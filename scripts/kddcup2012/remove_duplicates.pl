@@ -10,9 +10,12 @@
 use strict;
 use warnings;
 
-use English qw( -no_match_vars );
 use Getopt::Long;
-use POSIX qw(strftime);
+GetOptions(
+    'sorted-output'    => \(my $sorted_output    = 0),
+    'write-timestamps' => \(my $write_timestamps = 0),
+) or die "Did not understand command line parameters.\n";
+
 
 my $separator_regex = qr{\t};
 
@@ -42,7 +45,19 @@ while (<>) {
 }
 
 print STDERR "Sorting and printing to STDOUT ...\n";
-foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
-    print "$key\t$result{$key}\t$timestamp{$key}\n";
+if ($sorted_output) {
+    foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
+	print "$key\t$result{$key}\t$timestamp{$key}\n";
+    }
+}
+else {
+    foreach my $key (keys %result) {
+	if ($write_timestamps) {
+	    print "$key\t$result{$key}\t$timestamp{$key}\n";
+	}
+	else {
+	    print "$key\t$result{$key}\n";
+	}
+    }
 }
 print STDERR "Done.\n";
