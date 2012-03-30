@@ -79,10 +79,11 @@
      { method => 'SVDPlusPlus',               hp => 'num_factors=10 regularization=0.1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.007 num_iter=50',rmse => '0.91096', mae => '0.7152',  nmae => '0.1799',  cbd => '0.25939' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=320 bias_reg=0.007 reg_u=0.1 reg_i=0.1 learn_rate=0.07 num_iter=500 bold_driver=true',  rmse => '0.91073', mae => '0.72053', nmae => '0.18013' }
      { method => 'BiasedMatrixFactorization', hp => 'num_factors=160 bias_reg=0.003 reg_u=0.08 reg_i=0.1 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.91047', mae => '0.71944', nmae => '0.17986', cbd => '0.25901' }
+     { method => 'SigmoidItemAsymmetricFactorModel', hp => 'num_factors=10 regularization=0.005 bias_reg=0.1 learn_rate=0.006 bias_learn_rate=0.7 num_iter=90', rmse => '0.9086', mae => '0.71522', nmae => '0.17881', cbd => '0.25879' }
      { method => 'SVDPlusPlus',               hp => 'num_factors=4 regularization=1 bias_reg=0.05 learn_rate=0.01 bias_learn_rate=0.07 num_iter=50 frequency_regularization=true', rmse => '0.90939', mae => '0.71608', nmae => '0.17902', cbd => '0.25902' }
-	 { method => 'SVDPlusPlus',               hp => 'num_factors=20 regularization=0.1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.007 num_iter=50',rmse => '0.90829', mae => '0.713',   nmae => '0.17825', cbd => '0.25904' }
-	 { method => 'SVDPlusPlus',               hp => 'num_factors=20 regularization=1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.07 num_iter=50 frequency_regularization=true',rmse => '0.90783', mae => '0.71413', nmae => '0.17853', cbd => '0.2587' }
-	 { method => 'SVDPlusPlus',               hp => 'num_factors=50 regularization=1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.07 num_iter=50 frequency_regularization=true',rmse => '0.90651', mae => '0.71352', nmae => '0.17838', cbd => '0.2585' }
+     { method => 'SVDPlusPlus',               hp => 'num_factors=20 regularization=0.1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.007 num_iter=50',rmse => '0.90829', mae => '0.713',   nmae => '0.17825', cbd => '0.25904' }
+     { method => 'SVDPlusPlus',               hp => 'num_factors=20 regularization=1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.07 num_iter=50 frequency_regularization=true',rmse => '0.90783', mae => '0.71413', nmae => '0.17853', cbd => '0.2587' }
+     { method => 'SVDPlusPlus',               hp => 'num_factors=50 regularization=1 bias_reg=0.005 learn_rate=0.01 bias_learn_rate=0.07 num_iter=50 frequency_regularization=true',rmse => '0.90651', mae => '0.71352', nmae => '0.17838', cbd => '0.2585' }
    ]
 	# Flixster, 5-fold CV with --random-seed=1
 	flixster = [
