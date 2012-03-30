@@ -41,7 +41,7 @@ while (<>) {
     }
 }
 
-print STDERR "Sorting and printint to STDOUT ...\n";
+print STDERR "Sorting and printing to STDOUT ...\n";
 foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
     print "$key $result{$key} $timestamp{$key}\n";
 }
