@@ -14,6 +14,7 @@
 	 - remove the seldomly used InitMean and InitStdDev from the ToString()
            method of all recommenders that have it
 	 - generalize parts of ComputeObjective()
+	 - (Sigmoid)SVDPlusPlus: implement ComputeObjective()
 	command-line programs
 	 - rating prediction: --prediction-line=ranking writes a ranked list of
            items for each user
