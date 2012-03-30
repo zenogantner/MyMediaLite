@@ -44,12 +44,9 @@ namespace MyMediaLite.RatingPrediction
 	public class SVDPlusPlus : MatrixFactorization
 	{
 		// TODO
-		// - implement ComputeObjective
 		// - use knowledge of which items will have to be rated ...
 		// - implement also with fixed biases (progress prize 2008)
 		// - implement integrated model (section 5 of the KDD 2008 paper)
-		// - try bold driver heuristics
-		// - try learning rate decay
 		// - try rating-based weights from http://recsyswiki.com/wiki/SVD%2B%2B
 		// - try different learn rates/regularization for user and item parameters
 		// - implement parallel learning
@@ -379,6 +376,49 @@ namespace MyMediaLite.RatingPrediction
 				user_vector[f + 1] = (float) y_sum_vector[f] + user_p[f];
 
 			return user_vector;
+		}
+
+		/// <summary>Compute the value of the loss function that is currently being optimized (RMSE)</summary>
+		/// <returns>the loss</returns>
+		protected virtual double ComputeLoss()
+		{
+			return Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+		}
+
+		///
+		public override float ComputeObjective()
+		{
+			double complexity = 0;
+			if (FrequencyRegularization)
+			{
+				for (int u = 0; u <= MaxUserID; u++)
+				{
+					complexity += Math.Sqrt(ratings.CountByUser[u]) * Regularization           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByUser[u]) * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
+				}
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization           * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
+				}
+			}
+			else
+			{
+				for (int u = 0; u <= MaxUserID; u++)
+				{
+					complexity += ratings.CountByUser[u] * Regularization * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
+					complexity += ratings.CountByUser[u] * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
+				}
+				for (int i = 0; i <= MaxItemID; i++)
+				{
+					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					complexity += ratings.CountByItem[i] * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
+				}
+			}
+
+			return (float) (ComputeLoss() + complexity);
 		}
 
 		///

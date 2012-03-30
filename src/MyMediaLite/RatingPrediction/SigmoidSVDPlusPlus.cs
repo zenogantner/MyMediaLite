@@ -44,11 +44,10 @@ namespace MyMediaLite.RatingPrediction
 	public class SigmoidSVDPlusPlus : SVDPlusPlus
 	{
 		// TODO
-		// - implement ComputeObjective
 		// - merge with SVDPlusPlus?
 
 		/// <summary>size of the interval of valid ratings</summary>
-		double rating_range_size;
+		float rating_range_size;
 
 		Func<double, double, float> compute_gradient_common;
 
@@ -244,6 +243,26 @@ namespace MyMediaLite.RatingPrediction
 				user_vector[f + 1] = (float) y_sum_vector[f] + user_p[f];
 
 			return user_vector;
+		}
+
+		/// <summary>Compute the value of the loss function that is currently being optimized</summary>
+		/// <returns>the loss</returns>
+		protected override double ComputeLoss()
+		{
+			double loss = 0;
+			switch (Loss)
+			{
+				case OptimizationTarget.MAE:
+					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, ratings);
+					break;
+				case OptimizationTarget.RMSE:
+					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+					break;
+				case OptimizationTarget.LogisticLoss:
+					loss += Eval.Measures.LogisticLoss.ComputeSum(this, ratings, min_rating, rating_range_size);
+					break;
+			}
+			return loss;
 		}
 
 		///
