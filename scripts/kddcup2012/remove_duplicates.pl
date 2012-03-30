@@ -16,6 +16,7 @@ GetOptions(
     'write-timestamps' => \(my $write_timestamps = 0),
 ) or die "Did not understand command line parameters.\n";
 
+my $remember_timestamps = $sorted_output || $write_timestamps;
 
 my $separator_regex = qr{\t};
 
@@ -35,12 +36,12 @@ while (<>) {
     my $key = "$user\t$item";
     if (exists $result{$key} && $result != 1) {
         if ($result{$key} == $result) {
-            $timestamp{$key} = $timestamp;
+            $timestamp{$key} = $timestamp if $remember_timestamps;
         }
     }
     else {
         $result{$key}    = $result;
-        $timestamp{$key} = $timestamp;
+        $timestamp{$key} = $timestamp if $remember_timestamps;
     }
 }
 
