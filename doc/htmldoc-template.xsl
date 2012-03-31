@@ -342,9 +342,10 @@
 
   <xsl:template name="create-default-copyright">
     <div class="Copyright">
-      Copyright © 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
-      —
-      <a href="http://ismll.de/mymedialite">MyMediaLite Homepage</a>
+      <a href="http://ismll.de/mymedialite">
+      Copyright © 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler,
+      Copyright © 2011, 2012 Zeno Gantner
+      </a>
     </div>
   </xsl:template>
 </xsl:stylesheet>
