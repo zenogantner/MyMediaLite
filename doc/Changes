@@ -1,4 +1,4 @@
-3.0	2011-03-
+3.0	2011-04-
 	API
 	recommenders
 	 - new recommender: SigmoidItemAsymmetricFactorModel
@@ -25,6 +25,7 @@
 	 - item recommendation: load user and item ID mappings if requested
 	 - item recommendation: fix crash when predicting for all users
 	 - item recommendation: always use --data-dir for --test-users-file
+	 - item recommendation: get rid of --filtered-evaluation
 	 - rating prediction: simplify LoadData() method
 	I/O
 	 - speed up writing out item recommendations by using a heap to store

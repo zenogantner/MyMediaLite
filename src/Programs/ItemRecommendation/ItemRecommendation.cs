@@ -85,7 +85,6 @@ static class ItemRecommendation
 	static int num_test_users;
 	static int predict_items_number = -1;
 	static bool online_eval;
-	static bool filtered_eval;
 	static bool repeat_eval;
 	static string group_method;
 	static bool overlap_items;
@@ -181,7 +180,6 @@ static class ItemRecommendation
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
-   --filtered-evaluation        perform evaluation filtered by item attribute (requires --item-attributes=FILE)
    --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
    --compute-fit                display fit on training data
 
@@ -265,7 +263,6 @@ static class ItemRecommendation
 			{ "user-prediction",      v => user_prediction   = v != null },
 			{ "compute-fit",          v => compute_fit       = v != null },
 			{ "online-evaluation",    v => online_eval       = v != null },
-			{ "filtered-evaluation",  v => filtered_eval     = v != null },
 			{ "repeat-evaluation",    v => repeat_eval       = v != null },
 			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
@@ -464,9 +461,6 @@ static class ItemRecommendation
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
-		if (online_eval && filtered_eval)
-			Usage("Combination of --online-eval and --filtered-eval is not (yet) supported.");
-
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
 			Usage(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
@@ -511,8 +505,6 @@ static class ItemRecommendation
 			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
 			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
 				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
-			if (filtered_eval)
-				Usage("--user-prediction is not (yet) supported in combination with --filtered-evaluation.");
 			if (user_groups_file != null)
 				Usage("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
 		}
@@ -522,9 +514,6 @@ static class ItemRecommendation
 
 		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
 			Usage("Recommender expects --item-attributes=FILE.");
-
-		if (filtered_eval && item_attributes_file == null)
-			Usage("--filtered-evaluation expects --item-attributes=FILE.");
 
 		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
 			Usage("Recommender expects --user-relations=FILE.");
@@ -704,18 +693,12 @@ static class ItemRecommendation
 
 	static ItemRecommendationEvaluationResults ComputeFit()
 	{
-		if (filtered_eval)
-			return recommender.EvaluateFiltered(training_data, training_data, item_attributes, test_users, candidate_items, true);
-		else
-			return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true);
+		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true);
 	}
 
 	static ItemRecommendationEvaluationResults Evaluate()
 	{
-		if (filtered_eval)
-			return recommender.EvaluateFiltered(test_data, training_data, item_attributes, test_users, candidate_items, repeat_eval);
-		else
-			return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
+		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
