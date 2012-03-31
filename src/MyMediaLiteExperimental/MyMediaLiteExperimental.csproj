@@ -63,9 +63,4 @@
       <Name>SVM</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IO\" />
-    <Folder Include="Data\" />
-    <Folder Include="Taxonomy\" />
-  </ItemGroup>
 </Project>
