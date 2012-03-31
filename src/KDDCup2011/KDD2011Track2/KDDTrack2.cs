@@ -206,7 +206,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 			// evaluate and display results
 			double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 			Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} iteration {1}", error, iterative_recommender_validate.NumIter));
-			
+
 			if (compute_fit)
 			{
 				double fit = KDDCup.EvaluateTrack2(recommender_final, validation_candidates, validation_hits);
@@ -229,13 +229,13 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 						error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 						err_eval_stats.Add(error);
 						Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######} iteration {1}", error, i));
-						
+
 						if (compute_fit)
 						{
 							double fit = KDDCup.EvaluateTrack2(recommender_final, validation_candidates, validation_hits);
 							Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "fit: ERR {0:0.######} iteration {1}", fit, i));
 						}
-						
+
 						if (prediction_file != string.Empty)
 						{
 							if (predict_score)
@@ -296,7 +296,7 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 				// evaluate
 				double error = KDDCup.EvaluateTrack2(recommender_validate, validation_candidates, validation_hits);
 				Console.Write(string.Format(CultureInfo.InvariantCulture, "ERR {0:0.######}", error));
-		
+
 				if (prediction_file != string.Empty)
 				{
 					if (predict_score)
@@ -331,10 +331,12 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 		string validation_candidates_file = Path.Combine(data_dir, "validationCandidatesIdx2.txt");
 		string validation_ratings_file    = Path.Combine(data_dir, "validationRatingsIdx2.txt");
 		string validation_hits_file       = Path.Combine(data_dir, "validationHitsIdx2.txt");
+		/*
 		string track_file                 = Path.Combine(data_dir, "trackData2.txt");
 		string album_file                 = Path.Combine(data_dir, "albumData2.txt");
 		string artist_file                = Path.Combine(data_dir, "artistData2.txt");
 		string genre_file                 = Path.Combine(data_dir, "genreData2.txt");
+		*/
 
 		if (sample_data)
 		{
@@ -361,13 +363,6 @@ MyMediaLite KDD Cup 2011 Track 2 tool
 
 			// read test data
 			test_candidates = Track2Items.Read(test_file);
-
-			// read item data
-			if (recommender_validate is IKDDCupRecommender)
-			{
-				var kddcup_recommender = recommender_validate as IKDDCupRecommender;
-				kddcup_recommender.ItemInfo = MyMediaLite.IO.KDDCup2011.Items.Read(track_file, album_file, artist_file, genre_file, 2);
-			}
 
 			// connect data and recommenders
 			if (predict_rated)

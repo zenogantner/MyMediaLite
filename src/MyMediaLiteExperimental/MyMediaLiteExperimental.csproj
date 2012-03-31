@@ -49,7 +49,6 @@
     <Compile Include="Eval\KDDCup.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
-    <Compile Include="IKDDCupRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

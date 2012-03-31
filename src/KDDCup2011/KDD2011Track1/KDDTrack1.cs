@@ -349,10 +349,12 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 		string training_file   = Path.Combine(data_dir, track2 ? "trainIdx2.txt"      : "trainIdx1.txt");
 		string test_file       = Path.Combine(data_dir, track2 ? "testIdx2.txt"       : "testIdx1.txt");
 		string validation_file = Path.Combine(data_dir, track2 ? "validationIdx2.txt" : "validationIdx1.txt");
+		/*
 		string track_file      = Path.Combine(data_dir, track2 ? "trackData2.txt"     : "trackData1.txt");
 		string album_file      = Path.Combine(data_dir, track2 ? "albumData2.txt"     : "albumData1.txt");
 		string artist_file     = Path.Combine(data_dir, track2 ? "artistData2.txt"    : "artistData1.txt");
 		string genre_file      = Path.Combine(data_dir, track2 ? "genreData2.txt"     : "genreData1.txt");
+		*/
 
 		if (sample_data)
 		{
@@ -386,13 +388,6 @@ MyMediaLite KDD Cup 2011 Track 1 tool
 
 		if (track2)
 			validation_candidates = MyMediaLite.IO.KDDCup2011.Ratings.ReadTest(Path.Combine(data_dir, sample_data ? "validationCandidatesIdx2.firstLines.txt" : "validationCandidatesIdx2.txt"));
-
-		// read item data
-		if (recommender is IKDDCupRecommender)
-		{
-			var kddcup_recommender = recommender as IKDDCupRecommender;
-			kddcup_recommender.ItemInfo = MyMediaLite.IO.KDDCup2011.Items.Read(track_file, album_file, artist_file, genre_file, 1);
-		}
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
