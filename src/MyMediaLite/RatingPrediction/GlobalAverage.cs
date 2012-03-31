@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses the average rating value over all ratings for prediction</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class GlobalAverage : IncrementalRatingPredictor
 	{

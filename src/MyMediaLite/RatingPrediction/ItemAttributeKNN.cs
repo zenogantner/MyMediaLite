@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Attribute-aware weighted item-based kNN recommender</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{

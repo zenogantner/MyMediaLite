@@ -41,9 +41,6 @@ namespace MyMediaLite.RatingPrediction
 	///       </description></item>
 	///     </list>
 	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	///   <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	/// </remarks>
 	public abstract class KNN : IncrementalRatingPredictor

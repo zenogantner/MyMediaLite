@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
@@ -23,7 +23,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses the average rating value of an item for prediction</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class ItemAverage : EntityAverage
 	{

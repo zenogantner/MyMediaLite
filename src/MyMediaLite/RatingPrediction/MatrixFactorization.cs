@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 //
 // This file is part of MyMediaLite.
 //
@@ -30,15 +30,21 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent</summary>
 	/// <remarks>
-	/// Factorizing the observed rating values using a factor matrix for users and one for items.
+	///   <para>
+	///     Factorizing the observed rating values using a factor matrix for users and one for items.
+	///   </para>
 	///
-	/// NaN values in the model occur if values become too large or too small to be represented by the type float.
-	/// If you encounter such problems, there are three ways to fix them:
-	/// (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
-	/// (2) Change the range of rating values (1 to 5 works generally well with the default settings).
-	/// (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
-	///
-	/// This recommender supports incremental updates.
+	///   <para>
+	///     NaN values in the model occur if values become too large or too small to be represented by the type float.
+	///     If you encounter such problems, there are three ways to fix them:
+	///     (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
+	///     (2) Change the range of rating values (1 to 5 works generally well with the default settings).
+	///     (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
+	///   </para>
+	/// 
+	///   <para>
+	///     This recommender supports incremental updates.
+	///   </para>
 	/// </remarks>
 	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel, IFoldInRatingPredictor
 	{

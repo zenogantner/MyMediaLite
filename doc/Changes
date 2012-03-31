@@ -15,6 +15,8 @@
            method of all recommenders that have it
 	 - generalize parts of ComputeObjective()
 	 - (Sigmoid)SVDPlusPlus: implement ComputeObjective()
+	 - GlobalAverage, ItemAverage, UserAverage, ItemAttributeKNN: fix
+           incorrect statements in API documentation (reported by Chris Newell)
 	command-line programs
 	 - rating prediction: --prediction-line=ranking writes a ranked list of
            items for each user
