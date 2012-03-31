@@ -74,7 +74,7 @@ namespace MyMediaLite.Util
 		{
 			try
 			{
-				foreach (var key in parameters.Keys)
+				foreach (var key in new List<string>(parameters.Keys))
 				{
 					recommender.SetProperty(key, parameters[key], report_error);
 					parameters.Remove(key);
