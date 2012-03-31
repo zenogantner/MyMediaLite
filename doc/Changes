@@ -42,6 +42,8 @@
 	 - add some helper scripts for KDD Cup 2012
          - add overlap.pl and statistics.pl
 	misc
+	 - HyperParameter.NelderMead: fix bug in center computation (reported
+           by Chris Newell)
 	 - speed up test scipts
 	 - get rid of delegate definitions in some classes, use Func<> instead
 

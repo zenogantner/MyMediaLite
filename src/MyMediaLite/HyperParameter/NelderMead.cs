@@ -68,7 +68,7 @@ namespace MyMediaLite.HyperParameter
 			foreach (var key in results.Keys)
 				center += hp_values[key];
 
-			center /= hp_values.Count - 1;
+			center /= hp_values.Count;
 
 			return center;
 		}
