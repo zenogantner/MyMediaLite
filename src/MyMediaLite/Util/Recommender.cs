@@ -46,8 +46,7 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender</returns>
 		public static T Configure<T>(this T recommender, string parameters, Action<string> report_error)
 		{
-			var parameters_dictionary = new RecommenderParameters(parameters);
-			return Configure(recommender, parameters_dictionary, report_error);
+			return Configure(recommender, new RecommenderParameters(parameters), report_error);
 		}
 
 		/// <summary>Configure a recommender</summary>
