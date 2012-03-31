@@ -171,9 +171,6 @@ static class RatingPrediction
 
 	static void Main(string[] args)
 	{
-		Assembly assembly = Assembly.GetExecutingAssembly();
-		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
-
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 

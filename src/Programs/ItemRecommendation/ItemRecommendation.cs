@@ -193,11 +193,8 @@ static class ItemRecommendation
 		Environment.Exit(exit_code);
 	}
 
-    public static void Main(string[] args)
-    {
-		Assembly assembly = Assembly.GetExecutingAssembly();
-		Assembly.LoadFile(Path.GetDirectoryName(assembly.Location) + Path.DirectorySeparatorChar + "MyMediaLiteExperimental.dll");
-
+	public static void Main(string[] args)
+	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
 

@@ -43,9 +43,5 @@
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MyMediaLiteExperimental\MyMediaLiteExperimental.csproj">
-      <Project>{B350A953-A5D8-4302-8C8C-2399FA43D85F}</Project>
-      <Name>MyMediaLiteExperimental</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

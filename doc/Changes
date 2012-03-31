@@ -46,6 +46,7 @@
 	 - add some helper scripts for KDD Cup 2012
          - add overlap.pl and statistics.pl
 	misc
+	 - #132: get rid of package MyMediaLiteExperimental
 	 - HyperParameter.NelderMead: fix bug in center computation (reported
            by Chris Newell)
 	 - speed up test scipts
