@@ -101,14 +101,15 @@ namespace MyMediaLite.IO
 			if (reader.FieldCount < 3)
 				throw new FormatException("Expected at least 3 columns.");
 
-			Func<string> get_user_id = reader.GetGetter(0);
-			Func<string> get_item_id = reader.GetGetter(1);
+			Func<string> get_user_id = reader.GetStringGetter(0);
+			Func<string> get_item_id = reader.GetStringGetter(1);
+			Func<float>  get_rating  = reader.GetFloatGetter(2);
 
 			while (reader.Read())
 			{
 				int user_id = user_mapping.ToInternalID(get_user_id());
 				int item_id = item_mapping.ToInternalID(get_item_id());
-				float rating = reader.GetFloat(2);
+				float rating = get_rating();
 
 				ratings.Add(user_id, item_id, rating);
 			}

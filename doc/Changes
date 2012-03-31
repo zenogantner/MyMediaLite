@@ -35,6 +35,7 @@
 	 - perform fast binary (de)serialization if user and item IDs are not
            mapped
 	 - TimedRatingData: improved handling of different time/date formats
+	 - database access: introduce GetFloatGetter() to retrieve ratings
 	data structures
 	 - make DataSet, Ratings, StaticRatings, StaticByteRatings,
 	   TimedRatings, PosOnlyFeedback, and EntityMapping serializable

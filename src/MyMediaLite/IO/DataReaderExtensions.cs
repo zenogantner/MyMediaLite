@@ -24,14 +24,14 @@ namespace MyMediaLite.IO
 	/// <summary>Extension methods for IDataReader objects</summary>
 	public static class DataReaderExtensions
 	{
-		/// <summary>Get a getter function for (usually user or item) IDs from a IDataReader</summary>
-		/// <returns>a return_string function</returns>
+		/// <summary>Get a getter function for (usually user or item) IDs from an IDataReader</summary>
+		/// <returns>a function returning a string</returns>
 		/// <param name='reader'>the reader object</param>
 		/// <param name='i'>index of the field to access</param>
 		/// <exception cref='FormatException'>
 		///   thrown if field i is not of type String, Int32, or Int64
 		/// </exception>
-		public static Func<string> GetGetter(this IDataReader reader, int i)
+		public static Func<string> GetStringGetter(this IDataReader reader, int i)
 		{
 			Type t = reader.GetFieldType(i);
 			if (t.Equals(String.Empty.GetType()))
@@ -40,6 +40,28 @@ namespace MyMediaLite.IO
 				return () => reader.GetInt32(i).ToString();
 			else if (t.Equals(Int64.MinValue.GetType()))
 				return () => reader.GetInt64(i).ToString();
+			else
+				throw new FormatException(string.Format("Type '{0}' not supported for field {1}.", t.Name, i));
+		}
+
+		/// <summary>Get a getter function for ratings from an IDataReader</summary>
+		/// <returns>a function returning a float</returns>
+		/// <param name='reader'>the reader object</param>
+		/// <param name='i'>index of the field to access</param>
+		/// <exception cref='FormatException'>
+		///   thrown if field i is not of type Float, Double, Int32, or Int64
+		/// </exception>
+		public static Func<float> GetFloatGetter(this IDataReader reader, int i)
+		{
+			Type t = reader.GetFieldType(i);
+			if (t.Equals(float.MinValue.GetType()))
+				return () => reader.GetFloat(i);
+			else if (t.Equals(double.MinValue.GetType()))
+				return () => (float) reader.GetDouble(i);
+			else if (t.Equals(Int32.MinValue.GetType()))
+				return () => (float) reader.GetInt32(i);
+			else if (t.Equals(Int64.MinValue.GetType()))
+				return () => (float) reader.GetInt64(i);
 			else
 				throw new FormatException(string.Format("Type '{0}' not supported for field {1}.", t.Name, i));
 		}

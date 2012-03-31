@@ -107,8 +107,8 @@ namespace MyMediaLite.IO
 			if (reader.FieldCount < 2)
 				throw new FormatException("Expected at least 2 columns.");
 
-			Func<string> get_user_id = reader.GetGetter(0);
-			Func<string> get_item_id = reader.GetGetter(1);
+			Func<string> get_user_id = reader.GetStringGetter(0);
+			Func<string> get_item_id = reader.GetStringGetter(1);
 
 			while (reader.Read())
 			{

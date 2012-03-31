@@ -100,20 +100,21 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(IDataReader reader, double rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(IDataReader reader, float rating_threshold, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 
 			if (reader.FieldCount < 3)
 				throw new FormatException("Expected at least 3 columns.");
-			Func<string> get_user_id = reader.GetGetter(0);
-			Func<string> get_item_id = reader.GetGetter(1);
+			Func<string> get_user_id = reader.GetStringGetter(0);
+			Func<string> get_item_id = reader.GetStringGetter(1);
+			Func<float>  get_rating  = reader.GetFloatGetter(2);
 
 			while (reader.Read())
 			{
-				int user_id = user_mapping.ToInternalID(get_user_id());
-				int item_id = item_mapping.ToInternalID(get_item_id());
-				double rating = reader.GetDouble(2);
+				int user_id  = user_mapping.ToInternalID(get_user_id());
+				int item_id  = item_mapping.ToInternalID(get_item_id());
+				float rating = get_rating();
 
 				if (rating >= rating_threshold)
 					feedback.Add(user_id, item_id);
