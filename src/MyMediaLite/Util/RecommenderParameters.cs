@@ -31,31 +31,7 @@ namespace MyMediaLite.Util
 	{
 		/// <summary>Create a CommandLineParameters object</summary>
 		/// <param name="arg_string">a string that contains the command line parameters</param>
-		public RecommenderParameters(string arg_string)
-		{
-			IList<string> args = Regex.Split(arg_string, "\\s");
-
-			for (int i = 0; i < args.Count; i++)
-			{
-				if (args[i].Length == 0)
-					continue;
-
-				string[] pair = args[i].Split('=');
-				if (pair.Length != 2)
-					throw new ArgumentException("Too many '=' in argument '" + args[i] + "'.");
-
-				string arg_name  = pair[0];
-				string arg_value = pair[1];
-
-				if (this.ContainsKey(arg_name))
-					throw new ArgumentException(arg_name + " is used twice as an argument.");
-
-				if (arg_value.Length == 0)
-					throw new ArgumentException(arg_name + " has an empty value.");
-
-				this.Add(arg_name, arg_value);
-			}
-		}
+		public RecommenderParameters(string arg_string) : this(Regex.Split(arg_string, "\\s"), 0) { }
 
 		/// <summary>Create a RecommenderParameters object</summary>
 		/// <param name="args">a list of strings that contains the command line parameters</param>

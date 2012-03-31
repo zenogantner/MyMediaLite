@@ -51,6 +51,7 @@
            by Chris Newell)
 	 - speed up test scipts
 	 - get rid of delegate definitions in some classes, use Func<> instead
+	 - Util.RecommenderParameters: get rid of redundant constructor code
 
 2.99	2011-03-02
 	API
