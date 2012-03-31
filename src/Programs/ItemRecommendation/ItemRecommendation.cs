@@ -299,7 +299,7 @@ static class ItemRecommendation
 
 		CheckParameters(extra_args);
 
-		recommender.Configure(recommender_options, Usage);
+		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
 
 		if (no_id_mapping)
 		{
@@ -453,8 +453,6 @@ static class ItemRecommendation
 
 	static void CheckParameters(IList<string> extra_args)
 	{
-		// TODO block group vs. filter/online, etc.
-
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 

@@ -267,7 +267,7 @@ static class RatingPrediction
 
 		CheckParameters(extra_args);
 
-		recommender.Configure(recommender_options, Usage);
+		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
 
 		// ID mapping objects
 		if (file_format == RatingFileFormat.KDDCUP_2011 || no_id_mapping)

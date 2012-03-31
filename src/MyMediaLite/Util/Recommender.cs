@@ -46,7 +46,15 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender</returns>
 		public static T Configure<T>(this T recommender, string parameters, Action<string> report_error)
 		{
-			return Configure(recommender, new RecommenderParameters(parameters), report_error);
+			try
+			{
+				Configure(recommender, new RecommenderParameters(parameters), report_error);
+			}
+			catch (ArgumentException e) 
+			{
+				report_error(e.Message + "\n\n" + recommender.ToString() + "\n");
+			}
+			return recommender;
 		}
 
 		/// <summary>Configure a recommender</summary>
@@ -64,10 +72,17 @@ namespace MyMediaLite.Util
 		/// <returns>the configured recommender</returns>
 		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, Action<string> report_error)
 		{
-			foreach (var key in new List<string>(parameters.Keys))
+			try
 			{
-				recommender.SetProperty(key, parameters[key], report_error);
-				parameters.Remove(key);
+				foreach (var key in parameters.Keys)
+				{
+					recommender.SetProperty(key, parameters[key], report_error);
+					parameters.Remove(key);
+				}
+			}
+			catch (Exception e) 
+			{
+				report_error(e.Message + "\n\n" + recommender.ToString()  + "\n");
 			}
 			return recommender;
 		}

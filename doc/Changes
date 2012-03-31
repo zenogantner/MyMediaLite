@@ -19,14 +19,15 @@
 	 - GlobalAverage, ItemAverage, UserAverage, ItemAttributeKNN: fix
            incorrect statements in API documentation (reported by Chris Newell)
 	command-line programs
+	 - fix #78: '--recommender-options="option=" leads to exception'
 	 - rating prediction: --prediction-line=ranking writes a ranked list of
            items for each user
-	 - make the program classes static
 	 - item recommendation: load user and item ID mappings if requested
 	 - item recommendation: fix crash when predicting for all users
 	 - item recommendation: always use --data-dir for --test-users-file
 	 - item recommendation: get rid of --filtered-evaluation
 	 - rating prediction: simplify LoadData() method
+	 - make the program classes static
 	I/O
 	 - speed up writing out item recommendations by using a heap to store
            intermediate results (suggested by Brian McFee)
