@@ -60,9 +60,6 @@ namespace MyMediaLite.ItemRecommendation
 		// Item attribute weights
 		private Matrix<float> item_attribute_weight_by_user;
 
-		/// <summary>One iteration is <see cref="iteration_length"/> * number of entries in the training matrix</summary>
-		protected int iteration_length = 5;
-
 		private System.Random random;
 		// Fast, but memory-intensive sampling
 		private bool fast_sampling = false;
@@ -128,15 +125,12 @@ namespace MyMediaLite.ItemRecommendation
 				Iterate();
 		}
 
-		/// <summary>
-		/// Perform one iteration of stochastic gradient ascent over the training data.
-		/// One iteration is <see cref="iteration_length"/> * number of entries in the training matrix
-		/// </summary>
+		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
 		public void Iterate()
 		{
 			int num_pos_events = Feedback.Count;
 
-			for (int i = 0; i < num_pos_events * iteration_length; i++)
+			for (int i = 0; i < num_pos_events; i++)
 			{
 				if (i % 1000000 == 999999)
 					Console.Error.Write(".");

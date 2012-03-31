@@ -15,6 +15,7 @@
            method of all recommenders that have it
 	 - generalize parts of ComputeObjective()
 	 - (Sigmoid)SVDPlusPlus: implement ComputeObjective()
+	 - BPRLinear: get rid of unnecessary iteration_length variable
 	 - GlobalAverage, ItemAverage, UserAverage, ItemAttributeKNN: fix
            incorrect statements in API documentation (reported by Chris Newell)
 	command-line programs
