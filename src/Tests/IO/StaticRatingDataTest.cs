@@ -56,7 +56,7 @@ namespace Tests.IO
 5951,457,3,2001-01-01 00:00:00
 ");
 
-			IRatings data = StaticRatingData.Read(reader, 7, null, null, RatingType.DOUBLE, true);
+			IRatings data = StaticRatingData.Read(reader, 7, null, null, RatingType.FLOAT, true);
 			Assert.AreEqual(7, data.Count);
 		}
 
