@@ -261,7 +261,5 @@ namespace MyMediaLite.ItemRecommendation
 				"{0} reg={1} num_iter={2} learn_rate={3} fast_sampling_memory_limit={4}",
 				this.GetType().Name, Regularization, NumIter, LearnRate, FastSamplingMemoryLimit);
 		}
-
 	}
 }
-
