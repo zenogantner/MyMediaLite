@@ -94,7 +94,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(IDataReader reader, EntityMapping user_mapping, EntityMapping item_mapping)
+			Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
 			var ratings = new Ratings();
 
