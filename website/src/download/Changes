@@ -1,3 +1,60 @@
+3.0	2011-04-
+	API
+	recommenders
+	 - new recommender: SigmoidItemAsymmetricFactorModel
+	 - SocialMF:
+	   - implement with sigmoid function
+	   - training bug fixes (error reported by Nicholas Ampazis)
+	   - speed up case social_regularization=0
+	   - add bold-driver heuristics
+	   - add support for MAE and logistic loss optimization
+	 - ItemKNN(Cosine|Pearson): speed up rating access by using user-wise
+           indices of item-wise ones
+	 - RatingPredictor.KNN: NumIter attribute for the underlying bias model
+	 - remove the seldomly used InitMean and InitStdDev from the ToString()
+           method of all recommenders that have it
+	 - generalize parts of ComputeObjective()
+	 - (Sigmoid)SVDPlusPlus: implement ComputeObjective()
+	 - BPRLinear: get rid of unnecessary iteration_length variable
+	 - GlobalAverage, ItemAverage, UserAverage, ItemAttributeKNN: fix
+           incorrect statements in API documentation (reported by Chris Newell)
+	command-line programs
+	 - fix #78: '--recommender-options="option=" leads to exception'
+	 - rating prediction: --prediction-line=ranking writes a ranked list of
+           items for each user
+	 - item recommendation: load user and item ID mappings if requested
+	 - item recommendation: fix crash when predicting for all users
+	 - item recommendation: always use --data-dir for --test-users-file
+	 - item recommendation: get rid of --filtered-evaluation
+	 - rating prediction: simplify LoadData() method
+	 - make the program classes static
+	I/O
+	 - speed up writing out item recommendations by using a heap to store
+           intermediate results (suggested by Brian McFee)
+	 - add static class IO.FileSerializer
+	 - perform fast binary (de)serialization if user and item IDs are not
+           mapped
+	 - TimedRatingData: improved handling of different time/date formats
+	 - database access: introduce GetFloatGetter() to retrieve ratings
+	data structures
+	 - make DataSet, Ratings, StaticRatings, StaticByteRatings,
+	   TimedRatings, PosOnlyFeedback, and EntityMapping serializable
+	 - RatingType: represent enum by byte
+	evaluation
+	 - add static classes to Eval.Measures: MAE, RMSE, LogisticLoss
+	scripts
+	 - import_dataset.pl: fix indentation of usage message; allow output
+           without event column
+	 - add some helper scripts for KDD Cup 2012
+         - add overlap.pl and statistics.pl
+	misc
+	 - #132: get rid of package MyMediaLiteExperimental
+	 - HyperParameter.NelderMead: fix bug in center computation (reported
+           by Chris Newell)
+	 - speed up test scipts
+	 - get rid of delegate definitions in some classes, use Func<> instead
+	 - Util.RecommenderParameters: get rid of redundant constructor code
+
 2.99	2011-03-02
 	API
 	 - most rating stuff is now using float instead of double
