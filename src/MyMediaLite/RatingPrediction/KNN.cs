@@ -46,8 +46,8 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class KNN : IncrementalRatingPredictor
 	{
 		/// <summary>Number of neighbors to take into account for predictions</summary>
-		public uint K { get { return k;	} set {	k = value; } }
-		private uint k = uint.MaxValue;
+		public uint K { get { return k; } set { k = value; } }
+		private uint k = 80;
 
 		///
 		public override IRatings Ratings
