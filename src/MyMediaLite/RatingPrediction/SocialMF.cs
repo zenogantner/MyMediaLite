@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -68,6 +68,7 @@ namespace MyMediaLite.RatingPrediction
 		private void IterateBatch()
 		{
 			SetupLoss();
+			SparseBooleanMatrix user_reverse_connections = (SparseBooleanMatrix) user_connections.Transpose();
 
 			// I. compute gradients
 			var user_factors_gradient = new Matrix<float>(user_factors.dim1, user_factors.dim2);
@@ -139,7 +140,7 @@ namespace MyMediaLite.RatingPrediction
 							user_factors_gradient.Inc(u, f, social_regularization * (user_factors[u, f] - sum_connections[f] / num_connections));
 					}
 
-					foreach (int v in user_connections[u])
+					foreach (int v in user_reverse_connections[u])
 						if (user_connections[v].Count != 0)
 						{
 							float trust_v = (float) 1 / user_connections[v].Count;
