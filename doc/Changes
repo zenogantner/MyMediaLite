@@ -1,4 +1,4 @@
-3.0	2011-04-04
+3.0	2011-04-05
 	API
 	recommenders
 	 - new recommender: SigmoidItemAsymmetricFactorModel

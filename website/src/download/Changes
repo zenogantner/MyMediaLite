@@ -1,4 +1,4 @@
-3.0	2011-04-
+3.0	2011-04-04
 	API
 	recommenders
 	 - new recommender: SigmoidItemAsymmetricFactorModel
@@ -8,9 +8,11 @@
 	   - speed up case social_regularization=0
 	   - add bold-driver heuristics
 	   - add support for MAE and logistic loss optimization
-	 - ItemKNN(Cosine|Pearson): speed up rating access by using user-wise
-           indices of item-wise ones
-	 - RatingPredictor.KNN: NumIter attribute for the underlying bias model
+	 - RatingPredictor.KNN:
+           - NumIter attribute for the underlying bias model
+	   - set default K to 80 instead of inf
+	   - speed up rating access by using user-wise indices of item-wise
+             ones
 	 - remove the seldomly used InitMean and InitStdDev from the ToString()
            method of all recommenders that have it
 	 - generalize parts of ComputeObjective()
