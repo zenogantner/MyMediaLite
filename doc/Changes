@@ -1,5 +1,8 @@
-3.0	2011-04-05
-	API
+3.01	2012-05-
+	recommenders
+	 - SocialMF: remove unnecessary if-statement
+
+3.0	2012-04-05
 	recommenders
 	 - new recommender: SigmoidItemAsymmetricFactorModel
 	 - SocialMF:
@@ -57,7 +60,7 @@
 	 - get rid of delegate definitions in some classes, use Func<> instead
 	 - Util.RecommenderParameters: get rid of redundant constructor code
 
-2.99	2011-03-02
+2.99	2012-03-02
 	API
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
@@ -148,7 +151,7 @@
 	 - Utils.Shuffle is now an extension method
 	 - Utils.Recommender: simplify, allow enum options
 
-2.03	2011-01-14
+2.03	2012-01-14
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
