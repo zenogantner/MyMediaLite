@@ -26,11 +26,20 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Social-network-aware matrix factorization</summary>
 	/// <remarks>
-	/// This implementation assumes a binary trust network.
-	///
-	/// Mohsen Jamali, Martin Ester:
-    /// A matrix factorization technique with trust propagation for recommendation in social networks
-    /// RecSys '10: Proceedings of the Fourth ACM Conference on Recommender Systems, 2010
+	///   <para>
+	///     This implementation expects a binary trust network.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Mohsen Jamali, Martin Ester:
+	///         A matrix factorization technique with trust propagation for recommendation in social networks
+	///         RecSys 2010
+	///         http://portal.acm.org/citation.cfm?id=1864736
+	///       </description></item>
+	///     </list>
+	///   </para>
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
@@ -141,31 +150,30 @@ namespace MyMediaLite.RatingPrediction
 					}
 
 					foreach (int v in user_reverse_connections[u])
-						if (user_connections[v].Count != 0)
+					{
+						float trust_v = (float) 1 / user_connections[v].Count;
+						float neg_trust_times_reg = -social_regularization * trust_v;
+
+						float bias_diff = 0;
+						var factor_diffs = new float[NumFactors];
+						foreach (int w in user_connections[v])
 						{
-							float trust_v = (float) 1 / user_connections[v].Count;
-							float neg_trust_times_reg = -social_regularization * trust_v;
-
-							float bias_diff = 0;
-							var factor_diffs = new float[NumFactors];
-							foreach (int w in user_connections[v])
-							{
-								bias_diff -= user_bias[w];
-								for (int f = 0; f < factor_diffs.Length; f++)
-									factor_diffs[f] -= user_factors[w, f];
-							}
-
-							bias_diff *= trust_v; // normalize
-							bias_diff += user_bias[v];
-							user_bias_gradient[u] += neg_trust_times_reg * bias_diff;
-
+							bias_diff -= user_bias[w];
 							for (int f = 0; f < factor_diffs.Length; f++)
-							{
-								factor_diffs[f] *= trust_v; // normalize
-								factor_diffs[f] += user_factors[v, f];
-								user_factors_gradient.Inc(u, f, neg_trust_times_reg * factor_diffs[f]);
-							}
+								factor_diffs[f] -= user_factors[w, f];
 						}
+
+						bias_diff *= trust_v; // normalize
+						bias_diff += user_bias[v];
+						user_bias_gradient[u] += neg_trust_times_reg * bias_diff;
+
+						for (int f = 0; f < factor_diffs.Length; f++)
+						{
+							factor_diffs[f] *= trust_v; // normalize
+							factor_diffs[f] += user_factors[v, f];
+							user_factors_gradient.Inc(u, f, neg_trust_times_reg * factor_diffs[f]);
+						}
+					}
 				}
 
 			// II. apply gradient descent step
