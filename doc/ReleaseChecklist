@@ -21,7 +21,7 @@ release checklist:
 10. Add the new version to the website
 10a. Copy the --help output of the two command-line tools to the website
 11. Commit the website changes
-12. Create a git tag: 'git tag -a v2.XX -m "MyMediaLite release 2.XX"'
+12. Create a git tag: 'git tag -a v3.XX -m "MyMediaLite release 3.XX"'
 13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
 14. Upload the files to GitHub
 15. Announce it in the Google Group, on mloss.org, freecode.com, Google+, and Twitter
