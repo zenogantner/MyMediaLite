@@ -3,6 +3,8 @@
 	 - SocialMF: remove unnecessary if-statement
 	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
            for PredictItems() and ScoreItems() methods
+	evaluation
+	 - remove ItemsFiltered class
 
 3.0	2012-04-05
 	recommenders
