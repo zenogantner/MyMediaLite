@@ -100,22 +100,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_neg_items;
 
-		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
-		/// <remarks>
-		/// Does not work too well for BPR-MF.
-		///
-		/// Literature:
-		/// <list type="bullet">
-		///   <item><description>
-		///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-		///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
-		///     KDD 2011.
-		///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
-		///   </description></item>
-		/// </list>
-		/// </remarks>
-		public bool BoldDriver { set; get; }
-
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		protected double last_loss = double.NegativeInfinity;
 
@@ -151,28 +135,6 @@ namespace MyMediaLite.ItemRecommendation
 			CheckSampling();
 
 			random = Util.Random.GetInstance();
-
-			if (BoldDriver)
-			{
-				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100;         // TODO make configurable
-				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
-
-				// create the sample to estimate loss from
-				loss_sample_u = new int[num_sample_triples];
-				loss_sample_i = new int[num_sample_triples];
-				loss_sample_j = new int[num_sample_triples];
-
-				int u, i, j;
-				for (int c = 0; c < num_sample_triples; c++)
-				{
-					SampleTriple(out u, out i, out j);
-					loss_sample_u[c] = u;
-					loss_sample_i[c] = i;
-					loss_sample_j[c] = j;
-				}
-
-				last_loss = ComputeObjective();
-			}
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
@@ -246,20 +208,6 @@ namespace MyMediaLite.ItemRecommendation
 						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
 						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 					}
-			}
-
-			if (BoldDriver)
-			{
-				double loss = ComputeObjective();
-
-				if (loss > last_loss)
-					LearnRate *= 0.5f;
-				else if (loss < last_loss)
-					LearnRate *= 1.1f;
-
-				last_loss = loss;
-
-				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loss {0} learn_rate {1} ", loss, LearnRate));
 			}
 		}
 
@@ -660,8 +608,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} bold_driver={10} fast_sampling_memory_limit={11} update_j={12}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, BoldDriver, fast_sampling_memory_limit, UpdateJ);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} fast_sampling_memory_limit={10} update_j={11}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, fast_sampling_memory_limit, UpdateJ);
 		}
 	}
 }
