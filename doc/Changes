@@ -3,6 +3,8 @@
 	 - SocialMF: remove unnecessary if-statement
 	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
            for PredictItems() and ScoreItems() methods
+	 - BPRMF and variants: get rid of bold-driver heuristics (not
+           effective/efficient for these recommenders)
 	evaluation
 	 - remove ItemsFiltered class
 
