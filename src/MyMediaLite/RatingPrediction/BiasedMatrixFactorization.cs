@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -112,7 +112,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
-		///   Determines the number of sections the users and items will be divided into.
+		///   For parallel learning, set this number to a multiple of the number of available cores/CPUs
 		/// </remarks>
 		public int MaxThreads { get; set; }
 
@@ -128,7 +128,14 @@ namespace MyMediaLite.RatingPrediction
 		///   </description></item>
 		/// </list>
 		/// </remarks>
-		public bool BoldDriver { set; get; }
+		public bool BoldDriver { get; set; }
+
+		/// <summary>Use 'naive' parallelization strategy instead of conflict-free 'distributed' SGD</summary>
+		/// <remarks>
+		/// The exact sequence of updates depends on the thread scheduling.
+		/// If you want reproducible results, e.g. when setting --random-seed=N, do NOT set this property.
+		/// </remarks>
+		public bool NaiveParallelization { get; set; }
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		protected double last_loss = double.NegativeInfinity;
@@ -145,6 +152,7 @@ namespace MyMediaLite.RatingPrediction
 		protected Func<double, double, float> compute_gradient_common;
 
 		IList<int>[,] thread_blocks;
+		IList<int>[] thread_lists;
 
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
@@ -173,7 +181,12 @@ namespace MyMediaLite.RatingPrediction
 
 			// if necessary, prepare stuff for parallel processing
 			if (MaxThreads > 1)
-				thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
+			{
+				if (NaiveParallelization)
+					thread_lists = ratings.PartitionIndices(MaxThreads);
+				else
+					thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
+			}
 
 			rating_range_size = max_rating - min_rating;
 
@@ -190,12 +203,19 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (MaxThreads > 1)
 			{
-				// generate random sub-epoch sequence
-				var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
-				subepoch_sequence.Shuffle();
+				if (NaiveParallelization)
+				{
+					Parallel.For(0, MaxThreads, i => Iterate(thread_lists[i], true, true));
+				}
+				else
+				{
+					// generate random sub-epoch sequence
+					var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
+					subepoch_sequence.Shuffle();
 
-				foreach (int i in subepoch_sequence) // sub-epoch
-					Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
+					foreach (int i in subepoch_sequence) // sub-epoch
+						Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
+				}
 			}
 			else
 				base.Iterate();
@@ -460,7 +480,7 @@ namespace MyMediaLite.RatingPrediction
 
 			return user_vector;
 		}
-		
+
 		/// <summary>Computes the value of the loss function that is currently being optimized</summary>
 		/// <returns>the loss</returns>
 		protected double ComputeLoss()
@@ -480,7 +500,7 @@ namespace MyMediaLite.RatingPrediction
 			}
 			return loss;
 		}
-		
+
 		///
 		public override float ComputeObjective()
 		{
@@ -520,8 +540,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} loss={10} max_threads={11}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, BoldDriver, Loss, MaxThreads);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} loss={10} max_threads={11} naive_parallelization={12}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, BoldDriver, Loss, MaxThreads, NaiveParallelization);
 		}
 
 	}

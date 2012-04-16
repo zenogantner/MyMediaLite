@@ -69,6 +69,25 @@ namespace MyMediaLite.Util
 
 			return blocks;
 		}
+		
+		/// <summary>Partition the indices of a dataset into groups
+		/// </summary>
+		/// <returns>the groupes indices</returns>
+		/// <param name='dataset'>a dataset</param>
+		/// <param name='num_groups'>the number of groups</param>
+		public static IList<int>[] PartitionIndices(this IDataSet dataset, int num_groups)
+		{
+			var indices = dataset.RandomIndex;
+
+			var groups = new IList<int>[num_groups];
+			for (int i = 0; i < num_groups; i++)
+				groups[i] = new List<int>();
+
+			for (int index = 0; index < dataset.Count; index++)
+				groups[index % num_groups].Add(indices[index]);
+
+			return groups;
+		}
 	}
 }
 

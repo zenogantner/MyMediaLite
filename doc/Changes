@@ -1,6 +1,7 @@
 3.01	2012-05-
 	recommenders
 	 - SocialMF: remove unnecessary if-statement
+	 - BiasedMatrixFactorization: 'naive' parallelization
 	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
            for PredictItems() and ScoreItems() methods
 	 - BPRMF and variants: get rid of bold-driver heuristics (not
