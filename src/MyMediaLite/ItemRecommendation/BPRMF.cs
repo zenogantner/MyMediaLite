@@ -100,9 +100,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_neg_items;
 
-		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
-		protected double last_loss = double.NegativeInfinity;
-
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
 		/// <summary>array of positive item components of triples to use for approximate loss computation</summary>
