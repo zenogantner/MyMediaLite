@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Zeno Gantner, Christoph Freudenthaler
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Zeno Gantner, Christoph Freudenthaler
 //
 // This file is part of MyMediaLite.
 //
@@ -132,6 +132,23 @@ namespace MyMediaLite.ItemRecommendation
 			CheckSampling();
 
 			random = Util.Random.GetInstance();
+
+			{
+				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100; // TODO make configurable
+				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
+				// create the sample to estimate loss from
+				loss_sample_u = new int[num_sample_triples];
+				loss_sample_i = new int[num_sample_triples];
+				loss_sample_j = new int[num_sample_triples];
+				int u, i, j;
+				for (int c = 0; c < num_sample_triples; c++)
+				{
+					SampleTriple(out u, out i, out j);
+					loss_sample_u[c] = u;
+					loss_sample_i[c] = i;
+					loss_sample_j[c] = j;
+				}
+			}
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
