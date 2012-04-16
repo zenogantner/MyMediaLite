@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.DataType;
@@ -38,15 +39,16 @@ namespace MyMediaLite.ItemRecommendation
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class BPRMF_Mapping : BPRMF, IItemAttributeAwareRecommender
+	public class BPRMF_Mapping : BPRMF, IItemAttributeAwareRecommender, IUserAttributeAwareRecommender
 	{
 		// TODO
+		//  - handle item bias
 		//  - make sure we do not sample items that have no feedback when doing BPR-MF learning
 		//  - integrate UserMapping
 		//  - make mapping function selectable
 		//  - different mapping functions for users and items
 		//  - load/save
-		
+
 		/// <summary>The learn rate for training the mapping functions</summary>
 		public double LearnRateMapping { get { return learn_rate_mapping; } set { learn_rate_mapping = value; } }
 		/// <summary>The learn rate for training the mapping functions</summary>
@@ -69,9 +71,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>regularization constant for the mapping</summary>
 		protected double reg_mapping = 0.1;
 
-		/// <summary>The matrix representing the attribute-to-factor mapping</summary>
-		/// <remarks>includes bias</remarks>
-		protected Matrix<float> item_attribute_to_factor;
+		Matrix<float> user_attribute_to_factor;
+		Matrix<float> item_attribute_to_factor;
 
 		///
 		public SparseBooleanMatrix ItemAttributes
@@ -89,17 +90,53 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public int NumItemAttributes { get;	set; }
 
+		///
+		public SparseBooleanMatrix UserAttributes
+		{
+			get { return this.user_attributes; }
+			set {
+				this.user_attributes = value;
+				this.NumUserAttributes = user_attributes.NumberOfColumns;
+				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
+			}
+		}
+		/// <summary>The matrix storing the user attributes</summary>
+		protected SparseBooleanMatrix user_attributes;
+
+		///
+		public int NumUserAttributes { get; set; }
+
 		/// <summary>array to store the bias for each mapping</summary>
 		protected float[] item_factor_bias;
-		
+
 		///
 		public override void Train()
 		{
-			base.Train();
+			InitModel();
+
+			CheckSampling();
+
+			random = Util.Random.GetInstance();
+
+			for (int i = 0; i < NumIter; i++)
+				base.Iterate();
+
+			LearnUserAttributeToFactorMapping();
 			LearnItemAttributeToFactorMapping();
+			ComputeFactorsForNewUsers();
+			ComputeFactorsForNewItems();
 		}
-		
-		
+
+		///
+		public override void Iterate()
+		{
+			base.Iterate();
+			LearnUserAttributeToFactorMapping();
+			LearnItemAttributeToFactorMapping();
+			ComputeFactorsForNewUsers();
+			ComputeFactorsForNewItems();
+		}
+
 		void LearnItemAttributeToFactorMapping()
 		{
 			// create attribute-to-latent factor weight matrix
@@ -107,7 +144,7 @@ namespace MyMediaLite.ItemRecommendation
 			// store the results of the different runs in the following array
 			var old_attribute_to_factor = new Matrix<float>[num_init_mapping];
 
-			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
+			//Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxItemID);
 
 			var old_rmse_per_factor = new double[num_init_mapping][];
 
@@ -147,6 +184,146 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
+		void LearnUserAttributeToFactorMapping()
+		{
+			// create attribute-to-factor weight matrix
+			this.user_attribute_to_factor = new Matrix<float>(NumUserAttributes + 1, num_factors);
+			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
+			// store the results of the different runs in the following array
+			var old_user_attribute_to_factor = new Matrix<float>[num_init_mapping];
+
+			Console.Error.WriteLine("Will use {0} examples ...", num_iter_mapping * MaxUserID);
+
+			var old_rmse_per_factor = new double[num_init_mapping][];
+
+			for (int h = 0; h < num_init_mapping; h++)
+			{
+				user_attribute_to_factor.InitNormal(InitMean, InitStdDev);
+				Console.Error.WriteLine("----");
+
+				for (int i = 0; i < num_iter_mapping * MaxUserID; i++)
+					UpdateUserMapping();
+				ComputeUserMappingFit();
+
+				old_user_attribute_to_factor[h] = new Matrix<float>(user_attribute_to_factor);
+				old_rmse_per_factor[h] = ComputeUserMappingFit();
+			}
+
+			var min_rmse_per_factor = new double[num_factors];
+			for (int i = 0; i < num_factors; i++)
+				min_rmse_per_factor[i] = double.MaxValue;
+			var best_factor_init = new int[num_factors];
+
+			// find best factor mappings:
+			for (int i = 0; i < num_init_mapping; i++)
+			{
+				for (int j = 0; j < num_factors; j++)
+				{
+					if (old_rmse_per_factor[i][j] < min_rmse_per_factor[j])
+					{
+						min_rmse_per_factor[j] = old_rmse_per_factor[i][j];
+						best_factor_init[j]    = i;
+					}
+				}
+			}
+
+			// set the best weight combinations for each factor mapping
+			for (int i = 0; i < num_factors; i++)
+			{
+				Console.Error.WriteLine("Factor {0}, pick {1}", i, best_factor_init[i]);
+				user_attribute_to_factor.SetColumn(i, old_user_attribute_to_factor[best_factor_init[i]].GetColumn(i));
+			}
+
+			Console.Error.WriteLine("----");
+			ComputeUserMappingFit();
+		}
+
+		void UpdateUserMapping()
+		{
+			// stochastic gradient descent
+			int user_id = SampleUserWithAttributes();
+
+			float[] est_factors = MapUserToLatentFactorSpace(user_id);
+
+			for (int j = 0; j < num_factors; j++)
+			{
+				// TODO do we need an absolute term here???
+				double diff = est_factors[j] - user_factors[user_id, j];
+				if (diff > 0)
+				{
+					foreach (int attribute in user_attributes[user_id])
+					{
+						double w = user_attribute_to_factor[attribute, j];
+						double deriv = diff * w + reg_mapping * w;
+						user_attribute_to_factor.Inc(attribute, j, learn_rate_mapping * -deriv);
+					}
+					// bias term
+					double w_bias = user_attribute_to_factor[NumUserAttributes, j];
+					double deriv_bias = diff * w_bias + reg_mapping * w_bias;
+					user_attribute_to_factor.Inc(NumUserAttributes, j, learn_rate_mapping * -deriv_bias);
+				}
+			}
+		}
+
+		///
+		protected double[] ComputeUserMappingFit()
+		{
+			double rmse    = 0;
+			double penalty = 0;
+			double[] rmse_and_penalty_per_factor = new double[num_factors];
+
+			int num_users = 0;
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+			{
+				var user_items = Feedback.UserMatrix[user_id];
+				var user_attrs = user_attributes[user_id];
+				if (user_items.Count == 0 || user_attrs.Count == 0)
+					continue;
+
+				num_users++;
+
+				float[] est_factors = MapUserToLatentFactorSpace(user_id);
+				for (int j = 0; j < num_factors; j++)
+				{
+					double error    = Math.Pow(est_factors[j] - user_factors[user_id, j], 2);
+					double reg_term = reg_mapping * user_attribute_to_factor.GetColumn(j).EuclideanNorm();
+					rmse    += error;
+					penalty += reg_term;
+					rmse_and_penalty_per_factor[j] += error + reg_term;
+				}
+			}
+
+			for (int i = 0; i < num_factors; i++)
+			{
+				rmse_and_penalty_per_factor[i] = (double) rmse_and_penalty_per_factor[i] / num_users;
+				Console.Error.Write("{0:0.####} ", rmse_and_penalty_per_factor[i]);
+			}
+			rmse    = (double) rmse    / (num_factors * num_users);
+			penalty = (double) penalty / (num_factors * num_users);
+			Console.Error.WriteLine(" > {0:0.####} ({1:0.####})", rmse, penalty);
+
+			return rmse_and_penalty_per_factor;
+		}
+
+		/// <summary>
+		/// Samples an user for the mapping training.
+		/// Only users that are associated with at least one item, and that actually have attributes,
+		/// are taken into account.
+		/// </summary>
+		/// <returns>the user ID</returns>
+		protected int SampleUserWithAttributes()
+		{
+			while (true)
+			{
+				int user_id = random.Next(MaxUserID + 1);
+				var user_items = Feedback.UserMatrix[user_id];
+				var user_attrs = user_attributes[user_id];
+				if (user_items.Count == 0 || user_attrs.Count == 0)
+					continue;
+				return user_id;
+			}
+		}
+
 		/// <summary>
 		/// Samples an item for the mapping training.
 		/// Only items that are associated with at least one user are taken into account.
@@ -154,9 +331,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <returns>the item ID</returns>
 		protected int SampleItem()
 		{
+			int max_feedback_item_id = Feedback.MaxItemID;
+
 			while (true) // sampling with replacement
 			{
-				int item_id = random.Next(MaxItemID + 1);
+				int item_id = random.Next(max_feedback_item_id + 1);
 				var item_users = Feedback.ItemMatrix.GetEntriesByRow(item_id);
 				if (item_users.Count == 0)
 					continue;
@@ -168,7 +347,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			int item_id = SampleItem();
 
-			float[] est_factors = MapToItemLatentFactorSpace(item_id);
+			float[] est_factors = MapItemToLatentFactorSpace(item_id);
 
 			for (int j = 0; j < num_factors; j++) {
 				// TODO do we need an absolute term here???
@@ -179,14 +358,29 @@ namespace MyMediaLite.ItemRecommendation
 					{
 						double w = item_attribute_to_factor[attribute, j];
 						double deriv = diff * w + reg_mapping * w;
-						MatrixExtensions.Inc(item_attribute_to_factor, attribute, j, learn_rate_mapping * -deriv);
+						item_attribute_to_factor.Inc(attribute, j, learn_rate_mapping * -deriv);
 					}
 					// bias term
 					double w_bias = item_attribute_to_factor[NumItemAttributes, j];
 					double deriv_bias = diff * w_bias + reg_mapping * w_bias;
-					MatrixExtensions.Inc(item_attribute_to_factor, NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
+					item_attribute_to_factor.Inc(NumItemAttributes, j, learn_rate_mapping * -deriv_bias);
 				}
 			}
+		}
+
+		void ComputeFactorsForNewUsers()
+		{
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				if (Feedback.UserMatrix.NumEntriesByRow(user_id) == 0)
+					user_factors.SetRow(user_id, MapUserToLatentFactorSpace(user_id));
+		}
+
+		void ComputeFactorsForNewItems()
+		{
+			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+				if (Feedback.ItemMatrix.NumEntriesByRow(item_id) == 0)
+					item_factors.SetRow(item_id, MapItemToLatentFactorSpace(item_id));
+			// TODO bias
 		}
 
 		/// <summary>Compute the fit of the item mapping</summary>
@@ -206,16 +400,16 @@ namespace MyMediaLite.ItemRecommendation
 					continue;
 				var item_users = Feedback.ItemMatrix.GetEntriesByRow(item_id);
 				var item_attrs = item_attributes.GetEntriesByRow(item_id);
-				if (item_attrs.Count == 0) // TODO why ignore users w/o attributes?
+				if (item_users.Count == 0 || item_attrs.Count == 0) // TODO why ignore users w/o attributes?
 					continue;
 
 				num_items++;
 
-				float[] est_factors = MapToItemLatentFactorSpace(item_id);
+				float[] est_factors = MapItemToLatentFactorSpace(item_id);
 				for (int f = 0; f < num_factors; f++)
 				{
 					double error    = Math.Pow(est_factors[f] - item_factors[item_id, f], 2);
-					double reg_term = reg_mapping * VectorExtensions.EuclideanNorm(item_attribute_to_factor.GetColumn(f));
+					double reg_term = item_attribute_to_factor.GetColumn(f).EuclideanNorm();
 					rmse    += error;
 					penalty += reg_term;
 					rmse_and_penalty_per_factor[f] += error + reg_term;
@@ -234,8 +428,22 @@ namespace MyMediaLite.ItemRecommendation
 			return rmse_and_penalty_per_factor;
 		}
 
+		float[] MapUserToLatentFactorSpace(int user_id)
+		{
+			var factor_representation = new float[num_factors];
+			for (int f = 0; f < num_factors; f++)
+				// bias
+				factor_representation[f] = user_attribute_to_factor[NumUserAttributes, f];
+
+			foreach (int i in user_attributes[user_id])
+				for (int f = 0; f < num_factors; f++)
+					factor_representation[f] += user_attribute_to_factor[i, f];
+
+			return factor_representation;
+		}
+
 		/// <summary>map to latent factor space (method to be called)</summary>
-		protected virtual float[] MapToItemLatentFactorSpace(int item_id)
+		float[] MapItemToLatentFactorSpace(int item_id)
 		{
 			var factor_representation = new float[num_factors];
 			for (int j = 0; j < num_factors; j++)
@@ -247,19 +455,6 @@ namespace MyMediaLite.ItemRecommendation
 					factor_representation[j] += item_attribute_to_factor[i, j];
 
 			return factor_representation;
-		}
-
-		///
-		public override float Predict(int user_id, int item_id)
-		{
-			if ((user_id < 0) || (user_id >= user_factors.dim1))
-			{
-				Console.Error.WriteLine("user is unknown: " + user_id);
-				return float.MinValue;
-			}
-
-			float[] est_factors = MapToItemLatentFactorSpace(item_id);
-			return MatrixExtensions.RowScalarProduct(user_factors, user_id, est_factors);
 		}
 
 		///

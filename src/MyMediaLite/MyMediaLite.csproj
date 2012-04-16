@@ -234,6 +234,7 @@
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="Util\GroupUtils.cs" />
+    <Compile Include="ItemRecommendation\BPRMF_Mapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
