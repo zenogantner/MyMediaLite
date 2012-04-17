@@ -43,6 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		// TODO
 		//  - handle item bias
+		//  - use mapping from last iteration as start
 		//  - make sure we do not sample items that have no feedback when doing BPR-MF learning
 		//  - integrate UserMapping
 		//  - make mapping function selectable
@@ -123,8 +124,6 @@ namespace MyMediaLite.ItemRecommendation
 
 			LearnUserAttributeToFactorMapping();
 			LearnItemAttributeToFactorMapping();
-			ComputeFactorsForNewUsers();
-			ComputeFactorsForNewItems();
 		}
 
 		///
@@ -133,12 +132,14 @@ namespace MyMediaLite.ItemRecommendation
 			base.Iterate();
 			LearnUserAttributeToFactorMapping();
 			LearnItemAttributeToFactorMapping();
-			ComputeFactorsForNewUsers();
-			ComputeFactorsForNewItems();
 		}
 
 		void LearnItemAttributeToFactorMapping()
 		{
+			// no mapping of no item attributes present
+			if (item_attributes.NumberOfEntries == 0)
+				return;
+
 			// create attribute-to-latent factor weight matrix
 			this.item_attribute_to_factor = new Matrix<float>(NumItemAttributes + 1, num_factors);
 			// store the results of the different runs in the following array
@@ -182,10 +183,16 @@ namespace MyMediaLite.ItemRecommendation
 					old_attribute_to_factor[best_factor_init[i]].GetColumn(i)
 				);
 			}
+
+			ComputeFactorsForNewItems();
 		}
 
 		void LearnUserAttributeToFactorMapping()
 		{
+			// no mapping of no user attributes present
+			if (user_attributes.NumberOfEntries == 0)
+				return;
+
 			// create attribute-to-factor weight matrix
 			this.user_attribute_to_factor = new Matrix<float>(NumUserAttributes + 1, num_factors);
 			Console.Error.WriteLine("num_user_attributes=" + NumUserAttributes);
@@ -236,11 +243,13 @@ namespace MyMediaLite.ItemRecommendation
 
 			Console.Error.WriteLine("----");
 			ComputeUserMappingFit();
+
+			ComputeFactorsForNewUsers();
 		}
 
 		void UpdateUserMapping()
 		{
-			// stochastic gradient descent
+			// stochastic gradient descent step
 			int user_id = SampleUserWithAttributes();
 
 			float[] est_factors = MapUserToLatentFactorSpace(user_id);
@@ -370,17 +379,21 @@ namespace MyMediaLite.ItemRecommendation
 
 		void ComputeFactorsForNewUsers()
 		{
-			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+			for (int user_id = 0; user_id <= Feedback.MaxUserID; user_id++)
 				if (Feedback.UserMatrix.NumEntriesByRow(user_id) == 0)
 					user_factors.SetRow(user_id, MapUserToLatentFactorSpace(user_id));
+			for (int user_id = Feedback.MaxUserID + 1; user_id <= MaxUserID; user_id++)
+				user_factors.SetRow(user_id, MapUserToLatentFactorSpace(user_id));
 		}
 
 		void ComputeFactorsForNewItems()
 		{
-			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+			for (int item_id = 0; item_id <= Feedback.MaxItemID; item_id++)
 				if (Feedback.ItemMatrix.NumEntriesByRow(item_id) == 0)
 					item_factors.SetRow(item_id, MapItemToLatentFactorSpace(item_id));
-			// TODO bias
+			for (int item_id = Feedback.MaxItemID + 1; item_id <= MaxItemID; item_id++)
+				item_factors.SetRow(item_id, MapItemToLatentFactorSpace(item_id));
+				// TODO bias
 		}
 
 		/// <summary>Compute the fit of the item mapping</summary>
