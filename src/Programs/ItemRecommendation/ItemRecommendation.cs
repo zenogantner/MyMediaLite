@@ -105,8 +105,8 @@ static class ItemRecommendation
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Item Prediction from Positive-Only Feedback {0}.{1:00}", version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
 		Console.WriteLine("Copyright (C) 2011, 2012 Zeno Gantner");
+		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
 		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
 		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
@@ -191,6 +191,12 @@ static class ItemRecommendation
    --cutoff=NUM                 abort if MEASURE is below NUM
 ");
 		Environment.Exit(exit_code);
+	}
+
+	static void Abort(string message)
+	{
+		Console.Error.WriteLine(message);
+		Environment.Exit(-1);
 	}
 
 	public static void Main(string[] args)
@@ -295,7 +301,7 @@ static class ItemRecommendation
 		if (recommender == null && method != null)
 			Usage(string.Format("Unknown recommendation method: '{0}'", method));
 		if (recommender == null && load_model_file != null)
-			Usage(string.Format("Could not load model from file {0}.", load_model_file));
+			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
 		CheckParameters(extra_args);
 
@@ -326,7 +332,7 @@ static class ItemRecommendation
 		if (find_iter != 0)
 		{
 			if ( !(recommender is IIterativeModel) )
-				Usage("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
+				Abort("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
 
 			var iterative_recommender = (IIterativeModel) recommender;
 			Console.WriteLine(recommender);
@@ -434,7 +440,7 @@ static class ItemRecommendation
 					else if (group_method == "Maximum")
 						group_recommender = new Maximum(recommender);
 					else
-						Usage("Unknown method in --group-recommender=METHOD");
+						Usage("Unknown group recommendation strategy in --group-recommender=METHOD");
 
 					time_span = Wrap.MeasureTime( delegate() {
 						var result = group_recommender.Evaluate(test_data, training_data, group_to_user, candidate_items);
@@ -457,75 +463,75 @@ static class ItemRecommendation
 			Usage("Parameter --training-file=FILE is missing.");
 
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
-			Usage(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
+			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (cross_validation == 1)
-			Usage("--cross-validation=K requires K to be at least 2.");
+			Abort("--cross-validation=K requires K to be at least 2.");
 
 		if (show_fold_results && cross_validation == 0)
-			Usage("--show-fold-results only works with --cross-validation=K.");
+			Abort("--show-fold-results only works with --cross-validation=K.");
 
 		if (cross_validation > 1 && test_ratio != 0)
-			Usage("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
+			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
 
 		if (cross_validation > 1 && prediction_file != null)
-			Usage("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
+			Abort("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
 
 		if (cross_validation > 1 && save_model_file != null)
-			Usage("--cross-validation=K and --save-model=FILE are mutually exclusive.");
+			Abort("--cross-validation=K and --save-model=FILE are mutually exclusive.");
 
 		if (cross_validation > 1 && load_model_file != null)
-			Usage("--cross-validation=K and --load-model=FILE are mutually exclusive.");
+			Abort("--cross-validation=K and --load-model=FILE are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && test_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
-			Usage("--candidate-items=FILE, --all-items, --in-training-items, --in-test-items, and --overlap-items are mutually exclusive.");
+			Abort("--candidate-items=FILE, --all-items, --in-training-items, --in-test-items, and --overlap-items are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && overlap_items)
-			Usage("--overlap-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+			Abort("--overlap-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_test_items)
-			Usage("--in-test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+			Abort("--in-test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_training_items)
-			Usage("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
 		if (group_method != null && user_groups_file == null)
-			Usage("--group-recommender needs --user-groups=FILE.");
+			Abort("--group-recommender needs --user-groups=FILE.");
 
 		if (user_prediction)
 		{
 			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
 			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
-				Usage("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
+				Abort("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
 			if (user_groups_file != null)
-				Usage("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
+				Abort("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
 		}
 
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
-			Usage("Recommender expects --user-attributes=FILE.");
+			Abort("Recommender expects --user-attributes=FILE.");
 
 		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
-			Usage("Recommender expects --item-attributes=FILE.");
+			Abort("Recommender expects --item-attributes=FILE.");
 
 		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
-			Usage("Recommender expects --user-relations=FILE.");
+			Abort("Recommender expects --user-relations=FILE.");
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
-			Usage("Recommender expects --item-relations=FILE.");
+			Abort("Recommender expects --item-relations=FILE.");
 
 		if (no_id_mapping)
 		{
 			if (save_user_mapping_file != null)
-				Usage("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+				Abort("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
 			if (save_item_mapping_file != null)
-				Usage("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+				Abort("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
 			if (load_user_mapping_file != null)
-				Usage("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
+				Abort("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
 			if (load_item_mapping_file != null)
-				Usage("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
+				Abort("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
 		}
 
 		if (extra_args.Count > 0)

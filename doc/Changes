@@ -6,6 +6,9 @@
            for PredictItems() and ScoreItems() methods
 	 - BPRMF and variants: get rid of bold-driver heuristics (not
            effective/efficient for these recommenders)
+	command line tools
+         - do not print all usage information on errors that have easy
+           explanations
 	evaluation
 	 - remove ItemsFiltered class
 
