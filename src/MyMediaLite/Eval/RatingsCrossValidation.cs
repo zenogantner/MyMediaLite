@@ -125,6 +125,8 @@ namespace MyMediaLite.Eval
 				{
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
 					split_recommenders[i].Ratings = split.Train[i];
+					if (recommender is ITransductiveRatingPredictor)
+						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalFeedback = split.Test[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
