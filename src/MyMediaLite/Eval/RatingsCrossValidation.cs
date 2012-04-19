@@ -63,11 +63,13 @@ namespace MyMediaLite.Eval
 				{
 					var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
 					split_recommender.Ratings = split.Train[i];
+					if (recommender is ITransductiveRatingPredictor)
+						((ITransductiveRatingPredictor) split_recommender).AdditionalFeedback = split.Test[i];
 					split_recommender.Train();
 					var fold_results = Ratings.Evaluate(split_recommender, split.Test[i]);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
-					
+
 					// thread-safe stats
 					lock (avg_results)
 						foreach (var key in fold_results.Keys)

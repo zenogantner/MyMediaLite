@@ -79,7 +79,6 @@ static class ItemRecommendation
 	// command-line parameters (other)
 	static bool compute_fit;
 	static uint cross_validation;
-	static bool show_fold_results;
 	static double test_ratio;
 	static float rating_threshold = float.NaN;
 	static int num_test_users;
@@ -176,7 +175,6 @@ static class ItemRecommendation
 
   evaluation options:
    --cross-validation=K         perform k-fold cross-validation on the training data
-   --show-fold-results          show results for individual folds in cross-validation
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
@@ -267,7 +265,6 @@ static class ItemRecommendation
 			{ "compute-fit",          v => compute_fit       = v != null },
 			{ "online-evaluation",    v => online_eval       = v != null },
 			{ "repeat-evaluation",    v => repeat_eval       = v != null },
-			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "overlap-items",        v => overlap_items     = v != null },
 			{ "all-items",            v => all_items         = v != null },
@@ -402,7 +399,7 @@ static class ItemRecommendation
 			{
 				if (cross_validation > 1)
 				{
-					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, compute_fit, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, compute_fit, true);
 					Console.Write(results);
 					no_eval = true;
 				}
@@ -467,9 +464,6 @@ static class ItemRecommendation
 
 		if (cross_validation == 1)
 			Abort("--cross-validation=K requires K to be at least 2.");
-
-		if (show_fold_results && cross_validation == 0)
-			Abort("--show-fold-results only works with --cross-validation=K.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");

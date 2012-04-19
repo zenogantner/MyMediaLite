@@ -41,7 +41,7 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SigmoidSVDPlusPlus : SVDPlusPlus
+	public class SigmoidSVDPlusPlus : SVDPlusPlus, ITransductiveRatingPredictor
 	{
 		// TODO
 		// - merge with SVDPlusPlus?
@@ -66,10 +66,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			items_rated_by_user = new int[MaxUserID + 1][];
-			for (int u = 0; u <= MaxUserID; u++)
-				items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
-
 			rating_range_size = max_rating - min_rating;
 
 			// compute global bias

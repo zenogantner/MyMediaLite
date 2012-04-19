@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.Util;
@@ -41,10 +42,9 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SVDPlusPlus : MatrixFactorization
+	public class SVDPlusPlus : MatrixFactorization, ITransductiveRatingPredictor
 	{
 		// TODO
-		// - use knowledge of which items will have to be rated ...
 		// - implement also with fixed biases (progress prize 2008)
 		// - implement integrated model (section 5 of the KDD 2008 paper)
 		// - try rating-based weights from http://recsyswiki.com/wiki/SVD%2B%2B
@@ -61,6 +61,9 @@ namespace MyMediaLite.RatingPrediction
 		protected Matrix<float> y;
 		/// <summary>user factors (individual part)</summary>
 		protected Matrix<float> p;
+
+		///
+		public IDataSet AdditionalFeedback { get; set; }
 
 		// TODO update this structure on incremental updates
 		/// <summary>The items rated by the users</summary>
@@ -92,7 +95,12 @@ namespace MyMediaLite.RatingPrediction
 		{
 			items_rated_by_user = new int[MaxUserID + 1][];
 			for (int u = 0; u <= MaxUserID; u++)
-				items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
+			{
+				IEnumerable<int> index_list = (u <= AdditionalFeedback.MaxUserID)
+					? ratings.ByUser[u].Concat(AdditionalFeedback.ByUser[u])
+					: ratings.ByUser[u];
+				items_rated_by_user[u] = (from index in index_list select ratings.Items[index]).ToArray();
+			}
 
 			base.Train();
 		}

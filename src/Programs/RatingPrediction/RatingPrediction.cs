@@ -74,7 +74,6 @@ static class RatingPrediction
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.FLOAT;
 	static uint cross_validation;
-	static bool show_fold_results;
 	static double test_ratio;
 	static string chronological_split;
 	static double chronological_split_ratio = -1;
@@ -150,7 +149,6 @@ static class RatingPrediction
 
   evaluation options:
    --cross-validation=K                perform k-fold cross-validation on the training data
-   --show-fold-results                 show results for individual folds in cross-validation
    --test-ratio=NUM                    use a ratio of NUM of the training data for evaluation (simple split)
    --chronological-split=NUM|DATETIME  use the last ratio of NUM of the training data ratings for evaluation,
                                        or use the ratings from DATETIME on for evaluation (requires time information
@@ -237,7 +235,6 @@ static class RatingPrediction
 			// boolean options
 			{ "compute-fit",          v => compute_fit       = v != null },
 			{ "online-evaluation",    v => online_eval       = v != null },
-			{ "show-fold-results",    v => show_fold_results = v != null },
 			{ "search-hp",            v => search_hp         = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "help",                 v => show_help         = v != null },
@@ -396,7 +393,7 @@ static class RatingPrediction
 				if (cross_validation > 1)
 				{
 					Console.WriteLine();
-					var results = recommender.DoCrossValidation(cross_validation, compute_fit, show_fold_results);
+					var results = recommender.DoCrossValidation(cross_validation, compute_fit, true);
 					Console.Write(results);
 					no_eval = true;
 				}
@@ -457,9 +454,6 @@ static class RatingPrediction
 
 		if (cross_validation == 1)
 			Abort("--cross-validation=K requires K to be at least 2.");
-
-		if (show_fold_results && cross_validation == 0)
-			Abort("--show-fold-results only works with --cross-validation=K.");
 
 		if (cross_validation > 1 && test_ratio != 0)
 			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
@@ -596,6 +590,9 @@ static class RatingPrediction
 					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file);
 				else
 					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
+
+				if (recommender is ITransductiveRatingPredictor)
+					((ITransductiveRatingPredictor) recommender).AdditionalFeedback = test_data;
 			}
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));

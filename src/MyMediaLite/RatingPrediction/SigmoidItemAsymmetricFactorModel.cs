@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.Util;
@@ -41,16 +42,20 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class SigmoidItemAsymmetricFactorModel : BiasedMatrixFactorization
+	public class SigmoidItemAsymmetricFactorModel : BiasedMatrixFactorization, ITransductiveRatingPredictor
 	{
 		int[][] items_rated_by_user;
 
 		/// <summary>user factors (part expressed via the rated items)</summary>
 		protected Matrix<float> y;
 
+		///
+		public IDataSet AdditionalFeedback { get; set; }
+
 		/// <summary>Default constructor</summary>
 		public SigmoidItemAsymmetricFactorModel() : base()
 		{
+			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // start with an empty F
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;
@@ -62,7 +67,12 @@ namespace MyMediaLite.RatingPrediction
 		{
 			items_rated_by_user = new int[MaxUserID + 1][];
 			for (int u = 0; u <= MaxUserID; u++)
-				items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
+			{
+				IEnumerable<int> index_list = (u <= AdditionalFeedback.MaxUserID)
+					? ratings.ByUser[u].Concat(AdditionalFeedback.ByUser[u])
+					: ratings.ByUser[u];
+				items_rated_by_user[u] = (from index in index_list select ratings.Items[index]).ToArray();
+			}
 
 			rating_range_size = max_rating - min_rating;
 
