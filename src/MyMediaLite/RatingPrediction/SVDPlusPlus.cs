@@ -111,7 +111,7 @@ namespace MyMediaLite.RatingPrediction
 			double result = global_bias;
 
 			if (user_factors == null)
-				PrecomputeFactors();
+				PrecomputeUserFactors();
 
 			if (user_id <= MaxUserID)
 				result += user_bias[user_id];
@@ -161,7 +161,7 @@ namespace MyMediaLite.RatingPrediction
 
 				double prediction = global_bias + user_bias[u] + item_bias[i];
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
-				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
 				for (int f = 0; f < p_plus_y_sum_vector.Count; f++)
 					p_plus_y_sum_vector[f] = (float) (p_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
@@ -207,7 +207,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>Precompute all user factors</summary>
-		protected void PrecomputeFactors()
+		protected void PrecomputeUserFactors()
 		{
 			if (user_factors == null)
 				user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
@@ -223,13 +223,13 @@ namespace MyMediaLite.RatingPrediction
 				PrecomputeFactors(u);
 		}
 
-		/// <summary>Precompute the user factors for a given user</summary>
+		/// <summary>Precompute the factors for a given user</summary>
 		/// <param name='u'>the ID of the user</param>
 		protected void PrecomputeFactors(int u)
 		{
 			// compute
 			var factors = y.SumOfRows(items_rated_by_user[u]);
-			double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+			double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
 			for (int f = 0; f < factors.Count; f++)
 				factors[f] = (float) (factors[f] / norm_denominator + p[u, f]);
 
