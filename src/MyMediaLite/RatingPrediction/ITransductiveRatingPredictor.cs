@@ -31,4 +31,3 @@ namespace MyMediaLite.RatingPrediction
 		IDataSet AdditionalFeedback { get; set; }
 	}
 }
-
