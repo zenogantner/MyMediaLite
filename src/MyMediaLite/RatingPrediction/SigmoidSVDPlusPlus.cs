@@ -97,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 			double score = global_bias;
 
 			if (user_factors == null)
-				PrecomputeFactors();
+				PrecomputeUserFactors();
 
 			if (user_id <= MaxUserID)
 				score += user_bias[user_id];
@@ -128,7 +128,7 @@ namespace MyMediaLite.RatingPrediction
 
 				double score = global_bias + user_bias[u] + item_bias[i];
 				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
-				double norm_denominator = Math.Sqrt(ratings.CountByUser[u]);
+				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
 				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
 					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
