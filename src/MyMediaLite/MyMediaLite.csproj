@@ -236,6 +236,7 @@
     <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="ItemRecommendation\BPRMF_Mapping.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
+    <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

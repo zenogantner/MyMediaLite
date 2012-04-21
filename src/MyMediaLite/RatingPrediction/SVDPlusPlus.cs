@@ -93,15 +93,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			items_rated_by_user = new int[MaxUserID + 1][];
-			for (int u = 0; u <= MaxUserID; u++)
-			{
-				IEnumerable<int> index_list = (u <= AdditionalFeedback.MaxUserID)
-					? ratings.ByUser[u].Concat(AdditionalFeedback.ByUser[u])
-					: ratings.ByUser[u];
-				items_rated_by_user[u] = (from index in index_list select ratings.Items[index]).ToArray();
-			}
-
+			items_rated_by_user = this.ItemsRatedByUser();
 			base.Train();
 		}
 
@@ -213,29 +205,28 @@ namespace MyMediaLite.RatingPrediction
 				user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
 
 			if (items_rated_by_user == null)
-			{
-				items_rated_by_user = new int[MaxUserID + 1][];
-				for (int u = 0; u <= MaxUserID; u++)
-					items_rated_by_user[u] = (from index in ratings.ByUser[u] select ratings.Items[index]).ToArray();
-			}
+				items_rated_by_user = this.ItemsRatedByUser();
 
-			for (int u = 0; u <= MaxUserID; u++)
-				PrecomputeFactors(u);
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				PrecomputeFactors(user_id);
 		}
 
 		/// <summary>Precompute the factors for a given user</summary>
-		/// <param name='u'>the ID of the user</param>
-		protected void PrecomputeFactors(int u)
+		/// <param name='user_id'>the ID of the user</param>
+		protected void PrecomputeFactors(int user_id)
 		{
+			if (items_rated_by_user[user_id].Length == 0)
+				return;
+
 			// compute
-			var factors = y.SumOfRows(items_rated_by_user[u]);
-			double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
+			var factors = y.SumOfRows(items_rated_by_user[user_id]);
+			double norm_denominator = Math.Sqrt(items_rated_by_user[user_id].Length);
 			for (int f = 0; f < factors.Count; f++)
-				factors[f] = (float) (factors[f] / norm_denominator + p[u, f]);
+				factors[f] = (float) (factors[f] / norm_denominator + p[user_id, f]);
 
 			// assign
 			for (int f = 0; f < factors.Count; f++)
-				user_factors[u, f] = (float) factors[f];
+				user_factors[user_id, f] = (float) factors[f];
 		}
 
 		///
