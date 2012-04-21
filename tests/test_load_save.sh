@@ -4,7 +4,7 @@ PROGRAM="bin/rating_prediction"
 DATA_DIR=data/ml-100k
 
 echo "MyMediaLite load/save test script"
-echo "This will take about 12 minutes ..."
+echo "This will take about 2 minutes ..."
 
 echo
 echo "rating predictors"

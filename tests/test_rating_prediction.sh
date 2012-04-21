@@ -4,7 +4,7 @@ PROGRAM="bin/rating_prediction"
 LANG=C
 
 echo "MyMediaLite rating prediction test script"
-echo "This will take about 3 minutes ..."
+echo "This will take about 1 minute ..."
 
 echo
 echo "MovieLens 1M"

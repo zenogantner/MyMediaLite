@@ -5,7 +5,7 @@ DATA_DIR=data/ml-100k
 LANG=C
 
 echo "MyMediaLite random splitting test script"
-echo "This will take about 1 minute ..."
+echo "This will take less than 1 minute ..."
 
 echo
 echo "rating predictors"

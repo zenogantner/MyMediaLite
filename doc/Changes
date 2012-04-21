@@ -14,6 +14,8 @@
 	 - #234: get rid of argument --show-fold-results
 	evaluation
 	 - remove ItemsFiltered class
+	tests
+         - update time estimates to newer computer
 
 3.0	2012-04-05
 	recommenders

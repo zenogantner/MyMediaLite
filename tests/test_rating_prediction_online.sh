@@ -3,7 +3,7 @@
 PROGRAM="bin/rating_prediction"
 
 echo "MyMediaLite online rating prediction test script"
-echo "This will take about 1 minute ..."
+echo "This will take less than 1 minute ..."
 
 echo
 echo "MovieLens 100k"

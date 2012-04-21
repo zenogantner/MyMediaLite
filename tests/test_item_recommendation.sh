@@ -4,7 +4,7 @@ PROGRAM="bin/item_recommendation"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "MyMediaLite item recommendation test script"
-echo "This may take about 3 minutes ..."
+echo "This may take about 1 minute ..."
 echo "Do not take the prediction results too serious - we do not use the best hyperparameters here"
 
 echo

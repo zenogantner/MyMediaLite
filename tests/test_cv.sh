@@ -1,4 +1,4 @@
-#!/bin/bash -e
+!/bin/bash -e
 
 PROGRAM="bin/rating_prediction"
 DATA_DIR=data/ml-100k
@@ -7,7 +7,7 @@ LANG=C
 K=10
 
 echo "MyMediaLite cross-validation test script."
-echo "This will take about 3 minutes ..."
+echo "This will take about 1 minutes ..."
 
 echo
 echo "rating predictors"
