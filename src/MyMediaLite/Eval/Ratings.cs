@@ -82,11 +82,11 @@ namespace MyMediaLite.Eval
 			if (training_ratings != null)
 			{
 				var new_user_indices = (from index in all_indices
-				                        where test_ratings.Users[index] > test_ratings.MaxUserID || training_ratings.CountByUser[test_ratings.Users[index]] == 0
+				                        where test_ratings.Users[index] > training_ratings.MaxUserID || training_ratings.CountByUser[test_ratings.Users[index]] == 0
 				                        select index).ToArray();
 				results.NewUserResults = Evaluate(recommender, test_ratings, new_user_indices);
 				var new_item_indices = (from index in all_indices
-				                        where test_ratings.Items[index] > test_ratings.MaxItemID || training_ratings.CountByItem[test_ratings.Items[index]] == 0 select index).ToArray();
+				                        where test_ratings.Items[index] > training_ratings.MaxItemID || training_ratings.CountByItem[test_ratings.Items[index]] == 0 select index).ToArray();
 				results.NewItemResults = Evaluate(recommender, test_ratings, new_item_indices);
 				results.NewUserNewItemResults = Evaluate(recommender, test_ratings, Enumerable.Intersect(new_user_indices, new_item_indices).ToArray());
 			}
