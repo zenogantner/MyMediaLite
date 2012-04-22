@@ -35,8 +35,8 @@ while (<>) {
 
     my $key = "$user\t$item";
     if (exists $result{$key} && $result != 1) {
-        if ($result{$key} == $result) {
-            $timestamp{$key} = $timestamp if $remember_timestamps;
+        if ($result{$key} == $result && $remember_timestamps) {
+            $timestamp{$key} = $timestamp;
         }
     }
     else {
