@@ -323,7 +323,7 @@ namespace MyMediaLite.DataType
 		/// <param name="i">the row ID</param>
 		/// <param name="vector">the numeric vector</param>
 		/// <returns>the scalar product of row i and the vector</returns>
-		static public double RowScalarProduct(Matrix<double> matrix, int i, IList<double> vector)
+		static public double RowScalarProduct(this Matrix<double> matrix, int i, IList<double> vector)
 		{
 			if (i >= matrix.dim1)
 				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
@@ -343,7 +343,7 @@ namespace MyMediaLite.DataType
 		/// <param name="i">the row ID</param>
 		/// <param name="vector">the numeric vector</param>
 		/// <returns>the scalar product of row i and the vector</returns>
-		static public float RowScalarProduct(Matrix<float> matrix, int i, IList<float> vector)
+		static public float RowScalarProduct(this Matrix<float> matrix, int i, IList<float> vector)
 		{
 			if (i >= matrix.dim1)
 				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
@@ -363,7 +363,7 @@ namespace MyMediaLite.DataType
 		/// <param name="i">the row ID</param>
 		/// <param name="vector">the numeric vector</param>
 		/// <returns>the scalar product of row i and the vector</returns>
-		static public double RowScalarProduct(Matrix<float> matrix, int i, IList<double> vector)
+		static public double RowScalarProduct(this Matrix<float> matrix, int i, IList<double> vector)
 		{
 			if (i >= matrix.dim1)
 				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix.dim1);
@@ -384,7 +384,7 @@ namespace MyMediaLite.DataType
 		/// <param name="matrix2">the second matrix</param>
 		/// <param name="j">the second row ID</param>
 		/// <returns>the scalar product of row i of matrix1 and row j of matrix2</returns>
-		static public double RowScalarProduct(Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
+		static public double RowScalarProduct(this Matrix<double> matrix1, int i, Matrix<double> matrix2, int j)
 		{
 			if (i >= matrix1.dim1)
 				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);

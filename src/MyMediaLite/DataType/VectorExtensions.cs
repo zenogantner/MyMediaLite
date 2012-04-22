@@ -78,6 +78,34 @@ namespace MyMediaLite.DataType
 				vector[i] = (float) (vector[i] * x);
 		}
 
+		/// <summary>Compute scalar product (dot product) of two vectors</summary>
+		/// <returns>the scalar product of the arguments</returns>
+		/// <param name='v1'>the first vector</param>
+		/// <param name='v2'>the second vector</param>
+		static public double ScalarProduct(IList<double> v1, IList<double> v2)
+		{
+			double result = 0;
+
+			for (int i = 0; i < v1.Count; i++)
+				result += v1[i] * v2[i];
+
+			return result;
+		}
+
+		/// <summary>Compute scalar product (dot product) of two vectors</summary>
+		/// <returns>the scalar product of the arguments</returns>
+		/// <param name='v1'>the first vector</param>
+		/// <param name='v2'>the second vector</param>
+		static public float ScalarProduct(IList<float> v1, IList<float> v2)
+		{
+			double result = 0;
+
+			for (int i = 0; i < v1.Count; i++)
+				result += v1[i] * v2[i];
+
+			return (float) result;
+		}
+
 		/// <summary>Compute the Euclidean norm of a collection of doubles</summary>
 		/// <param name="vector">the vector to compute the norm for</param>
 		/// <returns>the Euclidean norm of the vector</returns>
