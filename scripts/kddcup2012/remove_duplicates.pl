@@ -5,7 +5,6 @@
 # Script for KDD Cup 2012, track 1
 # author: Zeno Gantner <zeno.gantner@gmail.com>
 # This script is in the public domain.
-#
 
 use strict;
 use warnings;
