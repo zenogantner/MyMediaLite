@@ -35,6 +35,7 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
+		/// <summary>the ratings to learn from</summary>
 		IRatings Ratings { get; set; }
 
 		/// <summary>Gets or sets the maximum rating.</summary>

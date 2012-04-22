@@ -34,8 +34,12 @@ namespace MyMediaLite.RatingPrediction
 		IDataSet AdditionalFeedback { get; set; }
 	}
 
+	/// <summary>Helper methods for ITransductiveRatingPredictor</summary>
 	public static class TransductiveRatingPredictorExtensions
 	{
+		/// <summary>For each item, get the users who rated it, both from the training and the test data</summary>
+		/// <returns>array of array of user IDs</returns>
+		/// <param name='recommender'>the recommender to retrieve the data from</param>
 		public static int[][] UsersWhoRated(this ITransductiveRatingPredictor recommender)
 		{
 			var ratings             = recommender.Ratings;
@@ -53,6 +57,9 @@ namespace MyMediaLite.RatingPrediction
 			return users_who_rated_the_item;
 		}
 
+		/// <summary>For each user, get the items they rated, both from the training and the test data</summary>
+		/// <returns>array of array of item IDs</returns>
+		/// <param name='recommender'>the recommender to retrieve the data from</param>
 		public static int[][] ItemsRatedByUser(this ITransductiveRatingPredictor recommender)
 		{
 			var ratings             = recommender.Ratings;

@@ -292,11 +292,7 @@ namespace MyMediaLite.RatingPrediction
 				user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
 
 			if (items_rated_by_user == null)
-			{
-				items_rated_by_user = new int[MaxUserID + 1][];
-				for (int user_id = 0; user_id <= MaxUserID; user_id++)
-					items_rated_by_user[user_id] = (from index in ratings.ByUser[user_id] select ratings.Items[index]).ToArray();
-			}
+				items_rated_by_user = this.ItemsRatedByUser();
 
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
 				PrecomputeUserFactors(user_id);
