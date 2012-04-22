@@ -14,6 +14,7 @@
            explanations
 	 - #234: get rid of argument --show-fold-results
 	evaluation
+         - rating prediction: detailed evaluation of cold-start events
 	 - remove ItemsFiltered class
 	tests
          - update time estimates to newer computer

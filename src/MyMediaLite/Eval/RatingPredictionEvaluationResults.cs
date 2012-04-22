@@ -28,6 +28,26 @@ namespace MyMediaLite.Eval
 	/// </remarks>
 	public class RatingPredictionEvaluationResults : Dictionary<string, float>
 	{
+		/// <summary>results for users without ratings in the training data</summary>
+		public Dictionary<string, float> NewUserResults { get; set; }
+		
+		/// <summary>results for items without ratings in the training data</summary>
+		public Dictionary<string, float> NewItemResults { get; set; }
+		
+		/// <summary>results for rating predictions where neither the user nor the item has ratings in the training data</summary>
+		public Dictionary<string, float> NewUserNewItemResults { get; set; }
+		
+		/// <summary>default constructor</summary>
+		public RatingPredictionEvaluationResults() {}
+		
+		/// <summary>initialize with given results</summary>
+		/// <param name='results'>a dictionary containing results</param>
+		public RatingPredictionEvaluationResults(Dictionary<string, float> results)
+		{
+			foreach (var key in results.Keys)
+				this[key] = results[key];
+		}
+
 		/// <summary>Format rating prediction results</summary>
 		/// <remarks>
 		/// See http://recsyswiki.com/wiki/Root_mean_square_error and http://recsyswiki.com/wiki/Mean_absolute_error
@@ -41,9 +61,23 @@ namespace MyMediaLite.Eval
 			);
 			if (this.ContainsKey("fit"))
 				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
+			if (NewUserResults != null)
+				s += "\n" + string.Format(
+					CultureInfo.InvariantCulture, "  new users: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
+					NewUserResults["RMSE"], NewUserResults["MAE"], NewUserResults["CBD"]
+				);
+			if (NewItemResults != null)
+				s += "\n" +string.Format(
+					CultureInfo.InvariantCulture, "  new items: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
+					NewItemResults["RMSE"], NewItemResults["MAE"], NewItemResults["CBD"]
+				);
+			if (NewUserNewItemResults != null)
+				s += "\n" + string.Format(
+					CultureInfo.InvariantCulture, "  new users and items: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
+					NewUserNewItemResults["RMSE"], NewUserNewItemResults["MAE"], NewUserNewItemResults["CBD"]
+				);
 			return s;
 		}
-
 	}
 }
 

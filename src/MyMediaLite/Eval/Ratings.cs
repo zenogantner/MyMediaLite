@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
 
@@ -66,24 +67,46 @@ namespace MyMediaLite.Eval
 		///   </para>
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
-		/// <param name="ratings">Test cases</param>
+		/// <param name="test_ratings">test cases</param>
+		/// <param name="training_ratings">the training examples</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public RatingPredictionEvaluationResults Evaluate(this IRatingPredictor recommender, IRatings ratings)
+		static public RatingPredictionEvaluationResults Evaluate(this IRatingPredictor recommender, IRatings test_ratings, IRatings training_ratings = null)
 		{
+			if (recommender == null)
+				throw new ArgumentNullException("recommender");
+			if (test_ratings == null)
+				throw new ArgumentNullException("ratings");
+
+			var all_indices = Enumerable.Range(0, test_ratings.Count).ToArray();
+			var results = new RatingPredictionEvaluationResults(Evaluate(recommender, test_ratings, all_indices));
+			if (training_ratings != null)
+			{
+				var new_user_indices = (from index in all_indices
+				                        where test_ratings.Users[index] > test_ratings.MaxUserID || training_ratings.CountByUser[test_ratings.Users[index]] == 0
+				                        select index).ToArray();
+				results.NewUserResults = Evaluate(recommender, test_ratings, new_user_indices);
+				var new_item_indices = (from index in all_indices
+				                        where test_ratings.Items[index] > test_ratings.MaxItemID || training_ratings.CountByItem[test_ratings.Items[index]] == 0 select index).ToArray();
+				results.NewItemResults = Evaluate(recommender, test_ratings, new_item_indices);
+				results.NewUserNewItemResults = Evaluate(recommender, test_ratings, Enumerable.Intersect(new_user_indices, new_item_indices).ToArray());
+			}
+			return results;
+		}
+
+		static Dictionary<string, float> Evaluate(IRatingPredictor recommender, IRatings ratings, IList<int> indices)
+		{
+			if (indices.Count == 0)
+				return null;
+
 			double rmse = 0;
 			double mae  = 0;
 			double cbd  = 0;
-
-			if (recommender == null)
-				throw new ArgumentNullException("recommender");
-			if (ratings == null)
-				throw new ArgumentNullException("ratings");
 
 			if (recommender is ITimeAwareRatingPredictor && ratings is ITimedRatings)
 			{
 				var time_aware_recommender = recommender as ITimeAwareRatingPredictor;
 				var timed_ratings = ratings as ITimedRatings;
-				for (int index = 0; index < ratings.Count; index++)
+				foreach (int index in indices)
 				{
 					float prediction = time_aware_recommender.Predict(timed_ratings.Users[index], timed_ratings.Items[index], timed_ratings.Times[index]);
 					float error = prediction - ratings[index];
@@ -94,7 +117,7 @@ namespace MyMediaLite.Eval
 				}
 			}
 			else
-				for (int index = 0; index < ratings.Count; index++)
+				foreach (int index in indices)
 				{
 					float prediction = recommender.Predict(ratings.Users[index], ratings.Items[index]);
 					float error = prediction - ratings[index];
@@ -103,11 +126,11 @@ namespace MyMediaLite.Eval
 					mae  += Math.Abs(error);
 					cbd  += ComputeCBD(ratings[index], prediction, ratings.MinRating, ratings.MaxRating);
 				}
-			mae  = mae / ratings.Count;
-			rmse = Math.Sqrt(rmse / ratings.Count);
-			cbd  = cbd / ratings.Count;
+			mae  = mae / indices.Count;
+			rmse = Math.Sqrt(rmse / indices.Count);
+			cbd  = cbd / indices.Count;
 
-			var result = new RatingPredictionEvaluationResults();
+			var result = new Dictionary<string, float>();
 			result["RMSE"] = (float) rmse;
 			result["MAE"]  = (float) mae;
 			result["NMAE"] = (float) mae / (recommender.MaxRating - recommender.MinRating);

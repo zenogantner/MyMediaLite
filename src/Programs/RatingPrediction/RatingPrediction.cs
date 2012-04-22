@@ -338,7 +338,7 @@ static class RatingPrediction
 				if (compute_fit)
 					Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), iterative_recommender.NumIter);
 
-				Console.WriteLine("{0} iteration {1}", recommender.Evaluate(test_data), iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", recommender.Evaluate(test_data, training_data), iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -358,7 +358,7 @@ static class RatingPrediction
 						}
 
 						RatingPredictionEvaluationResults results = null;
-						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data); });
+						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data, training_data); });
 						eval_time_stats.Add(time.TotalSeconds);
 						eval_stats.Add(results[measure]);
 						Console.WriteLine("{0} iteration {1}", results, it);
@@ -415,7 +415,7 @@ static class RatingPrediction
 				if (online_eval)
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.EvaluateOnline(test_data)); });
 				else
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.Evaluate(test_data)); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.Evaluate(test_data, training_data)); });
 
 				Console.Write(" testing_time " + seconds);
 
