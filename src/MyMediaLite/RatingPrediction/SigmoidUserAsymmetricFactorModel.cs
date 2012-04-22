@@ -114,11 +114,6 @@ namespace MyMediaLite.RatingPrediction
 				if (update_item)
 					item_bias[i] += BiasLearnRate * lr * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
-				if (float.IsNaN(user_bias[u]))
-					Console.Error.WriteLine("user_bias[{0}]", u);
-				if (float.IsNaN(item_bias[i]))
-					Console.Error.WriteLine("item_bias[{0}]", i);
-
 				// adjust factors
 				double tmp = gradient_common / norm_denominator; // TODO better name than tmp
 				for (int f = 0; f < NumFactors; f++)
@@ -130,9 +125,6 @@ namespace MyMediaLite.RatingPrediction
 					{
 						double delta_u = gradient_common * i_plus_x_sum_vector[f] - user_reg_weight * u_f;
 						user_factors.Inc(u, f, lr * delta_u);
-						if (float.IsNaN(user_factors[u, f]))
-							Console.Error.WriteLine("user_factors[{0}, {1}]", u, f);
-
 
 						double common_update = tmp * u_f;
 						foreach (int other_user_id in users_who_rated_the_item[u])
@@ -140,9 +132,6 @@ namespace MyMediaLite.RatingPrediction
 							float rated_user_reg = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(ratings.CountByUser[other_user_id])) : reg_u;
 							double delta_ou = common_update - rated_user_reg * x[other_user_id, f];
 							x.Inc(other_user_id, f, lr * delta_ou);
-
-							if (float.IsNaN(x[other_user_id, f]))
-								Console.Error.WriteLine("x[{0}, {1}]", other_user_id, f);
 						}
 					}
 				}
@@ -285,15 +274,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// assign
 			for (int f = 0; f < factors.Count; f++)
-			{
 				item_factors[item_id, f] = (float) factors[f];
-				if (float.IsNaN(item_factors[item_id, f]))
-				{
-					Console.Error.WriteLine("item_factors[{0}, {1}]", item_id, f);
-					if (item_id > AdditionalFeedback.MaxItemID)
-						Console.Error.WriteLine("!");
-				}
-			}
 		}
 
 		///
