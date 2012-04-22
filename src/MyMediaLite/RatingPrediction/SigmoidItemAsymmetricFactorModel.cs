@@ -97,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
 					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator);
 
-				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				score += item_factors.RowScalarProduct(i, u_plus_y_sum_vector);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -251,7 +251,7 @@ namespace MyMediaLite.RatingPrediction
 					int item_id = rated_items[index].First;
 
 					double score = global_bias + user_bias + item_bias[item_id];
-					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
+					score += item_factors.RowScalarProduct(item_id, y_sum_vector);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
 					float err = (float) (rated_items[index].Second - prediction);

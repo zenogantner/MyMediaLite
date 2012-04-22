@@ -97,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 				for (int f = 0; f < i_plus_x_sum_vector.Count; f++)
 					i_plus_x_sum_vector[f] = (float) (i_plus_x_sum_vector[f] / norm_denominator);
 
-				score += DataType.MatrixExtensions.RowScalarProduct(user_factors, u, i_plus_x_sum_vector);
+				score += user_factors.RowScalarProduct(u, i_plus_x_sum_vector);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
