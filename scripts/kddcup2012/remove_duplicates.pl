@@ -11,11 +11,10 @@ use warnings;
 
 use Getopt::Long;
 GetOptions(
-    'sorted-output'    => \(my $sorted_output    = 0),
     'write-timestamps' => \(my $write_timestamps = 0),
 ) or die "Did not understand command line parameters.\n";
 
-my $remember_timestamps = $sorted_output || $write_timestamps;
+my $remember_timestamps = $write_timestamps;
 
 my $separator_regex = qr{\t};
 
@@ -32,33 +31,31 @@ while (<>) {
 
     $event_count++;
 
-    my $key = "$user\t$item";
-    if (exists $result{$key} && $result != 1) {
-        if ($result{$key} == $result && $remember_timestamps) {
-            $timestamp{$key} = $timestamp;
+    if (!exists $result{$user}) {
+	$result{$user} = {};
+	$timestamp{$user} = {};
+    }
+
+    if (exists $result{$user}->{$item} && $result != 1) {
+        if ($result{$user}->{$item} == $result && $remember_timestamps) {
+            $timestamp{$user}->{$item} = $timestamp;
         }
     }
     else {
-        $result{$key}    = $result;
-        $timestamp{$key} = $timestamp if $remember_timestamps;
+        $result{$user}->{$item}    = $result;
+        $timestamp{$user}->{$item} = $timestamp if $remember_timestamps;
     }
 }
 
-if ($sorted_output) {
-    print STDERR "Sorting and printing to STDOUT ...\n";
-    foreach my $key (sort { $timestamp{$a} <=> $timestamp{$b} } keys %result) {
-	print "$key\t$result{$key}\t$timestamp{$key}\n";
-    }
-}
-else {
-    print STDERR "Printing to STDOUT ...\n";
-    foreach my $key (keys %result) {
-	if ($write_timestamps) {
-	    print "$key\t$result{$key}\t$timestamp{$key}\n";
-	}
-	else {
-	    print "$key\t$result{$key}\n";
-	}
+print STDERR "Printing to STDOUT ...\n";
+foreach my $user (keys %result) {
+    foreach my $item (keys %{$result{$user}}) {
+        if ($write_timestamps) {
+            print "$user\t$item\t$result{$user}->{$item}\t$timestamp{$user}->{$item}\n";
+        }
+        else {
+            print "$user\t$item\t$result{$user}->{$item}\n";
+        }
     }
 }
 print STDERR "Done.\n";
