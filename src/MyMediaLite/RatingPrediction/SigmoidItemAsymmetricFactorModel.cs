@@ -55,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public SigmoidItemAsymmetricFactorModel() : base()
 		{
-			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // start with an empty F
+			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // in case no test data is provided
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;
@@ -82,7 +82,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			SetupLoss();
 
-			user_factors = null; // delete old user factors
 			float reg_u = RegU;  // to limit property accesses
 			float reg_i = RegI;
 			float lr = LearnRate;
@@ -135,6 +134,7 @@ namespace MyMediaLite.RatingPrediction
 						}
 					}
 				}
+				user_factors = null; // delete old user factors
 			}
 		}
 

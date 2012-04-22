@@ -28,7 +28,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Asymmetric factor model which represents items in terms of the users they rated them</summary>
+	/// <summary>Asymmetric factor model which represents items in terms of the users that rated them</summary>
 	/// <remarks>
 	///   <para>
 	///     Literature:
@@ -55,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public SigmoidUserAsymmetricFactorModel() : base()
 		{
-			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // start with an empty F
+			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // in case no test data is provided
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;
@@ -82,7 +82,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			SetupLoss();
 
-			item_factors = null; // delete old item factors
 			float reg_u = RegU;  // to limit property accesses
 			float reg_i = RegI;
 			float lr = LearnRate;
@@ -136,6 +135,7 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
+			item_factors = null; // delete old item factors
 		}
 
 		///
