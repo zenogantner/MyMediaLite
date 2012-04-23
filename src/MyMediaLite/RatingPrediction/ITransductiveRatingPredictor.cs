@@ -49,10 +49,10 @@ namespace MyMediaLite.RatingPrediction
 			var users_who_rated_the_item = new int[max_item_id + 1][];
 			for (int item_id = 0; item_id <= max_item_id; item_id++)
 			{
-				IEnumerable<int> index_list = (item_id <= additional_feedback.MaxItemID)
-					? ratings.ByItem[item_id].Concat(additional_feedback.ByUser[item_id])
-					: ratings.ByItem[item_id];
-				users_who_rated_the_item[item_id] = (from index in index_list select ratings.Users[index]).ToArray();
+				var training_users = item_id <= ratings.MaxItemID             ? from index in             ratings.ByItem[item_id] select             ratings.Users[index] : new int[0];
+				var test_users     = item_id <= additional_feedback.MaxItemID ? from index in additional_feedback.ByItem[item_id] select additional_feedback.Users[index] : new int[0];
+
+				users_who_rated_the_item[item_id] = training_users.Union(test_users).ToArray();
 			}
 			return users_who_rated_the_item;
 		}
@@ -67,12 +67,12 @@ namespace MyMediaLite.RatingPrediction
 			int max_user_id = Math.Max(ratings.MaxUserID, additional_feedback.MaxUserID);
 
 			var items_rated_by_user = new int[max_user_id + 1][];
-			for (int u = 0; u <= max_user_id; u++)
+			for (int user_id = 0; user_id <= max_user_id; user_id++)
 			{
-				IEnumerable<int> index_list = (u <= additional_feedback.MaxUserID)
-					? ratings.ByUser[u].Concat(additional_feedback.ByUser[u])
-					: ratings.ByUser[u];
-				items_rated_by_user[u] = (from index in index_list select ratings.Items[index]).ToArray();
+				var training_items = user_id <= ratings.MaxUserID             ? from index in             ratings.ByUser[user_id] select             ratings.Items[index] : new int[0];
+				var test_items     = user_id <= additional_feedback.MaxUserID ? from index in additional_feedback.ByUser[user_id] select additional_feedback.Items[index] : new int[0];
+
+				items_rated_by_user[user_id] = training_items.Union(test_items).ToArray();
 			}
 			return items_rated_by_user;
 		}

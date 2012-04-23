@@ -65,6 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
+			MaxUserID = Math.Max(ratings.MaxUserID, AdditionalFeedback.MaxUserID);
 			MaxItemID = Math.Max(ratings.MaxItemID, AdditionalFeedback.MaxItemID);
 			users_who_rated_the_item = this.UsersWhoRated();
 			base.Train();
@@ -127,9 +128,11 @@ namespace MyMediaLite.RatingPrediction
 						user_factors.Inc(u, f, lr * delta_u);
 
 						double common_update = tmp * u_f;
-						foreach (int other_user_id in users_who_rated_the_item[u])
+						foreach (int other_user_id in users_who_rated_the_item[i])
 						{
-							float rated_user_reg = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(ratings.CountByUser[other_user_id])) : reg_u;
+							int other_user_rating_count = other_user_id > ratings.MaxUserID            ? 0 : ratings.CountByUser[other_user_id];
+							other_user_rating_count    += other_user_id > AdditionalFeedback.MaxUserID ? 0 : AdditionalFeedback.CountByUser[other_user_id];
+							float rated_user_reg = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(other_user_rating_count)) : reg_u;
 							double delta_ou = common_update - rated_user_reg * x[other_user_id, f];
 							x.Inc(other_user_id, f, lr * delta_ou);
 						}
@@ -205,23 +208,35 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU           * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+					int count_by_user = u > ratings.MaxUserID            ? 0 : ratings.CountByUser[u];
+					count_by_user    += u > AdditionalFeedback.MaxUserID ? 0 : AdditionalFeedback.CountByUser[u];
+					complexity += Math.Sqrt(count_by_user) * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(count_by_user) * RegU           * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
+					complexity += Math.Sqrt(count_by_user) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
 				}
-				for (int i = 0; i <= MaxItemID; i++)
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				for (int i = 0; i <= ratings.MaxItemID; i++)
+				{
+					int count_by_item = i > ratings.MaxItemID            ? 0 : ratings.CountByItem[i];
+					count_by_item    += i > AdditionalFeedback.MaxItemID ? 0 : AdditionalFeedback.CountByItem[i];
+					complexity += Math.Sqrt(count_by_item) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
 			}
 			else
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += ratings.CountByUser[u] * RegU * BiasReg * Math.Pow(user_bias[u], 2);
-					complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += ratings.CountByUser[u] * RegU * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
+					int count_by_user = u > ratings.MaxUserID            ? 0 : ratings.CountByUser[u];
+					count_by_user    += u > AdditionalFeedback.MaxUserID ? 0 : AdditionalFeedback.CountByUser[u];
+					complexity += count_by_user * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += count_by_user * RegU * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
+					complexity += count_by_user * RegU * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 				for (int i = 0; i <= MaxItemID; i++)
-					complexity += ratings.CountByItem[i] * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				{
+					int count_by_item = i > ratings.MaxItemID            ? 0 : ratings.CountByItem[i];
+					count_by_item    += i > AdditionalFeedback.MaxItemID ? 0 : AdditionalFeedback.CountByItem[i];
+					complexity += count_by_item * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+				}
 			}
 
 			return (float) (ComputeLoss() + complexity);
@@ -236,15 +251,15 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void InitModel()
 		{
-			base.InitModel();
-
 			x = new Matrix<float>(MaxUserID + 1, NumFactors);
 			x.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for users without training examples
 			for (int user_id = 0; user_id < x.NumberOfRows; user_id++)
-				if (ratings.CountByUser[user_id] == 0)
+				if (user_id > ratings.MaxUserID || ratings.CountByUser[user_id] == 0)
 					x.SetRowToOneValue(user_id, 0);
+
+			base.InitModel();
 		}
 
 		/// <summary>Precompute all item factors</summary>
