@@ -65,6 +65,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
+			MaxUserID = Math.Max(ratings.MaxUserID, AdditionalFeedback.MaxUserID);
 			items_rated_by_user = this.ItemsRatedByUser();
 			base.Train();
 		}
@@ -280,7 +281,7 @@ namespace MyMediaLite.RatingPrediction
 			y.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for items without training examples
-			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+			for (int item_id = 0; item_id < y.NumberOfRows; item_id++)
 				if (ratings.CountByItem[item_id] == 0)
 					y.SetRowToOneValue(item_id, 0);
 		}
