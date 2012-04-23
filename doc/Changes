@@ -1,6 +1,6 @@
 3.01	2012-05-
 	recommenders
-         - new rating predictor SigmoidUserAsymmetricFactorModel
+         - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
 	 - SocialMF: remove unnecessary if-statement
 	 - BiasedMatrixFactorization: 'naive' parallelization
 	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
