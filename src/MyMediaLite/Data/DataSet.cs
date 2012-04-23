@@ -122,7 +122,44 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public void BuildUserIndices()
+		public IList<int> CountByUser
+		{
+			get {
+				if (count_by_user == null)
+					BuildByUserCounts();
+				return count_by_user;
+			}
+		}
+		/// <summary>field for storing the count per user</summary>
+		protected IList<int> count_by_user;
+
+		void BuildByUserCounts()
+		{
+			count_by_user = new int[MaxUserID + 1];
+			for (int index = 0; index < Count; index++)
+				count_by_user[Users[index]]++;
+		}
+
+		///
+		public IList<int> CountByItem
+		{
+			get {
+				if (count_by_item == null)
+					BuildByItemCounts();
+				return count_by_item;
+			}
+		}
+		/// <summary>field for storing the count per item</summary>
+		protected IList<int> count_by_item;
+
+		void BuildByItemCounts()
+		{
+			count_by_item = new int[MaxItemID + 1];
+			for (int index = 0; index < Count; index++)
+				count_by_item[Items[index]]++;
+		}
+
+		void BuildUserIndices()
 		{
 			by_user = new List<IList<int>>();
 			for (int u = 0; u <= MaxUserID; u++)
@@ -133,8 +170,7 @@ namespace MyMediaLite.Data
 				by_user[Users[index]].Add(index);
 		}
 
-		///
-		public void BuildItemIndices()
+		void BuildItemIndices()
 		{
 			by_item = new List<IList<int>>();
 			for (int i = 0; i <= MaxItemID; i++)
@@ -145,8 +181,7 @@ namespace MyMediaLite.Data
 				by_item[Items[index]].Add(index);
 		}
 
-		///
-		public void BuildRandomIndex()
+		void BuildRandomIndex()
 		{
 			if (random_index == null || random_index.Length != Count)
 			{

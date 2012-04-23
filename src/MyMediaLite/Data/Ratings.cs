@@ -70,44 +70,6 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public IList<int> CountByUser
-		{
-			get {
-				if (count_by_user == null)
-					BuildByUserCounts();
-				return count_by_user;
-			}
-		}
-		IList<int> count_by_user;
-
-		///
-		public void BuildByUserCounts()
-		{
-			count_by_user = new int[MaxUserID + 1];
-			for (int index = 0; index < Count; index++)
-				count_by_user[Users[index]]++;
-		}
-
-		///
-		public IList<int> CountByItem
-		{
-			get {
-				if (count_by_item == null)
-					BuildByItemCounts();
-				return count_by_item;
-			}
-		}
-		IList<int> count_by_item;
-
-		///
-		public void BuildByItemCounts()
-		{
-			count_by_item = new int[MaxItemID + 1];
-			for (int index = 0; index < Count; index++)
-				count_by_item[Items[index]]++;
-		}
-
-		///
 		public float Average
 		{
 			get {

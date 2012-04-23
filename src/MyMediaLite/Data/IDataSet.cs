@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -68,12 +68,12 @@ namespace MyMediaLite.Data
 		/// <remarks>Should be implemented as a lazy data structure</remarks>
 		IList<int> RandomIndex { get; }
 
-		/// <summary>Build the user indices</summary>
-		void BuildUserIndices();
-		/// <summary>Build the item indices</summary>
-		void BuildItemIndices();
-		/// <summary>Build the random index</summary>
-		void BuildRandomIndex();
+		/// <summary>count by user</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
+		IList<int> CountByUser { get; }
+		/// <summary>count by item</summary>
+		/// <remarks>Should be implemented as a lazy data structure</remarks>
+		IList<int> CountByItem { get; }
 
 		/// <summary>Remove all events related to a given user</summary>
 		/// <param name="user_id">the user ID</param>

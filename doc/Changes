@@ -1,4 +1,6 @@
 3.01	2012-05-
+        API
+         - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
          - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
 	 - SocialMF: remove unnecessary if-statement
