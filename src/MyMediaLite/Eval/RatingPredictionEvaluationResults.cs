@@ -62,17 +62,17 @@ namespace MyMediaLite.Eval
 			if (this.ContainsKey("fit"))
 				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
 			if (NewUserResults != null)
-				s += "\n" + string.Format(
-					CultureInfo.InvariantCulture, "  new users: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
+				s += string.Format(
+					CultureInfo.InvariantCulture, " new users: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
 					NewUserResults["RMSE"], NewUserResults["MAE"], NewUserResults["CBD"]
 				);
 			if (NewItemResults != null)
-				s += "\n" +string.Format(
-					CultureInfo.InvariantCulture, "  new items: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
+				s += string.Format(
+					CultureInfo.InvariantCulture, " new items: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
 					NewItemResults["RMSE"], NewItemResults["MAE"], NewItemResults["CBD"]
 				);
 			if (NewUserNewItemResults != null)
-				s += "\n" + string.Format(
+				s += string.Format(
 					CultureInfo.InvariantCulture, "  new users and items: RMSE {0:0.#####} MAE {1:0.#####} CBD {2:0.#####}",
 					NewUserNewItemResults["RMSE"], NewUserNewItemResults["MAE"], NewUserNewItemResults["CBD"]
 				);
