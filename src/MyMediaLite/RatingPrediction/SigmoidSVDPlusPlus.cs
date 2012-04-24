@@ -168,8 +168,7 @@ namespace MyMediaLite.RatingPrediction
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							float rated_item_reg = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg;
-							double delta_oi = common_update - rated_item_reg * y[other_item_id, f];
+							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
 					}

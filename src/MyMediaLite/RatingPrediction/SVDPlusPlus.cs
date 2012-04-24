@@ -68,6 +68,9 @@ namespace MyMediaLite.RatingPrediction
 		// TODO update this structure on incremental updates
 		/// <summary>The items rated by the users</summary>
 		protected int[][] items_rated_by_user;
+		/// <summary>precomputed regularization terms for the y matrix</summary>
+		protected float[] y_reg;
+		int[] feedback_count_by_item;
 
 		/// <summary>bias learn rate</summary>
 		public float BiasLearnRate { get; set; }
@@ -95,6 +98,14 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			items_rated_by_user = this.ItemsRatedByUser();
+			feedback_count_by_item = this.ItemFeedbackCounts();
+			y_reg = new float[MaxItemID + 1];
+			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+				if (feedback_count_by_item[item_id] > 0)
+					y_reg[item_id] = FrequencyRegularization ? (float) (Regularization / Math.Sqrt(feedback_count_by_item[item_id])) : Regularization;
+				else
+					y_reg[item_id] = 0;
+
 			base.Train();
 		}
 
@@ -190,8 +201,7 @@ namespace MyMediaLite.RatingPrediction
 						double common_update = x * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
-							float rated_item_reg = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[other_item_id])) : reg;
-							double delta_oi = common_update - rated_item_reg * y[other_item_id, f];
+							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
 							y.Inc(other_item_id, f, lr * delta_oi);
 						}
 					}
@@ -393,14 +403,20 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * Regularization           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
+					if (ratings.CountByUser[u] > 0)
+					{
+						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
+						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
+					}
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization           * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
+					complexity += y_reg[i] * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					if (ratings.CountByItem[i] > 0)
+					{
+						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i]))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
+					}
 				}
 			}
 			else

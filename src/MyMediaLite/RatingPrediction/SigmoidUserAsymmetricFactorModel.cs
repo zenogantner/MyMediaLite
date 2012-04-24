@@ -46,6 +46,7 @@ namespace MyMediaLite.RatingPrediction
 	{
 		int[][] users_who_rated_the_item;
 		int[] feedback_count_by_user;
+		float[] x_reg;
 
 		/// <summary>item factors (part expressed via the users who rated them)</summary>
 		Matrix<float> x;
@@ -70,6 +71,13 @@ namespace MyMediaLite.RatingPrediction
 			MaxItemID = Math.Max(ratings.MaxItemID, AdditionalFeedback.MaxItemID);
 			users_who_rated_the_item = this.UsersWhoRated();
 			feedback_count_by_user = this.UserFeedbackCounts();
+			x_reg = new float[MaxUserID + 1];
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				if (feedback_count_by_user[user_id] > 0)
+					x_reg[user_id] = FrequencyRegularization ? (float) (RegU / Math.Sqrt(feedback_count_by_user[user_id])) : RegU;
+				else
+					x_reg[user_id] = 0;
+
 			base.Train();
 		}
 
@@ -132,8 +140,7 @@ namespace MyMediaLite.RatingPrediction
 						double common_update = tmp * u_f;
 						foreach (int other_user_id in users_who_rated_the_item[i])
 						{
-							float rated_user_reg = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(feedback_count_by_user[other_user_id])) : reg_u;
-							double delta_ou = common_update - rated_user_reg * x[other_user_id, f];
+							double delta_ou = common_update - x_reg[other_user_id] * x[other_user_id, f];
 							x.Inc(other_user_id, f, lr * delta_ou);
 						}
 					}
@@ -208,15 +215,16 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += Math.Sqrt(feedback_count_by_user[u]) * RegU * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
-					if (u > ratings.MaxUserID)
+					complexity += x_reg[u] * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
+					if (u > ratings.MaxUserID || ratings.CountByUser[u] == 0)
 						continue;
-
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+					
+					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 				for (int i = 0; i <= ratings.MaxItemID; i++)
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+					if (ratings.CountByItem[i] > 0)
+						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 			else
 			{

@@ -231,7 +231,7 @@ namespace MyMediaLite.RatingPrediction
 
 				last_loss = loss;
 
-				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loss {0} learn_rate {1} ", loss, LearnRate));
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "objective {0} learn_rate {1} ", loss, LearnRate));
 			}
 		}
 
@@ -509,13 +509,19 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByUser[u]) * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+					if (ratings.CountByUser[u] > 0)
+					{
+						complexity += (RegU / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+						complexity += (RegU / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
+					}
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-					complexity += Math.Sqrt(ratings.CountByItem[i]) * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+					if (ratings.CountByItem[i] > 0)
+					{
+						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i]))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
+					}
 				}
 			}
 			else
