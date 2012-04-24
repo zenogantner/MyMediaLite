@@ -76,5 +76,42 @@ namespace MyMediaLite.RatingPrediction
 			}
 			return items_rated_by_user;
 		}
+
+		/// <summary>Compute the number of feedback events per user</summary>
+		/// <returns>number of feedback events in both the training and tests data sets, per user</returns>
+		/// <param name='recommender'>the recommender to get the data from</param>
+		public static int[] UserFeedbackCounts(this ITransductiveRatingPredictor recommender)
+		{
+			int max_user_id = Math.Max(recommender.Ratings.MaxUserID, recommender.AdditionalFeedback.MaxUserID);
+			var result = new int[max_user_id + 1];
+
+			for (int user_id = 0; user_id <= max_user_id; user_id++)
+			{
+				if (user_id <= recommender.Ratings.MaxUserID)
+					result[user_id] += recommender.Ratings.CountByUser[user_id];
+				if (user_id <= recommender.AdditionalFeedback.MaxUserID)
+					result[user_id] += recommender.AdditionalFeedback.CountByUser[user_id];
+			}
+			return result;
+		}
+
+		/// <summary>Compute the number of feedback events per item</summary>
+		/// <returns>number of feedback events in both the training and tests data sets, per item</returns>
+		/// <param name='recommender'>the recommender to get the data from</param>
+		public static int[] ItemFeedbackCounts(this ITransductiveRatingPredictor recommender)
+		{
+			int max_item_id = Math.Max(recommender.Ratings.MaxItemID, recommender.AdditionalFeedback.MaxItemID);
+			var result = new int[max_item_id + 1];
+
+			for (int item_id = 0; item_id <= max_item_id; item_id++)
+			{
+				if (item_id <= recommender.Ratings.MaxItemID)
+					result[item_id] += recommender.Ratings.CountByItem[item_id];
+				if (item_id <= recommender.AdditionalFeedback.MaxItemID)
+					result[item_id] += recommender.AdditionalFeedback.CountByItem[item_id];
+			}
+			return result;
+		}
+
 	}
 }
