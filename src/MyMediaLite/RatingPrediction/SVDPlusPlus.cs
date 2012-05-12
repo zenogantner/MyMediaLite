@@ -99,6 +99,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			items_rated_by_user = this.ItemsRatedByUser();
 			feedback_count_by_item = this.ItemFeedbackCounts();
+			
+			MaxUserID = Math.Max (MaxUserID, items_rated_by_user.Length - 1);
+			MaxItemID = Math.Max(MaxItemID, feedback_count_by_item.Length - 1);
+			
 			y_reg = new float[MaxItemID + 1];
 			for (int item_id = 0; item_id <= MaxItemID; item_id++)
 				if (feedback_count_by_item[item_id] > 0)
@@ -143,9 +147,11 @@ namespace MyMediaLite.RatingPrediction
 			y.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for items without training examples
-			for (int i = 0; i <= MaxItemID; i++)
+			for (int i = 0; i < ratings.CountByItem.Count; i++)
 				if (ratings.CountByItem[i] == 0)
 					y.SetRowToOneValue(i, 0);
+			for (int i = ratings.CountByItem.Count; i <= MaxItemID; i++)
+				y.SetRowToOneValue(i, 0);
 
 			user_bias = new float[MaxUserID + 1];
 			item_bias = new float[MaxItemID + 1];
