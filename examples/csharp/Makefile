@@ -6,6 +6,7 @@ compile:
 run:
 	mono --debug rating_prediction.exe ../../data/ml-100k/u1.base ../../data/ml-100k/u1.test
 	mono --debug item_recommendation.exe   ../../data/ml-100k/u1.base ../../data/ml-100k/u1.test
+	#mono --debug foldin_incremental.exe
 
 clean:
 	rm -f *.exe *.mdb
