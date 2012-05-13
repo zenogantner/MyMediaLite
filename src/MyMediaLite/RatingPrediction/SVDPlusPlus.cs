@@ -99,10 +99,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			items_rated_by_user = this.ItemsRatedByUser();
 			feedback_count_by_item = this.ItemFeedbackCounts();
-			
-			MaxUserID = Math.Max (MaxUserID, items_rated_by_user.Length - 1);
+
+			MaxUserID = Math.Max(MaxUserID, items_rated_by_user.Length - 1);
 			MaxItemID = Math.Max(MaxItemID, feedback_count_by_item.Length - 1);
-			
+
 			y_reg = new float[MaxItemID + 1];
 			for (int item_id = 0; item_id <= MaxItemID; item_id++)
 				if (feedback_count_by_item[item_id] > 0)
@@ -121,9 +121,9 @@ namespace MyMediaLite.RatingPrediction
 			if (user_factors == null)
 				PrecomputeUserFactors();
 
-			if (user_id <= MaxUserID)
+			if (user_id < user_bias.Length)
 				result += user_bias[user_id];
-			if (item_id <= MaxItemID)
+			if (item_id < item_bias.Length)
 				result += item_bias[item_id];
 			if (user_id <= MaxUserID && item_id <= MaxItemID)
 				result += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
@@ -151,7 +151,14 @@ namespace MyMediaLite.RatingPrediction
 				if (ratings.CountByItem[i] == 0)
 					y.SetRowToOneValue(i, 0);
 			for (int i = ratings.CountByItem.Count; i <= MaxItemID; i++)
+			{
 				y.SetRowToOneValue(i, 0);
+				item_factors.SetRowToOneValue(i, 0);
+			}
+
+			// set factors to zero for users without training examples (rest is done in MatrixFactorization.cs)
+			for (int u = ratings.CountByUser.Count; u <= MaxUserID; u++)
+				p.SetRowToOneValue(u, 0);
 
 			user_bias = new float[MaxUserID + 1];
 			item_bias = new float[MaxItemID + 1];
@@ -338,6 +345,7 @@ namespace MyMediaLite.RatingPrediction
 				this.item_factors = item_factors;
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
+				user_factors = null; // enfore computation at first prediction
 			}
 		}
 
