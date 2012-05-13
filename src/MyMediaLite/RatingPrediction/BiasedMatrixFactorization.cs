@@ -306,9 +306,9 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double score = global_bias;
 
-			if (user_id < user_factors.dim1)
+			if (user_id < user_bias.Length)
 				score += user_bias[user_id];
-			if (item_id < item_factors.dim1)
+			if (item_id < item_bias.Length)
 				score += item_bias[item_id];
 			if (user_id < user_factors.dim1 && item_id < item_factors.dim1)
 				score += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
