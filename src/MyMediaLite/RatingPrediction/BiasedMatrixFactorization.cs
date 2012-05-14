@@ -549,6 +549,5 @@ namespace MyMediaLite.RatingPrediction
 				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} loss={10} max_threads={11} naive_parallelization={12}",
 				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, BoldDriver, Loss, MaxThreads, NaiveParallelization);
 		}
-
 	}
 }

@@ -112,6 +112,5 @@ namespace MyMediaLite.RatingPrediction
 			}
 			return result;
 		}
-
 	}
 }
