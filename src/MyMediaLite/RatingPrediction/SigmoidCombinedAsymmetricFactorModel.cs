@@ -53,7 +53,7 @@ namespace MyMediaLite.RatingPrediction
 		int[] feedback_count_by_item;
 		float[] x_reg;
 		float[] y_reg;
-		
+
 		/// <summary>item factors (part expressed via the users who rated them)</summary>
 		Matrix<float> x;
 		/// <summary>user factors (part expressed via the rated items)</summary>
@@ -233,6 +233,8 @@ namespace MyMediaLite.RatingPrediction
 				this.y = y;
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
+
+				rating_range_size = max_rating - min_rating;
 			}
 		}
 

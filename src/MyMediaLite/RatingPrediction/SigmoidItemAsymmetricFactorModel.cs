@@ -77,7 +77,7 @@ namespace MyMediaLite.RatingPrediction
 					y_reg[item_id] = FrequencyRegularization ? (float) (RegI / Math.Sqrt(feedback_count_by_item[item_id])) : RegI;
 				else
 					y_reg[item_id] = 0;
-			
+
 			base.Train();
 		}
 
@@ -189,7 +189,9 @@ namespace MyMediaLite.RatingPrediction
 							y.NumberOfColumns, item_factors.NumberOfColumns));
 
 				this.MaxUserID = user_bias.Count - 1;
-				this.MaxItemID = item_bias.Count - 1;
+				this.MaxItemID = item_factors.NumberOfRows - 1;
+
+				// TODO output data ...
 
 				// assign new model
 				this.global_bias = global_bias;
@@ -204,6 +206,9 @@ namespace MyMediaLite.RatingPrediction
 				this.item_factors = item_factors;
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
+				user_factors = null; // enfore computation at first prediction
+
+				rating_range_size = max_rating - min_rating;
 			}
 		}
 

@@ -67,8 +67,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			MaxUserID = Math.Max(ratings.MaxUserID, AdditionalFeedback.MaxUserID);
-			MaxItemID = Math.Max(ratings.MaxItemID, AdditionalFeedback.MaxItemID);
+			MaxUserID = Math.Max(MaxUserID, AdditionalFeedback.MaxUserID);
+			MaxItemID = Math.Max(MaxItemID, AdditionalFeedback.MaxItemID);
 			users_who_rated_the_item = this.UsersWhoRated();
 			feedback_count_by_user = this.UserFeedbackCounts();
 			x_reg = new float[MaxUserID + 1];
@@ -174,7 +174,7 @@ namespace MyMediaLite.RatingPrediction
 				var max_rating  = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 				var user_bias = reader.ReadVector();
 				var item_bias = reader.ReadVector();
-				var y            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var x            = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				if (user_bias.Count != user_factors.dim1)
@@ -183,13 +183,12 @@ namespace MyMediaLite.RatingPrediction
 							"Number of users must be the same for biases and factors: {0} != {1}",
 							user_bias.Count, user_factors.dim1));
 
-				if (y.NumberOfColumns != user_factors.NumberOfColumns)
+				if (x.NumberOfColumns != user_factors.NumberOfColumns)
 					throw new Exception(
-						string.Format("Number of item (y) and user factors must match: {0} != {1}",
-							y.NumberOfColumns, user_factors.NumberOfColumns));
+						string.Format("Number of item (x) and user factors must match: {0} != {1}",
+							x.NumberOfColumns, user_factors.NumberOfColumns));
 
-				this.MaxUserID = user_bias.Count - 1;
-				this.MaxItemID = item_bias.Count - 1;
+				this.MaxUserID = user_factors.NumberOfRows - 1;
 
 				// assign new model
 				this.global_bias = global_bias;
@@ -200,10 +199,13 @@ namespace MyMediaLite.RatingPrediction
 				}
 				this.user_bias = user_bias.ToArray();
 				this.item_bias = item_bias.ToArray();
-				this.x = y;
+				this.x = x;
 				this.user_factors = user_factors;
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
+				item_factors = null; // enfore computation at first prediction
+
+				rating_range_size = max_rating - min_rating;
 			}
 		}
 
@@ -218,7 +220,7 @@ namespace MyMediaLite.RatingPrediction
 					complexity += x_reg[u] * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
 					if (u > ratings.MaxUserID || ratings.CountByUser[u] == 0)
 						continue;
-					
+
 					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
 					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
 				}
@@ -267,6 +269,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Precompute all item factors</summary>
 		protected void PrecomputeItemFactors()
 		{
+			MaxItemID = Math.Max(Ratings.MaxItemID, AdditionalFeedback.MaxItemID);
+
 			if (item_factors == null)
 				item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
 
