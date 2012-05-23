@@ -18,6 +18,9 @@
 	evaluation
          - rating prediction: detailed evaluation of cold-start events
 	 - remove ItemsFiltered class
+	scripts
+	 - add script for creating submissions for the Million Song Dataset
+           Challenge on Kaggle
 	tests
          - update time estimates to newer computer
 
