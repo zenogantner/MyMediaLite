@@ -82,6 +82,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
+		/// <param name="n">length of the item list to evaluate -- if set to -1 (default), use the complete list, otherwise compute evaluation measures on the top n items</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public ItemRecommendationEvaluationResults Evaluate(
 			this IRecommender recommender,
@@ -90,7 +91,8 @@ namespace MyMediaLite.Eval
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
-			bool repeated_events = false)
+			bool repeated_events = false,  // TODO use enum type instead of bool
+			int n = -1)
 		{
 			switch (candidate_item_mode)
 			{
@@ -129,11 +131,11 @@ namespace MyMediaLite.Eval
 					if (num_eval_items == correct_items.Count)
 						return;
 
-					IList<int> prediction_list = recommender.PredictItems(user_id, candidate_items);
-					if (prediction_list.Count != candidate_items.Count)
-						throw new Exception("Not all items have been ranked.");
-
 					ICollection<int> ignore_items = repeated_events ? new int[0] : training_user_matrix[user_id];
+					
+					IList<int> prediction_list = (n != -1)
+						? recommender.PredictItems(user_id, candidate_items, n + ignore_items.Count)
+						: recommender.PredictItems(user_id, candidate_items, -1);
 
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
@@ -190,7 +192,10 @@ namespace MyMediaLite.Eval
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)
 		{
-			return recommender.Evaluate(recommender.Feedback, recommender.Feedback, test_users, candidate_items, candidate_item_mode, true)["RMSE"];
+			return recommender.Evaluate(
+				recommender.Feedback, recommender.Feedback,
+				test_users, candidate_items,
+				candidate_item_mode, true)["RMSE"];
 		}
 	}
 }

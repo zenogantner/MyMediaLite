@@ -169,16 +169,18 @@ static class ItemRecommendation
   choosing the users for evaluation/prediction
    --test-users=FILE            predict items for users specified in FILE (one user per line)
 
-  prediction options:
-   --prediction-file=FILE       write ranked predictions to FILE, one user per line
-   --predict-items-number=N     predict N items per user (needs --prediction-file)
+  prediction and evaluation:
+   --predict-items-number=N     predict N items per user
+   --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
 
-  evaluation options:
+  prediction:
+   --prediction-file=FILE       write ranked predictions to FILE, one user per line
+
+  evaluation:
    --cross-validation=K         perform k-fold cross-validation on the training data
    --test-ratio=NUM             evaluate by splitting of a NUM part of the feedback
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
-   --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
    --compute-fit                display fit on training data
 
   finding the right number of iterations (iterative methods)
@@ -688,12 +690,12 @@ static class ItemRecommendation
 
 	static ItemRecommendationEvaluationResults ComputeFit()
 	{
-		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true);
+		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true, predict_items_number);
 	}
 
 	static ItemRecommendationEvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval);
+		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval, predict_items_number);
 	}
 
 	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
@@ -716,7 +718,7 @@ static class ItemRecommendation
 		TimeSpan time_span = Wrap.MeasureTime( delegate() {
 			recommender.WritePredictions(
 				training_data,
-				candidate_items, predict_items_number,
+				candidate_items, predict_items_number, // TODO move this argument to the end of the list
 				prediction_file, user_list,
 				user_mapping, item_mapping);
 			if (user_list != null)

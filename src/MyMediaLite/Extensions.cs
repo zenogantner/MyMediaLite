@@ -32,7 +32,9 @@ namespace MyMediaLite
 		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
 		/// <param name="n">number of items to return (optional)</param>
 		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public System.Collections.Generic.IList<int> PredictItems(this IRecommender recommender, int user_id, System.Collections.Generic.IList<int> candidate_items, int n = -1)
+		static public System.Collections.Generic.IList<int> PredictItems(
+			this IRecommender recommender, int user_id,
+			System.Collections.Generic.IList<int> candidate_items, int n = -1)
 		{
 			var scored_items = ScoreItems(recommender, user_id, candidate_items, n);
 			scored_items = scored_items.OrderByDescending(x => x.Second).ToArray();
@@ -50,7 +52,9 @@ namespace MyMediaLite
 		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
 		/// <param name="n">number of items to return (optional)</param>
 		/// <returns>a list of pairs, each pair consisting of the item ID and the predicted score</returns>
-		static public System.Collections.Generic.IList<Pair<int, float>> ScoreItems(this IRecommender recommender, int user_id, System.Collections.Generic.IList<int> candidate_items, int n = -1)
+		static public System.Collections.Generic.IList<Pair<int, float>> ScoreItems(
+			this IRecommender recommender, int user_id,
+			System.Collections.Generic.IList<int> candidate_items, int n = -1)
 		{
 			if (n == -1)
 			{
