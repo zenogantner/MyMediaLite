@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -119,7 +119,6 @@ namespace MyMediaLite.DataType
 					counter++;
 			return counter;
 		}
-
 
 		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
 		public IList<KeyValuePair<int, IList<int>>> NonEmptyRows
