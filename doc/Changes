@@ -23,6 +23,8 @@
            Challenge on Kaggle
 	tests
          - update time estimates to newer computer
+	misc
+         - more readable doc/ComponentLicenses (pointed out by Greg Najda)
 
 3.0	2012-04-05
 	recommenders
