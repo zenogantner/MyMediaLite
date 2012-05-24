@@ -18,6 +18,7 @@
 
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.DataType;
 
@@ -97,7 +98,8 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			// (2) optimize all U
 			// HC_minus_IH is symmetric
-			for (int u = 0; u < W.dim1; u++)
+			//for (int u = 0; u < W.dim1; u++)
+			Parallel.For(0, W.dim1, u => 
 			{
 				var row = data.GetEntriesByRow(u);
 				// create HC_minus_IH in O(f^2|S_u|)
@@ -139,7 +141,7 @@ namespace MyMediaLite.ItemRecommendation
 						d += m_inv[f, f_2] * HCp[f_2];
 					W[u, f] = (float) d;
 				}
-			}
+			});
 		}
 
 		///
