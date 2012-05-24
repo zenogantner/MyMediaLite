@@ -109,7 +109,7 @@ namespace MyMediaLite.Eval
 			int num_users = 0;
 			var result = new ItemRecommendationEvaluationResults();
 
-			// make sure that UserMatrix is completely initialized before entering parallel code
+			// make sure that the user matrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
 
