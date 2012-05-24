@@ -3,10 +3,9 @@
          - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
          - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
+         - WRMF: support out-of-the-box multi-core learning
 	 - SocialMF: remove unnecessary if-statement
 	 - BiasedMatrixFactorization: 'naive' parallelization
-	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
-           for PredictItems() and ScoreItems() methods
 	 - BPRMF and variants: get rid of bold-driver heuristics (not
            effective/efficient for these recommenders)
          - (Sigmoid)SVDPlusPlus, SigmoidItemAsymmetricFactorModel: take the
@@ -16,11 +15,14 @@
            explanations
 	 - #234: get rid of argument --show-fold-results
 	evaluation
+	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
+           for PredictItems() and ScoreItems() methods
          - rating prediction: detailed evaluation of cold-start events
 	 - remove ItemsFiltered class
 	scripts
 	 - add script for creating submissions for the Million Song Dataset
            Challenge on Kaggle
+	 - import_dataset.pl: more flexible ID mapping file format
 	tests
          - update time estimates to newer computer
 	misc
