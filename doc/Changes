@@ -1,9 +1,9 @@
-3.01	2012-05-23
+3.01	2012-05-25
         API
          - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
          - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
-         - WRMF: support out-of-the-box multi-core learning
+         - WRMF: support out-of-the-box multi-core learning (#233)
 	 - SocialMF: remove unnecessary if-statement
 	 - BiasedMatrixFactorization: 'naive' parallelization
 	 - BPRMF and variants: get rid of bold-driver heuristics (not
