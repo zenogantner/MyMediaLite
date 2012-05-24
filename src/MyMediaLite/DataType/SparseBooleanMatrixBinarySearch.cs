@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -41,7 +41,7 @@ namespace MyMediaLite.DataType
 				else
 					return false;
 			}
-			set	{
+			set {
 				if (value) // if true
 				{
 					int index = ((List<int>) this[x]).BinarySearch(y);
@@ -121,7 +121,7 @@ namespace MyMediaLite.DataType
 		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
 		public IList<KeyValuePair<int, IList<int>>> NonEmptyRows
 		{
-			get	{
+			get {
 				var return_list = new List<KeyValuePair<int, IList<int>>>();
 				for (int i = 0; i < row_list.Count; i++)
 					if (row_list[i].Count > 0)
@@ -133,7 +133,7 @@ namespace MyMediaLite.DataType
 		///
 		public IList<int> NonEmptyRowIDs
 		{
-			get	{
+			get {
 				var row_ids = new List<int>();
 
 				for (int i = 0; i < row_list.Count; i++)
@@ -147,7 +147,7 @@ namespace MyMediaLite.DataType
 		///
 		public IList<int> NonEmptyColumnIDs
 		{
-			get	{
+			get {
 				var col_ids = new HashSet<int>();
 
 				// iterate over the complete data structure to find column IDs
@@ -161,12 +161,12 @@ namespace MyMediaLite.DataType
 
 		/// <summary>The number of rows in the matrix</summary>
 		/// <value>The number of rows in the matrix</value>
-		public int NumberOfRows	{ get { return row_list.Count; } }
+		public int NumberOfRows { get { return row_list.Count; } }
 
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>
 		public int NumberOfColumns {
-			get	{
+			get {
 				int max_column_id = -1;
 				foreach (var row in row_list)
 					if (row.Count > 0)
@@ -180,7 +180,7 @@ namespace MyMediaLite.DataType
 		/// <value>The number of (true) entries</value>
 		public int NumberOfEntries
 		{
-			get	{
+			get {
 				int n = 0;
 				foreach (var row in row_list)
 					n += row.Count;
