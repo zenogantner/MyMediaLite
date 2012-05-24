@@ -78,10 +78,6 @@ namespace MyMediaLite.ItemRecommendation
 		protected virtual void Optimize(IBooleanMatrix data, Matrix<float> W, Matrix<float> H)
 		{
 			var HH          = new Matrix<double>(num_factors, num_factors);
-			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
-			var HCp         = new double[num_factors];
-
-			var m = new DenseMatrix(num_factors, num_factors);
 
 			// source code comments are in terms of computing the user factors
 			// works the same with users and items exchanged
@@ -98,11 +94,11 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			// (2) optimize all U
 			// HC_minus_IH is symmetric
-			//for (int u = 0; u < W.dim1; u++)
 			Parallel.For(0, W.dim1, u => 
 			{
 				var row = data.GetEntriesByRow(u);
 				// create HC_minus_IH in O(f^2|S_u|)
+				var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
 				for (int f_1 = 0; f_1 < num_factors; f_1++)
 					for (int f_2 = 0; f_2 < num_factors; f_2++)
 					{
@@ -113,6 +109,7 @@ namespace MyMediaLite.ItemRecommendation
 						HC_minus_IH[f_1, f_2] = d;
 					}
 				// create HCp in O(f|S_u|)
+				var HCp         = new double[num_factors];
 				for (int f = 0; f < num_factors; f++)
 				{
 					double d = 0;
@@ -124,6 +121,7 @@ namespace MyMediaLite.ItemRecommendation
 				// create m = HH + HC_minus_IH + reg*I
 				// m is symmetric
 				// the inverse m_inv is symmetric
+				var m = new DenseMatrix(num_factors, num_factors);
 				for (int f_1 = 0; f_1 < num_factors; f_1++)
 					for (int f_2 = 0; f_2 < num_factors; f_2++)
 					{
