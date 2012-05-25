@@ -36,17 +36,19 @@ namespace MyMediaLite.Eval.Measures
 		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
 		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
-		/// <param name="correct_items">a collection of positive/correct item IDs</param>
+		/// <param name="relevant_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the AUC for the given data</returns>
-		public static double Compute(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items = null)
+		public static double Compute(IList<int> ranked_items, ICollection<int> relevant_items, ICollection<int> ignore_items = null)
 		{
 			if (ignore_items == null)
 				ignore_items = new HashSet<int>();
-
-			int num_correct_items = correct_items.Count - ignore_items.Intersect(correct_items).Count();
-			int num_eval_items    = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
-			int num_eval_pairs    = (num_eval_items - num_correct_items) * num_correct_items;
+			
+			// TODO check again! -- think about good names
+			var relevant_items_in_list = relevant_items.Intersect(ranked_items);
+			int num_relevant_items = relevant_items_in_list.Count() - ignore_items.Intersect(relevant_items_in_list).Count();
+			int num_eval_items     = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
+			int num_eval_pairs     = (num_eval_items - num_relevant_items) * num_relevant_items;
 			if (num_eval_pairs < 0)
 				throw new ArgumentException("correct_items cannot be larger than ranked_items");
 
@@ -60,7 +62,7 @@ namespace MyMediaLite.Eval.Measures
 				if (ignore_items.Contains(item_id))
 					continue;
 
-				if (!correct_items.Contains(item_id))
+				if (!relevant_items.Contains(item_id))
 					num_correct_pairs += hit_count;
 				else
 					hit_count++;
