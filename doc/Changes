@@ -3,6 +3,7 @@
          - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
          - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
+	 - new item recommender MostPopularByItemAttributes
          - WRMF: support out-of-the-box multi-core learning (#233)
 	 - SocialMF: remove unnecessary if-statement
 	 - BiasedMatrixFactorization: 'naive' parallelization

@@ -238,6 +238,7 @@
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
+    <Compile Include="ItemRecommendation\MostPopularByAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

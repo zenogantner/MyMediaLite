@@ -28,17 +28,21 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Linear model optimized for BPR</summary>
 	/// <remarks>
-	/// Literature:
-	/// <list type="bullet">
-    ///   <item><description>
-	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
-	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
-	///     ICDM 2011.
-	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
-	///   </description></item>
-	/// </list>
-	///
-	/// This recommender does NOT support incremental updates.
+	///   <para>
+	///   Literature:
+	///   <list type="bullet">
+	///     <item><description>
+	///       Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
+	///       Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
+	///       ICDM 2011.
+	///       http://www.ismll.uni-hildesheim.de/pub/pdfs/Gantner_et_al2010Mapping.pdf
+	///     </description></item>
+	///   </list>
+	/// </para>
+	/// 
+	/// <para>
+	///   This recommender does NOT support incremental updates.
+	/// </para>
 	/// </remarks>
 	public class BPRLinear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
@@ -55,7 +59,7 @@ namespace MyMediaLite.ItemRecommendation
 		private SparseBooleanMatrix item_attributes;
 
 		///
-		public int NumItemAttributes { get;	private set; }
+		public int NumItemAttributes { get; private set; }
 
 		// Item attribute weights
 		private Matrix<float> item_attribute_weight_by_user;
