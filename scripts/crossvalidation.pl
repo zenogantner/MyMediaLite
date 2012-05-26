@@ -33,11 +33,11 @@ use List::Util 'shuffle';
 my $DEFAULT_K = 10;
 
 GetOptions(
-	   'help'       => \(my $help   = 0),
-	   'filename=s' => \(my $name   = 'dataset'),
-	   'suffix=s'   => \(my $suffix = '.txt'),
-	   'k=i'        => \(my $k      = $DEFAULT_K),
-	  ) or usage(-1);
+	'help'       => \(my $help   = 0),
+	'filename=s' => \(my $name   = 'dataset'),
+	'suffix=s'   => \(my $suffix = '.txt'),
+	'k=i'        => \(my $k      = $DEFAULT_K),
+) or usage(-1);
 
 usage(0) if $help;
 
@@ -47,50 +47,50 @@ my $number_of_lines = scalar @lines;
 my @Line_To_Fold = ();
 
 for (my $i = 0; $i < $number_of_lines; $i++) {
-    $Line_To_Fold[$i] = $i % $k;
+	$Line_To_Fold[$i] = $i % $k;
 }
 @Line_To_Fold = shuffle(@Line_To_Fold);
 
 my @train_file_handles = ();
 my @test_file_handles  = ();
 for (my $i = 0; $i < $k; $i++) {
-    open my $TRAIN_FH, '>', "${name}-${i}.train${suffix}";
-    $train_file_handles[$i] = $TRAIN_FH;
-    open my $TEST_FH,  '>', "${name}-${i}.test${suffix}";
-    $test_file_handles[$i]  = $TEST_FH;
+	open my $TRAIN_FH, '>', "${name}-${i}.train${suffix}";
+	$train_file_handles[$i] = $TRAIN_FH;
+	open my $TEST_FH,  '>', "${name}-${i}.test${suffix}";
+	$test_file_handles[$i]  = $TEST_FH;
 }
 
 for (my $i = 0; $i < $number_of_lines; $i++) {
-    for (my $j = 0; $j < $k; $j++) {
+	for (my $j = 0; $j < $k; $j++) {
 	my $FH;
 	if ($j == $Line_To_Fold[$i]) {
-	    $FH = $test_file_handles[$j];
+		$FH = $test_file_handles[$j];
 	}
 	else {
 	    $FH = $train_file_handles[$j];
 	}
-	print $FH $lines[$i];
-    }
+		print $FH $lines[$i];
+	}
 }
 
 sub read_lines {
-    my @lines = ();
+	my @lines = ();
 
-    if (scalar @ARGV > 0) {
-        foreach my $file (@ARGV) {
-            push @lines, read_file($file);
-        }
-    }
-    else {
-        @lines = read_file(\*STDIN);
-    }
-    return wantarray ? @lines : join '', @lines;
+	if (scalar @ARGV > 0) {
+		foreach my $file (@ARGV) {
+			push @lines, read_file($file);
+		}
+	}
+	else {
+		@lines = read_file(\*STDIN);
+	}
+	return wantarray ? @lines : join '', @lines;
 }
 
 sub usage {
-    my ($return_code) = @_;
+	my ($return_code) = @_;
 
-    print << "END";
+	print << "END";
 $PROGRAM_NAME
 
 split file for crossvalidation
@@ -103,5 +103,5 @@ usage: $PROGRAM_NAME [OPTIONS] FILE
     --suffix=.SUFFIX    suffix of the output files
     --k=K               the number of folds (default $DEFAULT_K)
 END
-    exit $return_code;
+	exit $return_code;
 }
