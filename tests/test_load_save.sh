@@ -79,7 +79,7 @@ do
 	rm tmp.model*
 done
 
-for method in BPRMF WRMF
+for method in WRMF BPRMF
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt --recommender-options=\"num_iter=1\"
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt --recommender-options="num_iter=1" | perl -pe "s/\w+_time \S+//g" > output1.txt
@@ -100,16 +100,6 @@ do
 	rm tmp.model*
 done
 
-for method in ItemAttributeKNN
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt | perl -pe "s/\w+_time \S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt | perl -pe "s/\w+_time \S+//g" > output2.txt
-	diff --ignore-all-space output1.txt output2.txt
-	rm tmp.model*
-done
-
 for method in BPRLinear
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --recommender-options=\"num_iter=1\"
@@ -120,5 +110,14 @@ do
 	rm tmp.model*
 done
 
-rm output1.txt output2.txt
+for method in ItemAttributeKNN
+do
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt | perl -pe "s/\w+_time \S+//g" > output1.txt
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt | perl -pe "s/\w+_time \S+//g" > output2.txt
+	diff --ignore-all-space output1.txt output2.txt
+	rm tmp.model*
+done
 
+rm output1.txt output2.txt
