@@ -26,30 +26,37 @@ use 5.8.0;
 
 use Carp;
 use English qw( -no_match_vars );
-use File::Slurp;
 use Getopt::Long;
 use List::Util 'shuffle';
 
-my $DEFAULT_K = 10;
+my $USER_COLUMN  = 0;
+my $DEFAULT_K = 5;
 
 GetOptions(
-	'help'       => \(my $help   = 0),
+	'help'          => \(my $help        = 0),
 	'filename=s' => \(my $name   = 'dataset'),
-	'suffix=s'   => \(my $suffix = '.txt'),
-	'k=i'        => \(my $k      = $DEFAULT_K),
+	'suffix=s'      => \(my $suffix      = '.txt'),
+	'k=i'           => \(my $k           = $DEFAULT_K),
+	'separator=s'   => \(my $separator   = '\\s+'),
+	'user-column=i' => \(my $user_column = $USER_COLUMN),
 ) or usage(-1);
 
 usage(0) if $help;
+my $separator_regex = qr{$separator};
 
-my @lines           = read_lines();
-my $number_of_lines = scalar @lines;
 
-my @lines_to_fold = ();
+my $lines_by_user_ref = read_lines_by_user();
 
-for (my $i = 0; $i < $number_of_lines; $i++) {
-	$lines_to_fold[$i] = $i % $k;
+my %lines_to_fold_by_user = ();
+my $last_fold = 0;
+foreach my $user (sort keys %$lines_by_user_ref) {
+		my $number_of_lines = scalar @{$lines_by_user_ref->{$user}};
+		for (my $i = 0; $i < $number_of_lines; $i++) {
+			$lines_to_fold_by_user{$user}->[$i] = $last_fold++ % $k;
+		}
+		$lines_to_fold_by_user{$user} = [ shuffle(@{$lines_to_fold_by_user{$user}}) ];
 }
-@lines_to_fold = shuffle(@lines_to_fold);
+
 
 my @train_file_handles = ();
 my @test_file_handles  = ();
@@ -60,25 +67,31 @@ for (my $i = 0; $i < $k; $i++) {
 	$test_file_handles[$i]  = $TEST_FH;
 }
 
-for (my $i = 0; $i < $number_of_lines; $i++) {
-	for (my $j = 0; $j < $k; $j++) {
-		my $FH = ($j == $lines_to_fold[$i]) ? $test_file_handles[$j] : $train_file_handles[$j];
-		print $FH $lines[$i];
+foreach my $user (sort keys %$lines_by_user_ref) {
+	my $number_of_lines = scalar @{$lines_by_user_ref->{$user}};
+	for (my $i = 0; $i < $number_of_lines; $i++) {
+		for (my $j = 0; $j < $k; $j++) {
+			my $FH = ($j == $lines_to_fold_by_user{$user}->[$i]) ? $test_file_handles[$j] : $train_file_handles[$j];
+			print $FH $lines_by_user_ref->{$user}->[$i];
+		}
 	}
 }
 
-sub read_lines {
-	my @lines = ();
+sub read_lines_by_user {
+	my %lines_by_user = ();
 
-	if (scalar @ARGV > 0) {
-		foreach my $file (@ARGV) {
-			push @lines, read_file($file);
-		}
+	while (<>) {
+		my $line = $_;
+
+		next LINE if $line eq "\n"; # ignore empty lines
+
+		my @fields = split $separator_regex, $line;
+		die "Could not parse line: '$line'\n" if scalar @fields < 2;
+
+		my $user = $fields[$user_column];
+		push @{$lines_by_user{$user}}, $line;
 	}
-	else {
-		@lines = read_file(\*STDIN);
-	}
-	return wantarray ? @lines : join '', @lines;
+	return wantarray ? %lines_by_user : \%lines_by_user;
 }
 
 sub usage {
@@ -96,6 +109,9 @@ usage: $PROGRAM_NAME [OPTIONS] FILE
     --filename=NAME     (prefix of the) name of the output files
     --suffix=.SUFFIX    suffix of the output files
     --k=K               the number of folds (default $DEFAULT_K)
+    --separator=REGEX   the separator regex used to split the lines into columns,
+                        default is \\s+ (one or more whitespace characters)
+    --user-column=N     specifies the user column (0-based), default is $USER_COLUMN
 END
 	exit $return_code;
 }

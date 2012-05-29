@@ -1,4 +1,4 @@
-3.01	2012-05-25
+3.01	2012-05-29
         API
          - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
@@ -21,8 +21,9 @@
          - rating prediction: detailed evaluation of cold-start events
 	 - remove ItemsFiltered class
 	scripts
-	 - add script for creating submissions for the Million Song Dataset
-           Challenge on Kaggle
+	 - add scripts for creating submissions and blending for the Million
+           Song Dataset Challenge on Kaggle
+	 - add script for user-stratified crossvalidation
 	 - import_dataset.pl: more flexible ID mapping file format
 	tests
          - update time estimates to newer computer
