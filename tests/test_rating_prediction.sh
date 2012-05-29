@@ -14,8 +14,8 @@ DATA_DIR=data/ml-1m
 
 for method in MatrixFactorization BiasedMatrixFactorization
 do
-       echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
-            $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
 method=BiasedMatrixFactorization
@@ -24,8 +24,8 @@ echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --r
 
 for target in MAE LogisticLoss
 do
-       echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
-            $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
 touch $DATA_DIR/empty
