@@ -19,3 +19,4 @@ src/Programs/MovieDemo/gtk-gui/*.cs
 data/*
 lib/mymedialite/*
 obj
+src/TestResult.xml
