@@ -11,7 +11,7 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
 
 all: mymedialite
 
@@ -75,13 +75,16 @@ MyMediaLite-${VERSION}.doc.tar.gz: doxygen
 MyMediaLite-${VERSION}.src.tar.gz:
 	wget --output-document=MyMediaLite-${VERSION}.src.tar.gz https://github.com/zenogantner/MyMediaLite/tarball/master
 
-test: data/ml-100k/u.data all
+test: data/ml-100k/u.data all unittests
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
 	time tests/test_load_save.sh
 	time tests/test_cv.sh
 	time tests/test_random_split.sh
 	time tests/test_rating_prediction_online.sh
+
+unittests:
+	cd src && make test
 
 release: mymedialite MyMediaLite-${VERSION}.doc.tar.gz MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz
 	head doc/Changes
