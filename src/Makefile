@@ -33,3 +33,5 @@ uninstall:
 	rm -rf ${PREFIX}/bin/item_recommendation
 	rm -rf ${PREFIX}/bin/rating_prediction
 
+test:
+	nunit-console --run=Tests MyMediaLite-nogui.sln

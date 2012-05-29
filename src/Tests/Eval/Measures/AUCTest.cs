@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -74,15 +74,6 @@ namespace Tests.Eval.Measures
 			Assert.AreEqual(0.5, AUC.Compute(ranking, new int[] { 2, 4 }, ignore));
 			Assert.AreEqual(0.5, AUC.Compute(ranking, new int[] { 4 }, ignore));
 			Assert.AreEqual(0.5, AUC.Compute(ranking, new int[] { 1, 3 }, ignore));
-		}
-
-		[Test()]
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestComputeFail()
-		{
-			var ranking = new int[] { 1, 2, 3, 4 };
-
-			AUC.Compute(ranking, new int[] { 1, 2, 3, 4, 5 });
 		}
 	}
 }

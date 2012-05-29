@@ -23,12 +23,16 @@ namespace MyMediaLite.Eval.Measures
 {
 	/// <summary>Precision and recall at different positions in the list</summary>
 	/// <remarks>
-	/// Precision and recall are classical evaluation measures from information retrieval.
-	///
-	/// This class contains methods for computing precision and recall up to different positions
-	/// in the recommendation list, and the average precision (AP).
-	///
-	/// The mean of the AP over different users is called mean average precision (MAP)
+	///   <para>
+	///     Precision and recall are classical evaluation measures from information retrieval.
+	///   </para>
+	///   <para>
+	///     This class contains methods for computing precision and recall up to different positions
+	///     in the recommendation list, and the average precision (AP).
+	///   </para>
+	///   <para>
+	///     The mean of the AP over different users is called mean average precision (MAP)
+	///   </para>
 	/// </remarks>
 	public static class PrecisionAndRecall
 	{
