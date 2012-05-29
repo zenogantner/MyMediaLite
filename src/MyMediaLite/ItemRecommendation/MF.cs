@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner, Christoph Freudenthaler
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner, Christoph Freudenthaler
 //
 // This file is part of MyMediaLite.
 //

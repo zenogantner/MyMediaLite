@@ -35,7 +35,6 @@ namespace Tests.Eval.Measures
 		*/
 		static readonly int[] list_empty = new int[0];
 		
-		
 		[Test()]
 		public void TestAP()
 		{
@@ -52,7 +51,47 @@ namespace Tests.Eval.Measures
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list5, list1, list1)); // special case: empty list
 			Assert.AreEqual(1, PrecisionAndRecall.AP(list5, list5, list1));
 			Assert.AreEqual(0, PrecisionAndRecall.AP(list3, list_last, list1));
-			Assert.AreEqual((double) 1/4, PrecisionAndRecall.AP(list5, list_last, list1));			
+			Assert.AreEqual((double) 1/4, PrecisionAndRecall.AP(list5, list_last, list1));
+		}
+
+		[Test()]
+		public void TestHitsAt()
+		{
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list1, list1, list_empty, 1));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list3, list1, list_empty, 1));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list3, list1, list_empty, 2));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list3, list1, list_empty, 3));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list3, list1, list_empty, 4));
+			
+			Assert.AreEqual(0, PrecisionAndRecall.HitsAt(list5, list_last, list3, 1));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list5, list_last, list3, 2));
+			Assert.AreEqual(1, PrecisionAndRecall.HitsAt(list5, list_last, list3, 3));
+		}
+
+		[Test()]
+		public void PrecisionAt()
+		{
+			Assert.AreEqual(1, PrecisionAndRecall.PrecisionAt(list1, list1, list_empty, 1));
+			Assert.AreEqual(1, PrecisionAndRecall.PrecisionAt(list3, list1, list_empty, 1));
+			Assert.AreEqual((double) 1/2, PrecisionAndRecall.PrecisionAt(list3, list1, list_empty, 2));
+			Assert.AreEqual((double) 1/3, PrecisionAndRecall.PrecisionAt(list3, list1, list_empty, 3));
+			Assert.AreEqual((double) 1/3, PrecisionAndRecall.PrecisionAt(list3, list1, list_empty, 4)); // result list has only length 3
+			
+			Assert.AreEqual(0, PrecisionAndRecall.PrecisionAt(list5, list_last, list3, 1));
+			Assert.AreEqual((double) 1/2, PrecisionAndRecall.PrecisionAt(list5, list_last, list3, 2));
+		}
+
+		[Test()]
+		public void RecallAt()
+		{
+			Assert.AreEqual(1, PrecisionAndRecall.RecallAt(list1, list1, list_empty, 1));
+			Assert.AreEqual(1, PrecisionAndRecall.RecallAt(list3, list1, list_empty, 1));
+			Assert.AreEqual((double) 1/2, PrecisionAndRecall.RecallAt(list3, list1, list_empty, 2));
+			Assert.AreEqual((double) 1/3, PrecisionAndRecall.RecallAt(list3, list1, list_empty, 3));
+			Assert.AreEqual((double) 1/3, PrecisionAndRecall.RecallAt(list3, list1, list_empty, 4)); // result list has only length 3
+			
+			Assert.AreEqual(0, PrecisionAndRecall.RecallAt(list5, list_last, list3, 1));
+			Assert.AreEqual((double) 1/2, PrecisionAndRecall.RecallAt(list5, list_last, list3, 2));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -22,11 +22,11 @@ using MyMediaLite.Util;
 namespace MyMediaLite.DataType
 {
 	/// <summary>Class for storing sparse matrices</summary>
-    /// <remarks>
-    /// The data is stored in row-major mode.
-    /// Indexes are zero-based.
-    /// </remarks>
-    /// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
+	/// <remarks>
+	/// The data is stored in row-major mode.
+	/// Indexes are zero-based.
+	/// </remarks>
+	/// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
 	public class SparseMatrix<T> : IMatrix<T> where T:new()
 	{
 		/// <summary>List that stores the rows of the matrix</summary>

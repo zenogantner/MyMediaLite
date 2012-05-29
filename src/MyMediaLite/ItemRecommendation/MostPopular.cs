@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -117,7 +117,7 @@ namespace MyMediaLite.ItemRecommendation
 					string[] numbers = reader.ReadLine().Split(' ');
 					int item_id = int.Parse(numbers[0]);
 					int count   = int.Parse(numbers[1]);
-			 		view_count[item_id] = count;
+					view_count[item_id] = count;
 				}
 
 				this.view_count = view_count;

@@ -1,5 +1,5 @@
+// Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
-// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -33,6 +33,7 @@ namespace MyMediaLite.Eval.Measures
 	public static class PrecisionAndRecall
 	{
 		/// <summary>Compute the average precision (AP) of a list of ranked items</summary>
+		/// <remarks>See p. 147 of Introduction to Information Retrieval by Manning, Raghavan, Schütze.</remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
