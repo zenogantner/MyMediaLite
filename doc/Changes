@@ -1,4 +1,4 @@
-3.01	2012-05-29
+3.01	2012-05-30
         API
          - move CountBy(User|Item) from IRatings to IDataSet
 	recommenders
@@ -26,6 +26,7 @@
 	 - add script for user-stratified crossvalidation
 	 - import_dataset.pl: more flexible ID mapping file format
 	tests
+         - NUnit tests now also run from the command line
          - update time estimates to newer computer
 	misc
          - more readable doc/ComponentLicenses (pointed out by Greg Najda)
