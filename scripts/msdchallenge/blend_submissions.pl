@@ -17,7 +17,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO add support for weights
+# TODO
+#  - add support for weights
+#  - give out overlap
 
 use strict;
 use warnings;
@@ -68,12 +70,12 @@ while (<>) {
 		}
 	}
 	my %avg_rank = map { $_ => $rank_sum{$_} / $count{$_} } keys %rank_sum;
-	
+
 	die 'lost items' if (scalar keys %count < $n);
 	die 'lost items' if (scalar keys %worst_rank < $n);
 	die 'lost items' if (scalar keys %best_rank < $n);
 	die 'lost items' if (scalar keys %avg_rank < $n);
-	
+
 	# merge
 	my $sort_func = sub {
 		my ($a, $b) = @_;
@@ -102,6 +104,7 @@ usage: $PROGRAM_NAME [OPTIONS] FILE
 
   options:
     --help              display this help
+    --n                 the length of the item list per user (default is 500)
 END
 	exit $return_code;
 }
