@@ -99,7 +99,7 @@ namespace Tests.Eval.Measures
 			Assert.AreEqual(0, PrecisionAndRecall.RecallAt(list5, list_last, list3, 1));
 			Assert.AreEqual(1, PrecisionAndRecall.RecallAt(list5, list_last, list3, 2));
 		}
-		
+
 		/*
 		 * TODO find out how to skip, open ticket for that
 		[Test()]

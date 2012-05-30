@@ -43,7 +43,7 @@ namespace MyMediaLite.Eval.Measures
 		{
 			if (ignore_items == null)
 				ignore_items = new HashSet<int>();
-			
+
 			var relevant_items_in_list = relevant_items.Intersect(ranked_items);
 			int num_relevant_items = relevant_items_in_list.Count() - ignore_items.Intersect(relevant_items_in_list).Count();
 			int num_eval_items     = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
