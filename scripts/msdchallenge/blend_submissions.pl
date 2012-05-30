@@ -20,6 +20,8 @@
 # TODO
 #  - add support for weights
 #  - give out overlap
+#  - different blending strategies
+#  - differentiate between input-n and output-n
 
 use strict;
 use warnings;
