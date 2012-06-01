@@ -2,7 +2,9 @@
 	evaluation
 	 - fix MAP@k computation
 	scripts
-	 - fix MAP@k computation in MSD Challenge script
+	 - MSD challenge evaluation: fix MAP@k computation, give out number
+           of users with AP=0
+         
 
 3.01	2012-05-30
         API

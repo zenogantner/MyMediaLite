@@ -40,17 +40,22 @@ usage(0) if $help;
 my @filenames = @ARGV;
 my @file_handles = map { open my $fh, '<', $_ or die "Could not open $_\n"; $fh } @filenames;
 
-while (<>) {
+
+my $line_count = 0;
+LINE:
+while (1) {
 	my @lines = ();
 	foreach my $fh (@file_handles) {
 		my $line = <$fh>;
+		last LINE if !defined $line;
+
 		push @lines, $line;
 	}
 
 	# compute statistics
 	my %count      = ();
-	my %best_rank  = ();
-	my %worst_rank = ();
+	#my %best_rank  = ();
+	#my %worst_rank = ();
 	my %rank_sum   = ();
 	foreach my $line (@lines) {
 		chomp $line;
@@ -63,19 +68,19 @@ while (<>) {
 			my $rank = $i + 1;
 			$count{$item}++;
 			$rank_sum{$item} += $rank;
-			if (!exists $best_rank{$item} || $rank < $best_rank{$item}) {
-				$best_rank{$item} = $rank;
-			}
-			if (!exists $worst_rank{$item} || $rank > $worst_rank{$item}) {
-				$worst_rank{$item} = $rank;
-			}
+			#if (!exists $best_rank{$item} || $rank < $best_rank{$item}) {
+			#	$best_rank{$item} = $rank;
+			#}
+			#if (!exists $worst_rank{$item} || $rank > $worst_rank{$item}) {
+			#	$worst_rank{$item} = $rank;
+			#}
 		}
 	}
 	my %avg_rank = map { $_ => $rank_sum{$_} / $count{$_} } keys %rank_sum;
 
 	die 'lost items' if (scalar keys %count < $n);
-	die 'lost items' if (scalar keys %worst_rank < $n);
-	die 'lost items' if (scalar keys %best_rank < $n);
+	#die 'lost items' if (scalar keys %worst_rank < $n);
+	#die 'lost items' if (scalar keys %best_rank < $n);
 	die 'lost items' if (scalar keys %avg_rank < $n);
 
 	# merge
@@ -91,7 +96,12 @@ while (<>) {
 	my @ranked_items = sort { $sort_func->($b, $a) } keys %count;
 	my @top_items = @ranked_items[0 .. $n - 1];
 	print join(' ', @top_items) . "\n";
+
+	$line_count++;
+	print STDERR '.'  if $line_count % 1000 == 0;
+	print STDERR "\n" if $line_count % 50_000 == 0;
 }
+print STDERR "Processed $line_count lines.\n";
 
 
 sub usage {

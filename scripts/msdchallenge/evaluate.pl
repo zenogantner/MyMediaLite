@@ -52,6 +52,7 @@ foreach my $line (@lines) {
 my @pred_lines = read_file($prediction_file);
 my $user_id = 1;
 my $map_sum = 0;
+my $num_zero_ap_users = 0;
 foreach my $line (@pred_lines) {
 	my @ranked_items = split / /, $line;
 	$map_sum += average_precision(\@ranked_items, $songs_by_user{$user_id});
@@ -59,7 +60,8 @@ foreach my $line (@pred_lines) {
 }
 my $num_users = scalar @pred_lines;
 my $map = $map_sum / $num_users;
-print "num_users: $num_users\n";
+print "$num_users users\n";
+print "$num_zero_ap_users users with AP=0\n";
 printf "MAP: %.6f\n", $map;
 
 
@@ -79,7 +81,11 @@ sub average_precision {
 	}
 
 	my $num_of_ground_truth_items = scalar keys %$ground_truth_ref;
-	return $hit_count == 0 ? 0 : $sum / $num_of_ground_truth_items;
+	if ($hit_count == 0) {
+		$num_zero_ap_users++;
+		return 0;
+	}
+	return $sum / $num_of_ground_truth_items;
 }
 
 sub usage {
