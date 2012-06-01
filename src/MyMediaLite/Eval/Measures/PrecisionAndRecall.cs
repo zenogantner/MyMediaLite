@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMediaLite.Eval.Measures
 {
@@ -42,7 +43,10 @@ namespace MyMediaLite.Eval.Measures
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the AP for the given list</returns>
-		public static double AP(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items = null)
+		public static double AP(
+			IList<int> ranked_items,
+			ICollection<int> correct_items,
+			ICollection<int> ignore_items = null)
 		{
 			if (ignore_items == null)
 				ignore_items = new int[0];
@@ -69,7 +73,10 @@ namespace MyMediaLite.Eval.Measures
 			}
 
 			if (hit_count != 0)
-				return avg_prec_sum / hit_count;
+			{
+				int num_correct_items_not_ignored = correct_items.Except(ignore_items).Count();
+				return avg_prec_sum / num_correct_items_not_ignored;
+			}
 			else
 				return 0;
 		}

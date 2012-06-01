@@ -78,7 +78,8 @@ sub average_precision {
 		}
 	}
 
-	return $hit_count == 0 ? 0 : $sum / $hit_count;
+	my $num_of_ground_truth_items = scalar keys %$ground_truth_ref;
+	return $hit_count == 0 ? 0 : $sum / $num_of_ground_truth_items;
 }
 
 sub usage {

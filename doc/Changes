@@ -1,3 +1,9 @@
+3.02	2012-06-
+	evaluation
+	 - fix MAP@k computation
+	scripts
+	 - fix MAP@k computation in MSD Challenge script
+
 3.01	2012-05-30
         API
          - move CountBy(User|Item) from IRatings to IDataSet
