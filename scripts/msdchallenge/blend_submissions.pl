@@ -87,9 +87,7 @@ while (1) {
 	my $sort_func = sub {
 		my ($a, $b) = @_;
 		if ($count{$a} == $count{$b}) {
-			if ($avg_rank{$a} != $avg_rank{$b}) {
-				return -1 * ($avg_rank{$a} <=> $avg_rank{$b});
-			}
+			return $avg_rank{$b} <=> $avg_rank{$b};
 		}
 		return $count{$a} <=> $count{$b};
 	};
