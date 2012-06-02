@@ -96,7 +96,9 @@ namespace MyMediaLite.ItemRecommendation
 			foreach (int a in item_attributes[item_id])
 				if (attribute_count_by_user[user_id].ContainsKey(a)) // TODO speed up
 					result += attribute_count_by_user[user_id][a];
-			return (float) result * most_popular.Predict(user_id, item_id);
+			return (float) result * (most_popular.Predict(user_id, item_id) + 1);
+			// +1 guarantees that songs with a user-accessed attribute are ranked above other songs,
+			//    even if they have a count of zero.
 		}
 
 		///

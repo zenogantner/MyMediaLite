@@ -1,4 +1,7 @@
 3.02	2012-06-
+	recommenders
+	 - MostPopularByItemAttributes: predict songs with same attributes
+           even if they have a count of zero
 	evaluation
 	 - fix MAP@k computation
 	scripts
