@@ -12,6 +12,48 @@
 [% INCLUDE infobox %]
 
 <div id="content">
+  <a name="3.01"><h2>MyMediaLite 3.01</h2></a>
+    <p>
+    <b>May 31, 2012.</b2>
+    Version 3.01 of MyMediaLite has been released.
+    </p>
+    <p>
+      Most prominenty, we have several new rating predictors, all of them variants of asymmetric factor models (AFMs).
+      The new item recommender MostPopularByItemAttributes generalizes an idea presented by the organizers of the Million Song Database Challenge.
+      We now have 27 different rating predictors and 18 different item recommenders in MyMediaLite.
+    </p>
+    <p>
+      Existing recommender have received significant improvements:
+      <ul>
+        <li>WRMF: support out-of-the-box multi-core learning (#233)</li>
+        <li>BiasedMatrixFactorization: 'naive' parallelization</li>
+        <li>(Sigmoid)SVDPlusPlus, SigmoidItemAsymmetricFactorModel:
+            take the ratings that have to be predicted into account (transductive learning)</li>
+      </ul>
+    </p>
+    <p>
+     Evaluation improvements:
+     <ul>
+       <li>MyMediaLite.Extensions: parameter n (number of top-n predictions) for PredictItems() and ScoreItems() methods</li>
+       <li>rating prediction: detailed evaluation of cold-start events</li>
+       <li>remove ItemsFiltered class</li>
+     </ul>
+    </p>
+    <p>
+      Scripts:
+     <ul>
+       <li>add scripts for creating submissions, evaluation, and blending for the Million Song Dataset Challenge on Kaggle</li>
+       <li>add script for user-stratified crossvalidation</li>
+       <li><code>import_dataset.pl</code>: more flexible ID mapping file format</li>
+     </ul>
+    </p>
+    <p>
+      Testing: NUnit tests now also run from the command line.
+    </p>
+    <p>
+      More details can be found in the <a href="https://github.com/zenogantner/MyMediaLite/blob/master/doc/Changes">Changes file</a>.
+    </p>
+
   <a name="3.0"><h2>MyMediaLite 3.0</h2></a>  
     <p>
     <b>April 5, 2012.</b>

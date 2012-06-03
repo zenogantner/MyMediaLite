@@ -1,5 +1,37 @@
-3.0	2011-04-05
-	API
+3.01	2012-05-30
+        API
+         - move CountBy(User|Item) from IRatings to IDataSet
+	recommenders
+         - new rating predictors Sigmoid(User|Combined)AsymmetricFactorModel
+	 - new item recommender MostPopularByItemAttributes
+         - WRMF: support out-of-the-box multi-core learning (#233)
+	 - SocialMF: remove unnecessary if-statement
+	 - BiasedMatrixFactorization: 'naive' parallelization
+	 - BPRMF and variants: get rid of bold-driver heuristics (not
+           effective/efficient for these recommenders)
+         - (Sigmoid)SVDPlusPlus, SigmoidItemAsymmetricFactorModel: take the
+           ratings that have to be predicted into account
+	command line tools
+         - do not print all usage information on errors that have easy
+           explanations
+	 - #234: get rid of argument --show-fold-results
+	evaluation
+	 - MyMediaLite.Extensions: parameter n (number of top-n predictions)
+           for PredictItems() and ScoreItems() methods
+         - rating prediction: detailed evaluation of cold-start events
+	 - remove ItemsFiltered class
+	scripts
+	 - add scripts for creating submissions, evaluation, and blending for
+           the Million Song Dataset Challenge on Kaggle
+	 - add script for user-stratified crossvalidation
+	 - import_dataset.pl: more flexible ID mapping file format
+	tests
+         - NUnit tests now also run from the command line
+         - update time estimates to newer computer
+	misc
+         - more readable doc/ComponentLicenses (pointed out by Greg Najda)
+
+3.0	2012-04-05
 	recommenders
 	 - new recommender: SigmoidItemAsymmetricFactorModel
 	 - SocialMF:
@@ -57,7 +89,7 @@
 	 - get rid of delegate definitions in some classes, use Func<> instead
 	 - Util.RecommenderParameters: get rid of redundant constructor code
 
-2.99	2011-03-02
+2.99	2012-03-02
 	API
 	 - most rating stuff is now using float instead of double
 	 - IRecommender: Predict(user, item) now returns float instead of
@@ -148,7 +180,7 @@
 	 - Utils.Shuffle is now an extension method
 	 - Utils.Recommender: simplify, allow enum options
 
-2.03	2011-01-14
+2.03	2012-01-14
 	API
          - add method Grow(x, y) to IMatrix interface
          - #72: method ComputeFit() renamed to ComputeLoss(),
