@@ -33,12 +33,35 @@ use Getopt::Long;
 GetOptions(
 	'help' => \(my $help = 0),
 	'n'    => \(my $n    = 500),
+	'strategy=s' => \(my $strategy = 'count_arank'),
 ) or usage(-1);
 
 usage(0) if $help;
 
 my @filenames = @ARGV;
 my @file_handles = map { open my $fh, '<', $_ or die "Could not open $_\n"; $fh } @filenames;
+
+my %count    = ();
+my %avg_rank = ();
+
+my %sort_func = (
+	count_arank => sub {
+		my ($a, $b) = @_;
+		if ($count{$a} == $count{$b}) {
+			return $avg_rank{$a} <=> $avg_rank{$b};
+		}
+		return $count{$b} <=> $count{$a};
+	},
+	arank_count => sub {
+		my ($a, $b) = @_;
+		if ($avg_rank{$a} == $avg_rank{$b}) {
+			return $count{$b} <=> $count{$a};
+		}
+		return $avg_rank{$a} <=> $avg_rank{$b};
+	},
+);
+
+my $sort_func = $sort_func{$strategy};
 
 
 my $line_count = 0;
@@ -53,7 +76,7 @@ while (1) {
 	}
 
 	# compute statistics
-	my %count      = ();
+	%count      = ();
 	#my %best_rank  = ();
 	#my %worst_rank = ();
 	my %rank_sum   = ();
@@ -76,22 +99,10 @@ while (1) {
 			#}
 		}
 	}
-	my %avg_rank = map { $_ => $rank_sum{$_} / $count{$_} } keys %rank_sum;
-
-	die 'lost items' if (scalar keys %count < $n);
-	#die 'lost items' if (scalar keys %worst_rank < $n);
-	#die 'lost items' if (scalar keys %best_rank < $n);
-	die 'lost items' if (scalar keys %avg_rank < $n);
+	%avg_rank = map { $_ => $rank_sum{$_} / $count{$_} } keys %rank_sum;
 
 	# merge
-	my $sort_func = sub {
-		my ($a, $b) = @_;
-		if ($count{$a} == $count{$b}) {
-			return $avg_rank{$b} <=> $avg_rank{$b};
-		}
-		return $count{$a} <=> $count{$b};
-	};
-	my @ranked_items = sort { $sort_func->($b, $a) } keys %count;
+	my @ranked_items = sort { $sort_func->($a, $b) } keys %count;
 	my @top_items = @ranked_items[0 .. $n - 1];
 	print join(' ', @top_items) . "\n";
 
