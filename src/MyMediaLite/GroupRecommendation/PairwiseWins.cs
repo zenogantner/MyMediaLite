@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -32,7 +32,7 @@ namespace MyMediaLite.GroupRecommendation
 		///
 		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
-			var scores_by_user = new double[users.Count, items.Count];
+			var scores_by_user = new float[users.Count, items.Count];
 
 			var users_array = users.ToArray();
 			var items_array = items.ToArray();

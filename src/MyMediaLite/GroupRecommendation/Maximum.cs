@@ -30,13 +30,14 @@ namespace MyMediaLite.GroupRecommendation
 		///
 		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
-			var maximum_scores = new Dictionary<int, double>();
+			var maximum_scores = new Dictionary<int, float>();
 
-			foreach (int i in items)
+			foreach (int item_id in items)
 			{
-				maximum_scores[i] = double.MinValue;
-				foreach (int u in users) // TODO consider taking CanPredict into account
-					maximum_scores[i] = Math.Max(maximum_scores[i], recommender.Predict(u, i));
+				maximum_scores[item_id] = float.MinValue;
+				foreach (int user_id in users)
+					if (recommender.CanPredict(user_id, item_id))
+						maximum_scores[item_id] = Math.Max(maximum_scores[item_id], recommender.Predict(user_id, item_id));
 			}
 
 			var ranked_items = new List<int>(items);

@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,13 +30,14 @@ namespace MyMediaLite.GroupRecommendation
 		///
 		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
-			var minimum_scores = new Dictionary<int, double>();
+			var minimum_scores = new Dictionary<int, float>();
 
-			foreach (int i in items)
+			foreach (int item_id in items)
 			{
-				minimum_scores[i] = double.MaxValue;
-				foreach (int u in users) // TODO consider taking CanPredict into account
-					minimum_scores[i] = Math.Min(minimum_scores[i], recommender.Predict(u, i));
+				minimum_scores[item_id] = float.MaxValue;
+				foreach (int user_id in users)
+					if (recommender.CanPredict(user_id, item_id))
+						minimum_scores[item_id] = Math.Min(minimum_scores[item_id], recommender.Predict(user_id, item_id));
 			}
 
 			var ranked_items = new List<int>(items);

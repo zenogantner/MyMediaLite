@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,15 +35,23 @@ namespace MyMediaLite.GroupRecommendation
 			var user_weights = new Dictionary<int, int>();
 			foreach (int user_id in users)
 				user_weights[user_id] = item_recommender.Feedback.UserMatrix.GetEntriesByRow(user_id).Count;
-			
-			var average_scores = new Dictionary<int, double>();
+
+			var average_scores = new Dictionary<int, float>();
 
 			foreach (int item_id in items)
 			{
+				int count = 0;
 				average_scores[item_id] = 0;
-				foreach (int user_id in users) // TODO consider taking CanPredict into account
-					average_scores[item_id] += user_weights[user_id] * recommender.Predict(user_id, item_id);
-				average_scores[item_id] /= users.Count;
+				foreach (int user_id in users)
+					if (recommender.CanPredict(user_id, item_id))
+					{
+						average_scores[item_id] += user_weights[user_id] * recommender.Predict(user_id, item_id);
+						count++;
+				}
+				if (count > 0)
+					average_scores[item_id] /= users.Count;
+				else
+					average_scores[item_id] = float.MinValue;
 			}
 
 			var ranked_items = new List<int>(items);

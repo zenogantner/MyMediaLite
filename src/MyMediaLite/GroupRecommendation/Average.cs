@@ -30,14 +30,22 @@ namespace MyMediaLite.GroupRecommendation
 		///
 		public override IList<int> RankItems(ICollection<int> users, ICollection<int> items)
 		{
-			var average_scores = new Dictionary<int, double>();
+			var average_scores = new Dictionary<int, float>();
 
 			foreach (int i in items)
 			{
+				int count = 0;
 				average_scores[i] = 0;
-				foreach (int u in users) // TODO consider taking CanPredict into account
-					average_scores[i] += recommender.Predict(u, i);
-				average_scores[i] /= users.Count;
+				foreach (int u in users)
+					if (recommender.CanPredict(u, i))
+					{
+						average_scores[i] += recommender.Predict(u, i);
+						count++;
+					}
+				if (count > 0)
+					average_scores[i] /= users.Count;
+				else
+					average_scores[i] = float.MinValue;
 			}
 
 			var ranked_items = new List<int>(items);
