@@ -32,12 +32,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class WeightedBPRMF : BPRMF
 	{
-		// TODO offer this data structure from Feedback
-		/// <summary>array of user IDs of positive user-item pairs</summary>
-		protected int[] users;
-		/// <summary>array of item IDs of positive user-item pairs</summary>
-		protected int[] items;
-
 		/// <summary>Default constructor</summary>
 		public WeightedBPRMF() { }
 
@@ -48,21 +42,6 @@ namespace MyMediaLite.ItemRecommendation
 			WithReplacement = false;
 			// de-activate until false is supported
 			UniformUserSampling = true;
-
-			// prepare helper data structures for training
-			users = new int[Feedback.Count];
-			items = new int[Feedback.Count];
-
-			int index = 0;
-			foreach (int user_id in Feedback.UserMatrix.NonEmptyRowIDs)
-				foreach (int item_id in Feedback.UserMatrix[user_id])
-				{
-					users[index] = user_id;
-					items[index] = item_id;
-
-					index++;
-				}
-
 			// suppress using user_neg_items in BPRMF
 			FastSamplingMemoryLimit = 0;
 
@@ -73,13 +52,13 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void SampleTriple(out int u, out int i, out int j)
 		{
 			// sample user from positive user-item pairs
-			int index = random.Next(items.Length - 1);
-			u = users[index];
-			i = items[index];
+			int index = random.Next(Feedback.Count - 1);
+			u = Feedback.Users[index];
+			i = Feedback.Items[index];
 
 			// sample negative item
 			do
-				j = items[random.Next(items.Length - 1)];
+				j = Feedback.Items[random.Next(Feedback.Count - 1)];
 			while (Feedback.UserMatrix[u, j]);
 		}
 
