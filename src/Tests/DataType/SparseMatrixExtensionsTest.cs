@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -40,17 +40,20 @@ namespace Tests.DataType
 			var float_matrix = new SparseMatrix<float>(3, 3);
 			Assert.AreEqual(0, float_matrix.Max());
 			float_matrix[1, 1] = 9.0f;
-			Assert.AreEqual(9.0, float_matrix.Max());
+			Assert.AreEqual(9.0f, float_matrix.Max());
 		}
 
 		[Test()] public void TestFrobeniusNorm()
 		{
-			var matrix = new SparseMatrix<double>(5, 5);
-			Assert.AreEqual(0, matrix.FrobeniusNorm());
-			matrix[1, 1] = 5;
-			Assert.AreEqual(Math.Sqrt(25), matrix.FrobeniusNorm());
+			var double_matrix = new SparseMatrix<double>(5, 5);
+			Assert.AreEqual(0, double_matrix.FrobeniusNorm());
+			double_matrix[1, 1] = 5;
+			Assert.AreEqual(Math.Sqrt(25), double_matrix.FrobeniusNorm());
 
+			var float_matrix = new SparseMatrix<float>(5, 5);
+			Assert.AreEqual(0, float_matrix.FrobeniusNorm());
+			float_matrix[1, 1] = 5;
+			Assert.AreEqual(Math.Sqrt(25), float_matrix.FrobeniusNorm());
 		}
-
 	}
 }

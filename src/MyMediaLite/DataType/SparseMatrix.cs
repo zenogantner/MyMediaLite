@@ -25,21 +25,25 @@ namespace MyMediaLite.DataType
 	/// <remarks>
 	/// The data is stored in row-major mode.
 	/// Indexes are zero-based.
+	/// Access is internally done by binary search.
 	/// </remarks>
 	/// <typeparam name="T">the matrix element type, must have a default constructor/value</typeparam>
 	public class SparseMatrix<T> : IMatrix<T> where T:new()
 	{
-		/// <summary>List that stores the rows of the matrix</summary>
-		protected internal List<Dictionary<int, T>> row_list = new List<Dictionary<int, T>>();
-
+		/// <summary>List of lists that stores the values of the entries</summary>
+		protected internal List<List<T>> value_list = new List<List<T>>();
+		
+		/// <summary>List of lists that stores the column indices of the entries</summary>
+		protected internal List<List<int>> index_list = new List<List<int>>();
+		
 		///
 		public virtual bool IsSymmetric
 		{
 			get {
 				if (NumberOfRows != NumberOfColumns)
 					return false;
-				for (int i = 0; i < row_list.Count; i++)
-					foreach (var j in row_list[i].Keys)
+				for (int i = 0; i < index_list.Count; i++)
+					foreach (var j in index_list[i])
 					{
 						if (i > j)
 							continue; // check every pair only once
@@ -52,7 +56,7 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public int NumberOfRows { get { return row_list.Count; } }
+		public int NumberOfRows { get { return index_list.Count; } }
 
 		///
 		public int NumberOfColumns { get; private set; }
@@ -62,10 +66,7 @@ namespace MyMediaLite.DataType
 		public Dictionary<int, T> this [int x]
 		{
 			get {
-				if (x >= row_list.Count)
-					return new Dictionary<int, T>();
-				else
-					return row_list[x];
+				throw new NotImplementedException();
 			}
 		}
 
@@ -75,33 +76,31 @@ namespace MyMediaLite.DataType
 		public virtual T this [int x, int y]
 		{
 			get {
-				T result;
-				if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
-					return result;
-				else
-					return new T();
+				if (x < index_list.Count)
+				{
+					int index = index_list[x].BinarySearch(y);
+					if (index >= 0)
+						return value_list[x][index];
+				}
+				return new T();
 			}
 			set {
-				if (x >= row_list.Count)
-					for (int i = row_list.Count; i <= x; i++)
-						row_list.Add( new Dictionary<int, T>() );
-
-				row_list[x][y] = value;
-			}
-		}
-
-		/// <summary>
-		/// The non-empty rows of the matrix (the ones that contain at least one non-zero entry),
-		/// with their IDs
-		/// </summary>
-		public IList<KeyValuePair<int, Dictionary<int, T>>> NonEmptyRows
-		{
-			get {
-				var return_list = new List<KeyValuePair<int, Dictionary<int, T>>>();
-				for (int i = 0; i < row_list.Count; i++)
-					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, Dictionary<int, T>>(i, row_list[i]));
-				return return_list;
+				if (x >= index_list.Count)
+					for (int i = index_list.Count; i <= x; i++)
+					{
+						index_list.Add( new List<int>() );
+						value_list.Add( new List<T>() );
+					}
+				
+				int index = index_list[x].BinarySearch(y);
+				if (index >= 0)
+					value_list[x][index] = value;
+				else
+				{
+					int new_index = ~index;
+					index_list[x].Insert(new_index, y);
+					value_list[x].Insert(new_index, value);
+				}
 			}
 		}
 
@@ -111,9 +110,9 @@ namespace MyMediaLite.DataType
 		{
 			get {
 				var return_list = new List<Pair<int, int>>();
-				foreach (var id_row in this.NonEmptyRows)
-					foreach (var col_id in id_row.Value.Keys)
-						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
+				for (int row_id = 0; row_id < index_list.Count; row_id++)
+					foreach (var col_id in index_list[row_id])
+						return_list.Add(new Pair<int, int>(row_id, col_id));
 				return return_list;
 			}
 		}
@@ -124,7 +123,7 @@ namespace MyMediaLite.DataType
 		{
 			get {
 				int counter = 0;
-				foreach (var row in row_list)
+				foreach (var row in index_list)
 					counter += row.Count;
 				return counter;
 			}
@@ -136,7 +135,10 @@ namespace MyMediaLite.DataType
 		public SparseMatrix(int num_rows, int num_cols)
 		{
 			for (int i = 0; i < num_rows; i++)
-				row_list.Add( new Dictionary<int, T>() );
+			{
+				index_list.Add( new List<int>() );
+				value_list.Add( new List<T>() );
+			}
 			NumberOfColumns = num_cols;
 		}
 
@@ -151,8 +153,11 @@ namespace MyMediaLite.DataType
 		{
 			// if necessary, grow rows
 			if (num_rows > NumberOfRows)
-				for (int i = row_list.Count; i < num_rows; i++)
-					row_list.Add( new Dictionary<int, T>() );
+				for (int i = index_list.Count; i < num_rows; i++)
+				{
+					index_list.Add( new List<int>() );
+					value_list.Add( new List<T>() );
+				}
 
 			// if necessary, grow columns
 			if (num_cols > NumberOfColumns)

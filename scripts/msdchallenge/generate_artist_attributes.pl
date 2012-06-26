@@ -33,20 +33,26 @@ while (<>) {
 
 	$artist =~ tr/ /_/;
 	$artist =~ tr/ÉÈÊÁÀÂÓÒÔÚÙÛÍÌÎ/EEEAAAOOOUUUIII/;
-	$artist =~ tr/éèêáàâóòôúùûíìîç/eeeaaaooouuuiiic/;
+	$artist =~ tr/ëéèêáàâóòôøúùûíìîçñ/eeeeaaaoooouuuiiicn/;
+	$artist =~ s/æ/ae/g;
 
 	$artist = lc $artist;
 	$artist =~ s/&/and/g;
 
-	$artist =~ s/_\(?(introducing|duet|duett|featuring|feat\.|ft\.|w\/|w\.|mit|with|avec|prod\._by|remixed_by)_.*//;
+	$artist =~ s/d\.j\./dj/g;
+	$artist =~ s/all[ -]stars/allstars/g;
+	$artist =~ s/_\(?\[?(introducing|duet|duett|featuring|feat\.|ft\.|w\/|w\.|mit|with|avec|con|prod\._by|remixed_by)_.*//;
 	$artist =~ s/^the_//;
+	$artist =~ s/_jr\./_jr/g;
 	$artist =~ s/_\(karaoke\)$//;
 	$artist =~ s/;.*//g;
 	$artist =~ s/_\/_.*//;
 	$artist =~ s/_-_.*//;
 	$artist =~ s/"/_/g;
-	$artist =~ s/'/_/g;
-	$artist =~ s/__/_/g;
+	$artist =~ s/'_/_/g;
+	$artist =~ s/_'/_/g;
+	$artist =~ s/(\w)'s/$1s/g;
+	$artist =~ s/_+/_/g;
 	$artist =~ s/_$//;
 
 	print "$song_id $artist\n";

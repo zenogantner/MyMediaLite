@@ -134,20 +134,6 @@ namespace Tests.DataType
 			Assert.IsFalse(rowIDsEnum.MoveNext());
 		}
 
-		[Test()] public void TestNonEmptyRows()
-		{
-			var matrix = new SparseBooleanMatrix();
-			for (int i = 0; i < 5; i++)
-				if (i != 2)
-				{
-					matrix[i, 1]= true;
-					matrix[i, 4]= true;
-				}
-			Assert.IsTrue(matrix[0, 1]);
-			var nonEmptyRows = matrix.NonEmptyRows;
-			Assert.AreEqual(4, nonEmptyRows.Count);
-		}
-
 		[Test()] public void TestNumberOfEntries()
 		{
 			var matrix = new SparseBooleanMatrix();

@@ -21,11 +21,6 @@ using System.Collections.Generic;
 namespace MyMediaLite.DataType
 {
 	/// <summary>a skew symmetric (anti-symmetric) sparse matrix; consumes less memory</summary>
-	/// <remarks>
-	/// Be careful when accessing the matrix via the NonEmptyEntryIDs and
-	/// NonEmptyRows properties: these contain only the entries with x &gt; y,
-	/// but not their antisymmetric counterparts.
-	/// </remarks>
 	public class SkewSymmetricSparseMatrix : SymmetricSparseMatrix<float>
 	{
 		/// <summary>Access the elements of the sparse matrix</summary>
@@ -33,56 +28,31 @@ namespace MyMediaLite.DataType
 		/// <param name="y">the column ID</param>
 		public override float this [int x, int y]
 		{
-			get	{
+			get {
 				float result = 0f;
 
-				if (x < y)
-				{
-					if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
-						return result;
-				}
+				if (x <= y)
+					return base[x, y];
 				else if (x > y)
-				{
-					if (y < row_list.Count && row_list[y].TryGetValue(x, out result))
-						return -result; // minus for anti-symmetry
-				}
+					return -base[y, x]; // minus for anti-symmetry
 
 				return result;
 			}
 			set {
-				if (x < y)
-				{
-					if (x >= row_list.Count)
-						for (int i = row_list.Count; i <= x; i++)
-							row_list.Add( new Dictionary<int, float>() );
-
-					row_list[x][y] = value;
-				}
+				if (x <= y)
+					base[x, y] = value;
 				else if (x > y)
-				{
-					if (y >= row_list.Count)
-						for (int i = row_list.Count; i <= y; i++)
-							row_list.Add( new Dictionary<int, float>() );
-
-					row_list[y][x] = -value;
-				}
-				else
-				{
-					// all elements on the diagonal must be zero
-					if (value != 0)
-						throw new ArgumentException("Elements of the diagonal of a skew symmetric matrix must equal 0");
-				}
+					base[y, x] = -value;
 			}
 		}
 
-		/// <summary>Only true if all entries are zero</summary>
-		/// <value>Only true if all entries are zero</value>
+		/// <summary>Only true if all entries are zero, except for the diagonal</summary>
 		public override bool IsSymmetric
 		{
 			get {
-				for (int i = 0; i < row_list.Count; i++)
-					foreach (var j in row_list[i].Keys)
-						if (this[i, j] != 0)
+				for (int i = 0; i < index_list.Count; i++)
+					foreach (var j in index_list[i])
+						if (i != j && this[i, j] != 0)
 							return false;
 				return true;
 			}

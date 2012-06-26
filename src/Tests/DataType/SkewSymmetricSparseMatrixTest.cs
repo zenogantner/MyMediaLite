@@ -78,22 +78,16 @@ namespace Tests.DataType
 			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
 		}
 
-		[Test()] public void TestNonEmptyRows()
-		{
-			var matrix = new SkewSymmetricSparseMatrix(5);
-			Assert.AreEqual(0, matrix.NonEmptyRows.Count);
-
-			matrix [3, 1] = 1.0f;
-			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
-		}
-
 		[Test()] public void TestNonEmptyEntryIDs()
 		{
 			var matrix = new SkewSymmetricSparseMatrix(5);
 			Assert.AreEqual(0, matrix.NonEmptyEntryIDs.Count);
 
+			matrix[2, 2] = 0.1f;
+			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
+
 			matrix[3, 1] = 1.0f;
-			Assert.AreEqual(2, matrix.NonEmptyEntryIDs.Count);
+			Assert.AreEqual(3, matrix.NonEmptyEntryIDs.Count);
 		}
 
 		[Test()] public void TestNumberOfNonEmptyEntries()
@@ -107,8 +101,8 @@ namespace Tests.DataType
 			matrix[3, 1] = 2.0f;
 			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
 
-			matrix[3, 3] = 0f;
-			Assert.AreEqual(2, matrix.NumberOfNonEmptyEntries);
+			matrix[3, 3] = 1.0f;
+			Assert.AreEqual(3, matrix.NumberOfNonEmptyEntries);
 		}
 	}
 }

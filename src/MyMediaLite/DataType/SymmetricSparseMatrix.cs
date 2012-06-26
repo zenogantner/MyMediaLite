@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -22,10 +22,6 @@ using MyMediaLite.Util;
 namespace MyMediaLite.DataType
 {
 	/// <summary>a symmetric sparse matrix; consumes less memory</summary>
-	/// <remarks>
-	/// Be careful when accessing the matrix via the NonEmptyRows property: this contains
-	/// only the entries with x &gt;, but not their symmetric counterparts.
-	/// </remarks>
 	public class SymmetricSparseMatrix<T> : SparseMatrix<T> where T:new()
 	{
 		/// <summary>Access the elements of the sparse matrix</summary>
@@ -34,34 +30,16 @@ namespace MyMediaLite.DataType
 		public override T this [int x, int y]
 		{
 			get {
-				// ensure x <= y
 				if (x > y)
-				{
-					int tmp = x;
-					x = y;
-					y = tmp;
-				}
-
-				T result;
-				if (x < row_list.Count && row_list[x].TryGetValue(y, out result))
-					return result;
+					return base[y, x];
 				else
-					return new T();
+					return base[x, y];
 			}
 			set {
-				// ensure x <= y
 				if (x > y)
-				{
-					int tmp = x;
-					x = y;
-					y = tmp;
-				}
-
-				if (x >= row_list.Count)
-					for (int i = row_list.Count; i <= x; i++)
-						row_list.Add( new Dictionary<int, T>() );
-
-				row_list[x][y] = value;
+					base[y, x] = value;
+				else
+					base[x, y] = value;
 			}
 		}
 
@@ -80,39 +58,39 @@ namespace MyMediaLite.DataType
 				throw new ArgumentException("Symmetric matrices must have the same number of rows and columns.");
 			return new SymmetricSparseMatrix<T>(num_rows);
 		}
-		
+
 		///
 		public override IList<Pair<int, int>> NonEmptyEntryIDs
 		{
-			get	{
+			get {
 				var return_list = new List<Pair<int, int>>();
-				foreach (var id_row in this.NonEmptyRows)
-					foreach (var col_id in id_row.Value.Keys)
+				for (int row_id = 0; row_id < index_list.Count; row_id++)
+					foreach (var col_id in index_list[row_id])
 					{
-						return_list.Add(new Pair<int, int>(id_row.Key, col_id));
-						if (id_row.Key != col_id)
-							return_list.Add(new Pair<int, int>(col_id, id_row.Key));
+						return_list.Add(new Pair<int, int>(row_id, col_id));
+						if (row_id != col_id)
+							return_list.Add(new Pair<int, int>(col_id, row_id));
 					}
 				return return_list;
 			}
 		}
-		
+
 		///
 		public override int NumberOfNonEmptyEntries
 		{
-			get	{
+			get {
 				int counter = 0;
-				for (int i = 0; i < row_list.Count; i++)
+				for (int i = 0; i < index_list.Count; i++)
 				{
-					counter += 2 * row_list[i].Count;
-					
+					counter += 2 * index_list[i].Count;
+
 					// adjust for diagonal elements
-					if (row_list[i].ContainsKey(i))
+					if (index_list[i].Contains(i))
 						counter--;
 				}
-				
+
 				return counter;
 			}
-		}		
+		}
 	}
 }

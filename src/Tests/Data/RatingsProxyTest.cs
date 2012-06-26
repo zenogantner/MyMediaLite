@@ -55,13 +55,13 @@ namespace Tests.Data
 		[Test()] public void TestMinRating()
 		{
 			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
-			Assert.AreEqual(0.2f, ratings.MinRating);
+			Assert.AreEqual(0.2f, ratings.Scale.Min);
 		}
 
 		[Test()] public void TestMaxRating()
 		{
 			var ratings = new RatingsProxy(CreateRatings(), new int[] { 1, 3, 5 });
-			Assert.AreEqual(0.6f, ratings.MaxRating);
+			Assert.AreEqual(0.6f, ratings.Scale.Max);
 		}
 
 		[Test()] public void TestCount()

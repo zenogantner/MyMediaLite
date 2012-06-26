@@ -32,11 +32,9 @@ namespace MyMediaLite.Data
 			Items = new CombinedList<int>(ratings1.Items, ratings2.Items);
 			Values = new CombinedList<float>(ratings1, ratings2);
 
+			Scale = new RatingScale(ratings1.Scale, ratings2.Scale);
 			MaxUserID = Math.Max(ratings1.MaxUserID, ratings2.MaxUserID);
 			MaxItemID = Math.Max(ratings1.MaxItemID, ratings2.MaxItemID);
-
-			MinRating = Math.Min(ratings1.MinRating, ratings2.MinRating);
-			MaxRating = Math.Max(ratings1.MaxRating, ratings2.MaxRating);
 		}
 	}
 }

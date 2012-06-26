@@ -79,10 +79,8 @@ namespace MyMediaLite.Data
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
-			if (rating < MinRating)
-				MinRating = rating;
-			if (rating > MaxRating)
-				MaxRating = rating;
+
+			// TODO speed up time stuff
 			if (time < EarliestTime)
 				EarliestTime = time;
 			if (time > LatestTime)

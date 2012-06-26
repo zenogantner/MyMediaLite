@@ -25,10 +25,8 @@ namespace MyMediaLite.Data
 		///
 		new int Count { get; }
 
-		/// <summary>the maximum rating in the dataset</summary>
-		float MaxRating { get; }
-		/// <summary>the minimum rating in the dataset</summary>
-		float MinRating { get; }
+		/// <summary>information about the scale of the ratings in the dataset</summary>
+		RatingScale Scale { get; }
 
 		/// <summary>average rating in the dataset</summary>
 		float Average { get; }
@@ -72,6 +70,9 @@ namespace MyMediaLite.Data
 		/// <param name="item_id">the item ID</param>
 		/// <param name="rating">the rating</param>
 		void Add(int user_id, int item_id, float rating);
+		
+		/// <summary>Initialize the Scale property</summary>
+		void InitScale();
 	}
 }
 

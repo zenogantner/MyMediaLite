@@ -142,11 +142,18 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			// compute average differences
-			for (int i = 0; i <= MaxItemID; i++)
+			foreach (var pair in freq_matrix_like.NonEmptyEntryIDs)
 			{
-				foreach (int j in freq_matrix_like[i].Keys)
+				int i = pair.First;
+				int j = pair.Second;
+				if (i < j)
 					diff_matrix_like[i, j] /= freq_matrix_like[i, j];
-				foreach (int j in freq_matrix_dislike[i].Keys)
+			}
+			foreach (var pair in freq_matrix_dislike.NonEmptyEntryIDs)
+			{
+				int i = pair.First;
+				int j = pair.Second;
+				if (i < j)
 					diff_matrix_dislike[i, j] /= freq_matrix_dislike[i, j];
 			}
 		}

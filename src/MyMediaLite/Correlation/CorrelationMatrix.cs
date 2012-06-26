@@ -30,7 +30,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
-	public class CorrelationMatrix : SymmetricMatrix<float>
+	public class CorrelationMatrix : SymmetricSparseMatrix<float>
 	{
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;

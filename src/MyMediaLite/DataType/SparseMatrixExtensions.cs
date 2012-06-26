@@ -27,30 +27,30 @@ namespace MyMediaLite.DataType
 		/// <param name='m'>the matrix</param>
 		static public int Max(this SparseMatrix<int> m)
 		{
-			if (m.row_list.Count == 0)
+			if (m.value_list.Count == 0)
 				return 0;
 			else
-				return m.row_list.Max(r => (r.Values.Count == 0 ? 0 : r.Values.Max()));
+				return m.value_list.Max(r => (r.Count == 0 ? 0 : r.Max()));
 		}
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 		static public double Max(this SparseMatrix<double> m)
 		{
-			if (m.row_list.Count == 0)
-				return 0.0;
+			if (m.value_list.Count == 0)
+				return 0;
 			else
-				return m.row_list.Max(r => (r.Values.Count == 0 ? 0 : r.Values.Max()));
+				return m.value_list.Max(r => (r.Count == 0 ? 0 : r.Max()));
 		}
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 		static public float Max(this SparseMatrix<float> m)
 		{
-			if (m.row_list.Count == 0)
-				return 0.0f;
+			if (m.value_list.Count == 0)
+				return 0;
 			else
-				return m.row_list.Max(r => (r.Values.Count == 0 ? 0 : r.Values.Max()));
+				return m.value_list.Max(r => (r.Count == 0 ? 0 : r.Max()));
 		}
 
 		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
@@ -61,9 +61,9 @@ namespace MyMediaLite.DataType
 		/// <returns>the Frobenius norm of the matrix</returns>
 		static public double FrobeniusNorm(this SparseMatrix<double> matrix)
 		{
-			double squared_entry_sum = 0;
+			double squared_entry_sum = 0; // TODO speed-up: go over all entries of value_list
 			foreach (var entry in matrix.NonEmptyEntryIDs)
-				squared_entry_sum += Math.Pow(matrix.row_list[entry.First][entry.Second], 2);
+				squared_entry_sum += Math.Pow(matrix[entry.First, entry.Second], 2);
 			return Math.Sqrt(squared_entry_sum);
 		}
 
@@ -75,9 +75,9 @@ namespace MyMediaLite.DataType
 		/// <returns>the Frobenius norm of the matrix</returns>
 		static public float FrobeniusNorm(this SparseMatrix<float> matrix)
 		{
-			double squared_entry_sum = 0;
+			double squared_entry_sum = 0; // TODO speed-up: go over all entries of value_list
 			foreach (var entry in matrix.NonEmptyEntryIDs)
-				squared_entry_sum += Math.Pow(matrix.row_list[entry.First][entry.Second], 2);
+				squared_entry_sum += Math.Pow(matrix[entry.First, entry.Second], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
 	}

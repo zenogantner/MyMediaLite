@@ -57,11 +57,10 @@ namespace MyMediaLite.Data
 			Users = (int[]) info.GetValue("Users", typeof(int[]));
 			Items = (int[]) info.GetValue("Items", typeof(int[]));
 			Values = (float[]) info.GetValue("Values", typeof(float[]));
+			Scale  = (RatingScale) info.GetValue("Scale", typeof(RatingScale));
 
 			MaxUserID = Users.Max();
 			MaxItemID = Items.Max();
-			MaxRating = Values.Max();
-			MinRating = Values.Min();
 
 			pos = Values.Count;
 		}
@@ -69,7 +68,7 @@ namespace MyMediaLite.Data
 		///
 		public override void Add(int user_id, int item_id, float rating)
 		{
-			if (pos == Values.Count)
+			if (pos >= Values.Count)
 				throw new Exception(string.Format("Ratings storage is full, only space for {0} ratings", Count));
 
 			Users[pos]  = user_id;
@@ -80,11 +79,6 @@ namespace MyMediaLite.Data
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
-
-			if (rating > MaxRating)
-				MaxRating = rating;
-			if (rating < MinRating)
-				MinRating = rating;
 
 			pos++;
 		}
@@ -113,6 +107,7 @@ namespace MyMediaLite.Data
 			info.AddValue("Users", this.Users);
 			info.AddValue("Items", this.Items);
 			info.AddValue("Values", this.Values);
+			info.AddValue("Scale", this.Scale);
 		}
 	}
 }

@@ -61,16 +61,6 @@ namespace Tests.DataType
 			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
 		}
 
-		[Test()] public void TestNonEmptyRows()
-		{
-			var matrix  = new SparseMatrix<double>(3, 5);
-			Assert.AreEqual(0, matrix .NonEmptyRows.Count);
-
-			matrix [3, 1] = 1.0;
-			Assert.AreEqual(1, matrix.NonEmptyRows.Count);
-			Assert.AreEqual(3, matrix .NonEmptyRows[0].Key);
-		}
-
 		[Test()] public void TestNonEmptyEntryIDs()
 		{
 			var matrix = new SparseMatrix<double>(3, 5);

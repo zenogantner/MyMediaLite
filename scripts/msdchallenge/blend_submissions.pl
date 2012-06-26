@@ -41,8 +41,9 @@ usage(0) if $help;
 my @filenames = @ARGV;
 my @file_handles = map { open my $fh, '<', $_ or die "Could not open $_\n"; $fh } @filenames;
 
-my %count    = ();
-my %avg_rank = ();
+my %count     = ();
+my %avg_rank  = ();
+my %best_rank = ();
 
 my %sort_func = (
 	count_arank => sub {
@@ -58,6 +59,13 @@ my %sort_func = (
 			return $count{$b} <=> $count{$a};
 		}
 		return $avg_rank{$a} <=> $avg_rank{$b};
+	},
+	brank_arank => sub {
+		my ($a, $b) = @_;
+		if ($best_rank{$a} == $best_rank{$b}) {
+			return $avg_rank{$a} <=> $avg_rank{$a};
+		}
+		return $best_rank{$a} <=> $best_rank{$b};
 	},
 );
 
@@ -77,7 +85,7 @@ while (1) {
 
 	# compute statistics
 	%count      = ();
-	#my %best_rank  = ();
+	%best_rank  = ();
 	#my %worst_rank = ();
 	my %rank_sum   = ();
 	foreach my $line (@lines) {
@@ -91,9 +99,9 @@ while (1) {
 			my $rank = $i + 1;
 			$count{$item}++;
 			$rank_sum{$item} += $rank;
-			#if (!exists $best_rank{$item} || $rank < $best_rank{$item}) {
-			#	$best_rank{$item} = $rank;
-			#}
+			if (!exists $best_rank{$item} || $rank < $best_rank{$item}) {
+				$best_rank{$item} = $rank;
+			}
 			#if (!exists $worst_rank{$item} || $rank > $worst_rank{$item}) {
 			#	$worst_rank{$item} = $rank;
 			#}

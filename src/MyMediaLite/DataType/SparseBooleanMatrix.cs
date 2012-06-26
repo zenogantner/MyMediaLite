@@ -26,9 +26,6 @@ namespace MyMediaLite.DataType
 	/// <remarks>
 	/// Fast row-wise access is possible.
 	/// Indexes are zero-based.
-	///
-	/// If you need a more memory-efficient data structure, try <see cref="SparseBooleanMatrixBinarySearch"/>
-	/// or <see cref="SparseBooleanMatrixStatic"/>.
 	/// </remarks>
 	public class SparseBooleanMatrix : IBooleanMatrix
 	{
@@ -123,19 +120,6 @@ namespace MyMediaLite.DataType
 				if (row_list[row_id].Contains(column_id))
 					count++;
 			return count;
-		}
-
-		/// <summary>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</summary>
-		/// <value>The non-empty rows of the matrix (the ones that contain at least one true entry), with their IDs</value>
-		public IList<KeyValuePair<int, ISet<int>>> NonEmptyRows
-		{
-			get	{
-				var return_list = new List<KeyValuePair<int, ISet<int>>>();
-				for (int i = 0; i < row_list.Count; i++)
-					if (row_list[i].Count > 0)
-						return_list.Add(new KeyValuePair<int, ISet<int>>(i, row_list[i]));
-				return return_list;
-			}
 		}
 
 		///

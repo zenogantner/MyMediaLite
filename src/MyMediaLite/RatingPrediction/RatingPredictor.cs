@@ -48,8 +48,8 @@ namespace MyMediaLite.RatingPrediction
 				ratings = value;
 				MaxUserID = ratings.MaxUserID;
 				MaxItemID = ratings.MaxItemID;
-				MinRating = ratings.MinRating;
-				MaxRating = ratings.MaxRating;
+				MinRating = ratings.Scale.Min;
+				MaxRating = ratings.Scale.Max;
 			}
 		}
 		/// <summary>rating data</summary>

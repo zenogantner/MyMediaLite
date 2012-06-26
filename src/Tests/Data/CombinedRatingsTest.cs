@@ -34,6 +34,7 @@ namespace Tests.Data
 			ratings.Add(2, 5, 0.4f);
 			ratings.Add(3, 7, 0.2f);
 			ratings.Add(6, 3, 0.3f);
+			ratings.InitScale();
 
 			return ratings;
 		}
@@ -43,6 +44,7 @@ namespace Tests.Data
 			var ratings = new Ratings();
 			ratings.Add(1, 5, 0.9f);
 			ratings.Add(7, 9, 0.5f);
+			ratings.InitScale();
 
 			return ratings;
 		}
@@ -62,13 +64,13 @@ namespace Tests.Data
 		[Test()] public void TestMinRating()
 		{
 			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-			Assert.AreEqual(0.2f, ratings.MinRating);
+			Assert.AreEqual(0.2f, ratings.Scale.Min);
 		}
 
 		[Test()] public void TestMaxRating()
 		{
 			var ratings = new CombinedRatings(CreateRatings1(), CreateRatings2());
-			Assert.AreEqual(0.9f, ratings.MaxRating);
+			Assert.AreEqual(0.9f, ratings.Scale.Max);
 		}
 
 		[Test()] public void TestCount()

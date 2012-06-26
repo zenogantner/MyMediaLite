@@ -9,13 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <ReleaseVersion>3.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin/Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin/Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -86,7 +86,6 @@
     <Compile Include="DataType\Matrix.cs" />
     <Compile Include="DataType\SkewSymmetricSparseMatrix.cs" />
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
-    <Compile Include="DataType\SparseBooleanMatrixStatic.cs" />
     <Compile Include="DataType\SparseMatrix.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
     <Compile Include="Util\Handlers.cs" />
@@ -204,7 +203,6 @@
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
-    <Compile Include="DataType\SparseBooleanMatrixBinarySearch.cs" />
     <Compile Include="RatingPrediction\LatentFeatureLogLinearModel.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
@@ -239,6 +237,7 @@
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
     <Compile Include="ItemRecommendation\MostPopularByAttributes.cs" />
+    <Compile Include="Data\RatingScale.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

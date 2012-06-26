@@ -36,8 +36,8 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SlopeOne : RatingPredictor
 	{
-  		private SkewSymmetricSparseMatrix diff_matrix;
-  		private SymmetricSparseMatrix<int> freq_matrix;
+		private SkewSymmetricSparseMatrix diff_matrix;
+		private SymmetricSparseMatrix<int> freq_matrix;
 
 		private float global_average;
 
@@ -111,9 +111,13 @@ namespace MyMediaLite.RatingPrediction
 			}
 
 			// compute average differences
-			for (int i = 0; i <= MaxItemID; i++)
-				foreach (int j in freq_matrix[i].Keys)
+			foreach (var pair in freq_matrix.NonEmptyEntryIDs)
+			{
+				int i = pair.First;
+				int j = pair.Second;
+				if (i < j)
 					diff_matrix[i, j] /= freq_matrix[i, j];
+			}
 		}
 
 		///

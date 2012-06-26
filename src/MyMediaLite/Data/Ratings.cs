@@ -48,25 +48,30 @@ namespace MyMediaLite.Data
 		}
 
 		///
-		public float MaxRating { get; protected set; }
-		///
-		public float MinRating { get; protected set; }
+		public RatingScale Scale
+		{
+			get {
+				if (scale == null)
+					InitScale();
+				return scale;
+			}
+			protected set {
+				scale = value;
+			}
+		}
+		RatingScale scale;
 
 		/// <summary>Default constructor</summary>
 		public Ratings() : base()
 		{
 			Values = new List<float>();
-			MinRating = float.MaxValue;
-			MaxRating = float.MinValue;
 		}
 
 		///
 		public Ratings(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			Values = (List<float>) info.GetValue("Values", typeof(List<float>));
-
-			MaxRating = Values.Max();
-			MinRating = Values.Min();
+			Scale  = (RatingScale) info.GetValue("Scale", typeof(RatingScale));
 		}
 
 		///
@@ -90,6 +95,13 @@ namespace MyMediaLite.Data
 				throw new KeyNotFoundException(string.Format("rating {0}, {1} not found.", user_id, item_id));
 			}
 		}
+
+		///
+		public virtual void InitScale()
+		{
+			Scale = new RatingScale(this.Values);
+		}
+		// TODO think about adding SafeAdd method
 
 		///
 		public virtual bool TryGet(int user_id, int item_id, out float rating)
@@ -149,10 +161,6 @@ namespace MyMediaLite.Data
 				MaxUserID = user_id;
 			if (item_id > MaxItemID)
 				MaxItemID = item_id;
-			if (rating < MinRating)
-				MinRating = rating;
-			if (rating > MaxRating)
-				MaxRating = rating;
 
 			// update index data structures if necessary
 			if (by_user != null)
@@ -302,16 +310,17 @@ namespace MyMediaLite.Data
 		public bool Remove(float item) { throw new NotSupportedException(); }
 
 		///
-		IEnumerator IEnumerable.GetEnumerator() { throw new NotSupportedException(); }
+		IEnumerator IEnumerable.GetEnumerator() { return Values.GetEnumerator(); }
 
 		///
-		IEnumerator<float> IEnumerable<float>.GetEnumerator() { throw new NotSupportedException(); }
+		IEnumerator<float> IEnumerable<float>.GetEnumerator() { return Values.GetEnumerator(); }
 
 		///
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
 			info.AddValue("Values", this.Values);
+			info.AddValue("Scale", this.Scale);
 		}
 	}
 }

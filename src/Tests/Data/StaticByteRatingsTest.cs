@@ -1,5 +1,5 @@
+// Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Christina Lichtenthäler
-// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -38,8 +38,8 @@ namespace Tests.Data
 			ratings.Add(3, 7, 2);
 			ratings.Add(6, 3, 3);
 
-			Assert.AreEqual(6, ratings.MaxRating);
-			Assert.AreEqual(2, ratings.MinRating);
+			Assert.AreEqual(6, ratings.Scale.Max);
+			Assert.AreEqual(2, ratings.Scale.Min);
 		}
 
 		[Test()]

@@ -127,6 +127,7 @@ namespace MyMediaLite.IO
 				if (ratings.Count % 12000000 == 11999999)
 					Console.Error.WriteLine();
 			}
+			ratings.InitScale();
 			return ratings;
 		}
 	}

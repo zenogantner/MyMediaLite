@@ -1,5 +1,5 @@
-// Copyright (C) 2010 Christina Lichtenthäler
 // Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Christina Lichtenthäler
 //
 // This file is part of MyMediaLite.
 //
@@ -44,7 +44,7 @@ namespace Tests.Correlation
 
 			var correlation_matrix = BinaryCosine.Create(sparse_boolean_matrix);
 			
-			Assert.AreEqual(4, correlation_matrix.dim);
+			Assert.AreEqual(4, correlation_matrix.NumberOfRows);
 			Assert.IsTrue(correlation_matrix.IsSymmetric);
 			
 			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[0, 1], delta);

@@ -34,4 +34,4 @@ uninstall:
 	rm -rf ${PREFIX}/bin/rating_prediction
 
 test:
-	nunit-console --run=Tests MyMediaLite-nogui.sln
+	nunit-console --run=Tests MyMediaLite-nogui.sln --config=Debug

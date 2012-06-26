@@ -38,8 +38,8 @@ namespace Tests.Data
 			ratings.Add(3, 7, 0.2f);
 			ratings.Add(6, 3, 0.3f);
 
-			Assert.AreEqual(0.6f, ratings.MaxRating);
-			Assert.AreEqual(0.2f, ratings.MinRating);
+			Assert.AreEqual(0.6f, ratings.Scale.Max);
+			Assert.AreEqual(0.2f, ratings.Scale.Min);
 		}
 
 		[Test()] public void TestMaxUserIDMaxItemID()

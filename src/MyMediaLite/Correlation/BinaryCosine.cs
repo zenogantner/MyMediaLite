@@ -68,7 +68,7 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
-			var overlap = new SymmetricMatrix<uint>(entity_data.NumberOfRows);
+			var overlap = new SymmetricSparseMatrix<uint>(entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
@@ -96,7 +96,7 @@ namespace MyMediaLite.Correlation
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
-			var overlap = new SymmetricMatrix<ushort>(entity_data.NumberOfRows);
+			var overlap = new SymmetricSparseMatrix<ushort>(entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
@@ -138,8 +138,8 @@ namespace MyMediaLite.Correlation
 			long size_product = vector_i.Count * vector_j.Count;
 			if (size_product > 0)
 				return (float) count / (float) Math.Sqrt(size_product);
-			//else
-				return 0;
+
+			return 0;
 		}
 	}
 }

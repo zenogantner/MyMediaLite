@@ -85,6 +85,7 @@ namespace MyMediaLite.IO
 
 				ratings.Add(user_id, item_id, rating);
 			}
+			ratings.InitScale();
 			return ratings;
 		}
 
@@ -113,6 +114,7 @@ namespace MyMediaLite.IO
 
 				ratings.Add(user_id, item_id, rating);
 			}
+			ratings.InitScale();
 			return ratings;
 		}
 	}

@@ -113,7 +113,7 @@ namespace MyMediaLite.Eval
 
 					rmse += error * error;
 					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(ratings[index], prediction, ratings.MinRating, ratings.MaxRating);
+					cbd  += ComputeCBD(ratings[index], prediction, ratings.Scale.Min, ratings.Scale.Max);
 				}
 			}
 			else
@@ -124,7 +124,7 @@ namespace MyMediaLite.Eval
 
 					rmse += error * error;
 					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(ratings[index], prediction, ratings.MinRating, ratings.MaxRating);
+					cbd  += ComputeCBD(ratings[index], prediction, ratings.Scale.Min, ratings.Scale.Max);
 				}
 			mae  = mae / indices.Count;
 			rmse = Math.Sqrt(rmse / indices.Count);

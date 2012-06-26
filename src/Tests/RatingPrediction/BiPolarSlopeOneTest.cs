@@ -33,11 +33,12 @@ namespace Tests.RatingPrediction
 			var training_data = new Ratings();
 			training_data.Add(0, 0, 1.0f);
 			training_data.Add(1, 1, 5.0f);
+			training_data.InitScale();
 
 			recommender.Ratings = training_data;
 			recommender.Train();
 
-			Assert.AreEqual( 3.0, recommender.Predict(0, 2) );
+			Assert.AreEqual( 3.0f, recommender.Predict(0, 2) );
 		}
 
 		[Test()]
@@ -48,11 +49,12 @@ namespace Tests.RatingPrediction
 			var training_data = new Ratings();
 			training_data.Add(0, 0, 1.0f);
 			training_data.Add(1, 1, 5.0f);
+			training_data.InitScale();
 
 			recommender.Ratings = training_data;
 			recommender.Train();
 
-			Assert.AreEqual( 3.0, recommender.Predict(2, 1) );
+			Assert.AreEqual( 3.0f, recommender.Predict(2, 1) );
 		}
 	}
 }

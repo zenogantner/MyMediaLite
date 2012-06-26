@@ -38,8 +38,7 @@ namespace MyMediaLite.Data
 
 			MaxUserID = ratings.MaxUserID;
 			MaxItemID = ratings.MaxItemID;
-			MaxRating = ratings.MaxRating;
-			MinRating = ratings.MinRating;
+			Scale = ratings.Scale;
 
 			EarliestTime = Count > 0 ? Times.Min() : DateTime.MaxValue;
 			LatestTime   = Count > 0 ? Times.Max() : DateTime.MinValue;

@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
@@ -38,18 +39,9 @@ namespace MyMediaLite.Data
 			Items  = new ListProxy<int>(ratings.Items, indices);
 			Values = new ListProxy<float>(ratings, indices);
 
-			MaxUserID = -1;
-			MaxItemID = -1;
-			MaxRating = ratings.MaxRating;
-			MinRating = ratings.MinRating;
-
-			foreach (int index in indices)
-			{
-				if (ratings.Users[index] > MaxUserID)
-					MaxUserID = ratings.Users[index];
-				if (ratings.Items[index] > MaxItemID)
-					MaxItemID = ratings.Items[index];
-			}
+			MaxUserID = Users.Max();
+			MaxItemID = Items.Max();
+			Scale = ratings.Scale;
 		}
 
 		///
