@@ -14,6 +14,8 @@
          - sparse matrix types: get rid of NonEmptyRows property
 	 - Ratings: enable GetEnumerator()
 	 - DataSet, PosOnlyFeedback: add DataSet(dataset) constructors
+	command line tools
+	 - rating prediction: support binary ranking measures
 	evaluation
 	 - fix MAP@k computation
 	scripts

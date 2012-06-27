@@ -71,6 +71,7 @@ static class RatingPrediction
 	static string item_relations_file;
 	static string prediction_file;
 	static bool compute_fit;
+	static bool ranking_eval;
 	static RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	static RatingType rating_type       = RatingType.FLOAT;
 	static uint cross_validation;
@@ -156,6 +157,7 @@ static class RatingPrediction
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
    --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
+   --ranking-evaluation                compute ranking evaluation measures
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -234,6 +236,7 @@ static class RatingPrediction
 			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
 			// boolean options
 			{ "compute-fit",          v => compute_fit       = v != null },
+			{ "ranking-evaluation",   v => ranking_eval      = v != null },
 			{ "online-evaluation",    v => online_eval       = v != null },
 			{ "search-hp",            v => search_hp         = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
@@ -338,7 +341,7 @@ static class RatingPrediction
 				if (compute_fit)
 					Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), iterative_recommender.NumIter);
 
-				Console.WriteLine("{0} iteration {1}", recommender.Evaluate(test_data, training_data), iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", Evaluate(), iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -357,8 +360,8 @@ static class RatingPrediction
 							fit_time_stats.Add(time.TotalSeconds);
 						}
 
-						RatingPredictionEvaluationResults results = null;
-						time = Wrap.MeasureTime(delegate() { results = recommender.Evaluate(test_data, training_data); });
+						Dictionary<string, float> results = null;
+						time = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(time.TotalSeconds);
 						eval_stats.Add(results[measure]);
 						Console.WriteLine("{0} iteration {1}", results, it);
@@ -412,10 +415,10 @@ static class RatingPrediction
 
 			if (!no_eval)
 			{
-				if (online_eval)
+				if (online_eval) // TODO also support ranking for this
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.EvaluateOnline(test_data)); });
 				else
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.Evaluate(test_data, training_data)); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(Evaluate()); });
 
 				Console.Write(" testing_time " + seconds);
 
@@ -597,6 +600,28 @@ static class RatingPrediction
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
+	}
+
+	static Dictionary<string, float> Evaluate()
+	{
+		if (ranking_eval)
+		{
+			// TODO make configurable
+			var test_users = test_data.AllUsers;
+			var candidate_items = training_data.AllItems;
+			var eval_item_mode = CandidateItems.UNION;
+			bool repeat_eval = false;
+			int predict_items_number = -1;
+			var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);
+			var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(training_data);
+			return recommender.Evaluate(test_data_posonly, training_data_posonly,
+			                            test_users, candidate_items,
+			                            eval_item_mode, repeat_eval, predict_items_number);
+		}
+		else
+		{
+			return recommender.Evaluate(test_data, training_data);
+		}
 	}
 
 	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
