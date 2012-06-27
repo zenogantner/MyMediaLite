@@ -58,8 +58,9 @@ namespace MyMediaLite.Data
 		/// <summary>Default constructor</summary>
 		public PosOnlyFeedback() : base() { }
 
+		///
 		public PosOnlyFeedback(IDataSet dataset) : base(dataset) { }
-		
+
 		///
 		public PosOnlyFeedback(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
