@@ -112,6 +112,7 @@ namespace MyMediaLite.Eval
 			// make sure that the user matrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
+			// TODO get rid of this, turn into IDataSet
 
 			Parallel.ForEach(test_users, user_id =>
 			{
