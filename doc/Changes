@@ -1,4 +1,4 @@
-3.02	2012-06-
+.02	2012-06-
 	API
 	 - information about the rating scale (minimum rating, maximum rating,
            the different levels, etc.) are now in contained in the class
@@ -13,6 +13,7 @@
            SparseBooleanMatrixStatic
          - sparse matrix types: get rid of NonEmptyRows property
 	 - Ratings: enable GetEnumerator()
+	 - DataSet, PosOnlyFeedback: add DataSet(dataset) constructors
 	evaluation
 	 - fix MAP@k computation
 	scripts

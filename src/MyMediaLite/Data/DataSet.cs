@@ -64,6 +64,17 @@ namespace MyMediaLite.Data
 			Users = new List<int>();
 			Items = new List<int>();
 		}
+		
+		/// <summary>
+		/// Create new dataset view from an existing one.
+		/// Share the underlying data structures, do not copy them.
+		/// </summary>
+		/// <param name='dataset'>the dataset to build from</param>
+		public DataSet(IDataSet dataset)
+		{
+			Users = dataset.Users;
+			Items = dataset.Items;
+		}
 
 		///
 		public DataSet(SerializationInfo info, StreamingContext context)
