@@ -54,7 +54,11 @@ static class RatingPrediction
 	static List<double> training_time_stats = new List<double>();
 	static List<double> fit_time_stats      = new List<double>();
 	static List<double> eval_time_stats     = new List<double>();
-
+	
+	static IList<int> test_users;
+	static IList<int> candidate_items;
+	static CandidateItems eval_item_mode = CandidateItems.UNION;
+	
 	// command line parameters
 	static string data_dir = string.Empty;
 	static string training_file;
@@ -65,6 +69,14 @@ static class RatingPrediction
 	static string save_item_mapping_file;
 	static string load_user_mapping_file;
 	static string load_item_mapping_file;
+	
+	static string test_users_file;
+	static string candidate_items_file;
+	static bool overlap_items;
+	static bool in_training_items;
+	static bool in_test_items;
+	static bool all_items;
+	
 	static string user_attributes_file;
 	static string item_attributes_file;
 	static string user_relations_file;
@@ -220,6 +232,8 @@ static class RatingPrediction
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "prediction-line=",     v              => prediction_line      = v },
 			{ "prediction-header=",   v              => prediction_header    = v },
+			{ "test-users=",          v              => test_users_file      = v },
+			{ "candidate-items=",     v              => candidate_items_file = v },
 			{ "chronological-split=", v              => chronological_split  = v },
 			{ "measure=",             v              => measure              = v },
 			// integer-valued options
@@ -240,6 +254,10 @@ static class RatingPrediction
 			{ "online-evaluation",    v => online_eval       = v != null },
 			{ "search-hp",            v => search_hp         = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
+			{ "overlap-items",        v => overlap_items     = v != null },
+			{ "all-items",            v => all_items         = v != null },
+			{ "in-training-items",    v => in_training_items = v != null },
+			{ "in-test-items",        v => in_test_items     = v != null },
 			{ "help",                 v => show_help         = v != null },
 			{ "version",              v => show_version      = v != null },
 		};
@@ -597,6 +615,29 @@ static class RatingPrediction
 				if (recommender is ITransductiveRatingPredictor)
 					((ITransductiveRatingPredictor) recommender).AdditionalFeedback = test_data;
 			}
+
+			// test users
+			if (test_users_file != null)
+				test_users = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, test_users_file)).ToArray() );
+			else
+				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
+
+			// candidate items
+			if (candidate_items_file != null)
+				candidate_items = item_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, candidate_items_file)).ToArray() );
+			else if (all_items)
+				candidate_items = Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1).ToArray();
+
+			if (candidate_items != null)
+				eval_item_mode = CandidateItems.EXPLICIT;
+			else if (in_training_items)
+				eval_item_mode = CandidateItems.TRAINING;
+			else if (in_test_items)
+				eval_item_mode = CandidateItems.TEST;
+			else if (overlap_items)
+				eval_item_mode = CandidateItems.OVERLAP;
+			else
+				eval_item_mode = CandidateItems.UNION;
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
@@ -606,10 +647,7 @@ static class RatingPrediction
 	{
 		if (ranking_eval)
 		{
-			// TODO make configurable
-			var test_users = test_data.AllUsers;
-			var candidate_items = training_data.AllItems;
-			var eval_item_mode = CandidateItems.UNION;
+			// TODO make more configurable
 			bool repeat_eval = false;
 			int predict_items_number = -1;
 			var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);
