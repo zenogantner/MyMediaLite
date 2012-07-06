@@ -15,7 +15,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -238,6 +238,7 @@
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
     <Compile Include="ItemRecommendation\MostPopularByAttributes.cs" />
     <Compile Include="Data\RatingScale.cs" />
+    <Compile Include="RatingPrediction\NaiveBayes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

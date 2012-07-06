@@ -9,6 +9,7 @@ HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
+RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
 .PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
@@ -61,6 +62,8 @@ MyMediaLite-${VERSION}.tar.gz:
 	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_RANK_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_RANK_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 

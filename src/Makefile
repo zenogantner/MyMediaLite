@@ -5,6 +5,8 @@ all: ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.mdb ../lib/mymedialite
 	cp -r Programs/RatingPrediction/bin/Debug/*.mdb ../lib/mymedialite
 	cp -r Programs/RatingPrediction/bin/Debug/*.exe ../lib/mymedialite
+	cp -r Programs/RatingBasedRanking/bin/Debug/*.mdb ../lib/mymedialite
+	cp -r Programs/RatingBasedRanking/bin/Debug/*.exe ../lib/mymedialite
 
 ../lib/mymedialite:
 	mkdir ../lib/mymedialite
@@ -32,6 +34,7 @@ uninstall:
 	rm -rf ${PREFIX}/lib/mymedialite
 	rm -rf ${PREFIX}/bin/item_recommendation
 	rm -rf ${PREFIX}/bin/rating_prediction
+	rm -rf ${PREFIX}/bin/rating_based_ranking
 
 test:
 	nunit-console --run=Tests MyMediaLite-nogui.sln --config=Debug

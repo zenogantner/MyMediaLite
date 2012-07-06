@@ -33,7 +33,7 @@ using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
-static class RatingPrediction
+public static class RatingPrediction
 {
 	// data sets
 	static IRatings training_data;
@@ -187,7 +187,7 @@ static class RatingPrediction
 		Environment.Exit(-1);
 	}
 
-	static void Main(string[] args)
+	public static void Main(string[] args)
 	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);

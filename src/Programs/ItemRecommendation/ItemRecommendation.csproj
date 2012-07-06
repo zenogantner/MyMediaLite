@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
@@ -37,14 +37,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="../../../lib/Options.cs">
+    <Compile Include="ItemRecommendation.cs" />
+    <Compile Include="..\..\..\lib\Options.cs">
       <Link>Options.cs</Link>
     </Compile>
-    <Compile Include="ItemRecommendation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="../../MyMediaLite/MyMediaLite.csproj">
+    <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
