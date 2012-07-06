@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+mono --gc=sgen --debug $DIR/../lib/mymedialite/rating_based_ranking.exe "$@"
