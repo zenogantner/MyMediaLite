@@ -33,74 +33,55 @@ using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
 
 /// <summary>Item prediction program, see Usage() method for more information</summary>
-static class ItemRecommendation
+class ItemRecommendation : CommandLineProgram
 {
 	// data
-	static IPosOnlyFeedback training_data;
-	static IPosOnlyFeedback test_data;
-	static IList<int> test_users;
-	static IList<int> candidate_items;
-	static SparseBooleanMatrix group_to_user; // rows: groups, columns: users
-	static ICollection<int> user_groups;
+	IPosOnlyFeedback training_data;
+	IPosOnlyFeedback test_data;
+	IList<int> test_users;
+	IList<int> candidate_items;
+	SparseBooleanMatrix group_to_user; // rows: groups, columns: users
+	ICollection<int> user_groups;
 
-	static CandidateItems eval_item_mode = CandidateItems.UNION;
+	CandidateItems eval_item_mode = CandidateItems.UNION;
 
 	// recommenders
-	static IRecommender recommender = null;
+	IRecommender recommender = null;
 
 	// ID mapping objects
-	static IEntityMapping user_mapping = new EntityMapping();
-	static IEntityMapping item_mapping = new EntityMapping();
+	IEntityMapping user_mapping = new EntityMapping();
+	IEntityMapping item_mapping = new EntityMapping();
 
 	// user and item attributes
-	static SparseBooleanMatrix user_attributes;
-	static SparseBooleanMatrix item_attributes;
+	SparseBooleanMatrix user_attributes;
+	SparseBooleanMatrix item_attributes;
 
 	// command-line parameters (data)
-	static string training_file;
-	static string test_file;
-	static ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
-	static string data_dir = string.Empty;
-	static string test_users_file;
-	static string candidate_items_file;
-	static string user_attributes_file;
-	static string item_attributes_file;
-	static string user_relations_file;
-	static string item_relations_file;
-	static string save_model_file;
-	static string load_model_file;
-	static string save_user_mapping_file;
-	static string save_item_mapping_file;
-	static string load_user_mapping_file;
-	static string load_item_mapping_file;
-	static string user_groups_file;
-	static string prediction_file;
+	ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
+	string test_users_file;
+	string candidate_items_file;
+	string user_groups_file;
+	string prediction_file;
 
 	// command-line parameters (other)
-	static bool compute_fit;
-	static uint cross_validation;
-	static double test_ratio;
-	static float rating_threshold = float.NaN;
-	static int num_test_users;
-	static int predict_items_number = -1;
-	static bool online_eval;
-	static bool repeat_eval;
-	static string group_method;
-	static bool overlap_items;
-	static bool in_training_items;
-	static bool in_test_items;
-	static bool all_items;
-	static bool user_prediction;
-	static bool no_id_mapping = false;
-	static int random_seed = -1;
-	static int find_iter = 0;
+	uint cross_validation;
+	double test_ratio;
+	float rating_threshold = float.NaN;
+	int num_test_users;
+	int predict_items_number = -1;
+	bool online_eval;
+	bool repeat_eval;
+	string group_method;
+	bool overlap_items;
+	bool in_training_items;
+	bool in_test_items;
+	bool all_items;
+	bool user_prediction;
+	bool no_id_mapping = false;
+	int random_seed = -1;
+	int find_iter = 0;
 
-	// time statistics
-	static List<double> training_time_stats = new List<double>();
-	static List<double> fit_time_stats      = new List<double>();
-	static List<double> eval_time_stats     = new List<double>();
-
-	static void ShowVersion()
+	void ShowVersion()
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Item Prediction from Positive-Only Feedback {0}.{1:00}", version.Major, version.Minor);
@@ -111,14 +92,14 @@ static class ItemRecommendation
 		Environment.Exit(0);
 	}
 
-	static void Usage(string message)
+	void Usage(string message)
 	{
 		Console.WriteLine(message);
 		Console.WriteLine();
 		Usage(-1);
 	}
 
-	static void Usage(int exit_code)
+	void Usage(int exit_code)
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite item recommendation from positive-only feedback {0}.{1:00}", version.Major, version.Minor);
@@ -193,13 +174,13 @@ static class ItemRecommendation
 		Environment.Exit(exit_code);
 	}
 
-	static void Abort(string message)
+	static void Main(string[] args)
 	{
-		Console.Error.WriteLine(message);
-		Environment.Exit(-1);
+		var program = new ItemRecommendation();
+		program.Run(args);
 	}
 
-	public static void Main(string[] args)
+	public void Run(string[] args)
 	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
@@ -456,7 +437,7 @@ static class ItemRecommendation
 		DisplayStats();
 	}
 
-	static void CheckParameters(IList<string> extra_args)
+	void CheckParameters(IList<string> extra_args)
 	{
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
@@ -534,7 +515,7 @@ static class ItemRecommendation
 			Usage("Did not understand " + extra_args[0]);
 	}
 
-	static void LoadData()
+	void LoadData()
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			// training data
@@ -688,17 +669,17 @@ static class ItemRecommendation
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-	static ItemRecommendationEvaluationResults ComputeFit()
+	ItemRecommendationEvaluationResults ComputeFit()
 	{
 		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true, predict_items_number);
 	}
 
-	static ItemRecommendationEvaluationResults Evaluate()
+	ItemRecommendationEvaluationResults Evaluate()
 	{
 		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval, predict_items_number);
 	}
 
-	static void Predict(string prediction_file, string predict_for_users_file, int iteration)
+	void Predict(string prediction_file, string predict_for_users_file, int iteration)
 	{
 		if (prediction_file == null)
 			return;
@@ -706,7 +687,7 @@ static class ItemRecommendation
 		Predict(prediction_file + "-it-" + iteration, predict_for_users_file);
 	}
 
-	static void Predict(string prediction_file, string predict_for_users_file)
+	void Predict(string prediction_file, string predict_for_users_file)
 	{
 		if (candidate_items == null)
 			candidate_items = training_data.AllItems;
@@ -727,33 +708,5 @@ static class ItemRecommendation
 				Console.Error.WriteLine("Wrote predictions to file {0}.", prediction_file);
 		});
 		Console.Write(" prediction_time " + time_span);
-	}
-
-	static void AbortHandler(object sender, ConsoleCancelEventArgs args)
-	{
-		DisplayStats();
-	}
-
-	static void DisplayStats()
-	{
-		if (training_time_stats.Count > 0)
-			Console.Error.WriteLine(
-				string.Format(
-					CultureInfo.InvariantCulture,
-					"iteration_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-					training_time_stats.Min(), training_time_stats.Max(), training_time_stats.Average()));
-		if (eval_time_stats.Count > 0)
-			Console.Error.WriteLine(
-				string.Format(
-					CultureInfo.InvariantCulture,
-					"eval_time: min={0:0.###}, max={1:0.###}, avg={2:0.###}",
-					eval_time_stats.Min(), eval_time_stats.Max(), eval_time_stats.Average()));
-		if (compute_fit && fit_time_stats.Count > 0)
-			Console.Error.WriteLine(
-				string.Format(
-					CultureInfo.InvariantCulture,
-					"fit_time: min={0:0.##}, max={1:0.##}, avg={2:0.##}",
-					fit_time_stats.Min(), fit_time_stats.Max(), fit_time_stats.Average()));
-		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 }

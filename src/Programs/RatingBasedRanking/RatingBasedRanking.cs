@@ -18,10 +18,11 @@
 using System;
 using MyMediaLite.RatingPrediction;
 
-static class RatingBasedRanking
+class RatingBasedRanking : RatingPrediction
 {
-	public static void Main(string[] args)
+	static void Main(string[] args)
 	{
-		RatingPrediction.Main(args);
+		var program = new RatingBasedRanking();
+		program.Run(args);
 	}
 }

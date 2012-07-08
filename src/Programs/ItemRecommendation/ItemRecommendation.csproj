@@ -48,5 +48,9 @@
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommandLineProgram\CommandLineProgram.csproj">
+      <Project>{CF099BD4-46D6-4FB0-B42B-641A1F829241}</Project>
+      <Name>CommandLineProgram</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

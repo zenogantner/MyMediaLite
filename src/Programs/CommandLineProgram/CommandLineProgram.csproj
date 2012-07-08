@@ -5,21 +5,20 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}</ProjectGuid>
+    <ProjectGuid>{CF099BD4-46D6-4FB0-B42B-641A1F829241}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RatingPrediction</RootNamespace>
-    <AssemblyName>rating_prediction</AssemblyName>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <RootNamespace>CommandLineProgram</RootNamespace>
+    <AssemblyName>CommandLineProgram</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -27,35 +26,16 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Compile Include="CommandLineProgram.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="RatingPrediction.cs" />
-    <Compile Include="..\..\..\lib\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Deployment.LinuxDeployData scriptName="rating_prediction" />
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
   <ItemGroup>
     <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommandLineProgram\CommandLineProgram.csproj">
-      <Project>{CF099BD4-46D6-4FB0-B42B-641A1F829241}</Project>
-      <Name>CommandLineProgram</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
