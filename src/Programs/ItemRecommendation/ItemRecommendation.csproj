@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ItemRecommendation</RootNamespace>
     <AssemblyName>item_recommendation</AssemblyName>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <ReleaseVersion>3.02</ReleaseVersion>
     <StartupObject>ItemRecommendation</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,9 +38,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ItemRecommendation.cs" />
-    <Compile Include="..\..\..\lib\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

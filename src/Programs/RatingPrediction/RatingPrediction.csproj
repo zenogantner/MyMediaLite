@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>RatingPrediction</RootNamespace>
     <AssemblyName>rating_prediction</AssemblyName>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <ReleaseVersion>3.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,9 +36,6 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="RatingPrediction.cs" />
-    <Compile Include="..\..\..\lib\Options.cs">
-      <Link>Options.cs</Link>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ProjectExtensions>

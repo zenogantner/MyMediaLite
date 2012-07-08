@@ -33,7 +33,7 @@ using MyMediaLite.ItemRecommendation;
 using MyMediaLite.Util;
 
 /// <summary>Item prediction program, see Usage() method for more information</summary>
-class ItemRecommendation : CommandLineProgram
+class ItemRecommendation : CommandLineProgram<IRecommender>
 {
 	// data
 	IPosOnlyFeedback training_data;
@@ -45,29 +45,15 @@ class ItemRecommendation : CommandLineProgram
 
 	CandidateItems eval_item_mode = CandidateItems.UNION;
 
-	// recommenders
-	IRecommender recommender = null;
-
-	// ID mapping objects
-	IEntityMapping user_mapping = new EntityMapping();
-	IEntityMapping item_mapping = new EntityMapping();
-
-	// user and item attributes
-	SparseBooleanMatrix user_attributes;
-	SparseBooleanMatrix item_attributes;
-
 	// command-line parameters (data)
 	ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
 	string test_users_file;
 	string candidate_items_file;
 	string user_groups_file;
-	string prediction_file;
 
 	// command-line parameters (other)
-	uint cross_validation;
-	double test_ratio;
 	float rating_threshold = float.NaN;
-	int num_test_users;
+	int num_test_users = -1;
 	int predict_items_number = -1;
 	bool online_eval;
 	bool repeat_eval;
@@ -77,11 +63,13 @@ class ItemRecommendation : CommandLineProgram
 	bool in_test_items;
 	bool all_items;
 	bool user_prediction;
-	bool no_id_mapping = false;
-	int random_seed = -1;
-	int find_iter = 0;
 
-	void ShowVersion()
+	public ItemRecommendation()
+	{
+		measure = "AUC";
+	}
+
+	protected override void ShowVersion()
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Item Prediction from Positive-Only Feedback {0}.{1:00}", version.Major, version.Minor);
@@ -92,14 +80,7 @@ class ItemRecommendation : CommandLineProgram
 		Environment.Exit(0);
 	}
 
-	void Usage(string message)
-	{
-		Console.WriteLine(message);
-		Console.WriteLine();
-		Usage(-1);
-	}
-
-	void Usage(int exit_code)
+	protected override void Usage(int exit_code)
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite item recommendation from positive-only feedback {0}.{1:00}", version.Major, version.Minor);
@@ -180,97 +161,34 @@ class ItemRecommendation : CommandLineProgram
 		program.Run(args);
 	}
 
-	public void Run(string[] args)
+	protected override void SetupOptions()
 	{
-		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyMediaLite.Util.Handlers.UnhandledExceptionHandler);
-		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
+		options
+			.Add("group-recommender=",   v => group_method           = v)
+			.Add("candidate-items=",     v => candidate_items_file   = v)
+			.Add("user-groups=",         v => user_groups_file       = v)
+			.Add("predict-items-number=", (int v) => predict_items_number = v)
+			.Add("num-test-users=",       (int v) => num_test_users       = v)
+			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
+			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
+			.Add("user-prediction",      v => user_prediction   = v != null)
+			.Add("online-evaluation",    v => online_eval       = v != null)
+			.Add("repeat-evaluation",    v => repeat_eval       = v != null)
+			.Add("overlap-items",        v => overlap_items     = v != null)
+			.Add("all-items",            v => all_items         = v != null)
+			.Add("in-training-items",    v => in_training_items = v != null)
+			.Add("in-test-items",        v => in_test_items     = v != null);
+	}
 
-		// recommender arguments
-		string method              = null;
-		string recommender_options = string.Empty;
-
-		// help/version
-		bool show_help    = false;
-		bool show_version = false;
-
-		// variables for iteration search
-		int max_iter   = 500;
-		double cutoff  = 0;
-		double epsilon = 0;
-		string measure = "AUC";
-
-		compute_fit         = false;
-
-		// other parameters
-		test_ratio         = 0;
-		num_test_users     = -1;
-		repeat_eval        = false;
-
-		var p = new OptionSet() {
-			// string-valued options
-			{ "training-file=",       v => training_file          = v },
-			{ "test-file=",           v => test_file              = v },
-			{ "recommender=",         v => method                 = v },
-			{ "group-recommender=",   v => group_method           = v },
-			{ "recommender-options=", v => recommender_options   += " " + v },
-			{ "data-dir=",            v => data_dir               = v },
-			{ "user-attributes=",     v => user_attributes_file   = v },
-			{ "item-attributes=",     v => item_attributes_file   = v },
-			{ "user-relations=",      v => user_relations_file    = v },
-			{ "item-relations=",      v => item_relations_file    = v },
-			{ "save-model=",          v => save_model_file        = v },
-			{ "load-model=",          v => load_model_file        = v },
-			{ "save-user-mapping=",   v => save_user_mapping_file = v },
-			{ "save-item-mapping=",   v => save_item_mapping_file = v },
-			{ "load-user-mapping=",   v => load_user_mapping_file = v },
-			{ "load-item-mapping=",   v => load_item_mapping_file = v },
-			{ "prediction-file=",     v => prediction_file        = v },
-			{ "test-users=",          v => test_users_file        = v },
-			{ "candidate-items=",     v => candidate_items_file   = v },
-			{ "user-groups=",         v => user_groups_file       = v },
-			{ "measure=",             v => measure                = v },
-			// integer-valued options
-			{ "find-iter=",            (int v) => find_iter            = v },
-			{ "max-iter=",             (int v) => max_iter             = v },
-			{ "random-seed=",          (int v) => random_seed          = v },
-			{ "predict-items-number=", (int v) => predict_items_number = v },
-			{ "num-test-users=",       (int v) => num_test_users       = v },
-			{ "cross-validation=",     (uint v) => cross_validation    = v },
-			// floating point options
-			{ "epsilon=",             (double v)     => epsilon      = v },
-			{ "cutoff=",              (double v)     => cutoff       = v },
-			{ "test-ratio=",          (double v) => test_ratio       = v },
-			{ "rating-threshold=",    (float v)  => rating_threshold = v },
-			// enum options
-			{ "file-format=",         (ItemDataFileFormat v) => file_format = v },
-			// boolean options
-			{ "user-prediction",      v => user_prediction   = v != null },
-			{ "compute-fit",          v => compute_fit       = v != null },
-			{ "online-evaluation",    v => online_eval       = v != null },
-			{ "repeat-evaluation",    v => repeat_eval       = v != null },
-			{ "no-id-mapping",        v => no_id_mapping     = v != null },
-			{ "overlap-items",        v => overlap_items     = v != null },
-			{ "all-items",            v => all_items         = v != null },
-			{ "in-training-items",    v => in_training_items = v != null },
-			{ "in-test-items",        v => in_test_items     = v != null },
-			{ "help",                 v => show_help         = v != null },
-			{ "version",              v => show_version      = v != null },
-		};
-		IList<string> extra_args = p.Parse(args);
+	protected override void Run(string[] args)
+	{
+		base.Run(args);
 
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null)
 			no_eval = false;
 
-		if (show_version)
-			ShowVersion();
-		if (show_help)
-			Usage(0);
-
-		if (random_seed != -1)
-			MyMediaLite.Util.Random.Seed = random_seed;
-
-		// set up recommender
+		// set up recommender -- TODO generalize
  		if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
 		else if (method != null)
@@ -283,10 +201,10 @@ class ItemRecommendation : CommandLineProgram
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		CheckParameters(extra_args);
 
 		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
 
+		// TODO generalize
 		if (no_id_mapping)
 		{
 			user_mapping = new IdentityMapping();
@@ -297,7 +215,7 @@ class ItemRecommendation : CommandLineProgram
 		if (load_item_mapping_file != null)
 			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
-		// load all the data
+		// load all the data -- TODO generalize
 		LoadData();
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
@@ -437,28 +355,15 @@ class ItemRecommendation : CommandLineProgram
 		DisplayStats();
 	}
 
-	void CheckParameters(IList<string> extra_args)
+	protected override void CheckParameters(IList<string> extra_args)
 	{
+		base.CheckParameters(extra_args);
+		
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
-
-		if (cross_validation == 1)
-			Abort("--cross-validation=K requires K to be at least 2.");
-
-		if (cross_validation > 1 && test_ratio != 0)
-			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
-
-		if (cross_validation > 1 && prediction_file != null)
-			Abort("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
-
-		if (cross_validation > 1 && save_model_file != null)
-			Abort("--cross-validation=K and --save-model=FILE are mutually exclusive.");
-
-		if (cross_validation > 1 && load_model_file != null)
-			Abort("--cross-validation=K and --load-model=FILE are mutually exclusive.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && test_users_file == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
@@ -486,33 +391,6 @@ class ItemRecommendation : CommandLineProgram
 			if (user_groups_file != null)
 				Abort("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
 		}
-
-		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
-			Abort("Recommender expects --user-attributes=FILE.");
-
-		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
-			Abort("Recommender expects --item-attributes=FILE.");
-
-		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
-			Abort("Recommender expects --user-relations=FILE.");
-
-		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
-			Abort("Recommender expects --item-relations=FILE.");
-
-		if (no_id_mapping)
-		{
-			if (save_user_mapping_file != null)
-				Abort("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (save_item_mapping_file != null)
-				Abort("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (load_user_mapping_file != null)
-				Abort("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (load_item_mapping_file != null)
-				Abort("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
-		}
-
-		if (extra_args.Count > 0)
-			Usage("Did not understand " + extra_args[0]);
 	}
 
 	void LoadData()

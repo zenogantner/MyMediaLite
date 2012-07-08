@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MappingItemPrediction</RootNamespace>
     <AssemblyName>MappingItemPrediction</AssemblyName>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <ReleaseVersion>3.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

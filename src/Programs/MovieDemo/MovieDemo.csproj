@@ -10,7 +10,7 @@
     <RootNamespace>MovieDemo</RootNamespace>
     <AssemblyName>MovieDemo</AssemblyName>
     <StartupObject>MovieDemo.MainClass</StartupObject>
-    <ReleaseVersion>2.99</ReleaseVersion>
+    <ReleaseVersion>3.02</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -33,22 +33,11 @@ using MyMediaLite.RatingPrediction;
 using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
-public class RatingPrediction : CommandLineProgram
+public class RatingPrediction : CommandLineProgram<RatingPredictor>
 {
 	// data sets
 	IRatings training_data;
 	IRatings test_data;
-
-	// recommenders
-	RatingPredictor recommender = null;
-
-	// ID mapping objects
-	IEntityMapping user_mapping = new EntityMapping();
-	IEntityMapping item_mapping = new EntityMapping();
-
-	// user and item attributes
-	SparseBooleanMatrix user_attributes;
-	SparseBooleanMatrix item_attributes;
 
 	IList<int> test_users;
 	IList<int> candidate_items;
@@ -61,20 +50,26 @@ public class RatingPrediction : CommandLineProgram
 	bool in_test_items;
 	bool all_items;
 
-	string prediction_file;
+	bool search_hp             = false;
+	string prediction_line     = "{0}\t{1}\t{2}";
+	string prediction_header   = null;
+
 	bool ranking_eval;
 	RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	RatingType rating_type       = RatingType.FLOAT;
-	uint cross_validation;
-	double test_ratio;
 	string chronological_split;
 	double chronological_split_ratio = -1;
 	DateTime chronological_split_time = DateTime.MinValue;
-	int find_iter;
 	bool online_eval   = false;
-	bool no_id_mapping = false;
 
-	void ShowVersion()
+	protected virtual string DefaultMeasure { get { return "RMSE"; } }
+
+	public RatingPrediction()
+	{
+		measure = "RMSE";
+	}
+
+	protected override void ShowVersion()
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
@@ -85,14 +80,8 @@ public class RatingPrediction : CommandLineProgram
 		Environment.Exit(0);
 	}
 
-	void Usage(string message)
-	{
-		Console.WriteLine(message);
-		Console.WriteLine();
-		Usage(-1);
-	}
-
-	void Usage(int exit_code)
+	// TODO generalize
+	protected override void Usage(int exit_code)
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite rating prediction {0}.{1:00}", version.Major, version.Minor);
@@ -165,95 +154,34 @@ public class RatingPrediction : CommandLineProgram
 		var program = new RatingPrediction();
 		program.Run(args);
 	}
-	
-	public void Run(string[] args)
+
+	protected override void SetupOptions()
 	{
-		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
-		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
+		options
+			.Add("prediction-line=",     v              => prediction_line      = v)
+			.Add("prediction-header=",   v              => prediction_header    = v)
+			.Add("test-users=",          v              => test_users_file      = v)
+			.Add("candidate-items=",     v              => candidate_items_file = v)
+			.Add("chronological-split=", v              => chronological_split  = v)
+			.Add("rating-type=",         (RatingType v) => rating_type          = v)
+			.Add("file-format=",         (RatingFileFormat v) => file_format    = v)
+			.Add("ranking-evaluation",   v => ranking_eval      = v != null)
+			.Add("online-evaluation",    v => online_eval       = v != null)
+			.Add("search-hp",            v => search_hp         = v != null)
+			.Add("overlap-items",        v => overlap_items     = v != null)
+			.Add("all-items",            v => all_items         = v != null)
+			.Add("in-training-items",    v => in_training_items = v != null)
+			.Add("in-test-items",        v => in_test_items     = v != null);
+	}
 
-		// recommender arguments
-		string method              = null;
-		string recommender_options = string.Empty;
-
-		// help/version
-		bool show_help    = false;
-		bool show_version = false;
-
-		// arguments for iteration search
-		int max_iter   = 100;
-		string measure = "RMSE";
-		double epsilon = 0;
-		double cutoff  = double.MaxValue;
-
-		// other arguments
-		bool search_hp             = false;
-		int random_seed            = -1;
-		string prediction_line     = "{0}\t{1}\t{2}";
-		string prediction_header   = null;
-
-		var p = new OptionSet() {
-			// string-valued options
-			{ "training-file=",       v              => training_file        = v },
-			{ "test-file=",           v              => test_file            = v },
-			{ "recommender=",         v              => method               = v },
-			{ "recommender-options=", v              => recommender_options += " " + v },
-			{ "data-dir=",            v              => data_dir             = v },
-			{ "user-attributes=",     v              => user_attributes_file = v },
-			{ "item-attributes=",     v              => item_attributes_file = v },
-			{ "user-relations=",      v              => user_relations_file  = v },
-			{ "item-relations=",      v              => item_relations_file  = v },
-			{ "save-model=",          v              => save_model_file      = v },
-			{ "load-model=",          v              => load_model_file      = v },
-			{ "save-user-mapping=",   v              => save_user_mapping_file = v },
-			{ "save-item-mapping=",   v              => save_item_mapping_file = v },
-			{ "load-user-mapping=",   v              => load_user_mapping_file = v },
-			{ "load-item-mapping=",   v              => load_item_mapping_file = v },
-			{ "prediction-file=",     v              => prediction_file      = v },
-			{ "prediction-line=",     v              => prediction_line      = v },
-			{ "prediction-header=",   v              => prediction_header    = v },
-			{ "test-users=",          v              => test_users_file      = v },
-			{ "candidate-items=",     v              => candidate_items_file = v },
-			{ "chronological-split=", v              => chronological_split  = v },
-			{ "measure=",             v              => measure              = v },
-			// integer-valued options
-			{ "find-iter=",           (int v)        => find_iter            = v },
-			{ "max-iter=",            (int v)        => max_iter             = v },
-			{ "random-seed=",         (int v)        => random_seed          = v },
-			{ "cross-validation=",    (uint v)       => cross_validation     = v },
-			// double-valued options
-			{ "epsilon=",             (double v)     => epsilon              = v },
-			{ "cutoff=",              (double v)     => cutoff               = v },
-			{ "test-ratio=",          (double v)     => test_ratio           = v },
-			// enum options
-			{ "rating-type=",         (RatingType v) => rating_type          = v },
-			{ "file-format=",         (RatingFileFormat v) => file_format    = v },
-			// boolean options
-			{ "compute-fit",          v => compute_fit       = v != null },
-			{ "ranking-evaluation",   v => ranking_eval      = v != null },
-			{ "online-evaluation",    v => online_eval       = v != null },
-			{ "search-hp",            v => search_hp         = v != null },
-			{ "no-id-mapping",        v => no_id_mapping     = v != null },
-			{ "overlap-items",        v => overlap_items     = v != null },
-			{ "all-items",            v => all_items         = v != null },
-			{ "in-training-items",    v => in_training_items = v != null },
-			{ "in-test-items",        v => in_test_items     = v != null },
-			{ "help",                 v => show_help         = v != null },
-			{ "version",              v => show_version      = v != null },
-		};
-		IList<string> extra_args = p.Parse(args);
+	protected override void Run(string[] args)
+	{
+		base.Run(args);
 
 		// ... some more command line parameter actions ...
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null || chronological_split != null)
 			no_eval = false;
-
-		if (show_version)
-			ShowVersion();
-		if (show_help)
-			Usage(0);
-
-		if (random_seed != -1)
-			MyMediaLite.Util.Random.Seed = random_seed;
 
 		// set up recommender
 		if (load_model_file != null)
@@ -268,7 +196,6 @@ public class RatingPrediction : CommandLineProgram
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		CheckParameters(extra_args);
 
 		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
 
@@ -292,7 +219,9 @@ public class RatingPrediction : CommandLineProgram
 		if (save_item_mapping_file != null)
 			item_mapping.SaveMapping(save_item_mapping_file);
 
-		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
+		Console.Error.WriteLine(
+			string.Format(CultureInfo.InvariantCulture,
+			"ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
 
 		if (test_ratio > 0)
 		{
@@ -444,55 +373,18 @@ public class RatingPrediction : CommandLineProgram
 		DisplayStats();
 	}
 
-	void CheckParameters(IList<string> extra_args)
+	protected override void CheckParameters(IList<string> extra_args)
 	{
+		base.CheckParameters(extra_args);
+		
 		if (online_eval && !(recommender is IIncrementalRatingPredictor))
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (training_file == null && load_model_file == null)
 			Usage("Please provide either --training-file=FILE or --load-model=FILE.");
 
-		if (cross_validation == 1)
-			Abort("--cross-validation=K requires K to be at least 2.");
-
-		if (cross_validation > 1 && test_ratio != 0)
-			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
-
-		if (cross_validation > 1 && prediction_file != null)
-			Abort("--cross-validation=K and --prediction-file=FILE are mutually exclusive.");
-
-		if (cross_validation > 1 && save_model_file != null)
-			Abort("--cross-validation=K and --save-model=FILE are mutually exclusive.");
-
-		if (cross_validation > 1 && load_model_file != null)
-			Abort("--cross-validation=K and --load-model=FILE are mutually exclusive.");
-
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && chronological_split == null)
 			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
-
-		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
-			Abort("Recommender expects --user-attributes=FILE.");
-
-		if (recommender is IItemAttributeAwareRecommender && item_attributes_file == null)
-			Abort("Recommender expects --item-attributes=FILE.");
-
-		if (recommender is IUserRelationAwareRecommender && user_relations_file == null)
-			Abort("Recommender expects --user-relations=FILE.");
-
-		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
-			Abort("Recommender expects --item-relations=FILE.");
-
-		if (no_id_mapping)
-		{
-			if (save_user_mapping_file != null)
-				Abort("--save-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (save_item_mapping_file != null)
-				Abort("--save-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (load_user_mapping_file != null)
-				Abort("--load-user-mapping=FILE and --no-id-mapping are mutually exclusive.");
-			if (load_item_mapping_file != null)
-				Abort("--load-item-mapping=FILE and --no-id-mapping are mutually exclusive.");
-		}
 
 		// handling of --chronological-split
 		if (chronological_split != null)
@@ -519,9 +411,6 @@ public class RatingPrediction : CommandLineProgram
 			if (test_ratio > 1)
 				Abort("--test-ratio=NUM and --chronological-split=NUM|DATETIME are mutually exclusive.");
 		}
-
-		if (extra_args.Count > 0)
-			Usage("Did not understand " + extra_args[0]);
 	}
 
 	void LoadData(bool static_data)
