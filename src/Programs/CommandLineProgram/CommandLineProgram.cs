@@ -18,11 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.IO;
 using MyMediaLite.Util;
 
 public abstract class CommandLineProgram<T> where T:IRecommender
@@ -189,6 +191,37 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			MyMediaLite.Util.Random.Seed = random_seed;
 		
 		CheckParameters(extra_args);
+	}
+	
+	protected virtual void LoadData()
+	{
+		training_file = Path.Combine(data_dir, training_file);
+
+		// user attributes
+		if (user_attributes_file != null)
+			user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
+		if (recommender is IUserAttributeAwareRecommender)
+			((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
+
+		// item attributes
+		if (item_attributes_file != null)
+			item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
+		if (recommender is IItemAttributeAwareRecommender)
+			((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
+
+		// user relation
+		if (recommender is IUserRelationAwareRecommender)
+		{
+			((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
+			Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
+		}
+
+		// item relation
+		if (recommender is IItemRelationAwareRecommender)
+		{
+			((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
+			Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
+		}
 	}
 	
 	protected void Abort(string message)

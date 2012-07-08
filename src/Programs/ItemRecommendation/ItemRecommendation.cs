@@ -215,7 +215,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (load_item_mapping_file != null)
 			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
-		// load all the data -- TODO generalize
+		// load all the data
 		LoadData();
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
@@ -393,40 +393,16 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		}
 	}
 
-	void LoadData()
+	protected override void LoadData()
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
+			base.LoadData();
+			
 			// training data
 			training_file = Path.Combine(data_dir, training_file);
 			training_data = double.IsNaN(rating_threshold)
 				? ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
 				: ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
-
-			// user attributes
-			if (user_attributes_file != null)
-				user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-			if (recommender is IUserAttributeAwareRecommender)
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
-
-			// item attributes
-			if (item_attributes_file != null)
-				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			if (recommender is IItemAttributeAwareRecommender)
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
-
-			// user relation
-			if (recommender is IUserRelationAwareRecommender)
-			{
-				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
-				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
-			}
-
-			// item relation
-			if (recommender is IItemRelationAwareRecommender)
-			{
-				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
-				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
-			}
 
 			// user groups
 			if (user_groups_file != null)

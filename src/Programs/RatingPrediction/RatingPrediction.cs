@@ -49,7 +49,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	bool in_training_items;
 	bool in_test_items;
 	bool all_items;
-
+	
 	bool search_hp             = false;
 	string prediction_line     = "{0}\t{1}\t{2}";
 	string prediction_header   = null;
@@ -211,7 +211,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
 
 		// load all the data
-		LoadData(!online_eval);
+		LoadData();
 
 		// if requested, save ID mappings
 		if (save_user_mapping_file != null)
@@ -413,11 +413,13 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		}
 	}
 
-	void LoadData(bool static_data)
+	protected override void LoadData()
 	{
-		training_file = Path.Combine(data_dir, training_file);
-
+		bool static_data = !online_eval;
+		
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
+			base.LoadData();
+			
 			// read training data
 			if ((recommender is TimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
@@ -439,32 +441,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
 			}
 			recommender.Ratings = training_data;
-
-			// user attributes
-			if (user_attributes_file != null)
-				user_attributes = AttributeData.Read(Path.Combine(data_dir, user_attributes_file), user_mapping);
-			if (recommender is IUserAttributeAwareRecommender)
-				((IUserAttributeAwareRecommender)recommender).UserAttributes = user_attributes;
-
-			// item attributes
-			if (item_attributes_file != null)
-				item_attributes = AttributeData.Read(Path.Combine(data_dir, item_attributes_file), item_mapping);
-			if (recommender is IItemAttributeAwareRecommender)
-				((IItemAttributeAwareRecommender)recommender).ItemAttributes = item_attributes;
-
-			// user relation
-			if (recommender is IUserRelationAwareRecommender)
-			{
-				((IUserRelationAwareRecommender)recommender).UserRelation = RelationData.Read(Path.Combine(data_dir, user_relations_file), user_mapping);
-				Console.WriteLine("relation over {0} users", ((IUserRelationAwareRecommender)recommender).NumUsers);
-			}
-
-			// item relation
-			if (recommender is IItemRelationAwareRecommender)
-			{
-				((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
-				Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
-			}
 
 			// read test data
 			if (test_file != null)
