@@ -39,8 +39,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			get { return this.item_attributes; }
 			set {
-				if (value == null)
-					throw new ArgumentException("null!");
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
