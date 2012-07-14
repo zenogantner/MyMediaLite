@@ -36,25 +36,13 @@ using MyMediaLite.Util;
 public class RatingPrediction : CommandLineProgram<RatingPredictor>
 {
 	// data sets
-	IRatings training_data;
-	IRatings test_data;
+	protected IRatings training_data;
+	protected IRatings test_data;
 
-	IList<int> test_users;
-	IList<int> candidate_items;
-	CandidateItems eval_item_mode = CandidateItems.UNION;
-
-	string test_users_file;
-	string candidate_items_file;
-	bool overlap_items;
-	bool in_training_items;
-	bool in_test_items;
-	bool all_items;
-	
 	bool search_hp             = false;
 	string prediction_line     = "{0}\t{1}\t{2}";
 	string prediction_header   = null;
 
-	bool ranking_eval;
 	RatingFileFormat file_format = RatingFileFormat.DEFAULT;
 	RatingType rating_type       = RatingType.FLOAT;
 	string chronological_split;
@@ -71,13 +59,10 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected override void ShowVersion()
 	{
-		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite Rating Prediction {0}.{1:00}", version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2011, 2012 Zeno Gantner");
-		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle");
-		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
-		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
-		Environment.Exit(0);
+		ShowVersion(
+			"Rating Prediction",
+			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
+		);
 	}
 
 	// TODO generalize
@@ -124,8 +109,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
    --prediction-file=FILE         write the rating predictions to FILE
    --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID,
                                   item ID, and predicted rating; default is {0}\\t{1}\\t{2};
-                                  if set to 'ranking', each line contains a list of ranked items
-                                  for one user
    --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:
@@ -137,7 +120,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
    --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
-   --ranking-evaluation                compute ranking evaluation measures
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
@@ -160,30 +142,15 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		options
 			.Add("prediction-line=",     v              => prediction_line      = v)
 			.Add("prediction-header=",   v              => prediction_header    = v)
-			.Add("test-users=",          v              => test_users_file      = v)
-			.Add("candidate-items=",     v              => candidate_items_file = v)
 			.Add("chronological-split=", v              => chronological_split  = v)
 			.Add("rating-type=",         (RatingType v) => rating_type          = v)
 			.Add("file-format=",         (RatingFileFormat v) => file_format    = v)
-			.Add("ranking-evaluation",   v => ranking_eval      = v != null)
 			.Add("online-evaluation",    v => online_eval       = v != null)
-			.Add("search-hp",            v => search_hp         = v != null)
-			.Add("overlap-items",        v => overlap_items     = v != null)
-			.Add("all-items",            v => all_items         = v != null)
-			.Add("in-training-items",    v => in_training_items = v != null)
-			.Add("in-test-items",        v => in_test_items     = v != null);
+			.Add("search-hp",            v => search_hp         = v != null);
 	}
 
-	protected override void Run(string[] args)
+	protected override void SetupRecommender()
 	{
-		base.Run(args);
-
-		// ... some more command line parameter actions ...
-		bool no_eval = true;
-		if (test_ratio > 0 || test_file != null || chronological_split != null)
-			no_eval = false;
-
-		// set up recommender
 		if (load_model_file != null)
 			recommender = (RatingPredictor) Model.Load(load_model_file);
 		else if (method != null)
@@ -196,8 +163,17 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-
 		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
+	}
+
+	protected override void Run(string[] args)
+	{
+		base.Run(args);
+
+		// ... some more command line parameter actions ...
+		bool no_eval = true;
+		if (test_ratio > 0 || test_file != null || chronological_split != null)
+			no_eval = false;
 
 		// ID mapping objects
 		if (file_format == RatingFileFormat.KDDCUP_2011 || no_id_mapping)
@@ -341,7 +317,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 			if (!no_eval)
 			{
-				if (online_eval) // TODO also support ranking for this
+				if (online_eval)
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.EvaluateOnline(test_data)); });
 				else
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(Evaluate()); });
@@ -376,7 +352,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	protected override void CheckParameters(IList<string> extra_args)
 	{
 		base.CheckParameters(extra_args);
-		
+
 		if (online_eval && !(recommender is IIncrementalRatingPredictor))
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
@@ -416,10 +392,10 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	protected override void LoadData()
 	{
 		bool static_data = !online_eval;
-		
+
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
-			
+
 			// read training data
 			if ((recommender is TimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
@@ -460,49 +436,13 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					((ITransductiveRatingPredictor) recommender).AdditionalFeedback = test_data;
 			}
 
-			// test users
-			if (test_users_file != null)
-				test_users = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, test_users_file)).ToArray() );
-			else
-				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
-
-			// candidate items
-			if (candidate_items_file != null)
-				candidate_items = item_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, candidate_items_file)).ToArray() );
-			else if (all_items)
-				candidate_items = Enumerable.Range(0, item_mapping.InternalIDs.Max() + 1).ToArray();
-
-			if (candidate_items != null)
-				eval_item_mode = CandidateItems.EXPLICIT;
-			else if (in_training_items)
-				eval_item_mode = CandidateItems.TRAINING;
-			else if (in_test_items)
-				eval_item_mode = CandidateItems.TEST;
-			else if (overlap_items)
-				eval_item_mode = CandidateItems.OVERLAP;
-			else
-				eval_item_mode = CandidateItems.UNION;
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-	Dictionary<string, float> Evaluate()
+	protected virtual Dictionary<string, float> Evaluate()
 	{
-		if (ranking_eval)
-		{
-			// TODO make more configurable
-			bool repeat_eval = false;
-			int predict_items_number = -1;
-			var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);
-			var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(training_data);
-			return recommender.Evaluate(test_data_posonly, training_data_posonly,
-			                            test_users, candidate_items,
-			                            eval_item_mode, repeat_eval, predict_items_number);
-		}
-		else
-		{
-			return recommender.Evaluate(test_data, training_data);
-		}
+		return recommender.Evaluate(test_data, training_data);
 	}
 }

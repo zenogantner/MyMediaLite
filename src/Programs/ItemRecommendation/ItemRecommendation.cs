@@ -71,13 +71,10 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	protected override void ShowVersion()
 	{
-		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite Item Prediction from Positive-Only Feedback {0}.{1:00}", version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2011, 2012 Zeno Gantner");
-		Console.WriteLine("Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
-		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
-		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
-		Environment.Exit(0);
+		ShowVersion(
+			"Item Recommendation from Positive-Only Feedback",
+			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler"
+		);
 	}
 
 	protected override void Usage(int exit_code)
@@ -172,7 +169,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("user-prediction",      v => user_prediction   = v != null)
-			.Add("online-evaluation",    v => online_eval       = v != null)
+			.Add("online-evaluation",    v => online_eval       = v != null) // TODO generalize
 			.Add("repeat-evaluation",    v => repeat_eval       = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
@@ -180,15 +177,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("in-test-items",        v => in_test_items     = v != null);
 	}
 
-	protected override void Run(string[] args)
+	protected override void SetupRecommender()
 	{
-		base.Run(args);
-
-		bool no_eval = true;
-		if (test_ratio > 0 || test_file != null)
-			no_eval = false;
-
-		// set up recommender -- TODO generalize
  		if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
 		else if (method != null)
@@ -201,8 +191,16 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-
 		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
+	}
+
+	protected override void Run(string[] args)
+	{
+		base.Run(args);
+
+		bool no_eval = true;
+		if (test_ratio > 0 || test_file != null)
+			no_eval = false;
 
 		// TODO generalize
 		if (no_id_mapping)
@@ -358,7 +356,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	protected override void CheckParameters(IList<string> extra_args)
 	{
 		base.CheckParameters(extra_args);
-		
+
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
@@ -397,7 +395,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
-			
+
 			// training data
 			training_file = Path.Combine(data_dir, training_file);
 			training_data = double.IsNaN(rating_threshold)

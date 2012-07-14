@@ -1,25 +1,26 @@
 // Copyright (C) 2012 Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
@@ -53,7 +54,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected int random_seed = -1;
 	protected uint cross_validation;
 	protected double test_ratio = 0;
-	
+
 	// recommender arguments
 	protected string method              = null;
 	protected string recommender_options = string.Empty;
@@ -61,14 +62,14 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	// help/version
 	protected bool show_help    = false;
 	protected bool show_version = false;
-	
+
 	// arguments for iteration search
 	protected int max_iter   = 100;
 	protected string measure;
 	protected double epsilon = 0;
 	protected double cutoff  = double.MaxValue;
 	protected int find_iter = 0;
-	
+
 	// ID mapping objects
 	protected IEntityMapping user_mapping = new EntityMapping();
 	protected IEntityMapping item_mapping = new EntityMapping();
@@ -76,7 +77,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	// user and item attributes
 	protected SparseBooleanMatrix user_attributes;
 	protected SparseBooleanMatrix item_attributes;
-	
+
 	// time statistics
 	protected List<double> training_time_stats = new List<double>();
 	protected List<double> fit_time_stats      = new List<double>();
@@ -94,12 +95,24 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected abstract void SetupOptions();
 
 	protected abstract void ShowVersion();
-	
+
+	protected void ShowVersion(string program_name, string copyright)
+	{
+		var version = Assembly.GetEntryAssembly().GetName().Version;
+		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", program_name, version.Major, version.Minor);
+		Console.WriteLine(copyright);
+		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
+		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+		Environment.Exit(0);
+	}
+
+	protected abstract void SetupRecommender();
+
 	protected virtual void CheckParameters(IList<string> extra_args)
 	{
 		if (cross_validation == 1)
 			Abort("--cross-validation=K requires K to be at least 2.");
-		
+
 		if (cross_validation > 1 && test_ratio != 0)
 			Abort("--cross-validation=K and --test-ratio=NUM are mutually exclusive.");
 
@@ -111,7 +124,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 
 		if (cross_validation > 1 && load_model_file != null)
 			Abort("--cross-validation=K and --load-model=FILE are mutually exclusive.");
-		
+
 		if (recommender is IUserAttributeAwareRecommender && user_attributes_file == null)
 			Abort("Recommender expects --user-attributes=FILE.");
 
@@ -123,7 +136,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Abort("Recommender expects --item-relations=FILE.");
-		
+
 		if (no_id_mapping)
 		{
 			if (save_user_mapping_file != null)
@@ -139,12 +152,12 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (extra_args.Count > 0)
 			Usage("Did not understand " + extra_args[0]);
 	}
-	
+
 	protected virtual void Run(string[] args)
 	{
 		AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Handlers.UnhandledExceptionHandler);
 		Console.CancelKeyPress += new ConsoleCancelEventHandler(AbortHandler);
-		
+
 		options = new OptionSet() {
 			// string-valued options
 			{ "training-file=",       v              => training_file        = v },
@@ -180,7 +193,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			{ "version",              v => show_version      = v != null },
 		};
 		SetupOptions();
-		
+
 		IList<string> extra_args = options.Parse(args);
 		if (show_version)
 			ShowVersion();
@@ -189,10 +202,12 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 
 		if (random_seed != -1)
 			MyMediaLite.Util.Random.Seed = random_seed;
+
+		SetupRecommender();
 		
 		CheckParameters(extra_args);
 	}
-	
+
 	protected virtual void LoadData()
 	{
 		training_file = Path.Combine(data_dir, training_file);
@@ -223,7 +238,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 		}
 	}
-	
+
 	protected void Abort(string message)
 	{
 		Console.Error.WriteLine(message);
