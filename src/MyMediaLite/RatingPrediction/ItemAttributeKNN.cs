@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public int NumItemAttributes { get;	private set; }
+		public int NumItemAttributes { get; private set; }
 
 		///
 		public override void Train()
