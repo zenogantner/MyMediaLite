@@ -15,7 +15,7 @@
 	 - Ratings: enable GetEnumerator()
 	 - DataSet, PosOnlyFeedback: add C(dataset) constructors
 	command line tools
-	 - share some code between the command line tools
+	 - #32: share some code between the command line tools
 	 - rating prediction: support binary ranking measures
 	evaluation
 	 - fix MAP@k computation
