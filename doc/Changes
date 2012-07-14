@@ -4,9 +4,9 @@
            the different levels, etc.) are now in contained in the class
            RatingScale
 	recommenders
-	 - new: MostPopularByItemAttributes: predict songs with same attributes
-           even if they have a count of zero
-	 - new: NaiveBayes
+	 - new item recommender: MostPopularByItemAttributes: predict songs with
+           same attributes even if they have a count of zero
+	 - new rating predictor: NaiveBayes
 	 - group recommenders: take CanPredict() into account, some cleanup
 	 - WeightedBPRMF: use Feedback data structure more efficiently
 	data structures
