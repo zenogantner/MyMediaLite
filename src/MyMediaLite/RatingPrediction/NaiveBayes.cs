@@ -18,24 +18,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
 {
-	// TODO
-	//  - baseline model
-	//  - log probabilities
-	//  - double instead of floats?
-
 	/// <summary>Attribute-aware rating predictor using Naive Bayes</summary>
 	/// <remarks>
-	/// This recommender supports incremental updates.
+	/// This recommender DOES NOT support incremental updates.
 	/// </remarks>
 	public class NaiveBayes : RatingPredictor, IItemAttributeAwareRecommender
 	{
-		public float Smoothing { get; set; }
+		/// <summary>Smoothing parameter for the class probabilities (rating priors)</summary>
+		public float ClassSmoothing { get; set; }
+		/// <summary>Smoothing parameter for the attribute (given class/rating) probabilities</summary>
+		public float AttributeSmoothing { get; set; }
 
 		///
 		public SparseBooleanMatrix ItemAttributes
@@ -56,10 +53,12 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public int NumItemAttributes { get; private set; }
-
+		
+		/// <summary>Default constructor</summary>
 		public NaiveBayes()
 		{
-			Smoothing = 1;
+			ClassSmoothing = 1;
+			AttributeSmoothing = 1;
 		}
 
 		void InitModel()
@@ -96,16 +95,16 @@ namespace MyMediaLite.RatingPrediction
 			// compute probabilities
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
 			{
-				float denominator = user_class_counts.GetRow(user_id).Sum() + Smoothing;
+				float denominator = user_class_counts.GetRow(user_id).Sum() + ClassSmoothing;
 
 				foreach (int level_id in ratings.Scale.LevelID.Values)
 				{
-					user_class_probabilities[user_id, level_id] = (user_class_counts[user_id, level_id] + Smoothing) / denominator;
+					user_class_probabilities[user_id, level_id] = (user_class_counts[user_id, level_id] + ClassSmoothing) / denominator;
 
-					// TODO more sparse implementation of this
+					// TODO more sparse implementation of this?
 					for (int attribute_id = 0; attribute_id < NumItemAttributes; attribute_id++)
 						user_attribute_given_class_probabilities[user_id][attribute_id, level_id]
-							= (user_attribute_given_class_counts[user_id][attribute_id, level_id] + Smoothing) / (NumItemAttributes + Smoothing);
+							= (user_attribute_given_class_counts[user_id][attribute_id, level_id] + AttributeSmoothing) / (NumItemAttributes + AttributeSmoothing);
 				}
 			}
 		}
@@ -136,8 +135,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(
-				"{0}",
-				this.GetType().Name);
+				"{0} class_smoothing={1} attribute_smoothing={2}",
+				this.GetType().Name, ClassSmoothing, AttributeSmoothing);
 		}
 	}
 
