@@ -17,8 +17,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using MyMediaLite.DataType;
+using MyMediaLite.IO;
 using MyMediaLite.Util;
 
 namespace MyMediaLite.RatingPrediction
@@ -99,7 +102,6 @@ namespace MyMediaLite.RatingPrediction
 				{
 					user_class_probabilities[user_id, level_id] = (user_class_counts[user_id, level_id] + ClassSmoothing) / denominator;
 
-					// TODO more sparse implementation of this?
 					for (int attribute_id = 0; attribute_id < NumItemAttributes; attribute_id++)
 						user_attribute_given_class_probabilities[user_id][attribute_id, level_id]
 							= (user_attribute_given_class_counts[user_id][attribute_id, level_id] + AttributeSmoothing) / (NumItemAttributes + AttributeSmoothing);
@@ -129,6 +131,36 @@ namespace MyMediaLite.RatingPrediction
 			return (float) (score_sum / prob_sum);
 		}
 
+		///
+		public override void LoadModel(string filename)
+		{
+			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
+			{
+				var user_class_probabilities = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+				var num_users = int.Parse(reader.ReadLine());
+				var user_attribute_given_class_probabilities = new List<SparseMatrix<float>>();
+				for (int user_id = 0; user_id < num_users; user_id++)
+					user_attribute_given_class_probabilities.Add(
+						(SparseMatrix<float>) reader.ReadMatrix(new SparseMatrix<float>(0, 0))
+					);
+				
+				this.user_class_probabilities = user_class_probabilities;
+				this.user_attribute_given_class_probabilities = user_attribute_given_class_probabilities;
+			}
+		}
+		
+		///
+		public override void SaveModel(string filename)
+		{
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.02") )
+			{
+				writer.WriteMatrix(user_class_probabilities);
+				writer.WriteLine(user_attribute_given_class_probabilities.Count);
+				foreach (var m in user_attribute_given_class_probabilities)
+					writer.WriteSparseMatrix(m);
+			}
+		}
+		
 		///
 		public override string ToString()
 		{
