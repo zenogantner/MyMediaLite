@@ -220,6 +220,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected virtual void LoadData()
 	{
 		training_file = Path.Combine(data_dir, training_file);
+		if (test_file != null)
+			test_file = Path.Combine(data_dir, test_file);
 
 		// user attributes
 		if (user_attributes_file != null)

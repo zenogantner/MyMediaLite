@@ -392,7 +392,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			base.LoadData();
 
 			// training data
-			training_file = Path.Combine(data_dir, training_file);
 			training_data = double.IsNaN(rating_threshold)
 				? ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
 				: ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
@@ -410,7 +409,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			{
 				if (test_file != null)
 				{
-					test_file = Path.Combine(data_dir, test_file);
 					test_data = double.IsNaN(rating_threshold)
 						? ItemData.Read(test_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
 						: ItemDataRatingThreshold.Read(test_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);

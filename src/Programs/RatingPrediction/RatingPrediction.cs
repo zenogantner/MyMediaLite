@@ -416,8 +416,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			// read test data
 			if (test_file != null)
 			{
-				test_file = Path.Combine(data_dir, test_file);
-
 				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
 					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
