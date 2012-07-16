@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.Util;
@@ -28,9 +29,9 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Attribute-aware rating predictor using Naive Bayes</summary>
 	/// <remarks>
-	/// This recommender DOES NOT support incremental updates.
+	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class NaiveBayes : RatingPredictor, IItemAttributeAwareRecommender
+	public class NaiveBayes : IncrementalRatingPredictor, IItemAttributeAwareRecommender
 	{
 		/// <summary>Smoothing parameter for the class probabilities (rating priors)</summary>
 		public float ClassSmoothing { get; set; }
@@ -54,7 +55,7 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public int NumItemAttributes { get; private set; }
-		
+
 		/// <summary>Default constructor</summary>
 		public NaiveBayes()
 		{
@@ -74,37 +75,39 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			InitModel();
+			ComputeProbabilities(Enumerable.Range(0, MaxUserID + 1).ToArray());
+		}
 
-			// initialize counter variables
-			var user_class_counts = new Matrix<int>(MaxUserID + 1, ratings.Scale.Levels.Count);
-			var user_attribute_given_class_counts = new List<SparseMatrix<int>>();
-			for (int user_id = 0; user_id <= MaxUserID; user_id++)
-				user_attribute_given_class_counts.Add(new SparseMatrix<int>(ratings.Scale.Levels.Count, ItemAttributes.NumberOfColumns));
-
-			// count
-			for (int index = 0; index < Ratings.Count; index++)
+		void ComputeProbabilities(IList<int> users)
+		{
+			foreach (int user_id in users)
 			{
-				int user_id = ratings.Users[index];
-				int item_id = ratings.Items[index];
-				int level_id = ratings.Scale.LevelID[ratings[index]];
+				// initialize counter variables
+				var user_class_counts = new int[ratings.Scale.Levels.Count];
+				var user_attribute_given_class_counts = new SparseMatrix<int>(ratings.Scale.Levels.Count, ItemAttributes.NumberOfColumns);
 
-				user_class_counts[user_id, level_id]++;
-				foreach (int attribute_id in item_attributes.GetEntriesByRow(item_id))
-					user_attribute_given_class_counts[user_id][attribute_id, level_id]++;
-			}
+				// count
+				foreach (int index in ratings.ByUser[user_id])
+				{
+					int item_id = ratings.Items[index];
+					int level_id = ratings.Scale.LevelID[ratings[index]];
 
-			// compute probabilities
-			for (int user_id = 0; user_id <= MaxUserID; user_id++)
-			{
-				float denominator = user_class_counts.GetRow(user_id).Sum() + ClassSmoothing;
+					user_class_counts[level_id]++;
+					foreach (int attribute_id in item_attributes.GetEntriesByRow(item_id))
+						user_attribute_given_class_counts[attribute_id, level_id]++;
+				}
+
+				// compute probabilities
+				float denominator = user_class_counts.Sum() + ClassSmoothing;
 
 				foreach (int level_id in ratings.Scale.LevelID.Values)
 				{
-					user_class_probabilities[user_id, level_id] = (user_class_counts[user_id, level_id] + ClassSmoothing) / denominator;
+					user_class_probabilities[user_id, level_id] = (user_class_counts[level_id] + ClassSmoothing) / denominator;
 
+					// TODO sparsify?
 					for (int attribute_id = 0; attribute_id < NumItemAttributes; attribute_id++)
 						user_attribute_given_class_probabilities[user_id][attribute_id, level_id]
-							= (user_attribute_given_class_counts[user_id][attribute_id, level_id] + AttributeSmoothing) / (NumItemAttributes + AttributeSmoothing);
+							= (user_attribute_given_class_counts[attribute_id, level_id] + AttributeSmoothing) / (NumItemAttributes + AttributeSmoothing);
 				}
 			}
 		}
@@ -143,12 +146,12 @@ namespace MyMediaLite.RatingPrediction
 					user_attribute_given_class_probabilities.Add(
 						(SparseMatrix<float>) reader.ReadMatrix(new SparseMatrix<float>(0, 0))
 					);
-				
+
 				this.user_class_probabilities = user_class_probabilities;
 				this.user_attribute_given_class_probabilities = user_attribute_given_class_probabilities;
 			}
 		}
-		
+
 		///
 		public override void SaveModel(string filename)
 		{
@@ -160,7 +163,35 @@ namespace MyMediaLite.RatingPrediction
 					writer.WriteSparseMatrix(m);
 			}
 		}
-		
+
+		///
+		public override void AddRatings(IRatings ratings)
+		{
+			base.AddRatings(ratings);
+			ComputeProbabilities(ratings.AllUsers);
+		}
+
+		///
+		public override void UpdateRatings(IRatings ratings)
+		{
+			base.UpdateRatings(ratings);
+			ComputeProbabilities(ratings.AllUsers);
+		}
+
+		///
+		public override void RemoveRatings(IDataSet ratings)
+		{
+			base.RemoveRatings(ratings);
+			ComputeProbabilities(ratings.AllUsers);
+		}
+
+		///
+		protected override void AddUser(int user_id)
+		{
+			base.AddUser(user_id);
+			user_class_probabilities.AddRows(user_id + 1);
+		}
+
 		///
 		public override string ToString()
 		{
@@ -169,5 +200,4 @@ namespace MyMediaLite.RatingPrediction
 				this.GetType().Name, ClassSmoothing, AttributeSmoothing);
 		}
 	}
-
 }

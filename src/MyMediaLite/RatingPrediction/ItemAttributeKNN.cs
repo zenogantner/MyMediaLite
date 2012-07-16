@@ -42,13 +42,13 @@ namespace MyMediaLite.RatingPrediction
 		private SparseBooleanMatrix item_attributes;
 
 		///
+		public int NumItemAttributes { get; private set; }
+
+		///
 		protected override void RetrainItem(int item_id)
 		{
 			baseline_predictor.RetrainItem(item_id);
 		}
-
-		///
-		public int NumItemAttributes { get; private set; }
 
 		///
 		public override void Train()
@@ -66,5 +66,4 @@ namespace MyMediaLite.RatingPrediction
 				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI, NumIter);
 		}
 	}
-
 }
