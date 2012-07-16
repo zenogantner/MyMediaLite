@@ -188,12 +188,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 		// load all the data
 		LoadData();
-
-		// if requested, save ID mappings
-		if (save_user_mapping_file != null)
-			user_mapping.SaveMapping(save_user_mapping_file);
-		if (save_item_mapping_file != null)
-			item_mapping.SaveMapping(save_item_mapping_file);
+		SaveIDMappings();
 
 		Console.Error.WriteLine(
 			string.Format(CultureInfo.InvariantCulture,

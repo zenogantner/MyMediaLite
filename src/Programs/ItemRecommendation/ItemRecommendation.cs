@@ -216,12 +216,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		// load all the data
 		LoadData();
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
-
-		// if requested, save ID mappings
-		if (save_user_mapping_file != null)
-			user_mapping.SaveMapping(save_user_mapping_file);
-		if (save_item_mapping_file != null)
-			item_mapping.SaveMapping(save_item_mapping_file);
+		SaveIDMappings();
 
 		TimeSpan time_span;
 

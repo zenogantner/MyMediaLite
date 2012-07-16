@@ -207,7 +207,16 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		
 		CheckParameters(extra_args);
 	}
-
+	
+	protected void SaveIDMappings()
+	{
+		// if requested, save ID mappings
+		if (save_user_mapping_file != null)
+			user_mapping.SaveMapping(save_user_mapping_file);
+		if (save_item_mapping_file != null)
+			item_mapping.SaveMapping(save_item_mapping_file);
+	}
+	
 	protected virtual void LoadData()
 	{
 		training_file = Path.Combine(data_dir, training_file);
