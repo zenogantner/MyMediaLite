@@ -1,4 +1,4 @@
-.02	2012-07-16
+3.02	2012-07-??
 	API
 	 - information about the rating scale (minimum rating, maximum rating,
            the different levels, etc.) are now in contained in the class
@@ -22,6 +22,10 @@
 	 - rating prediction: support binary ranking measures
 	evaluation
 	 - fix MAP@k computation
+	documentation
+	 - improve documentation on website:
+           - GUI demo
+           - attribute files
 	scripts
 	 - MSD challenge evaluation: fix MAP@k computation, give out number
            of users with AP=0
