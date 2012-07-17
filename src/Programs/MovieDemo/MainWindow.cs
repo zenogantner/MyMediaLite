@@ -53,10 +53,11 @@ public partial class MainWindow : Window
 	IncrementalRatingPredictor rating_predictor;
 
 	// depends on dataset
-	string ratings_file          = "../../../../data/ml-1m/ratings.txt";
-	string movie_file            = "../../../../data/ml-1m/movies.dat";
+	// TODO common path
+	string ratings_file          = "../../../../../data/ml-1m/ratings.txt";
+	string movie_file            = "../../../../../data/ml-1m/movies.dat";
 	Encoding movie_file_encoding = Encoding.GetEncoding("ISO-8859-1");
-	string model_file            = "../../../../data/models/ml-1m-bmf.model";
+	string model_file            = "../../../../../data/models/ml-1m-bmf.model";
 
 	// MovieLens 10M
 	/*
@@ -89,7 +90,7 @@ public partial class MainWindow : Window
 
 		Console.Error.Write("Reading in German movie titles ... ");
 		time = Wrap.MeasureTime(delegate() {
-			german_names = IMDBAkaTitles.Read("../../../../data/imdb/german-aka-titles.list", "GERMAN", movies.IMDB_KEY_To_ID);
+			german_names = IMDBAkaTitles.Read("../../../../../data/imdb/german-aka-titles.list", "GERMAN", movies.IMDB_KEY_To_ID);
 		});
 		Console.Error.WriteLine("done ({0,0:0.##}).", time.TotalSeconds.ToString(CultureInfo.InvariantCulture));
 
