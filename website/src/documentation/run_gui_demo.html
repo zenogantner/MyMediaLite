@@ -24,8 +24,8 @@
   
   In the MyMediaLite root directory, enter
   <pre>
-    make download_imdb
-    make download_movielens
+    make download-imdb
+    make download-movielens
   </pre>
   This is what you would do on Linux and OS X.
   </p>
@@ -45,7 +45,7 @@
   To train the initial model, execute
   <pre>
     mkdir data/models
-    rating_prediction --training-file=data/ml-1m/ratings.txt --recommender=BiasedMatrixFactorization  --recommender-options="num_iter=60 bias_reg=0.001 regularization=0.045" --save-model=data/models/ml1m-bmf.model
+    rating_prediction --training-file=data/ml-1m/ratings.txt --recommender=BiasedMatrixFactorization  --recommender-options="num_iter=60 bias_reg=0.001 regularization=0.045" --save-model=data/models/ml-1m-bmf.model
   </pre>
 
   </p>
