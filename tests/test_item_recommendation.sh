@@ -53,19 +53,19 @@ DATA_DIR=data/ml-1m
 
 for method in ItemAttributeKNN
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=50
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=50
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
 done
 
 for method in BPRLinear
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --find-iter=1 --max-iter=2 --recommender-options="num_iter=0" --data-dir=$DATA_DIR --num-test-users=50
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --find-iter=1 --max-iter=2 --recommender-options="num_iter=0" --data-dir=$DATA_DIR --num-test-users=50
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --find-iter=1 --max-iter=2 --recommender-options="num_iter=0" --data-dir=$DATA_DIR --num-test-users=15
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --find-iter=1 --max-iter=2 --recommender-options="num_iter=0" --data-dir=$DATA_DIR --num-test-users=15
 done
 
 for method in UserAttributeKNN
 do
-	echo $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=50
-	     $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=50
+	echo $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
+	     $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
 done
 

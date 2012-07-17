@@ -163,6 +163,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		options
 			.Add("group-recommender=",   v => group_method           = v)
 			.Add("candidate-items=",     v => candidate_items_file   = v)
+			.Add("test-users=",          v => test_users_file      = v)
 			.Add("user-groups=",         v => user_groups_file       = v)
 			.Add("predict-items-number=", (int v) => predict_items_number = v)
 			.Add("num-test-users=",       (int v) => num_test_users       = v)
