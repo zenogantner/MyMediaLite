@@ -54,7 +54,7 @@ namespace MyMediaLite.ItemRecommendation
 				if (Feedback.ItemMatrix[neighbor, user_id])
 					count++;
 
-			return (float) (count / k);
+			return (float) count / k;
 		}
 
 		///

@@ -9,6 +9,8 @@
 	 - new rating predictor: NaiveBayes
 	 - group recommenders: take CanPredict() into account, some cleanup
 	 - WeightedBPRMF: use Feedback data structure more efficiently
+	 - ItemKNN item recommender: fix cast/integer division bug in Predict()
+           (reported by Cees Wesseling)
 	data structures
 	 - get rid of SparseBooleanMatrixBinarySearch and
            SparseBooleanMatrixStatic
