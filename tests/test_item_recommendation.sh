@@ -26,8 +26,8 @@ DATA_DIR=data/ml-100k
 for method in BPRMF WRMF
 do
 	echo $DATA_DIR
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 num_factors=$K" --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 num_factors=$K" --data-dir=$DATA_DIR
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --data-dir=$DATA_DIR
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --data-dir=$DATA_DIR
 done
 
 method=MostPopular
@@ -65,7 +65,7 @@ done
 
 for method in UserAttributeKNN
 do
-	echo $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
-	     $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=15
+	echo $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=5
+	     $PROGRAM --training-file=ml-1m-new-user-0.train.txt --test-file=ml-1m-new-user-0.test.txt --recommender=$method --user-attributes=user-attributes-nozip.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --num-test-users=5
 done
 

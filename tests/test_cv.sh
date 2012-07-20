@@ -4,7 +4,8 @@ PROGRAM="bin/rating_prediction"
 DATA_DIR=data/ml-100k
 LANG=C
 
-K=10
+K=3
+U=50
 
 echo "MyMediaLite cross-validation test script."
 echo "This will take about 1 minutes ..."
@@ -39,14 +40,14 @@ diff log1.grep log2.grep
 
 rm log1 log2 log1.grep log2.grep
 
-echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log1
-     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log1
+echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=$U > log1
+     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=$U > log1
 
-echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=WRMF --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log2
-     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=WRMF --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log2
+echo $PROGRAM --training-file=u.data --cross-validation=$K --recommender=WRMF --data-dir=$DATA_DIR --random-seed=1 --num-test-users=$U > log2
+     $PROGRAM --training-file=u.data --cross-validation=$K --recommender=WRMF --data-dir=$DATA_DIR --random-seed=1 --num-test-users=$U > log2
 
-grep "100 users" log1 > log1.grep
-grep "100 users" log2 > log2.grep
+grep "$U users" log1 > log1.grep
+grep "$U users" log2 > log2.grep
 
 diff log1.grep log2.grep
 
