@@ -1,4 +1,4 @@
-3.02	2012-07-??
+3.02	2012-07-21
 	API
 	 - information about the rating scale (minimum rating, maximum rating,
            the different levels, etc.) are now in contained in the class
@@ -31,7 +31,6 @@
            of users with AP=0
          - MSD challenge: add script to generate artist attributes
          
-
 3.01	2012-05-30
         API
          - move CountBy(User|Item) from IRatings to IDataSet
