@@ -98,7 +98,7 @@ while (<>) {
 		$item_count++;
 	}
 
-	$event = $event_constant if $event_constant;
+	$event = $event_constant if $event_constant ne '';
 
 	if ($libsvm_format) {
 		print "$event $user_id{$user}:1 $item_id{$item}:1\n";

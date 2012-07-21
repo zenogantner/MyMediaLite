@@ -30,6 +30,7 @@
 	 - MSD challenge evaluation: fix MAP@k computation, give out number
            of users with AP=0
          - MSD challenge: add script to generate artist attributes
+	 - import_dataset.pl: allow event constants of value 0
          
 3.01	2012-05-30
         API
