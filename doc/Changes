@@ -22,6 +22,7 @@
 	 - rating prediction: support binary ranking measures
 	evaluation
 	 - fix MAP@k computation
+         - aggregated output for cross-validation of iterative models
 	documentation
 	 - improve documentation on website:
            - GUI demo

@@ -31,31 +31,31 @@ namespace MyMediaLite.Eval
 		/// <param name="recommender">a rating predictor</param>
 		/// <param name="num_folds">the number of folds</param>
 		/// <param name="compute_fit">if set to true measure fit on the training data as well</param>
-		/// <param name="show_results">if set to true to print results to STDERR</param>
+		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public RatingPredictionEvaluationResults DoCrossValidation(
 			this RatingPredictor recommender,
 			uint num_folds = 5,
 			bool compute_fit = false,
-			bool show_results = false)
+			bool show_fold_results = false)
 		{
 			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
-			return recommender.DoCrossValidation(split, compute_fit, show_results);
+			return recommender.DoCrossValidation(split, compute_fit, show_fold_results);
 		}
 
 		/// <summary>Evaluate on the folds of a dataset split</summary>
 		/// <param name="recommender">a rating predictor</param>
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="compute_fit">if set to true measure fit on the training data as well</param>
-		/// <param name="show_results">set to true to print results to STDERR</param>
+		/// <param name="show_fold_results">set to true to print per-fold results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public RatingPredictionEvaluationResults DoCrossValidation(
 			this RatingPredictor recommender,
 			ISplit<IRatings> split,
 			bool compute_fit = false,
-			bool show_results = false)
+			bool show_fold_results = false)
 		{
-			var avg_results = new RatingPredictionEvaluationResults();
+			var fold_results = new RatingPredictionEvaluationResults[split.NumberOfFolds];
 
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
 			{
@@ -66,20 +66,12 @@ namespace MyMediaLite.Eval
 					if (recommender is ITransductiveRatingPredictor)
 						((ITransductiveRatingPredictor) split_recommender).AdditionalFeedback = split.Test[i];
 					split_recommender.Train();
-					var fold_results = Ratings.Evaluate(split_recommender, split.Test[i]);
+					fold_results[i] = Ratings.Evaluate(split_recommender, split.Test[i]);
 					if (compute_fit)
-						fold_results["fit"] = (float) split_recommender.ComputeFit();
+						fold_results[i]["fit"] = (float) split_recommender.ComputeFit();
 
-					// thread-safe stats
-					lock (avg_results)
-						foreach (var key in fold_results.Keys)
-							if (avg_results.ContainsKey(key))
-								avg_results[key] += fold_results[key];
-							else
-								avg_results[key] = fold_results[key];
-
-					if (show_results)
-						Console.Error.WriteLine("fold {0} {1}", i, fold_results);
+					if (show_fold_results)
+						Console.Error.WriteLine("fold {0} {1}", i, fold_results[i]);
 				}
 				catch (Exception e)
 				{
@@ -88,10 +80,7 @@ namespace MyMediaLite.Eval
 				}
 			});
 
-			foreach (var key in Ratings.Measures)
-				avg_results[key] /= split.NumberOfFolds;
-
-			return avg_results;
+			return new RatingPredictionEvaluationResults(fold_results);
 		}
 
 		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
@@ -117,7 +106,8 @@ namespace MyMediaLite.Eval
 
 			var split_recommenders     = new RatingPredictor[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
-
+			var fold_results = new RatingPredictionEvaluationResults[split.NumberOfFolds];
+			
 			// initial training and evaluation
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
 			{
@@ -129,8 +119,8 @@ namespace MyMediaLite.Eval
 						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalFeedback = split.Test[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
+					fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
+					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], iterative_recommenders[i].NumIter);
 				}
 				catch (Exception e)
 				{
@@ -138,9 +128,11 @@ namespace MyMediaLite.Eval
 					throw e;
 				}
 			});
+			Console.Error.WriteLine("iteration {0} {1}", iterative_recommenders[0].NumIter, new RatingPredictionEvaluationResults(fold_results));
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
+			{
 				Parallel.For(0, (int) split.NumberOfFolds, i =>
 				{
 					try
@@ -149,8 +141,8 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							var fold_results = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
+							fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
+							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
 						}
 					}
 					catch (Exception e)
@@ -159,6 +151,8 @@ namespace MyMediaLite.Eval
 						throw e;
 					}
 				});
+				Console.Error.WriteLine("iteration {0} {1}", it, new RatingPredictionEvaluationResults(fold_results));
+			}
 		}
 	}
 }

@@ -30,22 +30,35 @@ namespace MyMediaLite.Eval
 	{
 		/// <summary>results for users without ratings in the training data</summary>
 		public Dictionary<string, float> NewUserResults { get; set; }
-		
+
 		/// <summary>results for items without ratings in the training data</summary>
 		public Dictionary<string, float> NewItemResults { get; set; }
-		
+
 		/// <summary>results for rating predictions where neither the user nor the item has ratings in the training data</summary>
 		public Dictionary<string, float> NewUserNewItemResults { get; set; }
-		
+
 		/// <summary>default constructor</summary>
 		public RatingPredictionEvaluationResults() {}
-		
+
 		/// <summary>initialize with given results</summary>
 		/// <param name='results'>a dictionary containing results</param>
 		public RatingPredictionEvaluationResults(Dictionary<string, float> results)
 		{
 			foreach (var key in results.Keys)
 				this[key] = results[key];
+		}
+
+		/// <summary>Create averaged results</summary>
+		/// <param name='result_list'>the list of results to average</param>
+		public RatingPredictionEvaluationResults(IList<Dictionary<string, float>> result_list)
+		{
+			foreach (var key in result_list[0].Keys)
+			{
+				this[key] = 0;
+				foreach (var r in result_list)
+					this[key] += r[key];
+				this[key] /= result_list.Count;
+			}
 		}
 
 		/// <summary>Format rating prediction results</summary>
