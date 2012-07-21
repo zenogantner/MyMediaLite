@@ -88,10 +88,16 @@ namespace MyMediaLite.Eval
 		/// <param name="num_folds">the number of folds</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
-		static public void DoIterativeCrossValidation(this RatingPredictor recommender, uint num_folds, int max_iter, int find_iter = 1)
+		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
+		static public void DoIterativeCrossValidation(
+			this RatingPredictor recommender,
+			uint num_folds,
+			int max_iter,
+			int find_iter = 1,
+			bool show_fold_results = false)
 		{
 			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
-			recommender.DoIterativeCrossValidation(split, max_iter, find_iter);
+			recommender.DoIterativeCrossValidation(split, max_iter, find_iter, show_fold_results);
 		}
 
 		/// <summary>Evaluate an iterative recommender on the folds of a dataset split, display results on STDOUT</summary>
@@ -99,7 +105,13 @@ namespace MyMediaLite.Eval
 		/// <param name="split">a rating dataset split</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
-		static public void DoIterativeCrossValidation(this RatingPredictor recommender, ISplit<IRatings> split, int max_iter, int find_iter = 1)
+		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
+		static public void DoIterativeCrossValidation(
+			this RatingPredictor recommender,
+			ISplit<IRatings> split,
+			int max_iter,
+			int find_iter = 1,
+			bool show_fold_results = false)
 		{
 			if (!(recommender is IIterativeModel))
 				throw new ArgumentException("recommender must be of type IIterativeModel");
@@ -120,7 +132,9 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], iterative_recommenders[i].NumIter);
+					
+					if (show_fold_results)
+						Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], iterative_recommenders[i].NumIter);
 				}
 				catch (Exception e)
 				{
@@ -128,7 +142,7 @@ namespace MyMediaLite.Eval
 					throw e;
 				}
 			});
-			Console.Error.WriteLine("iteration {0} {1}", iterative_recommenders[0].NumIter, new RatingPredictionEvaluationResults(fold_results));
+			Console.WriteLine("iteration {0} {1}", iterative_recommenders[0].NumIter, new RatingPredictionEvaluationResults(fold_results));
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
@@ -142,7 +156,8 @@ namespace MyMediaLite.Eval
 						if (it % find_iter == 0)
 						{
 							fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
+							if (show_fold_results)
+								Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
 						}
 					}
 					catch (Exception e)
@@ -151,7 +166,7 @@ namespace MyMediaLite.Eval
 						throw e;
 					}
 				});
-				Console.Error.WriteLine("iteration {0} {1}", it, new RatingPredictionEvaluationResults(fold_results));
+				Console.WriteLine("iteration {0} {1}", it, new RatingPredictionEvaluationResults(fold_results));
 			}
 		}
 	}
