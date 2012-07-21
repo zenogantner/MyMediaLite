@@ -148,10 +148,10 @@ gendarme:
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/SVM.dll
 
-apidoc: mdoc-html doxygen
+apidoc: doxygen
 
 monodoc:
-	mdoc update -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
+	mdoc update --delete -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 
 mdoc-html: monodoc
 	mdoc-export-html doc/monodoc/ -o ${HTML_MDOC_DIR} --template=doc/htmldoc-template.xsl

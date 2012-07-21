@@ -27,6 +27,7 @@
 	 - improve documentation on website:
            - GUI demo
            - attribute files
+	 -  get rid of mdoc-generated HTML documentation
 	scripts
 	 - MSD challenge evaluation: fix MAP@k computation, give out number
            of users with AP=0
