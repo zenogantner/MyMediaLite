@@ -41,7 +41,7 @@ grep "test data" log2 > log2.grep
 
 diff log1.grep log2.grep
 
-rm log1 log2 log1.grep log2.grep
+rm -f log1 log2 log1.grep log2.grep
 
 echo $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log1
      $PROGRAM --training-file=u.data --test-ratio=0.1 --recommender=MostPopular --data-dir=$DATA_DIR --random-seed=1 --num-test-users=100 > log1
@@ -54,5 +54,5 @@ grep "100 users" log2 > log2.grep
 
 diff log1.grep log2.grep
 
-rm log1 log2 log1.grep log2.grep
+rm -f log1 log2 log1.grep log2.grep
 
