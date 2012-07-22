@@ -93,6 +93,8 @@ release: mymedialite MyMediaLite-${VERSION}.doc.tar.gz MyMediaLite-${VERSION}.ta
 	head doc/Changes
 	git status
 	cp doc/Changes website/src/download
+	bin/rating_prediction --help > website/lib/rating_prediction_usage
+	bin/item_recommendation --help > website/lib/item_recommendation_usage
 	cat doc/ReleaseChecklist
 
 example-csharp: data/ml-100k/u.data

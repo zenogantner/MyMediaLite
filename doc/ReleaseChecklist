@@ -19,7 +19,6 @@ release checklist:
 8d. Inspect the contents of the documentation package
 9. Create the release announcement
 10. Add the new version to the website
-10a. Copy the --help output of the two command-line tools to the website
 11. Commit the website changes
 12. Create a git tag: 'git tag -a v3.XX -m "MyMediaLite release 3.XX"'
 13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'

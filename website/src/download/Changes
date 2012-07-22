@@ -1,3 +1,39 @@
+3.02	2012-07-21
+	API
+	 - information about the rating scale (minimum rating, maximum rating,
+           the different levels, etc.) are now in contained in the class
+           RatingScale
+	recommenders
+	 - new item recommender: MostPopularByItemAttributes: predict songs with
+           same attributes even if they have a count of zero
+	 - new rating predictor: NaiveBayes
+	 - group recommenders: take CanPredict() into account, some cleanup
+	 - WeightedBPRMF: use Feedback data structure more efficiently
+	 - ItemKNN item recommender: fix cast/integer division bug in Predict()
+           (reported by Cees Wesseling)
+	data structures
+	 - get rid of SparseBooleanMatrixBinarySearch and
+           SparseBooleanMatrixStatic
+         - sparse matrix types: get rid of NonEmptyRows property
+	 - Ratings: enable GetEnumerator()
+	 - DataSet, PosOnlyFeedback: add C(dataset) constructors
+	command line tools
+	 - #32: share some code between the command line tools
+	 - rating prediction: support binary ranking measures
+	evaluation
+	 - fix MAP@k computation
+         - aggregated output for cross-validation of iterative models
+	documentation
+	 - improve documentation on website:
+           - GUI demo
+           - attribute files
+	 -  get rid of mdoc-generated HTML documentation
+	scripts
+	 - MSD challenge evaluation: fix MAP@k computation, give out number
+           of users with AP=0
+         - MSD challenge: add script to generate artist attributes
+	 - import_dataset.pl: allow event constants of value 0
+         
 3.01	2012-05-30
         API
          - move CountBy(User|Item) from IRatings to IDataSet
