@@ -279,7 +279,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void InitModel()
 		{
-			x = new Matrix<float>(MaxItemID + 1, NumFactors);
+			x = new Matrix<float>(MaxUserID + 1, NumFactors);
 			x.InitNormal(InitMean, InitStdDev);
 			// set factors to zero for users without training examples
 			for (int user_id = 0; user_id < x.NumberOfRows; user_id++)
