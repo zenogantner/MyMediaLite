@@ -1,4 +1,4 @@
-3.02	2012-07-21
+3.02	2012-07-23
 	API
 	 - information about the rating scale (minimum rating, maximum rating,
            the different levels, etc.) are now in contained in the class
@@ -11,6 +11,7 @@
 	 - WeightedBPRMF: use Feedback data structure more efficiently
 	 - ItemKNN item recommender: fix cast/integer division bug in Predict()
            (reported by Cees Wesseling)
+	 - SigmoidCombinedAsymmetricFactorModel: fix crash during training
 	data structures
 	 - get rid of SparseBooleanMatrixBinarySearch and
            SparseBooleanMatrixStatic
