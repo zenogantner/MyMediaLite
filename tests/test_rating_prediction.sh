@@ -2,9 +2,10 @@
 
 PROGRAM="bin/rating_prediction"
 LANG=C
+K=2
 
 echo "MyMediaLite rating prediction test script"
-echo "This will take about 1 minute ..."
+echo "This will take about 3 minutes ..."
 
 echo
 echo "MovieLens 1M"
@@ -12,27 +13,27 @@ echo "------------"
 
 DATA_DIR=data/ml-1m
 
-for method in MatrixFactorization SigmoidCombinedAsymmetricFactorModel
+for method in MatrixFactorization
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
 method=BiasedMatrixFactorization
-echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=3" --compute-fit --data-dir=$DATA_DIR
-     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=3" --compute-fit --data-dir=$DATA_DIR
+echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
+     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
 
 for target in MAE LogisticLoss
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=3" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 loss=$target num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
 touch $DATA_DIR/empty
 for method in SocialMF
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 learn_rate=0.005 social_reg=0 num_factors=3" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 learn_rate=0.005 social_reg=0 num_factors=3" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 learn_rate=0.005 social_reg=0 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --recommender-options="num_iter=1 learn_rate=0.005 social_reg=0 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
 done
 rm $DATA_DIR/empty
 
@@ -51,8 +52,8 @@ done
 
 for method in ItemAttributeKNN
 do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=5" --data-dir=$DATA_DIR --no-id-mapping
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=5" --data-dir=$DATA_DIR --no-id-mapping
+	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --item-attributes=item-attributes-genres.txt --recommender-options="k=$K" --data-dir=$DATA_DIR --no-id-mapping
 done
 
 
@@ -74,9 +75,15 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
 done
 
-for method in UserKNNPearson UserKNNCosine ItemKNNPearson ItemKNNCosine
+for method in SigmoidCombinedAsymmetricFactorModel SigmoidSVDPlusPlus SVDPlusPlus
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=float
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=5" --data-dir=$DATA_DIR --rating-type=float
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
+
+for method in UserKNNPearson UserKNNCosine ItemKNNPearson ItemKNNCosine
+do
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --rating-type=float
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --rating-type=float
+done
