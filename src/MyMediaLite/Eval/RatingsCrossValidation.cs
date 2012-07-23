@@ -142,7 +142,7 @@ namespace MyMediaLite.Eval
 					throw e;
 				}
 			});
-			Console.WriteLine("iteration {0} {1}", iterative_recommenders[0].NumIter, new RatingPredictionEvaluationResults(fold_results));
+			Console.WriteLine("{0} iteration {1}", new RatingPredictionEvaluationResults(fold_results), iterative_recommenders[0].NumIter);
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
@@ -166,7 +166,7 @@ namespace MyMediaLite.Eval
 						throw e;
 					}
 				});
-				Console.WriteLine("iteration {0} {1}", it, new RatingPredictionEvaluationResults(fold_results));
+				Console.WriteLine("{0} iteration {1}", new RatingPredictionEvaluationResults(fold_results), it);
 			}
 		}
 	}

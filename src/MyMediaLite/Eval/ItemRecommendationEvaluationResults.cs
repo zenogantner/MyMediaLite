@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -33,6 +33,19 @@ namespace MyMediaLite.Eval
 		{
 			foreach (string method in Items.Measures)
 				this[method] = 0;
+		}
+
+		/// <summary>Create averaged results</summary>
+		/// <param name='result_list'>the list of results to average</param>
+		public ItemRecommendationEvaluationResults(IList<Dictionary<string, float>> result_list)
+		{
+			foreach (var key in result_list[0].Keys)
+			{
+				this[key] = 0;
+				foreach (var r in result_list)
+					this[key] += r[key];
+				this[key] /= result_list.Count;
+			}
 		}
 
 		/// <summary>Format item prediction results</summary>

@@ -122,6 +122,7 @@ namespace MyMediaLite.Eval
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
+		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		static public void DoIterativeCrossValidation(
 			this IRecommender recommender,
 			uint num_folds,
@@ -130,7 +131,8 @@ namespace MyMediaLite.Eval
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
 			int max_iter,
-			int find_iter = 1)
+			int find_iter = 1,
+			bool show_fold_results = false)
 		{
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
@@ -148,6 +150,7 @@ namespace MyMediaLite.Eval
 		/// <param name="repeated_events">allow repeated events in the evaluation (i.e. items accessed by a user before may be in the recommended list)</param>
 		/// <param name="max_iter">the maximum number of iterations</param>
 		/// <param name="find_iter">the report interval</param>
+		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		static public void DoIterativeCrossValidation(
 			this IRecommender recommender,
 			ISplit<IPosOnlyFeedback> split,
@@ -156,7 +159,8 @@ namespace MyMediaLite.Eval
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
 			int max_iter,
-			int find_iter = 1)
+			int find_iter = 1,
+			bool show_fold_results = false)
 		{
 			if (!(recommender is IIterativeModel))
 				throw new ArgumentException("recommender must be of type IIterativeModel");
@@ -165,6 +169,7 @@ namespace MyMediaLite.Eval
 
 			var split_recommenders     = new ItemRecommender[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
+			var fold_results = new ItemRecommendationEvaluationResults[split.NumberOfFolds];
 
 			// initial training and evaluation
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
@@ -175,8 +180,9 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Feedback = split.Train[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-					Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
+					fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+					if (show_fold_results)
+						Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 				}
 				catch (Exception e)
 				{
@@ -184,9 +190,11 @@ namespace MyMediaLite.Eval
 					throw e;
 				}
 			});
+			Console.WriteLine("{0} iteration {1}", new ItemRecommendationEvaluationResults(fold_results), iterative_recommenders[0].NumIter);
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
+			{
 				Parallel.For(0, (int) split.NumberOfFolds, i =>
 				{
 					try
@@ -195,8 +203,9 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							var fold_results = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
-							Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
+							fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+							if (show_fold_results)
+								Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
 						}
 					}
 					catch (Exception e)
@@ -205,6 +214,8 @@ namespace MyMediaLite.Eval
 						throw e;
 					}
 				});
+				Console.WriteLine("{0} iteration {1}", new ItemRecommendationEvaluationResults(fold_results), it);
+			}
 		}
 	}
 }
