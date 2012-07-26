@@ -21,10 +21,10 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Rating predictor that allows folding in new users</summary>
+	/// <summary>Item recommender that allows folding in new users</summary>
 	/// <remarks>
 	///   <para>
-	///     The process of folding in is computing a predictive model for a new user based on their ratings
+	///     The process of folding in is computing a predictive model for a new user based on their feedback
 	///     and the existing recommender, without modifying the parameters of the existing recommender.
 	///   </para>
 	///   <para>
