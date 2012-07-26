@@ -95,13 +95,13 @@ namespace MyMediaLite.ItemRecommendation
 			int result = 0;
 			int ac;
 			foreach (int a in item_attributes[item_id])
-			{
 				if (attribute_count_by_user[user_id].TryGetValue(a, out ac))
 					result += ac;
-			}
-			return (float) result * (most_popular.Predict(user_id, item_id) + 1);
+			return (float) result * (most_popular.Predict(user_id, item_id) + 1) / item_attributes[item_id].Count;
 			// +1 guarantees that songs with a user-accessed attribute are ranked above other songs,
 			//    even if they have a count of zero.
+			// TODO what if song has no attributes?
+			// TODO think about other kinds of normalization
 		}
 
 		///
