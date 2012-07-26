@@ -453,6 +453,31 @@ namespace MyMediaLite.DataType
 			return result;
 		}
 
+		/// <summary>Compute the difference vector between two rows of two matrices</summary>
+		/// <param name="matrix1">the first matrix</param>
+		/// <param name="i">the first row ID</param>
+		/// <param name="matrix2">the second matrix</param>
+		/// <param name="j">the second row ID</param>
+		/// <returns>the difference vector of row i of matrix1 and row j of matrix2</returns>
+		static public IList<float> RowDifference(Matrix<float> matrix1, int i, Matrix<float> matrix2, int j)
+		{
+			if (i >= matrix1.dim1)
+				throw new ArgumentOutOfRangeException("i too big: " + i + ", dim1 is " + matrix1.dim1);
+			if (j >= matrix2.dim1)
+				throw new ArgumentOutOfRangeException("j too big: " + j + ", dim1 is " + matrix2.dim1);
+
+			if (matrix1.dim2 != matrix2.dim2)
+				throw new ArgumentException("wrong row size: " + matrix1.dim2 + " vs. " + matrix2.dim2);
+
+			var result = new float[matrix1.dim2];
+			int offset1 = i * matrix1.dim2;
+			int offset2 = j * matrix2.dim2;
+			for (int c = 0; c < matrix1.dim2; c++)
+				result[c] = matrix1.data[offset1 + c] - matrix2.data[offset2 + c];
+
+			return result;
+		}
+
 		/// <summary>Compute the scalar product of a matrix row with the difference vector of two other matrix rows</summary>
 		/// <param name="matrix1">the first matrix</param>
 		/// <param name="i">the first row ID</param>

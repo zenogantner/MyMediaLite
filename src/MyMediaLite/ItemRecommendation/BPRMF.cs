@@ -48,7 +48,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class BPRMF : MF
+	public class BPRMF : MF, IFoldInItemRecommender
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
@@ -179,7 +179,7 @@ namespace MyMediaLite.ItemRecommendation
 
 							// reset user if already exhausted
 							if (user_items.Count == 0)
-								foreach (int item_id in Feedback.UserMatrix[user_id])
+								foreach (int item_id in Feedback.UserMatrix[user_id]) // TODO define operation for this
 									user_matrix[user_id, item_id] = true;
 
 							pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
@@ -615,6 +615,70 @@ namespace MyMediaLite.ItemRecommendation
 				this.item_factors = item_factors;
 			}
 			random = Util.Random.GetInstance();
+		}
+
+		public IList<Pair<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
+		{
+			var user_factors = FoldIn(accessed_items);
+
+			var scored_items = new Pair<int, float>[candidate_items.Count];
+			for (int i = 0; i < scored_items.Length; i++)
+			{
+				int item_id = candidate_items[i];
+				float score = item_bias[item_id] + item_factors.RowScalarProduct(item_id, user_factors);
+				scored_items[i] = new Pair<int, float>(item_id, score);
+			}
+			return scored_items;
+		}
+
+		///
+		float[] FoldIn(IList<int> accessed_items)
+		{
+			var positive_items = new HashSet<int>(accessed_items);
+			//var candidate_items_set = new HashSet<int>(candidate_items); // TODO use this for variant
+
+			// initialize user parameters
+			var user_factors = new float[NumFactors];
+			user_factors.InitNormal(InitMean, InitStdDev);
+
+			// perform training
+			for (uint it = 0; it < NumIter; it++)
+				IterateUser(positive_items, user_factors);
+
+			return user_factors;
+		}
+
+		void IterateUser(ISet<int> user_items, IList<float> user_factors)
+		{
+			int num_pos_events = user_items.Count;
+
+			int user_id, pos_item_id, neg_item_id;
+
+			if (WithReplacement) // case 1: item sampling with replacement
+			{
+				throw new NotImplementedException();
+			}
+			else // case 2: item sampling without replacement
+			{
+				for (int i = 0; i < num_pos_events; i++)
+				{
+					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+					// TODO generalize and call UpdateFactors
+					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
+					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+
+					// adjust factors
+					for (int f = 0; f < num_factors; f++)
+					{
+						float w_uf = user_factors[f];
+						float h_if = item_factors[pos_item_id, f];
+						float h_jf = item_factors[neg_item_id, f];
+
+						double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
+						user_factors[f] = (float) (w_uf + learn_rate * update);
+					}
+				}
+			}
 		}
 
 		///
