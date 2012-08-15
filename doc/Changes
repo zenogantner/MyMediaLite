@@ -5,6 +5,8 @@
 	 - MostPopularByItemAttributes: divide score by number of item
            attributes (otherwise attributes with many attributes have
            automatically higher scores)
+	scripts
+         - add artist-to-song preprocessing script for MSD challenge
 
 3.02	2012-07-23
 	API
