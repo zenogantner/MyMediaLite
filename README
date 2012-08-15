@@ -18,6 +18,20 @@ Features
             GNU General Public License (GPL).
 
 
+Feedback and Contributions
+--------------------------
+We are always happy about feedback, and encourage MyMediaLite's users to
+contribute code to the project.
+
+Just fork it on GitHub and send pull requests!
+
+http://ismll.de/mymedialite/contribute.html
+
+Bugs and feature requests can be reported on our mailing list or in our issue
+tracker:
+https://groups.google.com/group/mymedialite
+https://github.com/zenogantner/MyMediaLite/issues
+
 Installation
 ------------
 See doc/Installation for installation instructions.
@@ -29,18 +43,6 @@ See doc/ and the website for more documentation.
 Website
 -------
   http://ismll.de/mymedialite
-
-Feedback and Contributions
---------------------------
-We are always happy about feedback, and encourage MyMediaLite's users to
-contribute code to the project.
-
-http://ismll.de/mymedialite/contribute.html
-
-Bugs and feature requests can be reported on our mailing list or in our issue
-tracker:
-https://groups.google.com/group/mymedialite
-https://github.com/zenogantner/MyMediaLite/issues
 
 Citing MyMediaLite
 ------------------
