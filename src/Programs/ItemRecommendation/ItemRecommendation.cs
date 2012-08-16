@@ -66,6 +66,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	public ItemRecommendation()
 	{
+		cutoff  = double.MinValue;
 		measure = "AUC";
 	}
 

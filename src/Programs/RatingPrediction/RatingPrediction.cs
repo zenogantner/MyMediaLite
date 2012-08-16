@@ -55,6 +55,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	public RatingPrediction()
 	{
 		measure = "RMSE";
+		cutoff = double.MaxValue;
 	}
 
 	protected override void ShowVersion()

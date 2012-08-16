@@ -5,6 +5,9 @@
 	 - MostPopularByItemAttributes: divide score by number of item
            attributes (otherwise attributes with many attributes have
            automatically higher scores)
+	command line tools
+	 - fix early abortion if cutoff not set for item_recommendation
+           (bug was introduced in 3.02)
 	scripts
          - add artist-to-song preprocessing script for MSD challenge
 

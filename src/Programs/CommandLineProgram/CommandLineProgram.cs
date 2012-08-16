@@ -67,7 +67,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected int max_iter   = 100;
 	protected string measure;
 	protected double epsilon = 0;
-	protected double cutoff  = double.MaxValue;
+	protected double cutoff;
 	protected int find_iter = 0;
 
 	// ID mapping objects
