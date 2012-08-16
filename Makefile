@@ -10,6 +10,7 @@ MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
+HOMEPAGE=${HOME}/src/homepage/public_html
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
 .PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
@@ -183,7 +184,7 @@ website:
 	ttree -s website/src/ -d website/public_html/ -c website/lib/ -l website/lib/ -r -f config --post_chomp -a
 
 copy-website: website
-	cp -r website/public_html/* ${HOME}/homepage/public_html/mymedialite/
+	cp -r website/public_html/* ${HOMEPAGE}/mymedialite/
 
 copy-packages-website:
-	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOME}/homepage/public_html/mymedialite/download
+	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOMEPAGE}/mymedialite/download
