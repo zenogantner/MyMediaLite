@@ -350,13 +350,13 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			var user_p = new float[NumFactors];
 			user_p.InitNormal(InitMean, InitStdDev);
 			float user_bias = 0;
 
-			var items = (from pair in rated_items select pair.First).ToArray();
+			var items = (from pair in rated_items select pair.Item1).ToArray();
 			float user_reg_weight = FrequencyRegularization ? (float) (Regularization / Math.Sqrt(items.Length)) : Regularization;
 
 			// compute stuff that will not change
@@ -370,13 +370,13 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[index].First;
+					int item_id = rated_items[index].Item1;
 
 					double prediction = global_bias + user_bias + item_bias[item_id];
 					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
 					prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
 
-					float err = (float) (rated_items[index].Second - prediction);
+					float err = (float) (rated_items[index].Item2 - prediction);
 
 					// adjust bias
 					user_bias += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias);

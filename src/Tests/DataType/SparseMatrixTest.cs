@@ -70,8 +70,8 @@ namespace Tests.DataType
 			Assert.AreEqual(1, matrix.NonEmptyEntryIDs.Count);
 			foreach (var pair in matrix.NonEmptyEntryIDs)
 			{
-				Assert.AreEqual(3, pair.First);
-				Assert.AreEqual(1, pair.Second);
+				Assert.AreEqual(3, pair.Item1);
+				Assert.AreEqual(1, pair.Item2);
 			}
 		}
 

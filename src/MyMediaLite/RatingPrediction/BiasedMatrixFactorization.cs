@@ -434,7 +434,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			SetupLoss();
 
@@ -450,13 +450,13 @@ namespace MyMediaLite.RatingPrediction
 			for (uint it = 0; it < NumIter; it++)
 				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[index].First;
+					int item_id = rated_items[index].Item1;
 
 					// compute rating and error
 					double score = global_bias + user_bias + item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, factors);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
-					double err = rated_items[index].Second - prediction;
+					double err = rated_items[index].Item2 - prediction;
 
 					float gradient_common = compute_gradient_common(sig_score, err);
 

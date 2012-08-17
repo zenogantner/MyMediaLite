@@ -42,39 +42,39 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestTopNWithCandidates()
 		{
-			var rated_items = new List<Pair<int, float>>();
-			rated_items.Add(new Pair<int, float>(1, 1.0f));
-			rated_items.Add(new Pair<int, float>(2, 4.0f));
-			rated_items.Add(new Pair<int, float>(3, 4.5f));
+			var rated_items = new List<Tuple<int, float>>();
+			rated_items.Add(Tuple.Create(1, 1.0f));
+			rated_items.Add(Tuple.Create(2, 4.0f));
+			rated_items.Add(Tuple.Create(3, 4.5f));
 
 			var candidate_items = new int[] { 4, 5, 6, 7, 8 };
 
 			IFoldInRatingPredictor recommender = CreateRecommender();
 
 			var result = recommender.RecommendItems(rated_items, candidate_items, 3);
-			Assert.GreaterOrEqual(result[0].Second, result[1].Second);
-			Assert.GreaterOrEqual(result[0].Second, result[2].Second);
-			Assert.GreaterOrEqual(result[1].Second, result[2].Second);
-			Assert.Contains(result[0].First, candidate_items);
-			Assert.Contains(result[1].First, candidate_items);
-			Assert.Contains(result[2].First, candidate_items);
+			Assert.GreaterOrEqual(result[0].Item2, result[1].Item2);
+			Assert.GreaterOrEqual(result[0].Item2, result[2].Item2);
+			Assert.GreaterOrEqual(result[1].Item2, result[2].Item2);
+			Assert.Contains(result[0].Item1, candidate_items);
+			Assert.Contains(result[1].Item1, candidate_items);
+			Assert.Contains(result[2].Item1, candidate_items);
 			Assert.AreEqual(3, result.Count);
 		}
 
 		[Test()]
 		public void TestTopNWithoutCandidates()
 		{
-			var rated_items = new List<Pair<int, float>>();
-			rated_items.Add(new Pair<int, float>(1, 1.0f));
-			rated_items.Add(new Pair<int, float>(2, 4.0f));
-			rated_items.Add(new Pair<int, float>(3, 4.5f));
+			var rated_items = new List<Tuple<int, float>>();
+			rated_items.Add(Tuple.Create(1, 1.0f));
+			rated_items.Add(Tuple.Create(2, 4.0f));
+			rated_items.Add(Tuple.Create(3, 4.5f));
 
 			IFoldInRatingPredictor recommender = CreateRecommender();
 
 			var result = recommender.RecommendItems(rated_items, 3);
-			Assert.GreaterOrEqual(result[0].Second, result[1].Second);
-			Assert.GreaterOrEqual(result[0].Second, result[2].Second);
-			Assert.GreaterOrEqual(result[1].Second, result[2].Second);
+			Assert.GreaterOrEqual(result[0].Item2, result[1].Item2);
+			Assert.GreaterOrEqual(result[0].Item2, result[2].Item2);
+			Assert.GreaterOrEqual(result[1].Item2, result[2].Item2);
 			Assert.AreEqual(3, result.Count);
 		}
 	}

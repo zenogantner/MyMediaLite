@@ -617,16 +617,17 @@ namespace MyMediaLite.ItemRecommendation
 			random = Util.Random.GetInstance();
 		}
 
-		public IList<Pair<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
+		///
+		public IList<Tuple<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
 		{
 			var user_factors = FoldIn(accessed_items);
 
-			var scored_items = new Pair<int, float>[candidate_items.Count];
+			var scored_items = new Tuple<int, float>[candidate_items.Count];
 			for (int i = 0; i < scored_items.Length; i++)
 			{
 				int item_id = candidate_items[i];
 				float score = item_bias[item_id] + item_factors.RowScalarProduct(item_id, user_factors);
-				scored_items[i] = new Pair<int, float>(item_id, score);
+				scored_items[i] = Tuple.Create(item_id, score);
 			}
 			return scored_items;
 		}

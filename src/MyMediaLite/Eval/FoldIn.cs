@@ -44,15 +44,15 @@ namespace MyMediaLite.Eval
 				{
 					var known_ratings = (
 						from index in update_data.ByUser[user_id]
-						select new Pair<int, float>(update_data.Items[index], update_data[index])
+						select Tuple.Create(update_data.Items[index], update_data[index])
 					).ToArray();
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
 					var predicted_ratings = recommender.ScoreItems(known_ratings, items_to_rate);
 
 					foreach (var pred in predicted_ratings)
 					{
-						float prediction = pred.Second;
-						float actual_rating = eval_data.Get(user_id, pred.First, eval_data.ByUser[user_id]);
+						float prediction = pred.Item2;
+						float actual_rating = eval_data.Get(user_id, pred.Item1, eval_data.ByUser[user_id]);
 						float error = prediction - actual_rating;
 
 						rmse += error * error;
@@ -104,8 +104,8 @@ namespace MyMediaLite.Eval
 
 					foreach (var pred in predicted_ratings)
 					{
-						float prediction = pred.Second;
-						float actual_rating = eval_data.Get(user_id, pred.First, eval_data.ByUser[user_id]);
+						float prediction = pred.Item2;
+						float actual_rating = eval_data.Get(user_id, pred.Item1, eval_data.ByUser[user_id]);
 						float error = prediction - actual_rating;
 
 						rmse += error * error;
@@ -156,8 +156,8 @@ namespace MyMediaLite.Eval
 
 					foreach (var pred in predicted_ratings)
 					{
-						float prediction = pred.Second;
-						float actual_rating = eval_data.Get(user_id, pred.First, eval_data.ByUser[user_id]);
+						float prediction = pred.Item2;
+						float actual_rating = eval_data.Get(user_id, pred.Item1, eval_data.ByUser[user_id]);
 						float error = prediction - actual_rating;
 
 						rmse += error * error;

@@ -70,7 +70,7 @@ namespace MyMediaLite.IO
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
-				writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(index_pair.Item1 + " " + index_pair.Item2 + " " + matrix[index_pair.Item1, index_pair.Item2].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -81,7 +81,7 @@ namespace MyMediaLite.IO
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
-				writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString(CultureInfo.InvariantCulture));
+				writer.WriteLine(index_pair.Item1 + " " + index_pair.Item2 + " " + matrix[index_pair.Item1, index_pair.Item2].ToString(CultureInfo.InvariantCulture));
 			writer.WriteLine();
 		}
 
@@ -92,7 +92,7 @@ namespace MyMediaLite.IO
 		{
 			writer.WriteLine(matrix.NumberOfRows + " " + matrix.NumberOfColumns);
 			foreach (var index_pair in matrix.NonEmptyEntryIDs)
-				writer.WriteLine(index_pair.First + " " + index_pair.Second + " " + matrix[index_pair.First, index_pair.Second].ToString());
+				writer.WriteLine(index_pair.Item1 + " " + index_pair.Item2 + " " + matrix[index_pair.Item1, index_pair.Item2].ToString());
 			writer.WriteLine();
 		}
 

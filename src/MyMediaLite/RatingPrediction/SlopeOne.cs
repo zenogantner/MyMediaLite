@@ -113,8 +113,8 @@ namespace MyMediaLite.RatingPrediction
 			// compute average differences
 			foreach (var pair in freq_matrix.NonEmptyEntryIDs)
 			{
-				int i = pair.First;
-				int j = pair.Second;
+				int i = pair.Item1;
+				int j = pair.Item2;
 				if (i < j)
 					diff_matrix[i, j] /= freq_matrix[i, j];
 			}

@@ -100,8 +100,8 @@ namespace MyMediaLite.RatingPrediction
 			}
 			// ... then apply (rounded) logarithm
 			foreach (var index_pair in log_frequency_by_day.NonEmptyEntryIDs)
-				log_frequency_by_day[index_pair.First, index_pair.Second]
-					= (int) Math.Ceiling(Math.Log(log_frequency_by_day[index_pair.First, index_pair.Second], FrequencyLogBase));
+				log_frequency_by_day[index_pair.Item1, index_pair.Item2]
+					= (int) Math.Ceiling(Math.Log(log_frequency_by_day[index_pair.Item1, index_pair.Item2], FrequencyLogBase));
 
 			base.Train();
 		}

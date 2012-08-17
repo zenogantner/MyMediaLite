@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
 using MyMediaLite.DataType;
 
@@ -45,6 +46,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <returns>a list of int and float pairs, representing item IDs and predicted scores</returns>
 		/// <param name='accessed_items'>the ratings (item IDs and rating values) representing the new user</param>
 		/// <param name='candidate_items'>the items to be rated</param>
-		IList<Pair<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items);
+		IList<Tuple<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items);
 	}
 }

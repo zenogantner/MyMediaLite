@@ -183,7 +183,6 @@
     <Compile Include="GroupRecommendation\PairwiseWins.cs" />
     <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="RatingPrediction\CoClustering.cs" />
-    <Compile Include="DataType\Pair.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="Correlation\WeightedBinaryCosine.cs" />
@@ -246,7 +245,7 @@
     <Folder Include="AttrToFactor\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SVM\SVM.csproj">
+    <ProjectReference Include="../SVM/SVM.csproj">
       <Project>{309290E3-E52B-4E67-9F6E-2A67B5D54320}</Project>
       <Name>SVM</Name>
     </ProjectReference>

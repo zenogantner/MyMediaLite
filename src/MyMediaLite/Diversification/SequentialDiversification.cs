@@ -67,27 +67,27 @@ namespace MyMediaLite.Diversification
 			while (item_set.Count > 0)
 			{
 				// rank remaining items by diversity
-				var items_by_diversity = new List<Pair<int, float>>();
+				var items_by_diversity = new List<Tuple<int, float>>();
 				foreach (int item_id in item_set)
 				{
 					float similarity = Similarity(item_id, diversified_item_list, ItemCorrelations);
-					items_by_diversity.Add(new Pair<int, float>(item_id, similarity));
+					items_by_diversity.Add(Tuple.Create(item_id, similarity));
 				}
-				items_by_diversity = items_by_diversity.OrderBy(x => x.Second).ToList();
+				items_by_diversity = items_by_diversity.OrderBy(x => x.Item2).ToList();
 
-				var items_by_merged_rank = new List<Pair<int, float>>();
+				var items_by_merged_rank = new List<Tuple<int, float>>();
 				for (int i = 0; i < items_by_diversity.Count; i++)
 				{
-					int item_id = items_by_diversity[i].First;
+					int item_id = items_by_diversity[i].Item1;
 					// i is the dissimilarity rank
 					// TODO adjust for ties
 					float score = item_rank_by_rating[item_id] * (1f - diversification_parameter) + i * diversification_parameter;
 
-					items_by_merged_rank.Add(new Pair<int, float>(item_id, score));
+					items_by_merged_rank.Add(Tuple.Create(item_id, score));
 				}
-				items_by_merged_rank = items_by_merged_rank.OrderBy(x => x.Second).ToList();
+				items_by_merged_rank = items_by_merged_rank.OrderBy(x => x.Item2).ToList();
 
-				int next_item_id = items_by_merged_rank[0].First;
+				int next_item_id = items_by_merged_rank[0].Item1;
 				diversified_item_list.Add(next_item_id);
 				item_set.Remove(next_item_id);
 			}

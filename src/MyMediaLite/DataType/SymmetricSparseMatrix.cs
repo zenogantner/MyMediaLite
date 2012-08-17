@@ -60,16 +60,16 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public override IList<Pair<int, int>> NonEmptyEntryIDs
+		public override IList<Tuple<int, int>> NonEmptyEntryIDs
 		{
 			get {
-				var return_list = new List<Pair<int, int>>();
+				var return_list = new List<Tuple<int, int>>();
 				for (int row_id = 0; row_id < index_list.Count; row_id++)
 					foreach (var col_id in index_list[row_id])
 					{
-						return_list.Add(new Pair<int, int>(row_id, col_id));
+						return_list.Add(Tuple.Create(row_id, col_id));
 						if (row_id != col_id)
-							return_list.Add(new Pair<int, int>(col_id, row_id));
+							return_list.Add(Tuple.Create(col_id, row_id));
 					}
 				return return_list;
 			}

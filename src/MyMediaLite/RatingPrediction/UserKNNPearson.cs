@@ -15,6 +15,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using MyMediaLite.Correlation;
@@ -50,7 +51,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected override IList<float> FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			var user_similarities = new float[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)

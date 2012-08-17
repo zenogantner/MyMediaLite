@@ -97,7 +97,7 @@ namespace MyMediaLite.ItemRecommendation
 			TextWriter writer,
 			IEntityMapping user_mapping, IEntityMapping item_mapping)
 		{
-			System.Collections.Generic.IList<Pair<int, float>> ordered_items;
+			System.Collections.Generic.IList<Tuple<int, float>> ordered_items;
 
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -105,19 +105,19 @@ namespace MyMediaLite.ItemRecommendation
 				item_mapping = new IdentityMapping();
 			if (num_predictions == -1)
 			{
-				var scored_items = new List<Pair<int, float>>();
+				var scored_items = new List<Tuple<int, float>>();
 				foreach (int item_id in candidate_items)
 					if (!ignore_items.Contains(item_id))
 					{
 						float score = recommender.Predict(user_id, item_id);
 						if (score > float.MinValue)
-							scored_items.Add(new Pair<int, float>(item_id, score));
+							scored_items.Add(Tuple.Create(item_id, score));
 					}
-				ordered_items = scored_items.OrderByDescending(x => x.Second).ToArray();
+				ordered_items = scored_items.OrderByDescending(x => x.Item2).ToArray();
 			}
 			else {
-				var comparer = new DelegateComparer<Pair<int, float>>( (a, b) => a.Second.CompareTo(b.Second) );
-				var heap = new IntervalHeap<Pair<int, float>>(num_predictions, comparer);
+				var comparer = new DelegateComparer<Tuple<int, float>>( (a, b) => a.Item2.CompareTo(b.Item2) );
+				var heap = new IntervalHeap<Tuple<int, float>>(num_predictions, comparer);
 				float min_relevant_score = float.MinValue;
 
 				foreach (int item_id in candidate_items)
@@ -126,16 +126,16 @@ namespace MyMediaLite.ItemRecommendation
 						float score = recommender.Predict(user_id, item_id);
 						if (score > min_relevant_score)
 						{
-							heap.Add(new Pair<int, float>(item_id, score));
+							heap.Add(Tuple.Create(item_id, score));
 							if (heap.Count > num_predictions)
 							{
 								heap.DeleteMin();
-								min_relevant_score = heap.FindMin().Second;
+								min_relevant_score = heap.FindMin().Item2;
 							}
 						}
 					}
 
-				ordered_items = new Pair<int, float>[heap.Count];
+				ordered_items = new Tuple<int, float>[heap.Count];
 				for (int i = 0; i < ordered_items.Count; i++)
 					ordered_items[i] = heap.DeleteMax();
 			}
@@ -143,11 +143,11 @@ namespace MyMediaLite.ItemRecommendation
 			writer.Write("{0}\t[", user_mapping.ToOriginalID(user_id));
 			if (ordered_items.Count > 0)
 			{
-				writer.Write("{0}:{1}", item_mapping.ToOriginalID(ordered_items[0].First), ordered_items[0].Second.ToString(CultureInfo.InvariantCulture));
+				writer.Write("{0}:{1}", item_mapping.ToOriginalID(ordered_items[0].Item1), ordered_items[0].Item2.ToString(CultureInfo.InvariantCulture));
 				for (int i = 1; i < ordered_items.Count; i++)
 				{
-					int item_id = ordered_items[i].First;
-					float score = ordered_items[i].Second;
+					int item_id = ordered_items[i].Item1;
+					float score = ordered_items[i].Item2;
 					writer.Write(",{0}:{1}", item_mapping.ToOriginalID(item_id), score.ToString(CultureInfo.InvariantCulture));
 				}
 			}

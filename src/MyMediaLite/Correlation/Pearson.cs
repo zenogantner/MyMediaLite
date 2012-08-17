@@ -167,19 +167,19 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_ratings">ratings identifying the first entity</param>
 		/// <param name="j">the ID of second entity</param>
 		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
-		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Pair<int, float>> entity_ratings, int j, float shrinkage)
+		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j, float shrinkage)
 		{
 			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
 
 			// get common ratings for the two entities
-			var e1 = new HashSet<int>(from pair in entity_ratings select pair.First);
+			var e1 = new HashSet<int>(from pair in entity_ratings select pair.Item1);
 			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes2) : ratings.GetUsers(indexes2);
 
 			e1.IntersectWith(e2);
 			var ratings1 = new Dictionary<int, float>();
 			for (int index = 0; index < entity_ratings.Count; index++)
-				if (e1.Contains(entity_ratings[index].First))
-					ratings1.Add(entity_ratings[index].First, entity_ratings[index].Second);
+				if (e1.Contains(entity_ratings[index].Item1))
+					ratings1.Add(entity_ratings[index].Item1, entity_ratings[index].Item2);
 
 			int n = e1.Count;
 			if (n < 2)

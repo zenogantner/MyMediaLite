@@ -137,9 +137,9 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Fold in one user, identified by their ratings</summary>
 		/// <returns>a vector containing the similarity with all users</returns>
 		/// <param name='rated_items'>the ratings to take into account</param>
-		abstract protected IList<float> FoldIn(IList<Pair<int, float>> rated_items);
+		abstract protected IList<float> FoldIn(IList<Tuple<int, float>> rated_items);
 		
-		float Predict(IList<float> user_similarities, IList<Pair<int, float>> rated_items, int item_id)
+		float Predict(IList<float> user_similarities, IList<Tuple<int, float>> rated_items, int item_id)
 		{
 			if (item_id > MaxItemID)
 				return baseline_predictor.Predict(int.MaxValue, item_id);
@@ -185,16 +185,16 @@ namespace MyMediaLite.RatingPrediction
 		}
 		
 		///
-		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		public IList<Tuple<int, float>> ScoreItems(IList<Tuple<int, float>> rated_items, IList<int> candidate_items)
 		{
 			var user_similarities = FoldIn(rated_items);
 
 			// score the items
-			var result = new Pair<int, float>[candidate_items.Count];
+			var result = new Tuple<int, float>[candidate_items.Count];
 			for (int i = 0; i < candidate_items.Count; i++)
 			{
 				int item_id = candidate_items[i];
-				result[i] = new Pair<int, float>(item_id, Predict(user_similarities, rated_items, item_id));
+				result[i] = Tuple.Create(item_id, Predict(user_similarities, rated_items, item_id));
 			}
 			return result;
 		}

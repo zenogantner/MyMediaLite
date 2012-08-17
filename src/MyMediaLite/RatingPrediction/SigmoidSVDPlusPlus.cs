@@ -184,7 +184,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float[] FoldIn(IList<Pair<int, float>> rated_items)
+		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			SetupLoss();
 
@@ -192,7 +192,7 @@ namespace MyMediaLite.RatingPrediction
 			user_p.InitNormal(InitMean, InitStdDev);
 			float user_bias = 0;
 
-			var items = (from pair in rated_items select pair.First).ToArray();
+			var items = (from pair in rated_items select pair.Item1).ToArray();
 			float user_reg_weight = FrequencyRegularization ? (float) (Regularization / Math.Sqrt(items.Length)) : Regularization;
 
 			// compute stuff that will not change
@@ -206,14 +206,14 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[index].First;
+					int item_id = rated_items[index].Item1;
 
 					double score = global_bias + user_bias + item_bias[item_id];
 					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, y_sum_vector);
 					score += DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_p);
 					double sig_score = 1 / (1 + Math.Exp(-score));
 					double prediction = min_rating + sig_score * rating_range_size;
-					float err = (float) (rated_items[index].Second - prediction);
+					float err = (float) (rated_items[index].Item2 - prediction);
 					float gradient_common = compute_gradient_common(sig_score, err);
 
 					// adjust bias

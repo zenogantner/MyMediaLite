@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using C5;
@@ -37,11 +38,11 @@ namespace MyMediaLite
 			System.Collections.Generic.IList<int> candidate_items, int n = -1)
 		{
 			var scored_items = ScoreItems(recommender, user_id, candidate_items, n);
-			scored_items = scored_items.OrderByDescending(x => x.Second).ToArray();
+			scored_items = scored_items.OrderByDescending(x => x.Item2).ToArray();
 
 			var result = new int[scored_items.Count];
 			for (int i = 0; i < result.Length; i++)
-				result[i] = scored_items[i].First;
+				result[i] = scored_items[i].Item1;
 
 			return result;
 		}
@@ -52,24 +53,24 @@ namespace MyMediaLite
 		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
 		/// <param name="n">number of items to return (optional)</param>
 		/// <returns>a list of pairs, each pair consisting of the item ID and the predicted score</returns>
-		static public System.Collections.Generic.IList<Pair<int, float>> ScoreItems(
+		static public System.Collections.Generic.IList<Tuple<int, float>> ScoreItems(
 			this IRecommender recommender, int user_id,
 			System.Collections.Generic.IList<int> candidate_items, int n = -1)
 		{
 			if (n == -1)
 			{
-				var result = new Pair<int, float>[candidate_items.Count];
+				var result = new Tuple<int, float>[candidate_items.Count];
 				for (int i = 0; i < candidate_items.Count; i++)
 				{
 					int item_id = candidate_items[i];
-					result[i] = new Pair<int, float>(item_id, recommender.Predict(user_id, item_id));
+					result[i] = Tuple.Create(item_id, recommender.Predict(user_id, item_id));
 				}
 				return result;
 			}
 			else
 			{
-				var comparer = new DelegateComparer<Pair<int, float>>( (a, b) => a.Second.CompareTo(b.Second) );
-				var heap = new IntervalHeap<Pair<int, float>>(n, comparer);
+				var comparer = new DelegateComparer<Tuple<int, float>>( (a, b) => a.Item2.CompareTo(b.Item2) );
+				var heap = new IntervalHeap<Tuple<int, float>>(n, comparer);
 				float min_relevant_score = float.MinValue;
 
 				foreach (int item_id in candidate_items)
@@ -77,16 +78,16 @@ namespace MyMediaLite
 					float score = recommender.Predict(user_id, item_id);
 					if (score > min_relevant_score)
 					{
-						heap.Add(new Pair<int, float>(item_id, score));
+						heap.Add(Tuple.Create(item_id, score));
 						if (heap.Count > n)
 						{
 							heap.DeleteMin();
-							min_relevant_score = heap.FindMin().Second;
+							min_relevant_score = heap.FindMin().Item2;
 						}
 					}
 				}
 
-				var result = new Pair<int, float>[heap.Count];
+				var result = new Tuple<int, float>[heap.Count];
 				for (int i = 0; i < result.Length; i++)
 					result[i] = heap.DeleteMax();
 				return result;

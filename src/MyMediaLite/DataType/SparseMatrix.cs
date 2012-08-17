@@ -106,13 +106,13 @@ namespace MyMediaLite.DataType
 
 		/// <summary>The row and column IDs of non-empty entries in the matrix</summary>
 		/// <value>The row and column IDs of non-empty entries in the matrix</value>
-		public virtual IList<Pair<int, int>> NonEmptyEntryIDs
+		public virtual IList<Tuple<int, int>> NonEmptyEntryIDs
 		{
 			get {
-				var return_list = new List<Pair<int, int>>();
+				var return_list = new List<Tuple<int, int>>();
 				for (int row_id = 0; row_id < index_list.Count; row_id++)
 					foreach (var col_id in index_list[row_id])
-						return_list.Add(new Pair<int, int>(row_id, col_id));
+						return_list.Add(new Tuple<int, int>(row_id, col_id));
 				return return_list;
 			}
 		}
@@ -168,8 +168,8 @@ namespace MyMediaLite.DataType
 		public virtual IMatrix<T> Transpose()
 		{
 			var transpose = new SparseMatrix<T>(NumberOfColumns, NumberOfRows);
-			foreach (Pair<int, int> p in NonEmptyEntryIDs)
-				transpose[p.Second, p.First] = this[p.First, p.Second];
+			foreach (Tuple<int, int> p in NonEmptyEntryIDs)
+				transpose[p.Item2, p.Item1] = this[p.Item1, p.Item2];
 			return transpose;
 		}
 	}

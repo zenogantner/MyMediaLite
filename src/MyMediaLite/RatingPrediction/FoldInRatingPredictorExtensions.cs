@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.DataType;
@@ -31,10 +32,10 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='rated_items'>a list of item IDs and ratings describing the user</param>
 		/// <param name='candidate_items'>the recommendation candidates</param>
 		/// <param name='n'>the number of items to recommend</param>
-		public static IList<Pair<int, float>> RecommendItems(this IFoldInRatingPredictor recommender, IList<Pair<int, float>> rated_items, IList<int> candidate_items, int n)
+		public static IList<Tuple<int, float>> RecommendItems(this IFoldInRatingPredictor recommender, IList<Tuple<int, float>> rated_items, IList<int> candidate_items, int n)
 		{
 			var scored_items = recommender.ScoreItems(rated_items, candidate_items);
-			return scored_items.OrderByDescending(x => x.Second).Take(n).ToArray();
+			return scored_items.OrderByDescending(x => x.Item2).Take(n).ToArray();
 		}
 
 		/// <summary>Recommend top N items, based on a user description by ratings</summary>
@@ -42,18 +43,18 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the IFoldInRatingPredictor recommender</param>
 		/// <param name='rated_items'>a list of item IDs and ratings describing the user</param>
 		/// <param name='n'>the number of items to recommend</param>
-		public static IList<Pair<int, float>> RecommendItems(this IFoldInRatingPredictor recommender, IList<Pair<int, float>> rated_items, int n)
+		public static IList<Tuple<int, float>> RecommendItems(this IFoldInRatingPredictor recommender, IList<Tuple<int, float>> rated_items, int n)
 		{
 			var candidate_items = Enumerable.Range(0, ((RatingPredictor)recommender).Ratings.MaxItemID - 1).ToArray();
 			var scored_items = recommender.ScoreItems(rated_items, candidate_items);
-			return scored_items.OrderByDescending(x => x.Second).Take(n).ToArray();
+			return scored_items.OrderByDescending(x => x.Item2).Take(n).ToArray();
 		}
 
 		/// <summary>Recommend top N items, based on a user description by ratings</summary>
 		/// <returns>a list of item IDs with scores</returns>
 		/// <param name='recommender'>the IFoldInRatingPredictor recommender</param>
 		/// <param name='rated_items'>a list of item IDs and ratings describing the user</param>
-		public static IList<Pair<int, float>> ScoreItems(this IFoldInRatingPredictor recommender, IList<Pair<int, float>> rated_items)
+		public static IList<Tuple<int, float>> ScoreItems(this IFoldInRatingPredictor recommender, IList<Tuple<int, float>> rated_items)
 		{
 			var candidate_items = Enumerable.Range(0, ((RatingPredictor)recommender).Ratings.MaxItemID - 1).ToArray();
 			return recommender.ScoreItems(rated_items, candidate_items);

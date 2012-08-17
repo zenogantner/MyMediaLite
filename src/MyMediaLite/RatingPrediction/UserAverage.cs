@@ -16,6 +16,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
@@ -88,16 +89,16 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		public IList<Tuple<int, float>> ScoreItems(IList<Tuple<int, float>> rated_items, IList<int> candidate_items)
 		{
-			float user_average = (float) (from pair in rated_items select pair.Second).Average();
+			float user_average = (float) (from pair in rated_items select pair.Item2).Average();
 
 			// score the items
-			var result = new Pair<int, float>[candidate_items.Count];
+			var result = new Tuple<int, float>[candidate_items.Count];
 			for (int i = 0; i < candidate_items.Count; i++)
 			{
 				int item_id = candidate_items[i];
-				result[i] = new Pair<int, float>(item_id, user_average);
+				result[i] = Tuple.Create(item_id, user_average);
 			}
 			return result;
 		}

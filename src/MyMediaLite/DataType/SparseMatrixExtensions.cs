@@ -63,7 +63,7 @@ namespace MyMediaLite.DataType
 		{
 			double squared_entry_sum = 0; // TODO speed-up: go over all entries of value_list
 			foreach (var entry in matrix.NonEmptyEntryIDs)
-				squared_entry_sum += Math.Pow(matrix[entry.First, entry.Second], 2);
+				squared_entry_sum += Math.Pow(matrix[entry.Item1, entry.Item2], 2);
 			return Math.Sqrt(squared_entry_sum);
 		}
 
@@ -77,7 +77,7 @@ namespace MyMediaLite.DataType
 		{
 			double squared_entry_sum = 0; // TODO speed-up: go over all entries of value_list
 			foreach (var entry in matrix.NonEmptyEntryIDs)
-				squared_entry_sum += Math.Pow(matrix[entry.First, entry.Second], 2);
+				squared_entry_sum += Math.Pow(matrix[entry.Item1, entry.Item2], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
 	}

@@ -50,8 +50,6 @@ namespace MyMediaLite.Data
 			int user_id = Users[index];
 			int item_id = Items[index];
 
-			Console.Error.WriteLine("at " + index);
-
 			indices.RemoveAt(index);
 			UpdateCountsAndIndices(new HashSet<int>() { user_id }, new HashSet<int>() { item_id });
 		}
@@ -64,7 +62,6 @@ namespace MyMediaLite.Data
 			for (int index = 0; index < Count; index++)
 				if (Users[index] == user_id)
 				{
-					Console.Error.WriteLine("remove {0}: {1} {2} {3}", index, Users[index], Items[index], Values[index]);
 					items_to_update.Add(Items[index]);
 					indices.RemoveAt(index);
 					index--; // avoid missing an entry

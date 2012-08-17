@@ -51,9 +51,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override IList<float> FoldIn(IList<Pair<int, float>> rated_items)
+		protected override IList<float> FoldIn(IList<Tuple<int, float>> rated_items)
 		{
-			var user_items = new HashSet<int>(from pair in rated_items select pair.First);
+			var user_items = new HashSet<int>(from pair in rated_items select pair.Item1);
 
 			var user_similarities = new float[MaxUserID + 1];
 			for (int u = 0; u <= MaxUserID; u++)

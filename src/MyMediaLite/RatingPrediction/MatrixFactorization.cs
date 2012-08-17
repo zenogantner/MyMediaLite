@@ -304,7 +304,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Compute parameters (latent factors) for a user represented by ratings</summary>
 		/// <returns>a vector of latent factors</returns>
 		/// <param name='rated_items'>a list of (item ID, rating value) pairs</param>
-		protected virtual float[] FoldIn(IList<Pair<int, float>> rated_items)
+		protected virtual float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			var user_vector = new float[NumFactors];
 			user_vector.InitNormal(InitMean, InitStdDev);
@@ -313,8 +313,8 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int index = 0; index < rated_items.Count; index++)
 				{
-					int item_id = rated_items[index].First;
-					float err = rated_items[index].Second - Predict(user_vector, item_id, false);
+					int item_id = rated_items[index].Item1;
+					float err = rated_items[index].Item2 - Predict(user_vector, item_id, false);
 
 					// adjust factors
 					for (int f = 0; f < NumFactors; f++)
@@ -331,16 +331,16 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public IList<Pair<int, float>> ScoreItems(IList<Pair<int, float>> rated_items, IList<int> candidate_items)
+		public IList<Tuple<int, float>> ScoreItems(IList<Tuple<int, float>> rated_items, IList<int> candidate_items)
 		{
 			var user_vector = FoldIn(rated_items);
 
 			// score the items
-			var result = new Pair<int, float>[candidate_items.Count];
+			var result = new Tuple<int, float>[candidate_items.Count];
 			for (int i = 0; i < candidate_items.Count; i++)
 			{
 				int item_id = candidate_items[i];
-				result[i] = new Pair<int, float>(item_id, Predict(user_vector, item_id));
+				result[i] = Tuple.Create(item_id, Predict(user_vector, item_id));
 			}
 			return result;
 		}
