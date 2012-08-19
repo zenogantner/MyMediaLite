@@ -20,7 +20,7 @@ using System.Collections.Generic;
 namespace MyMediaLite.Data
 {
 	/// <summary>Interface to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
-	public interface IEntityMapping
+	public interface IMapping
 	{
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>

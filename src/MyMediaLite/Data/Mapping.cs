@@ -24,7 +24,7 @@ namespace MyMediaLite.Data
 {
 	/// <summary>Class to map external entity IDs to internal ones to ensure that there are no gaps in the numbering</summary>
 	[Serializable()]
-	public sealed class EntityMapping : IEntityMapping, ISerializable
+	public sealed class Mapping : IMapping, ISerializable
 	{
 		/// <summary>Contains the mapping from the original (external) IDs to the internal IDs</summary>
 		/// <remarks>
@@ -49,10 +49,10 @@ namespace MyMediaLite.Data
 		public int NumberOfEntities { get { return internal_to_original.Count; } }
 
 		/// <summary>default constructor</summary>
-		public EntityMapping() { }
+		public Mapping() { }
 
 		///
-		public EntityMapping(SerializationInfo info, StreamingContext context)
+		public Mapping(SerializationInfo info, StreamingContext context)
 		{
 			original_to_internal = (Dictionary<string, int>) info.GetValue("original_to_internal", typeof(Dictionary<string, int>));
 			internal_to_original = (List<string>) info.GetValue("internal_to_original", typeof(List<string>));
