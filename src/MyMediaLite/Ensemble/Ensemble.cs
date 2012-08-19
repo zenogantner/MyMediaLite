@@ -29,7 +29,7 @@ namespace MyMediaLite.Ensemble
 	public abstract class Ensemble : IRecommender
 	{
 		/// <summary>list of recommenders</summary>
-		public List<IRecommender> recommenders = new List<IRecommender>();
+		public IList<IRecommender> recommenders = new List<IRecommender>();
 
 		private float max_rating_value = 5;
 		private float min_rating_value = 1;

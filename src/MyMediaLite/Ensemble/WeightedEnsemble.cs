@@ -33,7 +33,7 @@ namespace MyMediaLite.Ensemble
 	public class WeightedEnsemble : Ensemble
 	{
 		/// <summary>List of component weights</summary>
-		public List<float> weights = new List<float>();
+		public IList<float> weights = new List<float>();
 
 		/// <summary>Sum of the component weights</summary>
 		protected double weight_sum;
