@@ -31,8 +31,8 @@ namespace MyMediaLite.IO
 	{
 		/// <summary>Read in implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
@@ -54,8 +54,8 @@ namespace MyMediaLite.IO
 
 		/// <summary>Read in implicit feedback data from a TextReader</summary>
 		/// <param name="reader">the TextReader to be read from</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
