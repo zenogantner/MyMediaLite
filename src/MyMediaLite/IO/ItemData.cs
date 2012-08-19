@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public IPosOnlyFeedback Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			string binary_filename = filename + ".bin.PosOnlyFeedback";
 			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
@@ -58,7 +58,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public IPosOnlyFeedback Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -100,7 +100,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
 		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
-		static public IPosOnlyFeedback Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
+		static public IPosOnlyFeedback Read(IDataReader reader, IMapping user_mapping, IMapping item_mapping)
 		{
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 

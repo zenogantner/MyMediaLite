@@ -51,7 +51,7 @@ namespace MovieDemo
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="encoding">the encoding of the file</param>
 		/// <param name="item_mapping">ID mapping for the movies</param>
-		public void Read(string filename, Encoding encoding, EntityMapping item_mapping)
+		public void Read(string filename, Encoding encoding, Mapping item_mapping)
 		{
 			using ( var reader = new StreamReader(filename, encoding) )
 				Read(reader, item_mapping);
@@ -60,7 +60,7 @@ namespace MovieDemo
 		/// <summary>Read movie data from a file</summary>
 		/// <param name="filename">the name of the file to be read from</param>
 		/// <param name="item_mapping">ID mapping for the movies</param>
-		public void Read(string filename, EntityMapping item_mapping)
+		public void Read(string filename, Mapping item_mapping)
 		{
 			using ( var reader = new StreamReader(filename) )
 				Read(reader, item_mapping);
@@ -69,7 +69,7 @@ namespace MovieDemo
 		/// <summary>Read movie data from a StreamReader</summary>
 		/// <param name="reader">a StreamReader to be read from</param>
 		/// <param name="item_mapping">ID mapping for the movies</param>
-		public void Read(StreamReader reader, EntityMapping item_mapping)
+		public void Read(StreamReader reader, Mapping item_mapping)
 		{
 			movie_list = new List<Movie>();
 			IMDB_KEY_To_ID = new Dictionary<string, int>();

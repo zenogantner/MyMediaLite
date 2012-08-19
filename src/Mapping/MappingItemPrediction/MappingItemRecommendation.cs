@@ -149,8 +149,8 @@ class MappingItemRecommendation
 			Usage(-1);
 
 		// ID mapping objects
-		var user_mapping = new EntityMapping();
-		var item_mapping = new EntityMapping();
+		var user_mapping = new Mapping();
+		var item_mapping = new Mapping();
 
 		// training data
 		training_data = ItemData.Read(Path.Combine(data_dir, trainfile), user_mapping, item_mapping);

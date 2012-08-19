@@ -36,7 +36,7 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public IRatings Read(
 			string filename,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
+			IMapping user_mapping = null, IMapping item_mapping = null,
 			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{
@@ -72,7 +72,7 @@ namespace MyMediaLite.IO
 		/// <returns>the rating data</returns>
 		static public IRatings Read(
 			TextReader reader, int size,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
+			IMapping user_mapping = null, IMapping item_mapping = null,
 			RatingType rating_type = RatingType.FLOAT,
 			bool ignore_first_line = false)
 		{

@@ -35,7 +35,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
+		static public ITimedRatings Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null)
 		{
 			string binary_filename = filename + ".bin.TimedRatings";
 			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
@@ -57,7 +57,7 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
+		static public ITimedRatings Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();

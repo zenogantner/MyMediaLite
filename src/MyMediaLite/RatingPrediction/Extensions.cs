@@ -39,8 +39,8 @@ namespace MyMediaLite.RatingPrediction
 			this IRecommender recommender,
 			IRatings ratings,
 			TextWriter writer,
-			IEntityMapping user_mapping = null,
-			IEntityMapping item_mapping = null,
+			IMapping user_mapping = null,
+			IMapping item_mapping = null,
 			string line_format = "{0}\t{1}\t{2}",
 			string header = null)
 		{
@@ -85,7 +85,7 @@ namespace MyMediaLite.RatingPrediction
 			this IRecommender recommender,
 			IRatings ratings,
 			string filename,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null,
+			IMapping user_mapping = null, IMapping item_mapping = null,
 			string line_format = "{0}\t{1}\t{2}",
 			string header = null)
 		{

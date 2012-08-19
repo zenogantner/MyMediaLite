@@ -22,7 +22,7 @@ using System.Linq;
 namespace MyMediaLite.Data
 {
 	/// <summary>Identity mapping for entity IDs: Every original ID is mapped to itself</summary>
-	public sealed class IdentityMapping : IEntityMapping
+	public sealed class IdentityMapping : IMapping
 	{
 		private int MaxEntityID { get; set; }
 

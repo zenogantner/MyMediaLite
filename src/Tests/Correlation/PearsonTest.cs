@@ -81,8 +81,8 @@ namespace Tests.Correlation
 		[Test()] public void TestComputeCorrelations2()
 		{
 			// load data from disk
-			var user_mapping = new EntityMapping();
-			var item_mapping = new EntityMapping();
+			var user_mapping = new Mapping();
+			var item_mapping = new Mapping();
 			var ratings = RatingData.Read("../../../../data/ml-100k/u1.base", user_mapping, item_mapping);
 
 			Assert.AreEqual(-0.02788301f, Pearson.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311, 200f), 0.00001);

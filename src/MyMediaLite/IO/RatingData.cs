@@ -34,16 +34,16 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public IRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public IRatings Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
-			if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping) && File.Exists(filename + ".bin.Ratings"))
+			if (!(user_mapping is Mapping) && !(item_mapping is Mapping) && File.Exists(filename + ".bin.Ratings"))
 				return (IRatings) FileSerializer.Deserialize(filename + ".bin.Ratings");
 
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
 					var ratings = (Ratings) Read(reader, user_mapping, item_mapping);
-					if (!(user_mapping is EntityMapping) && !(item_mapping is EntityMapping))
+					if (!(user_mapping is Mapping) && !(item_mapping is Mapping))
 						ratings.Serialize(filename + ".bin.Ratings");
 					return ratings;
 				}
@@ -57,7 +57,7 @@ namespace MyMediaLite.IO
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+			Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -95,7 +95,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <returns>the rating data</returns>
 		static public IRatings
-			Read(IDataReader reader, IEntityMapping user_mapping, IEntityMapping item_mapping)
+			Read(IDataReader reader, IMapping user_mapping, IMapping item_mapping)
 		{
 			var ratings = new Ratings();
 

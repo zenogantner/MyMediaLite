@@ -33,7 +33,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public ITimedRatings Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			string binary_filename = filename + ".bin.TimedRatings";
 			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
@@ -56,7 +56,7 @@ namespace MyMediaLite.IO
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(TextReader reader, IEntityMapping user_mapping = null, IEntityMapping item_mapping = null, bool ignore_first_line = false)
+		static public ITimedRatings Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();

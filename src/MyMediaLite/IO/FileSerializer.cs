@@ -31,9 +31,9 @@ namespace MyMediaLite.IO
 		/// <returns><c>true</c> if we should serialize; otherwise, <c>false</c></returns>
 		/// <param name='user_mapping'>user ID mapping</param>
 		/// <param name='item_mapping'>item ID mapping</param>
-		public static bool Should(IEntityMapping user_mapping, IEntityMapping item_mapping)
+		public static bool Should(IMapping user_mapping, IMapping item_mapping)
 		{
-			return !(user_mapping is EntityMapping) && !(item_mapping is EntityMapping);
+			return !(user_mapping is Mapping) && !(item_mapping is Mapping);
 		}
 
 		/// <summary>Determine whether we can write our data to the disk</summary>

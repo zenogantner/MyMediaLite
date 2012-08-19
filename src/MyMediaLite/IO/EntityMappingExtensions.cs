@@ -28,7 +28,7 @@ namespace MyMediaLite.IO
 		/// <summary>Save the mappings to a file</summary>
 		/// <param name='mapping'>the mapping object to store</param>
 		/// <param name='filename'>the name of the file</param>
-		public static void SaveMapping(this IEntityMapping mapping, string filename)
+		public static void SaveMapping(this IMapping mapping, string filename)
 		{
 			using ( var writer = new StreamWriter(filename) )
 				foreach (int internal_id in mapping.InternalIDs)
@@ -38,9 +38,9 @@ namespace MyMediaLite.IO
 		/// <summary>Load entity mappings from a file</summary>
 		/// <param name='filename'>the name of the file</param>
 		/// <returns>an object of type EntityMapping</returns>
-		public static IEntityMapping LoadMapping(string filename)
+		public static IMapping LoadMapping(string filename)
 		{
-			var mapping = new EntityMapping();
+			var mapping = new Mapping();
 
 			using ( var reader = new StreamReader(filename) )
 			{
