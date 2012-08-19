@@ -23,6 +23,6 @@ namespace MyMediaLite.ItemRecommendation
 	public interface ITransductiveItemRecommender
 	{
 		/// <summary>user-item combinations that are known to be queried</summary>
-		IPosOnlyFeedback Feedback { get; set; }
+		IPosOnlyFeedback AdditionalFeedback { get; set; }
 	}
 }
