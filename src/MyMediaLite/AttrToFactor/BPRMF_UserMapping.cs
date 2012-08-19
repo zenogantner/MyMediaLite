@@ -42,7 +42,7 @@ namespace MyMediaLite.AttrToFactor
 	public class BPRMF_UserMapping : BPRMF_Mapping, IUserAttributeAwareRecommender
 	{
 		///
-		public SparseBooleanMatrix UserAttributes
+		public IBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
 			set {
@@ -52,7 +52,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 		/// <summary>The matrix storing the user attributes</summary>
-		protected SparseBooleanMatrix user_attributes;
+		protected IBooleanMatrix user_attributes;
 
 		///
 		public int NumUserAttributes { get; set; }

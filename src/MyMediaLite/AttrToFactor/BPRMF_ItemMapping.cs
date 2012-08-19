@@ -43,7 +43,7 @@ namespace MyMediaLite.AttrToFactor
 	public class BPRMF_ItemMapping : BPRMF_Mapping, IItemAttributeAwareRecommender
 	{
 		///
-		public SparseBooleanMatrix ItemAttributes
+		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set {
@@ -53,7 +53,7 @@ namespace MyMediaLite.AttrToFactor
 			}
 		}
 		/// <summary>The matrix storing the item attributes</summary>
-		protected SparseBooleanMatrix item_attributes;
+		protected IBooleanMatrix item_attributes;
 
 		///
 		public int NumItemAttributes { get;	set; }

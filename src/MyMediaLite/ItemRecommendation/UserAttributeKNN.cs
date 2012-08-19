@@ -28,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
 		///
-		public SparseBooleanMatrix UserAttributes
+		public IBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
 			set {
@@ -37,7 +37,7 @@ namespace MyMediaLite.ItemRecommendation
 				this.MaxUserID = Math.Max(MaxUserID, user_attributes.NumberOfRows - 1);
 			}
 		}
-		private SparseBooleanMatrix user_attributes;
+		private IBooleanMatrix user_attributes;
 
 		///
 		public int NumUserAttributes { get; private set; }

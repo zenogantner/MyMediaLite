@@ -76,7 +76,7 @@ namespace MyMediaLite.ItemRecommendation
 		Matrix<float> item_attribute_to_factor;
 
 		///
-		public SparseBooleanMatrix ItemAttributes
+		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set {
@@ -86,13 +86,13 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 		/// <summary>The matrix storing the item attributes</summary>
-		protected SparseBooleanMatrix item_attributes;
+		protected IBooleanMatrix item_attributes;
 
 		///
 		public int NumItemAttributes { get;	set; }
 
 		///
-		public SparseBooleanMatrix UserAttributes
+		public IBooleanMatrix UserAttributes
 		{
 			get { return this.user_attributes; }
 			set {
@@ -102,7 +102,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 		/// <summary>The matrix storing the user attributes</summary>
-		protected SparseBooleanMatrix user_attributes;
+		protected IBooleanMatrix user_attributes;
 
 		///
 		public int NumUserAttributes { get; set; }

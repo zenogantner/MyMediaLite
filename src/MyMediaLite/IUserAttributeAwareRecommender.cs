@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,6 +29,6 @@ namespace MyMediaLite
 
 		/// <value>The binary user attributes</value>
 		/// <remarks></remarks>
-		SparseBooleanMatrix UserAttributes { get; set; }
+		IBooleanMatrix UserAttributes { get; set; }
 	}
 }

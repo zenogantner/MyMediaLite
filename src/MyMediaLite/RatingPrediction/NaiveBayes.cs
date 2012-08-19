@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
 		public float AttributeSmoothing { get; set; }
 
 		///
-		public SparseBooleanMatrix ItemAttributes
+		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set {
@@ -48,7 +48,7 @@ namespace MyMediaLite.RatingPrediction
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
-		private SparseBooleanMatrix item_attributes;
+		private IBooleanMatrix item_attributes;
 
 		Matrix<float> user_class_probabilities;
 		IList<SparseMatrix<float>> user_attribute_given_class_probabilities;

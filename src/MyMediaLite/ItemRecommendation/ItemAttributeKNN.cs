@@ -29,16 +29,16 @@ namespace MyMediaLite.ItemRecommendation
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
 		///
-		public SparseBooleanMatrix ItemAttributes
+		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
-			set	{
+			set {
 				this.item_attributes = value;
 				this.NumItemAttributes = item_attributes.NumberOfColumns;
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
-		private SparseBooleanMatrix item_attributes;
+		private IBooleanMatrix item_attributes;
 
 		///
 		public int NumItemAttributes { get;	private set; }

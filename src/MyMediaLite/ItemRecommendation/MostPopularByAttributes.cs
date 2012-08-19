@@ -50,7 +50,7 @@ namespace MyMediaLite.ItemRecommendation
 		IList<IDictionary<int, int>> attribute_count_by_user;
 
 		///
-		public SparseBooleanMatrix ItemAttributes
+		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
 			set {
@@ -59,7 +59,7 @@ namespace MyMediaLite.ItemRecommendation
 				this.MaxItemID = Math.Max(MaxItemID, item_attributes.NumberOfRows - 1);
 			}
 		}
-		private SparseBooleanMatrix item_attributes;
+		private IBooleanMatrix item_attributes;
 
 		///
 		public int NumItemAttributes { get; private set; }
