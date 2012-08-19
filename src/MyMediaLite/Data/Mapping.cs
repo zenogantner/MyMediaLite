@@ -40,7 +40,7 @@ namespace MyMediaLite.Data
 
 		/// <summary>all original (external) entity IDs</summary>
 		/// <value>all original (external) entity IDs</value>
-		public ICollection<string> OriginalIDs	{ get { return original_to_internal.Keys; } }
+		public ICollection<string> OriginalIDs { get { return original_to_internal.Keys; } }
 
 		///
 		public ICollection<int> InternalIDs { get { return Enumerable.Range(0, internal_to_original.Count).ToArray(); } }
