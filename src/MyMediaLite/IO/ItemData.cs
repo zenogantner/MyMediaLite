@@ -97,8 +97,8 @@ namespace MyMediaLite.IO
 
 		/// <summary>Read in implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(IDataReader reader, IMapping user_mapping, IMapping item_mapping)
 		{

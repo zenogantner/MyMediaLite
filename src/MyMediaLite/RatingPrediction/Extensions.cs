@@ -31,8 +31,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
 		/// <param name="writer">the TextWriter to write the predictions to</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="Mapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="Mapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		/// <param name="header">if specified, write this string at the start of the output</param>
 		public static void WritePredictions(
@@ -77,8 +77,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="recommender">rating predictor</param>
 		/// <param name="ratings">test cases</param>
 		/// <param name="filename">the name of the file to write the predictions to</param>
-		/// <param name="user_mapping">an <see cref="EntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="EntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="Mapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="Mapping"/> object for the item IDs</param>
 		/// <param name="line_format">a format string specifying the line format; {0} is the user ID, {1} the item ID, {2} the rating</param>
 		/// <param name="header">if specified, write this string to the first line</param>
 		public static void WritePredictions(

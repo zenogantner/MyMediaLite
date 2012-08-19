@@ -33,8 +33,8 @@ namespace MyMediaLite.IO
 		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a file</summary>
 		/// <param name="filename">name of the file to be read from</param>
 		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(string filename, float rating_threshold, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
@@ -57,8 +57,8 @@ namespace MyMediaLite.IO
 		/// <summary>Read in rating data which will be interpreted as implicit feedback data from a TextReader</summary>
 		/// <param name="reader">the TextReader to be read from</param>
 		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(TextReader reader, float rating_threshold, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
@@ -97,8 +97,8 @@ namespace MyMediaLite.IO
 		/// <summary>Read in rating data which will be interpreted as implicit feedback data from an IDataReader, e.g. a database via DbDataReader</summary>
 		/// <param name="reader">the IDataReader to be read from</param>
 		/// <param name="rating_threshold">the minimum rating value needed to be accepted as positive feedback</param>
-		/// <param name="user_mapping">user <see cref="IEntityMapping"/> object</param>
-		/// <param name="item_mapping">item <see cref="IEntityMapping"/> object</param>
+		/// <param name="user_mapping">user <see cref="IMapping"/> object</param>
+		/// <param name="item_mapping">item <see cref="IMapping"/> object</param>
 		/// <returns>a <see cref="IPosOnlyFeedback"/> object with the user-wise collaborative data</returns>
 		static public IPosOnlyFeedback Read(IDataReader reader, float rating_threshold, IMapping user_mapping, IMapping item_mapping)
 		{

@@ -36,8 +36,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="num_predictions">number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="filename">the name of the file to write to</param>
 		/// <param name="users">a list of users to make recommendations for</param>
-		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
 			IPosOnlyFeedback train,
@@ -58,8 +58,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="num_predictions">number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
 		/// <param name="users">a list of users to make recommendations for; if null, all users in train will be provided with recommendations</param>
-		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
 			IPosOnlyFeedback train,
@@ -86,8 +86,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="ignore_items">list of items for which no predictions should be made</param>
 		/// <param name="num_predictions">the number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
-		/// <param name="user_mapping">an <see cref="IEntityMapping"/> object for the user IDs</param>
-		/// <param name="item_mapping">an <see cref="IEntityMapping"/> object for the item IDs</param>
+		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
+		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
 			int user_id,
