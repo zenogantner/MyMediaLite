@@ -24,7 +24,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that offers static methods to read (binary) relation over entities into SparseBooleanMatrix objects</summary>
+	/// <summary>Class that offers static methods to read (binary) relation over entities into IBooleanMatrix objects</summary>
 	public static class RelationData
 	{
 		/// <summary>Read binary relations from file</summary>

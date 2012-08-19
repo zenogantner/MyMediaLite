@@ -24,7 +24,7 @@ using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
-	/// <summary>Class that offers static methods to read (binary) attribute data into SparseBooleanMatrix objects</summary>
+	/// <summary>Class that offers static methods to read (binary) attribute data into IBooleanMatrix objects</summary>
 	/// <remarks>
 	/// The expected (sparse) line format is:
 	/// ENTITY_ID SEPARATOR ATTRIBUTE_ID
