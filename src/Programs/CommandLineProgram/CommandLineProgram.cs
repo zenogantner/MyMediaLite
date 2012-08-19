@@ -71,8 +71,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected int find_iter = 0;
 
 	// ID mapping objects
-	protected IEntityMapping user_mapping = new EntityMapping();
-	protected IEntityMapping item_mapping = new EntityMapping();
+	protected IMapping user_mapping = new Mapping();
+	protected IMapping item_mapping = new Mapping();
 
 	// user and item attributes
 	protected SparseBooleanMatrix user_attributes;

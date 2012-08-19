@@ -69,8 +69,8 @@ public partial class MainWindow : Window
 	string model_file            = "../../../../data/models/ml-10m-bmf.model";
 	*/
 
-	EntityMapping user_mapping = new EntityMapping();
-	EntityMapping item_mapping = new EntityMapping();
+	Mapping user_mapping = new Mapping();
+	Mapping item_mapping = new Mapping();
 
 	// application state
 	int current_user_external_id = 100000;

@@ -45,7 +45,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_predictions,
 			string filename,
 			System.Collections.Generic.IList<int> users = null,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
+			IMapping user_mapping = null, IMapping item_mapping = null)
 		{
 			using (var writer = new StreamWriter(filename))
 				WritePredictions(recommender, train, candidate_items, num_predictions, writer, users, user_mapping, item_mapping);
@@ -67,7 +67,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_predictions,
 			TextWriter writer,
 			System.Collections.Generic.IList<int> users = null,
-			IEntityMapping user_mapping = null, IEntityMapping item_mapping = null)
+			IMapping user_mapping = null, IMapping item_mapping = null)
 		{
 			if (users == null)
 				users = new List<int>(train.AllUsers);
@@ -95,7 +95,7 @@ namespace MyMediaLite.ItemRecommendation
 			System.Collections.Generic.ICollection<int> ignore_items,
 			int num_predictions,
 			TextWriter writer,
-			IEntityMapping user_mapping, IEntityMapping item_mapping)
+			IMapping user_mapping, IMapping item_mapping)
 		{
 			System.Collections.Generic.IList<Tuple<int, float>> ordered_items;
 
