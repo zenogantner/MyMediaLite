@@ -48,7 +48,7 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		MostPopular most_popular = new MostPopular();
 		IList<IDictionary<int, int>> attribute_count_by_user;
-		
+
 		///
 		public SparseBooleanMatrix ItemAttributes
 		{
@@ -69,11 +69,11 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			most_popular.Feedback = Feedback;
 			most_popular.Train();
-			
+
 			attribute_count_by_user = new IDictionary<int, int>[MaxUserID + 1];
 			for (int u = 0; u < attribute_count_by_user.Count; u++)
 				attribute_count_by_user[u] = new Dictionary<int, int>();
-			
+
 			for (int index = 0; index < Feedback.Count; index++)
 			{
 				int user_id = Feedback.Users[index];
