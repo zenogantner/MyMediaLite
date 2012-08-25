@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.RatingPrediction
@@ -63,6 +64,12 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public abstract float Predict(int user_id, int item_id);
+
+		///
+		public virtual IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
+		{
+			throw new NotImplementedException();
+		}
 
 		///
 		public abstract void Train();

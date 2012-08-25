@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 
 namespace MyMediaLite
 {
@@ -38,6 +39,12 @@ namespace MyMediaLite
 		/// <param name="item_id">the item ID</param>
 		/// <returns>the predicted score/rating for the given user-item combination</returns>
 		float Predict(int user_id, int item_id);
+
+		/// <summary>Recommend items for a given user</summary>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='n'>the number of items to recommend</param>
+		/// <param name='candidate_items'>the candidate items to choose from; if null, use all items</param>
+		IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null);
 
 		/// <summary>Check whether a useful prediction (i.e. not using a fallback/default answer) can be made for a given user-item combination</summary>
 		/// <remarks>

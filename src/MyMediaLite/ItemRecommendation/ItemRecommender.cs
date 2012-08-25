@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using MyMediaLite.Data;
 
 /*! \namespace MyMediaLite.ItemRecommendation
@@ -71,6 +72,12 @@ namespace MyMediaLite.ItemRecommendation
 		public virtual bool CanPredict(int user_id, int item_id)
 		{
 			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
+		}
+
+		///
+		public virtual IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
+		{
+			throw new NotImplementedException();
 		}
 
 		///

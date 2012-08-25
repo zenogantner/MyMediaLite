@@ -59,6 +59,15 @@ namespace MyMediaLite.Ensemble
 		}
 
 		///
+		public override IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
+		{
+			//var component_results = new IList<Tuple<int, float>>[recommenders.Count];
+			//for (int i = 0; i < recommenders.Count; i++)
+			//	component_results = recommenders[i].PredictItems(user_id, n, candidate_items);
+			throw new NotImplementedException();
+		}
+
+		///
 		public override void SaveModel(string file)
 		{
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.03") )

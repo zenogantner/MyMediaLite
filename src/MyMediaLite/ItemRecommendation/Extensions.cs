@@ -105,6 +105,7 @@ namespace MyMediaLite.ItemRecommendation
 				item_mapping = new IdentityMapping();
 			if (num_predictions == -1)
 			{
+				// TODO speed up by combining candidate_items and ignore_items
 				var scored_items = new List<Tuple<int, float>>();
 				foreach (int item_id in candidate_items)
 					if (!ignore_items.Contains(item_id))
