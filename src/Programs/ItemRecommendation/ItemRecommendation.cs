@@ -40,7 +40,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	IPosOnlyFeedback test_data;
 	IList<int> test_users;
 	IList<int> candidate_items;
-	SparseBooleanMatrix group_to_user; // rows: groups, columns: users
+	IBooleanMatrix group_to_user; // rows: groups, columns: users
 	ICollection<int> user_groups;
 
 	CandidateItems eval_item_mode = CandidateItems.UNION;

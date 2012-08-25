@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,7 +36,7 @@ namespace MyMediaLite.Data
 		/// <param name="display_overlap">if set true, display the user/item overlap between train and test</param>
 		public static string Statistics(
 			this IRatings train, IRatings test = null,
-			SparseBooleanMatrix user_attributes = null, SparseBooleanMatrix item_attributes = null,
+			IBooleanMatrix user_attributes = null, IBooleanMatrix item_attributes = null,
 			bool display_overlap = false)
 		{
 			// training data stats
@@ -90,7 +90,7 @@ namespace MyMediaLite.Data
 		/// <param name="item_attributes">the item attributes</param>
 		public static string Statistics(
 			this IPosOnlyFeedback training_data, IPosOnlyFeedback test_data = null,
-			SparseBooleanMatrix user_attributes = null, SparseBooleanMatrix item_attributes = null)
+			IBooleanMatrix user_attributes = null, IBooleanMatrix item_attributes = null)
 		{
 			// training data stats
 			int num_users = training_data.AllUsers.Count;
@@ -117,7 +117,7 @@ namespace MyMediaLite.Data
 		/// <summary>Display statistics for user and item attributes</summary>
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
-		public static string Statistics(SparseBooleanMatrix user_attributes, SparseBooleanMatrix item_attributes)
+		public static string Statistics(IBooleanMatrix user_attributes, IBooleanMatrix item_attributes)
 		{
 			string s = string.Empty;
 			if (user_attributes != null)

@@ -75,8 +75,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected IMapping item_mapping = new Mapping();
 
 	// user and item attributes
-	protected SparseBooleanMatrix user_attributes;
-	protected SparseBooleanMatrix item_attributes;
+	protected IBooleanMatrix user_attributes;
+	protected IBooleanMatrix item_attributes;
 
 	// time statistics
 	protected List<double> training_time_stats = new List<double>();

@@ -44,7 +44,7 @@ namespace MyMediaLite.Eval
 			this GroupRecommender recommender,
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback train,
-			SparseBooleanMatrix group_to_user,
+			IBooleanMatrix group_to_user,
 			ICollection<int> candidate_items,
 			bool ignore_overlap = true)
 		{
