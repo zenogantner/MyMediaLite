@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,11 +22,11 @@ using System.Linq;
 using System.Text;
 using Gtk;
 using MovieDemo;
+using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 public partial class MainWindow : Window
 {

@@ -34,7 +34,7 @@ Spacing
     they modify.
 15. There is no space between the datatype and the [] in array declarations.
 16. Use a space (or newline) after a comma, semicolon, or curly brace.
-17. Use tabs for indentation. It's the year 2011, your editor should be able to
+17. Use tabs for indentation. It's the year 2012, your editor should be able to
     deal with that.
 
 Curly braces
@@ -53,7 +53,5 @@ Unit tests
 19. Every class should have a unit test collection called ClassTest.
 20. Every method and every property of a class should have a unit test called
     ClassTest.(Method|Property)Test.
-21. Inside a unit test collection, methods should be sorted alphabetically.
-22. Indexers do need specific tests if they are used in other test cases.
 
 TODO: add more, discuss, group

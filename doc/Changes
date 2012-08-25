@@ -6,6 +6,8 @@
          - introduce more general IIncrementalRecommender inferface, which
            is extended by IIncrementalRatingRecommender (otherwise not
            changed) and IIncrementalItemRecommender (now more flexible)
+         - introduce abstract Recommender class that implements behavior
+           common to most rating predictors and item recommenders
 	recommenders
 	 - BPRMF: add fold-in support, new incremental update interface
          - MostPopular: new incremental update interface
@@ -16,6 +18,9 @@
 	command line tools
 	 - fix early abortion if cutoff not set for item_recommendation
            (bug was introduced in 3.02)
+         - remove KDDCup 2011 and ICDM 2010 executables: would have to be
+           maintained; for reference, they are still available in MML's
+           older releases
         documentation
          - improve Installation description
 	scripts
@@ -24,6 +29,7 @@
          - test_item_recommendation_online.sh: constant random seed
 	misc
 	 - get rid of generic Pair class, use System.Tuple instead
+         - get rid of Util namespace
 
 3.02	2012-07-23
 	API

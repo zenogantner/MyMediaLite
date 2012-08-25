@@ -1,5 +1,5 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
-// Copyright (C) 2010 Steffen Rendle, Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010 Steffen Rendle
 //
 // This file is part of MyMediaLite.
 //
@@ -15,10 +15,9 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Random number generator singleton class</summary>
 	public class Random : System.Random

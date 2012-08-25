@@ -1,10 +1,9 @@
 // This file is part of MyMediaLite.
 // Its content is in the public domain.
-
 using System;
 using System.IO;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Class containing handler functions, e.g. exception handlers</summary>
 	public static class Handlers
@@ -42,7 +41,7 @@ namespace MyMediaLite.Util
 				}
 				
 				Console.Error.WriteLine("  *****************************************************************************************************");
-				Console.Error.WriteLine("  *** An uncaught exception occured. Please send a bug report to mymedialite@ismll.de,              ***");
+				Console.Error.WriteLine("  *** An uncaught exception occured. Please send a bug report to zeno.gantner+mymedialite@gmail.com,***");
 				Console.Error.WriteLine("  *** or report the problem in our issue tracker: https://github.com/zenogantner/MyMediaLite/issues ***");
 				Console.Error.WriteLine("  *****************************************************************************************************");
 				Console.Error.WriteLine(e.Message + e.StackTrace);

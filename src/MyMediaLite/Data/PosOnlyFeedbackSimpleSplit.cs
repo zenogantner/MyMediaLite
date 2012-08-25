@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 
@@ -48,7 +47,7 @@ namespace MyMediaLite.Data
 			var Test  = new T();
 
 			// assign indices to training or validation part
-			Random random = MyMediaLite.Util.Random.GetInstance();
+			Random random = MyMediaLite.Random.GetInstance();
 			foreach (int index in feedback.RandomIndex)
 				if (random.NextDouble() < ratio)
 					Test.Add(feedback.Users[index], feedback.Items[index]);

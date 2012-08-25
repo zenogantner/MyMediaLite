@@ -39,14 +39,8 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// See http://recsyswiki/wiki/Item_recommendation and http://recsyswiki/wiki/Implicit_feedback
 	/// </remarks>
-	public abstract class ItemRecommender : IRecommender
+	public abstract class ItemRecommender : Recommender
 	{
-		/// <summary>Maximum user ID</summary>
-		public int MaxUserID { get; set; }
-
-		/// <summary>Maximum item ID</summary>
-		public int MaxItemID { get; set; }
-
 		/// <summary>the feedback data to be used for training</summary>
 		public virtual IPosOnlyFeedback Feedback
 		{
@@ -58,41 +52,5 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 		IPosOnlyFeedback feedback;
-
-		/// <summary>create a shallow copy of the object</summary>
-		public Object Clone()
-		{
-			return this.MemberwiseClone();
-		}
-
-		///
-		public abstract float Predict(int user_id, int item_id);
-
-		///
-		public virtual bool CanPredict(int user_id, int item_id)
-		{
-			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
-		}
-
-		///
-		public virtual IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
-		{
-			throw new NotImplementedException();
-		}
-
-		///
-		public abstract void Train();
-
-		///
-		public abstract void LoadModel(string filename);
-
-		///
-		public abstract void SaveModel(string filename);
-
-		///
-		public override string ToString()
-		{
-			return this.GetType().Name;
-		}
 	}
 }

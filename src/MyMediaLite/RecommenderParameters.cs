@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Class for key-value pair string processing</summary>
 	[Serializable]

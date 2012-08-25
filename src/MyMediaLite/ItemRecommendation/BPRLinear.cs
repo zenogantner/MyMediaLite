@@ -100,7 +100,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			random = Util.Random.GetInstance();
+			random = MyMediaLite.Random.GetInstance();
 
 			// prepare fast sampling, if necessary
 			int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);

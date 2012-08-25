@@ -36,7 +36,7 @@ namespace MyMediaLite.DataType
 		static public void RowInitNormal(this Matrix<double> matrix, int row, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int j = 0; j < matrix.dim2; j++)
 				matrix[row, j] = nd.Sample();
@@ -50,7 +50,7 @@ namespace MyMediaLite.DataType
 		static public void RowInitNormal(this Matrix<float> matrix, int row, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int j = 0; j < matrix.dim2; j++)
 				matrix[row, j] = (float) nd.Sample();
@@ -64,7 +64,7 @@ namespace MyMediaLite.DataType
 		static public void ColumnInitNormal(this Matrix<double> matrix, int column, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < matrix.dim1; i++)
 				matrix[i, column] = nd.Sample();
@@ -78,7 +78,7 @@ namespace MyMediaLite.DataType
 		static public void ColumnInitNormal(this Matrix<float> matrix, int column, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < matrix.dim1; i++)
 				matrix[i, column] = (float) nd.Sample();
@@ -91,7 +91,7 @@ namespace MyMediaLite.DataType
 		static public void InitNormal(this Matrix<double> matrix, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < matrix.dim1; i++)
 				for (int j = 0; j < matrix.dim2; j++)
@@ -105,7 +105,7 @@ namespace MyMediaLite.DataType
 		static public void InitNormal(this Matrix<float> matrix, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < matrix.dim1; i++)
 				for (int j = 0; j < matrix.dim2; j++)

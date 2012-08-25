@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,10 +22,7 @@ using System.Reflection;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
-/*! \namespace MyMediaLite.Util
- *  \brief This namespace contains helper code that did not fit anywhere else.
- */
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Class containing utility functions</summary>
 	public static class Utils
@@ -56,7 +52,7 @@ namespace MyMediaLite.Util
 		/// </remarks>
 		public static void Shuffle<T>(this IList<T> list)
 		{
-			Random random = MyMediaLite.Util.Random.GetInstance();
+			Random random = MyMediaLite.Random.GetInstance();
 			for (int i = list.Count - 1; i >= 0; i--)
 			{
 				int r = random.Next(i + 1);

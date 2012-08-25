@@ -14,10 +14,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.IO;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.IO
 {
@@ -78,12 +76,7 @@ namespace MyMediaLite.IO
 				type_name = reader.ReadLine();
 			}
 
-			if (type_name.StartsWith("MyMediaLite.RatingPrediction."))
-				recommender = Recommender.CreateRatingPredictor(type_name);
-			else if (type_name.StartsWith("MyMediaLite.ItemRecommendation."))
-				recommender = Recommender.CreateItemRecommender(type_name);
-			else
-				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", type_name));
+			recommender = type_name.CreateRecommender();
 			recommender.LoadModel(filename);
 
 			return recommender;

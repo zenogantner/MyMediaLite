@@ -14,14 +14,12 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.Correlation;
 using MyMediaLite.ItemRecommendation;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.AttrToFactor
 {
@@ -29,7 +27,7 @@ namespace MyMediaLite.AttrToFactor
 	/// <remarks>
 	/// Literature:
 	/// <list type="bullet">
-    ///   <item><description>
+	///   <item><description>
 	///     Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Steffen Rendle, Lars Schmidt-Thieme:
 	///     Learning Attribute-to-Feature Mappings for Cold-Start Recommendations.
 	///     ICDM 2011.

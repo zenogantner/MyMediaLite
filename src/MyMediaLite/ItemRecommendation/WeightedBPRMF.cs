@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {

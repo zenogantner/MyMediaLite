@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +29,6 @@ using MyMediaLite.Eval;
 using MyMediaLite.GroupRecommendation;
 using MyMediaLite.IO;
 using MyMediaLite.ItemRecommendation;
-using MyMediaLite.Util;
 
 /// <summary>Item prediction program, see Usage() method for more information</summary>
 class ItemRecommendation : CommandLineProgram<IRecommender>
@@ -88,7 +86,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    methods (plus arguments and their defaults):");
 
 		Console.Write("   - ");
-		Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.ItemRecommendation")));
+		Console.WriteLine(string.Join("\n   - ", RecommenderExtensions.List("MyMediaLite.ItemRecommendation")));
 
 		Console.WriteLine(@"  method ARGUMENTS have the form name=value
 
@@ -184,9 +182,9 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
  		if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
 		else if (method != null)
-			recommender = Recommender.CreateItemRecommender(method);
+			recommender = method.CreateItemRecommender();
 		else
-			recommender = Recommender.CreateItemRecommender("MostPopular");
+			recommender = "MostPopular".CreateItemRecommender();
 		// in case something went wrong ...
 		if (recommender == null && method != null)
 			Usage(string.Format("Unknown recommendation method: '{0}'", method));
@@ -488,7 +486,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				var new_test_users = new int[num_test_users];
 				for (int i = 0; i < num_test_users; i++)
 				{
-					int random_index = MyMediaLite.Util.Random.GetInstance().Next(old_test_users.Count - 1);
+					int random_index = MyMediaLite.Random.GetInstance().Next(old_test_users.Count - 1);
 					new_test_users[i] = old_test_users.ElementAt(random_index);
 					old_test_users.Remove(new_test_users[i]);
 				}

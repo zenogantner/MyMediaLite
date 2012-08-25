@@ -114,7 +114,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			random = Util.Random.GetInstance();
+			random = MyMediaLite.Random.GetInstance();
 
 			InitModel();
 			for (int i = 0; i < user_clustering.Count; i++)

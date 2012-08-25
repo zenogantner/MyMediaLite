@@ -146,7 +146,7 @@ namespace MyMediaLite.DataType
 		static public void InitNormal(this IList<double> vector, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < vector.Count; i++)
 				vector[i] = nd.Sample();
@@ -159,7 +159,7 @@ namespace MyMediaLite.DataType
 		static public void InitNormal(this IList<float> vector, double mean, double stddev)
 		{
 			var nd = new Normal(mean, stddev);
-			nd.RandomSource = Util.Random.GetInstance();
+			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < vector.Count; i++)
 				vector[i] = (float) nd.Sample();

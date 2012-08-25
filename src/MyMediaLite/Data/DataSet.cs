@@ -15,12 +15,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using MyMediaLite.Util;
 
 /*! \namespace MyMediaLite.Data
  *  \brief This namespace contains MyMediaLite's principal data structures,

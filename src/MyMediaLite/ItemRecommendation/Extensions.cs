@@ -63,7 +63,7 @@ namespace MyMediaLite.ItemRecommendation
 		static public void WritePredictions(
 			this IRecommender recommender,
 			IPosOnlyFeedback train,
-			System.Collections.Generic.IList<int> candidate_items,
+			System.Collections.Generic.ICollection<int> candidate_items,
 			int num_predictions,
 			TextWriter writer,
 			System.Collections.Generic.IList<int> users = null,
@@ -91,7 +91,7 @@ namespace MyMediaLite.ItemRecommendation
 		static public void WritePredictions(
 			this IRecommender recommender,
 			int user_id,
-			System.Collections.Generic.IList<int> candidate_items,
+			System.Collections.Generic.ICollection<int> candidate_items,
 			System.Collections.Generic.ICollection<int> ignore_items,
 			int num_predictions,
 			TextWriter writer,
@@ -103,9 +103,9 @@ namespace MyMediaLite.ItemRecommendation
 				user_mapping = new IdentityMapping();
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
+
 			if (num_predictions == -1)
 			{
-				// TODO speed up by combining candidate_items and ignore_items
 				var scored_items = new List<Tuple<int, float>>();
 				foreach (int item_id in candidate_items)
 					if (!ignore_items.Contains(item_id))

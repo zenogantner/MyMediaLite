@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,13 +22,13 @@ using System.Reflection;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Helper class with utility methods for handling recommenders</summary>
 	/// <remarks>
 	/// Contains methods for creating and configuring recommender objects, as well as listing recommender classes.
 	/// </remarks>
-	public static class Recommender
+	public static class RecommenderExtensions
 	{
 		static string NormalizeName(string s)
 		{
@@ -50,7 +49,7 @@ namespace MyMediaLite.Util
 			{
 				Configure(recommender, new RecommenderParameters(parameters), report_error);
 			}
-			catch (ArgumentException e) 
+			catch (ArgumentException e)
 			{
 				report_error(e.Message + "\n\n" + recommender.ToString() + "\n");
 			}
@@ -80,7 +79,7 @@ namespace MyMediaLite.Util
 					parameters.Remove(key);
 				}
 			}
-			catch (Exception e) 
+			catch (Exception e)
 			{
 				report_error(e.Message + "\n\n" + recommender.ToString()  + "\n");
 			}
@@ -180,6 +179,19 @@ namespace MyMediaLite.Util
 					return type.CreateRatingPredictor();
 			}
 			return null;
+		}
+
+		/// <summary>Create recommender</summary>
+		/// <param name='typename'>the type name</param>
+		/// <returns>a recommender of the given type name</returns>
+		public static Recommender CreateRecommender(this string typename)
+		{
+			if (typename.StartsWith("MyMediaLite.RatingPrediction."))
+				return typename.CreateRatingPredictor();
+			else if (typename.StartsWith("MyMediaLite.ItemRecommendation."))
+				return typename.CreateItemRecommender();
+			else
+				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", typename));
 		}
 
 		/// <summary>Create a rating predictor from a type object</summary>

@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,7 +22,6 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.HyperParameter
 {
@@ -51,7 +49,7 @@ namespace MyMediaLite.HyperParameter
 
 		static double Run(RatingPredictor recommender, ISplit<IRatings> split, string hp_string, string evaluation_measure)
 		{
-			Recommender.Configure(recommender, hp_string);
+			recommender.Configure(hp_string);
 
 			double result = recommender.DoCrossValidation(split)[evaluation_measure];
 			Console.Error.WriteLine("Nelder-Mead: {0}: {1}", hp_string, result.ToString(CultureInfo.InvariantCulture));
@@ -258,7 +256,7 @@ namespace MyMediaLite.HyperParameter
 			keys.Sort(delegate(string k1, string k2) { return results[k1].CompareTo(results[k2]); });
 
 			// set to best hyperparameter values
-			Recommender.Configure(recommender, keys.First());
+			recommender.Configure(keys.First());
 
 			return results[keys.First()];
 		}

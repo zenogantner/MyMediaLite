@@ -59,7 +59,10 @@ namespace MyMediaLite.Ensemble
 		}
 
 		///
-		public override IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
+		public override IList<Tuple<int, float>> Recommend(
+			int user_id, int n = 20,
+			ICollection<int> ignore_items = null,
+			ICollection<int> candidate_items = null)
 		{
 			//var component_results = new IList<Tuple<int, float>>[recommenders.Count];
 			//for (int i = 0; i < recommenders.Count; i++)

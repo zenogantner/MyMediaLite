@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +29,6 @@ using MyMediaLite.Eval;
 using MyMediaLite.HyperParameter;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 /// <summary>Rating prediction program, see Usage() method for more information</summary>
 public class RatingPrediction : CommandLineProgram<RatingPredictor>
@@ -77,7 +75,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
   recommenders (plus options and their defaults):");
 
 			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", Recommender.List("MyMediaLite.RatingPrediction")));
+			Console.WriteLine(string.Join("\n   - ", RecommenderExtensions.List("MyMediaLite.RatingPrediction")));
 
 			Console.WriteLine(@"  method ARGUMENTS have the form name=value
 
@@ -150,14 +148,15 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("search-hp",            v => search_hp         = v != null);
 	}
 
+	// TODO generalize this
 	protected override void SetupRecommender()
 	{
 		if (load_model_file != null)
 			recommender = (RatingPredictor) Model.Load(load_model_file);
 		else if (method != null)
-			recommender = Recommender.CreateRatingPredictor(method);
+			recommender = method.CreateRatingPredictor();
 		else
-			recommender = Recommender.CreateRatingPredictor("BiasedMatrixFactorization");
+			recommender = "BiasedMatrixFactorization".CreateRatingPredictor();
 		// in case something went wrong ...
 		if (recommender == null && method != null)
 			Usage(string.Format("Unknown rating prediction method: '{0}'", method));

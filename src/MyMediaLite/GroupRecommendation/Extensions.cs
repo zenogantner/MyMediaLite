@@ -19,16 +19,16 @@ using System;
 using System.Reflection;
 using MyMediaLite.GroupRecommendation;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite.GroupRecommendation
 {
 	/// <summary>Class containing utility functions for group recommenders</summary>
-	public static class GroupUtils
+	public static class Extensions
 	{
 		/// <summary>Create a group recommender from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <param name="recommender">the underlying recommender</param>
 		/// <returns>a group recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static GroupRecommender CreateGroupRecommender(string typename, IRecommender recommender)
+		public static GroupRecommender CreateGroupRecommender(this string typename, IRecommender recommender)
 		{
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
@@ -43,7 +43,7 @@ namespace MyMediaLite.Util
 		/// <param name="type">the type object</param>
 		/// <param name="recommender">the underlying recommender</param>
 		/// <returns>a group recommender object of type type</returns>
-		public static GroupRecommender CreateGroupRecommender(Type type, IRecommender recommender)
+		public static GroupRecommender CreateGroupRecommender(this Type type, IRecommender recommender)
 		{
 			if (type.IsAbstract)
 				return null;

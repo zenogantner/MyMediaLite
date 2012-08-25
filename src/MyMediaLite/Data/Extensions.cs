@@ -15,13 +15,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Globalization;
 using System.Linq;
-
 using MyMediaLite.DataType;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.Data
 {
@@ -73,7 +70,7 @@ namespace MyMediaLite.Data
 			{
 				int num_new_users = 0;
 				int num_new_items = 0;
-				TimeSpan seconds = Util.Wrap.MeasureTime(delegate() {
+				TimeSpan seconds = Wrap.MeasureTime(delegate() {
 					num_new_users = test.AllUsers.Except(train.AllUsers).Count();
 					num_new_items = test.AllItems.Except(train.AllItems).Count();
 				});

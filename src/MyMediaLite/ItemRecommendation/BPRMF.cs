@@ -133,7 +133,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			CheckSampling();
 
-			random = Util.Random.GetInstance();
+			random = MyMediaLite.Random.GetInstance();
 
 			{
 				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100; // TODO make configurable
@@ -623,7 +623,7 @@ namespace MyMediaLite.ItemRecommendation
 				this.item_bias    = (float[]) item_bias;
 				this.item_factors = item_factors;
 			}
-			random = Util.Random.GetInstance();
+			random = MyMediaLite.Random.GetInstance();
 		}
 
 		///

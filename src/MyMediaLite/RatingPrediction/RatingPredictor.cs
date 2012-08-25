@@ -23,14 +23,8 @@ using MyMediaLite.Data;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)</summary>
-	public abstract class RatingPredictor : IRatingPredictor
+	public abstract class RatingPredictor : Recommender, IRatingPredictor
 	{
-		/// <summary>Maximum user ID</summary>
-		public int MaxUserID  { get; set; }
-
-		/// <summary>Maximum item ID</summary>
-		public int MaxItemID  {	get; set; }
-
 		/// <summary>Maximum rating value</summary>
 		public virtual float MaxRating { get { return max_rating; } set { max_rating = value; } }
 		/// <summary>Maximum rating value</summary>
@@ -55,41 +49,5 @@ namespace MyMediaLite.RatingPrediction
 		}
 		/// <summary>rating data</summary>
 		protected IRatings ratings;
-
-		/// <summary>create a shallow copy of the object</summary>
-		public Object Clone()
-		{
-			return this.MemberwiseClone();
-		}
-
-		///
-		public abstract float Predict(int user_id, int item_id);
-
-		///
-		public virtual IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null)
-		{
-			throw new NotImplementedException();
-		}
-
-		///
-		public abstract void Train();
-
-		///
-		public virtual void LoadModel(string file) { throw new NotImplementedException(); }
-
-		///
-		public virtual void SaveModel(string file) { throw new NotImplementedException(); }
-
-		///
-		public virtual bool CanPredict(int user_id, int item_id)
-		{
-			return (user_id <= MaxUserID && user_id >= 0 && item_id <= MaxItemID && item_id >= 0);
-		}
-
-		///
-		public override string ToString()
-		{
-			return this.GetType().Name;
-		}
 	}
 }

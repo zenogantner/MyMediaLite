@@ -26,7 +26,6 @@ using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
-using MyMediaLite.Util;
 
 public abstract class CommandLineProgram<T> where T:IRecommender
 {
@@ -201,7 +200,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			Usage(0);
 
 		if (random_seed != -1)
-			MyMediaLite.Util.Random.Seed = random_seed;
+			MyMediaLite.Random.Seed = random_seed;
 
 		SetupRecommender();
 		

@@ -14,14 +14,12 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
-using MyMediaLite.Util;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -117,7 +115,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			CheckSampling();
 
-			random = Util.Random.GetInstance();
+			random = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < NumIter; i++)
 				base.Iterate();

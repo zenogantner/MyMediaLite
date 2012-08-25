@@ -15,10 +15,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 // 
-
 using System;
 
-namespace MyMediaLite.Util
+namespace MyMediaLite
 {
 	/// <summary>Static methods to wrap around other code.</summary>
 	public static class Wrap

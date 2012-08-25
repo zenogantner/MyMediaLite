@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{73424F09-BEEA-4992-B116-5F123496F5D3}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -86,12 +86,6 @@
     <Compile Include="DataType\SparseBooleanMatrix.cs" />
     <Compile Include="DataType\SparseMatrix.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
-    <Compile Include="Util\Handlers.cs" />
-    <Compile Include="Util\Memory.cs" />
-    <Compile Include="Util\Random.cs" />
-    <Compile Include="Util\Recommender.cs" />
-    <Compile Include="Util\RecommenderParameters.cs" />
-    <Compile Include="Util\Utils.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
     <Compile Include="RatingPrediction\EntityAverage.cs" />
@@ -155,7 +149,6 @@
     <Compile Include="Data\IDataSet.cs" />
     <Compile Include="Data\DataSet.cs" />
     <Compile Include="IO\TimedRatingData.cs" />
-    <Compile Include="Util\Wrap.cs" />
     <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
@@ -184,7 +177,6 @@
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="Correlation\WeightedBinaryCosine.cs" />
-    <Compile Include="Util\MultiCore.cs" />
     <Compile Include="ItemRecommendation\MultiCoreBPRMF.cs" />
     <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
@@ -228,7 +220,6 @@
     <Compile Include="Eval\KDDCup.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
-    <Compile Include="Util\GroupUtils.cs" />
     <Compile Include="ItemRecommendation\BPRMF_Mapping.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
@@ -239,6 +230,16 @@
     <Compile Include="Data\IMapping.cs" />
     <Compile Include="Data\Mapping.cs" />
     <Compile Include="IIncrementalRecommender.cs" />
+    <Compile Include="Random.cs" />
+    <Compile Include="RecommenderExtensions.cs" />
+    <Compile Include="RecommenderParameters.cs" />
+    <Compile Include="GroupRecommendation\Extensions.cs" />
+    <Compile Include="Handlers.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="MultiCore.cs" />
+    <Compile Include="Wrap.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Recommender.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			return (float) Util.Random.GetInstance().NextDouble();
+			return (float) MyMediaLite.Random.GetInstance().NextDouble();
 		}
 
 		///

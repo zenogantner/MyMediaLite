@@ -41,7 +41,10 @@ namespace MyMediaLite.Ensemble
 		}
 
 		///
-		public abstract IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null);
+		public abstract IList<Tuple<int, float>> Recommend(
+			int user_id, int n = 20,
+			ICollection<int> ignore_items = null,
+			ICollection<int> candidate_items = null);
 
 		/// <summary>The max rating value</summary>
 		/// <value>The max rating value</value>

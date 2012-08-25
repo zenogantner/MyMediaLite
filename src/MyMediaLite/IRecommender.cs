@@ -42,10 +42,14 @@ namespace MyMediaLite
 
 		/// <summary>Recommend items for a given user</summary>
 		/// <param name='user_id'>the user ID</param>
-		/// <param name='n'>the number of items to recommend</param>
+		/// <param name='n'>the number of items to recommend, -1 for as many as possible</param>
+		/// <param name='ignore_items'>collection if items that should not be returned; if null, use empty collection</param>
 		/// <param name='candidate_items'>the candidate items to choose from; if null, use all items</param>
 		/// <returns>a sorted list of (item_id, score) tuples</returns>
-		IList<Tuple<int, float>> Recommend(int user_id, int n = 20, ICollection<int> candidate_items = null);
+		IList<Tuple<int, float>> Recommend(
+			int user_id, int n = 20,
+			ICollection<int> ignore_items = null,
+			ICollection<int> candidate_items = null);
 
 		/// <summary>Check whether a useful prediction (i.e. not using a fallback/default answer) can be made for a given user-item combination</summary>
 		/// <remarks>
