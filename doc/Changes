@@ -3,8 +3,12 @@
          - rename (I)EntityMapping to (I)Mapping
          - attribute- and relation-aware interfaces, IO.AttributeData,
            IO.RelationData: refer to interfaces instead of classes
+         - introduce more general IIncrementalRecommender inferface, which
+           is extended by IIncrementalRatingRecommender (otherwise not
+           changed) and IIncrementalItemRecommender (now more flexible)
 	recommenders
-	 - BPRMF: add fold-in support
+	 - BPRMF: add fold-in support, new incremental update interface
+         - MostPopular: new incremental update interface
 	 - MostPopularByItemAttributes: divide score by number of item
            attributes (otherwise attributes with many attributes have
            automatically higher scores)

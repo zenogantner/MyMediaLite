@@ -108,7 +108,8 @@ namespace MyMediaLite.Eval
 				}
 
 				// update recommender
-				incremental_recommender.AddFeedback(users[index], items[index]);
+				var tuple = Tuple.Create(users[index], items[index]);
+				incremental_recommender.AddFeedback(new Tuple<int, int>[]{ tuple });
 			}
 
 			var results = new ItemRecommendationEvaluationResults();

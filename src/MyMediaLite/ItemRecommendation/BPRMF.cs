@@ -114,6 +114,8 @@ namespace MyMediaLite.ItemRecommendation
 		public BPRMF()
 		{
 			UniformUserSampling = true;
+			UpdateUsers = true;
+			UpdateItems = false;
 		}
 
 		///
@@ -361,29 +363,36 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void AddFeedback(int user_id, int item_id)
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.AddFeedback(user_id, item_id);
-
-			if (fast_sampling)
-				CreateFastSamplingData(user_id);
-
-			// retrain
-			RetrainUser(user_id);
-			RetrainItem(item_id);
+			base.AddFeedback(feedback);
+			Retrain(feedback);
+		}
+		
+		void Retrain(ICollection<Tuple<int, int>> feedback)
+		{
+			var users = from t in feedback select t.Item1;
+			var items = from t in feedback select t.Item2;
+			
+			foreach (int user_id in users)
+			{
+				if (fast_sampling)
+					CreateFastSamplingData(user_id);
+			}
+			
+			if (UpdateUsers)
+				foreach (int user_id in users)
+					RetrainUser(user_id);
+			if (UpdateItems)
+				foreach (int item_id in items)
+					RetrainItem(item_id);
 		}
 
 		///
-		public override void RemoveFeedback(int user_id, int item_id)
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.RemoveFeedback(user_id, item_id);
-
-			if (fast_sampling)
-				CreateFastSamplingData(user_id);
-
-			// retrain
-			RetrainUser(user_id);
-			RetrainItem(item_id);
+			base.RemoveFeedback(feedback);
+			Retrain(feedback);
 		}
 
 		///

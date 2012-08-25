@@ -32,7 +32,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This interface assumes that every user can rate every item only once.
 	/// </remarks>
-	public interface IIncrementalRatingPredictor : IRatingPredictor
+	public interface IIncrementalRatingPredictor : IRatingPredictor, IIncrementalRecommender
 	{
 		/// <summary>Add new ratings and perform incremental training</summary>
 		/// <param name='ratings'>the ratings</param>
@@ -45,35 +45,5 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Remove existing ratings and perform "incremental" training</summary>
 		/// <param name='ratings'>the user and item IDs of the ratings to be removed</param>
 		void RemoveRatings(IDataSet ratings);
-
-		/// <summary>Remove a user from the recommender model, and delete all their ratings</summary>
-		/// <remarks>
-		/// It is up to the recommender implementor whether there should be model updates after this
-		/// action, both options are valid.
-		/// </remarks>
-		/// <param name='user_id'>the ID of the user to be removed</param>
-		void RemoveUser(int user_id);
-
-		/// <summary>Remove an item from the recommender model, and delete all ratings of this item</summary>
-		/// <remarks>
-		/// It is up to the recommender implementor whether there should be model updates after this
-		/// action, both options are valid.
-		/// </remarks>
-		/// <param name='item_id'>the ID of the user to be removed</param>
-		void RemoveItem(int item_id);
-
-		/// <summary>true if users shall be updated when doing incremental updates</summary>
-		/// <remarks>
-		/// Default should be true.
-		/// Set to false if you do not want any updates to the user model parameters when doing incremental updates.
-		/// </remarks>
-		bool UpdateUsers { get; set; }
-
-		/// <summary>true if items shall be updated when doing incremental updates</summary>
-		/// <remarks>
-		/// Default should true.
-		/// Set to false if you do not want any updates to the item model parameters when doing incremental updates.
-		/// </remarks>
-		bool UpdateItems { get; set; }
 	}
 }

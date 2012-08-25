@@ -31,25 +31,43 @@ namespace MyMediaLite.ItemRecommendation
 	public abstract class IncrementalItemRecommender : ItemRecommender, IIncrementalItemRecommender
 	{
 		///
-		public virtual void AddFeedback(int user_id, int item_id)
+		public bool UpdateUsers { get; set; }
+
+		///
+		public bool UpdateItems { get; set; }
+
+		///
+		public virtual void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			if (user_id > MaxUserID)
-				AddUser(user_id);
-			if (item_id > MaxItemID)
-				AddItem(item_id);
+			foreach (var tuple in feedback)
+			{
+				int user_id = tuple.Item1;
+				int item_id = tuple.Item2;
 			
-			Feedback.Add(user_id, item_id);
+				if (user_id > MaxUserID)
+					AddUser(user_id);
+				if (item_id > MaxItemID)
+					AddItem(item_id);
+
+				Feedback.Add(user_id, item_id);
+			}
 		}
 
 		///
-		public virtual void RemoveFeedback(int user_id, int item_id)
+		public virtual void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			if (user_id > MaxUserID)
-				throw new ArgumentException("Unknown user " + user_id);
-			if (item_id > MaxItemID)
-				throw new ArgumentException("Unknown item " + item_id);
+			foreach (var tuple in feedback)
+			{
+				int user_id = tuple.Item1;
+				int item_id = tuple.Item2;
 
-			Feedback.Remove(user_id, item_id);
+				if (user_id > MaxUserID)
+					throw new ArgumentException("Unknown user " + user_id);
+				if (item_id > MaxItemID)
+					throw new ArgumentException("Unknown item " + item_id);
+	
+				Feedback.Remove(user_id, item_id);
+			}
 		}
 
 		///

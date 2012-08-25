@@ -15,6 +15,8 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+using System;
+using System.Collections.Generic;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -28,24 +30,14 @@ namespace MyMediaLite.ItemRecommendation
 	///     See also http://recsyswiki/wiki/Item_prediction
 	///   </para>
 	/// </remarks>
-	public interface IIncrementalItemRecommender : IRecommender
+	public interface IIncrementalItemRecommender : IIncrementalRecommender
 	{
-		/// <summary>Add a positive feedback event and perform incremental training</summary>
-		/// <param name='user_id'>the user ID</param>
-		/// <param name='item_id'>the item ID</param>
-		void AddFeedback(int user_id, int item_id);
+		/// <summary>Add positive feedback events and perform incremental training</summary>
+		/// <param name='feedback'>collection of user id - item id tuples</param>
+		void AddFeedback(ICollection<Tuple<int, int>> feedback);
 
-		/// <summary>Remove all feedback events by the given user-item combination</summary>
-		/// <param name='user_id'>the user ID</param>
-		/// <param name='item_id'>the item ID</param>
-		void RemoveFeedback(int user_id, int item_id);
-
-		/// <summary>Remove all feedback by one user</summary>
-		/// <param name='user_id'>the user ID</param>
-		void RemoveUser(int user_id);
-
-		/// <summary>Remove all feedback by one item</summary>
-		/// <param name='item_id'>the item ID</param>
-		void RemoveItem(int item_id);
+		/// <summary>Remove all feedback events by the given user-item combinations</summary>
+		/// <param name='feedback'>collection of user id - item id tuples</param>
+		void RemoveFeedback(ICollection<Tuple<int, int>> feedback);
 	}
 }

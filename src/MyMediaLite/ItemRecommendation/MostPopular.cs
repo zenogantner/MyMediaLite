@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
@@ -35,6 +36,12 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>View count</summary>
 		protected IList<int> view_count;
+
+		/// <summary>Default constructor</summary>
+		public MostPopular()
+		{
+			UpdateItems = true;
+		}
 
 		///
 		public override void Train()
@@ -80,17 +87,27 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void AddFeedback(int user_id, int item_id)
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.AddFeedback(user_id, item_id);
-			view_count[item_id]++;
+			base.AddFeedback(feedback);
+			if (UpdateItems)
+			{
+				var items = from t in feedback select t.Item2;
+				foreach (int item_id in items)
+					view_count[item_id]++;
+			}
 		}
 
 		///
-		public override void RemoveFeedback(int user_id, int item_id)
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.RemoveFeedback(user_id, item_id);
-			view_count[item_id]--;
+			base.RemoveFeedback(feedback);
+			if (UpdateItems)
+			{
+				var items = from t in feedback select t.Item2;
+				foreach (int item_id in items)
+					view_count[item_id]--;
+			}
 		}
 
 		///
