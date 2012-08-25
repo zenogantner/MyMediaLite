@@ -6,6 +6,8 @@ Requirements for running MyMediaLite:
 Instructions:
  - If you have the binary package, just copy its contents to wherever you
    want and run the programs from there.
+   - On Unix systems: copy bin/ and lib/ e.g. to /usr/local or to ~,
+     and make sure that bin/ is withing your PATH.
  - To build from source:
    - On Unix systems: run "make all", set the PREFIX varible in the Makefile,
                       then run "make install"

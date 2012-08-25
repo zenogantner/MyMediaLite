@@ -16,8 +16,12 @@
 	command line tools
 	 - fix early abortion if cutoff not set for item_recommendation
            (bug was introduced in 3.02)
+        documentation
+         - improve Installation description
 	scripts
          - add artist-to-song preprocessing script for MSD challenge
+        tests
+         - test_item_recommendation_online.sh: constant random seed
 	misc
 	 - get rid of generic Pair class, use System.Tuple instead
 
