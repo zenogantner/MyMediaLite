@@ -143,13 +143,10 @@ check-for-unnecessary-type-declarations:
 	ack --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
 
 gendarme:
-	gendarme ${GENDARME_OPTIONS} $RATING_PRED_DIR//bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} $ITEM_REC_DIR/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/MappingRatingPrediction/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/Mapping/MappingItemPrediction/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${RATING_PRED_DIR}/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${ITEM_REC_DIR}/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/MyMediaLiteExperimental.dll
-	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLiteExperimental/bin/Debug/SVM.dll
+	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/SVM.dll
 
 apidoc: doxygen
 
