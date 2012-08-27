@@ -6,7 +6,6 @@ using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
-using MyMediaLite.Util;
 
 public class FoldInAndIncrementalTraining
 {
