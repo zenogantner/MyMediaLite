@@ -16,7 +16,6 @@ Recommender functionality
    - Bell/Koren iCDM 2007 [SimuFctr]
  - time-aware rating and item prediction
    - timeSVD++
- - item recommender: add explicit top-n recommendation method to API
  - ensembles
    - ranking ensembles
    - stacking ensembles
@@ -27,7 +26,6 @@ Recommender functionality
    - allow new user evaluation for item prediction
    - support different CV protocols: leave-one-out, leave-one-out-per-user, k-fold CV, chronological splits, user-/item-stratified CV
    - support evaluation protocols w/ repeated events
-   - online update evaluation: chronological order; complete re-training
    - measure recommendation coverage
  - consider to store the hyperparameters in the model files as well
  - prediction certainty output
@@ -55,9 +53,8 @@ Architecture
      - add user or item information (attributes etc.)
      - retrain (asynchronous)
  - internal APIs
-   - interface(s) for recommenders that support online updates
    - change online learning APIs back to notification APIs
-   - user and item IDs should be unsigned integers, not signed integers
+   - user and item IDs could be unsigned integers instead of signed integers
    - generic optimization interface and algorithms (like Mallet)
    - consider using simulated multiple inheritance for the attribute-based recommenders:
      http://www.codeproject.com/KB/architecture/smip.aspx
@@ -76,19 +73,11 @@ Architecture
        - rename to Similarity (instead of Correlation)?
      - combine arbitrary similarity matrices
      - user-defined similarities
-     - re-integrate adjusted cosine (port to new rating data structure)
-   - slope-one
-       - different weighting schemes
  - distributed/parallel computing
-   - use Parallel.ForEach for item recommender evaluation
-     - as soon as Mono 2.8 is more widely available
-   - multi-core support
    - GPU support
    - support for distributed computing
      - check out http://code.google.com/p/qizmt/ and http://mapsharp.codeplex.com/
      - http://atbrox.com/2011/02/07/an-example-of-using-f-and-c-netmono-with-amazons-elastic-mapreduce-hadoop/
- - source code organization
-   - use one repository per component, instead of having everything in one repository
  - IO and storage
    - save model files using reflection (binary and XML)
    - GZip model files and prediction files (on demand)
@@ -110,7 +99,6 @@ Misc features
  - rewrite MF techniques using vector/matrix abstractions
  - output a nice table format for evaluation w/ R etc.
 Documentation/website
- - document all file formats
  - have documentation for different versions on the website
  - Doxygen: link to files on github/gitorious
  - add flyer to homepage (main page)
