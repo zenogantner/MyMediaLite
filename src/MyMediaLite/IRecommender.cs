@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 
@@ -47,7 +46,7 @@ namespace MyMediaLite
 		/// <param name='candidate_items'>the candidate items to choose from; if null, use all items</param>
 		/// <returns>a sorted list of (item_id, score) tuples</returns>
 		IList<Tuple<int, float>> Recommend(
-			int user_id, int n = 20,
+			int user_id, int n = -1,
 			ICollection<int> ignore_items = null,
 			ICollection<int> candidate_items = null);
 

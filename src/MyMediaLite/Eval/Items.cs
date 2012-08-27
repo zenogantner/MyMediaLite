@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,9 +133,8 @@ namespace MyMediaLite.Eval
 
 					ICollection<int> ignore_items = repeated_events ? new int[0] : training_user_matrix[user_id];
 					
-					IList<int> prediction_list = (n != -1)
-						? recommender.PredictItems(user_id, candidate_items, n + ignore_items.Count)
-						: recommender.PredictItems(user_id, candidate_items, -1);
+					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items);
+					var prediction_list = (from t in prediction select t.Item1).ToArray();
 
 					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);

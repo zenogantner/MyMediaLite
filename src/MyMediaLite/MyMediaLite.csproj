@@ -51,7 +51,6 @@
     <Compile Include="IUserRelationAwareRecommender.cs" />
     <Compile Include="IItemSimilarityProvider.cs" />
     <Compile Include="IUserSimilarityProvider.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
     <Compile Include="Correlation\CorrelationMatrix.cs" />
@@ -230,7 +229,6 @@
     <Compile Include="Data\Mapping.cs" />
     <Compile Include="IIncrementalRecommender.cs" />
     <Compile Include="Random.cs" />
-    <Compile Include="RecommenderExtensions.cs" />
     <Compile Include="RecommenderParameters.cs" />
     <Compile Include="GroupRecommendation\Extensions.cs" />
     <Compile Include="Handlers.cs" />
@@ -239,6 +237,7 @@
     <Compile Include="Wrap.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Recommender.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

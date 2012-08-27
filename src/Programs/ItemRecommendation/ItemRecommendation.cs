@@ -86,7 +86,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    methods (plus arguments and their defaults):");
 
 		Console.Write("   - ");
-		Console.WriteLine(string.Join("\n   - ", RecommenderExtensions.List("MyMediaLite.ItemRecommendation")));
+		Console.WriteLine(string.Join("\n   - ", "MyMediaLite.ItemRecommendation".ListRecommenders()));
 
 		Console.WriteLine(@"  method ARGUMENTS have the form name=value
 

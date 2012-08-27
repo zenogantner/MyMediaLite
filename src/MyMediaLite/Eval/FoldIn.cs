@@ -100,7 +100,7 @@ namespace MyMediaLite.Eval
 					local_recommender.Train();
 
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
-					var predicted_ratings = recommender.ScoreItems(user_id, items_to_rate);
+					var predicted_ratings = recommender.Recommend(user_id, candidate_items:items_to_rate);
 
 					foreach (var pred in predicted_ratings)
 					{
@@ -152,7 +152,7 @@ namespace MyMediaLite.Eval
 					local_recommender.AddRatings(user_ratings);
 
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
-					var predicted_ratings = recommender.ScoreItems(user_id, items_to_rate);
+					var predicted_ratings = recommender.Recommend(user_id, candidate_items:items_to_rate);
 
 					foreach (var pred in predicted_ratings)
 					{

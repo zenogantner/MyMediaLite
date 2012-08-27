@@ -75,7 +75,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
   recommenders (plus options and their defaults):");
 
 			Console.Write("   - ");
-			Console.WriteLine(string.Join("\n   - ", RecommenderExtensions.List("MyMediaLite.RatingPrediction")));
+			Console.WriteLine(string.Join("\n   - ", "MyMediaLite.RatingPrediction".ListRecommenders()));
 
 			Console.WriteLine(@"  method ARGUMENTS have the form name=value
 

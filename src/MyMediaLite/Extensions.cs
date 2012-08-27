@@ -14,85 +14,319 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-//
-
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using C5;
-using MyMediaLite.DataType;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using MyMediaLite.ItemRecommendation;
+using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite
 {
-	/// <summary>Extension methods for IRecommender</summary>
+	/// <summary>Helper class with utility methods for handling recommenders</summary>
+	/// <remarks>
+	/// Contains methods for creating and configuring recommender objects, as well as listing recommender classes.
+	/// </remarks>
 	public static class Extensions
 	{
-		/// <summary>Predict items for a given user</summary>
-		/// <param name="recommender">the recommender to use</param>
-		/// <param name="user_id">the numerical ID of the user</param>
-		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
-		/// <param name="n">number of items to return (optional)</param>
-		/// <returns>an ordered list of items, the most likely item first</returns>
-		static public System.Collections.Generic.IList<int> PredictItems(
-			this IRecommender recommender, int user_id,
-			System.Collections.Generic.IList<int> candidate_items, int n = -1)
+		/*
+		/// <summary>Scores items</summary>
+		/// <returns>the scored items</returns>
+		/// <param name='recommender'>the recommender to be used for scoring</param>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='items'>the items to score</param>
+		public static ICollection<Tuple<int, float>> ScoreItems(this Recommender recommender, int user_id, IList<int> items)
 		{
-			var scored_items = ScoreItems(recommender, user_id, candidate_items, n);
-			scored_items = scored_items.OrderByDescending(x => x.Item2).ToArray();
+			var scored_items = new List<Tuple<int, float>>();
+			foreach (int item_id in items)
+			{
+				float score = recommender.Predict(user_id, item_id);
+				scored_items.Add(Tuple.Create(item_id, score));
+			}
+			return scored_items;
+		}
+		*/
 
-			var result = new int[scored_items.Count];
-			for (int i = 0; i < result.Length; i++)
-				result[i] = scored_items[i].Item1;
+		static string NormalizeName(string s)
+		{
+			int underscore_position;
+			while ((underscore_position = s.LastIndexOf('_')) != -1)
+				s = s.Remove(underscore_position, 1);
+			return s.ToUpperInvariant();
+		}
+
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
+		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
+		/// <param name="report_error">void function that takes a string for error reporting</param>
+		/// <returns>the configured recommender</returns>
+		public static T Configure<T>(this T recommender, string parameters, Action<string> report_error)
+		{
+			try
+			{
+				Configure(recommender, new RecommenderParameters(parameters), report_error);
+			}
+			catch (ArgumentException e)
+			{
+				report_error(e.Message + "\n\n" + recommender.ToString() + "\n");
+			}
+			return recommender;
+		}
+
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
+		/// <param name="parameters">a string containing the parameters as key-value pairs</param>
+		public static T Configure<T>(this T recommender, string parameters)
+		{
+			return Configure(recommender, parameters, delegate(string s) { Console.Error.WriteLine(s); });
+		}
+
+		/// <summary>Configure a recommender</summary>
+		/// <param name="recommender">the recommender to configure</param>
+		/// <param name="parameters">a dictionary containing the parameters as key-value pairs</param>
+		/// <param name="report_error">void function that takes a string for error reporting</param>
+		/// <returns>the configured recommender</returns>
+		public static T Configure<T>(T recommender, Dictionary<string, string> parameters, Action<string> report_error)
+		{
+			try
+			{
+				foreach (var key in new List<string>(parameters.Keys))
+				{
+					recommender.SetProperty(key, parameters[key], report_error);
+					parameters.Remove(key);
+				}
+			}
+			catch (Exception e)
+			{
+				report_error(e.Message + "\n\n" + recommender.ToString()  + "\n");
+			}
+			return recommender;
+		}
+
+		/// <summary>Sets a property of a MyMediaLite recommender</summary>
+		/// <param name="recommender">An <see cref="IRecommender"/></param>
+		/// <param name="key">the name of the property (case insensitive)</param>
+		/// <param name="val">the string representation of the value</param>
+		public static void SetProperty<T>(this T recommender, string key, string val)
+		{
+			SetProperty(recommender, key, val, delegate(string s) { Console.Error.WriteLine(s); });
+		}
+
+		/// <summary>Sets a property of a MyMediaLite recommender</summary>
+		/// <param name="recommender">An <see cref="IRecommender"/></param>
+		/// <param name="key">the name of the property (case insensitive)</param>
+		/// <param name="val">the string representation of the value</param>
+		/// <param name="report_error">delegate to report errors</param>
+		public static void SetProperty<T>(this T recommender, string key, string val, Action<string> report_error)
+		{
+			Type type = recommender.GetType();
+			var property_names = new List<string>();
+			foreach (var p in type.GetProperties())
+				property_names.Add(p.Name);
+			property_names.Sort();
+
+			bool property_found = false;
+
+			key = NormalizeName(key);
+			foreach (string property_name in property_names)
+			{
+				if (NormalizeName(property_name).StartsWith(key))
+				{
+					property_found = true;
+					var property = type.GetProperty(property_name);
+
+					if (property.GetSetMethod() == null)
+						throw new ArgumentException(string.Format("Property '{0}' is read-only", key));
+
+					if (property.PropertyType.IsEnum)
+					{
+						property.GetSetMethod().Invoke(recommender, new Object[] { Enum.Parse(property.PropertyType, val) });
+						continue;
+					}
+
+					switch (property.PropertyType.ToString())
+					{
+						case "System.Double":
+							property.GetSetMethod().Invoke(recommender, new Object[] { double.Parse(val, CultureInfo.InvariantCulture) });
+							break;
+						case "System.Single":
+							property.GetSetMethod().Invoke(recommender, new Object[] { float.Parse(val, CultureInfo.InvariantCulture) });
+							break;
+						case "System.Int32":
+							if (val.Equals("inf"))
+								property.GetSetMethod().Invoke(recommender, new Object[] { int.MaxValue });
+							else
+								property.GetSetMethod().Invoke(recommender, new Object[] { int.Parse(val) });
+							break;
+						case "System.UInt32":
+							if (val.Equals("inf"))
+								property.GetSetMethod().Invoke(recommender, new Object[] { uint.MaxValue });
+							else
+								property.GetSetMethod().Invoke(recommender, new Object[] { uint.Parse(val) });
+							break;
+						case "System.Boolean":
+							property.GetSetMethod().Invoke(recommender, new Object[] { bool.Parse(val) });
+							break;
+						case "System.String":
+							property.GetSetMethod().Invoke(recommender, new Object[] { val });
+							break;
+						default:
+							report_error(string.Format("Parameter '{0}' has unknown type '{1}'", key, property.PropertyType));
+							break;
+					}
+				}
+			}
+
+			if (!property_found)
+				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
+		}
+
+		/// <summary>Create a rating predictor from the type name</summary>
+		/// <param name="typename">a string containing the type name</param>
+		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
+		public static RatingPredictor CreateRatingPredictor(this string typename)
+		{
+			if (! typename.StartsWith("MyMediaLite.RatingPrediction."))
+				typename = "MyMediaLite.RatingPrediction." + typename;
+
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				Type type = assembly.GetType(typename, false, true);
+				if (type != null)
+					return type.CreateRatingPredictor();
+			}
+			return null;
+		}
+
+		/// <summary>Create recommender</summary>
+		/// <param name='typename'>the type name</param>
+		/// <returns>a recommender of the given type name</returns>
+		public static Recommender CreateRecommender(this string typename)
+		{
+			if (typename.StartsWith("MyMediaLite.RatingPrediction."))
+				return typename.CreateRatingPredictor();
+			else if (typename.StartsWith("MyMediaLite.ItemRecommendation."))
+				return typename.CreateItemRecommender();
+			else
+				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", typename));
+		}
+
+		/// <summary>Create a rating predictor from a type object</summary>
+		/// <param name="type">the type object</param>
+		/// <returns>a rating recommender object of type type</returns>
+		public static RatingPredictor CreateRatingPredictor(this Type type)
+		{
+			if (type.IsAbstract)
+				return null;
+			if (type.IsGenericType)
+				return null;
+
+			if (type.IsSubclassOf(typeof(RatingPredictor)))
+				return (RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			else
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.RatingPredictor");
+		}
+
+		/// <summary>Create an item recommender from the type name</summary>
+		/// <param name="typename">a string containing the type name</param>
+		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
+		public static ItemRecommender CreateItemRecommender(this string typename)
+		{
+			if (! typename.StartsWith("MyMediaLite.ItemRecommendation"))
+				typename = "MyMediaLite.ItemRecommendation." + typename;
+
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				Type type = assembly.GetType(typename, false, true);
+				if (type != null)
+					return type.CreateItemRecommender();
+			}
+			return null;
+		}
+
+		/// <summary>Create an item recommender from a type object</summary>
+		/// <param name="type">the type object</param>
+		/// <returns>an item recommender object of type type</returns>
+		public static ItemRecommender CreateItemRecommender(this Type type)
+		{
+			if (type.IsAbstract)
+				return null;
+			if (type.IsGenericType)
+				return null;
+
+			if (type.IsSubclassOf(typeof(ItemRecommender)))
+				return (ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			else
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
+		}
+
+		/// <summary>Describes the kind of data needed by this recommender</summary>
+		/// <param name="recommender">a recommender</param>
+		/// <returns>a string containing the additional data file arguments needed for training this recommender</returns>
+		public static string Needs(this IRecommender recommender)
+		{
+			// determine necessary data
+			var needs = new List<string>();
+			if (recommender is IUserRelationAwareRecommender)
+				needs.Add("--user-relations=FILE");
+			if (recommender is IItemRelationAwareRecommender)
+				needs.Add("--item-relations=FILE");
+			if (recommender is IUserAttributeAwareRecommender)
+				needs.Add("--user-attributes=FILE");
+			if (recommender is IItemAttributeAwareRecommender)
+				needs.Add("--item-attributes=FILE");
+
+			return string.Join(", ", needs.ToArray());
+		}
+
+		/// <summary>Describes the kind of arguments supported by this recommender</summary>
+		/// <param name="recommender">a recommender</param>
+		/// <returns>a string containing the additional arguments supported by this recommender</returns>
+		public static string Supports(this IRecommender recommender)
+		{
+			// determine necessary data
+			var supports = new List<string>();
+			/*
+			if (recommender is IUserSimilarityProvider)
+				needs.Add("");
+			if (recommender is IItemSimilarityProvider)
+				needs.Add("");
+			*/
+			if (recommender is IIterativeModel)
+				supports.Add("--find-iter=N");
+			if (recommender is IIncrementalItemRecommender)
+				supports.Add("--online-evaluation");
+			if (recommender is IIncrementalRatingPredictor)
+				supports.Add("--online-evaluation");
+
+			return string.Join(", ", supports.ToArray());
+		}
+
+
+		/// <summary>List all recommenders in a given namespace</summary>
+		/// <param name="prefix">a string representing the namespace</param>
+		/// <returns>an array of strings containing the recommender descriptions</returns>
+		public static IList<string> ListRecommenders(this string prefix)
+		{
+			var result = new List<string>();
+
+			foreach (Type type in Utils.GetTypesInNamespace(prefix))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
+				{
+					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) type.CreateRatingPredictor() : (IRecommender) type.CreateItemRecommender();
+
+					string description = recommender.ToString();
+					string needs = recommender.Needs();
+					if (needs.Length > 0)
+						description += "\n       needs " + needs;
+					string supports = recommender.Supports();
+					if (supports.Length > 0)
+						description += "\n       supports " + supports;
+					result.Add(description);
+				}
 
 			return result;
 		}
-
-		/// <summary>Score items for a given user</summary>
-		/// <param name="recommender">the recommender to use</param>
-		/// <param name="user_id">the numerical ID of the user</param>
-		/// <param name="candidate_items">a collection of numerical IDs of candidate items</param>
-		/// <param name="n">number of items to return (optional)</param>
-		/// <returns>a list of pairs, each pair consisting of the item ID and the predicted score</returns>
-		static public System.Collections.Generic.IList<Tuple<int, float>> ScoreItems(
-			this IRecommender recommender, int user_id,
-			System.Collections.Generic.IList<int> candidate_items, int n = -1)
-		{
-			if (n == -1)
-			{
-				var result = new Tuple<int, float>[candidate_items.Count];
-				for (int i = 0; i < candidate_items.Count; i++)
-				{
-					int item_id = candidate_items[i];
-					result[i] = Tuple.Create(item_id, recommender.Predict(user_id, item_id));
-				}
-				return result;
-			}
-			else
-			{
-				var comparer = new DelegateComparer<Tuple<int, float>>( (a, b) => a.Item2.CompareTo(b.Item2) );
-				var heap = new IntervalHeap<Tuple<int, float>>(n, comparer);
-				float min_relevant_score = float.MinValue;
-
-				foreach (int item_id in candidate_items)
-				{
-					float score = recommender.Predict(user_id, item_id);
-					if (score > min_relevant_score)
-					{
-						heap.Add(Tuple.Create(item_id, score));
-						if (heap.Count > n)
-						{
-							heap.DeleteMin();
-							min_relevant_score = heap.FindMin().Item2;
-						}
-					}
-				}
-
-				var result = new Tuple<int, float>[heap.Count];
-				for (int i = 0; i < result.Length; i++)
-					result[i] = heap.DeleteMax();
-				return result;
-			}
-		}
 	}
 }
-
