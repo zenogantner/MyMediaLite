@@ -73,7 +73,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
 		/// <returns>the complete Pearson correlation matrix</returns>
-		static public CorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
+		static public SymmetricCorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
 		{
 			Pearson cm;
 			int num_entities = 0;

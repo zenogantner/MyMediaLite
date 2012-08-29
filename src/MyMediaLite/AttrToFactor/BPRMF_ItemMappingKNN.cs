@@ -43,7 +43,7 @@ namespace MyMediaLite.AttrToFactor
 		public uint K { get { return k; } set { k = value; } }
 		uint k = uint.MaxValue;
 
-		CorrelationMatrix item_correlation;
+		SymmetricCorrelationMatrix item_correlation;
 
 		///
 		public override void LearnAttributeToFactorMapping()

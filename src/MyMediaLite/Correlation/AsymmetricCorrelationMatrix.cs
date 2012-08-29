@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,23 +23,22 @@ using MyMediaLite.Data;
 using MyMediaLite.IO;
 using MyMediaLite.Taxonomy;
 
-/*! \namespace MyMediaLite.Correlation
- *  \brief This namespace contains several correlation/distance measures.
- */
 namespace MyMediaLite.Correlation
 {
+	// TODO use composition instead of inheritance!!
+	
 	/// <summary>Class for computing and storing correlations and similarities</summary>
-	public class CorrelationMatrix : SymmetricSparseMatrix<float>
+	public class AsymmetricCorrelationMatrix : SparseMatrix<float>, ICorrelationMatrix
 	{
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
-		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
-		public override bool IsSymmetric { get { return true; } }
+		/// <value>returns false</value>
+		public override bool IsSymmetric { get { return false; } }
 
 		/// <summary>Creates a CorrelationMatrix object for a given number of entities</summary>
 		/// <param name="num_entities">number of entities</param>
-		public CorrelationMatrix(int num_entities) : base(num_entities)
+		public AsymmetricCorrelationMatrix(int num_entities) : base(num_entities, num_entities)
 		{
 			this.num_entities = num_entities;
 		}
@@ -49,12 +47,12 @@ namespace MyMediaLite.Correlation
 		/// <remarks>Gives out a useful warning if there is not enough memory</remarks>
 		/// <param name="num_entities">the number of entities</param>
 		/// <returns>the correlation matrix</returns>
-		static public CorrelationMatrix Create(int num_entities)
+		static public AsymmetricCorrelationMatrix Create(int num_entities)
 		{
-			CorrelationMatrix cm;
+			AsymmetricCorrelationMatrix cm;
 			try
 			{
-				cm = new CorrelationMatrix(num_entities);
+				cm = new AsymmetricCorrelationMatrix(num_entities);
 			}
 			catch (OverflowException)
 			{
@@ -63,7 +61,9 @@ namespace MyMediaLite.Correlation
 			}
 			return cm;
 		}
-
+		
+		// TODO move IO to extension methods
+		
 		/// <summary>Creates a CorrelationMatrix from the lines of a StreamReader</summary>
 		/// <remarks>
 		/// In the first line, we expect to be the number of entities.
@@ -74,11 +74,11 @@ namespace MyMediaLite.Correlation
 		/// where EntityID1 and EntityID2 are non-negative integers and Correlation is a floating point number.
 		/// </remarks>
 		/// <param name="reader">the StreamReader to read from</param>
-		static public CorrelationMatrix ReadCorrelationMatrix(StreamReader reader)
+		static public AsymmetricCorrelationMatrix ReadCorrelationMatrix(StreamReader reader)
 		{
 			int num_entities = int.Parse(reader.ReadLine());
 
-			CorrelationMatrix cm = Create(num_entities);
+			AsymmetricCorrelationMatrix cm = Create(num_entities);
 
 			// diagonal values
 			for (int i = 0; i < num_entities; i++)
@@ -111,7 +111,7 @@ namespace MyMediaLite.Correlation
 		{
 			writer.WriteLine(num_entities);
 			for (int i = 0; i < num_entities; i++)
-				for (int j = i + 1; j < num_entities; j++)
+				for (int j = 0; j < num_entities; j++)
 				{
 					float val = this[i, j];
 					if (val != 0f)
@@ -119,20 +119,13 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
-		/// <summary>Add an entity to the CorrelationMatrix by growing it to the requested size.</summary>
-		/// <remarks>
-		/// Note that you still have to correctly compute and set the entity's correlation values
-		/// </remarks>
-		/// <param name="entity_id">the numerical ID of the entity</param>
+		///
 		public void AddEntity(int entity_id)
 		{
 			this.Grow(entity_id + 1, entity_id + 1);
 		}
 
-		/// <summary>Sum up the correlations between a given entity and the entities in a collection</summary>
-		/// <param name="entity_id">the numerical ID of the entity</param>
-		/// <param name="entities">a collection containing the numerical IDs of the entities to compare to</param>
-		/// <returns>the correlation sum</returns>
+		///
 		public double SumUp(int entity_id, ICollection<int> entities)
 		{
 			if (entity_id < 0 || entity_id >= num_entities)
@@ -145,9 +138,7 @@ namespace MyMediaLite.Correlation
 			return result;
 		}
 
-		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
-		/// <param name="entity_id">the entity ID</param>
-		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
+		///
 		public IList<int> GetPositivelyCorrelatedEntities(int entity_id)
 		{
 			var result = new List<int>();
@@ -164,7 +155,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		/// <param name="k">the neighborhood size</param>
 		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
-		public int[] GetNearestNeighbors(int entity_id, uint k)
+		public IList<int> GetNearestNeighbors(int entity_id, uint k)
 		{
 			var entities = new List<int>();
 			for (int i = 0; i < num_entities; i++)

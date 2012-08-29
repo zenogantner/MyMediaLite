@@ -37,7 +37,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Creates a Jaccard index matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public CorrelationMatrix Create(IBooleanMatrix vectors)
+		static public SymmetricCorrelationMatrix Create(IBooleanMatrix vectors)
 		{
 			BinaryDataCorrelationMatrix cm;
 			int num_entities = vectors.NumberOfRows;

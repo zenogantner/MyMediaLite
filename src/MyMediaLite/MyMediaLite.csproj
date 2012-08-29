@@ -15,7 +15,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -53,7 +53,6 @@
     <Compile Include="IUserSimilarityProvider.cs" />
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
-    <Compile Include="Correlation\CorrelationMatrix.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
@@ -238,6 +237,10 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Recommender.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Correlation\ConditionalProbability.cs" />
+    <Compile Include="Correlation\ICorrelationMatrix.cs" />
+    <Compile Include="Correlation\SymmetricCorrelationMatrix.cs" />
+    <Compile Include="Correlation\AsymmetricCorrelationMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

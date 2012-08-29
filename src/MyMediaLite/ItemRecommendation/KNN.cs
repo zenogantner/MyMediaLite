@@ -14,7 +14,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
+using System.Collections.Generic;
 using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.IO;
@@ -26,27 +26,27 @@ namespace MyMediaLite.ItemRecommendation
 	public abstract class KNN : ItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
-		public uint K {	get { return k;	} set {	k = value; } }
+		public uint K { get { return k; } set { k = value; } }
 
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 
 		/// <summary>Precomputed nearest neighbors</summary>
-		protected int[][] nearest_neighbors;
+		protected IList<IList<int>> nearest_neighbors;
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
-		protected CorrelationMatrix correlation;
+		protected SymmetricCorrelationMatrix correlation;
 
 		///
 		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
-				writer.WriteLine(nearest_neighbors.Length);
-				foreach (int[] nn in nearest_neighbors)
+				writer.WriteLine(nearest_neighbors.Count);
+				foreach (IList<int> nn in nearest_neighbors)
 				{
 					writer.Write(nn[0]);
-					for (int i = 1; i < nn.Length; i++)
+					for (int i = 1; i < nn.Count; i++)
 					 	writer.Write(" {0}", nn[i]);
 					writer.WriteLine();
 				}
@@ -71,7 +71,7 @@ namespace MyMediaLite.ItemRecommendation
 						nearest_neighbors[u][i] = int.Parse(numbers[i]);
 				}
 
-				this.correlation = CorrelationMatrix.ReadCorrelationMatrix(reader);
+				this.correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}

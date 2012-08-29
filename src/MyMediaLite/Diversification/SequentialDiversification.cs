@@ -37,11 +37,11 @@ namespace MyMediaLite.Diversification
 	/// </remarks>
 	public class SequentialDiversification
 	{
-		CorrelationMatrix ItemCorrelations { get; set; }
+		SymmetricCorrelationMatrix ItemCorrelations { get; set; }
 
 		/// <summary>Constructor</summary>
 		/// <param name="item_correlation">the similarity measure to use for diversification</param>
-		public SequentialDiversification(CorrelationMatrix item_correlation)
+		public SequentialDiversification(SymmetricCorrelationMatrix item_correlation)
 		{
 			ItemCorrelations = item_correlation;
 		}
@@ -99,7 +99,7 @@ namespace MyMediaLite.Diversification
 		/// <param name="items">a collection of items</param>
 		/// <param name="item_correlation">the similarity measure to use</param>
 		/// <returns>the similarity between the item and the collection</returns>
-		public static float Similarity(int item_id, ICollection<int> items, CorrelationMatrix item_correlation)
+		public static float Similarity(int item_id, ICollection<int> items, SymmetricCorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			foreach (int other_item_id in items)
@@ -111,7 +111,7 @@ namespace MyMediaLite.Diversification
 		/// <param name="items">a collection of items</param>
 		/// <param name="item_correlation">the similarity measure to use</param>
 		/// <returns>the intra-set similarity of the collection</returns>
-		public static float Similarity(ICollection<int> items, CorrelationMatrix item_correlation)
+		public static float Similarity(ICollection<int> items, SymmetricCorrelationMatrix item_correlation)
 		{
 			double similarity = 0;
 			for (int i = 0; i < items.Count; i++)

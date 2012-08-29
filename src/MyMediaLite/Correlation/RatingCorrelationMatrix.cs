@@ -14,15 +14,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using MyMediaLite.Data;
 using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
+	// TODO create interface
+	
 	/// <summary>CorrelationMatrix that computes correlations over rating data</summary>
-	public abstract class RatingCorrelationMatrix : CorrelationMatrix
+	public abstract class RatingCorrelationMatrix : SymmetricCorrelationMatrix
 	{
 		/// <summary>Constructor</summary>
 		/// <param name="num_entities">the number of entities</param>

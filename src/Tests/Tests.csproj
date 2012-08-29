@@ -15,7 +15,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -38,7 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Correlation\BinaryCosineTest.cs" />
-    <Compile Include="Correlation\CorrelationMatrixTest.cs" />
     <Compile Include="Correlation\PearsonTest.cs" />
     <Compile Include="Data\CombinedRatingsTest.cs" />
     <Compile Include="Data\EntityMappingTest.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="Data\RatingsProxyTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
+    <Compile Include="Correlation\SymmetricCorrelationMatrixTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
