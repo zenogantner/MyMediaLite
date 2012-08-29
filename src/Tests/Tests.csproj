@@ -72,7 +72,6 @@
     <Compile Include="Data\RatingsProxyTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
-    <Compile Include="Correlation\SymmetricCorrelationMatrixTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

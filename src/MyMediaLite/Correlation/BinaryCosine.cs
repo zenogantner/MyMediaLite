@@ -26,7 +26,7 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// http://en.wikipedia.org/wiki/Cosine_similarity
 	/// </remarks>
-	public sealed class BinaryCosine : BinaryDataCorrelationMatrix
+	public sealed class BinaryCosine : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Cosine</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -35,9 +35,9 @@ namespace MyMediaLite.Correlation
 		/// <summary>Creates a Cosine similarity matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public SymmetricCorrelationMatrix Create(IBooleanMatrix vectors)
+		static public BinaryCosine Create(IBooleanMatrix vectors)
 		{
-			BinaryDataCorrelationMatrix cm;
+			BinaryCosine cm;
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
@@ -53,7 +53,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public override void ComputeCorrelations(IBooleanMatrix entity_data)
+		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
 			// if possible, save some memory
 			if (entity_data.NumberOfColumns > ushort.MaxValue)

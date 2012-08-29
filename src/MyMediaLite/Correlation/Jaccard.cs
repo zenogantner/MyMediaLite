@@ -28,7 +28,7 @@ namespace MyMediaLite.Correlation
 	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public sealed class Jaccard : BinaryDataCorrelationMatrix
+	public sealed class Jaccard : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -37,9 +37,9 @@ namespace MyMediaLite.Correlation
 		/// <summary>Creates a Jaccard index matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public SymmetricCorrelationMatrix Create(IBooleanMatrix vectors)
+		static public Jaccard Create(IBooleanMatrix vectors)
 		{
-			BinaryDataCorrelationMatrix cm;
+			Jaccard cm;
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
@@ -55,7 +55,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public override void ComputeCorrelations(IBooleanMatrix entity_data)
+		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 

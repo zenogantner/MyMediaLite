@@ -52,10 +52,8 @@
     <Compile Include="IItemSimilarityProvider.cs" />
     <Compile Include="IUserSimilarityProvider.cs" />
     <Compile Include="Correlation\BinaryCosine.cs" />
-    <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
-    <Compile Include="Correlation\RatingCorrelationMatrix.cs" />
     <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="Data\IPosOnlyFeedback.cs" />
     <Compile Include="Data\IRatings.cs" />
@@ -241,6 +239,8 @@
     <Compile Include="Correlation\ICorrelationMatrix.cs" />
     <Compile Include="Correlation\SymmetricCorrelationMatrix.cs" />
     <Compile Include="Correlation\AsymmetricCorrelationMatrix.cs" />
+    <Compile Include="Correlation\IRatingCorrelationMatrix.cs" />
+    <Compile Include="Correlation\IBinaryDataCorrelationMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

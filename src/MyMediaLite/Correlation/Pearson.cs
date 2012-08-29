@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,7 +55,7 @@ namespace MyMediaLite.Correlation
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public sealed class Pearson : RatingCorrelationMatrix
+	public sealed class Pearson : SymmetricCorrelationMatrix, IRatingCorrelationMatrix
 	{
 		/// <summary>shrinkage parameter, if set to 0 we have the standard Pearson correlation without shrinkage</summary>
 		public float Shrinkage { get; set; }
@@ -218,10 +217,8 @@ namespace MyMediaLite.Correlation
 			return (float) pmcc * ((n - 1) / (n - 1 + shrinkage));
 		}
 
-		/// <summary>Compute correlations for given ratings</summary>
-		/// <param name="ratings">the rating data</param>
-		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		public override void ComputeCorrelations(IRatings ratings, EntityType entity_type)
+		///
+		public void ComputeCorrelations(IRatings ratings, EntityType entity_type)
 		{
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);

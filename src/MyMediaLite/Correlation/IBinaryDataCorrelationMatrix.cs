@@ -19,18 +19,12 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	// TODO create interface
-	
 	/// <summary>CorrelationMatrix that computes correlations over binary data</summary>
-	public abstract class BinaryDataCorrelationMatrix : SymmetricCorrelationMatrix
+	public interface IBinaryDataCorrelationMatrix : ICorrelationMatrix
 	{
-		/// <summary>Constructor</summary>
-		/// <param name="num_entities">the number of entities</param>
-		public BinaryDataCorrelationMatrix(int num_entities) : base(num_entities) { }
-
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
-		abstract public void ComputeCorrelations(IBooleanMatrix entity_data);
+		void ComputeCorrelations(IBooleanMatrix entity_data);
 	}
 }
 

@@ -20,33 +20,32 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.DataType;
 
-// TODO implement
-// TODO asymmetric
-
 namespace MyMediaLite.Correlation
 {
+	// TODO Jaccard, Cosine, and this actually only differ in a few lines - DRY!
+	
 	/// <summary>Class for storing and computing the Jaccard index (Tanimoto coefficient)</summary>
 	/// <remarks>
 	/// The Jaccard index is often also called the Tanimiti coefficient.
 	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public sealed class ConditionalProbability : BinaryDataCorrelationMatrix
+	public sealed class ConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public ConditionalProbability(int num_entities) : base(num_entities) { }
 
-		/// <summary>Creates a Jaccard index matrix from given data</summary>
+		/// <summary>Creates conditional probability matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public SymmetricCorrelationMatrix Create(IBooleanMatrix vectors)
+		static public ConditionalProbability Create(IBooleanMatrix vectors)
 		{
-			BinaryDataCorrelationMatrix cm;
+			ConditionalProbability cm;
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
-				cm = new Jaccard(num_entities);
+				cm = new ConditionalProbability(num_entities);
 			}
 			catch (OverflowException)
 			{
@@ -58,7 +57,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public override void ComputeCorrelations(IBooleanMatrix entity_data)
+		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
@@ -71,7 +70,7 @@ namespace MyMediaLite.Correlation
 				for (int i = 0; i < row.Count; i++)
 				{
 					int x = row[i];
-					for (int j = i + 1; j < row.Count; j++)
+					for (int j = 0; j < row.Count; j++)
 					{
 						int y = row[j];
 						overlap[x, y]++;
@@ -83,10 +82,10 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// compute Jaccard index
+			// compute conditional probabilities
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
-					this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
+					this[x, y] = (float) (overlap[x, y] / entity_data.NumEntriesByRow(x));
 		}
 
 		/// <summary>Computes the Jaccard index of two binary vectors</summary>
@@ -99,7 +98,7 @@ namespace MyMediaLite.Correlation
 			foreach (int k in vector_j)
 				if (vector_i.Contains(k))
 					cntr++;
-			return (float) ( cntr / (vector_i.Count + vector_j.Count - cntr) );
+			return (float) ( cntr / vector_i.Count);
 		}
 	}
 }
