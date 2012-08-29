@@ -26,12 +26,12 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weighted matrix factorization method proposed by Hu et al. and Pan et al.</summary>
 	/// <remarks>
- 	/// We use the fast learning method proposed by Hu et al. (alternating least squares),
- 	/// and we use a global weight to penalize observed/unobserved values.
+	/// We use the fast learning method proposed by Hu et al. (alternating least squares),
+	/// and we use a global weight to penalize observed/unobserved values.
 	///
 	/// Literature:
 	/// <list type="bullet">
-    ///   <item><description>
+	///   <item><description>
 	///     Y. Hu, Y. Koren, C. Volinsky: Collaborative filtering for implicit feedback datasets.
 	///     ICDM 2008.
 	///     http://research.yahoo.net/files/HuKorenVolinsky-ICDM08.pdf
@@ -77,7 +77,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="H">H</param>
 		protected virtual void Optimize(IBooleanMatrix data, Matrix<float> W, Matrix<float> H)
 		{
-			var HH          = new Matrix<double>(num_factors, num_factors);
+			var HH = new Matrix<double>(num_factors, num_factors);
 
 			// source code comments are in terms of computing the user factors
 			// works the same with users and items exchanged
@@ -94,7 +94,7 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			// (2) optimize all U
 			// HC_minus_IH is symmetric
-			Parallel.For(0, W.dim1, u => 
+			Parallel.For(0, W.dim1, u =>
 			{
 				var row = data.GetEntriesByRow(u);
 				// create HC_minus_IH in O(f^2|S_u|)
