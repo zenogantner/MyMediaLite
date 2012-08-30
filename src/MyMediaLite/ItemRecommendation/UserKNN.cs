@@ -30,7 +30,7 @@ namespace MyMediaLite.ItemRecommendation
 	public class UserKNN : KNN, IUserSimilarityProvider
 	{
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.UserMatrix; } }
-		
+
 		///
 		public override void Train()
 		{

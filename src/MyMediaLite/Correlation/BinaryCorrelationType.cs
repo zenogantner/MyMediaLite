@@ -22,6 +22,7 @@ namespace MyMediaLite.Correlation
 		Cosine,
 		Jaccard,
 		ConditionalProbability,
+		BidirectionalConditionalProbability,
 		WeightedCosine,
 		Cooccurrence,
 		SimilarityProvider,

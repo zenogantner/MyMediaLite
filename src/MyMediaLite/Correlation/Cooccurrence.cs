@@ -26,7 +26,7 @@ namespace MyMediaLite.Correlation
 	/// </remarks>
 	public sealed class Cooccurrence : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
-		/// <summary>Creates an object of type CoCount</summary>
+		/// <summary>Creates an object of type Cooccurrence</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public Cooccurrence(int num_entities) : base(num_entities) { }
 
@@ -82,10 +82,10 @@ namespace MyMediaLite.Correlation
 					this[x, y] = overlap[x, y];
 		}
 
-		/// <summary>Computes the CoCount index of two binary vectors</summary>
+		/// <summary>Computes the cooccurrence count of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>
-		/// <returns>the cosine similarity between the two vectors</returns>
+		/// <returns>the cooccurrence count of the two vectors</returns>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;

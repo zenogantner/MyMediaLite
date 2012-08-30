@@ -29,9 +29,11 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
-		
+
+		public float Alpha { get; set; }
+
 		public BinaryCorrelationType Correlation { get; set; }
-		
+
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 
@@ -40,14 +42,15 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected ICorrelationMatrix correlation;
-		
+
 		protected abstract IBooleanMatrix DataMatrix { get; }
-	
+
 		public KNN()
 		{
 			Correlation = BinaryCorrelationType.Cosine;
+			Alpha = 0.5;
 		}
-		
+
 		public override void Train()
 		{
 			switch (Correlation)
@@ -61,6 +64,9 @@ namespace MyMediaLite.ItemRecommendation
 				case BinaryCorrelationType.ConditionalProbability:
 					correlation = ConditionalProbability.Create(DataMatrix);
 					break;
+				case BinaryCorrelationType.BidirectionalConditionalProbability:
+					correlation = BidirectionalConditionalProbability.Create(DataMatrix, Alpha);
+					break;
 				case BinaryCorrelationType.WeightedCosine:
 					correlation = WeightedBinaryCosine.Create(DataMatrix);
 					break;
@@ -71,7 +77,7 @@ namespace MyMediaLite.ItemRecommendation
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
 		}
-		
+
 		///
 		public override void SaveModel(string filename)
 		{
@@ -111,13 +117,13 @@ namespace MyMediaLite.ItemRecommendation
 				this.nearest_neighbors = nearest_neighbors;
 			}
 		}
-		
+
 		///
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} correlation={2}",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation);
+				"{0} k={1} correlation={2} alpha={3} (only for BidirectionalConditionalProbability)",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Alpha);
 		}
 	}
 }

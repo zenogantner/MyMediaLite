@@ -18,7 +18,8 @@
            correlation for determining the nearest neighbors
          - ensembles: define attributes as interfaces instead of classes
 	correlations
-         - new correlations: ConditionalProbability, Cooccurrence (#267)
+         - new correlations: ConditionalProbability, Cooccurrence (#267),
+           BidirectionalConditionalProbability
 	command line tools
 	 - fix early abortion if cutoff not set for item_recommendation
            (bug was introduced in 3.02)

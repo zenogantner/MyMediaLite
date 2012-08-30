@@ -22,27 +22,35 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	// TODO Jaccard, Cosine, and this actually only differ in a few lines - DRY!
+	// TODO: better name
 	
-	/// <summary>Class for storing and computing conditional probabilities</summary>
+	/// <summary>Class for storing and 'bi-directional' computing conditional probabilities</summary>
 	/// <remarks>
+	/// TODO describe
+	/// TODO LIT
 	/// </remarks>
-	public sealed class ConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
+	/// 
+	public sealed class BidirectionalConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
+		float Alpha { get; set; } // TODO check value
+		
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public ConditionalProbability(int num_entities) : base(num_entities) { }
+		public BidirectionalConditionalProbability(int num_entities, float alpha) : base(num_entities)
+		{
+			Alpha = alpha;
+		}
 
 		/// <summary>Creates conditional probability matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
 		/// <returns>the similarity matrix based on the data</returns>
-		static public ConditionalProbability Create(IBooleanMatrix vectors)
+		static public BidirectionalConditionalProbability Create(IBooleanMatrix vectors, float alpha)
 		{
-			ConditionalProbability cm;
+			BidirectionalConditionalProbability cm;
 			int num_entities = vectors.NumberOfRows;
 			try
 			{
-				cm = new ConditionalProbability(num_entities);
+				cm = new BidirectionalConditionalProbability(num_entities, alpha);
 			}
 			catch (OverflowException)
 			{
@@ -80,25 +88,30 @@ namespace MyMediaLite.Correlation
 				this[i, i] = 1;
 
 			// compute conditional probabilities
+			float alpha = Alpha;
+			float one_minus_alpha = 1 - alpha;
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
 				{
-					this[x, y] = (float) (overlap[x, y] / entity_data.NumEntriesByRow(x));
-					this[y, x] = (float) (overlap[x, y] / entity_data.NumEntriesByRow(y));
+					double x_given_y = (double) (overlap[x, y] / entity_data.NumEntriesByRow(x));
+					double y_given_x = (double) (overlap[x, y] / entity_data.NumEntriesByRow(y));
+				
+					this[x, y] = (float) ( Math.Pow(x_given_y, alpha) * Math.Pow(y_given_x, one_minus_alpha) );
+					this[y, x] = (float) ( Math.Pow(y_given_x, alpha) * Math.Pow(x_given_y, one_minus_alpha) );
 				}
 		}
 
-		/// <summary>Computes the conditional probability for two binary vectors</summary>
+		/// <summary>Computes the Jaccard index of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>
-		/// <returns>the conditional probability for the two vectors</returns>
-		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
+		/// <returns>the cosine similarity between the two vectors</returns>
+		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j, float alpha)
 		{
 			int cntr = 0;
 			foreach (int k in vector_j)
 				if (vector_i.Contains(k))
 					cntr++;
-			return (float) (cntr / vector_i.Count);
+			return (float) ( Math.Pow(cntr / vector_i.Count, alpha) * Math.Pow(cntr / vector_j.Count, 1 - alpha) );
 		}
 	}
 }

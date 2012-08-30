@@ -88,7 +88,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Computes the Jaccard index of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>
-		/// <returns>the cosine similarity between the two vectors</returns>
+		/// <returns>the Jaccard index of the two vectors</returns>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
 		{
 			int cntr = 0;
