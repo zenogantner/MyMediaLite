@@ -17,7 +17,6 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation

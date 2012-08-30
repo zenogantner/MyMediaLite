@@ -17,14 +17,13 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for storing and computing the Jaccard index (Tanimoto coefficient)</summary>
 	/// <remarks>
-	/// The Jaccard index is often also called the Tanimiti coefficient.
+	/// The Jaccard index is often also called the Tanimoto coefficient.
 	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>

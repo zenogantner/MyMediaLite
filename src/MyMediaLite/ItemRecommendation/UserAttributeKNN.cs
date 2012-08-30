@@ -14,9 +14,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
-using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
@@ -27,6 +25,8 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
+		protected override IBooleanMatrix DataMatrix { get { return this.user_attributes; } }
+		
 		///
 		public IBooleanMatrix UserAttributes
 		{
@@ -41,22 +41,5 @@ namespace MyMediaLite.ItemRecommendation
 
 		///
 		public int NumUserAttributes { get; private set; }
-
-		///
-		public override void Train()
-		{
-			correlation = BinaryCosine.Create(user_attributes);
-
-			int num_users = user_attributes.NumberOfRows;
-			this.nearest_neighbors = new int[num_users][];
-			for (int u = 0; u < num_users; u++)
-				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
-		}
-
-		///
-		public override string ToString()
-		{
-			return string.Format("UserAttributeKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
-		}
 	}
 }

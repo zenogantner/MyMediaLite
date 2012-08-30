@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -28,11 +29,13 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
+		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
+		
 		///
 		public override void Train()
 		{
-			correlation = BinaryCosine.Create(Feedback.ItemMatrix);
-
+			base.Train();
+			
 			int num_items = MaxItemID + 1;
 			this.nearest_neighbors = new int[num_items][];
 			for (int i = 0; i < num_items; i++)
@@ -70,12 +73,6 @@ namespace MyMediaLite.ItemRecommendation
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
 				return correlation.GetNearestNeighbors(item_id, n);
-		}
-
-		///
-		public override string ToString()
-		{
-			return string.Format("ItemKNN k={0}", k == uint.MaxValue ? "inf" : k.ToString());
 		}
 	}
 }

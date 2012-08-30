@@ -14,9 +14,11 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MyMediaLite.Correlation;
+using MyMediaLite.DataType;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
@@ -27,7 +29,9 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
-
+		
+		public BinaryCorrelationType Correlation { get; set; }
+		
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 
@@ -35,8 +39,39 @@ namespace MyMediaLite.ItemRecommendation
 		protected IList<IList<int>> nearest_neighbors;
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
-		protected SymmetricCorrelationMatrix correlation;
-
+		protected ICorrelationMatrix correlation;
+		
+		protected abstract IBooleanMatrix DataMatrix { get; }
+	
+		public KNN()
+		{
+			Correlation = BinaryCorrelationType.Cosine;
+		}
+		
+		public override void Train()
+		{
+			switch (Correlation)
+			{
+				case BinaryCorrelationType.Cosine:
+					correlation = BinaryCosine.Create(DataMatrix);
+					break;
+				case BinaryCorrelationType.Jaccard:
+					correlation = Jaccard.Create(DataMatrix);
+					break;
+				case BinaryCorrelationType.ConditionalProbability:
+					correlation = ConditionalProbability.Create(DataMatrix);
+					break;
+				case BinaryCorrelationType.WeightedCosine:
+					correlation = WeightedBinaryCosine.Create(DataMatrix);
+					break;
+				case BinaryCorrelationType.Cooccurrence:
+					correlation = Cooccurrence.Create(DataMatrix);
+					break;
+				default:
+					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+			}
+		}
+		
 		///
 		public override void SaveModel(string filename)
 		{
@@ -75,6 +110,14 @@ namespace MyMediaLite.ItemRecommendation
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}
+		}
+		
+		///
+		public override string ToString()
+		{
+			return string.Format(
+				"{0} k={1} correlation={2}",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation);
 		}
 	}
 }

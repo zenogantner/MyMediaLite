@@ -15,12 +15,13 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 // 
-using System;
 using System.Collections.Generic;
+using System.IO;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	public interface ICorrelationMatrix
+	public interface ICorrelationMatrix : IMatrix<float>
 	{
 		/// <summary>Add an entity to the ICorrelationMatrix by growing it to the requested size.</summary>
 		/// <remarks>
@@ -46,6 +47,11 @@ namespace MyMediaLite.Correlation
 		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
 		IList<int> GetNearestNeighbors(int entity_id, uint k);
 
+		/// <summary>Write out the correlations to a StreamWriter</summary>
+		/// <param name="writer">
+		/// A <see cref="StreamWriter"/>
+		/// </param>
+		void Write(StreamWriter writer);
 	}
 }
 

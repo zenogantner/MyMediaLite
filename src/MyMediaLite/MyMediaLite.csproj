@@ -241,6 +241,9 @@
     <Compile Include="Correlation\AsymmetricCorrelationMatrix.cs" />
     <Compile Include="Correlation\IRatingCorrelationMatrix.cs" />
     <Compile Include="Correlation\IBinaryDataCorrelationMatrix.cs" />
+    <Compile Include="Correlation\BinaryCorrelationType.cs" />
+    <Compile Include="Correlation\RatingCorrelationType.cs" />
+    <Compile Include="Correlation\Cooccurrence.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

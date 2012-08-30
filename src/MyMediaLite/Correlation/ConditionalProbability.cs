@@ -24,11 +24,8 @@ namespace MyMediaLite.Correlation
 {
 	// TODO Jaccard, Cosine, and this actually only differ in a few lines - DRY!
 	
-	/// <summary>Class for storing and computing the Jaccard index (Tanimoto coefficient)</summary>
+	/// <summary>Class for storing and computing conditional probabilities</summary>
 	/// <remarks>
-	/// The Jaccard index is often also called the Tanimiti coefficient.
-	///
-	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
 	public sealed class ConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
