@@ -187,7 +187,7 @@ usage: $PROGRAM_NAME [OPTIONS] [INPUT]
     --ignore-line-regex=REGEX   ignore lines that match REGEX
     --event-constant=STRING     set the value for each event to STRING
     --libsvm-format             output in LIBSVM format (ignores date/timestamp information)
-	--alphanumeric-sort         sort mapping files alphanumerically instead of numerically
+    --alphanumeric-sort         sort mapping files alphanumerically instead of numerically
 END
 	exit $return_code;
 }
