@@ -36,6 +36,8 @@
          - improve Installation description
 	scripts
          - add artist-to-song preprocessing script for MSD challenge
+	evaluation
+	 - fix some Gendarme warnings
         tests
          - test_item_recommendation_online.sh: constant random seed
 	misc

@@ -76,7 +76,7 @@ namespace MyMediaLite.Eval
 				catch (Exception e)
 				{
 					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
-					throw e;
+					throw;
 				}
 			});
 
@@ -139,7 +139,7 @@ namespace MyMediaLite.Eval
 				catch (Exception e)
 				{
 					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
-					throw e;
+					throw;
 				}
 			});
 			Console.WriteLine("{0} iteration {1}", new RatingPredictionEvaluationResults(fold_results), iterative_recommenders[0].NumIter);
@@ -163,7 +163,7 @@ namespace MyMediaLite.Eval
 					catch (Exception e)
 					{
 						Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
-						throw e;
+						throw;
 					}
 				});
 				Console.WriteLine("{0} iteration {1}", new RatingPredictionEvaluationResults(fold_results), it);

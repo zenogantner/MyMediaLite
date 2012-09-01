@@ -166,7 +166,7 @@ namespace MyMediaLite.Eval
 				catch (Exception e)
 				{
 					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
-					throw e;
+					throw;
 				}
 			});
 

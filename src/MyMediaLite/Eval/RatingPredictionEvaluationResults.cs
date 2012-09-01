@@ -26,6 +26,7 @@ namespace MyMediaLite.Eval
 	/// <remarks>
 	/// This class is basically a Dictionary with a custom-made ToString() method.
 	/// </remarks>
+	[Serializable]
 	public class RatingPredictionEvaluationResults : Dictionary<string, float>
 	{
 		/// <summary>results for users without ratings in the training data</summary>
