@@ -22,21 +22,26 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Class for storing and 'bi-directional' computing conditional probabilities</summary>
+	/// <summary>Class for storing and computing 'bi-directional' conditional probabilities</summary>
 	/// <remarks>
 	/// TODO LIT
 	/// </remarks>
 	///
 	public sealed class BidirectionalConditionalProbability : BinaryDataAsymmetricCorrelationMatrix
 	{
-		float Alpha { get; set; } // TODO check value
+		readonly float alpha;
+		readonly float one_minus_alpha;
 
 		/// <summary>Creates an object of type BidirectionalConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
 		/// <param name="alpha">alpha parameter</param>
 		public BidirectionalConditionalProbability(int num_entities, float alpha) : base(num_entities)
 		{
-			Alpha = alpha;
+			if (alpha < 0 || alpha > 1)
+				throw new ArgumentOutOfRangeException("alpha must be in range [0, 1]");
+
+			this.alpha = alpha;
+			this.one_minus_alpha = 1 - alpha;
 		}
 
 		/// <summary>Creates conditional probability matrix from given data</summary>
@@ -65,11 +70,11 @@ namespace MyMediaLite.Correlation
 		{
 			if (count_x == 0 || count_y == 0)
 				return 0.0f;
-			
+
 			double x_given_y = (double) overlap / count_x;
 			double y_given_x = (double) overlap / count_y;
-			
-			return (float) ( Math.Pow(x_given_y, Alpha) * Math.Pow(y_given_x, 1 - Alpha) );
+
+			return (float) ( Math.Pow(x_given_y, alpha) * Math.Pow(y_given_x, one_minus_alpha) );
 		}
 	}
 }
