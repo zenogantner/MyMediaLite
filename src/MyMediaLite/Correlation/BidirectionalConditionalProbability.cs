@@ -66,8 +66,8 @@ namespace MyMediaLite.Correlation
 			if (count_x == 0 || count_y == 0)
 				return 0.0f;
 			
-			double x_given_y = (double) (overlap / count_x);
-			double y_given_x = (double) (overlap / count_y);
+			double x_given_y = (double) overlap / count_x;
+			double y_given_x = (double) overlap / count_y;
 			
 			return (float) ( Math.Pow(x_given_y, Alpha) * Math.Pow(y_given_x, 1 - Alpha) );
 		}
