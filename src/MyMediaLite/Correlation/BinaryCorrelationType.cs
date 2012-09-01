@@ -17,15 +17,24 @@
 // 
 namespace MyMediaLite.Correlation
 {
+	/// <summary>Correlations based on binary data</summary>
 	public enum BinaryCorrelationType
 	{
+		/// <summary>cosine similarity</summary>
 		Cosine,
+		/// <summary>Jaccard index (Tanimoto coefficient)</summary>
 		Jaccard,
+		/// <summary>conditional probability</summary>
 		ConditionalProbability,
+		/// <summary>bidirectional conditional probability</summary>
 		BidirectionalConditionalProbability,
+		/// <summary>weighted cosine similarity</summary>
 		WeightedCosine,
+		/// <summary>cooccurrence counts</summary>
 		Cooccurrence,
+		/// <summary>use a similarity provider to get the correlation</summary>
 		SimilarityProvider,
+		/// <summary>use stored/precomputed correlation</summary>
 		Stored
 	}
 }

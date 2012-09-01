@@ -17,17 +17,27 @@
 // 
 namespace MyMediaLite.Correlation
 {
+	/// <summary>Correlations based on rating data</summary>
 	public enum RatingCorrelationType
 	{
-		Cosine,
+		/// <summary>binary cosine similarity</summary>
+		BinaryCosine,
+		/// <summary>Jaccard index (Tanimoto coefficient)</summary>
 		Jaccard,
+		/// <summary>conditional probability</summary>
 		ConditionalProbability,
+		/// <summary>bidirectional conditional probability</summary>
 		BidirectionalConditionalProbability,
+		/// <summary>weighted cosine similarity</summary>
 		WeightedCosine,
+		/// <summary>cooccurrence counts</summary>
 		Cooccurrence,
-		Pearson,
+		/// <summary>use a similarity provider to get the correlation</summary>
 		SimilarityProvider,
+		/// <summary>use stored/precomputed correlation</summary>
 		Stored,
+		/// <summary>Pearson correlation</summary>
+		Pearson
 	}
 }
 

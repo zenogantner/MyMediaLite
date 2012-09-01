@@ -26,12 +26,13 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	// TODO use composition instead of inheritance!!
-	
+
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class AsymmetricCorrelationMatrix : SparseMatrix<float>, ICorrelationMatrix
 	{
+		///
 		public int NumEntities { get { return num_entities; } }
-		
+
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
@@ -63,9 +64,9 @@ namespace MyMediaLite.Correlation
 			}
 			return cm;
 		}
-		
+
 		// TODO move IO to extension methods
-		
+
 		/// <summary>Creates a CorrelationMatrix from the lines of a StreamReader</summary>
 		/// <remarks>
 		/// In the first line, we expect to be the number of entities.

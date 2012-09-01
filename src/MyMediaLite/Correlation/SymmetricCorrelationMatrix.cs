@@ -33,6 +33,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
+		///
 		public int NumEntities { get { return num_entities; } }
 		
 		/// <summary>Number of entities, e.g. users or items</summary>

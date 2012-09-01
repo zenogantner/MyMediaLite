@@ -19,12 +19,13 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>k-nearest neighbor item-based collaborative filtering using cosine-similarity over the item attibutes</summary>
+	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering using the correlation of the item attibutes</summary>
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
+		///
 		protected override IBooleanMatrix DataMatrix { get { return this.item_attributes; } }
 		
 		///
@@ -40,6 +41,6 @@ namespace MyMediaLite.ItemRecommendation
 		private IBooleanMatrix item_attributes;
 
 		///
-		public int NumItemAttributes { get;	private set; }
+		public int NumItemAttributes { get; private set; }
 	}
 }

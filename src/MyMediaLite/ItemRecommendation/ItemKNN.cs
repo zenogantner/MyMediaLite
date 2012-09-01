@@ -23,7 +23,7 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering</summary>
+	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering</summary>
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
@@ -31,13 +31,12 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
-		
+
 		///
 		public override void Train()
 		{
 			base.Train();
-			
-			// TODO generalize this as well
+
 			int num_items = MaxItemID + 1;
 			if (k != uint.MaxValue)
 			{

@@ -29,7 +29,7 @@ namespace MyMediaLite.Correlation
 	/// </remarks>
 	public sealed class ConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
-		/// <summary>Creates an object of type Jaccard</summary>
+		/// <summary>Creates an object of type ConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public ConditionalProbability(int num_entities) : base(num_entities) { }
 

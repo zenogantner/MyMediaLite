@@ -82,7 +82,10 @@ namespace MyMediaLite.Correlation
 			// compute Jaccard index
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
-					this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
+					if (overlap[x, y] != 0)
+						this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
+					else
+						this[x, y] = 0;
 		}
 
 		/// <summary>Computes the Jaccard index of two binary vectors</summary>

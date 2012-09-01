@@ -116,7 +116,7 @@ namespace MyMediaLite.Correlation
 				for (int y = 0; y < x; y++)
 				{
 					long size_product = entity_data.NumEntriesByRow(x) * entity_data.NumEntriesByRow(y);
-					if (size_product > 0)
+					if (size_product > 0.0f)
 						this[x, y] = (float) (overlap[x, y] / Math.Sqrt(size_product));
 				}
 		}
@@ -133,10 +133,10 @@ namespace MyMediaLite.Correlation
 					count++;
 
 			long size_product = vector_i.Count * vector_j.Count;
-			if (size_product > 0)
+			if (size_product > 0.0f)
 				return (float) count / (float) Math.Sqrt(size_product);
 
-			return 0;
+			return 0.0f;
 		}
 	}
 }

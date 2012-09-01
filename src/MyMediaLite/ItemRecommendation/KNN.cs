@@ -30,10 +30,23 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
 
+		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
 		public float Alpha { get; set; }
 
+		/// <summary>Exponent to be used for transforming the neighbor's weights</summary>
+		/// <remarks>
+		///   <para>
+		///     A value of 0 leads to counting of the relevant neighbors.
+		///     1 is the usual weighted prediction.
+		///     Values greater than 1 give higher weight to higher correlated neighbors.
+		///   </para>
+		///   <para>
+		///     TODO LIT
+		///   </para>
+		/// </remarks>
 		public float Q { get; set; }
 
+		/// <summary>The kind of correlation to use</summary>
 		public BinaryCorrelationType Correlation { get; set; }
 
 		/// <summary>data matrix to learn the correlation from</summary>
@@ -45,9 +58,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Precomputed nearest neighbors</summary>
 		protected IList<IList<int>> nearest_neighbors;
 
-		/// <summary>Correlation matrix over some kind of entity</summary>
+		/// <summary>Correlation matrix over some kind of entity, e.g. users or items</summary>
 		protected ICorrelationMatrix correlation;
-		
+
 		/// <summary>Default constructor</summary>
 		public KNN()
 		{
@@ -56,6 +69,7 @@ namespace MyMediaLite.ItemRecommendation
 			Q = 1.0f;
 		}
 
+		///
 		public override void Train()
 		{
 			switch (Correlation)

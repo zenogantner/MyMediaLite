@@ -24,12 +24,11 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
 	/// <remarks>
-	/// k=inf equals most-popular.
-	///
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class UserKNN : KNN, IUserSimilarityProvider
 	{
+		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.UserMatrix; } }
 
 		///

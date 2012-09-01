@@ -22,11 +22,8 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	// TODO: better name
-	
 	/// <summary>Class for storing and 'bi-directional' computing conditional probabilities</summary>
 	/// <remarks>
-	/// TODO describe
 	/// TODO LIT
 	/// </remarks>
 	/// 
@@ -34,8 +31,9 @@ namespace MyMediaLite.Correlation
 	{
 		float Alpha { get; set; } // TODO check value
 		
-		/// <summary>Creates an object of type Jaccard</summary>
+		/// <summary>Creates an object of type BidirectionalConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
+		/// <param name="alpha">alpha parameter</param>
 		public BidirectionalConditionalProbability(int num_entities, float alpha) : base(num_entities)
 		{
 			Alpha = alpha;
@@ -43,6 +41,7 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Creates conditional probability matrix from given data</summary>
 		/// <param name="vectors">the boolean data</param>
+		/// <param name="alpha">alpha parameter</param>
 		/// <returns>the similarity matrix based on the data</returns>
 		static public BidirectionalConditionalProbability Create(IBooleanMatrix vectors, float alpha)
 		{
@@ -101,9 +100,10 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
-		/// <summary>Computes the Jaccard index of two binary vectors</summary>
+		/// <summary>Computes the bidirectional conditional probability of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>
+		/// <param name="alpha">alpha parameter</param>
 		/// <returns>the cosine similarity between the two vectors</returns>
 		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j, float alpha)
 		{
