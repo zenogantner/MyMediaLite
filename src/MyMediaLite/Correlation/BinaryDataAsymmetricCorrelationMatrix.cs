@@ -17,16 +17,17 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Class with commoin routines for symmetric correlations that are learned from binary data</summary>
-	public abstract class BinaryDataCorrelationMatrix : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
+	/// <summary>Class with commoin routines for asymmetric correlations that are learned from binary data</summary>
+	public abstract class BinaryDataAsymmetricCorrelationMatrix : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
-		/// <summary>Creates an object of type BinaryDataCorrelation</summary>
+		/// <summary>Creates an object of type ConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public BinaryDataCorrelationMatrix(int num_entities) : base(num_entities) { }
+		public BinaryDataAsymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
 
 		///
 		protected abstract float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y);
@@ -34,6 +35,10 @@ namespace MyMediaLite.Correlation
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
+			// the diagonal of the correlation matrix
+			for (int i = 0; i < num_entities; i++)
+				this[i, i] = 1;
+
 			// if possible, save some memory
 			if (entity_data.NumberOfColumns > ushort.MaxValue)
 				ComputeCorrelationsUIntOverlap(entity_data);
@@ -43,58 +48,28 @@ namespace MyMediaLite.Correlation
 
 		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricSparseMatrix<uint>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = i + 1; j < row.Count; j++)
-						overlap[x, row[j]]++;
-				}
-			}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
+			var overlap = Overlap.ComputeUInt(entity_data);
 
 			// compute correlations
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
+				{
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
+					this[y, x] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(y), entity_data.NumEntriesByRow(x));
+				}
 		}
 
 		void ComputeCorrelationsUShortOverlap(IBooleanMatrix entity_data)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricSparseMatrix<ushort>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = i + 1; j < row.Count; j++)
-						overlap[x, row[j]]++;
-				}
-			}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
+			var overlap = Overlap.ComputeUShort(entity_data);
 
 			// compute correlation
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
+				{
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
+					this[y, x] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(y), entity_data.NumEntriesByRow(x));
+				}
 		}
 
 		///

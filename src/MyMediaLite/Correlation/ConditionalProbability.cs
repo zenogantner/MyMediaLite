@@ -25,7 +25,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class for storing and computing conditional probabilities</summary>
 	/// <remarks>
 	/// </remarks>
-	public sealed class ConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
+	public sealed class ConditionalProbability : BinaryDataAsymmetricCorrelationMatrix
 	{
 		/// <summary>Creates an object of type ConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -52,48 +52,12 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public void ComputeCorrelations(IBooleanMatrix entity_data)
+		protected override float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricMatrix<int>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = 0; j < row.Count; j++)
-					{
-						int y = row[j];
-						overlap[x, y]++;
-					}
-				}
-			}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
-
-			// compute conditional probabilities
-			for (int x = 0; x < num_entities; x++)
-				for (int y = 0; y < x; y++)
-				{
-					this[x, y] = (float) (overlap[x, y] / entity_data.NumEntriesByRow(x));
-					this[y, x] = (float) (overlap[x, y] / entity_data.NumEntriesByRow(y));
-				}
-		}
-
-		///
-		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
-		{
-			int cntr = 0;
-			foreach (int k in vector_j)
-				if (vector_i.Contains(k))
-					cntr++;
-			return (float) (cntr / vector_i.Count);
+			if (count_x != 0)
+				return (float) (overlap / count_x);
+			else
+				return 0.0f;
 		}
 	}
 }

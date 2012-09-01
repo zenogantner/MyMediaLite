@@ -244,7 +244,9 @@
     <Compile Include="Correlation\Cooccurrence.cs" />
     <Compile Include="Correlation\BidirectionalConditionalProbability.cs" />
     <Compile Include="Correlation\Extensions.cs" />
-    <Compile Include="Correlation\BinaryDataCorrelationMatrix.cs" />
+    <Compile Include="Correlation\BinaryDataAsymmetricCorrelationMatrix.cs" />
+    <Compile Include="Correlation\Overlap.cs" />
+    <Compile Include="Correlation\BinaryDataSymmetricCorrelationMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

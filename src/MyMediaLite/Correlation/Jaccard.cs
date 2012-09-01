@@ -27,7 +27,7 @@ namespace MyMediaLite.Correlation
 	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public sealed class Jaccard : BinaryDataCorrelationMatrix
+	public sealed class Jaccard : BinaryDataSymmetricCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>

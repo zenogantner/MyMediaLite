@@ -27,7 +27,7 @@ namespace MyMediaLite.Correlation
 	/// TODO LIT
 	/// </remarks>
 	///
-	public sealed class BidirectionalConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
+	public sealed class BidirectionalConditionalProbability : BinaryDataAsymmetricCorrelationMatrix
 	{
 		float Alpha { get; set; } // TODO check value
 
@@ -61,53 +61,15 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public void ComputeCorrelations(IBooleanMatrix entity_data)
+		protected override float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricMatrix<int>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = 0; j < row.Count; j++)
-					{
-						int y = row[j];
-						overlap[x, y]++;
-					}
-				}
-			}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
-
-			// compute conditional probabilities
-			float alpha = Alpha;
-			float one_minus_alpha = 1 - alpha;
-			for (int x = 0; x < num_entities; x++)
-				for (int y = 0; y < x; y++)
-				{
-					double x_given_y = (double) (overlap[x, y] / entity_data.NumEntriesByRow(x));
-					double y_given_x = (double) (overlap[x, y] / entity_data.NumEntriesByRow(y));
-
-					this[x, y] = (float) ( Math.Pow(x_given_y, alpha) * Math.Pow(y_given_x, one_minus_alpha) );
-					this[y, x] = (float) ( Math.Pow(y_given_x, alpha) * Math.Pow(x_given_y, one_minus_alpha) );
-				}
-		}
-
-		///
-		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
-		{
-			int cntr = 0;
-			foreach (int k in vector_j)
-				if (vector_i.Contains(k))
-					cntr++;
-			return (float) ( Math.Pow(cntr / vector_i.Count, Alpha) * Math.Pow(cntr / vector_j.Count, 1 - Alpha) );
+			if (count_x == 0 || count_y == 0)
+				return 0.0f;
+			
+			double x_given_y = (double) (overlap / count_x);
+			double y_given_x = (double) (overlap / count_y);
+			
+			return (float) ( Math.Pow(x_given_y, Alpha) * Math.Pow(y_given_x, 1 - Alpha) );
 		}
 	}
 }

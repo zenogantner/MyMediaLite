@@ -24,7 +24,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class for storing and computing the co-counts</summary>
 	/// <remarks>
 	/// </remarks>
-	public sealed class Cooccurrence : BinaryDataCorrelationMatrix
+	public sealed class Cooccurrence : BinaryDataSymmetricCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Cooccurrence</summary>
 		/// <param name="num_entities">the number of entities</param>
