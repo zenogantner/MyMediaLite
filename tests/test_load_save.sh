@@ -108,7 +108,7 @@ do
 	rm um.txt im.txt
 done
 
-for method in UserKNN ItemKNN WeightedUserKNN WeightedItemKNN
+for method in UserKNN ItemKNN
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+_time \S+//g" > output1.txt

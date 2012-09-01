@@ -21,7 +21,7 @@ done
 
 
 for i in `seq 1 10`; do echo $i >> $DATA_DIR/first-10; done
-for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
+for method in ItemKNN UserKNN
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10 --prediction-file=pred
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=20" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10 --prediction-file=pred
