@@ -26,11 +26,11 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// TODO LIT
 	/// </remarks>
-	/// 
+	///
 	public sealed class BidirectionalConditionalProbability : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
 		float Alpha { get; set; } // TODO check value
-		
+
 		/// <summary>Creates an object of type BidirectionalConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
 		/// <param name="alpha">alpha parameter</param>
@@ -94,24 +94,20 @@ namespace MyMediaLite.Correlation
 				{
 					double x_given_y = (double) (overlap[x, y] / entity_data.NumEntriesByRow(x));
 					double y_given_x = (double) (overlap[x, y] / entity_data.NumEntriesByRow(y));
-				
+
 					this[x, y] = (float) ( Math.Pow(x_given_y, alpha) * Math.Pow(y_given_x, one_minus_alpha) );
 					this[y, x] = (float) ( Math.Pow(y_given_x, alpha) * Math.Pow(x_given_y, one_minus_alpha) );
 				}
 		}
 
-		/// <summary>Computes the bidirectional conditional probability of two binary vectors</summary>
-		/// <param name="vector_i">the first vector</param>
-		/// <param name="vector_j">the second vector</param>
-		/// <param name="alpha">alpha parameter</param>
-		/// <returns>the cosine similarity between the two vectors</returns>
-		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j, float alpha)
+		///
+		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
 		{
 			int cntr = 0;
 			foreach (int k in vector_j)
 				if (vector_i.Contains(k))
 					cntr++;
-			return (float) ( Math.Pow(cntr / vector_i.Count, alpha) * Math.Pow(cntr / vector_j.Count, 1 - alpha) );
+			return (float) ( Math.Pow(cntr / vector_i.Count, Alpha) * Math.Pow(cntr / vector_j.Count, 1 - Alpha) );
 		}
 	}
 }

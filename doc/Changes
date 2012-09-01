@@ -24,6 +24,7 @@
 	correlations
          - new correlations: ConditionalProbability, Cooccurrence (#267),
            BidirectionalConditionalProbability
+         - share routines between different kinds of binary data correlations
 	command line tools
 	 - fix early abortion if cutoff not set for item_recommendation
            (bug was introduced in 3.02)

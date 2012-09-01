@@ -94,11 +94,8 @@ namespace MyMediaLite.Correlation
 					this[x, y] = (float) (weighted_overlap[x, y] / Math.Sqrt(entity_weights[x] * entity_weights[y] ));
 		}
 
-		/// <summary>Computes the cosine similarity of two binary vectors</summary>
-		/// <param name="vector_i">the first vector</param>
-		/// <param name="vector_j">the second vector</param>
-		/// <returns>the cosine similarity between the two vectors</returns>
-		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
+		///
+		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
 		{
 			int cntr = 0;
 			foreach (int k in vector_j)

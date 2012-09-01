@@ -27,7 +27,7 @@ namespace MyMediaLite.Correlation
 	///
 	/// http://en.wikipedia.org/wiki/Jaccard_index
 	/// </remarks>
-	public sealed class Jaccard : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
+	public sealed class Jaccard : BinaryDataCorrelationMatrix
 	{
 		/// <summary>Creates an object of type Jaccard</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -54,51 +54,12 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public void ComputeCorrelations(IBooleanMatrix entity_data)
+		protected override float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y)
 		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricMatrix<int>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = i + 1; j < row.Count; j++)
-					{
-						int y = row[j];
-						overlap[x, y]++;
-					}
-				}
-			}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
-
-			// compute Jaccard index
-			for (int x = 0; x < num_entities; x++)
-				for (int y = 0; y < x; y++)
-					if (overlap[x, y] != 0)
-						this[x, y] = (float) (overlap[x, y] / (entity_data.NumEntriesByRow(x) + entity_data.NumEntriesByRow(y) - overlap[x, y]));
-					else
-						this[x, y] = 0;
-		}
-
-		/// <summary>Computes the Jaccard index of two binary vectors</summary>
-		/// <param name="vector_i">the first vector</param>
-		/// <param name="vector_j">the second vector</param>
-		/// <returns>the Jaccard index of the two vectors</returns>
-		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
-		{
-			int cntr = 0;
-			foreach (int k in vector_j)
-				if (vector_i.Contains(k))
-					cntr++;
-			return (float) ( cntr / (vector_i.Count + vector_j.Count - cntr) );
+			if (overlap != 0)
+				return (float) (overlap / (count_x + count_y - overlap));
+			else
+				return 0.0f;
 		}
 	}
 }

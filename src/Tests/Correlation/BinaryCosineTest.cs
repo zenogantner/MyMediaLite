@@ -28,7 +28,7 @@ namespace Tests.Correlation
 	[TestFixture()]
 	public class BinaryCosineTest
 	{
-		static float delta = 0.0001f;
+		static readonly float DELTA = 0.0001f;
 		
 		[Test()] public void TestCreate()
 		{
@@ -47,9 +47,9 @@ namespace Tests.Correlation
 			Assert.AreEqual(4, correlation_matrix.NumberOfRows);
 			Assert.IsTrue(correlation_matrix.IsSymmetric);
 			
-			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[0, 1], delta);
-			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[1, 0], delta);
-			Assert.AreEqual(1 / 3d, correlation_matrix[1, 3], delta);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[0, 1], DELTA);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation_matrix[1, 0], DELTA);
+			Assert.AreEqual(1 / 3d, correlation_matrix[1, 3], DELTA);
 
 			Assert.AreEqual(0f, correlation_matrix[2, 0]);
 			Assert.AreEqual(0f, correlation_matrix[2, 1]);
@@ -75,9 +75,9 @@ namespace Tests.Correlation
 
 			var correlation = new BinaryCosine(4);
 			correlation.ComputeCorrelations(sparse_boolean_matrix);
-			Assert.AreEqual(1 / Math.Sqrt(6), correlation[0, 1], delta);
-			Assert.AreEqual(1 / Math.Sqrt(6), correlation[1, 0], delta);
-			Assert.AreEqual(1 / 3d, correlation[1, 3], delta);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation[0, 1], DELTA);
+			Assert.AreEqual(1 / Math.Sqrt(6), correlation[1, 0], DELTA);
+			Assert.AreEqual(1 / 3d, correlation[1, 3], DELTA);
 		}
 
 		[Test()] public void TestComputeCorrelation()
@@ -91,8 +91,10 @@ namespace Tests.Correlation
 			vector2.Add(3);
 			vector2.Add(4);
 			
-			Assert.AreEqual(1 / 3f, BinaryCosine.ComputeCorrelation(vector1, vector2), delta);
-			Assert.AreEqual(0f, BinaryCosine.ComputeCorrelation(vector1, new HashSet<int>()));
+			var cosine = new BinaryCosine(4);
+			
+			Assert.AreEqual(1 / 3f, cosine.ComputeCorrelation(vector1, vector2), DELTA);
+			Assert.AreEqual(0f, cosine.ComputeCorrelation(vector1, new HashSet<int>()), DELTA);
 		}
 	}
 }

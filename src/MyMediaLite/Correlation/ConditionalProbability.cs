@@ -22,8 +22,6 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	// TODO Jaccard, Cosine, and this actually only differ in a few lines - DRY!
-	
 	/// <summary>Class for storing and computing conditional probabilities</summary>
 	/// <remarks>
 	/// </remarks>
@@ -88,11 +86,8 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
-		/// <summary>Computes the conditional probability for two binary vectors</summary>
-		/// <param name="vector_i">the first vector</param>
-		/// <param name="vector_j">the second vector</param>
-		/// <returns>the conditional probability for the two vectors</returns>
-		public static float ComputeCorrelation(HashSet<int> vector_i, HashSet<int> vector_j)
+		///
+		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
 		{
 			int cntr = 0;
 			foreach (int k in vector_j)

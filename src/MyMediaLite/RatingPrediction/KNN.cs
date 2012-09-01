@@ -68,7 +68,7 @@ namespace MyMediaLite.RatingPrediction
 		public uint NumIter { get { return baseline_predictor.NumIter; } set { baseline_predictor.NumIter = value; } }
 		
 		/// <summary>Correlation matrix over some kind of entity</summary>
-		protected SymmetricCorrelationMatrix correlation;
+		protected ICorrelationMatrix correlation;
 
 		/// <summary>underlying baseline predictor</summary>
 		protected UserItemBaseline baseline_predictor = new UserItemBaseline() { RegU = 10, RegI = 5 };

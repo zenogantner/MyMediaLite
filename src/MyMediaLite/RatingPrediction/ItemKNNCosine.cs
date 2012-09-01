@@ -25,6 +25,8 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class ItemKNNCosine : ItemKNN
 	{
+		IBinaryDataCorrelationMatrix BinaryDataCorrelation { get { return correlation as IBinaryDataCorrelationMatrix; } }
+
 		///
 		public override void Train()
 		{
@@ -38,8 +40,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.RetrainItem(item_id);
 			if (UpdateItems)
+			{
+				var item_users = new HashSet<int>(data_item[item_id]);
 				for (int i = 0; i <= MaxItemID; i++)
-					correlation[item_id, i] = BinaryCosine.ComputeCorrelation(new HashSet<int>(data_item[item_id]), new HashSet<int>(data_item[i]));
+					correlation[item_id, i] = BinaryDataCorrelation.ComputeCorrelation(item_users, new HashSet<int>(data_item[i]));
+			}
 		}
 
 		///

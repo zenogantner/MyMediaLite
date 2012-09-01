@@ -30,6 +30,8 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class UserKNNCosine : UserKNN
 	{
+		IBinaryDataCorrelationMatrix BinaryDataCorrelation { get { return correlation as IBinaryDataCorrelationMatrix; } }
+		
 		///
 		public override void Train()
 		{
@@ -44,9 +46,8 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				var user_items = new HashSet<int>(data_user[user_id]);
-
 				for (int u = 0; u <= MaxUserID; u++)
-					correlation[user_id, u] = BinaryCosine.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
+					correlation[user_id, u] = BinaryDataCorrelation.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
 			}
 		}
 
@@ -56,8 +57,8 @@ namespace MyMediaLite.RatingPrediction
 			var user_items = new HashSet<int>(from pair in rated_items select pair.Item1);
 
 			var user_similarities = new float[MaxUserID + 1];
-			for (int u = 0; u <= MaxUserID; u++)
-				user_similarities[u] = BinaryCosine.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				user_similarities[user_id] = BinaryDataCorrelation.ComputeCorrelation(user_items, new HashSet<int>(data_user[user_id]));
 
 			return user_similarities;
 		}
