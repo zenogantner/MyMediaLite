@@ -44,7 +44,7 @@ namespace MyMediaLite.Correlation
 
 			if (Weighted)
 				ComputeCorrelationsWeighted(entity_data);
-			if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
+			else if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
 				ComputeCorrelationsUIntOverlap(entity_data);
 			else
 				ComputeCorrelationsUShortOverlap(entity_data);
