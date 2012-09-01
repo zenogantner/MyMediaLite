@@ -23,19 +23,15 @@ namespace MyMediaLite.Correlation
 {
 	public interface ICorrelationMatrix : IMatrix<float>
 	{
+		int NumEntities { get; }
+		
 		/// <summary>Add an entity to the ICorrelationMatrix by growing it to the requested size.</summary>
 		/// <remarks>
 		/// Note that you still have to correctly compute and set the entity's correlation values
 		/// </remarks>
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		void AddEntity(int entity_id);
-			
-		/// <summary>Sum up the correlations between a given entity and the entities in a collection</summary>
-		/// <param name="entity_id">the numerical ID of the entity</param>
-		/// <param name="entities">a collection containing the numerical IDs of the entities to compare to</param>
-		/// <returns>the correlation sum</returns>
-		double SumUp(int entity_id, ICollection<int> entities);
-		
+
 		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
 		/// <param name="entity_id">the entity ID</param>
 		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>

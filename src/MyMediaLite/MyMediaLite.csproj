@@ -114,8 +114,6 @@
     <Compile Include="ItemRecommendation\UserAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\UserKNN.cs" />
     <Compile Include="ItemRecommendation\WRMF.cs" />
-    <Compile Include="ItemRecommendation\WeightedItemKNN.cs" />
-    <Compile Include="ItemRecommendation\WeightedUserKNN.cs" />
     <Compile Include="ItemRecommendation\Zero.cs" />
     <Compile Include="IO\AttributeData.cs" />
     <Compile Include="IO\FileFormat.cs" />
@@ -245,6 +243,7 @@
     <Compile Include="Correlation\RatingCorrelationType.cs" />
     <Compile Include="Correlation\Cooccurrence.cs" />
     <Compile Include="Correlation\BidirectionalConditionalProbability.cs" />
+    <Compile Include="Correlation\Extensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

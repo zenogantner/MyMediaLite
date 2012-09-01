@@ -28,9 +28,13 @@ using MyMediaLite.Taxonomy;
  */
 namespace MyMediaLite.Correlation
 {
+	// TODO move more stuff to Extensions
+	
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
+		public int NumEntities { get { return num_entities; } }
+		
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
@@ -122,19 +126,6 @@ namespace MyMediaLite.Correlation
 		public void AddEntity(int entity_id)
 		{
 			this.Grow(entity_id + 1, entity_id + 1);
-		}
-
-		///
-		public double SumUp(int entity_id, ICollection<int> entities)
-		{
-			if (entity_id < 0 || entity_id >= num_entities)
-				throw new ArgumentException("Invalid entity ID: " + entity_id);
-
-			double result = 0;
-			foreach (int entity_id2 in entities)
-				if (entity_id2 >= 0 && entity_id2 < num_entities)
-					result += this[entity_id, entity_id2];
-			return result;
 		}
 
 		///

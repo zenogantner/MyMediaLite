@@ -23,12 +23,13 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering using cosine similarity</summary>
+	/// <summary>Unweighted k-nearest neighbor item-based collaborative filtering</summary>
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
+		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
 		
 		///
@@ -36,10 +37,14 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.Train();
 			
+			// TODO generalize this as well
 			int num_items = MaxItemID + 1;
-			this.nearest_neighbors = new int[num_items][];
-			for (int i = 0; i < num_items; i++)
-				nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
+			if (k != uint.MaxValue)
+			{
+				this.nearest_neighbors = new int[num_items][];
+				for (int i = 0; i < num_items; i++)
+					nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
+			}
 		}
 
 		///
@@ -50,12 +55,18 @@ namespace MyMediaLite.ItemRecommendation
 			if ((item_id < 0) || (item_id > MaxItemID))
 				return float.MinValue;
 
-			int count = 0;
-			foreach (int neighbor in nearest_neighbors[item_id])
-				if (Feedback.ItemMatrix[neighbor, user_id])
-					count++;
-
-			return (float) count / k;
+			if (k != uint.MaxValue)
+			{
+				double sum = 0;
+				foreach (int neighbor in nearest_neighbors[item_id])
+					if (Feedback.ItemMatrix[neighbor, user_id])
+						sum += Math.Pow(correlation[item_id, neighbor], Q);
+				return (float) sum;
+			}
+			else
+			{
+				return (float) correlation.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);;
+			}
 		}
 
 		///

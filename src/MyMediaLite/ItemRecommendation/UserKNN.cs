@@ -17,11 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>k-nearest neighbor user-based collaborative filtering using cosine-similarity (unweighted)</summary>
+	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
 	/// <remarks>
 	/// k=inf equals most-popular.
 	///
@@ -50,11 +51,18 @@ namespace MyMediaLite.ItemRecommendation
 			if ((item_id < 0) || (item_id > MaxItemID))
 				return float.MinValue;
 
-			int count = 0;
-			foreach (int neighbor in nearest_neighbors[user_id])
-				if (Feedback.UserMatrix[neighbor, item_id])
-					count++;
-			return (float) count / k;
+			if (k != uint.MaxValue)
+			{
+				double sum = 0;
+				foreach (int neighbor in nearest_neighbors[user_id])
+					if (Feedback.UserMatrix[neighbor, item_id])
+						sum += Math.Pow(correlation[user_id, neighbor], Q);
+				return (float) sum;
+			}
+			else
+			{
+				return (float) correlation.SumUp(item_id, Feedback.UserMatrix[user_id], Q);;
+			}
 		}
 
 		///

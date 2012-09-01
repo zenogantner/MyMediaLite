@@ -32,7 +32,12 @@ namespace MyMediaLite.ItemRecommendation
 
 		public float Alpha { get; set; }
 
+		public float Q { get; set; }
+
 		public BinaryCorrelationType Correlation { get; set; }
+
+		/// <summary>data matrix to learn the correlation from</summary>
+		protected abstract IBooleanMatrix DataMatrix { get; }
 
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
@@ -42,13 +47,13 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected ICorrelationMatrix correlation;
-
-		protected abstract IBooleanMatrix DataMatrix { get; }
-
+		
+		/// <summary>Default constructor</summary>
 		public KNN()
 		{
 			Correlation = BinaryCorrelationType.Cosine;
-			Alpha = 0.5;
+			Alpha = 0.5f;
+			Q = 1.0f;
 		}
 
 		public override void Train()
@@ -122,8 +127,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} correlation={2} alpha={3} (only for BidirectionalConditionalProbability)",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Alpha);
+				"{0} k={1} correlation={2} q={3} alpha={4} (only for BidirectionalConditionalProbability)",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Q, Alpha);
 		}
 	}
 }
