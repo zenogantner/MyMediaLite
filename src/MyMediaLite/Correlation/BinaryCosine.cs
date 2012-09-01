@@ -53,13 +53,13 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		protected override float ComputeCorrelationFromOverlap(float overlap, int count_x, int count_y)
+		protected override float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y)
 		{
-			long size_product = count_x * count_y;
-			if (size_product > 0.0f)
+			double size_product = count_x * count_y;
+			if (size_product > 0.0)
 				return (float) (overlap / Math.Sqrt(size_product));
-
-			return 0.0f;
+			else
+				return 0.0f;
 		}
 	}
 }

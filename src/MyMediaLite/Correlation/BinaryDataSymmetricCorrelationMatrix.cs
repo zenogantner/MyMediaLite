@@ -21,15 +21,21 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Class with commoin routines for symmetric correlations that are learned from binary data</summary>
+	/// <summary>Class with common routines for symmetric correlations that are learned from binary data</summary>
 	public abstract class BinaryDataSymmetricCorrelationMatrix : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
+		bool Weighted { get; set; }
+
 		/// <summary>Creates an object of type BinaryDataCorrelation</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public BinaryDataSymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
+		/// <param name="weighted">if true, correlations based on more observations will be given higher weight</param>
+		public BinaryDataSymmetricCorrelationMatrix(int num_entities, bool weighted = false) : base(num_entities)
+		{
+			Weighted = weighted;
+		}
 
 		///
-		protected abstract float ComputeCorrelationFromOverlap(float overlap, int count_x, int count_y);
+		protected abstract float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y);
 
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
@@ -38,11 +44,24 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// if possible, save some memory
-			if (entity_data.NumberOfColumns > ushort.MaxValue)
+			if (Weighted)
+				ComputeCorrelationsWeighted(entity_data);
+			else if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
 				ComputeCorrelationsUIntOverlap(entity_data);
 			else
 				ComputeCorrelationsUShortOverlap(entity_data);
+		}
+
+		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
+		{
+			var overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
+			var overlap = overlap_and_entity_weights.Item1; // TODO could be done in place
+			var entity_weights = overlap_and_entity_weights.Item2;
+
+			// compute correlations
+			for (int x = 0; x < num_entities; x++)
+				for (int y = 0; y < x; y++)
+					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
 		}
 
 		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)

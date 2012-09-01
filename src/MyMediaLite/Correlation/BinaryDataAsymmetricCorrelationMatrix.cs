@@ -31,7 +31,7 @@ namespace MyMediaLite.Correlation
 		public BinaryDataAsymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
 
 		///
-		protected abstract float ComputeCorrelationFromOverlap(float overlap, int count_x, int count_y);
+		protected abstract float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y);
 
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
