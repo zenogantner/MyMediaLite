@@ -28,8 +28,6 @@ namespace MyMediaLite.Correlation
 		ConditionalProbability,
 		/// <summary>bidirectional conditional probability</summary>
 		BidirectionalConditionalProbability,
-		/// <summary>weighted cosine similarity</summary>
-		WeightedCosine,
 		/// <summary>cooccurrence counts</summary>
 		Cooccurrence,
 		/// <summary>use a similarity provider to get the correlation</summary>

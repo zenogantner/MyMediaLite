@@ -32,6 +32,8 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
 		public float Alpha { get; set; }
+		
+		public bool Weighted { get; set; }
 
 		/// <summary>Exponent to be used for transforming the neighbor's weights</summary>
 		/// <remarks>
@@ -59,7 +61,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected IList<IList<int>> nearest_neighbors;
 
 		/// <summary>Correlation matrix over some kind of entity, e.g. users or items</summary>
-		protected ICorrelationMatrix correlation;
+		protected IBinaryDataCorrelationMatrix correlation;
 
 		/// <summary>Default constructor</summary>
 		public KNN()
@@ -72,29 +74,37 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			switch (Correlation)
+			int num_entities = DataMatrix.NumberOfRows;
+			try
 			{
-				case BinaryCorrelationType.Cosine:
-					correlation = BinaryCosine.Create(DataMatrix);
-					break;
-				case BinaryCorrelationType.Jaccard:
-					correlation = Jaccard.Create(DataMatrix);
-					break;
-				case BinaryCorrelationType.ConditionalProbability:
-					correlation = ConditionalProbability.Create(DataMatrix);
-					break;
-				case BinaryCorrelationType.BidirectionalConditionalProbability:
-					correlation = BidirectionalConditionalProbability.Create(DataMatrix, Alpha);
-					break;
-				case BinaryCorrelationType.WeightedCosine:
-					correlation = WeightedBinaryCosine.Create(DataMatrix);
-					break;
-				case BinaryCorrelationType.Cooccurrence:
-					correlation = Cooccurrence.Create(DataMatrix);
-					break;
-				default:
-					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+				switch (Correlation)
+				{
+					case BinaryCorrelationType.Cosine:
+						correlation = new BinaryCosine(num_entities);
+						break;
+					case BinaryCorrelationType.Jaccard:
+						correlation = new Jaccard(num_entities);
+						break;
+					case BinaryCorrelationType.ConditionalProbability:
+						correlation = new ConditionalProbability(num_entities);
+						break;
+					case BinaryCorrelationType.BidirectionalConditionalProbability:
+						correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
+						break;
+					case BinaryCorrelationType.Cooccurrence:
+						correlation = new Cooccurrence(num_entities);
+						break;
+					default:
+						throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+				}
 			}
+			catch (OverflowException)
+			{
+				Console.Error.WriteLine("Too many entities: " + num_entities);
+				throw;
+			}
+			correlation.Weighted = Weighted;
+			correlation.ComputeCorrelations(DataMatrix);
 		}
 
 		///
@@ -133,7 +143,8 @@ namespace MyMediaLite.ItemRecommendation
 						nearest_neighbors[i][j] = int.Parse(numbers[j]);
 				}
 
-				this.correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
+				// TODO fixme -- distinguish symmetric and asymmetric
+				//this.correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}
@@ -143,8 +154,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} correlation={2} q={3} alpha={4} (only for BidirectionalConditionalProbability)",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Q, Alpha);
+				"{0} k={1} correlation={2} q={3} weighted={4} alpha={5} (only for BidirectionalConditionalProbability)",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Q, Weighted, Alpha);
 		}
 	}
 }

@@ -52,7 +52,8 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			baseline_predictor.Train();
-			this.correlation = BinaryCosine.Create(ItemAttributes);
+			this.correlation = new BinaryCosine(ItemAttributes.NumberOfRows);
+			((IBinaryDataCorrelationMatrix)correlation).ComputeCorrelations(ItemAttributes);
 			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
 		}
 

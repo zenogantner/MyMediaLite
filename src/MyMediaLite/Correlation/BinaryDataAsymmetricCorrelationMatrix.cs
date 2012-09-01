@@ -26,6 +26,8 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class with commoin routines for asymmetric correlations that are learned from binary data</summary>
 	public abstract class BinaryDataAsymmetricCorrelationMatrix : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
+		public bool Weighted { get; set; }
+
 		/// <summary>Creates an object of type ConditionalProbability</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public BinaryDataAsymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
@@ -40,11 +42,27 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;
 
-			// if possible, save some memory
-			if (entity_data.NumberOfColumns > ushort.MaxValue)
+			if (Weighted)
+				ComputeCorrelationsWeighted(entity_data);
+			if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
 				ComputeCorrelationsUIntOverlap(entity_data);
 			else
 				ComputeCorrelationsUShortOverlap(entity_data);
+		}
+
+		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
+		{
+			var overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
+			var overlap        = overlap_and_entity_weights.Item1;
+			var entity_weights = overlap_and_entity_weights.Item2;
+
+			// compute correlations
+			for (int x = 0; x < num_entities; x++)
+				for (int y = 0; y < x; y++)
+				{
+					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
+					this[y, x] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[y], entity_weights[x]);
+				}
 		}
 
 		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)

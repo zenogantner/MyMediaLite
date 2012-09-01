@@ -170,7 +170,6 @@
     <Compile Include="RatingPrediction\CoClustering.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
-    <Compile Include="Correlation\WeightedBinaryCosine.cs" />
     <Compile Include="ItemRecommendation\MultiCoreBPRMF.cs" />
     <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />

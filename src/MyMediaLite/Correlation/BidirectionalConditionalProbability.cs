@@ -44,27 +44,6 @@ namespace MyMediaLite.Correlation
 			this.one_minus_alpha = 1 - alpha;
 		}
 
-		/// <summary>Creates conditional probability matrix from given data</summary>
-		/// <param name="vectors">the boolean data</param>
-		/// <param name="alpha">alpha parameter</param>
-		/// <returns>the similarity matrix based on the data</returns>
-		static public BidirectionalConditionalProbability Create(IBooleanMatrix vectors, float alpha)
-		{
-			BidirectionalConditionalProbability cm;
-			int num_entities = vectors.NumberOfRows;
-			try
-			{
-				cm = new BidirectionalConditionalProbability(num_entities, alpha);
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			cm.ComputeCorrelations(vectors);
-			return cm;
-		}
-
 		///
 		protected override float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y)
 		{

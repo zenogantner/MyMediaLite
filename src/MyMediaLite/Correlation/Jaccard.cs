@@ -33,26 +33,6 @@ namespace MyMediaLite.Correlation
 		/// <param name="num_entities">the number of entities</param>
 		public Jaccard(int num_entities) : base(num_entities) { }
 
-		/// <summary>Creates a Jaccard index matrix from given data</summary>
-		/// <param name="vectors">the boolean data</param>
-		/// <returns>the similarity matrix based on the data</returns>
-		static public Jaccard Create(IBooleanMatrix vectors)
-		{
-			Jaccard cm;
-			int num_entities = vectors.NumberOfRows;
-			try
-			{
-				cm = new Jaccard(num_entities);
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			cm.ComputeCorrelations(vectors);
-			return cm;
-		}
-
 		///
 		protected override float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y)
 		{

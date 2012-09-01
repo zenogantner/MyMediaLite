@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,7 +35,8 @@ namespace MyMediaLite.RatingPrediction
 		public override void Train()
 		{
 			baseline_predictor.Train();
-			this.correlation = BinaryCosine.Create(data_user);
+			this.correlation = new BinaryCosine(data_user.NumberOfRows);
+			((IBinaryDataCorrelationMatrix)correlation).ComputeCorrelations(data_user);
 		}
 
 		///

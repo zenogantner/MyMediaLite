@@ -23,6 +23,8 @@ namespace MyMediaLite.Correlation
 	/// <summary>CorrelationMatrix that computes correlations over binary data</summary>
 	public interface IBinaryDataCorrelationMatrix : ICorrelationMatrix
 	{
+		bool Weighted { get; set; }
+
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
 		void ComputeCorrelations(IBooleanMatrix entity_data);

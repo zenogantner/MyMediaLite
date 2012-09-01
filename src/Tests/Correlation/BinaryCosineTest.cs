@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -42,7 +41,8 @@ namespace Tests.Correlation
 			sparse_boolean_matrix[3, 3] = true;
 			sparse_boolean_matrix[3, 4] = true;
 
-			var correlation_matrix = BinaryCosine.Create(sparse_boolean_matrix);
+			var correlation_matrix = new BinaryCosine(sparse_boolean_matrix.NumberOfRows);
+			correlation_matrix.ComputeCorrelations(sparse_boolean_matrix);
 			
 			Assert.AreEqual(4, correlation_matrix.NumberOfRows);
 			Assert.IsTrue(correlation_matrix.IsSymmetric);

@@ -24,7 +24,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class with common routines for symmetric correlations that are learned from binary data</summary>
 	public abstract class BinaryDataSymmetricCorrelationMatrix : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
-		bool Weighted { get; set; }
+		public bool Weighted { get; set; }
 
 		/// <summary>Creates an object of type BinaryDataCorrelation</summary>
 		/// <param name="num_entities">the number of entities</param>
@@ -55,7 +55,7 @@ namespace MyMediaLite.Correlation
 		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
 		{
 			var overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
-			var overlap = overlap_and_entity_weights.Item1; // TODO could be done in place
+			var overlap        = overlap_and_entity_weights.Item1;
 			var entity_weights = overlap_and_entity_weights.Item2;
 
 			// compute correlations
