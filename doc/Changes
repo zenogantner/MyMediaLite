@@ -19,6 +19,7 @@
              the nearest neighbors
            - get rid of the distinction between weighted and non-weighted
              kNN
+	   - safer and shorter implementation of GetMostSimilar(Users|Items)
          - ensembles: define attributes as interfaces instead of classes
 	correlations
          - new correlations: ConditionalProbability, Cooccurrence (#267),

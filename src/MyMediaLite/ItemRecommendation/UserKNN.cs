@@ -73,9 +73,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
 		{
-			if (n == k)
-				return nearest_neighbors[user_id];
-			else if (n < k)
+			if (n <= k)
 				return nearest_neighbors[user_id].Take((int) n).ToArray();
 			else
 				return correlation.GetNearestNeighbors(user_id, n);
