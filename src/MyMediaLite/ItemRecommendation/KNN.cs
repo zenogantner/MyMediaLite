@@ -100,14 +100,15 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
 			{
+				writer.WriteLine(Correlation);
 				writer.WriteLine(nearest_neighbors.Count);
 				foreach (IList<int> nn in nearest_neighbors)
 				{
 					writer.Write(nn[0]);
 					for (int i = 1; i < nn.Count; i++)
-					 	writer.Write(" {0}", nn[i]);
+						writer.Write(" {0}", nn[i]);
 					writer.WriteLine();
 				}
 
@@ -120,15 +121,16 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				int num_users = int.Parse(reader.ReadLine());
-				var nearest_neighbors = new int[num_users][];
-				for (int u = 0; u < nearest_neighbors.Length; u++)
+				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match or Store?
+				int num_entities = int.Parse(reader.ReadLine());
+				var nearest_neighbors = new int[num_entities][];
+				for (int i = 0; i < nearest_neighbors.Length; i++)
 				{
 					string[] numbers = reader.ReadLine().Split(' ');
 
-					nearest_neighbors[u] = new int[numbers.Length];
-					for (int i = 0; i < numbers.Length; i++)
-						nearest_neighbors[u][i] = int.Parse(numbers[i]);
+					nearest_neighbors[i] = new int[numbers.Length];
+					for (int j = 0; j < numbers.Length; j++)
+						nearest_neighbors[i][j] = int.Parse(numbers[j]);
 				}
 
 				this.correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);

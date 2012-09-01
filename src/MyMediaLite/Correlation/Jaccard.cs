@@ -54,10 +54,10 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		protected override float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y)
+		protected override float ComputeCorrelationFromOverlap(float overlap, int count_x, int count_y)
 		{
 			if (overlap != 0)
-				return (float) overlap / (count_x + count_y - overlap);
+				return overlap / (count_x + count_y - overlap);
 			else
 				return 0.0f;
 		}

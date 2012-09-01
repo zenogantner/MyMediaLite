@@ -25,8 +25,6 @@ using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
-	// TODO use composition instead of inheritance!!
-
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class AsymmetricCorrelationMatrix : SparseMatrix<float>, ICorrelationMatrix
 	{

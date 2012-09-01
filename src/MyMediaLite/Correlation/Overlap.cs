@@ -23,6 +23,9 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class containing routines for computing overlaps</summary>
 	public static class Overlap
 	{
+		/// <summary>Computes the overlap between the vectors in a binary matrix</summary>
+		/// <returns>a sparse matrix with the overlaps</returns>
+		/// <param name='entity_data'>the binary matrix</param>
 		public static SymmetricSparseMatrix<uint> ComputeUInt(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
@@ -43,6 +46,9 @@ namespace MyMediaLite.Correlation
 			return overlap;
 		}
 
+		/// <summary>Computes the overlap between the vectors in a binary matrix</summary>
+		/// <returns>a sparse matrix with the overlaps</returns>
+		/// <param name='entity_data'>the binary matrix</param>
 		public static SymmetricSparseMatrix<ushort> ComputeUShort(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;

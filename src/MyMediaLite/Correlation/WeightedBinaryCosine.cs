@@ -65,7 +65,7 @@ namespace MyMediaLite.Correlation
 				other_entity_weights[row_id] = 1f / (float) Math.Log(3 + freq, 2); // TODO make configurable
 			}
 
-			var weighted_overlap = new SymmetricMatrix<float>(entity_data.NumberOfRows);
+			var weighted_overlap = new SymmetricMatrix<float>(entity_data.NumberOfRows); // TODO could be done in-place?
 			var entity_weights = new float[entity_data.NumberOfRows];
 
 			// go over all (other) entities

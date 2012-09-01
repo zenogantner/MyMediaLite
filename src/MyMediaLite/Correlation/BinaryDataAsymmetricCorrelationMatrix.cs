@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using MyMediaLite.DataType;
 
@@ -30,7 +31,7 @@ namespace MyMediaLite.Correlation
 		public BinaryDataAsymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
 
 		///
-		protected abstract float ComputeCorrelationFromOverlap(uint overlap, int count_x, int count_y);
+		protected abstract float ComputeCorrelationFromOverlap(float overlap, int count_x, int count_y);
 
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
@@ -73,7 +74,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public virtual float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
+		public float ComputeCorrelation(ICollection<int> vector_i, ICollection<int> vector_j)
 		{
 			uint count = 0;
 			foreach (int k in vector_j)
