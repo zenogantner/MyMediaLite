@@ -30,24 +30,6 @@ namespace MyMediaLite
 	/// </remarks>
 	public static class Extensions
 	{
-		/*
-		/// <summary>Scores items</summary>
-		/// <returns>the scored items</returns>
-		/// <param name='recommender'>the recommender to be used for scoring</param>
-		/// <param name='user_id'>the user ID</param>
-		/// <param name='items'>the items to score</param>
-		public static ICollection<Tuple<int, float>> ScoreItems(this Recommender recommender, int user_id, IList<int> items)
-		{
-			var scored_items = new List<Tuple<int, float>>();
-			foreach (int item_id in items)
-			{
-				float score = recommender.Predict(user_id, item_id);
-				scored_items.Add(Tuple.Create(item_id, score));
-			}
-			return scored_items;
-		}
-		*/
-
 		static string NormalizeName(string s)
 		{
 			int underscore_position;

@@ -13,7 +13,7 @@
 // GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
-//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+//  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -54,7 +54,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	int num_test_users = -1;
 	int predict_items_number = -1;
 	bool online_eval;
-	bool repeat_eval;
+	bool repeated_items;
 	string group_method;
 	bool overlap_items;
 	bool in_training_items;
@@ -129,7 +129,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
   prediction and evaluation:
    --predict-items-number=N     predict N items per user
-   --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
+   --repeated-items             items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
 
   prediction:
    --prediction-file=FILE       write ranked predictions to FILE, one user per line
@@ -170,7 +170,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("user-prediction",      v => user_prediction   = v != null)
 			.Add("online-evaluation",    v => online_eval       = v != null) // TODO generalize
-			.Add("repeat-evaluation",    v => repeat_eval       = v != null)
+			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
 			.Add("in-training-items",    v => in_training_items = v != null)
@@ -231,7 +231,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 			if (cross_validation > 1)
 			{
-				recommender.DoIterativeCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, repeat_eval, max_iter, find_iter);
+				recommender.DoIterativeCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, repeated_items, max_iter, find_iter);
 			}
 			else
 			{
@@ -521,7 +521,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	ItemRecommendationEvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeat_eval, predict_items_number);
+		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeated_items, predict_items_number);
 	}
 
 	void Predict(string prediction_file, string predict_for_users_file, int iteration)
@@ -544,9 +544,10 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		TimeSpan time_span = Wrap.MeasureTime( delegate() {
 			recommender.WritePredictions(
 				training_data,
-				candidate_items, predict_items_number, // TODO move this argument to the end of the list
+				candidate_items, predict_items_number,
 				prediction_file, user_list,
-				user_mapping, item_mapping);
+				user_mapping, item_mapping,
+				repeated_items);
 			if (user_list != null)
 				Console.Error.WriteLine("Wrote predictions for {0} users to file {1}.", user_list.Count, prediction_file);
 			else

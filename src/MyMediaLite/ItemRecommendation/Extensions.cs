@@ -36,17 +36,19 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="users">a list of users to make recommendations for</param>
 		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
+		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
 			IPosOnlyFeedback train,
-			System.Collections.Generic.IList<int> candidate_items,
+			IList<int> candidate_items,
 			int num_predictions,
 			string filename,
-			System.Collections.Generic.IList<int> users = null,
-			IMapping user_mapping = null, IMapping item_mapping = null)
+			IList<int> users = null,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			bool repeated_items = false)
 		{
 			using (var writer = new StreamWriter(filename))
-				WritePredictions(recommender, train, candidate_items, num_predictions, writer, users, user_mapping, item_mapping);
+				WritePredictions(recommender, train, candidate_items, num_predictions, writer, users, user_mapping, item_mapping, repeated_items);
 		}
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
@@ -58,21 +60,25 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="users">a list of users to make recommendations for; if null, all users in train will be provided with recommendations</param>
 		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
+		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
 			IPosOnlyFeedback train,
-			System.Collections.Generic.ICollection<int> candidate_items,
+			ICollection<int> candidate_items,
 			int num_predictions,
 			TextWriter writer,
-			System.Collections.Generic.IList<int> users = null,
-			IMapping user_mapping = null, IMapping item_mapping = null)
+			IList<int> users = null,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			bool repeated_items = false)
 		{
 			if (users == null)
 				users = new List<int>(train.AllUsers);
 
+			ICollection<int> ignore_items = new int[0];
 			foreach (int user_id in users)
 			{
-				var ignore_items = train.UserMatrix[user_id];
+				if (!repeated_items)
+					ignore_items = train.UserMatrix[user_id];
 				WritePredictions(recommender, user_id, candidate_items, ignore_items, num_predictions, writer, user_mapping, item_mapping);
 			}
 		}
@@ -89,8 +95,8 @@ namespace MyMediaLite.ItemRecommendation
 		static public void WritePredictions(
 			this IRecommender recommender,
 			int user_id,
-			System.Collections.Generic.ICollection<int> candidate_items,
-			System.Collections.Generic.ICollection<int> ignore_items,
+			ICollection<int> candidate_items,
+			ICollection<int> ignore_items,
 			int num_predictions,
 			TextWriter writer,
 			IMapping user_mapping, IMapping item_mapping)
@@ -99,6 +105,8 @@ namespace MyMediaLite.ItemRecommendation
 				user_mapping = new IdentityMapping();
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
+			
+			
 			
 			var ordered_items = recommender.Recommend(
 				user_id, n:num_predictions,
