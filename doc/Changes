@@ -30,7 +30,7 @@
            (bug was introduced in 3.02)
          - rename --repeat-evaluation to --repeat-items, and support this
            option also for writing out predictions, not only for evaluation
-           (reported by Elvio Vicosa)
+           (reported by Elvio Vicosa, #124)
          - remove KDDCup 2011 and ICDM 2010 executables: would have to be
            maintained; for reference, they are still available in MML's
            older releases
