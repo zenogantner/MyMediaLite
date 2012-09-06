@@ -1,4 +1,4 @@
-3.03	2012-09-
+3.03	2012-09-07
 	API
          - rename (I)EntityMapping to (I)Mapping
          - attribute- and relation-aware interfaces, IO.AttributeData,
@@ -25,6 +25,8 @@
          - new correlations: ConditionalProbability, Cooccurrence (#267),
            BidirectionalConditionalProbability
          - share routines between different kinds of binary data correlations
+           (#166)
+         - support weighting according to global frequency of an entity (#170)
 	command line tools
 	 - fix early abortion if cutoff not set for item_recommendation
            (bug was introduced in 3.02)
