@@ -11,10 +11,13 @@ echo
 echo "Tiny example dataset"
 echo "--------------------"
 
-for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
+for method in ItemKNN UserKNN
 do
-	echo $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=$K"
-	     $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=$K"
+	for c in Cosine ConditionalProbability Jaccard Cooccurrence
+	do
+		echo $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=$K c=$c"
+		     $PROGRAM --training-file=$DIR/example.train --test-file=$DIR/example.test --recommender=$method --recommender-options="k=$K c=$c"
+	done
 done
 
 echo
@@ -38,10 +41,13 @@ do
 done
 
 for i in `seq 1 10`; do echo $i >> $DATA_DIR/first-10; done
-for method in ItemKNN WeightedItemKNN UserKNN WeightedUserKNN
+for method in ItemKNN UserKNN
 do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+	for c in Cosine ConditionalProbability Jaccard Cooccurrence
+	do
+		echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K c=$c" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+		     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K c=$c" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+	done
 done
 rm $DATA_DIR/first-10
 
