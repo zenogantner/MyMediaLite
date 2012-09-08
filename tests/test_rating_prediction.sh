@@ -86,6 +86,6 @@ do
 	for c in BinaryCosine Pearson ConditionalProbability
 	do
 		echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$c" --data-dir=$DATA_DIR --rating-type=float
-		.....$PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$c" --data-dir=$DATA_DIR --rating-type=float
+		     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$c" --data-dir=$DATA_DIR --rating-type=float
 	done
 done
