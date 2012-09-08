@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 
@@ -86,20 +85,25 @@ namespace MyMediaLite.DataType
 			}
 		}
 
+		public void Resize(int num_rows)
+		{
+			Resize (num_rows, num_rows);
+		}
+
 		///
-		public void Grow(int num_rows, int num_columns)
+		public void Resize(int num_rows, int num_columns)
 		{
 			if (num_rows != num_columns)
 				throw new ArgumentException("num_rows must equal num_columns for symmetric matrices");
 
-			if (num_rows > dim)
+			if (num_rows != dim)
 			{
 				// create new data structure
 				var new_data = new T[num_rows][];
 				for (int i = 0; i < num_rows; i++)
 					new_data[i] = new T[i + 1];
 
-				for (int i = 0; i < dim; i++)
+				for (int i = 0; i < num_rows; i++)
 					for (int j = 0; j <= i; j++)
 						new_data[i][j] = this[i, j];
 

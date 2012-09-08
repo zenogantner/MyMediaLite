@@ -32,7 +32,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
 		public float Alpha { get; set; }
-		
+
 		public bool Weighted { get; set; }
 
 		/// <summary>Exponent to be used for transforming the neighbor's weights</summary>
@@ -71,39 +71,36 @@ namespace MyMediaLite.ItemRecommendation
 			Q = 1.0f;
 		}
 
+		void InitModel()
+		{
+			int num_entities = DataMatrix.NumberOfRows;
+			switch (Correlation)
+			{
+				case BinaryCorrelationType.Cosine:
+					correlation = new BinaryCosine(num_entities);
+					break;
+				case BinaryCorrelationType.Jaccard:
+					correlation = new Jaccard(num_entities);
+					break;
+				case BinaryCorrelationType.ConditionalProbability:
+					correlation = new ConditionalProbability(num_entities);
+					break;
+				case BinaryCorrelationType.BidirectionalConditionalProbability:
+					correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
+					break;
+				case BinaryCorrelationType.Cooccurrence:
+					correlation = new Cooccurrence(num_entities);
+					break;
+				default:
+					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+			}
+			correlation.Weighted = Weighted;
+		}
+
 		///
 		public override void Train()
 		{
-			int num_entities = DataMatrix.NumberOfRows;
-			try
-			{
-				switch (Correlation)
-				{
-					case BinaryCorrelationType.Cosine:
-						correlation = new BinaryCosine(num_entities);
-						break;
-					case BinaryCorrelationType.Jaccard:
-						correlation = new Jaccard(num_entities);
-						break;
-					case BinaryCorrelationType.ConditionalProbability:
-						correlation = new ConditionalProbability(num_entities);
-						break;
-					case BinaryCorrelationType.BidirectionalConditionalProbability:
-						correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
-						break;
-					case BinaryCorrelationType.Cooccurrence:
-						correlation = new Cooccurrence(num_entities);
-						break;
-					default:
-						throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
-				}
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			correlation.Weighted = Weighted;
+			InitModel();
 			correlation.ComputeCorrelations(DataMatrix);
 		}
 
@@ -131,7 +128,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match or Store?
+				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match
+				// TODO Weighted
 				int num_entities = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_entities][];
 				for (int i = 0; i < nearest_neighbors.Length; i++)
@@ -143,8 +141,14 @@ namespace MyMediaLite.ItemRecommendation
 						nearest_neighbors[i][j] = int.Parse(numbers[j]);
 				}
 
-				// TODO fixme -- distinguish symmetric and asymmetric
-				//this.correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
+				InitModel();
+				if (correlation is SymmetricCorrelationMatrix)
+					((SymmetricCorrelationMatrix) correlation).ReadSymmetricCorrelationMatrix(reader);
+				else if (correlation is AsymmetricCorrelationMatrix)
+					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
+				else
+					throw new NotSupportedException("Unknown correlation type: " + correlation.GetType());
+
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}

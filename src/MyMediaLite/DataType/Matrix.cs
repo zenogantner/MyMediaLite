@@ -239,14 +239,14 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public void Grow(int num_rows, int num_cols)
+		public void Resize(int num_rows, int num_cols)
 		{
-			if (num_rows > dim1 || num_cols > dim2)
+			if (num_rows != dim1 || num_cols != dim2)
 			{
 				// create new data structure
 				var new_data = new T[num_rows * num_cols];
-				for (int i = 0; i < dim1; i++)
-					for (int j = 0; j < dim2; j++)
+				for (int i = 0; i < num_rows; i++)
+					for (int j = 0; j < num_cols; j++)
 						new_data[i * num_cols + j] = this[i, j];
 
 				// replace old data structure

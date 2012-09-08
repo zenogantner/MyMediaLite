@@ -62,48 +62,14 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
-		public Pearson(int num_entities) : base(num_entities)
+		/// <param name="shrinkage">shrinkage parameter</param>
+		public Pearson(int num_entities, float shrinkage) : base(num_entities)
 		{
-			Shrinkage = 10;
+			Shrinkage = shrinkage;
 		}
 
-		/// <summary>Create a Pearson correlation matrix from given data</summary>
-		/// <param name="ratings">the ratings data</param>
-		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
-		/// <returns>the complete Pearson correlation matrix</returns>
-		static public SymmetricCorrelationMatrix Create(IRatings ratings, EntityType entity_type, float shrinkage)
-		{
-			Pearson cm;
-			int num_entities = 0;
-			if (entity_type.Equals(EntityType.USER))
-				num_entities = ratings.MaxUserID + 1;
-			else if (entity_type.Equals(EntityType.ITEM))
-				num_entities = ratings.MaxItemID + 1;
-			else
-				throw new ArgumentException("Unknown entity type: " + entity_type);
-
-			try
-			{
-				cm = new Pearson(num_entities);
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			cm.Shrinkage = shrinkage;
-			cm.ComputeCorrelations(ratings, entity_type);
-			return cm;
-		}
-
-		/// <summary>Compute correlation between two entities for given ratings</summary>
-		/// <param name="ratings">the rating data</param>
-		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		/// <param name="i">the ID of the first entity</param>
-		/// <param name="j">the ID of the second entity</param>
-		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
-		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j, float shrinkage)
+		///
+		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j)
 		{
 			if (i == j)
 				return 1;
@@ -157,16 +123,11 @@ namespace MyMediaLite.Correlation
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
 
-			return (float) pmcc * ((n - 1) / (n - 1 + shrinkage));
+			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
 		}
 
-		/// <summary>Compute correlation between two entities for given ratings</summary>
-		/// <param name="ratings">the rating data</param>
-		/// <param name="entity_type">the entity type, either USER or ITEM</param>
-		/// <param name="entity_ratings">ratings identifying the first entity</param>
-		/// <param name="j">the ID of second entity</param>
-		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
-		public static float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j, float shrinkage)
+		///
+		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j)
 		{
 			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
 
@@ -214,7 +175,7 @@ namespace MyMediaLite.Correlation
 				return 0;
 			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
 
-			return (float) pmcc * ((n - 1) / (n - 1 + shrinkage));
+			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
 		}
 
 		///

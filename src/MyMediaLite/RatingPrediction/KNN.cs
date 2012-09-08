@@ -14,13 +14,14 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.Data;
+using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -58,28 +59,85 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
+		/// <summary>The kind of correlation to use</summary>
+		public RatingCorrelationType Correlation { get; set; }
+
+		/// <summary>The entity type of the neighbors used for rating prediction</summary>
+		abstract protected EntityType Entity { get; }
+
+		abstract protected IBooleanMatrix BinaryDataMatrix { get; }
+
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
 		public float RegU { get { return baseline_predictor.RegU; } set { baseline_predictor.RegU = value; } }
 
 		/// <summary>regularization constant for the item bias of the underlying baseline predictor</summary>
 		public float RegI { get { return baseline_predictor.RegI; } set { baseline_predictor.RegI = value; } }
-		
+
 		/// <summary>number of iterations used for training the underlying baseline predictor</summary>
 		public uint NumIter { get { return baseline_predictor.NumIter; } set { baseline_predictor.NumIter = value; } }
-		
+
 		/// <summary>Correlation matrix over some kind of entity</summary>
 		protected ICorrelationMatrix correlation;
 
+		/// <summary>Alpha parameter for BidirectionalConditionalProbability, or shrinkage parameter for Pearson</summary>
+		public float Alpha { get; set; }
+
+		public bool Weighted { get; set; }
+
 		/// <summary>underlying baseline predictor</summary>
-		protected UserItemBaseline baseline_predictor = new UserItemBaseline() { RegU = 10, RegI = 5 };
+		protected UserItemBaseline baseline_predictor = new UserItemBaseline();
+
+		void InitModel()
+		{
+			int num_entities = BinaryDataMatrix.NumberOfRows;
+			switch (Correlation)
+			{
+				case RatingCorrelationType.BinaryCosine:
+					correlation = new BinaryCosine(num_entities);
+					break;
+				case RatingCorrelationType.Jaccard:
+					correlation = new Jaccard(num_entities);
+					break;
+				case RatingCorrelationType.ConditionalProbability:
+					correlation = new ConditionalProbability(num_entities);
+					break;
+				case RatingCorrelationType.BidirectionalConditionalProbability:
+					correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
+					break;
+				case RatingCorrelationType.Cooccurrence:
+					correlation = new Cooccurrence(num_entities);
+					break;
+				case RatingCorrelationType.Pearson:
+					correlation = new Pearson(num_entities, Alpha);
+					break;
+				default:
+					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+			}
+			if (correlation is IBinaryDataCorrelationMatrix)
+				((IBinaryDataCorrelationMatrix) correlation).Weighted = Weighted;
+		}
+
+		///
+		public override void Train()
+		{
+			baseline_predictor.Train();
+			InitModel();
+			if (correlation is IBinaryDataCorrelationMatrix)
+				((IBinaryDataCorrelationMatrix) correlation).ComputeCorrelations(BinaryDataMatrix);
+			else
+				((IRatingCorrelationMatrix) correlation).ComputeCorrelations(Ratings, Entity);
+		}
 
 		///
 		public override void SaveModel(string filename)
 		{
 			baseline_predictor.SaveModel(filename + "-global-effects");
 
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
-				correlation.Write(writer);
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
+			{
+				// writer.WriteLine(Correlation);
+				correlation.Write(writer); // TODO reverse calling conventions
+			}
 		}
 
 		///
@@ -91,9 +149,21 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				SymmetricCorrelationMatrix correlation = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
-				this.correlation = correlation;
+				if (correlation is SymmetricCorrelationMatrix)
+					((SymmetricCorrelationMatrix) correlation).ReadSymmetricCorrelationMatrix(reader);
+				else if (correlation is AsymmetricCorrelationMatrix)
+					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
+				else
+					throw new NotSupportedException("Unsupported correlation type: " + correlation.GetType());
 			}
+		}
+
+		///
+		public override string ToString()
+		{
+			return string.Format(
+				"{0} k={1} correlation={2} weighted={3} alpha={4} (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Weighted, Alpha, RegU, RegI, NumIter);
 		}
 	}
 }

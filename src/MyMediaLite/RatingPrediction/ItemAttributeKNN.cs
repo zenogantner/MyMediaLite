@@ -43,26 +43,6 @@ namespace MyMediaLite.RatingPrediction
 		public int NumItemAttributes { get; private set; }
 
 		///
-		protected override void RetrainItem(int item_id)
-		{
-			baseline_predictor.RetrainItem(item_id);
-		}
-
-		///
-		public override void Train()
-		{
-			baseline_predictor.Train();
-			this.correlation = new BinaryCosine(ItemAttributes.NumberOfRows);
-			((IBinaryDataCorrelationMatrix)correlation).ComputeCorrelations(ItemAttributes);
-			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
-		}
-
-		///
-		public override string ToString()
-		{
-			return string.Format(
-				"{0} k={1} reg_u={2} reg_i={3} num_iter={4}",
-				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI, NumIter);
-		}
+		protected override IBooleanMatrix BinaryDataMatrix { get { return item_attributes; } }
 	}
 }

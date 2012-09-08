@@ -28,14 +28,12 @@ using MyMediaLite.Taxonomy;
  */
 namespace MyMediaLite.Correlation
 {
-	// TODO move more stuff to Extensions
-	
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
 		///
 		public int NumEntities { get { return num_entities; } }
-		
+
 		/// <summary>Number of entities, e.g. users or items</summary>
 		protected int num_entities;
 
@@ -68,45 +66,6 @@ namespace MyMediaLite.Correlation
 			return cm;
 		}
 
-		/// <summary>Creates a CorrelationMatrix from the lines of a StreamReader</summary>
-		/// <remarks>
-		/// In the first line, we expect to be the number of entities.
-		/// All the other lines have the format
-		/// <pre>
-		///   EntityID1 EntityID2 Correlation
-		/// </pre>
-		/// where EntityID1 and EntityID2 are non-negative integers and Correlation is a floating point number.
-		/// </remarks>
-		/// <param name="reader">the StreamReader to read from</param>
-		static public SymmetricCorrelationMatrix ReadCorrelationMatrix(StreamReader reader)
-		{
-			int num_entities = int.Parse(reader.ReadLine());
-
-			SymmetricCorrelationMatrix cm = Create(num_entities);
-
-			// diagonal values
-			for (int i = 0; i < num_entities; i++)
-				cm[i, i] = 1;
-
-			string line;
-			while ((line = reader.ReadLine()) != null)
-			{
-				string[] numbers = line.Split(Constants.SPLIT_CHARS);
-				int i = int.Parse(numbers[0]);
-				int j = int.Parse(numbers[1]);
-				float c = float.Parse(numbers[2], CultureInfo.InvariantCulture);
-
-				if (i >= num_entities)
-					throw new IOException("Row index is too big: i = " + i);
-				if (j >= num_entities)
-					throw new IOException("Column index is too big: j = " + j);
-
-				cm[i, j] = c;
-			}
-
-			return cm;
-		}
-
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>
@@ -123,10 +82,15 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
+		public void Resize(int size)
+		{
+			Resize(size, size);
+		}
+
 		///
 		public void AddEntity(int entity_id)
 		{
-			this.Grow(entity_id + 1, entity_id + 1);
+			this.Resize(entity_id + 1, entity_id + 1);
 		}
 
 		///

@@ -42,7 +42,8 @@ namespace Tests.Correlation
 			writer.Close();
 
 			var reader = new StreamReader(filename);
-			var corr_matrix = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader);
+			var corr_matrix = new SymmetricCorrelationMatrix(0);
+			corr_matrix.ReadSymmetricCorrelationMatrix(reader);
 			Assert.AreEqual(1f,   corr_matrix[0, 0]);
 			Assert.AreEqual(1f,   corr_matrix[1, 1]);
 			Assert.AreEqual(1f,   corr_matrix[2, 2]);
@@ -86,7 +87,7 @@ namespace Tests.Correlation
 			var writer = new StreamWriter(filename);
 			matrix.Write(writer);
 			writer.Close();
-			
+
 			// check file format
 			var reader1 = new StreamReader(filename);
 			Assert.AreEqual("3",       reader1.ReadLine().Trim());
@@ -94,10 +95,11 @@ namespace Tests.Correlation
 			Assert.AreEqual("0 2 0.2", reader1.ReadLine().Trim());
 			Assert.AreEqual("1 2 0.3", reader1.ReadLine().Trim());
 			reader1.Close();
-			
+
 			// check result of reading in the file
 			var reader2 = new StreamReader(filename);
-			var corr_matrix = SymmetricCorrelationMatrix.ReadCorrelationMatrix(reader2);
+			var corr_matrix = new SymmetricCorrelationMatrix(0);
+			corr_matrix.ReadSymmetricCorrelationMatrix(reader2);
 
 			Assert.AreEqual(1f,   corr_matrix[0, 0]);
 			Assert.AreEqual(0.1f, corr_matrix[0, 1]);
@@ -109,7 +111,7 @@ namespace Tests.Correlation
 			Assert.AreEqual(0.3f, corr_matrix[2, 1]);
 			Assert.AreEqual(1f,   corr_matrix[2, 2]);
 			reader2.Close();
-			
+
 			// clean up
 			File.Delete(filename);
 		}

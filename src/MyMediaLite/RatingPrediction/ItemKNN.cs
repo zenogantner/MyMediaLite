@@ -16,13 +16,16 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MyMediaLite;
+using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 using MyMediaLite.Data;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN</summary>
-	public abstract class ItemKNN : KNN, IItemSimilarityProvider
+	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
 		protected SparseBooleanMatrix data_item;
@@ -39,8 +42,11 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <summary>Get positively correlated entities</summary>
-		protected Func<int, IList<int>> GetPositivelyCorrelatedEntities;
+		///
+		protected override EntityType Entity { get { return EntityType.ITEM; } }
+
+		///
+		protected override IBooleanMatrix BinaryDataMatrix { get { return data_item; } }
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
@@ -52,15 +58,17 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the predicted rating</returns>
 		public override float Predict(int user_id, int item_id)
 		{
-			if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
-				return baseline_predictor.Predict(user_id, item_id);
+			float result = baseline_predictor.Predict(user_id, item_id);
 
-			IList<int> relevant_items = GetPositivelyCorrelatedEntities(item_id);
+			if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
+				return result;
+
+			IList<int> correlated_items = correlation.GetPositivelyCorrelatedEntities(item_id);
 
 			double sum = 0;
 			double weight_sum = 0;
 			uint neighbors = K;
-			foreach (int item_id2 in relevant_items)
+			foreach (int item_id2 in correlated_items)
 				if (data_item[item_id2, user_id])
 				{
 					float rating  = ratings.Get(user_id, item_id2, ratings.ByUser[user_id]);
@@ -72,7 +80,6 @@ namespace MyMediaLite.RatingPrediction
 						break;
 				}
 
-			float result = baseline_predictor.Predict(user_id, item_id);
 			if (weight_sum != 0)
 				result += (float) (sum / weight_sum);
 
@@ -85,7 +92,27 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Retrain model for a given item</summary>
 		/// <param name='item_id'>the item ID</param>
-		abstract protected void RetrainItem(int item_id);
+		void RetrainItem(int item_id)
+		{
+			baseline_predictor.RetrainItem(item_id);
+
+			if (UpdateItems)
+			{
+				if (correlation is IBinaryDataCorrelationMatrix)
+				{
+					var bin_cor = correlation as IBinaryDataCorrelationMatrix;
+					var item_users = new HashSet<int>(data_item[item_id]);
+					for (int i = 0; i <= MaxItemID; i++)
+						correlation[item_id, i] = bin_cor.ComputeCorrelation(item_users, new HashSet<int>(data_item[i]));
+				}
+				if (correlation is IRatingCorrelationMatrix)
+				{
+					var rat_cor = correlation as IRatingCorrelationMatrix;
+					for (int i = 0; i <= MaxItemID; i++)
+						correlation[item_id, i] = rat_cor.ComputeCorrelation(ratings, EntityType.ITEM, item_id, i);
+				}
+			}
+		}
 
 		///
 		public override void AddRatings(IRatings ratings)
@@ -131,13 +158,6 @@ namespace MyMediaLite.RatingPrediction
 		public IList<int> GetMostSimilarItems(int item_id, uint n = 10)
 		{
 			return correlation.GetNearestNeighbors(item_id, n);
-		}
-
-		///
-		public override void LoadModel(string filename)
-		{
-			base.LoadModel(filename);
-			this.GetPositivelyCorrelatedEntities = Utils.Memoize<int, IList<int>>(correlation.GetPositivelyCorrelatedEntities);
 		}
 	}
 }

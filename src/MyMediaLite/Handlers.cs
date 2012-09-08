@@ -41,6 +41,7 @@ namespace MyMediaLite
 					Environment.Exit(-1);
 				}
 
+				Console.Error.WriteLine();
 				Console.Error.WriteLine("  *****************************************************************************************************");
 				Console.Error.WriteLine("  *** An uncaught exception occured. Please send a bug report to zeno.gantner+mymedialite@gmail.com,***");
 				Console.Error.WriteLine("  *** or report the problem in our issue tracker: https://github.com/zenogantner/MyMediaLite/issues ***");

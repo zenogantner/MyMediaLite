@@ -9,13 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.02</ReleaseVersion>
+    <ReleaseVersion>3.03</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -91,8 +91,6 @@
     <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
     <Compile Include="RatingPrediction\ItemAverage.cs" />
     <Compile Include="RatingPrediction\ItemKNN.cs" />
-    <Compile Include="RatingPrediction\ItemKNNCosine.cs" />
-    <Compile Include="RatingPrediction\ItemKNNPearson.cs" />
     <Compile Include="RatingPrediction\KNN.cs" />
     <Compile Include="RatingPrediction\MatrixFactorization.cs" />
     <Compile Include="RatingPrediction\RatingPredictor.cs" />
@@ -101,8 +99,6 @@
     <Compile Include="RatingPrediction\UserAverage.cs" />
     <Compile Include="RatingPrediction\UserItemBaseline.cs" />
     <Compile Include="RatingPrediction\UserKNN.cs" />
-    <Compile Include="RatingPrediction\UserKNNCosine.cs" />
-    <Compile Include="RatingPrediction\UserKNNPearson.cs" />
     <Compile Include="ItemRecommendation\BPRMF.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />

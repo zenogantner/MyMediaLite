@@ -1,4 +1,4 @@
-3.03	2012-09-07
+3.03	2012-09-08
 	API
          - rename (I)EntityMapping to (I)Mapping
          - attribute- and relation-aware interfaces, IO.AttributeData,
@@ -14,7 +14,7 @@
 	 - MostPopularByItemAttributes: divide score by number of item
            attributes (otherwise attributes with many attributes have
            automatically higher scores)
-	 - KNN (item recommendation):
+	 - KNN:
            - add option to select the kind of correlation for determining
              the nearest neighbors
            - get rid of the distinction between weighted and non-weighted
@@ -36,7 +36,9 @@
          - remove KDDCup 2011 and ICDM 2010 executables: would have to be
            maintained; for reference, they are still available in MML's
            older releases
-          - add version number to stack trace
+         - add version number to stack trace
+        data types
+         - IMatrix<T>: rename Grow() to Resize()
         documentation
          - improve Installation description
 	scripts

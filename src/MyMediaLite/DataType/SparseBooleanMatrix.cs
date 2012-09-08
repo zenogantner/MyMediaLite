@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -181,12 +180,22 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public void Grow(int num_rows, int num_cols)
+		public void Resize(int num_rows, int num_cols)
 		{
 			// if necessary, grow rows
 			if (num_rows > NumberOfRows)
 				for (int i = row_list.Count; i < num_rows; i++)
 					row_list.Add( new HashSet<int>() );
+			// if necessary, shrink rows
+			if (num_rows < NumberOfRows)
+				for (int i = NumberOfRows - 1; i >= num_rows; i--)
+					row_list.RemoveAt(i);
+
+			// if necessary, shrink columns
+			if (num_cols < NumberOfColumns)
+				foreach (var row in row_list)
+					for (int i = NumberOfColumns - 1; i >= num_cols; i--)
+						row.Remove(i);
 		}
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>

@@ -26,7 +26,6 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted kNN recommender based on user attributes</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{
@@ -44,7 +43,10 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public int NumUserAttributes { get; private set; }
-
+		
+		///
+		protected override IBooleanMatrix BinaryDataMatrix { get { return user_attributes; } }
+		
 		///
 		protected override void RetrainUser(int user_id)
 		{
@@ -52,25 +54,9 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void Train()
-		{
-			baseline_predictor.Train();
-			this.correlation = new BinaryCosine(UserAttributes.NumberOfRows);
-			((IBinaryDataCorrelationMatrix)correlation).ComputeCorrelations(UserAttributes);
-		}
-
-		///
 		protected override IList<float> FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			throw new NotSupportedException();
-		}
-
-		///
-		public override string ToString()
-		{
-			return string.Format(
-				"{0} k={1} reg_u={2} reg_i={3} num_iter={4}",
-				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), RegU, RegI, NumIter);
 		}
 	}
 

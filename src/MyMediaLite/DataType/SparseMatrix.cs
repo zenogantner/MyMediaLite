@@ -147,7 +147,7 @@ namespace MyMediaLite.DataType
 		}
 
 		///
-		public void Grow(int num_rows, int num_cols)
+		public void Resize(int num_rows, int num_cols)
 		{
 			// if necessary, grow rows
 			if (num_rows > NumberOfRows)
@@ -156,10 +156,38 @@ namespace MyMediaLite.DataType
 					index_list.Add( new List<int>() );
 					value_list.Add( new List<T>() );
 				}
+			// if necessary, shrink rows
+			if (num_rows < NumberOfRows)
+				for (int i = NumberOfRows - 1; i >= num_rows; i--)
+				{
+					index_list.RemoveAt(i);
+					value_list.RemoveAt(i);
+				}
 
 			// if necessary, grow columns
 			if (num_cols > NumberOfColumns)
 				NumberOfColumns = num_cols;
+			// if necessary, shrink columns
+			if (num_cols < NumberOfColumns)
+			{
+				// remove all column elements
+				for (int i = 0; i < num_rows; i++)
+				{
+					var indexes = index_list[i];
+					var values  = index_list[i];
+					for (int j = NumberOfColumns - 1; j >= num_cols; j--)
+					{
+						int pos = indexes.BinarySearch(j);
+						if (pos >= 0)
+						{
+							indexes.RemoveAt(pos);
+							values.RemoveAt(pos);
+						}
+					}
+				}
+				// set new number of columns
+				NumberOfColumns = num_cols;
+			}
 		}
 
 		///
