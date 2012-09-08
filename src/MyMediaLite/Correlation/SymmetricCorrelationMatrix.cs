@@ -32,10 +32,7 @@ namespace MyMediaLite.Correlation
 	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
 		///
-		public int NumEntities { get { return num_entities; } }
-
-		/// <summary>Number of entities, e.g. users or items</summary>
-		protected int num_entities;
+		public int NumEntities { get; private set; }
 
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
 		public override bool IsSymmetric { get { return true; } }
@@ -44,26 +41,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="num_entities">number of entities</param>
 		public SymmetricCorrelationMatrix(int num_entities) : base(num_entities)
 		{
-			this.num_entities = num_entities;
-		}
-
-		/// <summary>Creates a correlation matrix</summary>
-		/// <remarks>Gives out a useful warning if there is not enough memory</remarks>
-		/// <param name="num_entities">the number of entities</param>
-		/// <returns>the correlation matrix</returns>
-		static public SymmetricCorrelationMatrix Create(int num_entities)
-		{
-			SymmetricCorrelationMatrix cm;
-			try
-			{
-				cm = new SymmetricCorrelationMatrix(num_entities);
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			return cm;
+			NumEntities = num_entities;
 		}
 
 		/// <summary>Write out the correlations to a StreamWriter</summary>
@@ -72,9 +50,9 @@ namespace MyMediaLite.Correlation
 		/// </param>
 		public void Write(StreamWriter writer)
 		{
-			writer.WriteLine(num_entities);
-			for (int i = 0; i < num_entities; i++)
-				for (int j = i + 1; j < num_entities; j++)
+			writer.WriteLine(NumEntities);
+			for (int i = 0; i < NumEntities; i++)
+				for (int j = i + 1; j < NumEntities; j++)
 				{
 					float val = this[i, j];
 					if (val != 0f)
@@ -82,6 +60,12 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
+		public override void Resize(int size)
+		{
+			base.Resize(size);
+			NumEntities = size;
+		}
+		
 		///
 		public void AddEntity(int entity_id)
 		{

@@ -130,7 +130,6 @@ namespace MyMediaLite.ItemRecommendation
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
 				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match
-				// TODO Weighted
 
 				int num_entities = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_entities][];

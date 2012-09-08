@@ -68,6 +68,8 @@ namespace MyMediaLite.Correlation
 			Shrinkage = shrinkage;
 		}
 
+		// TODO get rid of some code here
+
 		///
 		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j)
 		{

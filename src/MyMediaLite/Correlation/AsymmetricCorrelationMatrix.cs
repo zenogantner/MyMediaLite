@@ -44,25 +44,6 @@ namespace MyMediaLite.Correlation
 			this.num_entities = num_entities;
 		}
 
-		/// <summary>Creates a correlation matrix</summary>
-		/// <remarks>Gives out a useful warning if there is not enough memory</remarks>
-		/// <param name="num_entities">the number of entities</param>
-		/// <returns>the correlation matrix</returns>
-		static public AsymmetricCorrelationMatrix Create(int num_entities)
-		{
-			AsymmetricCorrelationMatrix cm;
-			try
-			{
-				cm = new AsymmetricCorrelationMatrix(num_entities);
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("Too many entities: " + num_entities);
-				throw;
-			}
-			return cm;
-		}
-
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>

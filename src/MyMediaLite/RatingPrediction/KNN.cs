@@ -147,8 +147,6 @@ namespace MyMediaLite.RatingPrediction
 		public override void LoadModel(string filename)
 		{
 			baseline_predictor.LoadModel(filename + "-global-effects");
-			if (ratings != null)
-				baseline_predictor.Ratings = ratings;
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
