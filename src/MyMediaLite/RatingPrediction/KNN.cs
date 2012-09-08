@@ -64,7 +64,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>The entity type of the neighbors used for rating prediction</summary>
 		abstract protected EntityType Entity { get; }
-		
+
 		/// <summary>Return the data matrix that can be used to compute a correlation based on binary data</summary>
 		/// <remarks>If a purely rating-based correlation is used, this property is ignored.</remarks>
 		abstract protected IBooleanMatrix BinaryDataMatrix { get; }
@@ -92,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 
 		void InitModel()
 		{
-			int num_entities = BinaryDataMatrix.NumberOfRows;
+			int num_entities = 0;
 			switch (Correlation)
 			{
 				case RatingCorrelationType.BinaryCosine:
@@ -138,7 +138,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
 			{
-				// writer.WriteLine(Correlation);
+				writer.WriteLine(Correlation);
 				correlation.Write(writer); // TODO reverse calling conventions
 			}
 		}
@@ -152,6 +152,9 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
+				Correlation = (RatingCorrelationType) Enum.Parse(typeof(RatingCorrelationType), reader.ReadLine()); // TODO make sure they match
+				InitModel();
+
 				if (correlation is SymmetricCorrelationMatrix)
 					((SymmetricCorrelationMatrix) correlation).ReadSymmetricCorrelationMatrix(reader);
 				else if (correlation is AsymmetricCorrelationMatrix)

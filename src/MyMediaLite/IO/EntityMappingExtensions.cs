@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.IO;
 using MyMediaLite.Data;
@@ -38,7 +37,7 @@ namespace MyMediaLite.IO
 		/// <summary>Load entity mappings from a file</summary>
 		/// <param name='filename'>the name of the file</param>
 		/// <returns>an object of type EntityMapping</returns>
-		public static IMapping LoadMapping(string filename)
+		public static IMapping LoadMapping(this string filename)
 		{
 			var mapping = new Mapping();
 

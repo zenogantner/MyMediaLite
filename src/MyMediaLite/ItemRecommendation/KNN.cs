@@ -79,7 +79,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		void InitModel()
 		{
-			int num_entities = DataMatrix.NumberOfRows;
+			int num_entities = 0;
 			switch (Correlation)
 			{
 				case BinaryCorrelationType.Cosine:
@@ -118,12 +118,7 @@ namespace MyMediaLite.ItemRecommendation
 				writer.WriteLine(Correlation);
 				writer.WriteLine(nearest_neighbors.Count);
 				foreach (IList<int> nn in nearest_neighbors)
-				{
-					writer.Write(nn[0]);
-					for (int i = 1; i < nn.Count; i++)
-						writer.Write(" {0}", nn[i]);
-					writer.WriteLine();
-				}
+					writer.WriteLine(String.Join(" ", nn));
 
 				correlation.Write(writer);
 			}
@@ -136,6 +131,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match
 				// TODO Weighted
+
 				int num_entities = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_entities][];
 				for (int i = 0; i < nearest_neighbors.Length; i++)

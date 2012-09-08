@@ -90,5 +90,12 @@ namespace MyMediaLite.DataType
 				return counter;
 			}
 		}
+
+		/// <summary>Resize to the given size</summary>
+		/// <param name="size">the size</param>
+		public void Resize(int size)
+		{
+			Resize (size, size);
+		}
 	}
 }

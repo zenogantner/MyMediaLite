@@ -86,38 +86,6 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public IList<int> GetPositivelyCorrelatedEntities(int entity_id)
-		{
-			var result = new List<int>();
-			for (int i = 0; i < num_entities; i++)
-				if (this[i, entity_id] > 0)
-					result.Add(i);
-
-			result.Remove(entity_id);
-			result.Sort(delegate(int i, int j) { return this[j, entity_id].CompareTo(this[i, entity_id]); });
-			return result;
-		}
-
-		/// <summary>Get the k nearest neighbors of a given entity</summary>
-		/// <param name="entity_id">the numerical ID of the entity</param>
-		/// <param name="k">the neighborhood size</param>
-		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
-		public IList<int> GetNearestNeighbors(int entity_id, uint k)
-		{
-			var entities = new List<int>();
-			for (int i = 0; i < num_entities; i++)
-				entities.Add(i);
-
-			entities.Remove(entity_id);
-			entities.Sort(delegate(int i, int j) { return this[j, entity_id].CompareTo(this[i, entity_id]); });
-
-			if (k < entities.Count)
-				return entities.GetRange(0, (int) k).ToArray();
-			else
-				return entities.ToArray();
-		}
-
-		///
 		public void Resize(int num_rows)
 		{
 			Resize (num_rows, num_rows);

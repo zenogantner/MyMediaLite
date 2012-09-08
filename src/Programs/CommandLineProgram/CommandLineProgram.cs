@@ -202,11 +202,25 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (random_seed != -1)
 			MyMediaLite.Random.Seed = random_seed;
 
-		SetupRecommender();
-		
 		CheckParameters(extra_args);
+
+		if (no_id_mapping)
+		{
+			user_mapping = new IdentityMapping();
+			item_mapping = new IdentityMapping();
+		}
+		if (load_user_mapping_file != null)
+			user_mapping = load_user_mapping_file.LoadMapping();
+		if (load_item_mapping_file != null)
+			item_mapping = load_item_mapping_file.LoadMapping();
+
+		SetupRecommender();
+
+		// load all the data
+		LoadData();
+		SaveIDMappings();
 	}
-	
+
 	protected void SaveIDMappings()
 	{
 		// if requested, save ID mappings
@@ -215,7 +229,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (save_item_mapping_file != null)
 			item_mapping.SaveMapping(save_item_mapping_file);
 	}
-	
+
 	protected virtual void LoadData()
 	{
 		training_file = Path.Combine(data_dir, training_file);

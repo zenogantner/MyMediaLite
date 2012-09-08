@@ -197,26 +197,11 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	protected override void Run(string[] args)
 	{
 		base.Run(args);
+		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
 		bool no_eval = true;
 		if (test_ratio > 0 || test_file != null)
 			no_eval = false;
-
-		// TODO generalize
-		if (no_id_mapping)
-		{
-			user_mapping = new IdentityMapping();
-			item_mapping = new IdentityMapping();
-		}
-		if (load_user_mapping_file != null)
-			user_mapping = EntityMappingExtensions.LoadMapping(load_user_mapping_file);
-		if (load_item_mapping_file != null)
-			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
-
-		// load all the data
-		LoadData();
-		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
-		SaveIDMappings();
 
 		TimeSpan time_span;
 

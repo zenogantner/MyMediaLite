@@ -41,6 +41,8 @@ namespace MyMediaLite.Correlation
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
+			Resize(entity_data.NumberOfRows);
+
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < num_entities; i++)
 				this[i, i] = 1;

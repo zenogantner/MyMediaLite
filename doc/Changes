@@ -37,6 +37,7 @@
            maintained; for reference, they are still available in MML's
            older releases
          - add version number to stack trace
+         - move more code to abstract CommandLineProgram class
         data types
          - IMatrix<T>: rename Grow() to Resize()
         documentation

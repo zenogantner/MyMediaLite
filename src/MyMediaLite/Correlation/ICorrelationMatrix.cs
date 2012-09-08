@@ -34,17 +34,6 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_id">the numerical ID of the entity</param>
 		void AddEntity(int entity_id);
 
-		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
-		/// <param name="entity_id">the entity ID</param>
-		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
-		IList<int> GetPositivelyCorrelatedEntities(int entity_id);
-
-		/// <summary>Get the k nearest neighbors of a given entity</summary>
-		/// <param name="entity_id">the numerical ID of the entity</param>
-		/// <param name="k">the neighborhood size</param>
-		/// <returns>an array containing the numerical IDs of the k nearest neighbors</returns>
-		IList<int> GetNearestNeighbors(int entity_id, uint k);
-
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>

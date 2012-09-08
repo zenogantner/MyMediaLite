@@ -168,27 +168,16 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected override void Run(string[] args)
 	{
-		base.Run(args);
-
-		// ... some more command line parameter actions ...
-		bool no_eval = true;
-		if (test_ratio > 0 || test_file != null || chronological_split != null)
-			no_eval = false;
-
-		// ID mapping objects
-		if (file_format == RatingFileFormat.KDDCUP_2011 || no_id_mapping)
+		if (file_format == RatingFileFormat.KDDCUP_2011)
 		{
 			user_mapping = new IdentityMapping();
 			item_mapping = new IdentityMapping();
 		}
-		if (load_user_mapping_file != null)
-			user_mapping = EntityMappingExtensions.LoadMapping(load_user_mapping_file);
-		if (load_item_mapping_file != null)
-			item_mapping = EntityMappingExtensions.LoadMapping(load_item_mapping_file);
+		base.Run(args);
 
-		// load all the data
-		LoadData();
-		SaveIDMappings();
+		bool no_eval = true;
+		if (test_ratio > 0 || test_file != null || chronological_split != null)
+			no_eval = false;
 
 		Console.Error.WriteLine(
 			string.Format(CultureInfo.InvariantCulture,

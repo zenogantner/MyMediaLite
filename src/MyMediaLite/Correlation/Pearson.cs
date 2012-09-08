@@ -181,6 +181,9 @@ namespace MyMediaLite.Correlation
 		///
 		public void ComputeCorrelations(IRatings ratings, EntityType entity_type)
 		{
+			int num_entities = (entity_type == EntityType.USER) ? ratings.MaxUserID + 1 : ratings.MaxItemID + 1;
+			Resize(num_entities);
+
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 

@@ -133,6 +133,42 @@ namespace MyMediaLite.Correlation
 				correlation[i, j] = c;
 			}
 		}
+
+		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
+		/// <param name="entity_id">the entity ID</param>
+		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
+		public static IList<int> GetPositivelyCorrelatedEntities(this ICorrelationMatrix c, int entity_id)
+		{
+			int num_entities = c.NumberOfRows;
+			var result = new List<int>();
+			for (int i = 0; i < num_entities; i++)
+				if (c[i, entity_id] > 0)
+					result.Add(i);
+
+			result.Remove(entity_id);
+			result.Sort(delegate(int i, int j) { return c[j, entity_id].CompareTo(c[i, entity_id]); });
+			return result;
+		}
+
+		/// <summary>Get the k nearest neighbors of a given entity</summary>
+		/// <param name="entity_id">the numerical ID of the entity</param>
+		/// <param name="k">the neighborhood size</param>
+		/// <returns>a sorted list containing the numerical IDs of the k nearest neighbors</returns>
+		public static IList<int> GetNearestNeighbors(this ICorrelationMatrix c, int entity_id, uint k)
+		{
+			int num_entities = c.NumberOfRows;
+			var entities = new List<int>();
+			for (int i = 0; i < num_entities; i++)
+				entities.Add(i);
+
+			entities.Remove(entity_id);
+			entities.Sort(delegate(int i, int j) { return c[j, entity_id].CompareTo(c[i, entity_id]); });
+
+			if (k < entities.Count)
+				return entities.GetRange(0, (int) k).ToArray();
+			else
+				return entities.ToArray();
+		}
 	}
 }
 
