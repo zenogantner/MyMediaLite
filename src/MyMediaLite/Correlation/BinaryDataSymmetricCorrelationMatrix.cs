@@ -24,6 +24,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class with common routines for symmetric correlations that are learned from binary data</summary>
 	public abstract class BinaryDataSymmetricCorrelationMatrix : SymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
+		///
 		public bool Weighted { get; set; }
 
 		/// <summary>Creates an object of type BinaryDataCorrelation</summary>

@@ -26,6 +26,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class with commoin routines for asymmetric correlations that are learned from binary data</summary>
 	public abstract class BinaryDataAsymmetricCorrelationMatrix : AsymmetricCorrelationMatrix, IBinaryDataCorrelationMatrix
 	{
+		///
 		public bool Weighted { get; set; }
 
 		/// <summary>Creates an object of type ConditionalProbability</summary>

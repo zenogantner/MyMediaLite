@@ -42,7 +42,6 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="entity_ratings">ratings identifying the first entity</param>
 		/// <param name="j">the ID of second entity</param>
-		/// <param name="shrinkage">the shrinkage parameter, set to 0 for the standard Pearson correlation without shrinkage</param>
 		float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j);
 	}
 }

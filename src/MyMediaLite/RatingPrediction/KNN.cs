@@ -64,7 +64,9 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>The entity type of the neighbors used for rating prediction</summary>
 		abstract protected EntityType Entity { get; }
-
+		
+		/// <summary>Return the data matrix that can be used to compute a correlation based on binary data</summary>
+		/// <remarks>If a purely rating-based correlation is used, this property is ignored.</remarks>
 		abstract protected IBooleanMatrix BinaryDataMatrix { get; }
 
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
@@ -82,7 +84,8 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability, or shrinkage parameter for Pearson</summary>
 		public float Alpha { get; set; }
 
-		public bool Weighted { get; set; }
+		/// <summary>If set to true, give a lower weight to evidence coming from very frequent entities</summary>
+		public bool WeightedBinary { get; set; }
 
 		/// <summary>underlying baseline predictor</summary>
 		protected UserItemBaseline baseline_predictor = new UserItemBaseline();
@@ -114,7 +117,7 @@ namespace MyMediaLite.RatingPrediction
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
 			if (correlation is IBinaryDataCorrelationMatrix)
-				((IBinaryDataCorrelationMatrix) correlation).Weighted = Weighted;
+				((IBinaryDataCorrelationMatrix) correlation).Weighted = WeightedBinary;
 		}
 
 		///
@@ -162,8 +165,8 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} correlation={2} weighted={3} alpha={4} (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Weighted, Alpha, RegU, RegI, NumIter);
+				"{0} k={1} correlation={2} weighted_binary={3} alpha={4} (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
+				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, WeightedBinary, Alpha, RegU, RegI, NumIter);
 		}
 	}
 }

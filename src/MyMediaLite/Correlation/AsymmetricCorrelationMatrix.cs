@@ -116,5 +116,11 @@ namespace MyMediaLite.Correlation
 			else
 				return entities.ToArray();
 		}
+
+		///
+		public void Resize(int num_rows)
+		{
+			Resize (num_rows, num_rows);
+		}
 	}
 }

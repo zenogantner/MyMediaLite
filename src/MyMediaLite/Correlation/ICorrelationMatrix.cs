@@ -50,6 +50,10 @@ namespace MyMediaLite.Correlation
 		/// A <see cref="StreamWriter"/>
 		/// </param>
 		void Write(StreamWriter writer);
+
+		/// <summary>Resize to the given size</summary>
+		/// <param name="size">the size</param>
+		void Resize(int size);
 	}
 }
 

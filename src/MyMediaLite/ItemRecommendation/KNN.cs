@@ -33,6 +33,12 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
 		public float Alpha { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="MyMediaLite.ItemRecommendation.KNN"/> is weighted.
+		/// </summary>
+		/// <remarks>
+		/// TODO add literature reference
+		/// </remarks>
 		public bool Weighted { get; set; }
 
 		/// <summary>Exponent to be used for transforming the neighbor's weights</summary>

@@ -85,9 +85,11 @@ namespace MyMediaLite.DataType
 			}
 		}
 
-		public void Resize(int num_rows)
+		/// <summary>Resize to the given size</summary>
+		/// <param name="size">the size</param>
+		public void Resize(int size)
 		{
-			Resize (num_rows, num_rows);
+			Resize (size, size);
 		}
 
 		///

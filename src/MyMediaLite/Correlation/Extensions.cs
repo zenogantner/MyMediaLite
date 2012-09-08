@@ -45,12 +45,9 @@ namespace MyMediaLite.Correlation
 					result += Math.Pow(correlation[entity_id, entity_id2], q);
 			return result;
 		}
-		
-		static public void Resize(this ICorrelationMatrix c, int size)
-		{
-			c.Resize(size, size);
-		}
-		
+
+		/// <summary>Sets all values in a matrix to zero</summary>
+		/// <param name='c'>a correlation matrix</param>
 		static public void SetZero(this ICorrelationMatrix c)
 		{
 			int size = c.NumberOfRows;
@@ -67,6 +64,7 @@ namespace MyMediaLite.Correlation
 		/// </pre>
 		/// where EntityID1 and EntityID2 are non-negative integers and Correlation is a floating point number.
 		/// </remarks>
+		/// <param name='correlation'>a correlation matrix</param>
 		/// <param name="reader">the StreamReader to read from</param>
 		static public void ReadSymmetricCorrelationMatrix(
 			this SymmetricCorrelationMatrix correlation,
@@ -106,6 +104,7 @@ namespace MyMediaLite.Correlation
 		/// </pre>
 		/// where EntityID1 and EntityID2 are non-negative integers and Correlation is a floating point number.
 		/// </remarks>
+		/// <param name='correlation'>a correlation matrix</param>
 		/// <param name="reader">the StreamReader to read from</param>
 		static public void ReadAsymmetricCorrelationMatrix(
 			this AsymmetricCorrelationMatrix correlation, StreamReader reader)
@@ -134,7 +133,6 @@ namespace MyMediaLite.Correlation
 				correlation[i, j] = c;
 			}
 		}
-
 	}
 }
 

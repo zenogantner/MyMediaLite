@@ -23,6 +23,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>CorrelationMatrix that computes correlations over binary data</summary>
 	public interface IBinaryDataCorrelationMatrix : ICorrelationMatrix
 	{
+		/// <summary>If set to true, give a lower weight to evidence coming from very frequent entities</summary>
 		bool Weighted { get; set; }
 
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>

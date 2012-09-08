@@ -82,6 +82,7 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
+		///
 		public void Resize(int size)
 		{
 			Resize(size, size);
