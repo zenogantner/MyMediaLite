@@ -63,11 +63,12 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected bool show_version = false;
 
 	// arguments for iteration search
-	protected int max_iter   = 100;
+	protected uint find_iter = 0;
+	protected uint num_iter = 0;
+	protected uint max_iter = 50;
 	protected string measure;
 	protected double epsilon = 0;
 	protected double cutoff;
-	protected int find_iter = 0;
 
 	// ID mapping objects
 	protected IMapping user_mapping = new Mapping();
@@ -177,8 +178,9 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			{ "prediction-file=",     v              => prediction_file      = v },
 			{ "measure=",             v              => measure              = v },
 			// integer-valued options
-			{ "find-iter=",           (int v)        => find_iter            = v },
-			{ "max-iter=",            (int v)        => max_iter             = v },
+			{ "find-iter=",           (uint v)       => find_iter            = v },
+			{ "max-iter=",            (uint v)       => max_iter             = v },
+			{ "num-iter=",            (uint v)       => num_iter             = v },
 			{ "random-seed=",         (int v)        => random_seed          = v },
 			{ "cross-validation=",    (uint v)       => cross_validation     = v },
 			// double-valued options

@@ -143,6 +143,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
+   --num-iter=N                 start measuring at N iterations
    --max-iter=N                 perform at most N iterations
    --measure=MEASURE            the evaluation measure to use for the abort conditions below (default is AUC)
    --epsilon=NUM                abort iterations if MEASURE is less than best result plus NUM
@@ -210,7 +211,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			if ( !(recommender is IIterativeModel) )
 				Abort("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
 
-			var iterative_recommender = (IIterativeModel) recommender;
+			var iterative_recommender = recommender as IIterativeModel;
+			iterative_recommender.NumIter = num_iter;
 			Console.WriteLine(recommender);
 			var eval_stats = new List<double>();
 

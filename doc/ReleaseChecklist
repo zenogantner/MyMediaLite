@@ -6,7 +6,7 @@ release checklist:
 3b. Check if the version number and date are set correctly in the Changes file
 3c. Check if the version number is correctly set in the MonoDevelop project
 3d. Check if the version number is correctly set in the Doxyfile
-3e. Check if the rating prediction and item prediction tools give out the right version numbers
+3e. Check if the 3 command-line tools tools give out the right version numbers
 4. Check the output of 'git status' - is everything in the repository?
 5. Rebuild everything (there should be no warnings)
 6. Re-create the API documentation (make apidoc) and visually inspect the results

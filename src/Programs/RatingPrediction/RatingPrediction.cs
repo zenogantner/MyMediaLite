@@ -122,6 +122,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
+   --num-iter=N                   start measuring at N iterations
    --max-iter=N                   perform at most N iterations
    --measure=RMSE|MAE|NMAE|CBD    evaluation measure to use for the abort conditions below (default is RMSE)
    --epsilon=NUM                  abort iterations if evaluation measure is more than best result plus NUM
@@ -210,7 +211,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			if ( !(recommender is IIterativeModel) )
 				Abort("Only iterative recommenders (interface IIterativeModel) support --find-iter=N.");
 
-			Console.WriteLine(recommender.ToString());
+			var iterative_recommender = recommender as IIterativeModel;
+			iterative_recommender.NumIter = num_iter;
+			Console.WriteLine(recommender);
 
 			if (cross_validation > 1)
 			{
@@ -218,7 +221,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			}
 			else
 			{
-				var iterative_recommender = (IIterativeModel) recommender;
 				var eval_stats = new List<double>();
 
 				if (load_model_file == null)

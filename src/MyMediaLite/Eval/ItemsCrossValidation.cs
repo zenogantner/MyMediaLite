@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -130,8 +129,8 @@ namespace MyMediaLite.Eval
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
-			int max_iter,
-			int find_iter = 1,
+			uint max_iter,
+			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
 			if (!(recommender is ItemRecommender))
@@ -158,8 +157,8 @@ namespace MyMediaLite.Eval
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
 			bool repeated_events,
-			int max_iter,
-			int find_iter = 1,
+			uint max_iter,
+			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
 			if (!(recommender is IIterativeModel))

@@ -92,8 +92,8 @@ namespace MyMediaLite.Eval
 		static public void DoIterativeCrossValidation(
 			this RatingPredictor recommender,
 			uint num_folds,
-			int max_iter,
-			int find_iter = 1,
+			uint max_iter,
+			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
 			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
@@ -109,8 +109,8 @@ namespace MyMediaLite.Eval
 		static public void DoIterativeCrossValidation(
 			this RatingPredictor recommender,
 			ISplit<IRatings> split,
-			int max_iter,
-			int find_iter = 1,
+			uint max_iter,
+			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
 			if (!(recommender is IIterativeModel))

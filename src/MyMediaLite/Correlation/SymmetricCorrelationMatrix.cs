@@ -60,12 +60,13 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
+		///
 		public override void Resize(int size)
 		{
 			base.Resize(size);
 			NumEntities = size;
 		}
-		
+
 		///
 		public void AddEntity(int entity_id)
 		{
