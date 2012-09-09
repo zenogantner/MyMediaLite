@@ -43,6 +43,7 @@
          - IMatrix<T>: rename Grow() to Resize()
         documentation
          - improve Installation description
+         - correct Doxygen namespace for MyMediaLite.GroupRecommendation
 	scripts
          - add artist-to-song preprocessing script for MSD challenge
          - add script to allow easier adding of results to YAML files
