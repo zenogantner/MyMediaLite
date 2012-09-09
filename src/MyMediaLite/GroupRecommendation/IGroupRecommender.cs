@@ -17,7 +17,7 @@
 
 using System.Collections.Generic;
 
-/*! \namespace MyMediaLite.GroupRecommendations
+/*! \namespace MyMediaLite.GroupRecommendation
  *  \brief This namespace contains recommenders that make recommendations to groups of users.
  */
 namespace MyMediaLite.GroupRecommendation
