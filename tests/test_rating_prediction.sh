@@ -81,7 +81,7 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
-for method in UserKNN ItemKNNCosine
+for method in UserKNN ItemKNN
 do
 	for c in BinaryCosine Pearson ConditionalProbability
 	do
