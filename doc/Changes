@@ -45,6 +45,7 @@
          - improve Installation description
 	scripts
          - add artist-to-song preprocessing script for MSD challenge
+         - add script to allow easier adding of results to YAML files
 	evaluation
 	 - fix some Gendarme warnings
         tests
