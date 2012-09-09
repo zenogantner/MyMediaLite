@@ -13,7 +13,7 @@ release checklist:
 6a. Check whether the Doxygen output has the correct version number
 7. Run 'make release'
 8. Packages
-8a. Inspect the contents of the source code package from GitHub:
+8a. Inspect the contents of the source code package from GitHub
 8b. Make a test installation
 8c. Inspect the contents of the binary package
 8d. Inspect the contents of the documentation package
