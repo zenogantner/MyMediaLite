@@ -202,8 +202,6 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (random_seed != -1)
 			MyMediaLite.Random.Seed = random_seed;
 
-		CheckParameters(extra_args);
-
 		if (no_id_mapping)
 		{
 			user_mapping = new IdentityMapping();
@@ -215,6 +213,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			item_mapping = load_item_mapping_file.LoadMapping();
 
 		SetupRecommender();
+		CheckParameters(extra_args);
 
 		// load all the data
 		LoadData();
