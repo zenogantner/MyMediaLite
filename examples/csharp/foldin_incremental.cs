@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
@@ -50,10 +51,10 @@ public class FoldInAndIncrementalTraining
 
 		Console.Write(training_data.Statistics());
 		Console.Write(update_data.Statistics());
-        Console.Write(eval_data.Statistics());
+		Console.Write(eval_data.Statistics());
 
 		// prepare recommender
-		RatingPredictor recommender = Recommender.CreateRatingPredictor(method);
+		RatingPredictor recommender = method.CreateRatingPredictor();
 		recommender.Configure(options);
 		recommender.Ratings = training_data;
 		Console.WriteLine(string.Format(CultureInfo.InvariantCulture, "ratings range: [{0}, {1}]", recommender.MinRating, recommender.MaxRating));
