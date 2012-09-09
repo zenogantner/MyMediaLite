@@ -1,23 +1,21 @@
-MyMediaLite item recommendation from positive-only feedback 3.02
+MyMediaLite item recommendation from positive-only feedback 3.03
 
  usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]
 
    methods (plus arguments and their defaults):
    - BPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False fast_sampling_memory_limit=1024 update_j=True
        supports --find-iter=N, --online-evaluation
-   - ItemAttributeKNN k=80
+   - ItemAttributeKNN k=80 correlation=Cosine q=1 weighted=False alpha=0.5 (only for BidirectionalConditionalProbability)
        needs --item-attributes=FILE
-   - ItemKNN k=80
+   - ItemKNN k=80 correlation=Cosine q=1 weighted=False alpha=0.5 (only for BidirectionalConditionalProbability)
    - MostPopular
        supports --online-evaluation
    - Random
-   - UserAttributeKNN k=80
+   - UserAttributeKNN k=80 correlation=Cosine q=1 weighted=False alpha=0.5 (only for BidirectionalConditionalProbability)
        needs --user-attributes=FILE
-   - UserKNN k=80
+   - UserKNN k=80 correlation=Cosine q=1 weighted=False alpha=0.5 (only for BidirectionalConditionalProbability)
    - WRMF num_factors=10 regularization=0.015 c_pos=1 num_iter=15
        supports --find-iter=N, --online-evaluation
-   - WeightedItemKNN k=80
-   - WeightedUserKNN k=80
    - Zero
    - MultiCoreBPRMF num_factors=10 bias_reg=0 reg_u=0.0025 reg_i=0.0025 reg_j=0.00025 num_iter=30 learn_rate=0.05 uniform_user_sampling=True with_replacement=False fast_sampling_memory_limit=1024 update_j=True max_threads=100
        supports --find-iter=N, --online-evaluation
@@ -76,7 +74,7 @@ MyMediaLite item recommendation from positive-only feedback 3.02
 
   prediction and evaluation:
    --predict-items-number=N     predict N items per user
-   --repeat-evaluation          items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
+   --repeated-items             items accessed by a user before may be in the recommendations (and are not ignored in the evaluation)
 
   prediction:
    --prediction-file=FILE       write ranked predictions to FILE, one user per line
@@ -90,6 +88,7 @@ MyMediaLite item recommendation from positive-only feedback 3.02
 
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
+   --num-iter=N                 start measuring at N iterations
    --max-iter=N                 perform at most N iterations
    --measure=MEASURE            the evaluation measure to use for the abort conditions below (default is AUC)
    --epsilon=NUM                abort iterations if MEASURE is less than best result plus NUM
