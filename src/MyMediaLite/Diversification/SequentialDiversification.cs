@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +21,9 @@ using System.Linq;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 
+/*! \namespace MyMediaLite.Diversification
+ *  \brief This namespace contains methods for diversifying result lists.
+ */
 namespace MyMediaLite.Diversification
 {
 	/// <summary>Sequential diversification</summary>
