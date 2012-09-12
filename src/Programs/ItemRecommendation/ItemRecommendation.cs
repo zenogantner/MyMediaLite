@@ -536,10 +536,10 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				user_mapping, item_mapping,
 				repeated_items);
 			if (user_list != null)
-				Console.Error.WriteLine("Wrote predictions for {0} users to file {1}.", user_list.Count, prediction_file);
+				Console.Error.Write("Wrote predictions for {0} users to file {1}.", user_list.Count, prediction_file);
 			else
-				Console.Error.WriteLine("Wrote predictions to file {0}.", prediction_file);
+				Console.Error.Write("Wrote predictions to file {0}.", prediction_file);
 		});
-		Console.Write(" prediction_time " + time_span);
+		Console.WriteLine(" prediction_time " + time_span);
 	}
 }

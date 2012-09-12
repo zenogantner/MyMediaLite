@@ -325,7 +325,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					seconds = Wrap.MeasureTime(delegate() {
 						recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
 					});
-					Console.Error.Write("prediction_time " + seconds);
+					Console.Error.WriteLine("prediction_time " + seconds);
 				}
 			}
 
