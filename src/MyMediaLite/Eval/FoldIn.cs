@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Linq;
 using MyMediaLite.Data;
@@ -171,7 +170,7 @@ namespace MyMediaLite.Eval
 
 					Console.Error.Write(".");
 				}
-
+			
 			mae  = mae / rating_count;
 			rmse = Math.Sqrt(rmse / rating_count);
 			cbd  = cbd / rating_count;
