@@ -26,8 +26,6 @@ Follow and/or fork MyMediaLite on github: https://github.com/zenogantner/MyMedia
 
 #MyMediaLite at #mlcomp: mlcomp.org/datasets/335 mlcomp.org/datasets/351 #recsys
 
-You can reach the authors of #MyMediaLite by sending an e-mail to mymedialite@ismll.de.
-
 Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.net/projects/mymedialite http://mloss.org/software/view/282/
 
 If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
@@ -55,6 +53,8 @@ BPR_Linear in #MyMediaLite is an attribute-based model for personalized item ran
 Rate #MyMediaLite on ohloh.net: https://www.ohloh.net/p/mymedialite #recsys
 
 You can download #MyMediaLite here: http://ismll.de/mymedialite/download/index.html #recsys
+
+Have a patch for #MyMediaLite? Send us a pull request on github: https://github.com/zenogantner/MyMediaLite #recsys
 
 Read the #recsys2011 paper on #MyMediaLite: http://ismll.de/pub/pdfs/Gantner_et_al2011_MyMediaLite.pdf #recsys
 
