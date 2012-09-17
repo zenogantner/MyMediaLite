@@ -1,4 +1,7 @@
 3.04	2012-10-??
+        recommenders
+         - new: CLiMF (best paper at RecSys 2012)
+         - BPRMF: improve doc
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output
