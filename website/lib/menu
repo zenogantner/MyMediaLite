@@ -1,10 +1,11 @@
 [% menu_entries = [
      { url => 'index.html',               title => 'Home' }
      { url => 'features.html',            title => 'Features' }
+     { url => 'users.html',               title => 'Users' }
      { url => 'download/index.html',      title => 'Download' }
      { url => 'documentation/index.html', title => 'Documentation' }
      { url => 'examples/index.html',      title => 'Examples' }
-     { url => 'contribute.html',      title => 'Contribute' }
+     { url => 'contribute.html',          title => 'Contribute' }
      { url => 'links.html',               title => 'Links' }
 ] %]
 
