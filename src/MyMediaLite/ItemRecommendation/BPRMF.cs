@@ -28,24 +28,29 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Matrix factorization model for item prediction (ranking) optimized for BPR </summary>
 	/// <remarks>
-	/// BPR reduces ranking to pairwise classification.
-	///
-	/// Literature:
-	/// <list type="bullet">
-	///   <item><description>
-	///     Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
-	///     BPR: Bayesian Personalized Ranking from Implicit Feedback.
-	///     UAI 2009.
-	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
-	///   </description></item>
-	/// </list>
-	///
-	/// Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
-	/// To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
-	/// WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
-	/// (approximately) optimizes the average AUC over all users.
-	///
-	/// This recommender supports incremental updates.
+	///   <para>
+	///     BPR reduces ranking to pairwise classification.
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
+	///         BPR: Bayesian Personalized Ranking from Implicit Feedback.
+	///         UAI 2009.
+	///         http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
+	///   <para>
+	///     Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
+	///     To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
+	///     WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
+	///     (approximately) optimizes the average AUC over all users.
+	///   </para>
+	///   <para>
+	///     This recommender supports incremental updates.
+	///   </para>
 	/// </remarks>
 	public class BPRMF : MF, IFoldInItemRecommender
 	{
@@ -70,7 +75,7 @@ namespace MyMediaLite.ItemRecommendation
 		public float BiasReg { get; set; }
 
 		/// <summary>Learning rate alpha</summary>
-		public float LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
+		public float LearnRate { get { return learn_rate; } set { learn_rate = value; } }
 		/// <summary>Learning rate alpha</summary>
 		protected float learn_rate = 0.05f;
 
