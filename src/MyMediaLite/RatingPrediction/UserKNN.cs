@@ -149,15 +149,24 @@ namespace MyMediaLite.RatingPrediction
 				if (correlation is IBinaryDataCorrelationMatrix)
 				{
 					var bin_cor = correlation as IBinaryDataCorrelationMatrix;
-					var user_items = new HashSet<int>(data_user[user_id]);
-					for (int u = 0; u <= MaxUserID; u++)
-						correlation[user_id, u] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(data_user[u]));
+					var user_items = new HashSet<int>(BinaryDataMatrix[user_id]);
+					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
+						if (bin_cor.IsSymmetric)
+						{
+							correlation[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(BinaryDataMatrix[other_user_id]));
+						}
+						else
+						{
+							var other_user_items = new HashSet<int>(BinaryDataMatrix[other_user_id]);
+							correlation[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, other_user_items);
+							correlation[other_user_id, user_id] = bin_cor.ComputeCorrelation(other_user_items, user_items);
+						}
 				}
 				if (correlation is IRatingCorrelationMatrix)
 				{
 					var rat_cor = correlation as IRatingCorrelationMatrix;
-					for (int u = 0; u <= MaxUserID; u++)
-						correlation[user_id, u] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, user_id, u);
+					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
+						correlation[user_id, other_user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, user_id, other_user_id);
 				}
 			}
 		}

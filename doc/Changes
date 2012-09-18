@@ -2,6 +2,9 @@
         recommenders
          - new: CLiMF (best paper at RecSys 2012)
          - BPRMF: improve doc
+	 - UserKNN, ItemKNN: correct handling of incremental updates for
+           asymmetric correlations; avoid calling Update(User|Item) in
+           baseline_predictor twice
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output

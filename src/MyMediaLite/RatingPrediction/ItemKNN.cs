@@ -92,7 +92,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Retrain model for a given item</summary>
 		/// <param name='item_id'>the item ID</param>
-		void RetrainItem(int item_id)
+		protected virtual void RetrainItem(int item_id)
 		{
 			baseline_predictor.RetrainItem(item_id);
 
@@ -101,15 +101,24 @@ namespace MyMediaLite.RatingPrediction
 				if (correlation is IBinaryDataCorrelationMatrix)
 				{
 					var bin_cor = correlation as IBinaryDataCorrelationMatrix;
-					var item_users = new HashSet<int>(data_item[item_id]);
-					for (int i = 0; i <= MaxItemID; i++)
-						correlation[item_id, i] = bin_cor.ComputeCorrelation(item_users, new HashSet<int>(data_item[i]));
+					var item_users = new HashSet<int>(BinaryDataMatrix[item_id]);
+					for (int other_item_id = 0; other_item_id <= MaxItemID; other_item_id++)
+						if (bin_cor.IsSymmetric)
+						{
+							correlation[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, new HashSet<int>(BinaryDataMatrix[other_item_id]));
+						}
+						else
+						{
+							var other_item_users = new HashSet<int>(BinaryDataMatrix[other_item_id]);
+							correlation[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, other_item_users);
+							correlation[other_item_id, item_id] = bin_cor.ComputeCorrelation(other_item_users, item_users);
+						}
 				}
 				if (correlation is IRatingCorrelationMatrix)
 				{
 					var rat_cor = correlation as IRatingCorrelationMatrix;
-					for (int i = 0; i <= MaxItemID; i++)
-						correlation[item_id, i] = rat_cor.ComputeCorrelation(ratings, EntityType.ITEM, item_id, i);
+					for (int other_item_id = 0; other_item_id <= MaxItemID; other_item_id++)
+						correlation[item_id, other_item_id] = rat_cor.ComputeCorrelation(ratings, EntityType.ITEM, item_id, other_item_id);
 				}
 			}
 		}

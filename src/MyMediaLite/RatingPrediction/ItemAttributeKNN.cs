@@ -44,5 +44,8 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		protected override IBooleanMatrix BinaryDataMatrix { get { return item_attributes; } }
+		
+		///
+		protected override void RetrainItem(int item_id) { }
 	}
 }
