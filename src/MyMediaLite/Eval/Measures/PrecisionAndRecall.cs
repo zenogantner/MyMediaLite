@@ -64,12 +64,11 @@ namespace MyMediaLite.Eval.Measures
 					continue;
 				}
 
-				if (!correct_items.Contains(item_id))
-					continue;
-
-				hit_count++;
-
-				avg_prec_sum += (double) hit_count / (i + 1 - left_out);
+				if (correct_items.Contains(item_id))
+				{
+					hit_count++;
+					avg_prec_sum += (double) hit_count / (i + 1 - left_out);
+				}
 			}
 
 			if (hit_count != 0)

@@ -8,6 +8,8 @@
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output
+	evaluation:
+	 - average precision: more readable computation
 	documentation:
 	 - document Diversification namespace
 	website:
