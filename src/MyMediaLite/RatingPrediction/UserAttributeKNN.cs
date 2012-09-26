@@ -44,10 +44,10 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		public int NumUserAttributes { get; private set; }
-		
+
 		///
 		protected override IBooleanMatrix BinaryDataMatrix { get { return user_attributes; } }
-		
+
 		///
 		protected override void RetrainUser(int user_id) { }
 
