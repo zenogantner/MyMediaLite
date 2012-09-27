@@ -9,6 +9,9 @@
            asymmetric correlations; avoid calling Update(User|Item) in
            baseline_predictor twice
 	 - ItemKNN: support fold-in rating prediction
+         - MostPopular:
+           - #312: distinguish number of users and number of events
+           - score computation: divide by number of users or events
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output

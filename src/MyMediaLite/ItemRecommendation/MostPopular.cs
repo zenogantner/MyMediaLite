@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,16 +25,26 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Most-popular item recommender</summary>
 	/// <remarks>
-	/// Items are weighted by how often they have been seen in the past.
-	///
-	/// This method is not personalized.
-	///
-	/// This recommender supports incremental updates.
+	///   <para>
+	///     Items are weighted by how often they have been seen in the past.
+	///   </para>
+	///   <para>
+	///     This method is not personalized.
+	///   </para>
+	///   <para>
+	///     This recommender supports incremental updates.
+	///   </para>
 	/// </remarks>
 	public class MostPopular : IncrementalItemRecommender
 	{
+		/// <summary>
+		/// If true, the popularity of an item is measured by the number of unique users that have accessed it.
+		/// If false, the popularity is measured by the number of accesses to the item.
+		/// </summary>
+		public bool ByUser { get; set; }
+
 		/// <summary>View count</summary>
-		protected IList<int> view_count;
+		IList<int> view_count;
 
 		/// <summary>Default constructor</summary>
 		public MostPopular()
@@ -50,15 +59,19 @@ namespace MyMediaLite.ItemRecommendation
 			for (int i = 0; i <= MaxItemID; i++)
 				view_count.Add(0);
 
-			foreach (int i in Feedback.Items)
-				view_count[i]++;
+			if (ByUser)
+				for (int item_id = 0; item_id <= MaxItemID; item_id++)
+					view_count[item_id] = Feedback.ItemMatrix.NumEntriesByRow(item_id);
+			else
+				foreach (int i in Feedback.Items)
+					view_count[i]++;
 		}
 
 		///
 		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id <= MaxItemID)
-				return view_count[item_id];
+				return (float) view_count[item_id] / (ByUser ? MaxUserID + 1 : Feedback.Count);
 			else
 				return float.MinValue;
 		}
@@ -140,6 +153,14 @@ namespace MyMediaLite.ItemRecommendation
 				this.view_count = view_count;
 				this.MaxItemID = view_count.Length - 1;
 			}
+		}
+
+		///
+		public override string ToString()
+		{
+			return string.Format(
+				"{0} by_user={1}",
+				this.GetType().Name, ByUser);
 		}
 	}
 }
