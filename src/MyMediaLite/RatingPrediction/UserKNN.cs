@@ -195,7 +195,6 @@ namespace MyMediaLite.RatingPrediction
 			return user_similarities;
 		}
 
-
 		float Predict(IList<float> user_similarities, IList<Tuple<int, float>> rated_items, int item_id)
 		{
 			if (item_id > MaxItemID)

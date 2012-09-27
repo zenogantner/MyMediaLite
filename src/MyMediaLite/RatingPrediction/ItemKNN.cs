@@ -25,7 +25,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN</summary>
-	public class ItemKNN : KNN, IItemSimilarityProvider
+	public class ItemKNN : KNN, IItemSimilarityProvider, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
 		protected SparseBooleanMatrix data_item;
@@ -155,6 +155,56 @@ namespace MyMediaLite.RatingPrediction
 		protected override void AddItem(int item_id)
 		{
 			correlation.AddEntity(item_id);
+		}
+
+		float Predict(IList<Tuple<int, float>> rated_items, int item_id)
+		{
+			float result = baseline_predictor.Predict(int.MaxValue, item_id);
+
+			if (item_id > correlation.NumberOfRows - 1)
+				return result;
+
+			IList<int> correlated_items = correlation.GetPositivelyCorrelatedEntities(item_id);
+			var item_ratings = new Dictionary<int, float>();
+			foreach (var t in rated_items)
+				item_ratings.Add(t.Item1, t.Item2); // TODO handle several ratings of the same item
+
+			double sum = 0;
+			double weight_sum = 0;
+			uint neighbors = K;
+			foreach (int item_id2 in correlated_items)
+				if (item_ratings.ContainsKey(item_id2))
+				{
+					float rating  = item_ratings[item_id2];
+					double weight = correlation[item_id, item_id2];
+					weight_sum += weight;
+					sum += weight * (rating - baseline_predictor.Predict(int.MaxValue, item_id2));
+
+					if (--neighbors == 0)
+						break;
+				}
+
+			if (weight_sum != 0)
+				result += (float) (sum / weight_sum);
+
+			if (result > MaxRating)
+				result = MaxRating;
+			if (result < MinRating)
+				result = MinRating;
+			return result;
+		}
+
+		///
+		public IList<Tuple<int, float>> ScoreItems(IList<Tuple<int, float>> rated_items, IList<int> candidate_items)
+		{
+			// score the items
+			var result = new Tuple<int, float>[candidate_items.Count];
+			for (int i = 0; i < candidate_items.Count; i++)
+			{
+				int item_id = candidate_items[i];
+				result[i] = Tuple.Create(item_id, Predict(rated_items, item_id));
+			}
+			return result;
 		}
 
 		///

@@ -37,8 +37,8 @@ namespace MyMediaLite.DataType
 		/// <value>The number of columns of the matrix</value>
 		int NumberOfColumns { get; }
 
-		/// <summary>True if the matrix is symmetric, false otherwise</summary>
-		/// <value>True if the matrix is symmetric, false otherwise</value>
+		/// <summary>True if the matrix is stored in a symmetric manner, false otherwise</summary>
+		/// <remarks>Also true for skew symmetric matrices that exploit this property in order to save memory</remarks>
 		bool IsSymmetric { get; }
 
 		/// <summary>Get the transpose of the matrix, i.e. a matrix where rows and columns are interchanged</summary>
