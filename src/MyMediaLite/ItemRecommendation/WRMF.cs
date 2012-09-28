@@ -27,7 +27,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	///   <para>
 	///     We use the fast learning method proposed by Hu et al. (alternating least squares, ALS),
-	///     and we use a global weight to down-weight unobserved values.
+	///     and we use a global parameter to give observed values higher weights.
 	///   </para>
 	///   <para>
 	///     Literature:
@@ -42,9 +42,9 @@ namespace MyMediaLite.ItemRecommendation
 	///         One-class collaborative filtering,
 	///         ICDM 2008.
 	///         http://www.hpl.hp.com/techreports/2008/HPL-2008-48R1.pdf
-	///     </description></item>
+	///       </description></item>
+	///     </list>
 	///   </para>
-	/// </list>
 	///   <para>
 	///     This recommender does NOT support incremental updates.
 	///   </para>
