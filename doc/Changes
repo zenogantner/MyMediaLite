@@ -5,6 +5,8 @@
         recommenders
          - new: CLiMF (best paper at RecSys 2012)
          - BPRMF: improve doc
+         - WRMF: rename hyperparameter c_pos to alpha (more consistent with
+                 the paper)
 	 - UserKNN, ItemKNN: correct handling of incremental updates for
            asymmetric correlations; avoid calling Update(User|Item) in
            baseline_predictor twice
