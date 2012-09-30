@@ -14,6 +14,7 @@
          - MostPopular:
            - #312: distinguish number of users and number of events
            - score computation: divide by number of users or events
+	 - SVD++ and AFM variants: better names for temporary values
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output

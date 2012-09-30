@@ -147,7 +147,7 @@ namespace MyMediaLite.RatingPrediction
 					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
-				double x = gradient_common / norm_denominator; // TODO better name than x
+				double normalized_gradient_common = gradient_common / norm_denominator;
 				for (int f = 0; f < NumFactors; f++)
 				{
 					float i_f = item_factors[i, f];
@@ -163,7 +163,7 @@ namespace MyMediaLite.RatingPrediction
 						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 
-						double common_update = x * i_f;
+						double common_update = normalized_gradient_common * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
 							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
