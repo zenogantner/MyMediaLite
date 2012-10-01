@@ -42,15 +42,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SVDPlusPlus : MatrixFactorization, ITransductiveRatingPredictor
 	{
-		// TODO
-		// - implement also with fixed biases (progress prize 2008)
-		// - implement integrated model (section 5 of the KDD 2008 paper)
-		// - try rating-based weights from http://recsyswiki.com/wiki/SVD%2B%2B
-		// - try different learn rates/regularization for user and item parameters
-		// - implement parallel learning
-		// - implement normal gradient descent learning
-		// - implement ALS learning
-
 		/// <summary>rating biases of the users</summary>
 		protected float[] user_bias;
 		/// <summary>rating biases of the items</summary>

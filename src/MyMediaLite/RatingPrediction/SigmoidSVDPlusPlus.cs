@@ -41,9 +41,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SigmoidSVDPlusPlus : SVDPlusPlus, ITransductiveRatingPredictor
 	{
-		// TODO
-		// - merge with SVDPlusPlus?
-
 		/// <summary>size of the interval of valid ratings</summary>
 		float rating_range_size;
 
@@ -125,12 +122,12 @@ namespace MyMediaLite.RatingPrediction
 				int i = ratings.Items[index];
 
 				double score = global_bias + user_bias[u] + item_bias[i];
-				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
+				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
-				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
-					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
+				for (int f = 0; f < p_plus_y_sum_vector.Count; f++)
+					p_plus_y_sum_vector[f] = (float) (p_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -160,7 +157,7 @@ namespace MyMediaLite.RatingPrediction
 					}
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
+						double delta_i = gradient_common * p_plus_y_sum_vector[f] - item_reg_weight * i_f;
 						item_factors.Inc(i, f, lr * delta_i);
 
 						double common_update = normalized_gradient_common * i_f;
