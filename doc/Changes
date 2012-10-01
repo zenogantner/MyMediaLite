@@ -16,7 +16,8 @@
            - score computation: divide by number of users or events
 	 - SVD++ and AFM variants: better names for temporary values
 	 - UserItemBaseline: improved API doc with formula of the optimization
-           problem
+           problem (suggested by Yong Zheng)
+	 - MatrixFactorization: improved API doc
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output
