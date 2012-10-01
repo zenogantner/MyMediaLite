@@ -129,14 +129,14 @@ download-imdb: data
 	scripts/download_imdb.sh
 
 todo:
-	ack --type=csharp TODO                    ${SRC_DIR}; echo
-	ack --type=csharp FIXME                   ${SRC_DIR}; echo
-	ack --type=csharp HACK                    ${SRC_DIR}; echo
-	ack --type=csharp NotImplementedException ${SRC_DIR}; echo
-	ack --type=csharp TODO                    ${SRC_DIR} | wc -l
-	ack --type=csharp FIXME                   ${SRC_DIR} | wc -l
-	ack --type=csharp HACK                    ${SRC_DIR} | wc -l
-	ack --type=csharp NotImplementedException ${SRC_DIR} | wc -l
+	ack-grep --type=csharp TODO                    ${SRC_DIR}; echo
+	ack-grep --type=csharp FIXME                   ${SRC_DIR}; echo
+	ack-grep --type=csharp HACK                    ${SRC_DIR}; echo
+	ack-grep --type=csharp NotImplementedException ${SRC_DIR}; echo
+	ack-grep --type=csharp TODO                    ${SRC_DIR} | wc -l
+	ack-grep --type=csharp FIXME                   ${SRC_DIR} | wc -l
+	ack-grep --type=csharp HACK                    ${SRC_DIR} | wc -l
+	ack-grep --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
 ## TODO create regex with less false positives
 check-for-unnecessary-type-declarations:
