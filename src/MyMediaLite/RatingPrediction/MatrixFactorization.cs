@@ -26,7 +26,7 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent</summary>
+	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent (SGD)</summary>
 	/// <remarks>
 	///   <para>
 	///     Factorizing the observed rating values using a factor matrix for users and one for items.
@@ -37,7 +37,7 @@ namespace MyMediaLite.RatingPrediction
 	///     If you encounter such problems, there are three ways to fix them:
 	///     (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
 	///     (2) Change the range of rating values (1 to 5 works generally well with the default settings).
-	///     (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
+	///     (3) Decrease the learn_rate.
 	///   </para>
 	/// 
 	///   <para>
