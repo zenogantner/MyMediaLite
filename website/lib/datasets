@@ -50,13 +50,15 @@
      { method => 'SlopeOne',                      hp => '',                                                                                                  rmse => '0.902', mae => '0.712', nmae => '0.1779' }
      { method => 'UserItemBaseline',              hp => 'reg_u=25 reg_i=10, num_iter=10',                                                                    rmse => '0.908', mae => '0.719', nmae => '0.180',  cbd => '0.2568' }
      { method => 'ItemKNNPearson',                hp => 'k=80 shrinkage=10 reg_u=25 reg_i=10',                                                               rmse => '0.871', mae => '0.683', nmae => '0.1709', cbd => '0.2523' }
-     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=11 num_iter=11 shrinkage=115',                                                          rmse => '0.860', mae => '0.673', nmae => '0.1682', cbd => '0.2510' }
-     { method => 'BiasedMatrixFactorization',     hp => 'num_factors=6  bias_reg=0.25 reg_u=0.4 reg_i=1.2 frequency_regularization=true learn_rate=0.03 num_iter=80 bold_driver=true', rmse => '0.85356', mae => '0.67428', nmae => '0.16857', cbd => '0.25024' }
-     { method => 'BiasedMatrixFactorization',     hp => 'num_factors=20 bias_reg=0.25 reg_u=0.4 reg_i=1.2 frequency_regularization=true learn_rate=0.03 num_iter=80 bold_driver=true', rmse => '0.85192', mae => '0.672', nmae => '0.168', cbd => '0.24999' }
+     { method => 'FactorWiseMatrixFactorization', hp => 'num_factors=11 shrinkage=115',                                                                      rmse => '0.860', mae => '0.673', nmae => '0.1682', cbd => '0.2510' }
+     { method => 'MatrixFactorization',           hp => 'num_factors=10 num_iter=75 reg=0.05 learn_rate=0.005',                                              rmse => '0.857', mae => '0.675', nmae => '0.1686', cbd => '0.2506' }
+     { method => 'BiasedMatrixFactorization',     hp => 'num_factors=6  bias_reg=0.25 reg_u=0.4 reg_i=1.2 frequency_regularization=true learn_rate=0.03 num_iter=80 bold_driver=true', rmse => '0.854', mae => '0.674', nmae => '0.169', cbd => '0.25024' }
+     { method => 'BiasedMatrixFactorization',     hp => 'num_factors=20 bias_reg=0.25 reg_u=0.4 reg_i=1.2 frequency_regularization=true learn_rate=0.03 num_iter=80 bold_driver=true', rmse => '0.852', mae => '0.672', nmae => '0.168', cbd => '0.24999' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=40 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=110 bold_driver=true',  rmse => '0.855', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=60 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true',  rmse => '0.854', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=80 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true',  rmse => '0.854', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=120 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1690' }
+     { method => 'SVDPlusPlus',                   hp => 'num_factors=10 num_iter=80 reg=0.05 learn_rate=0.005',                                              rmse => '0.852', mae => '0.668', nmae => '0.1670', cbd => '0.2501' }
 	]
 	ml100k_data_chronological = [
 	 { method => 'UserAverage', hp => '', rmse => '1.13523', mae => '0.95191', nmae => '0.23798', cbd => '0.28607' }
