@@ -80,12 +80,12 @@ namespace MyMediaLite.Eval.Measures
 				return 0;
 		}
 
-		/// <summary>Compute the precision@N of a list of ranked items at several N</summary>
+		/// <summary>Compute the precision at N of a list of ranked items at several N</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="ns">the cutoff positions in the list</param>
-		/// <returns>the precision@N for the given data at the different positions N</returns>
+		/// <returns>the precision at N for the given data at the different positions N</returns>
 		public static Dictionary<int, double> PrecisionAt(
 			IList<int> ranked_items,
 			ICollection<int> correct_items,
@@ -98,22 +98,22 @@ namespace MyMediaLite.Eval.Measures
 			return precision_at_n;
 		}
 
-		/// <summary>Compute the precision@N of a list of ranked items</summary>
+		/// <summary>Compute the precision at N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the precision@N for the given data</returns>
+		/// <returns>the precision at N for the given data</returns>
 		public static double PrecisionAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
 		{
 			return PrecisionAt(ranked_items, correct_items, new HashSet<int>(), n);
 		}
 
-		/// <summary>Compute the precision@N of a list of ranked items</summary>
+		/// <summary>Compute the precision at N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the precision@N for the given data</returns>
+		/// <returns>the precision at N for the given data</returns>
 		public static double PrecisionAt(
 			IList<int> ranked_items, ICollection<int> correct_items,
 			ICollection<int> ignore_items, int n)
@@ -121,12 +121,12 @@ namespace MyMediaLite.Eval.Measures
 			return (double) HitsAt(ranked_items, correct_items, ignore_items, n) / n;
 		}
 
-		/// <summary>Compute the recall@N of a list of ranked items at several N</summary>
+		/// <summary>Compute the recall at N of a list of ranked items at several N</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="ns">the cutoff positions in the list</param>
-		/// <returns>the recall@N for the given data at the different positions N</returns>
+		/// <returns>the recall at N for the given data at the different positions N</returns>
 		public static Dictionary<int, double> RecallAt(
 			IList<int> ranked_items,
 			ICollection<int> correct_items,
@@ -139,22 +139,22 @@ namespace MyMediaLite.Eval.Measures
 			return recall_at_n;
 		}
 
-		/// <summary>Compute the recall@N of a list of ranked items</summary>
+		/// <summary>Compute the recall at N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the recall@N for the given data</returns>
+		/// <returns>the recall at N for the given data</returns>
 		public static double RecallAt(IList<int> ranked_items, ICollection<int> correct_items, int n)
 		{
 			return RecallAt(ranked_items, correct_items, new HashSet<int>(), n);
 		}
 
-		/// <summary>Compute the recall@N of a list of ranked items</summary>
+		/// <summary>Compute the recall at N of a list of ranked items</summary>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the recall@N for the given data</returns>
+		/// <returns>the recall at N for the given data</returns>
 		public static double RecallAt(
 			IList<int> ranked_items, ICollection<int> correct_items,
 			ICollection<int> ignore_items, int n)
@@ -167,7 +167,7 @@ namespace MyMediaLite.Eval.Measures
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
 		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <param name="n">the cutoff position in the list</param>
-		/// <returns>the hits@N for the given data</returns>
+		/// <returns>the hits at N for the given data</returns>
 		public static int HitsAt(
 			IList<int> ranked_items, ICollection<int> correct_items,
 			ICollection<int> ignore_items, int n)
