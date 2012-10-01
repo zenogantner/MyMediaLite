@@ -25,16 +25,28 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>baseline method for rating prediction</summary>
+	/// <summary>Baseline method for rating prediction</summary>
 	/// <remarks>
 	///   <para>
 	///     Uses the average rating value, plus a regularized user and item bias
 	///     for prediction.
 	///   </para>
 	///   <para>
-	///     The method is described in section 2.1 of the paper below.
+	///     The method was described in section 2.1 of the paper below.
 	///     One difference is that we support several iterations of alternating optimization,
 	///     instead of just one.
+	///   </para>
+	///   <para>
+	///     The optimization problem solved by the Train() method is the following:
+	///     \f[
+	///        \min_{\mathbf{a}, \mathbf{b}}
+	///          \sum_{(u, i, r) \in R} (r - \mu_R - a_u - b_i)^2 + \lambda_1 \|\mathbf{a}\|^2 + \lambda_2 \|\mathbf{b}\|^2,
+	///     \f]
+	///    where \f$R\f$ are the known ratings, and
+	///    \f$\lambda_1\f$ and \f$\lambda_2\f$ are the regularization constants <see cref="RegU">RegU</see> and <see cref="RegI">RegI</see>.
+	///    The sum represents the least squares error, while the two terms starting with \f$\lambda_1\f$ and \f$\lambda_2\f$, respectively,
+	///    are regularization terms that control the parameter sizes to avoid overfitting.
+	///    The optimization problem is solved an alternating least squares method.
 	///   </para>
 	///   <para>
 	///     Literature:
@@ -49,7 +61,7 @@ namespace MyMediaLite.RatingPrediction
 	///   <para>
 	///     This recommender supports incremental updates.
 	///   </para>
-	/// </remarks>
+	/// </remarks>	
 	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
