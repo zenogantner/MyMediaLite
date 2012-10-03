@@ -94,7 +94,6 @@ namespace MyMediaLite.RatingPrediction
 
 			float reg_u = RegU;  // to limit property accesses
 			float reg_i = RegI;
-			float lr = LearnRate;
 
 			foreach (int index in rating_indices)
 			{
@@ -119,9 +118,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * lr * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * lr * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
 				double normalized_gradient_common = gradient_common / norm_denominator;
@@ -133,13 +132,13 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = gradient_common * i_plus_x_sum_vector[f] - user_reg_weight * u_f;
-						user_factors.Inc(u, f, lr * delta_u);
+						user_factors.Inc(u, f, current_learnrate * delta_u);
 
 						double common_update = normalized_gradient_common * u_f;
 						foreach (int other_user_id in users_who_rated_the_item[i])
 						{
 							double delta_ou = common_update - x_reg[other_user_id] * x[other_user_id, f];
-							x.Inc(other_user_id, f, lr * delta_ou);
+							x.Inc(other_user_id, f, current_learnrate * delta_ou);
 						}
 					}
 				}
@@ -302,8 +301,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} loss={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, Loss);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} learn_rate_decay={7} num_iter={8} loss={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, LearnRateDecay, NumIter, Loss);
 		}
 	}
 }

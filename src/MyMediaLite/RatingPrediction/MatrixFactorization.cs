@@ -39,7 +39,7 @@ namespace MyMediaLite.RatingPrediction
 	///     (2) Change the range of rating values (1 to 5 works generally well with the default settings).
 	///     (3) Decrease the learn_rate.
 	///   </para>
-	/// 
+	///
 	///   <para>
 	///     This recommender supports incremental updates.
 	///   </para>
@@ -64,8 +64,12 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Number of latent factors</summary>
 		public uint NumFactors { get; set;}
 
-		/// <summary>Learn rate</summary>
+		/// <summary>Learn rate (update step size)</summary>
 		public float LearnRate { get; set; }
+
+		/// <summary>Multiplicative learn rate decay</summary>
+		/// <remarks>Applied after each epoch (= pass over the whole dataset)</remarks>
+		public float LearnRateDecay { get; set; }
 
 		/// <summary>Regularization parameter</summary>
 		public virtual float Regularization { get; set; }
@@ -73,15 +77,20 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
 
+		/// <summary>The learn rate used for the current epoch</summary>
+		protected float current_learnrate;
+
 		/// <summary>Default constructor</summary>
 		public MatrixFactorization() : base()
 		{
 			// set default values
 			Regularization = 0.015f;
 			LearnRate = 0.01f;
+			LearnRateDecay = 1.0f;
 			NumIter = 30;
 			InitStdDev = 0.1;
 			NumFactors = 10;
+			current_learnrate = LearnRate;
 		}
 
 		/// <summary>Initialize the model data structure</summary>
@@ -112,10 +121,17 @@ namespace MyMediaLite.RatingPrediction
 			LearnFactors(ratings.RandomIndex, true, true);
 		}
 
+		/// <summary>Updates <see cref="current_learnrate"/> after each epoch</summary>
+		protected virtual void UpdateLearnRate()
+		{
+			current_learnrate *= LearnRateDecay;
+		}
+
 		///
 		public virtual void Iterate()
 		{
 			Iterate(ratings.RandomIndex, true, true);
+			UpdateLearnRate();
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -163,12 +179,12 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = err * i_f - Regularization * u_f;
-						user_factors.Inc(u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, current_learnrate * delta_u);
 					}
 					if (update_item)
 					{
 						double delta_i = err * u_f - Regularization * i_f;
-						item_factors.Inc(i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, current_learnrate * delta_i);
 					}
 				}
 			}
@@ -404,8 +420,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4}",
-				this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter);
+				"{0} num_factors={1} regularization={2} learn_rate={3} learn_rate_decay={4}, num_iter={5}",
+				this.GetType().Name, NumFactors, Regularization, LearnRate, LearnRateDecay, NumIter);
 		}
 	}
 }

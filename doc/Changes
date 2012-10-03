@@ -1,4 +1,4 @@
-3.04	2012-10-??
+3.04	2012-10-05
 	API
 	 - IMatrix.IsSymmetric: now explicitly defined as the storage
            strategy, not the mathematical property
@@ -18,6 +18,9 @@
 	 - UserItemBaseline: improved API doc with formula of the optimization
            problem (suggested by Yong Zheng)
 	 - MatrixFactorization: improved API doc
+	 - all factorization models for rating prediction: add multiplicative
+           learn rate decay: property LearnRateDecay, --recommender-option
+           learn_rate_decay=0.9
 	command-line tools:
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output

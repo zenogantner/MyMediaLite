@@ -54,7 +54,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public IDataSet AdditionalFeedback { get; set; }
 
-		// TODO update this structure on incremental updates
+		// TODO #332 update this structure on incremental updates
 		/// <summary>The items rated by the users</summary>
 		protected int[][] items_rated_by_user;
 		/// <summary>precomputed regularization terms for the y matrix</summary>
@@ -158,7 +158,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
-			float lr  = LearnRate;
 
 			foreach (int index in rating_indices)
 			{
@@ -180,9 +179,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
 				double normalized_error = err / norm_denominator;
@@ -194,17 +193,17 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = err * i_f - user_reg_weight * p[u, f];
-						p.Inc(u, f, lr * delta_u);
+						p.Inc(u, f, current_learnrate * delta_u);
 					}
 					if (update_item)
 					{
 						double delta_i = err * p_plus_y_sum_vector[f] - item_reg_weight * i_f;
-						item_factors.Inc(i, f, lr * delta_i);
+						item_factors.Inc(i, f, current_learnrate * delta_i);
 						double common_update = normalized_error * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
 							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
-							y.Inc(other_item_id, f, lr * delta_oi);
+							y.Inc(other_item_id, f, current_learnrate * delta_oi);
 						}
 					}
 				}
@@ -445,8 +444,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} learn_rate_decay={7} num_iter={8}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, LearnRateDecay, NumIter);
 		}
 	}
 }

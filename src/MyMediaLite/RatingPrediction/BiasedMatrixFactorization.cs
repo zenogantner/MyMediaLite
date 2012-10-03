@@ -214,25 +214,34 @@ namespace MyMediaLite.RatingPrediction
 					foreach (int i in subepoch_sequence) // sub-epoch
 						Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
 				}
+				UpdateLearnRate(); // otherwise done in base.Iterate(), which is not called here
 			}
 			else
 				base.Iterate();
+		}
 
+		///
+		protected override void UpdateLearnRate()
+		{
 			if (BoldDriver)
 			{
 				double loss = ComputeObjective();
 
 				if (loss > last_loss)
-					LearnRate *= 0.5f;
+					current_learnrate *= 0.5f;
 				else if (loss < last_loss)
-					LearnRate *= 1.05f;
+					current_learnrate *= 1.05f;
 
 				last_loss = loss;
-
-				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "objective {0} learn_rate {1} ", loss, LearnRate));
+				
+				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "objective {0} learn_rate {1} ", loss, current_learnrate));
+			}
+			else
+			{
+				current_learnrate *= LearnRateDecay;
 			}
 		}
-
+		
 		/// <summary>Set up the common part of the error gradient of the loss function to optimize</summary>
 		protected void SetupLoss()
 		{
@@ -273,9 +282,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust latent factors
 				for (int f = 0; f < NumFactors; f++)
@@ -286,14 +295,14 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = gradient_common * i_f - user_reg_weight * u_f;
-						user_factors.Inc(u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, current_learnrate * delta_u);
 						// this is faster (190 vs. 260 seconds per iteration on Netflix w/ k=30) than
 						//    user_factors[u, f] += learn_rate * delta_u;
 					}
 					if (update_item)
 					{
 						double delta_i = gradient_common * u_f - item_reg_weight * i_f;
-						item_factors.Inc(i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, current_learnrate * delta_i);
 					}
 				}
 			}
@@ -544,8 +553,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} num_iter={8} bold_driver={9} loss={10} max_threads={11} naive_parallelization={12}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization,LearnRate, BiasLearnRate, NumIter, BoldDriver, Loss, MaxThreads, NaiveParallelization);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} learn_rate_decay={8}, num_iter={9} bold_driver={10} loss={11} max_threads={12} naive_parallelization={13}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, LearnRateDecay, BoldDriver, Loss, MaxThreads, NaiveParallelization);
 		}
 	}
 }
