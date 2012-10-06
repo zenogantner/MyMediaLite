@@ -1,4 +1,4 @@
-3.04	2012-10-05
+3.04	2012-10-06
 	API
 	 - IMatrix.IsSymmetric: now explicitly defined as the storage
            strategy, not the mathematical property
@@ -27,6 +27,7 @@
 	evaluation:
 	 - average precision: more readable computation
 	 - PrecisionAndRecall.cs: fix API doc generation
+         - add enum RepatedEvents
 	documentation:
 	 - document Diversification namespace
 	website:

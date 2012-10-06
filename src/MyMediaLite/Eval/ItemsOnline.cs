@@ -27,7 +27,6 @@ namespace MyMediaLite.Eval
 	/// <summary>Online evaluation for rankings of items</summary>
 	public static class ItemsOnline
 	{
-		// TODO consider micro- (by item) and macro-averaging (by user, the current thing); repeated events
 		/// <summary>Online evaluation for rankings of items</summary>
 		/// <remarks>
 		/// </remarks>

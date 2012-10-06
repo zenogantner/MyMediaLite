@@ -90,7 +90,7 @@ namespace MyMediaLite.Eval
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
-			bool repeated_events = false,  // TODO use enum type instead of bool
+			RepeatedEvents repeated_events = RepeatedEvents.No,
 			int n = -1)
 		{
 			switch (candidate_item_mode)
@@ -111,7 +111,6 @@ namespace MyMediaLite.Eval
 			// make sure that the user matrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
-			// TODO get rid of this, turn into IDataSet
 
 			Parallel.ForEach(test_users, user_id =>
 			{
@@ -123,7 +122,7 @@ namespace MyMediaLite.Eval
 					// the number of items that will be used for this user
 					var candidate_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
 					candidate_items_in_train.IntersectWith(candidate_items);
-					int num_eval_items = candidate_items.Count - (repeated_events ? 0 : candidate_items_in_train.Count());
+					int num_eval_items = candidate_items.Count - (repeated_events == RepeatedEvents.Yes ? 0 : candidate_items_in_train.Count());
 
 					// skip all users that have 0 or #candidate_items test items
 					if (correct_items.Count == 0)
@@ -131,7 +130,7 @@ namespace MyMediaLite.Eval
 					if (num_eval_items == correct_items.Count)
 						return;
 
-					ICollection<int> ignore_items = repeated_events ? new int[0] : training_user_matrix[user_id];
+					ICollection<int> ignore_items = repeated_events == RepeatedEvents.Yes ? new int[0] : training_user_matrix[user_id];
 					
 					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items);
 					var prediction_list = (from t in prediction select t.Item1).ToArray();
@@ -194,7 +193,7 @@ namespace MyMediaLite.Eval
 			return recommender.Evaluate(
 				recommender.Feedback, recommender.Feedback,
 				test_users, candidate_items,
-				candidate_item_mode, true)["RMSE"];
+				candidate_item_mode, RepeatedEvents.Yes)["RMSE"];
 		}
 	}
 }

@@ -128,7 +128,7 @@ namespace MyMediaLite.Eval
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
-			bool repeated_events,
+			RepeatedEvents repeated_events,
 			uint max_iter,
 			uint find_iter = 1,
 			bool show_fold_results = false)
@@ -156,7 +156,7 @@ namespace MyMediaLite.Eval
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
-			bool repeated_events,
+			RepeatedEvents repeated_events,
 			uint max_iter,
 			uint find_iter = 1,
 			bool show_fold_results = false)

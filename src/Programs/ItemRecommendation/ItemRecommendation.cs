@@ -218,7 +218,11 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 			if (cross_validation > 1)
 			{
-				recommender.DoIterativeCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, repeated_items, max_iter, find_iter);
+				var repeated_events = repeated_items ? RepeatedEvents.Yes : RepeatedEvents.No;
+				recommender.DoIterativeCrossValidation(
+					cross_validation,
+					test_users, candidate_items, eval_item_mode, repeated_events,
+					max_iter, find_iter);
 			}
 			else
 			{
@@ -503,12 +507,13 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	ItemRecommendationEvaluationResults ComputeFit()
 	{
-		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, true, predict_items_number);
+		return recommender.Evaluate(training_data, training_data, test_users, candidate_items, eval_item_mode, RepeatedEvents.Yes, predict_items_number);
 	}
 
 	ItemRecommendationEvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeated_items, predict_items_number);
+		var repeated_events = repeated_items ? RepeatedEvents.Yes : RepeatedEvents.No;
+		return recommender.Evaluate(test_data, training_data, test_users, candidate_items, eval_item_mode, repeated_events, predict_items_number);
 	}
 
 	void Predict(string prediction_file, string predict_for_users_file, int iteration)
