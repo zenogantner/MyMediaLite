@@ -59,6 +59,7 @@
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=80 bias_reg=0.001 regularization=0.060 learn_rate=0.07 num_iter=100 bold_driver=true',  rmse => '0.854', mae => '0.676', nmae => '0.1691' }
      { method => 'BiasedMatrixFactorization',     hp => 'num_factors=120 bias_reg=0.001 regularization=0.055 learn_rate=0.07 num_iter=100 bold_driver=true', rmse => '0.854', mae => '0.676', nmae => '0.1690' }
      { method => 'SVDPlusPlus',                   hp => 'num_factors=10 num_iter=80 reg=0.05 learn_rate=0.005',                                              rmse => '0.852', mae => '0.668', nmae => '0.1670', cbd => '0.2501' }
+     { method => 'SVDPlusPlus',                   hp => 'num_factors=20 num_iter=80 reg=0.05 learn_rate=0.005',                                              rmse => '0.851', mae => '0.668', nmae => '0.1670', cbd => '0.2499' }
 	]
 	ml100k_data_chronological = [
 	 { method => 'UserAverage', hp => '', rmse => '1.13523', mae => '0.95191', nmae => '0.23798', cbd => '0.28607' }
