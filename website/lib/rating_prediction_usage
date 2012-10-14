@@ -1,4 +1,4 @@
-MyMediaLite rating prediction 3.03
+MyMediaLite rating prediction 3.04
 
  usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 
@@ -15,7 +15,7 @@ MyMediaLite rating prediction 3.03
        supports --online-evaluation
    - ItemKNN k=80 correlation=BinaryCosine weighted_binary=False alpha=0 (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u=15 reg_i=10 num_iter=10
        supports --online-evaluation
-   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 num_iter=30
+   - MatrixFactorization num_factors=10 regularization=0.015 learn_rate=0.01 learn_rate_decay=1, num_iter=30
        supports --find-iter=N, --online-evaluation
    - SlopeOne
    - UserAttributeKNN k=80 correlation=BinaryCosine weighted_binary=False alpha=0 (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u=15 reg_i=10 num_iter=10
@@ -39,20 +39,20 @@ MyMediaLite rating prediction 3.03
        supports --online-evaluation
    - LatentFeatureLogLinearModel num_factors=10 bias_reg=0.01 reg_u=0.015 reg_i=0.015 frequency_regularization=False learn_rate=0.01 bias_learn_rate=1 num_iter=30 loss=RMSE
        supports --find-iter=N
-   - BiasedMatrixFactorization num_factors=10 bias_reg=0.01 reg_u=0.015 reg_i=0.015 frequency_regularization=False learn_rate=0.01 bias_learn_rate=1 num_iter=30 bold_driver=False loss=RMSE max_threads=1 naive_parallelization=False
+   - BiasedMatrixFactorization num_factors=10 bias_reg=0.01 reg_u=0.015 reg_i=0.015 frequency_regularization=False learn_rate=0.01 bias_learn_rate=1 learn_rate_decay=30, num_iter=1 bold_driver=False loss=RMSE max_threads=1 naive_parallelization=False
        supports --find-iter=N, --online-evaluation
-   - SVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30
+   - SVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 learn_rate_decay=1 num_iter=30
        supports --find-iter=N, --online-evaluation
-   - SigmoidSVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 loss=RMSE
+   - SigmoidSVDPlusPlus num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 learn_rate_decay=1 num_iter=30 loss=RMSE
        supports --find-iter=N, --online-evaluation
    - SocialMF num_factors=10 reg_u=0.015 reg_i=0.015 bias_reg=0.01 social_regularization=1 learn_rate=0.01 bias_learn_rate=1 num_iter=30 bold_driver=False loss=RMSE
        needs --user-relations=FILE
        supports --find-iter=N, --online-evaluation
-   - SigmoidItemAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 loss=RMSE
+   - SigmoidItemAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 learn_rate_decay=1 num_iter=1 loss=30
        supports --find-iter=N, --online-evaluation
-   - SigmoidUserAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 loss=RMSE
+   - SigmoidUserAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 learn_rate_decay=1 num_iter=30 loss=RMSE
        supports --find-iter=N, --online-evaluation
-   - SigmoidCombinedAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 num_iter=30 loss=RMSE
+   - SigmoidCombinedAsymmetricFactorModel num_factors=10 regularization=0.015 bias_reg=0.33 frequency_regularization=False learn_rate=0.001 bias_learn_rate=0.7 learn_rate_decay=1 num_iter=30 loss=RMSE
        supports --find-iter=N, --online-evaluation
    - NaiveBayes class_smoothing=1 attribute_smoothing=1
        needs --item-attributes=FILE
@@ -87,7 +87,7 @@ MyMediaLite rating prediction 3.03
   prediction options:
    --prediction-file=FILE         write the rating predictions to FILE
    --prediction-line=FORMAT       format of the prediction line; {0}, {1}, {2} refer to user ID,
-                                  item ID, and predicted rating; default is {0}\\t{1}\\t{2};
+                                  item ID, and predicted rating; default is {0}\t{1}\t{2};
    --prediction-header=LINE       print LINE to the first line of the prediction file
 
   evaluation options:

@@ -1,3 +1,41 @@
+3.04	2012-10-11
+	API
+	 - IMatrix.IsSymmetric: now explicitly defined as the storage
+           strategy, not the mathematical property
+        recommenders
+         - new: CLiMF (best paper at RecSys 2012)
+         - BPRMF: improve doc
+         - WRMF: rename hyperparameter c_pos to alpha (more consistent with
+                 the paper)
+	 - UserKNN, ItemKNN: correct handling of incremental updates for
+           asymmetric correlations; avoid calling Update(User|Item) in
+           baseline_predictor twice
+	 - ItemKNN: support fold-in rating prediction
+         - MostPopular:
+           - #312: distinguish number of users and number of events
+           - score computation: divide by number of users or events
+	 - SVD++ and AFM variants: better names for temporary values
+	 - UserItemBaseline: improved API doc with formula of the optimization
+           problem (suggested by Yong Zheng)
+	 - MatrixFactorization: improved API doc
+	 - all factorization models for rating prediction: add multiplicative
+           learn rate decay: property LearnRateDecay, --recommender-option
+           learn_rate_decay=0.9
+	command-line tools:
+         - rating_prediction: improve usage description
+	 - item_recommendation: new line after prediction_time output
+	evaluation:
+	 - average precision: more readable computation
+	 - PrecisionAndRecall.cs: fix API doc generation
+         - add enum RepatedEvents
+	documentation:
+	 - document Diversification namespace
+	website:
+ 	 - add some papers that use MyMediaLite
+	 - add list of organizations that use MyMediaLite
+	misc:
+	 - Makefile: call ack-grep instead of ack
+
 3.03	2012-09-09
 	API
          - rename (I)EntityMapping to (I)Mapping
