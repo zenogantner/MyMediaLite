@@ -244,6 +244,8 @@
     <Compile Include="Correlation\BinaryDataSymmetricCorrelationMatrix.cs" />
     <Compile Include="ItemRecommendation\CLiMF.cs" />
     <Compile Include="Eval\RepeatedEvents.cs" />
+    <Compile Include="ItemRecommendation\BPRSLIM.cs" />
+    <Compile Include="ItemRecommendation\SLIM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,20 +1,21 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
-// Copyright (C) 2010 Zeno Gantner, Christoph Freudenthaler
-//
+// Copyright (C) 2012 Lucas Drumond
+// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// 
 // This file is part of MyMediaLite.
-//
+// 
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
+// 
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+// 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,42 +27,40 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Matrix factorization model for item prediction (ranking) optimized for BPR </summary>
+	/// <summary>Sparse Linear Methods (SLIM) for item prediction (ranking) optimized for BPR-Opt optimization criterion </summary>
 	/// <remarks>
-	///   <para>
-	///     BPR reduces ranking to pairwise classification.
-	///   </para>
-	///   <para>
-	///     Literature:
-	///     <list type="bullet">
-	///       <item><description>
-	///         Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
-	///         BPR: Bayesian Personalized Ranking from Implicit Feedback.
-	///         UAI 2009.
-	///         http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
-	///       </description></item>
-	///     </list>
-	///   </para>
-	///   <para>
-	///     Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
-	///     To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
-	///     WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
-	///     (approximately) optimizes the average AUC over all users.
-	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
+	/// This implementation differs from the algorithm in the original SLIM paper since the model here is optimized for BPR-Opt 
+	/// instead of the elastic net loss. The optmization algorithm used is the Sotchastic Gradient Ascent.
+	///
+	/// Literature:
+	/// <list type="bullet">
+	///   <item><description>
+	///     Steffen Rendle, Christoph Freudenthaler, Zeno Gantner, Lars Schmidt-Thieme:
+	///     BPR: Bayesian Personalized Ranking from Implicit Feedback.
+	///     UAI 2009.
+	///     http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle_et_al2009-Bayesian_Personalized_Ranking.pdf
+	///   </description></item>
+	///   <item><description>
+	///     X. Ning, G. Karypis: Slim: Sparse linear methods for top-n recommender systems.
+	///    ICDM 2011.
+	///    http://glaros.dtc.umn.edu/gkhome/fetch/papers/SLIM2011icdm.pdf
+	///   </description></item>	
+	/// </list>
+	///
+	/// Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
+	/// To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
+	/// WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
+	/// (approximately) optimizes the average AUC over all users.
+	///
+	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class BPRMF : MF, IFoldInItemRecommender
+	public class BPRSlim : Slim
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
 
-		/// <summary>Item bias terms</summary>
-		protected float[] item_bias;
-
 		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; } }
+		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
 		/// <summary>Fast sampling memory limit, in MiB</summary>
 		protected int fast_sampling_memory_limit = 1024;
 
@@ -71,28 +70,20 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Sample uniformly from users</summary>
 		public bool UniformUserSampling { get; set; }
 
-		/// <summary>Regularization parameter for the bias term</summary>
-		public float BiasReg { get; set; }
-
 		/// <summary>Learning rate alpha</summary>
-		public float LearnRate { get { return learn_rate; } set { learn_rate = value; } }
+		public double LearnRate { get {	return learn_rate; } set { learn_rate = value; } }
 		/// <summary>Learning rate alpha</summary>
-		protected float learn_rate = 0.05f;
+		protected double learn_rate = 0.05;
 
-		/// <summary>Regularization parameter for user factors</summary>
-		public float RegU { get { return reg_u; } set { reg_u = value; } }
-		/// <summary>Regularization parameter for user factors</summary>
-		protected float reg_u = 0.0025f;
+		/// <summary>Regularization parameter for positive item weights</summary>
+		public double RegI { get { return reg_i; } set { reg_i = value;	} }
+		/// <summary>Regularization parameter for positive item weights</summary>
+		protected double reg_i = 0.0025;
 
-		/// <summary>Regularization parameter for positive item factors</summary>
-		public float RegI { get { return reg_i; } set { reg_i = value;	} }
-		/// <summary>Regularization parameter for positive item factors</summary>
-		protected float reg_i = 0.0025f;
-
-		/// <summary>Regularization parameter for negative item factors</summary>
-		public float RegJ { get { return reg_j; } set { reg_j = value; } }
-		/// <summary>Regularization parameter for negative item factors</summary>
-		protected float reg_j = 0.00025f;
+		/// <summary>Regularization parameter for negative item weights</summary>
+		public double RegJ { get { return reg_j; } set { reg_j = value; } }
+		/// <summary>Regularization parameter for negative item weights</summary>
+		protected double reg_j = 0.00025;
 
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		public bool UpdateJ { get { return update_j; } set { update_j = value; } }
@@ -115,19 +106,15 @@ namespace MyMediaLite.ItemRecommendation
 		protected System.Random random;
 
 		/// <summary>Default constructor</summary>
-		public BPRMF()
+		public BPRSlim()
 		{
 			UniformUserSampling = true;
-			UpdateUsers = true;
-			UpdateItems = false;
 		}
 
 		///
 		protected override void InitModel()
 		{
 			base.InitModel();
-
-			item_bias = new float[MaxItemID + 1];
 		}
 
 		///
@@ -140,12 +127,14 @@ namespace MyMediaLite.ItemRecommendation
 			random = MyMediaLite.Random.GetInstance();
 
 			{
-				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100;
+				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100;         
 				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
+
 				// create the sample to estimate loss from
 				loss_sample_u = new int[num_sample_triples];
 				loss_sample_i = new int[num_sample_triples];
 				loss_sample_j = new int[num_sample_triples];
+
 				int u, i, j;
 				for (int c = 0; c < num_sample_triples; c++)
 				{
@@ -155,7 +144,6 @@ namespace MyMediaLite.ItemRecommendation
 					loss_sample_j[c] = j;
 				}
 			}
-
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
 		}
@@ -257,7 +245,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				do
 					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j] == item_is_positive);
+				while (Feedback.UserMatrix[u, j] != item_is_positive);
 			}
 
 			return item_is_positive;
@@ -322,90 +310,41 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
 		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = item_bias[i] - item_bias[j] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
+			//double x_uij = item_bias[i] - item_bias[j] + MatrixExtensions.RowScalarProductWithRowDifference(Feedback.UserMatrix, u, item_weights, i, item_weights, j);
+			double x_uij = PredictWithDifference(u, i, j);
+			
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
-			// adjust bias terms
-			if (update_i)
-			{
-				double update = one_over_one_plus_ex - BiasReg * item_bias[i];
-				item_bias[i] += (float) (learn_rate * update);
-			}
-
-			if (update_j)
-			{
-				double update = -one_over_one_plus_ex - BiasReg * item_bias[j];
-				item_bias[j] += (float) (learn_rate * update);
-			}
-
 			// adjust factors
-			for (int f = 0; f < num_factors; f++)
-			{
-				float w_uf = user_factors[u, f];
-				float h_if = item_factors[i, f];
-				float h_jf = item_factors[j, f];
+			var user_items = Feedback.UserMatrix.GetEntriesByRow(u);
+			
+			for (int k = 0; k < user_items.Count; k++)
+			{				
+				
+				int f = user_items.ElementAt(k);
+				double w_if = item_weights[i, f];
+				double w_jf = item_weights[j, f];
 
-				if (update_u)
+				if (update_i && i != f)
 				{
-					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[u, f] = (float) (w_uf + learn_rate * update);
+					double update = one_over_one_plus_ex - reg_i * w_if;
+					item_weights[i, f] = (float) (w_if + learn_rate * update);
 				}
 
-				if (update_i)
+				if (update_j && j != f)
 				{
-					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[i, f] = (float) (h_if + learn_rate * update);
-				}
-
-				if (update_j)
-				{
-					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[j, f] = (float) (h_jf + learn_rate * update);
+					double update = - one_over_one_plus_ex - reg_j * w_jf;
+					item_weights[j, f] = (float) (w_jf + learn_rate * update);
 				}
 			}
 		}
 
-		///
-		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.AddFeedback(feedback);
-			Retrain(feedback);
-		}
-		
-		void Retrain(ICollection<Tuple<int, int>> feedback)
-		{
-			var users = from t in feedback select t.Item1;
-			var items = from t in feedback select t.Item2;
-			
-			foreach (int user_id in users)
-			{
-				if (fast_sampling)
-					CreateFastSamplingData(user_id);
-			}
-			
-			if (UpdateUsers)
-				foreach (int user_id in users)
-					RetrainUser(user_id);
-			if (UpdateItems)
-				foreach (int item_id in items)
-					RetrainItem(item_id);
-		}
-
-		///
-		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.RemoveFeedback(feedback);
-			Retrain(feedback);
-		}
 
 		///
 		protected override void AddUser(int user_id)
 		{
 			base.AddUser(user_id);
-
-			user_factors.AddRows(user_id + 1);
-			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
 		}
 
 		///
@@ -413,10 +352,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.AddItem(item_id);
 
-			item_factors.AddRows(item_id + 1);
-			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-
-			Array.Resize(ref item_bias, MaxItemID + 1);
+			item_weights.AddRows(item_id + 1);
+			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
 		}
 
 		///
@@ -428,10 +365,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				user_pos_items[user_id] = null;
 				user_neg_items[user_id] = null;
-			}
-
-			// set user latent factors to zero
-			user_factors.SetRowToOneValue(user_id, 0);
+			}			
 		}
 
 		///
@@ -469,29 +403,15 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			// set item latent factors to zero
-			item_factors.SetRowToOneValue(item_id, 0);
+			item_weights.SetRowToOneValue(item_id, 0);
 		}
 
-		/// <summary>Retrain the latent factors of a given user</summary>
-		/// <param name="user_id">the user ID</param>
-		protected virtual void RetrainUser(int user_id)
-		{
-			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-
-			var user_items = Feedback.UserMatrix[user_id];
-			for (int i = 0; i < user_items.Count; i++)
-			{
-				int item_id_1, item_id_2;
-				SampleItemPair(user_id, out item_id_1, out item_id_2);
-				UpdateFactors(user_id, item_id_1, item_id_2, true, false, false);
-			}
-		}
-
+		
 		/// <summary>Retrain the latent factors of a given item</summary>
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
-			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
+			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
 
 			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
 			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
@@ -508,8 +428,9 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		///
-		public override float ComputeObjective()
+		/// <summary>Compute approximate loss</summary>
+		/// <returns>the approximate loss</returns>
+		public virtual double ComputeLoss()
 		{
 			double ranking_loss = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)
@@ -521,14 +442,18 @@ namespace MyMediaLite.ItemRecommendation
 			double complexity = 0;
 			for (int c = 0; c < loss_sample_u.Length; c++)
 			{
-				complexity += RegU * Math.Pow(user_factors.GetRow(loss_sample_u[c]).EuclideanNorm(), 2);
-				complexity += RegI * Math.Pow(item_factors.GetRow(loss_sample_i[c]).EuclideanNorm(), 2);
-				complexity += RegJ * Math.Pow(item_factors.GetRow(loss_sample_j[c]).EuclideanNorm(), 2);
-				complexity += BiasReg * Math.Pow(item_bias[loss_sample_i[c]], 2);
-				complexity += BiasReg * Math.Pow(item_bias[loss_sample_j[c]], 2);
+				complexity += RegI * Math.Pow(item_weights.GetRow(loss_sample_i[c]).EuclideanNorm(), 2);
+				complexity += RegJ * Math.Pow(item_weights.GetRow(loss_sample_j[c]).EuclideanNorm(), 2);
 			}
 
-			return (float) (ranking_loss + 0.5 * complexity);
+			return ranking_loss + 0.5 * complexity;
+		}
+
+		/// <summary>Compute the fit (AUC on training data)</summary>
+		/// <returns>the fit</returns>
+		public override float ComputeObjective()
+		{
+			return 0;
 		}
 
 		private void CreateFastSamplingData(int u)
@@ -575,12 +500,20 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override float Predict(int user_id, int item_id)
+		public double PredictWithDifference(int user_id, int pos_item_id, int neg_item_id)
 		{
-			if (user_id > MaxUserID || item_id > MaxItemID)
-				return float.MinValue;
-
-			return item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+			if (user_id > MaxUserID || pos_item_id > MaxItemID || neg_item_id > MaxItemID)
+				return double.MinValue;
+			
+			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
+			double prediction = 0;
+			
+			for (int k = 0; k < user_items.Count; k++)
+			{
+				int f = user_items.ElementAt(k);
+				prediction += item_weights[pos_item_id, f] - item_weights[neg_item_id, f];
+			}
+			return prediction;
 		}
 
 		///
@@ -588,9 +521,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
 			{
-				writer.WriteMatrix(user_factors);
-				writer.WriteVector(item_bias);
-				writer.WriteMatrix(item_factors);
+				writer.WriteMatrix(item_weights);
 			}
 		}
 
@@ -598,101 +529,14 @@ namespace MyMediaLite.ItemRecommendation
 		public override void LoadModel(string file)
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+			{				
+				var item_weights = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
+			
+				this.MaxItemID = item_weights.NumberOfRows - 1;
 
-				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new IOException(
-						string.Format(
-							"Number of user and item factors must match: {0} != {1}",
-							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
-				if (item_bias.Count != item_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of items must be the same for biases and factors: {0} != {1}",
-							item_bias.Count, item_factors.dim1));
-
-				this.MaxUserID = user_factors.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				if (this.num_factors != user_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.num_factors = user_factors.NumberOfColumns;
-				}
-				this.user_factors = user_factors;
-				this.item_bias    = (float[]) item_bias;
-				this.item_factors = item_factors;
+				this.item_weights = item_weights;
 			}
 			random = MyMediaLite.Random.GetInstance();
-		}
-
-		///
-		public IList<Tuple<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
-		{
-			var user_factors = FoldIn(accessed_items);
-
-			var scored_items = new Tuple<int, float>[candidate_items.Count];
-			for (int i = 0; i < scored_items.Length; i++)
-			{
-				int item_id = candidate_items[i];
-				float score = item_bias[item_id] + item_factors.RowScalarProduct(item_id, user_factors);
-				scored_items[i] = Tuple.Create(item_id, score);
-			}
-			return scored_items;
-		}
-
-		///
-		float[] FoldIn(IList<int> accessed_items)
-		{
-			var positive_items = new HashSet<int>(accessed_items);
-			//var candidate_items_set = new HashSet<int>(candidate_items); // TODO use this for variant
-
-			// initialize user parameters
-			var user_factors = new float[NumFactors];
-			user_factors.InitNormal(InitMean, InitStdDev);
-
-			// perform training
-			for (uint it = 0; it < NumIter; it++)
-				IterateUser(positive_items, user_factors);
-
-			return user_factors;
-		}
-
-		void IterateUser(ISet<int> user_items, IList<float> user_factors)
-		{
-			int num_pos_events = user_items.Count;
-
-			int user_id, pos_item_id, neg_item_id;
-
-			if (WithReplacement) // case 1: item sampling with replacement
-			{
-				throw new NotImplementedException();
-			}
-			else // case 2: item sampling without replacement
-			{
-				for (int i = 0; i < num_pos_events; i++)
-				{
-					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-					// TODO generalize and call UpdateFactors
-					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
-					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
-
-					// adjust factors
-					for (int f = 0; f < num_factors; f++)
-					{
-						float w_uf = user_factors[f];
-						float h_if = item_factors[pos_item_id, f];
-						float h_jf = item_factors[neg_item_id, f];
-
-						double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-						user_factors[f] = (float) (w_uf + learn_rate * update);
-					}
-				}
-			}
 		}
 
 		///
@@ -700,8 +544,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} fast_sampling_memory_limit={10} update_j={11}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, fast_sampling_memory_limit, UpdateJ);
+				"{0} reg_i={1} reg_j={2} num_iter={3} learn_rate={4} uniform_user_sampling={5} with_replacement={6} fast_sampling_memory_limit={7} update_j={8}",
+				this.GetType().Name, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, fast_sampling_memory_limit, UpdateJ);
 		}
 	}
 }
+
