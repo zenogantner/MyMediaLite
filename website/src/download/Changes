@@ -1,9 +1,9 @@
-3.04	2012-10-11
+3.04	2012-10-14
 	API
 	 - IMatrix.IsSymmetric: now explicitly defined as the storage
            strategy, not the mathematical property
         recommenders
-         - new: CLiMF (best paper at RecSys 2012)
+         - new: CLiMF (best paper at RecSys 2012, not complete yet)
          - BPRMF: improve doc
          - WRMF: rename hyperparameter c_pos to alpha (more consistent with
                  the paper)
