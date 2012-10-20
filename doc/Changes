@@ -1,6 +1,9 @@
 3.05	2012-11-
 	recommenders
 	 - new: BPRSLIM (by Lucas Drumond)
+	 - (BiasedMatrix)Factorization: fix bug related to the learn rate decay
+           introduced in the last release (reported by Lucas Drumond and Josif
+           Grabocka)
 
 3.04	2012-10-14
 	API

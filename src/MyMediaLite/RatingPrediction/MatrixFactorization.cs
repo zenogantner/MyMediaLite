@@ -90,7 +90,6 @@ namespace MyMediaLite.RatingPrediction
 			NumIter = 30;
 			InitStdDev = 0.1;
 			NumFactors = 10;
-			current_learnrate = LearnRate;
 		}
 
 		/// <summary>Initialize the model data structure</summary>
@@ -109,6 +108,8 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < ratings.CountByItem.Count; i++)
 				if (ratings.CountByItem[i] == 0)
 					item_factors.SetRowToOneValue(i, 0);
+
+			current_learnrate = LearnRate;
 		}
 
 		///
@@ -420,7 +421,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} learn_rate={3} learn_rate_decay={4}, num_iter={5}",
+				"{0} num_factors={1} regularization={2} learn_rate={3} learn_rate_decay={4} num_iter={5}",
 				this.GetType().Name, NumFactors, Regularization, LearnRate, LearnRateDecay, NumIter);
 		}
 	}
