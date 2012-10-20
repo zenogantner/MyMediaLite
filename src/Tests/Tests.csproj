@@ -73,6 +73,9 @@
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
     <Compile Include="Correlation\SymmetricCorrelationMatrixTest.cs" />
+    <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
+    <Compile Include="UtilsTest.cs" />
+    <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
@@ -87,5 +90,6 @@
     <Folder Include="Eval\" />
     <Folder Include="Eval\Measures\" />
     <Folder Include="IO\" />
+    <Folder Include="ItemRecommendation\" />
   </ItemGroup>
 </Project>
