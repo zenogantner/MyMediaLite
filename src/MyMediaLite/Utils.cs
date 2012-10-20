@@ -27,7 +27,6 @@ namespace MyMediaLite
 	/// <summary>Class containing utility functions</summary>
 	public static class Utils
 	{
-		// TODO add memory constraints and a replacement strategy
 		/// <summary>Memoize a function</summary>
 		/// <param name="f">The function to memoize</param>
 		/// <returns>a version of the function that remembers past function results</returns>
@@ -64,17 +63,17 @@ namespace MyMediaLite
 			}
 		}
 
-		/// <summary>Get all types of a namespace</summary>
+		/// <summary>Get all types in a namespace</summary>
 		/// <param name="name_space">a string describing the namespace</param>
-		/// <returns>an array of Type objects</returns>
-		public static Type[] GetTypesInNamespace(string name_space)
+		/// <returns>a list of Type objects</returns>
+		public static IList<Type> GetTypes(string name_space)
 		{
 			var types = new List<Type>();
 
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 				types.AddRange( assembly.GetTypes().Where(t => string.Equals(t.Namespace, name_space, StringComparison.Ordinal)) );
 
-			return types.ToArray();
+			return types;
 		}
 	}
 }
