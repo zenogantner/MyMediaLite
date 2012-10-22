@@ -1,21 +1,20 @@
 // Copyright (C) 2012 Lucas Drumond
 // Copyright (C) 2010, 2011, 2012 Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-// 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -29,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Sparse Linear Methods (SLIM) for item prediction (ranking) optimized for BPR-Opt optimization criterion </summary>
 	/// <remarks>
-	/// This implementation differs from the algorithm in the original SLIM paper since the model here is optimized for BPR-Opt 
+	/// This implementation differs from the algorithm in the original SLIM paper since the model here is optimized for BPR-Opt
 	/// instead of the elastic net loss. The optmization algorithm used is the Sotchastic Gradient Ascent.
 	///
 	/// Literature:
@@ -44,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     X. Ning, G. Karypis: Slim: Sparse linear methods for top-n recommender systems.
 	///    ICDM 2011.
 	///    http://glaros.dtc.umn.edu/gkhome/fetch/papers/SLIM2011icdm.pdf
-	///   </description></item>	
+	///   </description></item>
 	/// </list>
 	///
 	/// Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
@@ -54,7 +53,7 @@ namespace MyMediaLite.ItemRecommendation
 	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class BPRSlim : Slim
+	public class BPRSLIM : SLIM
 	{
 		/// <summary>Fast, but memory-intensive sampling</summary>
 		protected bool fast_sampling = false;
@@ -95,18 +94,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>support data structure for fast sampling</summary>
 		protected IList<IList<int>> user_neg_items;
 
-		/// <summary>array of user components of triples to use for approximate loss computation</summary>
-		int[] loss_sample_u;
-		/// <summary>array of positive item components of triples to use for approximate loss computation</summary>
-		int[] loss_sample_i;
-		/// <summary>array of negative item components of triples to use for approximate loss computation</summary>
-		int[] loss_sample_j;
-
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
 		/// <summary>Default constructor</summary>
-		public BPRSlim()
+		public BPRSLIM()
 		{
 			UniformUserSampling = true;
 		}
@@ -126,24 +118,6 @@ namespace MyMediaLite.ItemRecommendation
 
 			random = MyMediaLite.Random.GetInstance();
 
-			{
-				int num_sample_triples = (int) Math.Sqrt(Feedback.MaxUserID) * 100;         
-				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
-
-				// create the sample to estimate loss from
-				loss_sample_u = new int[num_sample_triples];
-				loss_sample_i = new int[num_sample_triples];
-				loss_sample_j = new int[num_sample_triples];
-
-				int u, i, j;
-				for (int c = 0; c < num_sample_triples; c++)
-				{
-					SampleTriple(out u, out i, out j);
-					loss_sample_u[c] = u;
-					loss_sample_i[c] = i;
-					loss_sample_j[c] = j;
-				}
-			}
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
 		}
@@ -310,19 +284,15 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
 		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
-			//double x_uij = item_bias[i] - item_bias[j] + MatrixExtensions.RowScalarProductWithRowDifference(Feedback.UserMatrix, u, item_weights, i, item_weights, j);
 			double x_uij = PredictWithDifference(u, i, j);
-			
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
 			// adjust factors
 			var user_items = Feedback.UserMatrix.GetEntriesByRow(u);
-			
-			for (int k = 0; k < user_items.Count; k++)
-			{				
-				
-				int f = user_items.ElementAt(k);
+
+			foreach (int f in user_items)
+			{
 				double w_if = item_weights[i, f];
 				double w_jf = item_weights[j, f];
 
@@ -339,7 +309,6 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			}
 		}
-
 
 		///
 		protected override void AddUser(int user_id)
@@ -365,7 +334,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				user_pos_items[user_id] = null;
 				user_neg_items[user_id] = null;
-			}			
+			}
 		}
 
 		///
@@ -406,7 +375,7 @@ namespace MyMediaLite.ItemRecommendation
 			item_weights.SetRowToOneValue(item_id, 0);
 		}
 
-		
+
 		/// <summary>Retrain the latent factors of a given item</summary>
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
@@ -426,27 +395,6 @@ namespace MyMediaLite.ItemRecommendation
 				else
 					UpdateFactors(user_id, other_item_id, item_id, false, false, true);
 			}
-		}
-
-		/// <summary>Compute approximate loss</summary>
-		/// <returns>the approximate loss</returns>
-		public virtual double ComputeLoss()
-		{
-			double ranking_loss = 0;
-			for (int c = 0; c < loss_sample_u.Length; c++)
-			{
-				double x_uij = Predict(loss_sample_u[c], loss_sample_i[c]) - Predict(loss_sample_u[c], loss_sample_j[c]);
-				ranking_loss += 1 / (1 + Math.Exp(x_uij));
-			}
-
-			double complexity = 0;
-			for (int c = 0; c < loss_sample_u.Length; c++)
-			{
-				complexity += RegI * Math.Pow(item_weights.GetRow(loss_sample_i[c]).EuclideanNorm(), 2);
-				complexity += RegJ * Math.Pow(item_weights.GetRow(loss_sample_j[c]).EuclideanNorm(), 2);
-			}
-
-			return ranking_loss + 0.5 * complexity;
 		}
 
 		/// <summary>Compute the fit (AUC on training data)</summary>
@@ -504,10 +452,10 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (user_id > MaxUserID || pos_item_id > MaxItemID || neg_item_id > MaxItemID)
 				return double.MinValue;
-			
+
 			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
 			double prediction = 0;
-			
+
 			for (int k = 0; k < user_items.Count; k++)
 			{
 				int f = user_items.ElementAt(k);
@@ -529,9 +477,9 @@ namespace MyMediaLite.ItemRecommendation
 		public override void LoadModel(string file)
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{				
+			{
 				var item_weights = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-			
+
 				this.MaxItemID = item_weights.NumberOfRows - 1;
 
 				this.item_weights = item_weights;

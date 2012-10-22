@@ -1,4 +1,4 @@
-3.05	2012-10-22
+3.05	2012-10-23
 	recommenders
 	 - new item recommenders: BPRSLIM and LeastSquareSLIM (by Lucas
            Drumond)
