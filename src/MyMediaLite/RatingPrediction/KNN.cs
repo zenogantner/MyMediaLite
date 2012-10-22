@@ -139,7 +139,7 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
 			{
 				writer.WriteLine(Correlation);
-				correlation.Write(writer); // TODO reverse calling conventions
+				correlation.Write(writer);
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace MyMediaLite.RatingPrediction
 
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				Correlation = (RatingCorrelationType) Enum.Parse(typeof(RatingCorrelationType), reader.ReadLine()); // TODO make sure they match
+				Correlation = (RatingCorrelationType) Enum.Parse(typeof(RatingCorrelationType), reader.ReadLine());
 				InitModel();
 
 				if (correlation is SymmetricCorrelationMatrix)
