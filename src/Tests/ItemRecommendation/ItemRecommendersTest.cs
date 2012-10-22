@@ -28,9 +28,9 @@ namespace Tests.ItemRecommendation
 		public void TestToString()
 		{
 			foreach (Type type in Utils.GetTypes("MyMediaLite.ItemRecommendation"))
-				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRatingPrediction") != null)
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
 				{
-					var recommender = type.CreateRatingPredictor();
+					var recommender = type.CreateItemRecommender();
 					Assert.IsFalse(recommender.ToString().Contains(","));
 				}
 		}
