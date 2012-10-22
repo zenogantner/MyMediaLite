@@ -5,6 +5,7 @@
 	 - MatrixFactorization: fix bug related to the learn rate decay
            introduced in the last release (reported by Lucas Drumond and Josif
            Grabocka)
+	 - MatrixFactorization: support learning rate decay for fold-in
 	 - add some more unit tests
 	website
 	 - add more MyMediaLite users

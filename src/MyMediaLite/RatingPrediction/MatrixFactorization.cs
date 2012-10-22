@@ -328,6 +328,7 @@ namespace MyMediaLite.RatingPrediction
 			var user_vector = new float[NumFactors];
 			user_vector.InitNormal(InitMean, InitStdDev);
 			rated_items.Shuffle();
+			double lr = LearnRate;
 			for (uint it = 0; it < NumIter; it++)
 			{
 				for (int index = 0; index < rated_items.Count; index++)
@@ -342,9 +343,10 @@ namespace MyMediaLite.RatingPrediction
 						float i_f = item_factors[item_id, f];
 
 						double delta_u = err * i_f - Regularization * u_f;
-						user_vector[f] += (float) (LearnRate * delta_u);
+						user_vector[f] += (float) (lr * delta_u);
 					}
 				}
+				lr *= LearnRateDecay;
 			}
 			return user_vector;
 		}
