@@ -126,7 +126,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void InitModel()
+		protected internal override void InitModel()
 		{
 			base.InitModel();
 

@@ -19,10 +19,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
+
+[assembly: InternalsVisibleTo("Tests")]
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -47,10 +50,10 @@ namespace MyMediaLite.RatingPrediction
 	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
-		protected Matrix<float> user_factors;
+		protected internal Matrix<float> user_factors;
 
 		/// <summary>Matrix containing the latent item factors</summary>
-		protected Matrix<float> item_factors;
+		protected internal Matrix<float> item_factors;
 
 		/// <summary>The bias (global average)</summary>
 		protected float global_bias;
@@ -78,7 +81,7 @@ namespace MyMediaLite.RatingPrediction
 		public uint NumIter { get; set; }
 
 		/// <summary>The learn rate used for the current epoch</summary>
-		protected float current_learnrate;
+		protected internal float current_learnrate;
 
 		/// <summary>Default constructor</summary>
 		public MatrixFactorization() : base()
@@ -93,7 +96,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		/// <summary>Initialize the model data structure</summary>
-		protected virtual void InitModel()
+		protected internal virtual void InitModel()
 		{
 			// init factor matrices
 			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
@@ -132,7 +135,6 @@ namespace MyMediaLite.RatingPrediction
 		public virtual void Iterate()
 		{
 			Iterate(ratings.RandomIndex, true, true);
-			UpdateLearnRate();
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -189,6 +191,8 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
+
+			UpdateLearnRate();
 		}
 
 		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)

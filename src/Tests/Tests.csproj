@@ -76,6 +76,7 @@
     <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
     <Compile Include="UtilsTest.cs" />
     <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />
+    <Compile Include="RatingPrediction\MatrixFactorizationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

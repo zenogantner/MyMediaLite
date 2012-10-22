@@ -59,7 +59,7 @@ namespace MyMediaLite.RatingPrediction
 		public int NumUsers { get { return MaxUserID + 1; } }
 
 		///
-		protected override void InitModel()
+		protected internal override void InitModel()
 		{
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfRows - 1);
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfColumns - 1);

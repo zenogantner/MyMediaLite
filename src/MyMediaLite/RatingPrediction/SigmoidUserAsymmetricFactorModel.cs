@@ -250,7 +250,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void InitModel()
+		protected internal override void InitModel()
 		{
 			x = new Matrix<float>(MaxUserID + 1, NumFactors);
 			x.InitNormal(InitMean, InitStdDev);
