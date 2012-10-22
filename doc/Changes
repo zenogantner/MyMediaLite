@@ -1,7 +1,8 @@
-3.05	2012-10-
+3.05	2012-10-22
 	recommenders
-	 - new: BPRSLIM (by Lucas Drumond)
-	 - (BiasedMatrix)Factorization: fix bug related to the learn rate decay
+	 - new item recommenders: BPRSLIM and LeastSquareSLIM (by Lucas
+           Drumond)
+	 - MatrixFactorization: fix bug related to the learn rate decay
            introduced in the last release (reported by Lucas Drumond and Josif
            Grabocka)
 	 - add some more unit tests
