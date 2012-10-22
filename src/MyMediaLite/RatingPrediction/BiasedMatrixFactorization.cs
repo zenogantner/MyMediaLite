@@ -233,7 +233,7 @@ namespace MyMediaLite.RatingPrediction
 					current_learnrate *= 1.05f;
 
 				last_loss = loss;
-				
+
 				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "objective {0} learn_rate {1} ", loss, current_learnrate));
 			}
 			else
@@ -241,7 +241,7 @@ namespace MyMediaLite.RatingPrediction
 				current_learnrate *= LearnRateDecay;
 			}
 		}
-		
+
 		/// <summary>Set up the common part of the error gradient of the loss function to optimize</summary>
 		protected void SetupLoss()
 		{
