@@ -62,7 +62,7 @@ namespace MyMediaLite.RatingPrediction
 		public double InitStdDev { get; set; }
 
 		/// <summary>Number of latent factors</summary>
-		public uint NumFactors { get; set;}
+		public uint NumFactors { get; set; }
 
 		/// <summary>Learn rate (update step size)</summary>
 		public float LearnRate { get; set; }
