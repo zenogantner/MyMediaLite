@@ -7,9 +7,12 @@
            Grabocka)
 	 - MatrixFactorization: support learning rate decay for fold-in
 	 - add some more unit tests
+	command-line tools
+	 - fix to work when symbolically linked (by Lars Schmidt-Thieme)
 	website
 	 - add more MyMediaLite users
 	 - fix issue with trailing whitespaces for included links
+	 - add Lucas Drumond to authors
 	misc
 	 - clean up Makefile
 	 - rename Utils.GetTypesInNamespace() to GetTypes(), make it
