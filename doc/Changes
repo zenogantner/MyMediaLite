@@ -8,6 +8,7 @@
 	 - add some more unit tests
 	website
 	 - add more MyMediaLite users
+	 - fix issue with trailing whitespaces for included links
 	misc
 	 - clean up Makefile
 	 - rename Utils.GetTypesInNamespace() to GetTypes(), make it
