@@ -1,5 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SELF=$(readlink -f $0)
+DIR="$( cd "$( dirname "${SELF}" )" && pwd )"
 
 mono --gc=sgen --debug $DIR/../lib/mymedialite/rating_based_ranking.exe "$@"
