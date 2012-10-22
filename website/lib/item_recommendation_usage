@@ -1,4 +1,4 @@
-MyMediaLite item recommendation from positive-only feedback 3.04
+MyMediaLite item recommendation from positive-only feedback 3.05
 
  usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]
 
@@ -34,6 +34,10 @@ MyMediaLite item recommendation from positive-only feedback 3.04
    - MostPopularByAttributes
        needs --item-attributes=FILE
    - CLiMF num_factors=10 regularization=0 num_iter=30 learn_rate=0.01
+       supports --find-iter=N, --online-evaluation
+   - BPRSLIM reg_i=0.0025 reg_j=0.00025 num_iter=15 learn_rate=0.05 uniform_user_sampling=True with_replacement=False fast_sampling_memory_limit=1024 update_j=True
+       supports --find-iter=N, --online-evaluation
+   - LeastSquareSLIM reg_l1=0.01 reg_l2=0.001 num_iter=15 K=50
        supports --find-iter=N, --online-evaluation
   method ARGUMENTS have the form name=value
 

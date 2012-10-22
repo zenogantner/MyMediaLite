@@ -1,3 +1,23 @@
+3.05	2012-10-23
+	recommenders
+	 - new item recommenders: BPRSLIM and LeastSquareSLIM (by Lucas
+           Drumond)
+	 - MatrixFactorization: fix bug related to the learn rate decay
+           introduced in the last release (reported by Lucas Drumond and Josif
+           Grabocka)
+	 - MatrixFactorization: support learning rate decay for fold-in
+	 - add some more unit tests
+	command-line tools
+	 - fix to work when symbolically linked (by Lars Schmidt-Thieme)
+	website
+	 - add more MyMediaLite users
+	 - fix issue with trailing whitespaces for included links
+	 - add Lucas Drumond to authors
+	misc
+	 - clean up Makefile
+	 - rename Utils.GetTypesInNamespace() to GetTypes(), make it
+	   an extension method, add unit tests
+
 3.04	2012-10-14
 	API
 	 - IMatrix.IsSymmetric: now explicitly defined as the storage
@@ -21,16 +41,16 @@
 	 - all factorization models for rating prediction: add multiplicative
            learn rate decay: property LearnRateDecay, --recommender-option
            learn_rate_decay=0.9
-	command-line tools:
+	command-line tools
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output
-	evaluation:
+	evaluation
 	 - average precision: more readable computation
 	 - PrecisionAndRecall.cs: fix API doc generation
          - add enum RepatedEvents
-	documentation:
+	documentation
 	 - document Diversification namespace
-	website:
+	website
  	 - add some papers that use MyMediaLite
 	 - add list of organizations that use MyMediaLite
 	misc:
