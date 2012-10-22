@@ -9,6 +9,7 @@
 	website
 	 - add more MyMediaLite users
 	misc
+	 - clean up Makefile
 	 - rename Utils.GetTypesInNamespace() to GetTypes(), make it
 	   an extension method, add unit tests
 

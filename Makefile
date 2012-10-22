@@ -4,7 +4,6 @@ GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 PREFIX=/usr/local
 VERSION=3.05
-HTML_MDOC_DIR=website/public_html/documentation/mdoc
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
@@ -13,7 +12,7 @@ RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 HOMEPAGE=${HOME}/src/homepage/public_html
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
 
 all: mymedialite
 
@@ -25,13 +24,8 @@ clean:
 	cd examples/csharp && make clean
 	rm -rf ${SRC_DIR}/Programs/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/Programs/*/bin/Release/*
-	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Debug/*
-	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Release/*
-	rm -rf ${SRC_DIR}/Mapping/*/bin/Debug/*
-	rm -rf ${SRC_DIR}/Mapping/*/bin/Release/*
 	rm -rf ${SRC_DIR}/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/*/bin/Release/*
-	rm -rf ${SRC_DIR}/RatingService/bin/*
 	rm -rf ${SRC_DIR}/test-results
 	rm -rf ${SRC_DIR}/*/*.tar.gz
 	rm -rf ${SRC_DIR}/*/*.pidb
@@ -152,13 +146,6 @@ apidoc: doxygen
 
 monodoc:
 	mdoc update --delete -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-
-mdoc-html: monodoc
-	mdoc-export-html doc/monodoc/ -o ${HTML_MDOC_DIR} --template=doc/htmldoc-template.xsl
-	perl -e "use File::Slurp; \$$f = read_file '${HTML_MDOC_DIR}/index.html'; \$$f =~ s/\n.+?\n.+?experimental.+?\n.+?\n.+?\n.+?\n.+//; print \$$f;" > tmp.html && cat tmp.html > ${HTML_MDOC_DIR}/index.html && rm tmp.html
-
-view-mdoc:
-	x-www-browser file://${HTML_MDOC_DIR}/index.html
 
 doxygen:
 	cd doc/ && doxygen
