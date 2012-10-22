@@ -31,7 +31,10 @@ namespace Tests.ItemRecommendation
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
 				{
 					var recommender = type.CreateItemRecommender();
-					Assert.IsFalse(recommender.ToString().Contains(","));
+					Assert.IsFalse(
+						recommender.ToString().Contains(","),
+						string.Format("ToString() output of {0} contains commas: '{1}'", type.Name, recommender.ToString())
+					);
 				}
 		}
 	}
