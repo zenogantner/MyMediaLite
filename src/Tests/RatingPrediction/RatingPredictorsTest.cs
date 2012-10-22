@@ -36,6 +36,10 @@ namespace Tests.RatingPrediction
 						recommender.ToString().Contains(","),
 						string.Format("ToString() output of {0} contains commas: '{1}'", type.Name, recommender.ToString())
 					);
+					Assert.IsTrue(
+						recommender.ToString().StartsWith(type.Name),
+						string.Format("ToString() output of {0} does not start with class name: '{1}'", type.Name, recommender.ToString ())
+					);
 				}
 			}
 		}
