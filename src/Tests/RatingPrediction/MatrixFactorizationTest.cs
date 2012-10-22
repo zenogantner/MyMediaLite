@@ -19,23 +19,17 @@ using System;
 using NUnit.Framework;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
+using Tests.Data;
 
 namespace Tests.RatingPrediction
 {
 	[TestFixture()]
 	public class MatrixFactorizationTest
 	{
-		IRatings CreateRatings()
-		{
-			var ratings = new Ratings();
-			ratings.Add(0, 0, 0.0f);
-			return ratings;
-		}
-
 		[Test()]
 		public void TestCurrentLearnRate()
 		{
-			var mf = new MatrixFactorization() { LearnRate = 1.1f, Ratings = CreateRatings() };
+			var mf = new MatrixFactorization() { LearnRate = 1.1f, Ratings = TestUtils.CreateRatings() };
 
 			mf.InitModel();
 			Assert.AreEqual(1.1f, mf.LearnRate);
@@ -45,7 +39,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestDefaultBehaviorIsNoDecay()
 		{
-			var mf = new MatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Ratings = CreateRatings() };
+			var mf = new MatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Ratings = TestUtils.CreateRatings() };
 			mf.Train();
 			Assert.AreEqual(1.1f, mf.current_learnrate);
 		}
@@ -56,7 +50,7 @@ namespace Tests.RatingPrediction
 			var mf = new MatrixFactorization()
 			{
 				LearnRate = 1.0f, LearnRateDecay = 0.5f,
-				NumIter = 1, Ratings = CreateRatings()
+				NumIter = 1, Ratings = TestUtils.CreateRatings()
 			};
 
 			mf.Train();
@@ -69,7 +63,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestMatrixInit()
 		{
-			var mf = new MatrixFactorization() { Ratings = CreateRatings() };
+			var mf = new MatrixFactorization() { Ratings = TestUtils.CreateRatings() };
 			mf.InitModel();
 			Assert.IsNotNull(mf.user_factors);
 			Assert.IsNotNull(mf.item_factors);
