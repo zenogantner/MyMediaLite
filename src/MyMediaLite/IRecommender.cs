@@ -24,9 +24,9 @@ namespace MyMediaLite
 	/// You can browse the documentation by class name, class hierarchy, and member name.
 	/// Just click on the "Classes" tab.
 	///
-	/// Please report problems and missing information to the MyMediaLite authors: http://ismll.de/mymedialite/contact.html
+	/// Please report problems and missing information to the MyMediaLite authors: http://mymedialite.net/contact.html
 	///
-	/// If you want to contribute to MyMediaLite have a look at http://ismll.de/mymedialite/contribute.html
+	/// If you want to contribute to MyMediaLite have a look at http://mymedialite.net/contribute.html
 
 	/// <summary>Generic interface for simple recommenders</summary>
 	/// <remarks></remarks>
