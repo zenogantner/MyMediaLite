@@ -10,6 +10,7 @@ ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 HOMEPAGE=${HOME}/src/homepage/public_html
+ACK=ack-grep
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
 .PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
@@ -123,18 +124,18 @@ download-imdb: data
 	scripts/download_imdb.sh
 
 todo:
-	ack-grep --type=csharp TODO                    ${SRC_DIR}; echo
-	ack-grep --type=csharp FIXME                   ${SRC_DIR}; echo
-	ack-grep --type=csharp HACK                    ${SRC_DIR}; echo
-	ack-grep --type=csharp NotImplementedException ${SRC_DIR}; echo
-	ack-grep --type=csharp TODO                    ${SRC_DIR} | wc -l
-	ack-grep --type=csharp FIXME                   ${SRC_DIR} | wc -l
-	ack-grep --type=csharp HACK                    ${SRC_DIR} | wc -l
-	ack-grep --type=csharp NotImplementedException ${SRC_DIR} | wc -l
+	${ACK} --type=csharp TODO                    ${SRC_DIR}; echo
+	${ACK} --type=csharp FIXME                   ${SRC_DIR}; echo
+	${ACK} --type=csharp HACK                    ${SRC_DIR}; echo
+	${ACK} --type=csharp NotImplementedException ${SRC_DIR}; echo
+	${ACK} --type=csharp TODO                    ${SRC_DIR} | wc -l
+	${ACK} --type=csharp FIXME                   ${SRC_DIR} | wc -l
+	${ACK} --type=csharp HACK                    ${SRC_DIR} | wc -l
+	${ACK} --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
 ## TODO create regex with less false positives
 check-for-unnecessary-type-declarations:
-	ack-grep --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
+	${ACK} --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
 
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${RATING_PRED_DIR}/bin/Debug/*.exe
