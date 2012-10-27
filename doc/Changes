@@ -3,6 +3,8 @@
 	 - refer to new website: http://mymedialite.net
 	website
 	 - add disclaimer to FAQ
+	misc
+	 - Makefile: use variable ACK for ack/ack-grep
 
 3.05	2012-10-23
 	recommenders
