@@ -4,12 +4,13 @@
 	website
 	 - add disclaimer to FAQ
 	misc
+	 - UnhandledExceptionHandler: fix output formatting
 	 - Makefile: use variable ACK for ack/ack-grep
 
 3.05	2012-10-23
 	recommenders
-	 - new item recommenders: BPRSLIM and LeastSquareSLIM (by Lucas
-           Drumond)
+	 - new item recommenders: BPRSLIM (#120)  and LeastSquareSLIM (#118)
+           (by Lucas Drumond)
 	 - MatrixFactorization: fix bug related to the learn rate decay
            introduced in the last release (reported by Lucas Drumond and Josif
            Grabocka)
