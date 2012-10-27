@@ -66,7 +66,7 @@
     <li>MyMediaLite is, as the name says, leaner and simpler and carries less overhead, in particular:
        <ul>
          <li>it does not require a database</li>
-         <li>it contains a different set of recommender algorithms (even though there is big overlap)</li>
+         <li>it contains a different set of recommender algorithms (even though there is some overlap)</li>
          <li>it does not contain advanced features such as complex recommenders, recommender flows, OpenID integration, etc.</li>
        </ul>
     </li>
@@ -79,6 +79,23 @@
     <p>Please tell us which version of MyMediaLite you use,
        and describe in detail how to reproduce the bug,
        and include your data with the report (if possible).
+  </p>
+
+  <h3>It is very nice you implemented method X from paper Y. Can I use it for my next paper?</h3>
+  <p>
+  Yes, sure you can. However ...
+  </p>
+  <p>
+  <i>Disclaimer:</i>
+  While we did our best when implementing the recommenders, we cannot guarantee that they are bug-free,
+  nor can we guarantee that they have exactly the same behavior is the methods described in the papers
+  we mention.
+  It is your duty to perform calibration experiments, that is you try to replicate the
+  evaluation results reported by the authors, before using an implementation of their method.
+  </p>
+  <p>
+  If you use MyMediaLite for your experiments, please cite us.
+  See next question.
   </p>
 
   <h3>How can I cite MyMediaLite in my paper?</h3>

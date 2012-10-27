@@ -2,7 +2,7 @@
   links = {
      zeno          => { url => 'http://ismll.de/personen/gantner_en.html',             title => 'Zeno Gantner' }
      steffen       => { url => 'http://cms.uni-konstanz.de/informatik/rendle/',        title => 'Steffen Rendle' }
-     christoph     => { url => 'http://cms.uni-konstanz.de/informatik/freudenthaler/', title => 'Christoph Freudenthaler' }
+     christoph     => { url => 'http://cms.uni-konstanz.de/informatik/rendle/members/freudenthaler/', title => 'Christoph Freudenthaler' }
      lucas         => { url => 'http://ismll.de/personen/drumond_en.html',       title => 'Lucas Drumond' }
      mymedia       => { url => 'http://www.mymediaproject.org/'                  title => 'Dynamic Personalization of Multimedia (MyMedia)' }
      fp7           => { url => 'http://ec.europa.eu/research/fp7/index_en.cfm',  title => 'European Commission 7th Framework Programme' }
