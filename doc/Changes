@@ -1,6 +1,9 @@
 3.06	2012-11-
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
+	data types
+	 - (Sparse)Matrix: implement IsSymmetric according to interface
+           specification
 	command-line tools
 	 - #337: use Mono's default garbage collector
 	documentation

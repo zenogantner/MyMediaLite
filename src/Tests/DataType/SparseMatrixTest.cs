@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,13 +32,7 @@ namespace Tests.DataType
 			Assert.IsFalse(matrix1.IsSymmetric);
 
 			var matrix2 = new SparseMatrix<double>(5, 5);
-			Assert.IsTrue(matrix2.IsSymmetric);
-
-			matrix2[1, 3] = 1.0;
 			Assert.IsFalse(matrix2.IsSymmetric);
-
-			matrix2[3, 1] = 1.0;
-			Assert.IsTrue(matrix2.IsSymmetric);
 		}
 
 		[Test()] public void TestNumberOfRows()

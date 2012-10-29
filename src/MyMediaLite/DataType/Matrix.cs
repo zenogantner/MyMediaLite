@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 
@@ -37,18 +36,7 @@ namespace MyMediaLite.DataType
 		public int dim2;
 
 		///
-		public virtual bool IsSymmetric
-		{
-			get {
-				if (dim1 != dim2)
-					return false;
-				for (int i = 0; i < dim1; i++)
-					for (int j = i + 1; j < dim2; j++)
-						if (!this[i, j].Equals(this[j, i]))
-							return false;
-				return true;
-			}
-		}
+		public virtual bool IsSymmetric { get { return false; } }
 
 		///
 		public int NumberOfRows { get { return dim1; } }
