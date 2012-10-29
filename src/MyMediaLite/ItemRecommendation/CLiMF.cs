@@ -36,6 +36,7 @@ namespace MyMediaLite.ItemRecommendation
 	
 	/// <summary>Collaborative Less-is-More Filtering Matrix Factorization</summary>
 	/// <remarks>
+	///   WARNING: Implementation of this recommender is not finished yet.
 	/// </remarks>
 	/// <exception cref='NotImplementedException'>
 	/// Is thrown when a requested operation is not implemented for a given type.

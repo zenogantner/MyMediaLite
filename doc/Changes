@@ -1,5 +1,7 @@
 3.06	2012-11-
-	command-line tools:
+	recommenders
+	 - CLiMF: add warning that it is not finished yet
+	command-line tools
 	 - #337: use Mono's default garbage collector
 	documentation
 	 - refer to new website: http://mymedialite.net
