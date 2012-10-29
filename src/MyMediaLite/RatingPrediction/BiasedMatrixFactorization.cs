@@ -139,9 +139,9 @@ namespace MyMediaLite.RatingPrediction
 		protected double last_loss = double.NegativeInfinity;
 
 		/// <summary>the user biases</summary>
-		protected float[] user_bias;
+		protected internal float[] user_bias;
 		/// <summary>the item biases</summary>
-		protected float[] item_bias;
+		protected internal float[] item_bias;
 
 		/// <summary>size of the interval of valid ratings</summary>
 		protected float rating_range_size;
@@ -218,6 +218,8 @@ namespace MyMediaLite.RatingPrediction
 			}
 			else
 				base.Iterate();
+
+			UpdateLearnRate();
 		}
 
 		///

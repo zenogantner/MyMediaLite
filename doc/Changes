@@ -1,6 +1,7 @@
 3.06	2012-11-
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
+	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus: fix learn rate decay
 	data types
 	 - (Sparse)Matrix: implement IsSymmetric according to interface
            specification

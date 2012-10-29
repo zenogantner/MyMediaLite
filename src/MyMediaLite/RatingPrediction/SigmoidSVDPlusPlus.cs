@@ -168,6 +168,8 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
+
+			UpdateLearnRate();
 		}
 
 		///

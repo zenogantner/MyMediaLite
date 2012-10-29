@@ -78,6 +78,9 @@
     <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />
     <Compile Include="RatingPrediction\MatrixFactorizationTest.cs" />
     <Compile Include="TestUtils.cs" />
+    <Compile Include="RatingPrediction\BiasedMatrixFactorizationTest.cs" />
+    <Compile Include="RatingPrediction\SVDPlusPlusTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidSVDPlusPlusTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

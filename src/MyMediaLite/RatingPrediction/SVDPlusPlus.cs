@@ -43,13 +43,13 @@ namespace MyMediaLite.RatingPrediction
 	public class SVDPlusPlus : MatrixFactorization, ITransductiveRatingPredictor
 	{
 		/// <summary>rating biases of the users</summary>
-		protected float[] user_bias;
+		protected internal float[] user_bias;
 		/// <summary>rating biases of the items</summary>
-		protected float[] item_bias;
+		protected internal float[] item_bias;
 		/// <summary>user factors (part expressed via the rated items)</summary>
-		protected Matrix<float> y;
+		protected internal Matrix<float> y;
 		/// <summary>user factors (individual part)</summary>
-		protected Matrix<float> p;
+		protected internal Matrix<float> p;
 
 		///
 		public IDataSet AdditionalFeedback { get; set; }
@@ -208,6 +208,8 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
+
+			UpdateLearnRate();
 		}
 
 		/// <summary>Precompute all user factors</summary>
