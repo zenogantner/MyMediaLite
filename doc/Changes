@@ -3,7 +3,8 @@
 	 - CLiMF: add warning that it is not finished yet
 	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
            - fix learn rate decay
-           - fix System.ArgumentOutOfRangeException in FoldIn()
+           - fix System.ArgumentOutOfRangeException in FoldIn() (reported by
+             Greg Najda)
 	data types
 	 - (Sparse)Matrix: implement IsSymmetric according to interface
            specification
