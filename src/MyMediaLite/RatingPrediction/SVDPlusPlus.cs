@@ -335,8 +335,19 @@ namespace MyMediaLite.RatingPrediction
 				this.item_factors = item_factors;
 				this.min_rating = min_rating;
 				this.max_rating = max_rating;
-				user_factors = null; // enfore computation at first prediction
+				user_factors = null; // enforce computation at first prediction
 			}
+		}
+
+		///
+		protected override float Predict(float[] user_vector, int item_id)
+		{
+			var user_factors = new float[NumFactors];
+			Array.Copy(user_vector, 1, user_factors, 0, NumFactors);
+			double score = global_bias + user_vector[0];
+			if (item_id < item_factors.dim1)
+				score += item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_factors);
+			return (float) score;
 		}
 
 		///

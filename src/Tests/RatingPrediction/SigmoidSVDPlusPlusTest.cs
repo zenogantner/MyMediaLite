@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
@@ -71,6 +72,18 @@ namespace Tests.RatingPrediction
 			Assert.IsNotNull(svdpp.y);
 			Assert.IsNotNull(svdpp.user_bias);
 			Assert.IsNotNull(svdpp.item_bias);
+		}
+
+		[Test()]
+		public void TestFoldIn()
+		{
+			var svdpp = new SigmoidSVDPlusPlus() { Ratings = TestUtils.CreateRatings() };
+			svdpp.Train();
+			var user_ratings = new List<Tuple<int, float>>();
+			user_ratings.Add(new Tuple<int, float>(0, 4.0f));
+			var candidate_items = new List<int> { 0, 1 }; // have a known and an unknown item
+			var results = svdpp.ScoreItems(user_ratings, candidate_items);
+			Assert.AreEqual(2, results.Count);
 		}
 	}
 }
