@@ -98,10 +98,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if (user_id < 0 || user_id > MaxUserID)
-				return 0;
-			if (item_id < 0 || item_id >= item_weights.dim1)
-				return 0;
+			if (user_id > MaxUserID || item_id >= item_weights.dim1)
+				return float.MinValue;
 
 			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
 			float prediction = 0;

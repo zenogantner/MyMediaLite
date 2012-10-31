@@ -89,9 +89,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <returns>the predicted weight</returns>
 		public override float Predict(int user_id, int item_id)
 		{
-			if (user_id >= user_factors.dim1)
-				return float.MinValue;
-			if (item_id >= item_factors.dim1)
+			if (user_id >= user_factors.dim1 || item_id >= item_factors.dim1)
 				return float.MinValue;
 
 			return DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
