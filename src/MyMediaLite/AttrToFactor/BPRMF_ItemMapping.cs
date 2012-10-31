@@ -229,7 +229,7 @@ namespace MyMediaLite.AttrToFactor
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if ((user_id < 0) || (user_id >= user_factors.dim1))
+			if (user_id >= user_factors.dim1)
 			{
 				Console.Error.WriteLine("user is unknown: " + user_id);
 				return float.MinValue;
@@ -244,8 +244,8 @@ namespace MyMediaLite.AttrToFactor
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9} init_mean={10} init_stddev={11}",
-				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping, InitMean, InitStdDev);
+				"{0} num_factors={1} reg_u={2} reg_i={3} reg_j={4} num_iter={5} learn_rate={6} reg_mapping={7} num_iter_mapping={8} learn_rate_mapping={9}",
+				this.GetType().Name, num_factors, reg_u, reg_i, reg_j, NumIter, learn_rate, reg_mapping, num_iter_mapping, learn_rate_mapping);
 		}
 	}
 }

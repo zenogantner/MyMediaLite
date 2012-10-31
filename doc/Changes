@@ -5,6 +5,8 @@
            - fix learn rate decay
            - fix System.ArgumentOutOfRangeException in FoldIn() (reported by
              Greg Najda)
+         - do not check for negative user/item IDs any more - this would be
+           caught anyway by other means
 	data types
 	 - (Sparse)Matrix: implement IsSymmetric according to interface
            specification
