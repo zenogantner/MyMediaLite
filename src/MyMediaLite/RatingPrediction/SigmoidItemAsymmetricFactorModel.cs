@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPrediction
 		float[] y_reg;
 
 		/// <summary>user factors (part expressed via the rated items)</summary>
-		Matrix<float> y;
+		internal Matrix<float> y;
 
 		///
 		public IDataSet AdditionalFeedback { get; set; }

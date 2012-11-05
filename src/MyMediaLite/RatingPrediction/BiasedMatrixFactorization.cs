@@ -76,6 +76,11 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class BiasedMatrixFactorization : MatrixFactorization
 	{
+		/// <summary>Index of the bias term in the user vector representation for fold-in</summary>
+		protected const int FOLD_IN_BIAS_INDEX = 0;
+		/// <summary>Start index of the user factors in the user vector representation for fold-in</summary>
+		protected const int FOLD_IN_FACTORS_START = 1;
+
 		/// <summary>Learn rate factor for the bias terms</summary>
 		public float BiasLearnRate { get; set; }
 
@@ -329,8 +334,8 @@ namespace MyMediaLite.RatingPrediction
 		protected override float Predict(float[] user_vector, int item_id)
 		{
 			var user_factors = new float[NumFactors];
-			Array.Copy(user_vector, 1, user_factors, 0, NumFactors);
-			double score = global_bias + user_vector[0];
+			Array.Copy(user_vector, FOLD_IN_FACTORS_START, user_factors, 0, NumFactors);
+			double score = global_bias + user_vector[FOLD_IN_BIAS_INDEX];
 			if (item_id < item_factors.dim1)
 				score += item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(item_factors, item_id, user_factors);
 			return (float) (min_rating + 1 / (1 + Math.Exp(-score)) * rating_range_size);
@@ -486,8 +491,8 @@ namespace MyMediaLite.RatingPrediction
 				}
 
 			var user_vector = new float[NumFactors + 1];
-			user_vector[0] = user_bias;
-			Array.Copy(factors, 0, user_vector, 1, NumFactors);
+			user_vector[FOLD_IN_BIAS_INDEX] = user_bias;
+			Array.Copy(factors, 0, user_vector, FOLD_IN_FACTORS_START, NumFactors);
 
 			return user_vector;
 		}

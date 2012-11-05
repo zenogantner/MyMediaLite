@@ -52,7 +52,7 @@ namespace MyMediaLite.RatingPrediction
 		private float social_regularization = 1;
 
 		///
-		public IBooleanMatrix UserRelation { get { return this.user_connections; } set {	this.user_connections = value; } }
+		public IBooleanMatrix UserRelation { get { return this.user_connections; } set { this.user_connections = value; } }
 		private IBooleanMatrix user_connections;
 
 		/// <summary>the number of users</summary>

@@ -47,7 +47,7 @@ namespace MyMediaLite.RatingPrediction
 		float[] x_reg;
 
 		/// <summary>item factors (part expressed via the users who rated them)</summary>
-		Matrix<float> x;
+		internal Matrix<float> x;
 
 		///
 		public IDataSet AdditionalFeedback { get; set; }
@@ -101,12 +101,12 @@ namespace MyMediaLite.RatingPrediction
 				int i = ratings.Items[index];
 
 				double score = global_bias + user_bias[u] + item_bias[i];
-				var i_plus_x_sum_vector = x.SumOfRows(users_who_rated_the_item[i]);
+				var x_sum = x.SumOfRows(users_who_rated_the_item[i]);
 				double norm_denominator = Math.Sqrt(users_who_rated_the_item[i].Length);
-				for (int f = 0; f < i_plus_x_sum_vector.Count; f++)
-					i_plus_x_sum_vector[f] = (float) (i_plus_x_sum_vector[f] / norm_denominator);
+				for (int f = 0; f < x_sum.Count; f++)
+					x_sum[f] = (float) (x_sum[f] / norm_denominator);
 
-				score += user_factors.RowScalarProduct(u, i_plus_x_sum_vector);
+				score += user_factors.RowScalarProduct(u, x_sum);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -131,7 +131,7 @@ namespace MyMediaLite.RatingPrediction
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = gradient_common * i_plus_x_sum_vector[f] - user_reg_weight * u_f;
+						double delta_u = gradient_common * x_sum[f] - user_reg_weight * u_f;
 						user_factors.Inc(u, f, current_learnrate * delta_u);
 
 						double common_update = normalized_gradient_common * u_f;

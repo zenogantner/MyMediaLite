@@ -81,6 +81,10 @@
     <Compile Include="RatingPrediction\BiasedMatrixFactorizationTest.cs" />
     <Compile Include="RatingPrediction\SVDPlusPlusTest.cs" />
     <Compile Include="RatingPrediction\SigmoidSVDPlusPlusTest.cs" />
+    <Compile Include="RatingPrediction\SocialMFTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModelTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModelTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
