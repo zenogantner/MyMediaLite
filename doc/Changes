@@ -8,6 +8,9 @@
 	 - SigmoidCombinedAsymmetricFactorModel:
            - implement fold-in
            - fix potential NullReferenceException in Train()
+	 - UserKNN for item recommendation: add fold-in support
+	 - UserKNN and ItemKNN for item recommendation: fix prediction bug -
+           wrong scoring and potential exception
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods
