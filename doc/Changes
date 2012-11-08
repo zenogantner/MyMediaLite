@@ -1,24 +1,86 @@
-3.04	2012-10-??
+3.06	2012-11-
+	recommenders
+	 - CLiMF: add warning that it is not finished yet
+	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
+           - fix learn rate decay
+           - fix System.ArgumentOutOfRangeException in FoldIn() (reported by
+             Greg Najda)
+	 - SigmoidCombinedAsymmetricFactorModel:
+           - implement fold-in
+           - fix potential NullReferenceException in Train()
+         - do not check for negative user/item IDs any more - this would be
+           caught anyway by other means
+	 - add more unit tests for rating prediction methods
+	data types
+	 - (Sparse)Matrix: implement IsSymmetric according to interface
+           specification
+	command-line tools
+	 - #337: use Mono's default garbage collector
+	documentation
+	 - refer to new website: http://mymedialite.net
+	website
+	 - add disclaimer to FAQ
+	misc
+	 - UnhandledExceptionHandler: fix output formatting
+	 - Makefile: use variable ACK for ack/ack-grep
+
+3.05	2012-10-23
+	recommenders
+	 - new item recommenders: BPRSLIM (#120)  and LeastSquareSLIM (#118)
+           (by Lucas Drumond)
+	 - MatrixFactorization: fix bug related to the learn rate decay
+           introduced in the last release (reported by Lucas Drumond and Josif
+           Grabocka)
+	 - MatrixFactorization: support learning rate decay for fold-in
+	 - add some more unit tests
+	command-line tools
+	 - fix to work when symbolically linked (by Lars Schmidt-Thieme)
+	website
+	 - add more MyMediaLite users
+	 - fix issue with trailing whitespaces for included links
+	 - add Lucas Drumond to authors
+	misc
+	 - clean up Makefile
+	 - rename Utils.GetTypesInNamespace() to GetTypes(), make it
+	   an extension method, add unit tests
+
+3.04	2012-10-14
 	API
 	 - IMatrix.IsSymmetric: now explicitly defined as the storage
            strategy, not the mathematical property
         recommenders
-         - new: CLiMF (best paper at RecSys 2012)
+         - new: CLiMF (best paper at RecSys 2012, not complete yet)
          - BPRMF: improve doc
+         - WRMF: rename hyperparameter c_pos to alpha (more consistent with
+                 the paper)
 	 - UserKNN, ItemKNN: correct handling of incremental updates for
            asymmetric correlations; avoid calling Update(User|Item) in
            baseline_predictor twice
 	 - ItemKNN: support fold-in rating prediction
-	command-line tools:
+         - MostPopular:
+           - #312: distinguish number of users and number of events
+           - score computation: divide by number of users or events
+	 - SVD++ and AFM variants: better names for temporary values
+	 - UserItemBaseline: improved API doc with formula of the optimization
+           problem (suggested by Yong Zheng)
+	 - MatrixFactorization: improved API doc
+	 - all factorization models for rating prediction: add multiplicative
+           learn rate decay: property LearnRateDecay, --recommender-option
+           learn_rate_decay=0.9
+	command-line tools
          - rating_prediction: improve usage description
 	 - item_recommendation: new line after prediction_time output
-	evaluation:
+	evaluation
 	 - average precision: more readable computation
-	documentation:
+	 - PrecisionAndRecall.cs: fix API doc generation
+         - add enum RepatedEvents
+	documentation
 	 - document Diversification namespace
-	website:
+	website
  	 - add some papers that use MyMediaLite
 	 - add list of organizations that use MyMediaLite
+	misc:
+	 - #90: Makefile: call ack-grep instead of ack
 
 3.03	2012-09-09
 	API

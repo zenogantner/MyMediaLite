@@ -3,17 +3,17 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 PREFIX=/usr/local
-VERSION=3.03
-HTML_MDOC_DIR=website/public_html/documentation/mdoc
+VERSION=3.05
 HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 HOMEPAGE=${HOME}/src/homepage/public_html
+ACK=ack-grep
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc mdoc-html view-mdoc-html doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
 
 all: mymedialite
 
@@ -25,13 +25,8 @@ clean:
 	cd examples/csharp && make clean
 	rm -rf ${SRC_DIR}/Programs/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/Programs/*/bin/Release/*
-	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Debug/*
-	rm -rf ${SRC_DIR}/KDDCup2011/*/bin/Release/*
-	rm -rf ${SRC_DIR}/Mapping/*/bin/Debug/*
-	rm -rf ${SRC_DIR}/Mapping/*/bin/Release/*
 	rm -rf ${SRC_DIR}/*/bin/Debug/*
 	rm -rf ${SRC_DIR}/*/bin/Release/*
-	rm -rf ${SRC_DIR}/RatingService/bin/*
 	rm -rf ${SRC_DIR}/test-results
 	rm -rf ${SRC_DIR}/*/*.tar.gz
 	rm -rf ${SRC_DIR}/*/*.pidb
@@ -129,18 +124,18 @@ download-imdb: data
 	scripts/download_imdb.sh
 
 todo:
-	ack --type=csharp TODO                    ${SRC_DIR}; echo
-	ack --type=csharp FIXME                   ${SRC_DIR}; echo
-	ack --type=csharp HACK                    ${SRC_DIR}; echo
-	ack --type=csharp NotImplementedException ${SRC_DIR}; echo
-	ack --type=csharp TODO                    ${SRC_DIR} | wc -l
-	ack --type=csharp FIXME                   ${SRC_DIR} | wc -l
-	ack --type=csharp HACK                    ${SRC_DIR} | wc -l
-	ack --type=csharp NotImplementedException ${SRC_DIR} | wc -l
+	${ACK} --type=csharp TODO                    ${SRC_DIR}; echo
+	${ACK} --type=csharp FIXME                   ${SRC_DIR}; echo
+	${ACK} --type=csharp HACK                    ${SRC_DIR}; echo
+	${ACK} --type=csharp NotImplementedException ${SRC_DIR}; echo
+	${ACK} --type=csharp TODO                    ${SRC_DIR} | wc -l
+	${ACK} --type=csharp FIXME                   ${SRC_DIR} | wc -l
+	${ACK} --type=csharp HACK                    ${SRC_DIR} | wc -l
+	${ACK} --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
 ## TODO create regex with less false positives
 check-for-unnecessary-type-declarations:
-	ack --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
+	${ACK} --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
 
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${RATING_PRED_DIR}/bin/Debug/*.exe
@@ -152,13 +147,6 @@ apidoc: doxygen
 
 monodoc:
 	mdoc update --delete -i ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.xml -o doc/monodoc/ ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
-
-mdoc-html: monodoc
-	mdoc-export-html doc/monodoc/ -o ${HTML_MDOC_DIR} --template=doc/htmldoc-template.xsl
-	perl -e "use File::Slurp; \$$f = read_file '${HTML_MDOC_DIR}/index.html'; \$$f =~ s/\n.+?\n.+?experimental.+?\n.+?\n.+?\n.+?\n.+//; print \$$f;" > tmp.html && cat tmp.html > ${HTML_MDOC_DIR}/index.html && rm tmp.html
-
-view-mdoc:
-	x-www-browser file://${HTML_MDOC_DIR}/index.html
 
 doxygen:
 	cd doc/ && doxygen

@@ -87,15 +87,13 @@ class RatingBasedRanking : RatingPrediction
 
 	protected override Dictionary<string, float> Evaluate()
 	{
-		// TODO make more configurable
-		bool repeat_eval = false;
 		int predict_items_number = -1;
 		var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);
 		var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(training_data);
 		return recommender.Evaluate(
 			test_data_posonly, training_data_posonly,
 			test_users, candidate_items,
-			eval_item_mode, repeat_eval, predict_items_number
+			eval_item_mode, RepeatedEvents.No, predict_items_number
 		);
 	}
 

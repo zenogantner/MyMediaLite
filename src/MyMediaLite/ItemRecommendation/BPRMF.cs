@@ -140,7 +140,7 @@ namespace MyMediaLite.ItemRecommendation
 			random = MyMediaLite.Random.GetInstance();
 
 			{
-				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100; // TODO make configurable
+				int num_sample_triples = (int) Math.Sqrt(MaxUserID) * 100;
 				Console.Error.WriteLine("loss_num_sample_triples={0}", num_sample_triples);
 				// create the sample to estimate loss from
 				loss_sample_u = new int[num_sample_triples];
@@ -185,7 +185,7 @@ namespace MyMediaLite.ItemRecommendation
 
 							// reset user if already exhausted
 							if (user_items.Count == 0)
-								foreach (int item_id in Feedback.UserMatrix[user_id]) // TODO define operation for this
+								foreach (int item_id in Feedback.UserMatrix[user_id])
 									user_matrix[user_id, item_id] = true;
 
 							pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
@@ -360,7 +360,7 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_j)
 				{
-					double update = -w_uf  * one_over_one_plus_ex - reg_j * h_jf;
+					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
 					item_factors[j, f] = (float) (h_jf + learn_rate * update);
 				}
 			}

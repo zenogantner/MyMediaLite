@@ -25,7 +25,7 @@ contribute code to the project.
 
 Just fork it on GitHub and send pull requests!
 
-http://ismll.de/mymedialite/contribute.html
+http://mymedialite.net/contribute.html
 
 Bugs and feature requests can be reported on our mailing list or in our issue
 tracker:
@@ -42,7 +42,7 @@ See doc/ and the website for more documentation.
 
 Website
 -------
-  http://ismll.de/mymedialite
+  http://mymedialite.net
 
 Citing MyMediaLite
 ------------------
@@ -60,21 +60,22 @@ MyMediaLite: A Free Recommender System Library. RecSys 2011
   location  = {Chicago, USA}
 }
 
-Please inform us about if you have publication that uses
-this software, so we can list it on MyMediaLite's website.
+Please inform us about if you have a publication that uses
+this software, so we can list it on MyMediaLite's website:
+Just send an e-mail to mymedialite@gmail.com
 
 Acknowledgements
 ----------------
-Thanks go to the following people, who provided valuable feedback about
-MyMediaLite:
+Thanks go to the following people, who provided valuable feedback and/or
+patches:
 Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
 Alejandro Bellogín, Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri,
-Simon Dooms, Lucas Drumond, Jagadeesh Gorla, Mark Graus, Andreas Hoffmann,
-Tomas Horvath, Kenneth Hoste, Frantisek Hrdina, Dietmar Jannach,
-Artus Krohn-Grimberghe, Christina Lichtenthäler, Damir Logar, Brian McFee,
-Greg Najda, Chris Newell, Thai-Nghe Nguyen, Simon Renaud, Marco Ribeiro,
-Saurabh S., Sebastian Schelter, Yue Shi, Tom Tung, Elvio Vicosa, Yongfeng Wang,
-Cees Wesseling
+Simon Dooms, Lucas Drumond, Jagadeesh Gorla, Josif Grabocka, Mark Graus,
+Andreas Hoffmann, Tomas Horvath, Kenneth Hoste, Frantisek Hrdina,
+Dietmar Jannach, Artus Krohn-Grimberghe, Christina Lichtenthäler, Damir Logar,
+Brian McFee, Greg Najda, Chris Newell, Thai-Nghe Nguyen, Simon Renaud,
+Marco Ribeiro, Saurabh S., Sebastian Schelter, Lars Schmidt-Thieme, Yue Shi,
+Tom Tung, Elvio Vicosa, Yongfeng Wang, Cees Wesseling, Yong Zheng
 
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
@@ -82,7 +83,8 @@ under the grant agreement no. 215006.
 
 Copyright & Licensing
 ---------------------
-Copyright (C) 2011, 2012 Zeno Gantner
+Copyright (C) 2012 Zeno Gantner, Lucas Drumond
+Copyright (C) 2011 Zeno Gantner
 Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 
 MyMediaLite is free software: you can redistribute it and/or modify

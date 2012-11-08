@@ -52,14 +52,14 @@ namespace MyMediaLite.RatingPrediction
 		private float social_regularization = 1;
 
 		///
-		public IBooleanMatrix UserRelation { get { return this.user_connections; } set {	this.user_connections = value; } }
+		public IBooleanMatrix UserRelation { get { return this.user_connections; } set { this.user_connections = value; } }
 		private IBooleanMatrix user_connections;
 
 		/// <summary>the number of users</summary>
 		public int NumUsers { get { return MaxUserID + 1; } }
 
 		///
-		protected override void InitModel()
+		protected internal override void InitModel()
 		{
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfRows - 1);
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfColumns - 1);

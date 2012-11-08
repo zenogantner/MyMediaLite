@@ -9,13 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.03</ReleaseVersion>
+    <ReleaseVersion>3.05</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin/Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin/Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -243,6 +243,10 @@
     <Compile Include="Correlation\Overlap.cs" />
     <Compile Include="Correlation\BinaryDataSymmetricCorrelationMatrix.cs" />
     <Compile Include="ItemRecommendation\CLiMF.cs" />
+    <Compile Include="Eval\RepeatedEvents.cs" />
+    <Compile Include="ItemRecommendation\BPRSLIM.cs" />
+    <Compile Include="ItemRecommendation\SLIM.cs" />
+    <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

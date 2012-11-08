@@ -49,6 +49,17 @@ do
 		     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K c=$c" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
 	done
 done
+
+
+method=LeastSquareSLIM
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K num_iter=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K num_iter=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+
+
+method=BPRSLIM
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="num_iter=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="num_iter=$K" --data-dir=$DATA_DIR --test-users=first-10 --candidate-items=first-10
+
 rm $DATA_DIR/first-10
 
 echo

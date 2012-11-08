@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
-    <ReleaseVersion>3.03</ReleaseVersion>
+    <ReleaseVersion>3.05</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +73,18 @@
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
     <Compile Include="Correlation\SymmetricCorrelationMatrixTest.cs" />
+    <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
+    <Compile Include="UtilsTest.cs" />
+    <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />
+    <Compile Include="RatingPrediction\MatrixFactorizationTest.cs" />
+    <Compile Include="TestUtils.cs" />
+    <Compile Include="RatingPrediction\BiasedMatrixFactorizationTest.cs" />
+    <Compile Include="RatingPrediction\SVDPlusPlusTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidSVDPlusPlusTest.cs" />
+    <Compile Include="RatingPrediction\SocialMFTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModelTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModelTest.cs" />
+    <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
@@ -87,5 +99,6 @@
     <Folder Include="Eval\" />
     <Folder Include="Eval\Measures\" />
     <Folder Include="IO\" />
+    <Folder Include="ItemRecommendation\" />
   </ItemGroup>
 </Project>

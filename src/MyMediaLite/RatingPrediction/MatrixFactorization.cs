@@ -19,14 +19,17 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
+[assembly: InternalsVisibleTo("Tests")]
+
 namespace MyMediaLite.RatingPrediction
 {
-	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent</summary>
+	/// <summary>Simple matrix factorization class, learning is performed by stochastic gradient descent (SGD)</summary>
 	/// <remarks>
 	///   <para>
 	///     Factorizing the observed rating values using a factor matrix for users and one for items.
@@ -37,9 +40,9 @@ namespace MyMediaLite.RatingPrediction
 	///     If you encounter such problems, there are three ways to fix them:
 	///     (1) (preferred) Use BiasedMatrixFactorization, which is more stable.
 	///     (2) Change the range of rating values (1 to 5 works generally well with the default settings).
-	///     (3) Change the learn_rate (decrease it if your range is larger than 1 to 5).
+	///     (3) Decrease the learn_rate.
 	///   </para>
-	/// 
+	///
 	///   <para>
 	///     This recommender supports incremental updates.
 	///   </para>
@@ -47,10 +50,10 @@ namespace MyMediaLite.RatingPrediction
 	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
-		protected Matrix<float> user_factors;
+		protected internal Matrix<float> user_factors;
 
 		/// <summary>Matrix containing the latent item factors</summary>
-		protected Matrix<float> item_factors;
+		protected internal Matrix<float> item_factors;
 
 		/// <summary>The bias (global average)</summary>
 		protected float global_bias;
@@ -62,10 +65,14 @@ namespace MyMediaLite.RatingPrediction
 		public double InitStdDev { get; set; }
 
 		/// <summary>Number of latent factors</summary>
-		public uint NumFactors { get; set;}
+		public uint NumFactors { get; set; }
 
-		/// <summary>Learn rate</summary>
+		/// <summary>Learn rate (update step size)</summary>
 		public float LearnRate { get; set; }
+
+		/// <summary>Multiplicative learn rate decay</summary>
+		/// <remarks>Applied after each epoch (= pass over the whole dataset)</remarks>
+		public float LearnRateDecay { get; set; }
 
 		/// <summary>Regularization parameter</summary>
 		public virtual float Regularization { get; set; }
@@ -73,19 +80,23 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get; set; }
 
+		/// <summary>The learn rate used for the current epoch</summary>
+		protected internal float current_learnrate;
+
 		/// <summary>Default constructor</summary>
 		public MatrixFactorization() : base()
 		{
 			// set default values
 			Regularization = 0.015f;
 			LearnRate = 0.01f;
+			LearnRateDecay = 1.0f;
 			NumIter = 30;
 			InitStdDev = 0.1;
 			NumFactors = 10;
 		}
 
 		/// <summary>Initialize the model data structure</summary>
-		protected virtual void InitModel()
+		protected internal virtual void InitModel()
 		{
 			// init factor matrices
 			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
@@ -100,6 +111,8 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < ratings.CountByItem.Count; i++)
 				if (ratings.CountByItem[i] == 0)
 					item_factors.SetRowToOneValue(i, 0);
+
+			current_learnrate = LearnRate;
 		}
 
 		///
@@ -110,6 +123,12 @@ namespace MyMediaLite.RatingPrediction
 			// learn model parameters
 			global_bias = ratings.Average;
 			LearnFactors(ratings.RandomIndex, true, true);
+		}
+
+		/// <summary>Updates <see cref="current_learnrate"/> after each epoch</summary>
+		protected virtual void UpdateLearnRate()
+		{
+			current_learnrate *= LearnRateDecay;
 		}
 
 		///
@@ -163,15 +182,17 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = err * i_f - Regularization * u_f;
-						user_factors.Inc(u, f, LearnRate * delta_u);
+						user_factors.Inc(u, f, current_learnrate * delta_u);
 					}
 					if (update_item)
 					{
 						double delta_i = err * u_f - Regularization * i_f;
-						item_factors.Inc(i, f, LearnRate * delta_i);
+						item_factors.Inc(i, f, current_learnrate * delta_i);
 					}
 				}
 			}
+
+			UpdateLearnRate();
 		}
 
 		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
@@ -307,6 +328,7 @@ namespace MyMediaLite.RatingPrediction
 			var user_vector = new float[NumFactors];
 			user_vector.InitNormal(InitMean, InitStdDev);
 			rated_items.Shuffle();
+			double lr = LearnRate;
 			for (uint it = 0; it < NumIter; it++)
 			{
 				for (int index = 0; index < rated_items.Count; index++)
@@ -321,9 +343,10 @@ namespace MyMediaLite.RatingPrediction
 						float i_f = item_factors[item_id, f];
 
 						double delta_u = err * i_f - Regularization * u_f;
-						user_vector[f] += (float) (LearnRate * delta_u);
+						user_vector[f] += (float) (lr * delta_u);
 					}
 				}
+				lr *= LearnRateDecay;
 			}
 			return user_vector;
 		}
@@ -404,8 +427,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} learn_rate={3} num_iter={4}",
-				this.GetType().Name, NumFactors, Regularization, LearnRate, NumIter);
+				"{0} num_factors={1} regularization={2} learn_rate={3} learn_rate_decay={4} num_iter={5}",
+				this.GetType().Name, NumFactors, Regularization, LearnRate, LearnRateDecay, NumIter);
 		}
 	}
 }

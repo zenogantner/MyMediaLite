@@ -35,23 +35,7 @@ namespace MyMediaLite.DataType
 		protected internal List<List<int>> index_list = new List<List<int>>();
 		
 		///
-		public virtual bool IsSymmetric
-		{
-			get {
-				if (NumberOfRows != NumberOfColumns)
-					return false;
-				for (int i = 0; i < index_list.Count; i++)
-					foreach (var j in index_list[i])
-					{
-						if (i > j)
-							continue; // check every pair only once
-
-						if (! this[i, j].Equals(this[j, i]))
-							return false;
-					}
-				return true;
-			}
-		}
+		public virtual bool IsSymmetric { get { return false; } }
 
 		///
 		public int NumberOfRows { get { return index_list.Count; } }

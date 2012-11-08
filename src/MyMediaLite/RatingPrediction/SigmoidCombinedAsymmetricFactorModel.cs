@@ -53,9 +53,9 @@ namespace MyMediaLite.RatingPrediction
 		float[] y_reg;
 
 		/// <summary>item factors (part expressed via the users who rated them)</summary>
-		Matrix<float> x;
+		internal Matrix<float> x;
 		/// <summary>user factors (part expressed via the rated items)</summary>
-		Matrix<float> y;
+		internal Matrix<float> y;
 
 		///
 		public IDataSet AdditionalFeedback { get; set; }
@@ -107,11 +107,13 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
+			user_factors = null; // delete old user factors
+			item_factors = null; // delete old item factors
+
 			SetupLoss();
 
 			float reg_u = RegU;  // to limit property accesses
 			float reg_i = RegI;
-			float lr = LearnRate;
 
 			foreach (int index in rating_indices)
 			{
@@ -120,17 +122,17 @@ namespace MyMediaLite.RatingPrediction
 
 				double score = global_bias + user_bias[u] + item_bias[i];
 
-				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
+				var y_sum = y.SumOfRows(items_rated_by_user[u]);
 				double u_norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
-				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
-					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / u_norm_denominator);
+				for (int f = 0; f < y_sum.Count; f++)
+					y_sum[f] = (float) (y_sum[f] / u_norm_denominator);
 
-				var i_plus_x_sum_vector = x.SumOfRows(users_who_rated_the_item[i]);
+				var x_sum = x.SumOfRows(users_who_rated_the_item[i]);
 				double i_norm_denominator = Math.Sqrt(users_who_rated_the_item[i].Length);
-				for (int f = 0; f < i_plus_x_sum_vector.Count; f++)
-					i_plus_x_sum_vector[f] = (float) (i_plus_x_sum_vector[f] / i_norm_denominator);
+				for (int f = 0; f < x_sum.Count; f++)
+					x_sum[f] = (float) (x_sum[f] / i_norm_denominator);
 
-				score += DataType.VectorExtensions.ScalarProduct(u_plus_y_sum_vector, i_plus_x_sum_vector);
+				score += DataType.VectorExtensions.ScalarProduct(y_sum, x_sum);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -142,49 +144,41 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * lr * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * lr * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
-				double tmp_u = gradient_common / u_norm_denominator; // TODO better name than tmp_u
-				double tmp_i = gradient_common / i_norm_denominator; // TODO better name than tmp_i
+				double u_normalized_gradient_common = gradient_common / u_norm_denominator;
+				double i_normalized_gradient_common = gradient_common / i_norm_denominator;
 				for (int f = 0; f < NumFactors; f++)
 				{
-					float u_f = u_plus_y_sum_vector[f];
-					float i_f = i_plus_x_sum_vector[f];
+					float u_f = y_sum[f];
+					float i_f = x_sum[f];
 
 					// if necessary, compute and apply updates
 					if (update_user)
 					{
-						double delta_u = gradient_common * i_plus_x_sum_vector[f] - user_reg_weight * u_f;
-						user_factors.Inc(u, f, lr * delta_u);
-
-						double common_update = tmp_i * u_f;
+						double common_update = i_normalized_gradient_common * u_f;
 						foreach (int other_user_id in users_who_rated_the_item[i])
 						{
 							double delta_ou = common_update - x_reg[other_user_id] * x[other_user_id, f];
-							x.Inc(other_user_id, f, lr * delta_ou);
+							x.Inc(other_user_id, f, current_learnrate * delta_ou);
 						}
 					}
 
 					// if necessary, compute and apply updates
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
-						item_factors.Inc(i, f, lr * delta_i);
-
-						double common_update = tmp_u * i_f;
+						double common_update = u_normalized_gradient_common * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
 							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
-							y.Inc(other_item_id, f, lr * delta_oi);
+							y.Inc(other_item_id, f, current_learnrate * delta_oi);
 						}
 					}
 				}
 			}
-			user_factors = null; // delete old user factors
-			item_factors = null; // delete old item factors
 		}
 
 		///
@@ -269,14 +263,35 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
+		protected override float Predict(float[] user_vector, int item_id)
 		{
-			throw new NotImplementedException();
+			if (item_factors == null)
+				PrecomputeItemFactors();
+			return base.Predict(user_vector, item_id);
 		}
 
 		///
-		protected override void InitModel()
+		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
+			var items_rated_by_user = (from t in rated_items select t.Item1).ToArray();
+
+			var factors = y.SumOfRows(items_rated_by_user).ToArray();
+			double norm_denominator = Math.Sqrt(items_rated_by_user.Length);
+			for (int f = 0; f < factors.Length; f++)
+				factors[f] = (float) (factors[f] / norm_denominator);
+
+			var user_vector = new float[NumFactors + 1];
+			user_vector[FOLD_IN_BIAS_INDEX] = 0;
+			Array.Copy(factors, 0, user_vector, FOLD_IN_FACTORS_START, NumFactors);
+
+			return user_vector;
+		}
+
+		///
+		protected internal override void InitModel()
+		{
+			base.InitModel();
+
 			x = new Matrix<float>(MaxUserID + 1, NumFactors);
 			x.InitNormal(InitMean, InitStdDev);
 			// set factors to zero for users without training examples
@@ -290,8 +305,6 @@ namespace MyMediaLite.RatingPrediction
 			for (int item_id = 0; item_id < y.NumberOfRows; item_id++)
 				if (item_id > ratings.MaxItemID || ratings.CountByItem[item_id] == 0)
 					y.SetRowToOneValue(item_id, 0);
-
-			base.InitModel();
 		}
 
 		/// <summary>Precompute all user factors</summary>
@@ -361,8 +374,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} loss={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, Loss);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} learn_rate_decay={7} num_iter={8} loss={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, LearnRateDecay, NumIter, Loss);
 		}
 	}
 }

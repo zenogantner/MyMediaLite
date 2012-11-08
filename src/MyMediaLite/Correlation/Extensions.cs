@@ -34,15 +34,9 @@ namespace MyMediaLite.Correlation
 		/// <returns>the correlation sum</returns>
 		public static double SumUp(this ICorrelationMatrix correlation, int entity_id, ICollection<int> entities, float q = 1.0f)
 		{
-			int num_entities = correlation.NumEntities;
-
-			if (entity_id < 0 || entity_id >= num_entities)
-				throw new ArgumentException("Invalid entity ID: " + entity_id);
-
 			double result = 0;
 			foreach (int entity_id2 in entities)
-				//if (entity_id2 < num_entities)
-					result += Math.Pow(correlation[entity_id, entity_id2], q);
+				result += Math.Pow(correlation[entity_id, entity_id2], q);
 			return result;
 		}
 

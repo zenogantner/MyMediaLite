@@ -1,8 +1,9 @@
 [%
   links = {
-     zeno          => { url => 'http://ismll.de/personen/gantner_en.html',       title => 'Zeno Gantner' }
-     steffen       => { url => 'http://ismll.de/personen/rendle_en.html',        title => 'Steffen Rendle' }
-     christoph     => { url => 'http://ismll.de/personen/freudenthaler_en.html', title => 'Christoph Freudenthaler' }
+     zeno          => { url => 'http://ismll.de/personen/gantner_en.html',             title => 'Zeno Gantner' }
+     steffen       => { url => 'http://cms.uni-konstanz.de/informatik/rendle/',        title => 'Steffen Rendle' }
+     christoph     => { url => 'http://cms.uni-konstanz.de/informatik/rendle/members/freudenthaler/', title => 'Christoph Freudenthaler' }
+     lucas         => { url => 'http://ismll.de/personen/drumond_en.html',       title => 'Lucas Drumond' }
      mymedia       => { url => 'http://www.mymediaproject.org/'                  title => 'Dynamic Personalization of Multimedia (MyMedia)' }
      fp7           => { url => 'http://ec.europa.eu/research/fp7/index_en.cfm',  title => 'European Commission 7th Framework Programme' }
      free_software => { url => 'http://www.gnu.org/philosophy/free-sw.html',     title => 'free software' }
@@ -32,7 +33,7 @@
      likelike      => { url => 'http://code.google.com/p/likelike/'                           title => 'Likelike' }
      multilens     => { url => 'http://knuth.luther.edu/~bmiller/dynahome.php?page=multilens' title => 'MultiLens' }
      apprecommender => { url => 'https://github.com/tassia/AppRecommender',                   title => 'AppRecommender' }
-	 wooflix       => { url => 'http://gustavonarea.net/blog/posts/korens-svd-python-implementation/', title => 'wooflix' }
+     wooflix       => { url => 'http://gustavonarea.net/blog/posts/korens-svd-python-implementation/', title => 'wooflix' }
      cwis          => { url => 'http://scout.wisc.edu/Projects/CWIS/'                         title => 'Collection Workflow Integration System' }
      filmaster     => { url => 'https://bitbucket.org/filmaster/filmaster-test/src'           title => 'Filmaster' }
      mloss         => { url => 'http://mloss.org',                                            title => 'mloss.org' }
@@ -43,12 +44,11 @@
      libsvm        => { url => 'http://www.csie.ntu.edu.tw/~cjlin/libsvm/',      title => 'LIBSVM' }
      weka          => { url => 'http://www.cs.waikato.ac.nz/ml/weka/',           title => 'Weka' }
      r             => { url => 'http://www.r-project.org/',                      title => 'R' }
-     mathdotnetnumerics => { url => 'http://numerics.mathdotnet.com',         title => 'Math.NET Numerics' }
+     mathdotnetnumerics => { url => 'http://numerics.mathdotnet.com',            title => 'Math.NET Numerics' }
      libsvmdotnet  => { url => 'http://www.matthewajohnson.org/software/svm.html', title => 'SVM.NET' }
      mymediaframework => { url => 'http://mymediaproject.codeplex.com/',         title => 'MyMedia Framework' }
      ucmedia       => { url => 'http://www.mymediaproject.org/UCM.aspx',         title => 'User Centric Media Cluster' }
-     email         => { url => 'mailto:mymedialite@ismll.de',                    title => 'mymedialite@ismll.de' }
-     mymedia_email => { url => 'mailto:info@mymediaproject.org',                 title => 'info@mymediaproject.org' }
+     email         => { url => 'mailto:mymedialite@gmail.com',                   title => 'mymedialite@gmail.com' }
      source_code   => { url => 'https://github.com/zenogantner/MyMediaLite',     title => 'https://github.com/zenogantner/MyMediaLite' }
      ironpython    => { url => 'http://ironpython.net/'                          title => 'IronPython' }
      ironruby      => { url => 'http://ironruby.net/'                            title => 'IronRuby' }
@@ -58,7 +58,7 @@
      ndcg          => { url => 'http://recsyswiki.com/wiki/NDCG'                 title => 'NDCG' }
      mae           => { url => 'http://recsyswiki.com/wiki/MAE'                  title => 'MAE' }
      rmse          => { url => 'http://recsyswiki.com/wiki/RMSE'                 title => 'RMSE' }
-	 cbd           => { url => 'http://www.kaggle.com/c/ChessRatings2/Details/Evaluation' title => 'CBD' }
+     cbd           => { url => 'http://www.kaggle.com/c/ChessRatings2/Details/Evaluation' title => 'CBD' }
      auc           => { url => 'http://recsyswiki.com/wiki/AUC'                  title => 'AUC' }
   }
 %]

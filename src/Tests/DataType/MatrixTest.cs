@@ -28,6 +28,15 @@ namespace Tests.Data
 	[TestFixture()]
 	public class MatrixTest
 	{
+		[Test()] public void TestIsSymmetric()
+		{
+			var matrix1 = new Matrix<double>(3, 5);
+			Assert.IsFalse(matrix1.IsSymmetric);
+
+			var matrix2 = new Matrix<double>(5, 5);
+			Assert.IsFalse(matrix2.IsSymmetric);
+		}
+
 		[Test()] public void TestCreateMatrix()
 		{
 			var matrix = new Matrix<int>(2, 2);

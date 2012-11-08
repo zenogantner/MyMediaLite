@@ -41,9 +41,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SigmoidSVDPlusPlus : SVDPlusPlus, ITransductiveRatingPredictor
 	{
-		// TODO
-		// - merge with SVDPlusPlus?
-
 		/// <summary>size of the interval of valid ratings</summary>
 		float rating_range_size;
 
@@ -117,7 +114,6 @@ namespace MyMediaLite.RatingPrediction
 
 			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
-			float lr  = LearnRate;
 
 			foreach (int index in rating_indices)
 			{
@@ -125,12 +121,12 @@ namespace MyMediaLite.RatingPrediction
 				int i = ratings.Items[index];
 
 				double score = global_bias + user_bias[u] + item_bias[i];
-				var u_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
+				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
-				for (int f = 0; f < u_plus_y_sum_vector.Count; f++)
-					u_plus_y_sum_vector[f] = (float) (u_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
+				for (int f = 0; f < p_plus_y_sum_vector.Count; f++)
+					p_plus_y_sum_vector[f] = (float) (p_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, u_plus_y_sum_vector);
+				score += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
@@ -142,12 +138,12 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * (gradient_common - BiasReg * item_reg_weight * item_bias[i]);
 
 				// adjust factors
-				double x = gradient_common / norm_denominator; // TODO better name than x
+				double normalized_gradient_common = gradient_common / norm_denominator;
 				for (int f = 0; f < NumFactors; f++)
 				{
 					float i_f = item_factors[i, f];
@@ -156,22 +152,24 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = gradient_common * i_f - user_reg_weight * p[u, f];
-						p.Inc(u, f, lr * delta_u);
+						p.Inc(u, f, current_learnrate * delta_u);
 					}
 					if (update_item)
 					{
-						double delta_i = gradient_common * u_plus_y_sum_vector[f] - item_reg_weight * i_f;
-						item_factors.Inc(i, f, lr * delta_i);
+						double delta_i = gradient_common * p_plus_y_sum_vector[f] - item_reg_weight * i_f;
+						item_factors.Inc(i, f, current_learnrate * delta_i);
 
-						double common_update = x * i_f;
+						double common_update = normalized_gradient_common * i_f;
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
 							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
-							y.Inc(other_item_id, f, lr * delta_oi);
+							y.Inc(other_item_id, f, current_learnrate * delta_oi);
 						}
 					}
 				}
 			}
+
+			UpdateLearnRate();
 		}
 
 		///
@@ -263,8 +261,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} loss={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, Loss);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} learn_rate_decay={7} num_iter={8} loss={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, LearnRateDecay, NumIter, Loss);
 		}
 	}
 }
