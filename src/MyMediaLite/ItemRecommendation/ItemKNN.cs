@@ -64,7 +64,8 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			else
 			{
-				return (float) correlation.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);;
+				// roughly 10x faster
+				return (float) correlation.SumUp(item_id, Feedback.UserMatrix[user_id], Q);;
 			}
 		}
 

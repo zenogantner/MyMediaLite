@@ -26,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class UserKNN : KNN, IUserSimilarityProvider
+	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
 	{
 		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.UserMatrix; } }
@@ -60,7 +60,8 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			else
 			{
-				return (float) correlation.SumUp(item_id, Feedback.UserMatrix[user_id], Q);;
+				// roughly 10x faster
+				return (float) correlation.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);
 			}
 		}
 
@@ -78,5 +79,68 @@ namespace MyMediaLite.ItemRecommendation
 			else
 				return correlation.GetNearestNeighbors(user_id, n);
 		}
+
+		float Predict(IList<float> user_similarities, IList<int> nearest_neighbors, int item_id)
+		{
+			if ((item_id < 0) || (item_id > MaxItemID))
+				return float.MinValue;
+
+			if (k != uint.MaxValue)
+			{
+				double sum = 0;
+				foreach (int neighbor in nearest_neighbors)
+					if (Feedback.UserMatrix[neighbor, item_id])
+						sum += Math.Pow(user_similarities[neighbor], Q);
+				return (float) sum;
+			}
+			else
+			{
+				double sum = 0;
+				foreach (int user_id in Feedback.ItemMatrix[item_id])
+					sum += Math.Pow(user_similarities[user_id], Q);
+				return (float) sum;
+			}
+		}
+
+		/// <summary>Fold in one user, identified by their items</summary>
+		/// <returns>a vector containing the similarities to all users</returns>
+		/// <param name='items'>the items representing the user</param>
+		protected virtual IList<float> FoldIn(IList<int> items)
+		{
+			var user_similarities = new float[MaxUserID + 1];
+
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
+				user_similarities[user_id] = correlation.ComputeCorrelation(Feedback.UserMatrix[user_id], new HashSet<int>(items));
+
+			return user_similarities;
+		}
+
+		///
+		public IList<Tuple<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
+		{
+			var user_similarities = FoldIn(accessed_items);
+
+			IList<int> nearest_neighbors = null;
+			if (k != uint.MaxValue)
+			{
+				var users = Enumerable.Range(0, MaxUserID - 1).ToList();
+				users.Sort(delegate(int i, int j) { return user_similarities[j].CompareTo(user_similarities[i]); });
+
+				if (k < users.Count)
+					nearest_neighbors = users.GetRange(0, (int) k).ToArray();
+				else
+					nearest_neighbors = users.ToArray();
+			}
+
+			// score the items
+			var result = new Tuple<int, float>[candidate_items.Count];
+			for (int i = 0; i < candidate_items.Count; i++)
+			{
+				int item_id = candidate_items[i];
+				result[i] = Tuple.Create(item_id, Predict(user_similarities, nearest_neighbors, item_id));
+			}
+			return result;
+		}
+
 	}
 }
