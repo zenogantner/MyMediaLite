@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 using MyMediaLite.DataType;
 using MyMediaLite.Correlation;
 
@@ -25,8 +26,56 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		protected Cooccurrence freqMatrix = new Cooccurrence(0);
 
-
+		public override void Train()
+		{
+			base.Train();
+			freqMatrix.ComputeCorrelations(DataMatrix);
+			correctFreqMatrixDiagonal();
+		}
 	
+		private void correctFreqMatrixDiagonal()
+		{
+			for (int i = 0; i < freqMatrix.NumEntities; i++)
+				freqMatrix[i, i] = DataMatrix.NumEntriesByRow(i);
+		}
+	
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			Dictionary<int, List<int>> ratings = new Dictionary<int, ICollection<int>>();
+			foreach (var tuple in feedback)
+			{
+				int user_id = tuple.Item1;
+				if (! ratings.ContainsKey(user_id))
+					ratings[user_id] = new HashSet();
+				int item_id = tuple.Item2;
+				ratings[user_id].Add(item_id);
+			
+				if (user_id > MaxUserID)
+					AddUser(user_id);
+				if (item_id > MaxItemID) {
+					AddItem(item_id);
+					freqMatrix.AddEntity(item_id);
+				}
+				freqMatrix[item_id, item_id]++;
+
+				Feedback.Add(user_id, item_id);
+			}
+			
+			foreach (KeyValuePair<int,HashSet<int>> rat in ratings)
+			{
+				List rated_items = DataMatrix.GetEntriesByColumn(rat.Key);
+				List new_items = rat.Value.ToList();
+				foreach (int rated_item in rated_items)
+				{
+					foreach(int new_item in new_items)
+					{
+						freqMatrix[rated_item, new_item]++;
+						// TODO: calculate new similarities
+					}
+				}
+			}
+			
+		}			
 	}
 }
 
