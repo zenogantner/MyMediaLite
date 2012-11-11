@@ -11,6 +11,8 @@
 	 - UserKNN for item recommendation: add fold-in support
 	 - UserKNN and ItemKNN for item recommendation: fix prediction bug -
            wrong scoring and potential exception
+	 - BPRMF, MultiCoreBPRMF:
+           - #353: get rid of 'fast sampling' feature
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods

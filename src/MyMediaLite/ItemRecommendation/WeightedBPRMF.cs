@@ -41,8 +41,6 @@ namespace MyMediaLite.ItemRecommendation
 			WithReplacement = false;
 			// de-activate until false is supported
 			UniformUserSampling = true;
-			// suppress using user_neg_items in BPRMF
-			FastSamplingMemoryLimit = 0;
 
 			base.Train();
 		}
