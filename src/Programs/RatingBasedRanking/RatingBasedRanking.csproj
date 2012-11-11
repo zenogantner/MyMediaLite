@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>RatingBasedRanking</RootNamespace>
     <AssemblyName>rating_based_ranking</AssemblyName>
-    <ReleaseVersion>3.05</ReleaseVersion>
+    <ReleaseVersion>3.06</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
