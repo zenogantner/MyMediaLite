@@ -131,13 +131,13 @@ namespace MyMediaLite.ItemRecommendation
 				loss_sample_u = new int[num_sample_triples];
 				loss_sample_i = new int[num_sample_triples];
 				loss_sample_j = new int[num_sample_triples];
-				int u, i, j;
+				int user_id, item_id, other_item_id;
 				for (int c = 0; c < num_sample_triples; c++)
 				{
-					SampleTriple(out u, out i, out j);
-					loss_sample_u[c] = u;
-					loss_sample_i[c] = i;
-					loss_sample_j[c] = j;
+					SampleTriple(out user_id, out item_id, out other_item_id);
+					loss_sample_u[c] = user_id;
+					loss_sample_i[c] = item_id;
+					loss_sample_j[c] = other_item_id;
 				}
 			}
 
@@ -154,7 +154,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_pos_events = Feedback.Count;
 
 			int user_id, pos_item_id, neg_item_id;
-
+			
 			if (UniformUserSampling)
 			{
 				if (WithReplacement) // case 1: uniform user sampling, with replacement
@@ -217,32 +217,32 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <summary>Sample another item, given the first one and the user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the given item</param>
-		/// <param name="j">the ID of the other item</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the given item</param>
+		/// <param name="other_item_id">the ID of the other item</param>
 		/// <returns>true if the given item was already seen by user u</returns>
-		protected virtual bool SampleOtherItem(int u, int i, out int j)
+		protected virtual bool SampleOtherItem(int user_id, int item_id, out int other_item_id)
 		{
-			bool item_is_positive = Feedback.UserMatrix[u, i];
+			bool item_is_positive = Feedback.UserMatrix[user_id, item_id];
 
 			do
-				j = random.Next(MaxItemID + 1);
-			while (Feedback.UserMatrix[u, j] == item_is_positive);
+				other_item_id = random.Next(MaxItemID + 1);
+			while (Feedback.UserMatrix[user_id, other_item_id] == item_is_positive);
 
 			return item_is_positive;
 		}
 
 		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleItemPair(int u, out int i, out int j)
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
 		{
-			var user_items = Feedback.UserMatrix[u];
-			i = user_items.ElementAt(random.Next(user_items.Count));
+			var user_items = Feedback.UserMatrix[user_id];
+			item_id = user_items.ElementAt(random.Next(user_items.Count));
 			do
-				j = random.Next(MaxItemID + 1);
-			while (user_items.Contains(j));
+				other_item_id = random.Next(MaxItemID + 1);
+			while (user_items.Contains(other_item_id));
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -251,73 +251,73 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(MaxUserID + 1);
-				var user_items = Feedback.UserMatrix[u];
+				int user_id = random.Next(MaxUserID + 1);
+				var user_items = Feedback.UserMatrix[user_id];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
-				return u;
+				return user_id;
 			}
 		}
 
 		/// <summary>Sample a triple for BPR learning</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleTriple(out int u, out int i, out int j)
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected virtual void SampleTriple(out int user_id, out int item_id, out int other_item_id)
 		{
-			u = SampleUser();
-			SampleItemPair(u, out i, out j);
+			user_id = SampleUser();
+			SampleItemPair(user_id, out item_id, out other_item_id);
 		}
 
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
 		/// <param name="update_u">if true, update the user latent factors</param>
 		/// <param name="update_i">if true, update the latent factors of the first item</param>
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
-		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
+		protected virtual void UpdateFactors(int user_id, int item_id, int other_item_id, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = item_bias[i] - item_bias[j] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
+			double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
 			// adjust bias terms
 			if (update_i)
 			{
-				double update = one_over_one_plus_ex - BiasReg * item_bias[i];
-				item_bias[i] += (float) (learn_rate * update);
+				double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
+				item_bias[item_id] += (float) (learn_rate * update);
 			}
 
 			if (update_j)
 			{
-				double update = -one_over_one_plus_ex - BiasReg * item_bias[j];
-				item_bias[j] += (float) (learn_rate * update);
+				double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
+				item_bias[other_item_id] += (float) (learn_rate * update);
 			}
 
 			// adjust factors
 			for (int f = 0; f < num_factors; f++)
 			{
-				float w_uf = user_factors[u, f];
-				float h_if = item_factors[i, f];
-				float h_jf = item_factors[j, f];
+				float w_uf = user_factors[user_id, f];
+				float h_if = item_factors[item_id, f];
+				float h_jf = item_factors[other_item_id, f];
 
 				if (update_u)
 				{
 					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[u, f] = (float) (w_uf + learn_rate * update);
+					user_factors[user_id, f] = (float) (w_uf + learn_rate * update);
 				}
 
 				if (update_i)
 				{
 					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[i, f] = (float) (h_if + learn_rate * update);
+					item_factors[item_id, f] = (float) (h_if + learn_rate * update);
 				}
 
 				if (update_j)
 				{
 					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[j, f] = (float) (h_jf + learn_rate * update);
+					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
 				}
 			}
 		}
