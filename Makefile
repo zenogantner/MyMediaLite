@@ -4,16 +4,18 @@ GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 PREFIX=/usr/local
 VERSION=3.05
-HTML_DOXYGEN_DIR=website/public_html/documentation/doxygen
+HOMEPAGE=${HOME}/src/mymedialite.net/public_html
+HOMEPAGE_SRC=${HOME}/src/mymedialite.net/src
+HOMEPAGE_INC=${HOME}/src/mymedialite.net/lib
+HTML_DOXYGEN_DIR=${HOMEPAGE}/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
 ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
 RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
-HOMEPAGE=${HOME}/src/homepage/public_html
 ACK=ack-grep
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer website copy-website test release download-movielens copy-packages-website example-python example-ruby check-for-unnecessary-type-declarations unittests
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens copy-packages-website example-python example-ruby unittests
 
 all: mymedialite
 
@@ -37,7 +39,6 @@ clean:
 veryclean: clean
 	rm -f *.tar.gz
 	rm -rf doc/doxygen/*
-	rm -rf website/public_html/*
 
 install:
 	cd ${SRC_DIR} && make install PREFIX=${PREFIX}
@@ -88,9 +89,9 @@ unittests:
 release: mymedialite MyMediaLite-${VERSION}.doc.tar.gz MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz
 	head doc/Changes
 	git status
-	cp doc/Changes website/src/download
-	bin/rating_prediction --help > website/lib/rating_prediction_usage
-	bin/item_recommendation --help > website/lib/item_recommendation_usage
+	cp doc/Changes ${HOMEPAGE_SRC}/download
+	bin/rating_prediction --help > ${HOMEPAGE_INC}/rating_prediction_usage
+	bin/item_recommendation --help > ${HOMEPAGE_INC}/item_recommendation_usage
 	cat doc/ReleaseChecklist
 
 example-csharp: data/ml-100k/u.data
@@ -133,10 +134,6 @@ todo:
 	${ACK} --type=csharp HACK                    ${SRC_DIR} | wc -l
 	${ACK} --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
-## TODO create regex with less false positives
-check-for-unnecessary-type-declarations:
-	${ACK} --type=csharp "new" src/MyMediaLite | grep -v static | grep -v var | grep -v public | grep -v private | grep -v protected | grep -v return | grep -v throw | grep -v this | grep -v //
-
 gendarme:
 	gendarme ${GENDARME_OPTIONS} ${RATING_PRED_DIR}/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${ITEM_REC_DIR}/bin/Debug/*.exe
@@ -165,11 +162,5 @@ edit-flyer:
 view-flyer:
 	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf &
 
-website:
-	ttree -s website/src/ -d website/public_html/ -c website/lib/ -l website/lib/ -r -f config --post_chomp -a
-
-copy-website: website
-	cp -r website/public_html/* ${HOMEPAGE}/mymedialite/
-
 copy-packages-website:
-	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOMEPAGE}/mymedialite/download
+	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOMEPAGE}/download

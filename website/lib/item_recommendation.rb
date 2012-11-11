@@ -1,1 +1,0 @@
-../../examples/ruby/item_recommendation.rb
