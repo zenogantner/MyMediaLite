@@ -25,7 +25,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of k-nearest neighbors (kNN) model</summary>
 	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
-	public abstract class KNN : ItemRecommender
+	public abstract class KNN : IncrementalItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
@@ -69,12 +69,17 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Correlation matrix over some kind of entity, e.g. users or items</summary>
 		protected IBinaryDataCorrelationMatrix correlation;
 
+		/// <summary>Coocurrence matrix necessary to compute incremental updates</summary>
+		protected Cooccurrence cooccurrence;
+
 		/// <summary>Default constructor</summary>
 		public KNN()
 		{
 			Correlation = BinaryCorrelationType.Cosine;
 			Alpha = 0.5f;
 			Q = 1.0f;
+			UpdateUsers = true;
+			UpdateItems = true;
 		}
 
 		void InitModel()
@@ -101,6 +106,17 @@ namespace MyMediaLite.ItemRecommendation
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
 			correlation.Weighted = Weighted;
+			cooccurrence = new Cooccurrence(num_entities);
+			correctCooccurrenceDiagonal();
+		}
+
+		/// <summary>
+		/// Corrects the coocurrence diagonal (ocurrence counts).
+		/// </summary>
+		private void correctCooccurrenceDiagonal()
+		{
+			for (int i = 0; i < cooccurrence.NumEntities; i++)
+				cooccurrence[i, i] = DataMatrix.NumEntriesByRow(i);
 		}
 
 		///
@@ -108,6 +124,10 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 			correlation.ComputeCorrelations(DataMatrix);
+			if(correlation is Cooccurrence)
+				cooccurrence = (Cooccurrence) correlation;
+			else
+				cooccurrence.ComputeCorrelations(DataMatrix);
 		}
 
 		///
@@ -121,10 +141,11 @@ namespace MyMediaLite.ItemRecommendation
 					writer.WriteLine(String.Join(" ", nn));
 
 				correlation.Write(writer);
+				cooccurrence.Write(writer);
 			}
 		}
 
-		///
+		/// 
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
@@ -149,6 +170,8 @@ namespace MyMediaLite.ItemRecommendation
 					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
 				else
 					throw new NotSupportedException("Unknown correlation type: " + correlation.GetType());
+
+				cooccurrence.ReadSymmetricCorrelationMatrix(reader);
 
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
