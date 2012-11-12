@@ -40,10 +40,23 @@ namespace MyMediaLite.ItemRecommendation
 			int num_items = MaxItemID + 1;
 			if (k != uint.MaxValue)
 			{
-				this.nearest_neighbors = new int[num_items][];
+				this.nearest_neighbors = new List<IList<int>>(num_items);
 				for (int i = 0; i < num_items; i++)
-					nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
+					nearest_neighbors.Add(correlation.GetNearestNeighbors(i, k));
 			}
+		}
+
+		/// <summary>
+		/// Adds the item.
+		/// </summary>
+		/// <param name='item_id'>
+		/// Item_id.
+		/// </param>
+		protected override void AddItem(int item_id)
+		{
+			base.AddItem(item_id);
+			Console.WriteLine("Added item "+item_id);
+			nearest_neighbors.Add(new int[k]);
 		}
 
 		///
@@ -82,6 +95,101 @@ namespace MyMediaLite.ItemRecommendation
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
 				return correlation.GetNearestNeighbors(item_id, n);
+		}
+
+		/// <summary>
+		/// Remove all feedback events by the given user-item combinations
+		/// </summary>
+		/// <param name='feedback'>
+		/// collection of user id - item id tuples
+		/// </param>
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.RemoveFeedback (feedback);
+			var items = from t in feedback select t.Item1;
+			retrainItems(new HashSet<int>(items));
+		}
+ 
+		/// <summary>
+		/// Add positive feedback events and perform incremental training
+		/// </summary>
+		/// <param name='feedback'>
+		/// collection of user id - item id tuples
+		/// </param>
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.AddFeedback (feedback);
+			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			foreach (var tpl in feedback)
+			{
+				if (!feeddict.ContainsKey(tpl.Item1))
+					feeddict.Add(tpl.Item1, new List<int>());
+				feeddict[tpl.Item1].Add(tpl.Item2);
+			}
+			foreach (KeyValuePair<int, List<int>> f in feeddict)
+			{
+				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				List<int> new_items = f.Value;
+				foreach (int i in rated_items)
+				{
+					foreach (int j in new_items)
+					{
+						cooccurrence[i, j]++;
+						switch(Correlation) 
+						{
+							case BinaryCorrelationType.Cooccurrence:
+								correlation = cooccurrence;
+								break;
+							case BinaryCorrelationType.Cosine:
+								if (i == j)
+									correlation[i, i] = 1;
+								else
+									correlation[i,j] = cooccurrence[i, j] / 
+										(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
+								break;
+							default:
+							throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
+						}
+					}
+				}
+				retrainItems(new_items);
+			}
+		}
+
+		/// <summary>
+		/// Retrains the items.
+		/// </summary>
+		/// <param name='item_ids'>
+		/// Item_ids.
+		/// </param>
+		protected void retrainItems(IEnumerable<int> item_ids)
+		{
+			foreach (int item_id in item_ids)
+			{
+				nearest_neighbors[item_id] = correlation.GetNearestNeighbors(item_id, k);
+				// Find items that have item_id in neighbourhood
+				List<int> retrain_also = getItemsWithNeighbor(item_id);
+				foreach (int item in retrain_also)
+					nearest_neighbors[item] = correlation.GetNearestNeighbors(item, k);
+			}
+		}
+		
+		/// <summary>
+		/// Gets the items with neighbor.
+		/// </summary>
+		/// <returns>
+		/// The items with neighbor.
+		/// </returns>
+		/// <param name='neighbor_id'>
+		/// Neighbor_id.
+		/// </param>
+		protected List<int> getItemsWithNeighbor(int neighbor_id)
+		{
+			List<int> item_list = new List<int>();
+			for(int i = 0; i < nearest_neighbors.Count; i++)
+				if(nearest_neighbors[i].Contains(neighbor_id))
+					item_list.Add(i);
+			return item_list;
 		}
 	}
 }
