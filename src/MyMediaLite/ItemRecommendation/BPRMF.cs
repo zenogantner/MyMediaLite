@@ -54,16 +54,8 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class BPRMF : MF, IFoldInItemRecommender
 	{
-		/// <summary>Fast, but memory-intensive sampling</summary>
-		protected bool fast_sampling = false;
-
 		/// <summary>Item bias terms</summary>
 		protected float[] item_bias;
-
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; } }
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		protected int fast_sampling_memory_limit = 1024;
 
 		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
 		public bool WithReplacement { get; set; }
@@ -99,11 +91,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		protected bool update_j = true;
 
-		/// <summary>support data structure for fast sampling</summary>
-		protected IList<IList<int>> user_pos_items;
-		/// <summary>support data structure for fast sampling</summary>
-		protected IList<IList<int>> user_neg_items;
-
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
 		/// <summary>array of positive item components of triples to use for approximate loss computation</summary>
@@ -135,8 +122,6 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 
-			CheckSampling();
-
 			random = MyMediaLite.Random.GetInstance();
 
 			{
@@ -146,13 +131,13 @@ namespace MyMediaLite.ItemRecommendation
 				loss_sample_u = new int[num_sample_triples];
 				loss_sample_i = new int[num_sample_triples];
 				loss_sample_j = new int[num_sample_triples];
-				int u, i, j;
+				int user_id, item_id, other_item_id;
 				for (int c = 0; c < num_sample_triples; c++)
 				{
-					SampleTriple(out u, out i, out j);
-					loss_sample_u[c] = u;
-					loss_sample_i[c] = i;
-					loss_sample_j[c] = j;
+					SampleTriple(out user_id, out item_id, out other_item_id);
+					loss_sample_u[c] = user_id;
+					loss_sample_i[c] = item_id;
+					loss_sample_j[c] = other_item_id;
 				}
 			}
 
@@ -169,7 +154,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_pos_events = Feedback.Count;
 
 			int user_id, pos_item_id, neg_item_id;
-
+			
 			if (UniformUserSampling)
 			{
 				if (WithReplacement) // case 1: uniform user sampling, with replacement
@@ -232,61 +217,32 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <summary>Sample another item, given the first one and the user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the given item</param>
-		/// <param name="j">the ID of the other item</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the given item</param>
+		/// <param name="other_item_id">the ID of the other item</param>
 		/// <returns>true if the given item was already seen by user u</returns>
-		protected virtual bool SampleOtherItem(int u, int i, out int j)
+		protected virtual bool SampleOtherItem(int user_id, int item_id, out int other_item_id)
 		{
-			bool item_is_positive = Feedback.UserMatrix[u, i];
+			bool item_is_positive = Feedback.UserMatrix[user_id, item_id];
 
-			if (fast_sampling)
-			{
-				if (item_is_positive)
-				{
-					int rindex = random.Next(user_neg_items[u].Count);
-					j = user_neg_items[u][rindex];
-				}
-				else
-				{
-					int rindex = random.Next(user_pos_items[u].Count);
-					j = user_pos_items[u][rindex];
-				}
-			}
-			else
-			{
-				do
-					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j] == item_is_positive);
-			}
+			do
+				other_item_id = random.Next(MaxItemID + 1);
+			while (Feedback.UserMatrix[user_id, other_item_id] == item_is_positive);
 
 			return item_is_positive;
 		}
 
 		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleItemPair(int u, out int i, out int j)
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
 		{
-			if (fast_sampling)
-			{
-				int rindex;
-
-				rindex = random.Next(user_pos_items[u].Count);
-				i = user_pos_items[u][rindex];
-
-				rindex = random.Next(user_neg_items[u].Count);
-				j = user_neg_items[u][rindex];
-			}
-			else
-			{
-				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next(user_items.Count));
-				do
-					j = random.Next(MaxItemID + 1);
-				while (user_items.Contains(j));
-			}
+			var user_items = Feedback.UserMatrix[user_id];
+			item_id = user_items.ElementAt(random.Next(user_items.Count));
+			do
+				other_item_id = random.Next(MaxItemID + 1);
+			while (user_items.Contains(other_item_id));
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -295,73 +251,73 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(MaxUserID + 1);
-				var user_items = Feedback.UserMatrix[u];
+				int user_id = random.Next(MaxUserID + 1);
+				var user_items = Feedback.UserMatrix[user_id];
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
-				return u;
+				return user_id;
 			}
 		}
 
 		/// <summary>Sample a triple for BPR learning</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleTriple(out int u, out int i, out int j)
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected virtual void SampleTriple(out int user_id, out int item_id, out int other_item_id)
 		{
-			u = SampleUser();
-			SampleItemPair(u, out i, out j);
+			user_id = SampleUser();
+			SampleItemPair(user_id, out item_id, out other_item_id);
 		}
 
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
 		/// <param name="update_u">if true, update the user latent factors</param>
 		/// <param name="update_i">if true, update the latent factors of the first item</param>
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
-		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
+		protected virtual void UpdateFactors(int user_id, int item_id, int other_item_id, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = item_bias[i] - item_bias[j] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
+			double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
 			// adjust bias terms
 			if (update_i)
 			{
-				double update = one_over_one_plus_ex - BiasReg * item_bias[i];
-				item_bias[i] += (float) (learn_rate * update);
+				double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
+				item_bias[item_id] += (float) (learn_rate * update);
 			}
 
 			if (update_j)
 			{
-				double update = -one_over_one_plus_ex - BiasReg * item_bias[j];
-				item_bias[j] += (float) (learn_rate * update);
+				double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
+				item_bias[other_item_id] += (float) (learn_rate * update);
 			}
 
 			// adjust factors
 			for (int f = 0; f < num_factors; f++)
 			{
-				float w_uf = user_factors[u, f];
-				float h_if = item_factors[i, f];
-				float h_jf = item_factors[j, f];
+				float w_uf = user_factors[user_id, f];
+				float h_if = item_factors[item_id, f];
+				float h_jf = item_factors[other_item_id, f];
 
 				if (update_u)
 				{
 					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[u, f] = (float) (w_uf + learn_rate * update);
+					user_factors[user_id, f] = (float) (w_uf + learn_rate * update);
 				}
 
 				if (update_i)
 				{
 					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[i, f] = (float) (h_if + learn_rate * update);
+					item_factors[item_id, f] = (float) (h_if + learn_rate * update);
 				}
 
 				if (update_j)
 				{
 					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[j, f] = (float) (h_jf + learn_rate * update);
+					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
 				}
 			}
 		}
@@ -372,18 +328,12 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddFeedback(feedback);
 			Retrain(feedback);
 		}
-		
+
 		void Retrain(ICollection<Tuple<int, int>> feedback)
 		{
 			var users = from t in feedback select t.Item1;
 			var items = from t in feedback select t.Item2;
-			
-			foreach (int user_id in users)
-			{
-				if (fast_sampling)
-					CreateFastSamplingData(user_id);
-			}
-			
+
 			if (UpdateUsers)
 				foreach (int user_id in users)
 					RetrainUser(user_id);
@@ -424,12 +374,6 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.RemoveUser(user_id);
 
-			if (fast_sampling)
-			{
-				user_pos_items[user_id] = null;
-				user_neg_items[user_id] = null;
-			}
-
 			// set user latent factors to zero
 			user_factors.SetRowToOneValue(user_id, 0);
 		}
@@ -438,35 +382,6 @@ namespace MyMediaLite.ItemRecommendation
 		public override void RemoveItem(int item_id)
 		{
 			base.RemoveItem(item_id);
-
-			if (fast_sampling)
-			{
-				for (int i = 0; i < user_pos_items.Count; i++)
-					if (user_pos_items[i].Contains(item_id))
-					{
-						var new_pos_items = new int[user_pos_items.Count - 1];
-						bool found = false;
-						for (int j = 0; j < user_pos_items[i].Count; j++)
-							if (user_pos_items[i][j] != item_id)
-								new_pos_items[j - (found ? 1 : 0)] = user_pos_items[i][j];
-							else
-								found = true;
-						user_pos_items[i] = new_pos_items;
-					}
-
-				for (int i = 0; i < user_neg_items.Count; i++)
-					if (user_neg_items[i].Contains(item_id))
-					{
-						var new_neg_items = new int[user_neg_items.Count - 1];
-						bool found = false;
-						for (int j = 0; j < user_neg_items[i].Count; j++)
-							if (user_neg_items[i][j] != item_id)
-								new_neg_items[j - (found ? 1 : 0)] = user_neg_items[i][j];
-							else
-								found = true;
-						user_neg_items[i] = new_neg_items;
-					}
-			}
 
 			// set item latent factors to zero
 			item_factors.SetRowToOneValue(item_id, 0);
@@ -529,49 +444,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			return (float) (ranking_loss + 0.5 * complexity);
-		}
-
-		private void CreateFastSamplingData(int u)
-		{
-			while (u >= user_pos_items.Count)
-				user_pos_items.Add(null);
-			while (u >= user_neg_items.Count)
-				user_neg_items.Add(null);
-
-			user_pos_items[u] = Feedback.UserMatrix[u].ToArray();
-			var neg_list = new List<int>();
-			for (int i = 0; i < MaxItemID; i++)
-				if (! Feedback.UserMatrix[u, i])
-					neg_list.Add(i);
-			user_neg_items[u] = neg_list.ToArray();
-		}
-
-		///
-		protected void CheckSampling()
-		{
-			try
-			{
-				checked
-				{
-					int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-					Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
-
-					if (fast_sampling_memory_size <= fast_sampling_memory_limit)
-					{
-						fast_sampling = true;
-
-						this.user_pos_items = new List<IList<int>>(MaxUserID + 1);
-						this.user_neg_items = new List<IList<int>>(MaxUserID + 1);
-						for (int u = 0; u < MaxUserID + 1; u++)
-							CreateFastSamplingData(u);
-					}
-				}
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("fast_sampling_memory_size=TOO_MUCH");
-				// do nothing - don't use fast sampling
-			}
 		}
 
 		///
@@ -700,8 +572,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} fast_sampling_memory_limit={10} update_j={11}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, fast_sampling_memory_limit, UpdateJ);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} update_j={10}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
 	}
 }

@@ -32,7 +32,13 @@ namespace MyMediaLite.ItemRecommendation
 	public class WeightedBPRMF : BPRMF
 	{
 		/// <summary>Default constructor</summary>
-		public WeightedBPRMF() { }
+		public WeightedBPRMF()
+		{
+			// de-activate until supported
+			WithReplacement = false;
+			// de-activate until false is supported
+			UniformUserSampling = true;
+		}
 
 		///
 		public override void Train()
@@ -41,8 +47,6 @@ namespace MyMediaLite.ItemRecommendation
 			WithReplacement = false;
 			// de-activate until false is supported
 			UniformUserSampling = true;
-			// suppress using user_neg_items in BPRMF
-			FastSamplingMemoryLimit = 0;
 
 			base.Train();
 		}
@@ -51,13 +55,13 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void SampleTriple(out int u, out int i, out int j)
 		{
 			// sample user from positive user-item pairs
-			int index = random.Next(Feedback.Count - 1);
+			int index = random.Next(Feedback.Count);
 			u = Feedback.Users[index];
 			i = Feedback.Items[index];
 
 			// sample negative item
 			do
-				j = Feedback.Items[random.Next(Feedback.Count - 1)];
+				j = Feedback.Items[random.Next(Feedback.Count)];
 			while (Feedback.UserMatrix[u, j]);
 		}
 

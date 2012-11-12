@@ -113,8 +113,6 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 
-			CheckSampling();
-
 			random = MyMediaLite.Random.GetInstance();
 
 			for (int i = 0; i < NumIter; i++)
