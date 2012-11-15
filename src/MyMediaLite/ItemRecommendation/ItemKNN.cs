@@ -57,6 +57,9 @@ namespace MyMediaLite.ItemRecommendation
 			base.AddItem(item_id);
 			Console.WriteLine("Added item "+item_id);
 			nearest_neighbors.Add(new int[k]);
+			Console.WriteLine("NN size:" + nearest_neighbors.Count);
+			foreach(int item in Feedback.AllItems)
+				Console.Write (item + " ");
 		}
 
 		///
@@ -128,12 +131,15 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
+				Console.WriteLine("User: "+f.Key+":");
 				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> new_items = f.Value;
 				foreach (int i in rated_items)
 				{
+					Console.WriteLine("Rated item: "+i); 
 					foreach (int j in new_items)
 					{
+						Console.Write(j+" ");
 						cooccurrence[i, j]++;
 						switch(Correlation) 
 						{
@@ -151,6 +157,7 @@ namespace MyMediaLite.ItemRecommendation
 							throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
 						}
 					}
+					Console.WriteLine();
 				}
 				retrainItems(new_items);
 			}
