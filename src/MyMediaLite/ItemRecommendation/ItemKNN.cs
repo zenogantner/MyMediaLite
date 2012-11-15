@@ -109,7 +109,7 @@ namespace MyMediaLite.ItemRecommendation
 			var items = from t in feedback select t.Item1;
 			retrainItems(new HashSet<int>(items));
 		}
-
+ 
 		/// <summary>
 		/// Add positive feedback events and perform incremental training
 		/// </summary>
