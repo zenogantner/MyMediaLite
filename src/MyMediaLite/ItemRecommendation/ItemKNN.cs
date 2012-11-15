@@ -58,8 +58,6 @@ namespace MyMediaLite.ItemRecommendation
 			Console.WriteLine("Added item "+item_id);
 			nearest_neighbors.Add(new int[k]);
 			Console.WriteLine("NN size:" + nearest_neighbors.Count);
-			foreach(int item in Feedback.AllItems)
-				Console.Write (item + " ");
 		}
 
 		///
@@ -122,6 +120,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback (feedback);
+			foreach(int item in Feedback.AllItems)
+				Console.Write (item + " ");
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			foreach (var tpl in feedback)
 			{
