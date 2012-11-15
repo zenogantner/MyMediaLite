@@ -106,11 +106,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.RemoveFeedback (feedback);
-			HashSet<int> retrain = new HashSet<int>();
-			var users = from t in feedback select t.Item1;
-			foreach (int user in users)
-				retrain.UnionWith(DataMatrix.GetEntriesByColumn(user).ToArray());
-			retrainItems(retrain);
+			var items = from t in feedback select t.Item1;
+			retrainItems(new HashSet<int>(items));
 		}
 
 		/// <summary>
@@ -132,10 +129,10 @@ namespace MyMediaLite.ItemRecommendation
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
 				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
-				List<int> removed_items = f.Value;
+				List<int> new_items = f.Value;
 				foreach (int i in rated_items)
 				{
-					foreach (int j in removed_items)
+					foreach (int j in new_items)
 					{
 						cooccurrence[i, j]++;
 						switch(Correlation) 
@@ -155,7 +152,7 @@ namespace MyMediaLite.ItemRecommendation
 						}
 					}
 				}
-				retrainItems(rated_items);
+				retrainItems(new_items);
 			}
 		}
 
@@ -169,9 +166,30 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			foreach (int item_id in item_ids)
 			{
-				//Console.WriteLine("Retraining item "+item_id);
 				nearest_neighbors[item_id] = correlation.GetNearestNeighbors(item_id, k);
+				// Find items that have item_id in neighbourhood
+				List<int> retrain_also = getItemsWithNeighbor(item_id);
+				foreach (int item in retrain_also)
+					nearest_neighbors[item] = correlation.GetNearestNeighbors(item, k);
 			}
+		}
+		
+		/// <summary>
+		/// Gets the items with neighbor.
+		/// </summary>
+		/// <returns>
+		/// The items with neighbor.
+		/// </returns>
+		/// <param name='neighbor_id'>
+		/// Neighbor_id.
+		/// </param>
+		protected List<int> getItemsWithNeighbor(int neighbor_id)
+		{
+			List<int> item_list = new List<int>();
+			for(int i = 0; i < nearest_neighbors.Count; i++)
+				if(nearest_neighbors[i].Contains(neighbor_id))
+					item_list.Add(i);
+			return item_list;
 		}
 	}
 }
