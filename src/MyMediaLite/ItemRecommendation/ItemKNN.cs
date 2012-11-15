@@ -82,9 +82,10 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[item_id])
-					if (Feedback.ItemMatrix[neighbor, user_id])
-						sum += Math.Pow(correlation[item_id, neighbor], Q);
+				if(nearest_neighbors[item_id]!=null)
+					foreach (int neighbor in nearest_neighbors[item_id])
+						if (Feedback.ItemMatrix[neighbor, user_id])
+							sum += Math.Pow(correlation[item_id, neighbor], Q);
 				return (float) sum;
 			}
 			else
