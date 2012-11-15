@@ -55,10 +55,22 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
-			Console.WriteLine("Added item "+item_id);
-			nearest_neighbors.Add(new int[k]);
+			resizeNearestNeighbors(item_id + 1);
 		}
-
+		
+		/// <summary>
+		/// Resizes the nearest neighbors.
+		/// </summary>
+		/// <param name='new_size'>
+		/// New_size.
+		/// </param>
+		protected void resizeNearestNeighbors(int new_size)
+		{
+			if(new_size > nearest_neighbors.Count)
+				for(int i = nearest_neighbors.Count; i < new_size; i++)
+					nearest_neighbors.Add(null);
+		}
+		
 		///
 		public override float Predict(int user_id, int item_id)
 		{
@@ -70,9 +82,10 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[item_id])
-					if (Feedback.ItemMatrix[neighbor, user_id])
-						sum += Math.Pow(correlation[item_id, neighbor], Q);
+				if(nearest_neighbors[item_id]!=null)
+					foreach (int neighbor in nearest_neighbors[item_id])
+						if (Feedback.ItemMatrix[neighbor, user_id])
+							sum += Math.Pow(correlation[item_id, neighbor], Q);
 				return (float) sum;
 			}
 			else
@@ -187,8 +200,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			List<int> item_list = new List<int>();
 			for(int i = 0; i < nearest_neighbors.Count; i++)
-				if(nearest_neighbors[i].Contains(neighbor_id))
-					item_list.Add(i);
+				if(nearest_neighbors[i] != null)
+					if(nearest_neighbors[i].Contains(neighbor_id))
+						item_list.Add(i);
 			return item_list;
 		}
 	}
