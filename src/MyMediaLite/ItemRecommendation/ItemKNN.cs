@@ -205,8 +205,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			List<int> item_list = new List<int>();
 			for(int i = 0; i < nearest_neighbors.Count; i++)
-				if(nearest_neighbors[i].Contains(neighbor_id))
-					item_list.Add(i);
+				if(nearest_neighbors[i] != null)
+					if(nearest_neighbors[i].Contains(neighbor_id))
+						item_list.Add(i);
 			return item_list;
 		}
 	}
