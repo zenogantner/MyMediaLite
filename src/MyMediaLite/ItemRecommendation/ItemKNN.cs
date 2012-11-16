@@ -32,6 +32,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
 
+		protected List<TimeSpan> updateTimes;
+
 		///
 		public override void Train()
 		{
@@ -44,6 +46,7 @@ namespace MyMediaLite.ItemRecommendation
 				for (int i = 0; i < num_items; i++)
 					nearest_neighbors.Add(correlation.GetNearestNeighbors(i, k));
 			}
+			updateTimes = new List<TimeSpan>();
 		}
 
 		/// <summary>
@@ -131,6 +134,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
+			DateTime start = DateTime.Now;
 			base.AddFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			foreach (var tpl in feedback)
@@ -168,11 +172,13 @@ namespace MyMediaLite.ItemRecommendation
 							throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
 						}
 					}
-					Console.WriteLine();
 				}
-				Console.WriteLine("Retraining items from user " + f.Key);
+				// Console.WriteLine("Retraining items from user " + f.Key);
 				retrainItems(new_items);
 			}
+			TimeSpan updateTime = DateTime.Now - start;
+			updateTimes.Add(updateTime);
+			Console.WriteLine("Update Time: " + updateTime.Milliseconds);
 		}
 
 		/// <summary>
@@ -189,7 +195,7 @@ namespace MyMediaLite.ItemRecommendation
 				// Find items that have item_id in neighbourhood
 				List<int> retrain_also = getItemsWithNeighbor(item_id);
 				foreach (int item in retrain_also) {
-					Console.WriteLine(item_id + " is neighbor of " + item);
+					// Console.WriteLine(item_id + " is neighbor of " + item);
 					nearest_neighbors[item] = correlation.GetNearestNeighbors(item, k);
 				}
 			}
@@ -212,6 +218,14 @@ namespace MyMediaLite.ItemRecommendation
 					if(nearest_neighbors[i].Contains(neighbor_id))
 						item_list.Add(i);
 			return item_list;
+		}
+
+		~ItemKNN()
+		{
+			float sum = 0;
+			foreach(TimeSpan upd_time in updateTimes)
+				sum += upd_time.Milliseconds;
+			Console.WriteLine("Avg update time: " + sum/updateTimes.Count);
 		}
 	}
 }
