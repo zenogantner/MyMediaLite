@@ -132,11 +132,10 @@ namespace MyMediaLite.ItemRecommendation
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback (feedback);
-			foreach(int item in Feedback.AllItems)
-				Console.Write (item + " ");
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			foreach (var tpl in feedback)
 			{
+				Console.WriteLine("Adding feedback: " + tpl.Item1 + " " + tpl.Item2);
 				if (!feeddict.ContainsKey(tpl.Item1))
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
