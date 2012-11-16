@@ -143,15 +143,15 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
-				Console.WriteLine("User: "+f.Key+":");
+				//Console.WriteLine("User: "+f.Key+":");
 				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> new_items = f.Value;
 				foreach (int i in rated_items)
 				{
-					Console.WriteLine("Rated item: "+i); 
+					// Console.WriteLine("Rated item: "+i); 
 					foreach (int j in new_items)
 					{
-						Console.Write(j+" ");
+						// Console.Write(j+" ");
 						cooccurrence[i, j]++;
 						switch(Correlation) 
 						{
@@ -171,6 +171,7 @@ namespace MyMediaLite.ItemRecommendation
 					}
 					Console.WriteLine();
 				}
+				Console.WriteLine("Retraining items from user " + f.Key);
 				retrainItems(new_items);
 			}
 		}
@@ -188,8 +189,10 @@ namespace MyMediaLite.ItemRecommendation
 				nearest_neighbors[item_id] = correlation.GetNearestNeighbors(item_id, k);
 				// Find items that have item_id in neighbourhood
 				List<int> retrain_also = getItemsWithNeighbor(item_id);
-				foreach (int item in retrain_also)
+				foreach (int item in retrain_also) {
+					Console.WriteLine(item_id + " is neighbor of " + item);
 					nearest_neighbors[item] = correlation.GetNearestNeighbors(item, k);
+				}
 			}
 		}
 		
