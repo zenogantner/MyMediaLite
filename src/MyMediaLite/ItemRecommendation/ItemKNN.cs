@@ -222,10 +222,16 @@ namespace MyMediaLite.ItemRecommendation
 
 		~ItemKNN()
 		{
-			float sum = 0;
+			int sum = 0;
+			int max = 0;
 			foreach(TimeSpan upd_time in updateTimes)
+			{
+				max = Math.Max(max, upd_time.Milliseconds);
 				sum += upd_time.Milliseconds;
+			}
+
 			Console.WriteLine("Avg update time: " + sum/updateTimes.Count);
+			Console.WriteLine("Max update time: " + max);
 		}
 	}
 }
