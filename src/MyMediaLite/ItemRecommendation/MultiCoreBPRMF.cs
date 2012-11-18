@@ -40,7 +40,6 @@ namespace MyMediaLite.ItemRecommendation
 	public class MultiCoreBPRMF : BPRMF
 	{
 		// TODO support uniform user sampling
-		//ISparseBooleanMatrix replacement_user_matrix;
 
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
@@ -118,27 +117,11 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			int j = -1;
 
-			// TODO support fast_sampling
-//			if (fast_sampling)
-//			{
-//				if (item_is_positive)
-//				{
-//					int rindex = random.Next(user_neg_items[u].Count);
-//					j = user_neg_items[u][rindex];
-//				}
-//				else
-//				{
-//					int rindex = random.Next(user_pos_items[u].Count);
-//					j = user_pos_items[u][rindex];
-//				}
-//			}
-//			else
+			do
 			{
-				do {
-					int random_index = random.Next(items_by_group[item_group].Count);
-					j = items_by_group[item_group][random_index];
-				} while (Feedback.UserMatrix[u, j] == true);
-			}
+				int random_index = random.Next(items_by_group[item_group].Count);
+				j = items_by_group[item_group][random_index];
+			} while (Feedback.UserMatrix[u, j] == true);
 
 			return j;
 		}
