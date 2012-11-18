@@ -42,6 +42,9 @@ namespace MyMediaLite
 		/// <param name='num_groups'>the number of groups both users and items are partitioned into</param>
 		public static IList<int>[,] PartitionUsersAndItems(this IDataSet dataset, int num_groups)
 		{
+			num_groups = Math.Min(num_groups, dataset.MaxUserID + 1);
+			num_groups = Math.Min(num_groups, dataset.MaxItemID + 1);
+
 			// divide rating matrix into blocks
 			var user_permutation = new List<int>(Enumerable.Range(0, dataset.MaxUserID + 1));
 			var item_permutation = new List<int>(Enumerable.Range(0, dataset.MaxItemID + 1));
