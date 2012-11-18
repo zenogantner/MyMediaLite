@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 
 namespace MyMediaLite
 {
-	/// <summary>Class containing utility routines for multi-core algorithms</summary>
+	/// <summary>Utility routines for multi-core algorithms</summary>
 	public static class MultiCore
 	{
 		/// <summary>Partition dataset user- and item-wise for parallel processing</summary>
@@ -68,14 +68,14 @@ namespace MyMediaLite
 
 			return blocks;
 		}
-		
-		/// <summary>Partition the indices of a dataset into groups
-		/// </summary>
-		/// <returns>the groupes indices</returns>
+
+		/// <summary>Partition the indices of a dataset into groups</summary>
+		/// <returns>the grouped indices</returns>
 		/// <param name='dataset'>a dataset</param>
 		/// <param name='num_groups'>the number of groups</param>
 		public static IList<int>[] PartitionIndices(this IDataSet dataset, int num_groups)
 		{
+			num_groups = Math.Min(num_groups, dataset.Count);
 			var indices = dataset.RandomIndex;
 
 			var groups = new IList<int>[num_groups];

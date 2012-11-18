@@ -38,6 +38,17 @@ namespace Tests
 			for (int i = 0; i < partition.Length; i++)
 				Assert.AreEqual(group_size, partition[i].Count);
 		}
+
+		[Test()]
+		public void TestPartitionIndicesLessRatingsThanThreads()
+		{
+			int NUM_RATINGS = 10;
+			int NUM_GROUPS = 50;
+			
+			var ratings = TestUtils.CreateRandomRatings(15, 15, NUM_RATINGS);
+			var partition = ratings.PartitionIndices(NUM_GROUPS);
+			Assert.AreEqual(NUM_RATINGS, partition.Length);
+		}
 	}
 }
 
