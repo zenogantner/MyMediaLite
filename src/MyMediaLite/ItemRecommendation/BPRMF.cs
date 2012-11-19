@@ -199,7 +199,7 @@ namespace MyMediaLite.ItemRecommendation
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
 		}
-		
+
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from users without replacement.
 		/// </summary>
@@ -233,7 +233,7 @@ namespace MyMediaLite.ItemRecommendation
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
 		}
-		
+
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
 		/// </summary>
@@ -583,7 +583,7 @@ namespace MyMediaLite.ItemRecommendation
 				for (int i = 0; i < num_pos_events; i++)
 				{
 					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-					// TODO generalize and call UpdateFactors
+					// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
 					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
 					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
