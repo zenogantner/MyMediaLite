@@ -221,14 +221,12 @@ namespace MyMediaLite.ItemRecommendation
 		protected virtual void IterateWithReplacementUniformPair()
 		{
 			int num_pos_events = Feedback.Count;
-			int user_id, pos_item_id, neg_item_id;
-
 			for (int i = 0; i < num_pos_events; i++)
 			{
 				int index = random.Next(num_pos_events);
-				user_id = Feedback.Users[index];
-				pos_item_id = Feedback.Items[index];
-				neg_item_id = -1;
+				int user_id = Feedback.Users[index];
+				int pos_item_id = Feedback.Items[index];
+				int neg_item_id = -1;
 				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
@@ -239,13 +237,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// </summary>
 		protected virtual void IterateWithoutReplacementUniformPair(IList<int> indices)
 		{
-			int user_id, pos_item_id, neg_item_id;
-
 			foreach (int index in indices)
 			{
-				user_id = Feedback.Users[index];
-				pos_item_id = Feedback.Items[index];
-				neg_item_id = -1;
+				int user_id = Feedback.Users[index];
+				int pos_item_id = Feedback.Items[index];
+				int neg_item_id = -1;
 				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
@@ -280,7 +276,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (user_items.Contains(other_item_id));
 		}
 
-		/// <summary>Sample a user that has viewed at least one and not all items</summary>
+		/// <summary>Uniformly sample a user that has viewed at least one and not all items</summary>
 		/// <returns>the user ID</returns>
 		protected virtual int SampleUser()
 		{
