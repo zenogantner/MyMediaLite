@@ -163,7 +163,7 @@ namespace MyMediaLite.ItemRecommendation
 				if (WithReplacement)
 					IterateWithReplacementUniformPair();
 				else
-					IterateWithoutReplacementUniformUser();
+					IterateWithoutReplacementUniformPair(Feedback.RandomIndex);
 			}
 		}
 
@@ -237,11 +237,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
 		/// </summary>
-		protected virtual void IterateWithoutReplacementUniformPair()
+		protected virtual void IterateWithoutReplacementUniformPair(IList<int> indices)
 		{
 			int user_id, pos_item_id, neg_item_id;
 
-			foreach (int index in Feedback.RandomIndex)
+			foreach (int index in indices)
 			{
 				user_id = Feedback.Users[index];
 				pos_item_id = Feedback.Items[index];
