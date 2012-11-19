@@ -76,7 +76,7 @@ namespace MyMediaLite
 		/// <returns>the grouped indices</returns>
 		/// <param name='dataset'>a dataset</param>
 		/// <param name='num_groups'>the number of groups</param>
-		public static IList<int>[] PartitionIndices(this IDataSet dataset, int num_groups)
+		public static IList<IList<int>> PartitionIndices(this IDataSet dataset, int num_groups)
 		{
 			num_groups = Math.Min(num_groups, dataset.Count);
 			var indices = dataset.RandomIndex;

@@ -155,7 +155,7 @@ namespace MyMediaLite.RatingPrediction
 		protected Func<double, double, float> compute_gradient_common;
 
 		IList<int>[,] thread_blocks;
-		IList<int>[] thread_lists;
+		IList<IList<int>> thread_lists;
 
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
@@ -208,16 +208,18 @@ namespace MyMediaLite.RatingPrediction
 			{
 				if (NaiveParallelization)
 				{
-					Parallel.For(0, MaxThreads, i => Iterate(thread_lists[i], true, true));
+					Parallel.For(0, thread_lists.Count, i => Iterate(thread_lists[i], true, true));
 				}
 				else
 				{
+					int num_threads = thread_blocks.GetLength(0);
+
 					// generate random sub-epoch sequence
-					var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
+					var subepoch_sequence = new List<int>(Enumerable.Range(0, num_threads));
 					subepoch_sequence.Shuffle();
 
 					foreach (int i in subepoch_sequence) // sub-epoch
-						Parallel.For(0, MaxThreads, j => Iterate(thread_blocks[j, (i + j) % MaxThreads], true, true));
+						Parallel.For(0, num_threads, j => Iterate(thread_blocks[j, (i + j) % num_threads], true, true));
 				}
 				UpdateLearnRate(); // otherwise done in base.Iterate(), which is not called here
 			}
