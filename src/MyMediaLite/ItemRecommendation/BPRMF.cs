@@ -30,6 +30,23 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	///   <para>
 	///     BPR reduces ranking to pairwise classification.
+	///     The different variants (settings) of this recommender
+	///     roughly optimize the area under the ROC curve (AUC).
+	///   </para>
+	///   <para>
+	///     \f[
+	///       \max_\Theta \sum_{(u,i,j) \in D_S}
+	///                        \ln g(\hat{s}_{u,i,j}(\Theta)) - \lambda ||\Theta||^2 ,
+	///     \f]
+	///     where \f$\hat{s}_{u,i,j}(\Theta) := \hat{s}_{u,i}(\Theta) - \hat{s}_{u,j}(\Theta)\f$
+	///     and \f$D_S = \{ (u, i, j) | i \in \mathcal{I}^+_u \wedge j \in \mathcal{I}^-_u \}\f$.
+	///     \f$\Theta\f$ represents the parameters of the model and \f$\lambda\f$ is a regularization constant.
+	///     \f$g\f$ is the  logistic function.
+	///   </para>
+	///   <para>
+	///     In this implementation, we distinguish different regularization updates for users and positive and negative items,
+	///     which means we do not have only one regularization constant. The optimization problem specified above thus is only
+	///     an approximation.
 	///   </para>
 	///   <para>
 	///     Literature:
