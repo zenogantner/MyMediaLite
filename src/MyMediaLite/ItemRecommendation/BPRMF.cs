@@ -151,68 +151,103 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
-			int num_pos_events = Feedback.Count;
-
-			int user_id, pos_item_id, neg_item_id;
-			
 			if (UniformUserSampling)
 			{
-				if (WithReplacement) // case 1: uniform user sampling, with replacement
-				{
-					var user_matrix = Feedback.GetUserMatrixCopy();
-
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						while (true) // sampling with replacement
-						{
-							user_id = SampleUser();
-							var user_items = user_matrix[user_id];
-
-							// reset user if already exhausted
-							if (user_items.Count == 0)
-								foreach (int item_id in Feedback.UserMatrix[user_id])
-									user_matrix[user_id, item_id] = true;
-
-							pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
-							user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
-							do
-								neg_item_id = random.Next(MaxItemID + 1);
-							while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
-							break;
-						}
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
-				}
-				else // case 2: uniform user sampling, without replacement
-				{
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
-				}
+				if (WithReplacement)
+					IterateWithReplacementUniformUser();
+				else
+					IterateWithoutReplacementUniformUser();
 			}
 			else
 			{
-				if (WithReplacement) // case 3: uniform pair sampling, with replacement
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						int index = random.Next(num_pos_events);
-						user_id = Feedback.Users[index];
-						pos_item_id = Feedback.Items[index];
-						neg_item_id = -1;
-						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
-				else // case 4: uniform pair sampling, without replacement
-					foreach (int index in Feedback.RandomIndex)
-					{
-						user_id = Feedback.Users[index];
-						pos_item_id = Feedback.Items[index];
-						neg_item_id = -1;
-						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
+				if (WithReplacement)
+					IterateWithReplacementUniformPair();
+				else
+					IterateWithoutReplacementUniformUser();
+			}
+		}
+
+		/// <summary>
+		/// Iterate over the training data, uniformly sample from users with replacement.
+		/// </summary>
+		protected virtual void IterateWithReplacementUniformUser()
+		{
+			int num_pos_events = Feedback.Count;
+			int user_id, pos_item_id, neg_item_id;
+
+			var user_matrix = Feedback.GetUserMatrixCopy();
+
+			for (int i = 0; i < num_pos_events; i++)
+			{
+				while (true) // sampling with replacement
+				{
+					user_id = SampleUser();
+					var user_items = user_matrix[user_id];
+
+					// reset user if already exhausted
+					if (user_items.Count == 0)
+						foreach (int item_id in Feedback.UserMatrix[user_id])
+							user_matrix[user_id, item_id] = true;
+
+					pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
+					user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
+					do
+						neg_item_id = random.Next(MaxItemID + 1);
+					while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
+					break;
+				}
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+			}
+		}
+		
+		/// <summary>
+		/// Iterate over the training data, uniformly sample from users without replacement.
+		/// </summary>
+		protected virtual void IterateWithoutReplacementUniformUser()
+		{
+			int num_pos_events = Feedback.Count;
+			int user_id, pos_item_id, neg_item_id;
+
+			for (int i = 0; i < num_pos_events; i++)
+			{
+				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+			}
+		}
+
+		/// <summary>
+		/// Iterate over the training data, uniformly sample from user-item pairs with replacement.
+		/// </summary>
+		protected virtual void IterateWithReplacementUniformPair()
+		{
+			int num_pos_events = Feedback.Count;
+			int user_id, pos_item_id, neg_item_id;
+
+			for (int i = 0; i < num_pos_events; i++)
+			{
+				int index = random.Next(num_pos_events);
+				user_id = Feedback.Users[index];
+				pos_item_id = Feedback.Items[index];
+				neg_item_id = -1;
+				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+			}
+		}
+		
+		/// <summary>
+		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
+		/// </summary>
+		protected virtual void IterateWithoutReplacementUniformPair()
+		{
+			int user_id, pos_item_id, neg_item_id;
+
+			foreach (int index in Feedback.RandomIndex)
+			{
+				user_id = Feedback.Users[index];
+				pos_item_id = Feedback.Items[index];
+				neg_item_id = -1;
+				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
 		}
 
@@ -521,7 +556,6 @@ namespace MyMediaLite.ItemRecommendation
 		float[] FoldIn(IList<int> accessed_items)
 		{
 			var positive_items = new HashSet<int>(accessed_items);
-			//var candidate_items_set = new HashSet<int>(candidate_items); // TODO use this for variant
 
 			// initialize user parameters
 			var user_factors = new float[NumFactors];
