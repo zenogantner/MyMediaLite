@@ -76,8 +76,8 @@ namespace Tests
 
 			var ratings = TestUtils.CreateRandomRatings(15, 15, NUM_RATINGS);
 			var partition = ratings.PartitionIndices(NUM_GROUPS);
-			Assert.AreEqual(NUM_GROUPS, partition.Length);
-			for (int i = 0; i < partition.Length; i++)
+			Assert.AreEqual(NUM_GROUPS, partition.Count);
+			for (int i = 0; i < partition.Count; i++)
 				Assert.AreEqual(group_size, partition[i].Count);
 		}
 
@@ -89,7 +89,7 @@ namespace Tests
 
 			var ratings = TestUtils.CreateRandomRatings(15, 15, NUM_RATINGS);
 			var partition = ratings.PartitionIndices(NUM_GROUPS);
-			Assert.AreEqual(NUM_RATINGS, partition.Length);
+			Assert.AreEqual(NUM_RATINGS, partition.Count);
 		}
 	}
 }
