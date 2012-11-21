@@ -41,86 +41,212 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.UIManager = new global::Gtk.UIManager ();
 		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
-		this.FilterAction = new global::Gtk.Action ("FilterAction", global::Mono.Unix.Catalog.GetString ("Filter"), null, null);
+		this.FilterAction = new global::Gtk.Action (
+			"FilterAction",
+			global::Mono.Unix.Catalog.GetString("Filter"),
+			null,
+			null
+		);
 		this.FilterAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Filter");
 		w1.Add (this.FilterAction, null);
-		this.LanguageAction = new global::Gtk.Action ("LanguageAction", global::Mono.Unix.Catalog.GetString ("Language"), null, null);
+		this.LanguageAction = new global::Gtk.Action (
+			"LanguageAction",
+			global::Mono.Unix.Catalog.GetString("Language"),
+			null,
+			null
+		);
 		this.LanguageAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Language");
 		w1.Add (this.LanguageAction, null);
-		this.UserAction = new global::Gtk.Action ("UserAction", global::Mono.Unix.Catalog.GetString ("User"), null, null);
+		this.UserAction = new global::Gtk.Action (
+			"UserAction",
+			global::Mono.Unix.Catalog.GetString("User"),
+			null,
+			null
+		);
 		this.UserAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("User");
 		w1.Add (this.UserAction, null);
-		this.SaveRatingsAsAction = new global::Gtk.Action ("SaveRatingsAsAction", global::Mono.Unix.Catalog.GetString ("Save Ratings As ..."), null, null);
+		this.SaveRatingsAsAction = new global::Gtk.Action (
+			"SaveRatingsAsAction",
+			global::Mono.Unix.Catalog.GetString("Save Ratings As ..."),
+			null,
+			null
+		);
 		this.SaveRatingsAsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Ratings As ...");
 		w1.Add (this.SaveRatingsAsAction, null);
-		this.SaveRatingsAnonymouslyAction = new global::Gtk.Action ("SaveRatingsAnonymouslyAction", global::Mono.Unix.Catalog.GetString ("Save Ratings Anonymously"), null, null);
+		this.SaveRatingsAnonymouslyAction = new global::Gtk.Action (
+			"SaveRatingsAnonymouslyAction",
+			global::Mono.Unix.Catalog.GetString("Save Ratings Anonymously"),
+			null,
+			null
+		);
 		this.SaveRatingsAnonymouslyAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Save Ratings Anonymously");
 		w1.Add (this.SaveRatingsAnonymouslyAction, null);
-		this.DiscardRatingsAction = new global::Gtk.Action ("DiscardRatingsAction", global::Mono.Unix.Catalog.GetString ("Discard Ratings"), null, null);
+		this.DiscardRatingsAction = new global::Gtk.Action (
+			"DiscardRatingsAction",
+			global::Mono.Unix.Catalog.GetString("Discard Ratings"),
+			null,
+			null
+		);
 		this.DiscardRatingsAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Discard Ratings");
 		w1.Add (this.DiscardRatingsAction, null);
-		this.OnlyShow200MostPopularMoviesAction = new global::Gtk.ToggleAction ("OnlyShow200MostPopularMoviesAction", global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies "), null, null);
+		this.OnlyShow200MostPopularMoviesAction = new global::Gtk.ToggleAction (
+			"OnlyShow200MostPopularMoviesAction",
+			global::Mono.Unix.Catalog.GetString("Only Show 200 Most Popular Movies "),
+			null,
+			null
+		);
 		this.OnlyShow200MostPopularMoviesAction.Active = true;
 		this.OnlyShow200MostPopularMoviesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Only Show 200 Most Popular Movies ");
 		w1.Add (this.OnlyShow200MostPopularMoviesAction, null);
-		this.ByGenreAction = new global::Gtk.Action ("ByGenreAction", global::Mono.Unix.Catalog.GetString ("By Genre ..."), null, null);
+		this.ByGenreAction = new global::Gtk.Action (
+			"ByGenreAction",
+			global::Mono.Unix.Catalog.GetString("By Genre ..."),
+			null,
+			null
+		);
 		this.ByGenreAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("By Genre ...");
 		w1.Add (this.ByGenreAction, null);
-		this.ActionAction = new global::Gtk.ToggleAction ("ActionAction", global::Mono.Unix.Catalog.GetString ("Action"), null, null);
+		this.ActionAction = new global::Gtk.ToggleAction (
+			"ActionAction",
+			global::Mono.Unix.Catalog.GetString("Action"),
+			null,
+			null
+		);
 		this.ActionAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Action");
 		w1.Add (this.ActionAction, null);
-		this.TODORestByProgramAction = new global::Gtk.Action ("TODORestByProgramAction", global::Mono.Unix.Catalog.GetString ("TODO: rest by program ..."), null, null);
+		this.TODORestByProgramAction = new global::Gtk.Action (
+			"TODORestByProgramAction",
+			global::Mono.Unix.Catalog.GetString("TODO: rest by program ..."),
+			null,
+			null
+		);
 		this.TODORestByProgramAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("TODO: rest by program ...");
 		w1.Add (this.TODORestByProgramAction, null);
-		this.EnglishAction = new global::Gtk.RadioAction ("EnglishAction", global::Mono.Unix.Catalog.GetString ("English"), null, null, 0);
+		this.EnglishAction = new global::Gtk.RadioAction (
+			"EnglishAction",
+			global::Mono.Unix.Catalog.GetString("English"),
+			null,
+			null,
+			0
+		);
 		this.EnglishAction.Group = new global::GLib.SList (global::System.IntPtr.Zero);
 		this.EnglishAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("English");
 		w1.Add (this.EnglishAction, null);
-		this.DeutschAction = new global::Gtk.RadioAction ("DeutschAction", global::Mono.Unix.Catalog.GetString ("Deutsch"), null, null, 0);
+		this.DeutschAction = new global::Gtk.RadioAction (
+			"DeutschAction",
+			global::Mono.Unix.Catalog.GetString("Deutsch"),
+			null,
+			null,
+			0
+		);
 		this.DeutschAction.Group = this.EnglishAction.Group;
 		this.DeutschAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Deutsch");
 		w1.Add (this.DeutschAction, null);
-		this.LoadUserAction = new global::Gtk.Action ("LoadUserAction", global::Mono.Unix.Catalog.GetString ("Load User"), null, null);
+		this.LoadUserAction = new global::Gtk.Action (
+			"LoadUserAction",
+			global::Mono.Unix.Catalog.GetString("Load User"),
+			null,
+			null
+		);
 		this.LoadUserAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Load User");
 		w1.Add (this.LoadUserAction, null);
-		this.AndrAction = new global::Gtk.Action ("AndrAction", global::Mono.Unix.Catalog.GetString ("André"), null, null);
+		this.AndrAction = new global::Gtk.Action (
+			"AndrAction",
+			global::Mono.Unix.Catalog.GetString("André"),
+			null,
+			null
+		);
 		this.AndrAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("André");
 		w1.Add (this.AndrAction, null);
-		this.ArtusAction = new global::Gtk.Action ("ArtusAction", global::Mono.Unix.Catalog.GetString ("Artus"), null, null);
+		this.ArtusAction = new global::Gtk.Action (
+			"ArtusAction",
+			global::Mono.Unix.Catalog.GetString("Artus"),
+			null,
+			null
+		);
 		this.ArtusAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Artus");
 		w1.Add (this.ArtusAction, null);
-		this.ChristophAction = new global::Gtk.Action ("ChristophAction", global::Mono.Unix.Catalog.GetString ("Christoph"), null, null);
+		this.ChristophAction = new global::Gtk.Action (
+			"ChristophAction",
+			global::Mono.Unix.Catalog.GetString("Christoph"),
+			null,
+			null
+		);
 		this.ChristophAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Christoph");
 		w1.Add (this.ChristophAction, null);
-		this.LucasAction = new global::Gtk.Action ("LucasAction", global::Mono.Unix.Catalog.GetString ("Lucas"), null, null);
+		this.LucasAction = new global::Gtk.Action (
+			"LucasAction",
+			global::Mono.Unix.Catalog.GetString("Lucas"),
+			null,
+			null
+		);
 		this.LucasAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Lucas");
 		w1.Add (this.LucasAction, null);
-		this.KrisztianAction = new global::Gtk.Action ("KrisztianAction", global::Mono.Unix.Catalog.GetString ("Krisztian"), null, null);
+		this.KrisztianAction = new global::Gtk.Action (
+			"KrisztianAction",
+			global::Mono.Unix.Catalog.GetString("Krisztian"),
+			null,
+			null
+		);
 		this.KrisztianAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Krisztian");
 		w1.Add (this.KrisztianAction, null);
-		this.NgheAction = new global::Gtk.Action ("NgheAction", global::Mono.Unix.Catalog.GetString ("Nghe"), null, null);
+		this.NgheAction = new global::Gtk.Action (
+			"NgheAction",
+			global::Mono.Unix.Catalog.GetString("Nghe"),
+			null,
+			null
+		);
 		this.NgheAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Nghe");
 		w1.Add (this.NgheAction, null);
-		this.OsmanAction = new global::Gtk.Action ("OsmanAction", global::Mono.Unix.Catalog.GetString ("Osman"), null, null);
+		this.OsmanAction = new global::Gtk.Action (
+			"OsmanAction",
+			global::Mono.Unix.Catalog.GetString("Osman"),
+			null,
+			null
+		);
 		this.OsmanAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Osman");
 		w1.Add (this.OsmanAction, null);
-		this.RasoulAction = new global::Gtk.Action ("RasoulAction", global::Mono.Unix.Catalog.GetString ("Rasoul"), null, null);
+		this.RasoulAction = new global::Gtk.Action (
+			"RasoulAction",
+			global::Mono.Unix.Catalog.GetString("Rasoul"),
+			null,
+			null
+		);
 		this.RasoulAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Rasoul");
 		w1.Add (this.RasoulAction, null);
-		this.SabrinaAction = new global::Gtk.Action ("SabrinaAction", global::Mono.Unix.Catalog.GetString ("Sabrina"), null, null);
+		this.SabrinaAction = new global::Gtk.Action (
+			"SabrinaAction",
+			global::Mono.Unix.Catalog.GetString("Sabrina"),
+			null,
+			null
+		);
 		this.SabrinaAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Sabrina");
 		w1.Add (this.SabrinaAction, null);
-		this.TomasAction = new global::Gtk.Action ("TomasAction", global::Mono.Unix.Catalog.GetString ("Tomas"), null, null);
+		this.TomasAction = new global::Gtk.Action (
+			"TomasAction",
+			global::Mono.Unix.Catalog.GetString("Tomas"),
+			null,
+			null
+		);
 		this.TomasAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Tomas");
 		w1.Add (this.TomasAction, null);
-		this.ZenoAction = new global::Gtk.Action ("ZenoAction", global::Mono.Unix.Catalog.GetString ("Zeno"), null, null);
+		this.ZenoAction = new global::Gtk.Action (
+			"ZenoAction",
+			global::Mono.Unix.Catalog.GetString("Zeno"),
+			null,
+			null
+		);
 		this.ZenoAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Zeno");
 		w1.Add (this.ZenoAction, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("MyMediaLite Movie Demo");
-		this.Icon = global::Stetic.IconLoader.LoadIcon (this, "stock_animation", global::Gtk.IconSize.Menu);
+		this.Icon = global::Stetic.IconLoader.LoadIcon (
+			this,
+			"stock_animation",
+			global::Gtk.IconSize.Menu
+		);
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.vbox1 = new global::Gtk.VBox ();
