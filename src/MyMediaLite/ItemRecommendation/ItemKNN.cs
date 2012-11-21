@@ -82,7 +82,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				if(nearest_neighbors[item_id]!=null)
+				if(nearest_neighbors[item_id] != null)
 					foreach (int neighbor in nearest_neighbors[item_id])
 						if (Feedback.ItemMatrix[neighbor, user_id])
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
@@ -133,12 +133,17 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			base.AddFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+
+			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
 				if (!feeddict.ContainsKey(tpl.Item1))
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
+
+			// For each user in new feedback update coocurrence 
+			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
 				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
@@ -146,45 +151,65 @@ namespace MyMediaLite.ItemRecommendation
 				foreach (int i in rated_items)
 				{
 					foreach (int j in new_items)
-					{
 						cooccurrence[i, j]++;
-						switch(Correlation) 
+
+					switch(Correlation) 
+					{
+					case BinaryCorrelationType.Cooccurrence:
+						correlation = cooccurrence;
+						break;
+					case BinaryCorrelationType.Cosine:
+						// Update correlations of each rated item by user 
+						foreach (int j in Feedback.AllItems)
 						{
-							case BinaryCorrelationType.Cooccurrence:
-								correlation = cooccurrence;
-								break;
-							case BinaryCorrelationType.Cosine:
-								if (i == j)
-									correlation[i, i] = 1;
-								else
-									correlation[i,j] = cooccurrence[i, j] / 
-										(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
-								break;
-							default:
-							throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
+							if (i == j)
+								correlation[i, i] = 1;
+							else
+								correlation[i, j] = cooccurrence[i, j] / 
+									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
 						}
+						break;
+					default:
+						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
 					}
 				}
+				// Recalculate neighbors as necessary
 				retrainItems(new_items);
 			}
 		}
 
 		/// <summary>
-		/// Retrains the items.
+		/// Selectively retrains items based on new items added to feedback.
 		/// </summary>
-		/// <param name='item_ids'>
-		/// Item_ids.
+		/// <param name='new_items'>
+		/// New items.
 		/// </param>
-		protected void retrainItems(IEnumerable<int> item_ids)
+		protected void retrainItems(IEnumerable<int> new_items)
 		{
-			foreach (int item_id in item_ids)
+			float min;
+			HashSet<int> retrainItems = new HashSet<int>(); 
+			foreach (int item in Feedback.AllItems.Except(new_items))
 			{
-				nearest_neighbors[item_id] = correlation.GetNearestNeighbors(item_id, k);
-				// Find items that have item_id in neighbourhood
-				List<int> retrain_also = getItemsWithNeighbor(item_id);
-				foreach (int item in retrain_also)
-					nearest_neighbors[item] = correlation.GetNearestNeighbors(item, k);
+				// Get the correlation of the least correlated neighbor
+				if(nearest_neighbors[item] == null) 
+					min = 0f;
+				else if(nearest_neighbors[item].Count < k)
+					min = 0f;
+				else 
+					min = correlation[item, nearest_neighbors[item].Last()];
+
+				// Check if any of the added items have a higher correlation
+				// (requires retraining if it is a new neighbor or an existing one)
+				foreach(int new_item in new_items)
+					if(correlation[item, new_item] > min)
+						retrainItems.Add(item);
 			}
+			// Recently added items also need retraining
+			retrainItems.UnionWith(new_items);
+			// Recalculate neighborhood of selected items
+			foreach(int r_item in retrainItems)
+				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
+			Console.WriteLine("Updated "+ retrainItems.Count + " KNN lists");
 		}
 		
 		/// <summary>
