@@ -88,11 +88,18 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
+				double normalization = 0;
 				if(nearest_neighbors[item_id] != null)
+				{
 					foreach (int neighbor in nearest_neighbors[item_id])
+					{
+						normalization += Math.Pow(correlation[item_id, neighbor], Q);
 						if (Feedback.ItemMatrix[neighbor, user_id])
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
-				return (float) sum;
+					}
+				}
+				if(sum = 0) return 0f;
+				return (float) sum / normalization;
 			}
 			else
 			{
