@@ -98,8 +98,8 @@ namespace MyMediaLite.ItemRecommendation
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
 					}
 				}
-				if(sum = 0) return 0f;
-				return (float) sum / normalization;
+				if(sum == 0) return (float) 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
