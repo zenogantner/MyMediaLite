@@ -98,8 +98,8 @@ namespace MyMediaLite.ItemRecommendation
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
 					}
 				}
-				if(sum == 0) return (float) 0;
-				return (float) (sum / normalization);
+				if(sum = 0) return 0f;
+				return (float) sum / normalization;
 			}
 			else
 			{
@@ -210,9 +210,9 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				// Get the correlation of the least correlated neighbor
 				if(nearest_neighbors[item] == null) 
-					min = 0f;
+					min = 0;
 				else if(nearest_neighbors[item].Count < k)
-					min = 0f;
+					min = 0;
 				else 
 					min = correlation[item, nearest_neighbors[item].Last()];
 
