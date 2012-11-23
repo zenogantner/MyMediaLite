@@ -55,16 +55,16 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
-			resizeNearestNeighbors(item_id + 1);
+			ResizeNearestNeighbors(item_id + 1);
 		}
 		
 		/// <summary>
-		/// Resizes the nearest neighbors.
+		/// Resizes the nearest neighbors list if necessary.
 		/// </summary>
 		/// <param name='new_size'>
 		/// New_size.
 		/// </param>
-		protected void resizeNearestNeighbors(int new_size)
+		protected void ResizeNearestNeighbors(int new_size)
 		{
 			if(new_size > nearest_neighbors.Count)
 				for(int i = nearest_neighbors.Count; i < new_size; i++)
@@ -92,8 +92,8 @@ namespace MyMediaLite.ItemRecommendation
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
 					}
 				}
-				if(sum = 0) return 0f;
-				return (float) sum / normalization;
+				if(sum == 0) return 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
@@ -126,8 +126,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.RemoveFeedback (feedback);
-			var items = from t in feedback select t.Item1;
-			retrainItems(new HashSet<int>(items));
+			// TODO: reflect item removal in model
 		}
  
 		/// <summary>
@@ -181,7 +180,7 @@ namespace MyMediaLite.ItemRecommendation
 					}
 				}
 				// Recalculate neighbors as necessary
-				retrainItems(new_items);
+				RetrainItems(new_items);
 			}
 		}
 
@@ -191,7 +190,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name='new_items'>
 		/// New items.
 		/// </param>
-		protected void retrainItems(IEnumerable<int> new_items)
+		protected void RetrainItems(IEnumerable<int> new_items)
 		{
 			float min;
 			HashSet<int> retrainItems = new HashSet<int>(); 
@@ -219,23 +218,5 @@ namespace MyMediaLite.ItemRecommendation
 			Console.WriteLine("Updated "+ retrainItems.Count + " KNN lists");
 		}
 		
-		/// <summary>
-		/// Gets the items with neighbor.
-		/// </summary>
-		/// <returns>
-		/// The items with neighbor.
-		/// </returns>
-		/// <param name='neighbor_id'>
-		/// Neighbor_id.
-		/// </param>
-		protected List<int> getItemsWithNeighbor(int neighbor_id)
-		{
-			List<int> item_list = new List<int>();
-			for(int i = 0; i < nearest_neighbors.Count; i++)
-				if(nearest_neighbors[i] != null)
-					if(nearest_neighbors[i].Contains(neighbor_id))
-						item_list.Add(i);
-			return item_list;
-		}
 	}
 }
