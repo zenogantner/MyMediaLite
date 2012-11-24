@@ -49,10 +49,12 @@ namespace MyMediaLite
 		public static Random GetInstance()
 		{
 			if (instance == null)
+			{
 				if (seed == null)
 					instance = new Random();
 				else
 					instance = new Random(seed.Value);
+			}
 			return instance;
 		}
 	}
