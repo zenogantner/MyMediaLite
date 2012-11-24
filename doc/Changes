@@ -13,6 +13,9 @@
            wrong scoring and potential exception if k=inf
 	 - BPRMF, MultiCoreBPRMF, SoftMarginRankinMF:
            - #353: get rid of 'fast sampling' feature
+	 - MultiCoreBPRMF
+	   - fix multithreading behavior for WithReplacement=false and
+             UniformUserSampling=false (thanks to Alex V. for the help)
 	 - BPRMF:
 	   - move different sampling strategies into different protected
              methods
