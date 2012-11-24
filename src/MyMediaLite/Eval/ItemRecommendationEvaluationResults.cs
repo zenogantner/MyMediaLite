@@ -15,10 +15,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace MyMediaLite.Eval
 {
@@ -29,9 +29,34 @@ namespace MyMediaLite.Eval
 	[Serializable]
 	public class ItemRecommendationEvaluationResults : Dictionary<string, float>
 	{
+		/// <summary>
+		/// List of strings representing the metrics which will be shown by the ToString() method
+		/// </summary>
+		/// <remarks>
+		/// All strings must be keys of the dictionary.
+		/// </remarks>
+		public IList<string> MetricsToShow { get; set; }
+
+		/// <summary>
+		/// List of strings representing the integer values (like number of users) which will be shown by the ToString() method
+		/// </summary>
+		/// <remarks>
+		/// All strings must be keys of the dictionary.
+		/// </remarks>
+		public IList<string> IntsToShow { get; set; }
+
+		/// <summary>
+		/// The format string used to display floating point numbers
+		/// </summary>
+		public string MetricFormatString { get; set; }
+
 		/// <summary>default constructor</summary>
 		public ItemRecommendationEvaluationResults()
 		{
+			MetricsToShow = new string[] { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR" };
+			IntsToShow    = new string[] { "num_users", "num_items", "num_lists" };
+			MetricFormatString = "0.#####";
+
 			foreach (string method in Items.Measures)
 				this[method] = 0;
 		}
@@ -53,10 +78,11 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		public override string ToString()
 		{
-			string s = string.Format(
-				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} MRR {7:0.#####} num_users {8} num_items {9} num_lists {10}",
-				this["AUC"], this["prec@5"], this["prec@10"], this["MAP"], this["recall@5"], this["recall@10"], this["NDCG"], this["MRR"], this["num_users"], this["num_items"], this["num_lists"]
-			);
+			var metrics = (from m in MetricsToShow select string.Format("{0} {1:" + MetricFormatString + "}", m, this[m])).ToList();
+			var ints    = (from i in IntsToShow    select string.Format("{0} {1}", i, this[i])).ToList();
+
+			string s = string.Join(" ", metrics.Concat(ints));
+
 			if (this.ContainsKey("fit"))
 				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
 			return s;
