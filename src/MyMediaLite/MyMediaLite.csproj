@@ -247,6 +247,7 @@
     <Compile Include="ItemRecommendation\BPRSLIM.cs" />
     <Compile Include="ItemRecommendation\SLIM.cs" />
     <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
+    <Compile Include="Eval\EvaluationResults.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
