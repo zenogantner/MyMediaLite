@@ -34,7 +34,8 @@
            specification
 	command-line tools
 	 - #337: use Mono's default garbage collector
-	 - reduce measurement output, let user select which measures to display
+	 - #301: reduce measurement output, let user select which measures to
+           display
 	documentation
 	 - refer to new website: http://mymedialite.net
 	website
