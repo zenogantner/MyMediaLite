@@ -16,6 +16,7 @@
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
@@ -45,23 +46,23 @@ namespace MyMediaLite.Data
 		/// <param name="ratio">the ratio of positive events to use for validation</param>
 		public PosOnlyFeedbackAllButOneSplit(IPosOnlyFeedback feedback, double ratio, bool keep_order, int random_seed)
 		{
-			rand = new Random(seed);
+			rand = new Random(random_seed);
 			if (ratio <= 0)
 				throw new ArgumentException("ratio must be greater than 0");
 
 			// create train/test data structures
-			var Train = new T();
-			var Test  = new T();
-			var Hidden = new List<IList<int>>();
+			this.Hidden = new List<IList<int>>();
 			
 			if(keep_order) {
 				var split = new PosOnlyFeedbackKeepOrderSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, ratio);
+				this.Train = split.Train;
+				this.Test = split.Test;
 			} else {
 				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, ratio);
+				this.Train = split.Train;
+				this.Test = split.Test;
 			}
 			
-			this.Train = split.Train;
-			this.Test = split.Test;
 
 			foreach(T fold in this.Test) {
 				var by_user = fold.ByUser;
