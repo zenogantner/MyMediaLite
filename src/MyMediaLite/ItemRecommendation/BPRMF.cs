@@ -389,7 +389,6 @@ namespace MyMediaLite.ItemRecommendation
 
 		void Retrain(ICollection<Tuple<int, int>> feedback)
 		{
-			Console.WriteLine("Retraining " + feedback.Count + " tuples");
 			var users = from t in feedback select t.Item1;
 			var items = from t in feedback select t.Item2;
 
