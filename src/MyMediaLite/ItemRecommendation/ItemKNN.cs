@@ -343,13 +343,13 @@ namespace MyMediaLite.ItemRecommendation
 				int nb_count = updated_neighbors_count[i];
 
 				max_total = Math.Max(max_total, tt_upd_time.TotalMilliseconds);
-				sum_total += tt_upd_time.Milliseconds;
+				sum_total += tt_upd_time.TotalMilliseconds;
 
 				max_mx = Math.Max(max_mx, mx_upd_time.TotalMilliseconds);
-				sum_mx += mx_upd_time.Milliseconds;
+				sum_mx += mx_upd_time.TotalMilliseconds;
 
 				max_nb = Math.Max(max_nb, nb_upd_time.TotalMilliseconds);
-				sum_nb += nb_upd_time.Milliseconds;
+				sum_nb += nb_upd_time.TotalMilliseconds;
 
 				max_ct = Math.Max(max_ct, nb_count);
 				sum_ct += nb_count;
