@@ -216,7 +216,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (load_item_mapping_file != null)
 			item_mapping = load_item_mapping_file.LoadMapping();
 
-		eval_measures = measures.Split(' ', ',');
+		if (measures != null)
+			eval_measures = measures.Split(' ', ',');
 
 		SetupRecommender();
 		CheckParameters(extra_args);
