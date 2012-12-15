@@ -43,10 +43,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public class SocialMF : BiasedMatrixFactorization, IUserRelationAwareRecommender
 	{
-		// TODO
-		//  - MAE optimization or throw Exception
-		//  - frequency-based regularization
-
 		/// <summary>Social network regularization constant</summary>
 		public float SocialRegularization { get { return social_regularization; } set { social_regularization = value; } }
 		private float social_regularization = 1;
@@ -61,6 +57,12 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected internal override void InitModel()
 		{
+			if (user_connections == null)
+			{
+				user_connections = new SparseBooleanMatrix();
+				Console.Error.WriteLine("Warning: UserRelation not set.");
+			}
+
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfRows - 1);
 			this.MaxUserID = Math.Max(MaxUserID, user_connections.NumberOfColumns - 1);
 

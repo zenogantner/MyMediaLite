@@ -1,4 +1,4 @@
-3.06	2012-11-
+3.06	2012-12-16
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
 	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
@@ -26,6 +26,8 @@
            - fix sampling corner case (last element was ignored)
 	   - set WithReplacement = false and UniformUserSampling = true in
              constructor
+	 - SocialMF
+	   - fix NRE when UserRelation is not set
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods
