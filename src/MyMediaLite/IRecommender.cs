@@ -79,5 +79,5 @@ namespace MyMediaLite
 		/// The ToString() method of recommenders should list the class name and all hyperparameters, separated by space characters.
 		/// </remarks>
 		string ToString();
-   }
+	}
 }
