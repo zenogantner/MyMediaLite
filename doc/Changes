@@ -28,6 +28,7 @@
              constructor
 	 - SocialMF
 	   - fix NRE when UserRelation is not set
+	   - more flexible Iterate() method
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods

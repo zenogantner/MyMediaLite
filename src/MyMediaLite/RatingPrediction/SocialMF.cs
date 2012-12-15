@@ -72,11 +72,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
-			// We ignore the method's arguments. FIXME
-			IterateBatch();
+			IterateBatch(rating_indices, update_user, update_item);
 		}
 
-		private void IterateBatch()
+		private void IterateBatch(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			SetupLoss();
 			SparseBooleanMatrix user_reverse_connections = (SparseBooleanMatrix) user_connections.Transpose();
@@ -88,7 +87,7 @@ namespace MyMediaLite.RatingPrediction
 			var item_bias_gradient    = new float[item_factors.dim1];
 
 			// I.1 prediction error
-			for (int index = 0; index < ratings.Count; index++)
+			foreach (int index in rating_indices)
 			{
 				int user_id = ratings.Users[index];
 				int item_id = ratings.Items[index];
@@ -179,14 +178,20 @@ namespace MyMediaLite.RatingPrediction
 				}
 
 			// II. apply gradient descent step
-			for (int user_id = 0; user_id < user_factors_gradient.dim1; user_id++)
-				user_bias[user_id] -= user_bias_gradient[user_id] * LearnRate * BiasLearnRate;
-			for (int item_id = 0; item_id < item_factors_gradient.dim1; item_id++)
-				item_bias[item_id] -= item_bias_gradient[item_id] * LearnRate * BiasLearnRate;
-			user_factors_gradient.Multiply(-LearnRate);
-			user_factors.Inc(user_factors_gradient);
-			item_factors_gradient.Multiply(-LearnRate);
-			item_factors.Inc(item_factors_gradient);
+			if (update_user)
+			{
+				for (int user_id = 0; user_id < user_factors_gradient.dim1; user_id++)
+					user_bias[user_id] -= user_bias_gradient[user_id] * LearnRate * BiasLearnRate;
+				user_factors_gradient.Multiply(-LearnRate);
+				user_factors.Inc(user_factors_gradient);
+			}
+			if (update_item)
+			{
+				for (int item_id = 0; item_id < item_factors_gradient.dim1; item_id++)
+					item_bias[item_id] -= item_bias_gradient[item_id] * LearnRate * BiasLearnRate;
+				item_factors_gradient.Multiply(-LearnRate);
+				item_factors.Inc(item_factors_gradient);
+			}
 		}
 
 		///
