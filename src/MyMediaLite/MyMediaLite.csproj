@@ -249,7 +249,6 @@
     <Compile Include="ItemRecommendation\SLIM.cs" />
     <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
     <Compile Include="Eval\EvaluationResults.cs" />
-    <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
     <Compile Include="RatingPrediction\ImplicitFeedbackKNN.cs" />
     <Compile Include="RatingPrediction\IntegratedSVDPlusPlusKNN.cs" />
   </ItemGroup>
