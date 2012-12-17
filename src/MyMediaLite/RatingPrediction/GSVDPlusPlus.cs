@@ -99,8 +99,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			user_factors = null; // delete old user factors
 			item_factors = null; // delete old item factors
-			float reg = Regularization; // to limit property accesses
-			float lr  = LearnRate;
+			float reg = Regularization; // to limit property accesses			
 
 			foreach (int index in rating_indices)
 			{
@@ -133,9 +132,9 @@ namespace MyMediaLite.RatingPrediction
 
 				// adjust biases
 				if (update_user)
-					user_bias[u] += BiasLearnRate * LearnRate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
+					user_bias[u] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
-					item_bias[i] += BiasLearnRate * LearnRate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
+					item_bias[i] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
 
 				double normalized_error = err / norm_denominator;
 				for (int f = 0; f < NumFactors; f++)
@@ -146,7 +145,7 @@ namespace MyMediaLite.RatingPrediction
 					if (update_user)
 					{
 						double delta_u = err * i_f - user_reg_weight * p[u, f];
-						p.Inc(u, f, lr * delta_u);
+						p.Inc(u, f, current_learnrate * delta_u);
 					}
 					if (update_item)
 					{
@@ -154,11 +153,11 @@ namespace MyMediaLite.RatingPrediction
 						foreach (int other_item_id in items_rated_by_user[u])
 						{
 							double delta_oi = common_update - y_reg[other_item_id] * y[other_item_id, f];
-							y.Inc(other_item_id, f, lr * delta_oi);
+							y.Inc(other_item_id, f, current_learnrate * delta_oi);
 						}
 						
 						double delta_i = err * p_plus_y_sum_vector[f] - item_reg_weight * q[i, f];
-						q.Inc(i, f, lr * delta_i);
+						q.Inc(i, f, current_learnrate * delta_i);
 						
 						// adjust attributes
 						if (i < item_attributes.NumberOfRows) 
@@ -170,12 +169,14 @@ namespace MyMediaLite.RatingPrediction
 							foreach (int attribute_id in attribute_list) 
 							{
 								double delta_oi = second_norm_error * p_plus_y_sum_vector[f] - x_reg[attribute_id] * x[attribute_id, f];
-								x.Inc(attribute_id, f, lr * delta_oi);
+								x.Inc(attribute_id, f, current_learnrate * delta_oi);
 							}
 						}						
 					}
 				}
 			}
+			
+			UpdateLearnRate();			
 		}
 		
 		///
