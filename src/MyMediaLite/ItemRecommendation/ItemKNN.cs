@@ -58,19 +58,6 @@ namespace MyMediaLite.ItemRecommendation
 			ResizeNearestNeighbors(item_id + 1);
 		}
 		
-		/// <summary>
-		/// Resizes the nearest neighbors list if necessary.
-		/// </summary>
-		/// <param name='new_size'>
-		/// New_size.
-		/// </param>
-		protected void ResizeNearestNeighbors(int new_size)
-		{
-			if(new_size > nearest_neighbors.Count)
-				for(int i = nearest_neighbors.Count; i < new_size; i++)
-					nearest_neighbors.Add(null);
-		}
-		
 		///
 		public override float Predict(int user_id, int item_id)
 		{

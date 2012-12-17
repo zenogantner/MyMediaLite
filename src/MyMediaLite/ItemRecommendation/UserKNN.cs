@@ -37,9 +37,9 @@ namespace MyMediaLite.ItemRecommendation
 			base.Train();
 
 			int num_users = MaxUserID + 1;
-			this.nearest_neighbors = new int[num_users][];
+			this.nearest_neighbors = new List<IList<int>>(num_users);
 			for (int u = 0; u < num_users; u++)
-				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
+				nearest_neighbors.Add(correlation.GetNearestNeighbors(u, k));
 		}
 
 		///
@@ -51,10 +51,18 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[user_id])
-					if (Feedback.UserMatrix[neighbor, item_id])
-						sum += Math.Pow(correlation[user_id, neighbor], Q);
-				return (float) sum;
+				double normalization = 0;
+				if(nearest_neighbors[user_id] != null)
+				{
+					foreach (int neighbor in nearest_neighbors[user_id])
+					{
+						normalization += Math.Pow(correlation[user_id, neighbor], Q);
+						if (Feedback.UserMatrix[neighbor, item_id])
+							sum += Math.Pow(correlation[user_id, neighbor], Q);
+					}
+				}
+				if(sum == 0) return 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
@@ -140,5 +148,111 @@ namespace MyMediaLite.ItemRecommendation
 			return result;
 		}
 
+		/// <summary>
+		/// Add positive feedback events and perform incremental training
+		/// </summary>
+		/// <param name='feedback'>
+		/// collection of user id - item id tuples
+		/// </param>
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.AddFeedback (feedback);
+			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			
+			// Construct a dictionary to group feedback by item
+			foreach (var tpl in feedback)
+			{
+				//Console.WriteLine("Adding feedback: " + tpl.Item1 + " " + tpl.Item2);
+				if (!feeddict.ContainsKey(tpl.Item2))
+					feeddict.Add(tpl.Item2, new List<int>());
+				feeddict[tpl.Item2].Add(tpl.Item1);
+			}
+			// For each user in new feedback update coocurrence 
+			// and correlation matrices
+			foreach (KeyValuePair<int, List<int>> f in feeddict)
+			{
+				List<int> rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				List<int> new_users = f.Value;
+				foreach (int i in rating_users)
+				{
+					foreach (int j in new_users)
+						cooccurrence[i, j]++;
+					
+					switch(Correlation) 
+					{
+					case BinaryCorrelationType.Cooccurrence:
+						correlation = cooccurrence;
+						break;
+					case BinaryCorrelationType.Cosine:
+						// Update correlations of each rated item by user 
+						foreach (int j in Feedback.AllUsers)
+						{
+							if (i == j)
+								correlation[i, i] = 1;
+							else
+								correlation[i, j] = cooccurrence[i, j] / 
+									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
+						}
+						break;
+					default:
+						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
+					}
+				}
+				
+				// Recalculate neighbors as necessary
+				RetrainUsers(new_users);
+			}
+		}
+		
+		/// <summary>
+		/// Selectively retrains users based on new users added to feedback.
+		/// </summary>
+		/// <returns>
+		/// Number of updated neighbor lists.
+		/// </returns>
+		/// <param name='new_users'>
+		/// Recently added users.
+		/// </param>
+		protected int RetrainUsers(IEnumerable<int> new_users)
+		{
+			float min;
+			HashSet<int> retrain_users = new HashSet<int>(); 
+			foreach (int user in Feedback.AllUsers.Except(new_users))
+			{
+				// Get the correlation of the least correlated neighbor
+				if(nearest_neighbors[user] == null) 
+					min = 0;
+				else if(nearest_neighbors[user].Count < k)
+					min = 0;
+				else 
+					min = correlation[user, nearest_neighbors[user].Last()];
+				
+				// Check if any of the added users have a higher correlation
+				// (requires retraining if it is a new neighbor or an existing one)
+				foreach(int new_user in new_users)
+					if(correlation[user, new_user] > min)
+						retrain_users.Add(user);
+			}
+			// Recently added users also need retraining
+			retrain_users.UnionWith(new_users);
+			// Recalculate neighborhood of selected users
+			foreach(int r_user in retrain_users)
+				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
+			
+			return retrain_users.Count;
+		}
+		
+		/// <summary>
+		/// Adds the user.
+		/// </summary>
+		/// <param name='user_id'>
+		/// User_id.
+		/// </param>
+		protected override void AddUser(int user_id)
+		{
+			base.AddUser(user_id);
+			ResizeNearestNeighbors(user_id + 1);
+		}
+		
 	}
 }
