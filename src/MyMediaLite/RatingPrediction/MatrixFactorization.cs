@@ -194,15 +194,27 @@ namespace MyMediaLite.RatingPrediction
 
 			UpdateLearnRate();
 		}
-
-		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
+		
+		/// <summary>
+		/// Learns the factors.
+		/// </summary>
+		/// <param name='rating_indices'>
+		/// Rating_indices.
+		/// </param>
+		/// <param name='update_user'>
+		/// Update_user.
+		/// </param>
+		/// <param name='update_item'>
+		/// Update_item.
+		/// </param>
+		protected void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			for (uint current_iter = 0; current_iter < NumIter; current_iter++)
 				Iterate(rating_indices, update_user, update_item);
 		}
 
 		///
-		protected float Predict(int user_id, int item_id, bool bound)
+		protected virtual float Predict(int user_id, int item_id, bool bound)
 		{
 			float result = global_bias + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 
