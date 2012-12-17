@@ -26,7 +26,7 @@ namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted kNN recommender based on user attributes</summary>
 	/// <remarks>
-	/// This recommender supports incremental updates.
+	/// This recommender supports incremental updates, but it does not support fold-in.
 	/// </remarks>
 	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
 	{

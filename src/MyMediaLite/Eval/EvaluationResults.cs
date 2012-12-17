@@ -22,6 +22,9 @@ using System.Linq;
 
 namespace MyMediaLite.Eval
 {
+	/// <summary>
+	/// Class for representing evaluation results
+	/// </summary>
 	[Serializable]
 	public abstract class EvaluationResults : Dictionary<string, float>
 	{
@@ -46,6 +49,7 @@ namespace MyMediaLite.Eval
 		/// </summary>
 		public string FloatingPointFormat { get; set; }
 
+		/// <summary> Constructor</summary>
 		protected EvaluationResults()
 		{
 			FloatingPointFormat = "0.#####";
