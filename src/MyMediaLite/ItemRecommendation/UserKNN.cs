@@ -45,9 +45,9 @@ namespace MyMediaLite.ItemRecommendation
 			base.Train();
 
 			int num_users = MaxUserID + 1;
-			this.nearest_neighbors = new int[num_users][];
+			this.nearest_neighbors = new List<IList<int>>(num_users);
 			for (int u = 0; u < num_users; u++)
-				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
+				nearest_neighbors.Add(correlation.GetNearestNeighbors(u, k));
 
 			update_times = new List<TimeSpan>();
 			nb_update_times = new List<TimeSpan>();
