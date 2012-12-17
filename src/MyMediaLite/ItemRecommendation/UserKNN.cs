@@ -31,6 +31,14 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.UserMatrix; } }
 
+		/// <summary>
+		/// For collecting update time statistics.
+		/// </summary>
+		protected List<TimeSpan> update_times;
+		protected List<TimeSpan> nb_update_times;
+		protected List<TimeSpan> mx_update_times;
+		protected List<int> updated_neighbors_count;
+
 		///
 		public override void Train()
 		{
@@ -40,6 +48,11 @@ namespace MyMediaLite.ItemRecommendation
 			this.nearest_neighbors = new int[num_users][];
 			for (int u = 0; u < num_users; u++)
 				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
+
+			update_times = new List<TimeSpan>();
+			nb_update_times = new List<TimeSpan>();
+			mx_update_times = new List<TimeSpan>();
+			updated_neighbors_count = new List<int>();
 		}
 
 		///
@@ -51,10 +64,18 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[user_id])
-					if (Feedback.UserMatrix[neighbor, item_id])
-						sum += Math.Pow(correlation[user_id, neighbor], Q);
-				return (float) sum;
+				double normalization = 0;
+				if(nearest_neighbors[user_id] != null)
+				{
+					foreach (int neighbor in nearest_neighbors[user_id])
+					{
+						normalization += Math.Pow(correlation[user_id, neighbor], Q);
+						if (Feedback.UserMatrix[neighbor, item_id])
+							sum += Math.Pow(correlation[user_id, neighbor], Q);
+					}
+				}
+				if(sum == 0) return 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
@@ -138,6 +159,181 @@ namespace MyMediaLite.ItemRecommendation
 				result[i] = Tuple.Create(item_id, Predict(user_similarities, nearest_neighbors, item_id));
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Add positive feedback events and perform incremental training
+		/// </summary>
+		/// <param name='feedback'>
+		/// collection of user id - item id tuples
+		/// </param>
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.AddFeedback (feedback);
+			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			
+			// Construct a dictionary to group feedback by item
+			foreach (var tpl in feedback)
+			{
+				//Console.WriteLine("Adding feedback: " + tpl.Item1 + " " + tpl.Item2);
+				if (!feeddict.ContainsKey(tpl.Item2))
+					feeddict.Add(tpl.Item2, new List<int>());
+				feeddict[tpl.Item2].Add(tpl.Item1);
+			}
+			DateTime start;
+			DateTime mx_upd_time;
+			DateTime nb_upd_time;
+			int num_updated_neighbors;
+			// For each user in new feedback update coocurrence 
+			// and correlation matrices
+			foreach (KeyValuePair<int, List<int>> f in feeddict)
+			{
+				start = DateTime.Now;
+				List<int> rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				List<int> new_users = f.Value;
+				foreach (int i in rating_users)
+				{
+					foreach (int j in new_users)
+						cooccurrence[i, j]++;
+					
+					switch(Correlation) 
+					{
+					case BinaryCorrelationType.Cooccurrence:
+						correlation = cooccurrence;
+						break;
+					case BinaryCorrelationType.Cosine:
+						// Update correlations of each rated item by user 
+						foreach (int j in Feedback.AllUsers)
+						{
+							if (i == j)
+								correlation[i, i] = 1;
+							else
+								correlation[i, j] = cooccurrence[i, j] / 
+									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
+						}
+						break;
+					default:
+						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
+					}
+				}
+				mx_upd_time = DateTime.Now; 
+				
+				// Recalculate neighbors as necessary
+				num_updated_neighbors = RetrainUsers(new_users);
+				nb_upd_time = DateTime.Now;
+				
+				// Collect statistics
+				update_times.Add(nb_upd_time - start);
+				mx_update_times.Add(mx_upd_time - start);
+				nb_update_times.Add(nb_upd_time - mx_upd_time);
+				updated_neighbors_count.Add(num_updated_neighbors);
+			}
+		}
+		
+		/// <summary>
+		/// Selectively retrains users based on new users added to feedback.
+		/// </summary>
+		/// <returns>
+		/// Number of updated neighbor lists.
+		/// </returns>
+		/// <param name='new_users'>
+		/// Recently added users.
+		/// </param>
+		protected int RetrainUsers(IEnumerable<int> new_users)
+		{
+			float min;
+			HashSet<int> retrain_users = new HashSet<int>(); 
+			foreach (int user in Feedback.AllUsers.Except(new_users))
+			{
+				// Get the correlation of the least correlated neighbor
+				if(nearest_neighbors[user] == null) 
+					min = 0;
+				else if(nearest_neighbors[user].Count < k)
+					min = 0;
+				else 
+					min = correlation[user, nearest_neighbors[user].Last()];
+				
+				// Check if any of the added users have a higher correlation
+				// (requires retraining if it is a new neighbor or an existing one)
+				foreach(int new_user in new_users)
+					if(correlation[user, new_user] > min)
+						retrain_users.Add(user);
+			}
+			// Recently added users also need retraining
+			retrain_users.UnionWith(new_users);
+			// Recalculate neighborhood of selected users
+			foreach(int r_user in retrain_users)
+				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
+			
+			return retrain_users.Count;
+		}
+		
+		/// <summary>
+		/// Adds the user.
+		/// </summary>
+		/// <param name='user_id'>
+		/// User_id.
+		/// </param>
+		protected override void AddUser(int user_id)
+		{
+			base.AddUser(user_id);
+			ResizeNearestNeighbors(user_id + 1);
+		}
+		
+		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the
+		/// <see cref="MyMediaLite.ItemRecommendation.UserKNN"/> is reclaimed by garbage collection.
+		/// </summary>
+		~UserKNN()
+		{
+			double sum_total = 0;
+			double max_total = 0;
+			double sum_nb = 0;
+			double max_nb = 0;
+			double max_mx = 0;
+			double sum_mx = 0;
+			int max_ct = 0;
+			int sum_ct = 0;
+			int reg_ct;
+			
+			Console.WriteLine("Registry count:" + (reg_ct = update_times.Count));
+			Console.WriteLine();
+			
+			for(int i = 0; i < reg_ct; i++)
+			{
+				TimeSpan tt_upd_time = update_times[i];
+				TimeSpan mx_upd_time = mx_update_times[i];
+				TimeSpan nb_upd_time = nb_update_times[i];
+				int nb_count = updated_neighbors_count[i];
+				
+				max_total = Math.Max(max_total, tt_upd_time.TotalMilliseconds);
+				sum_total += tt_upd_time.TotalMilliseconds;
+				
+				max_mx = Math.Max(max_mx, mx_upd_time.TotalMilliseconds);
+				sum_mx += mx_upd_time.TotalMilliseconds;
+				
+				max_nb = Math.Max(max_nb, nb_upd_time.TotalMilliseconds);
+				sum_nb += nb_upd_time.TotalMilliseconds;
+				
+				max_ct = Math.Max(max_ct, nb_count);
+				sum_ct += nb_count;
+				
+				Console.WriteLine(tt_upd_time.TotalMilliseconds + "\t" 
+				                  + mx_upd_time.TotalMilliseconds + "\t"
+				                  + nb_upd_time.TotalMilliseconds + "\t"
+				                  + nb_count);
+			}
+			Console.WriteLine();
+			
+			Console.WriteLine("Avg update time: " + sum_total/reg_ct);
+			Console.WriteLine("Max update time: " + max_total);
+			Console.WriteLine("Avg mx update time: " + sum_mx/reg_ct);
+			Console.WriteLine("Max mx update time: " + max_mx);
+			Console.WriteLine("Avg nb update time: " + sum_nb/reg_ct);
+			Console.WriteLine("Max nb update time: " + max_nb);
+			Console.WriteLine("Avg nb count: " + sum_ct/reg_ct);
+			Console.WriteLine("Max nb count: " + max_ct);
+
 		}
 
 	}
