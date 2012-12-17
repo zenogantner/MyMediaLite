@@ -88,7 +88,7 @@ namespace MyMediaLite.RatingPrediction
 		public bool WeightedBinary { get; set; }
 
 		/// <summary>underlying baseline predictor</summary>
-		protected UserItemBaseline baseline_predictor = new UserItemBaseline();
+		public UserItemBaseline baseline_predictor = new UserItemBaseline();
 
 		void InitModel()
 		{
