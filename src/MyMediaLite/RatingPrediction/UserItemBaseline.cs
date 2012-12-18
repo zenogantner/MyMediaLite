@@ -61,7 +61,7 @@ namespace MyMediaLite.RatingPrediction
 	///   <para>
 	///     This recommender supports incremental updates.
 	///   </para>
-	/// </remarks>	
+	/// </remarks>
 	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>

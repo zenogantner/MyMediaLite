@@ -52,7 +52,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	public RatingPrediction()
 	{
-		measure = "RMSE";
+		eval_measures = RatingPredictionEvaluationResults.DefaultMeasuresToShow;
 		cutoff = double.MaxValue;
 	}
 
@@ -119,14 +119,14 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
    --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
+   --measures=RMSE,MAE,NMAE,CBD        comma- or space-separated list of evaluation measures to display (default is RMSE, MAE, CBD)
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations
    --num-iter=N                   start measuring at N iterations
    --max-iter=N                   perform at most N iterations
-   --measure=RMSE|MAE|NMAE|CBD    evaluation measure to use for the abort conditions below (default is RMSE)
-   --epsilon=NUM                  abort iterations if evaluation measure is more than best result plus NUM
-   --cutoff=NUM                   abort if evaluation measure is above NUM
+   --epsilon=NUM                  abort iterations if main evaluation measure is more than best result plus NUM
+   --cutoff=NUM                   abort if main evaluation measure is above NUM
 ");
 		Environment.Exit(exit_code);
 	}
@@ -164,7 +164,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
+		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
 	}
 
 	protected override void Run(string[] args)
@@ -227,9 +227,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					recommender.Train();
 
 				if (compute_fit)
-					Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), iterative_recommender.NumIter);
+					Console.WriteLine("fit {0} iteration {1}", Render(recommender.Evaluate(training_data)), iterative_recommender.NumIter);
 
-				Console.WriteLine("{0} iteration {1}", Evaluate(), iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", Render(Evaluate()), iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -248,23 +248,23 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 							fit_time_stats.Add(time.TotalSeconds);
 						}
 
-						Dictionary<string, float> results = null;
+						EvaluationResults results = null;
 						time = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(time.TotalSeconds);
-						eval_stats.Add(results[measure]);
-						Console.WriteLine("{0} iteration {1}", results, it);
+						eval_stats.Add(results[eval_measures[0]]);
+						Console.WriteLine("{0} iteration {1}", Render(results), it);
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
 							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
 
-						if (epsilon > 0.0 && results[measure] - eval_stats.Min() > epsilon)
+						if (epsilon > 0.0 && results[eval_measures[0]] - eval_stats.Min() > epsilon)
 						{
-							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], eval_stats.Min()));
+							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results[eval_measures[0]], eval_stats.Min()));
 							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
 							break;
 						}
-						if (results[measure] > cutoff)
+						if (results[eval_measures[0]] > cutoff)
 						{
 							Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 							break;
@@ -285,7 +285,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				{
 					Console.WriteLine();
 					var results = recommender.DoCrossValidation(cross_validation, compute_fit, true);
-					Console.Write(results);
+					Console.Write(Render(results));
 					no_eval = true;
 				}
 				else
@@ -304,9 +304,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			if (!no_eval)
 			{
 				if (online_eval)
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(recommender.EvaluateOnline(test_data)); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(Render(recommender.EvaluateOnline(test_data))); });
 				else
-					seconds = Wrap.MeasureTime(delegate() { Console.Write(Evaluate()); });
+					seconds = Wrap.MeasureTime(delegate() { Console.Write(Render(Evaluate())); });
 
 				Console.Write(" testing_time " + seconds);
 
@@ -314,7 +314,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				{
 					Console.Write("\nfit ");
 					seconds = Wrap.MeasureTime(delegate() {
-						Console.Write(recommender.Evaluate(training_data));
+						Console.Write(Render(recommender.Evaluate(training_data)));
 					});
 					Console.Write(" fit_time " + seconds);
 				}
@@ -425,7 +425,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		Console.Error.WriteLine("memory {0}", Memory.Usage);
 	}
 
-	protected virtual Dictionary<string, float> Evaluate()
+	protected virtual EvaluationResults Evaluate()
 	{
 		return recommender.Evaluate(test_data, training_data);
 	}

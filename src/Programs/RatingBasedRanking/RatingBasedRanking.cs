@@ -85,7 +85,7 @@ class RatingBasedRanking : RatingPrediction
 			eval_item_mode = CandidateItems.UNION;
 	}
 
-	protected override Dictionary<string, float> Evaluate()
+	protected override EvaluationResults Evaluate()
 	{
 		int predict_items_number = -1;
 		var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);

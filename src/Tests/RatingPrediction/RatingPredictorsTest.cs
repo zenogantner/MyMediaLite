@@ -18,6 +18,8 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite;
+using MyMediaLite.DataType;
+using MyMediaLite.RatingPrediction;
 
 namespace Tests.RatingPrediction
 {
@@ -42,6 +44,31 @@ namespace Tests.RatingPrediction
 					);
 				}
 			}
+		}
+
+		[Test()]
+		public void TestFoldIn()
+		{
+			foreach (Type type in Utils.GetTypes("MyMediaLite.RatingPrediction"))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFoldInRatingPredictor") != null)
+				{
+					if (type.Name == "SigmoidUserAsymmetricFactorModel" || type.Name == "UserAttributeKNN")
+						continue;
+				
+					var recommender = type.CreateRatingPredictor();
+					recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
+					if (type.GetInterface("IUserAttributeAwareRecommender") != null)
+						((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
+					if (type.GetInterface("IItemAttributeAwareRecommender") != null)
+						((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
+
+					recommender.Train();
+
+					var items_rated_by_user = new Tuple<int, float>[] { Tuple.Create(1, 1.0f), Tuple.Create(2, 1.5f) };
+					var items_to_rate = new int[] { 2 };
+					var rated_items = ((IFoldInRatingPredictor) recommender).ScoreItems(items_rated_by_user, items_to_rate);
+					Assert.AreEqual(1, rated_items.Count);
+				}
 		}
 	}
 }

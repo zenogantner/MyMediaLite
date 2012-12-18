@@ -25,105 +25,41 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Matrix factorization for BPR on multiple cores</summary>
 	/// <remarks>
-	/// Literature:
-	/// <list type="bullet">
-	///   <item><description>
-	///     Rainer Gemulla, Peter J. Haas, Erik Nijkamp, Yannis Sismanis:
-	///     Large-Scale Matrix Factorization with Distributed Stochastic Gradient Descent.
-	///     KDD 2011.
-	///     http://www.mpi-inf.mpg.de/~rgemulla/publications/gemulla11dsgd.pdf
-	///   </description></item>
-	/// </list>
-	///
 	/// This recommender supports incremental updates, however they are currently not performed on multiple cores.
 	/// </remarks>
 	public class MultiCoreBPRMF : BPRMF
 	{
-		// TODO support uniform user sampling
-
 		/// <summary>the maximum number of threads to use</summary>
 		/// <remarks>
 		///   Determines the number of sections the users and items will be divided into.
 		/// </remarks>
 		public int MaxThreads { get; set; }
 
+		IList<IList<int>> index_blocks;
+
 		/// <summary>default constructor</summary>
 		public MultiCoreBPRMF()
 		{
+			WithReplacement = false;
+			UniformUserSampling = false;
 			MaxThreads = 100;
 		}
-
-		IList<int>[,] blocks;
-		IList<int>[] items_by_group;
 
 		///
 		public override void Train()
 		{
-			if (UniformUserSampling)
-				throw new NotSupportedException("uniform_user_sampling");
-			if (WithReplacement)
-				throw new NotSupportedException("with_replacement");
-
-			blocks = Feedback.PartitionUsersAndItems(MaxThreads);
-			items_by_group = new IList<int>[MaxThreads];
-			for (int item_group = 0; item_group < MaxThreads; item_group++)
-			{
-				var items_in_group = new HashSet<int>();
-				for (int user_group = 0; user_group < MaxThreads; user_group++)
-					foreach (int index in blocks[user_group, item_group])
-						items_in_group.Add(Feedback.Items[index]);
-				items_by_group[item_group] = items_in_group.ToArray();
-			}
+			index_blocks = Feedback.PartitionIndices(MaxThreads);
 
 			// perform training
 			base.Train();
 		}
 
 		///
-		public override void Iterate()
+		protected override void IterateWithoutReplacementUniformPair()
 		{
-			// generate random sub-epoch sequence
-			var subepoch_sequence = new List<int>(Enumerable.Range(0, MaxThreads));
-			subepoch_sequence.Shuffle();
-
-			foreach (int i in subepoch_sequence) // sub-epoch
-				//Parallel.For(0, NumGroups, j => Iterate(j, (i + j) % NumGroups));
-				for (int j = 0; j < MaxThreads; j++)
-					Iterate(j, (i + j) % MaxThreads);
-		}
-
-		/// <summary>Iterate over the examples of a specific block of the feedback matrix</summary>
-		/// <param name='user_group'>the user group</param>
-		/// <param name='item_group'>the item group</param>
-		void Iterate(int user_group, int item_group)
-		{
-			int user_id, pos_item_id, neg_item_id;
-
-			// uniform pair sampling, without replacement
-			foreach (int index in blocks[user_group, item_group])
-			{
-				user_id = Feedback.Users[index];
-				pos_item_id = Feedback.Items[index];
-				neg_item_id = SampleNegativeItem(user_id, item_group);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-			}
-		}
-
-		/// <summary>Sample negative item, given the the user and the item group</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="item_group">the group the item has to belong to</param>
-		/// <returns>the ID of the negative item</returns>
-		int SampleNegativeItem(int u, int item_group)
-		{
-			int j = -1;
-
-			do
-			{
-				int random_index = random.Next(items_by_group[item_group].Count);
-				j = items_by_group[item_group][random_index];
-			} while (Feedback.UserMatrix[u, j] == true);
-
-			return j;
+			Parallel.ForEach(
+				index_blocks,
+				indices => IterateWithoutReplacementUniformPair(indices));
 		}
 
 		///

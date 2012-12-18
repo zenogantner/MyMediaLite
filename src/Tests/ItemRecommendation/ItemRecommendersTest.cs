@@ -18,6 +18,8 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite;
+using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommendation;
 
 namespace Tests.ItemRecommendation
 {
@@ -39,6 +41,28 @@ namespace Tests.ItemRecommendation
 						recommender.ToString().StartsWith(type.Name),
 						string.Format("ToString() output of {0} does not start with class name: '{1}'", type.Name, recommender.ToString ())
 					);
+				}
+		}
+
+		[Test()]
+		public void TestFoldIn()
+		{
+			foreach (Type type in Utils.GetTypes("MyMediaLite.ItemRecommendation"))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFoldInItemRecommender") != null)
+				{
+					var recommender = type.CreateItemRecommender();
+					recommender.Feedback = TestUtils.CreatePosOnlyFeedback();
+					if (type.GetInterface("IUserAttributeAwareRecommender") != null)
+						((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
+					if (type.GetInterface("IItemAttributeAwareRecommender") != null)
+						((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
+
+					recommender.Train();
+
+					var items_accessed_by_user = new int[] { 0, 1 };
+					var items_to_score = new int[] { 2 };
+					var scored_items = ((IFoldInItemRecommender) recommender).ScoreItems(items_accessed_by_user, items_to_score);
+					Assert.AreEqual(1, scored_items.Count);
 				}
 		}
 	}

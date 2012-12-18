@@ -25,6 +25,7 @@ using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval;
 using MyMediaLite.IO;
 
 public abstract class CommandLineProgram<T> where T:IRecommender
@@ -66,7 +67,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected uint find_iter = 0;
 	protected uint num_iter = 0;
 	protected uint max_iter = 50;
-	protected string measure;
+	protected string measures;
+	protected IList<string> eval_measures;
 	protected double epsilon = 0;
 	protected double cutoff;
 
@@ -176,7 +178,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			{ "load-user-mapping=",   v              => load_user_mapping_file = v },
 			{ "load-item-mapping=",   v              => load_item_mapping_file = v },
 			{ "prediction-file=",     v              => prediction_file      = v },
-			{ "measure=",             v              => measure              = v },
+			{ "measures=",            v              => measures             = v },
 			// integer-valued options
 			{ "find-iter=",           (uint v)       => find_iter            = v },
 			{ "max-iter=",            (uint v)       => max_iter             = v },
@@ -213,6 +215,9 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			user_mapping = load_user_mapping_file.LoadMapping();
 		if (load_item_mapping_file != null)
 			item_mapping = load_item_mapping_file.LoadMapping();
+
+		if (measures != null)
+			eval_measures = measures.Split(' ', ',');
 
 		SetupRecommender();
 		CheckParameters(extra_args);
@@ -262,6 +267,12 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			((IItemRelationAwareRecommender)recommender).ItemRelation = RelationData.Read(Path.Combine(data_dir, item_relations_file), item_mapping);
 			Console.WriteLine("relation over {0} items", ((IItemRelationAwareRecommender)recommender).NumItems);
 		}
+	}
+
+	protected string Render(EvaluationResults results)
+	{
+		results.MeasuresToShow = eval_measures;
+		return results.ToString();
 	}
 
 	protected void Abort(string message)

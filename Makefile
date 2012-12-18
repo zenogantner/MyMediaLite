@@ -78,10 +78,13 @@ MyMediaLite-${VERSION}.src.tar.gz:
 test: data/ml-100k/u.data all unittests
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
+	time tests/test_item_recommendation_predict.sh
 	time tests/test_load_save.sh
 	time tests/test_cv.sh
 	time tests/test_random_split.sh
+	time tests/test_item_recommendation_online.sh
 	time tests/test_rating_prediction_online.sh
+	time tests/test_rating_prediction_time.sh
 
 unittests:
 	cd src && make test

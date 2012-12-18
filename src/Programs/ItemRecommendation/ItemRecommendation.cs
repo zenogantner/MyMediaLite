@@ -65,7 +65,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	public ItemRecommendation()
 	{
 		cutoff  = double.MinValue;
-		measure = "AUC";
+		eval_measures = ItemRecommendationEvaluationResults.DefaultMeasuresToShow;
 	}
 
 	protected override void ShowVersion()
@@ -140,14 +140,14 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --compute-fit                display fit on training data
+   --measures=LIST              the evaluation measures to display (default is AUC, prec@5)
 
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
    --num-iter=N                 start measuring at N iterations
    --max-iter=N                 perform at most N iterations
-   --measure=MEASURE            the evaluation measure to use for the abort conditions below (default is AUC)
-   --epsilon=NUM                abort iterations if MEASURE is less than best result plus NUM
-   --cutoff=NUM                 abort if MEASURE is below NUM
+   --epsilon=NUM                abort iterations if main measure is less than best result plus NUM
+   --cutoff=NUM                 abort if main measure is below NUM
 ");
 		Environment.Exit(exit_code);
 	}
@@ -192,12 +192,14 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (recommender == null && load_model_file != null)
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		recommender.Configure(recommender_options, (string m) => { Console.Error.WriteLine(m); Environment.Exit(-1); });
+		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
 	}
 
 	protected override void Run(string[] args)
 	{
 		base.Run(args);
+
+		Console.WriteLine(string.Join("--", eval_measures));
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
 		bool no_eval = true;
@@ -233,7 +235,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 					Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), iterative_recommender.NumIter);
 
 				var results = Evaluate();
-				Console.WriteLine("{0} iteration {1}", results, iterative_recommender.NumIter);
+				Console.WriteLine("{0} iteration {1}", Render(results), iterative_recommender.NumIter);
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -254,19 +256,19 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
 						eval_time_stats.Add(t.TotalSeconds);
-						eval_stats.Add(results[measure]);
-						Console.WriteLine("{0} iteration {1}", results, it);
+						eval_stats.Add(results[eval_measures[0]]);
+						Console.WriteLine("{0} iteration {1}", Render(results), it);
 
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
 
-						if (epsilon > 0.0 && eval_stats.Max() - results[measure] > epsilon)
+						if (epsilon > 0.0 && eval_stats.Max() - results[eval_measures[0]] > epsilon)
 						{
-							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results["RMSE"], eval_stats.Min()));
+							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results[eval_measures[0]], eval_stats.Min()));
 							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
 							break;
 						}
-						if (results[measure] < cutoff)
+						if (results[eval_measures[0]] < cutoff)
 						{
 								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
 								Console.Error.WriteLine("DONE");
@@ -285,7 +287,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				if (cross_validation > 1)
 				{
 					var results = recommender.DoCrossValidation(cross_validation, test_users, candidate_items, eval_item_mode, compute_fit, true);
-					Console.Write(results);
+					Console.Write(Render(results));
 					no_eval = true;
 				}
 				else
@@ -307,7 +309,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				if (online_eval)
 					time_span = Wrap.MeasureTime( delegate() {
 						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
-						Console.Write(results);
+						Console.Write(Render(results));
 					});
 				else if (group_method != null)
 				{
@@ -326,11 +328,11 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 					time_span = Wrap.MeasureTime( delegate() {
 						var result = group_recommender.Evaluate(test_data, training_data, group_to_user, candidate_items);
-						Console.Write(result);
+						Console.Write(Render(result));
 					});
 				}
 				else
-					time_span = Wrap.MeasureTime( delegate() { Console.Write(Evaluate()); });
+					time_span = Wrap.MeasureTime( delegate() { Console.Write(Render(Evaluate())); });
 				Console.Write(" testing_time " + time_span);
 			}
 			Console.WriteLine();

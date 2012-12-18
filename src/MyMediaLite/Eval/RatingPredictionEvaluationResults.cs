@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,8 +26,16 @@ namespace MyMediaLite.Eval
 	/// This class is basically a Dictionary with a custom-made ToString() method.
 	/// </remarks>
 	[Serializable]
-	public class RatingPredictionEvaluationResults : Dictionary<string, float>
+	public class RatingPredictionEvaluationResults : EvaluationResults
 	{
+		/// <summary>
+		/// Default for MeasuresToShow
+		/// </summary>
+		static public IList<string> DefaultMeasuresToShow
+		{
+			get { return new string[] { "RMSE", "MAE", "CBD" }; }
+		}
+
 		/// <summary>results for users without ratings in the training data</summary>
 		public Dictionary<string, float> NewUserResults { get; set; }
 
@@ -39,27 +46,27 @@ namespace MyMediaLite.Eval
 		public Dictionary<string, float> NewUserNewItemResults { get; set; }
 
 		/// <summary>default constructor</summary>
-		public RatingPredictionEvaluationResults() {}
-
-		/// <summary>initialize with given results</summary>
-		/// <param name='results'>a dictionary containing results</param>
-		public RatingPredictionEvaluationResults(Dictionary<string, float> results)
+		public RatingPredictionEvaluationResults()
 		{
-			foreach (var key in results.Keys)
-				this[key] = results[key];
+			Init();
 		}
 
-		/// <summary>Create averaged results</summary>
-		/// <param name='result_list'>the list of results to average</param>
-		public RatingPredictionEvaluationResults(IList<Dictionary<string, float>> result_list)
+		///
+		public RatingPredictionEvaluationResults(Dictionary<string, float> results) : base(results)
 		{
-			foreach (var key in result_list[0].Keys)
-			{
-				this[key] = 0;
-				foreach (var r in result_list)
-					this[key] += r[key];
-				this[key] /= result_list.Count;
-			}
+			Init();
+		}
+
+		///
+		public RatingPredictionEvaluationResults(IList<Dictionary<string, float>> result_list) : base(result_list)
+		{
+			Init();
+		}
+
+		private void Init()
+		{
+			MeasuresToShow = DefaultMeasuresToShow;
+			IntsToShow = new string[] {};
 		}
 
 		/// <summary>Format rating prediction results</summary>
@@ -69,10 +76,7 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		public override string ToString()
 		{
-			string s = string.Format(
-				CultureInfo.InvariantCulture, "RMSE {0:0.#####} MAE {1:0.#####} NMAE {2:0.#####} CBD {3:0.#####}",
-				this["RMSE"], this["MAE"], this["NMAE"], this["CBD"]
-			);
+			string s = base.ToString();
 			if (this.ContainsKey("fit"))
 				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
 			if (NewUserResults != null)

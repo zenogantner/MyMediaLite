@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
@@ -115,8 +116,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>array of negative item components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_j;
 
-		/// <summary>Random number generator</summary>
-		protected System.Random random;
+		/// <summary>Reference to (per-thread) singleton random number generator</summary>
+		[ThreadStatic] // we need one random number generator per thread because synchronizing is slow
+		static protected System.Random random;
 
 		/// <summary>
 		/// For collecting update time statistics.
@@ -175,6 +177,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
+			random = MyMediaLite.Random.GetInstance(); // in case Iterate() is not called from Train()
+
 			if (UniformUserSampling)
 			{
 				if (WithReplacement)
@@ -187,7 +191,7 @@ namespace MyMediaLite.ItemRecommendation
 				if (WithReplacement)
 					IterateWithReplacementUniformPair();
 				else
-					IterateWithoutReplacementUniformPair(Feedback.RandomIndex);
+					IterateWithoutReplacementUniformPair();
 			}
 		}
 
@@ -259,8 +263,18 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
 		/// </summary>
+		protected virtual void IterateWithoutReplacementUniformPair()
+		{
+			IterateWithoutReplacementUniformPair(Feedback.RandomIndex);
+		}
+
+		/// <summary>
+		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
+		/// </summary>
 		protected virtual void IterateWithoutReplacementUniformPair(IList<int> indices)
 		{
+			random = MyMediaLite.Random.GetInstance(); // if necessary, initialize for this thread
+
 			foreach (int index in indices)
 			{
 				int user_id = Feedback.Users[index];
@@ -557,7 +571,6 @@ namespace MyMediaLite.ItemRecommendation
 				this.item_bias    = (float[]) item_bias;
 				this.item_factors = item_factors;
 			}
-			random = MyMediaLite.Random.GetInstance();
 		}
 
 		///

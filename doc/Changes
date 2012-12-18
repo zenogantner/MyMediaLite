@@ -1,4 +1,4 @@
-3.06	2012-11-
+3.06	2012-12-18
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
 	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
@@ -13,6 +13,9 @@
            wrong scoring and potential exception if k=inf
 	 - BPRMF, MultiCoreBPRMF, SoftMarginRankinMF:
            - #353: get rid of 'fast sampling' feature
+	 - MultiCoreBPRMF
+	   - fix multithreading behavior for WithReplacement=false and
+             UniformUserSampling=false (thanks to Alex V. for the help)
 	 - BPRMF:
 	   - move different sampling strategies into different protected
              methods
@@ -23,6 +26,9 @@
            - fix sampling corner case (last element was ignored)
 	   - set WithReplacement = false and UniformUserSampling = true in
              constructor
+	 - SocialMF
+	   - fix NRE when UserRelation is not set
+	   - more flexible Iterate() method
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods
@@ -31,6 +37,8 @@
            specification
 	command-line tools
 	 - #337: use Mono's default garbage collector
+	 - #301: reduce measurement output, let user select which measures to
+           display
 	documentation
 	 - refer to new website: http://mymedialite.net
 	website
@@ -39,6 +47,7 @@
 	misc
 	 - UnhandledExceptionHandler: fix output formatting
 	 - Makefile: use variable ACK for ack/ack-grep
+	 - run all system tests with make target 'test'
 	 - MultiCore helper class
 	   - add unit tests
 	   - fix behavior when there are less tasks to divide than threads
