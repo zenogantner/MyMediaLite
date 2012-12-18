@@ -1,4 +1,4 @@
-3.06	2012-12-16
+3.06	2012-12-18
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
 	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
@@ -47,6 +47,7 @@
 	misc
 	 - UnhandledExceptionHandler: fix output formatting
 	 - Makefile: use variable ACK for ack/ack-grep
+	 - run all system tests with make target 'test'
 	 - MultiCore helper class
 	   - add unit tests
 	   - fix behavior when there are less tasks to divide than threads
