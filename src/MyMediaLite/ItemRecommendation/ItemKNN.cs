@@ -209,13 +209,12 @@ namespace MyMediaLite.ItemRecommendation
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
-				Console.WriteLine("Removing feedback: " + tpl.Item1 + " " + tpl.Item2);
 				if (!feeddict.ContainsKey(tpl.Item1))
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
 			
-			// For each user in new feedback update coocurrence 
+			// For each item in removed feedback update coocurrence 
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
