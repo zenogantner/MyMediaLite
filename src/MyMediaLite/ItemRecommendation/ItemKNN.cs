@@ -32,14 +32,6 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
 
-		/// <summary>
-		/// For collecting update time statistics.
-		/// </summary>
-		protected List<TimeSpan> update_times;
-		protected List<TimeSpan> nb_update_times;
-		protected List<TimeSpan> mx_update_times;
-		protected List<int> updated_neighbors_count;
-
 		///
 		public override void Train()
 		{
@@ -52,10 +44,6 @@ namespace MyMediaLite.ItemRecommendation
 				for (int i = 0; i < num_items; i++)
 					nearest_neighbors.Add(correlation.GetNearestNeighbors(i, k));
 			}
-			update_times = new List<TimeSpan>();
-			nb_update_times = new List<TimeSpan>();
-			mx_update_times = new List<TimeSpan>();
-			updated_neighbors_count = new List<int>();
 		}
 
 		/// <summary>
@@ -70,6 +58,19 @@ namespace MyMediaLite.ItemRecommendation
 			ResizeNearestNeighbors(item_id + 1);
 		}
 		
+		/// <summary>
+		/// Resizes the nearest neighbors list if necessary.
+		/// </summary>
+		/// <param name='new_size'>
+		/// New_size.
+		/// </param>
+		protected void ResizeNearestNeighbors(int new_size)
+		{
+			if(new_size > nearest_neighbors.Count)
+				for(int i = nearest_neighbors.Count; i < new_size; i++)
+					nearest_neighbors.Add(null);
+		}
+
 		///
 		public override float Predict(int user_id, int item_id)
 		{
@@ -136,15 +137,10 @@ namespace MyMediaLite.ItemRecommendation
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
-			DateTime start;
-			DateTime mx_upd_time;
-			DateTime nb_upd_time;
-			int num_updated_neighbors;
 			// For each user in new feedback update coocurrence 
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
-				start = DateTime.Now;
 				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> new_items = f.Value;
 				foreach (int i in rated_items)
@@ -172,17 +168,9 @@ namespace MyMediaLite.ItemRecommendation
 						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
 					}
 				}
-				mx_upd_time = DateTime.Now; 
 
 				// Recalculate neighbors as necessary
-				num_updated_neighbors = RetrainItems(new_items);
-				nb_upd_time = DateTime.Now;
-
-				// Collect statistics
-				update_times.Add(nb_upd_time - start);
-				mx_update_times.Add(mx_upd_time - start);
-				nb_update_times.Add(nb_upd_time - mx_upd_time);
-				updated_neighbors_count.Add(num_updated_neighbors);
+				RetrainItems(new_items);
 			}
 		}
 
@@ -232,7 +220,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			DateTime start = DateTime.Now;
 			base.RemoveFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			
@@ -279,9 +266,6 @@ namespace MyMediaLite.ItemRecommendation
 				// Recalculate neighbors as necessary
 				RetrainItemsRemoved(removed_items);
 			}
-			TimeSpan update_time = DateTime.Now - start;
-			update_times.Add(update_time);
-			Console.WriteLine("Update Time: " + update_time.Milliseconds);
 		}
 
 		/// <summary>
@@ -301,61 +285,6 @@ namespace MyMediaLite.ItemRecommendation
 			retrain_items.UnionWith(removed_items);
 			foreach(int r_item in retrain_items)
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
-			Console.WriteLine("Updated "+ retrain_items.Count + " KNN lists");
-		}
-		/// <summary>
-		/// Releases unmanaged resources and performs other cleanup operations before the
-		/// <see cref="MyMediaLite.ItemRecommendation.ItemKNN"/> is reclaimed by garbage collection.
-		/// </summary>
-		~ItemKNN()
-		{
-			double sum_total = 0;
-			double max_total = 0;
-			double sum_nb = 0;
-			double max_nb = 0;
-			double max_mx = 0;
-			double sum_mx = 0;
-			int max_ct = 0;
-			int sum_ct = 0;
-			int reg_ct;
-
-			Console.WriteLine("Registry count:" + (reg_ct = update_times.Count));
-			Console.WriteLine();
-
-			for(int i = 0; i < reg_ct; i++)
-			{
-				TimeSpan tt_upd_time = update_times[i];
-				TimeSpan mx_upd_time = mx_update_times[i];
-				TimeSpan nb_upd_time = nb_update_times[i];
-				int nb_count = updated_neighbors_count[i];
-
-				max_total = Math.Max(max_total, tt_upd_time.TotalMilliseconds);
-				sum_total += tt_upd_time.TotalMilliseconds;
-
-				max_mx = Math.Max(max_mx, mx_upd_time.TotalMilliseconds);
-				sum_mx += mx_upd_time.TotalMilliseconds;
-
-				max_nb = Math.Max(max_nb, nb_upd_time.TotalMilliseconds);
-				sum_nb += nb_upd_time.TotalMilliseconds;
-
-				max_ct = Math.Max(max_ct, nb_count);
-				sum_ct += nb_count;
-
-				Console.WriteLine(tt_upd_time.TotalMilliseconds + "\t" 
-				                  + mx_upd_time.TotalMilliseconds + "\t"
-				                  + nb_upd_time.TotalMilliseconds + "\t"
-				                  + nb_count);
-			}
-			Console.WriteLine();
-
-			Console.WriteLine("Avg update time: " + sum_total/reg_ct);
-			Console.WriteLine("Max update time: " + max_total);
-			Console.WriteLine("Avg mx update time: " + sum_mx/reg_ct);
-			Console.WriteLine("Max mx update time: " + max_mx);
-			Console.WriteLine("Avg nb update time: " + sum_nb/reg_ct);
-			Console.WriteLine("Max nb update time: " + max_nb);
-			Console.WriteLine("Avg nb count: " + sum_ct/reg_ct);
-			Console.WriteLine("Max nb count: " + max_ct);
 		}
 	}
 }

@@ -73,7 +73,7 @@ namespace MyMediaLite.Eval
 			var random_index = new int[test.Count];
 			for (int index = 0; index < random_index.Length; index++)
 				random_index[index] = index;
-			//random_index.Shuffle();
+			random_index.Shuffle();
 
 			var results_by_user = new Dictionary<int, ItemRecommendationEvaluationResults>();
 
