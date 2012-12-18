@@ -249,8 +249,8 @@
     <Compile Include="ItemRecommendation\SLIM.cs" />
     <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
     <Compile Include="Eval\EvaluationResults.cs" />
-    <Compile Include="RatingPrediction\ImplicitFeedbackKNN.cs" />
     <Compile Include="RatingPrediction\IntegratedSVDPlusPlusKNN.cs" />
+    <Compile Include="RatingPrediction\KorenImplicitKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

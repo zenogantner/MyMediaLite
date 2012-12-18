@@ -38,7 +38,7 @@ namespace MyMediaLite.RatingPrediction
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public class ImplicitFeedbackKNN : SVDPlusPlus
+	public class KorenImplicitKNN : SVDPlusPlus
 	{
 		/// <summary>Weights in the neighborhood model that represent coefficients relating items based on the existing ratings</summary>
 		protected Matrix<float> w;
@@ -60,14 +60,14 @@ namespace MyMediaLite.RatingPrediction
 		private uint k;
 				
 		/// <summary>Default constructor</summary>
-		public ImplicitFeedbackKNN() : base()
+		public KorenImplicitKNN() : base()
 		{
 			K = 30;
 		}
 		
 		///
-		public override void Train()
-		{	
+		protected void InitNeighborhoodModel()
+		{
 			Predictor = new ItemKNN();
 			Predictor.Ratings = Ratings;
 			Predictor.Correlation = MyMediaLite.Correlation.RatingCorrelationType.Pearson;
@@ -92,17 +92,22 @@ namespace MyMediaLite.RatingPrediction
 			var additional_feedback = AdditionalFeedback;			
 			for (int index = 0; index < additional_feedback.Count; index++)
 				additional_data_item[additional_feedback.Items[index], additional_feedback.Users[index]] = true;
+		}
+		
+		///
+		public override void Train()
+		{	
+			InitNeighborhoodModel();
 			
-			if(this is IntegratedSVDPlusPlusKNN)
-			{
-				base.Train();	
-			}
-			else 
-			{
-				// learn model parameters
-				global_bias = ratings.Average;
-				LearnFactors(ratings.RandomIndex, true, true);
-			}
+			// learn model parameters
+			global_bias = ratings.Average;
+			LearnFactors(ratings.RandomIndex, true, true);
+		}
+		
+		///
+		protected void TrainAncestors()
+		{
+			base.Train();	
 		}
 		
 		///
