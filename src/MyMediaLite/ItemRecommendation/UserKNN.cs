@@ -162,7 +162,6 @@ namespace MyMediaLite.ItemRecommendation
 			// Construct a dictionary to group feedback by item
 			foreach (var tpl in feedback)
 			{
-				//Console.WriteLine("Adding feedback: " + tpl.Item1 + " " + tpl.Item2);
 				if (!feeddict.ContainsKey(tpl.Item2))
 					feeddict.Add(tpl.Item2, new List<int>());
 				feeddict[tpl.Item2].Add(tpl.Item1);
@@ -184,7 +183,7 @@ namespace MyMediaLite.ItemRecommendation
 						correlation = cooccurrence;
 						break;
 					case BinaryCorrelationType.Cosine:
-						// Update correlations of each rated item by user 
+						// Update correlations of each user in feedback 
 						foreach (int j in Feedback.AllUsers)
 						{
 							if (i == j)
@@ -240,6 +239,79 @@ namespace MyMediaLite.ItemRecommendation
 				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
 			
 			return retrain_users.Count;
+		}
+		
+		/// <summary>
+		/// Remove all feedback events by the given user-item combinations
+		/// </summary>
+		/// <param name='feedback'>
+		/// collection of user id - item id tuples
+		/// </param>
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.RemoveFeedback (feedback);
+			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			
+			// Construct a dictionary to group feedback by item
+			foreach (var tpl in feedback)
+			{
+				if (!feeddict.ContainsKey(tpl.Item2))
+					feeddict.Add(tpl.Item2, new List<int>());
+				feeddict[tpl.Item2].Add(tpl.Item1);
+			}
+			
+			// For each user in removed feedback update coocurrence 
+			// and correlation matrices
+			foreach (KeyValuePair<int, List<int>> f in feeddict)
+			{
+				List<int> rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				List<int> removing_users = f.Value;
+				foreach (int i in rating_users)
+				{
+					foreach (int j in removing_users)
+						cooccurrence[i, j] = (cooccurrence[i, j] >= 1 ? cooccurrence[i, j] - 1 : 0);
+					
+					switch(Correlation) 
+					{
+					case BinaryCorrelationType.Cooccurrence:
+						correlation = cooccurrence;
+						break;
+					case BinaryCorrelationType.Cosine:
+						foreach (int j in Feedback.AllUsers)
+						{
+							if (i == j)
+								correlation[i, i] = 1;
+							else
+								correlation[i, j] = cooccurrence[i, j] / 
+									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
+						}
+						break;
+					default:
+						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
+					}
+				}
+				// Recalculate neighbors as necessary
+				RetrainUsersRemoved(removing_users);
+			}
+		}
+		
+		/// <summary>
+		/// Selectively retrains users based on removed feedback.
+		/// </summary>
+		/// <param name='removing_users'>
+		/// Users with removed feedback.
+		/// </param>
+		protected void RetrainUsersRemoved(IEnumerable<int> removing_users)
+		{
+			HashSet<int> retrain_users = new HashSet<int>(); 
+			foreach (int user in Feedback.AllUsers.Except(removing_users))
+				foreach(int r_user in removing_users)
+					if(nearest_neighbors[user] != null)
+						if(nearest_neighbors[user].Contains(r_user))
+							retrain_users.Add(user);
+			retrain_users.UnionWith(removing_users);
+			foreach(int r_user in retrain_users)
+				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
 		}
 		
 		/// <summary>

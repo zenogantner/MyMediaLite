@@ -46,31 +46,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>
-		/// Adds the item.
-		/// </summary>
-		/// <param name='item_id'>
-		/// Item_id.
-		/// </param>
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			ResizeNearestNeighbors(item_id + 1);
-		}
-		
-		/// <summary>
-		/// Resizes the nearest neighbors list if necessary.
-		/// </summary>
-		/// <param name='new_size'>
-		/// New_size.
-		/// </param>
-		protected void ResizeNearestNeighbors(int new_size)
-		{
-			if(new_size > nearest_neighbors.Count)
-				for(int i = nearest_neighbors.Count; i < new_size; i++)
-					nearest_neighbors.Add(null);
-		}
-
 		///
 		public override float Predict(int user_id, int item_id)
 		{
@@ -132,7 +107,6 @@ namespace MyMediaLite.ItemRecommendation
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
-				//Console.WriteLine("Adding feedback: " + tpl.Item1 + " " + tpl.Item2);
 				if (!feeddict.ContainsKey(tpl.Item1))
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
@@ -226,13 +200,12 @@ namespace MyMediaLite.ItemRecommendation
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
-				Console.WriteLine("Removing feedback: " + tpl.Item1 + " " + tpl.Item2);
 				if (!feeddict.ContainsKey(tpl.Item1))
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
 			
-			// For each user in new feedback update coocurrence 
+			// For each item in removed feedback update coocurrence 
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
@@ -286,5 +259,31 @@ namespace MyMediaLite.ItemRecommendation
 			foreach(int r_item in retrain_items)
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
 		}
+
+		/// <summary>
+		/// Adds the item.
+		/// </summary>
+		/// <param name='item_id'>
+		/// Item_id.
+		/// </param>
+		protected override void AddItem(int item_id)
+		{
+			base.AddItem(item_id);
+			ResizeNearestNeighbors(item_id + 1);
+		}
+		
+		/// <summary>
+		/// Resizes the nearest neighbors list if necessary.
+		/// </summary>
+		/// <param name='new_size'>
+		/// New_size.
+		/// </param>
+		protected void ResizeNearestNeighbors(int new_size)
+		{
+			if(new_size > nearest_neighbors.Count)
+				for(int i = nearest_neighbors.Count; i < new_size; i++)
+					nearest_neighbors.Add(null);
+		}
+
 	}
 }
