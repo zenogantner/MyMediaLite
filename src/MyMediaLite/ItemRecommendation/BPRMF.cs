@@ -118,6 +118,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
+		/// <summary>
+		/// For collecting update time statistics.
+		/// </summary>
+		protected List<TimeSpan> update_times;
+
 		/// <summary>Default constructor</summary>
 		public BPRMF()
 		{
@@ -160,6 +165,8 @@ namespace MyMediaLite.ItemRecommendation
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
+
+			update_times = new List<TimeSpan>();
 		}
 
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
@@ -374,7 +381,10 @@ namespace MyMediaLite.ItemRecommendation
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback(feedback);
+			DateTime start = DateTime.Now;
 			Retrain(feedback);
+			DateTime end = DateTime.Now;
+			update_times.Add(end - start);
 		}
 
 		void Retrain(ICollection<Tuple<int, int>> feedback)
@@ -621,6 +631,35 @@ namespace MyMediaLite.ItemRecommendation
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} update_j={10}",
 				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
+		}
+
+		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the
+		/// <see cref="MyMediaLite.ItemRecommendation.BPRMF"/> is reclaimed by garbage collection.
+		/// </summary>
+		~BPRMF() 
+		{
+			double sum_total = 0;
+			double max_total = 0;
+			int reg_ct;
+			
+			Console.WriteLine("Registry count:" + (reg_ct = update_times.Count));
+			Console.WriteLine();
+			
+			for(int i = 0; i < reg_ct; i++)
+			{
+				TimeSpan tt_upd_time = update_times[i];
+
+				max_total = Math.Max(max_total, tt_upd_time.TotalMilliseconds);
+				sum_total += tt_upd_time.TotalMilliseconds;
+
+				Console.WriteLine(tt_upd_time.TotalMilliseconds);
+			}
+			Console.WriteLine();
+			
+			Console.WriteLine("Avg update time: " + sum_total/reg_ct);
+			Console.WriteLine("Max update time: " + max_total);
+
 		}
 	}
 }

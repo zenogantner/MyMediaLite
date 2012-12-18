@@ -54,8 +54,8 @@ namespace MyMediaLite.Eval
 		public override string ToString()
 		{
 			string s = string.Format(
-				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@5 {1:0.#####} prec@10 {2:0.#####} MAP {3:0.#####} recall@5 {4:0.#####} recall@10 {5:0.#####} NDCG {6:0.#####} MRR {7:0.#####} num_users {8} num_items {9} num_lists {10}",
-				this["AUC"], this["prec@5"], this["prec@10"], this["MAP"], this["recall@5"], this["recall@10"], this["NDCG"], this["MRR"], this["num_users"], this["num_items"], this["num_lists"]
+				CultureInfo.InvariantCulture, "AUC {0:0.#####} prec@1 {1:0.#####} prec@5 {2:0.#####} prec@10 {3:0.#####} MAP {4:0.#####} recall@1 {5:0.#####} recall@5 {6:0.#####} recall@10 {7:0.#####} NDCG {8:0.#####} MRR {9:0.#####} num_users {10} num_items {11} num_lists {12}",
+				this["AUC"], this["prec@1"], this["prec@5"], this["prec@10"], this["MAP"], this["recall@1"], this["recall@5"], this["recall@10"], this["NDCG"], this["MRR"], this["num_users"], this["num_items"], this["num_lists"]
 			);
 			if (this.ContainsKey("fit"))
 				s += string.Format(CultureInfo.InvariantCulture, " fit {0:0.#####}", this["fit"]);
