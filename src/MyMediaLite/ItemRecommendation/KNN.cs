@@ -107,7 +107,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 			correlation.Weighted = Weighted;
 			cooccurrence = new Cooccurrence(num_entities);
-			correctCooccurrenceDiagonal();
 		}
 
 		/// <summary>
@@ -128,6 +127,8 @@ namespace MyMediaLite.ItemRecommendation
 				cooccurrence = (Cooccurrence) correlation;
 			else
 				cooccurrence.ComputeCorrelations(DataMatrix);
+			
+			correctCooccurrenceDiagonal();
 		}
 
 		///
