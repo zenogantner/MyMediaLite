@@ -199,7 +199,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	{
 		base.Run(args);
 
-		Console.WriteLine(string.Join("--", eval_measures));
 		Console.Write(training_data.Statistics(test_data, user_attributes, item_attributes));
 
 		bool no_eval = true;
