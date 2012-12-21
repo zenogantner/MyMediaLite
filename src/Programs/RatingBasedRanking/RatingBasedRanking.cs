@@ -36,6 +36,11 @@ class RatingBasedRanking : RatingPrediction
 	bool in_test_items;
 	bool all_items;
 
+	public RatingBasedRanking()
+	{
+		eval_measures = new string[] { "AUC", "prec@5" };
+	}
+
 	protected override void ShowVersion()
 	{
 		ShowVersion(
