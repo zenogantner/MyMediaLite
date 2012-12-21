@@ -170,7 +170,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("user-prediction",      v => user_prediction   = v != null)
-			.Add("online-evaluation",    v => online_eval       = v != null) // TODO generalize
+			.Add("online-evaluation",    v => online_eval       = v != null)
 			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
