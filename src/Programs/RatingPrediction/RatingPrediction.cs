@@ -149,7 +149,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("search-hp",            v => search_hp         = v != null);
 	}
 
-	// TODO generalize this
 	protected override void SetupRecommender()
 	{
 		if (load_model_file != null)
@@ -158,13 +157,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			recommender = method.CreateRatingPredictor();
 		else
 			recommender = "BiasedMatrixFactorization".CreateRatingPredictor();
-		// in case something went wrong ...
-		if (recommender == null && method != null)
-			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
-		if (recommender == null && load_model_file != null)
-			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
+		base.SetupRecommender();
 	}
 
 	protected override void Run(string[] args)

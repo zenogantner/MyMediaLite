@@ -20,3 +20,4 @@ data/*
 lib/mymedialite/*
 obj
 src/TestResult.xml
+*.bin.Ratings

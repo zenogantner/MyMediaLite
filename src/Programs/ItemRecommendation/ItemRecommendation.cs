@@ -186,13 +186,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			recommender = method.CreateItemRecommender();
 		else
 			recommender = "MostPopular".CreateItemRecommender();
-		// in case something went wrong ...
-		if (recommender == null && method != null)
-			Usage(string.Format("Unknown recommendation method: '{0}'", method));
-		if (recommender == null && load_model_file != null)
-			Abort(string.Format("Could not load model from file {0}.", load_model_file));
-
-		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
+		
+		base.SetupRecommender();
 	}
 
 	protected override void Run(string[] args)
