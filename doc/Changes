@@ -9,7 +9,10 @@
 	evaluation
 	 - simplify item recommender evaluation - do not pass ignore_items to the
            methods computing the measures
-	command-line programs
+	data types
+	 - get rid of unused vector and matrix code (mostly double precision
+	   code)
+	command-line tools
 	 - share SetupRecommender() code between the 3 command-line tools
 	 - add default evaluation measure to rating_based_ranking
 

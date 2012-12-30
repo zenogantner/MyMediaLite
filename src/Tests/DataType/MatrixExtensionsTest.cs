@@ -1,5 +1,5 @@
+// Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using MyMediaLite.DataType;
@@ -29,30 +28,32 @@ namespace Tests.DataType
 	{
 		[Test()] public void TestInc()
 		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
 			matrix.Inc(3, 4, 2.5);
 			Assert.AreEqual(7.5, matrix[3, 4]);
 
-			var matrix1 = new Matrix<double>(5, 5);
+			var matrix1 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix1.SetRow(i, row);
-			var matrix2 = new Matrix<double>(5, 5);
+			var matrix2 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
-			double[] testrow = { 2, 4, 6, 8, 10 };
+			float[] testrow = { 2, 4, 6, 8, 10 };
 			matrix1.Inc(matrix2);
 			Assert.AreEqual(testrow, matrix1.GetRow(2));
-
-			var matrix3 = new Matrix<double>(5, 5);
+			
+			/*
+			var matrix3 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix3.SetRow(i, row);
 			matrix3.Inc(1.0);
 			for (int j = 0; j < 5; j++)
 				Assert.AreEqual(row[j] + 1, matrix3[1, j]);
-
+			 */
+			 
 			var matrix4 = new Matrix<int>(5, 5);
 			int[] int_row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
@@ -64,55 +65,45 @@ namespace Tests.DataType
 
 		[Test()] public void TestColumnAverage()
 		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
 			Assert.AreEqual(2.0, matrix.ColumnAverage(1));
 			Assert.AreEqual(5.0, matrix.ColumnAverage(4));
 		}
 
-		[Test()] public void TestRowAverage()
-		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
-			for (int i = 0; i < 5; i++)
-				matrix.SetRow(i, row);
-			Assert.AreEqual(3.0, matrix.RowAverage(1));
-			Assert.AreEqual(3.0, matrix.RowAverage(4));
-		}
-
 		[Test()] public void TestMultiply()
 		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			matrix.Multiply(2.5);
-			double[] testrow = { 2.5, 5, 7.5, 10, 12.5 };
+			matrix.Multiply(2.5f);
+			float[] testrow = { 2.5f, 5f, 7.5f, 10f, 12.5f };
 			Assert.AreEqual(testrow, matrix.GetRow(3));
 		}
 
 		[Test()] public void TestFrobeniusNorm()
 		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			double result = Math.Sqrt(275.0);
+			float result = (float) Math.Sqrt(275.0);
 			Assert.AreEqual(result, matrix.FrobeniusNorm());
 		}
 
 		[Test()] public void TestRowScalarProduct()
 		{
-			var matrix = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix.SetRow(i, row);
-			double[] vector = { 1, 2, 3, 4, 5 };
+			float[] vector = { 1, 2, 3, 4, 5 };
 			Assert.AreEqual(55, MatrixExtensions.RowScalarProduct(matrix, 2, vector));
 
-			var matrix2 = new Matrix<double>(5, 5);
+			var matrix2 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
 			Assert.AreEqual(55, MatrixExtensions.RowScalarProduct(matrix, 2, matrix2, 3));
@@ -120,11 +111,11 @@ namespace Tests.DataType
 
 		[Test()] public void TestRowDifference()
 		{
-			var matrix1 = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix1 = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix1.SetRow(i, row);
-			var matrix2 = new Matrix<double>(5, 5);
+			var matrix2 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
 
@@ -135,15 +126,15 @@ namespace Tests.DataType
 
 		[Test()] public void TestScalarProductWithRowDifference()
 		{
-			var matrix1 = new Matrix<double>(5, 5);
-			double[] row = { 1, 2, 3, 4, 5 };
+			var matrix1 = new Matrix<float>(5, 5);
+			float[] row = { 1, 2, 3, 4, 5 };
 			for (int i = 0; i < 5; i++)
 				matrix1.SetRow(i, row);
-			var matrix2 = new Matrix<double>(5, 5);
+			var matrix2 = new Matrix<float>(5, 5);
 			for (int i = 0; i < 5; i++)
 				matrix2.SetRow(i, row);
-			var matrix3 = new Matrix<double>(5, 5);
-			MatrixExtensions.Inc(matrix3, 1);
+			var matrix3 = new Matrix<float>(5, 5);
+			MatrixExtensions.Inc(matrix3, 1.0f);
 
 			Assert.AreEqual(40, MatrixExtensions.RowScalarProductWithRowDifference(matrix1, 2, matrix2, 3, matrix3, 1));
 		}
@@ -154,11 +145,6 @@ namespace Tests.DataType
 			Assert.AreEqual(0, int_matrix.Max());
 			int_matrix[1, 1] = 9;
 			Assert.AreEqual(9, MatrixExtensions.Max(int_matrix));
-
-			var double_matrix = new Matrix<double>(3, 3);
-			Assert.AreEqual(0, double_matrix.Max());
-			double_matrix[1, 1] = 9.0;
-			Assert.AreEqual(9.0, double_matrix.Max());
 
 			var float_matrix = new Matrix<float>(3, 3);
 			Assert.AreEqual(0, float_matrix.Max());
