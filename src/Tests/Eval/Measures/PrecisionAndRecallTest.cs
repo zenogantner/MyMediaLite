@@ -28,11 +28,6 @@ namespace Tests.Eval.Measures
 		static readonly int[] list1 = new int[] { 1 };
 		static readonly int[] list3 = new int[] { 1, 2, 3 };
 		static readonly int[] list_last = new int[] { 5 };
-		/*
-		static readonly int[] list_even5 = new int[] { 2, 4 };
-		static readonly int[] list_odd5 = new int[] { 1, 3, 5 };
-		*/
-		static readonly int[] list_empty = new int[0];
 
 		[Test()]
 		public void TestAP()
