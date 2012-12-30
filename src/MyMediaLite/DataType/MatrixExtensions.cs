@@ -64,9 +64,8 @@ namespace MyMediaLite.DataType
 			var nd = new Normal(mean, stddev);
 			nd.RandomSource = MyMediaLite.Random.GetInstance();
 
-			for (int i = 0; i < matrix.dim1; i++)
-				for (int j = 0; j < matrix.dim2; j++)
-					matrix[i, j] = (float) nd.Sample();
+			for (int i = 0; i < matrix.data.Length; i++)
+				matrix.data[i] = (float) nd.Sample();
 		}
 
 		/// <summary>Increments the specified matrix element by a double value</summary>
@@ -87,15 +86,11 @@ namespace MyMediaLite.DataType
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
 
-			int dim1 = matrix1.dim1;
-			int dim2 = matrix1.dim2;
-
-			for (int x = 0; x < dim1; x++)
-				for (int y = 0; y < dim2; y++)
-					matrix1.data[x * dim2 + y] += matrix2.data[x * dim2 + y];
+			for (int i = 0; i < matrix1.data.Length; i++)
+				matrix1.data[i] += matrix2.data[i];
 		}
 
-		/// <summary>Increment the specified matrix element by 1</summary>
+		/// <summary>Increments the specified matrix element by 1</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
 		/// <param name="j">the column</param>
@@ -162,12 +157,8 @@ namespace MyMediaLite.DataType
 		/// <param name="f">the number to multiply with</param>
 		static public void Multiply(this Matrix<float> matrix, float f)
 		{
-			for (int x = 0; x < matrix.dim1; x++)
-			{
-				int offset = x * matrix.dim2;
-				for (int y = 0; y < matrix.dim2; y++)
-					matrix.data[offset + y] *= f;
-			}
+			for (int i = 0; i < matrix.data.Length; i++)
+				matrix.data[i] *= f;
 		}
 
 		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
@@ -179,8 +170,8 @@ namespace MyMediaLite.DataType
 		static public float FrobeniusNorm(this Matrix<float> matrix)
 		{
 			double squared_entry_sum = 0;
-			for (int x = 0; x < matrix.dim1 * matrix.dim2; x++)
-				squared_entry_sum += Math.Pow(matrix.data[x], 2);
+			for (int i = 0; i < matrix.data.Length; i++)
+				squared_entry_sum += Math.Pow(matrix.data[i], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
 
