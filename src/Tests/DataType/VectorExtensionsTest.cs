@@ -30,7 +30,7 @@ namespace Tests.DataType
 	{
 		[Test()] public void TestEuclideanNorm()
 		{
-			var test_vector = new List<double>() { 2, 5, 3, 7, 5, 3 };
+			var test_vector = new List<float>() { 2, 5, 3, 7, 5, 3 };
 			Assert.AreEqual(11, test_vector.EuclideanNorm());
 		}
 	}
