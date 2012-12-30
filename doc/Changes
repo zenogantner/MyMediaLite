@@ -14,6 +14,7 @@
 	   code)
 	 - matrix operations: speed up and simplify random initialization,
            element-wise multiplication, increment, addition
+	 - more unit tests for vector operations
 	command-line tools
 	 - share SetupRecommender() code between the 3 command-line tools
 	 - add default evaluation measure to rating_based_ranking

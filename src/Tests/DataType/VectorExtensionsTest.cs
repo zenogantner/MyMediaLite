@@ -1,5 +1,5 @@
+// Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
-// Copyright (C) 2011 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +23,6 @@ using NUnit.Framework;
 
 namespace Tests.DataType
 {
-	/// <summary>Testing the VectorUtils class</summary>
 	[TestFixture()]
 	public class VectorExtensionsTest
 	{
@@ -32,6 +30,14 @@ namespace Tests.DataType
 		{
 			var test_vector = new List<float>() { 2, 5, 3, 7, 5, 3 };
 			Assert.AreEqual(11, test_vector.EuclideanNorm());
+		}
+		
+		[Test()] public void TestInit()
+		{
+			var test_vector = new float[10];
+			test_vector.Init(1.3f);
+			for (int i = 0; i < test_vector.Length; i++)
+				Assert.AreEqual(1.3f, test_vector[i]);
 		}
 	}
 }
