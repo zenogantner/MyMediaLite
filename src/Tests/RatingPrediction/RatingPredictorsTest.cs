@@ -18,6 +18,7 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPrediction;
 
@@ -57,14 +58,7 @@ namespace Tests.RatingPrediction
 
 					try
 					{
-						var recommender = type.CreateRatingPredictor();
-						recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
-						if (type.GetInterface("IUserAttributeAwareRecommender") != null)
-							((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
-						if (type.GetInterface("IItemAttributeAwareRecommender") != null)
-							((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
-
-						recommender.Train();
+						var recommender = SetUpRecommender(type);
 
 						var items_rated_by_user = new Tuple<int, float>[] { Tuple.Create(1, 1.0f), Tuple.Create(2, 1.5f) };
 						var items_to_rate = new int[] { 2 };
@@ -76,6 +70,59 @@ namespace Tests.RatingPrediction
 						Assert.Fail("Exception while testing recommender {0}: {1}\n{2}", type.Name, e.Message, e.StackTrace);
 					}
 				}
+		}
+
+		[Test()]
+		public void TestSaveLoad()
+		{
+			foreach (Type type in Utils.GetTypes("MyMediaLite.RatingPrediction"))
+			{
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
+				{
+					if (type.Name == "Random" || type.Name == "ExternalRatingPredictor")
+						continue;
+					if (type.Name == "LatentFeatureLogLinearModel" || type.Name == "NaiveBayes")
+						continue;
+					if (type.Name == "TimeAwareBaseline" || type.Name == "TimeAwareBaselineWithFrequencies")
+						continue;
+
+					try
+					{
+						var recommender = SetUpRecommender(type);
+
+						var results = new float[5];
+						for (int i = 0; i < results.Length; i++)
+							results[i] = recommender.Predict(0, i);
+
+						recommender.SaveModel("tmp.model");
+						recommender.LoadModel("tmp.model");
+						for (int i = 0; i < results.Length; i++)
+							Assert.AreEqual(results[i], recommender.Predict(0, i), 0.0001);
+						// TODO delete file
+					}
+					catch (Exception e)
+					{
+						Assert.Fail("Exception while testing recommender {0}: {1}\n{2}", type.Name, e.Message, e.StackTrace);
+					}
+				}
+			}
+		}
+
+		private static RatingPredictor SetUpRecommender(Type type)
+		{
+			var recommender = type.CreateRatingPredictor();
+			if (recommender is ITimeAwareRatingPredictor)
+				recommender.Ratings = TestUtils.CreateRandomTimedRatings(5, 5, 10);
+			else
+				recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
+			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
+				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
+			if (type.GetInterface("IItemAttributeAwareRecommender") != null)
+				((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
+
+			recommender.Train();
+
+			return recommender;
 		}
 	}
 }
