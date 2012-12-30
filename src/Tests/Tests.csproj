@@ -87,6 +87,7 @@
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModelTest.cs" />
     <Compile Include="MulticoreTest.cs" />
     <Compile Include="RatingPrediction\ExternalRatingPredictorTest.cs" />
+    <Compile Include="Eval\ItemsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
