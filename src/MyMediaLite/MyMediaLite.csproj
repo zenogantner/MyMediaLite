@@ -10,7 +10,6 @@
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
     <ReleaseVersion>3.06</ReleaseVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -156,14 +155,6 @@
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
     <Compile Include="Eval\RatingPredictionEvaluationResults.cs" />
-    <Compile Include="Eval\Groups.cs" />
-    <Compile Include="GroupRecommendation\Average.cs" />
-    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\Maximum.cs" />
-    <Compile Include="GroupRecommendation\Minimum.cs" />
-    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
-    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="RatingPrediction\CoClustering.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
@@ -221,7 +212,6 @@
     <Compile Include="IIncrementalRecommender.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="RecommenderParameters.cs" />
-    <Compile Include="GroupRecommendation\Extensions.cs" />
     <Compile Include="Handlers.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MultiCore.cs" />

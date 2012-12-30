@@ -26,7 +26,6 @@ using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
-using MyMediaLite.GroupRecommendation;
 using MyMediaLite.IO;
 using MyMediaLite.ItemRecommendation;
 
@@ -38,8 +37,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	IPosOnlyFeedback test_data;
 	IList<int> test_users;
 	IList<int> candidate_items;
-	IBooleanMatrix group_to_user; // rows: groups, columns: users
-	ICollection<int> user_groups;
 
 	CandidateItems eval_item_mode = CandidateItems.UNION;
 
@@ -47,7 +44,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
 	string test_users_file;
 	string candidate_items_file;
-	string user_groups_file;
 
 	// command-line parameters (other)
 	float rating_threshold = float.NaN;
@@ -55,7 +51,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	int predict_items_number = -1;
 	bool online_eval;
 	bool repeated_items;
-	string group_method;
 	bool overlap_items;
 	bool in_training_items;
 	bool in_test_items;
@@ -92,7 +87,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
   general OPTIONS:
    --recommender=METHOD             use METHOD for recommendations (default: MostPopular)
-   --group-recommender=METHOD       use METHOD to combine the predictions for several users
    --recommender-options=OPTIONS    use OPTIONS as recommender options
    --help                           display this usage information and exit
    --version                        display version information and exit
@@ -108,7 +102,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --item-attributes=FILE                   file with item attribute information, 1 tuple per line
    --user-relations=FILE                    file with user relation information, 1 tuple per line
    --item-relations=FILE                    file with item relation information, 1 tuple per line
-   --user-groups=FILE                       file with group-to-user mappings, 1 tuple per line
    --save-model=FILE                        save computed model to FILE
    --load-model=FILE                        load model from FILE
 
@@ -161,10 +154,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	protected override void SetupOptions()
 	{
 		options
-			.Add("group-recommender=",   v => group_method           = v)
 			.Add("candidate-items=",     v => candidate_items_file   = v)
 			.Add("test-users=",          v => test_users_file      = v)
-			.Add("user-groups=",         v => user_groups_file       = v)
 			.Add("predict-items-number=", (int v) => predict_items_number = v)
 			.Add("num-test-users=",       (int v) => num_test_users       = v)
 			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
@@ -305,26 +296,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
 						Console.Write(Render(results));
 					});
-				else if (group_method != null)
-				{
-					GroupRecommender group_recommender = null;
-
-					Console.Write("group recommendation strategy: {0} ", group_method);
-					// TODO GroupUtils.CreateGroupRecommender(group_method, recommender);
-					if (group_method == "Average")
-						group_recommender = new Average(recommender);
-					else if (group_method == "Minimum")
-						group_recommender = new Minimum(recommender);
-					else if (group_method == "Maximum")
-						group_recommender = new Maximum(recommender);
-					else
-						Usage("Unknown group recommendation strategy in --group-recommender=METHOD");
-
-					time_span = Wrap.MeasureTime( delegate() {
-						var result = group_recommender.Evaluate(test_data, training_data, group_to_user, candidate_items);
-						Console.Write(Render(result));
-					});
-				}
 				else
 					time_span = Wrap.MeasureTime( delegate() { Console.Write(Render(Evaluate())); });
 				Console.Write(" testing_time " + time_span);
@@ -360,16 +331,11 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_training_items)
 			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
-		if (group_method != null && user_groups_file == null)
-			Abort("--group-recommender needs --user-groups=FILE.");
-
 		if (user_prediction)
 		{
 			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
 			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
 				Abort("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
-			if (user_groups_file != null)
-				Abort("--user-prediction is not (yet) supported in combination with --user-groups=FILE.");
 		}
 	}
 
@@ -382,14 +348,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			training_data = double.IsNaN(rating_threshold)
 				? ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
 				: ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
-
-			// user groups
-			if (user_groups_file != null)
-			{
-				group_to_user = RelationData.Read(Path.Combine(data_dir, user_groups_file), user_mapping); // assumption: user and user group IDs are disjoint
-				user_groups = group_to_user.NonEmptyRowIDs;
-				Console.WriteLine("{0} user groups", user_groups.Count);
-			}
 
 			// test data
 			if (test_ratio == 0)
@@ -406,33 +364,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
 				training_data = split.Train[0];
 				test_data     = split.Test[0];
-			}
-
-			if (group_method == "GroupsAsUsers")
-			{
-				Console.WriteLine("group recommendation strategy: {0}", group_method);
-				// TODO verify what is going on here
-
-				//var training_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
-				// transform groups to users
-				foreach (int group_id in group_to_user.NonEmptyRowIDs)
-					foreach (int user_id in group_to_user[group_id])
-						foreach (int item_id in training_data.UserMatrix.GetEntriesByRow(user_id))
-							training_data.Add(group_id, item_id);
-				// add the users that do not belong to groups
-
-				//training_data = training_data_group;
-
-				// transform groups to users
-				var test_data_group = new PosOnlyFeedback<SparseBooleanMatrix>();
-				foreach (int group_id in group_to_user.NonEmptyRowIDs)
-					foreach (int user_id in group_to_user[group_id])
-						foreach (int item_id in test_data.UserMatrix.GetEntriesByRow(user_id))
-							test_data_group.Add(group_id, item_id);
-
-				test_data = test_data_group;
-
-				group_method = null; // deactivate s.t. the normal eval routines are used
 			}
 
 			if (user_prediction)

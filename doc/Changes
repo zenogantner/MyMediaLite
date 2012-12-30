@@ -1,4 +1,5 @@
 3.07	2013-01-
+	#378: get rid of group recommendation code
 	recommenders
 	 - new recommenders ExternalRatingPredictor and ExternalItemRecommender:
            to evaluate external prediction tools with the MyMediaLite evaluation
