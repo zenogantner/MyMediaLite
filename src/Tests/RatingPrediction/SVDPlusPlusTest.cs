@@ -50,7 +50,7 @@ namespace Tests.RatingPrediction
 		{
 			var svdpp = new SVDPlusPlus()
 			{
-				LearnRate = 1.0f, LearnRateDecay = 0.5f,
+				LearnRate = 1.0f, Decay = 0.5f,
 				NumIter = 1, Ratings = TestUtils.CreateRatings()
 			};
 

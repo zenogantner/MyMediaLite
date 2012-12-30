@@ -3,6 +3,7 @@
 	 - new recommenders ExternalRatingPredictor and ExternalItemRecommender:
            to evaluate external prediction tools with the MyMediaLite evaluation
            framework
+	 - MatrixFactorization: rename LearnRateDecay to Decay
 	evaluation
 	 - simplify item recommender evaluation - do not pass ignore_items to the
            methods computing the measures
