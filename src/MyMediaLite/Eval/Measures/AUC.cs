@@ -37,16 +37,12 @@ namespace MyMediaLite.Eval.Measures
 		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="relevant_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the AUC for the given data</returns>
-		public static double Compute(IList<int> ranked_items, ICollection<int> relevant_items, ICollection<int> ignore_items = null)
+		public static double Compute(IList<int> ranked_items, ICollection<int> relevant_items, int num_dropped_items)
 		{
-			if (ignore_items == null)
-				ignore_items = new HashSet<int>();
-
 			var relevant_items_in_list = relevant_items.Intersect(ranked_items);
-			int num_relevant_items = relevant_items_in_list.Count() - ignore_items.Intersect(relevant_items_in_list).Count();
-			int num_eval_items     = ranked_items.Count - ignore_items.Intersect(ranked_items).Count();
+			int num_relevant_items = relevant_items_in_list.Count();
+			int num_eval_items     = ranked_items.Count + num_dropped_items;
 			int num_eval_pairs     = (num_eval_items - num_relevant_items) * num_relevant_items;
 			if (num_eval_pairs < 0)
 				throw new Exception("num_eval_pairs cannot be less than 0");
@@ -57,15 +53,13 @@ namespace MyMediaLite.Eval.Measures
 			int num_correct_pairs = 0;
 			int hit_count         = 0;
 			foreach (int item_id in ranked_items)
-			{
-				if (ignore_items.Contains(item_id))
-					continue;
-
 				if (!relevant_items.Contains(item_id))
 					num_correct_pairs += hit_count;
 				else
 					hit_count++;
-			}
+
+			int missing_relevant_items = relevant_items.Except(ranked_items).Count();
+			num_correct_pairs += hit_count * (num_dropped_items - missing_relevant_items);
 
 			return (double) num_correct_pairs / num_eval_pairs;
 		}

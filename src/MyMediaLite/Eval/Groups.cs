@@ -77,15 +77,14 @@ namespace MyMediaLite.Eval
 				if (prediction_list.Count != candidate_items.Count)
 					throw new Exception("Not all items have been ranked.");
 
-				var ignore_items = ignore_overlap ? candidate_items_in_train : new HashSet<int>();
-
-				double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
-				double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
-				double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
-				double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
+				int num_dropped_items = candidate_items.Count - prediction_list.Count;
+				double auc  = AUC.Compute(prediction_list, correct_items, num_dropped_items);
+				double map  = PrecisionAndRecall.AP(prediction_list, correct_items);
+				double ndcg = NDCG.Compute(prediction_list, correct_items);
+				double rr   = ReciprocalRank.Compute(prediction_list, correct_items);
 				var positions = new int[] { 5, 10 };
-				var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
-				var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
+				var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, positions);
+				var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, positions);
 
 				// thread-safe incrementing
 				lock(result)
