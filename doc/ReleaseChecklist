@@ -1,4 +1,6 @@
 release checklist:
+0. One week before the scheduled release date: Ask on mailing list that people
+   test their stuff with the current master branch on GitHub
 1. Check the output of the test suite
 2. Check the output of the example programs
 3. Version numbers
