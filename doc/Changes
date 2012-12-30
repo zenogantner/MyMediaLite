@@ -1,7 +1,8 @@
 3.07	2013-01-
 	recommenders
-	 - new recommender ExternalRatingPredictor: to evaluate external prediction
-           tools with the MyMediaLite evaluation framework
+	 - new recommenders ExternalRatingPredictor and ExternalItemRecommender:
+           to evaluate external prediction tools with the MyMediaLite evaluation
+           framework
 	evaluation
 	 - simplify item recommender evaluation - do not pass ignore_items to the
            methods computing the measures
