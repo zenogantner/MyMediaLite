@@ -112,15 +112,13 @@ namespace MyMediaLite.Eval
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
 
-			//Parallel.ForEach(test_users, user_id =>
-			{
-			foreach (int user_id in test_users) 
+			Parallel.ForEach(test_users, user_id => {
 				try
 				{
 					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
 					correct_items.IntersectWith(candidate_items);
 					if (correct_items.Count == 0)
-						continue;//return;
+						return;
 
 					var ignore_items_for_this_user = new HashSet<int>(
 						repeated_events == RepeatedEvents.Yes ? new int[0] : training_user_matrix[user_id]
@@ -128,7 +126,7 @@ namespace MyMediaLite.Eval
 					ignore_items_for_this_user.IntersectWith(candidate_items);
 					int num_candidates_for_this_user = candidate_items.Count - ignore_items_for_this_user.Count;
 					if (correct_items.Count == num_candidates_for_this_user)
-						continue;//return;
+						return;
 
 					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items_for_this_user);
 					var prediction_list = (from t in prediction select t.Item1).ToArray();
@@ -166,7 +164,7 @@ namespace MyMediaLite.Eval
 					Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
 					throw;
 				}
-			}//);
+			});
 
 			foreach (string measure in Measures)
 				result[measure] /= num_users;
