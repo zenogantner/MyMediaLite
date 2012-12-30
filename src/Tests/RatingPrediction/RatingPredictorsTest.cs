@@ -52,22 +52,29 @@ namespace Tests.RatingPrediction
 			foreach (Type type in Utils.GetTypes("MyMediaLite.RatingPrediction"))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFoldInRatingPredictor") != null)
 				{
-					if (type.Name == "SigmoidUserAsymmetricFactorModel" || type.Name == "UserAttributeKNN")
+					if (type.Name == "SigmoidUserAsymmetricFactorModel" || type.Name == "UserAttributeKNN" || type.Name == "GSVDPlusPlus")
 						continue;
-				
-					var recommender = type.CreateRatingPredictor();
-					recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
-					if (type.GetInterface("IUserAttributeAwareRecommender") != null)
-						((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
-					if (type.GetInterface("IItemAttributeAwareRecommender") != null)
-						((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
 
-					recommender.Train();
+					try
+					{
+						var recommender = type.CreateRatingPredictor();
+						recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
+						if (type.GetInterface("IUserAttributeAwareRecommender") != null)
+							((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
+						if (type.GetInterface("IItemAttributeAwareRecommender") != null)
+							((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
 
-					var items_rated_by_user = new Tuple<int, float>[] { Tuple.Create(1, 1.0f), Tuple.Create(2, 1.5f) };
-					var items_to_rate = new int[] { 2 };
-					var rated_items = ((IFoldInRatingPredictor) recommender).ScoreItems(items_rated_by_user, items_to_rate);
-					Assert.AreEqual(1, rated_items.Count);
+						recommender.Train();
+
+						var items_rated_by_user = new Tuple<int, float>[] { Tuple.Create(1, 1.0f), Tuple.Create(2, 1.5f) };
+						var items_to_rate = new int[] { 2 };
+						var rated_items = ((IFoldInRatingPredictor) recommender).ScoreItems(items_rated_by_user, items_to_rate);
+						Assert.AreEqual(1, rated_items.Count);
+					}
+					catch (Exception e)
+					{
+						Assert.Fail("Exception while testing recommender {0}: {1}\n{2}", type.Name, e.Message, e.StackTrace);
+					}
 				}
 		}
 	}
