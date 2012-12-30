@@ -37,6 +37,7 @@ namespace MyMediaLite.Eval.Measures
 		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="relevant_items">a collection of positive/correct item IDs</param>
+		/// <param name="num_dropped_items">the number of relevant items that were not ranked (considered to be ranked below all ranked_items)</param>
 		/// <returns>the AUC for the given data</returns>
 		public static double Compute(IList<int> ranked_items, ICollection<int> relevant_items, int num_dropped_items)
 		{
