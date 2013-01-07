@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -60,7 +60,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	{
 		ShowVersion(
 			"Rating Prediction",
-			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
+			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
 		);
 	}
 
@@ -278,7 +278,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				if (cross_validation > 1)
 				{
 					Console.WriteLine();
-					var results = recommender.DoCrossValidation(cross_validation, compute_fit, true);
+					var results = DoCrossValidation();
 					Console.Write(Render(results));
 					no_eval = true;
 				}
@@ -422,5 +422,10 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	protected virtual EvaluationResults Evaluate()
 	{
 		return recommender.Evaluate(test_data, training_data);
+	}
+	
+	protected virtual EvaluationResults DoCrossValidation()
+	{
+		return recommender.DoCrossValidation(cross_validation, compute_fit, true);
 	}
 }

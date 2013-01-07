@@ -18,6 +18,8 @@
 	command-line tools
 	 - share SetupRecommender() code between the 3 command-line tools
 	 - add default evaluation measure to rating_based_ranking
+	 - rating_based_ranking: explicitly state that --crossvalidation is not
+           supported (reported by Pieter-Jan Verbruggen)
 
 3.06	2012-12-18
 	recommenders
