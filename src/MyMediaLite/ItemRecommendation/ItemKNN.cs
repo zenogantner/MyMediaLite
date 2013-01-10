@@ -191,7 +191,6 @@ namespace MyMediaLite.ItemRecommendation
 			// Recalculate neighborhood of selected items
 			foreach(int r_item in retrain_items)
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
-			Console.WriteLine("Updated "+ retrain_items.Count + " KNN lists");
 		}
 
 		/// <summary>
@@ -202,7 +201,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			DateTime start = DateTime.Now;
 			base.RemoveFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			
@@ -248,9 +246,6 @@ namespace MyMediaLite.ItemRecommendation
 				// Recalculate neighbors as necessary
 				RetrainItemsRemoved(removed_items);
 			}
-			TimeSpan update_time = DateTime.Now - start;
-			update_times.Add(update_time);
-			Console.WriteLine("Update Time: " + update_time.Milliseconds);
 		}
 
 		/// <summary>
