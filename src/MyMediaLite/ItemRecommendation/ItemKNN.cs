@@ -70,7 +70,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				double sum = 0;
 				double normalization = 0;
-				if(nearest_neighbors[item_id] != null)
+				if (nearest_neighbors[item_id] != null)
 				{
 					foreach (int neighbor in nearest_neighbors[item_id])
 					{
@@ -79,7 +79,7 @@ namespace MyMediaLite.ItemRecommendation
 							sum += Math.Pow(correlation[item_id, neighbor], Q);
 					}
 				}
-				if(sum == 0) return 0;
+				if (sum == 0) return 0;
 				return (float) (sum / normalization);
 			}
 			else
@@ -135,7 +135,7 @@ namespace MyMediaLite.ItemRecommendation
 					foreach (int j in new_items)
 						cooccurrence[i, j]++;
 					
-					switch(Correlation) 
+					switch (Correlation) 
 					{
 					case BinaryCorrelationType.Cooccurrence:
 						correlation = cooccurrence;
@@ -173,23 +173,23 @@ namespace MyMediaLite.ItemRecommendation
 			foreach (int item in Feedback.AllItems.Except(new_items))
 			{
 				// Get the correlation of the least correlated neighbor
-				if(nearest_neighbors[item] == null) 
+				if (nearest_neighbors[item] == null) 
 					min = 0;
-				else if(nearest_neighbors[item].Count < k)
+				else if (nearest_neighbors[item].Count < k)
 					min = 0;
 				else 
 					min = correlation[item, nearest_neighbors[item].Last()];
 				
 				// Check if any of the added items have a higher correlation
 				// (requires retraining if it is a new neighbor or an existing one)
-				foreach(int new_item in new_items)
-					if(correlation[item, new_item] > min)
+				foreach (int new_item in new_items)
+					if (correlation[item, new_item] > min)
 						retrain_items.Add(item);
 			}
 			// Recently added items also need retraining
 			retrain_items.UnionWith(new_items);
 			// Recalculate neighborhood of selected items
-			foreach(int r_item in retrain_items)
+			foreach (int r_item in retrain_items)
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
 		}
 
@@ -223,7 +223,7 @@ namespace MyMediaLite.ItemRecommendation
 					foreach (int j in removed_items)
 						cooccurrence[i, j] = (cooccurrence[i, j] >= 1 ? cooccurrence[i, j] - 1 : 0);
 					
-					switch(Correlation) 
+					switch (Correlation) 
 					{
 					case BinaryCorrelationType.Cooccurrence:
 						correlation = cooccurrence;
@@ -259,14 +259,13 @@ namespace MyMediaLite.ItemRecommendation
 			float min;
 			HashSet<int> retrain_items = new HashSet<int>(); 
 			foreach (int item in Feedback.AllItems.Except(removed_items))
-				foreach(int r_item in removed_items)
-					if(nearest_neighbors[item] != null)
-						if(nearest_neighbors[item].Contains(r_item))
+				foreach (int r_item in removed_items)
+					if (nearest_neighbors[item] != null)
+						if (nearest_neighbors[item].Contains(r_item))
 							retrain_items.Add(item);
 			retrain_items.UnionWith(removed_items);
-			foreach(int r_item in retrain_items)
+			foreach (int r_item in retrain_items)
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
-			Console.WriteLine("Updated "+ retrain_items.Count + " KNN lists");
 		}
 
 	}

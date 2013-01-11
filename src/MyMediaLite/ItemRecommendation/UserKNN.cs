@@ -52,7 +52,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				double sum = 0;
 				double normalization = 0;
-				if(nearest_neighbors[user_id] != null)
+				if (nearest_neighbors[user_id] != null)
 				{
 					foreach (int neighbor in nearest_neighbors[user_id])
 					{
@@ -61,7 +61,7 @@ namespace MyMediaLite.ItemRecommendation
 							sum += Math.Pow(correlation[user_id, neighbor], Q);
 					}
 				}
-				if(sum == 0) return 0;
+				if (sum == 0) return 0;
 				return (float) (sum / normalization);
 			}
 			else
@@ -156,7 +156,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.AddFeedback (feedback);
+			base.AddFeedback(feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 			
 			// Construct a dictionary to group feedback by item
@@ -219,23 +219,23 @@ namespace MyMediaLite.ItemRecommendation
 			foreach (int user in Feedback.AllUsers.Except(new_users))
 			{
 				// Get the correlation of the least correlated neighbor
-				if(nearest_neighbors[user] == null) 
+				if (nearest_neighbors[user] == null) 
 					min = 0;
-				else if(nearest_neighbors[user].Count < k)
+				else if (nearest_neighbors[user].Count < k)
 					min = 0;
 				else 
 					min = correlation[user, nearest_neighbors[user].Last()];
 				
 				// Check if any of the added users have a higher correlation
 				// (requires retraining if it is a new neighbor or an existing one)
-				foreach(int new_user in new_users)
-					if(correlation[user, new_user] > min)
+				foreach (int new_user in new_users)
+					if (correlation[user, new_user] > min)
 						retrain_users.Add(user);
 			}
 			// Recently added users also need retraining
 			retrain_users.UnionWith(new_users);
 			// Recalculate neighborhood of selected users
-			foreach(int r_user in retrain_users)
+			foreach (int r_user in retrain_users)
 				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
 			
 			return retrain_users.Count;
@@ -305,12 +305,12 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			HashSet<int> retrain_users = new HashSet<int>(); 
 			foreach (int user in Feedback.AllUsers.Except(removing_users))
-				foreach(int r_user in removing_users)
-					if(nearest_neighbors[user] != null)
-						if(nearest_neighbors[user].Contains(r_user))
+				foreach (int r_user in removing_users)
+					if (nearest_neighbors[user] != null)
+						if (nearest_neighbors[user].Contains(r_user))
 							retrain_users.Add(user);
 			retrain_users.UnionWith(removing_users);
-			foreach(int r_user in retrain_users)
+			foreach (int r_user in retrain_users)
 				nearest_neighbors[r_user] = correlation.GetNearestNeighbors(r_user, k);
 		}
 		

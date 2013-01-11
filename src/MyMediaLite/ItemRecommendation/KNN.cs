@@ -123,7 +123,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 			correlation.ComputeCorrelations(DataMatrix);
-			if(correlation is Cooccurrence)
+			if (correlation is Cooccurrence)
 				cooccurrence = (Cooccurrence) correlation;
 			else
 				cooccurrence.ComputeCorrelations(DataMatrix);
@@ -187,8 +187,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		protected void ResizeNearestNeighbors(int new_size)
 		{
-			if(new_size > nearest_neighbors.Count)
-				for(int i = nearest_neighbors.Count; i < new_size; i++)
+			if (new_size > nearest_neighbors.Count)
+				for (int i = nearest_neighbors.Count; i < new_size; i++)
 					nearest_neighbors.Add(null);
 		}
 		
