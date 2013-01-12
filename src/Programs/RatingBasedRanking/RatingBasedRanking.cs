@@ -66,8 +66,8 @@ class RatingBasedRanking : RatingPrediction
 	{
 		base.CheckParameters(extra_args);
 
-		if (cross_validation > 0)
-			Abort("--cross-validation=K is not supported for rating-based ranking.");
+		if (cross_validation > 0 && find_iter != 0)
+			Abort("The combination of --cross-validation=K and --find-iter is not supported for rating-based ranking.");
 	}
 
 	protected override void LoadData()
@@ -108,6 +108,12 @@ class RatingBasedRanking : RatingPrediction
 			test_users, candidate_items,
 			eval_item_mode, RepeatedEvents.No, predict_items_number
 		);
+	}
+
+	protected override EvaluationResults DoCrossValidation()
+	{
+		var candidate_items = new List<int>(test_data.AllItems.Union(training_data.AllItems));
+		return recommender.DoRatingBasedRankingCrossValidation(cross_validation, candidate_items, CandidateItems.UNION);
 	}
 
 	static void Main(string[] args)

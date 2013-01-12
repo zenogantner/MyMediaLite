@@ -243,6 +243,7 @@
     <Compile Include="RatingPrediction\ExternalRatingPredictor.cs" />
     <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
     <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
+    <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
