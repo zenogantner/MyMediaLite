@@ -82,7 +82,7 @@ namespace MyMediaLite.Eval
 					var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
 					split_recommender.Feedback = split.Train[fold];
 					split_recommender.Train();
-					var fold_results = Items.Evaluate(split_recommender, split.Train[fold], split.Test[fold], test_users, candidate_items, candidate_item_mode);
+					var fold_results = Items.Evaluate(split_recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
 

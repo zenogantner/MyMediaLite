@@ -7,8 +7,10 @@
 	 - MatrixFactorization: rename LearnRateDecay to Decay
 	 - SLIM: fix wrong data type in LoadModel()
 	evaluation
-	 - simplify item recommender evaluation - do not pass ignore_items to the
-           methods computing the measures
+	 - simplify item recommender evaluation - do not pass ignore_items to
+           the methods computing the measures
+	 - item cross-validation: fix bug where train and test sets were
+           switched
 	data types
 	 - get rid of unused vector and matrix code (mostly double precision
 	   code)
