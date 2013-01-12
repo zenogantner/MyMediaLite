@@ -77,3 +77,9 @@ If you are a Java developer, this may help you to learn about C#: http://www.25h
 How to call #MyMediaLite from F#: https://github.com/zenogantner/MyMediaLite/blob/master/examples/fsharp/item_recommendation.fs https://github.com/zenogantner/MyMediaLite/blob/master/examples/fsharp/rating_prediction.fs #recsys
 
 #MyMediaLite has a Java port: https://github.com/jcnewell/MyMediaLiteJava initiated by @JCWNewell #recsys
+
+To do rating prediction w/o evaluation, just provide --test-file and --prediction-file as command-line arguments.
+
+To to item recommendation w/o evaluation, just provide --prediction-file as command-line arguments.
+
+For item recommendation, you can fine-tune what you want to predict with --predict-items-number=N --repeated-items --candidate-items. etc.
