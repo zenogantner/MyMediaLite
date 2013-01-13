@@ -1,9 +1,12 @@
 3.07	2013-01-
 	#378: get rid of group recommendation code
 	recommenders
+	 - new rating predictor GSVD++ (by Marcelo Manzato)
 	 - new recommenders ExternalRatingPredictor and ExternalItemRecommender:
            to evaluate external prediction tools with the MyMediaLite evaluation
            framework
+	 - incremental updates for item recommendation UserKNN and ItemKNN
+           (pull request by João Vinagre)
 	 - MatrixFactorization: rename LearnRateDecay to Decay
 	 - SLIM: fix wrong data type in LoadModel()
 	evaluation
