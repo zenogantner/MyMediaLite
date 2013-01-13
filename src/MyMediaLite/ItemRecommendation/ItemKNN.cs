@@ -1,3 +1,4 @@
+// Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
@@ -25,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering</summary>
 	/// <remarks>
-	/// This recommender supports incremental updates.
+	/// This recommender supports incremental updates for the Cosine and Cooccurrence similarities.
 	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
@@ -46,18 +47,13 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>
-		/// Adds the item.
-		/// </summary>
-		/// <param name='item_id'>
-		/// Item_id.
-		/// </param>
+		///
 		protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
 			ResizeNearestNeighbors(item_id + 1);
 		}
-		
+
 		///
 		public override float Predict(int user_id, int item_id)
 		{
@@ -105,17 +101,12 @@ namespace MyMediaLite.ItemRecommendation
 				return correlation.GetNearestNeighbors(item_id, n);
 		}
 
-		/// <summary>
-		/// Add positive feedback events and perform incremental training
-		/// </summary>
-		/// <param name='feedback'>
-		/// collection of user id - item id tuples
-		/// </param>
+		///
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
-			
+
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
@@ -123,8 +114,8 @@ namespace MyMediaLite.ItemRecommendation
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
-			
-			// For each user in new feedback update coocurrence 
+
+			// For each user in new feedback update coocurrence
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
@@ -134,20 +125,20 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					foreach (int j in new_items)
 						cooccurrence[i, j]++;
-					
-					switch (Correlation) 
+
+					switch (Correlation)
 					{
 					case BinaryCorrelationType.Cooccurrence:
 						correlation = cooccurrence;
 						break;
 					case BinaryCorrelationType.Cosine:
-						// Update correlations of each rated item by user 
+						// Update correlations of each rated item by user
 						foreach (int j in Feedback.AllItems)
 						{
 							if (i == j)
 								correlation[i, i] = 1;
 							else
-								correlation[i, j] = cooccurrence[i, j] / 
+								correlation[i, j] = cooccurrence[i, j] /
 									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
 						}
 						break;
@@ -159,27 +150,22 @@ namespace MyMediaLite.ItemRecommendation
 				RetrainItems(new_items);
 			}
 		}
-		
-		/// <summary>
-		/// Selectively retrains items based on new items added to feedback.
-		/// </summary>
-		/// <param name='new_items'>
-		/// New items.
-		/// </param>
+
+		///
 		protected void RetrainItems(IEnumerable<int> new_items)
 		{
 			float min;
-			HashSet<int> retrain_items = new HashSet<int>(); 
+			HashSet<int> retrain_items = new HashSet<int>();
 			foreach (int item in Feedback.AllItems.Except(new_items))
 			{
 				// Get the correlation of the least correlated neighbor
-				if (nearest_neighbors[item] == null) 
+				if (nearest_neighbors[item] == null)
 					min = 0;
 				else if (nearest_neighbors[item].Count < k)
 					min = 0;
-				else 
+				else
 					min = correlation[item, nearest_neighbors[item].Last()];
-				
+
 				// Check if any of the added items have a higher correlation
 				// (requires retraining if it is a new neighbor or an existing one)
 				foreach (int new_item in new_items)
@@ -193,17 +179,12 @@ namespace MyMediaLite.ItemRecommendation
 				nearest_neighbors[r_item] = correlation.GetNearestNeighbors(r_item, k);
 		}
 
-		/// <summary>
-		/// Remove all feedback events by the given user-item combinations
-		/// </summary>
-		/// <param name='feedback'>
-		/// collection of user id - item id tuples
-		/// </param>
+		///
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.RemoveFeedback (feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
-			
+
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
 			{
@@ -211,8 +192,8 @@ namespace MyMediaLite.ItemRecommendation
 					feeddict.Add(tpl.Item1, new List<int>());
 				feeddict[tpl.Item1].Add(tpl.Item2);
 			}
-			
-			// For each item in removed feedback update coocurrence 
+
+			// For each item in removed feedback update coocurrence
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
@@ -222,20 +203,20 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					foreach (int j in removed_items)
 						cooccurrence[i, j] = (cooccurrence[i, j] >= 1 ? cooccurrence[i, j] - 1 : 0);
-					
-					switch (Correlation) 
+
+					switch (Correlation)
 					{
 					case BinaryCorrelationType.Cooccurrence:
 						correlation = cooccurrence;
 						break;
 					case BinaryCorrelationType.Cosine:
-						// Update correlations of each rated item by user 
+						// Update correlations of each rated item by user
 						foreach (int j in Feedback.AllItems)
 						{
 							if (i == j)
 								correlation[i, i] = 1;
 							else
-								correlation[i, j] = cooccurrence[i, j] / 
+								correlation[i, j] = cooccurrence[i, j] /
 									(float) Math.Sqrt(cooccurrence[i, i] * cooccurrence[j, j]);
 						}
 						break;
@@ -256,8 +237,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		protected void RetrainItemsRemoved(IEnumerable<int> removed_items)
 		{
-			float min;
-			HashSet<int> retrain_items = new HashSet<int>(); 
+			HashSet<int> retrain_items = new HashSet<int>();
 			foreach (int item in Feedback.AllItems.Except(removed_items))
 				foreach (int r_item in removed_items)
 					if (nearest_neighbors[item] != null)

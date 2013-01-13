@@ -1,3 +1,4 @@
+// Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -110,8 +111,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <summary>
-		/// Corrects the coocurrence diagonal (ocurrence counts).
-		/// </summary>
+		/// Corrects the coocurrence diagonal (ocurrence counts)</summary>
 		private void correctCooccurrenceDiagonal()
 		{
 			for (int i = 0; i < cooccurrence.NumEntities; i++)
@@ -127,7 +127,7 @@ namespace MyMediaLite.ItemRecommendation
 				cooccurrence = (Cooccurrence) correlation;
 			else
 				cooccurrence.ComputeCorrelations(DataMatrix);
-			
+
 			correctCooccurrenceDiagonal();
 		}
 
@@ -146,7 +146,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// 
+		///
 		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
@@ -179,20 +179,14 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>
-		/// Resizes the nearest neighbors list if necessary.
-		/// </summary>
-		/// <param name='new_size'>
-		/// New_size.
-		/// </param>
+		/// <summary>Resizes the nearest neighbors list if necessary</summary>
+		/// <param name='new_size'>the new size</param>
 		protected void ResizeNearestNeighbors(int new_size)
 		{
 			if (new_size > nearest_neighbors.Count)
 				for (int i = nearest_neighbors.Count; i < new_size; i++)
 					nearest_neighbors.Add(null);
 		}
-		
-
 
 		///
 		public override string ToString()
