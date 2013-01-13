@@ -26,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering</summary>
 	/// <remarks>
-	/// This recommender supports incremental updates for the Cosine and Cooccurrence similarities.
+	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
 	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
@@ -104,7 +104,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.AddFeedback (feedback);
+			base.AddFeedback(feedback);
 			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
 
 			// Construct a dictionary to group feedback by user

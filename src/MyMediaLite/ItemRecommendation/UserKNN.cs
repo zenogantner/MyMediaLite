@@ -25,7 +25,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
 	/// <remarks>
-	/// This recommender supports incremental updates for the Cosine and Cooccurrence similarities.
+	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
 	/// </remarks>
 	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
 	{
