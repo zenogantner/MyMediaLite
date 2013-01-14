@@ -22,6 +22,9 @@
            element-wise multiplication, increment, addition
 	 - more unit tests for vector operations
 	 - SymmetricCorrelationMatrix: improve API documentation
+	correlations
+ 	 - throw NotImplementedException for "Weighted" scenario
+           BinaryData(As|S)ymmetricCorrelationMatrix.ComputeCorrelation()
 	command-line tools
 	 - share SetupRecommender() code between the 3 command-line tools
 	 - add default evaluation measure to rating_based_ranking

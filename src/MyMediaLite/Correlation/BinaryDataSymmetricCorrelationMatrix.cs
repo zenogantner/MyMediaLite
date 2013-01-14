@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -95,7 +95,10 @@ namespace MyMediaLite.Correlation
 				if (vector_i.Contains(k))
 					count++;
 
-			return ComputeCorrelationFromOverlap(count, vector_i.Count, vector_j.Count);
+			if (Weighted)
+				throw new NotImplementedException();
+			else
+				return ComputeCorrelationFromOverlap(count, vector_i.Count, vector_j.Count);
 		}
 	}
 }
