@@ -70,9 +70,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Correlation matrix over some kind of entity, e.g. users or items</summary>
 		protected IBinaryDataCorrelationMatrix correlation;
 
-		/// <summary>Coocurrence matrix necessary to compute incremental updates</summary>
-		protected Cooccurrence cooccurrence;
-
 		/// <summary>Default constructor</summary>
 		public KNN()
 		{
@@ -106,16 +103,33 @@ namespace MyMediaLite.ItemRecommendation
 				default:
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
-			correlation.Weighted = Weighted;
-			cooccurrence = new Cooccurrence(num_entities);
 		}
 
-		/// <summary>
-		/// Corrects the coocurrence diagonal (ocurrence counts)</summary>
-		private void correctCooccurrenceDiagonal()
+		/// <summary>Update the correlation matrix for the given feedback</summary>
+		/// <param name='feedback'>the feedback (user-item tuples)</param>
+		protected void Update(ICollection<Tuple<int, int>> feedback)
 		{
-			for (int i = 0; i < cooccurrence.NumEntities; i++)
-				cooccurrence[i, i] = DataMatrix.NumEntriesByRow(i);
+			var update_entities = new HashSet<int>();
+			foreach (var t in feedback)
+				update_entities.Add(t.Item1);
+
+			foreach (int i in update_entities)
+			{
+				for (int j = 0; j < correlation.NumEntities; j++)
+				{
+					if (j < i && correlation.IsSymmetric && update_entities.Contains(j))
+						continue;
+
+					correlation[i, j] = correlation.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
+				}
+			}
+			RecomputeNeighbors(update_entities);
+		}
+
+		private void RecomputeNeighbors(ICollection<int> update_entities)
+		{
+			foreach (int entity_id in update_entities)
+				nearest_neighbors[entity_id] = correlation.GetNearestNeighbors(entity_id, k);
 		}
 
 		///
@@ -123,12 +137,6 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			InitModel();
 			correlation.ComputeCorrelations(DataMatrix);
-			if (correlation is Cooccurrence)
-				cooccurrence = (Cooccurrence) correlation;
-			else
-				cooccurrence.ComputeCorrelations(DataMatrix);
-
-			correctCooccurrenceDiagonal();
 		}
 
 		///
@@ -142,7 +150,6 @@ namespace MyMediaLite.ItemRecommendation
 					writer.WriteLine(String.Join(" ", nn));
 
 				correlation.Write(writer);
-				cooccurrence.Write(writer);
 			}
 		}
 
@@ -171,8 +178,6 @@ namespace MyMediaLite.ItemRecommendation
 					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
 				else
 					throw new NotSupportedException("Unknown correlation type: " + correlation.GetType());
-
-				cooccurrence.ReadSymmetricCorrelationMatrix(reader);
 
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
