@@ -105,7 +105,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback(feedback);
-			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			var feeddict = new Dictionary<int, List<int>>();
 
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
@@ -154,7 +154,7 @@ namespace MyMediaLite.ItemRecommendation
 		private void RecalculateNeighbors(IEnumerable<int> new_items)
 		{
 			float min;
-			HashSet<int> retrain_items = new HashSet<int>();
+			var retrain_items = new HashSet<int>();
 			foreach (int item in Feedback.AllItems.Except(new_items))
 			{
 				// Get the correlation of the least correlated neighbor
@@ -181,8 +181,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
-			base.RemoveFeedback (feedback);
-			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			base.RemoveFeedback(feedback);
+			var feeddict = new Dictionary<int, List<int>>();
 
 			// Construct a dictionary to group feedback by user
 			foreach (var tpl in feedback)
@@ -196,7 +196,7 @@ namespace MyMediaLite.ItemRecommendation
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
-				List<int> rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				var rated_items = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> removed_items = f.Value;
 				foreach (int i in rated_items)
 				{
@@ -236,7 +236,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		protected void RetrainItemsRemoved(IEnumerable<int> removed_items)
 		{
-			HashSet<int> retrain_items = new HashSet<int>();
+			var retrain_items = new HashSet<int>();
 			foreach (int item in Feedback.AllItems.Except(removed_items))
 				foreach (int r_item in removed_items)
 					if (nearest_neighbors[item] != null)

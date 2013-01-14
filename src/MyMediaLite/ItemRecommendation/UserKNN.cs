@@ -149,16 +149,11 @@ namespace MyMediaLite.ItemRecommendation
 			return result;
 		}
 
-		/// <summary>
-		/// Add positive feedback events and perform incremental training
-		/// </summary>
-		/// <param name='feedback'>
-		/// collection of user id - item id tuples
-		/// </param>
+		///
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.AddFeedback(feedback);
-			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			var feeddict = new Dictionary<int, List<int>>();
 
 			// Construct a dictionary to group feedback by item
 			foreach (var tpl in feedback)
@@ -171,7 +166,7 @@ namespace MyMediaLite.ItemRecommendation
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
-				List<int> rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				var rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> new_users = f.Value;
 				foreach (int i in rating_users)
 				{
@@ -215,7 +210,7 @@ namespace MyMediaLite.ItemRecommendation
 		private int RecalculateNeighbors(IEnumerable<int> new_users)
 		{
 			float min;
-			HashSet<int> retrain_users = new HashSet<int>();
+			var retrain_users = new HashSet<int>();
 			foreach (int user in Feedback.AllUsers.Except(new_users))
 			{
 				// Get the correlation of the least correlated neighbor
@@ -250,7 +245,7 @@ namespace MyMediaLite.ItemRecommendation
 		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
 		{
 			base.RemoveFeedback (feedback);
-			Dictionary<int,List<int>> feeddict = new Dictionary<int, List<int>>();
+			var feeddict = new Dictionary<int, List<int>>();
 
 			// Construct a dictionary to group feedback by item
 			foreach (var tpl in feedback)
@@ -264,7 +259,7 @@ namespace MyMediaLite.ItemRecommendation
 			// and correlation matrices
 			foreach (KeyValuePair<int, List<int>> f in feeddict)
 			{
-				List<int> rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
+				var rating_users = DataMatrix.GetEntriesByColumn(f.Key).ToList();
 				List<int> removing_users = f.Value;
 				foreach (int i in rating_users)
 				{
@@ -303,7 +298,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// </param>
 		protected void RetrainUsersRemoved(IEnumerable<int> removing_users)
 		{
-			HashSet<int> retrain_users = new HashSet<int>();
+			var retrain_users = new HashSet<int>();
 			foreach (int user in Feedback.AllUsers.Except(removing_users))
 				foreach (int r_user in removing_users)
 					if (nearest_neighbors[user] != null)
