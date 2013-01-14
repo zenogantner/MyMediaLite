@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -67,7 +67,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	{
 		ShowVersion(
 			"Item Recommendation from Positive-Only Feedback",
-			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler"
+			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler"
 		);
 	}
 
