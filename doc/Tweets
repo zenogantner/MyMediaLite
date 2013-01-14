@@ -83,3 +83,5 @@ To do rating prediction w/o evaluation, just provide --test-file and --predictio
 To do item recommendation w/o evaluation, just provide --prediction-file as command-line argument.
 
 For item recommendation, you can fine-tune what you want to predict with --predict-items-number=N --repeated-items --candidate-items. etc.
+
+Who uses the #MyMediaLite recommender system library? http://mymedialite.net/users.html #recsys
