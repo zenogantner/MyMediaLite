@@ -146,13 +146,12 @@ namespace MyMediaLite.ItemRecommendation
 						throw new NotImplementedException("Incremental updates with ItemKNN only work with cosine and coocurrence (so far)");
 					}
 				}
-				// Recalculate neighbors as necessary
-				RetrainItems(new_items);
+				RecalculateNeighbors(new_items);
 			}
 		}
 
 		///
-		protected void RetrainItems(IEnumerable<int> new_items)
+		private void RecalculateNeighbors(IEnumerable<int> new_items)
 		{
 			float min;
 			HashSet<int> retrain_items = new HashSet<int>();

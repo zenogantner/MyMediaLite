@@ -199,8 +199,7 @@ namespace MyMediaLite.ItemRecommendation
 					}
 				}
 
-				// Recalculate neighbors as necessary
-				RetrainUsers(new_users);
+				RecalculateNeighbors(new_users);
 			}
 		}
 
@@ -213,7 +212,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name='new_users'>
 		/// Recently added users.
 		/// </param>
-		protected int RetrainUsers(IEnumerable<int> new_users)
+		private int RecalculateNeighbors(IEnumerable<int> new_users)
 		{
 			float min;
 			HashSet<int> retrain_users = new HashSet<int>();
