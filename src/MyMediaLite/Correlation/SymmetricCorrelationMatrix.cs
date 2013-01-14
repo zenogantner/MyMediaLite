@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,7 +31,7 @@ namespace MyMediaLite.Correlation
 	/// <summary>Class for computing and storing correlations and similarities</summary>
 	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
-		///
+		/// <summary>Number of entities the correlation is defined over</summary>
 		public int NumEntities { get; private set; }
 
 		/// <value>returns true if the matrix is symmetric, which is generally the case for similarity matrices</value>
