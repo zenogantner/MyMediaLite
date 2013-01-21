@@ -100,7 +100,7 @@ namespace MyMediaLite.ItemRecommendation
 			else
 				return correlation.GetNearestNeighbors(item_id, n);
 		}
-
+		
 		///
 		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
 		{

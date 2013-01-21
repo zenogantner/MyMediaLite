@@ -19,7 +19,7 @@ done
 
 for method in UserKNN ItemKNN
 do
-	for corr in Cosine Cooccurrence
+	for corr in BidirectionalConditionalProbability Cosine Cooccurrence 
 	do
 		echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=${TEST_USERS} --random-seed=1 --recommender-options="correlation=$corr"
 		     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --online-evaluation --num-test-users=${TEST_USERS} --random-seed=1 --recommender-options="correlation=$corr"
