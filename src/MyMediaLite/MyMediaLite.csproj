@@ -244,6 +244,8 @@
     <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
     <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
     <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
+    <Compile Include="RatingPrediction\IntegratedSVDPlusPlusKNN.cs" />
+    <Compile Include="RatingPrediction\KorenImplicitKNN.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
