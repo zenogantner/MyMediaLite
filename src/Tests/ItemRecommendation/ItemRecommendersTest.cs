@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -50,20 +50,60 @@ namespace Tests.ItemRecommendation
 			foreach (Type type in Utils.GetTypes("MyMediaLite.ItemRecommendation"))
 				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFoldInItemRecommender") != null)
 				{
-					var recommender = type.CreateItemRecommender();
-					recommender.Feedback = TestUtils.CreatePosOnlyFeedback();
-					if (type.GetInterface("IUserAttributeAwareRecommender") != null)
-						((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
-					if (type.GetInterface("IItemAttributeAwareRecommender") != null)
-						((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
-
-					recommender.Train();
+					var recommender = SetUpRecommender(type);
 
 					var items_accessed_by_user = new int[] { 0, 1 };
 					var items_to_score = new int[] { 2 };
 					var scored_items = ((IFoldInItemRecommender) recommender).ScoreItems(items_accessed_by_user, items_to_score);
 					Assert.AreEqual(1, scored_items.Count);
 				}
+		}
+		
+		[Test()]
+		public void TestSaveLoad()
+		{
+			foreach (Type type in Utils.GetTypes("MyMediaLite.ItemRecommendation"))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
+				{
+					if (type.Name == "Random" || type.Name == "ExternalItemRecommender")
+						continue;
+					if (type.Name == "MostPopularByAttributes" || type.Name == "ItemAttributeSVM")
+						continue;
+					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN" || type.Name == "BPRLinear" || type.Name == "BPRSLIM")
+						continue;
+
+					try
+					{
+						var recommender = SetUpRecommender(type);
+
+						var results = new float[5];
+						for (int i = 0; i < results.Length; i++)
+							results[i] = recommender.Predict(0, i);
+					
+						
+						recommender.SaveModel("tmp.model");
+						recommender.LoadModel("tmp.model");
+						for (int i = 0; i < results.Length; i++)
+							Assert.AreEqual(results[i], recommender.Predict(0, i), 0.0001);
+					}
+					catch (Exception e)
+					{
+						Assert.Fail("Exception while testing recommender {0}: {1}\n{2}", type.Name, e.Message, e.StackTrace);
+					}
+				}
+		}
+		
+		private static ItemRecommender SetUpRecommender(Type type)
+		{
+			var recommender = (ItemRecommender) type.CreateItemRecommender();
+			recommender.Feedback = TestUtils.CreatePosOnlyFeedback();
+			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
+				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
+			if (type.GetInterface("IItemAttributeAwareRecommender") != null)
+				((IItemAttributeAwareRecommender) recommender).ItemAttributes = new SparseBooleanMatrix();
+
+			recommender.Train();
+			return recommender;
 		}
 	}
 }

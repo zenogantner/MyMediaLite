@@ -98,7 +98,6 @@ namespace Tests.RatingPrediction
 						recommender.LoadModel("tmp.model");
 						for (int i = 0; i < results.Length; i++)
 							Assert.AreEqual(results[i], recommender.Predict(0, i), 0.0001);
-						// TODO delete file
 					}
 					catch (Exception e)
 					{
