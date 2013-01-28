@@ -1,3 +1,5 @@
+Questions about #MyMediaLite? Join our Google Group: 
+
 How to contribute to #mymedialite: http://mymedialite.net/contribute.html #recsys #opensource #freesoftware #mono #csharp
 
 If you are interested in recommender systems and personalization, have a look at http://recsyswiki.com #recsys
@@ -85,3 +87,5 @@ To do item recommendation w/o evaluation, just provide --prediction-file as comm
 For item recommendation, you can fine-tune what you want to predict with --predict-items-number=N --repeated-items --candidate-items. etc.
 
 Who uses the #MyMediaLite recommender system library? http://mymedialite.net/users.html #recsys
+
+Follow the development of the #MyMediaLite recommendation software on #GitHub: https://github.com/zenogantner/MyMediaLite #recsys
