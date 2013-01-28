@@ -1,20 +1,20 @@
 // Copyright (C) 2012 Marcelo Manzato, Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 using System;
 using System.Collections.Generic;
 using MyMediaLite.Data;
@@ -37,35 +37,35 @@ namespace MyMediaLite.RatingPrediction
 	///       </description></item>
 	///     </list>
 	///   </para>
-	/// </remarks>	
+	/// </remarks>
 	public class IntegratedSVDPlusPlusKNN : KorenImplicitKNN, ITransductiveRatingPredictor
-	{	
+	{
 		///
 		public override void Train()
 		{
 			InitNeighborhoodModel();
 			TrainAncestors();
 		}
-		
+
 		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			user_factors = null; // delete old user factors
-			float reg = Regularization; // to limit property accesses			
-			
+			float reg = Regularization; // to limit property accesses
+
 			foreach (int index in rating_indices)
 			{
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
-				
+
 				float prediction = base.Predict(u, i, false);
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
 				for (int f = 0; f < p_plus_y_sum_vector.Count; f++)
 					p_plus_y_sum_vector[f] = (float) (p_plus_y_sum_vector[f] / norm_denominator + p[u, f]);
 
-				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);				
-				
+				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);
+
 				float err = ratings[index] - prediction;
 
 				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
@@ -76,10 +76,10 @@ namespace MyMediaLite.RatingPrediction
 					user_bias[u] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * user_reg_weight * user_bias[u]);
 				if (update_item)
 					item_bias[i] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
-				
+
 				IList<int> rkiu = new List<int>();
 				IList<int> nkiu = new List<int>();
-				foreach (int j in k_relevant_items[i]) 
+				foreach (int j in k_relevant_items[i])
 				{
 					if (Predictor.data_item[j, u])
 					{
@@ -87,21 +87,21 @@ namespace MyMediaLite.RatingPrediction
 					}
 					if (Predictor.data_item[j, u] || additional_data_item[j, u])
 					{
-						nkiu.Add(j);	
+						nkiu.Add(j);
 					}
-				}				
-				
+				}
+
 				// adjust item similarities
-				foreach (int j in rkiu) 
+				foreach (int j in rkiu)
 				{
 					float rating  = ratings.Get(u, j, ratings.ByUser[u]);
-					w[i, j] += current_learnrate * ((err / (float)Math.Sqrt(rkiu.Count)) * (rating - Predictor.baseline_predictor.Predict(u, j)) - reg * w[i, j]);	
+					w[i, j] += current_learnrate * ((err / (float)Math.Sqrt(rkiu.Count)) * (rating - Predictor.baseline_predictor.Predict(u, j)) - reg * w[i, j]);
 				}
-				foreach (int j in nkiu) 
-				{					
-					c[i, j] += current_learnrate * ((err / (float)Math.Sqrt(nkiu.Count)) - reg * c[i, j]);	
+				foreach (int j in nkiu)
+				{
+					c[i, j] += current_learnrate * ((err / (float)Math.Sqrt(nkiu.Count)) - reg * c[i, j]);
 				}
-				
+
 				// adjust factors
 				double normalized_error = err / norm_denominator;
 				for (int f = 0; f < NumFactors; f++)
@@ -127,10 +127,10 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
-			
+
 			UpdateLearnRate();
 		}
-		
+
 		///
 		public override float Predict(int user_id, int item_id)
 		{
@@ -143,10 +143,10 @@ namespace MyMediaLite.RatingPrediction
 				result += user_bias[user_id];
 			if (item_id < item_bias.Length)
 				result += item_bias[item_id];
-			if (user_id <= MaxUserID && item_id <= MaxItemID) 
+			if (user_id <= MaxUserID && item_id <= MaxItemID)
 			{
 				result += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
-				
+
 				float r_sum = 0;
 				int r_count = 0;
 				float n_sum = 0;
@@ -160,17 +160,17 @@ namespace MyMediaLite.RatingPrediction
 						r_count++;
 					}
 					if (Predictor.data_item[j, user_id] || additional_data_item[j, user_id])
-					{						
+					{
 						n_sum += c[item_id, j];
 						n_count++;
 					}
 				}
 				if (r_count > 0)
-					result += r_sum / (float)Math.Sqrt(r_count);				
+					result += r_sum / (float)Math.Sqrt(r_count);
 				if (n_count > 0)
 					result += n_sum / (float)Math.Sqrt(n_count);
 			}
-			
+
 			if (result > MaxRating)
 				return MaxRating;
 			if (result < MinRating)
@@ -178,7 +178,7 @@ namespace MyMediaLite.RatingPrediction
 
 			return (float) result;
 		}
-		
+
 		///
 		public override string ToString()
 		{
