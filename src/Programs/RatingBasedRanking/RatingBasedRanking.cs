@@ -112,7 +112,7 @@ class RatingBasedRanking : RatingPrediction
 
 	protected override EvaluationResults DoCrossValidation()
 	{
-		var candidate_items = new List<int>(test_data.AllItems.Union(training_data.AllItems));
+		var candidate_items = new List<int>(training_data.AllItems);
 		return recommender.DoRatingBasedRankingCrossValidation(cross_validation, candidate_items, CandidateItems.UNION);
 	}
 
