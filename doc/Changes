@@ -1,4 +1,4 @@
-3.07	2013-02-
+3.07	2013-02-04
 	#378: get rid of group recommendation code
 	recommenders
 	 - new rating predictor GSVD++ (by Marcelo Manzato)
