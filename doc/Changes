@@ -1,3 +1,8 @@
+3.08	2013-03-
+	recommenders
+	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
+           Dooms)
+
 3.07	2013-02-04
 	#378: get rid of group recommendation code
 	recommenders
