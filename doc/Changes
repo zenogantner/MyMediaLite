@@ -2,6 +2,17 @@
 	recommenders
 	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
            Dooms)
+         - WRMF: support incremental training
+	 - BPRMF:
+           - avoid duplicate calls to UpdateUser() and UpdateItem() during
+             incremental updates
+           - set item bias to zero in RemoveItem()
+           - move some incremental update functionality to class MF
+         - removed CLiMF, as the implementation was never complete nor working
+        command-line tools
+         - item_recommendation: add usage information for
+           --(load|save)-(user|item)-mapping=FILE
+
 
 3.07	2013-02-04
 	#378: get rid of group recommendation code
