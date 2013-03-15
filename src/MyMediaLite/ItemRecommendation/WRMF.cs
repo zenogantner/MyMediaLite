@@ -119,8 +119,8 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					double d = 0;
 					foreach (int i in row)
-						d += H[i, f_1] * H[i, f_2] * alpha;
-					HC_minus_IH[f_1, f_2] = d;
+						d += H[i, f_1] * H[i, f_2];
+					HC_minus_IH[f_1, f_2] = d * alpha;
 				}
 			// create HCp in O(f|S_u|)
 			var HCp = new double[num_factors];
@@ -128,8 +128,8 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				double d = 0;
 				foreach (int i in row)
-					d += H[i, f] * (1 + alpha);
-				HCp[f] = d;
+					d += H[i, f];
+				HCp[f] = d * (1 + alpha);
 			}
 			// create m = HH + HC_minus_IH + reg*I
 			// m is symmetric
