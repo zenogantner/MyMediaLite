@@ -2,7 +2,10 @@
 	recommenders
 	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
            Dooms)
-         - WRMF: support incremental training
+         - WRMF:
+           - support incremental training
+           - reduce training time by about 50%, by explointing symmmetry and by
+             reducing the number of multiplications
 	 - BPRMF:
            - avoid duplicate calls to UpdateUser() and UpdateItem() during
              incremental updates

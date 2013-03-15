@@ -98,12 +98,13 @@ namespace MyMediaLite.ItemRecommendation
 			var mm = new Matrix<double>(m.dim2, m.dim2);
 			// mm is symmetric
 			for (int f_1 = 0; f_1 < m.dim2; f_1++)
-				for (int f_2 = 0; f_2 < m.dim2; f_2++)
+				for (int f_2 = f_1; f_2 < m.dim2; f_2++)
 				{
 					double d = 0;
 					for (int i = 0; i < m.dim1; i++)
 						d += m[i, f_1] * m[i, f_2];
 					mm[f_1, f_2] = d;
+					mm[f_2, f_1] = d;
 				}
 			return mm;
 		}
@@ -115,12 +116,13 @@ namespace MyMediaLite.ItemRecommendation
 			// create HC_minus_IH in O(f^2|S_u|)
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
 			for (int f_1 = 0; f_1 < num_factors; f_1++)
-				for (int f_2 = 0; f_2 < num_factors; f_2++)
+				for (int f_2 = f_1; f_2 < num_factors; f_2++)
 				{
 					double d = 0;
 					foreach (int i in row)
 						d += H[i, f_1] * H[i, f_2];
 					HC_minus_IH[f_1, f_2] = d * alpha;
+					HC_minus_IH[f_2, f_1] = d * alpha;
 				}
 			// create HCp in O(f|S_u|)
 			var HCp = new double[num_factors];
@@ -136,12 +138,13 @@ namespace MyMediaLite.ItemRecommendation
 			// the inverse m_inv is symmetric
 			var m = new DenseMatrix(num_factors, num_factors);
 			for (int f_1 = 0; f_1 < num_factors; f_1++)
-				for (int f_2 = 0; f_2 < num_factors; f_2++)
+				for (int f_2 = f_1; f_2 < num_factors; f_2++)
 				{
 					double d = HH[f_1, f_2] + HC_minus_IH[f_1, f_2];
 					if (f_1 == f_2)
 						d += regularization;
 					m[f_1, f_2] = d;
+					m[f_2, f_1] = d;
 				}
 			var m_inv = m.Inverse();
 			// write back optimal W
