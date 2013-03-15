@@ -88,7 +88,7 @@ Global
 		StartupItem = MyMediaLite\MyMediaLite.csproj
 		Policies = $0
 		$0.StandardHeader = $1
-		$1.Text = @Copyright (C) 2012 Zeno Gantner\n\nThis file is part of MyMediaLite.\n\nMyMediaLite is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nMyMediaLite is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\n along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.\n
+		$1.Text = @Copyright (C) 2013 Zeno Gantner\n\nThis file is part of MyMediaLite.\n\nMyMediaLite is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nMyMediaLite is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\n along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.\n
 		$1.IncludeInNewFiles = True
 		$0.DotNetNamingPolicy = $2
 		$2.DirectoryNamespaceAssociation = PrefixedFlat
@@ -108,6 +108,6 @@ Global
 		$6.scope = text/x-csharp
 		$0.VersionControlPolicy = $7
 		$7.inheritsSet = Mono
-		version = 3.06
+		version = 3.07
 	EndGlobalSection
 EndGlobal

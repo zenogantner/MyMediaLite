@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -108,7 +108,22 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		Environment.Exit(0);
 	}
 
-	protected abstract void SetupRecommender();
+	protected virtual void SetupRecommender()
+	{
+		// in case something went wrong ...
+		if (recommender == null && method != null)
+			Usage(string.Format("Unknown recommender: '{0}'", method));
+		if (recommender == null && load_model_file != null)
+			Abort(string.Format("Could not load model from file {0}.", load_model_file));
+
+		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
+		
+		if (recommender is INeedsMappings)
+		{
+			((INeedsMappings) recommender).UserMapping = user_mapping;
+			((INeedsMappings) recommender).ItemMapping = item_mapping;
+		}
+	}
 
 	protected virtual void CheckParameters(IList<string> extra_args)
 	{

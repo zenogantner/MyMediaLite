@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -61,7 +61,6 @@ namespace MyMediaLite.Correlation
 			var overlap        = overlap_and_entity_weights.Item1;
 			var entity_weights = overlap_and_entity_weights.Item2;
 
-			// compute correlations
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
@@ -71,7 +70,6 @@ namespace MyMediaLite.Correlation
 		{
 			var overlap = Overlap.ComputeUInt(entity_data);
 
-			// compute correlations
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
@@ -81,7 +79,6 @@ namespace MyMediaLite.Correlation
 		{
 			var overlap = Overlap.ComputeUShort(entity_data);
 
-			// compute correlation
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
@@ -95,7 +92,10 @@ namespace MyMediaLite.Correlation
 				if (vector_i.Contains(k))
 					count++;
 
-			return ComputeCorrelationFromOverlap(count, vector_i.Count, vector_j.Count);
+			if (Weighted)
+				throw new NotImplementedException();
+			else
+				return ComputeCorrelationFromOverlap(count, vector_i.Count, vector_j.Count);
 		}
 	}
 }

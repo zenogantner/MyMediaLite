@@ -72,7 +72,7 @@ namespace MyMediaLite.RatingPrediction
 
 		/// <summary>Multiplicative learn rate decay</summary>
 		/// <remarks>Applied after each epoch (= pass over the whole dataset)</remarks>
-		public float LearnRateDecay { get; set; }
+		public float Decay { get; set; }
 
 		/// <summary>Regularization parameter</summary>
 		public virtual float Regularization { get; set; }
@@ -89,7 +89,7 @@ namespace MyMediaLite.RatingPrediction
 			// set default values
 			Regularization = 0.015f;
 			LearnRate = 0.01f;
-			LearnRateDecay = 1.0f;
+			Decay = 1.0f;
 			NumIter = 30;
 			InitStdDev = 0.1;
 			NumFactors = 10;
@@ -128,7 +128,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Updates <see cref="current_learnrate"/> after each epoch</summary>
 		protected virtual void UpdateLearnRate()
 		{
-			current_learnrate *= LearnRateDecay;
+			current_learnrate *= Decay;
 		}
 
 		///
@@ -346,7 +346,7 @@ namespace MyMediaLite.RatingPrediction
 						user_vector[f] += (float) (lr * delta_u);
 					}
 				}
-				lr *= LearnRateDecay;
+				lr *= Decay;
 			}
 			return user_vector;
 		}
@@ -428,7 +428,7 @@ namespace MyMediaLite.RatingPrediction
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} regularization={2} learn_rate={3} learn_rate_decay={4} num_iter={5}",
-				this.GetType().Name, NumFactors, Regularization, LearnRate, LearnRateDecay, NumIter);
+				this.GetType().Name, NumFactors, Regularization, LearnRate, Decay, NumIter);
 		}
 	}
 }

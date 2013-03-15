@@ -1,4 +1,6 @@
 release checklist:
+0. One week before the scheduled release date: Ask on mailing list that people
+   test their stuff with the current master branch on GitHub
 1. Check the output of the test suite
 2. Check the output of the example programs
 3. Version numbers
@@ -21,6 +23,6 @@ release checklist:
 10. Add the new version to the website
 11. Commit the website changes
 12. Create a git tag: 'git tag -a v3.XX -m "MyMediaLite release 3.XX"'
-13. Copy announcement and the packages to the website: 'make copy-website copy-packages-website'
+13. Copy announcement and the packages to the website: 'make copy-packages-website'
 14. Upload the files to GitHub
 15. Announce it in the Google Group, on mloss.org, freecode.com, Google+, and Twitter

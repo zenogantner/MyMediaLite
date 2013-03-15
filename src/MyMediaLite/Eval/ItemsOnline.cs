@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,6 +29,9 @@ namespace MyMediaLite.Eval
 	{
 		/// <summary>Online evaluation for rankings of items</summary>
 		/// <remarks>
+		/// The evaluation protocol works as follows:
+		/// For every test user, evaluate on the test items, and then add the those test items to the training set and perform an incremental update.
+		/// The sequence of users is random.
 		/// </remarks>
 		/// <param name="recommender">the item recommender to be evaluated</param>
 		/// <param name="test">test cases</param>
@@ -55,72 +58,41 @@ namespace MyMediaLite.Eval
 				case CandidateItems.OVERLAP:  candidate_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
 				case CandidateItems.UNION:    candidate_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
 			}
-			candidate_item_mode = CandidateItems.EXPLICIT;
-
-			// for better handling, move test data points into arrays
-			var users = new int[test.Count];
-			var items = new int[test.Count];
-			int pos = 0;
-			foreach (int user_id in test.UserMatrix.NonEmptyRowIDs)
-				foreach (int item_id in test.UserMatrix[user_id])
-				{
-					users[pos] = user_id;
-					items[pos] = item_id;
-					pos++;
-				}
-
-			// random order of the test data points  // TODO chronological order
-			var random_index = new int[test.Count];
-			for (int index = 0; index < random_index.Length; index++)
-				random_index[index] = index;
-			random_index.Shuffle();
-
+			
+			test_users.Shuffle();
 			var results_by_user = new Dictionary<int, ItemRecommendationEvaluationResults>();
-
-			int num_lists = 0;
-
-			foreach (int index in random_index)
+			foreach (int user_id in test_users)
 			{
-				if (test_users.Contains(users[index]) && candidate_items.Contains(items[index]))
-				{
-					// evaluate user
-					var current_test = new PosOnlyFeedback<SparseBooleanMatrix>();
-					current_test.Add(users[index], items[index]);
-					var current_result = Items.Evaluate(recommender, current_test, training, current_test.AllUsers, candidate_items, candidate_item_mode);
-
-					if (current_result["num_users"] == 1)
-						if (results_by_user.ContainsKey(users[index]))
-						{
-							foreach (string measure in Items.Measures)
-								results_by_user[users[index]][measure] += current_result[measure];
-							results_by_user[users[index]]["num_items"]++;
-							num_lists++;
-						}
-						else
-						{
-							results_by_user[users[index]] = current_result;
-							results_by_user[users[index]]["num_items"] = 1;
-							results_by_user[users[index]].Remove("num_users");
-						}
-				}
+				if (candidate_items.Intersect(test.ByUser[user_id]).Count() == 0)
+					continue;
+				
+				// prepare data
+				var current_test_data = new PosOnlyFeedback<SparseBooleanMatrix>();
+				foreach (int index in test.ByUser[user_id])
+					current_test_data.Add(user_id, test.Items[index]);
+				// evaluate user
+				var current_result = Items.Evaluate(recommender, current_test_data, training, current_test_data.AllUsers, candidate_items, CandidateItems.EXPLICIT);
+				results_by_user[user_id] = current_result;
 
 				// update recommender
-				var tuple = Tuple.Create(users[index], items[index]);
-				incremental_recommender.AddFeedback(new Tuple<int, int>[]{ tuple });
+				var tuples = new List<Tuple<int, int>>();
+				foreach (int index in test.ByUser[user_id])
+					tuples.Add(Tuple.Create(user_id, test.Items[index]));
+				incremental_recommender.AddFeedback(tuples);
 			}
 
 			var results = new ItemRecommendationEvaluationResults();
 
 			foreach (int u in results_by_user.Keys)
 				foreach (string measure in Items.Measures)
-					results[measure] += results_by_user[u][measure] / results_by_user[u]["num_items"];
+					results[measure] += results_by_user[u][measure];
 
 			foreach (string measure in Items.Measures)
 				results[measure] /= results_by_user.Count;
 
 			results["num_users"] = results_by_user.Count;
 			results["num_items"] = candidate_items.Count;
-			results["num_lists"] = num_lists;
+			results["num_lists"] = results_by_user.Count;
 
 			return results;
 		}

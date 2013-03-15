@@ -1,0 +1,201 @@
+A New Data Model for MyMediaLite
+================================
+
+Abstract
+--------
+In this document, I describe the current data model of MyMediaLite and its
+shortcomings. Based on this analysis, I suggest new interfaces for dealing
+with interaction data in MyMediaLite in a more flexible way. Among other
+things, the new data model will allow us to support learning from context
+data, ordinal/multi-class responses, and streaming/out-of-core learning,
+without additional abstractions.
+
+
+Introduction and Motivation
+---------------------------
+I was young and foolish. But I had my reasons.
+
+MyMediaLite is a recommender system algorithm library that was derived from
+the MyMedia Framework. The MyMedia Framework was the outcome of a 3-year
+European research project between several partners, both from academy and
+industry. It had database integration ... well, it required the data to be
+stored in a MS SQLServer database in the default configuration. It was
+integrated with different kinds of middleware and meta-data systems.
+It had social network integration (yeah, Facebook etc.). You get the idea:
+It was huge.
+The MyMedia Framework had a very elegant, flexible data model. It allowed
+the data to be loaded from any kind of row-oriented source, using .NET's
+IDataReader interface. It was so flexible that the recommender algorithms
+in the framework, which could be separated into 2 groups -- rating predictors
+and item recommenders (from implicit/positive-only feedback), defined 2 distinct
+internal data models. Each of those data models used the IDataReader interface
+to read the data into an internal data structure. And each of those data models
+was represented by its own interface. All recommenders were then implemented
+against one of those interfaces, which rendered the more general and flexible
+interface unnecessary. So I removed it when I turned the MyMedia Framework into
+MyMediaLite.
+Every data interface was implemented by several datastructures, and had corresponding
+support classes that took care of I/O.
+When we added support for time-aware rating prediction, the limitations of the
+architecture showed for the first time: We needed to create new data structures,
+new interfaces, and new I/O classes for this task.
+
+Of course, besides time, there are other kinds of context, for example:
+ - query
+ - location
+ - items (e.g. for tag recommendation)
+Contexts may require different kinds of representations - binary, categorial,
+integers, floating point numbers, etc.
+
+Combining context with separate interfaces and implementations for ratings and implicit feedback
+by creating new interfaces and underlying implementations for each combination
+does not scale well; in particular we will not be able to orthogonally combine several types of context.
+
+This is why I think we should move back to a more flexible and generic interface,
+which covers all (or at least most) recommendation scenarios.
+Additionally, we will re-think how different storage types/backends, and additional actions
+like incremental updates to the data (and observing recommenders) can be supported.
+The rest of this text will give a detailed suggestion.
+
+
+Current Drawbacks
+-----------------
+
+Drawbacks of our current data structures in MyMediaLite, and some things we would like to change:
+ - They do not flexibly support different kinds of data:
+   counts, ratings, repeated events, listening times, percentages, ...
+ - They do not transparently support databases and other kinds of (potentially distributed) storage.
+   We can read in from databases, but need to keep the data all in memory -- that is, we use the
+   database purely as external storage.
+ - Every user of a dataset representation can also modify it.
+   In fact, this is currently even necessary for incremental updates to recommenders.
+   We have API calls that modify both the dataset and perform the update on the model model.
+   Those two actions should be distinct: Only priviledged entities should be allowed to
+   modify the interaction data, and the model updates should happen automatically via callbacks.
+ - General concepts like sampling and co-visitations are implemented several times inside
+   MyMediaLite.
+ - We only support binary attributes and relations. We do not support
+   nominal, string-valued, real-valued attributes and relations. We should change this for
+   both relations (with interaction data and social networks as the most important examples)
+   and user/item attributes.
+ - User/item attributes/relations are directly represented as matrices. While matrices could in
+   principle be kept out of memory, or distributed, this is currently not the case.
+   Also, the abstraction of a matrix only allows for one attribute type, while users and items
+   could have several different kinds of attributes of different type (nominal, numerical, binary,
+   etc.)
+ - MyMediaLite does not support out-of-core learning -- if data does not fix into memory, we cannot
+   do anything. Software like Vowpal Wabbit and GraphChi have shown that there are solutions to this
+   problem.
+
+
+Requirements for the New Approach
+---------------------------------
+
+Our new data model should support the following.
+ - methods to get standard fields like user ID, item ID, rating, etc.
+ - general sampling, positive/negative sampling by user and item
+   (necessary e.g. for stochastic gradient descent and BPR)
+ - user and item co-visitations (necessary for Slope-One and many
+   similarity matrics)
+ - different kinds of context
+ - out-of-core learning (given a requested reading order:
+   sequential, chronological, random, by user, by item, by context
+ - different kinds of attributes and relation types:
+   float, integer, categories, strings, dates/timestamps
+ - different kinds of backends (e.g. files, memory, relational databases,
+   graph databases, document-oriented databases)
+ - views that are guaranteed not to change underneath.
+ - incremental updates to data structures and recommender models
+ - online/streaming learning
+ - views for fold-ins (ignoring user IDs)
+
+
+Basic Interfaces and Abstractions
+---------------------------------
+
+IInteractions
+  IInteractionReader GetRandomReader()
+  IInteractionReader GetSequentialReader()
+  IInteractionReader GetChronologicalReader()
+  IInteractionReader GetByUserReader(int)
+  IInteractionReader GetByItemReader(int)
+
+IInteractionSplitter
+  ISplit<IInteraction> GetCrossValidationSplit(int)
+  ISplit<IInteraction> GetRandomSplit(float)
+  ISplit<IInteraction> GetChronologicalSplit(float)
+  ISplit<IInteraction> GetChronologicalSplit(DateTime)
+
+BPR sampling?
+Reservoir sampling?
+
+IInteractionReader : IDataReader
+specific methods:
+  int GetUser
+  int GetItem
+  float GetRating
+  ? GetDate
+  ? GetTimestamp
+  ? GetTimeOfDay
+  GeoLocation GetLocation
+  string GetQuery
+  ? GetDuration
+  IList<int> GetTags
+
+IByEntityReader : IInteractionReader
+  GetCovisitations
+  GetCovisitationCount
+  GetCovisitationRatings
+
+
+Advanced Functionality
+----------------------
+
+
+
+Implementation Details
+----------------------
+ - updates go to a queue, which is used for updates and sending notifications.
+ - Queue handlers are the synchronization Points.
+
+
+Migration Plan
+--------------
+  implement interfaces for the memory backend
+  implement a generic memory backend
+  implement generic, configurable I/O for the memory backend
+  implement rating baseline methods
+  implement matrix factorization methods
+  implement item recommendation baseline methods
+  implement BPR-MF
+  implement WRMF
+  implement KNN
+  use for incremental updates
+  use for fold-in
+  implement attribute-aware stuff
+  implement relatio-aware stuff
+   => from here on, we would be releasable, first 3.99 as a beta, one month later 4.0
+  Java port: support Mahout/Taste DataModel
+  implement new context-aware recommenders
+  implement from-disk streaming
+  separate (re-)training from the recommendation model
+
+
+Planned Evolution of this Document
+----------------------------------
+ - think about LINQ integration
+ - show to Sebastian and Isabel
+ - show to Chris
+ - Steffen: make sure we have enough support to get MCMC working nicely
+ - post on mailing list
+
+
+Links
+-----
+MyMediaLite: http://mymedialite.net
+   #221: MyMediaLite should have a generic I/O layer, so that recommender models, feedback data, ID mappings, attributes, etc., can be stored to/loaded from arbitrary storage like files, databases, etc.
+   #266 support item recommendation based on counts
+   #313 WRMF: support other feedback times than positive-only
+MyMedia Framework:
+GraphChi: http://graphlab.org/graphchi/
+Vowpal Wabbit: https://github.com/JohnLangford/vowpal_wabbit/wiki

@@ -123,7 +123,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<double>(0, 0));
+				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
 				this.MaxItemID = item_factors.NumberOfRows - 1;
 

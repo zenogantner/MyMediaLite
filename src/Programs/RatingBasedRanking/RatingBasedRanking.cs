@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,11 +36,16 @@ class RatingBasedRanking : RatingPrediction
 	bool in_test_items;
 	bool all_items;
 
+	public RatingBasedRanking()
+	{
+		eval_measures = new string[] { "AUC", "prec@5" };
+	}
+
 	protected override void ShowVersion()
 	{
 		ShowVersion(
 			"Rating-based Item Ranking",
-			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
+			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
 		);
 	}
 
@@ -55,6 +60,14 @@ class RatingBasedRanking : RatingPrediction
 			.Add("all-items",            v => all_items         = v != null)
 			.Add("in-training-items",    v => in_training_items = v != null)
 			.Add("in-test-items",        v => in_test_items     = v != null);
+	}
+
+	protected override void CheckParameters(IList<string> extra_args)
+	{
+		base.CheckParameters(extra_args);
+
+		if (cross_validation > 0 && find_iter != 0)
+			Abort("The combination of --cross-validation=K and --find-iter is not supported for rating-based ranking.");
 	}
 
 	protected override void LoadData()
@@ -95,6 +108,12 @@ class RatingBasedRanking : RatingPrediction
 			test_users, candidate_items,
 			eval_item_mode, RepeatedEvents.No, predict_items_number
 		);
+	}
+
+	protected override EvaluationResults DoCrossValidation()
+	{
+		var candidate_items = new List<int>(training_data.AllItems);
+		return recommender.DoRatingBasedRankingCrossValidation(cross_validation, candidate_items, CandidateItems.UNION);
 	}
 
 	static void Main(string[] args)

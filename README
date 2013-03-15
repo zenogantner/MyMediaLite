@@ -72,11 +72,11 @@ Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
 Alejandro Bellogín, Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri,
 Simon Dooms, Lucas Drumond, Jagadeesh Gorla, Josif Grabocka, Mark Graus,
 Andreas Hoffmann, Tomas Horvath, Kenneth Hoste, Frantisek Hrdina,
-Dietmar Jannach, Artus Krohn-Grimberghe, Christina Lichtenthäler, Damir Logar,
-Brian McFee, Greg Najda, Chris Newell, Thai-Nghe Nguyen, Simon Renaud,
-Marco Ribeiro, Saurabh S., Sebastian Schelter, Lars Schmidt-Thieme, Yue Shi,
-Tom Tung, Elvio Vicosa, Oleksandr Vitvitskyi, Yongfeng Wang, Cees Wesseling,
-Yong Zheng
+Dietmar Jannach, Peng Jiang, Artus Krohn-Grimberghe, Christina Lichtenthäler,
+Damir Logar, Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell,
+Thai-Nghe Nguyen, Simon Renaud, Marco Ribeiro, Saurabh S., Sebastian Schelter,
+Lars Schmidt-Thieme, Yue Shi, Tom Tung, Pieter-Jan Verbruggen, Elvio Vicosa,
+João Vinagre, Oleksandr Vitvitskyi, Yongfeng Wang, Cees Wesseling, Yong Zheng
 
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
@@ -84,7 +84,8 @@ under the grant agreement no. 215006.
 
 Copyright & Licensing
 ---------------------
-Copyright (C) 2012 Zeno Gantner, Lucas Drumond
+Copyright (C) 2013 Zeno Gantner, João Vinagre
+Copyright (C) 2012 Zeno Gantner, Lucas Drumond, Marcelo Manzato
 Copyright (C) 2011 Zeno Gantner
 Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 

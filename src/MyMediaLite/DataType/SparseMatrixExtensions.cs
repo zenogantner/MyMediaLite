@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Linq;
 
@@ -35,36 +34,12 @@ namespace MyMediaLite.DataType
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
-		static public double Max(this SparseMatrix<double> m)
-		{
-			if (m.value_list.Count == 0)
-				return 0;
-			else
-				return m.value_list.Max(r => (r.Count == 0 ? 0 : r.Max()));
-		}
-
-		/// <summary>return the maximum value contained in a matrix</summary>
-		/// <param name='m'>the matrix</param>
 		static public float Max(this SparseMatrix<float> m)
 		{
 			if (m.value_list.Count == 0)
 				return 0;
 			else
 				return m.value_list.Max(r => (r.Count == 0 ? 0 : r.Max()));
-		}
-
-		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>
-		/// <remarks>
-		/// See http://en.wikipedia.org/wiki/Matrix_norm
-		/// </remarks>
-		/// <param name="matrix">the matrix</param>
-		/// <returns>the Frobenius norm of the matrix</returns>
-		static public double FrobeniusNorm(this SparseMatrix<double> matrix)
-		{
-			double squared_entry_sum = 0; // TODO speed-up: go over all entries of value_list
-			foreach (var entry in matrix.NonEmptyEntryIDs)
-				squared_entry_sum += Math.Pow(matrix[entry.Item1, entry.Item2], 2);
-			return Math.Sqrt(squared_entry_sum);
 		}
 
 		/// <summary>Compute the Frobenius norm (square root of the sum of squared entries) of a matrix</summary>

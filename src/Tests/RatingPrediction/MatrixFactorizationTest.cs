@@ -49,7 +49,7 @@ namespace Tests.RatingPrediction
 		{
 			var mf = new MatrixFactorization()
 			{
-				LearnRate = 1.0f, LearnRateDecay = 0.5f,
+				LearnRate = 1.0f, Decay = 0.5f,
 				NumIter = 1, Ratings = TestUtils.CreateRatings()
 			};
 

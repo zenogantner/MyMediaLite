@@ -1,3 +1,4 @@
+// Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -24,7 +25,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
+	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
 	/// </remarks>
 	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
 	{
@@ -37,9 +38,9 @@ namespace MyMediaLite.ItemRecommendation
 			base.Train();
 
 			int num_users = MaxUserID + 1;
-			this.nearest_neighbors = new int[num_users][];
+			this.nearest_neighbors = new List<IList<int>>(num_users);
 			for (int u = 0; u < num_users; u++)
-				nearest_neighbors[u] = correlation.GetNearestNeighbors(u, k);
+				nearest_neighbors.Add(correlation.GetNearestNeighbors(u, k));
 		}
 
 		///
@@ -51,10 +52,18 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[user_id])
-					if (Feedback.UserMatrix[neighbor, item_id])
-						sum += Math.Pow(correlation[user_id, neighbor], Q);
-				return (float) sum;
+				double normalization = 0;
+				if (nearest_neighbors[user_id] != null)
+				{
+					foreach (int neighbor in nearest_neighbors[user_id])
+					{
+						normalization += Math.Pow(correlation[user_id, neighbor], Q);
+						if (Feedback.UserMatrix[neighbor, item_id])
+							sum += Math.Pow(correlation[user_id, neighbor], Q);
+					}
+				}
+				if (sum == 0) return 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
@@ -140,5 +149,27 @@ namespace MyMediaLite.ItemRecommendation
 			return result;
 		}
 
+		///
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.AddFeedback(feedback);
+			if (UpdateUsers)
+				Update(feedback);
+		}
+
+		///
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.RemoveFeedback(feedback);
+			if (UpdateUsers)
+				Update(feedback);
+		}
+
+		///
+		protected override void AddUser(int user_id)
+		{
+			base.AddUser(user_id);
+			ResizeNearestNeighbors(user_id + 1);
+		}
 	}
 }

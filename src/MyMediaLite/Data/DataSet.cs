@@ -62,7 +62,7 @@ namespace MyMediaLite.Data
 			Users = new List<int>();
 			Items = new List<int>();
 		}
-		
+
 		/// <summary>
 		/// Create new dataset view from an existing one.
 		/// Share the underlying data structures, do not copy them.
