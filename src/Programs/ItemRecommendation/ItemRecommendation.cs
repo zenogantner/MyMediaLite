@@ -104,6 +104,10 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --item-relations=FILE                    file with item relation information, 1 tuple per line
    --save-model=FILE                        save computed model to FILE
    --load-model=FILE                        load model from FILE
+   --save-user-mapping=FILE                 save user ID mapping to FILE
+   --save-item-mapping=FILE                 save item ID mapping to FILE
+   --load-user-mapping=FILE                 load user ID mapping from FILE
+   --load-item-mapping=FILE                 load item ID mapping from FILE
 
   data interpretation:
    --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
