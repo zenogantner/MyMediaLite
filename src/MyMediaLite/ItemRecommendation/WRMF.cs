@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -16,6 +16,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Double;
@@ -46,7 +47,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     </list>
 	///   </para>
 	///   <para>
-	///     This recommender does NOT support incremental updates.
+	///     This recommender supports incremental updates.
 	///   </para>
 	/// </remarks>
 	public class WRMF : MF
@@ -95,51 +96,67 @@ namespace MyMediaLite.ItemRecommendation
 					HH[f_1, f_2] = d;
 				}
 			// (2) optimize all U
+			Parallel.For(
+				0,
+				W.dim1,
+				u => { Optimize(u, data, W, H, HH); }
+			);
+		}
+
+		private void Optimize(int u, IBooleanMatrix data, Matrix<float> W, Matrix<float> H, Matrix<double> HH)
+		{
+			var row = data.GetEntriesByRow(u);
 			// HC_minus_IH is symmetric
-			Parallel.For(0, W.dim1, u =>
-			{
-				var row = data.GetEntriesByRow(u);
-				// create HC_minus_IH in O(f^2|S_u|)
-				var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
-				for (int f_1 = 0; f_1 < num_factors; f_1++)
-					for (int f_2 = 0; f_2 < num_factors; f_2++)
-					{
-						double d = 0;
-						foreach (int i in row)
-							d += H[i, f_1] * H[i, f_2] * alpha;
-						HC_minus_IH[f_1, f_2] = d;
-					}
-				// create HCp in O(f|S_u|)
-				var HCp = new double[num_factors];
-				for (int f = 0; f < num_factors; f++)
+			// create HC_minus_IH in O(f^2|S_u|)
+			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
+			for (int f_1 = 0; f_1 < num_factors; f_1++)
+				for (int f_2 = 0; f_2 < num_factors; f_2++)
 				{
 					double d = 0;
 					foreach (int i in row)
-						d += H[i, f] * (1 + alpha);
-					HCp[f] = d;
+						d += H[i, f_1] * H[i, f_2] * alpha;
+					HC_minus_IH[f_1, f_2] = d;
 				}
-				// create m = HH + HC_minus_IH + reg*I
-				// m is symmetric
-				// the inverse m_inv is symmetric
-				var m = new DenseMatrix(num_factors, num_factors);
-				for (int f_1 = 0; f_1 < num_factors; f_1++)
-					for (int f_2 = 0; f_2 < num_factors; f_2++)
-					{
-						double d = HH[f_1, f_2] + HC_minus_IH[f_1, f_2];
-						if (f_1 == f_2)
-							d += regularization;
-						m[f_1, f_2] = d;
-					}
-				var m_inv = m.Inverse();
-				// write back optimal W
-				for (int f = 0; f < num_factors; f++)
+			// create HCp in O(f|S_u|)
+			var HCp = new double[num_factors];
+			for (int f = 0; f < num_factors; f++)
+			{
+				double d = 0;
+				foreach (int i in row)
+					d += H[i, f] * (1 + alpha);
+				HCp[f] = d;
+			}
+			// create m = HH + HC_minus_IH + reg*I
+			// m is symmetric
+			// the inverse m_inv is symmetric
+			var m = new DenseMatrix(num_factors, num_factors);
+			for (int f_1 = 0; f_1 < num_factors; f_1++)
+				for (int f_2 = 0; f_2 < num_factors; f_2++)
 				{
-					double d = 0;
-					for (int f_2 = 0; f_2 < num_factors; f_2++)
-						d += m_inv[f, f_2] * HCp[f_2];
-					W[u, f] = (float) d;
+					double d = HH[f_1, f_2] + HC_minus_IH[f_1, f_2];
+					if (f_1 == f_2)
+						d += regularization;
+					m[f_1, f_2] = d;
 				}
-			});
+			var m_inv = m.Inverse();
+			// write back optimal W
+			for (int f = 0; f < num_factors; f++)
+			{
+				double d = 0;
+				for (int f_2 = 0; f_2 < num_factors; f_2++)
+					d += m_inv[f, f_2] * HCp[f_2];
+				W[u, f] = (float) d;
+			}
+		}
+
+		///
+		protected override void RetrainUser(int user_id)
+		{
+		}
+
+		///
+		protected override void RetrainItem(int item_id)
+		{
 		}
 
 		///
