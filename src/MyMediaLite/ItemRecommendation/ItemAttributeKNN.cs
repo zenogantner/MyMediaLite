@@ -27,7 +27,7 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		///
 		protected override IBooleanMatrix DataMatrix { get { return this.item_attributes; } }
-		
+
 		///
 		public IBooleanMatrix ItemAttributes
 		{

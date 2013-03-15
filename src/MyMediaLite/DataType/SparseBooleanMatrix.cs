@@ -58,9 +58,6 @@ namespace MyMediaLite.DataType
 		public ICollection<int> this [int x]
 		{
 			get {
-				//Console.Error.WriteLine("{0} - {1}", row_list.Count, x); Console.Error.Flush();
-				// FIXME
-
 				if (x >= row_list.Count)
 					for (int i = row_list.Count; i <= x; i++)
 						row_list.Add(new HashSet<int>());

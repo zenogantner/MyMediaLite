@@ -3,7 +3,7 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 PREFIX=/usr/local
-VERSION=3.06
+VERSION=3.07
 HOMEPAGE=../mymedialite.net/public_html
 HOMEPAGE_SRC=../mymedialite.net/src
 HOMEPAGE_INC=../mymedialite.net/lib
@@ -78,10 +78,13 @@ MyMediaLite-${VERSION}.src.tar.gz:
 test: data/ml-100k/u.data all unittests
 	time tests/test_rating_prediction.sh
 	time tests/test_item_recommendation.sh
+	time tests/test_item_recommendation_predict.sh
 	time tests/test_load_save.sh
 	time tests/test_cv.sh
 	time tests/test_random_split.sh
+	time tests/test_item_recommendation_online.sh
 	time tests/test_rating_prediction_online.sh
+	time tests/test_rating_prediction_time.sh
 
 unittests:
 	cd src && make test

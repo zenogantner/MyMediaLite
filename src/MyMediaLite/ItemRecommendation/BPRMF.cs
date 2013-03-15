@@ -170,6 +170,8 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
+			random = MyMediaLite.Random.GetInstance(); // in case Iterate() is not called from Train()
+
 			if (UniformUserSampling)
 			{
 				if (WithReplacement)
@@ -559,7 +561,6 @@ namespace MyMediaLite.ItemRecommendation
 				this.item_bias    = (float[]) item_bias;
 				this.item_factors = item_factors;
 			}
-			random = MyMediaLite.Random.GetInstance();
 		}
 
 		///

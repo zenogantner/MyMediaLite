@@ -1,5 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
-// Copyright (C) 2010 Tina Lichtenthäler, Zeno Gantner
+// Copyright (C) 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,27 +14,30 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-using System.Collections.Generic;
-using MyMediaLite.DataType;
+//
+using System;
 using NUnit.Framework;
+using MyMediaLite.Data;
+using MyMediaLite.IO;
+using MyMediaLite.RatingPrediction;
 
-namespace Tests.DataType
+namespace Tests.RatingPrediction
 {
 	[TestFixture()]
-	public class VectorExtensionsTest
+	public class ExternalRatingPredictorTest
 	{
-		[Test()] public void TestEuclideanNorm()
+		[Test()]
+		public void TestCase()
 		{
-			var test_vector = new List<float>() { 2, 5, 3, 7, 5, 3 };
-			Assert.AreEqual(11, test_vector.EuclideanNorm());
-		}
-		
-		[Test()] public void TestInit()
-		{
-			var test_vector = new float[10];
-			test_vector.Init(1.3f);
-			for (int i = 0; i < test_vector.Length; i++)
-				Assert.AreEqual(1.3f, test_vector[i]);
+			string filename = "../../../../tests/example.test";
+			var mapping = new IdentityMapping();
+			var ratings = RatingData.Read(filename);
+
+			var recommender = new ExternalRatingPredictor() { PredictionFile = filename, UserMapping = mapping, ItemMapping = mapping };
+			recommender.Train();
+			for (int i = 0; i < ratings.Count; i++)
+				Assert.AreEqual(ratings[i], recommender.Predict(ratings.Users[i], ratings.Items[i]));
 		}
 	}
 }
+

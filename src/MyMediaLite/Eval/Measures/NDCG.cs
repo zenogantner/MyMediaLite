@@ -32,31 +32,21 @@ namespace MyMediaLite.Eval.Measures
 		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="correct_items">a collection of positive/correct item IDs</param>
-		/// <param name="ignore_items">a collection of item IDs which should be ignored for the evaluation</param>
 		/// <returns>the NDCG for the given data</returns>
-		public static double Compute(IList<int> ranked_items, ICollection<int> correct_items, ICollection<int> ignore_items = null)
+		public static double Compute(IList<int> ranked_items, ICollection<int> correct_items)
 		{
-			if (ignore_items == null)
-				ignore_items = new HashSet<int>();
-
 			double dcg   = 0;
 			double idcg  = ComputeIDCG(correct_items.Count);
-			int left_out = 0;
 
 			for (int i = 0; i < ranked_items.Count; i++)
 			{
 				int item_id = ranked_items[i];
-				if (ignore_items.Contains(item_id))
-				{
-					left_out++;
-					continue;
-				}
 
 				if (!correct_items.Contains(item_id))
 					continue;
 
 				// compute NDCG part
-				int rank = i + 1 - left_out;
+				int rank = i + 1;
 				dcg += 1 / Math.Log(rank + 1, 2);
 			}
 

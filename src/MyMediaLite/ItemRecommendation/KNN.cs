@@ -1,3 +1,4 @@
+// Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -25,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of k-nearest neighbors (kNN) model</summary>
 	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
-	public abstract class KNN : ItemRecommender
+	public abstract class KNN : IncrementalItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
@@ -75,6 +76,8 @@ namespace MyMediaLite.ItemRecommendation
 			Correlation = BinaryCorrelationType.Cosine;
 			Alpha = 0.5f;
 			Q = 1.0f;
+			UpdateUsers = true;
+			UpdateItems = true;
 		}
 
 		void InitModel()
@@ -100,7 +103,33 @@ namespace MyMediaLite.ItemRecommendation
 				default:
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
-			correlation.Weighted = Weighted;
+		}
+
+		/// <summary>Update the correlation matrix for the given feedback</summary>
+		/// <param name='feedback'>the feedback (user-item tuples)</param>
+		protected void Update(ICollection<Tuple<int, int>> feedback)
+		{
+			var update_entities = new HashSet<int>();
+			foreach (var t in feedback)
+				update_entities.Add(t.Item1);
+
+			foreach (int i in update_entities)
+			{
+				for (int j = 0; j < correlation.NumEntities; j++)
+				{
+					if (j < i && correlation.IsSymmetric && update_entities.Contains(j))
+						continue;
+
+					correlation[i, j] = correlation.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
+				}
+			}
+			RecomputeNeighbors(update_entities);
+		}
+
+		private void RecomputeNeighbors(ICollection<int> update_entities)
+		{
+			foreach (int entity_id in update_entities)
+				nearest_neighbors[entity_id] = correlation.GetNearestNeighbors(entity_id, k);
 		}
 
 		///
@@ -129,7 +158,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
-				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine()); // TODO make sure they match
+				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine());
 
 				int num_entities = int.Parse(reader.ReadLine());
 				var nearest_neighbors = new int[num_entities][];
@@ -153,6 +182,15 @@ namespace MyMediaLite.ItemRecommendation
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}
+		}
+
+		/// <summary>Resizes the nearest neighbors list if necessary</summary>
+		/// <param name='new_size'>the new size</param>
+		protected void ResizeNearestNeighbors(int new_size)
+		{
+			if (new_size > nearest_neighbors.Count)
+				for (int i = nearest_neighbors.Count; i < new_size; i++)
+					nearest_neighbors.Add(null);
 		}
 
 		///

@@ -1,4 +1,42 @@
-3.06	2012-11-
+3.08	2013-03-
+	recommenders
+	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
+           Dooms)
+
+3.07	2013-02-04
+	#378: get rid of group recommendation code
+	recommenders
+	 - new rating predictor GSVD++ (by Marcelo Manzato)
+	 - new recommenders ExternalRatingPredictor and ExternalItemRecommender:
+           to evaluate external prediction tools with the MyMediaLite evaluation
+           framework
+	 - incremental updates for item recommendation UserKNN and ItemKNN
+           (pull request by João Vinagre)
+	 - MatrixFactorization: rename LearnRateDecay to Decay
+	 - SLIM: fix wrong data type in LoadModel()
+	evaluation
+	 - simplify item recommender evaluation - do not pass ignore_items to
+           the methods computing the measures
+	 - item cross-validation: fix bug where train and test sets were
+           switched
+	 - item online evaluation: rewrote protocol; now documented and simpler
+	data types
+	 - get rid of unused vector and matrix code (mostly double precision
+	   code)
+	 - matrix operations: speed up and simplify random initialization,
+           element-wise multiplication, increment, addition
+	 - more unit tests for vector operations
+	 - SymmetricCorrelationMatrix: improve API documentation
+	correlations
+ 	 - throw NotImplementedException for "Weighted" scenario
+           BinaryData(As|S)ymmetricCorrelationMatrix.ComputeCorrelation()
+	command-line tools
+	 - share SetupRecommender() code between the 3 command-line tools
+	 - add default evaluation measure to rating_based_ranking
+	 - rating_based_ranking: add support for --cross-validation (reported
+           by Pieter-Jan Verbruggen)
+
+3.06	2012-12-18
 	recommenders
 	 - CLiMF: add warning that it is not finished yet
 	 - BiasedMatrixFactorization, (Sigmoid)SVDPlusPlus:
@@ -26,6 +64,9 @@
            - fix sampling corner case (last element was ignored)
 	   - set WithReplacement = false and UniformUserSampling = true in
              constructor
+	 - SocialMF
+	   - fix NRE when UserRelation is not set
+	   - more flexible Iterate() method
          - do not check for negative user/item IDs any more - this would be
            caught anyway by other means
 	 - add more unit tests for rating prediction methods
@@ -44,6 +85,7 @@
 	misc
 	 - UnhandledExceptionHandler: fix output formatting
 	 - Makefile: use variable ACK for ack/ack-grep
+	 - run all system tests with make target 'test'
 	 - MultiCore helper class
 	   - add unit tests
 	   - fix behavior when there are less tasks to divide than threads

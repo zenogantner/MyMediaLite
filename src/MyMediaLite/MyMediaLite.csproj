@@ -9,14 +9,13 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.06</ReleaseVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ReleaseVersion>3.07</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin/Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin/Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -156,14 +155,6 @@
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
     <Compile Include="Eval\RatingPredictionEvaluationResults.cs" />
-    <Compile Include="Eval\Groups.cs" />
-    <Compile Include="GroupRecommendation\Average.cs" />
-    <Compile Include="GroupRecommendation\GroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\IGroupRecommender.cs" />
-    <Compile Include="GroupRecommendation\Maximum.cs" />
-    <Compile Include="GroupRecommendation\Minimum.cs" />
-    <Compile Include="GroupRecommendation\PairwiseWins.cs" />
-    <Compile Include="GroupRecommendation\WeightedAverage.cs" />
     <Compile Include="RatingPrediction\CoClustering.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
@@ -221,7 +212,6 @@
     <Compile Include="IIncrementalRecommender.cs" />
     <Compile Include="Random.cs" />
     <Compile Include="RecommenderParameters.cs" />
-    <Compile Include="GroupRecommendation\Extensions.cs" />
     <Compile Include="Handlers.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MultiCore.cs" />
@@ -251,6 +241,11 @@
     <Compile Include="Eval\EvaluationResults.cs" />
     <Compile Include="RatingPrediction\IntegratedSVDPlusPlusKNN.cs" />
     <Compile Include="RatingPrediction\KorenImplicitKNN.cs" />
+    <Compile Include="INeedsMappings.cs" />
+    <Compile Include="RatingPrediction\ExternalRatingPredictor.cs" />
+    <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
+    <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
+    <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

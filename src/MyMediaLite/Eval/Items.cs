@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -112,36 +112,33 @@ namespace MyMediaLite.Eval
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
 
-			Parallel.ForEach(test_users, user_id =>
-			{
+			Parallel.ForEach(test_users, user_id => {
 				try
 				{
 					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
 					correct_items.IntersectWith(candidate_items);
-
-					// the number of items that will be used for this user
-					var candidate_items_in_train = new HashSet<int>(training_user_matrix[user_id]);
-					candidate_items_in_train.IntersectWith(candidate_items);
-					int num_eval_items = candidate_items.Count - (repeated_events == RepeatedEvents.Yes ? 0 : candidate_items_in_train.Count());
-
-					// skip all users that have 0 or #candidate_items test items
 					if (correct_items.Count == 0)
 						return;
-					if (num_eval_items == correct_items.Count)
+
+					var ignore_items_for_this_user = new HashSet<int>(
+						repeated_events == RepeatedEvents.Yes ? new int[0] : training_user_matrix[user_id]
+					);
+					ignore_items_for_this_user.IntersectWith(candidate_items);
+					int num_candidates_for_this_user = candidate_items.Count - ignore_items_for_this_user.Count;
+					if (correct_items.Count == num_candidates_for_this_user)
 						return;
 
-					ICollection<int> ignore_items = repeated_events == RepeatedEvents.Yes ? new int[0] : training_user_matrix[user_id];
-					
-					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items);
+					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items_for_this_user);
 					var prediction_list = (from t in prediction select t.Item1).ToArray();
 
-					double auc  = AUC.Compute(prediction_list, correct_items, ignore_items);
-					double map  = PrecisionAndRecall.AP(prediction_list, correct_items, ignore_items);
-					double ndcg = NDCG.Compute(prediction_list, correct_items, ignore_items);
-					double rr   = ReciprocalRank.Compute(prediction_list, correct_items, ignore_items);
+					int num_dropped_items = num_candidates_for_this_user - prediction.Count;
+					double auc  = AUC.Compute(prediction_list, correct_items, num_dropped_items);
+					double map  = PrecisionAndRecall.AP(prediction_list, correct_items);
+					double ndcg = NDCG.Compute(prediction_list, correct_items);
+					double rr   = ReciprocalRank.Compute(prediction_list, correct_items);
 					var positions = new int[] { 5, 10 };
-					var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, ignore_items, positions);
-					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, ignore_items, positions);
+					var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, positions);
+					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, positions);
 
 					// thread-safe incrementing
 					lock (result)

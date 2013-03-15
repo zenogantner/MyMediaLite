@@ -102,10 +102,10 @@ for cor in Cosine BidirectionalConditionalProbability
 do
 	for method in UserKNN ItemKNN
 	do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --save-model=tmp.model --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --save-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+_time \S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --load-model=tmp.model --data-dir=$DATA_DIR
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --load-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+_time \S+//g" > output2.txt
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --save-model=tmp.model --data-dir=$DATA_DIR --measures=prec@5
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --save-model=tmp.model --data-dir=$DATA_DIR --measures=prec@5 | perl -pe "s/\w+_time \S+//g" > output1.txt
+	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --load-model=tmp.model --data-dir=$DATA_DIR --measures=prec@5
+	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K correlation=$cor" --load-model=tmp.model --data-dir=$DATA_DIR --measures=prec@5 | perl -pe "s/\w+_time \S+//g" > output2.txt
 	diff --ignore-all-space output1.txt output2.txt
 	rm tmp.model*
 	done

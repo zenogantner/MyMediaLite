@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using MyMediaLite.DataType;
 using NUnit.Framework;
@@ -32,11 +31,6 @@ namespace Tests.DataType
 			int_matrix[1, 1] = 9;
 			Assert.AreEqual(9, int_matrix.Max());
 
-			var double_matrix = new SparseMatrix<double>(3, 3);
-			Assert.AreEqual(0, double_matrix.Max());
-			double_matrix[1, 1] = 9.0;
-			Assert.AreEqual(9.0, double_matrix.Max());
-
 			var float_matrix = new SparseMatrix<float>(3, 3);
 			Assert.AreEqual(0, float_matrix.Max());
 			float_matrix[1, 1] = 9.0f;
@@ -45,11 +39,6 @@ namespace Tests.DataType
 
 		[Test()] public void TestFrobeniusNorm()
 		{
-			var double_matrix = new SparseMatrix<double>(5, 5);
-			Assert.AreEqual(0, double_matrix.FrobeniusNorm());
-			double_matrix[1, 1] = 5;
-			Assert.AreEqual(Math.Sqrt(25), double_matrix.FrobeniusNorm());
-
 			var float_matrix = new SparseMatrix<float>(5, 5);
 			Assert.AreEqual(0, float_matrix.FrobeniusNorm());
 			float_matrix[1, 1] = 5;

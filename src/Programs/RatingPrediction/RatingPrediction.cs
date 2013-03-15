@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -60,7 +60,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	{
 		ShowVersion(
 			"Rating Prediction",
-			"Copyright (C) 2011, 2012 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
+			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
 		);
 	}
 
@@ -149,7 +149,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("search-hp",            v => search_hp         = v != null);
 	}
 
-	// TODO generalize this
 	protected override void SetupRecommender()
 	{
 		if (load_model_file != null)
@@ -158,13 +157,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			recommender = method.CreateRatingPredictor();
 		else
 			recommender = "BiasedMatrixFactorization".CreateRatingPredictor();
-		// in case something went wrong ...
-		if (recommender == null && method != null)
-			Usage(string.Format("Unknown rating prediction method: '{0}'", method));
-		if (recommender == null && load_model_file != null)
-			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
-		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
+		base.SetupRecommender();
 	}
 
 	protected override void Run(string[] args)
@@ -284,7 +278,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				if (cross_validation > 1)
 				{
 					Console.WriteLine();
-					var results = recommender.DoCrossValidation(cross_validation, compute_fit, true);
+					var results = DoCrossValidation();
 					Console.Write(Render(results));
 					no_eval = true;
 				}
@@ -428,5 +422,10 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	protected virtual EvaluationResults Evaluate()
 	{
 		return recommender.Evaluate(test_data, training_data);
+	}
+	
+	protected virtual EvaluationResults DoCrossValidation()
+	{
+		return recommender.DoCrossValidation(cross_validation, compute_fit, true);
 	}
 }

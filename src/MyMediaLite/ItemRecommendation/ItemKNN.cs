@@ -1,3 +1,4 @@
+// Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
@@ -25,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering</summary>
 	/// <remarks>
-	/// This recommender does NOT support incremental updates.
+	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
 	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
@@ -40,10 +41,17 @@ namespace MyMediaLite.ItemRecommendation
 			int num_items = MaxItemID + 1;
 			if (k != uint.MaxValue)
 			{
-				this.nearest_neighbors = new int[num_items][];
+				this.nearest_neighbors = new List<IList<int>>(num_items);
 				for (int i = 0; i < num_items; i++)
-					nearest_neighbors[i] = correlation.GetNearestNeighbors(i, k);
+					nearest_neighbors.Add(correlation.GetNearestNeighbors(i, k));
 			}
+		}
+
+		///
+		protected override void AddItem(int item_id)
+		{
+			base.AddItem(item_id);
+			ResizeNearestNeighbors(item_id + 1);
 		}
 
 		///
@@ -57,14 +65,23 @@ namespace MyMediaLite.ItemRecommendation
 			if (k != uint.MaxValue)
 			{
 				double sum = 0;
-				foreach (int neighbor in nearest_neighbors[item_id])
-					if (Feedback.ItemMatrix[neighbor, user_id])
-						sum += Math.Pow(correlation[item_id, neighbor], Q);
-				return (float) sum;
+				double normalization = 0;
+				if (nearest_neighbors[item_id] != null)
+				{
+					foreach (int neighbor in nearest_neighbors[item_id])
+					{
+						normalization += Math.Pow(correlation[item_id, neighbor], Q);
+						if (Feedback.ItemMatrix[neighbor, user_id])
+							sum += Math.Pow(correlation[item_id, neighbor], Q);
+					}
+				}
+				if (sum == 0) return 0;
+				return (float) (sum / normalization);
 			}
 			else
 			{
 				// roughly 10x faster
+				// TODO: implement normalization
 				return (float) correlation.SumUp(item_id, Feedback.UserMatrix[user_id], Q);
 			}
 		}
@@ -82,6 +99,22 @@ namespace MyMediaLite.ItemRecommendation
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
 				return correlation.GetNearestNeighbors(item_id, n);
+		}
+		
+		///
+		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.AddFeedback(feedback);
+			if (UpdateItems)
+				Update(feedback);
+		}
+
+		///
+		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
+		{
+			base.RemoveFeedback(feedback);
+			if (UpdateItems)
+				Update(feedback);
 		}
 	}
 }
