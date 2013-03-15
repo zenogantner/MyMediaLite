@@ -80,27 +80,32 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="H">H</param>
 		protected virtual void Optimize(IBooleanMatrix data, Matrix<float> W, Matrix<float> H)
 		{
-			var HH = new Matrix<double>(num_factors, num_factors);
-
 			// comments are in terms of computing the user factors
 			// ... works the same with users and items exchanged
 
 			// (1) create HH in O(f^2|Items|)
-			// HH is symmetric
-			for (int f_1 = 0; f_1 < num_factors; f_1++)
-				for (int f_2 = 0; f_2 < num_factors; f_2++)
-				{
-					double d = 0;
-					for (int i = 0; i < H.dim1; i++)
-						d += H[i, f_1] * H[i, f_2];
-					HH[f_1, f_2] = d;
-				}
+			var HH = ComputeSquareMatrix(H);
 			// (2) optimize all U
 			Parallel.For(
 				0,
 				W.dim1,
 				u => { Optimize(u, data, W, H, HH); }
 			);
+		}
+
+		private Matrix<double> ComputeSquareMatrix(Matrix<float> m)
+		{
+			var mm = new Matrix<double>(m.dim2, m.dim2);
+			// mm is symmetric
+			for (int f_1 = 0; f_1 < m.dim2; f_1++)
+				for (int f_2 = 0; f_2 < m.dim2; f_2++)
+				{
+					double d = 0;
+					for (int i = 0; i < m.dim1; i++)
+						d += m[i, f_1] * m[i, f_2];
+					mm[f_1, f_2] = d;
+				}
+			return mm;
 		}
 
 		private void Optimize(int u, IBooleanMatrix data, Matrix<float> W, Matrix<float> H, Matrix<double> HH)
@@ -152,11 +157,15 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override void RetrainUser(int user_id)
 		{
+			var hh = ComputeSquareMatrix(item_factors);
+			Optimize(user_id, Feedback.UserMatrix, user_factors, item_factors, hh);
 		}
 
 		///
 		protected override void RetrainItem(int item_id)
 		{
+			var ww = ComputeSquareMatrix(user_factors);
+			Optimize(item_id, Feedback.ItemMatrix, item_factors, user_factors, ww);
 		}
 
 		///
