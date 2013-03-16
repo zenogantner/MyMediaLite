@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,12 +30,14 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="rating_type">the data type to be used for storing the ratings</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
 		static public IRatings Read(
 			string filename,
 			IMapping user_mapping = null, IMapping item_mapping = null,
 			RatingType rating_type = RatingType.FLOAT,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS,
 			bool ignore_first_line = false)
 		{
 			string binary_filename = filename + ".bin.StaticRatings";
@@ -52,7 +54,7 @@ namespace MyMediaLite.IO
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
-					var ratings = (StaticRatings) Read(reader, size, user_mapping, item_mapping, rating_type);
+					var ratings = (StaticRatings) Read(reader, size, user_mapping, item_mapping, rating_type, test_rating_format);
 					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
 						ratings.Serialize(binary_filename);
 					return ratings;
@@ -66,12 +68,14 @@ namespace MyMediaLite.IO
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
 		/// <param name="rating_type">the data type to be used for storing the ratings</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
 		static public IRatings Read(
 			TextReader reader, int size,
 			IMapping user_mapping = null, IMapping item_mapping = null,
 			RatingType rating_type = RatingType.FLOAT,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS,
 			bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
@@ -97,12 +101,14 @@ namespace MyMediaLite.IO
 
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
-				if (tokens.Length < 3)
+				if (test_rating_format == TestRatingFileFormat.WITH_RATINGS && tokens.Length < 3)
 					throw new FormatException("Expected at least 3 columns: " + line);
+				if (test_rating_format == TestRatingFileFormat.WITHOUT_RATINGS && tokens.Length < 2)
+					throw new FormatException("Expected at least 2 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(tokens[0]);
 				int item_id = item_mapping.ToInternalID(tokens[1]);
-				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
+				float rating = test_rating_format == TestRatingFileFormat.WITH_RATINGS ? float.Parse(tokens[2], CultureInfo.InvariantCulture) : 0;
 
 				ratings.Add(user_id, item_id, rating);
 			}

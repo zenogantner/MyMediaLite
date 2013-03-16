@@ -15,6 +15,11 @@
         command-line tools
          - item_recommendation: add usage information for
            --(load|save)-(user|item)-mapping=FILE
+         - rating_prediction:
+           - do not print complete usage information for invalid command line
+             argument combinations; only describe what is wrong
+           - allow test files without rating column via --test-no-ratings
+             (suggested by Michael Ekstrand)
 
 
 3.07	2013-02-04

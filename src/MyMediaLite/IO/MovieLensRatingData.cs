@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,11 +29,15 @@ namespace MyMediaLite.IO
 	public static class MovieLensRatingData
 	{
 		/// <summary>Read in rating data from a file</summary>
-		/// <param name="filename">the name of the file to read from, "-" if STDIN</param>
+		/// <param name="filename">the name of the file to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null)
+		static public ITimedRatings Read(
+			string filename,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS)
 		{
 			string binary_filename = filename + ".bin.TimedRatings";
 			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
@@ -42,7 +46,7 @@ namespace MyMediaLite.IO
 			return Wrap.FormatException<ITimedRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
-					var ratings = (TimedRatings) Read(reader, user_mapping, item_mapping);
+					var ratings = (TimedRatings) Read(reader, user_mapping, item_mapping, test_rating_format);
 					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
 						ratings.Serialize(binary_filename);
 					return ratings;
@@ -54,8 +58,12 @@ namespace MyMediaLite.IO
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null)
+		static public ITimedRatings Read(
+			TextReader reader,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -66,18 +74,21 @@ namespace MyMediaLite.IO
 
 			string[] separators = { "::" };
 			string line;
+			int seconds_pos = test_rating_format == TestRatingFileFormat.WITH_RATINGS ? 3 : 2;
 
 			while ((line = reader.ReadLine()) != null)
 			{
 				string[] tokens = line.Split(separators, StringSplitOptions.None);
 
-				if (tokens.Length < 4)
-					throw new FormatException(string.Format("Expected at least 4 columns: {0}", line));
+				if (test_rating_format == TestRatingFileFormat.WITH_RATINGS && tokens.Length < 4)
+					throw new FormatException("Expected at least 4 columns: " + line);
+				if (test_rating_format == TestRatingFileFormat.WITHOUT_RATINGS && tokens.Length < 3)
+					throw new FormatException("Expected at least 3 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(tokens[0]);
 				int item_id = item_mapping.ToInternalID(tokens[1]);
-				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
-				long seconds = uint.Parse(tokens[3]);
+				float rating = test_rating_format == TestRatingFileFormat.WITH_RATINGS ? float.Parse(tokens[2], CultureInfo.InvariantCulture) : 0;
+				long seconds = uint.Parse(tokens[seconds_pos]);
 
 				var time = new DateTime(seconds * 10000000L).AddYears(1969);
 				var offset = TimeZone.CurrentTimeZone.GetUtcOffset(time);

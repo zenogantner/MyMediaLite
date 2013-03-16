@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,9 +29,14 @@ namespace MyMediaLite.IO
 		/// <param name="filename">the name of the file to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(string filename, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
+		static public ITimedRatings Read(
+			string filename,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS,
+			bool ignore_first_line = false)
 		{
 			string binary_filename = filename + ".bin.TimedRatings";
 			if (FileSerializer.Should(user_mapping, item_mapping) && File.Exists(binary_filename))
@@ -52,9 +57,14 @@ namespace MyMediaLite.IO
 		/// <param name="reader">the <see cref="TextReader"/> to read from</param>
 		/// <param name="user_mapping">mapping object for user IDs</param>
 		/// <param name="item_mapping">mapping object for item IDs</param>
+		/// <param name="test_rating_format">whether there is a rating column in each line or not</param>
 		/// <param name="ignore_first_line">if true, ignore the first line</param>
 		/// <returns>the rating data</returns>
-		static public ITimedRatings Read(TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, bool ignore_first_line = false)
+		static public ITimedRatings Read(
+			TextReader reader,
+			IMapping user_mapping = null, IMapping item_mapping = null,
+			TestRatingFileFormat test_rating_format = TestRatingFileFormat.WITH_RATINGS,
+			bool ignore_first_line = false)
 		{
 			if (user_mapping == null)
 				user_mapping = new IdentityMapping();
@@ -67,6 +77,7 @@ namespace MyMediaLite.IO
 			var time_split_chars = new char[] { ' ', '-', ':' };
 
 			string line;
+			int date_time_offset = test_rating_format == TestRatingFileFormat.WITH_RATINGS ? 3 : 2;
 			while ((line = reader.ReadLine()) != null)
 			{
 				if (line.Length == 0)
@@ -74,16 +85,18 @@ namespace MyMediaLite.IO
 
 				string[] tokens = line.Split(Constants.SPLIT_CHARS);
 
-				if (tokens.Length < 4)
+				if (test_rating_format == TestRatingFileFormat.WITH_RATINGS && tokens.Length < 4)
 					throw new FormatException("Expected at least 4 columns: " + line);
+				if (test_rating_format == TestRatingFileFormat.WITHOUT_RATINGS && tokens.Length < 3)
+					throw new FormatException("Expected at least 3 columns: " + line);
 
 				int user_id = user_mapping.ToInternalID(tokens[0]);
 				int item_id = item_mapping.ToInternalID(tokens[1]);
-				float rating = float.Parse(tokens[2], CultureInfo.InvariantCulture);
-				string date_string = tokens[3];
-				if (tokens[3].StartsWith("\"") && tokens.Length > 4 && tokens[4].EndsWith("\""))
+				float rating = test_rating_format == TestRatingFileFormat.WITH_RATINGS ? float.Parse(tokens[2], CultureInfo.InvariantCulture) : 0;
+				string date_string = tokens[date_time_offset];
+				if (tokens[date_time_offset].StartsWith("\"") && tokens.Length > date_time_offset + 1 && tokens[date_time_offset + 1].EndsWith("\""))
 				{
-					date_string = tokens[3] + " " + tokens[4];
+					date_string = tokens[date_time_offset] + " " + tokens[date_time_offset + 1];
 					date_string = date_string.Substring(1, date_string.Length - 2);
 				}
 

@@ -38,6 +38,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	protected IRatings test_data;
 
 	bool search_hp             = false;
+	bool test_no_ratings       = false;
 	string prediction_line     = "{0}\t{1}\t{2}";
 	string prediction_header   = null;
 
@@ -91,6 +92,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
   files:
    --training-file=FILE                   read training data from FILE
    --test-file=FILE                       read test data from FILE
+   --test-no-ratings                      test data contains no rating column
+                                          (needs both --prediction-file=FILE and --test-file=FILE)
    --file-format=movielens_1m|kddcup_2011|ignore_first_line|default
    --data-dir=DIR                         load all files from DIR
    --user-attributes=FILE                 file with user attribute information, 1 tuple per line
@@ -146,7 +149,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("rating-type=",         (RatingType v) => rating_type          = v)
 			.Add("file-format=",         (RatingFileFormat v) => file_format    = v)
 			.Add("online-evaluation",    v => online_eval       = v != null)
-			.Add("search-hp",            v => search_hp         = v != null);
+			.Add("search-hp",            v => search_hp         = v != null)
+			.Add("test-no-ratings",      v => test_no_ratings   = v != null);
 	}
 
 	protected override void SetupRecommender()
@@ -171,7 +175,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		base.Run(args);
 
 		bool no_eval = true;
-		if (test_ratio > 0 || test_file != null || chronological_split != null)
+		if (test_ratio > 0 || chronological_split != null)
+			no_eval = false;
+		if (test_file != null && !test_no_ratings)
 			no_eval = false;
 
 		Console.Error.WriteLine(
@@ -337,11 +343,14 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (training_file == null && load_model_file == null)
-			Usage("Please provide either --training-file=FILE or --load-model=FILE.");
+			Abort("Please provide either --training-file=FILE or --load-model=FILE.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && chronological_split == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
+			Abort("Please provide either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --save-model=FILE.");
 
+		if (test_no_ratings && prediction_file == null)
+			Abort("--test-no-ratings needs both --prediction-file=FILE and --test-file=FILE.");
+		
 		// handling of --chronological-split
 		if (chronological_split != null)
 		{
@@ -387,9 +396,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					training_data = static_data
 						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type)
 						: RatingData.Read(training_file, user_mapping, item_mapping);
-				else if(file_format == RatingFileFormat.IGNORE_FIRST_LINE)
+				else if (file_format == RatingFileFormat.IGNORE_FIRST_LINE)
 					training_data = static_data
-						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type, true)
+						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type, TestRatingFileFormat.WITH_RATINGS, true)
 						: RatingData.Read(training_file, user_mapping, item_mapping, true);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					training_data = MovieLensRatingData.Read(training_file, user_mapping, item_mapping);
@@ -401,14 +410,15 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			// read test data
 			if (test_file != null)
 			{
+				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITH_RATINGS : TestRatingFileFormat.WITHOUT_RATINGS;
 				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
-					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping);
+					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					test_data = MovieLensRatingData.Read(test_file, user_mapping, item_mapping);
+					test_data = MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
 					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file);
 				else
-					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
+					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, test_format, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
 
 				if (recommender is ITransductiveRatingPredictor)
 					((ITransductiveRatingPredictor) recommender).AdditionalFeedback = test_data;

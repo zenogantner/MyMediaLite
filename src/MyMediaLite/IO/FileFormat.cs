@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -32,7 +32,16 @@ namespace MyMediaLite.IO
 		/// <summary>The KDD Cup 2011 rating format</summary>
 		KDDCUP_2011,
 	}
-	
+
+	/// <summary>Distinguish between test files with and without rating column</summary>
+	public enum TestRatingFileFormat
+	{
+		/// <summary>Just like the training file format, with rating values</summary>
+		WITH_RATINGS,
+		/// <summary>Without a rating column</summary>
+		WITHOUT_RATINGS,
+	}
+
 	/// <summary>Represents different rating file formats</summary>
 	public enum ItemDataFileFormat
 	{

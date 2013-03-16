@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.IO;
 using NUnit.Framework;
@@ -56,7 +55,7 @@ namespace Tests.IO
 5951,457,3,2001-01-01 00:00:00
 ");
 
-			IRatings data = StaticRatingData.Read(reader, 7, null, null, RatingType.FLOAT, true);
+			IRatings data = StaticRatingData.Read(reader, 7, null, null, RatingType.FLOAT, TestRatingFileFormat.WITH_RATINGS, true);
 			Assert.AreEqual(7, data.Count);
 		}
 
