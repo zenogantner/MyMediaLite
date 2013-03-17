@@ -21,6 +21,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -70,26 +71,27 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Iterate()
 		{
 			// perform alternating parameter fitting
-			Optimize(Feedback.UserMatrix, user_factors, item_factors);
-			Optimize(Feedback.ItemMatrix, item_factors, user_factors);
+			Optimize(EntityType.USER);
+			Optimize(EntityType.ITEM);
 		}
 
 		/// <summary>Optimizes the specified data</summary>
-		/// <param name="data">data</param>
-		/// <param name="W">W</param>
-		/// <param name="H">H</param>
-		protected virtual void Optimize(IBooleanMatrix data, Matrix<float> W, Matrix<float> H)
+		/// <param name="target">the optimization target, USER or ITEM</param>
+		protected virtual void Optimize(EntityType target)
 		{
-			// comments are in terms of computing the user factors
-			// ... works the same with users and items exchanged
+			if (target != EntityType.USER && target != EntityType.ITEM)
+				throw new ArgumentException();
 
+			int num_entities = target == EntityType.USER ? user_factors.dim1 : item_factors.dim1;
+			
 			// (1) create HH in O(f^2|Items|)
+			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
 			var HH = ComputeSquareMatrix(H);
 			// (2) optimize all U
 			Parallel.For(
 				0,
-				W.dim1,
-				u => { Optimize(u, data, W, H, HH); }
+				num_entities,
+				u => { Optimize(u, target, HH); }
 			);
 		}
 
@@ -109,9 +111,20 @@ namespace MyMediaLite.ItemRecommendation
 			return mm;
 		}
 
-		private void Optimize(int u, IBooleanMatrix data, Matrix<float> W, Matrix<float> H, Matrix<double> HH)
+		private void Optimize(int u, EntityType target, Matrix<double> HH)
 		{
-			var row = data.GetEntriesByRow(u);
+			if (target != EntityType.USER && target != EntityType.ITEM)
+				throw new ArgumentException();
+			
+			Matrix<float> W = target == EntityType.USER ? user_factors : item_factors;
+			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
+
+			//ICollection<int> row = target == EntityType.USER ? Interactions.ByUser(u).Items : Interactions.ByItem(u).Users;
+			ICollection<int> row = target == EntityType.USER ? Feedback.UserMatrix.GetEntriesByRow(u) : Feedback.ItemMatrix.GetEntriesByRow(u);
+			
+			// comments are in terms of computing the user factors
+			// ... works the same with users and items exchanged
+
 			// HC_minus_IH is symmetric
 			// create HC_minus_IH in O(f^2|S_u|)
 			var HC_minus_IH = new Matrix<double>(num_factors, num_factors);
@@ -161,14 +174,14 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void RetrainUser(int user_id)
 		{
 			var hh = ComputeSquareMatrix(item_factors);
-			Optimize(user_id, Feedback.UserMatrix, user_factors, item_factors, hh);
+			Optimize(user_id, EntityType.USER, hh);
 		}
 
 		///
 		protected override void RetrainItem(int item_id)
 		{
 			var ww = ComputeSquareMatrix(user_factors);
-			Optimize(item_id, Feedback.ItemMatrix, item_factors, user_factors, ww);
+			Optimize(item_id, EntityType.ITEM, ww);
 		}
 
 		///

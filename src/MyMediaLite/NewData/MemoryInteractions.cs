@@ -33,7 +33,7 @@ namespace MyMediaLite.Data
 		public IInteractionReader Sequential
 		{
 			get {
-				return new IndexedMemoryReader(dataset, Enumerable.Range(0, dataset.Count).GetEnumerator());
+				return new IndexedMemoryReader(dataset, Enumerable.Range(0, dataset.Count));
 			}
 		}
 
@@ -56,15 +56,27 @@ namespace MyMediaLite.Data
 		{
 			this.dataset = dataset;
 		}
-
+		
+		private IList<IInteractionReader> _by_user;
 		public IInteractionReader ByUser(int user_id)
 		{
-			return new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
+			if (_by_user == null)
+				_by_user = new IInteractionReader[Users.Count];
+			if (_by_user[user_id] == null)
+				_by_user[user_id] = new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
+			
+			return _by_user[user_id];
 		}
 		
+		private IList<IInteractionReader> _by_item;
 		public IInteractionReader ByItem(int item_id)
 		{
-			return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
+			if (_by_item == null)
+				_by_item = new IInteractionReader[Items.Count];
+			if (_by_item[item_id] == null)
+				_by_item[item_id] = new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
+			
+			return _by_item[item_id];
 		}
 
 	}

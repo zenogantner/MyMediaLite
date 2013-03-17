@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 // 
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace MyMediaLite.Data
@@ -23,13 +24,22 @@ namespace MyMediaLite.Data
 	public interface IInteractionReader
 	{
 		int GetUser();
+		ICollection<int> Users { get; }
 		int GetItem();
+		ICollection<int> Items { get; }
 		float GetRating();
+		//ICollection<float> Ratings { get; }
 		DateTime GetDateTime();
+		//ICollection<DateTime> DateTimes { get; }
 		long GetTimestamp();
+		//ICollection<long> Timestamps { get; }
+		
 		// long GetDuration();
+		
 		// int GetContext();
+		
 		// GeoLocation GetGeoLocation();
+		
 		// string GetQuery()
 	}
 }

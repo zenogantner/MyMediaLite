@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,7 +37,7 @@ namespace MyMediaLite
 			{
 				R value;
 				if (map.TryGetValue(a, out value))
-				return value;
+					return value;
 				value = f(a);
 				map.Add(a, value);
 				return value;
