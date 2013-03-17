@@ -113,12 +113,24 @@ Our new data model should support the following.
 Basic Interfaces and Abstractions
 ---------------------------------
 
-IInteractions
-  IInteractionReader GetRandomReader()
-  IInteractionReader GetSequentialReader()
-  IInteractionReader GetChronologicalReader()
-  IInteractionReader GetByUserReader(int)
-  IInteractionReader GetByItemReader(int)
+TODO: How much of LINQ shall we integrate?
+      Or will we integrate this in the next iteration?
+
+IInteractions - TODO which of these should be properties?
+  TODO also implement IReader, delegate to Sequential()?
+  IInteractionReader Random()
+  IInteractionReader Sequential()
+  IInteractionReader Chronological()
+  IInteractionReader ByUser(int)
+  IInteractionReader ByItem(int)
+  IInteractionReader UserItemPairs(UserSamplingMode, ReplacementMode)
+    TODO maybe simplify this?
+  IList<int> Users()
+    TODO think about returning iterators
+  IList<int> Items()
+  IList<int> Values(int)
+  IWriteHandle GetWriteHandle()
+  RatingScale RatingScale() -- TODO hwo exactly?
 
 IInteractionSplitter
   ISplit<IInteraction> GetCrossValidationSplit(int)
@@ -126,27 +138,31 @@ IInteractionSplitter
   ISplit<IInteraction> GetChronologicalSplit(float)
   ISplit<IInteraction> GetChronologicalSplit(DateTime)
 
-BPR sampling?
-Reservoir sampling?
-
 IInteractionReader : IDataReader
-specific methods:
+  *Aggregate(int, AggregateType),
+  where * in Float, Double, Int32, Int64, DateTime
+  *Values(int)
+  *AllValues(int)
+position methods:
   int GetUser
   int GetItem
   float GetRating
-  ? GetDate
-  ? GetTimestamp
+  DateTime GetDateTime
+  long GetTimestamp
   ? GetTimeOfDay
   GeoLocation GetLocation
   string GetQuery
-  ? GetDuration
-  IList<int> GetTags
+  long GetDuration
+  IList<int> GetTag()
 
 IByEntityReader : IInteractionReader
   GetCovisitations
   GetCovisitationCount
   GetCovisitationRatings
 
+IWriteHandle
+
+AggregateType: Mean, Median, Sum, Mode
 
 Advanced Functionality
 ----------------------
