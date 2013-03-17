@@ -26,7 +26,7 @@ namespace MyMediaLite.Data
 		IInteractionReader Sequential { get; }
 		// IInteractionReader Chronological { get; }
 		IInteractionReader ByUser(int user_id);
-		IInteractionReader ByItem(int user_id);
+		IInteractionReader ByItem(int item_id);
 
 		IList<int> Users { get; }
 		IList<int> Items { get; }

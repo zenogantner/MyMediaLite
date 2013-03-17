@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -42,7 +42,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// If false, the popularity is measured by the number of accesses to the item.
 		/// </summary>
 		public bool ByUser { get; set; }
-
+		
+		private int score_denominator;
+		
 		/// <summary>View count</summary>
 		IList<int> view_count;
 
@@ -56,22 +58,32 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Train()
 		{
 			view_count = new List<int>(MaxItemID + 1);
-			for (int i = 0; i <= MaxItemID; i++)
+			for (int item_id = 0; item_id <= MaxItemID; item_id++)
 				view_count.Add(0);
 
 			if (ByUser)
+			{
 				for (int item_id = 0; item_id <= MaxItemID; item_id++)
-					view_count[item_id] = Feedback.ItemMatrix.NumEntriesByRow(item_id);
+					view_count[item_id] = Interactions.ByItem(item_id).Users.Count;
+				score_denominator = MaxUserID + 1;
+			}
 			else
-				foreach (int i in Feedback.Items)
-					view_count[i]++;
+			{
+				score_denominator = 0;
+				var reader = Interactions.Sequential;
+				while (reader.Read())
+				{
+					view_count[reader.GetItem()]++;
+					score_denominator++;
+				}
+			}
 		}
 
 		///
 		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id <= MaxItemID)
-				return (float) view_count[item_id] / (ByUser ? MaxUserID + 1 : Feedback.Count);
+				return (float) view_count[item_id] / score_denominator;
 			else
 				return float.MinValue;
 		}
@@ -94,8 +106,20 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void RemoveUser(int user_id)
 		{
-			foreach (int i in Feedback.UserMatrix[user_id])
-				view_count[i]--;
+			if (UpdateItems)
+			{
+				var reader = Interactions.ByUser(user_id);
+				if (ByUser)
+				{
+					foreach (int item_id in reader.Items)
+						view_count[item_id]--;
+				}
+				else
+				{
+					while (reader.Read())
+						view_count[reader.GetItem()]--;
+				}
+			}
 			base.RemoveUser(user_id);
 		}
 
@@ -106,8 +130,16 @@ namespace MyMediaLite.ItemRecommendation
 			if (UpdateItems)
 			{
 				var items = from t in feedback select t.Item2;
-				foreach (int item_id in items)
-					view_count[item_id]++;
+				if (ByUser)
+				{
+					foreach (int item_id in new HashSet<int>(items))
+						view_count[item_id] = Interactions.ByItem(item_id).Users.Count;
+				}
+				else
+				{
+					foreach (int item_id in items)
+						view_count[item_id]++;
+				}
 			}
 		}
 
@@ -118,8 +150,16 @@ namespace MyMediaLite.ItemRecommendation
 			if (UpdateItems)
 			{
 				var items = from t in feedback select t.Item2;
-				foreach (int item_id in items)
-					view_count[item_id]--;
+				if (ByUser)
+				{
+					foreach (int item_id in new HashSet<int>(items))
+						view_count[item_id] = Interactions.ByItem(item_id).Users.Count;
+				}
+				else
+				{
+					foreach (int item_id in items)
+						view_count[item_id]--;
+				}
 			}
 		}
 

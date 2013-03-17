@@ -67,7 +67,8 @@ namespace MyMediaLite.Data
 			
 			return _by_user[user_id];
 		}
-		
+
+		// TODO problem: read status!!
 		private IList<IInteractionReader> _by_item;
 		public IInteractionReader ByItem(int item_id)
 		{
