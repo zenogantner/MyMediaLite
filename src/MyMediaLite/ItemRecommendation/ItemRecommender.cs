@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -41,6 +41,8 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public abstract class ItemRecommender : Recommender
 	{
+		protected IInteractions Interactions { get; private set; }
+		
 		/// <summary>the feedback data to be used for training</summary>
 		public virtual IPosOnlyFeedback Feedback
 		{
@@ -49,6 +51,7 @@ namespace MyMediaLite.ItemRecommendation
 				this.feedback = value;
 				MaxUserID = Math.Max(feedback.MaxUserID, MaxUserID);
 				MaxItemID = Math.Max(feedback.MaxItemID, MaxItemID);
+				Interactions = new MemoryInteractions(value);
 			}
 		}
 		IPosOnlyFeedback feedback;

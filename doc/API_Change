@@ -117,7 +117,6 @@ TODO: How much of LINQ shall we integrate?
       Or will we integrate this in the next iteration?
 
 IInteractions - TODO which of these should be properties?
-  TODO also implement IReader, delegate to Sequential()?
   IInteractionReader Random()
   IInteractionReader Sequential()
   IInteractionReader Chronological()
@@ -130,7 +129,7 @@ IInteractions - TODO which of these should be properties?
   IList<int> Items()
   IList<int> Values(int)
   IWriteHandle GetWriteHandle()
-  RatingScale RatingScale() -- TODO hwo exactly?
+  RatingScale RatingScale() -- TODO how exactly?
 
 IInteractionSplitter
   ISplit<IInteraction> GetCrossValidationSplit(int)
@@ -138,7 +137,7 @@ IInteractionSplitter
   ISplit<IInteraction> GetChronologicalSplit(float)
   ISplit<IInteraction> GetChronologicalSplit(DateTime)
 
-IInteractionReader : IDataReader
+IInteractionReader
   *Aggregate(int, AggregateType),
   where * in Float, Double, Int32, Int64, DateTime
   *Values(int)
@@ -153,7 +152,7 @@ position methods:
   GeoLocation GetLocation
   string GetQuery
   long GetDuration
-  IList<int> GetTag()
+  IList<int> GetTags()
 
 IByEntityReader : IInteractionReader
   GetCovisitations
@@ -178,7 +177,7 @@ Implementation Details
 Migration Plan
 --------------
   implement interfaces for the memory backend
-  implement a generic memory backend
+  implement a generic memory backend with the old data structured behind
   implement generic, configurable I/O for the memory backend
   implement rating baseline methods
   implement matrix factorization methods
