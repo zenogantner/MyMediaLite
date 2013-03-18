@@ -21,6 +21,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MyMediaLite;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
@@ -61,10 +62,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     </list>
 	///   </para>
 	///   <para>
-	///     Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
-	///     To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
-	///     WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
-	///     (approximately) optimizes the average AUC over all users.
+	///     UniformUserSampling=true (the default) approximately optimizes the average AUC over all users.
 	///   </para>
 	///   <para>
 	///     This recommender supports incremental updates.
@@ -74,9 +72,6 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>Item bias terms</summary>
 		protected float[] item_bias;
-
-		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
-		public bool WithReplacement { get; set; }
 
 		/// <summary>Sample uniformly from users</summary>
 		public bool UniformUserSampling { get; set; }
@@ -174,59 +169,20 @@ namespace MyMediaLite.ItemRecommendation
 
 			if (UniformUserSampling)
 			{
-				if (WithReplacement)
-					IterateWithReplacementUniformUser();
-				else
-					IterateWithoutReplacementUniformUser();
+				IterateUniformUser();
 			}
 			else
 			{
-				if (WithReplacement)
-					IterateWithReplacementUniformPair();
-				else
-					IterateWithoutReplacementUniformPair();
-			}
-		}
-
-		/// <summary>
-		/// Iterate over the training data, uniformly sample from users with replacement.
-		/// </summary>
-		protected virtual void IterateWithReplacementUniformUser()
-		{
-			int num_pos_events = Feedback.Count;
-			int user_id, pos_item_id, neg_item_id;
-
-			var user_matrix = Feedback.GetUserMatrixCopy();
-
-			for (int i = 0; i < num_pos_events; i++)
-			{
-				while (true) // sampling with replacement
-				{
-					user_id = SampleUser();
-					var user_items = user_matrix[user_id];
-
-					// reset user if already exhausted
-					if (user_items.Count == 0)
-						foreach (int item_id in Feedback.UserMatrix[user_id])
-							user_matrix[user_id, item_id] = true;
-
-					pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
-					user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
-					do
-						neg_item_id = random.Next(MaxItemID + 1);
-					while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
-					break;
-				}
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				IterateUniformPair();
 			}
 		}
 
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from users without replacement.
 		/// </summary>
-		protected virtual void IterateWithoutReplacementUniformUser()
+		protected virtual void IterateUniformUser()
 		{
-			int num_pos_events = Feedback.Count;
+			int num_pos_events = Interactions.Count;
 			int user_id, pos_item_id, neg_item_id;
 
 			for (int i = 0; i < num_pos_events; i++)
@@ -239,39 +195,15 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from user-item pairs with replacement.
 		/// </summary>
-		protected virtual void IterateWithReplacementUniformPair()
-		{
-			int num_pos_events = Feedback.Count;
-			for (int i = 0; i < num_pos_events; i++)
-			{
-				int index = random.Next(num_pos_events);
-				int user_id = Feedback.Users[index];
-				int pos_item_id = Feedback.Items[index];
-				int neg_item_id = -1;
-				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-			}
-		}
-
-		/// <summary>
-		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
-		/// </summary>
-		protected virtual void IterateWithoutReplacementUniformPair()
-		{
-			IterateWithoutReplacementUniformPair(Feedback.RandomIndex);
-		}
-
-		/// <summary>
-		/// Iterate over the training data, uniformly sample from user-item pairs without replacement.
-		/// </summary>
-		protected virtual void IterateWithoutReplacementUniformPair(IList<int> indices)
+		protected virtual void IterateUniformPair()
 		{
 			random = MyMediaLite.Random.GetInstance(); // if necessary, initialize for this thread
-
-			foreach (int index in indices)
+			var reader = Interactions.Random;
+			
+			while (reader.Read())
 			{
-				int user_id = Feedback.Users[index];
-				int pos_item_id = Feedback.Items[index];
+				int user_id = reader.GetUser();
+				int pos_item_id = reader.GetItem();
 				int neg_item_id = -1;
 				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
@@ -282,14 +214,14 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the ID of the given item</param>
 		/// <param name="other_item_id">the ID of the other item</param>
-		/// <returns>true if the given item was already seen by user u</returns>
+		/// <returns>true if the given item was already seen by the user</returns>
 		protected virtual bool SampleOtherItem(int user_id, int item_id, out int other_item_id)
 		{
-			bool item_is_positive = Feedback.UserMatrix[user_id, item_id];
+			bool item_is_positive = Interactions.ByUser(user_id).Items.Contains(item_id);
 
 			do
 				other_item_id = random.Next(MaxItemID + 1);
-			while (Feedback.UserMatrix[user_id, other_item_id] == item_is_positive);
+			while (Interactions.ByUser(user_id).Items.Contains(other_item_id) == item_is_positive);
 
 			return item_is_positive;
 		}
@@ -300,7 +232,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="other_item_id">the ID of the second item</param>
 		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
 		{
-			var user_items = Feedback.UserMatrix[user_id];
+			var user_items = Interactions.ByUser(user_id).Items;
 			item_id = user_items.ElementAt(random.Next(user_items.Count));
 			do
 				other_item_id = random.Next(MaxItemID + 1);
@@ -314,7 +246,7 @@ namespace MyMediaLite.ItemRecommendation
 			while (true)
 			{
 				int user_id = random.Next(MaxUserID + 1);
-				var user_items = Feedback.UserMatrix[user_id];
+				var user_items = Interactions.ByUser(user_id).Items;
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
 				return user_id;
@@ -403,7 +335,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
 
-			var user_items = Feedback.UserMatrix[user_id];
+			var user_items = Interactions.ByUser(user_id).Items;
 			for (int i = 0; i < user_items.Count; i++)
 			{
 				int item_id_1, item_id_2;
@@ -417,7 +349,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
 
-			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
+			int num_pos_events = Interactions.Count;
 			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
@@ -545,31 +477,23 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			int num_pos_events = user_items.Count;
 
-			int user_id, pos_item_id, neg_item_id;
+			for (int i = 0; i < num_pos_events; i++)
+			{
+				int user_id, pos_item_id, neg_item_id;
+				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+				// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
+				double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
+				double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
-			if (WithReplacement) // case 1: item sampling with replacement
-			{
-				throw new NotImplementedException();
-			}
-			else // case 2: item sampling without replacement
-			{
-				for (int i = 0; i < num_pos_events; i++)
+				// adjust factors
+				for (int f = 0; f < num_factors; f++)
 				{
-					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-					// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
-					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
-					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+					float w_uf = user_factors[f];
+					float h_if = item_factors[pos_item_id, f];
+					float h_jf = item_factors[neg_item_id, f];
 
-					// adjust factors
-					for (int f = 0; f < num_factors; f++)
-					{
-						float w_uf = user_factors[f];
-						float h_if = item_factors[pos_item_id, f];
-						float h_jf = item_factors[neg_item_id, f];
-
-						double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-						user_factors[f] = (float) (w_uf + learn_rate * update);
-					}
+					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
+					user_factors[f] = (float) (w_uf + learn_rate * update);
 				}
 			}
 		}
@@ -579,8 +503,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} update_j={10}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} update_j={9}",
+				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, UpdateJ);
 		}
 	}
 }

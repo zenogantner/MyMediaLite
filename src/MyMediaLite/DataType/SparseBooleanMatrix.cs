@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -150,7 +150,7 @@ namespace MyMediaLite.DataType
 
 		/// <summary>The number of rows in the matrix</summary>
 		/// <value>The number of rows in the matrix</value>
-		public int NumberOfRows	{ get { return row_list.Count; } }
+		public int NumberOfRows { get { return row_list.Count; } }
 
 		/// <summary>The number of columns in the matrix</summary>
 		/// <value>The number of columns in the matrix</value>

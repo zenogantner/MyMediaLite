@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,11 +14,11 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 
 namespace MyMediaLite.ItemRecommendation
@@ -31,11 +31,11 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class WeightedBPRMF : BPRMF
 	{
+		IInteractionReader _sampling_reader;
+		
 		/// <summary>Default constructor</summary>
 		public WeightedBPRMF()
 		{
-			// de-activate until supported
-			WithReplacement = false;
 			// de-activate until false is supported
 			UniformUserSampling = true;
 		}
@@ -43,26 +43,28 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			// de-activate until supported
-			WithReplacement = false;
 			// de-activate until false is supported
 			UniformUserSampling = true;
-
+			
+			_sampling_reader = Interactions.Random;
 			base.Train();
 		}
 
 		///
 		protected override void SampleTriple(out int u, out int i, out int j)
 		{
-			// sample user from positive user-item pairs
-			int index = random.Next(Feedback.Count);
-			u = Feedback.Users[index];
-			i = Feedback.Items[index];
+			if (!_sampling_reader.Read())
+			{
+				_sampling_reader.Reset();
+				_sampling_reader.Read();
+			}
+			u = _sampling_reader.GetUser();
+			i = _sampling_reader.GetItem();
 
 			// sample negative item
 			do
-				j = Feedback.Items[random.Next(Feedback.Count)];
-			while (Feedback.UserMatrix[u, j]);
+				j = Feedback.Items[random.Next(Feedback.Count)]; // TODO TODO create 2nd reader
+			while (Interactions.ByUser(u).Items.Contains(j));
 		}
 
 		///

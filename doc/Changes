@@ -2,6 +2,8 @@
 	recommenders
 	 - MostPopular: take ByUser property always into account when doing
            incremental updates
+	 - BPRMF: remove WithReplacement property
+	 - remove MultiCoreBPRMF
 
 3.08	2013-03-
 	recommenders
