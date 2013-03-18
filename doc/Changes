@@ -11,7 +11,8 @@
              incremental updates
            - set item bias to zero in RemoveItem()
            - move some incremental update functionality to class MF
-         - removed CLiMF, as the implementation was never complete nor working
+         - remove CLiMF, as the implementation was never complete nor working
+         - remove BPRMF_Mapping (incomplete implementation)
         command-line tools
          - item_recommendation: add usage information for
            --(load|save)-(user|item)-mapping=FILE
@@ -20,6 +21,8 @@
              argument combinations; only describe what is wrong
            - allow test files without rating column via --test-no-ratings
              (suggested by Michael Ekstrand)
+        misc
+         - remove namespace AttrToFactor
 
 
 3.07	2013-02-04

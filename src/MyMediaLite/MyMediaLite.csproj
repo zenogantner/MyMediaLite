@@ -15,7 +15,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin/Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>bin/Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -191,16 +191,8 @@
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
     <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModel.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
-    <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
-    <Compile Include="ItemRecommendation\BPRMF_Mapping.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
@@ -247,7 +239,6 @@
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
-    <Folder Include="AttrToFactor\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SVM\SVM.csproj">
