@@ -59,10 +59,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			float result = baseline_predictor.Predict(user_id, item_id);
 
-			if ((user_id > correlation.NumberOfRows - 1) || (item_id > MaxItemID))
+			if ((user_id > correlation_matrix.NumberOfRows - 1) || (item_id > MaxItemID))
 				return result;
 
-			IList<int> correlated_users = correlation.GetPositivelyCorrelatedEntities(user_id);
+			IList<int> correlated_users = correlation_matrix.GetPositivelyCorrelatedEntities(user_id);
 
 			double sum = 0;
 			double weight_sum = 0;
@@ -73,7 +73,7 @@ namespace MyMediaLite.RatingPrediction
 				{
 					float rating = ratings.Get(user_id2, item_id, ratings.ByItem[item_id]);
 
-					float weight = correlation[user_id, user_id2];
+					float weight = correlation_matrix[user_id, user_id2];
 					weight_sum += weight;
 					sum += weight * (rating - baseline_predictor.Predict(user_id2, item_id));
 
@@ -123,19 +123,19 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void AddUser(int user_id)
 		{
-			correlation.AddEntity(user_id);
+			correlation_matrix.AddEntity(user_id);
 		}
 
 		///
 		public float GetUserSimilarity(int user_id1, int user_id2)
 		{
-			return correlation[user_id1, user_id2];
+			return correlation_matrix[user_id1, user_id2];
 		}
 
 		///
 		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
 		{
-			return correlation.GetNearestNeighbors(user_id, n);
+			return correlation_matrix.GetNearestNeighbors(user_id, n);
 		}
 
 		/// <summary>Retrain model for a given user</summary>
@@ -146,27 +146,27 @@ namespace MyMediaLite.RatingPrediction
 
 			if (UpdateUsers)
 			{
-				if (correlation is IBinaryDataCorrelationMatrix)
+				if (correlation_matrix is IBinaryDataCorrelationMatrix)
 				{
-					var bin_cor = correlation as IBinaryDataCorrelationMatrix;
+					var bin_cor = correlation_matrix as IBinaryDataCorrelationMatrix;
 					var user_items = new HashSet<int>(BinaryDataMatrix[user_id]);
 					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
 						if (bin_cor.IsSymmetric)
 						{
-							correlation[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(BinaryDataMatrix[other_user_id]));
+							correlation_matrix[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(BinaryDataMatrix[other_user_id]));
 						}
 						else
 						{
 							var other_user_items = new HashSet<int>(BinaryDataMatrix[other_user_id]);
-							correlation[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, other_user_items);
-							correlation[other_user_id, user_id] = bin_cor.ComputeCorrelation(other_user_items, user_items);
+							correlation_matrix[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, other_user_items);
+							correlation_matrix[other_user_id, user_id] = bin_cor.ComputeCorrelation(other_user_items, user_items);
 						}
 				}
-				if (correlation is IRatingCorrelationMatrix)
+				if (correlation_matrix is IRatingCorrelationMatrix)
 				{
-					var rat_cor = correlation as IRatingCorrelationMatrix;
+					var rat_cor = correlation_matrix as IRatingCorrelationMatrix;
 					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
-						correlation[user_id, other_user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, user_id, other_user_id);
+						correlation_matrix[user_id, other_user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, user_id, other_user_id);
 				}
 			}
 		}
@@ -178,16 +178,16 @@ namespace MyMediaLite.RatingPrediction
 		{
 			var user_similarities = new float[MaxUserID + 1];
 
-			if (correlation is IBinaryDataCorrelationMatrix)
+			if (correlation_matrix is IBinaryDataCorrelationMatrix)
 			{
-				var bin_cor = correlation as IBinaryDataCorrelationMatrix;
+				var bin_cor = correlation_matrix as IBinaryDataCorrelationMatrix;
 				var user_items = new HashSet<int>(from t in rated_items select t.Item1);
 				for (int user_id = 0; user_id <= MaxUserID; user_id++)
 					user_similarities[user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(data_user[user_id]));
 			}
-			if (correlation is IRatingCorrelationMatrix)
+			if (correlation_matrix is IRatingCorrelationMatrix)
 			{
-				var rat_cor = correlation as IRatingCorrelationMatrix;
+				var rat_cor = correlation_matrix as IRatingCorrelationMatrix;
 				for (int user_id = 0; user_id <= MaxUserID; user_id++)
 					user_similarities[user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, rated_items, user_id);
 			}
