@@ -191,7 +191,6 @@
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
     <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModel.cs" />
-    <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
@@ -244,11 +243,5 @@
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
     <Folder Include="NewData\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SVM\SVM.csproj">
-      <Project>{309290E3-E52B-4E67-9F6E-2A67B5D54320}</Project>
-      <Name>SVM</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
