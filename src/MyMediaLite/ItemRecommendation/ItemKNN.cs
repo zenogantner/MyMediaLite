@@ -43,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				this.nearest_neighbors = new List<IList<int>>(num_items);
 				for (int i = 0; i < num_items; i++)
-					nearest_neighbors.Add(correlation.GetNearestNeighbors(i, k));
+					nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(i, k));
 			}
 		}
 
@@ -70,9 +70,9 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					foreach (int neighbor in nearest_neighbors[item_id])
 					{
-						normalization += Math.Pow(correlation[item_id, neighbor], Q);
+						normalization += Math.Pow(correlation_matrix[item_id, neighbor], Q);
 						if (Feedback.ItemMatrix[neighbor, user_id])
-							sum += Math.Pow(correlation[item_id, neighbor], Q);
+							sum += Math.Pow(correlation_matrix[item_id, neighbor], Q);
 					}
 				}
 				if (sum == 0) return 0;
@@ -82,14 +82,14 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				// roughly 10x faster
 				// TODO: implement normalization
-				return (float) correlation.SumUp(item_id, Feedback.UserMatrix[user_id], Q);
+				return (float) correlation_matrix.SumUp(item_id, Feedback.UserMatrix[user_id], Q);
 			}
 		}
 
 		///
 		public float GetItemSimilarity(int item_id1, int item_id2)
 		{
-			return correlation[item_id1, item_id2];
+			return correlation_matrix[item_id1, item_id2];
 		}
 
 		///
@@ -98,7 +98,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (n <= k)
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
-				return correlation.GetNearestNeighbors(item_id, n);
+				return correlation_matrix.GetNearestNeighbors(item_id, n);
 		}
 		
 		///

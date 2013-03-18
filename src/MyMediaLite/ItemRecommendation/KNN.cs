@@ -68,7 +68,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected IList<IList<int>> nearest_neighbors;
 
 		/// <summary>Correlation matrix over some kind of entity, e.g. users or items</summary>
-		protected IBinaryDataCorrelationMatrix correlation;
+		protected IBinaryDataCorrelationMatrix correlation_matrix;
 
 		/// <summary>Default constructor</summary>
 		public KNN()
@@ -86,22 +86,22 @@ namespace MyMediaLite.ItemRecommendation
 			switch (Correlation)
 			{
 				case BinaryCorrelationType.Cosine:
-					correlation = new BinaryCosine(num_entities);
+					correlation_matrix = new BinaryCosine(num_entities);
 					break;
 				case BinaryCorrelationType.Jaccard:
-					correlation = new Jaccard(num_entities);
+					correlation_matrix = new Jaccard(num_entities);
 					break;
 				case BinaryCorrelationType.ConditionalProbability:
-					correlation = new ConditionalProbability(num_entities);
+					correlation_matrix = new ConditionalProbability(num_entities);
 					break;
 				case BinaryCorrelationType.BidirectionalConditionalProbability:
-					correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
+					correlation_matrix = new BidirectionalConditionalProbability(num_entities, Alpha);
 					break;
 				case BinaryCorrelationType.Cooccurrence:
-					correlation = new Cooccurrence(num_entities);
+					correlation_matrix = new Cooccurrence(num_entities);
 					break;
 				default:
-					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
+					throw new NotImplementedException(string.Format("{0} does not support for {1}.", this.GetType().Name, Correlation));
 			}
 		}
 
@@ -115,12 +115,12 @@ namespace MyMediaLite.ItemRecommendation
 
 			foreach (int i in update_entities)
 			{
-				for (int j = 0; j < correlation.NumEntities; j++)
+				for (int j = 0; j < correlation_matrix.NumEntities; j++)
 				{
-					if (j < i && correlation.IsSymmetric && update_entities.Contains(j))
+					if (j < i && correlation_matrix.IsSymmetric && update_entities.Contains(j))
 						continue;
 
-					correlation[i, j] = correlation.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
+					correlation_matrix[i, j] = correlation_matrix.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
 				}
 			}
 			RecomputeNeighbors(update_entities);
@@ -129,14 +129,14 @@ namespace MyMediaLite.ItemRecommendation
 		private void RecomputeNeighbors(ICollection<int> update_entities)
 		{
 			foreach (int entity_id in update_entities)
-				nearest_neighbors[entity_id] = correlation.GetNearestNeighbors(entity_id, k);
+				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, k);
 		}
 
 		///
 		public override void Train()
 		{
 			InitModel();
-			correlation.ComputeCorrelations(DataMatrix);
+			correlation_matrix.ComputeCorrelations(DataMatrix);
 		}
 
 		///
@@ -149,7 +149,7 @@ namespace MyMediaLite.ItemRecommendation
 				foreach (IList<int> nn in nearest_neighbors)
 					writer.WriteLine(String.Join(" ", nn));
 
-				correlation.Write(writer);
+				correlation_matrix.Write(writer);
 			}
 		}
 
@@ -172,12 +172,12 @@ namespace MyMediaLite.ItemRecommendation
 				}
 
 				InitModel();
-				if (correlation is SymmetricCorrelationMatrix)
-					((SymmetricCorrelationMatrix) correlation).ReadSymmetricCorrelationMatrix(reader);
-				else if (correlation is AsymmetricCorrelationMatrix)
-					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
+				if (correlation_matrix is SymmetricCorrelationMatrix)
+					((SymmetricCorrelationMatrix) correlation_matrix).ReadSymmetricCorrelationMatrix(reader);
+				else if (correlation_matrix is AsymmetricCorrelationMatrix)
+					((AsymmetricCorrelationMatrix) correlation_matrix).ReadAsymmetricCorrelationMatrix(reader);
 				else
-					throw new NotSupportedException("Unknown correlation type: " + correlation.GetType());
+					throw new NotSupportedException("Unknown correlation type: " + correlation_matrix.GetType());
 
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;

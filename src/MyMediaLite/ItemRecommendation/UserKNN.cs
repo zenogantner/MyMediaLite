@@ -40,7 +40,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_users = MaxUserID + 1;
 			this.nearest_neighbors = new List<IList<int>>(num_users);
 			for (int u = 0; u < num_users; u++)
-				nearest_neighbors.Add(correlation.GetNearestNeighbors(u, k));
+				nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(u, k));
 		}
 
 		///
@@ -57,9 +57,9 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					foreach (int neighbor in nearest_neighbors[user_id])
 					{
-						normalization += Math.Pow(correlation[user_id, neighbor], Q);
+						normalization += Math.Pow(correlation_matrix[user_id, neighbor], Q);
 						if (Feedback.UserMatrix[neighbor, item_id])
-							sum += Math.Pow(correlation[user_id, neighbor], Q);
+							sum += Math.Pow(correlation_matrix[user_id, neighbor], Q);
 					}
 				}
 				if (sum == 0) return 0;
@@ -68,14 +68,14 @@ namespace MyMediaLite.ItemRecommendation
 			else
 			{
 				// roughly 10x faster
-				return (float) correlation.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);
+				return (float) correlation_matrix.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);
 			}
 		}
 
 		///
 		public float GetUserSimilarity(int user_id1, int user_id2)
 		{
-			return correlation[user_id1, user_id2];
+			return correlation_matrix[user_id1, user_id2];
 		}
 
 		///
@@ -84,7 +84,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (n <= k)
 				return nearest_neighbors[user_id].Take((int) n).ToArray();
 			else
-				return correlation.GetNearestNeighbors(user_id, n);
+				return correlation_matrix.GetNearestNeighbors(user_id, n);
 		}
 
 		float Predict(IList<float> user_similarities, IList<int> nearest_neighbors, int item_id)
@@ -117,7 +117,7 @@ namespace MyMediaLite.ItemRecommendation
 			var user_similarities = new float[MaxUserID + 1];
 
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
-				user_similarities[user_id] = correlation.ComputeCorrelation(Feedback.UserMatrix[user_id], new HashSet<int>(items));
+				user_similarities[user_id] = correlation_matrix.ComputeCorrelation(Feedback.UserMatrix[user_id], new HashSet<int>(items));
 
 			return user_similarities;
 		}
