@@ -79,7 +79,7 @@ namespace MyMediaLite.RatingPrediction
 		public uint NumIter { get { return baseline_predictor.NumIter; } set { baseline_predictor.NumIter = value; } }
 
 		/// <summary>Correlation matrix over some kind of entity</summary>
-		protected ICorrelationMatrix correlation;
+		protected ICorrelationMatrix correlation_matrix;
 
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability, or shrinkage parameter for Pearson</summary>
 		public float Alpha { get; set; }
@@ -96,28 +96,28 @@ namespace MyMediaLite.RatingPrediction
 			switch (Correlation)
 			{
 				case RatingCorrelationType.BinaryCosine:
-					correlation = new BinaryCosine(num_entities);
+					correlation_matrix = new BinaryCosine(num_entities);
 					break;
 				case RatingCorrelationType.Jaccard:
-					correlation = new Jaccard(num_entities);
+					correlation_matrix = new Jaccard(num_entities);
 					break;
 				case RatingCorrelationType.ConditionalProbability:
-					correlation = new ConditionalProbability(num_entities);
+					correlation_matrix = new ConditionalProbability(num_entities);
 					break;
 				case RatingCorrelationType.BidirectionalConditionalProbability:
-					correlation = new BidirectionalConditionalProbability(num_entities, Alpha);
+					correlation_matrix = new BidirectionalConditionalProbability(num_entities, Alpha);
 					break;
 				case RatingCorrelationType.Cooccurrence:
-					correlation = new Cooccurrence(num_entities);
+					correlation_matrix = new Cooccurrence(num_entities);
 					break;
 				case RatingCorrelationType.Pearson:
-					correlation = new Pearson(num_entities, Alpha);
+					correlation_matrix = new Pearson(num_entities, Alpha);
 					break;
 				default:
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
-			if (correlation is IBinaryDataCorrelationMatrix)
-				((IBinaryDataCorrelationMatrix) correlation).Weighted = WeightedBinary;
+			if (correlation_matrix is IBinaryDataCorrelationMatrix)
+				((IBinaryDataCorrelationMatrix) correlation_matrix).Weighted = WeightedBinary;
 		}
 
 		///
@@ -125,10 +125,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.Train();
 			InitModel();
-			if (correlation is IBinaryDataCorrelationMatrix)
-				((IBinaryDataCorrelationMatrix) correlation).ComputeCorrelations(BinaryDataMatrix);
+			if (correlation_matrix is IBinaryDataCorrelationMatrix)
+				((IBinaryDataCorrelationMatrix) correlation_matrix).ComputeCorrelations(BinaryDataMatrix);
 			else
-				((IRatingCorrelationMatrix) correlation).ComputeCorrelations(Ratings, Entity);
+				((IRatingCorrelationMatrix) correlation_matrix).ComputeCorrelations(Ratings, Entity);
 		}
 
 		///
@@ -139,7 +139,7 @@ namespace MyMediaLite.RatingPrediction
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
 			{
 				writer.WriteLine(Correlation);
-				correlation.Write(writer);
+				correlation_matrix.Write(writer);
 			}
 		}
 
@@ -153,12 +153,12 @@ namespace MyMediaLite.RatingPrediction
 				Correlation = (RatingCorrelationType) Enum.Parse(typeof(RatingCorrelationType), reader.ReadLine());
 				InitModel();
 
-				if (correlation is SymmetricCorrelationMatrix)
-					((SymmetricCorrelationMatrix) correlation).ReadSymmetricCorrelationMatrix(reader);
-				else if (correlation is AsymmetricCorrelationMatrix)
-					((AsymmetricCorrelationMatrix) correlation).ReadAsymmetricCorrelationMatrix(reader);
+				if (correlation_matrix is SymmetricCorrelationMatrix)
+					((SymmetricCorrelationMatrix) correlation_matrix).ReadSymmetricCorrelationMatrix(reader);
+				else if (correlation_matrix is AsymmetricCorrelationMatrix)
+					((AsymmetricCorrelationMatrix) correlation_matrix).ReadAsymmetricCorrelationMatrix(reader);
 				else
-					throw new NotSupportedException("Unsupported correlation type: " + correlation.GetType());
+					throw new NotSupportedException("Unsupported correlation type: " + correlation_matrix.GetType());
 			}
 		}
 

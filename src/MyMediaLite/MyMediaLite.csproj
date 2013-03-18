@@ -191,16 +191,8 @@
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
     <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModel.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMapping_Optimal.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingKNN.cs" />
-    <Compile Include="AttrToFactor\BPRMF_ItemMappingSVR.cs" />
-    <Compile Include="AttrToFactor\BPRMF_Mapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping.cs" />
-    <Compile Include="AttrToFactor\BPRMF_UserMapping_Optimal.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeSVM.cs" />
     <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
-    <Compile Include="ItemRecommendation\BPRMF_Mapping.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
@@ -251,7 +243,6 @@
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
-    <Folder Include="AttrToFactor\" />
     <Folder Include="NewData\" />
   </ItemGroup>
   <ItemGroup>
