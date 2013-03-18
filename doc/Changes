@@ -13,6 +13,7 @@
            - move some incremental update functionality to class MF
          - remove CLiMF, as the implementation was never complete nor working
          - remove BPRMF_Mapping (incomplete implementation)
+	 - remove ItemAttributeSVM
         command-line tools
          - item_recommendation: add usage information for
            --(load|save)-(user|item)-mapping=FILE
