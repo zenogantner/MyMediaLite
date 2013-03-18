@@ -19,12 +19,17 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
+// TODO: inherit this interface from an IRecord interface
+//       consider sharing some things with IInteractions
+
 namespace MyMediaLite.Data
 {
 	public interface IInteractionReader
 	{
 		void Reset();
 		bool Read();
+
+		int Count { get; }
 
 		int GetUser();
 		ICollection<int> Users { get; }

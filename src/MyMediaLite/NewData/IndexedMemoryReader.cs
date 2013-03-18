@@ -23,6 +23,8 @@ namespace MyMediaLite.Data
 {
 	public class IndexedMemoryReader : IInteractionReader
 	{
+		public int Count { get { return index.Count; } }
+
 		public ICollection<int> Users
 		{
 			get {
@@ -42,12 +44,12 @@ namespace MyMediaLite.Data
 			}
 		}
 		private ICollection<int> _items;
-		
+
 		private IDataSet dataset;
-		private IEnumerable<int> index;
+		private IList<int> index;
 		private IEnumerator<int> enumerator;
 
-		public IndexedMemoryReader(IDataSet dataset, IEnumerable<int> index)
+		public IndexedMemoryReader(IDataSet dataset, IList<int> index)
 		{
 			this.dataset = dataset;
 			this.index = index;

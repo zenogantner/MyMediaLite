@@ -99,7 +99,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
 		public void Iterate()
 		{
-			int num_pos_events = Feedback.Count;
+			int num_pos_events = Interactions.Count;
 
 			for (int i = 0; i < num_pos_events; i++)
 			{
@@ -116,16 +116,17 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="u">the user ID</param>
+		/// <param name="user_id">the user ID</param>
 		/// <param name="i">the ID of the first item</param>
 		/// <param name="j">the ID of the second item</param>
-		protected  void SampleItemPair(int u, out int i, out int j)
+		protected  void SampleItemPair(int user_id, out int i, out int j)
 		{
-			var user_items = Feedback.UserMatrix[u];
-			i = user_items.ElementAt(random.Next (user_items.Count));
+			var user_items = Interactions.ByUser(user_id).Items;
+			i = user_items.ElementAt(random.Next(user_items.Count));
 			do
-				j = random.Next (0, MaxItemID + 1);
-			while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
+				j = random.Next(MaxItemID + 1);
+			while (user_items.Contains(j) || Interactions.ByItem(j).Count == 0);
+			// Do not sample the item if it never has been viewed (maybe unknown item).
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -134,11 +135,11 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(MaxUserID + 1);
-				var user_items = Feedback.UserMatrix[u];
+				int user_id = random.Next(MaxUserID + 1);
+				var user_items = Interactions.ByUser(user_id).Items;
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
-				return u;
+				return user_id;
 			}
 		}
 
