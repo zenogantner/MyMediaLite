@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -39,7 +38,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     </description></item>
 	///   </list>
 	/// </para>
-	/// 
+	///
 	/// <para>
 	///   This recommender does NOT support incremental updates.
 	/// </para>
@@ -65,16 +64,10 @@ namespace MyMediaLite.ItemRecommendation
 		private Matrix<float> item_attribute_weight_by_user;
 
 		private System.Random random;
-		// Fast, but memory-intensive sampling
-		private bool fast_sampling = false;
 
 		/// <summary>Number of iterations over the training data</summary>
 		public uint NumIter { get { return num_iter; } set { num_iter = value; } }
 		private uint num_iter = 10;
-
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; } set { fast_sampling_memory_limit = value; }	}
-		int fast_sampling_memory_limit = 1024;
 
  		/// <summary>mean of the Gaussian distribution used to initialize the features</summary>
 		public double InitMean { get { return init_mean; } set { init_mean = value; } }
@@ -92,36 +85,10 @@ namespace MyMediaLite.ItemRecommendation
 		public float Regularization { get { return regularization; } set { regularization = value; } }
 		float regularization = 0.015f;
 
-		// support data structure for fast sampling
-		private IList<int>[] user_pos_items;
-		// support data structure for fast sampling
-		private IList<int>[] user_neg_items;
-
 		///
 		public override void Train()
 		{
 			random = MyMediaLite.Random.GetInstance();
-
-			// prepare fast sampling, if necessary
-			int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-			Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
-			if (fast_sampling_memory_size <= fast_sampling_memory_limit)
-			{
-				fast_sampling = true;
-
-				this.user_pos_items = new int[MaxUserID + 1][];
-				this.user_neg_items = new int[MaxUserID + 1][];
-				for (int u = 0; u < MaxUserID + 1; u++)
-				{
-					var pos_list = new List<int>(Feedback.UserMatrix[u]);
-					user_pos_items[u] = pos_list.ToArray();
-					var neg_list = new List<int>();
-					for (int i = 0; i < MaxItemID; i++)
-						if (!Feedback.UserMatrix[u].Contains(i) && Feedback.ItemMatrix[i].Count != 0)
-							neg_list.Add(i);
-					user_neg_items[u] = neg_list.ToArray();
-				}
-			}
 
 			item_attribute_weight_by_user = new Matrix<float>(MaxUserID + 1, NumItemAttributes);
 
@@ -154,19 +121,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="j">the ID of the second item</param>
 		protected  void SampleItemPair(int u, out int i, out int j)
 		{
-			if (fast_sampling)
-			{
-				i = user_pos_items[u][random.Next(user_pos_items[u].Count)];
-				j = user_neg_items[u][random.Next (user_neg_items[u].Count)];
-			}
-			else
-			{
-				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next (user_items.Count));
-				do
-					j = random.Next (0, MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
-			}
+			var user_items = Feedback.UserMatrix[u];
+			i = user_items.ElementAt(random.Next (user_items.Count));
+			do
+				j = random.Next (0, MaxItemID + 1);
+			while (Feedback.UserMatrix[u, j] || Feedback.ItemMatrix[j].Count == 0); // don't sample the item if it never has been viewed (maybe unknown item!)
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -262,8 +221,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} reg={1} num_iter={2} learn_rate={3} fast_sampling_memory_limit={4}",
-				this.GetType().Name, Regularization, NumIter, LearnRate, FastSamplingMemoryLimit);
+				"{0} reg={1} num_iter={2} learn_rate={3}",
+				this.GetType().Name, Regularization, NumIter, LearnRate);
 		}
 	}
 }
