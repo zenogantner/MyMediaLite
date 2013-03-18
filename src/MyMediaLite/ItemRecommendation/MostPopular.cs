@@ -42,9 +42,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// If false, the popularity is measured by the number of accesses to the item.
 		/// </summary>
 		public bool ByUser { get; set; }
-		
+
 		private int score_denominator;
-		
+
 		/// <summary>View count</summary>
 		IList<int> view_count;
 
