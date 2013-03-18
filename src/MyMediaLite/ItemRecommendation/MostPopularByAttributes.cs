@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -73,12 +72,13 @@ namespace MyMediaLite.ItemRecommendation
 			attribute_count_by_user = new IDictionary<int, int>[MaxUserID + 1];
 			for (int u = 0; u < attribute_count_by_user.Count; u++)
 				attribute_count_by_user[u] = new Dictionary<int, int>();
-
-			for (int index = 0; index < Feedback.Count; index++)
+			
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				int user_id = Feedback.Users[index];
-				int item_id = Feedback.Items[index];
-				foreach (int a in item_attributes[item_id]) // TODO speed up
+				int user_id = reader.GetUser();
+				int item_id = reader.GetItem();
+				foreach (int a in item_attributes[item_id])
 					if (attribute_count_by_user[user_id].ContainsKey(a))
 						attribute_count_by_user[user_id][a]++;
 					else
