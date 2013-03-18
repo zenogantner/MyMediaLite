@@ -60,10 +60,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			float result = baseline_predictor.Predict(user_id, item_id);
 
-			if ((user_id > MaxUserID) || (item_id > correlation.NumberOfRows - 1))
+			if ((user_id > MaxUserID) || (item_id > correlation_matrix.NumberOfRows - 1))
 				return result;
 
-			IList<int> correlated_items = correlation.GetPositivelyCorrelatedEntities(item_id);
+			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
 
 			double sum = 0;
 			double weight_sum = 0;
@@ -72,7 +72,7 @@ namespace MyMediaLite.RatingPrediction
 				if (data_item[item_id2, user_id])
 				{
 					float rating  = ratings.Get(user_id, item_id2, ratings.ByUser[user_id]);
-					double weight = correlation[item_id, item_id2];
+					double weight = correlation_matrix[item_id, item_id2];
 					weight_sum += weight;
 					sum += weight * (rating - baseline_predictor.Predict(user_id, item_id2));
 
@@ -98,27 +98,27 @@ namespace MyMediaLite.RatingPrediction
 
 			if (UpdateItems)
 			{
-				if (correlation is IBinaryDataCorrelationMatrix)
+				if (correlation_matrix is IBinaryDataCorrelationMatrix)
 				{
-					var bin_cor = correlation as IBinaryDataCorrelationMatrix;
+					var bin_cor = correlation_matrix as IBinaryDataCorrelationMatrix;
 					var item_users = new HashSet<int>(BinaryDataMatrix[item_id]);
 					for (int other_item_id = 0; other_item_id <= MaxItemID; other_item_id++)
 						if (bin_cor.IsSymmetric)
 						{
-							correlation[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, new HashSet<int>(BinaryDataMatrix[other_item_id]));
+							correlation_matrix[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, new HashSet<int>(BinaryDataMatrix[other_item_id]));
 						}
 						else
 						{
 							var other_item_users = new HashSet<int>(BinaryDataMatrix[other_item_id]);
-							correlation[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, other_item_users);
-							correlation[other_item_id, item_id] = bin_cor.ComputeCorrelation(other_item_users, item_users);
+							correlation_matrix[item_id, other_item_id] = bin_cor.ComputeCorrelation(item_users, other_item_users);
+							correlation_matrix[other_item_id, item_id] = bin_cor.ComputeCorrelation(other_item_users, item_users);
 						}
 				}
-				if (correlation is IRatingCorrelationMatrix)
+				if (correlation_matrix is IRatingCorrelationMatrix)
 				{
-					var rat_cor = correlation as IRatingCorrelationMatrix;
+					var rat_cor = correlation_matrix as IRatingCorrelationMatrix;
 					for (int other_item_id = 0; other_item_id <= MaxItemID; other_item_id++)
-						correlation[item_id, other_item_id] = rat_cor.ComputeCorrelation(ratings, EntityType.ITEM, item_id, other_item_id);
+						correlation_matrix[item_id, other_item_id] = rat_cor.ComputeCorrelation(ratings, EntityType.ITEM, item_id, other_item_id);
 				}
 			}
 		}
@@ -154,17 +154,17 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override void AddItem(int item_id)
 		{
-			correlation.AddEntity(item_id);
+			correlation_matrix.AddEntity(item_id);
 		}
 
 		float Predict(IList<Tuple<int, float>> rated_items, int item_id)
 		{
 			float result = baseline_predictor.Predict(int.MaxValue, item_id);
 
-			if (item_id > correlation.NumberOfRows - 1)
+			if (item_id > correlation_matrix.NumberOfRows - 1)
 				return result;
 
-			IList<int> correlated_items = correlation.GetPositivelyCorrelatedEntities(item_id);
+			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
 			var item_ratings = new Dictionary<int, float>();
 			foreach (var t in rated_items)
 				item_ratings.Add(t.Item1, t.Item2); // TODO handle several ratings of the same item
@@ -176,7 +176,7 @@ namespace MyMediaLite.RatingPrediction
 				if (item_ratings.ContainsKey(item_id2))
 				{
 					float rating  = item_ratings[item_id2];
-					double weight = correlation[item_id, item_id2];
+					double weight = correlation_matrix[item_id, item_id2];
 					weight_sum += weight;
 					sum += weight * (rating - baseline_predictor.Predict(int.MaxValue, item_id2));
 
@@ -210,13 +210,13 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public float GetItemSimilarity(int item_id1, int item_id2)
 		{
-			return correlation[item_id1, item_id2];
+			return correlation_matrix[item_id1, item_id2];
 		}
 
 		///
 		public IList<int> GetMostSimilarItems(int item_id, uint n = 10)
 		{
-			return correlation.GetNearestNeighbors(item_id, n);
+			return correlation_matrix.GetNearestNeighbors(item_id, n);
 		}
 	}
 }
