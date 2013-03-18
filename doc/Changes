@@ -11,6 +11,7 @@
              incremental updates
            - set item bias to zero in RemoveItem()
            - move some incremental update functionality to class MF
+         - BPRLinear, BPRSLIM: remove obsolete fast sampling
          - remove CLiMF, as the implementation was never complete nor working
          - remove BPRMF_Mapping (incomplete implementation)
 	 - remove ItemAttributeSVM

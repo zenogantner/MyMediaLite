@@ -1,5 +1,5 @@
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2012 Lucas Drumond
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -55,14 +55,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class BPRSLIM : SLIM
 	{
-		/// <summary>Fast, but memory-intensive sampling</summary>
-		protected bool fast_sampling = false;
-
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		public int FastSamplingMemoryLimit { get { return fast_sampling_memory_limit; }	set { fast_sampling_memory_limit = value; } }
-		/// <summary>Fast sampling memory limit, in MiB</summary>
-		protected int fast_sampling_memory_limit = 1024;
-
 		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
 		public bool WithReplacement { get; set; }
 
@@ -89,11 +81,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		protected bool update_j = true;
 
-		/// <summary>support data structure for fast sampling</summary>
-		protected IList<IList<int>> user_pos_items;
-		/// <summary>support data structure for fast sampling</summary>
-		protected IList<IList<int>> user_neg_items;
-
 		/// <summary>Random number generator</summary>
 		protected System.Random random;
 
@@ -113,8 +100,6 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Train()
 		{
 			InitModel();
-
-			CheckSampling();
 
 			random = MyMediaLite.Random.GetInstance();
 
@@ -202,25 +187,9 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			bool item_is_positive = Feedback.UserMatrix[u, i];
 
-			if (fast_sampling)
-			{
-				if (item_is_positive)
-				{
-					int rindex = random.Next(user_neg_items[u].Count);
-					j = user_neg_items[u][rindex];
-				}
-				else
-				{
-					int rindex = random.Next(user_pos_items[u].Count);
-					j = user_pos_items[u][rindex];
-				}
-			}
-			else
-			{
-				do
-					j = random.Next(MaxItemID + 1);
-				while (Feedback.UserMatrix[u, j] != item_is_positive);
-			}
+			do
+				j = random.Next(MaxItemID + 1);
+			while (Feedback.UserMatrix[u, j] != item_is_positive);
 
 			return item_is_positive;
 		}
@@ -231,24 +200,11 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="j">the ID of the second item</param>
 		protected virtual void SampleItemPair(int u, out int i, out int j)
 		{
-			if (fast_sampling)
-			{
-				int rindex;
-
-				rindex = random.Next(user_pos_items[u].Count);
-				i = user_pos_items[u][rindex];
-
-				rindex = random.Next(user_neg_items[u].Count);
-				j = user_neg_items[u][rindex];
-			}
-			else
-			{
-				var user_items = Feedback.UserMatrix[u];
-				i = user_items.ElementAt(random.Next(user_items.Count));
-				do
-					j = random.Next(MaxItemID + 1);
-				while (user_items.Contains(j));
-			}
+			var user_items = Feedback.UserMatrix[u];
+			i = user_items.ElementAt(random.Next(user_items.Count));
+			do
+				j = random.Next(MaxItemID + 1);
+			while (user_items.Contains(j));
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -326,50 +282,9 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void RemoveUser(int user_id)
-		{
-			base.RemoveUser(user_id);
-
-			if (fast_sampling)
-			{
-				user_pos_items[user_id] = null;
-				user_neg_items[user_id] = null;
-			}
-		}
-
-		///
 		public override void RemoveItem(int item_id)
 		{
 			base.RemoveItem(item_id);
-
-			if (fast_sampling)
-			{
-				for (int i = 0; i < user_pos_items.Count; i++)
-					if (user_pos_items[i].Contains(item_id))
-					{
-						var new_pos_items = new int[user_pos_items.Count - 1];
-						bool found = false;
-						for (int j = 0; j < user_pos_items[i].Count; j++)
-							if (user_pos_items[i][j] != item_id)
-								new_pos_items[j - (found ? 1 : 0)] = user_pos_items[i][j];
-							else
-								found = true;
-						user_pos_items[i] = new_pos_items;
-					}
-
-				for (int i = 0; i < user_neg_items.Count; i++)
-					if (user_neg_items[i].Contains(item_id))
-					{
-						var new_neg_items = new int[user_neg_items.Count - 1];
-						bool found = false;
-						for (int j = 0; j < user_neg_items[i].Count; j++)
-							if (user_neg_items[i][j] != item_id)
-								new_neg_items[j - (found ? 1 : 0)] = user_neg_items[i][j];
-							else
-								found = true;
-						user_neg_items[i] = new_neg_items;
-					}
-			}
 
 			// set item latent factors to zero
 			item_weights.SetRowToOneValue(item_id, 0);
@@ -402,49 +317,6 @@ namespace MyMediaLite.ItemRecommendation
 		public override float ComputeObjective()
 		{
 			return 0;
-		}
-
-		private void CreateFastSamplingData(int u)
-		{
-			while (u >= user_pos_items.Count)
-				user_pos_items.Add(null);
-			while (u >= user_neg_items.Count)
-				user_neg_items.Add(null);
-
-			user_pos_items[u] = Feedback.UserMatrix[u].ToArray();
-			var neg_list = new List<int>();
-			for (int i = 0; i < MaxItemID; i++)
-				if (! Feedback.UserMatrix[u, i])
-					neg_list.Add(i);
-			user_neg_items[u] = neg_list.ToArray();
-		}
-
-		///
-		protected void CheckSampling()
-		{
-			try
-			{
-				checked
-				{
-					int fast_sampling_memory_size = ((MaxUserID + 1) * (MaxItemID + 1) * 4) / (1024 * 1024);
-					Console.Error.WriteLine("fast_sampling_memory_size=" + fast_sampling_memory_size);
-
-					if (fast_sampling_memory_size <= fast_sampling_memory_limit)
-					{
-						fast_sampling = true;
-
-						this.user_pos_items = new List<IList<int>>(MaxUserID + 1);
-						this.user_neg_items = new List<IList<int>>(MaxUserID + 1);
-						for (int u = 0; u < MaxUserID + 1; u++)
-							CreateFastSamplingData(u);
-					}
-				}
-			}
-			catch (OverflowException)
-			{
-				Console.Error.WriteLine("fast_sampling_memory_size=TOO_MUCH");
-				// do nothing - don't use fast sampling
-			}
 		}
 
 		///
@@ -492,8 +364,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} reg_i={1} reg_j={2} num_iter={3} learn_rate={4} uniform_user_sampling={5} with_replacement={6} fast_sampling_memory_limit={7} update_j={8}",
-				this.GetType().Name, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, fast_sampling_memory_limit, UpdateJ);
+				"{0} reg_i={1} reg_j={2} num_iter={3} learn_rate={4} uniform_user_sampling={5} with_replacement={6} update_j={7}",
+				this.GetType().Name, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
 	}
 }
