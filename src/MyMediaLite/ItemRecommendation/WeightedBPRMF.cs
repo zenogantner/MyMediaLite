@@ -26,9 +26,17 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Weigthed BPR-MF with frequency-adjusted sampling</summary>
 	/// <remarks>
-	/// Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Lars Schmidt-Thieme:
-	/// Bayesian Personalized Ranking for Non-Uniformly Sampled Items.
-	/// KDD Cup Workshop 2011
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Zeno Gantner, Lucas Drumond, Christoph Freudenthaler, Lars Schmidt-Thieme:
+	///         Bayesian Personalized Ranking for Non-Uniformly Sampled Items.
+	///         KDD Cup Workshop 2011
+	///         http://jmlr.csail.mit.edu/proceedings/papers/v18/gantner12a/gantner12a.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
 	/// </remarks>
 	public class WeightedBPRMF : BPRMF
 	{
