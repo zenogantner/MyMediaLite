@@ -23,6 +23,7 @@ using System.Linq;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
+using MyMediaLite.ItemRecommendation.BPR;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -45,12 +46,6 @@ namespace MyMediaLite.ItemRecommendation
 	///    http://glaros.dtc.umn.edu/gkhome/fetch/papers/SLIM2011icdm.pdf
 	///   </description></item>
 	/// </list>
-	///
-	/// Different sampling strategies are configurable by setting the UniformUserSampling and WithReplacement accordingly.
-	/// To get the strategy from the original paper, set UniformUserSampling=false and WithReplacement=false.
-	/// WithReplacement=true (default) gives you usually a slightly faster convergence, and UniformUserSampling=true (default)
-	/// (approximately) optimizes the average AUC over all users.
-	///
 	/// This recommender supports incremental updates.
 	/// </remarks>
 	public class BPRSLIM : SLIM
@@ -78,9 +73,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		protected bool update_j = true;
 
-		/// <summary>Random number generator</summary>
-		protected System.Random random;
-
 		/// <summary>Default constructor</summary>
 		public BPRSLIM()
 		{
@@ -88,20 +80,20 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected override void InitModel()
-		{
-			base.InitModel();
-		}
-
-		///
 		public override void Train()
 		{
 			InitModel();
 
-			random = MyMediaLite.Random.GetInstance();
-
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
+		}
+
+		private IBPRSampler CreateBPRSampler()
+		{
+			if (UniformUserSampling)
+				return new UniformUserSampler(Interactions);
+			else
+				return new UniformPairSampler(Interactions);
 		}
 
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
@@ -110,85 +102,15 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
-			int num_pos_events = Feedback.Count;
-
+			var bpr_sampler = CreateBPRSampler();
+			int num_pos_events = Interactions.Count;
 			int user_id, pos_item_id, neg_item_id;
 
-			if (UniformUserSampling)
+			for (int i = 0; i < num_pos_events; i++)
 			{
-				for (int i = 0; i < num_pos_events; i++)
-				{
-					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-				}
+				bpr_sampler.NextTriple(out user_id, out pos_item_id, out neg_item_id);
+				UpdateParameters(user_id, pos_item_id, neg_item_id, true, true, update_j);
 			}
-			else
-			{
-				var reader = Interactions.Random;
-				
-				while (reader.Read())
-				{
-					user_id = reader.GetUser();
-					pos_item_id = reader.GetItem();
-					neg_item_id = -1;
-					SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-				}
-			}
-		}
-
-		/// <summary>Sample another item, given the first one and the user</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the ID of the given item</param>
-		/// <param name="other_item_id">the ID of the other item</param>
-		/// <returns>true if the given item was already seen by user u</returns>
-		protected virtual bool SampleOtherItem(int user_id, int item_id, out int other_item_id)
-		{
-			var user_items = Interactions.ByUser(user_id).Items;
-			bool item_is_positive = user_items.Contains(item_id);
-
-			do
-				other_item_id = random.Next(MaxItemID + 1);
-			while (user_items.Contains(other_item_id) == item_is_positive);
-
-			return item_is_positive;
-		}
-
-		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the ID of the first item</param>
-		/// <param name="other_item_id">the ID of the second item</param>
-		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
-		{
-			var user_items = Interactions.ByUser(user_id).Items;
-			item_id = user_items.ElementAt(random.Next(user_items.Count));
-			do
-				other_item_id = random.Next(MaxItemID + 1);
-			while (user_items.Contains(other_item_id));
-		}
-
-		/// <summary>Sample a user that has viewed at least one and not all items</summary>
-		/// <returns>the user ID</returns>
-		protected virtual int SampleUser()
-		{
-			while (true)
-			{
-				int user_id = random.Next(MaxUserID + 1);
-				var user_items = Interactions.ByUser(user_id).Items;
-				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
-					continue;
-				return user_id;
-			}
-		}
-
-		/// <summary>Sample a triple for BPR learning</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleTriple(out int u, out int i, out int j)
-		{
-			u = SampleUser();
-			SampleItemPair(u, out i, out j);
 		}
 
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
@@ -198,14 +120,14 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_u">if true, update the user latent factors</param>
 		/// <param name="update_i">if true, update the latent factors of the first item</param>
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
-		protected virtual void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
+		void UpdateParameters(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
 			double x_uij = PredictWithDifference(u, i, j);
 
 			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
 			// adjust factors
-			var user_items = Feedback.UserMatrix.GetEntriesByRow(u);
+			var user_items = Interactions.ByUser(u).Items;
 
 			foreach (int f in user_items)
 			{
@@ -224,12 +146,6 @@ namespace MyMediaLite.ItemRecommendation
 					item_weights[j, f] = (float) (w_jf + learn_rate * update);
 				}
 			}
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
 		}
 
 		///
@@ -255,20 +171,21 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_id">the item ID</param>
 		protected virtual void RetrainItem(int item_id)
 		{
+			var bpr_sampler = CreateBPRSampler();
 			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
 
-			int num_pos_events = Feedback.UserMatrix.NumberOfEntries;
-			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
+			int num_pos_events = Interactions.Count;;
+			int num_item_iterations = num_pos_events / (MaxItemID + 1);
 			for (int i = 0; i < num_item_iterations; i++) {
 				// remark: the item may be updated more or less frequently than in the normal from-scratch training
-				int user_id = SampleUser();
+				int user_id = bpr_sampler.NextUser();
 				int other_item_id;
-				bool item_is_positive = SampleOtherItem(user_id, item_id, out other_item_id);
+				bool item_is_positive = bpr_sampler.OtherItem(user_id, item_id, out other_item_id);
 
 				if (item_is_positive)
-					UpdateFactors(user_id, item_id, other_item_id, false, true, false);
+					UpdateParameters(user_id, item_id, other_item_id, false, true, false);
 				else
-					UpdateFactors(user_id, other_item_id, item_id, false, false, true);
+					UpdateParameters(user_id, other_item_id, item_id, false, false, true);
 			}
 		}
 
@@ -285,7 +202,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (user_id > MaxUserID || pos_item_id > MaxItemID || neg_item_id > MaxItemID)
 				return double.MinValue;
 
-			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
+			var user_items = Interactions.ByUser(user_id).Items;
 			double prediction = 0;
 
 			for (int k = 0; k < user_items.Count; k++)
@@ -316,7 +233,7 @@ namespace MyMediaLite.ItemRecommendation
 
 				this.item_weights = item_weights;
 			}
-			random = MyMediaLite.Random.GetInstance();
+			CreateBPRSampler();
 		}
 
 		///

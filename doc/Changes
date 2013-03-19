@@ -2,7 +2,9 @@
 	recommenders
 	 - MostPopular: take ByUser property always into account when doing
            incremental updates
-	 - BPR-related recommenders: remove WithReplacement property
+	 - BPR-related recommenders:
+           - remove WithReplacement property
+           - move BPR sampling logic into namespace ItemRecommender.BPR
 	 - remove MultiCoreBPRMF
 
 3.08	2013-03-

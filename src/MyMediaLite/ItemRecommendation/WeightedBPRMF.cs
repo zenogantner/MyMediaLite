@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.ItemRecommendation.BPR;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -31,8 +32,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class WeightedBPRMF : BPRMF
 	{
-		IInteractionReader _sampling_reader;
-		
 		/// <summary>Default constructor</summary>
 		public WeightedBPRMF()
 		{
@@ -45,26 +44,12 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			// de-activate until false is supported
 			UniformUserSampling = true;
-			
-			_sampling_reader = Interactions.Random;
 			base.Train();
 		}
 
-		///
-		protected override void SampleTriple(out int u, out int i, out int j)
+		protected override IBPRSampler CreateBPRSampler()
 		{
-			if (!_sampling_reader.Read())
-			{
-				_sampling_reader.Reset();
-				_sampling_reader.Read();
-			}
-			u = _sampling_reader.GetUser();
-			i = _sampling_reader.GetItem();
-
-			// sample negative item
-			do
-				j = Feedback.Items[random.Next(Feedback.Count)]; // TODO TODO create 2nd reader
-			while (Interactions.ByUser(u).Items.Contains(j));
+			return new WeightedBPRSampler(Interactions);
 		}
 
 		///

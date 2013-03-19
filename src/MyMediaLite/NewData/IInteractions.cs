@@ -23,8 +23,10 @@ namespace MyMediaLite.Data
 	public interface IInteractions
 	{
 		int Count { get; }
+		int MaxUserID { get; }
+		int MaxItemID { get; }
 
-		IInteractionReader Random { get; }
+		IInteractionReader Random { get; } // TODO use function instead if property for clearer semantics? This should return a *different* reader for each call
 		IInteractionReader Sequential { get; }
 		// IInteractionReader Chronological { get; }
 		IInteractionReader ByUser(int user_id);

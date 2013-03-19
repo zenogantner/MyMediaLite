@@ -55,14 +55,8 @@ namespace MyMediaLite.ItemRecommendation
 			LearnRate = 0.1f;
 		}
 
-		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		/// <param name="update_u">if true, update the user latent factors</param>
-		/// <param name="update_i">if true, update the latent factors of the first item</param>
-		/// <param name="update_j">if true, update the latent factors of the second item</param>
-		protected override void UpdateFactors(int u, int i, int j, bool update_u, bool update_i, bool update_j)
+		///
+		protected override void UpdateParameters(int u, int i, int j, bool update_u, bool update_i, bool update_j)
 		{
 			double x_uij = item_bias[i] - item_bias[j] + MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
 

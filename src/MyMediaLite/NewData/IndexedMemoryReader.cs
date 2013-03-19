@@ -25,7 +25,7 @@ namespace MyMediaLite.Data
 	{
 		public int Count { get { return index.Count; } }
 
-		public ICollection<int> Users
+		public ISet<int> Users
 		{
 			get {
 				if (_users == null)
@@ -33,9 +33,9 @@ namespace MyMediaLite.Data
 				return _users;
 			}
 		}
-		private ICollection<int> _users;
+		private ISet<int> _users;
 
-		public ICollection<int> Items
+		public ISet<int> Items
 		{
 			get {
 				if (_items == null)
@@ -43,7 +43,7 @@ namespace MyMediaLite.Data
 				return _items;
 			}
 		}
-		private ICollection<int> _items;
+		private ISet<int> _items;
 
 		private IDataSet dataset;
 		private IList<int> index;
@@ -64,6 +64,12 @@ namespace MyMediaLite.Data
 		public bool Read()
 		{
 			return enumerator.MoveNext();
+		}
+
+		public void ReadInfinite()
+		{
+			if (!enumerator.MoveNext())
+				enumerator.Reset();
 		}
 
 		public int GetUser()

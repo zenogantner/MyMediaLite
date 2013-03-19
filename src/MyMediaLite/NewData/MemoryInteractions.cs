@@ -25,6 +25,10 @@ namespace MyMediaLite.Data
 	{
 		public int Count { get { return dataset.Count; } }
 
+		public int MaxUserID { get; private set; }
+
+		public int MaxItemID { get; private set; }
+
 		public IInteractionReader Random
 		{
 			get {
@@ -57,6 +61,8 @@ namespace MyMediaLite.Data
 		public MemoryInteractions(IDataSet dataset)
 		{
 			this.dataset = dataset;
+			MaxUserID = dataset.MaxUserID;
+			MaxItemID = dataset.MaxItemID;
 		}
 
 		private IList<IInteractionReader> _by_user;
