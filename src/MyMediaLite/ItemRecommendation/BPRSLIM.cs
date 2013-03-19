@@ -110,7 +110,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
-			// TODO move BPR sampling logic to its own helper class
 			int num_pos_events = Feedback.Count;
 
 			int user_id, pos_item_id, neg_item_id;
@@ -150,7 +149,7 @@ namespace MyMediaLite.ItemRecommendation
 
 			do
 				other_item_id = random.Next(MaxItemID + 1);
-			while (user_items.Contains(other_item_id) != item_is_positive);
+			while (user_items.Contains(other_item_id) == item_is_positive);
 
 			return item_is_positive;
 		}
