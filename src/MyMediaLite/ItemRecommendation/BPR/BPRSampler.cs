@@ -40,7 +40,6 @@ namespace MyMediaLite.ItemRecommendation.BPR
 		}
 
 		public abstract void NextTriple(out int u, out int i, out int j);
-		//public abstract void ItemPair(int user_id, out int item_id, out int other_item_id);
 		public abstract int NextUser();
 
 		/// <summary>Sample another item, given the first one and the user</summary>
