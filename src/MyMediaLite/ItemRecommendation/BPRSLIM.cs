@@ -55,9 +55,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class BPRSLIM : SLIM
 	{
-		/// <summary>Sample positive observations with (true) or without (false) replacement</summary>
-		public bool WithReplacement { get; set; }
-
 		/// <summary>Sample uniformly from users</summary>
 		public bool UniformUserSampling { get; set; }
 
@@ -113,98 +110,62 @@ namespace MyMediaLite.ItemRecommendation
 		/// </remarks>
 		public override void Iterate()
 		{
+			// TODO move BPR sampling logic to its own helper class
 			int num_pos_events = Feedback.Count;
 
 			int user_id, pos_item_id, neg_item_id;
 
 			if (UniformUserSampling)
 			{
-				if (WithReplacement) // case 1: uniform user sampling, with replacement
+				for (int i = 0; i < num_pos_events; i++)
 				{
-					var user_matrix = Feedback.GetUserMatrixCopy();
-
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						while (true) // sampling with replacement
-						{
-							user_id = SampleUser();
-							var user_items = user_matrix[user_id];
-
-							// reset user if already exhausted
-							if (user_items.Count == 0)
-								foreach (int item_id in Feedback.UserMatrix[user_id])
-									user_matrix[user_id, item_id] = true;
-
-							pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
-							user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
-							do
-								neg_item_id = random.Next(MaxItemID + 1);
-							while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
-							break;
-						}
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
-				}
-				else // case 2: uniform user sampling, without replacement
-				{
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
+					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
 				}
 			}
 			else
 			{
-				if (WithReplacement) // case 3: uniform pair sampling, with replacement
-					for (int i = 0; i < num_pos_events; i++)
-					{
-						int index = random.Next(num_pos_events);
-						user_id = Feedback.Users[index];
-						pos_item_id = Feedback.Items[index];
-						neg_item_id = -1;
-						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
-				else // case 4: uniform pair sampling, without replacement
-					foreach (int index in Feedback.RandomIndex)
-					{
-						user_id = Feedback.Users[index];
-						pos_item_id = Feedback.Items[index];
-						neg_item_id = -1;
-						SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-						UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
-					}
+				var reader = Interactions.Random;
+				
+				while (reader.Read())
+				{
+					user_id = reader.GetUser();
+					pos_item_id = reader.GetItem();
+					neg_item_id = -1;
+					SampleOtherItem(user_id, pos_item_id, out neg_item_id);
+					UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				}
 			}
 		}
 
 		/// <summary>Sample another item, given the first one and the user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the given item</param>
-		/// <param name="j">the ID of the other item</param>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the given item</param>
+		/// <param name="other_item_id">the ID of the other item</param>
 		/// <returns>true if the given item was already seen by user u</returns>
-		protected virtual bool SampleOtherItem(int u, int i, out int j)
+		protected virtual bool SampleOtherItem(int user_id, int item_id, out int other_item_id)
 		{
-			bool item_is_positive = Feedback.UserMatrix[u, i];
+			var user_items = Interactions.ByUser(user_id).Items;
+			bool item_is_positive = user_items.Contains(item_id);
 
 			do
-				j = random.Next(MaxItemID + 1);
-			while (Feedback.UserMatrix[u, j] != item_is_positive);
+				other_item_id = random.Next(MaxItemID + 1);
+			while (user_items.Contains(other_item_id) != item_is_positive);
 
 			return item_is_positive;
 		}
 
 		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected virtual void SampleItemPair(int u, out int i, out int j)
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
 		{
-			var user_items = Feedback.UserMatrix[u];
-			i = user_items.ElementAt(random.Next(user_items.Count));
+			var user_items = Interactions.ByUser(user_id).Items;
+			item_id = user_items.ElementAt(random.Next(user_items.Count));
 			do
-				j = random.Next(MaxItemID + 1);
-			while (user_items.Contains(j));
+				other_item_id = random.Next(MaxItemID + 1);
+			while (user_items.Contains(other_item_id));
 		}
 
 		/// <summary>Sample a user that has viewed at least one and not all items</summary>
@@ -213,11 +174,11 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			while (true)
 			{
-				int u = random.Next(MaxUserID + 1);
-				var user_items = Feedback.UserMatrix[u];
+				int user_id = random.Next(MaxUserID + 1);
+				var user_items = Interactions.ByUser(user_id).Items;
 				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
 					continue;
-				return u;
+				return user_id;
 			}
 		}
 
@@ -364,8 +325,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} reg_i={1} reg_j={2} num_iter={3} learn_rate={4} uniform_user_sampling={5} with_replacement={6} update_j={7}",
-				this.GetType().Name, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
+				"{0} reg_i={1} reg_j={2} num_iter={3} learn_rate={4} uniform_user_sampling={5} update_j={6}",
+				this.GetType().Name, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, UpdateJ);
 		}
 	}
 }

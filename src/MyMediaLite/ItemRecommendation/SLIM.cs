@@ -1,3 +1,4 @@
+// Copyright (C) 2013 Zeno Gantner
 // Copyright (C) 2012 Lucas Drumond
 //
 // This file is part of MyMediaLite.
@@ -101,7 +102,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (user_id > MaxUserID || item_id >= item_weights.dim1)
 				return float.MinValue;
 
-			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
+			var user_items = Interactions.ByUser(user_id).Items;
 			float prediction = 0;
 			foreach (int item in user_items)
 				prediction += item_weights[item_id, item];

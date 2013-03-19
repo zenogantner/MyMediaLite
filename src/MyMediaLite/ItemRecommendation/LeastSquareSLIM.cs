@@ -1,3 +1,4 @@
+// Copyright (C) 2013 Zeno Gantner
 // Copyright (C) 2012 Lucas Drumond
 //
 // This file is part of MyMediaLite.
@@ -145,16 +146,16 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="other_item_id">the ID of the second item</param>
 		protected virtual void UpdateParameters(int item_id, int other_item_id)
 		{
-			var item_users = Feedback.UserMatrix.GetEntriesByColumn(other_item_id);
+			var item_users = Interactions.ByItem(other_item_id).Users;
 
 			double gradient_sum = 0;
 
-			foreach (int u in item_users)
+			foreach (int user_id in item_users)
 			{
-				if (Feedback.UserMatrix[u].Contains(item_id))
+				if (Interactions.ByUser(user_id).Items.Contains(item_id))
 					gradient_sum += 1;
 
-				gradient_sum -= Predict(u, item_id, other_item_id);
+				gradient_sum -= Predict(user_id, item_id, other_item_id);
 			}
 
 			double gradient = gradient_sum / ((double) MaxUserID + 1.0);
@@ -183,25 +184,19 @@ namespace MyMediaLite.ItemRecommendation
 		/// into consideration. This is needed for the coordinate descent update rule (equation 5 from
 		/// Friedman et al. (2010)).
 		/// </summary>
-		/// <param name='user_id'>
-		/// User_id.
-		/// </param>
-		/// <param name='item_id'>
-		/// Item_id.
-		/// </param>
-		/// <param name='exclude_item_id'>
-		/// Current item ID which shouldn't .
-		/// </param>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='item_id'>the item ID</param>
+		/// <param name='exclude_item_id'>current item ID, to be excluded in the computation</param>
 		public float Predict(int user_id, int item_id, int exclude_item_id)
 		{
-			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
+			var user_items = Interactions.ByUser(user_id).Items;
 			float prediction = 0;
 
 			if (K > 0)
 			{
 				foreach (int neighbor in GetMostSimilarItems(item_id))
 				{
-					if (Feedback.ItemMatrix[neighbor, user_id] && neighbor != exclude_item_id)
+					if (user_items.Contains(neighbor) && neighbor != exclude_item_id)
 						prediction += item_weights[item_id, neighbor];
 				}
 			}
@@ -261,14 +256,14 @@ namespace MyMediaLite.ItemRecommendation
 			if (user_id > MaxUserID || item_id >= item_weights.dim1)
 				return float.MinValue;
 
-			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);
+			var user_items = Interactions.ByUser(user_id).Items;
 			float prediction = 0;
 
 			if (K > 0)
 			{
 				foreach (int neighbor in itemKNN.GetMostSimilarItems(item_id))
 				{
-					if (Feedback.ItemMatrix[neighbor, user_id])
+					if (user_items.Contains(neighbor))
 						prediction += item_weights[item_id, neighbor];
 				}
 			}
