@@ -410,7 +410,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			// read test data
 			if (test_file != null)
 			{
-				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITH_RATINGS : TestRatingFileFormat.WITHOUT_RATINGS;
+				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITHOUT_RATINGS : TestRatingFileFormat.WITH_RATINGS;
 				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
 					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
