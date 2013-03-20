@@ -295,12 +295,11 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="user_id">the user ID</param>
+		/// <param name="user_items">the items accessed by the given user</param>
 		/// <param name="item_id">the ID of the first item</param>
 		/// <param name="other_item_id">the ID of the second item</param>
-		protected virtual void SampleItemPair(int user_id, out int item_id, out int other_item_id)
+		protected virtual void SampleItemPair(ICollection<int> user_items, out int item_id, out int other_item_id)
 		{
-			var user_items = Feedback.UserMatrix[user_id];
 			item_id = user_items.ElementAt(random.Next(user_items.Count));
 			do
 				other_item_id = random.Next(MaxItemID + 1);
@@ -328,7 +327,8 @@ namespace MyMediaLite.ItemRecommendation
 		protected virtual void SampleTriple(out int user_id, out int item_id, out int other_item_id)
 		{
 			user_id = SampleUser();
-			SampleItemPair(user_id, out item_id, out other_item_id);
+			var user_items = Feedback.UserMatrix[user_id];
+			SampleItemPair(user_items, out item_id, out other_item_id);
 		}
 
 		/// <summary>Update latent factors according to the stochastic gradient descent update rule</summary>
@@ -407,7 +407,7 @@ namespace MyMediaLite.ItemRecommendation
 			for (int i = 0; i < user_items.Count; i++)
 			{
 				int item_id_1, item_id_2;
-				SampleItemPair(user_id, out item_id_1, out item_id_2);
+				SampleItemPair(user_items, out item_id_1, out item_id_2);
 				UpdateFactors(user_id, item_id_1, item_id_2, true, false, false);
 			}
 		}
@@ -543,19 +543,18 @@ namespace MyMediaLite.ItemRecommendation
 
 		void IterateUser(ISet<int> user_items, IList<float> user_factors)
 		{
-			int num_pos_events = user_items.Count;
-
-			int user_id, pos_item_id, neg_item_id;
-
 			if (WithReplacement) // case 1: item sampling with replacement
 			{
 				throw new NotImplementedException();
 			}
 			else // case 2: item sampling without replacement
 			{
+				int num_pos_events = user_items.Count;
+				int pos_item_id, neg_item_id;
+
 				for (int i = 0; i < num_pos_events; i++)
 				{
-					SampleTriple(out user_id, out pos_item_id, out neg_item_id);
+					SampleItemPair(user_items, out pos_item_id, out neg_item_id);
 					// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
 					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
 					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
