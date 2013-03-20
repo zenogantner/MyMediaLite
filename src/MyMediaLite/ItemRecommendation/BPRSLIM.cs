@@ -166,11 +166,10 @@ namespace MyMediaLite.ItemRecommendation
 			item_weights.SetRowToOneValue(item_id, 0);
 		}
 
-
-		/// <summary>Retrain the latent factors of a given item</summary>
-		/// <param name="item_id">the item ID</param>
+		///
 		protected virtual void RetrainItem(int item_id)
 		{
+			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
 			var bpr_sampler = CreateBPRSampler();
 			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
 

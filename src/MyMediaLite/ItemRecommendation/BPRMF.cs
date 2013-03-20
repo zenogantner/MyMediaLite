@@ -250,10 +250,9 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override void RetrainUser(int user_id)
 		{
-			// TODO do properly
-
-			var bpr_sampler = CreateBPRSampler();
+			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
 			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
+			var bpr_sampler = CreateBPRSampler();
 
 			var user_items = Interactions.ByUser(user_id).Items;
 			var reader = Interactions.ByUser(user_id);
@@ -261,7 +260,7 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				int item_id_1 = reader.GetItem();
 				int item_id_2;
-				bpr_sampler.OtherItem(user_id, item_id_1, out item_id_2);
+				bpr_sampler.OtherItem(user_items, item_id_1, out item_id_2);
 				UpdateParameters(user_id, item_id_1, item_id_2, true, false, false);
 			}
 		}
@@ -269,8 +268,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected override void RetrainItem(int item_id)
 		{
-			//TODO do properly
-
+			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
 			var bpr_sampler = CreateBPRSampler();
 			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
 
@@ -401,16 +399,15 @@ namespace MyMediaLite.ItemRecommendation
 
 		void IterateUser(ISet<int> user_items, IList<float> user_factors)
 		{
-			// TODO do correctly!!!
-			
 			var bpr_sampler = CreateBPRSampler();
 			int num_pos_events = user_items.Count;
 
 			for (int i = 0; i < num_pos_events; i++)
 			{
-				int user_id, pos_item_id, neg_item_id;
-				bpr_sampler.NextTriple(out user_id, out pos_item_id, out neg_item_id);
-				// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
+				int pos_item_id, neg_item_id;
+				bpr_sampler.ItemPair(user_items, out pos_item_id, out neg_item_id);
+
+				// TODO generalize and call UpdateParameters -- need to represent factors as arrays, not matrices for this
 				double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
 				double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 

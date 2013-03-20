@@ -16,6 +16,8 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.ItemRecommendation.BPR
@@ -42,6 +44,34 @@ namespace MyMediaLite.ItemRecommendation.BPR
 		public abstract void NextTriple(out int u, out int i, out int j);
 		public abstract int NextUser();
 
+		/// <summary>Sample a pair of items, given a user</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		public void ItemPair(ISet<int> user_items, out int item_id, out int other_item_id)
+		{
+			item_id = user_items.ElementAt(random.Next(user_items.Count));
+			do
+				other_item_id = random.Next(max_item_id + 1);
+			while (user_items.Contains(other_item_id));
+		}
+
+		/// <summary>Sample another item, given the first one and the user</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the given item</param>
+		/// <param name="other_item_id">the ID of the other item</param>
+		/// <returns>true if the given item was already seen by user u</returns>
+		public virtual bool OtherItem(ISet<int> user_items, int item_id, out int other_item_id)
+		{
+			bool item_is_positive = user_items.Contains(item_id);
+
+			do
+				other_item_id = random.Next(max_item_id + 1);
+			while (user_items.Contains(other_item_id) == item_is_positive);
+
+			return item_is_positive;
+		}
+
 		/// <summary>Sample another item, given the first one and the user</summary>
 		/// <param name="user_id">the user ID</param>
 		/// <param name="item_id">the ID of the given item</param>
@@ -50,13 +80,7 @@ namespace MyMediaLite.ItemRecommendation.BPR
 		public virtual bool OtherItem(int user_id, int item_id, out int other_item_id)
 		{
 			var user_items = interactions.ByUser(user_id).Items;
-			bool item_is_positive = user_items.Contains(item_id);
-
-			do
-				other_item_id = random.Next(max_item_id + 1);
-			while (user_items.Contains(other_item_id) == item_is_positive);
-
-			return item_is_positive;
+			return OtherItem(user_items, item_id, out other_item_id);
 		}
 	}
 }

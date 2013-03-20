@@ -16,27 +16,24 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite.Data;
 
 namespace MyMediaLite.ItemRecommendation.BPR
 {
-	public class WeightedBPRSampler : UniformPairSampler
+	public class UniformUserFrequencyItemSampler : UniformUserSampler
 	{
 		private IInteractionReader negative_item_sampling_reader;
 
-		public WeightedBPRSampler(IInteractions interactions) : base(interactions)
+		public UniformUserFrequencyItemSampler(IInteractions interactions) : base(interactions)
 		{
 			negative_item_sampling_reader = interactions.Random;
 		}
 
-		/// <summary>Sample another item, given the first one and the user</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="item_id">the ID of the given item</param>
-		/// <param name="other_item_id">the ID of the other item</param>
-		/// <returns>true if the given item was already seen by user u</returns>
-		public override bool OtherItem(int user_id, int item_id, out int other_item_id)
+		///
+		public override bool OtherItem(ISet<int> user_items, int item_id, out int other_item_id)
 		{
-			var user_items = interactions.ByUser(user_id).Items;
 			bool item_is_positive = user_items.Contains(item_id);
 
 			do
@@ -48,6 +45,18 @@ namespace MyMediaLite.ItemRecommendation.BPR
 
 			return item_is_positive;
 		}
+		
+		/// <summary>Sample a pair of items, given a user</summary>
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the ID of the first item</param>
+		/// <param name="other_item_id">the ID of the second item</param>
+		protected void ItemPair(int user_id, out int item_id, out int other_item_id)
+		{
+			var user_items = interactions.ByUser(user_id).Items;
+			item_id = user_items.ElementAt(random.Next(user_items.Count));
+			OtherItem(user_items, item_id, out other_item_id);
+		}
+
 	}
 }
 
