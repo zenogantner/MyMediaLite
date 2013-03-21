@@ -174,11 +174,11 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		}
 		base.Run(args);
 
-		bool no_eval = true;
+		bool do_eval = false;
 		if (test_ratio > 0 || chronological_split != null)
-			no_eval = false;
+			do_eval = true;
 		if (test_file != null && !test_no_ratings)
-			no_eval = false;
+			do_eval = true;
 
 		Console.Error.WriteLine(
 			string.Format(CultureInfo.InvariantCulture,
@@ -286,7 +286,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					Console.WriteLine();
 					var results = DoCrossValidation();
 					Console.Write(Render(results));
-					no_eval = true;
+					do_eval = false;
 				}
 				else
 				{
@@ -301,7 +301,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				}
 			}
 
-			if (!no_eval)
+			if (do_eval)
 			{
 				if (online_eval)
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(Render(recommender.EvaluateOnline(test_data))); });
@@ -318,15 +318,15 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					});
 					Console.Write(" fit_time " + seconds);
 				}
+			}
 
-				if (prediction_file != null)
-				{
-					Console.WriteLine();
-					seconds = Wrap.MeasureTime(delegate() {
-						recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
-					});
-					Console.Error.WriteLine("prediction_time " + seconds);
-				}
+			if (prediction_file != null)
+			{
+				Console.WriteLine();
+				seconds = Wrap.MeasureTime(delegate() {
+					recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
+				});
+				Console.Error.WriteLine("prediction_time " + seconds);
 			}
 
 			Console.WriteLine();
@@ -350,7 +350,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 		if (test_no_ratings && prediction_file == null)
 			Abort("--test-no-ratings needs both --prediction-file=FILE and --test-file=FILE.");
-		
+
 		// handling of --chronological-split
 		if (chronological_split != null)
 		{
@@ -433,7 +433,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	{
 		return recommender.Evaluate(test_data, training_data);
 	}
-	
+
 	protected virtual EvaluationResults DoCrossValidation()
 	{
 		return recommender.DoCrossValidation(cross_validation, compute_fit, true);
