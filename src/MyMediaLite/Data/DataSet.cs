@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -144,7 +144,7 @@ namespace MyMediaLite.Data
 
 		void BuildByUserCounts()
 		{
-			count_by_user = new int[MaxUserID + 1];
+			count_by_user = Enumerable.Repeat(0, MaxUserID + 1).ToList();
 			for (int index = 0; index < Count; index++)
 				count_by_user[Users[index]]++;
 		}
@@ -163,7 +163,7 @@ namespace MyMediaLite.Data
 
 		void BuildByItemCounts()
 		{
-			count_by_item = new int[MaxItemID + 1];
+			count_by_item = Enumerable.Repeat(0, MaxItemID + 1).ToList();
 			for (int index = 0; index < Count; index++)
 				count_by_item[Items[index]]++;
 		}

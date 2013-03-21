@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -174,6 +173,20 @@ namespace MyMediaLite.Data
 				for (int i = by_item.Count; i <= item_id; i++)
 					by_item.Add(new List<int>());
 				by_item[item_id].Add(pos);
+			}
+
+			// update count data structures if necessary
+			if (count_by_user != null)
+			{
+				for (int u = count_by_user.Count; u <= user_id; u++)
+					count_by_user.Add(0);
+				count_by_user[user_id]++;
+			}
+			if (count_by_item != null)
+			{
+				for (int i = count_by_item.Count; i <= item_id; i++)
+					count_by_item.Add(0);
+				count_by_item[item_id]++;
 			}
 		}
 
