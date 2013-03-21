@@ -67,26 +67,22 @@ namespace MyMediaLite.Eval
 		{
 			switch (candidate_item_mode)
 			{
-				case CandidateItems.TRAINING: return training.AllItems; break;
-				case CandidateItems.TEST:     return test.AllItems; break;
+				case CandidateItems.TRAINING: return training.AllItems;
+				case CandidateItems.TEST:     return test.AllItems;
 				case CandidateItems.OVERLAP:
 					var result = test.AllItems.Intersect(training.AllItems).ToList();
 					result.Sort();
 					return result;
-				 	break;
 				case CandidateItems.UNION:
 					result = test.AllItems.Union(training.AllItems).ToList();
 					result.Sort();
 					return result;
-					 break;
 				case CandidateItems.EXPLICIT:
 					if (candidate_items == null)
 						throw new ArgumentNullException("candidate_items");
 					return candidate_items;
-					 break;
 				default:
 					throw new ArgumentException("Unknown candidate_item_mode: " + candidate_item_mode.ToString());
-					 break;
 			}
 		}
 
