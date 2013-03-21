@@ -1,5 +1,5 @@
 // Copyright (C) 2013 João Vinagre, Zeno Gantner
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -103,6 +103,7 @@ namespace MyMediaLite.ItemRecommendation
 				default:
 					throw new NotImplementedException(string.Format("{0} does not support for {1}.", this.GetType().Name, Correlation));
 			}
+			correlation_matrix.Weighted = Weighted;
 		}
 
 		/// <summary>Update the correlation matrix for the given feedback</summary>
