@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -82,6 +82,17 @@ namespace Tests.RatingPrediction
 			var candidate_items = new List<int> { 0, 1 }; // have a known and an unknown item
 			var results = mf.ScoreItems(user_ratings, candidate_items);
 			Assert.AreEqual(2, results.Count);
+		}
+
+		[Test()]
+		public void TestIncrementalUpdates()
+		{
+			var mf = new BiasedMatrixFactorization() { Ratings = TestUtils.CreateRatings(), FrequencyRegularization = true };
+			mf.Train();
+
+			var new_ratings = new Ratings();
+			new_ratings.Add(mf.MaxUserID + 1, mf.MaxItemID + 1, 3f);
+			mf.AddRatings(new_ratings);
 		}
 	}
 }
