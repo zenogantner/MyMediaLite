@@ -55,6 +55,41 @@ namespace MyMediaLite.Eval
 			}
 		}
 
+		/// <param name="candidate_items">a list of integers with all candidate items</param>
+		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
+		/// <param name="test">test cases</param>
+		/// <param name="training">training data</param>
+		static public IList<int> Candidates(
+			IList<int> candidate_items,
+			CandidateItems candidate_item_mode,
+			IPosOnlyFeedback test,
+			IPosOnlyFeedback training)
+		{
+			switch (candidate_item_mode)
+			{
+				case CandidateItems.TRAINING: return training.AllItems; break;
+				case CandidateItems.TEST:     return test.AllItems; break;
+				case CandidateItems.OVERLAP:
+					var result = test.AllItems.Intersect(training.AllItems).ToList();
+					result.Sort();
+					return result;
+				 	break;
+				case CandidateItems.UNION:
+					result = test.AllItems.Union(training.AllItems).ToList();
+					result.Sort();
+					return result;
+					 break;
+				case CandidateItems.EXPLICIT:
+					if (candidate_items == null)
+						throw new ArgumentNullException("candidate_items");
+					return candidate_items;
+					 break;
+				default:
+					throw new ArgumentException("Unknown candidate_item_mode: " + candidate_item_mode.ToString());
+					 break;
+			}
+		}
+
 		/// <summary>Evaluation for rankings of items</summary>
 		/// <remarks>
 		/// User-item combinations that appear in both sets are ignored for the test set, and thus in the evaluation,
@@ -93,25 +128,17 @@ namespace MyMediaLite.Eval
 			RepeatedEvents repeated_events = RepeatedEvents.No,
 			int n = -1)
 		{
-			switch (candidate_item_mode)
-			{
-				case CandidateItems.TRAINING: candidate_items = training.AllItems; break;
-				case CandidateItems.TEST:     candidate_items = test.AllItems; break;
-				case CandidateItems.OVERLAP:  candidate_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
-				case CandidateItems.UNION:    candidate_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
-			}
-			if (candidate_items == null)
-				throw new ArgumentNullException("candidate_items");
 			if (test_users == null)
 				test_users = test.AllUsers;
+			candidate_items = Candidates(candidate_items, candidate_item_mode, test, training);
 
-			int num_users = 0;
 			var result = new ItemRecommendationEvaluationResults();
 
 			// make sure that the user matrix is completely initialized before entering parallel code
 			var training_user_matrix = training.UserMatrix;
 			var test_user_matrix     = test.UserMatrix;
 
+			int num_users = 0;
 			Parallel.ForEach(test_users, user_id => {
 				try
 				{

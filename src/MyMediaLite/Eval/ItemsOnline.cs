@@ -50,22 +50,15 @@ namespace MyMediaLite.Eval
 			if (incremental_recommender == null)
 				throw new ArgumentException("recommender must be of type IIncrementalItemRecommender");
 
-			// prepare candidate items once to avoid recreating them
-			switch (candidate_item_mode)
-			{
-				case CandidateItems.TRAINING: candidate_items = training.AllItems; break;
-				case CandidateItems.TEST:     candidate_items = test.AllItems; break;
-				case CandidateItems.OVERLAP:  candidate_items = new List<int>(test.AllItems.Intersect(training.AllItems)); break;
-				case CandidateItems.UNION:    candidate_items = new List<int>(test.AllItems.Union(training.AllItems)); break;
-			}
-			
+			candidate_items = Items.Candidates(candidate_items, candidate_item_mode, test, training);
+
 			test_users.Shuffle();
 			var results_by_user = new Dictionary<int, ItemRecommendationEvaluationResults>();
 			foreach (int user_id in test_users)
 			{
 				if (candidate_items.Intersect(test.ByUser[user_id]).Count() == 0)
 					continue;
-				
+
 				// prepare data
 				var current_test_data = new PosOnlyFeedback<SparseBooleanMatrix>();
 				foreach (int index in test.ByUser[user_id])
@@ -79,6 +72,7 @@ namespace MyMediaLite.Eval
 				foreach (int index in test.ByUser[user_id])
 					tuples.Add(Tuple.Create(user_id, test.Items[index]));
 				incremental_recommender.AddFeedback(tuples);
+				// TODO candidate_items should be updated properly
 			}
 
 			var results = new ItemRecommendationEvaluationResults();
