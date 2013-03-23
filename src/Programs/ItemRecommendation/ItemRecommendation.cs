@@ -323,8 +323,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && test_users_file == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --test-users=FILE.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && prediction_file == null)
+			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --prediction-file=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
 			Abort("--candidate-items=FILE, --all-items, --in-training-items, --in-test-items, and --overlap-items are mutually exclusive.");
@@ -335,8 +335,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_test_items)
 			Abort("--in-test-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
 
-		if (test_file == null && test_ratio == 0 && cross_validation == 0 && in_training_items)
-			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, or cross-validation=K.");
+		if (test_file == null && test_ratio == 0 && cross_validation == 0 && prediction_file == null && in_training_items)
+			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, cross-validation=K, or --prediction-file=FILE.");
 
 		if (user_prediction)
 		{
