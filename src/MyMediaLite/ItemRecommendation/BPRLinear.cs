@@ -46,9 +46,11 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class BPRLinear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
+		// TODO add item bias
+
 		/// <summary>Sample uniformly from users</summary>
 		public bool UniformUserSampling { get; set; }
-		
+
 		///
 		public IBooleanMatrix ItemAttributes
 		{
@@ -99,7 +101,7 @@ namespace MyMediaLite.ItemRecommendation
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
 		}
-		
+
 		protected virtual IBPRSampler CreateBPRSampler()
 		{
 			if (UniformUserSampling)
@@ -107,7 +109,7 @@ namespace MyMediaLite.ItemRecommendation
 			else
 				return new UniformPairSampler(Interactions);
 		}
-		
+
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
 		public void Iterate()
 		{
