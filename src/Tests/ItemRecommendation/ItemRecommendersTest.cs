@@ -58,7 +58,7 @@ namespace Tests.ItemRecommendation
 					Assert.AreEqual(1, scored_items.Count);
 				}
 		}
-		
+
 		[Test()]
 		public void TestSaveLoad()
 		{
@@ -69,7 +69,7 @@ namespace Tests.ItemRecommendation
 						continue;
 					if (type.Name == "MostPopularByAttributes" || type.Name == "ItemAttributeSVM")
 						continue;
-					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN" || type.Name == "BPRSLIM")
+					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN")
 						continue;
 
 					try
@@ -91,7 +91,7 @@ namespace Tests.ItemRecommendation
 					}
 				}
 		}
-		
+
 		private static ItemRecommender SetUpRecommender(Type type)
 		{
 			var recommender = (ItemRecommender) type.CreateItemRecommender();
