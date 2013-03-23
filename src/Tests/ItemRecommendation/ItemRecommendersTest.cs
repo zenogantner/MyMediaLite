@@ -69,7 +69,7 @@ namespace Tests.ItemRecommendation
 						continue;
 					if (type.Name == "MostPopularByAttributes" || type.Name == "ItemAttributeSVM")
 						continue;
-					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN" || type.Name == "BPRLinear" || type.Name == "BPRSLIM")
+					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN" || type.Name == "BPRSLIM")
 						continue;
 
 					try
@@ -79,8 +79,7 @@ namespace Tests.ItemRecommendation
 						var results = new float[5];
 						for (int i = 0; i < results.Length; i++)
 							results[i] = recommender.Predict(0, i);
-					
-						
+
 						recommender.SaveModel("tmp.model");
 						recommender.LoadModel("tmp.model");
 						for (int i = 0; i < results.Length; i++)
