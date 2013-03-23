@@ -60,8 +60,9 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected string recommender_options = string.Empty;
 
 	// help/version
-	protected bool show_help    = false;
-	protected bool show_version = false;
+	protected bool show_help     = false;
+	protected bool show_measures = false;
+	protected bool show_version  = false;
 
 	// arguments for iteration search
 	protected uint find_iter = 0;
@@ -85,6 +86,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected List<double> fit_time_stats      = new List<double>();
 	protected List<double> eval_time_stats     = new List<double>();
 
+	protected abstract ICollection<string> Measures { get; }
+
 	protected virtual void Usage(string message)
 	{
 		Console.WriteLine(message);
@@ -97,6 +100,16 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected abstract void SetupOptions();
 
 	protected abstract void ShowVersion();
+
+	protected void ShowMeasures()
+	{
+		Console.WriteLine("--measures=\"LIST\"");
+		Console.WriteLine();
+		Console.WriteLine("LIST is comma- or space-separated list that may contain the following elements:");
+		foreach (var measure in Measures)
+			Console.WriteLine("  " + measure);
+		Environment.Exit(0);
+	}
 
 	protected void ShowVersion(string program_name, string copyright)
 	{
@@ -117,7 +130,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			Abort(string.Format("Could not load model from file {0}.", load_model_file));
 
 		recommender.Configure(recommender_options, (string msg) => { Console.Error.WriteLine(msg); Environment.Exit(-1); });
-		
+
 		if (recommender is INeedsMappings)
 		{
 			((INeedsMappings) recommender).UserMapping = user_mapping;
@@ -208,6 +221,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			{ "compute-fit",          v => compute_fit       = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "help",                 v => show_help         = v != null },
+			{ "help-measures",        v => show_measures     = v != null },
 			{ "version",              v => show_version      = v != null },
 		};
 		SetupOptions();
@@ -215,6 +229,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		IList<string> extra_args = options.Parse(args);
 		if (show_version)
 			ShowVersion();
+		if (show_measures)
+			ShowMeasures();
 		if (show_help)
 			Usage(0);
 
