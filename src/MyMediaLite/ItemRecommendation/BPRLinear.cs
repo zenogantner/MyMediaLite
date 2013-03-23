@@ -22,6 +22,7 @@ using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.ItemRecommendation.BPR;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -45,6 +46,9 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public class BPRLinear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
+		/// <summary>Sample uniformly from users</summary>
+		public bool UniformUserSampling { get; set; }
+		
 		///
 		public IBooleanMatrix ItemAttributes
 		{
@@ -95,66 +99,31 @@ namespace MyMediaLite.ItemRecommendation
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();
 		}
-
+		
+		protected virtual IBPRSampler CreateBPRSampler()
+		{
+			if (UniformUserSampling)
+				return new UniformUserSampler(Interactions);
+			else
+				return new UniformPairSampler(Interactions);
+		}
+		
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
 		public void Iterate()
 		{
 			int num_pos_events = Interactions.Count;
+			int user_id, pos_item_id, neg_item_id;
 
+			var bpr_sampler = CreateBPRSampler();
 			for (int i = 0; i < num_pos_events; i++)
 			{
-				if (i % 1000000 == 999999)
-					Console.Error.Write(".");
-				if (i % 100000000 == 99999999)
-					Console.Error.WriteLine();
-
-				int user_id, item_id_1, item_id_2;
-				SampleTriple(out user_id, out item_id_1, out item_id_2);
-
-				UpdateFeatures(user_id, item_id_1, item_id_2);
+				bpr_sampler.NextTriple(out user_id, out pos_item_id, out neg_item_id);
+				UpdateParameters(user_id, pos_item_id, neg_item_id);
 			}
-		}
-
-		/// <summary>Sample a pair of items, given a user</summary>
-		/// <param name="user_id">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected  void SampleItemPair(int user_id, out int i, out int j)
-		{
-			var user_items = Interactions.ByUser(user_id).Items;
-			i = user_items.ElementAt(random.Next(user_items.Count));
-			do
-				j = random.Next(MaxItemID + 1);
-			while (user_items.Contains(j) || Interactions.ByItem(j).Count == 0);
-			// Do not sample the item if it never has been viewed (maybe unknown item).
-		}
-
-		/// <summary>Sample a user that has viewed at least one and not all items</summary>
-		/// <returns>the user ID</returns>
-		protected int SampleUser()
-		{
-			while (true)
-			{
-				int user_id = random.Next(MaxUserID + 1);
-				var user_items = Interactions.ByUser(user_id).Items;
-				if (user_items.Count == 0 || user_items.Count == MaxItemID + 1)
-					continue;
-				return user_id;
-			}
-		}
-
-		/// <summary>Sample a triple for BPR learning</summary>
-		/// <param name="u">the user ID</param>
-		/// <param name="i">the ID of the first item</param>
-		/// <param name="j">the ID of the second item</param>
-		protected void SampleTriple(out int u, out int i, out int j)
-		{
-			u = SampleUser();
-			SampleItemPair(u, out i, out j);
 		}
 
 		/// <summary>Modified feature update method that exploits attribute sparsity</summary>
-		protected virtual void UpdateFeatures(int u, int i, int j)
+		protected virtual void UpdateParameters(int u, int i, int j)
 		{
 			double x_uij = Predict(u, i) - Predict(u, j);
 
@@ -181,6 +150,7 @@ namespace MyMediaLite.ItemRecommendation
 				double uf_update = -one_over_one_plus_ex - regularization * w_uf;
 				item_attribute_weight_by_user[u, a] = (float) (w_uf + learn_rate * uf_update);
 			}
+			// TODO regularize more attributes?
 		}
 
 		///
@@ -222,8 +192,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} reg={1} num_iter={2} learn_rate={3}",
-				this.GetType().Name, Regularization, NumIter, LearnRate);
+				"{0} reg={1} num_iter={2} learn_rate={3} uniform_user_sampling={4}",
+				this.GetType().Name, Regularization, NumIter, LearnRate, UniformUserSampling);
 		}
 	}
 }
