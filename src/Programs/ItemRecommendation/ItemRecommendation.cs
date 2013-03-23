@@ -57,6 +57,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	bool all_items;
 	bool user_prediction;
 
+	protected override ICollection<string> Measures { get { return Items.Measures; } }
+
 	public ItemRecommendation()
 	{
 		cutoff  = double.MinValue;
@@ -137,7 +139,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --num-test-users=N           evaluate on only N randomly picked users (to save time)
    --online-evaluation          perform online evaluation (use every tested user-item combination for incremental training)
    --compute-fit                display fit on training data
-   --measures=LIST              the evaluation measures to display (default is AUC, prec@5)
+   --measures=LIST              the evaluation measures to display (default is 'AUC, prec@5')
+                                use --help-measures to get a list of all available measures
 
   finding the right number of iterations (iterative methods)
    --find-iter=N                give out statistics every N iterations
@@ -181,7 +184,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			recommender = method.CreateItemRecommender();
 		else
 			recommender = "MostPopular".CreateItemRecommender();
-		
+
 		base.SetupRecommender();
 	}
 

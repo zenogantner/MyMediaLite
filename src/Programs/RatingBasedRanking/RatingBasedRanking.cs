@@ -36,6 +36,8 @@ class RatingBasedRanking : RatingPrediction
 	bool in_test_items;
 	bool all_items;
 
+	protected override ICollection<string> Measures { get { return Items.Measures; } }
+
 	public RatingBasedRanking()
 	{
 		eval_measures = new string[] { "AUC", "prec@5" };

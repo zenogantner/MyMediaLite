@@ -50,6 +50,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	bool online_eval   = false;
 
 	protected virtual string DefaultMeasure { get { return "RMSE"; } }
+	protected override ICollection<string> Measures { get { return MyMediaLite.Eval.Ratings.Measures; } }
 
 	public RatingPrediction()
 	{
@@ -122,7 +123,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
    --online-evaluation                 perform online evaluation (use every tested rating for incremental training)
    --search-hp                         search for good hyperparameter values (experimental feature)
    --compute-fit                       display fit on training data
-   --measures=RMSE,MAE,NMAE,CBD        comma- or space-separated list of evaluation measures to display (default is RMSE, MAE, CBD)
+   --measures=LIST                     comma- or space-separated list of evaluation measures to display (default is RMSE, MAE, CBD)
+                                       use --help-measures to get a list of all available measures
 
   options for finding the right number of iterations (iterative methods)
    --find-iter=N                  give out statistics every N iterations

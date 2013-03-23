@@ -27,6 +27,7 @@
          - remove BPRMF_Mapping (incomplete implementation)
 	 - remove ItemAttributeSVM
         command-line tools
+	 - #399: add --help-measures to all 3 tools
          - item_recommendation: add usage information for
            --(load|save)-(user|item)-mapping=FILE
          - rating_prediction:
