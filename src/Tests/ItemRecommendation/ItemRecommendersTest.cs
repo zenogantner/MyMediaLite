@@ -67,7 +67,7 @@ namespace Tests.ItemRecommendation
 				{
 					if (type.Name == "Random" || type.Name == "ExternalItemRecommender")
 						continue;
-					if (type.Name == "MostPopularByAttributes" || type.Name == "ItemAttributeSVM")
+					if (type.Name == "MostPopularByAttributes")
 						continue;
 					if (type.Name == "ItemAttributeKNN" || type.Name == "UserAttributeKNN")
 						continue;
