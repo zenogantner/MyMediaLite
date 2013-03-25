@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -95,7 +95,7 @@ namespace MyMediaLite.DataType
 		/// <param name="size">the size</param>
 		public virtual void Resize(int size)
 		{
-			Resize (size, size);
+			Resize(size, size);
 		}
 	}
 }
