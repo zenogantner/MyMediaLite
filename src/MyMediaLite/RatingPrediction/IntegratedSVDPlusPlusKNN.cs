@@ -79,7 +79,10 @@ namespace MyMediaLite.RatingPrediction
 				
 				IList<int> rkiu = new List<int>();
 				IList<int> nkiu = new List<int>();
-				foreach (int j in k_relevant_items[i]) 
+				
+				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(i, K);				
+				
+				foreach (int j in k_relevant_items) 
 				{
 					if (Predictor.data_item[j, u])
 					{
@@ -151,7 +154,10 @@ namespace MyMediaLite.RatingPrediction
 				int r_count = 0;
 				float n_sum = 0;
 				int n_count = 0;
-				foreach (int j in k_relevant_items[item_id])
+				
+				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(item_id, K);				
+				
+				foreach (int j in k_relevant_items)
 				{
 					if (Predictor.data_item[j, user_id])
 					{
@@ -184,8 +190,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} K={8}",
-				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, K);
+				"{0} num_factors={1} regularization={2} bias_reg={3} frequency_regularization={4} learn_rate={5} bias_learn_rate={6} num_iter={7} K={8} decay={9}",
+				this.GetType().Name, NumFactors, Regularization, BiasReg, FrequencyRegularization, LearnRate, BiasLearnRate, NumIter, K, Decay);
 		}
 	}
 }
