@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.Data;
+using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -49,8 +51,32 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Matrix indicating which item is preferred by which user</summary>
 		protected SparseBooleanMatrix additional_data_item;
 		
+		/// <summary>Correlation matrix over some kind of entity</summary>
+		protected ICorrelationMatrix correlation;
+		
 		///
-		protected ItemKNN Predictor;
+		protected IList<int>[] k_relevant_items;
+		
+		/// <summary>Matrix indicating which item was rated by which user</summary>
+		protected SparseBooleanMatrix data_item;
+		
+		///
+		protected IList<int> rkiu;
+		
+		///
+		protected IList<int> nkiu;
+		
+		///
+		public override IRatings Ratings
+		{
+			set {
+				base.Ratings = value;
+
+				data_item = new SparseBooleanMatrix();
+				for (int index = 0; index < ratings.Count; index++)
+					data_item[ratings.Items[index], ratings.Users[index]] = true;
+			}
+		}
 		
 		/// <summary>Number of neighbors to take into account for predictions</summary>
 		public uint K { get { return k; } set { k = value; } }
@@ -67,10 +93,17 @@ namespace MyMediaLite.RatingPrediction
 		{
 			current_learnrate = LearnRate;
 			
-			Predictor = new ItemKNN();
-			Predictor.Ratings = Ratings;
-			Predictor.Correlation = MyMediaLite.Correlation.RatingCorrelationType.Pearson;
-			Predictor.Train();
+			correlation = new Pearson(MaxItemID + 1, 0);
+			((IRatingCorrelationMatrix) correlation).ComputeCorrelations(Ratings, EntityType.ITEM);
+			
+			k_relevant_items = new IList<int>[MaxItemID + 1];
+ 			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+			{
+				k_relevant_items[item_id] = correlation.GetNearestNeighbors(item_id, K);
+			}
+			
+			rkiu = new List<int>();
+			nkiu = new List<int>();
 			
 			w = new Matrix<float>(MaxItemID + 1, MaxItemID + 1);
 			w.InitNormal(InitMean, InitStdDev);
@@ -114,6 +147,25 @@ namespace MyMediaLite.RatingPrediction
 		}
 		
 		///
+		protected void UpdateSimilarItems(int user_id, int item_id)
+		{
+			rkiu.Clear();
+			nkiu.Clear();
+			
+			foreach (int j in k_relevant_items[item_id]) 
+			{
+				if (data_item[j, user_id])
+				{
+					rkiu.Add(j);
+				}
+				if (data_item[j, user_id] || additional_data_item[j, user_id])
+				{
+					nkiu.Add(j);	
+				}					
+			}
+		}
+		
+		///
 		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			float reg = Regularization; // to limit property accesses			
@@ -123,8 +175,11 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 				
-				float err = ratings[index] - Predict(u, i, false);
-				//Console.WriteLine("ratings[{0}] = {1} Predict({2},{3}) = {4} (err = {5})", index, ratings[index], u, i, Predict(u,i), err);
+				UpdateSimilarItems(u, i);
+				
+				float prediction = Predict(u, i, false);
+				float err = ratings[index] - prediction;
+				//Console.WriteLine("ratings[{0}] = {1} Predict({2},{3}) = {4} (err = {5})", index, ratings[index], u, i, prediction, err);
 
 				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
 				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
@@ -137,23 +192,6 @@ namespace MyMediaLite.RatingPrediction
 				
 				//Console.WriteLine("BiasLearnRate={0} current_learnrate={1} err={2} BiasReg={3} user_reg_weight={4} user_bias[{5}]={6} item_reg_weight={7} item_bias[{8}]={9}", 
 				//	BiasLearnRate, current_learnrate, err, BiasReg, user_reg_weight, u, user_bias[u], item_reg_weight, i, item_bias[i]);
-				
-				IList<int> rkiu = new List<int>();
-				IList<int> nkiu = new List<int>();
-				
-				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(i, K);				
-				
-				foreach (int j in k_relevant_items) 
-				{
-					if (Predictor.data_item[j, u])
-					{
-						rkiu.Add(j);
-					}
-					if (Predictor.data_item[j, u] || additional_data_item[j, u])
-					{
-						nkiu.Add(j);	
-					}
-				}
 				
 				foreach (int j in rkiu) 
 				{					
@@ -170,7 +208,8 @@ namespace MyMediaLite.RatingPrediction
 			UpdateLearnRate();
 		}
 		
-		private float BasePredict(int user_id, int item_id)
+		///
+		protected float BasePredict(int user_id, int item_id)
 		{
 			return global_bias + user_bias[user_id] + item_bias[item_id];
 		}
@@ -191,22 +230,23 @@ namespace MyMediaLite.RatingPrediction
 				float n_sum = 0;
 				int n_count = 0;
 				
-				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(item_id, K);				
-				
-				foreach (int j in k_relevant_items)
+				if(bound)
 				{
-					if (Predictor.data_item[j, user_id])
-					{
-						float rating  = ratings.Get(user_id, j, ratings.ByUser[user_id]);
-						r_sum += (rating - BasePredict(user_id, j)) * w[item_id, j];
-						r_count++;
-					}
-					if (Predictor.data_item[j, user_id] || additional_data_item[j, user_id])
-					{						
-						n_sum += c[item_id, j];
-						n_count++;
-					}
+					UpdateSimilarItems(user_id, item_id);	
 				}
+				
+				foreach (int j in rkiu) 
+				{
+					float rating  = ratings.Get(user_id, j, ratings.ByUser[user_id]);
+					r_sum += (rating - BasePredict(user_id, j)) * w[item_id, j];
+					r_count++;
+				}
+				foreach (int j in nkiu) 
+				{
+					n_sum += c[item_id, j];
+					n_count++;
+				}				
+				
 				if (r_count > 0)
 					result += r_sum / (float)Math.Sqrt(r_count);				
 				if (n_count > 0)

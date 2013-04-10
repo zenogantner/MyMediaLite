@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Correlation;
 using System.Globalization;
 
 namespace MyMediaLite.RatingPrediction
@@ -58,6 +59,8 @@ namespace MyMediaLite.RatingPrediction
 				int u = ratings.Users[index];
 				int i = ratings.Items[index];
 				
+				UpdateSimilarItems(u, i);
+				
 				float prediction = base.Predict(u, i, false);
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
 				double norm_denominator = Math.Sqrt(items_rated_by_user[u].Length);
@@ -77,28 +80,11 @@ namespace MyMediaLite.RatingPrediction
 				if (update_item)
 					item_bias[i] += BiasLearnRate * current_learnrate * ((float) err - BiasReg * item_reg_weight * item_bias[i]);
 				
-				IList<int> rkiu = new List<int>();
-				IList<int> nkiu = new List<int>();
-				
-				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(i, K);				
-				
-				foreach (int j in k_relevant_items) 
-				{
-					if (Predictor.data_item[j, u])
-					{
-						rkiu.Add(j);
-					}
-					if (Predictor.data_item[j, u] || additional_data_item[j, u])
-					{
-						nkiu.Add(j);	
-					}
-				}				
-				
 				// adjust item similarities
 				foreach (int j in rkiu) 
 				{
 					float rating  = ratings.Get(u, j, ratings.ByUser[u]);
-					w[i, j] += current_learnrate * ((err / (float)Math.Sqrt(rkiu.Count)) * (rating - Predictor.baseline_predictor.Predict(u, j)) - reg * w[i, j]);	
+					w[i, j] += current_learnrate * ((err / (float)Math.Sqrt(rkiu.Count)) * (rating - BasePredict(u, j)) - reg * w[i, j]);	
 				}
 				foreach (int j in nkiu) 
 				{					
@@ -134,8 +120,17 @@ namespace MyMediaLite.RatingPrediction
 			UpdateLearnRate();
 		}
 		
-		///
+		/// <summary>Predict the rating of a given user for a given item</summary>		
+		/// <param name="user_id">the user ID</param>
+		/// <param name="item_id">the item ID</param>
+		/// <returns>the predicted rating</returns>
 		public override float Predict(int user_id, int item_id)
+		{
+			return Predict(user_id, item_id, true);
+		}
+		
+		///
+		protected override float Predict(int user_id, int item_id, bool bound)
 		{
 			double result = global_bias;
 
@@ -155,22 +150,23 @@ namespace MyMediaLite.RatingPrediction
 				float n_sum = 0;
 				int n_count = 0;
 				
-				IList<int> k_relevant_items = Predictor.GetMostSimilarItems(item_id, K);				
-				
-				foreach (int j in k_relevant_items)
+				if(bound)
 				{
-					if (Predictor.data_item[j, user_id])
-					{
-						float rating  = ratings.Get(user_id, j, ratings.ByUser[user_id]);
-						r_sum += (rating - Predictor.baseline_predictor.Predict(user_id, j)) * w[item_id, j];
-						r_count++;
-					}
-					if (Predictor.data_item[j, user_id] || additional_data_item[j, user_id])
-					{						
-						n_sum += c[item_id, j];
-						n_count++;
-					}
+					UpdateSimilarItems(user_id, item_id);	
 				}
+				
+				foreach (int j in rkiu) 
+				{
+					float rating  = ratings.Get(user_id, j, ratings.ByUser[user_id]);
+					r_sum += (rating - BasePredict(user_id, j)) * w[item_id, j];
+					r_count++;
+				}
+				foreach (int j in nkiu) 
+				{
+					n_sum += c[item_id, j];
+					n_count++;
+				}				
+				
 				if (r_count > 0)
 					result += r_sum / (float)Math.Sqrt(r_count);				
 				if (n_count > 0)

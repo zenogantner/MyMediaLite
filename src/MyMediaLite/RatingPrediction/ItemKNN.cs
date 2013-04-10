@@ -28,7 +28,7 @@ namespace MyMediaLite.RatingPrediction
 	public class ItemKNN : KNN, IItemSimilarityProvider, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix indicating which item was rated by which user</summary>
-		public SparseBooleanMatrix data_item;
+		protected SparseBooleanMatrix data_item;
 
 		///
 		public override IRatings Ratings
