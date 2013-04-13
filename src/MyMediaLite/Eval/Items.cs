@@ -71,11 +71,11 @@ namespace MyMediaLite.Eval
 				case CandidateItems.TEST:     return test.AllItems;
 				case CandidateItems.OVERLAP:
 					var result = test.AllItems.Intersect(training.AllItems).ToList();
-					result.Sort();
+					result.Shuffle();
 					return result;
 				case CandidateItems.UNION:
 					result = test.AllItems.Union(training.AllItems).ToList();
-					result.Sort();
+					result.Shuffle();
 					return result;
 				case CandidateItems.EXPLICIT:
 					if (candidate_items == null)
