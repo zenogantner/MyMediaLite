@@ -1,4 +1,4 @@
-3.08	2013-03-
+3.08	2013-04-13
 	recommenders
 	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
            Dooms)
@@ -27,7 +27,7 @@
            - allow test files without rating column via --test-no-ratings
              (suggested by Michael Ekstrand)
 	evaluation
-	 - sort candidate items by item ID to avoid biased results for recommenders
+	 - shuffle candidate items to avoid biased results for recommenders
            that return the same score for many items for --overlap-items and
            --all-items (reported by Pieter-Jan Perbruggen)
 	data structures
