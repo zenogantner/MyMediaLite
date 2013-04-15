@@ -1,4 +1,4 @@
-3.08	2013-04-13
+3.08	2013-04-15
 	recommenders
 	 - #400: cut ratings to allowed range for SlopeOne (reported by Simon
            Dooms)
