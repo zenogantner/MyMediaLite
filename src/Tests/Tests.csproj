@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <HintPath>..\..\lib\NUnit\nunit.core.dll</HintPath>
     </Reference>
