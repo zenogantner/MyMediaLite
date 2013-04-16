@@ -1,4 +1,4 @@
-Questions about #MyMediaLite? Join our Google Group: 
+Questions about #MyMediaLite? Join our Google Group: https://groups.google.com/group/mymedialite
 
 How to contribute to #mymedialite: http://mymedialite.net/contribute.html #recsys #opensource #freesoftware #mono #csharp
 
@@ -32,13 +32,11 @@ Subscribe to #MyMediaLite updates on freshmeat.net & mloss.org http://freshmeat.
 
 If you want to cite #MyMediaLite in your paper, use this #BibTeX entry: http://mloss.org/revision/paperbib/811/ #recsys
 
-WR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
+WRMF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/o6v2QP #MyMediaLite #recsys
 
-BPR-MF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/pYrJ7l #MyMediaLite #recsys
+BPRMF is a state-of-the-art matrix factorization model for item recommendation: http://bit.ly/pYrJ7l #MyMediaLite #recsys
 
 #MyMediaLite supports the tasks of rating prediction and item recommendation: http://bit.ly/qhMI5V http://bit.ly/qlNDbY #recsys
-
-Since version 1.05, #MyMediaLite supports recommendations for groups: http://mymedialite.net/news/index.html#1.05 #recsys
 
 #MyMediaLite supports different evaluation protocols, e.g. simple splits and k-fold cross-validation: http://bit.ly/nbykPh #recsys
 
@@ -50,7 +48,7 @@ BiasedMatrixFactorization is a state-of-the-art matrix factorization model for r
 
 #MyMediaLite contains different kNN models for both rating and item prediction: http://bit.ly/pscX4U http://bit.ly/no1sam #recsys
 
-BPR_Linear in #MyMediaLite is an attribute-based model for personalized item ranking: http://bit.ly/mV5lal #recsys
+BPRLinear in #MyMediaLite is an attribute-based model for personalized item ranking: http://bit.ly/mV5lal #recsys
 
 Rate #MyMediaLite on ohloh.net: https://www.ohloh.net/p/mymedialite #recsys
 
@@ -62,7 +60,7 @@ Read the #recsys2011 paper on #MyMediaLite: http://ismll.de/pub/pdfs/Gantner_et_
 
 Read about our approach for #kddcup2011: http://ismll.de/pub/pdfs/Gantner_et_al2011_KDDCup.pdf #recsys #MyMediaLite
 
-Overview of open source/free software recommender system implementations: http://www.ismll.uni-hildesheim.de/mymedialite/links.html
+Overview of open source/free software recommender system implementations: http://mymedialite.net/links.html
 
 Research that builds on the #MyMediaLite library: http://mymedialite.net/examples/research.html #recsys
 
