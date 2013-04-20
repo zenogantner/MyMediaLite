@@ -51,6 +51,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	protected string prediction_file;
 	protected bool compute_fit = false;
 	protected bool no_id_mapping = false;
+	protected bool online_eval;
 	protected int random_seed = -1;
 	protected uint cross_validation;
 	protected double test_ratio = 0;
@@ -167,6 +168,12 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		if (recommender is IItemRelationAwareRecommender && user_relations_file == null)
 			Abort("Recommender expects --item-relations=FILE.");
 
+		if (online_eval && test_file == null && test_ratio == 0 && cross_validation == 0)
+			Abort("--online-evaluation needs either --test-file=FILE, --test-ratio=NUM, or cross-validation=K");
+
+		if (online_eval && find_iter != 0)
+			Abort("--online-evaluation cannot be combined with --find-iter=NUM");
+
 		if (no_id_mapping)
 		{
 			if (save_user_mapping_file != null)
@@ -219,6 +226,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			{ "test-ratio=",          (double v)     => test_ratio           = v },
 			// boolean options
 			{ "compute-fit",          v => compute_fit       = v != null },
+			{ "online-evaluation",    v => online_eval       = v != null },
 			{ "no-id-mapping",        v => no_id_mapping     = v != null },
 			{ "help",                 v => show_help         = v != null },
 			{ "help-measures",        v => show_measures     = v != null },

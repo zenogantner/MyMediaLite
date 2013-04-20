@@ -47,7 +47,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	string chronological_split;
 	double chronological_split_ratio = -1;
 	DateTime chronological_split_time = DateTime.MinValue;
-	bool online_eval   = false;
 
 	protected virtual string DefaultMeasure { get { return "RMSE"; } }
 	protected override ICollection<string> Measures { get { return MyMediaLite.Eval.Ratings.Measures; } }
@@ -150,7 +149,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("chronological-split=", v              => chronological_split  = v)
 			.Add("rating-type=",         (RatingType v) => rating_type          = v)
 			.Add("file-format=",         (RatingFileFormat v) => file_format    = v)
-			.Add("online-evaluation",    v => online_eval       = v != null)
 			.Add("search-hp",            v => search_hp         = v != null)
 			.Add("test-no-ratings",      v => test_no_ratings   = v != null);
 	}
@@ -352,6 +350,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 		if (test_no_ratings && prediction_file == null)
 			Abort("--test-no-ratings needs both --prediction-file=FILE and --test-file=FILE.");
+
+		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null && chronological_split == null)
+			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, or --prediction-file=FILE.");
 
 		// handling of --chronological-split
 		if (chronological_split != null)

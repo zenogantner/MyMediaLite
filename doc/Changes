@@ -1,4 +1,11 @@
 3.09	2013-
+	command-line tools
+         - make sure that --online-evaluation is used together with either
+           --test-file, --test-ratio, or --cross-validation; make sure it is
+           not combined with --find-iter; make sure that --find-iter has
+           something to evaluate on (based on a report by Lina Weichbrodt)
+         - move more CheckParameter() code to the common CommandLineProgram
+           class
 	misc
 	 - #413: Add missing reference to System.Data (Roland Richter)
 
