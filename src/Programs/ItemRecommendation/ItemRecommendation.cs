@@ -49,7 +49,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	float rating_threshold = float.NaN;
 	int num_test_users = -1;
 	int predict_items_number = -1;
-	bool online_eval;
 	bool repeated_items;
 	bool overlap_items;
 	bool in_training_items;
@@ -168,7 +167,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("user-prediction",      v => user_prediction   = v != null)
-			.Add("online-evaluation",    v => online_eval       = v != null)
 			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
@@ -323,8 +321,11 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (online_eval && !(recommender is IIncrementalItemRecommender))
 			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
+		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null)
+			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --prediction-file=FILE.");
+
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && prediction_file == null)
-			Usage("Please provide either test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --prediction-file=FILE.");
+			Usage("Please provide either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --prediction-file=FILE.");
 
 		if ((candidate_items_file != null ? 1 : 0) + (all_items ? 1 : 0) + (in_training_items ? 1 : 0) + (in_test_items ? 1 : 0) + (overlap_items ? 1 : 0) > 1)
 			Abort("--candidate-items=FILE, --all-items, --in-training-items, --in-test-items, and --overlap-items are mutually exclusive.");
