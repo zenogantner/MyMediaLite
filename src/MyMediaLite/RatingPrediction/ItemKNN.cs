@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,10 +35,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			set {
 				base.Ratings = value;
-
+				
 				data_item = new SparseBooleanMatrix();
-				for (int index = 0; index < ratings.Count; index++)
-					data_item[ratings.Items[index], ratings.Users[index]] = true;
+				var reader = Interactions.Sequential;
+				while (reader.Read())
+					data_item[reader.GetItem(), reader.GetUser()] = true;
 			}
 		}
 

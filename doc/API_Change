@@ -182,10 +182,9 @@ Migration Plan
   implement rating baseline methods
   implement matrix factorization methods
   implement item recommendation baseline methods
-  implement BPR-MF
-  implement WRMF
   implement KNN
   use for incremental updates
+  support parallel learning
   use for fold-in
   implement attribute-aware stuff
   implement relatio-aware stuff

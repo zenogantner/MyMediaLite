@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,11 +15,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
+
+// TODO port to new backend
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -82,12 +83,12 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to get the data from</param>
 		public static int[] UserFeedbackCounts(this ITransductiveRatingPredictor recommender)
 		{
-			int max_user_id = Math.Max(recommender.Ratings.MaxUserID, recommender.AdditionalFeedback.MaxUserID);
+			int max_user_id = Math.Max(recommender.Interactions.MaxUserID, recommender.AdditionalFeedback.MaxUserID);
 			var result = new int[max_user_id + 1];
 
 			for (int user_id = 0; user_id <= max_user_id; user_id++)
 			{
-				if (user_id <= recommender.Ratings.MaxUserID)
+				if (user_id <= recommender.Interactions.MaxUserID)
 					result[user_id] += recommender.Ratings.CountByUser[user_id];
 				if (user_id <= recommender.AdditionalFeedback.MaxUserID)
 					result[user_id] += recommender.AdditionalFeedback.CountByUser[user_id];
@@ -100,13 +101,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to get the data from</param>
 		public static int[] ItemFeedbackCounts(this ITransductiveRatingPredictor recommender)
 		{
-			int max_item_id = Math.Max(recommender.Ratings.MaxItemID, recommender.AdditionalFeedback.MaxItemID);
+			int max_item_id = Math.Max(recommender.Interactions.MaxItemID, recommender.AdditionalFeedback.MaxItemID);
 			var result = new int[max_item_id + 1];
 
 			for (int item_id = 0; item_id <= max_item_id; item_id++)
 			{
-				if (item_id <= recommender.Ratings.MaxItemID)
-					result[item_id] += recommender.Ratings.CountByItem[item_id];
+				if (item_id <= recommender.Interactions.MaxItemID)
+					result[item_id] += recommender.Interactions.ByItem(item_id).Count;
 				if (item_id <= recommender.AdditionalFeedback.MaxItemID)
 					result[item_id] += recommender.AdditionalFeedback.CountByItem[item_id];
 			}

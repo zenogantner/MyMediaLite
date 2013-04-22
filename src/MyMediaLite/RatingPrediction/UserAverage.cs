@@ -33,13 +33,13 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			base.Train(ratings.Users, ratings.MaxUserID);
+			base.Train(ratings.Users, Interactions.MaxUserID);
 		}
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			return (user_id <= ratings.MaxUserID);
+			return (user_id <= Interactions.MaxUserID);
 		}
 
 		///

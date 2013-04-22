@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -69,12 +69,12 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
-			IterateBatch(rating_indices, update_user, update_item);
+			IterateBatch(reader, update_user, update_item);
 		}
 
-		private void IterateBatch(IList<int> rating_indices, bool update_user, bool update_item)
+		private void IterateBatch(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			SetupLoss();
 			SparseBooleanMatrix user_reverse_connections = (SparseBooleanMatrix) user_connections.Transpose();
@@ -86,10 +86,10 @@ namespace MyMediaLite.RatingPrediction
 			var item_bias_gradient    = new float[item_factors.dim1];
 
 			// I.1 prediction error
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int user_id = ratings.Users[index];
-				int item_id = ratings.Items[index];
+				int user_id = reader.GetUser();
+				int item_id = reader.GetItem();
 
 				// prediction
 				float score = global_bias + user_bias[user_id] + item_bias[item_id];
@@ -97,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				float prediction = (float) (MinRating + sig_score * rating_range_size);
-				float error      = prediction - ratings[index];
+				float error = prediction - reader.GetRating();
 
 				float gradient_common = compute_gradient_common(sig_score, error);
 
@@ -198,14 +198,14 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double user_complexity = 0;
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
-				if (ratings.CountByUser.Count > user_id)
+				if (user_id <= Interactions.MaxUserID)
 				{
 					user_complexity += Math.Pow(VectorExtensions.EuclideanNorm(user_factors.GetRow(user_id)), 2);
 					user_complexity += BiasReg * Math.Pow(user_bias[user_id], 2);
 				}
 			double item_complexity = 0;
 			for (int item_id = 0; item_id <= MaxItemID; item_id++)
-				if (ratings.CountByItem.Count > item_id)
+				if (item_id <= Interactions.MaxItemID)
 				{
 					item_complexity += Math.Pow(VectorExtensions.EuclideanNorm(item_factors.GetRow(item_id)), 2);
 					item_complexity += BiasReg * Math.Pow(item_bias[item_id], 2);

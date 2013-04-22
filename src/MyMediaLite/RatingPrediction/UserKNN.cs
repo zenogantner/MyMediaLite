@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,8 +36,9 @@ namespace MyMediaLite.RatingPrediction
 			set {
 				base.Ratings = value;
 				data_user = new SparseBooleanMatrix();
-				for (int index = 0; index < ratings.Count; index++)
-					data_user[ratings.Users[index], ratings.Items[index]] = true;
+				var reader = Interactions.Sequential;
+				while (reader.Read())
+					data_user[reader.GetUser(), reader.GetItem()] = true;
 			}
 		}
 
@@ -96,8 +97,9 @@ namespace MyMediaLite.RatingPrediction
 		public override void AddRatings(IRatings ratings)
 		{
 			baseline_predictor.AddRatings(ratings);
-			for (int index = 0; index < ratings.Count; index++)
-				data_user[ratings.Users[index], ratings.Items[index]] = true;
+			var reader = new MemoryInteractions(ratings).Sequential;
+			while (reader.Read())
+				data_user[reader.GetUser(), reader.GetItem()] = true;
 			foreach (int user_id in ratings.AllUsers)
 				RetrainUser(user_id);
 		}
@@ -114,8 +116,9 @@ namespace MyMediaLite.RatingPrediction
 		public override void RemoveRatings(IDataSet ratings)
 		{
 			baseline_predictor.RemoveRatings(ratings);
-			for (int index = 0; index < ratings.Count; index++)
-				data_user[ratings.Users[index], ratings.Items[index]] = true;
+			var reader = new MemoryInteractions(ratings).Sequential;
+			while (reader.Read())
+				data_user[reader.GetUser(), reader.GetItem()] = true;
 			foreach (int user_id in ratings.AllUsers)
 				RetrainUser(user_id);
 		}

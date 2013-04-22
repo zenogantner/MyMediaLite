@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using MyMediaLite.Data;
 
@@ -51,17 +50,17 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public virtual void UpdateRatings(IRatings new_ratings)
+		public virtual void UpdateRatings(IRatings rating_updates)
 		{
-			for (int i = 0; i < new_ratings.Count; i++)
+			for (int i = 0; i < rating_updates.Count; i++)
 			{
-				int user_id = new_ratings.Users[i];
-				int item_id = new_ratings.Items[i];
-				float rating = new_ratings[i];
+				int user_id = rating_updates.Users[i];
+				int item_id = rating_updates.Items[i];
+				float rating = rating_updates[i];
 
 				int index;
 				if (Ratings.TryGetIndex(user_id, item_id, out index))
-					Ratings[index] = rating;
+					ratings[index] = rating;
 				else
 					throw new Exception(string.Format("Cannot update rating for user {0} and item {1}: No such rating exists.", user_id, item_id));
 			}

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,70 +66,52 @@ namespace MyMediaLite.Eval
 		///   </para>
 		/// </remarks>
 		/// <param name="recommender">rating predictor</param>
-		/// <param name="test_ratings">test cases</param>
-		/// <param name="training_ratings">the training examples</param>
+		/// <param name="ratings">test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
-		static public RatingPredictionEvaluationResults Evaluate(this IRatingPredictor recommender, IRatings test_ratings, IRatings training_ratings = null)
+		static public RatingPredictionEvaluationResults Evaluate(
+			this IRatingPredictor recommender,
+			IRatings ratings)
 		{
 			if (recommender == null)
 				throw new ArgumentNullException("recommender");
-			if (test_ratings == null)
+			if (ratings == null)
 				throw new ArgumentNullException("ratings");
-
-			var all_indices = Enumerable.Range(0, test_ratings.Count).ToArray();
-			var results = new RatingPredictionEvaluationResults(Evaluate(recommender, test_ratings, all_indices));
-			if (training_ratings != null)
-			{
-				var new_user_indices = (from index in all_indices
-				                        where test_ratings.Users[index] > training_ratings.MaxUserID || training_ratings.CountByUser[test_ratings.Users[index]] == 0
-				                        select index).ToArray();
-				results.NewUserResults = Evaluate(recommender, test_ratings, new_user_indices);
-				var new_item_indices = (from index in all_indices
-				                        where test_ratings.Items[index] > training_ratings.MaxItemID || training_ratings.CountByItem[test_ratings.Items[index]] == 0 select index).ToArray();
-				results.NewItemResults = Evaluate(recommender, test_ratings, new_item_indices);
-				results.NewUserNewItemResults = Evaluate(recommender, test_ratings, Enumerable.Intersect(new_user_indices, new_item_indices).ToArray());
-			}
-			return results;
-		}
-
-		static Dictionary<string, float> Evaluate(IRatingPredictor recommender, IRatings ratings, IList<int> indices)
-		{
-			if (indices.Count == 0)
-				return null;
 
 			double rmse = 0;
 			double mae  = 0;
 			double cbd  = 0;
+			
+			var interactions = new MemoryInteractions(ratings);
+			var reader = interactions.Sequential;
 
 			if (recommender is ITimeAwareRatingPredictor && ratings is ITimedRatings)
 			{
 				var time_aware_recommender = recommender as ITimeAwareRatingPredictor;
-				var timed_ratings = ratings as ITimedRatings;
-				foreach (int index in indices)
+				while (reader.Read())
 				{
-					float prediction = time_aware_recommender.Predict(timed_ratings.Users[index], timed_ratings.Items[index], timed_ratings.Times[index]);
-					float error = prediction - ratings[index];
+					float prediction = time_aware_recommender.Predict(reader.GetUser(), reader.GetItem(), reader.GetDateTime());
+					float error = prediction - reader.GetRating();
 
 					rmse += error * error;
 					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(ratings[index], prediction, ratings.Scale.Min, ratings.Scale.Max);
+					cbd  += ComputeCBD(reader.GetRating(), prediction, interactions.RatingScale.Min, interactions.RatingScale.Max);
 				}
 			}
 			else
-				foreach (int index in indices)
+				while (reader.Read())
 				{
-					float prediction = recommender.Predict(ratings.Users[index], ratings.Items[index]);
-					float error = prediction - ratings[index];
+					float prediction = recommender.Predict(reader.GetUser(), reader.GetItem());
+					float error = prediction - reader.GetRating();
 
 					rmse += error * error;
 					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(ratings[index], prediction, ratings.Scale.Min, ratings.Scale.Max);
+					cbd  += ComputeCBD(reader.GetRating(), prediction, interactions.RatingScale.Min, interactions.RatingScale.Max);
 				}
-			mae  = mae / indices.Count;
-			rmse = Math.Sqrt(rmse / indices.Count);
-			cbd  = cbd / indices.Count;
+			mae  = mae / interactions.Count;
+			rmse = Math.Sqrt(rmse / interactions.Count);
+			cbd  = cbd / interactions.Count;
 
-			var result = new Dictionary<string, float>();
+			var result = new RatingPredictionEvaluationResults();
 			result["RMSE"] = (float) rmse;
 			result["MAE"]  = (float) mae;
 			result["NMAE"] = (float) mae / (recommender.MaxRating - recommender.MinRating);

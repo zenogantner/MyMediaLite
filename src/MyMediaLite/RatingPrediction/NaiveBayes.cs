@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -85,10 +85,11 @@ namespace MyMediaLite.RatingPrediction
 				var user_attribute_given_class_counts = new SparseMatrix<int>(ratings.Scale.Levels.Count, ItemAttributes.NumberOfColumns);
 
 				// count
-				foreach (int index in ratings.ByUser[user_id])
+				var reader = Interactions.ByUser(user_id);
+				while (reader.Read())
 				{
-					int item_id = ratings.Items[index];
-					int level_id = ratings.Scale.LevelID[ratings[index]];
+					int item_id = reader.GetItem();
+					int level_id = ratings.Scale.LevelID[reader.GetRating()];
 
 					user_class_counts[level_id]++;
 					foreach (int attribute_id in item_attributes.GetEntriesByRow(item_id))

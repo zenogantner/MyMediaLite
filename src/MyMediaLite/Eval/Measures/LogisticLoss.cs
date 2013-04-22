@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
@@ -33,13 +32,14 @@ namespace MyMediaLite.Eval.Measures
 		/// <param name='rating_range_size'>the size of the rating range: max_rating - min_rating</param>
 		public static double ComputeSum(
 			this IRatingPredictor recommender,
-			IRatings ratings,
+			IInteractions interactions,
 			float min_rating, float rating_range_size)
 		{
 			double sum = 0;
-			for (int i = 0; i < ratings.Count; i++)
+			var reader = interactions.Sequential;
+			while (reader.Read())
 			{
-				double prediction = recommender.Predict(ratings.Users[i], ratings.Items[i]);
+				double prediction = recommender.Predict(reader.GetUser(), reader.GetItem());
 
 				// map into [0, 1] interval
 				prediction = (prediction - min_rating) / rating_range_size;
@@ -47,7 +47,7 @@ namespace MyMediaLite.Eval.Measures
 					prediction = 0.0;
 				if (prediction > 1.0)
 					prediction = 1.0;
-				double actual_rating = (ratings[i] - min_rating) / rating_range_size;
+				double actual_rating = (reader.GetRating() - min_rating) / rating_range_size;
 
 				sum -= (actual_rating) * Math.Log(prediction);
 				sum -= (1 - actual_rating) * Math.Log(1 - prediction);

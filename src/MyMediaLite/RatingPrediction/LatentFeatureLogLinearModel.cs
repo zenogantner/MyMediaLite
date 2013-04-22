@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -50,7 +50,7 @@ namespace MyMediaLite.RatingPrediction
 		//  - RMSE/MAE optimization
 		//  - incremental updates
 		//  - fold-in
-		//  - centered: instead if  rating look at rating - global_bias
+		//  - centered: instead of  rating look at rating - global_bias
 
 		/// <summary>Mean of the normal distribution used to initialize the factors</summary>
 		public double InitMean { get; set; }
@@ -189,15 +189,16 @@ namespace MyMediaLite.RatingPrediction
 		void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
 		{
 			//SetupLoss();
-
-			foreach (int index in rating_indices)
+			
+			var reader = Interactions.Random;
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
-				int correct_label = value_to_label_id[ratings[index]];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
+				int correct_label = value_to_label_id[reader.GetRating()];
 
-				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
-				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(Interactions.ByUser(u).Count)) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(Interactions.ByItem(i).Count)) : RegI;
 
 				for (int l = 0; l < label_id_to_value.Count - 1; l++)
 				{

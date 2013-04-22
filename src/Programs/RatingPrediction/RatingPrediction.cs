@@ -256,7 +256,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
-							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
+							recommender.WritePredictions(new MemoryInteractions(test_data), prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
 
 						if (epsilon > 0.0 && results[eval_measures[0]] - eval_stats.Min() > epsilon)
 						{
@@ -324,7 +324,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			{
 				Console.WriteLine();
 				seconds = Wrap.MeasureTime(delegate() {
-					recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
+					recommender.WritePredictions(new MemoryInteractions(test_data), prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
 				});
 				Console.Error.WriteLine("prediction_time " + seconds);
 			}
@@ -434,7 +434,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected virtual EvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(test_data, training_data);
+		return recommender.Evaluate(test_data);
 	}
 
 	protected virtual EvaluationResults DoCrossValidation()

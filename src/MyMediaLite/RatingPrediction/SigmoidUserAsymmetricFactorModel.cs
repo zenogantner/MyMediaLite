@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -88,17 +88,17 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			SetupLoss();
 
 			float reg_u = RegU;  // to limit property accesses
 			float reg_i = RegI;
 
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
 				double score = global_bias + user_bias[u] + item_bias[i];
 				var x_sum = x.SumOfRows(users_who_rated_the_item[i]);
@@ -110,10 +110,10 @@ namespace MyMediaLite.RatingPrediction
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
-				double err = ratings[index] - prediction;
+				double err = reader.GetRating() - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(ratings.CountByUser[u])) : reg_u;
-				float item_reg_weight = FrequencyRegularization ? (float) (reg_i / Math.Sqrt(ratings.CountByItem[i])) : reg_i;
+				float user_reg_weight = FrequencyRegularization ? (float) (reg_u / Math.Sqrt(Interactions.ByUser(u).Count)) : reg_u;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg_i / Math.Sqrt(Interactions.ByItem(i).Count)) : reg_i;
 				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
@@ -215,29 +215,29 @@ namespace MyMediaLite.RatingPrediction
 				for (int u = 0; u <= MaxUserID; u++)
 				{
 					complexity += x_reg[u] * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
-					if (u > ratings.MaxUserID || ratings.CountByUser[u] == 0)
+					if (u > Interactions.MaxUserID || Interactions.ByUser(u).Count == 0)
 						continue;
 
-					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += (RegU / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
+					complexity += (RegU / Math.Sqrt(Interactions.ByUser(u).Count))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += (RegU / Math.Sqrt(Interactions.ByUser(u).Count)) * BiasReg * Math.Pow(user_bias[u], 2);
 				}
-				for (int i = 0; i <= ratings.MaxItemID; i++)
-					if (ratings.CountByItem[i] > 0)
-						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
+				for (int i = 0; i <= Interactions.MaxItemID; i++)
+					if (Interactions.ByItem(i).Count > 0)
+						complexity += (RegI / Math.Sqrt(Interactions.ByItem(i).Count)) * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 			else
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
 					complexity += feedback_count_by_user[u] * RegU * Math.Pow(x.GetRow(u).EuclideanNorm(), 2);
-					if (u > ratings.MaxUserID)
+					if (u > Interactions.MaxUserID)
 						continue;
 
-					complexity += ratings.CountByUser[u] * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += ratings.CountByUser[u] * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+					complexity += Interactions.ByUser(u).Count * RegU           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += Interactions.ByUser(u).Count * RegU * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 				for (int i = 0; i <= MaxItemID; i++)
-					complexity += ratings.CountByItem[i] * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+					complexity += Interactions.ByItem(i).Count * RegI * BiasReg * Math.Pow(item_bias[i], 2);
 			}
 
 			return (float) (ComputeLoss() + complexity);
@@ -257,7 +257,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// set factors to zero for users without training examples
 			for (int user_id = 0; user_id < x.NumberOfRows; user_id++)
-				if (user_id > ratings.MaxUserID || ratings.CountByUser[user_id] == 0)
+				if (user_id > Interactions.MaxUserID || ratings.CountByUser[user_id] == 0)
 					x.SetRowToOneValue(user_id, 0);
 
 			base.InitModel();
@@ -266,7 +266,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Precompute all item factors</summary>
 		protected void PrecomputeItemFactors()
 		{
-			MaxItemID = Math.Max(Ratings.MaxItemID, AdditionalFeedback.MaxItemID);
+			MaxItemID = Math.Max(Interactions.MaxItemID, AdditionalFeedback.MaxItemID);
 
 			if (item_factors == null)
 				item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);

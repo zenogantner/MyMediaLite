@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -37,6 +37,8 @@ namespace MyMediaLite.RatingPrediction
 	{
 		/// <summary>the ratings to learn from</summary>
 		IRatings Ratings { get; set; }
+
+		IInteractions Interactions { get; set; }
 
 		/// <summary>Gets or sets the maximum rating.</summary>
 		/// <value>The maximally possible rating</value>

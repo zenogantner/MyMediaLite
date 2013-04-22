@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using MyMediaLite.Data;
@@ -35,16 +34,20 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Minimum rating value</summary>
 		protected float min_rating;
 
+		public IInteractions Interactions { get; set; }
+
 		/// <summary>The rating data</summary>
 		public virtual IRatings Ratings
 		{
 			get { return ratings; }
 			set {
 				ratings = value;
-				MaxUserID = ratings.MaxUserID;
-				MaxItemID = ratings.MaxItemID;
+				MaxUserID = Interactions.MaxUserID;
+				MaxItemID = Interactions.MaxItemID;
 				MinRating = ratings.Scale.Min;
 				MaxRating = ratings.Scale.Max;
+
+				Interactions = new MemoryInteractions(ratings);
 			}
 		}
 		/// <summary>rating data</summary>

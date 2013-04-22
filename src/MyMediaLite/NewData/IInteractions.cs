@@ -25,15 +25,18 @@ namespace MyMediaLite.Data
 		int Count { get; }
 		int MaxUserID { get; }
 		int MaxItemID { get; }
-
-		IInteractionReader Random { get; } // TODO use function instead if property for clearer semantics? This should return a *different* reader for each call
-		IInteractionReader Sequential { get; }
-		// IInteractionReader Chronological { get; }
-		IInteractionReader ByUser(int user_id);
-		IInteractionReader ByItem(int item_id);
-
 		IList<int> Users { get; }
 		IList<int> Items { get; }
+		IInteractionReader Random { get; } // TODO use function instead of property for clearer semantics? This should return a *different* reader for each call
+
+		// TODO think about a multi-threaded reader
+
+		IInteractionReader Sequential { get; } // default?
+
+		// IInteractionReader Chronological { get; }
+		IInteractionReader ByUser(int user_id); // TODO think about using property... (also better code modularity)
+		IInteractionReader ByItem(int item_id);
+
 		RatingScale RatingScale { get; }
 	}
 }

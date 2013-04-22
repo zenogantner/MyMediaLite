@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Globalization;
 using System.IO;
@@ -130,14 +129,17 @@ namespace MyMediaLite.RatingPrediction
 				return;
 
 			// compute residuals
-			var residuals = new float[ratings.Count];
-			for (int index = 0; index < ratings.Count; index++)
+			var residuals = new float[Interactions.Count];
+			int pos = 0;
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
-				residuals[index] = (float) (ratings[index] - Predict(u, i));
-				int n_ui = Math.Min(ratings.ByUser[u].Count, ratings.ByItem[i].Count);
-				residuals[index] *= (float) (n_ui / (n_ui + Shrinkage));
+				int u = reader.GetUser();
+				int i = reader.GetItem();
+				residuals[pos] = (float) (reader.GetRating() - Predict(u, i));
+				int n_ui = Math.Min(Interactions.ByUser(u).Count, Interactions.ByItem(i).Count);
+				residuals[pos] *= (float) (n_ui / (n_ui + Shrinkage));
+				pos++;
 			}
 
 			// initialize new latent factors
@@ -154,12 +156,14 @@ namespace MyMediaLite.RatingPrediction
 					var user_factors_update_denominator = new float[MaxUserID + 1];
 
 					// compute updates in one pass over the data
-					for (int index = 0; index < ratings.Count; index++)
+					pos = 0;
+					reader = Interactions.Sequential;
+					while (reader.Read())
 					{
-						int u = ratings.Users[index];
-						int i = ratings.Items[index];
+						int u = reader.GetUser();
+						int i = reader.GetItem();
 
-						user_factors_update_numerator[u]   += residuals[index] * item_factors[i, num_learned_factors];
+						user_factors_update_numerator[u]   += residuals[pos] * item_factors[i, num_learned_factors];
 						user_factors_update_denominator[u] += item_factors[i, num_learned_factors] * item_factors[i, num_learned_factors];
 					}
 
@@ -174,12 +178,14 @@ namespace MyMediaLite.RatingPrediction
 					var item_factors_update_denominator = new double[MaxItemID + 1];
 
 					// compute updates in one pass over the data
-					for (int index = 0; index < ratings.Count; index++)
+					reader = Interactions.Sequential;
+					pos = 0;
+					while (reader.Read())
 					{
-						int u = ratings.Users[index];
-						int i = ratings.Items[index];
+						int u = reader.GetUser();
+						int i = reader.GetItem();
 
-						item_factors_update_numerator[i]   += residuals[index] * user_factors[u, num_learned_factors];
+						item_factors_update_numerator[i]   += residuals[pos] * user_factors[u, num_learned_factors];
 						item_factors_update_denominator[i] += user_factors[u, num_learned_factors] * user_factors[u, num_learned_factors];
 					}
 
@@ -269,7 +275,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public float ComputeObjective()
 		{
-			return (float) Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+			return (float) Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 		}
 
 		///

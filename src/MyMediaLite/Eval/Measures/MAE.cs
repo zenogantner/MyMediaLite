@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 // 
-
 using System;
 using MyMediaLite.Data;
 using MyMediaLite.RatingPrediction;
@@ -29,11 +28,12 @@ namespace MyMediaLite.Eval.Measures
 		/// <returns>the absolute error sum</returns>
 		/// <param name='recommender'>the recommender to make predictions with</param>
 		/// <param name='ratings'>the actual ratings</param>
-		public static double ComputeAbsoluteErrorSum(this IRatingPredictor recommender, IRatings ratings)
+		public static double ComputeAbsoluteErrorSum(this IRatingPredictor recommender, IInteractions interactions)
 		{
 			double sum = 0;
-			for (int i = 0; i < ratings.Count; i++)
-				sum += Math.Abs(recommender.Predict(ratings.Users[i], ratings.Items[i]) - ratings[i]);
+			var reader = interactions.Sequential;
+			while (reader.Read())
+				sum += Math.Abs(recommender.Predict(reader.GetUser(), reader.GetItem()) - reader.GetRating());
 			return sum;
 		}
 	}

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -152,8 +152,8 @@ namespace MyMediaLite.RatingPrediction
 			for (int i = 0; i < timed_ratings.Count; i++)
 				user_mean_day[ratings.Users[i]] += RelativeDay(timed_ratings.Times[i]);
 			for (int u = 0; u <= MaxUserID; u++)
-				if (ratings.CountByUser[u] != 0)
-					user_mean_day[u] /= ratings.CountByUser[u];
+				if (Interactions.ByUser(u).Count != 0)
+					user_mean_day[u] /= Interactions.ByUser(u).Count;
 				else // no ratings yet?
 					user_mean_day[u] = RelativeDay(timed_ratings.LatestTime); // set to latest day
 
@@ -190,15 +190,15 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public virtual void Iterate()
 		{
-			foreach (int index in timed_ratings.RandomIndex)
+			var reader = Interactions.Random;
+			while (reader.Read())
 			{
-				int u = timed_ratings.Users[index];
-				int i = timed_ratings.Items[index];
-				int day = RelativeDay(timed_ratings.Times[index]);
+				int u = reader.GetUser();
+				int i = reader.GetItem();
+				int day = RelativeDay(reader.GetDateTime());
 				int bin = day / BinSize;
 
-				// compute error
-				float err = timed_ratings[index] - Predict(u, i, day, bin);
+				float err = reader.GetRating() - Predict(u, i, day, bin);
 
 				UpdateParameters(u, i, day, bin, err);
 			}
@@ -294,7 +294,7 @@ namespace MyMediaLite.RatingPrediction
 		public virtual float ComputeObjective()
 		{
 			double loss =
-				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings)
+				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions)
 				+ RegU                 * Math.Pow(user_bias.EuclideanNorm(),             2)
 				+ RegI                 * Math.Pow(item_bias.EuclideanNorm(),             2)
  				+ RegAlpha             * Math.Pow(alpha.EuclideanNorm(),                 2)

@@ -78,7 +78,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// set factors to zero for items without training examples
 			for (int i = 0; i < ratings.CountByItem.Count; i++)
-				if (ratings.CountByItem[i] == 0)
+				if (Interactions.ByItem(i).Count == 0)
 					q.SetRowToOneValue(i, 0);
 		}
 
@@ -95,16 +95,16 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			user_factors = null; // delete old user factors
 			item_factors = null; // delete old item factors
 			float reg = Regularization; // to limit property accesses
 
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
 				double prediction = global_bias + user_bias[u] + item_bias[i];
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
@@ -125,10 +125,10 @@ namespace MyMediaLite.RatingPrediction
 
 				prediction += DataType.VectorExtensions.ScalarProduct(q_plus_x_sum_vector, p_plus_y_sum_vector);
 
-				double err = ratings[index] - prediction;
+				double err = reader.GetRating() - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
-				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
+				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByUser(u).Count)) : reg;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByItem(i).Count)) : reg;
 
 				// adjust biases
 				if (update_user)

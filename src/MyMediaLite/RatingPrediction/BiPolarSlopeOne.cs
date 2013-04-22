@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -53,12 +52,13 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return false;
-
-			foreach (int index in ratings.ByUser[user_id])
+			
+			var reader = Interactions.ByUser(user_id);
+			while (reader.Read())
 			{
-				if (freq_matrix_like[item_id, ratings.Items[index]] != 0)
+				if (freq_matrix_like[item_id, reader.GetItem()] != 0)
 					return true;
-				if (freq_matrix_dislike[item_id, ratings.Items[index]] != 0)
+				if (freq_matrix_dislike[item_id, reader.GetItem()] != 0)
 					return true;
 			}
 			return false;
@@ -72,28 +72,29 @@ namespace MyMediaLite.RatingPrediction
 
 			double prediction = 0.0;
 			int frequencies = 0;
-
-			foreach (int index in ratings.ByUser[user_id])
+			
+			var reader = Interactions.ByUser(user_id);
+			while (reader.Read())
+			{
+				if (reader.GetRating() > user_average[user_id])
 				{
-					if (ratings[index] > user_average[user_id])
+					int f = freq_matrix_like[item_id, reader.GetItem()];
+					if (f != 0)
 					{
-						int f = freq_matrix_like[item_id, ratings.Items[index]];
-						if (f != 0)
-						{
-							prediction  += ( diff_matrix_like[item_id, ratings.Items[index]] + ratings[index] ) * f;
-							frequencies += f;
-						}
-					}
-					else
-					{
-						int f = freq_matrix_dislike[item_id, ratings.Items[index]];
-						if (f != 0)
-						{
-							prediction  += ( diff_matrix_dislike[item_id, ratings.Items[index]] + ratings[index] ) * f;
-							frequencies += f;
-						}
+						prediction  += ( diff_matrix_like[item_id, reader.GetItem()] + reader.GetRating() ) * f;
+						frequencies += f;
 					}
 				}
+				else
+				{
+					int f = freq_matrix_dislike[item_id, reader.GetItem()];
+					if (f != 0)
+					{
+						prediction  += ( diff_matrix_dislike[item_id, reader.GetItem()] + reader.GetRating() ) * f;
+						frequencies += f;
+					}
+				}
+			}
 
 			if (frequencies == 0)
 				return global_average;
@@ -113,14 +114,15 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// default value if no prediction can be made
-			global_average = ratings.Average;
+			global_average = ratings.Average; // TODO
 
 			// compute difference sums and frequencies
-			foreach (int user_id in ratings.AllUsers)
+			foreach (int user_id in Interactions.Users)
 			{
 				float user_avg = 0;
-				foreach (int index in ratings.ByUser[user_id])
-					user_avg += ratings[index];
+				var reader = Interactions.ByUser(user_id);
+				while (reader.Read())
+					user_avg += reader.GetRating();
 				user_avg /= ratings.ByUser[user_id].Count;
 
 				// store for later use
@@ -128,15 +130,15 @@ namespace MyMediaLite.RatingPrediction
 
 				foreach (int index in ratings.ByUser[user_id])
 					foreach (int index2 in ratings.ByUser[user_id])
-						if (ratings[index] > user_avg && ratings[index2] > user_avg)
+						if (reader.GetRating() > user_avg && ratings[index2] > user_avg)
 						{
-							freq_matrix_like[ratings.Items[index], ratings.Items[index2]] += 1;
-							diff_matrix_like[ratings.Items[index], ratings.Items[index2]] += (float) (ratings[index] - ratings[index2]);
+							freq_matrix_like[reader.GetItem(), ratings.Items[index2]] += 1;
+							diff_matrix_like[reader.GetItem(), ratings.Items[index2]] += (float) (reader.GetRating() - ratings[index2]);
 						}
-						else if (ratings[index] < user_avg && ratings[index2] < user_avg)
+						else if (reader.GetRating() < user_avg && ratings[index2] < user_avg)
 						{
-							freq_matrix_dislike[ratings.Items[index], ratings.Items[index2]] += 1;
-							diff_matrix_dislike[ratings.Items[index], ratings.Items[index2]] += (float) (ratings[index] - ratings[index2]);
+							freq_matrix_dislike[reader.GetItem(), ratings.Items[index2]] += 1;
+							diff_matrix_dislike[reader.GetItem(), ratings.Items[index2]] += (float) (reader.GetRating() - ratings[index2]);
 						}
 
 			}

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -113,12 +113,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The optimization target</summary>
 		public OptimizationTarget Loss { get; set; }
 
-		/// <summary>the maximum number of threads to use</summary>
-		/// <remarks>
-		///   For parallel learning, set this number to a multiple of the number of available cores/CPUs
-		/// </remarks>
-		public int MaxThreads { get; set; }
-
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
 		/// Literature:
@@ -132,13 +126,6 @@ namespace MyMediaLite.RatingPrediction
 		/// </list>
 		/// </remarks>
 		public bool BoldDriver { get; set; }
-
-		/// <summary>Use 'naive' parallelization strategy instead of conflict-free 'distributed' SGD</summary>
-		/// <remarks>
-		/// The exact sequence of updates depends on the thread scheduling.
-		/// If you want reproducible results, e.g. when setting --random-seed=N, do NOT set this property.
-		/// </remarks>
-		public bool NaiveParallelization { get; set; }
 
 		/// <summary>Loss for the last iteration, used by bold driver heuristics</summary>
 		protected double last_loss = double.NegativeInfinity;
@@ -162,7 +149,6 @@ namespace MyMediaLite.RatingPrediction
 		{
 			BiasReg = 0.01f;
 			BiasLearnRate = 1.0f;
-			MaxThreads = 1;
 		}
 
 		///
@@ -182,19 +168,10 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			// if necessary, prepare stuff for parallel processing
-			if (MaxThreads > 1)
-			{
-				if (NaiveParallelization)
-					thread_lists = ratings.PartitionIndices(MaxThreads);
-				else
-					thread_blocks = ratings.PartitionUsersAndItems(MaxThreads);
-			}
-
 			rating_range_size = max_rating - min_rating;
 
 			// compute global bias
-			double avg = (ratings.Average - min_rating) / rating_range_size;
+			double avg = (ratings.Average - min_rating) / rating_range_size; // TODO
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
@@ -204,28 +181,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Iterate()
 		{
-			if (MaxThreads > 1)
-			{
-				if (NaiveParallelization)
-				{
-					Parallel.For(0, thread_lists.Count, i => Iterate(thread_lists[i], true, true));
-				}
-				else
-				{
-					int num_threads = thread_blocks.GetLength(0);
-
-					// generate random sub-epoch sequence
-					var subepoch_sequence = new List<int>(Enumerable.Range(0, num_threads));
-					subepoch_sequence.Shuffle();
-
-					foreach (int i in subepoch_sequence) // sub-epoch
-						Parallel.For(0, num_threads, j => Iterate(thread_blocks[j, (i + j) % num_threads], true, true));
-				}
-				UpdateLearnRate(); // otherwise done in base.Iterate(), which is not called here
-			}
-			else
-				base.Iterate();
-
+			base.Iterate();
 			UpdateLearnRate();
 		}
 
@@ -269,25 +225,25 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			SetupLoss();
 
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
 				double score = global_bias + user_bias[u] + item_bias[i] + DataType.MatrixExtensions.RowScalarProduct(user_factors, u, item_factors, i);
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
-				double err = ratings[index] - prediction;
+				double err = reader.GetRating() - prediction;
 
 				float gradient_common = compute_gradient_common(sig_score, err);
 
-				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(ratings.CountByUser[u])) : RegU;
-				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(ratings.CountByItem[i])) : RegI;
+				float user_reg_weight = FrequencyRegularization ? (float) (RegU / Math.Sqrt(Interactions.ByUser(u).Count)) : RegU;
+				float item_reg_weight = FrequencyRegularization ? (float) (RegI / Math.Sqrt(Interactions.ByItem(i).Count)) : RegI;
 
 				// adjust biases
 				if (update_user)
@@ -507,13 +463,13 @@ namespace MyMediaLite.RatingPrediction
 			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
-					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, ratings);
+					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, Interactions);
 					break;
 				case OptimizationTarget.RMSE:
-					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 					break;
 				case OptimizationTarget.LogisticLoss:
-					loss += Eval.Measures.LogisticLoss.ComputeSum(this, ratings, min_rating, rating_range_size);
+					loss += Eval.Measures.LogisticLoss.ComputeSum(this, Interactions, min_rating, rating_range_size);
 					break;
 			}
 			return loss;
@@ -527,18 +483,20 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					if (ratings.CountByUser[u] > 0)
+					int by_user_count = Interactions.ByUser(u).Count;
+					if (by_user_count > 0)
 					{
-						complexity += (RegU / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-						complexity += (RegU / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
+						complexity += (RegU / Math.Sqrt(by_user_count))           * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+						complexity += (RegU / Math.Sqrt(by_user_count)) * BiasReg * Math.Pow(user_bias[u], 2);
 					}
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
-					if (ratings.CountByItem[i] > 0)
+					int by_item_count = Interactions.ByItem(i).Count;
+					if (by_item_count > 0)
 					{
-						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i]))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-						complexity += (RegI / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
+						complexity += (RegI / Math.Sqrt(by_item_count))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+						complexity += (RegI / Math.Sqrt(by_item_count)) * BiasReg * Math.Pow(item_bias[i], 2);
 					}
 				}
 			}
@@ -546,13 +504,13 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += ratings.CountByUser[u] * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-					complexity += ratings.CountByUser[u] * RegU * BiasReg * Math.Pow(user_bias[u], 2);
+					complexity += Interactions.ByUser(u).Count * RegU * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+					complexity += Interactions.ByUser(u).Count * RegU * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
-					complexity += ratings.CountByItem[i] * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-					complexity += ratings.CountByItem[i] * RegI * BiasReg * Math.Pow(item_bias[i], 2);
+					complexity += Interactions.ByItem(i).Count * RegI * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += Interactions.ByItem(i).Count * RegI * BiasReg * Math.Pow(item_bias[i], 2);
 				}
 			}
 
@@ -564,8 +522,8 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} learn_rate_decay={8} num_iter={9} bold_driver={10} loss={11} max_threads={12} naive_parallelization={13}",
-				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization, LearnRate, BiasLearnRate, Decay, NumIter, BoldDriver, Loss, MaxThreads, NaiveParallelization);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} frequency_regularization={5} learn_rate={6} bias_learn_rate={7} learn_rate_decay={8} num_iter={9} bold_driver={10} loss={11}",
+				this.GetType().Name, NumFactors, BiasReg, RegU, RegI, FrequencyRegularization, LearnRate, BiasLearnRate, Decay, NumIter, BoldDriver, Loss);
 		}
 	}
 }

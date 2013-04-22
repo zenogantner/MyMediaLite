@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -162,13 +161,16 @@ namespace MyMediaLite.RatingPrediction
 
 			double[] errors = new double[NumUserClusters];
 			for (int uc = 0; uc < NumUserClusters; uc++)
-				foreach (int index in ratings.ByUser[user_id])
+			{
+				var reader = Interactions.ByUser(user_id);
+				while (reader.Read())
 				{
-					int item_id   = ratings.Items[index];
-					double rating = ratings[index];
+					int item_id   = reader.GetItem();
+					double rating = reader.GetRating();
 
 					errors[uc] += Math.Pow(rating - Predict(user_id, item_id, uc, item_clustering[item_id]), 2);
 				}
+			}
 
 			int minimum_index = GetMinimumIndex(errors, user_clustering[user_id]);
 			if (minimum_index != user_clustering[user_id])
@@ -186,13 +188,16 @@ namespace MyMediaLite.RatingPrediction
 
 			double[] errors = new double[NumItemClusters];
 			for (int ic = 0; ic < NumItemClusters; ic++)
-				foreach (int index in ratings.ByItem[item_id])
+			{
+				var reader = Interactions.ByItem(item_id);
+				while (reader.Read())
 				{
-					int user_id = ratings.Users[index];
-					double rating = ratings[index];
+					int user_id = reader.GetUser();
+					float rating = reader.GetRating();
 
 					errors[ic] += Math.Pow(rating - Predict(user_id, item_id, user_clustering[user_id], ic), 2);
 				}
+			}
 
 			int minimum_index = GetMinimumIndex(errors, item_clustering[item_id]);
 			if (minimum_index != item_clustering[item_id])
@@ -359,7 +364,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public float ComputeObjective()
 		{
-			return (float) Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+			return (float) Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 		}
 
 		///

@@ -60,14 +60,15 @@ namespace MyMediaLite.RatingPrediction
 
 			double prediction = 0.0;
 			int frequency = 0;
-
-			foreach (int index in ratings.ByUser[user_id])
+			
+			var reader = Interactions.ByUser(user_id);
+			while (reader.Read())
 			{
-				int other_item_id = ratings.Items[index];
+				int other_item_id = reader.GetItem();
 				int f = freq_matrix[item_id, other_item_id];
 				if (f != 0)
 				{
-					prediction += ( diff_matrix[item_id, other_item_id] + ratings[index] ) * f;
+					prediction += ( diff_matrix[item_id, other_item_id] + reader.GetRating() ) * f;
 					frequency += f;
 				}
 			}

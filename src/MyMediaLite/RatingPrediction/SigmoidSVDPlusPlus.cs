@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 
@@ -108,17 +109,17 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			SetupLoss();
 
 			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
 
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
 				double score = global_bias + user_bias[u] + item_bias[i];
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
@@ -130,10 +131,10 @@ namespace MyMediaLite.RatingPrediction
 				double sig_score = 1 / (1 + Math.Exp(-score));
 
 				double prediction = min_rating + sig_score * rating_range_size;
-				double err = ratings[index] - prediction;
+				double err = reader.GetRating() - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
-				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
+				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByUser(u).Count)) : reg;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByItem(i).Count)) : reg;
 				float gradient_common = compute_gradient_common(sig_score, err);
 
 				// adjust biases
@@ -240,20 +241,17 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the loss</returns>
 		protected override double ComputeLoss()
 		{
-			double loss = 0;
 			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
-					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, ratings);
-					break;
+					return Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, Interactions);
 				case OptimizationTarget.RMSE:
-					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
-					break;
+					return Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 				case OptimizationTarget.LogisticLoss:
-					loss += Eval.Measures.LogisticLoss.ComputeSum(this, ratings, min_rating, rating_range_size);
-					break;
+					return Eval.Measures.LogisticLoss.ComputeSum(this, Interactions, min_rating, rating_range_size);
+				default:
+					throw new Exception();
 			}
-			return loss;
 		}
 
 		///

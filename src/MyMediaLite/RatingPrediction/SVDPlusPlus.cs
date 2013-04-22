@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -136,17 +136,17 @@ namespace MyMediaLite.RatingPrediction
 			y.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for items without training examples
-			for (int i = 0; i < ratings.CountByItem.Count; i++)
-				if (ratings.CountByItem[i] == 0)
+			for (int i = 0; i <= Interactions.MaxItemID; i++)
+				if (Interactions.ByItem(i).Count == 0)
 					y.SetRowToOneValue(i, 0);
-			for (int i = ratings.CountByItem.Count; i <= MaxItemID; i++)
+			for (int i = Interactions.MaxItemID + 1; i <= MaxItemID; i++)
 			{
 				y.SetRowToOneValue(i, 0);
 				item_factors.SetRowToOneValue(i, 0);
 			}
 
 			// set factors to zero for users without training examples (rest is done in MatrixFactorization.cs)
-			for (int u = ratings.CountByUser.Count; u <= MaxUserID; u++)
+			for (int u = Interactions.MaxUserID; u <= MaxUserID; u++)
 				p.SetRowToOneValue(u, 0);
 
 			user_bias = new float[MaxUserID + 1];
@@ -154,15 +154,15 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected override void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			user_factors = null; // delete old user factors
 			float reg = Regularization; // to limit property accesses
 
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
 				double prediction = global_bias + user_bias[u] + item_bias[i];
 				var p_plus_y_sum_vector = y.SumOfRows(items_rated_by_user[u]);
@@ -172,10 +172,11 @@ namespace MyMediaLite.RatingPrediction
 
 				prediction += DataType.MatrixExtensions.RowScalarProduct(item_factors, i, p_plus_y_sum_vector);
 
-				double err = ratings[index] - prediction;
+				double err = reader.GetRating() - prediction;
 
-				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByUser[u])) : reg;
-				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(ratings.CountByItem[i])) : reg;
+				float user_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByUser(u).Count)) : reg;
+				float item_reg_weight = FrequencyRegularization ? (float) (reg / Math.Sqrt(Interactions.ByItem(i).Count)) : reg;
+				// TODO: compute once and put into arrays
 
 				// adjust biases
 				if (update_user)
@@ -407,7 +408,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the loss</returns>
 		protected virtual double ComputeLoss()
 		{
-			return Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+			return Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 		}
 
 		///
@@ -418,19 +419,20 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					if (ratings.CountByUser[u] > 0)
+					// TODO also use the weights from the arrays
+					if (Interactions.ByUser(u).Count > 0)
 					{
-						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
-						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
+						complexity += (Regularization * Math.Sqrt(Interactions.ByUser(u).Count))           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
+						complexity += (Regularization * Math.Sqrt(Interactions.ByUser(u).Count)) * BiasReg * Math.Pow(user_bias[u], 2);
 					}
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
 					complexity += y_reg[i] * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
-					if (ratings.CountByItem[i] > 0)
+					if (Interactions.ByItem(i).Count > 0)
 					{
-						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i]))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
+						complexity += (Regularization * Math.Sqrt(Interactions.ByItem(i).Count))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+						complexity += (Regularization * Math.Sqrt(Interactions.ByItem(i).Count)) * BiasReg * Math.Pow(item_bias[i], 2);
 					}
 				}
 			}
@@ -438,14 +440,14 @@ namespace MyMediaLite.RatingPrediction
 			{
 				for (int u = 0; u <= MaxUserID; u++)
 				{
-					complexity += ratings.CountByUser[u] * Regularization * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
-					complexity += ratings.CountByUser[u] * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
+					complexity += Interactions.ByUser(u).Count * Regularization * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
+					complexity += Interactions.ByUser(u).Count * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
 				}
 				for (int i = 0; i <= MaxItemID; i++)
 				{
-					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
-					complexity += ratings.CountByItem[i] * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
+					complexity += Interactions.ByItem(i).Count * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+					complexity += Interactions.ByItem(i).Count * Regularization * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
+					complexity += Interactions.ByItem(i).Count * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
 				}
 			}
 

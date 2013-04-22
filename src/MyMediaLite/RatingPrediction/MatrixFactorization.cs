@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 //
 // This file is part of MyMediaLite.
@@ -105,11 +105,11 @@ namespace MyMediaLite.RatingPrediction
 			item_factors.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for users and items without training examples
-			for (int u = 0; u < ratings.CountByUser.Count; u++)
-				if (ratings.CountByUser[u] == 0)
+			for (int u = 0; u <= Interactions.MaxUserID; u++)
+				if (Interactions.ByUser(u).Count == 0)
 					user_factors.SetRowToOneValue(u, 0);
-			for (int i = 0; i < ratings.CountByItem.Count; i++)
-				if (ratings.CountByItem[i] == 0)
+			for (int i = 0; i <= Interactions.MaxItemID; i++)
+				if (Interactions.ByItem(i).Count == 0)
 					item_factors.SetRowToOneValue(i, 0);
 
 			current_learnrate = LearnRate;
@@ -121,8 +121,8 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// learn model parameters
-			global_bias = ratings.Average;
-			LearnFactors(ratings.RandomIndex, true, true);
+			global_bias = ratings.Average; // TODO
+			LearnFactors(Interactions.Random, true, true);
 		}
 
 		/// <summary>Updates <see cref="current_learnrate"/> after each epoch</summary>
@@ -134,7 +134,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public virtual void Iterate()
 		{
-			Iterate(ratings.RandomIndex, true, true);
+			Iterate(Interactions.Random, true, true);
 		}
 
 		/// <summary>Updates the latent factors on a user</summary>
@@ -144,7 +144,7 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateUsers)
 			{
 				user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-				LearnFactors(ratings.ByUser[user_id], true, false);
+				LearnFactors(Interactions.ByUser(user_id), true, false); // TODO should be properly randomized
 			}
 		}
 
@@ -155,22 +155,22 @@ namespace MyMediaLite.RatingPrediction
 			if (UpdateItems)
 			{
 				item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-				LearnFactors(ratings.ByItem[item_id], false, true);
+				LearnFactors(Interactions.ByItem(item_id), false, true); // TODO should be properly randomized
 			}
 		}
 
 		/// <summary>Iterate once over rating data and adjust corresponding factors (stochastic gradient descent)</summary>
-		/// <param name="rating_indices">a list of indices pointing to the ratings to iterate over</param>
+		/// <param name="reader"></param>
 		/// <param name="update_user">true if user factors to be updated</param>
 		/// <param name="update_item">true if item factors to be updated</param>
-		protected virtual void Iterate(IList<int> rating_indices, bool update_user, bool update_item)
+		protected virtual void Iterate(IInteractionReader reader, bool update_user, bool update_item)
 		{
-			foreach (int index in rating_indices)
+			while (reader.Read())
 			{
-				int u = ratings.Users[index];
-				int i = ratings.Items[index];
+				int u = reader.GetUser();
+				int i = reader.GetItem();
 
-				float err = ratings[index] - Predict(u, i, false);
+				float err = reader.GetRating() - Predict(u, i, false);
 
 				// adjust factors
 				for (int f = 0; f < NumFactors; f++)
@@ -195,10 +195,10 @@ namespace MyMediaLite.RatingPrediction
 			UpdateLearnRate();
 		}
 
-		private void LearnFactors(IList<int> rating_indices, bool update_user, bool update_item)
+		private void LearnFactors(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			for (uint current_iter = 0; current_iter < NumIter; current_iter++)
-				Iterate(rating_indices, update_user, update_item);
+				Iterate(reader, update_user, update_item);
 		}
 
 		///
@@ -411,13 +411,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the regularized loss</returns>
 		public virtual float ComputeObjective()
 		{
-			double objective = Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
+			double objective = Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
 
 			for (int u = 0; u <= MaxUserID; u++)
-				objective += ratings.CountByUser[u] * Regularization * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
+				objective += Interactions.ByUser(u).Count * Regularization * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
 
 			for (int i = 0; i <= MaxItemID; i++)
-				objective += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
+				objective += Interactions.ByItem(i).Count * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
 
 			return (float) objective;
 		}

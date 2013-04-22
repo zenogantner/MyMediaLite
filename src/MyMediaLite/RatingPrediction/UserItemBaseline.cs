@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -115,10 +115,11 @@ namespace MyMediaLite.RatingPrediction
 			for (int u = 0; u <= MaxUserID; u++)
 				user_biases[u] = 0;
 
-			for (int index = 0; index < ratings.Count; index++)
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				user_biases[ratings.Users[index]] += ratings[index] - global_average - item_biases[ratings.Items[index]];
-				user_ratings_count[ratings.Users[index]]++;
+				user_biases[reader.GetUser()] += reader.GetRating() - global_average - item_biases[reader.GetItem()];
+				user_ratings_count[reader.GetUser()]++;
 			}
 			for (int u = 0; u < user_biases.Length; u++)
 				if (user_ratings_count[u] != 0)
@@ -128,17 +129,18 @@ namespace MyMediaLite.RatingPrediction
 		void OptimizeItemBiases()
 		{
 			int[] item_ratings_count = new int[MaxItemID + 1];
-			for (int i = 0; i <= MaxItemID; i++)
-				item_biases[i] = 0;
-
-			for (int index = 0; index < ratings.Count; index++)
+			for (int item_id = 0; item_id <= MaxItemID; item_id++)
+				item_biases[item_id] = 0;
+			
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				item_biases[ratings.Items[index]] += ratings[index] - global_average - user_biases[ratings.Users[index]];
-				item_ratings_count[ratings.Items[index]]++;
+				item_biases[reader.GetItem()] += reader.GetRating() - global_average - user_biases[reader.GetUser()];
+				item_ratings_count[reader.GetItem()]++;
 			}
-			for (int i = 0; i < item_biases.Length; i++)
-				if (item_ratings_count[i] != 0)
-					item_biases[i] = item_biases[i] / (RegI + item_ratings_count[i]);
+			for (int item_id = 0; item_id < item_biases.Length; item_id++)
+				if (item_ratings_count[item_id] != 0)
+					item_biases[item_id] = item_biases[item_id] / (RegI + item_ratings_count[item_id]);
 		}
 
 		///
@@ -160,10 +162,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateUsers)
 			{
-				foreach (int index in ratings.ByUser[user_id])
-					user_biases[user_id] += ratings[index] - global_average - item_biases[ratings.Items[index]];
-				if (ratings.ByUser[user_id].Count != 0)
-					user_biases[user_id] = user_biases[user_id] / (RegU + ratings.ByUser[user_id].Count);
+				var reader = Interactions.ByUser(user_id);
+				while (reader.Read())
+					user_biases[user_id] += reader.GetRating() - global_average - item_biases[reader.GetItem()];
+				if (Interactions.ByUser(user_id).Count != 0)
+					user_biases[user_id] = user_biases[user_id] / (RegU + Interactions.ByUser(user_id).Count);
 			}
 		}
 
@@ -172,10 +175,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			if (UpdateItems)
 			{
-				foreach (int index in ratings.ByItem[item_id])
-					item_biases[item_id] += ratings[index] - global_average;
-				if (ratings.ByItem[item_id].Count != 0)
-					item_biases[item_id] = item_biases[item_id] / (RegI + ratings.ByItem[item_id].Count);
+				var reader = Interactions.ByItem(item_id);
+				while (reader.Read())
+					item_biases[item_id] += reader.GetRating() - global_average;
+				if (Interactions.ByItem(item_id).Count != 0)
+					item_biases[item_id] = item_biases[item_id] / (RegI + Interactions.ByItem(item_id).Count);
 			}
 		}
 
@@ -253,7 +257,7 @@ namespace MyMediaLite.RatingPrediction
 		public float ComputeObjective()
 		{
 			return (float) (
-				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings)
+				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions)
 				+ RegU * Math.Pow(user_biases.EuclideanNorm(), 2)
 				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2));
 		}

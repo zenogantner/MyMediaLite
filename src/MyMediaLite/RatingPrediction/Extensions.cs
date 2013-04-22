@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -36,7 +36,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="header">if specified, write this string at the start of the output</param>
 		public static void WritePredictions(
 			this IRecommender recommender,
-			IRatings ratings,
+			IInteractions interactions,
 			TextWriter writer,
 			IMapping user_mapping = null,
 			IMapping item_mapping = null,
@@ -51,30 +51,38 @@ namespace MyMediaLite.RatingPrediction
 			if (header != null)
 				writer.WriteLine(header);
 
-			if (line_format == "ranking")
+			if (line_format == "ranking") // TODO is this used at all?
 			{
-				foreach (int user_id in ratings.AllUsers)
-					if (ratings.ByUser[user_id].Count > 0)
+				foreach (int user_id in interactions.Users)
+				{
+					int num_ratings_by_user = interactions.ByUser(user_id).Count;
+					if (num_ratings_by_user > 0)
+					{
 						recommender.WritePredictions(
 							user_id,
-							new List<int>(from index in ratings.ByUser[user_id] select ratings.Items[index]),
+							interactions.ByUser(user_id).Items,
 							new int[] { },
-							ratings.ByUser[user_id].Count,
+							num_ratings_by_user,
 							writer,
 							user_mapping, item_mapping);
+					}
+				}
 			}
 			else
-				for (int index = 0; index < ratings.Count; index++)
+			{
+				var reader = interactions.Sequential;
+				while (reader.Read())
 					writer.WriteLine(
 						line_format,
-						user_mapping.ToOriginalID(ratings.Users[index]),
-						item_mapping.ToOriginalID(ratings.Items[index]),
-						recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
+						user_mapping.ToOriginalID(reader.GetUser()),
+						item_mapping.ToOriginalID(reader.GetItem()),
+						recommender.Predict(reader.GetUser(), reader.GetItem()).ToString(CultureInfo.InvariantCulture));
+			}
 		}
 
 		/// <summary>Rate a given set of instances and write it to a file</summary>
 		/// <param name="recommender">rating predictor</param>
-		/// <param name="ratings">test cases</param>
+		/// <param name="interactions">test cases</param>
 		/// <param name="filename">the name of the file to write the predictions to</param>
 		/// <param name="user_mapping">an <see cref="Mapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="Mapping"/> object for the item IDs</param>
@@ -82,14 +90,14 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name="header">if specified, write this string to the first line</param>
 		public static void WritePredictions(
 			this IRecommender recommender,
-			IRatings ratings,
+			IInteractions interactions,
 			string filename,
 			IMapping user_mapping = null, IMapping item_mapping = null,
 			string line_format = "{0}\t{1}\t{2}",
 			string header = null)
 		{
 			using (var writer = new StreamWriter(filename))
-				WritePredictions(recommender, ratings, writer, user_mapping, item_mapping, line_format);
+				WritePredictions(recommender, interactions, writer, user_mapping, item_mapping, line_format);
 		}
 	}
 }
