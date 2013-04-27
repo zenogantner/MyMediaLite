@@ -384,8 +384,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected override void LoadData()
 	{
-		bool static_data = !online_eval;
-
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
 
@@ -397,13 +395,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			else
 			{
 				if (file_format == RatingFileFormat.DEFAULT)
-					training_data = static_data
-						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type)
-						: RatingData.Read(training_file, user_mapping, item_mapping);
+					training_data = RatingData.Read(training_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.IGNORE_FIRST_LINE)
-					training_data = static_data
-						? StaticRatingData.Read(training_file, user_mapping, item_mapping, rating_type, TestRatingFileFormat.WITH_RATINGS, true)
-						: RatingData.Read(training_file, user_mapping, item_mapping, true);
+					training_data = RatingData.Read(training_file, user_mapping, item_mapping, true);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					training_data = MovieLensRatingData.Read(training_file, user_mapping, item_mapping);
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
