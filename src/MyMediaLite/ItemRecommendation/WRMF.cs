@@ -171,20 +171,6 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		protected override void RetrainUser(int user_id)
-		{
-			var hh = ComputeSquareMatrix(item_factors);
-			Optimize(user_id, EntityType.USER, hh);
-		}
-
-		///
-		protected override void RetrainItem(int item_id)
-		{
-			var ww = ComputeSquareMatrix(user_factors);
-			Optimize(item_id, EntityType.ITEM, ww);
-		}
-
-		///
 		public override float ComputeObjective()
 		{
 			return -1;

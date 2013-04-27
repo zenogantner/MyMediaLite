@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -269,18 +269,8 @@ namespace MyMediaLite
 		{
 			// determine necessary data
 			var supports = new List<string>();
-			/*
-			if (recommender is IUserSimilarityProvider)
-				needs.Add("");
-			if (recommender is IItemSimilarityProvider)
-				needs.Add("");
-			*/
 			if (recommender is IIterativeModel)
 				supports.Add("--find-iter=N");
-			if (recommender is IIncrementalItemRecommender)
-				supports.Add("--online-evaluation");
-			if (recommender is IIncrementalRatingPredictor)
-				supports.Add("--online-evaluation");
 
 			return string.Join(", ", supports.ToArray());
 		}

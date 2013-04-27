@@ -26,7 +26,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of k-nearest neighbors (kNN) model</summary>
 	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
-	public abstract class KNN : IncrementalItemRecommender
+	public abstract class KNN : ItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
@@ -76,8 +76,6 @@ namespace MyMediaLite.ItemRecommendation
 			Correlation = BinaryCorrelationType.Cosine;
 			Alpha = 0.5f;
 			Q = 1.0f;
-			UpdateUsers = true;
-			UpdateItems = true;
 		}
 
 		void InitModel()

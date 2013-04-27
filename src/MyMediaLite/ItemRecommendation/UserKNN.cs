@@ -24,9 +24,6 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
-	/// </remarks>
 	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
 	{
 		///
@@ -147,29 +144,6 @@ namespace MyMediaLite.ItemRecommendation
 				result[i] = Tuple.Create(item_id, Predict(user_similarities, nearest_neighbors, item_id));
 			}
 			return result;
-		}
-
-		///
-		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.AddFeedback(feedback);
-			if (UpdateUsers)
-				Update(feedback);
-		}
-
-		///
-		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.RemoveFeedback(feedback);
-			if (UpdateUsers)
-				Update(feedback);
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			ResizeNearestNeighbors(user_id + 1);
 		}
 	}
 }

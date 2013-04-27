@@ -31,11 +31,8 @@ namespace MyMediaLite.ItemRecommendation
 	///   <para>
 	///     This method is not personalized.
 	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	/// </remarks>
-	public class MostPopular : IncrementalItemRecommender
+	public class MostPopular : ItemRecommender
 	{
 		/// <summary>
 		/// If true, the popularity of an item is measured by the number of unique users that have accessed it.
@@ -47,12 +44,6 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>View count</summary>
 		IList<int> view_count;
-
-		/// <summary>Default constructor</summary>
-		public MostPopular()
-		{
-			UpdateItems = true;
-		}
 
 		///
 		public override void Train()
@@ -86,81 +77,6 @@ namespace MyMediaLite.ItemRecommendation
 				return (float) view_count[item_id] / score_denominator;
 			else
 				return float.MinValue;
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			while (view_count.Count <= MaxItemID)
-				view_count.Add(0);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-			view_count[item_id] = 0;
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			if (UpdateItems)
-			{
-				var reader = Interactions.ByUser(user_id);
-				if (ByUser)
-				{
-					foreach (int item_id in reader.Items)
-						view_count[item_id]--;
-				}
-				else
-				{
-					while (reader.Read())
-						view_count[reader.GetItem()]--;
-				}
-			}
-			base.RemoveUser(user_id);
-		}
-
-		///
-		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.AddFeedback(feedback);
-			if (UpdateItems)
-			{
-				var items = from t in feedback select t.Item2;
-				if (ByUser)
-				{
-					foreach (int item_id in new HashSet<int>(items))
-						view_count[item_id] = Interactions.ByItem(item_id).Users.Count;
-				}
-				else
-				{
-					foreach (int item_id in items)
-						view_count[item_id]++;
-				}
-			}
-		}
-
-		///
-		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.RemoveFeedback(feedback);
-			if (UpdateItems)
-			{
-				var items = from t in feedback select t.Item2;
-				if (ByUser)
-				{
-					foreach (int item_id in new HashSet<int>(items))
-						view_count[item_id] = Interactions.ByItem(item_id).Users.Count;
-				}
-				else
-				{
-					foreach (int item_id in items)
-						view_count[item_id]--;
-				}
-			}
 		}
 
 		///

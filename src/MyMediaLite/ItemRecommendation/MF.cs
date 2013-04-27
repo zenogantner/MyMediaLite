@@ -26,7 +26,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Abstract class for matrix factorization based item predictors</summary>
-	public abstract class MF : IncrementalItemRecommender, IIterativeModel
+	public abstract class MF : ItemRecommender, IIterativeModel
 	{
 		/// <summary>Latent user factor matrix</summary>
 		protected Matrix<float> user_factors;
@@ -76,77 +76,6 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Iterate once over the data</summary>
 		public abstract void Iterate();
-
-		///
-		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.AddFeedback(feedback);
-			Retrain(feedback);
-		}
-
-		void Retrain(ICollection<Tuple<int, int>> feedback)
-		{
-			var users = new HashSet<int>(from t in feedback select t.Item1);
-			var items = new HashSet<int>(from t in feedback select t.Item2);
-
-			if (UpdateUsers)
-				foreach (int user_id in users)
-					RetrainUser(user_id);
-			if (UpdateItems)
-				foreach (int item_id in items)
-					RetrainItem(item_id);
-		}
-
-		///
-		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.RemoveFeedback(feedback);
-			Retrain(feedback);
-		}
-
-		/// <summary>Retrain the latent factors of a given user</summary>
-		/// <param name="user_id">the user ID</param>
-		protected abstract void RetrainUser(int user_id);
-
-		/// <summary>Retrain the latent factors of a given item</summary>
-		/// <param name="item_id">the item ID</param>
-		protected abstract void RetrainItem(int item_id);
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-
-			user_factors.AddRows(user_id + 1);
-			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-
-			item_factors.AddRows(item_id + 1);
-			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			base.RemoveUser(user_id);
-
-			// set user latent factors to zero
-			user_factors.SetRowToOneValue(user_id, 0);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-
-			// set item latent factors to zero
-			item_factors.SetRowToOneValue(item_id, 0);
-		}
 
 		///
 		public abstract float ComputeObjective();

@@ -148,46 +148,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-
-			item_weights.AddRows(item_id + 1);
-			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-
-			// set item latent factors to zero
-			item_weights.SetRowToOneValue(item_id, 0);
-		}
-
-		///
-		protected virtual void RetrainItem(int item_id)
-		{
-			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
-			var bpr_sampler = CreateBPRSampler();
-			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
-
-			int num_pos_events = Interactions.Count;;
-			int num_item_iterations = num_pos_events / (MaxItemID + 1);
-			for (int i = 0; i < num_item_iterations; i++) {
-				// remark: the item may be updated more or less frequently than in the normal from-scratch training
-				int user_id = bpr_sampler.NextUser();
-				int other_item_id;
-				bool item_is_positive = bpr_sampler.OtherItem(user_id, item_id, out other_item_id);
-
-				if (item_is_positive)
-					UpdateParameters(user_id, item_id, other_item_id, false, true, false);
-				else
-					UpdateParameters(user_id, other_item_id, item_id, false, false, true);
-			}
-		}
-
 		/// <summary>Compute the fit (AUC on training data)</summary>
 		/// <returns>the fit</returns>
 		public override float ComputeObjective()

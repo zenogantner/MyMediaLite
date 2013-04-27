@@ -303,9 +303,10 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 			if (do_eval)
 			{
+				/*
 				if (online_eval)
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(Render(recommender.EvaluateOnline(test_data))); });
-				else
+				else */
 					seconds = Wrap.MeasureTime(delegate() { Console.Write(Render(Evaluate())); });
 
 				Console.Write(" testing_time " + seconds);
@@ -339,8 +340,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	{
 		base.CheckParameters(extra_args);
 
-		if (online_eval && !(recommender is IIncrementalRatingPredictor))
-			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
+		//if (online_eval && !(recommender is IIncrementalRatingPredictor))
+		//	Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (training_file == null && load_model_file == null)
 			Abort("Please provide either --training-file=FILE or --load-model=FILE.");

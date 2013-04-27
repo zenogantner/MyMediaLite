@@ -295,13 +295,14 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			{
 				if (compute_fit)
 					Console.WriteLine("fit: {0}", ComputeFit());
-
+				
+				/*
 				if (online_eval)
 					time_span = Wrap.MeasureTime( delegate() {
 						var results = recommender.EvaluateOnline(test_data, training_data, test_users, candidate_items, eval_item_mode);
 						Console.Write(Render(results));
 					});
-				else
+				else */
 					time_span = Wrap.MeasureTime( delegate() { Console.Write(Render(Evaluate())); });
 				Console.Write(" testing_time " + time_span);
 			}
@@ -318,8 +319,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (training_file == null)
 			Usage("Parameter --training-file=FILE is missing.");
 
-		if (online_eval && !(recommender is IIncrementalItemRecommender))
-			Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
+		//if (online_eval && !(recommender is IIncrementalItemRecommender))
+		//	Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
 		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null)
 			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --prediction-file=FILE.");

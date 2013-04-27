@@ -49,9 +49,6 @@ namespace MyMediaLite.ItemRecommendation
 	///     </description></item>
 	///    </list>
 	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	/// </remarks>
 	public class LeastSquareSLIM : SLIM
 	{
@@ -208,46 +205,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			return prediction;
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-
-			item_weights.AddRows(item_id + 1);
-			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			base.RemoveUser(user_id);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-
-			// set item latent factors to zero
-			item_weights.SetRowToOneValue(item_id, 0);
-		}
-
-
-		/// <summary>Retrain the latent factors of a given item</summary>
-		/// <param name="item_id">the item ID</param>
-		protected virtual void RetrainItem(int item_id)
-		{
-			item_weights.RowInitNormal(item_id, InitMean, InitStdDev);
-
-			Train(item_id);
 		}
 
 		///

@@ -83,16 +83,5 @@ namespace Tests.RatingPrediction
 			var results = mf.ScoreItems(user_ratings, candidate_items);
 			Assert.AreEqual(2, results.Count);
 		}
-
-		[Test()]
-		public void TestIncrementalUpdates()
-		{
-			var mf = new BiasedMatrixFactorization() { Ratings = TestUtils.CreateRatings(), FrequencyRegularization = true };
-			mf.Train();
-
-			var new_ratings = new Ratings();
-			new_ratings.Add(mf.MaxUserID + 1, mf.MaxItemID + 1, 3f);
-			mf.AddRatings(new_ratings);
-		}
 	}
 }

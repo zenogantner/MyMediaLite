@@ -25,9 +25,6 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor (kNN) item-based collaborative filtering</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates for the BinaryCosine and Cooccurrence similarities.
-	/// </remarks>
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
 		///
@@ -45,13 +42,6 @@ namespace MyMediaLite.ItemRecommendation
 				for (int i = 0; i < num_items; i++)
 					nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(i, k));
 			}
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			ResizeNearestNeighbors(item_id + 1);
 		}
 
 		///
@@ -99,22 +89,6 @@ namespace MyMediaLite.ItemRecommendation
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
 				return correlation_matrix.GetNearestNeighbors(item_id, n);
-		}
-		
-		///
-		public override void AddFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.AddFeedback(feedback);
-			if (UpdateItems)
-				Update(feedback);
-		}
-
-		///
-		public override void RemoveFeedback(ICollection<Tuple<int, int>> feedback)
-		{
-			base.RemoveFeedback(feedback);
-			if (UpdateItems)
-				Update(feedback);
 		}
 	}
 }

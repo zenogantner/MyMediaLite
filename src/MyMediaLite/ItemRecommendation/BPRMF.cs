@@ -65,9 +65,6 @@ namespace MyMediaLite.ItemRecommendation
 	///   <para>
 	///     UniformUserSampling=true (the default) approximately optimizes the average AUC over all users.
 	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	/// </remarks>
 	public class BPRMF : MF, IFoldInItemRecommender
 	{
@@ -116,8 +113,6 @@ namespace MyMediaLite.ItemRecommendation
 		public BPRMF()
 		{
 			UniformUserSampling = true;
-			UpdateUsers = true;
-			UpdateItems = false;
 		}
 
 		///
@@ -230,60 +225,6 @@ namespace MyMediaLite.ItemRecommendation
 					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
 					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
 				}
-			}
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			Array.Resize(ref item_bias, MaxItemID + 1);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-			item_bias[item_id] = 0;
-		}
-
-		///
-		protected override void RetrainUser(int user_id)
-		{
-			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
-			user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-			var bpr_sampler = CreateBPRSampler();
-
-			var user_items = Interactions.ByUser(user_id).Items;
-			var reader = Interactions.ByUser(user_id);
-			while (reader.Read())
-			{
-				int item_id_1 = reader.GetItem();
-				int item_id_2;
-				bpr_sampler.OtherItem(user_items, item_id_1, out item_id_2);
-				UpdateParameters(user_id, item_id_1, item_id_2, true, false, false);
-			}
-		}
-
-		///
-		protected override void RetrainItem(int item_id)
-		{
-			// #406 maybe we need different hyperparameters/several iterations for optimal performance; more experiments necessary
-			var bpr_sampler = CreateBPRSampler();
-			item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-
-			int num_pos_events = Interactions.Count;
-			int num_item_iterations = num_pos_events  / (MaxItemID + 1);
-			for (int i = 0; i < num_item_iterations; i++) {
-				// remark: the item may be updated more or less frequently than in the normal from-scratch training
-				int user_id = bpr_sampler.NextUser();
-				int other_item_id;
-				bool item_is_positive = bpr_sampler.OtherItem(user_id, item_id, out other_item_id);
-
-				if (item_is_positive)
-					UpdateParameters(user_id, item_id, other_item_id, false, true, false);
-				else
-					UpdateParameters(user_id, other_item_id, item_id, false, false, true);
 			}
 		}
 

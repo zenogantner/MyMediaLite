@@ -43,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// 	</list>
 	///   </para>
 	/// </remarks>
-	public abstract class SLIM : IncrementalItemRecommender, IIterativeModel
+	public abstract class SLIM : ItemRecommender, IIterativeModel
 	{
 		/// <summary>Item weight matrix (the W matrix in the original paper)</summary>
 		protected Matrix<float> item_weights;

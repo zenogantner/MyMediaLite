@@ -123,15 +123,10 @@
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
     <Compile Include="IO\Constants.cs" />
-    <Compile Include="RatingPrediction\IIncrementalRatingPredictor.cs" />
-    <Compile Include="ItemRecommendation\IncrementalItemRecommender.cs" />
-    <Compile Include="ItemRecommendation\IIncrementalItemRecommender.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecall.cs" />
     <Compile Include="Eval\Measures\NDCG.cs" />
     <Compile Include="Eval\Measures\ReciprocalRank.cs" />
     <Compile Include="Eval\Measures\AUC.cs" />
-    <Compile Include="Eval\ItemsOnline.cs" />
-    <Compile Include="Eval\RatingsOnline.cs" />
     <Compile Include="Eval\ItemsCrossValidation.cs" />
     <Compile Include="Eval\RatingsCrossValidation.cs" />
     <Compile Include="Eval\CandidateItems.cs" />
