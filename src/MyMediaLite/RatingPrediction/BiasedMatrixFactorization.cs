@@ -20,9 +20,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval.Measures;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -35,11 +35,6 @@ namespace MyMediaLite.RatingPrediction
 	///     If set to log likelihood and with binary ratings, the recommender
 	///     implements a simple version Menon and Elkan's LFL model,
 	///     which predicts binary labels, has no advanced regularization, and uses no side information.
-	///   </para>
-	///   <para>
-	///     This recommender makes use of multi-core machines if requested.
-	///     Just set MaxThreads to a large enough number (usually multiples of the number of available cores).
-	///     The parallelization is based on ideas presented in the paper by Gemulla et al.
 	///   </para>
 	///   <para>
 	///     Literature:
@@ -141,9 +136,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>delegate to compute the common term of the error gradient</summary>
 		protected Func<double, double, float> compute_gradient_common;
 
-		IList<int>[,] thread_blocks;
-		IList<IList<int>> thread_lists;
-
 		/// <summary>Default constructor</summary>
 		public BiasedMatrixFactorization() : base()
 		{
@@ -171,7 +163,7 @@ namespace MyMediaLite.RatingPrediction
 			rating_range_size = max_rating - min_rating;
 
 			// compute global bias
-			double avg = (ratings.Average - min_rating) / rating_range_size; // TODO
+			double avg = (Interactions.AverageRating() - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
 			for (int current_iter = 0; current_iter < NumIter; current_iter++)
@@ -459,20 +451,17 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the loss</returns>
 		protected double ComputeLoss()
 		{
-			double loss = 0;
 			switch (Loss)
 			{
 				case OptimizationTarget.MAE:
-					loss += Eval.Measures.MAE.ComputeAbsoluteErrorSum(this, Interactions);
-					break;
+					return this.ComputeAbsoluteErrorSum(Interactions);
 				case OptimizationTarget.RMSE:
-					loss += Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
-					break;
+					return this.ComputeSquaredErrorSum(Interactions);
 				case OptimizationTarget.LogisticLoss:
-					loss += Eval.Measures.LogisticLoss.ComputeSum(this, Interactions, min_rating, rating_range_size);
-					break;
+					return this.ComputeSum(Interactions, min_rating, rating_range_size);
+				default:
+					throw new ArgumentException();
 			}
-			return loss;
 		}
 
 		///

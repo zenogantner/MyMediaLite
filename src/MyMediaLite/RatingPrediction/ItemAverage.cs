@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System.Collections.Generic;
 using MyMediaLite.Data;
 
@@ -48,28 +47,10 @@ namespace MyMediaLite.RatingPrediction
 				return global_average;
 		}
 
-		///
-		public override void AddRatings(IRatings ratings)
+		protected override void Retrain(IDataSet ratings)
 		{
-			base.AddRatings(ratings);
 			foreach (int item_id in ratings.AllItems)
-				Retrain(item_id, Ratings.ByItem[item_id]);
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			foreach (int item_id in ratings.AllItems)
-				Retrain(item_id, Ratings.ByItem[item_id]);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			foreach (int item_id in ratings.AllItems)
-				Retrain(item_id, Ratings.ByItem[item_id]);
+				entity_averages[item_id] = Interactions.ByItem(item_id).AverageRating();
 		}
 
 		///

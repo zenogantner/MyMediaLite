@@ -121,7 +121,7 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// learn model parameters
-			global_bias = ratings.Average; // TODO
+			global_bias = Interactions.AverageRating();
 			LearnFactors(Interactions.Random, true, true);
 		}
 

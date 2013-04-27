@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using MyMediaLite.Eval;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPrediction;
 
@@ -144,7 +145,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			InitModel();
 
-			global_average = ratings.Average;
+			global_average = Interactions.AverageRating();
 			latest_relative_day = RelativeDay(timed_ratings.LatestTime);
 
 			// compute mean day of rating by user

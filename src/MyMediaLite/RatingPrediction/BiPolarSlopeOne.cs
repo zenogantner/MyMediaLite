@@ -114,7 +114,7 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			// default value if no prediction can be made
-			global_average = ratings.Average; // TODO
+			global_average = Interactions.AverageRating();
 
 			// compute difference sums and frequencies
 			foreach (int user_id in Interactions.Users)

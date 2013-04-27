@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -15,10 +15,10 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using MyMediaLite.Data;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 				rating_sums[entity_id] += ratings[i];
 			}
 
-			global_average = ratings.Average;
+			global_average = Interactions.AverageRating();
 
 			for (int i = 0; i <= max_entity_id; i++)
 				if (rating_counts[i] > 0)
@@ -74,24 +74,27 @@ namespace MyMediaLite.RatingPrediction
 					entity_averages[i] = global_average;
 		}
 
-		/// <summary>Retrain the recommender according to the given entity type</summary>
-		/// <param name="entity_id">the ID of the entity to update</param>
-		/// <param name="indices">list of indices to use for retraining</param>
-		protected void Retrain(int entity_id, IList<int> indices)
+		protected abstract void Retrain(IDataSet ratings);
+
+		///
+		public override void AddRatings(IRatings ratings)
 		{
-			double sum = 0;
-			int count = 0;
+			base.AddRatings(ratings);
+			Retrain(ratings);
+		}
 
-			foreach (int i in indices)
-			{
-				count++;
-				sum += ratings[i];
-			}
+		///
+		public override void UpdateRatings(IRatings ratings)
+		{
+			base.UpdateRatings(ratings);
+			Retrain(ratings);
+		}
 
-			if (count > 0)
-				entity_averages[entity_id] = (float) (sum / count);
-			else
-				entity_averages[entity_id] = global_average;
+		///
+		public override void RemoveRatings(IDataSet ratings)
+		{
+			base.RemoveRatings(ratings);
+			Retrain(ratings);
 		}
 
 		///

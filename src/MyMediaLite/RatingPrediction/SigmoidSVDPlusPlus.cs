@@ -65,7 +65,7 @@ namespace MyMediaLite.RatingPrediction
 			rating_range_size = max_rating - min_rating;
 
 			// compute global bias
-			double avg = (ratings.Average - min_rating) / rating_range_size;
+			double avg = (Interactions.AverageRating() - min_rating) / rating_range_size;
 			global_bias = (float) Math.Log(avg / (1 - avg));
 
 			base.Train();

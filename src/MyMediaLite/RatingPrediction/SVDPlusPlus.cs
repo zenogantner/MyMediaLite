@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Eval.Measures;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.RatingPrediction
@@ -408,7 +409,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <returns>the loss</returns>
 		protected virtual double ComputeLoss()
 		{
-			return Eval.Measures.RMSE.ComputeSquaredErrorSum(this, Interactions);
+			return this.ComputeSquaredErrorSum(Interactions);
 		}
 
 		///

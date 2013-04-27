@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
@@ -34,7 +33,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			global_average = ratings.Average;
+			global_average = Interactions.AverageRating();
 		}
 
 		///

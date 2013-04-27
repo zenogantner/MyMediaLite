@@ -96,7 +96,7 @@ namespace MyMediaLite.RatingPrediction
 			user_biases = new float[MaxUserID + 1];
 			item_biases = new float[MaxItemID + 1];
 
-			global_average = ratings.Average;
+			global_average = Interactions.AverageRating();
 
 			for (uint i = 0; i < NumIter; i++)
 				Iterate();

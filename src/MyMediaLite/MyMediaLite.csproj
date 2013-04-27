@@ -243,6 +243,7 @@
     <Compile Include="ItemRecommendation\BPR\UniformUserSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairFrequencyItemSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformUserFrequencyItemSampler.cs" />
+    <Compile Include="NewData\NewExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
