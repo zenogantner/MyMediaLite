@@ -5,7 +5,12 @@
 	 - BPR-related recommenders:
            - remove WithReplacement property
            - move BPR sampling logic into namespace ItemRecommender.BPR
-	 - remove MultiCoreBPRMF
+	 - remove the following recommenders:
+            - CoClustering
+            - SlopeOne
+            - BipolarSlopeOne
+	    - MultiCoreBPRMF
+	    - SocialMF
 	misc
 	 - remove MovieDemo
 

@@ -51,8 +51,6 @@
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\SparseMatrixTest.cs" />
     <Compile Include="DataType\SymmetricSparseMatrixTest.cs" />
-    <Compile Include="RatingPrediction\BiPolarSlopeOneTest.cs" />
-    <Compile Include="RatingPrediction\SlopeOneTest.cs" />
     <Compile Include="Data\PosOnlyFeedbackTest.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecallTest.cs" />
     <Compile Include="DataType\VectorExtensionsTest.cs" />
@@ -81,7 +79,6 @@
     <Compile Include="RatingPrediction\BiasedMatrixFactorizationTest.cs" />
     <Compile Include="RatingPrediction\SVDPlusPlusTest.cs" />
     <Compile Include="RatingPrediction\SigmoidSVDPlusPlusTest.cs" />
-    <Compile Include="RatingPrediction\SocialMFTest.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModelTest.cs" />
     <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModelTest.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModelTest.cs" />

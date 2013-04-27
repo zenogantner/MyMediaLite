@@ -83,7 +83,6 @@
     <Compile Include="DataType\SparseMatrix.cs" />
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
-    <Compile Include="RatingPrediction\BiPolarSlopeOne.cs" />
     <Compile Include="RatingPrediction\EntityAverage.cs" />
     <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\GlobalAverage.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="RatingPrediction\KNN.cs" />
     <Compile Include="RatingPrediction\MatrixFactorization.cs" />
     <Compile Include="RatingPrediction\RatingPredictor.cs" />
-    <Compile Include="RatingPrediction\SlopeOne.cs" />
     <Compile Include="RatingPrediction\UserAttributeKNN.cs" />
     <Compile Include="RatingPrediction\UserAverage.cs" />
     <Compile Include="RatingPrediction\UserItemBaseline.cs" />
@@ -149,7 +147,6 @@
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
     <Compile Include="Eval\RatingPredictionEvaluationResults.cs" />
-    <Compile Include="RatingPrediction\CoClustering.cs" />
     <Compile Include="Data\Extensions.cs" />
     <Compile Include="DataType\SymmetricMatrix.cs" />
     <Compile Include="ItemRecommendation\SoftMarginRankingMF.cs" />
@@ -179,7 +176,6 @@
     <Compile Include="IO\EntityMappingExtensions.cs" />
     <Compile Include="ItemRecommendation\IFoldInItemRecommender.cs" />
     <Compile Include="IO\FileSerializer.cs" />
-    <Compile Include="RatingPrediction\SocialMF.cs" />
     <Compile Include="Eval\Measures\RMSE.cs" />
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
