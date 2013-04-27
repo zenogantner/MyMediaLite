@@ -42,12 +42,12 @@ namespace MyMediaLite.RatingPrediction
 			get { return ratings; }
 			set {
 				ratings = value;
-				MaxUserID = Interactions.MaxUserID;
-				MaxItemID = Interactions.MaxItemID;
 				MinRating = ratings.Scale.Min;
 				MaxRating = ratings.Scale.Max;
 
 				Interactions = new MemoryInteractions(ratings);
+				MaxUserID = Interactions.MaxUserID;
+				MaxItemID = Interactions.MaxItemID;
 			}
 		}
 		/// <summary>rating data</summary>

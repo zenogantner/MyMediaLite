@@ -198,7 +198,10 @@ namespace MyMediaLite.RatingPrediction
 		private void LearnFactors(IInteractionReader reader, bool update_user, bool update_item)
 		{
 			for (uint current_iter = 0; current_iter < NumIter; current_iter++)
+			{
 				Iterate(reader, update_user, update_item);
+				reader.Reset();
+			}
 		}
 
 		///
@@ -266,6 +269,7 @@ namespace MyMediaLite.RatingPrediction
 				RetrainUser(user_id);
 			foreach (int item_id in ratings.AllItems)
 				RetrainItem(item_id);
+			// TODO perform training an all involved users and items at once
 		}
 
 		///

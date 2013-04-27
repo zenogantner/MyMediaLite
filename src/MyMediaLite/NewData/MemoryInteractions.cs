@@ -72,7 +72,7 @@ namespace MyMediaLite.Data
 				_by_user = new IInteractionReader[Users.Max() + 1];
 
 			if (user_id >= _by_user.Count)
-				throw new ArgumentOutOfRangeException(string.Format("{0} >= {1}", user_id, _by_user.Count));
+				throw new ArgumentOutOfRangeException("user_id", string.Format("{0} >= {1}", user_id, _by_user.Count));
 
 			if (_by_user[user_id] == null)
 				_by_user[user_id] = new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
