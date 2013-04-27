@@ -322,8 +322,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		//if (online_eval && !(recommender is IIncrementalItemRecommender))
 		//	Abort(string.Format("Recommender {0} does not support incremental updates, which are necessary for an online experiment.", recommender.GetType().Name));
 
-		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null)
-			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, or --prediction-file=FILE.");
+		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null && !compute_fit)
+			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --compute-fit, or --prediction-file=FILE.");
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && save_model_file == null && prediction_file == null)
 			Usage("Please provide either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --save-model=FILE, or --prediction-file=FILE.");
