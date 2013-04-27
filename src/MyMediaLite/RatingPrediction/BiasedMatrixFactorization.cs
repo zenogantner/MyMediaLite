@@ -358,48 +358,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			Array.Resize(ref user_bias, MaxUserID + 1);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			Array.Resize(ref item_bias, MaxItemID + 1);
-		}
-
-		///
-		public override void RetrainUser(int user_id)
-		{
-			user_bias[user_id] = 0;
-			base.RetrainUser(user_id);
-		}
-
-		///
-		public override void RetrainItem(int item_id)
-		{
-			item_bias[item_id] = 0;
-			base.RetrainItem(item_id);
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			user_bias[user_id] = 0;
-			base.RemoveUser(user_id);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			item_bias[item_id] = 0;
-			base.RemoveItem(item_id);
-		}
-
-		///
 		protected override float[] FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			SetupLoss();

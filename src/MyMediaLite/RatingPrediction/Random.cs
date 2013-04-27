@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,11 +21,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses a random rating value for prediction</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates.
-	/// Updates are just ignored, because the predictions are always uniformly sampled from the interval of rating values.
-	/// </remarks>
-	public class Random : IncrementalRatingPredictor
+	public class Random : RatingPredictor
 	{
 		///
 		public override void Train() { }

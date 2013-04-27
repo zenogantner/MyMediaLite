@@ -49,9 +49,6 @@ namespace MyMediaLite.RatingPrediction
 		protected override IBooleanMatrix BinaryDataMatrix { get { return user_attributes; } }
 
 		///
-		protected override void RetrainUser(int user_id) { }
-
-		///
 		protected override IList<float> FoldIn(IList<Tuple<int, float>> rated_items)
 		{
 			throw new NotSupportedException();

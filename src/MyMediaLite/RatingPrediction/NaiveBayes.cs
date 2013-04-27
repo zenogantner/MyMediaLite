@@ -26,10 +26,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Attribute-aware rating predictor using Naive Bayes</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates.
-	/// </remarks>
-	public class NaiveBayes : IncrementalRatingPredictor, IItemAttributeAwareRecommender
+	public class NaiveBayes : RatingPredictor, IItemAttributeAwareRecommender
 	{
 		/// <summary>Smoothing parameter for the class probabilities (rating priors)</summary>
 		public float ClassSmoothing { get; set; }
@@ -161,34 +158,6 @@ namespace MyMediaLite.RatingPrediction
 				foreach (var m in user_attribute_given_class_probabilities)
 					writer.WriteSparseMatrix(m);
 			}
-		}
-
-		///
-		public override void AddRatings(IRatings ratings)
-		{
-			base.AddRatings(ratings);
-			ComputeProbabilities(ratings.AllUsers);
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			ComputeProbabilities(ratings.AllUsers);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			ComputeProbabilities(ratings.AllUsers);
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			user_class_probabilities.AddRows(user_id + 1);
 		}
 
 		///

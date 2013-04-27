@@ -94,42 +94,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void AddRatings(IRatings ratings)
-		{
-			baseline_predictor.AddRatings(ratings);
-			var reader = new MemoryInteractions(ratings).Sequential;
-			while (reader.Read())
-				data_user[reader.GetUser(), reader.GetItem()] = true;
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			baseline_predictor.UpdateRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			baseline_predictor.RemoveRatings(ratings);
-			var reader = new MemoryInteractions(ratings).Sequential;
-			while (reader.Read())
-				data_user[reader.GetUser(), reader.GetItem()] = true;
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			correlation_matrix.AddEntity(user_id);
-		}
-
-		///
 		public float GetUserSimilarity(int user_id1, int user_id2)
 		{
 			return correlation_matrix[user_id1, user_id2];
@@ -139,39 +103,6 @@ namespace MyMediaLite.RatingPrediction
 		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
 		{
 			return correlation_matrix.GetNearestNeighbors(user_id, n);
-		}
-
-		/// <summary>Retrain model for a given user</summary>
-		/// <param name='user_id'>the user ID</param>
-		protected virtual void RetrainUser(int user_id)
-		{
-			baseline_predictor.RetrainUser(user_id);
-
-			if (UpdateUsers)
-			{
-				if (correlation_matrix is IBinaryDataCorrelationMatrix)
-				{
-					var bin_cor = correlation_matrix as IBinaryDataCorrelationMatrix;
-					var user_items = new HashSet<int>(BinaryDataMatrix[user_id]);
-					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
-						if (bin_cor.IsSymmetric)
-						{
-							correlation_matrix[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(BinaryDataMatrix[other_user_id]));
-						}
-						else
-						{
-							var other_user_items = new HashSet<int>(BinaryDataMatrix[other_user_id]);
-							correlation_matrix[user_id, other_user_id] = bin_cor.ComputeCorrelation(user_items, other_user_items);
-							correlation_matrix[other_user_id, user_id] = bin_cor.ComputeCorrelation(other_user_items, user_items);
-						}
-				}
-				if (correlation_matrix is IRatingCorrelationMatrix)
-				{
-					var rat_cor = correlation_matrix as IRatingCorrelationMatrix;
-					for (int other_user_id = 0; other_user_id <= MaxUserID; other_user_id++)
-						correlation_matrix[user_id, other_user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, user_id, other_user_id);
-				}
-			}
 		}
 
 		/// <summary>Fold in one user, identified by their ratings</summary>

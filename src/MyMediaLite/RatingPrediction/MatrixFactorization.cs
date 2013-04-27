@@ -42,12 +42,8 @@ namespace MyMediaLite.RatingPrediction
 	///     (2) Change the range of rating values (1 to 5 works generally well with the default settings).
 	///     (3) Decrease the learn_rate.
 	///   </para>
-	///
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	/// </remarks>
-	public class MatrixFactorization : IncrementalRatingPredictor, IIterativeModel, IFoldInRatingPredictor
+	public class MatrixFactorization : RatingPredictor, IIterativeModel, IFoldInRatingPredictor
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
 		protected internal Matrix<float> user_factors;
@@ -135,28 +131,6 @@ namespace MyMediaLite.RatingPrediction
 		public virtual void Iterate()
 		{
 			Iterate(Interactions.Random, true, true);
-		}
-
-		/// <summary>Updates the latent factors on a user</summary>
-		/// <param name="user_id">the user ID</param>
-		public virtual void RetrainUser(int user_id)
-		{
-			if (UpdateUsers)
-			{
-				user_factors.RowInitNormal(user_id, InitMean, InitStdDev);
-				LearnFactors(Interactions.ByUser(user_id), true, false); // TODO should be properly randomized
-			}
-		}
-
-		/// <summary>Updates the latent factors of an item</summary>
-		/// <param name="item_id">the item ID</param>
-		public virtual void RetrainItem(int item_id)
-		{
-			if (UpdateItems)
-			{
-				item_factors.RowInitNormal(item_id, InitMean, InitStdDev);
-				LearnFactors(Interactions.ByItem(item_id), false, true); // TODO should be properly randomized
-			}
 		}
 
 		/// <summary>Iterate once over rating data and adjust corresponding factors (stochastic gradient descent)</summary>
@@ -259,69 +233,6 @@ namespace MyMediaLite.RatingPrediction
 				return global_bias;
 
 			return Predict(user_id, item_id, true);
-		}
-
-		///
-		public override void AddRatings(IRatings ratings)
-		{
-			base.AddRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-			// TODO perform training an all involved users and items at once
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			user_factors.AddRows(user_id + 1);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			item_factors.AddRows(item_id + 1);
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			base.RemoveUser(user_id);
-
-			// set user factors to zero
-			user_factors.SetRowToOneValue(user_id, 0);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			base.RemoveItem(item_id);
-
-			// set item factors to zero
-			item_factors.SetRowToOneValue(item_id, 0);
 		}
 
 		/// <summary>Compute parameters (latent factors) for a user represented by ratings</summary>

@@ -23,10 +23,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses the average rating value over all ratings for prediction</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates.
-	/// </remarks>
-	public class GlobalAverage : IncrementalRatingPredictor
+	public class GlobalAverage : RatingPredictor
 	{
 		private float global_average = 0;
 
@@ -46,27 +43,6 @@ namespace MyMediaLite.RatingPrediction
 		public override float Predict(int user_id, int item_id)
 		{
 			return global_average;
-		}
-
-		///
-		public override void AddRatings(IRatings ratings)
-		{
-			base.AddRatings(ratings);
-			Train();
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			Train();
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			Train();
 		}
 
 		///

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,11 +21,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Uses a constant rating value for prediction</summary>
-	/// <remarks>
-	/// This recommender supports incremental updates.
-	/// Updates are just ignored, because the prediction is always the same.
-	/// </remarks>
-	public class Constant : IncrementalRatingPredictor
+	public class Constant : RatingPredictor
 	{
 		/// <summary>the constant rating</summary>
 		public float ConstantRating { get; set; }

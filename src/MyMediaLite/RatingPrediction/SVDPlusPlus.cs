@@ -245,30 +245,6 @@ namespace MyMediaLite.RatingPrediction
 				user_factors[user_id, f] = (float) factors[f];
 		}
 
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			Array.Resize(ref user_bias, MaxUserID + 1);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			Array.Resize(ref item_bias, MaxItemID + 1);
-		}
-
-		/// <summary>Updates the latent factors on a user</summary>
-		/// <param name="user_id">the user ID</param>
-		public override void RetrainUser(int user_id)
-		{
-			if (UpdateUsers)
-			{
-				base.RetrainUser(user_id);
-				PrecomputeFactors(user_id);
-			}
-		}
 
 		///
 		public override void SaveModel(string filename)

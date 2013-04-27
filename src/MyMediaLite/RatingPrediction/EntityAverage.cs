@@ -24,7 +24,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class that uses an average (by entity) rating value for predictions</summary>
-	public abstract class EntityAverage : IncrementalRatingPredictor
+	public abstract class EntityAverage : RatingPredictor
 	{
 		/// <summary>The average rating for each entity</summary>
 		protected IList<float> entity_averages;
@@ -74,31 +74,8 @@ namespace MyMediaLite.RatingPrediction
 					entity_averages[i] = global_average;
 		}
 
-		protected abstract void Retrain(IDataSet ratings);
-
 		///
-		public override void AddRatings(IRatings ratings)
-		{
-			base.AddRatings(ratings);
-			Retrain(ratings);
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			Retrain(ratings);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			Retrain(ratings);
-		}
-
-		///
-		public override void SaveModel(string filename)
+		public void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
@@ -108,7 +85,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override void LoadModel(string filename)
+		public void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{

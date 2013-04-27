@@ -58,11 +58,8 @@ namespace MyMediaLite.RatingPrediction
 	///       </description></item>
 	///     </list>
 	///   </para>
-	///   <para>
-	///     This recommender supports incremental updates.
-	///   </para>
 	/// </remarks>
-	public class UserItemBaseline : IncrementalRatingPredictor, IIterativeModel
+	public class UserItemBaseline : RatingPredictor, IIterativeModel
 	{
 		/// <summary>Regularization parameter for the user biases</summary>
 		public float RegU { get; set; }
@@ -155,76 +152,6 @@ namespace MyMediaLite.RatingPrediction
 			if (result < MinRating)
 				return MinRating;
 			return result;
-		}
-
-		///
-		public virtual void RetrainUser(int user_id)
-		{
-			if (UpdateUsers)
-			{
-				var reader = Interactions.ByUser(user_id);
-				while (reader.Read())
-					user_biases[user_id] += reader.GetRating() - global_average - item_biases[reader.GetItem()];
-				if (Interactions.ByUser(user_id).Count != 0)
-					user_biases[user_id] = user_biases[user_id] / (RegU + Interactions.ByUser(user_id).Count);
-			}
-		}
-
-		///
-		public virtual void RetrainItem(int item_id)
-		{
-			if (UpdateItems)
-			{
-				var reader = Interactions.ByItem(item_id);
-				while (reader.Read())
-					item_biases[item_id] += reader.GetRating() - global_average;
-				if (Interactions.ByItem(item_id).Count != 0)
-					item_biases[item_id] = item_biases[item_id] / (RegI + Interactions.ByItem(item_id).Count);
-			}
-		}
-
-		///
-		public override void AddRatings(IRatings ratings)
-		{
-			base.AddRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-		}
-
-		///
-		public override void UpdateRatings(IRatings ratings)
-		{
-			base.UpdateRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-		}
-
-		///
-		public override void RemoveRatings(IDataSet ratings)
-		{
-			base.RemoveRatings(ratings);
-			foreach (int user_id in ratings.AllUsers)
-				RetrainUser(user_id);
-			foreach (int item_id in ratings.AllItems)
-				RetrainItem(item_id);
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			base.AddUser(user_id);
-			Array.Resize(ref user_biases, MaxUserID + 1);
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			base.AddItem(item_id);
-			Array.Resize(ref item_biases, MaxItemID + 1);
 		}
 
 		///

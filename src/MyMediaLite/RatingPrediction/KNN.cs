@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -44,7 +44,7 @@ namespace MyMediaLite.RatingPrediction
 	///   </para>
 	///   <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
 	/// </remarks>
-	public abstract class KNN : IncrementalRatingPredictor
+	public abstract class KNN : RatingPredictor
 	{
 		/// <summary>Number of neighbors to take into account for predictions</summary>
 		public uint K { get { return k; } set { k = value; } }

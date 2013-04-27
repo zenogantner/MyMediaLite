@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -127,60 +127,5 @@ namespace MyMediaLite.Eval
 			return result;
 		}
 
-		/// <summary>Performs user-wise fold-in evaluation, but instead of folding in perform incremental training with the new data</summary>
-		/// <remarks>
-		/// </remarks>
-		/// <returns>the evaluation results</returns>
-		/// <param name='recommender'>a rating predictor capable of performing a user fold-in</param>
-		/// <param name='update_data'>the rating data used to represent the users</param>
-		/// <param name='eval_data'>the evaluation data</param>
-		static public RatingPredictionEvaluationResults EvaluateFoldInIncrementalTraining(this IncrementalRatingPredictor recommender, IRatings update_data, IRatings eval_data)
-		{
-			double rmse = 0;
-			double mae  = 0;
-			double cbd  = 0;
-
-			int rating_count = 0;
-			foreach (int user_id in update_data.AllUsers)
-				if (eval_data.AllUsers.Contains(user_id))
-				{
-					var local_recommender = (IncrementalRatingPredictor) recommender.Clone();
-
-					// add ratings and perform incremental training
-					var user_ratings = new RatingsProxy(update_data, update_data.ByUser[user_id]);
-					local_recommender.AddRatings(user_ratings);
-
-					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();
-					var predicted_ratings = recommender.Recommend(user_id, candidate_items:items_to_rate);
-
-					foreach (var pred in predicted_ratings)
-					{
-						float prediction = pred.Item2;
-						float actual_rating = eval_data.Get(user_id, pred.Item1, eval_data.ByUser[user_id]);
-						float error = prediction - actual_rating;
-
-						rmse += error * error;
-						mae  += Math.Abs(error);
-						cbd  += Eval.Ratings.ComputeCBD(actual_rating, prediction, recommender.MinRating, recommender.MaxRating);
-						rating_count++;
-					}
-
-					// remove ratings again
-					local_recommender.RemoveRatings(user_ratings);
-
-					Console.Error.Write(".");
-				}
-			
-			mae  = mae / rating_count;
-			rmse = Math.Sqrt(rmse / rating_count);
-			cbd  = cbd / rating_count;
-
-			var result = new RatingPredictionEvaluationResults();
-			result["RMSE"] = (float) rmse;
-			result["MAE"]  = (float) mae;
-			result["NMAE"] = (float) mae / (recommender.MaxRating - recommender.MinRating);
-			result["CBD"]  = (float) cbd;
-			return result;
-		}
 	}
 }

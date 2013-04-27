@@ -1,7 +1,7 @@
 4.00
 	recommenders
-	 - MostPopular: take ByUser property always into account when doing
-           incremental updates
+	 - remove incremental updates (will be re-added at some point, with
+           better architecture)
 	 - BPR-related recommenders:
            - remove WithReplacement property
            - move BPR sampling logic into namespace ItemRecommender.BPR

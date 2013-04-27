@@ -46,24 +46,5 @@ namespace MyMediaLite.RatingPrediction
 			else
 				return global_average;
 		}
-
-		protected override void Retrain(IDataSet ratings)
-		{
-			foreach (int item_id in ratings.AllItems)
-				entity_averages[item_id] = Interactions.ByItem(item_id).AverageRating();
-		}
-
-		///
-		protected override void AddItem(int item_id)
-		{
-			while (entity_averages.Count < item_id + 1)
-				entity_averages.Add(0);
-		}
-
-		///
-		public override void RemoveItem(int item_id)
-		{
-			entity_averages[item_id] = global_average;
-		}
 	}
 }

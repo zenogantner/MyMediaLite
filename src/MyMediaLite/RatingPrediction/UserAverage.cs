@@ -51,26 +51,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		protected override void Retrain(IDataSet ratings)
-		{
-			foreach (int user_id in ratings.AllUsers)
-				entity_averages[user_id] = Interactions.ByUser(user_id).AverageRating();
-		}
-
-		///
-		protected override void AddUser(int user_id)
-		{
-			while (entity_averages.Count < user_id + 1)
-				entity_averages.Add(0);
-		}
-
-		///
-		public override void RemoveUser(int user_id)
-		{
-			entity_averages[user_id] = global_average;
-		}
-
-		///
 		public IList<Tuple<int, float>> ScoreItems(IList<Tuple<int, float>> rated_items, IList<int> candidate_items)
 		{
 			float user_average = (float) (from pair in rated_items select pair.Item2).Average();
