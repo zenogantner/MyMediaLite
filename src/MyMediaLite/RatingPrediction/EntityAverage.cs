@@ -75,7 +75,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public void SaveModel(string filename)
+		public override void SaveModel(string filename)
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
 			{
@@ -85,7 +85,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public void LoadModel(string filename)
+		public override void LoadModel(string filename)
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
