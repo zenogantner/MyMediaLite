@@ -20,8 +20,8 @@ do
 done
 
 method=BiasedMatrixFactorization
-echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
-     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 max_threads=100 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
+echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
+     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --recommender-options="num_iter=1 num_factors=$K" --compute-fit --data-dir=$DATA_DIR
 
 for target in MAE LogisticLoss
 do
