@@ -352,7 +352,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		if (test_no_ratings && prediction_file == null)
 			Abort("--test-no-ratings needs both --prediction-file=FILE and --test-file=FILE.");
 
-		if (find_iter != 0 && test_ratio == 0 && cross_validation == 0 && prediction_file == null && chronological_split == null && !compute_fit)
+		if (find_iter != 0 && test_file == null && test_ratio == 0 && cross_validation == 0 && prediction_file == null && chronological_split == null && !compute_fit)
 			Abort("--find-iter=N must be combined with either --test-file=FILE, --test-ratio=NUM, --cross-validation=K, --chronological-split=NUM|DATETIME, --compute-fit, or --prediction-file=FILE.");
 
 		// handling of --chronological-split
