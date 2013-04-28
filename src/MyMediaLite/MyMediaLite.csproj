@@ -84,7 +84,6 @@
     <Compile Include="DataType\SymmetricSparseMatrix.cs" />
     <Compile Include="Taxonomy\EntityType.cs" />
     <Compile Include="RatingPrediction\EntityAverage.cs" />
-    <Compile Include="RatingPrediction\FactorWiseMatrixFactorization.cs" />
     <Compile Include="RatingPrediction\GlobalAverage.cs" />
     <Compile Include="RatingPrediction\IRatingPredictor.cs" />
     <Compile Include="RatingPrediction\ItemAttributeKNN.cs" />
@@ -163,7 +162,6 @@
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
-    <Compile Include="RatingPrediction\LatentFeatureLogLinearModel.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
     <Compile Include="Eval\FoldIn.cs" />

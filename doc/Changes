@@ -11,6 +11,8 @@
             - BipolarSlopeOne
 	    - MultiCoreBPRMF
 	    - SocialMF
+            - FactorWiseMatrixFactorization
+	    - LatentLogLinearModel
 	misc
 	 - remove MovieDemo
 
