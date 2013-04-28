@@ -87,3 +87,5 @@ For item recommendation, you can fine-tune what you want to predict with --predi
 Who uses the #MyMediaLite recommender system library? http://mymedialite.net/users.html #recsys
 
 Follow the development of the #MyMediaLite recommendation software on #GitHub: https://github.com/zenogantner/MyMediaLite #recsys
+
+Simple open development tasks for #MyMediaLite: https://github.com/zenogantner/MyMediaLite/issues?labels=simple+fix&state=open #recsys
