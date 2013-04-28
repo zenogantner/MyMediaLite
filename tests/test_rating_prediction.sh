@@ -29,14 +29,6 @@ do
 	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=2 --num-iter=1 --recommender-options="loss=$target num_factors=$K" --compute-fit --data-dir=$DATA_DIR --no-id-mapping
 done
 
-touch $DATA_DIR/empty
-for method in SocialMF
-do
-	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --num-iter=1 --recommender-options="learn_rate=0.005 social_reg=0 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
-	     $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --find-iter=1 --max-iter=3 --num-iter=1 --recommender-options="learn_rate=0.005 social_reg=0 num_factors=$K" --compute-fit --data-dir=$DATA_DIR --user-relations=empty --no-id-mapping
-done
-rm $DATA_DIR/empty
-
 for method in UserItemBaseline ItemAverage Constant Random
 do
 	echo $PROGRAM --training-file=ml-1m-0.train.txt --test-file=ml-1m-0.test.txt --recommender=$method --data-dir=$DATA_DIR --no-id-mapping
@@ -63,17 +55,9 @@ echo "--------------"
 
 DATA_DIR=data/ml-100k
 
-for method in UserItemBaseline SlopeOne BipolarSlopeOne
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
-done
-
-for method in FactorWiseMatrixFactorization CoClustering
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
-done
+method=UserItemBaseline
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
 
 for method in SigmoidCombinedAsymmetricFactorModel SigmoidSVDPlusPlus SVDPlusPlus
 do

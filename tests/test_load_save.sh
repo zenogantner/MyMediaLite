@@ -11,7 +11,7 @@ echo
 echo "rating predictors"
 echo "-----------------"
 
-for method in SlopeOne #BipolarSlopeOne MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage
+for method in MatrixFactorization BiasedMatrixFactorization UserItemBaseline GlobalAverage UserAverage
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR | perl -pe "s/\w+_time\s*\S+//g" > output1.txt
@@ -21,7 +21,7 @@ do
 	rm tmp.model*
 done
 
-for method in ItemAverage #FactorWiseMatrixFactorization
+for method in ItemAverage
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt | perl -pe "s/\w+_time\s*\S+//g" > output1.txt
@@ -32,7 +32,7 @@ do
 done
 
 
-for method in CoClustering SVDPlusPlus SigmoidSVDPlusPlus SigmoidUserAsymmetricFactorModel SigmoidItemAsymmetricFactorModel SigmoidCombinedAsymmetricFactorModel
+for method in SVDPlusPlus SigmoidSVDPlusPlus SigmoidUserAsymmetricFactorModel SigmoidItemAsymmetricFactorModel SigmoidCombinedAsymmetricFactorModel
 do
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt --recommender-options=\"num_iter=1\"
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt --recommender-options="num_iter=1" | perl -pe "s/\w+_time\s*\S+//g" | perl -ne '$ln = $_; while (/(\d+\.\d+)/g) { $f = sprintf "%.4", $1; $ln =~ s/$1/$f/; } print $ln' > output1.txt
