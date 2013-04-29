@@ -126,10 +126,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
+			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.09") )
 			{
-				writer.WriteLine(MaxItemID + 1);
-				for (int i = 0; i <= MaxItemID; i++)
+				writer.WriteLine(view_count.Count);
+				for (int i = 0; i < view_count.Count; i++)
 					writer.WriteLine(i + " " + view_count[i]);
 			}
 		}
