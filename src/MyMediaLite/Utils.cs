@@ -27,23 +27,6 @@ namespace MyMediaLite
 	/// <summary>Class containing utility functions</summary>
 	public static class Utils
 	{
-		/// <summary>Memoize a function</summary>
-		/// <param name="f">The function to memoize</param>
-		/// <returns>a version of the function that remembers past function results</returns>
-		public static Func<A, R> Memoize<A, R>(this Func<A, R> f)
-		{
-			var map = new Dictionary<A, R>();
-			return a =>
-			{
-				R value;
-				if (map.TryGetValue(a, out value))
-					return value;
-				value = f(a);
-				map.Add(a, value);
-				return value;
-			};
-		}
-
 		/// <summary>Shuffle a list in-place</summary>
 		/// <remarks>
 		/// Fisher-Yates shuffle, see
