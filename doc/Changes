@@ -26,6 +26,7 @@
            class
 	misc
 	 - #413: Add missing reference to System.Data (Roland Richter)
+	 - make MyMediaLite.Random a true (per-thread) singleton
 
 3.08	2013-04-13
 	recommenders
