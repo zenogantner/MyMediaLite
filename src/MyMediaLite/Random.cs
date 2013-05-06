@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -28,11 +28,11 @@ namespace MyMediaLite
 		private static Nullable<int> seed;
 
 		/// <summary>Default constructor</summary>
-		public Random() : base() { }
+		private Random() : base() { }
 
 		/// <summary>Creates a Random object initialized with a seed</summary>
 		/// <param name="seed">An integer for initializing the random number generator</param>
-		public Random(int seed) : base(seed) { }
+		private Random(int seed) : base(seed) { }
 
 		/// <summary>the random seed</summary>
 		public static int Seed
@@ -49,13 +49,17 @@ namespace MyMediaLite
 		public static Random GetInstance()
 		{
 			if (instance == null)
-			{
-				if (seed == null)
-					instance = new Random();
-				else
-					instance = new Random(seed.Value);
-			}
+				Init();
 			return instance;
+		}
+
+		/// <summary>(Re-)initialize the instance</summary>
+		public static void Init()
+		{
+			if (seed == null)
+				instance = new Random();
+			else
+				instance = new Random(seed.Value);
 		}
 	}
 }
