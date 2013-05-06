@@ -13,6 +13,7 @@
 	    - SocialMF
             - FactorWiseMatrixFactorization
 	    - LatentLogLinearModel
+	 - remove the Ensemble namespace
 	misc
 	 - remove MovieDemo
 
