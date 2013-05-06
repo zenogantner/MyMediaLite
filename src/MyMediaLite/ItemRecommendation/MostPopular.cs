@@ -128,6 +128,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.09") )
 			{
+				writer.WriteLine(score_denominator);
 				writer.WriteLine(view_count.Count);
 				for (int i = 0; i < view_count.Count; i++)
 					writer.WriteLine(i + " " + view_count[i]);
@@ -139,6 +140,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
 			{
+				int score_denominator = int.Parse(reader.ReadLine());
 				int size = int.Parse(reader.ReadLine());
 				var view_count = new int[size];
 
@@ -150,6 +152,7 @@ namespace MyMediaLite.ItemRecommendation
 					view_count[item_id] = count;
 				}
 
+				this.score_denominator = score_denominator;
 				this.view_count = view_count;
 				this.MaxItemID = view_count.Length - 1;
 			}
