@@ -176,7 +176,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	protected override void SetupRecommender()
 	{
- 		if (load_model_file != null)
+		if (load_model_file != null)
 			recommender = Model.Load(load_model_file);
 		else if (method != null)
 			recommender = method.CreateItemRecommender();
@@ -184,6 +184,12 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			recommender = "MostPopular".CreateItemRecommender();
 
 		base.SetupRecommender();
+	}
+
+	private void Train()
+	{
+		recommender.Train();
+		MyMediaLite.Random.Init(); // re-init to make sure eval results are the same after training and loading
 	}
 
 	protected override void Run(string[] args)
@@ -219,7 +225,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			else
 			{
 				if (load_model_file == null)
-					recommender.Train();
+					Train();
 
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), iterative_recommender.NumIter);
@@ -282,7 +288,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				}
 				else
 				{
-					time_span = Wrap.MeasureTime( delegate() { recommender.Train(); } );
+					time_span = Wrap.MeasureTime( delegate() { Train(); } );
 					Console.Write("training_time " + time_span + " ");
 				}
 			}
