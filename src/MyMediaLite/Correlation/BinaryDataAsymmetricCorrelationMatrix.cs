@@ -57,6 +57,17 @@ namespace MyMediaLite.Correlation
 			ComputeCorrelations(overlap_and_entity_weights.Item1, overlap_and_entity_weights.Item2);
 		}
 
+		///
+		public void ComputeCorrelations(IInteractions interactions, EntityType entity_type)
+		{
+			Tuple<IMatrix<float>, IList<float>> overlap_and_entity_weights;
+			if (Weighted)
+				overlap_and_entity_weights = Overlap.ComputeWeighted(interactions, entity_type);
+			else
+				overlap_and_entity_weights = Overlap.Compute(interactions, entity_type);
+			ComputeCorrelations(overlap_and_entity_weights.Item1, overlap_and_entity_weights.Item2);
+		}
+
 		void ComputeCorrelations(IMatrix<float> overlap, IList<float> entity_weights)
 		{
 			for (int x = 0; x < num_entities; x++)

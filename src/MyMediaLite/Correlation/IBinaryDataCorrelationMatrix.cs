@@ -34,7 +34,7 @@ namespace MyMediaLite.Correlation
 
 		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
 		/// <param name="interactions">the implicit feedback set</param>
-		//void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
+		void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
 
 		/// <summary>Computes the correlation of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>

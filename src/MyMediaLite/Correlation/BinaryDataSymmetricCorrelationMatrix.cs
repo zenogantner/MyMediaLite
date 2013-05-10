@@ -17,7 +17,9 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
@@ -41,12 +43,6 @@ namespace MyMediaLite.Correlation
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
 		{
-			Resize(entity_data.NumberOfRows);
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < NumEntities; i++)
-				this[i, i] = 1;
-			
 			Tuple<IMatrix<float>, IList<float>> overlap_and_entity_weights;
 			if (Weighted)
 				overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
@@ -55,8 +51,25 @@ namespace MyMediaLite.Correlation
 			ComputeCorrelations(overlap_and_entity_weights.Item1, overlap_and_entity_weights.Item2);
 		}
 
+		///
+		public void ComputeCorrelations(IInteractions interactions, EntityType entity_type)
+		{
+			Tuple<IMatrix<float>, IList<float>> overlap_and_entity_weights;
+			if (Weighted)
+				overlap_and_entity_weights = Overlap.ComputeWeighted(interactions, entity_type);
+			else
+				overlap_and_entity_weights = Overlap.Compute(interactions, entity_type);
+			ComputeCorrelations(overlap_and_entity_weights.Item1, overlap_and_entity_weights.Item2);
+		}
+
 		void ComputeCorrelations(IMatrix<float> overlap, IList<float> entity_weights)
 		{
+			Resize(entity_weights.Count);
+			
+			// the diagonal of the correlation matrix
+			for (int i = 0; i < NumEntities; i++)
+				this[i, i] = 1;
+
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
