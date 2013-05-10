@@ -70,7 +70,6 @@
     <Compile Include="Data\RatingsProxyTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
-    <Compile Include="Correlation\SymmetricCorrelationMatrixTest.cs" />
     <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
     <Compile Include="UtilsTest.cs" />
     <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />

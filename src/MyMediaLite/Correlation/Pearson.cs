@@ -141,7 +141,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public void ComputeCorrelations(IInteractions ratings, EntityType entity_type)
+		public override void ComputeCorrelations(IInteractions ratings, EntityType entity_type)
 		{
 			int num_entities = (entity_type == EntityType.USER) ? ratings.MaxUserID + 1 : ratings.MaxItemID + 1;
 			Resize(num_entities);

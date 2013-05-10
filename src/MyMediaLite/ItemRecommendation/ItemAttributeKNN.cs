@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,9 +26,6 @@ namespace MyMediaLite.ItemRecommendation
 	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
 	{
 		///
-		protected override IBooleanMatrix DataMatrix { get { return this.item_attributes; } }
-
-		///
 		public IBooleanMatrix ItemAttributes
 		{
 			get { return this.item_attributes; }
@@ -42,5 +39,12 @@ namespace MyMediaLite.ItemRecommendation
 
 		///
 		public int NumItemAttributes { get; private set; }
+		
+		///
+		public override void Train()
+		{
+			InitModel();
+			correlation_matrix.ComputeCorrelations(ItemAttributes);
+		}
 	}
 }

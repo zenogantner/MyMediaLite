@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -28,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 	public class ItemKNN : KNN, IItemSimilarityProvider
 	{
 		///
-		protected override IBooleanMatrix DataMatrix { get { return Feedback.ItemMatrix; } }
+		protected override EntityType Entity { get { return EntityType.ITEM; } }
 
 		///
 		public override void Train()

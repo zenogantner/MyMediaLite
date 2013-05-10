@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -26,7 +26,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
-	public class AsymmetricCorrelationMatrix : SparseMatrix<float>, ICorrelationMatrix
+	public abstract class AsymmetricCorrelationMatrix : SparseMatrix<float>, ICorrelationMatrix
 	{
 		///
 		public int NumEntities { get { return num_entities; } }
@@ -44,6 +44,8 @@ namespace MyMediaLite.Correlation
 			this.num_entities = num_entities;
 		}
 
+		public abstract void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
+
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
 		/// A <see cref="StreamWriter"/>
@@ -58,12 +60,6 @@ namespace MyMediaLite.Correlation
 					if (val != 0f)
 						writer.WriteLine(i + " " + j + " " + val.ToString(CultureInfo.InvariantCulture));
 				}
-		}
-
-		///
-		public void AddEntity(int entity_id)
-		{
-			this.Resize(entity_id + 1);
 		}
 
 		///

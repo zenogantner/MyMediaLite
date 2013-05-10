@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -27,7 +28,7 @@ namespace MyMediaLite.ItemRecommendation
 	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
 	{
 		///
-		protected override IBooleanMatrix DataMatrix { get { return Feedback.UserMatrix; } }
+		protected override EntityType Entity { get { return EntityType.USER; } }
 
 		///
 		public override void Train()

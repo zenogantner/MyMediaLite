@@ -45,9 +45,6 @@ namespace MyMediaLite.RatingPrediction
 		///
 		protected override EntityType Entity { get { return EntityType.USER; } }
 
-		///
-		protected override IBooleanMatrix BinaryDataMatrix { get { return data_user; } }
-
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
 		/// If the user or the item are not known to the recommender, a suitable average rating is returned.

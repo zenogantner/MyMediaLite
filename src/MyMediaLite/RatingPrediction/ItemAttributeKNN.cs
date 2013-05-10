@@ -40,9 +40,15 @@ namespace MyMediaLite.RatingPrediction
 		private IBooleanMatrix item_attributes;
 
 		///
-		public int NumItemAttributes { get; private set; }
+		public override void Train()
+		{
+			baseline_predictor.Train();
+			InitModel();
+			var binary_correlation = correlation_matrix as IBinaryDataCorrelationMatrix;
+			binary_correlation.ComputeCorrelations(ItemAttributes);
+		}
 
 		///
-		protected override IBooleanMatrix BinaryDataMatrix { get { return item_attributes; } }
+		public int NumItemAttributes { get; private set; }
 	}
 }

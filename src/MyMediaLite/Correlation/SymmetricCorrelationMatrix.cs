@@ -29,7 +29,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for computing and storing correlations and similarities</summary>
-	public class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
+	public abstract class SymmetricCorrelationMatrix : SymmetricSparseMatrix<float>, ICorrelationMatrix
 	{
 		/// <summary>Number of entities the correlation is defined over</summary>
 		public int NumEntities { get; private set; }
@@ -43,6 +43,8 @@ namespace MyMediaLite.Correlation
 		{
 			NumEntities = num_entities;
 		}
+
+		public abstract void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
 
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">
@@ -65,12 +67,6 @@ namespace MyMediaLite.Correlation
 		{
 			base.Resize(size);
 			NumEntities = size;
-		}
-
-		///
-		public void AddEntity(int entity_id)
-		{
-			this.Resize(entity_id + 1, entity_id + 1);
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			set {
 				base.Ratings = value;
-				
+
 				data_item = new SparseBooleanMatrix();
 				var reader = Interactions.Sequential;
 				while (reader.Read())
@@ -45,9 +45,6 @@ namespace MyMediaLite.RatingPrediction
 
 		///
 		protected override EntityType Entity { get { return EntityType.ITEM; } }
-
-		///
-		protected override IBooleanMatrix BinaryDataMatrix { get { return data_item; } }
 
 		/// <summary>Predict the rating of a given user for a given item</summary>
 		/// <remarks>
@@ -63,12 +60,13 @@ namespace MyMediaLite.RatingPrediction
 
 			if ((user_id > MaxUserID) || (item_id > correlation_matrix.NumberOfRows - 1))
 				return result;
-
+			
+		// TODO get rid of data_item, use the interactions directly here
 			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = K;
+			uint neighbors = K; // TODO better var name
 			foreach (int item_id2 in correlated_items)
 				if (data_item[item_id2, user_id])
 				{

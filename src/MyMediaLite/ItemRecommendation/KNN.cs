@@ -21,6 +21,7 @@ using System.IO;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -30,6 +31,9 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }
+
+		/// <summary>The entity type of the neighbors used for prediction</summary>
+		abstract protected EntityType Entity { get; }
 
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
 		public float Alpha { get; set; }
@@ -58,9 +62,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>The kind of correlation to use</summary>
 		public BinaryCorrelationType Correlation { get; set; }
 
-		/// <summary>data matrix to learn the correlation from</summary>
-		protected abstract IBooleanMatrix DataMatrix { get; }
-
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		protected uint k = 80;
 
@@ -78,7 +79,7 @@ namespace MyMediaLite.ItemRecommendation
 			Q = 1.0f;
 		}
 
-		void InitModel()
+		protected void InitModel()
 		{
 			int num_entities = 0;
 			switch (Correlation)
@@ -104,38 +105,11 @@ namespace MyMediaLite.ItemRecommendation
 			correlation_matrix.Weighted = Weighted;
 		}
 
-		/// <summary>Update the correlation matrix for the given feedback</summary>
-		/// <param name='feedback'>the feedback (user-item tuples)</param>
-		protected void Update(ICollection<Tuple<int, int>> feedback)
-		{
-			var update_entities = new HashSet<int>();
-			foreach (var t in feedback)
-				update_entities.Add(t.Item1);
-
-			foreach (int i in update_entities)
-			{
-				for (int j = 0; j < correlation_matrix.NumEntities; j++)
-				{
-					if (j < i && correlation_matrix.IsSymmetric && update_entities.Contains(j))
-						continue;
-
-					correlation_matrix[i, j] = correlation_matrix.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
-				}
-			}
-			RecomputeNeighbors(update_entities);
-		}
-
-		private void RecomputeNeighbors(ICollection<int> update_entities)
-		{
-			foreach (int entity_id in update_entities)
-				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, k);
-		}
-
 		///
 		public override void Train()
 		{
 			InitModel();
-			correlation_matrix.ComputeCorrelations(DataMatrix);
+			correlation_matrix.ComputeCorrelations(Interactions, Entity);
 		}
 
 		///
@@ -181,15 +155,6 @@ namespace MyMediaLite.ItemRecommendation
 				this.k = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}
-		}
-
-		/// <summary>Resizes the nearest neighbors list if necessary</summary>
-		/// <param name='new_size'>the new size</param>
-		protected void ResizeNearestNeighbors(int new_size)
-		{
-			if (new_size > nearest_neighbors.Count)
-				for (int i = nearest_neighbors.Count; i < new_size; i++)
-					nearest_neighbors.Add(null);
 		}
 
 		///

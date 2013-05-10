@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -17,7 +17,9 @@
 //
 using System.Collections.Generic;
 using System.IO;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
@@ -27,12 +29,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>size of the matrix (number of entities)</summary>
 		int NumEntities { get; }
 
-		/// <summary>Add an entity to the ICorrelationMatrix by growing it to the requested size.</summary>
-		/// <remarks>
-		/// Note that you still have to correctly compute and set the entity's correlation values
-		/// </remarks>
-		/// <param name="entity_id">the numerical ID of the entity</param>
-		void AddEntity(int entity_id);
+		void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
 
 		/// <summary>Write out the correlations to a StreamWriter</summary>
 		/// <param name="writer">

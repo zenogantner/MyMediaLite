@@ -32,10 +32,6 @@ namespace MyMediaLite.Correlation
 		/// <param name="entity_data">the matrix, rows contain the entities to correlate</param>
 		void ComputeCorrelations(IBooleanMatrix entity_data);
 
-		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
-		/// <param name="interactions">the implicit feedback set</param>
-		void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
-
 		/// <summary>Computes the correlation of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>
 		/// <param name="vector_j">the second vector</param>

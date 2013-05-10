@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -46,7 +46,13 @@ namespace MyMediaLite.RatingPrediction
 		public int NumUserAttributes { get; private set; }
 
 		///
-		protected override IBooleanMatrix BinaryDataMatrix { get { return user_attributes; } }
+		public override void Train()
+		{
+			baseline_predictor.Train();
+			InitModel();
+			var binary_correlation = correlation_matrix as IBinaryDataCorrelationMatrix;
+			binary_correlation.ComputeCorrelations(UserAttributes);
+		}
 
 		///
 		protected override IList<float> FoldIn(IList<Tuple<int, float>> rated_items)

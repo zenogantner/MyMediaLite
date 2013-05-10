@@ -149,7 +149,7 @@ namespace MyMediaLite.Correlation
 
 			IList<float> counts = new float[num_entities];
 			for (int i = 0; i < num_entities; i++)
-				counts[i] = (entity_type == EntityType.USER) ? interactions.ByUser(i).Items.Count : interactions.ByUser(i).Items.Count;
+				counts[i] = (entity_type == EntityType.USER) ? interactions.ByUser(i).Items.Count : interactions.ByItem(i).Users.Count;
 
 			return Tuple.Create(overlap, counts);
 		}

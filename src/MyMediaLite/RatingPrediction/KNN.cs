@@ -65,10 +65,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The entity type of the neighbors used for rating prediction</summary>
 		abstract protected EntityType Entity { get; }
 
-		/// <summary>Return the data matrix that can be used to compute a correlation based on binary data</summary>
-		/// <remarks>If a purely rating-based correlation is used, this property is ignored.</remarks>
-		abstract protected IBooleanMatrix BinaryDataMatrix { get; }
-
 		/// <summary>regularization constant for the user bias of the underlying baseline predictor</summary>
 		public float RegU { get { return baseline_predictor.RegU; } set { baseline_predictor.RegU = value; } }
 
@@ -90,7 +86,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>underlying baseline predictor</summary>
 		protected UserItemBaseline baseline_predictor = new UserItemBaseline();
 
-		void InitModel()
+		protected void InitModel()
 		{
 			int num_entities = 0;
 			switch (Correlation)
@@ -125,10 +121,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			baseline_predictor.Train();
 			InitModel();
-			if (correlation_matrix is IBinaryDataCorrelationMatrix)
-				((IBinaryDataCorrelationMatrix) correlation_matrix).ComputeCorrelations(BinaryDataMatrix);
-			else
-				((IRatingCorrelationMatrix) correlation_matrix).ComputeCorrelations(Interactions, Entity);
+			correlation_matrix.ComputeCorrelations(Interactions, Entity);
 		}
 
 		///
