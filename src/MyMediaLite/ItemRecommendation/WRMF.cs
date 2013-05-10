@@ -119,9 +119,8 @@ namespace MyMediaLite.ItemRecommendation
 			Matrix<float> W = target == EntityType.USER ? user_factors : item_factors;
 			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
 
-			//ICollection<int> row = target == EntityType.USER ? Interactions.ByUser(u).Items : Interactions.ByItem(u).Users;
-			ICollection<int> row = target == EntityType.USER ? Feedback.UserMatrix.GetEntriesByRow(u) : Feedback.ItemMatrix.GetEntriesByRow(u);
-			
+			ICollection<int> row = target == EntityType.USER ? Interactions.ByUser(u).Items : Interactions.ByItem(u).Users;
+
 			// comments are in terms of computing the user factors
 			// ... works the same with users and items exchanged
 
