@@ -176,7 +176,6 @@
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
     <Compile Include="RatingPrediction\SigmoidItemAsymmetricFactorModel.cs" />
-    <Compile Include="ItemRecommendation\ITransductiveItemRecommender.cs" />
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />

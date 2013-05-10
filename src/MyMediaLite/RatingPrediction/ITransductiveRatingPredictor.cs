@@ -20,8 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
 
-// TODO port to new backend
-
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Rating predictor that knows beforehand what it will have to rate</summary>
@@ -32,7 +30,7 @@ namespace MyMediaLite.RatingPrediction
 	public interface ITransductiveRatingPredictor : IRatingPredictor
 	{
 		/// <summary>user-item combinations that are known to be queried</summary>
-		IDataSet AdditionalFeedback { get; set; }
+		IInteractions AdditionalInteractions { get; set; }
 	}
 
 	/// <summary>Helper methods for ITransductiveRatingPredictor</summary>
@@ -43,15 +41,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to retrieve the data from</param>
 		public static int[][] UsersWhoRated(this ITransductiveRatingPredictor recommender)
 		{
-			var ratings             = recommender.Ratings;
-			var additional_feedback = recommender.AdditionalFeedback;
-			int max_item_id = Math.Max(ratings.MaxItemID, additional_feedback.MaxItemID);
+			var interactions            = recommender.Interactions;
+			var additional_interactions = recommender.AdditionalInteractions;
+			int max_item_id = Math.Max(interactions.MaxItemID, additional_interactions.MaxItemID);
 
 			var users_who_rated_the_item = new int[max_item_id + 1][];
 			for (int item_id = 0; item_id <= max_item_id; item_id++)
 			{
-				var training_users = item_id <= ratings.MaxItemID             ? from index in             ratings.ByItem[item_id] select             ratings.Users[index] : new int[0];
-				var test_users     = item_id <= additional_feedback.MaxItemID ? from index in additional_feedback.ByItem[item_id] select additional_feedback.Users[index] : new int[0];
+				var training_users = item_id <= interactions.MaxItemID            ?            interactions.ByItem(item_id).Users : new HashSet<int>();
+				var test_users     = item_id <= additional_interactions.MaxItemID ? additional_interactions.ByItem(item_id).Users : new HashSet<int>();
 
 				users_who_rated_the_item[item_id] = training_users.Union(test_users).ToArray();
 			}
@@ -63,15 +61,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to retrieve the data from</param>
 		public static int[][] ItemsRatedByUser(this ITransductiveRatingPredictor recommender)
 		{
-			var ratings             = recommender.Ratings;
-			var additional_feedback = recommender.AdditionalFeedback;
-			int max_user_id = Math.Max(ratings.MaxUserID, additional_feedback.MaxUserID);
+			var interactions            = recommender.Interactions;
+			var additional_interactions = recommender.AdditionalInteractions;
+			int max_user_id = Math.Max(interactions.MaxUserID, additional_interactions.MaxUserID);
 
 			var items_rated_by_user = new int[max_user_id + 1][];
 			for (int user_id = 0; user_id <= max_user_id; user_id++)
 			{
-				var training_items = user_id <= ratings.MaxUserID             ? from index in             ratings.ByUser[user_id] select             ratings.Items[index] : new int[0];
-				var test_items     = user_id <= additional_feedback.MaxUserID ? from index in additional_feedback.ByUser[user_id] select additional_feedback.Items[index] : new int[0];
+				var training_items = user_id <= interactions.MaxUserID            ?            interactions.ByUser(user_id).Items : new HashSet<int>();
+				var test_items     = user_id <= additional_interactions.MaxUserID ? additional_interactions.ByUser(user_id).Items : new HashSet<int>();
 
 				items_rated_by_user[user_id] = training_items.Union(test_items).ToArray();
 			}
@@ -83,15 +81,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to get the data from</param>
 		public static int[] UserFeedbackCounts(this ITransductiveRatingPredictor recommender)
 		{
-			int max_user_id = Math.Max(recommender.Interactions.MaxUserID, recommender.AdditionalFeedback.MaxUserID);
+			int max_user_id = Math.Max(recommender.Interactions.MaxUserID, recommender.AdditionalInteractions.MaxUserID);
 			var result = new int[max_user_id + 1];
 
 			for (int user_id = 0; user_id <= max_user_id; user_id++)
 			{
 				if (user_id <= recommender.Interactions.MaxUserID)
-					result[user_id] += recommender.Ratings.CountByUser[user_id];
-				if (user_id <= recommender.AdditionalFeedback.MaxUserID)
-					result[user_id] += recommender.AdditionalFeedback.CountByUser[user_id];
+					result[user_id] += recommender.Interactions.ByUser(user_id).Count;
+				if (user_id <= recommender.AdditionalInteractions.MaxUserID)
+					result[user_id] += recommender.AdditionalInteractions.ByUser(user_id).Count;
 			}
 			return result;
 		}
@@ -101,15 +99,15 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='recommender'>the recommender to get the data from</param>
 		public static int[] ItemFeedbackCounts(this ITransductiveRatingPredictor recommender)
 		{
-			int max_item_id = Math.Max(recommender.Interactions.MaxItemID, recommender.AdditionalFeedback.MaxItemID);
+			int max_item_id = Math.Max(recommender.Interactions.MaxItemID, recommender.AdditionalInteractions.MaxItemID);
 			var result = new int[max_item_id + 1];
 
 			for (int item_id = 0; item_id <= max_item_id; item_id++)
 			{
 				if (item_id <= recommender.Interactions.MaxItemID)
 					result[item_id] += recommender.Interactions.ByItem(item_id).Count;
-				if (item_id <= recommender.AdditionalFeedback.MaxItemID)
-					result[item_id] += recommender.AdditionalFeedback.CountByItem[item_id];
+				if (item_id <= recommender.AdditionalInteractions.MaxItemID)
+					result[item_id] += recommender.AdditionalInteractions.ByItem(item_id).Count;
 			}
 			return result;
 		}

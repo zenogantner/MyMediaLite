@@ -64,7 +64,7 @@ namespace MyMediaLite.Eval
 					var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
 					split_recommender.Ratings = split.Train[i];
 					if (recommender is ITransductiveRatingPredictor)
-						((ITransductiveRatingPredictor) split_recommender).AdditionalFeedback = split.Test[i];
+						((ITransductiveRatingPredictor) split_recommender).AdditionalInteractions = new MemoryInteractions(split.Test[i]); // TODO make sure to filter rating values
 					split_recommender.Train();
 					fold_results[i] = Ratings.Evaluate(split_recommender, split.Test[i]);
 					if (compute_fit)
@@ -128,7 +128,7 @@ namespace MyMediaLite.Eval
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
 					split_recommenders[i].Ratings = split.Train[i];
 					if (recommender is ITransductiveRatingPredictor)
-						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalFeedback = split.Test[i];
+						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalInteractions = new MemoryInteractions(split.Test[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);

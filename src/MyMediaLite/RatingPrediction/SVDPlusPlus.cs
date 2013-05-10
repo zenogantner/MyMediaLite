@@ -53,7 +53,7 @@ namespace MyMediaLite.RatingPrediction
 		protected internal Matrix<float> p;
 
 		///
-		public IDataSet AdditionalFeedback { get; set; }
+		public IInteractions AdditionalInteractions { get; set; }
 
 		// TODO #332 update this structure on incremental updates
 		/// <summary>The items rated by the users</summary>
@@ -77,7 +77,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public SVDPlusPlus() : base()
 		{
-			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // in case no test data is provided
+			AdditionalInteractions = new MemoryInteractions(new Ratings()); // in case no test data is provided
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;

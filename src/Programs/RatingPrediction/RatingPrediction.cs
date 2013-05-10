@@ -419,7 +419,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, test_format, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
 
 				if (recommender is ITransductiveRatingPredictor)
-					((ITransductiveRatingPredictor) recommender).AdditionalFeedback = test_data;
+					((ITransductiveRatingPredictor) recommender).AdditionalInteractions = new MemoryInteractions(test_data);
 			}
 
 		});

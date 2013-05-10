@@ -50,12 +50,12 @@ namespace MyMediaLite.RatingPrediction
 		internal Matrix<float> x;
 
 		///
-		public IDataSet AdditionalFeedback { get; set; }
+		public IInteractions AdditionalInteractions { get; set; }
 
 		/// <summary>Default constructor</summary>
 		public SigmoidUserAsymmetricFactorModel() : base()
 		{
-			AdditionalFeedback = new PosOnlyFeedback<SparseBooleanMatrix>(); // in case no test data is provided
+			AdditionalInteractions = new MemoryInteractions(new Ratings()); // in case no test data is provided
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;
@@ -65,8 +65,8 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			MaxUserID = Math.Max(MaxUserID, AdditionalFeedback.MaxUserID);
-			MaxItemID = Math.Max(MaxItemID, AdditionalFeedback.MaxItemID);
+			MaxUserID = Math.Max(MaxUserID, AdditionalInteractions.MaxUserID);
+			MaxItemID = Math.Max(MaxItemID, AdditionalInteractions.MaxItemID);
 			users_who_rated_the_item = this.UsersWhoRated();
 			feedback_count_by_user = this.UserFeedbackCounts();
 			x_reg = new float[MaxUserID + 1];
@@ -266,7 +266,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Precompute all item factors</summary>
 		protected void PrecomputeItemFactors()
 		{
-			MaxItemID = Math.Max(Interactions.MaxItemID, AdditionalFeedback.MaxItemID);
+			MaxItemID = Math.Max(Interactions.MaxItemID, AdditionalInteractions.MaxItemID);
 
 			if (item_factors == null)
 				item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
