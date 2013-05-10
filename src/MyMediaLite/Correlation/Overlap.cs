@@ -60,16 +60,14 @@ namespace MyMediaLite.Correlation
 			return Tuple.Create(weighted_overlap, entity_weights);
 		}
 
-		/// <summary>Compute the overlap between the vectors in a binary matrix</summary>
-		/// <returns>a sparse matrix with the overlaps</returns>
+		/// <summary>Compute the overlap between the row vectors in a binary matrix</summary>
 		/// <param name='entity_data'>the binary matrix</param>
-		public static IMatrix<uint> Compute(IBooleanMatrix entity_data)
+		public static Tuple<IMatrix<float>, IList<float>> Compute(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
-			var overlap = new SymmetricSparseMatrix<uint>(entity_data.NumberOfRows);
+			var overlap = new SymmetricSparseMatrix<float>(entity_data.NumberOfRows);
 
-			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
 			{
 				var row = transpose.GetEntriesByRow(row_id);
@@ -77,10 +75,15 @@ namespace MyMediaLite.Correlation
 				{
 					int x = row[i];
 					for (int j = i + 1; j < row.Count; j++)
-						overlap[x, row[j]]++;
+						overlap[x, row[j]] += 1;
 				}
 			}
-			return overlap;
+			
+			var counts = new float[entity_data.NumberOfRows];
+			for (int row_id = 0; row_id < entity_data.NumberOfRows; row_id++)
+				counts[row_id] = entity_data.NumEntriesByRow(row_id);
+
+			return new Tuple<IMatrix<float>, IList<float>>(overlap, counts);
 		}
 	}
 }

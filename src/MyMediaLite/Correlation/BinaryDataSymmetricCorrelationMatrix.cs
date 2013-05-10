@@ -46,31 +46,20 @@ namespace MyMediaLite.Correlation
 			// the diagonal of the correlation matrix
 			for (int i = 0; i < NumEntities; i++)
 				this[i, i] = 1;
-
+			
+			Tuple<IMatrix<float>, IList<float>> overlap_and_entity_weights;
 			if (Weighted)
-				ComputeCorrelationsWeighted(entity_data);
+				overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
 			else
-				ComputeCorrelationsNotWeighted(entity_data);
+				overlap_and_entity_weights = Overlap.Compute(entity_data);
+			ComputeCorrelations(overlap_and_entity_weights.Item1, overlap_and_entity_weights.Item2);
 		}
 
-		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
+		void ComputeCorrelations(IMatrix<float> overlap, IList<float> entity_weights)
 		{
-			var overlap_and_entity_weights = Overlap.ComputeWeighted(entity_data);
-			var overlap        = overlap_and_entity_weights.Item1;
-			var entity_weights = overlap_and_entity_weights.Item2;
-
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
-		}
-
-		void ComputeCorrelationsNotWeighted(IBooleanMatrix entity_data)
-		{
-			var overlap = Overlap.Compute(entity_data);
-
-			for (int x = 0; x < NumEntities; x++)
-				for (int y = 0; y < x; y++)
-					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
 		}
 
 		///
