@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
@@ -28,12 +30,15 @@ namespace MyMediaLite.Correlation
 		///
 		public bool Weighted { get; set; }
 
-		/// <summary>Creates an object of type ConditionalProbability</summary>
+		/// <summary>Creates an object of type BinaryDataAsymmetricCorrelationMatrix</summary>
 		/// <param name="num_entities">the number of entities</param>
 		public BinaryDataAsymmetricCorrelationMatrix(int num_entities) : base(num_entities) { }
 
 		///
 		protected abstract float ComputeCorrelationFromOverlap(float overlap, float count_x, float count_y);
+
+		///
+		//public void ComputeCorrelations(IInteractions interactions, EntityType entity_type)
 
 		///
 		public void ComputeCorrelations(IBooleanMatrix entity_data)
@@ -46,10 +51,8 @@ namespace MyMediaLite.Correlation
 
 			if (Weighted)
 				ComputeCorrelationsWeighted(entity_data);
-			else if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
-				ComputeCorrelationsUIntOverlap(entity_data);
 			else
-				ComputeCorrelationsUShortOverlap(entity_data);
+				ComputeCorrelationsNotWeighted(entity_data);
 		}
 
 		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
@@ -67,24 +70,11 @@ namespace MyMediaLite.Correlation
 				}
 		}
 
-		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)
+		void ComputeCorrelationsNotWeighted(IBooleanMatrix entity_data)
 		{
-			var overlap = Overlap.ComputeUInt(entity_data);
+			var overlap = Overlap.Compute(entity_data);
 
 			// compute correlations
-			for (int x = 0; x < num_entities; x++)
-				for (int y = 0; y < x; y++)
-				{
-					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
-					this[y, x] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(y), entity_data.NumEntriesByRow(x));
-				}
-		}
-
-		void ComputeCorrelationsUShortOverlap(IBooleanMatrix entity_data)
-		{
-			var overlap = Overlap.ComputeUShort(entity_data);
-
-			// compute correlation
 			for (int x = 0; x < num_entities; x++)
 				for (int y = 0; y < x; y++)
 				{

@@ -49,10 +49,8 @@ namespace MyMediaLite.Correlation
 
 			if (Weighted)
 				ComputeCorrelationsWeighted(entity_data);
-			else if (entity_data.NumberOfColumns > ushort.MaxValue) // if possible, save some memory
-				ComputeCorrelationsUIntOverlap(entity_data);
 			else
-				ComputeCorrelationsUShortOverlap(entity_data);
+				ComputeCorrelationsNotWeighted(entity_data);
 		}
 
 		void ComputeCorrelationsWeighted(IBooleanMatrix entity_data)
@@ -66,18 +64,9 @@ namespace MyMediaLite.Correlation
 					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_weights[x], entity_weights[y]);
 		}
 
-		void ComputeCorrelationsUIntOverlap(IBooleanMatrix entity_data)
+		void ComputeCorrelationsNotWeighted(IBooleanMatrix entity_data)
 		{
-			var overlap = Overlap.ComputeUInt(entity_data);
-
-			for (int x = 0; x < NumEntities; x++)
-				for (int y = 0; y < x; y++)
-					this[x, y] = ComputeCorrelationFromOverlap(overlap[x, y], entity_data.NumEntriesByRow(x), entity_data.NumEntriesByRow(y));
-		}
-
-		void ComputeCorrelationsUShortOverlap(IBooleanMatrix entity_data)
-		{
-			var overlap = Overlap.ComputeUShort(entity_data);
+			var overlap = Overlap.Compute(entity_data);
 
 			for (int x = 0; x < NumEntities; x++)
 				for (int y = 0; y < x; y++)

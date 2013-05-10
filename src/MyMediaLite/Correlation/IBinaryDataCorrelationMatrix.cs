@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,7 +16,9 @@
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.Correlation
 {
@@ -26,9 +28,13 @@ namespace MyMediaLite.Correlation
 		/// <summary>If set to true, give a lower weight to evidence coming from very frequent entities</summary>
 		bool Weighted { get; set; }
 
-		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
-		/// <param name="entity_data">the implicit feedback set, rows contain the entities to correlate</param>
+		/// <summary>Compute the correlations from a binary matrix</summary>
+		/// <param name="entity_data">the matrix, rows contain the entities to correlate</param>
 		void ComputeCorrelations(IBooleanMatrix entity_data);
+
+		/// <summary>Compute the correlations from an implicit feedback, positive-only dataset</summary>
+		/// <param name="interactions">the implicit feedback set</param>
+		//void ComputeCorrelations(IInteractions interactions, EntityType entity_type);
 
 		/// <summary>Computes the correlation of two binary vectors</summary>
 		/// <param name="vector_i">the first vector</param>

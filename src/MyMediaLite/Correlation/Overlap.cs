@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -63,34 +63,11 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute the overlap between the vectors in a binary matrix</summary>
 		/// <returns>a sparse matrix with the overlaps</returns>
 		/// <param name='entity_data'>the binary matrix</param>
-		public static IMatrix<uint> ComputeUInt(IBooleanMatrix entity_data)
+		public static IMatrix<uint> Compute(IBooleanMatrix entity_data)
 		{
 			var transpose = entity_data.Transpose() as IBooleanMatrix;
 
 			var overlap = new SymmetricSparseMatrix<uint>(entity_data.NumberOfRows);
-
-			// go over all (other) entities
-			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)
-			{
-				var row = transpose.GetEntriesByRow(row_id);
-				for (int i = 0; i < row.Count; i++)
-				{
-					int x = row[i];
-					for (int j = i + 1; j < row.Count; j++)
-						overlap[x, row[j]]++;
-				}
-			}
-			return overlap;
-		}
-
-		/// <summary>Computes the overlap between the vectors in a binary matrix</summary>
-		/// <returns>a sparse matrix with the overlaps</returns>
-		/// <param name='entity_data'>the binary matrix</param>
-		public static IMatrix<ushort> ComputeUShort(IBooleanMatrix entity_data)
-		{
-			var transpose = entity_data.Transpose() as IBooleanMatrix;
-
-			var overlap = new SymmetricSparseMatrix<ushort>(entity_data.NumberOfRows);
 
 			// go over all (other) entities
 			for (int row_id = 0; row_id < transpose.NumberOfRows; row_id++)

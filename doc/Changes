@@ -14,6 +14,8 @@
             - FactorWiseMatrixFactorization
 	    - LatentLogLinearModel
 	 - remove the Ensemble namespace
+	correlation
+	 - simplify correlation computation
 	misc
 	 - remove MovieDemo
 
