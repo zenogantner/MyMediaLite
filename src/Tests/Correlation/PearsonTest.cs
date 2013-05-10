@@ -37,9 +37,10 @@ namespace Tests.Correlation
 			ratings.Add(1, 4, 0.2f);
 			ratings.Add(2, 0, 0.1f);
 			ratings.Add(2, 1, 0.3f);
+			var interactions = new MemoryInteractions(ratings);
 
-			var correlation_matrix = new Pearson(ratings.MaxUserID + 1, 0f);
-			correlation_matrix.ComputeCorrelations(ratings, EntityType.USER);
+			var correlation_matrix = new Pearson(interactions.MaxUserID + 1, 0f);
+			correlation_matrix.ComputeCorrelations(interactions, EntityType.USER);
 			Assert.AreEqual(3, correlation_matrix.NumberOfRows);
 			Assert.IsTrue(correlation_matrix.IsSymmetric);
 			Assert.AreEqual(0, correlation_matrix[0, 1]);
@@ -54,40 +55,46 @@ namespace Tests.Correlation
 			ratings.Add(1, 2, 0.6f);
 			ratings.Add(1, 3, 0.4f);
 			ratings.Add(1, 4, 0.2f);
+			var interactions = new MemoryInteractions(ratings);
 
 			// test
-			var p = new Pearson(ratings.AllUsers.Count, 0f);
-			Assert.AreEqual(0, p.ComputeCorrelation(ratings, EntityType.USER, 0, 1));
+			var p = new Pearson(interactions.MaxUserID, 0f);
+			Assert.AreEqual(0, p.ComputeCorrelation(interactions, EntityType.USER, 0, 1));
 		}
 
 		[Test()] public void TestComputeCorrelations()
 		{
 			// create test objects
 			var pearson = new Pearson(3, 0f);
-			var rating_data = new Ratings();
-			rating_data.Add(0, 1, 0.3f);
-			rating_data.Add(0, 2, 0.6f);
-			rating_data.Add(0, 4, 0.2f);
-			rating_data.Add(1, 3, 0.4f);
-			rating_data.Add(1, 4, 0.2f);
-			rating_data.Add(2, 0, 0.1f);
-			rating_data.Add(2, 1, 0.3f);
+			var ratings = new Ratings();
+			ratings.Add(0, 1, 0.3f);
+			ratings.Add(0, 2, 0.6f);
+			ratings.Add(0, 4, 0.2f);
+			ratings.Add(1, 3, 0.4f);
+			ratings.Add(1, 4, 0.2f);
+			ratings.Add(2, 0, 0.1f);
+			ratings.Add(2, 1, 0.3f);
+			var interactions = new MemoryInteractions(ratings);
+			
 			// test
 			pearson.Shrinkage = 0;
-			pearson.ComputeCorrelations(rating_data, EntityType.USER);
+			pearson.ComputeCorrelations(interactions, EntityType.USER);
 
 			Assert.AreEqual(0, pearson[0, 2]);
 		}
 
-		[Test()] public void TestComputeCorrelations2()
+		[Test()]
+		public void TestComputeCorrelations2()
 		{
+			// TODO we should not need MovieLens for the unit tests ...
 			// load data from disk
 			var user_mapping = new Mapping();
 			var item_mapping = new Mapping();
 			var ratings = RatingData.Read("../../../../data/ml-100k/u1.base", user_mapping, item_mapping);
+			var interactions = new MemoryInteractions(ratings);
 			
-			var p = new Pearson(ratings.AllUsers.Count, 200f);
-			Assert.AreEqual(-0.02788301f, p.ComputeCorrelation(ratings, EntityType.ITEM, 45, 311), 0.00001);
+			var p = new Pearson(interactions.MaxItemID + 1, 200f);
+			Assert.AreEqual(-0.02788301f, p.ComputeCorrelation(interactions, EntityType.ITEM, 45, 311), 0.00001);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -27,7 +27,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Compute the correlations for a given entity type from a rating dataset</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the EntityType - either USER or ITEM</param>
-		void ComputeCorrelations(IRatings ratings, EntityType entity_type);
+		void ComputeCorrelations(IInteractions ratings, EntityType entity_type);
 
 		/// <summary>Computes the correlation of two rating vectors</summary>
 		/// <param name="ratings">the rating data</param>
@@ -35,14 +35,14 @@ namespace MyMediaLite.Correlation
 		/// <param name="i">the ID of the first entity</param>
 		/// <param name="j">the ID of the second entity</param>
 		/// <returns>the correlation of the two vectors</returns>
-		float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j);
+		float ComputeCorrelation(IInteractions ratings, EntityType entity_type, int i, int j);
 
 		/// <summary>Compute correlation between two entities for given ratings</summary>
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="entity_ratings">ratings identifying the first entity</param>
 		/// <param name="j">the ID of second entity</param>
-		float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j);
+		float ComputeCorrelation(IInteractions ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j);
 	}
 }
 

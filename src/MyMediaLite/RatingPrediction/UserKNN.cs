@@ -123,7 +123,7 @@ namespace MyMediaLite.RatingPrediction
 			{
 				var rat_cor = correlation_matrix as IRatingCorrelationMatrix;
 				for (int user_id = 0; user_id <= MaxUserID; user_id++)
-					user_similarities[user_id] = rat_cor.ComputeCorrelation(ratings, EntityType.USER, rated_items, user_id);
+					user_similarities[user_id] = rat_cor.ComputeCorrelation(Interactions, EntityType.USER, rated_items, user_id);
 			}
 
 			return user_similarities;

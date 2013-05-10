@@ -128,7 +128,7 @@ namespace MyMediaLite.RatingPrediction
 			if (correlation_matrix is IBinaryDataCorrelationMatrix)
 				((IBinaryDataCorrelationMatrix) correlation_matrix).ComputeCorrelations(BinaryDataMatrix);
 			else
-				((IRatingCorrelationMatrix) correlation_matrix).ComputeCorrelations(Ratings, Entity);
+				((IRatingCorrelationMatrix) correlation_matrix).ComputeCorrelations(Interactions, Entity);
 		}
 
 		///

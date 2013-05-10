@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -60,7 +60,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>shrinkage parameter, if set to 0 we have the standard Pearson correlation without shrinkage</summary>
 		public float Shrinkage { get; set; }
 
-		/// <summary>Constructor. Create a Pearson correlation matrix</summary>
+		/// <summary>Create a Pearson correlation matrix</summary>
 		/// <param name="num_entities">the number of entities</param>
 		/// <param name="shrinkage">shrinkage parameter</param>
 		public Pearson(int num_entities, float shrinkage) : base(num_entities)
@@ -68,74 +68,35 @@ namespace MyMediaLite.Correlation
 			Shrinkage = shrinkage;
 		}
 
-		// TODO get rid of some code here
-
 		///
-		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j)
+		public float ComputeCorrelation(IInteractions ratings, EntityType entity_type, int i, int j)
 		{
 			if (i == j)
 				return 1;
 
-			IList<int> indexes1 = (entity_type == EntityType.USER) ? ratings.ByUser[i] : ratings.ByItem[i];
-			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
-
-			// get common ratings for the two entities
-			var e1 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes1) : ratings.GetUsers(indexes1);
-			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes2) : ratings.GetUsers(indexes2);
-
-			e1.IntersectWith(e2);
-
-			int n = e1.Count;
-			if (n < 2)
-				return 0;
-
-			// single-pass variant
-			double i_sum = 0;
-			double j_sum = 0;
-			double ij_sum = 0;
-			double ii_sum = 0;
-			double jj_sum = 0;
-			foreach (int other_entity_id in e1)
+			// TODO move into its own method to allow reuse ...
+			var entity_ratings = new List<Tuple<int, float>>();
+			IInteractionReader reader = (entity_type == EntityType.USER) ? ratings.ByUser(i) : ratings.ByItem(i);
+			while (reader.Read())
 			{
-				// get ratings
-				float r1 = 0;
-				float r2 = 0;
 				if (entity_type == EntityType.USER)
-				{
-					r1 = ratings.Get(i, other_entity_id, indexes1);
-					r2 = ratings.Get(j, other_entity_id, indexes2);
-				}
+					entity_ratings.Add(new Tuple<int, float>(reader.GetItem(), reader.GetRating()));
+				else if (entity_type == EntityType.ITEM)
+					entity_ratings.Add(new Tuple<int, float>(reader.GetUser(), reader.GetRating()));
 				else
-				{
-					r1 = ratings.Get(other_entity_id, i, indexes1);
-					r2 = ratings.Get(other_entity_id, j, indexes2);
-				}
-
-				// update sums
-				i_sum  += r1;
-				j_sum  += r2;
-				ij_sum += r1 * r2;
-				ii_sum += r1 * r1;
-				jj_sum += r2 * r2;
+					throw new ArgumentException(string.Format("Only USER and ITEM are supported, but not {0}.", entity_type), "entity_type");
 			}
-
-			double denominator = Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
-
-			if (denominator == 0)
-				return 0;
-			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
-
-			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
+			return ComputeCorrelation(ratings, entity_type, entity_ratings, j);
 		}
 
 		///
-		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j)
+		public float ComputeCorrelation(IInteractions ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j)
 		{
-			IList<int> indexes2 = (entity_type == EntityType.USER) ? ratings.ByUser[j] : ratings.ByItem[j];
+			IInteractionReader reader = (entity_type == EntityType.USER) ? ratings.ByUser(j) : ratings.ByItem(j);
 
 			// get common ratings for the two entities
 			var e1 = new HashSet<int>(from pair in entity_ratings select pair.Item1);
-			var e2 = (entity_type == EntityType.USER) ? ratings.GetItems(indexes2) : ratings.GetUsers(indexes2);
+			var e2 = (entity_type == EntityType.USER) ? reader.Items : reader.Users;
 
 			e1.IntersectWith(e2);
 			var ratings1 = new Dictionary<int, float>();
@@ -147,21 +108,20 @@ namespace MyMediaLite.Correlation
 			if (n < 2)
 				return 0;
 
-			// single-pass variant
 			double i_sum = 0;
 			double j_sum = 0;
 			double ij_sum = 0;
 			double ii_sum = 0;
 			double jj_sum = 0;
-			foreach (int other_entity_id in e1)
+			while (reader.Read())
 			{
+				int entity_id = (entity_type == EntityType.USER) ? reader.GetItem() : reader.GetUser();
+				if (!ratings1.ContainsKey(entity_id))
+					continue;
+
 				// get ratings
-				float r1 = ratings1[other_entity_id];
-				float r2 = 0;
-				if (entity_type == EntityType.USER)
-					r2 = ratings.Get(j, other_entity_id, indexes2);
-				else
-					r2 = ratings.Get(other_entity_id, j, indexes2);
+				float r1 = ratings1[entity_id];
+				float r2 = reader.GetRating();
 
 				// update sums
 				i_sum  += r1;
@@ -181,7 +141,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		///
-		public void ComputeCorrelations(IRatings ratings, EntityType entity_type)
+		public void ComputeCorrelations(IInteractions ratings, EntityType entity_type)
 		{
 			int num_entities = (entity_type == EntityType.USER) ? ratings.MaxUserID + 1 : ratings.MaxItemID + 1;
 			Resize(num_entities);
@@ -189,67 +149,10 @@ namespace MyMediaLite.Correlation
 			if (entity_type != EntityType.USER && entity_type != EntityType.ITEM)
 				throw new ArgumentException("entity type must be either USER or ITEM, not " + entity_type);
 
-			IList<IList<int>> ratings_by_other_entity = (entity_type == EntityType.USER) ? ratings.ByItem : ratings.ByUser;
-
-			var freqs   = new SymmetricMatrix<int>(num_entities);
-			var i_sums  = new SymmetricMatrix<float>(num_entities);
-			var j_sums  = new SymmetricMatrix<float>(num_entities);
-			var ij_sums = new SymmetricMatrix<float>(num_entities);
-			var ii_sums = new SymmetricMatrix<float>(num_entities);
-			var jj_sums = new SymmetricMatrix<float>(num_entities);
-
-			foreach (IList<int> other_entity_ratings in ratings_by_other_entity)
-				for (int i = 0; i < other_entity_ratings.Count; i++)
-				{
-					var index1 = other_entity_ratings[i];
-					int x = (entity_type == EntityType.USER) ? ratings.Users[index1] : ratings.Items[index1];
-
-					// update pairwise scalar product and frequency
-					for (int j = i + 1; j < other_entity_ratings.Count; j++)
-					{
-						var index2 = other_entity_ratings[j];
-						int y = (entity_type == EntityType.USER) ? ratings.Users[index2] : ratings.Items[index2];
-
-						float rating1 = (float) ratings[index1];
-						float rating2 = (float) ratings[index2];
-
-						// update sums
-						freqs[x, y]   += 1;
-						i_sums[x, y]  += rating1;
-						j_sums[x, y]  += rating2;
-						ij_sums[x, y] += rating1 * rating2;
-						ii_sums[x, y] += rating1 * rating1;
-						jj_sums[x, y] += rating2 * rating2;
-					}
-				}
-
-			// the diagonal of the correlation matrix
-			for (int i = 0; i < num_entities; i++)
-				this[i, i] = 1;
-
+			// TODO: speed up
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
-				{
-					int n = freqs[i, j];
-
-					if (n < 2)
-					{
-						this[i, j] = 0;
-						continue;
-					}
-
-					double numerator = ij_sums[i, j] * n - i_sums[i, j] * j_sums[i, j];
-
-					double denominator = Math.Sqrt( (n * ii_sums[i, j] - i_sums[i, j] * i_sums[i, j]) * (n * jj_sums[i, j] - j_sums[i, j] * j_sums[i, j]) );
-					if (denominator == 0)
-					{
-						this[i, j] = 0;
-						continue;
-					}
-
-					double pmcc = numerator / denominator;
-					this[i, j] = (float) (pmcc * ((n - 1) / (n - 1 + Shrinkage)));
-				}
+					this[i, j] = ComputeCorrelation(ratings, entity_type, i, j);
 		}
 	}
 }
