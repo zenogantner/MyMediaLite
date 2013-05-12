@@ -32,17 +32,6 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>The global average rating (default prediction if there is no data about an entity)</summary>
 		protected float global_average;
 
-		/// <summary>return the average rating for a given entity</summary>
-		/// <param name="index">the entity index</param>
-		public float this [int index] {
-			get {
-				if (index < entity_averages.Count)
-					return entity_averages[index];
-				else
-					return global_average;
-			}
-		}
-
 		/// <summary>Train the recommender according to the given entity type</summary>
 		/// <param name="entity_ids">list of all entity IDs in the training data (per rating)</param>
 		/// <param name="max_entity_id">the maximum entity ID</param>
