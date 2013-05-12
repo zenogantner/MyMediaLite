@@ -187,8 +187,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		if (test_ratio > 0)
 		{
 			var split = new RatingsSimpleSplit(training_data, test_ratio);
-			recommender.Ratings = training_data = split.Train[0];
+			training_data = split.Train[0];
 			test_data = split.Test[0];
+			recommender.Interactions = new MemoryInteractions(training_data);
 			Console.Error.WriteLine(string.Format( CultureInfo.InvariantCulture, "test ratio {0}", test_ratio));
 		}
 		if (chronological_split != null)
@@ -196,8 +197,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			var split = chronological_split_ratio != -1
 							? new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_ratio)
 							: new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_time);
-			recommender.Ratings = training_data = split.Train[0];
+			training_data = split.Train[0];
 			test_data = split.Test[0];
+			recommender.Interactions = new MemoryInteractions(training_data);
 			if (test_ratio != -1)
 				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "test ratio (chronological) {0}", chronological_split_ratio));
 			else
@@ -403,7 +405,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
 					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
 			}
-			recommender.Ratings = training_data;
+			recommender.Interactions = new MemoryInteractions(training_data);
 
 			// read test data
 			if (test_file != null)

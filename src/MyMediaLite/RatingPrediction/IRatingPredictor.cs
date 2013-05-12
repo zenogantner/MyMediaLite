@@ -14,7 +14,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using MyMediaLite.Data;
 
 /*! \namespace MyMediaLite.RatingPrediction
@@ -35,9 +34,7 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
-		/// <summary>the ratings to learn from</summary>
-		IRatings Ratings { get; set; }
-
+		/// <summary>the ratings dataset to learn from</summary>
 		IInteractions Interactions { get; set; }
 
 		/// <summary>Gets or sets the maximum rating.</summary>
