@@ -68,8 +68,12 @@ namespace MyMediaLite.Data
 		private IList<IInteractionReader> _by_user;
 		public IInteractionReader ByUser(int user_id)
 		{
+			int num_users = 0;
+			if (Users.Count > 0)
+				num_users = Users.Max() + 1;
+
 			if (_by_user == null)
-				_by_user = new IInteractionReader[Users.Max() + 1];
+				_by_user = new IInteractionReader[num_users];
 
 			if (user_id >= _by_user.Count)
 				throw new ArgumentOutOfRangeException("user_id", string.Format("{0} >= {1}", user_id, _by_user.Count));
@@ -85,8 +89,12 @@ namespace MyMediaLite.Data
 		private IList<IInteractionReader> _by_item;
 		public IInteractionReader ByItem(int item_id)
 		{
+			int num_items = 0;
+			if (Items.Count > 0)
+				num_items = Items.Max() + 1;
+
 			if (_by_item == null)
-				_by_item = new IInteractionReader[Items.Max() + 1];
+				_by_item = new IInteractionReader[num_items];
 
 			if (item_id >= _by_item.Count)
 				throw new ArgumentOutOfRangeException(string.Format("{0} >= {1}", item_id, _by_item.Count));

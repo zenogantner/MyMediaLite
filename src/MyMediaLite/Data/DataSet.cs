@@ -59,6 +59,8 @@ namespace MyMediaLite.Data
 		/// <summary>Default constructor</summary>
 		public DataSet()
 		{
+			MaxUserID = -1;
+			MaxItemID = -1;
 			Users = new List<int>();
 			Items = new List<int>();
 		}
