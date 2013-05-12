@@ -105,9 +105,7 @@ namespace MyMediaLite.ItemRecommendation
 				user_mapping = new IdentityMapping();
 			if (item_mapping == null)
 				item_mapping = new IdentityMapping();
-			
-			
-			
+
 			var ordered_items = recommender.Recommend(
 				user_id, n:num_predictions,
 				ignore_items:ignore_items, candidate_items:candidate_items);

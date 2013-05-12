@@ -48,33 +48,20 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if (user_id > MaxUserID)
-				return float.MinValue;
-			if (item_id > MaxItemID)
+			if (user_id > MaxUserID || item_id > MaxItemID)
 				return float.MinValue;
 
-			if (k != uint.MaxValue)
+			double sum;
+			if (k != uint.MaxValue && nearest_neighbors[item_id] != null)
 			{
-				double sum = 0;
-				double normalization = 0;
-				if (nearest_neighbors[item_id] != null)
-				{
-					foreach (int neighbor in nearest_neighbors[item_id])
-					{
-						normalization += Math.Pow(correlation_matrix[item_id, neighbor], Q);
-						if (Feedback.ItemMatrix[neighbor, user_id])
-							sum += Math.Pow(correlation_matrix[item_id, neighbor], Q);
-					}
-				}
-				if (sum == 0) return 0;
-				return (float) (sum / normalization);
+				var relevant_neighbors = nearest_neighbors[item_id].Intersect(Interactions.ByUser(user_id).Items).ToList();
+				sum = correlation_matrix.SumUp(item_id, relevant_neighbors, Q);
 			}
 			else
 			{
-				// roughly 10x faster
-				// TODO: implement normalization
-				return (float) correlation_matrix.SumUp(item_id, Feedback.UserMatrix[user_id], Q);
+				sum = correlation_matrix.SumUp(item_id, Interactions.ByUser(user_id).Items, Q);
 			}
+			return (float) sum;
 		}
 
 		///

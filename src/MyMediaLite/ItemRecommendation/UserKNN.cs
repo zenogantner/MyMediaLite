@@ -44,30 +44,20 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			if ((user_id > MaxUserID) || (item_id > MaxItemID))
+			if (user_id > MaxUserID || item_id > MaxItemID)
 				return float.MinValue;
 
-			if (k != uint.MaxValue)
+			double sum;
+			if (k != uint.MaxValue && nearest_neighbors[user_id] != null)
 			{
-				double sum = 0;
-				double normalization = 0;
-				if (nearest_neighbors[user_id] != null)
-				{
-					foreach (int neighbor in nearest_neighbors[user_id])
-					{
-						normalization += Math.Pow(correlation_matrix[user_id, neighbor], Q);
-						if (Feedback.UserMatrix[neighbor, item_id])
-							sum += Math.Pow(correlation_matrix[user_id, neighbor], Q);
-					}
-				}
-				if (sum == 0) return 0;
-				return (float) (sum / normalization);
+				var relevant_neighbors = nearest_neighbors[user_id].Intersect(Interactions.ByItem(item_id).Users).ToList();
+				sum = correlation_matrix.SumUp(user_id, relevant_neighbors, Q);
 			}
 			else
 			{
-				// roughly 10x faster
-				return (float) correlation_matrix.SumUp(user_id, Feedback.ItemMatrix[item_id], Q);
+				sum = correlation_matrix.SumUp(user_id, Interactions.ByItem(item_id).Users, Q);
 			}
+			return (float) sum;
 		}
 
 		///
@@ -89,22 +79,14 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if ((item_id < 0) || (item_id > MaxItemID))
 				return float.MinValue;
-
+			
+			ICollection<int> relevant_neighbors = nearest_neighbors;
 			if (k != uint.MaxValue)
-			{
-				double sum = 0;
-				foreach (int neighbor in nearest_neighbors)
-					if (Feedback.UserMatrix[neighbor, item_id])
-						sum += Math.Pow(user_similarities[neighbor], Q);
-				return (float) sum;
-			}
-			else
-			{
-				double sum = 0;
-				foreach (int user_id in Feedback.ItemMatrix[item_id])
-					sum += Math.Pow(user_similarities[user_id], Q);
-				return (float) sum;
-			}
+				relevant_neighbors = nearest_neighbors.Intersect(Interactions.ByItem(item_id).Users).ToList();
+			double sum = 0;
+			foreach (int neighbor in relevant_neighbors)
+				sum += Math.Pow(user_similarities[neighbor], Q);
+			return (float) sum;
 		}
 
 		/// <summary>Fold in one user, identified by their items</summary>
@@ -115,7 +97,7 @@ namespace MyMediaLite.ItemRecommendation
 			var user_similarities = new float[MaxUserID + 1];
 
 			for (int user_id = 0; user_id <= MaxUserID; user_id++)
-				user_similarities[user_id] = correlation_matrix.ComputeCorrelation(Feedback.UserMatrix[user_id], new HashSet<int>(items));
+				user_similarities[user_id] = correlation_matrix.ComputeCorrelation(Interactions.ByUser(user_id).Items, new HashSet<int>(items));
 
 			return user_similarities;
 		}
