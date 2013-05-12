@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyMediaLite;
 using MyMediaLite.Correlation;
 using MyMediaLite.DataType;
@@ -61,23 +62,24 @@ namespace MyMediaLite.RatingPrediction
 			if ((user_id > MaxUserID) || (item_id > correlation_matrix.NumberOfRows - 1))
 				return result;
 			
-		// TODO get rid of data_item, use the interactions directly here
 			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
+			var items_rated_by_user = Interactions.ByUser(user_id).Items;
+			correlated_items = correlated_items.Intersect(items_rated_by_user).Take((int) K).ToList();
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = K; // TODO better var name
-			foreach (int item_id2 in correlated_items)
-				if (data_item[item_id2, user_id])
-				{
-					float rating  = ratings.Get(user_id, item_id2, ratings.ByUser[user_id]);
-					double weight = correlation_matrix[item_id, item_id2];
-					weight_sum += weight;
-					sum += weight * (rating - baseline_predictor.Predict(user_id, item_id2));
-
-					if (--neighbors == 0)
-						break;
-				}
+			var reader = Interactions.ByUser(user_id);
+			while (reader.Read())
+			{
+				int item_id2 = reader.GetItem();
+				if (!correlated_items.Contains(item_id2))
+					continue;
+				
+				float rating  = reader.GetRating();
+				double weight = correlation_matrix[item_id, item_id2];
+				weight_sum += weight;
+				sum += weight * (rating - baseline_predictor.Predict(user_id, item_id2));
+			}
 
 			if (weight_sum != 0)
 				result += (float) (sum / weight_sum);

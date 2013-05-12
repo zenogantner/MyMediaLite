@@ -131,7 +131,7 @@ namespace MyMediaLite.Correlation
 		/// <summary>Get all entities that are positively correlated to an entity, sorted by correlation</summary>
 		/// <param name="c">a correlation matrix</param>
 		/// <param name="entity_id">the entity ID</param>
-		/// <returns>a sorted list of all entities that are positively correlated to entitiy_id</returns>
+		/// <returns>a set of all entities that are positively correlated to entitiy_id</returns>
 		public static IList<int> GetPositivelyCorrelatedEntities(this ICorrelationMatrix c, int entity_id)
 		{
 			int num_entities = c.NumberOfRows;

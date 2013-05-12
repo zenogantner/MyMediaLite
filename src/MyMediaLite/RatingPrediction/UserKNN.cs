@@ -61,23 +61,22 @@ namespace MyMediaLite.RatingPrediction
 				return result;
 
 			IList<int> correlated_users = correlation_matrix.GetPositivelyCorrelatedEntities(user_id);
+			var users_who_rated_item = Interactions.ByItem(item_id).Users;
+			correlated_users = correlated_users.Intersect(users_who_rated_item).Take((int) K).ToList();
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = K;
-			foreach (int user_id2 in correlated_users)
+			var reader = Interactions.ByItem(item_id);
+			while (reader.Read())
 			{
-				if (data_user[user_id2, item_id])
-				{
-					float rating = ratings.Get(user_id2, item_id, ratings.ByItem[item_id]);
+				int user_id2 = reader.GetUser();
+				if (!correlated_users.Contains(user_id2))
+					continue;
 
-					float weight = correlation_matrix[user_id, user_id2];
-					weight_sum += weight;
-					sum += weight * (rating - baseline_predictor.Predict(user_id2, item_id));
-
-					if (--neighbors == 0)
-						break;
-				}
+				float rating = reader.GetRating();
+				float weight = correlation_matrix[user_id, user_id2];
+				weight_sum += weight;
+				sum += weight * (rating - baseline_predictor.Predict(user_id2, item_id));
 			}
 
 			if (weight_sum != 0)

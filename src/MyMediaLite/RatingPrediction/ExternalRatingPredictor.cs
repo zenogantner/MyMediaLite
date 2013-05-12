@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -39,6 +39,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public IMapping ItemMapping { get; set; }
 
+		// TODO get rid of this as well
 		private IRatings external_ratings;
 
 		/// <summary>Default constructor</summary>

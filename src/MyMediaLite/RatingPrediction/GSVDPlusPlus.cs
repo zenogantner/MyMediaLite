@@ -77,9 +77,9 @@ namespace MyMediaLite.RatingPrediction
 			q.InitNormal(InitMean, InitStdDev);
 
 			// set factors to zero for items without training examples
-			for (int i = 0; i < ratings.CountByItem.Count; i++)
-				if (Interactions.ByItem(i).Count == 0)
-					q.SetRowToOneValue(i, 0);
+			for (int item_id = 0; item_id <= Interactions.MaxItemID; item_id++)
+				if (Interactions.ByItem(item_id).Count == 0)
+					q.SetRowToOneValue(item_id, 0);
 		}
 
 		///
