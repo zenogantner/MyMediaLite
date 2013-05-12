@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -32,7 +33,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			base.Train(ratings.Users, Interactions.MaxUserID);
+			base.Train(EntityType.USER);
 		}
 
 		///

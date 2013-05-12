@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using MyMediaLite.Data;
 using MyMediaLite.IO;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -33,10 +34,10 @@ namespace MyMediaLite.RatingPrediction
 		protected float global_average;
 
 		/// <summary>Train the recommender according to the given entity type</summary>
-		/// <param name="entity_ids">list of all entity IDs in the training data (per rating)</param>
-		/// <param name="max_entity_id">the maximum entity ID</param>
-		protected void Train(IList<int> entity_ids, int max_entity_id)
+		protected void Train(EntityType entity_type)
 		{
+			int max_entity_id = (entity_type == EntityType.USER) ? Interactions.MaxUserID : Interactions.MaxItemID;
+			
 			var rating_sums   = new List<double>();
 			var rating_counts = new List<int>();
 			entity_averages = new List<float>();
@@ -47,11 +48,12 @@ namespace MyMediaLite.RatingPrediction
 				entity_averages.Add(0);
 			}
 
-			for (int i = 0; i < ratings.Count; i++)
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				int entity_id = entity_ids[i];
+				int entity_id = (entity_type == EntityType.USER) ? reader.GetUser() : reader.GetItem();
 				rating_counts[entity_id]++;
-				rating_sums[entity_id] += ratings[i];
+				rating_sums[entity_id] += reader.GetRating();
 			}
 
 			global_average = Interactions.AverageRating();

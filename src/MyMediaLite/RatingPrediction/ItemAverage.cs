@@ -17,6 +17,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System.Collections.Generic;
 using MyMediaLite.Data;
+using MyMediaLite.Taxonomy;
 
 namespace MyMediaLite.RatingPrediction
 {
@@ -29,7 +30,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			base.Train(ratings.Items, MaxItemID);
+			Train(EntityType.ITEM);
 		}
 
 		///
