@@ -404,7 +404,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			}
 
 			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)
-				((ItemRecommender)recommender).Feedback = training_data;
+				((ItemRecommender)recommender).Interactions = new MemoryInteractions(training_data);
 
 			// test users
 			if (test_users_file != null)

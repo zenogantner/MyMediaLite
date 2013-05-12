@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -47,8 +47,9 @@ namespace MyMediaLite.Eval
 		{
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
-
-			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(((ItemRecommender) recommender).Feedback, num_folds);
+			
+			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((ItemRecommender) recommender).Interactions).dataset;
+			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
 			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
@@ -80,7 +81,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
-					split_recommender.Feedback = split.Train[fold];
+					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
 					split_recommender.Train();
 					var fold_results = Items.Evaluate(split_recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
@@ -136,7 +137,8 @@ namespace MyMediaLite.Eval
 			if (!(recommender is ItemRecommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
-			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(((ItemRecommender) recommender).Feedback, num_folds);
+			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((ItemRecommender) recommender).Interactions).dataset;
+			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
 			recommender.DoIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 
@@ -176,7 +178,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Feedback = split.Train[i];
+					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);

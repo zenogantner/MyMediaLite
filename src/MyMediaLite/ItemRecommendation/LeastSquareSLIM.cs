@@ -80,7 +80,7 @@ namespace MyMediaLite.ItemRecommendation
 				itemKNN = new ItemKNN();
 				itemKNN.K = K;
 				itemKNN.Correlation = MyMediaLite.Correlation.BinaryCorrelationType.Cosine;
-				itemKNN.Feedback = this.Feedback;
+				itemKNN.Interactions = this.Interactions;
 			}
 		}
 

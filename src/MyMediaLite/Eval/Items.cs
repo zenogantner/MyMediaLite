@@ -210,8 +210,10 @@ namespace MyMediaLite.Eval
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)
 		{
+			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) recommender.Interactions).dataset;
+			
 			return recommender.Evaluate(
-				recommender.Feedback, recommender.Feedback,
+				feedback, feedback,
 				test_users, candidate_items,
 				candidate_item_mode, RepeatedEvents.Yes)["AUC"];
 		}

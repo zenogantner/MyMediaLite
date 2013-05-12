@@ -18,6 +18,7 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 
@@ -95,7 +96,7 @@ namespace Tests.ItemRecommendation
 		private static ItemRecommender SetUpRecommender(Type type)
 		{
 			var recommender = (ItemRecommender) type.CreateItemRecommender();
-			recommender.Feedback = TestUtils.CreatePosOnlyFeedback();
+			recommender.Interactions = new MemoryInteractions(TestUtils.CreatePosOnlyFeedback());
 			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
 				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
 			if (type.GetInterface("IItemAttributeAwareRecommender") != null)

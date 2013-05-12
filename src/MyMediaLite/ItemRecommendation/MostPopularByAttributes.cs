@@ -66,7 +66,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			most_popular.Feedback = Feedback;
+			most_popular.Interactions = Interactions;
 			most_popular.Train();
 
 			attribute_count_by_user = new IDictionary<int, int>[MaxUserID + 1];

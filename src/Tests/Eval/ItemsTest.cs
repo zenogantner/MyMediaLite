@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -44,7 +44,7 @@ namespace Tests.Eval
 			training_data.Add(3, 1);
 			training_data.Add(3, 2);
 
-			recommender = new MostPopular() { Feedback = training_data };
+			recommender = new MostPopular() { Interactions = new MemoryInteractions(training_data) };
 			recommender.Train();
 
 			test_data = new PosOnlyFeedback<SparseBooleanMatrix>();

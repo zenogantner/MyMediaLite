@@ -56,7 +56,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		private IDataSet dataset;
+		public IDataSet dataset; // TODO get rid of this
 
 		public MemoryInteractions(IDataSet dataset)
 		{
@@ -102,7 +102,7 @@ namespace MyMediaLite.Data
 			if (_by_item[item_id] == null)
 				_by_item[item_id] = new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
 
-			return _by_item[item_id];
+			return _by_item[item_id]; // TODO distinguish between reader and stuff that provides .Items and .Users ...
 		}
 
 	}

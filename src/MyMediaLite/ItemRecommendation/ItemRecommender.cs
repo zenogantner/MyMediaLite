@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using MyMediaLite.Data;
@@ -41,19 +40,16 @@ namespace MyMediaLite.ItemRecommendation
 	/// </remarks>
 	public abstract class ItemRecommender : Recommender
 	{
-		protected IInteractions Interactions { get; private set; }
-		
 		/// <summary>the feedback data to be used for training</summary>
-		public virtual IPosOnlyFeedback Feedback
+		public virtual IInteractions Interactions
 		{
-			get { return this.feedback; }
+			get { return this.interactions; }
 			set {
-				this.feedback = value;
-				MaxUserID = Math.Max(feedback.MaxUserID, MaxUserID);
-				MaxItemID = Math.Max(feedback.MaxItemID, MaxItemID);
-				Interactions = new MemoryInteractions(value);
+				this.interactions = value;
+				MaxUserID = Math.Max(interactions.MaxUserID, MaxUserID);
+				MaxItemID = Math.Max(interactions.MaxItemID, MaxItemID);
 			}
 		}
-		IPosOnlyFeedback feedback;
+		IInteractions interactions;
 	}
 }
