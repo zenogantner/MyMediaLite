@@ -51,11 +51,11 @@ namespace MyMediaLite.RatingPrediction
 		private uint k = 80;
 
 		///
-		public override IRatings Ratings
+		public override IInteractions Interactions
 		{
 			set {
-				base.Ratings = value;
-				baseline_predictor.Ratings = value;
+				base.Interactions = value;
+				baseline_predictor.Interactions = value;
 			}
 		}
 

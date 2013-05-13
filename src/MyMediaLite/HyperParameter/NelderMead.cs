@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -79,8 +79,8 @@ namespace MyMediaLite.HyperParameter
 			string error_measure,
 			RatingPredictor recommender)
 		{
-			var split = new RatingsSimpleSplit(recommender.Ratings, split_ratio);
-			//var split = new RatingCrossValidationSplit(recommender.Ratings, 5);
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			var split = new RatingsSimpleSplit(ratings, split_ratio);
 
 			IList<string> hp_names;
 			IList<DenseVector> initial_hp_values;

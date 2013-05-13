@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -30,7 +30,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestCurrentLearnRate()
 		{
-			var afm = new SigmoidUserAsymmetricFactorModel() { LearnRate = 1.1f, Ratings = TestUtils.CreateRatings() };
+			var afm = new SigmoidUserAsymmetricFactorModel() { LearnRate = 1.1f, Interactions = TestUtils.CreateRatings() };
 
 			afm.InitModel();
 			Assert.AreEqual(1.1f, afm.LearnRate);
@@ -40,7 +40,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestDefaultBehaviorIsNoDecay()
 		{
-			var afm = new SigmoidUserAsymmetricFactorModel() { LearnRate = 1.1f, NumIter = 10, Ratings = TestUtils.CreateRatings() };
+			var afm = new SigmoidUserAsymmetricFactorModel() { LearnRate = 1.1f, NumIter = 10, Interactions = TestUtils.CreateRatings() };
 			afm.Train();
 			Assert.AreEqual(1.1f, afm.current_learnrate);
 		}
@@ -51,7 +51,7 @@ namespace Tests.RatingPrediction
 			var afm = new SigmoidUserAsymmetricFactorModel()
 			{
 				LearnRate = 1.0f, Decay = 0.5f,
-				NumIter = 1, Ratings = TestUtils.CreateRatings()
+				NumIter = 1, Interactions = TestUtils.CreateRatings()
 			};
 
 			afm.Train();
@@ -64,7 +64,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestMatrixInit()
 		{
-			var afm = new SigmoidUserAsymmetricFactorModel() { Ratings = TestUtils.CreateRatings() };
+			var afm = new SigmoidUserAsymmetricFactorModel() { Interactions = TestUtils.CreateRatings() };
 			afm.InitModel();
 			Assert.IsNotNull(afm.user_factors);
 			Assert.IsNotNull(afm.item_factors);

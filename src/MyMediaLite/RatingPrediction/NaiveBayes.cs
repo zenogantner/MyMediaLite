@@ -60,10 +60,10 @@ namespace MyMediaLite.RatingPrediction
 
 		void InitModel()
 		{
-			user_class_probabilities = new Matrix<float>(MaxUserID + 1, ratings.Scale.Levels.Count);
+			user_class_probabilities = new Matrix<float>(MaxUserID + 1, Interactions.RatingScale.Levels.Count);
 			user_attribute_given_class_probabilities = new List<SparseMatrix<float>>();
 			for (int u = 0; u <= MaxUserID; u++)
-				user_attribute_given_class_probabilities.Add(new SparseMatrix<float>(ratings.Scale.Levels.Count, ItemAttributes.NumberOfColumns));
+				user_attribute_given_class_probabilities.Add(new SparseMatrix<float>(Interactions.RatingScale.Levels.Count, ItemAttributes.NumberOfColumns));
 		}
 
 		///
@@ -78,15 +78,15 @@ namespace MyMediaLite.RatingPrediction
 			foreach (int user_id in users)
 			{
 				// initialize counter variables
-				var user_class_counts = new int[ratings.Scale.Levels.Count];
-				var user_attribute_given_class_counts = new SparseMatrix<int>(ratings.Scale.Levels.Count, ItemAttributes.NumberOfColumns);
+				var user_class_counts = new int[Interactions.RatingScale.Levels.Count];
+				var user_attribute_given_class_counts = new SparseMatrix<int>(Interactions.RatingScale.Levels.Count, ItemAttributes.NumberOfColumns);
 
 				// count
 				var reader = Interactions.ByUser(user_id);
 				while (reader.Read())
 				{
 					int item_id = reader.GetItem();
-					int level_id = ratings.Scale.LevelID[reader.GetRating()];
+					int level_id = Interactions.RatingScale.LevelID[reader.GetRating()];
 
 					user_class_counts[level_id]++;
 					foreach (int attribute_id in item_attributes.GetEntriesByRow(item_id))
@@ -96,7 +96,7 @@ namespace MyMediaLite.RatingPrediction
 				// compute probabilities
 				float denominator = user_class_counts.Sum() + ClassSmoothing;
 
-				foreach (int level_id in ratings.Scale.LevelID.Values)
+				foreach (int level_id in Interactions.RatingScale.LevelID.Values)
 				{
 					user_class_probabilities[user_id, level_id] = (user_class_counts[level_id] + ClassSmoothing) / denominator;
 
@@ -121,11 +121,11 @@ namespace MyMediaLite.RatingPrediction
 		{
 			double prob_sum = 0;
 			double score_sum = 0;
-			for (int level_id = 0; level_id < ratings.Scale.Levels.Count; level_id++)
+			for (int level_id = 0; level_id < Interactions.RatingScale.Levels.Count; level_id++)
 			{
 				double prob = PredictProbabilityProportions(user_id, item_id, level_id);
 				prob_sum += prob;
-				score_sum += prob * ratings.Scale.Levels[level_id];
+				score_sum += prob * Interactions.RatingScale.Levels[level_id];
 			}
 			return (float) (score_sum / prob_sum);
 		}

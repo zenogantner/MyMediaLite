@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,10 +14,10 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.IO;
 using MyMediaLite.RatingPrediction;
@@ -31,7 +31,7 @@ namespace Tests.RatingPrediction
 		{
 			var training_data = RatingData.Read("../../../../data/ml-100k/u.data");
 			var recommender = new MatrixFactorization();
-			recommender.Ratings = training_data;
+			recommender.Interactions = new MemoryInteractions(training_data);
 			recommender.NumFactors = 4;
 			recommender.NumIter = 5;
 			recommender.Train();

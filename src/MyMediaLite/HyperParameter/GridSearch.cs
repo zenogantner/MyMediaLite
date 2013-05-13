@@ -179,10 +179,11 @@ namespace MyMediaLite.HyperParameter
 			RatingPrediction.RatingPredictor recommender,
 			uint k)
 		{
-			var data = recommender.Ratings;
-			var split = new RatingCrossValidationSplit(data, k);
+			var interactions = recommender.Interactions;
+			var ratings = (IRatings) ((MemoryInteractions) interactions).dataset;
+			var split = new RatingCrossValidationSplit(ratings, k);
 			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
-			recommender.Ratings = data;
+			recommender.Interactions = interactions;
 			return result;
 		}
 	}

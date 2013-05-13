@@ -43,7 +43,8 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			var split = new RatingCrossValidationSplit(ratings, num_folds);
 			return recommender.DoRatingBasedRankingCrossValidation(split, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
@@ -70,7 +71,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (RatingPredictor) recommender.Clone(); // avoid changes in recommender
-					split_recommender.Ratings = split.Train[fold];
+					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
 					split_recommender.Train();
 
 					var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Test[fold]);
@@ -127,7 +128,8 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			var split = new RatingCrossValidationSplit(ratings, num_folds);
 			recommender.DoRatingBasedRankingIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 
@@ -165,7 +167,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Ratings = split.Train[i];
+					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					

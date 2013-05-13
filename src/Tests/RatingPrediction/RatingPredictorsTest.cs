@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -111,9 +111,9 @@ namespace Tests.RatingPrediction
 		{
 			var recommender = type.CreateRatingPredictor();
 			if (recommender is ITimeAwareRatingPredictor)
-				recommender.Ratings = TestUtils.CreateRandomTimedRatings(5, 5, 10);
+				recommender.Interactions = TestUtils.CreateRandomTimedRatings(5, 5, 10);
 			else
-				recommender.Ratings = TestUtils.CreateRandomRatings(5, 5, 10);
+				recommender.Interactions = TestUtils.CreateRandomRatings(5, 5, 10);
 			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
 				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
 			if (type.GetInterface("IItemAttributeAwareRecommender") != null)

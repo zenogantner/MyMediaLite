@@ -24,7 +24,7 @@ namespace Tests
 {
 	public static class TestUtils
 	{
-		public static IRatings CreateRandomRatings(int num_users, int num_items, int num_ratings)
+		public static IInteractions CreateRandomRatings(int num_users, int num_items, int num_ratings)
 		{
 			var random = MyMediaLite.Random.GetInstance();
 
@@ -36,10 +36,10 @@ namespace Tests
 				int rating_value = 1 + random.Next(5);
 				ratings.Add(user_id, item_id, rating_value);
 			}
-			return ratings;
+			return new MemoryInteractions(ratings);
 		}
 
-		public static IRatings CreateRandomTimedRatings(int num_users, int num_items, int num_ratings)
+		public static IInteractions CreateRandomTimedRatings(int num_users, int num_items, int num_ratings)
 		{
 			var random = MyMediaLite.Random.GetInstance();
 
@@ -51,24 +51,24 @@ namespace Tests
 				int rating_value = 1 + random.Next(5);
 				ratings.Add(user_id, item_id, rating_value, DateTime.Now);
 			}
-			return ratings;
+			return new MemoryInteractions(ratings);
 		}
 
-		public static IRatings CreateRatings()
+		public static IInteractions CreateRatings()
 		{
 			var ratings = new Ratings();
 			ratings.Add(0, 0, 0.0f);
-			return ratings;
+			return new MemoryInteractions(ratings);
 		}
 
-		public static IPosOnlyFeedback CreatePosOnlyFeedback()
+		public static IInteractions CreatePosOnlyFeedback()
 		{
 			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
 			feedback.Add(0, 0);
 			feedback.Add(0, 1);
 			feedback.Add(1, 0);
 			feedback.Add(1, 2);
-			return feedback;
+			return new MemoryInteractions(feedback);
 		}
 	}
 }

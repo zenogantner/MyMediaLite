@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -29,7 +29,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestCurrentLearnRate()
 		{
-			var mf = new MatrixFactorization() { LearnRate = 1.1f, Ratings = TestUtils.CreateRatings() };
+			var mf = new MatrixFactorization() { LearnRate = 1.1f, Interactions = TestUtils.CreateRatings() };
 
 			mf.InitModel();
 			Assert.AreEqual(1.1f, mf.LearnRate);
@@ -39,7 +39,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestDefaultBehaviorIsNoDecay()
 		{
-			var mf = new MatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Ratings = TestUtils.CreateRatings() };
+			var mf = new MatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Interactions = TestUtils.CreateRatings() };
 			mf.Train();
 			Assert.AreEqual(1.1f, mf.current_learnrate);
 		}
@@ -50,7 +50,7 @@ namespace Tests.RatingPrediction
 			var mf = new MatrixFactorization()
 			{
 				LearnRate = 1.0f, Decay = 0.5f,
-				NumIter = 1, Ratings = TestUtils.CreateRatings()
+				NumIter = 1, Interactions = TestUtils.CreateRatings()
 			};
 
 			mf.Train();
@@ -63,7 +63,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestMatrixInit()
 		{
-			var mf = new MatrixFactorization() { Ratings = TestUtils.CreateRatings() };
+			var mf = new MatrixFactorization() { Interactions = TestUtils.CreateRatings() };
 			mf.InitModel();
 			Assert.IsNotNull(mf.user_factors);
 			Assert.IsNotNull(mf.item_factors);

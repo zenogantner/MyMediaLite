@@ -27,21 +27,6 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted user-based kNN</summary>
 	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInRatingPredictor
 	{
-		/// <summary>boolean matrix indicating which user rated which item</summary>
-		protected SparseBooleanMatrix data_user;
-
-		///
-		public override IRatings Ratings
-		{
-			set {
-				base.Ratings = value;
-				data_user = new SparseBooleanMatrix();
-				var reader = Interactions.Sequential;
-				while (reader.Read())
-					data_user[reader.GetUser(), reader.GetItem()] = true;
-			}
-		}
-
 		///
 		protected override EntityType Entity { get { return EntityType.USER; } }
 
@@ -113,7 +98,7 @@ namespace MyMediaLite.RatingPrediction
 				var bin_cor = correlation_matrix as IBinaryDataCorrelationMatrix;
 				var user_items = new HashSet<int>(from t in rated_items select t.Item1);
 				for (int user_id = 0; user_id <= MaxUserID; user_id++)
-					user_similarities[user_id] = bin_cor.ComputeCorrelation(user_items, new HashSet<int>(data_user[user_id]));
+					user_similarities[user_id] = bin_cor.ComputeCorrelation(user_items, Interactions.ByUser(user_id).Items);
 			}
 			if (correlation_matrix is IRatingCorrelationMatrix)
 			{
@@ -133,24 +118,23 @@ namespace MyMediaLite.RatingPrediction
 			IList<int> relevant_users = (
 				from user_id in Enumerable.Range(0, user_similarities.Count)
 				where user_similarities[user_id] > 0
-				select user_id).ToArray();
-
+				select user_id).Take((int) K).ToArray(); // FIXME rank by correlation
+			
+			
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = K;
-			foreach (int user_id in relevant_users)
+			var reader = Interactions.ByItem(item_id);
+			while (reader.Read())
 			{
-				if (data_user[user_id, item_id])
-				{
-					float rating = ratings.Get(user_id, item_id, ratings.ByUser[user_id]);
+				int user_id = reader.GetUser();
+				if (!relevant_users.Contains(user_id))
+					continue;
+				
+				float rating = reader.GetRating();
 
-					float weight = user_similarities[user_id];
-					weight_sum += weight;
-					sum += weight * (rating - baseline_predictor.Predict(user_id, item_id));
-
-					if (--neighbors == 0)
-						break;
-				}
+				float weight = user_similarities[user_id];
+				weight_sum += weight;
+				sum += weight * (rating - baseline_predictor.Predict(user_id, item_id));
 			}
 
 			float result = baseline_predictor.Predict(int.MaxValue, item_id); // TODO implement fold-in for baseline predictor

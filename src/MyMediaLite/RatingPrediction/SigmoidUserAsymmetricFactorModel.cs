@@ -257,7 +257,7 @@ namespace MyMediaLite.RatingPrediction
 
 			// set factors to zero for users without training examples
 			for (int user_id = 0; user_id < x.NumberOfRows; user_id++)
-				if (user_id > Interactions.MaxUserID || ratings.CountByUser[user_id] == 0)
+				if (user_id > Interactions.MaxUserID || Interactions.ByUser(user_id).Count == 0)
 					x.SetRowToOneValue(user_id, 0);
 
 			base.InitModel();

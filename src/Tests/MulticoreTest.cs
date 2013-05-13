@@ -18,6 +18,7 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite;
+using MyMediaLite.Data;
 
 namespace Tests
 {
@@ -33,7 +34,7 @@ namespace Tests
 			int NUM_GROUPS = 3;
 
 			var ratings = TestUtils.CreateRandomRatings(NUM_USERS, NUM_ITEMS, NUM_RATINGS);
-			var partition = ratings.PartitionUsersAndItems(NUM_GROUPS);
+			var partition = ((MemoryInteractions) ratings).dataset.PartitionUsersAndItems(NUM_GROUPS);
 			Assert.AreEqual(NUM_GROUPS, partition.GetLength(0));
 			Assert.AreEqual(NUM_GROUPS, partition.GetLength(1));
 		}
@@ -47,7 +48,7 @@ namespace Tests
 			int NUM_GROUPS = 20;
 
 			var ratings = TestUtils.CreateRandomRatings(NUM_USERS, NUM_ITEMS, NUM_RATINGS);
-			var partition = ratings.PartitionUsersAndItems(NUM_GROUPS);
+			var partition = ((MemoryInteractions) ratings).dataset.PartitionUsersAndItems(NUM_GROUPS);
 			Assert.AreEqual(ratings.MaxUserID + 1, partition.GetLength(0));
 			Assert.AreEqual(ratings.MaxUserID + 1, partition.GetLength(1));
 		}
@@ -61,7 +62,7 @@ namespace Tests
 			int NUM_GROUPS = 20;
 
 			var ratings = TestUtils.CreateRandomRatings(NUM_USERS, NUM_ITEMS, NUM_RATINGS);
-			var partition = ratings.PartitionUsersAndItems(NUM_GROUPS);
+			var partition = ((MemoryInteractions) ratings).dataset.PartitionUsersAndItems(NUM_GROUPS);
 			Assert.AreEqual(ratings.MaxItemID + 1, partition.GetLength(0));
 			Assert.AreEqual(ratings.MaxItemID + 1, partition.GetLength(1));
 		}
@@ -75,7 +76,7 @@ namespace Tests
 			int group_size = NUM_RATINGS / NUM_GROUPS;
 
 			var ratings = TestUtils.CreateRandomRatings(15, 15, NUM_RATINGS);
-			var partition = ratings.PartitionIndices(NUM_GROUPS);
+			var partition = ((MemoryInteractions) ratings).dataset.PartitionIndices(NUM_GROUPS);
 			Assert.AreEqual(NUM_GROUPS, partition.Count);
 			for (int i = 0; i < partition.Count; i++)
 				Assert.AreEqual(group_size, partition[i].Count);
@@ -88,7 +89,7 @@ namespace Tests
 			int NUM_GROUPS = 50;
 
 			var ratings = TestUtils.CreateRandomRatings(15, 15, NUM_RATINGS);
-			var partition = ratings.PartitionIndices(NUM_GROUPS);
+			var partition = ((MemoryInteractions) ratings).dataset.PartitionIndices(NUM_GROUPS);
 			Assert.AreEqual(NUM_RATINGS, partition.Count);
 		}
 	}

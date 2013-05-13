@@ -95,7 +95,8 @@ namespace MyMediaLite.Eval
 					var local_recommender = (RatingPredictor) recommender.Clone();
 
 					var known_ratings = new RatingsProxy(update_data, update_data.ByUser[user_id]);
-					local_recommender.Ratings = new CombinedRatings(recommender.Ratings, known_ratings);
+					var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+					local_recommender.Interactions = new MemoryInteractions(new CombinedRatings(ratings, known_ratings));
 					local_recommender.Train();
 
 					var items_to_rate = (from index in eval_data.ByUser[user_id] select eval_data.Items[index]).ToArray();

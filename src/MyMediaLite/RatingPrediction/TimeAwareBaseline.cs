@@ -42,7 +42,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender does currently NOT support incremental updates.
 	/// </remarks>
-	public class TimeAwareBaseline : TimeAwareRatingPredictor, IIterativeModel
+	public class TimeAwareBaseline : RatingPredictor, ITimeAwareRatingPredictor, IIterativeModel
 	{
 		// parameters
 
@@ -146,17 +146,18 @@ namespace MyMediaLite.RatingPrediction
 			InitModel();
 
 			global_average = Interactions.AverageRating();
-			latest_relative_day = RelativeDay(timed_ratings.LatestTime);
+			latest_relative_day = RelativeDay(Interactions.LatestDateTime);
 
 			// compute mean day of rating by user
 			user_mean_day = new float[MaxUserID + 1];
-			for (int i = 0; i < timed_ratings.Count; i++)
-				user_mean_day[ratings.Users[i]] += RelativeDay(timed_ratings.Times[i]);
+			var reader = Interactions.Sequential;
+			while (reader.Read())
+				user_mean_day[reader.GetUser()] += RelativeDay(reader.GetDateTime());
 			for (int u = 0; u <= MaxUserID; u++)
 				if (Interactions.ByUser(u).Count != 0)
 					user_mean_day[u] /= Interactions.ByUser(u).Count;
 				else // no ratings yet?
-					user_mean_day[u] = RelativeDay(timed_ratings.LatestTime); // set to latest day
+					user_mean_day[u] = RelativeDay(Interactions.LatestDateTime); // set to latest day
 
 			for (int i = 0; i < NumIter; i++)
 				Iterate();
@@ -167,13 +168,13 @@ namespace MyMediaLite.RatingPrediction
 		/// <param name='datetime'>the date/time of the rating event</param>
 		protected int RelativeDay(DateTime datetime)
 		{
-			return (datetime - timed_ratings.EarliestTime).Days;
+			return (datetime - Interactions.EarliestDateTime).Days;
 		}
 
 		/// <summary>Initialize the model parameters</summary>
 		protected virtual void InitModel()
 		{
-			int number_of_days = (timed_ratings.LatestTime - timed_ratings.EarliestTime).Days;
+			int number_of_days = (Interactions.LatestDateTime - Interactions.EarliestDateTime).Days;
 			int number_of_bins = number_of_days / BinSize + 1;
 			Console.WriteLine("{0} days, {1} bins", number_of_days, number_of_bins);
 
@@ -262,7 +263,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float Predict(int user_id, int item_id, DateTime time)
+		public float Predict(int user_id, int item_id, DateTime time)
 		{
 			int day = RelativeDay(time);
 			int bin = day / BinSize;

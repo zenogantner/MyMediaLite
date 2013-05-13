@@ -88,15 +88,16 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			int number_of_days = (timed_ratings.LatestTime - timed_ratings.EarliestTime).Days;
+			int number_of_days = (Interactions.LatestDateTime - Interactions.EarliestDateTime).Days;
 
 			// compute log rating frequencies
 			log_frequency_by_day = new SparseMatrix<int>(MaxUserID + 1, number_of_days);
 			// first count the frequencies ...
-			for (int i = 0; i < timed_ratings.Count; i++)
+			var reader = Interactions.Sequential;
+			while (reader.Read())
 			{
-				int day = RelativeDay(timed_ratings.Times[i]);
-				log_frequency_by_day[timed_ratings.Users[i], day]++;
+				int day = RelativeDay(reader.GetDateTime());
+				log_frequency_by_day[reader.GetUser(), day]++;
 			}
 			// ... then apply (rounded) logarithm
 			foreach (var index_pair in log_frequency_by_day.NonEmptyEntryIDs)
@@ -136,7 +137,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float Predict(int user_id, int item_id, DateTime time)
+		public float Predict(int user_id, int item_id, DateTime time)
 		{
 			float result = base.Predict(user_id, item_id, time);
 			int day = RelativeDay(time);

@@ -34,23 +34,20 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Minimum rating value</summary>
 		protected float min_rating;
 
-		public IInteractions Interactions { get; set; }
-
 		/// <summary>The rating data</summary>
-		public virtual IRatings Ratings
+		public virtual IInteractions Interactions
 		{
-			get { return ratings; }
+			get { return interactions; }
 			set {
-				ratings = value;
-				MinRating = ratings.Scale.Min;
-				MaxRating = ratings.Scale.Max;
+				interactions = value;
+				MinRating = interactions.RatingScale.Min;
+				MaxRating = interactions.RatingScale.Max;
 
-				Interactions = new MemoryInteractions(ratings);
-				MaxUserID = Interactions.MaxUserID;
-				MaxItemID = Interactions.MaxItemID;
+				MaxUserID = interactions.MaxUserID;
+				MaxItemID = interactions.MaxItemID;
 			}
 		}
 		/// <summary>rating data</summary>
-		protected IRatings ratings;
+		private IInteractions interactions;
 	}
 }

@@ -147,7 +147,8 @@ namespace MyMediaLite.Eval
 		/// <param name='recommender'>the rating predictor to evaluate</param>
 		public static double ComputeFit(this RatingPredictor recommender)
 		{
-			return recommender.Evaluate(recommender.Ratings)["RMSE"];
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			return recommender.Evaluate(ratings)["RMSE"];
 		}
 	}
 }

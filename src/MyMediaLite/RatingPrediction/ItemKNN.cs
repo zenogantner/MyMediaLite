@@ -28,22 +28,6 @@ namespace MyMediaLite.RatingPrediction
 	/// <summary>Weighted item-based kNN</summary>
 	public class ItemKNN : KNN, IItemSimilarityProvider, IFoldInRatingPredictor
 	{
-		/// <summary>Matrix indicating which item was rated by which user</summary>
-		protected SparseBooleanMatrix data_item;
-
-		///
-		public override IRatings Ratings
-		{
-			set {
-				base.Ratings = value;
-
-				data_item = new SparseBooleanMatrix();
-				var reader = Interactions.Sequential;
-				while (reader.Read())
-					data_item[reader.GetItem(), reader.GetUser()] = true;
-			}
-		}
-
 		///
 		protected override EntityType Entity { get { return EntityType.ITEM; } }
 

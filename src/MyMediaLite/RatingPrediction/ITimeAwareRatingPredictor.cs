@@ -29,9 +29,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface ITimeAwareRatingPredictor : IRatingPredictor
 	{
-		/// <summary>training data that also contains the time information</summary>
-		ITimedRatings TimedRatings { get; set; }
-
 		/// <summary>predict rating at a certain point in time</summary>
 		/// <param name='user_id'>the user ID</param>
 		/// <param name='item_id'>the item ID</param>

@@ -390,7 +390,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			base.LoadData();
 
 			// read training data
-			if ((recommender is TimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
+			if ((recommender is ITimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
 				training_data = TimedRatingData.Read(training_file, user_mapping, item_mapping);
 			}
@@ -411,7 +411,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			if (test_file != null)
 			{
 				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITHOUT_RATINGS : TestRatingFileFormat.WITH_RATINGS;
-				if (recommender is TimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
+				if (recommender is ITimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
 					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format);
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format);

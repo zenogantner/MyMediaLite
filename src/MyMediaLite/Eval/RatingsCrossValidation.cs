@@ -39,7 +39,8 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_fold_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			var split = new RatingCrossValidationSplit(ratings, num_folds);
 			return recommender.DoCrossValidation(split, compute_fit, show_fold_results);
 		}
 
@@ -62,7 +63,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommender.Ratings = split.Train[i];
+					split_recommender.Interactions = new MemoryInteractions(split.Train[i]);
 					if (recommender is ITransductiveRatingPredictor)
 						((ITransductiveRatingPredictor) split_recommender).AdditionalInteractions = new MemoryInteractions(split.Test[i]); // TODO make sure to filter rating values
 					split_recommender.Train();
@@ -96,7 +97,8 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Ratings, num_folds);
+			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
+			var split = new RatingCrossValidationSplit(ratings, num_folds);
 			recommender.DoIterativeCrossValidation(split, max_iter, find_iter, show_fold_results);
 		}
 
@@ -126,7 +128,7 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Ratings = split.Train[i];
+					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
 					if (recommender is ITransductiveRatingPredictor)
 						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalInteractions = new MemoryInteractions(split.Test[i]);
 					split_recommenders[i].Train();

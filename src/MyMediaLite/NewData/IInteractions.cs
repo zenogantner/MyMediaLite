@@ -25,6 +25,8 @@ namespace MyMediaLite.Data
 		int Count { get; }
 		int MaxUserID { get; }
 		int MaxItemID { get; }
+		DateTime EarliestDateTime { get; }
+		DateTime LatestDateTime { get; }
 		IList<int> Users { get; }
 		IList<int> Items { get; }
 		IInteractionReader Random { get; } // TODO use function instead of property for clearer semantics? This should return a *different* reader for each call

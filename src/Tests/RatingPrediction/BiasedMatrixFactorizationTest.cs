@@ -30,7 +30,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestCurrentLearnRate()
 		{
-			var mf = new BiasedMatrixFactorization() { LearnRate = 1.1f, Ratings = TestUtils.CreateRatings() };
+			var mf = new BiasedMatrixFactorization() { LearnRate = 1.1f, Interactions = TestUtils.CreateRatings() };
 
 			mf.InitModel();
 			Assert.AreEqual(1.1f, mf.LearnRate);
@@ -40,7 +40,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestDefaultBehaviorIsNoDecay()
 		{
-			var mf = new BiasedMatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Ratings = TestUtils.CreateRatings() };
+			var mf = new BiasedMatrixFactorization() { LearnRate = 1.1f, NumIter = 10, Interactions = TestUtils.CreateRatings() };
 			mf.Train();
 			Assert.AreEqual(1.1f, mf.current_learnrate);
 		}
@@ -51,7 +51,7 @@ namespace Tests.RatingPrediction
 			var mf = new BiasedMatrixFactorization()
 			{
 				LearnRate = 1.0f, Decay = 0.5f,
-				NumIter = 1, Ratings = TestUtils.CreateRatings()
+				NumIter = 1, Interactions = TestUtils.CreateRatings()
 			};
 
 			mf.Train();
@@ -64,7 +64,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestMatrixInit()
 		{
-			var mf = new BiasedMatrixFactorization() { Ratings = TestUtils.CreateRatings() };
+			var mf = new BiasedMatrixFactorization() { Interactions = TestUtils.CreateRatings() };
 			mf.InitModel();
 			Assert.IsNotNull(mf.user_factors);
 			Assert.IsNotNull(mf.item_factors);
@@ -75,7 +75,7 @@ namespace Tests.RatingPrediction
 		[Test()]
 		public void TestFoldIn()
 		{
-			var mf = new BiasedMatrixFactorization() { Ratings = TestUtils.CreateRatings() };
+			var mf = new BiasedMatrixFactorization() { Interactions = TestUtils.CreateRatings() };
 			mf.Train();
 			var user_ratings = new List<Tuple<int, float>>();
 			user_ratings.Add(new Tuple<int, float>(0, 4.0f));
