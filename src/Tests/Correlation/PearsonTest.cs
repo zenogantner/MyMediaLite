@@ -224,7 +224,7 @@ namespace Tests.Correlation
 			Assert.AreEqual(0.3f, matrix[1, 2]);
 
 			// test
-			IList<int> cor_entities_list = matrix.GetPositivelyCorrelatedEntities(2);
+			IList<int> cor_entities_list = matrix.GetPositivelyCorrelatedEntities(2, new int[] { 0, 1, 2 }, 3);
 			int[] cor_entities = new int[1];
 			cor_entities_list.CopyTo(cor_entities, 0);
 			int[] pos_cor_entities = { 1 };

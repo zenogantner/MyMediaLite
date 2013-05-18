@@ -25,13 +25,13 @@ namespace MyMediaLite.Data
 	{
 		///
 		public int Count { get { return dataset.Count; } }
-		
+
 		///
 		public int MaxUserID { get; private set; }
 
 		///
 		public int MaxItemID { get; private set; }
-		
+
 		///
 		public DateTime EarliestDateTime
 		{
@@ -42,7 +42,7 @@ namespace MyMediaLite.Data
 					throw new NotSupportedException("Data set does not contain time information.");
 			}
 		}
-		
+
 		///
 		public DateTime LatestDateTime
 		{
@@ -61,7 +61,7 @@ namespace MyMediaLite.Data
 				return new IndexedMemoryReader(dataset, dataset.RandomIndex);
 			}
 		}
-		
+
 		///
 		public IInteractionReader Sequential
 		{
@@ -69,12 +69,12 @@ namespace MyMediaLite.Data
 				return new IndexedMemoryReader(dataset, Enumerable.Range(0, dataset.Count).ToArray());
 			}
 		}
-		
+
 		///
 		public IList<int> Users { get { return dataset.AllUsers; } }
 		///
 		public IList<int> Items { get { return dataset.AllItems; } }
-		
+
 		///
 		public RatingScale RatingScale
 		{
@@ -85,10 +85,10 @@ namespace MyMediaLite.Data
 				return ratings.Scale;
 			}
 		}
-		
+
 		///
 		public IDataSet dataset; // TODO make private again
-		
+
 		///
 		public MemoryInteractions(IDataSet dataset)
 		{
@@ -97,46 +97,17 @@ namespace MyMediaLite.Data
 			MaxItemID = dataset.MaxItemID;
 		}
 
-		private IList<IInteractionReader> _by_user;
 		///
 		public IInteractionReader ByUser(int user_id)
 		{
-			int num_users = 0;
-			if (Users.Count > 0)
-				num_users = Users.Max() + 1;
-
-			if (_by_user == null)
-				_by_user = new IInteractionReader[num_users];
-
-			if (user_id >= _by_user.Count)
-				throw new ArgumentOutOfRangeException("user_id", string.Format("{0} >= {1}", user_id, _by_user.Count));
-
-			if (_by_user[user_id] == null)
-				_by_user[user_id] = new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
-
-			return _by_user[user_id];
+			return new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
 		}
 		// TODO share code with ByItem
 
-		// TODO problem: read status!!
-		private IList<IInteractionReader> _by_item;
 		///
 		public IInteractionReader ByItem(int item_id)
 		{
-			int num_items = 0;
-			if (Items.Count > 0)
-				num_items = Items.Max() + 1;
-
-			if (_by_item == null)
-				_by_item = new IInteractionReader[num_items];
-
-			if (item_id >= _by_item.Count)
-				throw new ArgumentOutOfRangeException(string.Format("{0} >= {1}", item_id, _by_item.Count));
-
-			if (_by_item[item_id] == null)
-				_by_item[item_id] = new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
-
-			return _by_item[item_id]; // TODO distinguish between reader and stuff that provides .Items and .Users ...
+			return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
 		}
 
 	}

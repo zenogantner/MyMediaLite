@@ -45,9 +45,7 @@ namespace MyMediaLite.RatingPrediction
 			if ((user_id > correlation_matrix.NumberOfRows - 1) || (item_id > MaxItemID))
 				return result;
 
-			IList<int> correlated_users = correlation_matrix.GetPositivelyCorrelatedEntities(user_id);
-			var users_who_rated_item = Interactions.ByItem(item_id).Users;
-			correlated_users = correlated_users.Intersect(users_who_rated_item).Take((int) K).ToList();
+			IList<int> correlated_users = correlation_matrix.GetPositivelyCorrelatedEntities(user_id, Interactions.ByItem(item_id).Users, K);
 
 			double sum = 0;
 			double weight_sum = 0;

@@ -45,10 +45,8 @@ namespace MyMediaLite.RatingPrediction
 
 			if ((user_id > MaxUserID) || (item_id > correlation_matrix.NumberOfRows - 1))
 				return result;
-			
-			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
-			var items_rated_by_user = Interactions.ByUser(user_id).Items;
-			correlated_items = correlated_items.Intersect(items_rated_by_user).Take((int) K).ToList();
+
+			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id, Interactions.ByUser(user_id).Items, K);
 
 			double sum = 0;
 			double weight_sum = 0;
@@ -58,7 +56,7 @@ namespace MyMediaLite.RatingPrediction
 				int item_id2 = reader.GetItem();
 				if (!correlated_items.Contains(item_id2))
 					continue;
-				
+
 				float rating  = reader.GetRating();
 				double weight = correlation_matrix[item_id, item_id2];
 				weight_sum += weight;
@@ -82,25 +80,21 @@ namespace MyMediaLite.RatingPrediction
 			if (item_id > correlation_matrix.NumberOfRows - 1)
 				return result;
 
-			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id);
 			var item_ratings = new Dictionary<int, float>();
 			foreach (var t in rated_items)
-				item_ratings.Add(t.Item1, t.Item2); // TODO handle several ratings of the same item
+				item_ratings.Add(t.Item1, t.Item2);
+
+			IList<int> correlated_items = correlation_matrix.GetPositivelyCorrelatedEntities(item_id, item_ratings.Keys, K);
 
 			double sum = 0;
 			double weight_sum = 0;
-			uint neighbors = K;
 			foreach (int item_id2 in correlated_items)
-				if (item_ratings.ContainsKey(item_id2))
-				{
-					float rating  = item_ratings[item_id2];
-					double weight = correlation_matrix[item_id, item_id2];
-					weight_sum += weight;
-					sum += weight * (rating - baseline_predictor.Predict(int.MaxValue, item_id2));
-
-					if (--neighbors == 0)
-						break;
-				}
+			{
+				float rating  = item_ratings[item_id2];
+				double weight = correlation_matrix[item_id, item_id2];
+				weight_sum += weight;
+				sum += weight * (rating - baseline_predictor.Predict(int.MaxValue, item_id2));
+			}
 
 			if (weight_sum != 0)
 				result += (float) (sum / weight_sum);

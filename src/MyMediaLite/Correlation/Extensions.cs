@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.Correlation
@@ -132,17 +133,15 @@ namespace MyMediaLite.Correlation
 		/// <param name="c">a correlation matrix</param>
 		/// <param name="entity_id">the entity ID</param>
 		/// <returns>a set of all entities that are positively correlated to entitiy_id</returns>
-		public static IList<int> GetPositivelyCorrelatedEntities(this ICorrelationMatrix c, int entity_id)
+		public static IList<int> GetPositivelyCorrelatedEntities(this ICorrelationMatrix c, int entity_id, ICollection<int> entities, uint k)
 		{
-			int num_entities = c.NumberOfRows;
 			var result = new List<int>();
-			for (int i = 0; i < num_entities; i++)
-				if (c[i, entity_id] > 0)
-					result.Add(i);
+			foreach(int e in entities)
+				if (c[e, entity_id] > 0 && entity_id != e)
+					result.Add(e);
 
-			result.Remove(entity_id);
 			result.Sort(delegate(int i, int j) { return c[j, entity_id].CompareTo(c[i, entity_id]); });
-			return result;
+			return result.Take((int) k).ToArray();
 		}
 
 		/// <summary>Get the k nearest neighbors of a given entity</summary>
