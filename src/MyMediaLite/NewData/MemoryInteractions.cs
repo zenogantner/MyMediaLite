@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace MyMediaLite.Data
 {
@@ -97,17 +98,28 @@ namespace MyMediaLite.Data
 			MaxItemID = dataset.MaxItemID;
 		}
 
+		private readonly object syncLock = new object();
+		
 		///
 		public IInteractionReader ByUser(int user_id)
 		{
-			return new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
+			lock(syncLock)
+			{
+				if (user_id >= dataset.ByUser.Count)
+					throw new ArgumentOutOfRangeException("user_id", user_id, string.Format("should not be >= {0}, dataset.MaxUserID is {1}", dataset.ByUser.Count, dataset.MaxUserID));
+				return new IndexedMemoryReader(dataset, dataset.ByUser[user_id]);
+			}
 		}
-		// TODO share code with ByItem
 
 		///
 		public IInteractionReader ByItem(int item_id)
 		{
-			return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
+			lock(syncLock)
+			{
+				if (item_id >= dataset.ByItem.Count)
+					throw new ArgumentOutOfRangeException("item_id", item_id, string.Format("should not be >= {0}, dataset.MaxItemID is {1}", dataset.ByItem.Count, dataset.MaxItemID));
+				return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
+			}
 		}
 
 	}
