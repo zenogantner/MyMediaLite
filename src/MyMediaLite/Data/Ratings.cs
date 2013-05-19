@@ -235,6 +235,7 @@ namespace MyMediaLite.Data
 					count_by_item[item_id] = by_item[item_id].Count;
 			if ((count_by_user != null || count_by_item != null) && (by_user == null || by_item == null))
 			{
+				// reset counts if necessary
 				if (count_by_user != null)
 					foreach (int user_id in users)
 						count_by_user[user_id] = 0;
