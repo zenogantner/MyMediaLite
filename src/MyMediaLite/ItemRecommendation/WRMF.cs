@@ -91,7 +91,17 @@ namespace MyMediaLite.ItemRecommendation
 			Parallel.For(
 				0,
 				num_entities,
-				u => { Optimize(u, target, HH); }
+				u => {
+					try
+					{
+						Optimize(u, target, HH);
+					}
+					catch (Exception e)
+					{
+						Console.Error.WriteLine("===> ERROR: " + e.Message + e.StackTrace);
+						throw;
+					}
+				}
 			);
 		}
 
@@ -159,7 +169,7 @@ namespace MyMediaLite.ItemRecommendation
 					m[f_2, f_1] = d;
 				}
 			var m_inv = m.Inverse();
-			// write back optimal W
+			// write optimal W
 			for (int f = 0; f < num_factors; f++)
 			{
 				double d = 0;
