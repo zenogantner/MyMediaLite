@@ -47,7 +47,7 @@ namespace MyMediaLite.HyperParameter
 			return hp_string;
 		}
 
-		static double Run(RatingPredictor recommender, ISplit<IRatings> split, string hp_string, string evaluation_measure)
+		static double Run(RatingPredictor recommender, ISplit<IInteractions> split, string hp_string, string evaluation_measure)
 		{
 			recommender.Configure(hp_string);
 
@@ -79,8 +79,7 @@ namespace MyMediaLite.HyperParameter
 			string error_measure,
 			RatingPredictor recommender)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			var split = new RatingsSimpleSplit(ratings, split_ratio);
+			var split = new RatingsSimpleSplit(recommender.Interactions, split_ratio);
 
 			IList<string> hp_names;
 			IList<DenseVector> initial_hp_values;
@@ -123,7 +122,6 @@ namespace MyMediaLite.HyperParameter
 					new DenseVector( new double[] { 0.00001 } ),
 				};				
 			}
-			// TODO kNN-based methods
 			else
 			{
 				throw new Exception("not prepared for type " + recommender.GetType().ToString());
@@ -146,8 +144,8 @@ namespace MyMediaLite.HyperParameter
 			string evaluation_measure,
 			IList<string> hp_names,
 			IList<DenseVector> initial_hp_values,
-			RatingPredictor recommender, // TODO make more general?
-			ISplit<IRatings> split)
+			RatingPredictor recommender,
+			ISplit<IInteractions> split)
 		{
 			var results    = new Dictionary<string, double>();
 			var hp_vectors = new Dictionary<string, DenseVector>();

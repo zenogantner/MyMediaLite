@@ -42,7 +42,7 @@ namespace MyMediaLite.HyperParameter
 			string hyperparameter_name,
 			double[] hyperparameter_values,
 			RatingPredictor recommender,
-			ISplit<IRatings> split)
+			ISplit<IInteractions> split)
 		{
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -78,7 +78,7 @@ namespace MyMediaLite.HyperParameter
 			string hp_name1, string hp_name2,
 			double[] hp_values1, double[] hp_values2,
 			RatingPredictor recommender,
-			ISplit<IRatings> split)
+			ISplit<IInteractions> split)
 		{
 			double min_result = double.MaxValue;
 			int min_i = -1;
@@ -126,7 +126,7 @@ namespace MyMediaLite.HyperParameter
 			double[] hp_values2,
 			double basis,
 			RatingPrediction.RatingPredictor recommender,
-			ISplit<IRatings> split)
+			ISplit<IInteractions> split)
 		{
 			var new_hp_values1 = new double[hp_values1.Length];
 			var new_hp_values2 = new double[hp_values2.Length];
@@ -154,7 +154,7 @@ namespace MyMediaLite.HyperParameter
 			double[] hp_values,
 			double basis,
 			RatingPrediction.RatingPredictor recommender,
-			ISplit<IRatings> split)
+			ISplit<IInteractions> split)
 		{
 			var new_hp_values = new double[hp_values.Length];
 
@@ -180,8 +180,7 @@ namespace MyMediaLite.HyperParameter
 			uint k)
 		{
 			var interactions = recommender.Interactions;
-			var ratings = (IRatings) ((MemoryInteractions) interactions).dataset;
-			var split = new RatingCrossValidationSplit(ratings, k);
+			var split = new RatingCrossValidationSplit(interactions, k);
 			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
 			recommender.Interactions = interactions;
 			return result;

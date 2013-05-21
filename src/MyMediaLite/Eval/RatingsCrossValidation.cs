@@ -38,8 +38,7 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_fold_results = false)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			var split = new RatingCrossValidationSplit(ratings, num_folds);
+			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
 			return recommender.DoCrossValidation(split, compute_fit, show_fold_results);
 		}
 
@@ -51,7 +50,7 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public RatingPredictionEvaluationResults DoCrossValidation(
 			this RatingPredictor recommender,
-			ISplit<IRatings> split,
+			ISplit<IInteractions> split,
 			bool compute_fit = false,
 			bool show_fold_results = false)
 		{
@@ -62,11 +61,11 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommender.Interactions = new MemoryInteractions(split.Train[i]);
+					split_recommender.Interactions = split.Train[i];
 					if (recommender is ITransductiveRatingPredictor)
-						((ITransductiveRatingPredictor) split_recommender).AdditionalInteractions = new MemoryInteractions(split.Test[i]); // TODO make sure to filter rating values
+						((ITransductiveRatingPredictor) split_recommender).AdditionalInteractions = split.Test[i]; // TODO make sure to filter rating values
 					split_recommender.Train();
-					fold_results[i] = Ratings.Evaluate(split_recommender, new MemoryInteractions(split.Test[i]));
+					fold_results[i] = Ratings.Evaluate(split_recommender, split.Test[i]);
 					if (compute_fit)
 						fold_results[i]["fit"] = (float) split_recommender.ComputeFit();
 
@@ -96,8 +95,7 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			var split = new RatingCrossValidationSplit(ratings, num_folds);
+			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
 			recommender.DoIterativeCrossValidation(split, max_iter, find_iter, show_fold_results);
 		}
 
@@ -109,7 +107,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		static public void DoIterativeCrossValidation(
 			this RatingPredictor recommender,
-			ISplit<IRatings> split,
+			ISplit<IInteractions> split,
 			uint max_iter,
 			uint find_iter = 1,
 			bool show_fold_results = false)
@@ -127,12 +125,12 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
+					split_recommenders[i].Interactions = split.Train[i];
 					if (recommender is ITransductiveRatingPredictor)
-						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalInteractions = new MemoryInteractions(split.Test[i]);
+						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalInteractions = split.Test[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					fold_results[i] = Ratings.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]));
+					fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
 
 					if (show_fold_results)
 						Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], iterative_recommenders[i].NumIter);
@@ -156,7 +154,7 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							fold_results[i] = Ratings.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]));
+							fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
 							if (show_fold_results)
 								Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
 						}

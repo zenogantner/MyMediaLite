@@ -34,8 +34,8 @@ using MyMediaLite.RatingPrediction;
 public class RatingPrediction : CommandLineProgram<RatingPredictor>
 {
 	// data sets
-	protected IRatings training_data;
-	protected IRatings test_data;
+	protected IInteractions training_data;
+	protected IInteractions test_data;
 
 	bool search_hp             = false;
 	bool test_no_ratings       = false;
@@ -189,17 +189,17 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			var split = new RatingsSimpleSplit(training_data, test_ratio);
 			training_data = split.Train[0];
 			test_data = split.Test[0];
-			recommender.Interactions = new MemoryInteractions(training_data);
+			recommender.Interactions = training_data;
 			Console.Error.WriteLine(string.Format( CultureInfo.InvariantCulture, "test ratio {0}", test_ratio));
 		}
 		if (chronological_split != null)
 		{
 			var split = chronological_split_ratio != -1
-							? new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_ratio)
-							: new RatingsChronologicalSplit((ITimedRatings) training_data, chronological_split_time);
+							? new RatingsChronologicalSplit(training_data, chronological_split_ratio)
+							: new RatingsChronologicalSplit(training_data, chronological_split_time);
 			training_data = split.Train[0];
 			test_data = split.Test[0];
-			recommender.Interactions = new MemoryInteractions(training_data);
+			recommender.Interactions = training_data;
 			if (test_ratio != -1)
 				Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "test ratio (chronological) {0}", chronological_split_ratio));
 			else
@@ -229,7 +229,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					recommender.Train();
 
 				if (compute_fit)
-					Console.WriteLine("fit {0} iteration {1}", Render(recommender.Evaluate(new MemoryInteractions(training_data))), iterative_recommender.NumIter);
+					Console.WriteLine("fit {0} iteration {1}", Render(recommender.Evaluate(training_data)), iterative_recommender.NumIter);
 
 				Console.WriteLine("{0} iteration {1}", Render(Evaluate()), iterative_recommender.NumIter);
 
@@ -245,7 +245,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 						if (compute_fit)
 						{
 							time = Wrap.MeasureTime(delegate() {
-								Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(new MemoryInteractions(training_data)), it);
+								Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), it);
 							});
 							fit_time_stats.Add(time.TotalSeconds);
 						}
@@ -258,7 +258,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 						Model.Save(recommender, save_model_file, it);
 						if (prediction_file != null)
-							recommender.WritePredictions(new MemoryInteractions(test_data), prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
+							recommender.WritePredictions(test_data, prediction_file + "-it-" + it, user_mapping, item_mapping, prediction_line, prediction_header);
 
 						if (epsilon > 0.0 && results[eval_measures[0]] - eval_stats.Min() > epsilon)
 						{
@@ -317,7 +317,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				{
 					Console.Write("\nfit ");
 					seconds = Wrap.MeasureTime(delegate() {
-						Console.Write(Render(recommender.Evaluate(new MemoryInteractions(training_data))));
+						Console.Write(Render(recommender.Evaluate(training_data)));
 					});
 					Console.Write(" fit_time " + seconds);
 				}
@@ -327,7 +327,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			{
 				Console.WriteLine();
 				seconds = Wrap.MeasureTime(delegate() {
-					recommender.WritePredictions(new MemoryInteractions(test_data), prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
+					recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
 				});
 				Console.Error.WriteLine("prediction_time " + seconds);
 			}
@@ -392,36 +392,36 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			// read training data
 			if ((recommender is ITimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
 			{
-				training_data = TimedRatingData.Read(training_file, user_mapping, item_mapping);
+				training_data = new MemoryInteractions(TimedRatingData.Read(training_file, user_mapping, item_mapping));
 			}
 			else
 			{
 				if (file_format == RatingFileFormat.DEFAULT)
-					training_data = RatingData.Read(training_file, user_mapping, item_mapping);
+					training_data = new MemoryInteractions(RatingData.Read(training_file, user_mapping, item_mapping));
 				else if (file_format == RatingFileFormat.IGNORE_FIRST_LINE)
-					training_data = RatingData.Read(training_file, user_mapping, item_mapping, true);
+					training_data = new MemoryInteractions(RatingData.Read(training_file, user_mapping, item_mapping, true));
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					training_data = MovieLensRatingData.Read(training_file, user_mapping, item_mapping);
+					training_data = new MemoryInteractions(MovieLensRatingData.Read(training_file, user_mapping, item_mapping));
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					training_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file);
+					training_data = new MemoryInteractions(MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file));
 			}
-			recommender.Interactions = new MemoryInteractions(training_data);
+			recommender.Interactions = training_data;
 
 			// read test data
 			if (test_file != null)
 			{
 				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITHOUT_RATINGS : TestRatingFileFormat.WITH_RATINGS;
 				if (recommender is ITimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
-					test_data = TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format);
+					test_data = new MemoryInteractions(TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format));
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					test_data = MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format);
+					test_data = new MemoryInteractions(MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format));
 				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					test_data = MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file);
+					test_data = new MemoryInteractions(MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file));
 				else
-					test_data = StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, test_format, file_format == RatingFileFormat.IGNORE_FIRST_LINE);
+					test_data = new MemoryInteractions(StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, test_format, file_format == RatingFileFormat.IGNORE_FIRST_LINE));
 
 				if (recommender is ITransductiveRatingPredictor)
-					((ITransductiveRatingPredictor) recommender).AdditionalInteractions = new MemoryInteractions(test_data);
+					((ITransductiveRatingPredictor) recommender).AdditionalInteractions = test_data;
 			}
 
 		});
@@ -431,7 +431,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected virtual EvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(new MemoryInteractions(test_data));
+		return recommender.Evaluate(test_data);
 	}
 
 	protected virtual EvaluationResults DoCrossValidation()

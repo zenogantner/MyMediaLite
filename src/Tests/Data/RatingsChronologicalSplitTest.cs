@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using NUnit.Framework;
 using MyMediaLite.Data;
@@ -34,30 +33,30 @@ namespace Tests.Data
 			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
 			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
 
-			var split1 = new RatingsChronologicalSplit(ratings, 0.25);
+			var split1 = new RatingsChronologicalSplit(new MemoryInteractions(ratings), 0.25);
 			Assert.AreEqual(3, split1.Train[0].Count);
 			Assert.AreEqual(1, split1.Test[0].Count);
-			Assert.AreEqual(2, split1.Train[0].ByUser[0].Count);
-			Assert.AreEqual(1, split1.Train[0].ByUser[1].Count);
-			Assert.AreEqual(0, split1.Test[0].ByUser[0].Count);
-			Assert.AreEqual(1, split1.Test[0].ByUser[1].Count);
-			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestTime);
+			Assert.AreEqual(2, split1.Train[0].ByUser(0).Count);
+			Assert.AreEqual(1, split1.Train[0].ByUser(1).Count);
+			Assert.AreEqual(0, split1.Test[0].ByUser(0).Count);
+			Assert.AreEqual(1, split1.Test[0].ByUser(1).Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestDateTime);
 
 
-			var split2 = new RatingsChronologicalSplit(ratings, 0.5);
+			var split2 = new RatingsChronologicalSplit(new MemoryInteractions(ratings), 0.5);
 			Assert.AreEqual(2, split2.Train[0].Count);
 			Assert.AreEqual(2, split2.Test[0].Count);
-			Assert.AreEqual(1, split2.Train[0].ByUser[0].Count);
-			Assert.AreEqual(1, split2.Train[0].ByUser[1].Count);
-			Assert.AreEqual(1, split2.Test[0].ByUser[0].Count);
-			Assert.AreEqual(1, split2.Test[0].ByUser[1].Count);
-			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 10, 31),  split2.Train[0].LatestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestTime);
+			Assert.AreEqual(1, split2.Train[0].ByUser(0).Count);
+			Assert.AreEqual(1, split2.Train[0].ByUser(1).Count);
+			Assert.AreEqual(1, split2.Test[0].ByUser(0).Count);
+			Assert.AreEqual(1, split2.Test[0].ByUser(1).Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 10, 31),  split2.Train[0].LatestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestDateTime);
 		}
 
 		[Test()]
@@ -69,29 +68,29 @@ namespace Tests.Data
 			ratings.Add(1, 0, 1.0f, new DateTime(2011, 10, 31));
 			ratings.Add(1, 1, 2.5f, new DateTime(2011, 11, 2));
 
-			var split1 = new RatingsChronologicalSplit(ratings, new DateTime(2011, 11, 2));
+			var split1 = new RatingsChronologicalSplit(new MemoryInteractions(ratings), new DateTime(2011, 11, 2));
 			Assert.AreEqual(3, split1.Train[0].Count);
 			Assert.AreEqual(1, split1.Test[0].Count);
-			Assert.AreEqual(2, split1.Train[0].ByUser[0].Count);
-			Assert.AreEqual(1, split1.Train[0].ByUser[1].Count);
-			Assert.AreEqual(0, split1.Test[0].ByUser[0].Count);
-			Assert.AreEqual(1, split1.Test[0].ByUser[1].Count);
-			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestTime);
+			Assert.AreEqual(2, split1.Train[0].ByUser(0).Count);
+			Assert.AreEqual(1, split1.Train[0].ByUser(1).Count);
+			Assert.AreEqual(0, split1.Test[0].ByUser(0).Count);
+			Assert.AreEqual(1, split1.Test[0].ByUser(1).Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split1.Train[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1),  split1.Train[0].LatestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split1.Test[0].LatestDateTime);
 
-			var split2 = new RatingsChronologicalSplit(ratings, new DateTime(2011, 11, 1));
+			var split2 = new RatingsChronologicalSplit(new MemoryInteractions(ratings), new DateTime(2011, 11, 1));
 			Assert.AreEqual(2, split2.Train[0].Count);
 			Assert.AreEqual(2, split2.Test[0].Count);
-			Assert.AreEqual(1, split2.Train[0].ByUser[0].Count);
-			Assert.AreEqual(1, split2.Train[0].ByUser[1].Count);
-			Assert.AreEqual(1, split2.Test[0].ByUser[0].Count);
-			Assert.AreEqual(1, split2.Test[0].ByUser[1].Count);
-			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].LatestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestTime);
-			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestTime);
+			Assert.AreEqual(1, split2.Train[0].ByUser(0).Count);
+			Assert.AreEqual(1, split2.Train[0].ByUser(1).Count);
+			Assert.AreEqual(1, split2.Test[0].ByUser(0).Count);
+			Assert.AreEqual(1, split2.Test[0].ByUser(1).Count);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 10, 31), split2.Train[0].LatestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 1), split2.Test[0].EarliestDateTime);
+			Assert.AreEqual(new DateTime(2011, 11, 2), split2.Test[0].LatestDateTime);
 		}
 
 	}

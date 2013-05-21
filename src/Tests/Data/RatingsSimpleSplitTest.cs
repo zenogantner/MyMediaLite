@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -34,11 +34,11 @@ namespace Tests.Data
 			ratings.Add(1, 0, 1.0f);
 			ratings.Add(1, 1, 2.5f);
 
-			var split1 = new RatingsSimpleSplit(ratings, 0.25);
+			var split1 = new RatingsSimpleSplit(new MemoryInteractions(ratings), 0.25);
 			Assert.AreEqual(3, split1.Train[0].Count);
 			Assert.AreEqual(1, split1.Test[0].Count);
 
-			var split2 = new RatingsSimpleSplit(ratings, 0.5);
+			var split2 = new RatingsSimpleSplit(new MemoryInteractions(ratings), 0.5);
 			Assert.AreEqual(2, split2.Train[0].Count);
 			Assert.AreEqual(2, split2.Test[0].Count);
 		}

@@ -80,7 +80,7 @@ class RatingBasedRanking : RatingPrediction
 		if (test_users_file != null)
 			test_users = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, test_users_file)).ToArray() );
 		else
-			test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
+			test_users = test_data != null ? test_data.Users : training_data.Users;
 
 		// candidate items
 		if (candidate_items_file != null)
@@ -104,7 +104,7 @@ class RatingBasedRanking : RatingPrediction
 	{
 		int predict_items_number = -1;
 		return recommender.Evaluate(
-			new MemoryInteractions(test_data), new MemoryInteractions(training_data),
+			test_data, training_data,
 			test_users, candidate_items,
 			eval_item_mode, RepeatedEvents.No, predict_items_number
 		);
@@ -112,7 +112,7 @@ class RatingBasedRanking : RatingPrediction
 
 	protected override EvaluationResults DoCrossValidation()
 	{
-		var candidate_items = new List<int>(training_data.AllItems);
+		var candidate_items = new List<int>(training_data.Items);
 		return recommender.DoRatingBasedRankingCrossValidation(cross_validation, candidate_items, CandidateItems.UNION);
 	}
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,13 +14,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	/// <summary>k-fold  cross-validation split for rating prediction</summary>
+	/// <summary>k-fold  cross-validation split</summary>
 	/// <remarks>
 	///   <para>
 	///     Please note that k-fold cross-validation is not the best/most realistic way of evaluating
@@ -32,25 +31,27 @@ namespace MyMediaLite.Data
 	///     The dataset must not be modified after the split - this would lead to undefined behavior.
 	///   </para>
 	/// </remarks>
-	public class RatingCrossValidationSplit : ISplit<IRatings>
+	public class RatingCrossValidationSplit : ISplit<IInteractions>
 	{
 		///
 		public uint NumberOfFolds { get; private set; }
 
 		///
-		public IList<IRatings> Train { get; private set; }
+		public IList<IInteractions> Train { get; private set; }
 
 		///
-		public IList<IRatings> Test { get; private set; }
+		public IList<IInteractions> Test { get; private set; }
 
 		/// <summary>Create a k-fold split of rating prediction data</summary>
-		/// <param name="ratings">the dataset</param>
+		/// <param name="interactions">the dataset</param>
 		/// <param name="num_folds">the number of folds</param>
-		public RatingCrossValidationSplit(IRatings ratings, uint num_folds)
+		public RatingCrossValidationSplit(IInteractions interactions, uint num_folds)
 		{
 			if (num_folds < 2)
 				throw new ArgumentOutOfRangeException("num_folds must be at least 2.");
-			
+
+			var ratings = (IRatings) ((MemoryInteractions) interactions).dataset;
+
 			NumberOfFolds = num_folds;
 
 			// randomize
@@ -75,18 +76,18 @@ namespace MyMediaLite.Data
 						train_indices[j].Add(i);
 
 			// create split data structures
-			Train = new List<IRatings>((int) num_folds);
-			Test  = new List<IRatings>((int) num_folds);
+			Train = new List<IInteractions>((int) num_folds);
+			Test  = new List<IInteractions>((int) num_folds);
 			for (int i = 0; i < num_folds; i++)
 				if (ratings is ITimedRatings)
 				{
-					Train.Add(new TimedRatingsProxy((ITimedRatings) ratings, train_indices[i]));
-					Test.Add(new TimedRatingsProxy((ITimedRatings) ratings, test_indices[i]));
+					Train.Add(new MemoryInteractions(new TimedRatingsProxy((ITimedRatings) ratings, train_indices[i])));
+					Test.Add(new MemoryInteractions(new TimedRatingsProxy((ITimedRatings) ratings, test_indices[i])));
 				}
 				else
 				{
-					Train.Add(new RatingsProxy(ratings, train_indices[i]));
-					Test.Add(new RatingsProxy(ratings, test_indices[i]));
+					Train.Add(new MemoryInteractions(new RatingsProxy(ratings, train_indices[i])));
+					Test.Add(new MemoryInteractions(new RatingsProxy(ratings, test_indices[i])));
 				}
 		}
 	}

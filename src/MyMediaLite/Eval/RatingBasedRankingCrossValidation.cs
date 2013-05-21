@@ -43,8 +43,7 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_results = false)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			var split = new RatingCrossValidationSplit(ratings, num_folds);
+			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
 			return recommender.DoRatingBasedRankingCrossValidation(split, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
@@ -58,7 +57,7 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public EvaluationResults DoRatingBasedRankingCrossValidation(
 			this RatingPredictor recommender,
-			ISplit<IRatings> split,
+			ISplit<IInteractions> split,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
 			bool compute_fit = false,
@@ -71,13 +70,11 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (RatingPredictor) recommender.Clone(); // avoid changes in recommender
-					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
+					split_recommender.Interactions = split.Train[fold];
 					split_recommender.Train();
 
-					var test_data_posonly = new MemoryInteractions(split.Test[fold]);
-					var training_data_posonly = new MemoryInteractions(split.Train[fold]);
-					IList<int> test_users = test_data_posonly.Users;
-					var fold_results = Items.Evaluate(split_recommender, test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode);
+					IList<int> test_users = split.Test[fold].Users;
+					var fold_results = Items.Evaluate(split_recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
 
@@ -128,8 +125,7 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			var split = new RatingCrossValidationSplit(ratings, num_folds);
+			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
 			recommender.DoRatingBasedRankingIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 
@@ -145,7 +141,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		static public void DoRatingBasedRankingIterativeCrossValidation(
 			this RatingPredictor recommender,
-			ISplit<IRatings> split,
+			ISplit<IInteractions> split,
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
@@ -167,13 +163,11 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (RatingPredictor) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
+					split_recommenders[i].Interactions = split.Train[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					
-					var test_data_posonly = new MemoryInteractions(split.Test[i]);
-					var training_data_posonly = new MemoryInteractions(split.Train[i]);
-					fold_results[i] = Items.Evaluate(split_recommenders[i], test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode, repeated_events);
+
+					fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
 					if (show_fold_results)
 						Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 				}
@@ -196,10 +190,7 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							var test_data_posonly = new MemoryInteractions(split.Test[i]);
-							var training_data_posonly = new MemoryInteractions(split.Train[i]);
-
-							fold_results[i] = Items.Evaluate(split_recommenders[i], test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode, repeated_events);
+							fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
 							if (show_fold_results)
 								Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
 						}

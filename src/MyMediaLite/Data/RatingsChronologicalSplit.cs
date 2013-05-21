@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011 Zeno Gantner
+// Copyright (C) 2010, 2011, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,7 +14,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,16 +33,16 @@ namespace MyMediaLite.Data
 	///   The dataset must not be modified after the split - this would lead to undefined behavior.
 	/// </para>
 	/// </remarks>
-	public class RatingsChronologicalSplit : ISplit<ITimedRatings>
+	public class RatingsChronologicalSplit : ISplit<IInteractions>
 	{
 		///
 		public uint NumberOfFolds { get { return 1; } }
 
 		///
-		public IList<ITimedRatings> Train { get; private set; }
+		public IList<IInteractions> Train { get; private set; }
 
 		///
-		public IList<ITimedRatings> Test { get; private set; }
+		public IList<IInteractions> Test { get; private set; }
 
 		/// <summary>Create a chronological split of rating prediction data</summary>
 		/// <remarks>
@@ -51,12 +50,14 @@ namespace MyMediaLite.Data
 		/// train and test, there is no guaranteed order between them (ties are broken according to how the
 		/// sorting procedure sorts the ratings).
 		/// </remarks>
-		/// <param name="ratings">the dataset</param>
+		/// <param name="interactions">the dataset</param>
 		/// <param name="ratio">the ratio of ratings to use for validation</param>
-		public RatingsChronologicalSplit(ITimedRatings ratings, double ratio)
+		public RatingsChronologicalSplit(IInteractions interactions, double ratio)
 		{
 			if (ratio <= 0 && ratio >= 1)
 				throw new ArgumentOutOfRangeException("ratio must be between 0 and 1");
+
+			var ratings = (ITimedRatings) ((MemoryInteractions) interactions).dataset;
 
 			var chronological_index = Enumerable.Range(0, ratings.Count).ToList();
 			chronological_index.Sort(
@@ -76,18 +77,20 @@ namespace MyMediaLite.Data
 				test_indices[i] = chronological_index[i + train_indices.Length];
 
 			// create split data structures
-			Train = new ITimedRatings[] { new TimedRatingsProxy(ratings, train_indices) };
-			Test  = new ITimedRatings[] { new TimedRatingsProxy(ratings, test_indices)  };
+			Train = new IInteractions[] { new MemoryInteractions(new TimedRatingsProxy(ratings, train_indices)) };
+			Test  = new IInteractions[] { new MemoryInteractions(new TimedRatingsProxy(ratings, test_indices))  };
 		}
 
 		/// <summary>Create a chronological split of rating prediction data</summary>
-		/// <param name="ratings">the dataset</param>
+		/// <param name="interactions">the dataset</param>
 		/// <param name="split_time">
 		/// the point in time to use for splitting the data set;
 		/// everything from that point on will be used for validation
 		/// </param>
-		public RatingsChronologicalSplit(ITimedRatings ratings, DateTime split_time)
+		public RatingsChronologicalSplit(IInteractions interactions, DateTime split_time)
 		{
+			var ratings = (ITimedRatings) ((MemoryInteractions) interactions).dataset;
+
 			if (split_time < ratings.EarliestTime)
 				throw new ArgumentOutOfRangeException("split_time must be after the earliest event in the data set");
 			if (split_time > ratings.LatestTime)
@@ -105,8 +108,8 @@ namespace MyMediaLite.Data
 					test_indices.Add(i);
 
 			// create split data structures
-			Train = new ITimedRatings[] { new TimedRatingsProxy(ratings, train_indices) };
-			Test  = new ITimedRatings[] { new TimedRatingsProxy(ratings, test_indices)  };
+			Train = new IInteractions[] { new MemoryInteractions(new TimedRatingsProxy(ratings, train_indices)) };
+			Test  = new IInteractions[] { new MemoryInteractions(new TimedRatingsProxy(ratings, test_indices))  };
 		}
 
 	}
