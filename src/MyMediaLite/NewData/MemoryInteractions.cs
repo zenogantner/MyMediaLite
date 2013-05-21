@@ -99,7 +99,7 @@ namespace MyMediaLite.Data
 		}
 
 		private readonly object syncLock = new object();
-		
+
 		///
 		public IInteractionReader ByUser(int user_id)
 		{
@@ -122,6 +122,18 @@ namespace MyMediaLite.Data
 			}
 		}
 
+		public bool HasRatings
+		{
+			get {
+				return dataset is IRatings;
+			}
+		}
+
+		public bool HasDateTimes
+		{
+			get {
+				return dataset is ITimedDataSet;
+			}
+		}
 	}
 }
-

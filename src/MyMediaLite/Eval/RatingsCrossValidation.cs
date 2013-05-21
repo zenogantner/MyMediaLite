@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -67,7 +66,7 @@ namespace MyMediaLite.Eval
 					if (recommender is ITransductiveRatingPredictor)
 						((ITransductiveRatingPredictor) split_recommender).AdditionalInteractions = new MemoryInteractions(split.Test[i]); // TODO make sure to filter rating values
 					split_recommender.Train();
-					fold_results[i] = Ratings.Evaluate(split_recommender, split.Test[i]);
+					fold_results[i] = Ratings.Evaluate(split_recommender, new MemoryInteractions(split.Test[i]));
 					if (compute_fit)
 						fold_results[i]["fit"] = (float) split_recommender.ComputeFit();
 
@@ -121,7 +120,7 @@ namespace MyMediaLite.Eval
 			var split_recommenders     = new RatingPredictor[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
 			var fold_results = new RatingPredictionEvaluationResults[split.NumberOfFolds];
-			
+
 			// initial training and evaluation
 			Parallel.For(0, (int) split.NumberOfFolds, i =>
 			{
@@ -133,8 +132,8 @@ namespace MyMediaLite.Eval
 						((ITransductiveRatingPredictor) split_recommenders[i]).AdditionalInteractions = new MemoryInteractions(split.Test[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
-					
+					fold_results[i] = Ratings.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]));
+
 					if (show_fold_results)
 						Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], iterative_recommenders[i].NumIter);
 				}
@@ -157,7 +156,7 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							fold_results[i] = Ratings.Evaluate(split_recommenders[i], split.Test[i]);
+							fold_results[i] = Ratings.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]));
 							if (show_fold_results)
 								Console.Error.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
 						}

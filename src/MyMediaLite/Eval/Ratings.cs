@@ -70,21 +70,15 @@ namespace MyMediaLite.Eval
 		/// <returns>a Dictionary containing the evaluation results</returns>
 		static public RatingPredictionEvaluationResults Evaluate(
 			this IRatingPredictor recommender,
-			IRatings ratings)
+			IInteractions interactions)
 		{
-			if (recommender == null)
-				throw new ArgumentNullException("recommender");
-			if (ratings == null)
-				throw new ArgumentNullException("ratings");
-
 			double rmse = 0;
 			double mae  = 0;
 			double cbd  = 0;
-			
-			var interactions = new MemoryInteractions(ratings);
+
 			var reader = interactions.Sequential;
 
-			if (recommender is ITimeAwareRatingPredictor && ratings is ITimedRatings)
+			if (recommender is ITimeAwareRatingPredictor && interactions.HasDateTimes)
 			{
 				var time_aware_recommender = recommender as ITimeAwareRatingPredictor;
 				while (reader.Read())
@@ -147,8 +141,7 @@ namespace MyMediaLite.Eval
 		/// <param name='recommender'>the rating predictor to evaluate</param>
 		public static double ComputeFit(this RatingPredictor recommender)
 		{
-			var ratings = (IRatings) ((MemoryInteractions) recommender.Interactions).dataset;
-			return recommender.Evaluate(ratings)["RMSE"];
+			return recommender.Evaluate(recommender.Interactions)["RMSE"];
 		}
 	}
 }

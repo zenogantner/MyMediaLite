@@ -40,6 +40,9 @@ namespace MyMediaLite.Data
 		IInteractionReader ByItem(int item_id);
 
 		RatingScale RatingScale { get; }
+
+		bool HasRatings { get; }
+		bool HasDateTimes { get; }
 	}
 }
 

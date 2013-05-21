@@ -229,7 +229,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					recommender.Train();
 
 				if (compute_fit)
-					Console.WriteLine("fit {0} iteration {1}", Render(recommender.Evaluate(training_data)), iterative_recommender.NumIter);
+					Console.WriteLine("fit {0} iteration {1}", Render(recommender.Evaluate(new MemoryInteractions(training_data))), iterative_recommender.NumIter);
 
 				Console.WriteLine("{0} iteration {1}", Render(Evaluate()), iterative_recommender.NumIter);
 
@@ -245,7 +245,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 						if (compute_fit)
 						{
 							time = Wrap.MeasureTime(delegate() {
-								Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(training_data), it);
+								Console.WriteLine("fit {0} iteration {1}", recommender.Evaluate(new MemoryInteractions(training_data)), it);
 							});
 							fit_time_stats.Add(time.TotalSeconds);
 						}
@@ -317,7 +317,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				{
 					Console.Write("\nfit ");
 					seconds = Wrap.MeasureTime(delegate() {
-						Console.Write(Render(recommender.Evaluate(training_data)));
+						Console.Write(Render(recommender.Evaluate(new MemoryInteractions(training_data))));
 					});
 					Console.Write(" fit_time " + seconds);
 				}
@@ -431,7 +431,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected virtual EvaluationResults Evaluate()
 	{
-		return recommender.Evaluate(test_data);
+		return recommender.Evaluate(new MemoryInteractions(test_data));
 	}
 
 	protected virtual EvaluationResults DoCrossValidation()
