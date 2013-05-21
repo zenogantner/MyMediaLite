@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -86,12 +86,12 @@ namespace MyMediaLite.Data
 		/// <param name="user_attributes">the user attributes</param>
 		/// <param name="item_attributes">the item attributes</param>
 		public static string Statistics(
-			this IPosOnlyFeedback training_data, IPosOnlyFeedback test_data = null,
+			this IInteractions training_data, IInteractions test_data = null,
 			IBooleanMatrix user_attributes = null, IBooleanMatrix item_attributes = null)
 		{
 			// training data stats
-			int num_users = training_data.AllUsers.Count;
-			int num_items = training_data.AllItems.Count;
+			int num_users = training_data.Users.Count;
+			int num_items = training_data.Items.Count;
 			long matrix_size = (long) num_users * num_items;
 			long empty_size  = (long) matrix_size - training_data.Count;
 			double sparsity = (double) 100L * empty_size / matrix_size;
@@ -100,8 +100,8 @@ namespace MyMediaLite.Data
 			// test data stats
 			if (test_data != null)
 			{
-				num_users = test_data.AllUsers.Count;
-				num_items = test_data.AllItems.Count;
+				num_users = test_data.Users.Count;
+				num_items = test_data.Items.Count;
 				matrix_size = (long) num_users * num_items;
 				empty_size  = (long) matrix_size - test_data.Count;
 				sparsity = (double) 100L * empty_size / matrix_size; // TODO depends on the eval scheme whether this is correct

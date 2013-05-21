@@ -31,26 +31,28 @@ namespace Tests.Eval
 	{
 		IList<int> all_users, candidate_items;
 		ItemRecommender recommender;
-		IPosOnlyFeedback training_data, test_data;
+		IInteractions training_data, test_data;
 
 		[SetUp()]
 		public void SetUp()
 		{
-			training_data = new PosOnlyFeedback<SparseBooleanMatrix>();
-			training_data.Add(1, 1);
-			training_data.Add(1, 2);
-			training_data.Add(2, 2);
-			training_data.Add(2, 3);
-			training_data.Add(3, 1);
-			training_data.Add(3, 2);
+			var pof_training_data = new PosOnlyFeedback<SparseBooleanMatrix>();
+			pof_training_data.Add(1, 1);
+			pof_training_data.Add(1, 2);
+			pof_training_data.Add(2, 2);
+			pof_training_data.Add(2, 3);
+			pof_training_data.Add(3, 1);
+			pof_training_data.Add(3, 2);
+			training_data = new MemoryInteractions(pof_training_data);
 
-			recommender = new MostPopular() { Interactions = new MemoryInteractions(training_data) };
+			recommender = new MostPopular() { Interactions = training_data };
 			recommender.Train();
 
-			test_data = new PosOnlyFeedback<SparseBooleanMatrix>();
-			test_data.Add(2, 3);
-			test_data.Add(2, 4);
-			test_data.Add(4, 4);
+			var pof_test_data = new PosOnlyFeedback<SparseBooleanMatrix>();
+			pof_test_data.Add(2, 3);
+			pof_test_data.Add(2, 4);
+			pof_test_data.Add(4, 4);
+			test_data = new MemoryInteractions(pof_test_data);
 
 			all_users = Enumerable.Range(1, 4).ToList();
 			candidate_items = Enumerable.Range(1, 5).ToList();

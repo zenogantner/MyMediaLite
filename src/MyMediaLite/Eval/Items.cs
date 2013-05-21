@@ -62,19 +62,19 @@ namespace MyMediaLite.Eval
 		static public IList<int> Candidates(
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback training)
+			IInteractions test,
+			IInteractions training)
 		{
 			switch (candidate_item_mode)
 			{
-				case CandidateItems.TRAINING: return training.AllItems;
-				case CandidateItems.TEST:     return test.AllItems;
+				case CandidateItems.TRAINING: return training.Items;
+				case CandidateItems.TEST:     return test.Items;
 				case CandidateItems.OVERLAP:
-					var result = test.AllItems.Intersect(training.AllItems).ToList();
+					var result = test.Items.Intersect(training.Items).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.UNION:
-					result = test.AllItems.Union(training.AllItems).ToList();
+					result = test.Items.Union(training.Items).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.EXPLICIT:
@@ -116,8 +116,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public ItemRecommendationEvaluationResults Evaluate(
 			this IRecommender recommender,
-			IPosOnlyFeedback test,
-			IPosOnlyFeedback training,
+			IInteractions test,
+			IInteractions training,
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
@@ -125,26 +125,22 @@ namespace MyMediaLite.Eval
 			int n = -1)
 		{
 			if (test_users == null)
-				test_users = test.AllUsers;
+				test_users = test.Users;
 			candidate_items = Candidates(candidate_items, candidate_item_mode, test, training);
 
 			var result = new ItemRecommendationEvaluationResults();
-
-			// make sure that the user matrix is completely initialized before entering parallel code
-			var training_user_matrix = training.UserMatrix;
-			var test_user_matrix     = test.UserMatrix;
 
 			int num_users = 0;
 			Parallel.ForEach(test_users, user_id => {
 				try
 				{
-					var correct_items = new HashSet<int>(test_user_matrix[user_id]);
+					var correct_items = new HashSet<int>(test.ByUser(user_id).Items);
 					correct_items.IntersectWith(candidate_items);
 					if (correct_items.Count == 0)
 						return;
 
 					var ignore_items_for_this_user = new HashSet<int>(
-						repeated_events == RepeatedEvents.Yes ? new int[0] : training_user_matrix[user_id]
+						repeated_events == RepeatedEvents.Yes ? new int[0] : training.ByUser(user_id).Items.ToArray()
 					);
 					ignore_items_for_this_user.IntersectWith(candidate_items);
 					int num_candidates_for_this_user = candidate_items.Count - ignore_items_for_this_user.Count;
@@ -210,10 +206,8 @@ namespace MyMediaLite.Eval
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)
 		{
-			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) recommender.Interactions).dataset;
-			
 			return recommender.Evaluate(
-				feedback, feedback,
+				recommender.Interactions, recommender.Interactions,
 				test_users, candidate_items,
 				candidate_item_mode, RepeatedEvents.Yes)["AUC"];
 		}

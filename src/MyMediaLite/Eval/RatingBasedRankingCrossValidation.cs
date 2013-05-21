@@ -74,9 +74,9 @@ namespace MyMediaLite.Eval
 					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
 					split_recommender.Train();
 
-					var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Test[fold]);
-					var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Train[fold]);
-					IList<int> test_users = test_data_posonly.AllUsers;
+					var test_data_posonly = new MemoryInteractions(split.Test[fold]);
+					var training_data_posonly = new MemoryInteractions(split.Train[fold]);
+					IList<int> test_users = test_data_posonly.Users;
 					var fold_results = Items.Evaluate(split_recommender, test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
@@ -171,8 +171,8 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
 					
-					var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Test[i]);
-					var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Train[i]);
+					var test_data_posonly = new MemoryInteractions(split.Test[i]);
+					var training_data_posonly = new MemoryInteractions(split.Train[i]);
 					fold_results[i] = Items.Evaluate(split_recommenders[i], test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode, repeated_events);
 					if (show_fold_results)
 						Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
@@ -196,8 +196,8 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Test[i]);
-							var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(split.Train[i]);
+							var test_data_posonly = new MemoryInteractions(split.Test[i]);
+							var training_data_posonly = new MemoryInteractions(split.Train[i]);
 
 							fold_results[i] = Items.Evaluate(split_recommenders[i], test_data_posonly, training_data_posonly, test_users, candidate_items, candidate_item_mode, repeated_events);
 							if (show_fold_results)

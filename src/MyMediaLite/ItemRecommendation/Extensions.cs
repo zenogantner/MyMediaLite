@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 	{
 		/// <summary>Write item predictions (scores) to a file</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train"></param>
 		/// <param name="candidate_items">list of candidate items</param>
 		/// <param name="num_predictions">number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="filename">the name of the file to write to</param>
@@ -39,7 +39,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
-			IPosOnlyFeedback train,
+			IInteractions train,
 			IList<int> candidate_items,
 			int num_predictions,
 			string filename,
@@ -53,7 +53,7 @@ namespace MyMediaLite.ItemRecommendation
 
 		/// <summary>Write item predictions (scores) to a TextWriter object</summary>
 		/// <param name="recommender">the <see cref="IRecommender"/> to use for making the predictions</param>
-		/// <param name="train">a user-wise <see cref="IPosOnlyFeedback"/> containing the items already observed</param>
+		/// <param name="train"></param>
 		/// <param name="candidate_items">list of candidate items</param>
 		/// <param name="num_predictions">number of items to return per user, -1 if there should be no limit</param>
 		/// <param name="writer">the <see cref="TextWriter"/> to write to</param>
@@ -63,7 +63,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
 			this IRecommender recommender,
-			IPosOnlyFeedback train,
+			IInteractions train,
 			ICollection<int> candidate_items,
 			int num_predictions,
 			TextWriter writer,
@@ -72,13 +72,13 @@ namespace MyMediaLite.ItemRecommendation
 			bool repeated_items = false)
 		{
 			if (users == null)
-				users = new List<int>(train.AllUsers);
+				users = new List<int>(train.Users);
 
 			ICollection<int> ignore_items = new int[0];
 			foreach (int user_id in users)
 			{
 				if (!repeated_items)
-					ignore_items = train.UserMatrix[user_id];
+					ignore_items = train.ByUser(user_id).Items;
 				WritePredictions(recommender, user_id, candidate_items, ignore_items, num_predictions, writer, user_mapping, item_mapping);
 			}
 		}

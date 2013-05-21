@@ -16,6 +16,8 @@
 	 - remove the Ensemble namespace
 	correlation
 	 - simplify correlation computation
+	command-line tools
+	 - remove user recommendation feature
 	misc
 	 - remove MovieDemo
 

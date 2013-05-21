@@ -83,7 +83,7 @@ namespace MyMediaLite.Eval
 					var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
 					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
 					split_recommender.Train();
-					var fold_results = Items.Evaluate(split_recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);
+					var fold_results = Items.Evaluate(split_recommender, new MemoryInteractions(split.Test[fold]), new MemoryInteractions(split.Train[fold]), test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
 
@@ -181,7 +181,7 @@ namespace MyMediaLite.Eval
 					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+					fold_results[i] = Items.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]), new MemoryInteractions(split.Train[i]), test_users, candidate_items, candidate_item_mode, repeated_events);
 					if (show_fold_results)
 						Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 				}
@@ -204,7 +204,7 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
+							fold_results[i] = Items.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]), new MemoryInteractions(split.Train[i]), test_users, candidate_items, candidate_item_mode, repeated_events);
 							if (show_fold_results)
 								Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
 						}

@@ -103,10 +103,8 @@ class RatingBasedRanking : RatingPrediction
 	protected override EvaluationResults Evaluate()
 	{
 		int predict_items_number = -1;
-		var test_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(test_data);
-		var training_data_posonly = new PosOnlyFeedback<SparseBooleanMatrix>(training_data);
 		return recommender.Evaluate(
-			test_data_posonly, training_data_posonly,
+			new MemoryInteractions(test_data), new MemoryInteractions(training_data),
 			test_users, candidate_items,
 			eval_item_mode, RepeatedEvents.No, predict_items_number
 		);

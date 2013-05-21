@@ -33,8 +33,8 @@ using MyMediaLite.ItemRecommendation;
 class ItemRecommendation : CommandLineProgram<IRecommender>
 {
 	// data
-	IPosOnlyFeedback training_data;
-	IPosOnlyFeedback test_data;
+	IInteractions training_data;
+	IInteractions test_data;
 	IList<int> test_users;
 	IList<int> candidate_items;
 
@@ -54,7 +54,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	bool in_training_items;
 	bool in_test_items;
 	bool all_items;
-	bool user_prediction;
 
 	protected override ICollection<string> Measures { get { return Items.Measures; } }
 
@@ -111,7 +110,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --load-item-mapping=FILE                 load item ID mapping from FILE
 
   data interpretation:
-   --user-prediction            transpose the user-item matrix and perform user prediction instead of item prediction
    --rating-threshold=NUM       (for rating data) interpret rating >= NUM as positive feedback
 
   choosing the items for evaluation/prediction (mutually exclusive):
@@ -166,7 +164,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("num-test-users=",       (int v) => num_test_users       = v)
 			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
-			.Add("user-prediction",      v => user_prediction   = v != null)
 			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
@@ -345,72 +342,47 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && prediction_file == null && in_training_items)
 			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, cross-validation=K, or --prediction-file=FILE.");
-
-		if (user_prediction)
-		{
-			if (recommender is IUserAttributeAwareRecommender || recommender is IItemAttributeAwareRecommender ||
-			    recommender is IUserRelationAwareRecommender  || recommender is IItemRelationAwareRecommender)
-				Abort("--user-prediction is not (yet) supported in combination with attribute- or relation-aware recommenders.");
-		}
 	}
-
+	
+	IInteractions LoadInteractions(string filename)
+	{
+		IPosOnlyFeedback pos_only_feedback;
+		if (double.IsNaN(rating_threshold))
+			pos_only_feedback = ItemData.Read(filename, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
+		else
+			pos_only_feedback = ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
+		return new MemoryInteractions(pos_only_feedback);
+	}
+	
 	protected override void LoadData()
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
 
-			// training data
-			training_data = double.IsNaN(rating_threshold)
-				? ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
-				: ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
+			training_data = LoadInteractions(training_file);
 
 			// test data
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
-				{
-					test_data = double.IsNaN(rating_threshold)
-						? ItemData.Read(test_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE)
-						: ItemDataRatingThreshold.Read(test_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
-				}
+					test_data = LoadInteractions(test_file);
 			}
 			else
 			{
-				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(training_data, test_ratio);
-				training_data = split.Train[0];
-				test_data     = split.Test[0];
-			}
-
-			if (user_prediction)
-			{
-				// swap file names for test users and candidate items
-				var ruf = test_users_file;
-				var rif = candidate_items_file;
-				test_users_file = rif;
-				candidate_items_file = ruf;
-
-				// swap user and item mappings
-				var um = user_mapping;
-				var im = item_mapping;
-				user_mapping = im;
-				item_mapping = um;
-
-				// transpose training and test data
-				training_data = training_data.Transpose();
-
-				// transpose test data
-				if (test_data != null)
-					test_data = test_data.Transpose();
+				var pof_train = (PosOnlyFeedback<SparseBooleanMatrix>) ((MemoryInteractions) training_data).dataset;
+				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(pof_train, test_ratio);
+				training_data = new MemoryInteractions(split.Train[0]);
+				test_data     = new MemoryInteractions(split.Test[0]);
 			}
 
 			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)
-				((ItemRecommender)recommender).Interactions = new MemoryInteractions(training_data);
+				((ItemRecommender)recommender).Interactions = training_data;
 
 			// test users
 			if (test_users_file != null)
 				test_users = user_mapping.ToInternalID( File.ReadLines(Path.Combine(data_dir, test_users_file)).ToArray() );
 			else
-				test_users = test_data != null ? test_data.AllUsers : training_data.AllUsers;
+				test_users = test_data != null ? test_data.Users : training_data.Users;
 
 			// if necessary, perform user sampling
 			if (num_test_users > 0 && num_test_users < test_users.Count)
@@ -469,7 +441,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	void Predict(string prediction_file, string predict_for_users_file)
 	{
 		if (candidate_items == null)
-			candidate_items = training_data.AllItems;
+			candidate_items = training_data.Items;
 
 		IList<int> user_list = null;
 		if (predict_for_users_file != null)
