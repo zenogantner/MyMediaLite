@@ -1,5 +1,5 @@
 all: ../lib/mymedialite
-	xbuild /p:Configuration=Debug MyMediaLite-nogui.sln
+	xbuild /p:Configuration=Debug MyMediaLite.sln
 	cp -r Programs/ItemRecommendation/bin/Debug/*.dll ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.exe ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.mdb ../lib/mymedialite
@@ -37,4 +37,4 @@ uninstall:
 	rm -rf ${PREFIX}/bin/rating_based_ranking
 
 test:
-	nunit-console --run=Tests MyMediaLite-nogui.sln --config=Debug
+	nunit-console --run=Tests MyMediaLite.sln --config=Debug
