@@ -34,9 +34,6 @@ namespace MyMediaLite.RatingPrediction
 	/// </remarks>
 	public interface IRatingPredictor : IRecommender
 	{
-		/// <summary>the ratings dataset to learn from</summary>
-		IInteractions Interactions { get; set; }
-
 		/// <summary>Gets or sets the maximum rating.</summary>
 		/// <value>The maximally possible rating</value>
 		float MaxRating { get; set; }
