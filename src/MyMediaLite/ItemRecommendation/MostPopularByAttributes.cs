@@ -43,7 +43,7 @@ namespace MyMediaLite.ItemRecommendation
 	///   This recommender does NOT support incremental updates.
 	/// </para>
 	/// </remarks>
-	public class MostPopularByAttributes : ItemRecommender, IItemAttributeAwareRecommender
+	public class MostPopularByAttributes : Recommender, IItemAttributeAwareRecommender
 	{
 		MostPopular most_popular = new MostPopular();
 		IList<IDictionary<int, int>> attribute_count_by_user;

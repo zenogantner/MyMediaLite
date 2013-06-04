@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using C5;
+using MyMediaLite.Data;
 
 namespace MyMediaLite
 {
@@ -32,6 +33,18 @@ namespace MyMediaLite
 
 		/// <summary>Maximum item ID</summary>
 		public int MaxItemID { get; set; }
+
+		/// <summary>the feedback data to be used for training</summary>
+		public virtual IInteractions Interactions
+		{
+			get { return this.interactions; }
+			set {
+				this.interactions = value;
+				MaxUserID = Math.Max(interactions.MaxUserID, MaxUserID);
+				MaxItemID = Math.Max(interactions.MaxItemID, MaxItemID);
+			}
+		}
+		IInteractions interactions;
 
 		/// <summary>create a shallow copy of the object</summary>
 		public Object Clone()

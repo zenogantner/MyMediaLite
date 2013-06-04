@@ -21,7 +21,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// This recommender can be used for debugging, e.g. to detect non-random orderings in item lists.
 	/// </remarks>
-	public class Zero : ItemRecommender
+	public class Zero : Recommender
 	{
 		///
 		public override void Train() { /* do nothing */ }

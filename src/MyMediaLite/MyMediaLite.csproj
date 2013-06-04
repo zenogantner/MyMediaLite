@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.07</ReleaseVersion>
+    <ReleaseVersion>3.06</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -97,7 +97,6 @@
     <Compile Include="ItemRecommendation\BPRMF.cs" />
     <Compile Include="ItemRecommendation\ItemAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
-    <Compile Include="ItemRecommendation\ItemRecommender.cs" />
     <Compile Include="ItemRecommendation\KNN.cs" />
     <Compile Include="ItemRecommendation\MF.cs" />
     <Compile Include="ItemRecommendation\MostPopular.cs" />

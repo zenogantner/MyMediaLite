@@ -45,10 +45,10 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_results = false)
 		{
-			if (!(recommender is ItemRecommender))
+			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 			
-			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((ItemRecommender) recommender).Interactions).dataset;
+			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((Recommender) recommender).Interactions).dataset;
 			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
 			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
@@ -73,14 +73,14 @@ namespace MyMediaLite.Eval
 		{
 			var avg_results = new ItemRecommendationEvaluationResults();
 
-			if (!(recommender is ItemRecommender))
+			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
 			Parallel.For(0, (int) split.NumberOfFolds, fold =>
 			{
 				try
 				{
-					var split_recommender = (ItemRecommender) recommender.Clone(); // avoid changes in recommender
+					var split_recommender = (Recommender) recommender.Clone(); // avoid changes in recommender
 					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
 					split_recommender.Train();
 					var fold_results = Items.Evaluate(split_recommender, new MemoryInteractions(split.Test[fold]), new MemoryInteractions(split.Train[fold]), test_users, candidate_items, candidate_item_mode);
@@ -134,10 +134,10 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			if (!(recommender is ItemRecommender))
+			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
-			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((ItemRecommender) recommender).Interactions).dataset;
+			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((Recommender) recommender).Interactions).dataset;
 			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
 			recommender.DoIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
@@ -165,10 +165,10 @@ namespace MyMediaLite.Eval
 		{
 			if (!(recommender is IIterativeModel))
 				throw new ArgumentException("recommender must be of type IIterativeModel");
-			if (!(recommender is ItemRecommender))
+			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
-			var split_recommenders     = new ItemRecommender[split.NumberOfFolds];
+			var split_recommenders     = new Recommender[split.NumberOfFolds];
 			var iterative_recommenders = new IIterativeModel[split.NumberOfFolds];
 			var fold_results = new ItemRecommendationEvaluationResults[split.NumberOfFolds];
 
@@ -177,7 +177,7 @@ namespace MyMediaLite.Eval
 			{
 				try
 				{
-					split_recommenders[i] = (ItemRecommender) recommender.Clone(); // to avoid changes in recommender
+					split_recommenders[i] = (Recommender) recommender.Clone(); // to avoid changes in recommender
 					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];

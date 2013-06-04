@@ -213,7 +213,7 @@ namespace MyMediaLite
 		/// <summary>Create an item recommender from the type name</summary>
 		/// <param name="typename">a string containing the type name</param>
 		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static ItemRecommender CreateItemRecommender(this string typename)
+		public static Recommender CreateItemRecommender(this string typename)
 		{
 			if (! typename.StartsWith("MyMediaLite.ItemRecommendation"))
 				typename = "MyMediaLite.ItemRecommendation." + typename;
@@ -230,17 +230,17 @@ namespace MyMediaLite
 		/// <summary>Create an item recommender from a type object</summary>
 		/// <param name="type">the type object</param>
 		/// <returns>an item recommender object of type type</returns>
-		public static ItemRecommender CreateItemRecommender(this Type type)
+		public static Recommender CreateItemRecommender(this Type type)
 		{
 			if (type.IsAbstract)
 				return null;
 			if (type.IsGenericType)
 				return null;
 
-			if (type.IsSubclassOf(typeof(ItemRecommender)))
-				return (ItemRecommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(Recommender)))
+				return (Recommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.ItemRecommendation.ItemRecommender");
+				throw new Exception(type.Name + " is not a subclass of MyMediaLite.Recommender");
 		}
 
 		/// <summary>Describes the kind of data needed by this recommender</summary>

@@ -21,7 +21,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// It would not be necessary for Random to inherit from ItemRecommender, but it is done nonetheless for convenience.
 	/// </remarks>
-	public class Random : ItemRecommender
+	public class Random : Recommender
 	{
 		///
 		public override void Train() { }

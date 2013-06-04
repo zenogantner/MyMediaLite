@@ -27,7 +27,7 @@ namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>Base class for item recommenders that use some kind of k-nearest neighbors (kNN) model</summary>
 	/// <seealso cref="MyMediaLite.ItemRecommendation.KNN"/>
-	public abstract class KNN : ItemRecommender
+	public abstract class KNN : Recommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
 		public uint K { get { return k; } set { k = value; } }

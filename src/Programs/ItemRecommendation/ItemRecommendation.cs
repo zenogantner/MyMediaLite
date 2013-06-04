@@ -375,8 +375,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				test_data     = new MemoryInteractions(split.Test[0]);
 			}
 
-			if (recommender is MyMediaLite.ItemRecommendation.ItemRecommender)
-				((ItemRecommender)recommender).Interactions = training_data;
+			if (recommender is MyMediaLite.Recommender)
+				((Recommender)recommender).Interactions = training_data;
 
 			// test users
 			if (test_users_file != null)

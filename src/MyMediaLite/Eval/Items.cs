@@ -201,7 +201,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		public static double ComputeFit(
-			this ItemRecommender recommender,
+			this Recommender recommender,
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)

@@ -32,7 +32,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     This method is not personalized.
 	///   </para>
 	/// </remarks>
-	public class MostPopular : ItemRecommender
+	public class MostPopular : Recommender
 	{
 		/// <summary>
 		/// If true, the popularity of an item is measured by the number of unique users that have accessed it.

@@ -29,7 +29,7 @@ namespace MyMediaLite.ItemRecommendation
 	///   This recommender does NOT support incremental updates.
 	/// </para>
 	/// </remarks>
-	public class ExternalItemRecommender : ItemRecommender, INeedsMappings
+	public class ExternalItemRecommender : Recommender, INeedsMappings
 	{
 		/// <summary>the file with the stored ratings</summary>
 		public string PredictionFile { get; set; }

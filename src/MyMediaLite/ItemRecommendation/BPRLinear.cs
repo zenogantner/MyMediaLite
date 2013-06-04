@@ -44,7 +44,7 @@ namespace MyMediaLite.ItemRecommendation
 	///   This recommender does NOT support incremental updates.
 	/// </para>
 	/// </remarks>
-	public class BPRLinear : ItemRecommender, IItemAttributeAwareRecommender, IIterativeModel
+	public class BPRLinear : Recommender, IItemAttributeAwareRecommender, IIterativeModel
 	{
 		// TODO add item bias
 

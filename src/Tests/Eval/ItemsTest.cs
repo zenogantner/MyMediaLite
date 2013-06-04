@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
@@ -30,7 +31,7 @@ namespace Tests.Eval
 	public class ItemsTest
 	{
 		IList<int> all_users, candidate_items;
-		ItemRecommender recommender;
+		Recommender recommender;
 		IInteractions training_data, test_data;
 
 		[SetUp()]
