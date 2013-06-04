@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MyMediaLite.Data;
 
 namespace MyMediaLite
 {
@@ -28,10 +29,12 @@ namespace MyMediaLite
 	///
 	/// If you want to contribute to MyMediaLite have a look at http://mymedialite.net/contribute.html
 
-	/// <summary>Generic interface for simple recommenders</summary>
+	/// <summary>Generic recommender interface</summary>
 	/// <remarks></remarks>
 	public interface IRecommender : ICloneable
 	{
+		IInteractions Interactions { get; set; }
+
 		/// <summary>Predict rating or score for a given user-item combination</summary>
 		/// <remarks></remarks>
 		/// <param name="user_id">the user ID</param>
