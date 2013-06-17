@@ -36,10 +36,10 @@ namespace MyMediaLite.RatingPrediction
 	{
 		/// <summary>Gets or sets the maximum rating.</summary>
 		/// <value>The maximally possible rating</value>
-		float MaxRating { get; set; }
+		float MaxRating { get; }
 
 		/// <summary>Gets or sets the minimum rating.</summary>
 		/// <value>The minimally possible rating</value>
-		float MinRating { get; set; }
+		float MinRating { get; }
 	}
 }
