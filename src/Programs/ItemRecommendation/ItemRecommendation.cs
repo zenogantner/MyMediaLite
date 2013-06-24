@@ -46,7 +46,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	string candidate_items_file;
 
 	// command-line parameters (other)
-	float rating_threshold = float.NaN;
 	int num_test_users = -1;
 	int predict_items_number = -1;
 	bool repeated_items;
@@ -109,9 +108,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
    --load-user-mapping=FILE                 load user ID mapping from FILE
    --load-item-mapping=FILE                 load item ID mapping from FILE
 
-  data interpretation:
-   --rating-threshold=NUM       (for rating data) interpret rating >= NUM as positive feedback
-
   choosing the items for evaluation/prediction (mutually exclusive):
    --candidate-items=FILE       use items in FILE (one per line) as candidate items
    --overlap-items              use only items that are both in the training and the test set as candidate items
@@ -162,7 +158,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("test-users=",          v => test_users_file      = v)
 			.Add("predict-items-number=", (int v) => predict_items_number = v)
 			.Add("num-test-users=",       (int v) => num_test_users       = v)
-			.Add("rating-threshold=",    (float v)  => rating_threshold = v)
 			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
@@ -343,29 +338,19 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		if (test_file == null && test_ratio == 0 && cross_validation == 0 && prediction_file == null && in_training_items)
 			Abort("--in-training-items only makes sense with either --test-file=FILE, --test-ratio=NUM, cross-validation=K, or --prediction-file=FILE.");
 	}
-	
-	IInteractions LoadInteractions(string filename)
-	{
-		IPosOnlyFeedback pos_only_feedback;
-		if (double.IsNaN(rating_threshold))
-			pos_only_feedback = ItemData.Read(filename, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
-		else
-			pos_only_feedback = ItemDataRatingThreshold.Read(training_file, rating_threshold, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE);
-		return new MemoryInteractions(pos_only_feedback);
-	}
-	
+
 	protected override void LoadData()
 	{
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
 
-			training_data = LoadInteractions(training_file);
+			training_data = new MemoryInteractions(ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE));
 
 			// test data
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
-					test_data = LoadInteractions(test_file);
+					test_data = new MemoryInteractions(ItemData.Read(test_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE));
 			}
 			else
 			{
