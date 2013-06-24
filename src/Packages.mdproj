@@ -53,6 +53,6 @@
         </Package>
       </Packages>
     </Packages>
-    <ReleaseVersion>3.07</ReleaseVersion>
+    <ReleaseVersion>4.00</ReleaseVersion>
   </PropertyGroup>
 </Project>

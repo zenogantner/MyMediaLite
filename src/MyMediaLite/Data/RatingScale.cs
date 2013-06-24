@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -41,38 +41,15 @@ namespace MyMediaLite.Data
 		public Dictionary<float, int> LevelID { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MyMediaLite.Data.RatingScale"/> class.
-		/// </summary>
-		/// <param name='levels'>a list of observed levels</param>
-		public RatingScale(List<float> levels)
-		{
-			Init(levels);
-		}
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="MyMediaLite.Data.RatingScale"/> class,
 		/// given a list of float values
 		/// </summary>
 		/// <param name='rating_values'>the ratings dataset</param>
-		public RatingScale (IList<float> rating_values)
+		public RatingScale(IList<float> rating_values)
 		{
 			var levels = new HashSet<float>();
 			foreach (float val in rating_values)
 				levels.Add(val);
-
-			Init(levels.ToList());
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MyMediaLite.Data.RatingScale"/> class,
-		/// given a list of byte values
-		/// </summary>
-		/// <param name='rating_values'>the ratings dataset</param>
-		public RatingScale (IList<byte> rating_values)
-		{
-			var levels = new HashSet<float>();
-			foreach (float val in rating_values)
-				levels.Add((float) val);
 
 			Init(levels.ToList());
 		}

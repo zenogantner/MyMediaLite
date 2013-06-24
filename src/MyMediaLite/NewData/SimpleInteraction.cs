@@ -16,38 +16,29 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
-using System.Data;
-
-// TODO: inherit this interface from an IRecord interface
-//       consider sharing some things with IInteractions
 
 namespace MyMediaLite.Data
 {
-	public interface IInteractionReader
+	public struct SimpleInteraction : IInteraction
 	{
-		void Reset();
-		bool Read();
-		void ReadInfinite();
+		public int User { get { return user; } }
+		private readonly int user;
 
-		int Count { get; }
+		public int Item { get { return item; } }
+		private readonly int item;
 
-		int GetUser();
-		ISet<int> Users { get; }
-		int GetItem();
-		ISet<int> Items { get; }
-		float GetRating();
-		//ICollection<float> Ratings { get; }
-		DateTime GetDateTime();
-		//ICollection<DateTime> DateTimes { get; }
+		public float Rating { get { throw new NotSupportedException(); } }
 
-		// long GetDuration();
+		public DateTime DateTime { get { throw new NotSupportedException(); } }
 
-		// int GetContext();
+		public bool HasRatings { get { return false; } }
+		public bool HasDateTimes { get { return false; } }
 
-		// GeoLocation GetGeoLocation();
-
-		// string GetQuery()
+		public SimpleInteraction(int user, int item)
+		{
+			this.user = user;
+			this.item = item;
+		}
 	}
 }
 

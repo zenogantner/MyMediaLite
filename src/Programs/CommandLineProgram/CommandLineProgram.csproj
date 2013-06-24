@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>CommandLineProgram</RootNamespace>
     <AssemblyName>CommandLineProgram</AssemblyName>
-    <ReleaseVersion>3.07</ReleaseVersion>
+    <ReleaseVersion>4.00</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

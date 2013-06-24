@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
-    <ReleaseVersion>3.07</ReleaseVersion>
+    <ReleaseVersion>4.00</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,8 +42,6 @@
     <Compile Include="Data\CombinedRatingsTest.cs" />
     <Compile Include="Data\EntityMappingTest.cs" />
     <Compile Include="Data\RatingsTest.cs" />
-    <Compile Include="Data\StaticByteRatingsTest.cs" />
-    <Compile Include="Data\StaticRatingsTest.cs" />
     <Compile Include="DataType\CombinedListTest.cs" />
     <Compile Include="DataType\ListProxyTest.cs" />
     <Compile Include="DataType\MatrixTest.cs" />
@@ -61,10 +59,8 @@
     <Compile Include="Data\RatingsPerUserChronologicalSplitTest.cs" />
     <Compile Include="Eval\Measures\AUCTest.cs" />
     <Compile Include="IO\RatingDataTest.cs" />
-    <Compile Include="IO\StaticRatingDataTest.cs" />
     <Compile Include="IO\TimedRatingDataTest.cs" />
     <Compile Include="IO\ItemDataTest.cs" />
-    <Compile Include="IO\ItemDataRatingThresholdTest.cs" />
     <Compile Include="IO\MovieLensRatingDataTest.cs" />
     <Compile Include="DataType\SymmetricMatrixTest.cs" />
     <Compile Include="Data\RatingsProxyTest.cs" />

@@ -345,7 +345,7 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			base.LoadData();
 
 			training_data = new MemoryInteractions(ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE));
-
+			
 			// test data
 			if (test_ratio == 0)
 			{

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.06</ReleaseVersion>
+    <ReleaseVersion>4.00</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,7 +68,6 @@
     <Compile Include="Data\Ratings.cs" />
     <Compile Include="Data\RatingsProxy.cs" />
     <Compile Include="Data\RatingsSimpleSplit.cs" />
-    <Compile Include="Data\StaticByteRatings.cs" />
     <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="DataType\CombinedList.cs" />
@@ -108,12 +107,10 @@
     <Compile Include="IO\AttributeData.cs" />
     <Compile Include="IO\FileFormat.cs" />
     <Compile Include="IO\ItemData.cs" />
-    <Compile Include="IO\ItemDataRatingThreshold.cs" />
     <Compile Include="IO\Model.cs" />
     <Compile Include="IO\MovieLensRatingData.cs" />
     <Compile Include="IO\RatingData.cs" />
     <Compile Include="IO\RelationData.cs" />
-    <Compile Include="IO\StaticRatingData.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
     <Compile Include="IO\Constants.cs" />
@@ -149,11 +146,7 @@
     <Compile Include="RatingPrediction\Random.cs" />
     <Compile Include="RatingPrediction\Constant.cs" />
     <Compile Include="ItemRecommendation\BPRLinear.cs" />
-    <Compile Include="IO\KDDCup2011\Items.cs" />
-    <Compile Include="IO\KDDCup2011\Ratings.cs" />
-    <Compile Include="IO\KDDCup2011\Track2Items.cs" />
     <Compile Include="Diversification\SequentialDiversification.cs" />
-    <Compile Include="Data\KDDCupItems.cs" />
     <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="HyperParameter\NelderMead.cs" />
     <Compile Include="HyperParameter\GridSearch.cs" />
@@ -227,6 +220,11 @@
     <Compile Include="ItemRecommendation\BPR\UniformPairFrequencyItemSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformUserFrequencyItemSampler.cs" />
     <Compile Include="NewData\NewExtensions.cs" />
+    <Compile Include="NewData\IInteraction.cs" />
+    <Compile Include="NewData\SimpleInteraction.cs" />
+    <Compile Include="NewData\FullInteraction.cs" />
+    <Compile Include="NewData\Interactions.cs" />
+    <Compile Include="NewData\InteractionReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

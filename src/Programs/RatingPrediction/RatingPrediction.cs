@@ -167,11 +167,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected override void Run(string[] args)
 	{
-		if (file_format == RatingFileFormat.KDDCUP_2011)
-		{
-			user_mapping = new IdentityMapping();
-			item_mapping = new IdentityMapping();
-		}
 		base.Run(args);
 
 		bool do_eval = false;
@@ -402,8 +397,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					training_data = new MemoryInteractions(RatingData.Read(training_file, user_mapping, item_mapping, true));
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					training_data = new MemoryInteractions(MovieLensRatingData.Read(training_file, user_mapping, item_mapping));
-				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					training_data = new MemoryInteractions(MyMediaLite.IO.KDDCup2011.Ratings.Read(training_file));
 			}
 			recommender.Interactions = training_data;
 
@@ -415,10 +408,9 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 					test_data = new MemoryInteractions(TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format));
 				else if (file_format == RatingFileFormat.MOVIELENS_1M)
 					test_data = new MemoryInteractions(MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format));
-				else if (file_format == RatingFileFormat.KDDCUP_2011)
-					test_data = new MemoryInteractions(MyMediaLite.IO.KDDCup2011.Ratings.Read(test_file));
 				else
-					test_data = new MemoryInteractions(StaticRatingData.Read(test_file, user_mapping, item_mapping, rating_type, test_format, file_format == RatingFileFormat.IGNORE_FIRST_LINE));
+					test_data = new MemoryInteractions(RatingData.Read(test_file, user_mapping, item_mapping, file_format == RatingFileFormat.IGNORE_FIRST_LINE));
+				// TODO fully support "test format" again!
 
 				if (recommender is ITransductiveRatingPredictor)
 					((ITransductiveRatingPredictor) recommender).AdditionalInteractions = test_data;
