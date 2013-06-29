@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -28,7 +28,16 @@ namespace MyMediaLite
 		public static TimeSpan MeasureTime(Action t)
 		{
 			DateTime startTime = DateTime.Now;
-			t(); // perform task
+			try
+			{
+				t(); // perform task
+			}
+			catch (Exception e)
+			{
+				System.Console.Error.WriteLine(e.GetType().Name + ": " + e.Message);
+				System.Console.Error.WriteLine(e.StackTrace);
+				throw;
+			}
 			return DateTime.Now - startTime;
 		}
 		
