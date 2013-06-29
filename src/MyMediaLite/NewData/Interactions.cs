@@ -66,7 +66,11 @@ namespace MyMediaLite.Data
 		private IList<T> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
-
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MyMediaLite.Data.Interactions`1"/> class, taking a list of interactions
+		/// </summary>
+		/// <param name='interaction_list'>a list of interactions</param>
 		public Interactions(IList<T> interaction_list)
 		{
 			this.interaction_list = interaction_list; // TODO consider defensive copy
@@ -85,22 +89,6 @@ namespace MyMediaLite.Data
 			{
 				EarliestDateTime = (from e in interaction_list select e.DateTime).Min();
 				LatestDateTime = (from e in interaction_list select e.DateTime).Max();
-			}
-		}
-
-		// TODO batch-add would be better interface
-		// TODO synchronize
-		public void Add(T entry)
-		{
-			interaction_list.Add(entry);
-			user_set.Add(entry.User);
-			item_set.Add(entry.Item);
-			if (HasDateTimes)
-			{
-				if (entry.DateTime < EarliestDateTime)
-					EarliestDateTime = entry.DateTime;
-				if (entry.DateTime > LatestDateTime)
-					LatestDateTime = entry.DateTime;
 			}
 		}
 
