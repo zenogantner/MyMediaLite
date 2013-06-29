@@ -63,10 +63,11 @@ namespace MyMediaLite.Data
 		public bool HasRatings { get; private set; }
 		public bool HasDateTimes { get; private set; }
 
+		IList<T> InteractionList { get { return interaction_list; } }
 		private IList<T> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MyMediaLite.Data.Interactions`1"/> class, taking a list of interactions
 		/// </summary>
@@ -92,11 +93,13 @@ namespace MyMediaLite.Data
 			}
 		}
 
+		// TODO updates: batch interface, use immutable data structures in the background
+
 		static public readonly char[] DEFAULT_SEPARATORS = new char[]{ '\t', ' ', ',' };
 
 		// TODO move to different file
 		static public Interactions<SimpleInteraction> FromFile(
-			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, 
+			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1,
 			char[] separators = null, bool ignore_first_line = false)
 		{
@@ -108,16 +111,13 @@ namespace MyMediaLite.Data
 				reader.ReadLine();
 			if (separators == null)
 				separators = DEFAULT_SEPARATORS;
-			
+
 			int min_num_fields = Math.Max(user_pos, item_pos) + 1;
-			
+
 			var interaction_list = new List<SimpleInteraction>();
 			string line;
 			while ((line = reader.ReadLine()) != null)
 			{
-				if (line.Trim().Length == 0) // TODO this could be quite costly. Remove?
-					continue;
-
 				string[] tokens = line.Split(separators);
 
 				if (tokens.Length < min_num_fields)
@@ -139,12 +139,13 @@ namespace MyMediaLite.Data
 
 		// TODO move to different file
 		static public Interactions<FullInteraction> FromFile(
-			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null, 
+			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
 			var interaction_list = new List<FullInteraction>();
 			return new Interactions<FullInteraction>(interaction_list);
+			// TODO implement
 		}
 
 	}
