@@ -1,20 +1,20 @@
 // Copyright (C) 2011, 2012, 2013 Zeno Gantner
-// 
+//
 // This file is part of MyMediaLite.
-// 
+//
 // MyMediaLite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MyMediaLite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 using System;
 
 namespace MyMediaLite
@@ -40,7 +40,7 @@ namespace MyMediaLite
 			}
 			return DateTime.Now - startTime;
 		}
-		
+
 		/// <summary>Catch FormatException and re-throw it including filename</summary>
 		/// <param name='filename'>the name of the file processed inside t</param>
 		/// <param name='t'>the task to be performed</param>
@@ -58,7 +58,7 @@ namespace MyMediaLite
 				throw new FormatException(string.Format("Could not read file {0}: {1}", filename, e.Message));
 			}
 		}
-		
+
 		/// <summary>Catch FormatException and re-throw it including filename; generic version</summary>
 		/// <param name='filename'>the name of the file processed inside t</param>
 		/// <param name='t'>the task to be performed</param>
