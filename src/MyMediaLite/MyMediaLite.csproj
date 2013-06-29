@@ -225,11 +225,14 @@
     <Compile Include="NewData\FullInteraction.cs" />
     <Compile Include="NewData\Interactions.cs" />
     <Compile Include="NewData\InteractionReader.cs" />
+    <Compile Include="NewData\Split\CrossValidationSplit.cs" />
+    <Compile Include="NewData\Split\SimpleSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
     <Folder Include="NewData\" />
     <Folder Include="ItemRecommendation\BPR\" />
+    <Folder Include="NewData\Split\" />
   </ItemGroup>
 </Project>

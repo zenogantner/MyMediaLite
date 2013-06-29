@@ -16,6 +16,8 @@
 // along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System.Collections.Generic;
 
+// TODO move splitting logic into its own sub-namespace
+
 namespace MyMediaLite.Data
 {
 	/// <summary>generic dataset splitter interface</summary>

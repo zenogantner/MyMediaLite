@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace MyMediaLite.Data
 {
-	public class Interactions<T> : IInteractions where T : IInteraction
+	public class Interactions : IInteractions
 	{
 		public int Count { get { return interaction_list.Count; } }
 
@@ -42,15 +42,18 @@ namespace MyMediaLite.Data
 					random_interaction_list = interaction_list.ToArray();
 					random_interaction_list.Shuffle();
 				}
-				return new InteractionReader<T>(random_interaction_list, user_set, item_set);
+				return new InteractionReader(random_interaction_list, user_set, item_set);
 			}
 		}
-		IList<T> random_interaction_list;
+		IList<IInteraction> random_interaction_list;
+		// TODO change protection level
+		public IList<IInteraction> RandomInteractionList { get { return random_interaction_list; } }
 
+		
 		public IInteractionReader Sequential
 		{
 			get {
-				return new InteractionReader<T>(interaction_list, user_set, item_set);
+				return new InteractionReader(interaction_list, user_set, item_set);
 			}
 		}
 
@@ -62,9 +65,8 @@ namespace MyMediaLite.Data
 
 		public bool HasRatings { get; private set; }
 		public bool HasDateTimes { get; private set; }
-
-		IList<T> InteractionList { get { return interaction_list; } }
-		private IList<T> interaction_list;
+		
+		private IList<IInteraction> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
 
@@ -72,7 +74,7 @@ namespace MyMediaLite.Data
 		/// Initializes a new instance of the <see cref="MyMediaLite.Data.Interactions`1"/> class, taking a list of interactions
 		/// </summary>
 		/// <param name='interaction_list'>a list of interactions</param>
-		public Interactions(IList<T> interaction_list)
+		public Interactions(IList<IInteraction> interaction_list)
 		{
 			this.interaction_list = interaction_list; // TODO consider defensive copy
 
@@ -98,7 +100,7 @@ namespace MyMediaLite.Data
 		static public readonly char[] DEFAULT_SEPARATORS = new char[]{ '\t', ' ', ',' };
 
 		// TODO move to different file
-		static public Interactions<SimpleInteraction> FromFile(
+		static public Interactions FromFile(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1,
 			char[] separators = null, bool ignore_first_line = false)
@@ -114,7 +116,7 @@ namespace MyMediaLite.Data
 
 			int min_num_fields = Math.Max(user_pos, item_pos) + 1;
 
-			var interaction_list = new List<SimpleInteraction>();
+			var interaction_list = new List<IInteraction>();
 			string line;
 			while ((line = reader.ReadLine()) != null)
 			{
@@ -134,17 +136,17 @@ namespace MyMediaLite.Data
 					throw new FormatException(string.Format("Could not read line '{0}'", line));
 				}
 			}
-			return new Interactions<SimpleInteraction>(interaction_list);
+			return new Interactions(interaction_list);
 		}
 
 		// TODO move to different file
-		static public Interactions<FullInteraction> FromFile(
+		static public Interactions FromFile(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
-			var interaction_list = new List<FullInteraction>();
-			return new Interactions<FullInteraction>(interaction_list);
+			var interaction_list = new List<IInteraction>();
+			return new Interactions(interaction_list);
 			// TODO implement
 		}
 

@@ -19,7 +19,7 @@ using System;
 
 namespace MyMediaLite.Data
 {
-	public struct FullInteraction : IInteraction
+	public class FullInteraction : IInteraction
 	{
 		public int User { get { return user; } }
 		private readonly int user;

@@ -20,16 +20,16 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	public class InteractionReader<T> : IInteractionReader where T : IInteraction
+	public class InteractionReader : IInteractionReader
 	{
 		public ISet<int> Users { get; private set; }
 		public ISet<int> Items { get; private set; }
 		public int Count { get { return interaction_list.Count; } }
 
-		private IList<T> interaction_list;
+		private IList<IInteraction> interaction_list;
 		private int pos;
 
-		public InteractionReader(IList<T> interaction_list, ISet<int> users, ISet<int> items)
+		public InteractionReader(IList<IInteraction> interaction_list, ISet<int> users, ISet<int> items)
 		{
 			this.interaction_list = interaction_list;
 			Users = users;
