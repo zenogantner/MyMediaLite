@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.DataType;
 using MyMediaLite.ItemRecommendation;
 
@@ -47,9 +48,8 @@ namespace MyMediaLite.Eval
 		{
 			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
-			
-			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((Recommender) recommender).Interactions).dataset;
-			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
+
+			var split = new CrossValidationSplit(recommender.Interactions, num_folds);
 			return recommender.DoCrossValidation(split, test_users, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
@@ -64,7 +64,7 @@ namespace MyMediaLite.Eval
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public ItemRecommendationEvaluationResults DoCrossValidation(
 			this IRecommender recommender,
-			ISplit<IPosOnlyFeedback> split,
+			CrossValidationSplit split,
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP,
@@ -81,9 +81,9 @@ namespace MyMediaLite.Eval
 				try
 				{
 					var split_recommender = (Recommender) recommender.Clone(); // avoid changes in recommender
-					split_recommender.Interactions = new MemoryInteractions(split.Train[fold]);
+					split_recommender.Interactions = split.Train[fold];
 					split_recommender.Train();
-					var fold_results = Items.Evaluate(split_recommender, new MemoryInteractions(split.Test[fold]), new MemoryInteractions(split.Train[fold]), test_users, candidate_items, candidate_item_mode);
+					var fold_results = Items.Evaluate(split_recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);
 					if (compute_fit)
 						fold_results["fit"] = (float) split_recommender.ComputeFit();
 
@@ -137,8 +137,7 @@ namespace MyMediaLite.Eval
 			if (!(recommender is Recommender))
 				throw new ArgumentException("recommender must be of type ItemRecommender");
 
-			var feedback = (IPosOnlyFeedback) ((MemoryInteractions) ((Recommender) recommender).Interactions).dataset;
-			var split = new PosOnlyFeedbackCrossValidationSplit<PosOnlyFeedback<SparseBooleanMatrix>>(feedback, num_folds);
+			var split = new CrossValidationSplit(recommender.Interactions, num_folds);
 			recommender.DoIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 
@@ -154,7 +153,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_fold_results">if set to true to print per-fold results to STDERR</param>
 		static public void DoIterativeCrossValidation(
 			this IRecommender recommender,
-			ISplit<IPosOnlyFeedback> split,
+			CrossValidationSplit split,
 			IList<int> test_users,
 			IList<int> candidate_items,
 			CandidateItems candidate_item_mode,
@@ -178,10 +177,10 @@ namespace MyMediaLite.Eval
 				try
 				{
 					split_recommenders[i] = (Recommender) recommender.Clone(); // to avoid changes in recommender
-					split_recommenders[i].Interactions = new MemoryInteractions(split.Train[i]);
+					split_recommenders[i].Interactions = split.Train[i];
 					split_recommenders[i].Train();
 					iterative_recommenders[i] = (IIterativeModel) split_recommenders[i];
-					fold_results[i] = Items.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]), new MemoryInteractions(split.Train[i]), test_users, candidate_items, candidate_item_mode, repeated_events);
+					fold_results[i] = Items.Evaluate(split_recommenders[i], split.Test[i], split.Train[i], test_users, candidate_items, candidate_item_mode, repeated_events);
 					if (show_fold_results)
 						Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, iterative_recommenders[i].NumIter);
 				}
@@ -191,7 +190,6 @@ namespace MyMediaLite.Eval
 					throw;
 				}
 			});
-			Console.WriteLine("{0} iteration {1}", new ItemRecommendationEvaluationResults(fold_results), iterative_recommenders[0].NumIter);
 
 			// iterative training and evaluation
 			for (int it = (int) iterative_recommenders[0].NumIter + 1; it <= max_iter; it++)
@@ -204,9 +202,12 @@ namespace MyMediaLite.Eval
 
 						if (it % find_iter == 0)
 						{
-							fold_results[i] = Items.Evaluate(split_recommenders[i], new MemoryInteractions(split.Test[i]), new MemoryInteractions(split.Train[i]), test_users, candidate_items, candidate_item_mode, repeated_events);
+							fold_results[i] = Items.Evaluate(
+								split_recommenders[i],
+								split.Test[i], split.Train[i],
+								test_users, candidate_items, candidate_item_mode, repeated_events);
 							if (show_fold_results)
-								Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results, it);
+								Console.WriteLine("fold {0} {1} iteration {2}", i, fold_results[i], it);
 						}
 					}
 					catch (Exception e)

@@ -58,8 +58,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		protected virtual void InitModel()
 		{
-			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
-			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
+			user_factors = new Matrix<float>(Interactions.MaxUserID + 1, NumFactors);
+			item_factors = new Matrix<float>(Interactions.MaxItemID + 1, NumFactors);
 
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);

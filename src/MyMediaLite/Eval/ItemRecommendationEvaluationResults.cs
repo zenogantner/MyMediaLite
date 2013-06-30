@@ -45,6 +45,13 @@ namespace MyMediaLite.Eval
 		public ItemRecommendationEvaluationResults(IList<Dictionary<string, float>> result_list) : base(result_list)
 		{
 			Init();
+			foreach (var key in result_list[0].Keys)
+			{
+				this[key] = 0;
+				foreach (var dict in result_list)
+					this[key] += dict[key];
+				this[key] /= result_list.Count;
+			}
 		}
 
 		private void Init()

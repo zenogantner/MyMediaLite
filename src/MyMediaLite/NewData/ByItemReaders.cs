@@ -44,7 +44,7 @@ namespace MyMediaLite.Data
 					if (by_item == null)
 						BuildItemIndices();
 					if (item_id >= by_item.Count)
-						throw new ArgumentOutOfRangeException();
+						throw new ArgumentOutOfRangeException("item_id", string.Format("{0} >= {1}", item_id, by_item.Count));
 					return new InteractionReader(
 						by_item[item_id],
 						by_item_users[item_id],
