@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.DataType;
 using MyMediaLite.RatingPrediction;
 
@@ -43,7 +44,7 @@ namespace MyMediaLite.Eval
 			bool compute_fit = false,
 			bool show_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
+			var split = new CrossValidationSplit(recommender.Interactions, num_folds);
 			return recommender.DoRatingBasedRankingCrossValidation(split, candidate_items, candidate_item_mode, compute_fit, show_results);
 		}
 
@@ -125,7 +126,7 @@ namespace MyMediaLite.Eval
 			uint find_iter = 1,
 			bool show_fold_results = false)
 		{
-			var split = new RatingCrossValidationSplit(recommender.Interactions, num_folds);
+			var split = new CrossValidationSplit(recommender.Interactions, num_folds);
 			recommender.DoRatingBasedRankingIterativeCrossValidation(split, test_users, candidate_items, candidate_item_mode, repeated_events, max_iter, find_iter);
 		}
 

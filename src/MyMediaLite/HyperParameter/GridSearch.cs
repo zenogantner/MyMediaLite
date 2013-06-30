@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Linq;
 using MyMediaLite;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.Eval;
 using MyMediaLite.ItemRecommendation;
 using MyMediaLite.RatingPrediction;
@@ -180,7 +181,7 @@ namespace MyMediaLite.HyperParameter
 			uint k)
 		{
 			var interactions = recommender.Interactions;
-			var split = new RatingCrossValidationSplit(interactions, k);
+			var split = new CrossValidationSplit(interactions, k);
 			double result = FindMinimum(evaluation_measure, hyperparameter_name, hyperparameter_values, recommender, split);
 			recommender.Interactions = interactions;
 			return result;

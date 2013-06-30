@@ -59,7 +59,6 @@
     <Compile Include="Data\ISplit.cs" />
     <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\IdentityMapping.cs" />
-    <Compile Include="Data\RatingCrossValidationSplit.cs" />
     <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
     <Compile Include="Data\RatingsProxy.cs" />
