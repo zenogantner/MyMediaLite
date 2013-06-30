@@ -28,16 +28,7 @@ namespace MyMediaLite
 		public static TimeSpan MeasureTime(Action t)
 		{
 			DateTime startTime = DateTime.Now;
-			try
-			{
-				t(); // perform task
-			}
-			catch (Exception e)
-			{
-				System.Console.Error.WriteLine(e.GetType().Name + ": " + e.Message);
-				System.Console.Error.WriteLine(e.StackTrace);
-				throw;
-			}
+			t(); // perform task
 			return DateTime.Now - startTime;
 		}
 

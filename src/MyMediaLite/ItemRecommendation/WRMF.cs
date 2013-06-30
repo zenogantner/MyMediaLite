@@ -88,10 +88,11 @@ namespace MyMediaLite.ItemRecommendation
 			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
 			var HH = ComputeSquareMatrix(H);
 			// (2) optimize all U
-			Parallel.For(
+			/* Parallel.For(
 				0,
 				num_entities,
-				u => {
+				u => { */
+			for (int u = 0; u < num_entities; u++) {
 					try
 					{
 						Optimize(u, target, HH);
@@ -102,7 +103,7 @@ namespace MyMediaLite.ItemRecommendation
 						throw;
 					}
 				}
-			);
+			//);
 		}
 
 		private Matrix<double> ComputeSquareMatrix(Matrix<float> m)

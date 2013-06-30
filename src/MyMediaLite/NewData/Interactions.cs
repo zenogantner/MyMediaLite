@@ -72,20 +72,12 @@ namespace MyMediaLite.Data
 		{
 			return ByUserReaders[user_id];
 		}
-
-		/*
-		///
+		
+		private ByItemReaders ByItemReaders { get; set; }
 		public IInteractionReader ByItem(int item_id)
 		{
-			lock(syncLock)
-			{
-				if (item_id >= dataset.ByItem.Count)
-					throw new ArgumentOutOfRangeException("item_id", item_id, string.Format("should not be >= {0}, dataset.MaxItemID is {1}", dataset.ByItem.Count, dataset.MaxItemID));
-				return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
-			}
+			return ByItemReaders[item_id];
 		}
-		 */
-		public IInteractionReader ByItem(int item_id) { throw new NotImplementedException(); }
 
 		public RatingScale RatingScale { get; private set; }
 
@@ -121,6 +113,7 @@ namespace MyMediaLite.Data
 			}
 
 			ByUserReaders = new ByUserReaders(interaction_list, MaxUserID);
+			ByItemReaders = new ByItemReaders(interaction_list, MaxItemID);
 		}
 
 		// TODO updates: batch interface, use immutable data structures in the background

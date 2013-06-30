@@ -21,55 +21,52 @@ using MyMediaLite.DataType;
 
 namespace MyMediaLite.Data
 {
-	// TODO create 2 versions of this: 1 using ListProxy, and one that copies the data
-
-	public class ByUserReaders
+	public class ByItemReaders
 	{
 		private readonly object syncLock = new object();
 
-		// TODO make readonly?
 		private IList<IInteraction> InteractionList { get; set; }
-		private int MaxUserID { get; set; }
+		private int MaxItemID { get; set; }
 
-		public ByUserReaders(IList<IInteraction> interaction_list, int max_user_id)
+		public ByItemReaders(IList<IInteraction> interaction_list, int max_item_id)
 		{
 			InteractionList = interaction_list;
-			MaxUserID = max_user_id;
-			BuildUserIndices();
+			MaxItemID = max_item_id;
+			BuildItemIndices();
 		}
 
 		///
-		public IInteractionReader this[int user_id]
+		public IInteractionReader this[int item_id]
 		{
 			get {
 				lock(syncLock)
 				{
-					if (by_user == null)
-						BuildUserIndices();
-					if (user_id >= by_user.Count)
+					if (by_item == null)
+						BuildItemIndices();
+					if (item_id >= by_item.Count)
 						throw new ArgumentOutOfRangeException();
 					return new InteractionReader(
-						by_user[user_id],
-						user_singletons[user_id],
-						by_user_items[user_id]);
+						by_item[item_id],
+						item_singletons[item_id],
+						by_item_users[item_id]);
 				}
 			}
 		}
-		/// <summary>Indices organized by user</summary>
-		private IList<IList<IInteraction>> by_user;
-		private IList<ISet<int>> by_user_items;
-		private IList<ISet<int>> user_singletons;
+		/// <summary>Indices organized by item</summary>
+		private IList<IList<IInteraction>> by_item;
+		private IList<ISet<int>> by_item_users;
+		private IList<ISet<int>> item_singletons;
 
-		void BuildUserIndices()
+		void BuildItemIndices()
 		{
-			by_user = new List<IList<IInteraction>>();
-			by_user_items = new List<ISet<int>>();
-			user_singletons = new List<ISet<int>>();
-			for (int user_id = 0; user_id <= MaxUserID; user_id++) // TODO create arrays and have a nicer loop
+			by_item = new List<IList<IInteraction>>();
+			by_item_users = new List<ISet<int>>();
+			item_singletons = new List<ISet<int>>();
+			for (int item_id = 0; item_id <= MaxItemID; item_id++) // create arrays and have a nicer loop
 			{
-				by_user.Add(new List<IInteraction>());
-				by_user_items.Add(new HashSet<int>());
-				user_singletons.Add(new HashSet<int>(new int[] { user_id }));
+				by_item.Add(new List<IInteraction>());
+				by_item_users.Add(new HashSet<int>());
+				item_singletons.Add(new HashSet<int>(new int[] { item_id }));
 			}
 
 			// one pass over the data
@@ -77,8 +74,8 @@ namespace MyMediaLite.Data
 			{
 				int user_id = interaction.User;
 				int item_id = interaction.Item;
-				by_user[user_id].Add(interaction);
-				by_user_items[user_id].Add(item_id);
+				by_item[item_id].Add(interaction);
+				by_item_users[item_id].Add(user_id);
 			}
 		}
 	}

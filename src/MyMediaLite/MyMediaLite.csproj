@@ -228,6 +228,7 @@
     <Compile Include="NewData\Split\CrossValidationSplit.cs" />
     <Compile Include="NewData\Split\SimpleSplit.cs" />
     <Compile Include="NewData\ByUserReaders.cs" />
+    <Compile Include="NewData\ByItemReaders.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
