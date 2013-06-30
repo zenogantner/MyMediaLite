@@ -62,7 +62,6 @@
     <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
     <Compile Include="Data\RatingsProxy.cs" />
-    <Compile Include="Data\RatingsSimpleSplit.cs" />
     <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="DataType\CombinedList.cs" />

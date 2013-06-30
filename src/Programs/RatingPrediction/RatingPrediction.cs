@@ -24,6 +24,7 @@ using System.Text;
 using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.HyperParameter;
@@ -43,7 +44,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 	string prediction_header   = null;
 
 	RatingFileFormat file_format = RatingFileFormat.DEFAULT;
-	RatingType rating_type       = RatingType.FLOAT;
 	string chronological_split;
 	double chronological_split_ratio = -1;
 	DateTime chronological_split_time = DateTime.MinValue;
@@ -147,7 +147,6 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			.Add("prediction-line=",     v              => prediction_line      = v)
 			.Add("prediction-header=",   v              => prediction_header    = v)
 			.Add("chronological-split=", v              => chronological_split  = v)
-			.Add("rating-type=",         (RatingType v) => rating_type          = v)
 			.Add("file-format=",         (RatingFileFormat v) => file_format    = v)
 			.Add("search-hp",            v => search_hp         = v != null)
 			.Add("test-no-ratings",      v => test_no_ratings   = v != null);
@@ -181,7 +180,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 		if (test_ratio > 0)
 		{
-			var split = new RatingsSimpleSplit(training_data, test_ratio);
+			var split = new SimpleSplit(training_data, test_ratio);
 			training_data = split.Train[0];
 			test_data = split.Test[0];
 			recommender.Interactions = training_data;

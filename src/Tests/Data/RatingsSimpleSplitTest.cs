@@ -19,26 +19,28 @@
 using System;
 using NUnit.Framework;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 
 namespace Tests.Data
 {
 	[TestFixture()]
-	public class RatingsSimpleSplitTest
+	public class SimpleSplitTest
 	{
 		[Test()]
 		public void TestConstructor()
 		{
-			var ratings = new Ratings();
-			ratings.Add(0, 0, 5.0f);
-			ratings.Add(0, 1, 4.5f);
-			ratings.Add(1, 0, 1.0f);
-			ratings.Add(1, 1, 2.5f);
+			var interactions = TestUtils.CreateFeedback( new Tuple<int, int>[] {
+				Tuple.Create(0, 0),
+				Tuple.Create(0, 1),
+				Tuple.Create(1, 0),
+				Tuple.Create(1, 1),
+			});
 
-			var split1 = new RatingsSimpleSplit(new MemoryInteractions(ratings), 0.25);
+			var split1 = new SimpleSplit(interactions, 0.25);
 			Assert.AreEqual(3, split1.Train[0].Count);
 			Assert.AreEqual(1, split1.Test[0].Count);
 
-			var split2 = new RatingsSimpleSplit(new MemoryInteractions(ratings), 0.5);
+			var split2 = new SimpleSplit(interactions, 0.5);
 			Assert.AreEqual(2, split2.Train[0].Count);
 			Assert.AreEqual(2, split2.Test[0].Count);
 		}

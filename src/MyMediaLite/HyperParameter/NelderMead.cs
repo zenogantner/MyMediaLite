@@ -20,6 +20,7 @@ using System.Globalization;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.Eval;
 using MyMediaLite.RatingPrediction;
 
@@ -79,7 +80,7 @@ namespace MyMediaLite.HyperParameter
 			string error_measure,
 			RatingPredictor recommender)
 		{
-			var split = new RatingsSimpleSplit(recommender.Interactions, split_ratio);
+			var split = new SimpleSplit(recommender.Interactions, split_ratio);
 
 			IList<string> hp_names;
 			IList<DenseVector> initial_hp_values;
