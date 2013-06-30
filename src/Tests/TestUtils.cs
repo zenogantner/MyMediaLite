@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
@@ -60,15 +61,24 @@ namespace Tests
 			ratings.Add(0, 0, 0.0f);
 			return new MemoryInteractions(ratings);
 		}
-
-		public static IInteractions CreatePosOnlyFeedback()
+		
+		public static IInteractions CreateFeedback(IList<Tuple<int, int>> interaction_pairs)
 		{
-			var feedback = new PosOnlyFeedback<SparseBooleanMatrix>();
-			feedback.Add(0, 0);
-			feedback.Add(0, 1);
-			feedback.Add(1, 0);
-			feedback.Add(1, 2);
-			return new MemoryInteractions(feedback);
+			var interaction_list = new List<IInteraction>();
+			foreach (var pair in interaction_pairs)
+				interaction_list.Add(new SimpleInteraction(pair.Item1, pair.Item2));
+			return new Interactions(interaction_list);
+		}
+
+		public static IInteractions CreateFeedback()
+		{
+			Tuple<int, int>[] interaction_pairs = new Tuple<int, int>[] {
+				Tuple.Create(0, 0),
+				Tuple.Create(0, 1),
+				Tuple.Create(1, 0),
+				Tuple.Create(1, 2),
+			};
+			return CreateFeedback(interaction_pairs);
 		}
 	}
 }

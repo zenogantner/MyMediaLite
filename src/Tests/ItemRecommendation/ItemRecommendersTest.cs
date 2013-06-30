@@ -96,7 +96,7 @@ namespace Tests.ItemRecommendation
 		private static Recommender SetUpRecommender(Type type)
 		{
 			var recommender = type.CreateItemRecommender();
-			recommender.Interactions = TestUtils.CreatePosOnlyFeedback();
+			recommender.Interactions = TestUtils.CreateFeedback();
 			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
 				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
 			if (type.GetInterface("IItemAttributeAwareRecommender") != null)

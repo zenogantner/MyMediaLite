@@ -37,23 +37,23 @@ namespace Tests.Eval
 		[SetUp()]
 		public void SetUp()
 		{
-			var pof_training_data = new PosOnlyFeedback<SparseBooleanMatrix>();
-			pof_training_data.Add(1, 1);
-			pof_training_data.Add(1, 2);
-			pof_training_data.Add(2, 2);
-			pof_training_data.Add(2, 3);
-			pof_training_data.Add(3, 1);
-			pof_training_data.Add(3, 2);
-			training_data = new MemoryInteractions(pof_training_data);
+			training_data = TestUtils.CreateFeedback(new Tuple<int, int>[] {
+				Tuple.Create(1, 1),
+				Tuple.Create(1, 2),
+				Tuple.Create(2, 2),
+				Tuple.Create(2, 3),
+				Tuple.Create(3, 1),
+				Tuple.Create(3, 2),
+			});
 
 			recommender = new MostPopular() { Interactions = training_data };
 			recommender.Train();
 
-			var pof_test_data = new PosOnlyFeedback<SparseBooleanMatrix>();
-			pof_test_data.Add(2, 3);
-			pof_test_data.Add(2, 4);
-			pof_test_data.Add(4, 4);
-			test_data = new MemoryInteractions(pof_test_data);
+			test_data = TestUtils.CreateFeedback(new Tuple<int, int>[] {
+				Tuple.Create(2, 3),
+				Tuple.Create(2, 4),
+				Tuple.Create(4, 4),
+			});
 
 			all_users = Enumerable.Range(1, 4).ToList();
 			candidate_items = Enumerable.Range(1, 5).ToList();

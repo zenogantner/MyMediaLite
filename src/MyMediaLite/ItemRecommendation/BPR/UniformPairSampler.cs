@@ -68,7 +68,7 @@ namespace MyMediaLite.ItemRecommendation.BPR
 		/// <param name="j">the ID of the second item</param>
 		public override void NextTriple(out int u, out int i, out int j)
 		{
-			triple_reader.Read();
+			triple_reader.ReadInfinite();
 			u = triple_reader.GetUser();
 			i = triple_reader.GetItem();
 			OtherItem(u, i, out j);
