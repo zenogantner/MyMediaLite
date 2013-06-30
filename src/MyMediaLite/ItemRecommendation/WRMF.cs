@@ -83,16 +83,15 @@ namespace MyMediaLite.ItemRecommendation
 				throw new ArgumentException();
 
 			int num_entities = target == EntityType.USER ? user_factors.dim1 : item_factors.dim1;
-			
+
 			// (1) create HH in O(f^2|Items|)
 			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
 			var HH = ComputeSquareMatrix(H);
 			// (2) optimize all U
-			/* Parallel.For(
+			Parallel.For(
 				0,
 				num_entities,
-				u => { */
-			for (int u = 0; u < num_entities; u++) {
+				u => {
 					try
 					{
 						Optimize(u, target, HH);
@@ -103,7 +102,7 @@ namespace MyMediaLite.ItemRecommendation
 						throw;
 					}
 				}
-			//);
+			);
 		}
 
 		private Matrix<double> ComputeSquareMatrix(Matrix<float> m)
@@ -126,7 +125,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (target != EntityType.USER && target != EntityType.ITEM)
 				throw new ArgumentException();
-			
+
 			Matrix<float> W = target == EntityType.USER ? user_factors : item_factors;
 			Matrix<float> H = target == EntityType.USER ? item_factors : user_factors;
 

@@ -47,8 +47,8 @@ namespace MyMediaLite.Data
 						throw new ArgumentOutOfRangeException();
 					return new InteractionReader(
 						by_item[item_id],
-						item_singletons[item_id],
-						by_item_users[item_id]);
+						by_item_users[item_id],
+						item_singletons[item_id]);
 				}
 			}
 		}
