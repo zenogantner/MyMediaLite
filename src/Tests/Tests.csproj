@@ -55,7 +55,6 @@
     <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />
     <Compile Include="Data\RatingsChronologicalSplitTest.cs" />
     <Compile Include="Data\RatingsSimpleSplitTest.cs" />
-    <Compile Include="Data\RatingsPerUserChronologicalSplitTest.cs" />
     <Compile Include="Eval\Measures\AUCTest.cs" />
     <Compile Include="IO\RatingDataTest.cs" />
     <Compile Include="IO\TimedRatingDataTest.cs" />

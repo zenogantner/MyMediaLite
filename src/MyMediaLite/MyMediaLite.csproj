@@ -127,7 +127,6 @@
     <Compile Include="Data\TimedRatingsProxy.cs" />
     <Compile Include="Data\RatingsChronologicalSplit.cs" />
     <Compile Include="Data\ITimedDataSet.cs" />
-    <Compile Include="Data\RatingsPerUserChronologicalSplit.cs" />
     <Compile Include="RatingPrediction\Extensions.cs" />
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
