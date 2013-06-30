@@ -40,7 +40,7 @@ namespace MyMediaLite.ItemRecommendation.BPR
 	{
 		IInteractionReader triple_reader;
 		IInteractionReader infinite_reader;
-		
+
 		public UniformPairSampler(IInteractions interactions) : base(interactions)
 		{
 			triple_reader = interactions.Random;
