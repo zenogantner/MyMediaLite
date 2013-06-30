@@ -24,6 +24,7 @@ using System.Text;
 using Mono.Options;
 using MyMediaLite;
 using MyMediaLite.Data;
+using MyMediaLite.Data.Split;
 using MyMediaLite.DataType;
 using MyMediaLite.Eval;
 using MyMediaLite.IO;
@@ -41,7 +42,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 	CandidateItems eval_item_mode = CandidateItems.UNION;
 
 	// command-line parameters (data)
-	ItemDataFileFormat file_format = ItemDataFileFormat.DEFAULT;
 	string test_users_file;
 	string candidate_items_file;
 
@@ -94,7 +94,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
   files:
    --training-file=FILE                     read training data from FILE
    --test-file=FILE                         read test data from FILE
-   --file-format=ignore_first_line|default
    --no-id-mapping                          do not map user and item IDs to internal IDs, keep the original IDs
    --data-dir=DIR                           load all files from DIR
    --user-attributes=FILE                   file with user attribute information, 1 tuple per line
@@ -158,7 +157,6 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 			.Add("test-users=",          v => test_users_file      = v)
 			.Add("predict-items-number=", (int v) => predict_items_number = v)
 			.Add("num-test-users=",       (int v) => num_test_users       = v)
-			.Add("file-format=",         (ItemDataFileFormat v) => file_format = v)
 			.Add("repeated-items",       v => repeated_items    = v != null)
 			.Add("overlap-items",        v => overlap_items     = v != null)
 			.Add("all-items",            v => all_items         = v != null)
@@ -344,20 +342,19 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 		TimeSpan loading_time = Wrap.MeasureTime(delegate() {
 			base.LoadData();
 
-			training_data = new MemoryInteractions(ItemData.Read(training_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE));
+			training_data = Interactions.FromFile(training_file, user_mapping, item_mapping);
 			
 			// test data
 			if (test_ratio == 0)
 			{
 				if (test_file != null)
-					test_data = new MemoryInteractions(ItemData.Read(test_file, user_mapping, item_mapping, file_format == ItemDataFileFormat.IGNORE_FIRST_LINE));
+					test_data = Interactions.FromFile(test_file, user_mapping, item_mapping);
 			}
 			else
 			{
-				var pof_train = (PosOnlyFeedback<SparseBooleanMatrix>) ((MemoryInteractions) training_data).dataset;
-				var split = new PosOnlyFeedbackSimpleSplit<PosOnlyFeedback<SparseBooleanMatrix>>(pof_train, test_ratio);
-				training_data = new MemoryInteractions(split.Train[0]);
-				test_data     = new MemoryInteractions(split.Test[0]);
+				var split = new SimpleSplit(training_data, test_ratio);
+				training_data = split.Train[0];
+				test_data     = split.Test[0];
 			}
 
 			if (recommender is MyMediaLite.Recommender)

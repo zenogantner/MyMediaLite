@@ -36,20 +36,25 @@ namespace MyMediaLite.Data
 		public IInteractionReader Random
 		{
 			get {
+				return new InteractionReader(RandomInteractionList, user_set, item_set);
+			}
+		}
+		IList<IInteraction> random_interaction_list;
+		// TODO change protection level
+		public IList<IInteraction> RandomInteractionList
+		{
+			get {
 				// TODO synchronize
 				if (random_interaction_list == null)
 				{
 					random_interaction_list = interaction_list.ToArray();
 					random_interaction_list.Shuffle();
 				}
-				return new InteractionReader(random_interaction_list, user_set, item_set);
+				return random_interaction_list;
 			}
 		}
-		IList<IInteraction> random_interaction_list;
-		// TODO change protection level
-		public IList<IInteraction> RandomInteractionList { get { return random_interaction_list; } }
 
-		
+
 		public IInteractionReader Sequential
 		{
 			get {
@@ -58,14 +63,35 @@ namespace MyMediaLite.Data
 		}
 
 		// IInteractionReader Chronological { get; }
-		public IInteractionReader ByUser(int user_id) { throw new NotImplementedException(); }
+
+
+
+		private ByUserReaders ByUserReaders { get; set; }
+		///
+		public IInteractionReader ByUser(int user_id)
+		{
+			return ByUserReaders[user_id];
+		}
+
+		/*
+		///
+		public IInteractionReader ByItem(int item_id)
+		{
+			lock(syncLock)
+			{
+				if (item_id >= dataset.ByItem.Count)
+					throw new ArgumentOutOfRangeException("item_id", item_id, string.Format("should not be >= {0}, dataset.MaxItemID is {1}", dataset.ByItem.Count, dataset.MaxItemID));
+				return new IndexedMemoryReader(dataset, dataset.ByItem[item_id]);
+			}
+		}
+		 */
 		public IInteractionReader ByItem(int item_id) { throw new NotImplementedException(); }
 
 		public RatingScale RatingScale { get; private set; }
 
 		public bool HasRatings { get; private set; }
 		public bool HasDateTimes { get; private set; }
-		
+
 		private IList<IInteraction> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
@@ -93,6 +119,8 @@ namespace MyMediaLite.Data
 				EarliestDateTime = (from e in interaction_list select e.DateTime).Min();
 				LatestDateTime = (from e in interaction_list select e.DateTime).Max();
 			}
+
+			ByUserReaders = new ByUserReaders(interaction_list, MaxUserID);
 		}
 
 		// TODO updates: batch interface, use immutable data structures in the background
@@ -101,6 +129,17 @@ namespace MyMediaLite.Data
 
 		// TODO move to different file
 		static public Interactions FromFile(
+			string filename, IMapping user_mapping = null, IMapping item_mapping = null,
+			int user_pos = 0, int item_pos = 1,
+			char[] separators = null, bool ignore_first_line = false)
+		{
+			using (var reader = new StreamReader(filename))
+			{
+				return FromTextReader(reader, user_mapping, item_mapping, user_pos, item_pos, separators, ignore_first_line);
+			}
+		}
+
+		static public Interactions FromTextReader(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1,
 			char[] separators = null, bool ignore_first_line = false)

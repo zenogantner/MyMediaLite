@@ -21,6 +21,7 @@ using System.Data;
 
 namespace MyMediaLite.Data
 {
+	// Temporary class -- will never be released.
 	public class IndexedMemoryReader : IInteractionReader
 	{
 		public int Count { get { return index.Count; } }

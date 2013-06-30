@@ -22,6 +22,7 @@ using System.Threading;
 
 namespace MyMediaLite.Data
 {
+	// Temporary class -- will never be part of a release.
 	public class MemoryInteractions : IInteractions
 	{
 		///

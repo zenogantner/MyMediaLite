@@ -36,7 +36,7 @@ namespace MyMediaLite.Data
 		IInteractionReader Sequential { get; } // default?
 
 		// IInteractionReader Chronological { get; }
-		IInteractionReader ByUser(int user_id); // TODO think about using property... (also better code modularity)
+		IInteractionReader ByUser(int user_id); // TODO think about using property... (also better code modularity) -- after we got rid of MemoryInteractions
 		IInteractionReader ByItem(int item_id);
 
 		RatingScale RatingScale { get; }

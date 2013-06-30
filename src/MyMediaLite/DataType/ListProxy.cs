@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Zeno Gantner
+// Copyright (C) 2011, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -35,6 +35,10 @@ namespace MyMediaLite.DataType
 		{
 			this.list = list;
 			this.indices = indices;
+			
+			foreach (int index in indices)
+				if (index >= list.Count)
+					throw new ArgumentOutOfRangeException(string.Format("{0} >= {1}", index, list.Count));
 		}
 
 		///
