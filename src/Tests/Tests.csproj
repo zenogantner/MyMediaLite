@@ -53,8 +53,6 @@
     <Compile Include="DataType\VectorExtensionsTest.cs" />
     <Compile Include="DataType\MatrixExtensionsTest.cs" />
     <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />
-    <Compile Include="Data\RatingsChronologicalSplitTest.cs" />
-    <Compile Include="Data\RatingsSimpleSplitTest.cs" />
     <Compile Include="Eval\Measures\AUCTest.cs" />
     <Compile Include="IO\RatingDataTest.cs" />
     <Compile Include="IO\TimedRatingDataTest.cs" />
@@ -77,6 +75,8 @@
     <Compile Include="MulticoreTest.cs" />
     <Compile Include="RatingPrediction\ExternalRatingPredictorTest.cs" />
     <Compile Include="Eval\ItemsTest.cs" />
+    <Compile Include="Data\SimpleSplitTest.cs" />
+    <Compile Include="Data\ChronologicalSplitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

@@ -39,8 +39,8 @@ namespace MyMediaLite.Data
 				return new InteractionReader(RandomInteractionList, user_set, item_set);
 			}
 		}
-		IList<IInteraction> random_interaction_list;
-		// TODO change protection level
+		private IList<IInteraction> random_interaction_list;
+		// TODO change protection level?
 		public IList<IInteraction> RandomInteractionList
 		{
 			get {
@@ -54,7 +54,6 @@ namespace MyMediaLite.Data
 			}
 		}
 
-
 		public IInteractionReader Sequential
 		{
 			get {
@@ -62,9 +61,26 @@ namespace MyMediaLite.Data
 			}
 		}
 
-		// IInteractionReader Chronological { get; }
-
-
+		IInteractionReader Chronological
+		{
+			get {
+				return new InteractionReader(ChronologicalInteractionList, user_set, item_set);
+			}
+		}
+		private List<IInteraction> chronological_interaction_list;
+		// TODO change protection level?
+		public IList<IInteraction> ChronologicalInteractionList
+		{
+			get {
+				// TODO synchronize
+				if (chronological_interaction_list == null)
+				{
+					chronological_interaction_list = interaction_list.ToList();
+					chronological_interaction_list.Sort((a, b) => a.DateTime.CompareTo(b.DateTime));
+				}
+				return chronological_interaction_list;
+			}
+		}
 
 		private ByUserReaders ByUserReaders { get; set; }
 		///
@@ -72,7 +88,7 @@ namespace MyMediaLite.Data
 		{
 			return ByUserReaders[user_id];
 		}
-		
+
 		private ByItemReaders ByItemReaders { get; set; }
 		public IInteractionReader ByItem(int item_id)
 		{
@@ -84,6 +100,8 @@ namespace MyMediaLite.Data
 		public bool HasRatings { get; private set; }
 		public bool HasDateTimes { get; private set; }
 
+		// TODO change access
+		public IList<IInteraction> InteractionList { get { return interaction_list; } }
 		private IList<IInteraction> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
@@ -95,6 +113,11 @@ namespace MyMediaLite.Data
 		public Interactions(IList<IInteraction> interaction_list)
 		{
 			this.interaction_list = interaction_list; // TODO consider defensive copy
+
+			if (interaction_list[0].HasDateTimes && interaction_list[0].DateTime != DateTime.MinValue)
+				HasDateTimes = true;
+			if (interaction_list[0].HasRatings)
+				HasRatings = true;
 
 			user_set = new HashSet<int>(from e in interaction_list select e.User);
 			item_set = new HashSet<int>(from e in interaction_list select e.Item);
@@ -172,14 +195,62 @@ namespace MyMediaLite.Data
 		}
 
 		// TODO move to different file
+		// TODO better checks, more elegant please
 		static public Interactions FromFile(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
+			if (user_mapping == null)
+				user_mapping = new IdentityMapping();
+			if (item_mapping == null)
+				item_mapping = new IdentityMapping();
+			if (ignore_first_line)
+				reader.ReadLine();
+			if (separators == null)
+				separators = DEFAULT_SEPARATORS;
+
+			int min_num_fields = (new int[] {user_pos, item_pos, rating_pos, datetime_pos}).Max() + 1;
+
 			var interaction_list = new List<IInteraction>();
+			string line;
+			while ((line = reader.ReadLine()) != null)
+			{
+				string[] tokens = line.Split(separators);
+
+				if (tokens.Length < min_num_fields)
+					throw new FormatException(string.Format("Expected at least {0} columns: {1}", min_num_fields, line));
+
+				try
+				{
+					if (tokens.Length == 2)
+					{
+						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
+						int item_id = item_mapping.ToInternalID(tokens[item_pos]);
+						interaction_list.Add(new SimpleInteraction(user_id, item_id));
+					}
+					if (tokens.Length == 3)
+					{
+						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
+						int item_id = item_mapping.ToInternalID(tokens[item_pos]);
+						float rating = float.Parse(tokens[rating_pos]);
+						interaction_list.Add(new FullInteraction(user_id, item_id, rating, DateTime.MinValue));
+					}
+					if (tokens.Length >= 4)
+					{
+						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
+						int item_id = item_mapping.ToInternalID(tokens[item_pos]);
+						float rating = float.Parse(tokens[rating_pos]);
+						DateTime date_time = DateTime.Parse(tokens[datetime_pos]);
+						interaction_list.Add(new FullInteraction(user_id, item_id, rating, date_time));
+					}
+				}
+				catch (Exception)
+				{
+					throw new FormatException(string.Format("Could not read line '{0}'", line));
+				}
+			}
 			return new Interactions(interaction_list);
-			// TODO implement
 		}
 
 	}

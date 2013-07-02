@@ -56,7 +56,6 @@
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="Data\IRatings.cs" />
-    <Compile Include="Data\ISplit.cs" />
     <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\IdentityMapping.cs" />
     <Compile Include="Data\RatingType.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="DataType\MatrixExtensions.cs" />
     <Compile Include="DataType\SparseMatrixExtensions.cs" />
     <Compile Include="Data\TimedRatingsProxy.cs" />
-    <Compile Include="Data\RatingsChronologicalSplit.cs" />
     <Compile Include="Data\ITimedDataSet.cs" />
     <Compile Include="RatingPrediction\Extensions.cs" />
     <Compile Include="ItemRecommendation\Extensions.cs" />
@@ -221,6 +219,8 @@
     <Compile Include="NewData\Split\SimpleSplit.cs" />
     <Compile Include="NewData\ByUserReaders.cs" />
     <Compile Include="NewData\ByItemReaders.cs" />
+    <Compile Include="NewData\Split\ChronologicalSplit.cs" />
+    <Compile Include="NewData\Split\ISplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

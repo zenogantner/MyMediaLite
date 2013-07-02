@@ -189,8 +189,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		if (chronological_split != null)
 		{
 			var split = chronological_split_ratio != -1
-							? new RatingsChronologicalSplit(training_data, chronological_split_ratio)
-							: new RatingsChronologicalSplit(training_data, chronological_split_time);
+							? new ChronologicalSplit(training_data, chronological_split_ratio)
+							: new ChronologicalSplit(training_data, chronological_split_time);
 			training_data = split.Train[0];
 			test_data = split.Test[0];
 			recommender.Interactions = training_data;
