@@ -478,6 +478,8 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void LoadModel(string file)
 		{
+			random = MyMediaLite.Random.GetInstance();
+
 			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
 			{
 				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
