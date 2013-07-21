@@ -40,7 +40,7 @@ namespace MyMediaLite.IO
 			return Wrap.FormatException<IRatings>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
-					var ratings = (Ratings) Read(reader, user_mapping, item_mapping);
+					var ratings = (Ratings) Read(reader, user_mapping, item_mapping, ignore_first_line);
 					if (!(user_mapping is Mapping) && !(item_mapping is Mapping))
 						ratings.Serialize(filename + ".bin.Ratings");
 					return ratings;
