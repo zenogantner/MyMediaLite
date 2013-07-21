@@ -143,9 +143,9 @@ namespace MyMediaLite.Eval
 					if (correct_items.Count == 0)
 						return;
 
-                    var ignore_items_for_this_user = new HashSet<int>(
-                        repeated_events == RepeatedEvents.Yes || training_user_matrix[user_id] == null ? new int[0] : training_user_matrix[user_id]
-                    );
+					var ignore_items_for_this_user = new HashSet<int>(
+						repeated_events == RepeatedEvents.Yes || training_user_matrix[user_id] == null ? new int[0] : training_user_matrix[user_id]
+					);
 
 					ignore_items_for_this_user.IntersectWith(candidate_items);
 					int num_candidates_for_this_user = candidate_items.Count - ignore_items_for_this_user.Count;
