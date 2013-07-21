@@ -158,7 +158,7 @@ namespace MyMediaLite.DataType
 				for (int i = 0; i < num_rows; i++)
 				{
 					var indexes = index_list[i];
-					var values  = index_list[i];
+					var values  = value_list[i];
 					for (int j = NumberOfColumns - 1; j >= num_cols; j--)
 					{
 						int pos = indexes.BinarySearch(j);
