@@ -1,10 +1,16 @@
 3.10	2013-
+	recommenders:
+         - BPRMF: init random number generator in LoadModel() (pull request by
+           KwangSeob Kim)
 	data structures
          - fix bug in SparseMatrix.Resize() (reported by GitHub user
            guoguibing)
         IO
 	 - RatingData.cs: add missing param ignore_first_line to method call
            (reported by GitHub user guoguibing)
+	evaluation
+	 - avoid null reference for cold-start users
+           (pull request by KwangSeob Kim)
 
 3.09	2013-06-22
 	command-line tools
