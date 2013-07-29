@@ -2,6 +2,9 @@
 	recommenders:
          - BPRMF: init random number generator in LoadModel() (pull request by
            KwangSeob Kim)
+	command-line tools:
+	 - rating prediction: prevent NPE when --test-file=FILE not specified
+           (reported by Roberto Abalde)
 	data structures
          - fix bug in SparseMatrix.Resize() (reported by GitHub user
            guoguibing)
