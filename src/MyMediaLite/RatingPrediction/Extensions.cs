@@ -19,6 +19,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MyMediaLite.Data;
+using MyMediaLite.IO;
 using MyMediaLite.ItemRecommendation;
 
 namespace MyMediaLite.RatingPrediction
@@ -96,7 +97,7 @@ namespace MyMediaLite.RatingPrediction
 			string line_format = "{0}\t{1}\t{2}",
 			string header = null)
 		{
-			using (var writer = new StreamWriter(filename))
+			using (var writer = FileSystem.CreateStreamWriter(filename))
 				WritePredictions(recommender, interactions, writer, user_mapping, item_mapping, line_format);
 		}
 	}

@@ -40,6 +40,7 @@
     <Reference Include="C5, Version=1.1.1.0, Culture=neutral, PublicKeyToken=06a1b38866503b69">
       <HintPath>..\..\lib\C5\C5.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="IO\EntityMappingExtensions.cs" />
     <Compile Include="ItemRecommendation\IFoldInItemRecommender.cs" />
     <Compile Include="IO\FileSerializer.cs" />
+    <Compile Include="IO\FileSystem.cs" />
     <Compile Include="Eval\Measures\RMSE.cs" />
     <Compile Include="Eval\Measures\MAE.cs" />
     <Compile Include="Eval\Measures\LogisticLoss.cs" />
