@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -21,6 +21,7 @@ using System.IO;
 using System.Linq;
 using MyMediaLite.Data;
 using MyMediaLite.DataType;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -47,7 +48,7 @@ namespace MyMediaLite.ItemRecommendation
 			IMapping user_mapping = null, IMapping item_mapping = null,
 			bool repeated_items = false)
 		{
-			using (var writer = new StreamWriter(filename))
+			using (var writer = FileSystem.CreateStreamWriter(filename))
 				WritePredictions(recommender, train, candidate_items, num_predictions, writer, users, user_mapping, item_mapping, repeated_items);
 		}
 
