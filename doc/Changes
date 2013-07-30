@@ -5,6 +5,8 @@
 	command-line tools:
 	 - rating prediction: prevent NPE when --test-file=FILE not specified
            (reported by Roberto Abalde)
+         - support writing predictions to stdout on Unix (requested by GitHub
+           user jkleint)
 	data structures
          - fix bug in SparseMatrix.Resize() (reported by GitHub user
            guoguibing)
