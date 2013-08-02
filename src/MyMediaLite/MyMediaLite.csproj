@@ -123,7 +123,6 @@
     <Compile Include="IO\VectorExtensions.cs" />
     <Compile Include="DataType\MatrixExtensions.cs" />
     <Compile Include="DataType\SparseMatrixExtensions.cs" />
-    <Compile Include="Data\TimedRatingsProxy.cs" />
     <Compile Include="Data\ITimedDataSet.cs" />
     <Compile Include="RatingPrediction\Extensions.cs" />
     <Compile Include="ItemRecommendation\Extensions.cs" />
