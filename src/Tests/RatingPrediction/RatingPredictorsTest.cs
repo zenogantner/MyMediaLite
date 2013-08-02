@@ -110,10 +110,7 @@ namespace Tests.RatingPrediction
 		private static RatingPredictor SetUpRecommender(Type type)
 		{
 			var recommender = type.CreateRatingPredictor();
-			if (recommender is ITimeAwareRatingPredictor)
-				recommender.Interactions = TestUtils.CreateRandomTimedRatings(5, 5, 10);
-			else
-				recommender.Interactions = TestUtils.CreateRandomRatings(5, 5, 10);
+			recommender.Interactions = TestUtils.CreateRandomRatings(5, 5, 10);
 			if (type.GetInterface("IUserAttributeAwareRecommender") != null)
 				((IUserAttributeAwareRecommender) recommender).UserAttributes = new SparseBooleanMatrix();
 			if (type.GetInterface("IItemAttributeAwareRecommender") != null)

@@ -56,11 +56,9 @@
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
     <Compile Include="Data\IRatings.cs" />
-    <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\IdentityMapping.cs" />
     <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
-    <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\ListProxy.cs" />
@@ -163,7 +161,6 @@
     <Compile Include="RecommenderParameters.cs" />
     <Compile Include="Handlers.cs" />
     <Compile Include="Memory.cs" />
-    <Compile Include="MultiCore.cs" />
     <Compile Include="Wrap.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Recommender.cs" />

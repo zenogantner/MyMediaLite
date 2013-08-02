@@ -29,37 +29,22 @@ namespace Tests
 		{
 			var random = MyMediaLite.Random.GetInstance();
 
-			var ratings = new Ratings();
+			var interaction_list = new List<IInteraction>();
 			for (int i = 0; i < num_ratings; i++)
 			{
 				int user_id = random.Next(num_users);
 				int item_id = random.Next(num_items);
-				int rating_value = 1 + random.Next(5);
-				ratings.Add(user_id, item_id, rating_value);
+				int rating = 1 + random.Next(5);
+				interaction_list.Add(new FullInteraction(user_id, item_id, rating, DateTime.Now)); // FIXME
 			}
-			return new MemoryInteractions(ratings);
-		}
-
-		public static IInteractions CreateRandomTimedRatings(int num_users, int num_items, int num_ratings)
-		{
-			var random = MyMediaLite.Random.GetInstance();
-
-			var ratings = new TimedRatings();
-			for (int i = 0; i < num_ratings; i++)
-			{
-				int user_id = random.Next(num_users);
-				int item_id = random.Next(num_items);
-				int rating_value = 1 + random.Next(5);
-				ratings.Add(user_id, item_id, rating_value, DateTime.Now);
-			}
-			return new MemoryInteractions(ratings);
+			return new Interactions(interaction_list);
 		}
 
 		public static IInteractions CreateRatings()
 		{
-			var ratings = new Ratings();
-			ratings.Add(0, 0, 0.0f);
-			return new MemoryInteractions(ratings);
+			var interaction_list = new List<IInteraction>();
+			interaction_list.Add(new FullInteraction(0, 0, 0.0f, DateTime.Now));
+			return new Interactions(interaction_list);
 		}
 		
 		public static IInteractions CreateFeedback(IList<Tuple<int, int>> interaction_pairs)
