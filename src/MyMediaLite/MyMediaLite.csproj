@@ -55,7 +55,6 @@
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
-    <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="Data\IRatings.cs" />
     <Compile Include="Data\ITimedRatings.cs" />
     <Compile Include="Data\IdentityMapping.cs" />

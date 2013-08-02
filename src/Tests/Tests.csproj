@@ -39,7 +39,6 @@
   <ItemGroup>
     <Compile Include="Correlation\BinaryCosineTest.cs" />
     <Compile Include="Correlation\PearsonTest.cs" />
-    <Compile Include="Data\CombinedRatingsTest.cs" />
     <Compile Include="Data\EntityMappingTest.cs" />
     <Compile Include="Data\RatingsTest.cs" />
     <Compile Include="DataType\CombinedListTest.cs" />
