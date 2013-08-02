@@ -387,37 +387,21 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 			base.LoadData();
 
 			// read training data
-			if ((recommender is ITimeAwareRatingPredictor || chronological_split != null) && file_format != RatingFileFormat.MOVIELENS_1M)
-			{
-				training_data = new MemoryInteractions(TimedRatingData.Read(training_file, user_mapping, item_mapping));
-			}
+			training_data = Interactions.FromFile(training_file, user_mapping, item_mapping);
+			if (training_data == null)
+				Console.WriteLine("hey");
 			else
-			{
-				if (file_format == RatingFileFormat.DEFAULT)
-					training_data = new MemoryInteractions(RatingData.Read(training_file, user_mapping, item_mapping));
-				else if (file_format == RatingFileFormat.IGNORE_FIRST_LINE)
-					training_data = new MemoryInteractions(RatingData.Read(training_file, user_mapping, item_mapping, true));
-				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					training_data = new MemoryInteractions(MovieLensRatingData.Read(training_file, user_mapping, item_mapping));
-			}
+				Console.WriteLine(training_data.Count);
 			recommender.Interactions = training_data;
 
 			// read test data
 			if (test_file != null)
 			{
-				TestRatingFileFormat test_format = test_no_ratings ? TestRatingFileFormat.WITHOUT_RATINGS : TestRatingFileFormat.WITH_RATINGS;
-				if (recommender is ITimeAwareRatingPredictor && file_format != RatingFileFormat.MOVIELENS_1M)
-					test_data = new MemoryInteractions(TimedRatingData.Read(test_file, user_mapping, item_mapping, test_format));
-				else if (file_format == RatingFileFormat.MOVIELENS_1M)
-					test_data = new MemoryInteractions(MovieLensRatingData.Read(test_file, user_mapping, item_mapping, test_format));
-				else
-					test_data = new MemoryInteractions(RatingData.Read(test_file, user_mapping, item_mapping, file_format == RatingFileFormat.IGNORE_FIRST_LINE));
-				// TODO fully support "test format" again!
+				test_data = Interactions.FromFile(test_file, user_mapping, item_mapping);
 
 				if (recommender is ITransductiveRatingPredictor)
 					((ITransductiveRatingPredictor) recommender).AdditionalInteractions = test_data;
 			}
-
 		});
 		Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "loading_time {0:0.##}", loading_time.TotalSeconds));
 		Console.Error.WriteLine("memory {0}", Memory.Usage);

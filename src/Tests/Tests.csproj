@@ -43,7 +43,6 @@
     <Compile Include="Data\RatingsTest.cs" />
     <Compile Include="DataType\ListProxyTest.cs" />
     <Compile Include="DataType\MatrixTest.cs" />
-    <Compile Include="DataType\SkewSymmetricSparseMatrixTest.cs" />
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\SparseMatrixTest.cs" />
     <Compile Include="DataType\SymmetricSparseMatrixTest.cs" />
@@ -53,8 +52,6 @@
     <Compile Include="DataType\SparseMatrixExtensionsTest.cs" />
     <Compile Include="Eval\Measures\AUCTest.cs" />
     <Compile Include="IO\RatingDataTest.cs" />
-    <Compile Include="IO\TimedRatingDataTest.cs" />
-    <Compile Include="IO\MovieLensRatingDataTest.cs" />
     <Compile Include="DataType\SymmetricMatrixTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />

@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.Data
 {
@@ -141,62 +142,25 @@ namespace MyMediaLite.Data
 
 		// TODO updates: batch interface, use immutable data structures in the background
 
-		static public readonly char[] DEFAULT_SEPARATORS = new char[]{ '\t', ' ', ',' };
+		static public readonly char[] DEFAULT_SEPARATORS = new char[]{ '\t', ',' };
+
+		// TODO stream from file (implement in different class, but share the parsing code)
 
 		// TODO move to different file
 		static public Interactions FromFile(
 			string filename, IMapping user_mapping = null, IMapping item_mapping = null,
-			int user_pos = 0, int item_pos = 1,
+			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
 			using (var reader = new StreamReader(filename))
 			{
-				return FromTextReader(reader, user_mapping, item_mapping, user_pos, item_pos, separators, ignore_first_line);
+				return FromTextReader(reader, user_mapping, item_mapping, user_pos, item_pos, rating_pos, datetime_pos, separators, ignore_first_line);
 			}
-		}
-
-		static public Interactions FromTextReader(
-			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
-			int user_pos = 0, int item_pos = 1,
-			char[] separators = null, bool ignore_first_line = false)
-		{
-			if (user_mapping == null)
-				user_mapping = new IdentityMapping();
-			if (item_mapping == null)
-				item_mapping = new IdentityMapping();
-			if (ignore_first_line)
-				reader.ReadLine();
-			if (separators == null)
-				separators = DEFAULT_SEPARATORS;
-
-			int min_num_fields = Math.Max(user_pos, item_pos) + 1;
-
-			var interaction_list = new List<IInteraction>();
-			string line;
-			while ((line = reader.ReadLine()) != null)
-			{
-				string[] tokens = line.Split(separators);
-
-				if (tokens.Length < min_num_fields)
-					throw new FormatException("Expected at least 2 columns: " + line);
-
-				try
-				{
-					int user_id = user_mapping.ToInternalID(tokens[user_pos]);
-					int item_id = item_mapping.ToInternalID(tokens[item_pos]);
-					interaction_list.Add(new SimpleInteraction(user_id, item_id));
-				}
-				catch (Exception)
-				{
-					throw new FormatException(string.Format("Could not read line '{0}'", line));
-				}
-			}
-			return new Interactions(interaction_list);
 		}
 
 		// TODO move to different file
 		// TODO better checks, more elegant please
-		static public Interactions FromFile(
+		static public Interactions FromTextReader(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
@@ -221,8 +185,8 @@ namespace MyMediaLite.Data
 				if (tokens.Length < min_num_fields)
 					throw new FormatException(string.Format("Expected at least {0} columns: {1}", min_num_fields, line));
 
-				try
-				{
+				/*try
+				{*/
 					if (tokens.Length == 2)
 					{
 						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
@@ -234,21 +198,21 @@ namespace MyMediaLite.Data
 						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
 						int item_id = item_mapping.ToInternalID(tokens[item_pos]);
 						float rating = float.Parse(tokens[rating_pos]);
-						interaction_list.Add(new FullInteraction(user_id, item_id, rating, DateTime.MinValue));
+						interaction_list.Add(new FullInteraction(user_id, item_id, rating, DateTime.MinValue)); // FIXME
 					}
 					if (tokens.Length >= 4)
 					{
 						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
 						int item_id = item_mapping.ToInternalID(tokens[item_pos]);
 						float rating = float.Parse(tokens[rating_pos]);
-						DateTime date_time = DateTime.Parse(tokens[datetime_pos]);
+						DateTime date_time = DateTimeParser.Parse(tokens[datetime_pos]);
 						interaction_list.Add(new FullInteraction(user_id, item_id, rating, date_time));
 					}
-				}
-				catch (Exception)
+				/*}
+				catch (Exception e)
 				{
-					throw new FormatException(string.Format("Could not read line '{0}'", line));
-				}
+					throw new FormatException(string.Format("Could not read line '{0}'", line), e);
+				}*/
 			}
 			return new Interactions(interaction_list);
 		}
