@@ -57,7 +57,6 @@
     <Compile Include="IO\TimedRatingDataTest.cs" />
     <Compile Include="IO\MovieLensRatingDataTest.cs" />
     <Compile Include="DataType\SymmetricMatrixTest.cs" />
-    <Compile Include="Data\RatingsProxyTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
     <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
