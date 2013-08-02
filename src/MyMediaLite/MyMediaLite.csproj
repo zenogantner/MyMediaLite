@@ -60,7 +60,6 @@
     <Compile Include="Data\IdentityMapping.cs" />
     <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
-    <Compile Include="Data\StaticRatings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
     <Compile Include="DataType\CombinedList.cs" />
     <Compile Include="DataType\IBooleanMatrix.cs" />
