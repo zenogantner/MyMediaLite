@@ -46,6 +46,9 @@ install:
 uninstall:
 	cd ${SRC_DIR} && make uninstall PREFIX=${PREFIX}
 
+fix_csproj:
+	./scripts/fix_csproj.sh
+
 MyMediaLite-${VERSION}.tar.gz:
 	mkdir MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/doc/
