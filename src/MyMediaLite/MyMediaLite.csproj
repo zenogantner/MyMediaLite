@@ -144,7 +144,6 @@
     <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
-    <Compile Include="Eval\FoldIn.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensions.cs" />
     <Compile Include="RatingPrediction\OptimizationTarget.cs" />
     <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
