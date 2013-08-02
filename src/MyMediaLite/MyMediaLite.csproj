@@ -61,7 +61,6 @@
     <Compile Include="Data\RatingType.cs" />
     <Compile Include="Data\Ratings.cs" />
     <Compile Include="Data\TimedRatings.cs" />
-    <Compile Include="DataType\CombinedList.cs" />
     <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\ListProxy.cs" />
