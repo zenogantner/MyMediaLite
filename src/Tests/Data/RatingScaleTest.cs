@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -26,18 +26,9 @@ namespace Tests.Data
 	[TestFixture()]
 	public class RatingScaleTest
 	{
-		IRatings CreateRatings()
+		IList<float> CreateRatings()
 		{
-			var ratings = new Ratings();
-			ratings.Add(1, 4, 0.3f);
-			ratings.Add(1, 8, 0.2f);
-			ratings.Add(2, 4, 0.2f);
-			ratings.Add(2, 2, 0.6f);
-			ratings.Add(2, 5, 0.4f);
-			ratings.Add(3, 7, 0.2f);
-			ratings.Add(6, 3, 0.3f);
-
-			return ratings;
+			return new float[] { 0.3f, 0.2f, 0.2f, 0.6f, 0.4f, 0.2f, 0.3f };
 		}
 
 		[Test()]
