@@ -55,9 +55,7 @@
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
-    <Compile Include="Data\IRatings.cs" />
     <Compile Include="Data\IdentityMapping.cs" />
-    <Compile Include="Data\RatingType.cs" />
     <Compile Include="DataType\IBooleanMatrix.cs" />
     <Compile Include="DataType\IMatrix.cs" />
     <Compile Include="DataType\ListProxy.cs" />
@@ -104,8 +102,6 @@
     <Compile Include="Eval\ItemsCrossValidation.cs" />
     <Compile Include="Eval\RatingsCrossValidation.cs" />
     <Compile Include="Eval\CandidateItems.cs" />
-    <Compile Include="Data\IDataSet.cs" />
-    <Compile Include="Data\DataSet.cs" />
     <Compile Include="RatingPrediction\ITimeAwareRatingPredictor.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaseline.cs" />
     <Compile Include="RatingPrediction\TimeAwareBaselineWithFrequencies.cs" />
@@ -188,7 +184,6 @@
     <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
     <Compile Include="NewData\IInteractions.cs" />
     <Compile Include="NewData\IInteractionReader.cs" />
-    <Compile Include="NewData\IndexedMemoryReader.cs" />
     <Compile Include="ItemRecommendation\BPR\BPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\IBPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairSampler.cs" />
@@ -200,7 +195,6 @@
     <Compile Include="NewData\SimpleInteraction.cs" />
     <Compile Include="NewData\FullInteraction.cs" />
     <Compile Include="NewData\Interactions.cs" />
-    <Compile Include="NewData\MemoryInteractions.cs" />
     <Compile Include="NewData\InteractionReader.cs" />
     <Compile Include="NewData\Split\CrossValidationSplit.cs" />
     <Compile Include="NewData\Split\SimpleSplit.cs" />
