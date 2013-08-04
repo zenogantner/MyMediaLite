@@ -182,33 +182,32 @@
     <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
     <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
     <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
-    <Compile Include="NewData\IInteractions.cs" />
-    <Compile Include="NewData\IInteractionReader.cs" />
     <Compile Include="ItemRecommendation\BPR\BPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\IBPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformUserSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairFrequencyItemSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformUserFrequencyItemSampler.cs" />
-    <Compile Include="NewData\NewExtensions.cs" />
-    <Compile Include="NewData\IInteraction.cs" />
-    <Compile Include="NewData\SimpleInteraction.cs" />
-    <Compile Include="NewData\FullInteraction.cs" />
-    <Compile Include="NewData\Interactions.cs" />
-    <Compile Include="NewData\InteractionReader.cs" />
-    <Compile Include="NewData\Split\CrossValidationSplit.cs" />
-    <Compile Include="NewData\Split\SimpleSplit.cs" />
-    <Compile Include="NewData\ByUserReaders.cs" />
-    <Compile Include="NewData\ByItemReaders.cs" />
-    <Compile Include="NewData\Split\ChronologicalSplit.cs" />
-    <Compile Include="NewData\Split\ISplit.cs" />
     <Compile Include="IO\DateTimeParser.cs" />
+    <Compile Include="Data\ByItemReaders.cs" />
+    <Compile Include="Data\ByUserReaders.cs" />
+    <Compile Include="Data\FullInteraction.cs" />
+    <Compile Include="Data\IInteraction.cs" />
+    <Compile Include="Data\IInteractionReader.cs" />
+    <Compile Include="Data\IInteractions.cs" />
+    <Compile Include="Data\InteractionReader.cs" />
+    <Compile Include="Data\Interactions.cs" />
+    <Compile Include="Data\NewExtensions.cs" />
+    <Compile Include="Data\SimpleInteraction.cs" />
+    <Compile Include="Data\Split\ChronologicalSplit.cs" />
+    <Compile Include="Data\Split\CrossValidationSplit.cs" />
+    <Compile Include="Data\Split\ISplit.cs" />
+    <Compile Include="Data\Split\SimpleSplit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
-    <Folder Include="NewData\" />
     <Folder Include="ItemRecommendation\BPR\" />
-    <Folder Include="NewData\Split\" />
+    <Folder Include="Data\Split\" />
   </ItemGroup>
 </Project>
