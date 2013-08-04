@@ -181,21 +181,24 @@ namespace MyMediaLite.Data
 		// TODO stream from file (implement in different class, but share the parsing code)
 
 		// TODO move to different file
-		static public Interactions FromFile(
+		// TODO more elegant interface ...
+		static public IInteractions FromFile(
 			string filename, IMapping user_mapping = null, IMapping item_mapping = null,
+			int min_num_fields = 2,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
 			using (var reader = new StreamReader(filename))
 			{
-				return FromTextReader(reader, user_mapping, item_mapping, user_pos, item_pos, rating_pos, datetime_pos, separators, ignore_first_line);
+				return FromTextReader(reader, user_mapping, item_mapping, min_num_fields, user_pos, item_pos, rating_pos, datetime_pos, separators, ignore_first_line);
 			}
 		}
 
 		// TODO move to different file
 		// TODO better checks, more elegant please
-		static public Interactions FromTextReader(
+		static public IInteractions FromTextReader(
 			TextReader reader, IMapping user_mapping = null, IMapping item_mapping = null,
+			int min_num_fields = 2,
 			int user_pos = 0, int item_pos = 1, int rating_pos = 2, int datetime_pos = 3,
 			char[] separators = null, bool ignore_first_line = false)
 		{
@@ -207,8 +210,6 @@ namespace MyMediaLite.Data
 				reader.ReadLine();
 			if (separators == null)
 				separators = DEFAULT_SEPARATORS;
-
-			int min_num_fields = (new int[] {user_pos, item_pos, rating_pos, datetime_pos}).Max() + 1;
 
 			var interaction_list = new List<IInteraction>();
 			string line;

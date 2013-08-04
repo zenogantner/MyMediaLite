@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -14,6 +14,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+using System;
 using MyMediaLite.Data;
 using MyMediaLite.IO;
 
@@ -39,7 +40,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public IMapping ItemMapping { get; set; }
 
-		private IRatings external_scores;
+		private IInteractions external_scores;
 
 		/// <summary>Default constructor</summary>
 		public ExternalItemRecommender()
@@ -50,24 +51,28 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			external_scores = RatingData.Read(PredictionFile, UserMapping, ItemMapping);
+			external_scores = MyMediaLite.Data.Interactions.FromFile(PredictionFile, UserMapping, ItemMapping);
 		}
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			float rating;
-			return external_scores.TryGet(user_id, item_id, out rating);
+			return external_scores.ByUser(user_id).Items.Contains(item_id);
 		}
 
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			float rating;
-			if (external_scores.TryGet(user_id, item_id, out rating))
-				return rating;
-			else
+			if (!CanPredict(user_id, item_id))
 				return float.MinValue;
+
+			var reader = external_scores.ByUser(user_id);
+			while (reader.Read())
+			{
+				if (reader.GetItem() == item_id)
+					return reader.GetRating();
+			}
+			throw new Exception("Should not happen.");
 		}
 
 		///

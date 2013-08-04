@@ -14,6 +14,8 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+using System;
+using MyMediaLite;
 using MyMediaLite.Data;
 using MyMediaLite.IO;
 
@@ -39,8 +41,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public IMapping ItemMapping { get; set; }
 
-		// TODO get rid of this as well
-		private IRatings external_ratings;
+		private IInteractions external_ratings;
 
 		/// <summary>Default constructor</summary>
 		public ExternalRatingPredictor()
@@ -51,24 +52,28 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void Train()
 		{
-			external_ratings = RatingData.Read(PredictionFile, UserMapping, ItemMapping);
+			external_ratings = MyMediaLite.Data.Interactions.FromFile(PredictionFile, UserMapping, ItemMapping);
 		}
 
 		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			float rating;
-			return external_ratings.TryGet(user_id, item_id, out rating);
+			return external_ratings.ByUser(user_id).Items.Contains(item_id);
 		}
 
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			float rating;
-			if (external_ratings.TryGet(user_id, item_id, out rating))
-				return rating;
-			else
+			if (!CanPredict(user_id, item_id))
 				return float.MinValue;
+
+			var reader = external_ratings.ByUser(user_id);
+			while (reader.Read())
+			{
+				if (reader.GetItem() == item_id)
+					return reader.GetRating();
+			}
+			throw new Exception("Should not happen.");
 		}
 
 		///
