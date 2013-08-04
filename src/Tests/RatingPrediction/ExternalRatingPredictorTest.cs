@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -31,12 +31,13 @@ namespace Tests.RatingPrediction
 		{
 			string filename = "../../../../tests/example.test";
 			var mapping = new IdentityMapping();
-			var ratings = RatingData.Read(filename);
+			var ratings = Interactions.FromFile(filename);
 
 			var recommender = new ExternalRatingPredictor() { PredictionFile = filename, UserMapping = mapping, ItemMapping = mapping };
 			recommender.Train();
-			for (int i = 0; i < ratings.Count; i++)
-				Assert.AreEqual(ratings[i], recommender.Predict(ratings.Users[i], ratings.Items[i]));
+			var reader = ratings.Sequential;
+			while (reader.Read())
+				Assert.AreEqual(reader.GetRating(), recommender.Predict(reader.GetUser(), reader.GetItem()));
 		}
 	}
 }
