@@ -29,9 +29,8 @@ namespace Tests.RatingPrediction
 	{
 		IFoldInRatingPredictor CreateRecommender()
 		{
-			var training_data = RatingData.Read("../../../../data/ml-100k/u.data");
 			var recommender = new MatrixFactorization();
-			recommender.Interactions = new MemoryInteractions(training_data);
+			recommender.Interactions = Interactions.FromFile("../../../../data/ml-100k/u.data");
 			recommender.NumFactors = 4;
 			recommender.NumIter = 5;
 			recommender.Train();

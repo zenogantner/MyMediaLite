@@ -115,7 +115,6 @@
     <Compile Include="IO\VectorExtensions.cs" />
     <Compile Include="DataType\MatrixExtensions.cs" />
     <Compile Include="DataType\SparseMatrixExtensions.cs" />
-    <Compile Include="Data\ITimedDataSet.cs" />
     <Compile Include="RatingPrediction\Extensions.cs" />
     <Compile Include="ItemRecommendation\Extensions.cs" />
     <Compile Include="Eval\ItemRecommendationEvaluationResults.cs" />
@@ -191,7 +190,6 @@
     <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
     <Compile Include="NewData\IInteractions.cs" />
     <Compile Include="NewData\IInteractionReader.cs" />
-    <Compile Include="NewData\MemoryInteractions.cs" />
     <Compile Include="NewData\IndexedMemoryReader.cs" />
     <Compile Include="ItemRecommendation\BPR\BPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\IBPRSampler.cs" />
@@ -204,6 +202,7 @@
     <Compile Include="NewData\SimpleInteraction.cs" />
     <Compile Include="NewData\FullInteraction.cs" />
     <Compile Include="NewData\Interactions.cs" />
+    <Compile Include="NewData\MemoryInteractions.cs" />
     <Compile Include="NewData\InteractionReader.cs" />
     <Compile Include="NewData\Split\CrossValidationSplit.cs" />
     <Compile Include="NewData\Split\SimpleSplit.cs" />

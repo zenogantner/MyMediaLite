@@ -40,7 +40,7 @@ namespace MyMediaLite.Data
 
 		public void Reset()
 		{
-			pos = 0;
+			pos = -1;
 		}
 
 		public bool Read()

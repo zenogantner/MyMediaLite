@@ -65,7 +65,7 @@ namespace MyMediaLite.Data
 			by_user = new List<IList<IInteraction>>();
 			by_user_items = new List<ISet<int>>();
 			user_singletons = new List<ISet<int>>();
-			for (int user_id = 0; user_id <= MaxUserID; user_id++) // TODO create arrays and have a nicer loop
+			for (int user_id = 0; user_id <= MaxUserID; user_id++)
 			{
 				by_user.Add(new List<IInteraction>());
 				by_user_items.Add(new HashSet<int>());

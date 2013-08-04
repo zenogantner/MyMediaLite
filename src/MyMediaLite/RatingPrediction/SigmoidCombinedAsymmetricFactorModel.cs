@@ -63,7 +63,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <summary>Default constructor</summary>
 		public SigmoidCombinedAsymmetricFactorModel() : base()
 		{
-			AdditionalInteractions = new MemoryInteractions(new Ratings()); // in case no test data is provided
+			AdditionalInteractions = new Interactions(); // in case no test data is provided
 			Regularization = 0.015f;
 			LearnRate = 0.001f;
 			BiasLearnRate = 0.7f;

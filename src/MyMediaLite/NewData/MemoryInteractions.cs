@@ -38,10 +38,7 @@ namespace MyMediaLite.Data
 		public DateTime EarliestDateTime
 		{
 			get {
-				if (dataset is ITimedDataSet)
-					return ((ITimedDataSet) dataset).EarliestTime;
-				else
-					throw new NotSupportedException("Data set does not contain time information.");
+				throw new NotSupportedException("Data set does not contain time information.");
 			}
 		}
 
@@ -49,10 +46,7 @@ namespace MyMediaLite.Data
 		public DateTime LatestDateTime
 		{
 			get {
-				if (dataset is ITimedDataSet)
-					return ((ITimedDataSet) dataset).LatestTime;
-				else
-					throw new NotSupportedException("Data set does not contain time information.");
+				throw new NotSupportedException("Data set does not contain time information.");
 			}
 		}
 
@@ -126,14 +120,14 @@ namespace MyMediaLite.Data
 		public bool HasRatings
 		{
 			get {
-				return dataset is IRatings;
+				return false;
 			}
 		}
 
 		public bool HasDateTimes
 		{
 			get {
-				return dataset is ITimedDataSet;
+				return false;
 			}
 		}
 	}

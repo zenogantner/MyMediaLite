@@ -25,15 +25,28 @@ namespace MyMediaLite.Data
 {
 	public class Interactions : IInteractions
 	{
+		///
 		public int Count { get { return interaction_list.Count; } }
 
+		///
 		public int MaxUserID { get; private set; }
+
+		///
 		public int MaxItemID { get; private set; }
+
+		///
 		public DateTime EarliestDateTime { get; private set; }
+
+		///
 		public DateTime LatestDateTime { get; private set; }
+
+		///
 		public IList<int> Users { get { return new List<int>(user_set); } }
+
+		///
 		public IList<int> Items { get { return new List<int>(item_set); } }
 
+		///
 		public IInteractionReader Random
 		{
 			get {
@@ -41,7 +54,9 @@ namespace MyMediaLite.Data
 			}
 		}
 		private IList<IInteraction> random_interaction_list;
+
 		// TODO change protection level?
+		///
 		public IList<IInteraction> RandomInteractionList
 		{
 			get {
@@ -55,6 +70,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
+		///
 		public IInteractionReader Sequential
 		{
 			get {
@@ -62,6 +78,7 @@ namespace MyMediaLite.Data
 			}
 		}
 
+		///
 		IInteractionReader Chronological
 		{
 			get {
@@ -91,24 +108,41 @@ namespace MyMediaLite.Data
 		}
 
 		private ByItemReaders ByItemReaders { get; set; }
+		///
 		public IInteractionReader ByItem(int item_id)
 		{
 			return ByItemReaders[item_id];
 		}
 
+		///
 		public RatingScale RatingScale { get; private set; }
 
+		///
 		public bool HasRatings { get; private set; }
+
+		///
 		public bool HasDateTimes { get; private set; }
 
 		// TODO change access
+		///
 		public IList<IInteraction> InteractionList { get { return interaction_list; } }
 		private IList<IInteraction> interaction_list;
 		private ISet<int> user_set;
 		private ISet<int> item_set;
 
+		public Interactions()
+		{
+			interaction_list = new IInteraction[0];
+			user_set = new HashSet<int>();
+			item_set = new HashSet<int>();
+			MaxUserID = -1;
+			MaxItemID = -1;
+			ByUserReaders = new ByUserReaders(interaction_list, MaxUserID);
+			ByItemReaders = new ByItemReaders(interaction_list, MaxItemID);
+		}
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MyMediaLite.Data.Interactions`1"/> class, taking a list of interactions
+		/// Initializes a new instance of the <see cref="MyMediaLite.Data.Interactions"/> class, taking a list of interactions
 		/// </summary>
 		/// <param name='interaction_list'>a list of interactions</param>
 		public Interactions(IList<IInteraction> interaction_list)
@@ -185,8 +219,8 @@ namespace MyMediaLite.Data
 				if (tokens.Length < min_num_fields)
 					throw new FormatException(string.Format("Expected at least {0} columns: {1}", min_num_fields, line));
 
-				/*try
-				{*/
+				try
+				{
 					if (tokens.Length == 2)
 					{
 						int user_id = user_mapping.ToInternalID(tokens[user_pos]);
@@ -208,11 +242,11 @@ namespace MyMediaLite.Data
 						DateTime date_time = DateTimeParser.Parse(tokens[datetime_pos]);
 						interaction_list.Add(new FullInteraction(user_id, item_id, rating, date_time));
 					}
-				/*}
+				}
 				catch (Exception e)
 				{
 					throw new FormatException(string.Format("Could not read line '{0}'", line), e);
-				}*/
+				}
 			}
 			return new Interactions(interaction_list);
 		}

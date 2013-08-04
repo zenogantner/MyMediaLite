@@ -82,7 +82,11 @@ namespace MyMediaLite.Correlation
 				if (entity_type == EntityType.USER)
 					entity_ratings.Add(new Tuple<int, float>(reader.GetItem(), reader.GetRating()));
 				else if (entity_type == EntityType.ITEM)
-					entity_ratings.Add(new Tuple<int, float>(reader.GetUser(), reader.GetRating()));
+				{
+					var u = reader.GetUser();
+					var r = reader.GetRating();
+					entity_ratings.Add(new Tuple<int, float>(u, r));
+				}
 				else
 					throw new ArgumentException(string.Format("Only USER and ITEM are supported, but not {0}.", entity_type), "entity_type");
 			}

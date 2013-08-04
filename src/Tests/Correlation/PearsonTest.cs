@@ -16,6 +16,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MyMediaLite.Correlation;
@@ -31,15 +32,15 @@ namespace Tests.Correlation
 	{
 		[Test()] public void TestCreate()
 		{
-			var ratings = new Ratings();
-			ratings.Add(0, 1, 0.3f);
-			ratings.Add(0, 2, 0.6f);
-			ratings.Add(0, 4, 0.2f);
-			ratings.Add(1, 3, 0.4f);
-			ratings.Add(1, 4, 0.2f);
-			ratings.Add(2, 0, 0.1f);
-			ratings.Add(2, 1, 0.3f);
-			var interactions = new MemoryInteractions(ratings);
+			var interaction_list = new List<IInteraction>();
+			interaction_list.Add(new FullInteraction(0, 1, 0.3f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(0, 2, 0.6f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(0, 4, 0.2f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 3, 0.4f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 4, 0.2f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(2, 0, 0.1f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(2, 1, 0.3f, DateTime.Now));
+			var interactions = new Interactions(interaction_list);
 
 			var correlation_matrix = new Pearson(interactions.MaxUserID + 1, 0f);
 			correlation_matrix.ComputeCorrelations(interactions, EntityType.USER);
@@ -51,13 +52,13 @@ namespace Tests.Correlation
 		[Test()] public void TestComputeCorrelation()
 		{
 			// create test objects
-			var ratings = new Ratings();
-			ratings.Add(0, 1, 0.3f);
-			ratings.Add(0, 4, 0.2f);
-			ratings.Add(1, 2, 0.6f);
-			ratings.Add(1, 3, 0.4f);
-			ratings.Add(1, 4, 0.2f);
-			var interactions = new MemoryInteractions(ratings);
+			var interaction_list = new List<IInteraction>();
+			interaction_list.Add(new FullInteraction(0, 1, 0.3f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(0, 4, 0.2f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 2, 0.6f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 3, 0.4f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 4, 0.2f, DateTime.Now));
+			var interactions = new Interactions(interaction_list);
 
 			// test
 			var p = new Pearson(interactions.MaxUserID, 0f);
@@ -68,15 +69,15 @@ namespace Tests.Correlation
 		{
 			// create test objects
 			var pearson = new Pearson(3, 0f);
-			var ratings = new Ratings();
-			ratings.Add(0, 1, 0.3f);
-			ratings.Add(0, 2, 0.6f);
-			ratings.Add(0, 4, 0.2f);
-			ratings.Add(1, 3, 0.4f);
-			ratings.Add(1, 4, 0.2f);
-			ratings.Add(2, 0, 0.1f);
-			ratings.Add(2, 1, 0.3f);
-			var interactions = new MemoryInteractions(ratings);
+			var interaction_list = new List<IInteraction>();
+			interaction_list.Add(new FullInteraction(0, 1, 0.3f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(0, 2, 0.6f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(0, 4, 0.2f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 3, 0.4f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(1, 4, 0.2f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(2, 0, 0.1f, DateTime.Now));
+			interaction_list.Add(new FullInteraction(2, 1, 0.3f, DateTime.Now));
+			var interactions = new Interactions(interaction_list);
 
 			// test
 			pearson.Shrinkage = 0;
@@ -88,13 +89,8 @@ namespace Tests.Correlation
 		[Test()]
 		public void TestComputeCorrelations2()
 		{
-			// TODO we should not need MovieLens for the unit tests ...
 			// load data from disk
-			var user_mapping = new Mapping();
-			var item_mapping = new Mapping();
-			var ratings = RatingData.Read("../../../../data/ml-100k/u1.base", user_mapping, item_mapping);
-			var interactions = new MemoryInteractions(ratings);
-
+			var interactions = Interactions.FromFile("../../../../data/ml-100k/u1.base", new Mapping(), new Mapping());
 			var p = new Pearson(interactions.MaxItemID + 1, 200f);
 			Assert.AreEqual(-0.02788301f, p.ComputeCorrelation(interactions, EntityType.ITEM, 45, 311), 0.00001);
 		}
