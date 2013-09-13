@@ -230,8 +230,12 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 				if (compute_fit)
 					Console.WriteLine("fit: {0} iteration {1} ", ComputeFit(), iterative_recommender.NumIter);
 
-				var results = Evaluate();
-				Console.WriteLine("{0} iteration {1}", Render(results), iterative_recommender.NumIter);
+				EvaluationResults results = null;
+				if (!no_eval)
+				{
+					results = Evaluate();
+					Console.WriteLine("{0} iteration {1}", Render(results), iterative_recommender.NumIter);
+				}
 
 				for (int it = (int) iterative_recommender.NumIter + 1; it <= max_iter; it++)
 				{
@@ -250,25 +254,31 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 							fit_time_stats.Add(t.TotalSeconds);
 						}
 
-						t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
-						eval_time_stats.Add(t.TotalSeconds);
-						eval_stats.Add(results[eval_measures[0]]);
-						Console.WriteLine("{0} iteration {1}", Render(results), it);
+						if (!no_eval)
+						{
+							t = Wrap.MeasureTime(delegate() { results = Evaluate(); });
+							eval_time_stats.Add(t.TotalSeconds);
+							eval_stats.Add(results[eval_measures[0]]);
+							Console.WriteLine("{0} iteration {1}", Render(results), it);
+						}
 
 						Model.Save(recommender, save_model_file, it);
 						Predict(prediction_file, test_users_file, it);
 
-						if (epsilon > 0.0 && eval_stats.Max() - results[eval_measures[0]] > epsilon)
+						if (!no_eval)
 						{
-							Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results[eval_measures[0]], eval_stats.Min()));
-							Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
-							break;
-						}
-						if (results[eval_measures[0]] < cutoff)
-						{
-								Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
-								Console.Error.WriteLine("DONE");
+							if (epsilon > 0.0 && eval_stats.Max() - results[eval_measures[0]] > epsilon)
+							{
+								Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0} >> {1}", results[eval_measures[0]], eval_stats.Min()));
+								Console.Error.WriteLine("Reached convergence on training/validation data after {0} iterations.", it);
 								break;
+							}
+							if (results[eval_measures[0]] < cutoff)
+							{
+									Console.Error.WriteLine("Reached cutoff after {0} iterations.", it);
+									Console.Error.WriteLine("DONE");
+									break;
+							}
 						}
 					}
 				} // for
