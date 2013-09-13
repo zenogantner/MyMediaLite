@@ -65,16 +65,18 @@ namespace MyMediaLite.Eval
 			IInteractions test,
 			IInteractions training)
 		{
+			IList<int> test_items = (test != null) ? test.Items : new int[0];
+
 			switch (candidate_item_mode)
 			{
 				case CandidateItems.TRAINING: return training.Items;
 				case CandidateItems.TEST:     return test.Items;
 				case CandidateItems.OVERLAP:
-					var result = test.Items.Intersect(training.Items).ToList();
+					var result = test_items.Intersect(training.Items).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.UNION:
-					result = test.Items.Union(training.Items).ToList();
+					result = test_items.Union(training.Items).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.EXPLICIT:
