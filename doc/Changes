@@ -3,6 +3,8 @@
          - BPRMF: init random number generator in LoadModel() (pull request by
            KwangSeob Kim)
 	command-line tools:
+         - item recommendation: prevent NPE with --find-iter when --test-file
+           nor test-ratio is specified (reported by Tobias Lang)
 	 - rating prediction: prevent NPE when --test-file=FILE not specified
            (reported by Roberto Abalde)
          - support writing predictions to stdout on Unix (requested by GitHub
