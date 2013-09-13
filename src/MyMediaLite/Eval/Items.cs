@@ -65,16 +65,18 @@ namespace MyMediaLite.Eval
 			IPosOnlyFeedback test,
 			IPosOnlyFeedback training)
 		{
+			IList<int> test_items = (test != null) ? test.AllItems : new int[0];
+
 			switch (candidate_item_mode)
 			{
 				case CandidateItems.TRAINING: return training.AllItems;
 				case CandidateItems.TEST:     return test.AllItems;
 				case CandidateItems.OVERLAP:
-					var result = test.AllItems.Intersect(training.AllItems).ToList();
+					var result = test_items.Intersect(training.AllItems).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.UNION:
-					result = test.AllItems.Union(training.AllItems).ToList();
+					result = test_items.Union(training.AllItems).ToList();
 					result.Shuffle();
 					return result;
 				case CandidateItems.EXPLICIT:
