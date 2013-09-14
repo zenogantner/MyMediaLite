@@ -6,10 +6,11 @@
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CF099BD4-46D6-4FB0-B42B-641A1F829241}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>CommandLineProgram</RootNamespace>
-    <AssemblyName>CommandLineProgram</AssemblyName>
+    <AssemblyName>mymedialite</AssemblyName>
     <ReleaseVersion>4.00</ReleaseVersion>
+    <StartupObject>CommandLineProgram</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,7 +39,7 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
+    <ProjectReference Include="../../MyMediaLite/MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>

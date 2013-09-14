@@ -3,15 +3,13 @@ EDITOR=editor
 GENDARME_OPTIONS=--quiet --severity critical+
 SRC_DIR=src
 PREFIX=/usr/local
-VERSION=3.07
+VERSION=4.0
 HOMEPAGE=../mymedialite.net/public_html
 HOMEPAGE_SRC=../mymedialite.net/src
 HOMEPAGE_INC=../mymedialite.net/lib
 HTML_DOXYGEN_DIR=${HOMEPAGE}/documentation/doxygen
 MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
-ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
-RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
-RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
+PROG_DIR=${SRC_DIR}/Programs/CommandLineProgram
 ACK=ack-grep
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
@@ -57,13 +55,9 @@ MyMediaLite-${VERSION}.tar.gz:
 	cp README MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/lib/
 	mkdir MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_RANK_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_RANK_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${PROG_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${PROG_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${PROG_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}/lib/mymedialite
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 
@@ -141,8 +135,7 @@ todo:
 	${ACK} --type=csharp NotImplementedException ${SRC_DIR} | wc -l
 
 gendarme:
-	gendarme ${GENDARME_OPTIONS} ${RATING_PRED_DIR}/bin/Debug/*.exe
-	gendarme ${GENDARME_OPTIONS} ${ITEM_REC_DIR}/bin/Debug/*.exe
+	gendarme ${GENDARME_OPTIONS} ${PROG_DIR}/bin/Debug/*.exe
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/MyMediaLite.dll
 	gendarme ${GENDARME_OPTIONS} ${SRC_DIR}/MyMediaLite/bin/Debug/SVM.dll
 

@@ -4,6 +4,7 @@
 
 for f in `ls src/*/*.csproj src/*/*/*.csproj`
 do
+	echo $f
 	cat ${f} | perl -npe 's{<OutputPath>bin\\(Debug|Release)</OutputPath>}{<OutputPath>bin/$1</OutputPath>}' > ${f}.new
 	mv ${f}.new ${f}
 done

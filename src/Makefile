@@ -1,12 +1,8 @@
 all: ../lib/mymedialite
 	xbuild /p:Configuration=Debug MyMediaLite.sln
-	cp -r Programs/ItemRecommendation/bin/Debug/*.dll ../lib/mymedialite
-	cp -r Programs/ItemRecommendation/bin/Debug/*.exe ../lib/mymedialite
-	cp -r Programs/ItemRecommendation/bin/Debug/*.mdb ../lib/mymedialite
-	cp -r Programs/RatingPrediction/bin/Debug/*.mdb ../lib/mymedialite
-	cp -r Programs/RatingPrediction/bin/Debug/*.exe ../lib/mymedialite
-	cp -r Programs/RatingBasedRanking/bin/Debug/*.mdb ../lib/mymedialite
-	cp -r Programs/RatingBasedRanking/bin/Debug/*.exe ../lib/mymedialite
+	cp -r Programs/CommandLineProgram/bin/Debug/*.dll ../lib/mymedialite
+	cp -r Programs/CommandLineProgram/bin/Debug/*.exe ../lib/mymedialite
+	cp -r Programs/CommandLineProgram/bin/Debug/*.mdb ../lib/mymedialite
 
 ../lib/mymedialite:
 	mkdir ../lib/mymedialite
@@ -32,9 +28,7 @@ install: uninstall ${PREFIX}/lib ${PREFIX}/bin
 
 uninstall:
 	rm -rf ${PREFIX}/lib/mymedialite
-	rm -rf ${PREFIX}/bin/item_recommendation
-	rm -rf ${PREFIX}/bin/rating_prediction
-	rm -rf ${PREFIX}/bin/rating_based_ranking
+	rm -rf ${PREFIX}/bin/mymedialite
 
 test:
 	nunit-console --run=Tests MyMediaLite.sln --config=Debug
