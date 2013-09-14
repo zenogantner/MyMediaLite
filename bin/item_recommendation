@@ -1,7 +1,0 @@
-#!/bin/bash
-
-LOCALE=C
-SELF=$(readlink -f $0)
-DIR="$( cd "$( dirname "${SELF}" )" && pwd )"
-
-mono --debug $DIR/../lib/mymedialite/item_recommendation.exe "$@"
