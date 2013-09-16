@@ -66,26 +66,33 @@ namespace MyMediaLite.Eval
 			IInteractions training)
 		{
 			IList<int> test_items = (test != null) ? test.Items : new int[0];
+			IList<int> result = null;
 
 			switch (candidate_item_mode)
 			{
-				case CandidateItems.TRAINING: return training.Items;
-				case CandidateItems.TEST:     return test.Items;
+				case CandidateItems.TRAINING:
+					result = training.Items.ToArray();
+					break;
+				case CandidateItems.TEST:
+					result = test.Items.ToArray();
+					break;
 				case CandidateItems.OVERLAP:
-					var result = test_items.Intersect(training.Items).ToList();
-					result.Shuffle();
-					return result;
+					result = test_items.Intersect(training.Items).ToList();
+					break;
 				case CandidateItems.UNION:
 					result = test_items.Union(training.Items).ToList();
-					result.Shuffle();
-					return result;
+					break;
 				case CandidateItems.EXPLICIT:
 					if (candidate_items == null)
 						throw new ArgumentNullException("candidate_items");
-					return candidate_items;
+					result = candidate_items.ToArray();
+					break;
 				default:
 					throw new ArgumentException("Unknown candidate_item_mode: " + candidate_item_mode.ToString());
 			}
+
+			result.Shuffle();
+			return result;
 		}
 
 		/// <summary>Evaluation for rankings of items</summary>
