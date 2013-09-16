@@ -18,8 +18,10 @@
 	 - RatingData.cs: add missing param ignore_first_line to method call
            (reported by GitHub user guoguibing)
 	evaluation
-	 - avoid null reference for cold-start users
-           (pull request by KwangSeob Kim)
+	 - avoid null reference for cold-start users (pull request by KwangSeob
+           Kim)
+         - #425: Randomize ordering of candidate_items in ItemRecommender
+           evaluations (reported by Chris Newell)
 
 3.09	2013-06-22
 	command-line tools
