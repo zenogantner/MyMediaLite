@@ -7,16 +7,16 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CF099BD4-46D6-4FB0-B42B-641A1F829241}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CommandLineProgram</RootNamespace>
+    <RootNamespace>MyMediaLite.Program</RootNamespace>
     <AssemblyName>mymedialite</AssemblyName>
     <ReleaseVersion>4.00</ReleaseVersion>
-    <StartupObject>CommandLineProgram</StartupObject>
+    <StartupObject>MyMediaLite.Program.CommandLineProgram</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin/Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin/Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -39,6 +39,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Help.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">

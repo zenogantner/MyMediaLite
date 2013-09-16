@@ -16,19 +16,34 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Reflection;
 
-public abstract class Command
+namespace MyMediaLite.Program
 {
-	public abstract string Description { get; }
-
-	public abstract string Usage { get; }
-
-	public abstract void Run();
-
-	public abstract void Configure(string[] args);
-
-	public override string ToString()
+	public abstract class Command
 	{
-		return this.GetType().Name;
+		public abstract string Description { get; }
+
+		public abstract string Usage { get; }
+
+		public abstract void Run();
+
+		public abstract void Configure(string[] args);
+
+		public override string ToString()
+		{
+			return this.GetType().Name;
+		}
+
+		public static Command Create(string typename)
+		{
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				Type type = assembly.GetType("MyMediaLite.Program." + typename, false, true);
+				if (type != null)
+					return type.Create();
+			}
+			return null;
+		}
 	}
 }

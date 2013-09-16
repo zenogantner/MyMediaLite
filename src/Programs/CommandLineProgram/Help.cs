@@ -20,51 +20,54 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMediaLite;
 
-public class Help : Command
+namespace MyMediaLite.Program
 {
-	public override string Description
+	public class Help : Command
 	{
-		get {
-			return "Display help";
-		}
-	}
-
-	public override string Usage
-	{
-		get {
-			return "Help for help ...";
-		}
-	}
-
-	public override void Run()
-	{
-		Console.WriteLine("usage: mymedialite [--version] [--datadir] <command> [<args>]");
-		Console.WriteLine();
-		Console.WriteLine("Available commands:");
-		ListCommands();
-	}
-
-	public override void Configure(string[] args)
-	{
-	}
-
-	void ListCommands()
-	{
-		foreach (var command in GetCommands())
-			Console.WriteLine(command.ToString());
-	}
-
-	IList<Command> GetCommands()
-	{
-		var list = new List<Command>();
-		foreach (var type in Utils.GetTypes(""))
+		public override string Description
 		{
-			if (!type.IsAbstract && type.IsClass && !type.IsGenericType && type.IsSubclassOf(Type.GetType("Command")))
-			{
-				var command = (Command) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
-				list.Add(command);
+			get {
+				return "Display help";
 			}
 		}
-		return list;
+
+		public override string Usage
+		{
+			get {
+				return "Help for help ...";
+			}
+		}
+
+		public override void Run()
+		{
+			Console.WriteLine("usage: mymedialite [--version] [--datadir] <command> [<args>]");
+			Console.WriteLine();
+			Console.WriteLine("Available commands:");
+			ListCommands();
+		}
+
+		public override void Configure(string[] args)
+		{
+		}
+
+		void ListCommands()
+		{
+			foreach (var command in GetCommands())
+				Console.WriteLine(command.ToString());
+		}
+
+		IList<Command> GetCommands()
+		{
+			var list = new List<Command>();
+			foreach (var type in Utils.GetTypes("MyMediaLite.Program"))
+			{
+				if (!type.IsAbstract && type.IsClass && !type.IsGenericType && type.IsSubclassOf(typeof(Command)))
+				{
+					var command = (Command) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+					list.Add(command);
+				}
+			}
+			return list;
+		}
 	}
 }

@@ -16,13 +16,29 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Linq;
 using MyMediaLite;
 
-public class CommandLineProgram
+namespace MyMediaLite.Program
 {
-	static void Main(string[] args)
+	public class CommandLineProgram
 	{
+		static void Main(string[] args)
+		{
+			if (args.Length == 0)
+			{
+				args = new string[1];
+				args[0] = "help";
+			}
 
+			if (args[0] == "--help")
+				args[0] = "help";
+
+
+			var cmd = Command.Create(args[0]);
+			var cmd_arguments = args.Skip(1).ToArray();
+			cmd.Configure(cmd_arguments);
+			cmd.Run();
+		}
 	}
 }
-
