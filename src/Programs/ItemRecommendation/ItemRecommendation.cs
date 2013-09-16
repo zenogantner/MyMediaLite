@@ -282,6 +282,8 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 						}
 					}
 				} // for
+				if (max_iter % find_iter != 0)
+					Predict(prediction_file, test_users_file);
 			}
 		}
 		else

@@ -271,6 +271,8 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 						}
 					}
 				} // for
+				if (max_iter % find_iter != 0)
+					recommender.WritePredictions(test_data, prediction_file, user_mapping, item_mapping, prediction_line, prediction_header);
 			}
 		}
 		else

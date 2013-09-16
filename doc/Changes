@@ -1,8 +1,10 @@
-3.10	2013-
-	recommenders:
+3.10	2013-09-
+	recommenders
          - BPRMF: init random number generator in LoadModel() (pull request by
            KwangSeob Kim)
-	command-line tools:
+	command-line tools
+	 - write out final predictions after last iteration with --find-iter
+           (reported by Tobias Lang)
          - item recommendation: prevent NPE with --find-iter when --test-file
            nor test-ratio is specified (reported by Tobias Lang)
 	 - rating prediction: prevent NPE when --test-file=FILE not specified
