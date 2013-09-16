@@ -16,13 +16,19 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using MyMediaLite;
 
-public class CommandLineProgram
+public abstract class Command
 {
-	static void Main(string[] args)
-	{
+	public abstract string Description { get; }
 
+	public abstract string Usage { get; }
+
+	public abstract void Run();
+
+	public abstract void Configure(string[] args);
+
+	public override string ToString()
+	{
+		return this.GetType().Name;
 	}
 }
-

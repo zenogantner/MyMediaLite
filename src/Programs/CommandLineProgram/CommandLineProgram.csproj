@@ -37,9 +37,11 @@
       <Link>Options.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="Help.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../../MyMediaLite/MyMediaLite.csproj">
+    <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
