@@ -1,3 +1,6 @@
+3.11	2013-11-??
+	recommenders
+
 3.10	2013-09-23
 	recommenders
          - BPRMF: init random number generator in LoadModel() (pull request by
