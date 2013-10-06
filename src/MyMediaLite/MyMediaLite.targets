@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NuGetExePath>../packages/NuGet.CommandLine.2.7.1/tools/NuGet.exe</NuGetExePath>
+    <NuGetCommand Condition=" '$(OS)' == 'Windows_NT'">"$(NuGetExePath)"</NuGetCommand>
+    <NuGetCommand Condition=" '$(OS)' != 'Windows_NT' ">mono --runtime=v4.0.30319 $(NuGetExePath)</NuGetCommand>
+  </PropertyGroup>
+  
+  <Target Name="PrepareForPackage" DependsOnTargets="Build">
+    <Message Text="Copying output to package staging area." />
+    <Copy SourceFiles="$(OutputPath)MyMediaLite.dll;$(OutputPath)MyMediaLite.xml" DestinationFolder="package/lib/net40" />
+  </Target>
+
+  <Target Name="BuildPackage" DependsOnTargets="PrepareForPackage">
+    <Message Text="Building NuGet package." />
+    <Exec Command="$(NuGetCommand) pack MyMediaLite.nuspec -OutputDirectory $(OutputPath) -BasePath package -NonInteractive" />
+  </Target>
+
+  <ItemGroup>
+    <Packages Include="$(OutputPath)*.nupkg" />
+  </ItemGroup>
+  
+  <Target Name="CleanPackage">
+    <Delete Files="@(Packages)" />
+  </Target>
+
+  <PropertyGroup>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      CleanPackage
+    </CleanDependsOn>
+  </PropertyGroup>
+</Project>

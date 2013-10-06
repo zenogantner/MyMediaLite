@@ -51,7 +51,7 @@ namespace Tests.DataType
 		{
 			var matrix1 = new SparseMatrix<double>(3, 5);
 			var matrix2 = matrix1.CreateMatrix(4, 4);
-			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
+			Assert.IsInstanceOf(matrix1.GetType(), matrix2);
 		}
 
 		[Test()] public void TestNonEmptyEntryIDs()
