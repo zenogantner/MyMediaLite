@@ -1,3 +1,4 @@
+// Copyright (C) 2013 Nino Antulov-Fantulin, Matej Mihelcic, Zeno Gantner
 // Copyright (C) 2012 Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -157,14 +158,13 @@ namespace MyMediaLite.Correlation
 			for (int i = 0; i < num_entities; i++)
 				entities.Add(i);
 
-			entities.Remove(entity_id);
-			entities.Sort(delegate(int i, int j) { return c[j, entity_id].CompareTo(c[i, entity_id]); });
+			if (num_entities < k)
+				k = (uint) num_entities;
 
-			if (k < entities.Count)
-				return entities.GetRange(0, (int) k).ToArray();
-			else
-				return entities.ToArray();
+			entities.Remove(entity_id);
+			return PartialSort.Sort(entities, c, entity_id, (int) k);
 		}
+
 	}
 }
 
