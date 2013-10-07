@@ -203,11 +203,18 @@
     <Compile Include="Data\Split\CrossValidationSplit.cs" />
     <Compile Include="Data\Split\ISplit.cs" />
     <Compile Include="Data\Split\SimpleSplit.cs" />
+    <Compile Include="NewAPI\ITrainer.cs" />
+    <Compile Include="NewAPI\IRecommender.cs" />
+    <Compile Include="NewAPI\IFactory.cs" />
+    <Compile Include="NewAPI\IModel.cs" />
+    <Compile Include="NewAPI\IDataSet.cs" />
+    <Compile Include="NewAPI\IUserData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Eval\Measures\" />
     <Folder Include="ItemRecommendation\BPR\" />
     <Folder Include="Data\Split\" />
+    <Folder Include="NewAPI\" />
   </ItemGroup>
 </Project>
