@@ -37,7 +37,15 @@ namespace MyMediaLite.Program
 
 			var cmd = Command.Create(args[0]);
 			var cmd_arguments = args.Skip(1).ToArray();
-			cmd.Configure(cmd_arguments);
+			try
+			{
+				cmd.Configure(cmd_arguments);
+			}
+			catch (IndexOutOfRangeException)
+			{
+				Console.WriteLine(cmd.Usage);
+				return;
+			}
 			cmd.Run();
 		}
 	}
