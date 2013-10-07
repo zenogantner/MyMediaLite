@@ -4,7 +4,6 @@
 *.dll
 *.bak
 *.tmp
-bin
 *.tar.gz
 *.userprefs
 *.pidb
@@ -20,4 +19,4 @@ data/*
 lib/mymedialite/*
 obj
 src/TestResult.xml
-*.bin.Ratings
+bin
