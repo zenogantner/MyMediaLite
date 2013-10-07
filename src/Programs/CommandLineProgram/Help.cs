@@ -53,7 +53,7 @@ namespace MyMediaLite.Program
 		void ListCommands()
 		{
 			foreach (var command in GetCommands())
-				Console.WriteLine(command.ToString());
+				Console.WriteLine("  {0}", command.ToString().ToLower());
 		}
 
 		IList<Command> GetCommands()
