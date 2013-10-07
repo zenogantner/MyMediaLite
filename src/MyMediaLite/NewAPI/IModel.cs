@@ -16,12 +16,14 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.IO;
 
 namespace MyMediaLite
 {
 	public interface IModel
 	{
 		void Save(string filename);
+		void Save(TextWriter writer);
 	}
 }
 
