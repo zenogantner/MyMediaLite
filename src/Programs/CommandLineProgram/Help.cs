@@ -42,7 +42,6 @@ namespace MyMediaLite.Program
 		{
 			Console.WriteLine("usage: mymedialite [--version] [--datadir] <command> [<args>]");
 			Console.WriteLine();
-			Console.WriteLine("Available commands:");
 			ListCommands();
 		}
 
@@ -52,6 +51,7 @@ namespace MyMediaLite.Program
 
 		void ListCommands()
 		{
+			Console.WriteLine("Available commands:");
 			foreach (var command in GetCommands())
 				Console.WriteLine("  {0}", command.ToString().ToLower());
 		}
