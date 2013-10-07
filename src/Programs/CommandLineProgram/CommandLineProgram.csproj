@@ -40,6 +40,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Help.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Train.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">

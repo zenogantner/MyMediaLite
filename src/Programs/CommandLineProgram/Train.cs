@@ -22,32 +22,42 @@ using MyMediaLite;
 
 namespace MyMediaLite.Program
 {
-	public class Help : Command
+	public class Train : Command
 	{
+		IRecommender Recommender { get; set; }
+		string DataFilename { get; set; }
+		string ModelFilename { get; set; }
+
 		public override string Description
 		{
 			get {
-				return "Display help";
+				return "Train recommender";
 			}
 		}
 
 		public override string Usage
 		{
 			get {
-				return "help [command]";
+				return "train <recommender> <data-file> [<model-file>]";
 			}
 		}
 
 		public override void Run()
 		{
-			Console.WriteLine("usage: mymedialite [--version] [--datadir] <command> [<args>]");
-			Console.WriteLine();
-			Console.WriteLine("Available commands:");
-			ListCommands();
+			// TODO load data
+			// TODO train
+			// TODO save model
+			Console.WriteLine("training ... done");
 		}
 
 		public override void Configure(string[] args)
 		{
+			Recommender = args[0].CreateItemRecommender();
+			DataFilename = args[1];
+			if (args.Length > 2)
+				ModelFilename = args[2];
+			else
+				ModelFilename = args[0] + ".model";
 		}
 
 		void ListCommands()
