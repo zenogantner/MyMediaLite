@@ -42,7 +42,7 @@ namespace Tests.Data
 			var matrix = new Matrix<int>(2, 2);
 
 			var other_matrix = matrix.CreateMatrix(3, 3);
-			Assert.IsInstanceOfType(matrix.GetType(), other_matrix);
+			Assert.IsInstanceOf(matrix.GetType(), other_matrix);
 		}
 
 		[Test()] public void TestGetSetRow()

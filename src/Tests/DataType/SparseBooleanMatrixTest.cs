@@ -33,7 +33,7 @@ namespace Tests.DataType
 			var matrix = new SparseBooleanMatrix();
 
 			var other_matrix = matrix.CreateMatrix(2, 2);
-			Assert.IsInstanceOfType(matrix.GetType(), other_matrix);
+			Assert.IsInstanceOf(matrix.GetType(), other_matrix);
 		}
 
 		[Test()] public void TestGetEntriesByColumn()
