@@ -3,13 +3,13 @@
   <metadata>
     <id>MyMediaLite</id>
     <version>3.10</version>
-    <authors>Zeno Gantner</authors>
+    <authors>Zeno Gantner, Steffen Rendle, Lucas Drumond</authors>
     <owners>Zeno Gantner</owners>
-    <description>A recommender system algorithm library</description>
+    <description>Recommender system library for CLR (.NET)</description>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
     <projectUrl>https://github.com/zenogantner/MyMediaLite</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <tags>recommender_systems</tags>
+    <tags>recommender_systems, machine_learning, artificial_intelligence, collaborative_filtering, recommendation</tags>
     <dependencies>
       <dependency id="C5" version="2.2.4881.16939" />
       <dependency id="MathNet.Numerics" version="2.6.1" />
