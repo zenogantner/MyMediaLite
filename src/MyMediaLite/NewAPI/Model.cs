@@ -23,7 +23,7 @@ namespace MyMediaLite
 	// TODO rename to Model
 	public abstract class NewModel : IModel
 	{
-		protected abstract string Version { get; }
+		protected virtual string Version { get { return "4.00"; } }
 
 		public abstract void Save(TextWriter writer);
 		public void Save(string filename)

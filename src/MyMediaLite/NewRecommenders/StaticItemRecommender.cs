@@ -16,17 +16,26 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	// TODO will be renamed to IRecommender
-	public interface INewRecommender
+	public class StaticItemRecommender : ScoringRecommender
 	{
-		bool SupportsFoldIn { get; }
-		float Score(int userId, int itemId);
-		IList<Tuple<int, float>> Recommend(int userId, IEnumerable<int> itemSet, int n);
-		IList<Tuple<int, float>> FoldIn(IUserData userData, IEnumerable<int> itemSet, int n);
+		public override bool SupportsFoldIn { get { return false; } }
+
+		StaticItemModel Model { get; set; }
+
+		public StaticItemRecommender(IModel model)
+		{
+			if (!(model is StaticItemModel))
+				throw new ArgumentException();
+			Model = (StaticItemModel) model;
+		}
+
+		public override float Score(int userId, int itemId)
+		{
+			return Model[itemId];
+		}
 	}
 }
 

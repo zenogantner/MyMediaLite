@@ -17,16 +17,30 @@
 //
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MyMediaLite
 {
-	// TODO will be renamed to IRecommender
-	public interface INewRecommender
+	public class StaticItemModel : NewModel
 	{
-		bool SupportsFoldIn { get; }
-		float Score(int userId, int itemId);
-		IList<Tuple<int, float>> Recommend(int userId, IEnumerable<int> itemSet, int n);
-		IList<Tuple<int, float>> FoldIn(IUserData userData, IEnumerable<int> itemSet, int n);
+		public float this[int index]
+		{
+			get {
+				return ItemData[index];
+			}
+		}
+
+		private IList<float> ItemData { get; set; }
+
+		public StaticItemModel(IList<float> itemData)
+		{
+			ItemData = itemData;
+		}
+
+		public override void Save(TextWriter writer)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
 

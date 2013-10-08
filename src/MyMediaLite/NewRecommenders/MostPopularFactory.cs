@@ -16,17 +16,23 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
-using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	// TODO will be renamed to IRecommender
-	public interface INewRecommender
+	public class MostPopularFactory : ModelBasedFactory
 	{
-		bool SupportsFoldIn { get; }
-		float Score(int userId, int itemId);
-		IList<Tuple<int, float>> Recommend(int userId, IEnumerable<int> itemSet, int n);
-		IList<Tuple<int, float>> FoldIn(IUserData userData, IEnumerable<int> itemSet, int n);
+		public override IModel LoadModel(string filename)
+		{
+			throw new NotImplementedException();
+		}
+		public override INewRecommender CreateRecommender(IModel model)
+		{
+			return new StaticItemRecommender(model);
+		}
+		public override ITrainer CreateTrainer()
+		{
+			return new MostPopularTrainer();
+		}
 	}
 }
 
