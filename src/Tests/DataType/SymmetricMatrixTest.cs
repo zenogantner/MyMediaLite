@@ -58,7 +58,7 @@ namespace Tests.DataType
 		{
 			var matrix1 = new SymmetricMatrix<float>(5);
 			var matrix2 = matrix1.CreateMatrix(4, 4);
-			Assert.IsInstanceOfType(matrix1.GetType(), matrix2);
+			Assert.IsInstanceOf(matrix1.GetType(), matrix2);
 		}
 	}
 }

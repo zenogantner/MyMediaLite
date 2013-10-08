@@ -1,9 +1,8 @@
 *~
-*.exe
 *.mdb
-*.dll
 *.bak
 *.tmp
+*.suo
 bin
 *.tar.gz
 *.userprefs
@@ -21,3 +20,4 @@ lib/mymedialite/*
 obj
 src/TestResult.xml
 *.bin.Ratings
+package/
