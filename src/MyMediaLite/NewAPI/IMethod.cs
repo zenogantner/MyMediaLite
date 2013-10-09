@@ -20,21 +20,14 @@ using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	abstract public class ModelBasedFactory : IFactory
+	public interface IMethod
 	{
-		public virtual bool SupportsUpdate { get { return false; } }
-		abstract public IModel LoadModel(string filename);
-		abstract public IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
-		public virtual IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters)
-		{
-			throw new NotSupportedException();
-		}
-		abstract public IRecommender CreateRecommender(IModel model);
-		public virtual IRecommender CreateRecommender(IModel model, IDataSet dataset)
-		{
-			return CreateRecommender(model);
-		}
-
+		IModel LoadModel(string filename);
+		IRecommender CreateRecommender(IModel model);
+		IRecommender CreateRecommender(IModel model, IDataSet dataset);
+		bool SupportsUpdate { get; }
+		IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
+		IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters);
 	}
 }
 

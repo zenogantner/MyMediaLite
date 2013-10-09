@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	public class MostPopular : ModelBasedFactory
+	public class MostPopular : ModelBasedMethod
 	{
 		public override IModel LoadModel(string filename)
 		{

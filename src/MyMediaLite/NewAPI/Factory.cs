@@ -22,14 +22,14 @@ namespace MyMediaLite
 {
 	public class Factory
 	{
-		public IFactory this[string methodName]
+		public IMethod this[string methodName]
 		{
 			get {
 				return CreateFactory(methodName);
 			}
 		}
 
-		private static IFactory CreateFactory(string typename)
+		private static IMethod CreateFactory(string typename)
 		{
 			if (! typename.StartsWith("MyMediaLite"))
 				typename = "MyMediaLite." + typename;
@@ -43,15 +43,15 @@ namespace MyMediaLite
 			return null;
 		}
 
-		public static IFactory CreateFactory(Type type)
+		public static IMethod CreateFactory(Type type)
 		{
 			if (type.IsAbstract)
 				return null;
 			if (type.IsGenericType)
 				return null;
 
-			if (type.IsSubclassOf(typeof(IFactory)))
-				return (IFactory) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
+			if (type.IsSubclassOf(typeof(IMethod)))
+				return (IMethod) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
 				throw new Exception(type.Name + " is not an implementation of MyMediaLite.IFactory");
 		}

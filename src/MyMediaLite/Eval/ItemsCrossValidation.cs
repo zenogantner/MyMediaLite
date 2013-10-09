@@ -38,7 +38,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public ItemRecommendationEvaluationResults DoCrossValidation(
-			this IFactory method,
+			this IMethod method,
 			IInteractions interactions,
 			Dictionary<string, object> parameters,
 			uint num_folds,
@@ -62,7 +62,7 @@ namespace MyMediaLite.Eval
 		/// <param name="show_results">set to true to print results to STDERR</param>
 		/// <returns>a dictionary containing the average results over the different folds of the split</returns>
 		static public ItemRecommendationEvaluationResults DoCrossValidation(
-			this IFactory method,
+			this IMethod method,
 			CrossValidationSplit split,
 			Dictionary<string, object> parameters,
 			IList<int> test_users,
