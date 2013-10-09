@@ -59,7 +59,10 @@ namespace MyMediaLite
 			return new StaticItemModel(viewCount);
 		}
 
-		public override IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters)
+		public override IModel Update(
+			IModel model, IDataSet dataset,
+			IList<int> modifiedUsers, IList<int> modifiedItems,
+			Dictionary<string, object> parameters = null)
 		{
 			// lazy solution, just retrain everything
 			return Train(dataset, parameters);
