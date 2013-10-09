@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MyMediaLite.DataType;
 using MyMediaLite.IO;
 
 namespace MyMediaLite.Data
@@ -122,6 +123,13 @@ namespace MyMediaLite.Data
 
 		///
 		public bool HasDateTimes { get; private set; }
+
+		public IInteractions UserItemInteractions { get { return this; } }
+		public IBooleanMatrix UserAttributes { get { throw new NotSupportedException(); } }
+		public IBooleanMatrix ItemAttributes { get { throw new NotSupportedException(); } }
+		public IBooleanMatrix UserRelations { get { throw new NotSupportedException(); } }
+		public IBooleanMatrix ItemRelations { get { throw new NotSupportedException(); } }
+
 
 		// TODO change access
 		///
@@ -251,7 +259,6 @@ namespace MyMediaLite.Data
 			}
 			return new Interactions(interaction_list);
 		}
-
 	}
 }
 

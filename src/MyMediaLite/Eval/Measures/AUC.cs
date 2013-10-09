@@ -41,12 +41,19 @@ namespace MyMediaLite.Eval.Measures
 		/// <returns>the AUC for the given data</returns>
 		public static double Compute(IList<int> ranked_items, ICollection<int> relevant_items, int num_dropped_items)
 		{
+			if (ranked_items.Count == 0)
+				throw new ArgumentException("Should not be zero.", "ranked_items.Count");
+
 			var relevant_items_in_list = relevant_items.Intersect(ranked_items);
 			int num_relevant_items = relevant_items_in_list.Count();
 			int num_eval_items     = ranked_items.Count + num_dropped_items;
 			int num_eval_pairs     = (num_eval_items - num_relevant_items) * num_relevant_items;
 			if (num_eval_pairs < 0)
+			{
+				Console.WriteLine(num_eval_items);
+				Console.WriteLine(num_relevant_items);
 				throw new Exception("num_eval_pairs cannot be less than 0");
+			}
 
 			if (num_eval_pairs == 0)
 				return 0.5;

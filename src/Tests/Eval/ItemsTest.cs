@@ -30,51 +30,53 @@ namespace Tests.Eval
 	[TestFixture()]
 	public class ItemsTest
 	{
-		IList<int> all_users, candidate_items;
-		Recommender recommender;
-		IInteractions training_data, test_data;
+		IList<int> allUsers, candidateItems;
+		INewRecommender recommender;
+		IInteractions trainingData, testData;
 
 		[SetUp()]
 		public void SetUp()
 		{
-			training_data = TestUtils.CreateFeedback(new Tuple<int, int>[] {
+			trainingData = TestUtils.CreateFeedback(new Tuple<int, int>[] {
 				Tuple.Create(1, 1),
 				Tuple.Create(1, 2),
 				Tuple.Create(2, 2),
-				Tuple.Create(2, 3),
 				Tuple.Create(3, 1),
 				Tuple.Create(3, 2),
+				Tuple.Create(3, 3),
 			});
 
-			recommender = new MostPopular() { Interactions = training_data };
-			recommender.Train();
+			var factory = new MostPopular();
+			var model = factory.CreateTrainer().Train(trainingData, null);
+			recommender = factory.CreateRecommender(model);
 
-			test_data = TestUtils.CreateFeedback(new Tuple<int, int>[] {
+			testData = TestUtils.CreateFeedback(new Tuple<int, int>[] {
 				Tuple.Create(2, 3),
 				Tuple.Create(2, 4),
+				Tuple.Create(4, 1),
 				Tuple.Create(4, 4),
 			});
 
-			all_users = Enumerable.Range(1, 4).ToList();
-			candidate_items = Enumerable.Range(1, 5).ToList();
+			allUsers = Enumerable.Range(1, 4).ToList();
+			candidateItems = Enumerable.Range(1, 5).ToList();
 		}
 
 		[Test()]
 		public void TestEvalDefault()
 		{
-			var results = Items.Evaluate(recommender, test_data, training_data);
-			Assert.AreEqual(1, results["num_lists"]);
+			var results = Items.Evaluate(recommender, testData, trainingData);
+			Assert.AreEqual(2, results["num_lists"]);
 			Assert.AreEqual(0.5, results["AUC"]);
-			Assert.AreEqual(0.0, results["prec@5"], 0.01);
+			Assert.AreEqual(0.5, results["prec@5"], 0.01);
 		}
 
 		[Test()]
 		public void TestEvalDefaultGivenUserAndItems()
 		{
-			var results = Items.Evaluate(recommender, test_data, training_data, all_users, candidate_items);
-			Assert.AreEqual(1, results["num_lists"]);
+			var results = Items.Evaluate(recommender, testData, trainingData, allUsers, candidateItems);
+			Assert.AreEqual(3, results["num_lists"]);
 			Assert.AreEqual(0.5, results["AUC"]);
-			Assert.AreEqual(0.0, results["prec@5"], 0.01);
+			Assert.AreEqual(0.333, results["prec@5"], 0.01);
 		}
 	}
 }

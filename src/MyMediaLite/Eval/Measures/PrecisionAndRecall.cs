@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -15,7 +15,6 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +87,7 @@ namespace MyMediaLite.Eval.Measures
 		public static double PrecisionAt(
 			IList<int> ranked_items, ICollection<int> correct_items, int n)
 		{
-			return (double) HitsAt(ranked_items, correct_items, n) / n;
+			return (double) HitsAt(ranked_items, correct_items, n) / Math.Min(n, ranked_items.Count);
 		}
 
 		/// <summary>Compute the recall at N of a list of ranked items at several N</summary>

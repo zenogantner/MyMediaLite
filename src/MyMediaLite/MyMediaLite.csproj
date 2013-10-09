@@ -82,7 +82,6 @@
     <Compile Include="ItemRecommendation\ItemKNN.cs" />
     <Compile Include="ItemRecommendation\KNN.cs" />
     <Compile Include="ItemRecommendation\MF.cs" />
-    <Compile Include="ItemRecommendation\MostPopular.cs" />
     <Compile Include="ItemRecommendation\Random.cs" />
     <Compile Include="ItemRecommendation\UserAttributeKNN.cs" />
     <Compile Include="ItemRecommendation\UserKNN.cs" />
@@ -144,7 +143,6 @@
     <Compile Include="RatingPrediction\ITransductiveRatingPredictor.cs" />
     <Compile Include="RatingPrediction\SigmoidUserAsymmetricFactorModel.cs" />
     <Compile Include="RatingPrediction\SigmoidCombinedAsymmetricFactorModel.cs" />
-    <Compile Include="ItemRecommendation\MostPopularByAttributes.cs" />
     <Compile Include="Data\RatingScale.cs" />
     <Compile Include="RatingPrediction\NaiveBayes.cs" />
     <Compile Include="Data\IMapping.cs" />
@@ -181,7 +179,6 @@
     <Compile Include="RatingPrediction\ExternalRatingPredictor.cs" />
     <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
     <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
-    <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
     <Compile Include="ItemRecommendation\BPR\BPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\IBPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairSampler.cs" />
@@ -212,12 +209,12 @@
     <Compile Include="NewAPI\Model.cs" />
     <Compile Include="NewRecommenders\ModelBasedFactory.cs" />
     <Compile Include="NewRecommenders\MatrixFactorization.cs" />
-    <Compile Include="NewRecommenders\MostPopularFactory.cs" />
     <Compile Include="NewRecommenders\StaticItemRecommender.cs" />
     <Compile Include="NewRecommenders\StaticItemModel.cs" />
     <Compile Include="NewRecommenders\MostPopularTrainer.cs" />
     <Compile Include="NewRecommenders\ScoringRecommender.cs" />
     <Compile Include="NewAPI\Factory.cs" />
+    <Compile Include="NewRecommenders\MostPopular.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

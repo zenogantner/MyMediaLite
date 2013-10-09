@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.Data
 {
-	public interface IInteractions
+	public interface IInteractions : IDataSet
 	{
 		int Count { get; }
 		int MaxUserID { get; }

@@ -164,85 +164,6 @@ namespace MyMediaLite
 				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
 		}
 
-		/// <summary>Create a rating predictor from the type name</summary>
-		/// <param name="typename">a string containing the type name</param>
-		/// <returns>a rating recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static RatingPredictor CreateRatingPredictor(this string typename)
-		{
-			if (! typename.StartsWith("MyMediaLite.RatingPrediction."))
-				typename = "MyMediaLite.RatingPrediction." + typename;
-
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-			{
-				Type type = assembly.GetType(typename, false, true);
-				if (type != null)
-					return type.CreateRatingPredictor();
-			}
-			return null;
-		}
-
-		/// <summary>Create recommender</summary>
-		/// <param name='typename'>the type name</param>
-		/// <returns>a recommender of the given type name</returns>
-		public static Recommender CreateRecommender(this string typename)
-		{
-			if (typename.StartsWith("MyMediaLite.RatingPrediction."))
-				return typename.CreateRatingPredictor();
-			else if (typename.StartsWith("MyMediaLite.ItemRecommendation."))
-				return typename.CreateItemRecommender();
-			else
-				throw new IOException(string.Format("Unknown recommender namespace in type name '{0}'", typename));
-		}
-
-		/// <summary>Create a rating predictor from a type object</summary>
-		/// <param name="type">the type object</param>
-		/// <returns>a rating recommender object of type type</returns>
-		public static RatingPredictor CreateRatingPredictor(this Type type)
-		{
-			if (type.IsAbstract)
-				return null;
-			if (type.IsGenericType)
-				return null;
-
-			if (type.IsSubclassOf(typeof(RatingPredictor)))
-				return (RatingPredictor) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
-			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.RatingPrediction.RatingPredictor");
-		}
-
-		/// <summary>Create an item recommender from the type name</summary>
-		/// <param name="typename">a string containing the type name</param>
-		/// <returns>an item recommender object of type typename if the recommender type is found, null otherwise</returns>
-		public static Recommender CreateItemRecommender(this string typename)
-		{
-			if (! typename.StartsWith("MyMediaLite.ItemRecommendation"))
-				typename = "MyMediaLite.ItemRecommendation." + typename;
-
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-			{
-				Type type = assembly.GetType(typename, false, true);
-				if (type != null)
-					return type.CreateItemRecommender();
-			}
-			return null;
-		}
-
-		/// <summary>Create an item recommender from a type object</summary>
-		/// <param name="type">the type object</param>
-		/// <returns>an item recommender object of type type</returns>
-		public static Recommender CreateItemRecommender(this Type type)
-		{
-			if (type.IsAbstract)
-				return null;
-			if (type.IsGenericType)
-				return null;
-
-			if (type.IsSubclassOf(typeof(Recommender)))
-				return (Recommender) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
-			else
-				throw new Exception(type.Name + " is not a subclass of MyMediaLite.Recommender");
-		}
-
 		/// <summary>Describes the kind of data needed by this recommender</summary>
 		/// <param name="recommender">a recommender</param>
 		/// <returns>a string containing the additional data file arguments needed for training this recommender</returns>
@@ -273,32 +194,6 @@ namespace MyMediaLite
 				supports.Add("--find-iter=N");
 
 			return string.Join(", ", supports.ToArray());
-		}
-
-
-		/// <summary>List all recommenders in a given namespace</summary>
-		/// <param name="prefix">a string representing the namespace</param>
-		/// <returns>an array of strings containing the recommender descriptions</returns>
-		public static IList<string> ListRecommenders(this string prefix)
-		{
-			var result = new List<string>();
-
-			foreach (Type type in Utils.GetTypes(prefix))
-				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IRecommender") != null)
-				{
-					IRecommender recommender = prefix.Equals("MyMediaLite.RatingPrediction") ? (IRecommender) type.CreateRatingPredictor() : (IRecommender) type.CreateItemRecommender();
-
-					string description = recommender.ToString();
-					string needs = recommender.Needs();
-					if (needs.Length > 0)
-						description += "\n       needs " + needs;
-					string supports = recommender.Supports();
-					if (supports.Length > 0)
-						description += "\n       supports " + supports;
-					result.Add(description);
-				}
-
-			return result;
 		}
 	}
 }

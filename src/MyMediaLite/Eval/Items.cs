@@ -124,7 +124,7 @@ namespace MyMediaLite.Eval
 		/// <param name="n">length of the item list to evaluate -- if set to -1 (default), use the complete list, otherwise compute evaluation measures on the top n items</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public ItemRecommendationEvaluationResults Evaluate(
-			this IRecommender recommender,
+			this INewRecommender recommender,
 			IInteractions test,
 			IInteractions training,
 			IList<int> test_users = null,
@@ -145,21 +145,19 @@ namespace MyMediaLite.Eval
 				{
 					var correct_items = new HashSet<int>(test.ByUser(user_id).Items);
 					correct_items.IntersectWith(candidate_items);
-					if (correct_items.Count == 0)
+
+					var ignore_items_for_this_user = new HashSet<int>();
+					if (repeated_events == RepeatedEvents.No && user_id <= training.MaxUserID)
+						ignore_items_for_this_user = new HashSet<int>(training.ByUser(user_id).Items);
+
+					var itemSet = candidate_items.Except(ignore_items_for_this_user);
+					if (itemSet.Intersect(correct_items).Count() == itemSet.Count())
 						return;
 
-					var ignore_items_for_this_user = new HashSet<int>(
-						repeated_events == RepeatedEvents.Yes ? new int[0] : training.ByUser(user_id).Items.ToArray()
-					);
-					ignore_items_for_this_user.IntersectWith(candidate_items);
-					int num_candidates_for_this_user = candidate_items.Count - ignore_items_for_this_user.Count;
-					if (correct_items.Count == num_candidates_for_this_user)
-						return;
-
-					var prediction = recommender.Recommend(user_id, candidate_items:candidate_items, n:n, ignore_items:ignore_items_for_this_user);
+					var prediction = recommender.Recommend(user_id, itemSet, n);
 					var prediction_list = (from t in prediction select t.Item1).ToArray();
 
-					int num_dropped_items = num_candidates_for_this_user - prediction.Count;
+					int num_dropped_items = itemSet.Count() - prediction.Count;
 					double auc  = AUC.Compute(prediction_list, correct_items, num_dropped_items);
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items);
 					double ndcg = NDCG.Compute(prediction_list, correct_items);
@@ -210,13 +208,14 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		public static double ComputeFit(
-			this Recommender recommender,
+			this INewRecommender recommender,
+			IInteractions interactions,
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,
 			CandidateItems candidate_item_mode = CandidateItems.OVERLAP)
 		{
 			return recommender.Evaluate(
-				recommender.Interactions, recommender.Interactions,
+				interactions, interactions,
 				test_users, candidate_items,
 				candidate_item_mode, RepeatedEvents.Yes)["AUC"];
 		}

@@ -31,7 +31,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="../MyMediaLite/MyMediaLite.csproj">
+    <ProjectReference Include="..\MyMediaLite\MyMediaLite.csproj">
       <Project>{73424F09-BEEA-4992-B116-5F123496F5D3}</Project>
       <Name>MyMediaLite</Name>
     </ProjectReference>
@@ -53,9 +53,7 @@
     <Compile Include="DataType\SymmetricMatrixTest.cs" />
     <Compile Include="RatingPrediction\FoldInRatingPredictorExtensionsTest.cs" />
     <Compile Include="Data\RatingScaleTest.cs" />
-    <Compile Include="RatingPrediction\RatingPredictorsTest.cs" />
     <Compile Include="UtilsTest.cs" />
-    <Compile Include="ItemRecommendation\ItemRecommendersTest.cs" />
     <Compile Include="RatingPrediction\MatrixFactorizationTest.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="RatingPrediction\BiasedMatrixFactorizationTest.cs" />
@@ -83,6 +81,5 @@
     <Folder Include="Eval\" />
     <Folder Include="Eval\Measures\" />
     <Folder Include="IO\" />
-    <Folder Include="ItemRecommendation\" />
   </ItemGroup>
 </Project>

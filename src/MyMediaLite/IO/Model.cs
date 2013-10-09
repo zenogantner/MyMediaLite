@@ -61,27 +61,6 @@ namespace MyMediaLite.IO
 			recommender.LoadModel(filename);
 		}
 
-		/// <summary>Load a recommender from a file, including object creation</summary>
-		/// <param name="filename">the name of the model file</param>
-		/// <returns>the recommender loaded from the file</returns>
-		public static IRecommender Load(string filename)
-		{
-			IRecommender recommender;
-			string type_name;
-
-			using (var reader = new StreamReader(filename))
-			{
-				if (reader.EndOfStream)
-					throw new IOException("Unexpected end of file " + filename);
-				type_name = reader.ReadLine();
-			}
-
-			recommender = type_name.CreateRecommender();
-			recommender.LoadModel(filename);
-
-			return recommender;
-		}
-
 		/// <summary>Get a reader object to read in model parameters of a recommender</summary>
 		/// <param name="filename">the filename of the model file</param>
 		/// <param name="recommender_type">the expected recommender type</param>

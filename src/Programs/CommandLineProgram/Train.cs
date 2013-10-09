@@ -52,32 +52,12 @@ namespace MyMediaLite.Program
 
 		public override void Configure(string[] args)
 		{
-			Recommender = args[0].CreateItemRecommender();
+			IFactory factory = new Factory()[args[0]];
 			DataFilename = args[1];
 			if (args.Length > 2)
 				ModelFilename = args[2];
 			else
 				ModelFilename = args[0] + ".model";
-		}
-
-		void ListCommands()
-		{
-			foreach (var command in GetCommands())
-				Console.WriteLine(command.ToString());
-		}
-
-		IList<Command> GetCommands()
-		{
-			var list = new List<Command>();
-			foreach (var type in Utils.GetTypes("MyMediaLite.Program"))
-			{
-				if (!type.IsAbstract && type.IsClass && !type.IsGenericType && type.IsSubclassOf(typeof(Command)))
-				{
-					var command = (Command) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
-					list.Add(command);
-				}
-			}
-			return list;
 		}
 	}
 }

@@ -17,6 +17,7 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using C5;
 
 namespace MyMediaLite
@@ -29,6 +30,18 @@ namespace MyMediaLite
 
 		public System.Collections.Generic.IList<Tuple<int, float>> Recommend(int userId, IEnumerable<int> itemSet, int n)
 		{
+			// TODO get rid of this, or do in separate methods -- you either want to score all your items, or get a top n recommendation
+			if (n == -1)
+			{
+				var scoredItems = new List<Tuple<int, float>>();
+				foreach (int itemId in itemSet)
+				{
+					float score = Score(userId, itemId);
+					scoredItems.Add(Tuple.Create(itemId, score));
+				}
+				return scoredItems.OrderByDescending(x => x.Item2).ToArray();
+			}
+
 			var comparer = new DelegateComparer<Tuple<int, float>>( (a, b) => a.Item2.CompareTo(b.Item2) );
 			var heap = new IntervalHeap<Tuple<int, float>>(n, comparer);
 			float minRelevantScore = float.MinValue;
@@ -46,6 +59,7 @@ namespace MyMediaLite
 					}
 				}
 			}
+
 			var orderedItems = new Tuple<int, float>[heap.Count];
 			for (int i = 0; i < orderedItems.Length; i++)
 				orderedItems[i] = heap.DeleteMax();

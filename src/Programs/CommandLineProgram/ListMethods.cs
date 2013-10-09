@@ -17,32 +17,50 @@
 //
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using MyMediaLite;
 
-namespace MyMediaLite
+namespace MyMediaLite.Program
 {
-	public class StaticItemModel : NewModel
+	public class ListMethods : Command
 	{
-		public float this[int index]
+		public override string Description
 		{
 			get {
-				return ItemData[index];
+				return "List methods available in MyMediaLite";
 			}
 		}
 
-		private IList<float> ItemData { get; set; }
-
-		public StaticItemModel(IList<float> itemData)
+		public override string Usage
 		{
-			ItemData = itemData;
+			get {
+				return "list-methods";
+			}
 		}
 
-		public override void Save(TextWriter writer)
+		public override void Run()
 		{
-			writer.WriteLine(ItemData.Count);
-			for (int i = 0; i < ItemData.Count; i++)
-				writer.WriteLine(i + " " + ItemData[i]);
+			foreach (string method in GetMethodList())
+				Console.WriteLine("  " + method);
 		}
+
+		public override void Configure(string[] args)
+		{
+		}
+
+		public static IList<string> GetMethodList()
+		{
+			var result = new List<string>();
+
+			foreach (Type type in Utils.GetTypes("MyMediaLite"))
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFactory") != null)
+				{
+					string description = type.Name;
+					result.Add(description);
+				}
+
+			return result;
+		}
+
 	}
 }
-

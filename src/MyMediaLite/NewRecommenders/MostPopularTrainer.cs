@@ -23,29 +23,27 @@ namespace MyMediaLite
 {
 	public class MostPopularTrainer : ITrainer
 	{
-		// TODO support ByUser setting
-		public bool ByUser { get; set; }
-
 		// TODO later
 		public bool SupportsUpdate { get { return false; } }
 
-		public IModel Train(IDataSet dataset, Dictionary<string, object> parameters)
+		public IModel Train(IDataSet dataset, Dictionary<string, object> parameters = null)
 		{
-			int maxUserID = dataset.Interactions.MaxUserID;
-			int maxItemID = dataset.Interactions.MaxItemID;
+			bool byUser = false; // TODO support via parameters
+			int maxUserID = dataset.UserItemInteractions.MaxUserID;
+			int maxItemID = dataset.UserItemInteractions.MaxItemID;
 
 			var viewCount = new List<float>(maxItemID + 1);
 			for (int item_id = 0; item_id <= maxItemID; item_id++)
 				viewCount.Add(0);
 
-			if (ByUser)
+			if (byUser)
 			{
 				for (int item_id = 0; item_id <= maxItemID; item_id++)
-					viewCount[item_id] = dataset.Interactions.ByItem(item_id).Users.Count;
+					viewCount[item_id] = dataset.UserItemInteractions.ByItem(item_id).Users.Count;
 			}
 			else
 			{
-				var reader = dataset.Interactions.Sequential;
+				var reader = dataset.UserItemInteractions.Sequential;
 				while (reader.Read())
 					viewCount[reader.GetItem()] += 1;
 			}

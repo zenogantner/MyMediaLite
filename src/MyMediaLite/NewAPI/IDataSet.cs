@@ -23,7 +23,7 @@ namespace MyMediaLite
 {
 	public interface IDataSet
 	{
-		IInteractions Interactions { get; }
+		IInteractions UserItemInteractions { get; }
 		IBooleanMatrix UserAttributes { get; }
 		IBooleanMatrix ItemAttributes { get; }
 		IBooleanMatrix UserRelations { get; }

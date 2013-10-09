@@ -1,7 +1,7 @@
 4.00
+	API
+         - complete rewrite
 	recommenders
-	 - remove incremental updates (will be re-added at some point, with
-           better architecture)
 	 - BPR-related recommenders:
            - remove WithReplacement property
            - move BPR sampling logic into namespace ItemRecommender.BPR
@@ -21,9 +21,15 @@
          - remove KDDCup 2011 format support
 	correlation
 	 - simplify correlation computation
-	command-line tools
-	 - remove user recommendation feature
-         - remove rating threshold for item recommnedation
+	command-line tool
+	 - complete rewrite
+         - now with sub-commands like git and subversion
+        evaluation
+         - ignore users where only zero hits can be achieved
+           (warning: this makes evaluation results incomparable between
+            3.x and 4.x)
+         - precision at N: take into account case where result list
+           is shorter than N
 	misc
 	 - remove MovieDemo
 

@@ -19,7 +19,7 @@ using System;
 
 namespace MyMediaLite
 {
-	public class MostPopularFactory : ModelBasedFactory
+	public class MostPopular : ModelBasedFactory
 	{
 		public override IModel LoadModel(string filename)
 		{

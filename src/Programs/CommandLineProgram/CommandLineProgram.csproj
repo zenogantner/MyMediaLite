@@ -41,6 +41,7 @@
     <Compile Include="Help.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Train.cs" />
+    <Compile Include="ListMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MyMediaLite\MyMediaLite.csproj">
@@ -52,8 +53,5 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System" />
-    <Reference Include="DocoptNet">
-      <HintPath>..\..\..\lib\DocoptNet\DocoptNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>
