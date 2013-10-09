@@ -39,7 +39,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
-			this IRecommender recommender,
+			this Recommender recommender,
 			IInteractions train,
 			IList<int> candidate_items,
 			int num_predictions,
@@ -63,7 +63,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		/// <param name="repeated_items">true if items that a user has already accessed shall also be predicted</param>
 		static public void WritePredictions(
-			this IRecommender recommender,
+			this Recommender recommender,
 			IInteractions train,
 			ICollection<int> candidate_items,
 			int num_predictions,
@@ -94,7 +94,7 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="user_mapping">an <see cref="IMapping"/> object for the user IDs</param>
 		/// <param name="item_mapping">an <see cref="IMapping"/> object for the item IDs</param>
 		static public void WritePredictions(
-			this IRecommender recommender,
+			this Recommender recommender,
 			int user_id,
 			ICollection<int> candidate_items,
 			ICollection<int> ignore_items,

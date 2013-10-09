@@ -113,23 +113,11 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "3.05") )
-			{
-				writer.WriteMatrix(item_weights);
-			}
 		}
 
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				this.item_weights = item_factors;
-			}
 		}
 	}
 }

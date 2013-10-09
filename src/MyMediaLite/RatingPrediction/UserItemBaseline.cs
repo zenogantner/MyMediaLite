@@ -157,27 +157,16 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
-			{
-				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
-				writer.WriteVector(user_biases);
-				writer.WriteVector(item_biases);
-			}
+			/*
+			writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
+			writer.WriteVector(user_biases);
+			writer.WriteVector(item_biases);
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				var user_biases = reader.ReadVector();
-				var item_biases = reader.ReadVector();
-
-				this.global_average = global_average;
-				this.user_biases = user_biases.ToArray();
-				this.item_biases = item_biases.ToArray();
-			}
 		}
 
 		///

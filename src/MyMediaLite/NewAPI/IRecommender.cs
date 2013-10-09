@@ -1,4 +1,4 @@
-// Copyright (C) 2013 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -20,8 +20,18 @@ using System.Collections.Generic;
 
 namespace MyMediaLite
 {
-	// TODO will be renamed to IRecommender
-	public interface INewRecommender
+	// Doxygen main page
+	/// \mainpage MyMediaLite API Documentation
+	/// You can browse the documentation by class name, class hierarchy, and member name.
+	/// Just click on the "Classes" tab.
+	///
+	/// Please report problems and missing information to the MyMediaLite authors: http://mymedialite.net/contact.html
+	///
+	/// If you want to contribute to MyMediaLite have a look at http://mymedialite.net/contribute.html
+
+	/// <summary>Generic recommender interface</summary>
+	/// <remarks></remarks>
+	public interface IRecommender
 	{
 		bool SupportsFoldIn { get; }
 		float Score(int userId, int itemId);

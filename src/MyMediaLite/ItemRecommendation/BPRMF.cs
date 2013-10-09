@@ -66,7 +66,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     UniformUserSampling=true (the default) approximately optimizes the average AUC over all users.
 	///   </para>
 	/// </remarks>
-	public class BPRMF : MF, IFoldInItemRecommender
+	public class BPRMF : MF
 	{
 		/// <summary>Item bias terms</summary>
 		protected float[] item_bias;
@@ -263,48 +263,16 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
-			{
+			/*
 				writer.WriteMatrix(user_factors);
 				writer.WriteVector(item_bias);
 				writer.WriteMatrix(item_factors);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new IOException(
-						string.Format(
-							"Number of user and item factors must match: {0} != {1}",
-							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
-				if (item_bias.Count != item_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of items must be the same for biases and factors: {0} != {1}",
-							item_bias.Count, item_factors.dim1));
-
-				this.MaxUserID = user_factors.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				if (this.num_factors != user_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.num_factors = user_factors.NumberOfColumns;
-				}
-				this.user_factors = user_factors;
-				this.item_bias    = (float[]) item_bias;
-				this.item_factors = item_factors;
-			}
-			CreateBPRSampler();
 		}
 
 		///

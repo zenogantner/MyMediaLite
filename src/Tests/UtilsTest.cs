@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2013 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
 // 
@@ -27,8 +27,8 @@ namespace Tests
 		[Test()]
 		public void TestGetTypes()
 		{
-			Assert.Greater(Utils.GetTypes("MyMediaLite.RatingPrediction").Count, 25);
-			Assert.Greater(Utils.GetTypes("MyMediaLite.ItemRecommendation").Count, 20);
+			Assert.Greater(Utils.GetTypes("MyMediaLite.RatingPrediction").Count, 15);
+			Assert.Greater(Utils.GetTypes("MyMediaLite.ItemRecommendation").Count, 15);
 		}
 	}
 }

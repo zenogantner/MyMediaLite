@@ -20,8 +20,7 @@ using System.IO;
 
 namespace MyMediaLite
 {
-	// TODO rename to Model
-	public abstract class NewModel : IModel
+	public abstract class Model : IModel
 	{
 		protected virtual string Version { get { return "4.00"; } }
 

@@ -163,37 +163,5 @@ namespace MyMediaLite
 			if (!property_found)
 				report_error(string.Format("Recommender {0} does not have a parameter named '{1}'.\n{2}", type.ToString(), key, recommender));
 		}
-
-		/// <summary>Describes the kind of data needed by this recommender</summary>
-		/// <param name="recommender">a recommender</param>
-		/// <returns>a string containing the additional data file arguments needed for training this recommender</returns>
-		public static string Needs(this IRecommender recommender)
-		{
-			// determine necessary data
-			var needs = new List<string>();
-			if (recommender is IUserRelationAwareRecommender)
-				needs.Add("--user-relations=FILE");
-			if (recommender is IItemRelationAwareRecommender)
-				needs.Add("--item-relations=FILE");
-			if (recommender is IUserAttributeAwareRecommender)
-				needs.Add("--user-attributes=FILE");
-			if (recommender is IItemAttributeAwareRecommender)
-				needs.Add("--item-attributes=FILE");
-
-			return string.Join(", ", needs.ToArray());
-		}
-
-		/// <summary>Describes the kind of arguments supported by this recommender</summary>
-		/// <param name="recommender">a recommender</param>
-		/// <returns>a string containing the additional arguments supported by this recommender</returns>
-		public static string Supports(this IRecommender recommender)
-		{
-			// determine necessary data
-			var supports = new List<string>();
-			if (recommender is IIterativeModel)
-				supports.Add("--find-iter=N");
-
-			return string.Join(", ", supports.ToArray());
-		}
 	}
 }

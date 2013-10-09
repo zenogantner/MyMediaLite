@@ -43,7 +43,7 @@ namespace MyMediaLite.RatingPrediction
 	///     (3) Decrease the learn_rate.
 	///   </para>
 	/// </remarks>
-	public class MatrixFactorization : RatingPredictor, IIterativeModel, IFoldInRatingPredictor
+	public class MatrixFactorization : RatingPredictor, IIterativeModel
 	{
 		/// <summary>Matrix containing the latent user factors</summary>
 		protected internal Matrix<float> user_factors;
@@ -284,42 +284,16 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
-			{
+			/*
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteMatrix(user_factors);
 				writer.WriteMatrix(item_factors);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var bias = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new Exception(
-						string.Format("Number of user and item factors must match: {0} != {1}",
-							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
-
-				this.MaxUserID = user_factors.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				this.global_bias = bias;
-				if (this.NumFactors != user_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set NumFactors to {0}", user_factors.NumberOfColumns);
-					this.NumFactors = (uint) user_factors.NumberOfColumns;
-				}
-				this.user_factors = user_factors;
-				this.item_factors = item_factors;
-			}
 		}
 
 		/// <summary>Compute the regularized loss</summary>

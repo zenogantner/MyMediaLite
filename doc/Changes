@@ -32,6 +32,8 @@
            is shorter than N
 	misc
 	 - remove MovieDemo
+         - remove hyperparameter search (did not fit into new architecture,
+           replacement is planned)
 
 3.09	2013-06-22
 	command-line tools

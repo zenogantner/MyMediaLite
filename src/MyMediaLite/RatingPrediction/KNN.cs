@@ -127,32 +127,17 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
+			/*
 			baseline_predictor.SaveModel(filename + "-global-effects");
 
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
-			{
 				writer.WriteLine(Correlation);
 				correlation_matrix.Write(writer);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			baseline_predictor.LoadModel(filename + "-global-effects");
-
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				Correlation = (RatingCorrelationType) Enum.Parse(typeof(RatingCorrelationType), reader.ReadLine());
-				InitModel();
-
-				if (correlation_matrix is SymmetricCorrelationMatrix)
-					((SymmetricCorrelationMatrix) correlation_matrix).ReadSymmetricCorrelationMatrix(reader);
-				else if (correlation_matrix is AsymmetricCorrelationMatrix)
-					((AsymmetricCorrelationMatrix) correlation_matrix).ReadAsymmetricCorrelationMatrix(reader);
-				else
-					throw new NotSupportedException("Unsupported correlation type: " + correlation_matrix.GetType());
-			}
 		}
 
 		///

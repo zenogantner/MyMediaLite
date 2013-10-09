@@ -21,7 +21,7 @@ using System.IO;
 
 namespace MyMediaLite
 {
-	public class StaticItemModel : NewModel
+	public class StaticItemModel : Model
 	{
 		public float this[int index]
 		{

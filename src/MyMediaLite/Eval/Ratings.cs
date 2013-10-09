@@ -69,7 +69,7 @@ namespace MyMediaLite.Eval
 		/// <param name="ratings">test cases</param>
 		/// <returns>a Dictionary containing the evaluation results</returns>
 		static public RatingPredictionEvaluationResults Evaluate(
-			this IRatingPredictor recommender,
+			this RatingPredictor recommender,
 			IInteractions interactions)
 		{
 			double rmse = 0;
@@ -78,29 +78,15 @@ namespace MyMediaLite.Eval
 
 			var reader = interactions.Sequential;
 
-			if (recommender is ITimeAwareRatingPredictor && interactions.HasDateTimes)
+			while (reader.Read())
 			{
-				var time_aware_recommender = recommender as ITimeAwareRatingPredictor;
-				while (reader.Read())
-				{
-					float prediction = time_aware_recommender.Predict(reader.GetUser(), reader.GetItem(), reader.GetDateTime());
-					float error = prediction - reader.GetRating();
+				float prediction = recommender.Predict(reader.GetUser(), reader.GetItem());
+				float error = prediction - reader.GetRating();
 
-					rmse += error * error;
-					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(reader.GetRating(), prediction, interactions.RatingScale.Min, interactions.RatingScale.Max);
-				}
+				rmse += error * error;
+				mae  += Math.Abs(error);
+				cbd  += ComputeCBD(reader.GetRating(), prediction, interactions.RatingScale.Min, interactions.RatingScale.Max);
 			}
-			else
-				while (reader.Read())
-				{
-					float prediction = recommender.Predict(reader.GetUser(), reader.GetItem());
-					float error = prediction - reader.GetRating();
-
-					rmse += error * error;
-					mae  += Math.Abs(error);
-					cbd  += ComputeCBD(reader.GetRating(), prediction, interactions.RatingScale.Min, interactions.RatingScale.Max);
-				}
 			mae  = mae / interactions.Count;
 			rmse = Math.Sqrt(rmse / interactions.Count);
 			cbd  = cbd / interactions.Count;

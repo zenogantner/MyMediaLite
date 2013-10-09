@@ -25,7 +25,7 @@ namespace MyMediaLite
 		{
 			throw new NotImplementedException();
 		}
-		public override INewRecommender CreateRecommender(IModel model)
+		public override IRecommender CreateRecommender(IModel model)
 		{
 			return new StaticItemRecommender(model);
 		}

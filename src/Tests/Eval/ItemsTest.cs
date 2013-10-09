@@ -31,7 +31,7 @@ namespace Tests.Eval
 	public class ItemsTest
 	{
 		IList<int> allUsers, candidateItems;
-		INewRecommender recommender;
+		IRecommender recommender;
 		IInteractions trainingData, testData;
 
 		[SetUp()]

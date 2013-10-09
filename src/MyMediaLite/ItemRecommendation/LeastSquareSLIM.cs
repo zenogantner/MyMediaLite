@@ -243,6 +243,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
+			/*
 			if (K > 0)
 				itemKNN.SaveModel(filename + "-knn");
 
@@ -250,24 +251,12 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				writer.WriteMatrix(item_weights);
 			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			if (K > 0)
-			{
-				itemKNN = new ItemKNN();
-				itemKNN.LoadModel(filename + "-knn");
-			}
-
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var item_weights = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				this.MaxItemID = item_weights.NumberOfRows - 1;
-				this.item_weights = item_weights;
-			}
 		}
 
 		///

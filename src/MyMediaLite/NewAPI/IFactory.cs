@@ -22,8 +22,8 @@ namespace MyMediaLite
 	public interface IFactory
 	{
 		IModel LoadModel(string filename);
-		INewRecommender CreateRecommender(IModel model);
-		INewRecommender CreateRecommender(IModel model, IDataSet dataset);
+		IRecommender CreateRecommender(IModel model);
+		IRecommender CreateRecommender(IModel model, IDataSet dataset);
 		ITrainer CreateTrainer();
 	}
 }

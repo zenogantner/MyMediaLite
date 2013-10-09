@@ -22,8 +22,8 @@ namespace MyMediaLite
 	abstract public class ModelBasedFactory : IFactory
 	{
 		abstract public IModel LoadModel(string filename);
-		abstract public INewRecommender CreateRecommender(IModel model);
-		public INewRecommender CreateRecommender(IModel model, IDataSet dataset)
+		abstract public IRecommender CreateRecommender(IModel model);
+		public IRecommender CreateRecommender(IModel model, IDataSet dataset)
 		{
 			return CreateRecommender(model);
 		}

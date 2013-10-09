@@ -25,7 +25,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
+	public class ItemAttributeKNN : ItemKNN
 	{
 		///
 		public IBooleanMatrix ItemAttributes

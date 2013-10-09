@@ -22,7 +22,7 @@ using C5;
 
 namespace MyMediaLite
 {
-	public abstract class ScoringRecommender : INewRecommender
+	public abstract class ScoringRecommender : IRecommender
 	{
 		public virtual bool SupportsFoldIn { get { return false; } }
 

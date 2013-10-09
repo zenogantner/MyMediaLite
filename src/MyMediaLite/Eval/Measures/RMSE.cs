@@ -28,7 +28,7 @@ namespace MyMediaLite.Eval.Measures
 		/// <returns>the squared error sum</returns>
 		/// <param name='recommender'>the recommender to make predictions with</param>
 		/// <param name='ratings'>the actual ratings</param>
-		public static double ComputeSquaredErrorSum(this IRatingPredictor recommender, IInteractions interactions)
+		public static double ComputeSquaredErrorSum(this RatingPredictor recommender, IInteractions interactions)
 		{
 			double sum = 0;
 			var reader = interactions.Sequential;

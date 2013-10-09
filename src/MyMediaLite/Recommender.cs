@@ -26,7 +26,7 @@ namespace MyMediaLite
 	/// <summary>
 	/// Abstract recommender class implementing default behaviors
 	/// </summary>
-	public abstract class Recommender : IRecommender
+	public abstract class Recommender
 	{
 		/// <summary>Maximum user ID</summary>
 		public int MaxUserID { get; set; }

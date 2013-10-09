@@ -99,39 +99,11 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string file)
 		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
-			{
-				writer.WriteMatrix(user_factors);
-				writer.WriteMatrix(item_factors);
-			}
 		}
 
 		///
 		public override void LoadModel(string file)
 		{
-			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new IOException(
-						string.Format(
-							"Number of user and item factors must match: {0} != {1}",
-							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
-
-				this.MaxUserID = user_factors.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				if (this.NumFactors != user_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.NumFactors = (uint) user_factors.NumberOfColumns;
-				}
-				this.user_factors = user_factors;
-				this.item_factors = item_factors;
-			}
 		}
 	}
 }

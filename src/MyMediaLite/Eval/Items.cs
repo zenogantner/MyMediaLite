@@ -124,7 +124,7 @@ namespace MyMediaLite.Eval
 		/// <param name="n">length of the item list to evaluate -- if set to -1 (default), use the complete list, otherwise compute evaluation measures on the top n items</param>
 		/// <returns>a dictionary containing the evaluation results (default is false)</returns>
 		static public ItemRecommendationEvaluationResults Evaluate(
-			this INewRecommender recommender,
+			this IRecommender recommender,
 			IInteractions test,
 			IInteractions training,
 			IList<int> test_users = null,
@@ -208,7 +208,7 @@ namespace MyMediaLite.Eval
 		/// <param name="candidate_items">a list of integers with all candidate items</param>
 		/// <param name="candidate_item_mode">the mode used to determine the candidate items</param>
 		public static double ComputeFit(
-			this INewRecommender recommender,
+			this IRecommender recommender,
 			IInteractions interactions,
 			IList<int> test_users = null,
 			IList<int> candidate_items = null,

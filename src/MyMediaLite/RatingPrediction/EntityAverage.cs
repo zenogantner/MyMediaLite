@@ -68,21 +68,15 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.03") )
-			{
+			/*
 				writer.WriteLine(global_average.ToString(CultureInfo.InvariantCulture));
 				writer.WriteVector(entity_averages);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				this.global_average = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				this.entity_averages = reader.ReadVector();
-			}
 		}
 	}
 }

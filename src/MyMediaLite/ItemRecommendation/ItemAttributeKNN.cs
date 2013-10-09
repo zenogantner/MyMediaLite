@@ -23,7 +23,7 @@ namespace MyMediaLite.ItemRecommendation
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
-	public class ItemAttributeKNN : ItemKNN, IItemAttributeAwareRecommender
+	public class ItemAttributeKNN : ItemKNN
 	{
 		///
 		public IBooleanMatrix ItemAttributes

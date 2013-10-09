@@ -115,46 +115,19 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.03") )
-			{
+			/*
 				writer.WriteLine(Correlation);
 				writer.WriteLine(nearest_neighbors.Count);
 				foreach (IList<int> nn in nearest_neighbors)
 					writer.WriteLine(String.Join(" ", nn));
 
 				correlation_matrix.Write(writer);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				Correlation = (BinaryCorrelationType) Enum.Parse(typeof(BinaryCorrelationType), reader.ReadLine());
-
-				int num_entities = int.Parse(reader.ReadLine());
-				var nearest_neighbors = new int[num_entities][];
-				for (int i = 0; i < nearest_neighbors.Length; i++)
-				{
-					string[] numbers = reader.ReadLine().Split(' ');
-
-					nearest_neighbors[i] = new int[numbers.Length];
-					for (int j = 0; j < numbers.Length; j++)
-						nearest_neighbors[i][j] = int.Parse(numbers[j]);
-				}
-
-				InitModel();
-				if (correlation_matrix is SymmetricCorrelationMatrix)
-					((SymmetricCorrelationMatrix) correlation_matrix).ReadSymmetricCorrelationMatrix(reader);
-				else if (correlation_matrix is AsymmetricCorrelationMatrix)
-					((AsymmetricCorrelationMatrix) correlation_matrix).ReadAsymmetricCorrelationMatrix(reader);
-				else
-					throw new NotSupportedException("Unknown correlation type: " + correlation_matrix.GetType());
-
-				this.k = (uint) nearest_neighbors[0].Length;
-				this.nearest_neighbors = nearest_neighbors;
-			}
 		}
 
 		///

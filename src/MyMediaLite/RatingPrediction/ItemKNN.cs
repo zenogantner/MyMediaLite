@@ -26,7 +26,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Weighted item-based kNN</summary>
-	public class ItemKNN : KNN, IItemSimilarityProvider, IFoldInRatingPredictor
+	public class ItemKNN : KNN
 	{
 		///
 		protected override EntityType Entity { get { return EntityType.ITEM; } }

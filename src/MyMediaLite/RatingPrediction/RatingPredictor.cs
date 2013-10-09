@@ -22,7 +22,7 @@ using MyMediaLite.Data;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Abstract class for rating predictors that keep the rating data in memory for training (and possibly prediction)</summary>
-	public abstract class RatingPredictor : Recommender, IRatingPredictor
+	public abstract class RatingPredictor : Recommender
 	{
 		/// <summary>Maximum rating value</summary>
 		public virtual float MaxRating { get { return max_rating; } set { max_rating = value; } }

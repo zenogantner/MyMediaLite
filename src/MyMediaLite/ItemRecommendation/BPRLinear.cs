@@ -44,7 +44,7 @@ namespace MyMediaLite.ItemRecommendation
 	///   This recommender does NOT support incremental updates.
 	/// </para>
 	/// </remarks>
-	public class BPRLinear : Recommender, IItemAttributeAwareRecommender, IIterativeModel
+	public class BPRLinear : Recommender, IIterativeModel
 	{
 		// TODO add item bias
 
@@ -172,15 +172,11 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
-				writer.WriteMatrix(item_attribute_weight_by_user);
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-				this.item_attribute_weight_by_user = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 		}
 
 		///

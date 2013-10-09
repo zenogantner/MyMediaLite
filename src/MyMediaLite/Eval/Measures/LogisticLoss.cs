@@ -31,7 +31,7 @@ namespace MyMediaLite.Eval.Measures
 		/// <param name='min_rating'>the minimal rating</param>
 		/// <param name='rating_range_size'>the size of the rating range: max_rating - min_rating</param>
 		public static double ComputeSum(
-			this IRatingPredictor recommender,
+			this RatingPredictor recommender,
 			IInteractions interactions,
 			float min_rating, float rating_range_size)
 		{

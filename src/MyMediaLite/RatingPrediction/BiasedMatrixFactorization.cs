@@ -294,8 +294,7 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99") )
-			{
+			/*
 				writer.WriteLine(global_bias.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(min_rating.ToString(CultureInfo.InvariantCulture));
 				writer.WriteLine(max_rating.ToString(CultureInfo.InvariantCulture));
@@ -303,58 +302,12 @@ namespace MyMediaLite.RatingPrediction
 				writer.WriteMatrix(user_factors);
 				writer.WriteVector(item_bias);
 				writer.WriteMatrix(item_factors);
-			}
+			*/
 		}
 
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var bias       = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				var min_rating = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-				var max_rating = float.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
-
-				var user_bias = reader.ReadVector();
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-				if (user_factors.dim2 != item_factors.dim2)
-					throw new IOException(
-						string.Format(
-							"Number of user and item factors must match: {0} != {1}",
-							user_factors.dim2, item_factors.dim2));
-				if (user_bias.Count != user_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of users must be the same for biases and factors: {0} != {1}",
-							user_bias.Count, user_factors.dim1));
-				if (item_bias.Count != item_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of items must be the same for biases and factors: {0} != {1}",
-							item_bias.Count, item_factors.dim1));
-
-				this.MaxUserID = user_factors.dim1 - 1;
-				this.MaxItemID = item_factors.dim1 - 1;
-
-				// assign new model
-				this.global_bias = bias;
-				if (this.NumFactors != user_factors.dim2)
-				{
-					Console.Error.WriteLine("Set NumFactors to {0}", user_factors.dim2);
-					this.NumFactors = (uint) user_factors.dim2;
-				}
-				this.user_factors = user_factors;
-				this.item_factors = item_factors;
-				this.user_bias = user_bias.ToArray();
-				this.item_bias = item_bias.ToArray();
-				this.min_rating = min_rating;
-				this.max_rating = max_rating;
-
-				rating_range_size = max_rating - min_rating;
-			}
 		}
 
 		///

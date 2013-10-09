@@ -26,7 +26,7 @@ using MyMediaLite.IO;
 namespace MyMediaLite.RatingPrediction
 {
 	/// <summary>Attribute-aware rating predictor using Naive Bayes</summary>
-	public class NaiveBayes : RatingPredictor, IItemAttributeAwareRecommender
+	public class NaiveBayes : RatingPredictor
 	{
 		/// <summary>Smoothing parameter for the class probabilities (rating priors)</summary>
 		public float ClassSmoothing { get; set; }
@@ -133,31 +133,17 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override void LoadModel(string filename)
 		{
-			using ( StreamReader reader = Model.GetReader(filename, this.GetType()) )
-			{
-				var user_class_probabilities = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var num_users = int.Parse(reader.ReadLine());
-				var user_attribute_given_class_probabilities = new List<SparseMatrix<float>>();
-				for (int user_id = 0; user_id < num_users; user_id++)
-					user_attribute_given_class_probabilities.Add(
-						(SparseMatrix<float>) reader.ReadMatrix(new SparseMatrix<float>(0, 0))
-					);
-
-				this.user_class_probabilities = user_class_probabilities;
-				this.user_attribute_given_class_probabilities = user_attribute_given_class_probabilities;
-			}
 		}
 
 		///
 		public override void SaveModel(string filename)
 		{
-			using ( StreamWriter writer = Model.GetWriter(filename, this.GetType(), "3.02") )
-			{
+			/*
 				writer.WriteMatrix(user_class_probabilities);
 				writer.WriteLine(user_attribute_given_class_probabilities.Count);
 				foreach (var m in user_attribute_given_class_probabilities)
 					writer.WriteSparseMatrix(m);
-			}
+			*/
 		}
 
 		///

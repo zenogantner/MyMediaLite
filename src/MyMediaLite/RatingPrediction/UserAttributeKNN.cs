@@ -28,7 +28,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender supports incremental updates, but it does not support fold-in.
 	/// </remarks>
-	public class UserAttributeKNN : UserKNN, IUserAttributeAwareRecommender
+	public class UserAttributeKNN : UserKNN
 	{
 		///
 		public IBooleanMatrix UserAttributes

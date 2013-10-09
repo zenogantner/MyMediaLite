@@ -28,7 +28,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender supports incremental updates.
 	/// </remarks>
-	public class UserAverage : EntityAverage, IFoldInRatingPredictor
+	public class UserAverage : EntityAverage
 	{
 		///
 		public override void Train()

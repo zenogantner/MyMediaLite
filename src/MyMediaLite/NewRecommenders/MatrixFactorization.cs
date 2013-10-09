@@ -22,7 +22,7 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite
 {
-	public class MatrixFactorization : NewModel
+	public class MatrixFactorization : Model
 	{
 		protected override string Version { get { return "4.00"; } }
 

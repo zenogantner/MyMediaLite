@@ -25,7 +25,7 @@ using MyMediaLite.Taxonomy;
 namespace MyMediaLite.ItemRecommendation
 {
 	/// <summary>k-nearest neighbor user-based collaborative filtering</summary>
-	public class UserKNN : KNN, IUserSimilarityProvider, IFoldInItemRecommender
+	public class UserKNN : KNN
 	{
 		///
 		protected override EntityType Entity { get { return EntityType.USER; } }
