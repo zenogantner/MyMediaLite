@@ -1,4 +1,4 @@
-MyMediaLite - a recommender system algorithm library
+MyMediaLite - a recommender system library for the CLR (.NET)
 
 Features
 --------
@@ -45,6 +45,12 @@ Website
   http://mymedialite.net
   http://twitter.com/mymedialite
 
+Let us know if you use MyMediaLite
+----------------------------------
+Please inform us about if you use MyMediaLite in your professional or academic
+work, so we can brag about it on MyMediaLite's website:
+Just send an e-mail to mymedialite@googlegroups.com
+
 Citing MyMediaLite
 ------------------
 If you use MyMediaLite for your research, it would be nice to acknowledge it
@@ -61,29 +67,11 @@ MyMediaLite: A Free Recommender System Library. RecSys 2011
   location  = {Chicago, USA}
 }
 
-Please inform us about if you have a publication that uses
-this software, so we can list it on MyMediaLite's website:
-Just send an e-mail to mymedialite@googlegroups.com
 
 Acknowledgements
 ----------------
-Thanks go to the following people, who provided valuable feedback,
-patches, or other kinds of assistance:
-Roberto Abalde, Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
-Alejandro Bellogín, Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri,
-Simon Dooms, Lucas Drumond, Michael Ekstrand, Jagadeesh Gorla, Josif Grabocka,
-Mark Graus, Guibing Guo, Andreas Hoffmann, Tomas Horvath, Kenneth Hoste,
-Frantisek Hrdina, Jia Huang, KwangSeob Kim, Dietmar Jannach, Peng Jiang,
-Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler, Damir Logar,
-Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell, Thai-Nghe Nguyen,
-Simon Renaud, Marco Ribeiro, Roland Richter, Saurabh S., Sebastian Schelter,
-Lars Schmidt-Thieme, Yue Shi, Tom Tung, Pieter-Jan Verbruggen, Elvio Vicosa,
-João Vinagre, Oleksandr Vitvitskyi, Yongfeng Wang, Lina Weichbrodt,
-Cees Wesseling, Yong Zheng, GitHub user jkleint.
+See doc/Acknowledgements
 
-This work was funded by the European Commission FP7 project MyMedia
-(Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
-under the grant agreement no. 215006.
 
 Copyright & Licensing
 ---------------------
