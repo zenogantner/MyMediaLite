@@ -47,7 +47,7 @@ namespace Tests.Eval
 			});
 
 			var factory = new MostPopular();
-			var model = factory.CreateTrainer().Train(trainingData, null);
+			var model = factory.Train(trainingData, null);
 			recommender = factory.CreateRecommender(model);
 
 			testData = TestUtils.CreateFeedback(new Tuple<int, int>[] {

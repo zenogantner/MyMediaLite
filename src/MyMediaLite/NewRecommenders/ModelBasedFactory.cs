@@ -16,18 +16,25 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 
 namespace MyMediaLite
 {
 	abstract public class ModelBasedFactory : IFactory
 	{
+		public virtual bool SupportsUpdate { get { return false; } }
 		abstract public IModel LoadModel(string filename);
+		abstract public IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
+		public virtual IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters)
+		{
+			throw new NotSupportedException();
+		}
 		abstract public IRecommender CreateRecommender(IModel model);
-		public IRecommender CreateRecommender(IModel model, IDataSet dataset)
+		public virtual IRecommender CreateRecommender(IModel model, IDataSet dataset)
 		{
 			return CreateRecommender(model);
 		}
-		abstract public ITrainer CreateTrainer();
+
 	}
 }
 

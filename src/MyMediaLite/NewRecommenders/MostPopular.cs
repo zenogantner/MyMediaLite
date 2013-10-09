@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 
 namespace MyMediaLite
 {
@@ -25,13 +26,43 @@ namespace MyMediaLite
 		{
 			throw new NotImplementedException();
 		}
+
 		public override IRecommender CreateRecommender(IModel model)
 		{
 			return new StaticItemRecommender(model);
 		}
-		public override ITrainer CreateTrainer()
+
+		// TODO later
+		public bool SupportsUpdate { get { return false; } }
+
+		public override IModel Train(IDataSet dataset, Dictionary<string, object> parameters = null)
 		{
-			return new MostPopularTrainer();
+			bool byUser = false; // TODO support via parameters
+			int maxUserID = dataset.UserItemInteractions.MaxUserID;
+			int maxItemID = dataset.UserItemInteractions.MaxItemID;
+
+			var viewCount = new List<float>(maxItemID + 1);
+			for (int item_id = 0; item_id <= maxItemID; item_id++)
+				viewCount.Add(0);
+
+			if (byUser)
+			{
+				for (int item_id = 0; item_id <= maxItemID; item_id++)
+					viewCount[item_id] = dataset.UserItemInteractions.ByItem(item_id).Users.Count;
+			}
+			else
+			{
+				var reader = dataset.UserItemInteractions.Sequential;
+				while (reader.Read())
+					viewCount[reader.GetItem()] += 1;
+			}
+			return new StaticItemModel(viewCount);
+		}
+
+		public override IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters)
+		{
+			// lazy solution, just retrain everything
+			return Train(dataset, parameters);
 		}
 	}
 }

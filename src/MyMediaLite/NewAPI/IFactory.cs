@@ -16,6 +16,7 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 //
 using System;
+using System.Collections.Generic;
 
 namespace MyMediaLite
 {
@@ -24,7 +25,9 @@ namespace MyMediaLite
 		IModel LoadModel(string filename);
 		IRecommender CreateRecommender(IModel model);
 		IRecommender CreateRecommender(IModel model, IDataSet dataset);
-		ITrainer CreateTrainer();
+		bool SupportsUpdate { get; }
+		IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
+		IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters);
 	}
 }
 

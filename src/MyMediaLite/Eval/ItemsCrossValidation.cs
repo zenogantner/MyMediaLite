@@ -77,7 +77,7 @@ namespace MyMediaLite.Eval
 			{
 				try
 				{
-					var model = method.CreateTrainer().Train(split.Train[fold], parameters);
+					var model = method.Train(split.Train[fold], parameters);
 					var recommender = method.CreateRecommender(model);
 
 					var fold_results = Items.Evaluate(recommender, split.Test[fold], split.Train[fold], test_users, candidate_items, candidate_item_mode);

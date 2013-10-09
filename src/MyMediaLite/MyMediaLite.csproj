@@ -172,7 +172,6 @@
     <Compile Include="Data\Split\CrossValidationSplit.cs" />
     <Compile Include="Data\Split\ISplit.cs" />
     <Compile Include="Data\Split\SimpleSplit.cs" />
-    <Compile Include="NewAPI\ITrainer.cs" />
     <Compile Include="NewAPI\IRecommender.cs" />
     <Compile Include="NewAPI\IFactory.cs" />
     <Compile Include="NewAPI\IModel.cs" />
@@ -183,7 +182,6 @@
     <Compile Include="NewRecommenders\MatrixFactorization.cs" />
     <Compile Include="NewRecommenders\StaticItemRecommender.cs" />
     <Compile Include="NewRecommenders\StaticItemModel.cs" />
-    <Compile Include="NewRecommenders\MostPopularTrainer.cs" />
     <Compile Include="NewRecommenders\ScoringRecommender.cs" />
     <Compile Include="NewAPI\Factory.cs" />
     <Compile Include="NewRecommenders\MostPopular.cs" />
