@@ -26,8 +26,11 @@ namespace MyMediaLite
 		IRecommender CreateRecommender(IModel model);
 		IRecommender CreateRecommender(IModel model, IDataSet dataset);
 		bool SupportsUpdate { get; }
-		IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
-		IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters);
+		IModel Train(IDataSet dataset, Dictionary<string, object> parameters = null);
+		IModel Update(
+			IModel model, IDataSet dataset,
+			IList<int> modifiedUsers, IList<int> modifiedItems,
+			Dictionary<string, object> parameters = null);
 	}
 }
 
