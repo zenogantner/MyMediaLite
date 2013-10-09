@@ -7,9 +7,9 @@ Naming
 1. Class, interface, method and property names are written in CamelCase.
 2. Interface names have a preceding 'I'.
 3. Enum values are written in UPPER_CASE.
-4. Namespace names below MyMedia are written in lower_case.
+4. Namespace names below MyMedia are written in CamelCase.
 5. Field variables, local variables, and method parameters are written in
-   lower_case.
+   lowerCase.
 
 Properties
 6. It is okay to define simple properties in one line.
