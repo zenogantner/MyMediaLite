@@ -22,10 +22,11 @@ namespace MyMediaLite
 {
 	public interface IMethod
 	{
+		Dictionary<string, object> DefaultParameters { get; }
+		bool SupportsUpdate { get; }
 		IModel LoadModel(string filename);
 		IRecommender CreateRecommender(IModel model);
 		IRecommender CreateRecommender(IModel model, IDataSet dataset);
-		bool SupportsUpdate { get; }
 		IModel Train(IDataSet dataset, Dictionary<string, object> parameters = null);
 		IModel Update(
 			IModel model, IDataSet dataset,

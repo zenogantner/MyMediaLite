@@ -22,13 +22,21 @@ namespace MyMediaLite
 {
 	abstract public class ModelBasedMethod : IMethod
 	{
+		public virtual Dictionary<string, object> DefaultParameters { get { return new Dictionary<string, object>(); } }
+
 		public virtual bool SupportsUpdate { get { return false; } }
+
 		abstract public IModel LoadModel(string filename);
-		abstract public IModel Train(IDataSet dataset, Dictionary<string, object> parameters);
-		public virtual IModel Update(IModel model, IDataSet dataset, IList<int> modifiedUsers, IList<int> modifiedItems, Dictionary<string, object> parameters)
+		abstract public IModel Train(IDataSet dataset, Dictionary<string, object> parameters = null);
+
+		public virtual IModel Update(
+			IModel model, IDataSet dataset,
+			IList<int> modifiedUsers, IList<int> modifiedItems,
+			Dictionary<string, object> parameters = null)
 		{
 			throw new NotSupportedException();
 		}
+
 		abstract public IRecommender CreateRecommender(IModel model);
 		public virtual IRecommender CreateRecommender(IModel model, IDataSet dataset)
 		{
