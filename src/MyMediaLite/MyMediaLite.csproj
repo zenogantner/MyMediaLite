@@ -217,6 +217,7 @@
     <Compile Include="NewRecommenders\StaticItemModel.cs" />
     <Compile Include="NewRecommenders\MostPopularTrainer.cs" />
     <Compile Include="NewRecommenders\ScoringRecommender.cs" />
+    <Compile Include="NewAPI\Factory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>
