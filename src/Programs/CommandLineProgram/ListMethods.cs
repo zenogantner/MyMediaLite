@@ -40,6 +40,7 @@ namespace MyMediaLite.Program
 
 		public override void Run()
 		{
+			Console.WriteLine("Available methods:");
 			foreach (string method in GetMethodList())
 				Console.WriteLine("  " + method);
 		}
@@ -53,7 +54,7 @@ namespace MyMediaLite.Program
 			var result = new List<string>();
 
 			foreach (Type type in Utils.GetTypes("MyMediaLite"))
-				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IFactory") != null)
+				if (!type.IsAbstract && !type.IsInterface && !type.IsEnum && !type.IsGenericType && type.GetInterface("IMethod") != null)
 				{
 					string description = type.Name;
 					result.Add(description);
