@@ -40,7 +40,7 @@ namespace MyMediaLite
 		{
 			var writer = new StreamWriter(filename);
 			writer.WriteLine(this.GetType());
-			writer.WriteLine(version);
+			writer.WriteLine("version {0}", version);
 			return writer;
 		}
 	}
