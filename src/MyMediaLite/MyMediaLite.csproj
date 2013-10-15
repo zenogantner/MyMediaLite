@@ -80,7 +80,6 @@
     <Compile Include="ItemRecommendation\WRMF.cs" />
     <Compile Include="ItemRecommendation\Zero.cs" />
     <Compile Include="IO\AttributeData.cs" />
-    <Compile Include="IO\FileFormat.cs" />
     <Compile Include="IO\RelationData.cs" />
     <Compile Include="Eval\Items.cs" />
     <Compile Include="Eval\Ratings.cs" />
