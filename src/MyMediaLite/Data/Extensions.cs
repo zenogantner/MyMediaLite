@@ -76,5 +76,21 @@ namespace MyMediaLite.Data
 					item_attributes.NumberOfEntries, item_attributes.NonEmptyRowIDs.Count);
 			return s;
 		}
+
+		public static float AverageRating(this IInteractions interactions)
+		{
+			var reader = interactions.Sequential;
+			return reader.AverageRating();
+		}
+
+		public static float AverageRating(this IInteractionReader reader)
+		{
+			double sum = 0;
+			while (reader.Read())
+			{
+				sum += reader.GetRating();
+			}
+			return (float) (sum / reader.Count);
+		}
 	}
 }
