@@ -113,7 +113,6 @@
     <Compile Include="RatingPrediction\BiasedMatrixFactorization.cs" />
     <Compile Include="IO\MatrixExtensions.cs" />
     <Compile Include="IO\EntityMappingExtensions.cs" />
-    <Compile Include="IO\FileSerializer.cs" />
     <Compile Include="IO\FileSystem.cs" />
     <Compile Include="Eval\Measures\RMSE.cs" />
     <Compile Include="Eval\Measures\MAE.cs" />
