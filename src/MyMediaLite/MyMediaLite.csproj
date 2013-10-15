@@ -147,8 +147,6 @@
     <Compile Include="ItemRecommendation\SLIM.cs" />
     <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
     <Compile Include="Eval\EvaluationResults.cs" />
-    <Compile Include="INeedsMappings.cs" />
-    <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
     <Compile Include="ItemRecommendation\BPR\BPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\IBPRSampler.cs" />
     <Compile Include="ItemRecommendation\BPR\UniformPairSampler.cs" />
