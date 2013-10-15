@@ -20,16 +20,16 @@ using System.Reflection;
 
 namespace MyMediaLite
 {
-	public class Factory
+	public class MethodFactory
 	{
 		public IMethod this[string methodName]
 		{
 			get {
-				return CreateFactory(methodName);
+				return CreateMethod(methodName);
 			}
 		}
 
-		private static IMethod CreateFactory(string typename)
+		private static IMethod CreateMethod(string typename)
 		{
 			if (! typename.StartsWith("MyMediaLite"))
 				typename = "MyMediaLite." + typename;
@@ -38,22 +38,22 @@ namespace MyMediaLite
 			{
 				Type type = assembly.GetType(typename, false, true);
 				if (type != null)
-					return CreateFactory(type);
+					return CreateMethod(type);
 			}
 			return null;
 		}
 
-		public static IMethod CreateFactory(Type type)
+		public static IMethod CreateMethod(Type type)
 		{
 			if (type.IsAbstract)
 				return null;
 			if (type.IsGenericType)
 				return null;
 
-			if (type.IsSubclassOf(typeof(IMethod)))
+			if (type.GetInterface("IMethod") != null)
 				return (IMethod) type.GetConstructor(new Type[] { } ).Invoke( new object[] { });
 			else
-				throw new Exception(type.Name + " is not an implementation of MyMediaLite.IFactory");
+				throw new Exception(type.Name + " is not an implementation of MyMediaLite.IMethod");
 		}
 
 	}

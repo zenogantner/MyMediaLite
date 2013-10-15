@@ -181,10 +181,10 @@
     <Compile Include="NewRecommenders\StaticItemRecommender.cs" />
     <Compile Include="NewRecommenders\StaticItemModel.cs" />
     <Compile Include="NewRecommenders\ScoringRecommender.cs" />
-    <Compile Include="NewAPI\Factory.cs" />
     <Compile Include="NewRecommenders\MostPopular.cs" />
     <Compile Include="NewAPI\IMethod.cs" />
     <Compile Include="NewRecommenders\ModelBasedMethod.cs" />
+    <Compile Include="NewAPI\MethodFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <ItemGroup>

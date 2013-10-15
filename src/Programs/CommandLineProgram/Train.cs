@@ -52,7 +52,7 @@ namespace MyMediaLite.Program
 
 		public override void Configure(string[] args)
 		{
-			IMethod factory = new Factory()[args[0]];
+			IMethod factory = new MethodFactory()[args[0]];
 			DataFilename = args[1];
 			if (args.Length > 2)
 				ModelFilename = args[2];
