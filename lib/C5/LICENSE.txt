@@ -10,7 +10,8 @@ and http://www.itu.dk/research/c5/Release1.0/ITU-TR-2006-76.pdf
 
 LICENSE
 
-Copyright (c) 2003-2007 Niels Kokholm and Peter Sestoft
+Copyright Niels Kokholm, Peter Sestoft, and Rasmus Nielsen 2003-2013.
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
