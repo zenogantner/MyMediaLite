@@ -8,7 +8,7 @@
   
   <Target Name="PrepareForPackage" DependsOnTargets="Build">
     <Message Text="Copying output to package staging area." />
-    <Copy SourceFiles="$(OutputPath)MyMediaLite.dll;$(OutputPath)MyMediaLite.xml" DestinationFolder="package/lib/net40" />
+    <Copy SourceFiles="$(OutputPath)MyMediaLite.dll;$(OutputPath)MyMediaLite.xml;..\..\lib\C5\C5.dll;..\..\lib\C5\C5.xml" DestinationFolder="package/lib/net40" />
   </Target>
 
   <Target Name="BuildPackage" DependsOnTargets="PrepareForPackage">
