@@ -1,15 +1,3 @@
-THE C5 GENERIC COLLECTION LIBRARY FOR C#/CLI
-
-Niels Kokholm and Peter Sestoft
-IT University of Copenhagen, Denmark
-
-See http://www.itu.dk/research/c5/
-and http://www.itu.dk/research/c5/Release1.0/ITU-TR-2006-76.pdf
-
---------------------------------------------
-
-LICENSE
-
 Copyright Niels Kokholm, Peter Sestoft, and Rasmus Nielsen 2003-2013.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,5 +17,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------

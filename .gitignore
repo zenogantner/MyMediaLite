@@ -20,4 +20,4 @@ lib/mymedialite/*
 obj
 src/TestResult.xml
 *.bin.Ratings
-package/
+src/MyMediaLite/package/lib/
