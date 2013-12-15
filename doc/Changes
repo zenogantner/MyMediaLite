@@ -1,5 +1,7 @@
-3.11	2013-11-??
+3.11	2013-12-
 	recommenders
+	misc
+	 - #440: fix MovieLens 10M URL (pull request by Greg Najda)
 
 3.10	2013-09-23
 	recommenders
