@@ -10,10 +10,12 @@ read DUMMY
 echo "This may take a while ..."
 echo
 
+mkdir -p data
+
 # download MovieLens data
 wget --output-document=data/ml-100k.zip  http://www.grouplens.org/system/files/ml-100k.zip
 wget --output-document=data/ml-1m.zip    http://www.grouplens.org/system/files/ml-1m.zip
-wget --output-document=data/ml-10m.zip   http://www.grouplens.org/sites/www.grouplens.org/external_files/data/ml-10m.zip
+wget --output-document=data/ml-10m.zip   http://files.grouplens.org/papers/ml-10m.zip
 
 cd data
 
