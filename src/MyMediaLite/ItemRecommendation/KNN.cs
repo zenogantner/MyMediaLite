@@ -106,28 +106,8 @@ namespace MyMediaLite.ItemRecommendation
 			correlation_matrix.Weighted = Weighted;
 		}
 
-		/// <summary>Update the correlation matrix for the given feedback</summary>
-		/// <param name='feedback'>the feedback (user-item tuples)</param>
-		protected void Update(ICollection<Tuple<int, int>> feedback)
-		{
-			var update_entities = new HashSet<int>();
-			foreach (var t in feedback)
-				update_entities.Add(t.Item1);
-
-			foreach (int i in update_entities)
-			{
-				for (int j = 0; j < correlation_matrix.NumEntities; j++)
-				{
-					if (j < i && correlation_matrix.IsSymmetric && update_entities.Contains(j))
-						continue;
-
-					correlation_matrix[i, j] = correlation_matrix.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
-				}
-			}
-			RecomputeNeighbors(update_entities);
-		}
-
-		private void RecomputeNeighbors(ICollection<int> update_entities)
+		///
+		protected void RecomputeNeighbors(ICollection<int> update_entities)
 		{
 			foreach (int entity_id in update_entities)
 				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, k);
