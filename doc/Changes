@@ -1,5 +1,7 @@
-3.11	2013-12-
+3.11	2014-
 	recommenders
+	 - fix incremental update bug (user vs. item ID confusion) for item
+	   recommendation ItemKNN (pull request by Jessica Tölke)
 	misc
 	 - #440: fix MovieLens 10M URL (pull request by Greg Najda)
 
