@@ -116,5 +116,26 @@ namespace MyMediaLite.ItemRecommendation
 			if (UpdateItems)
 				Update(feedback);
 		}
+
+		/// <summary>Update the correlation matrix for the given feedback</summary>
+		/// <param name='feedback'>the feedback (user-item tuples)</param>
+		protected void Update(ICollection<Tuple<int, int>> feedback)
+		{
+			var update_entities = new HashSet<int>();
+			foreach (var t in feedback)
+				update_entities.Add(t.Item2);
+
+			foreach (int i in update_entities)
+			{
+				for (int j = 0; j < correlation_matrix.NumEntities; j++)
+				{
+					if (j < i && correlation_matrix.IsSymmetric && update_entities.Contains(j))
+						continue;
+
+					correlation_matrix[i, j] = correlation_matrix.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
+				}
+			}
+			RecomputeNeighbors(update_entities);
+		}
 	}
 }
