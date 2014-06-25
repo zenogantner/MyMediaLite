@@ -32,9 +32,8 @@
     <DocumentationFile>bin/Release/MyMediaLite.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5, Version=2.2.4881.16939, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\C5\C5.dll</HintPath>
+    <Reference Include="C5">
+      <HintPath>..\packages\C5.2.3\lib\net40\C5.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=2.6.1.30, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

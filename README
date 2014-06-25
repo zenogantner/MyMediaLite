@@ -109,10 +109,6 @@ along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 This package contains Mono.Options, C5, the Math.NET Numerics library,
 a C# port of LIBSVM, and NUnit.
 
-The C5 library used is a non-PCL build, allowing it work with versions
-of Mono earlier than 3.x. The fork allowing non-PCL builds is at
-https://github.com/LHCGreg/C5
-
 The original packages can be found here:
 http://www.itu.dk/research/c5/
 http://numerics.mathdotnet.com
