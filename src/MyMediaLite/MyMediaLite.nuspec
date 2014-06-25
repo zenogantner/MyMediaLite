@@ -12,6 +12,7 @@
     <tags>recommender_systems, machine_learning, artificial_intelligence, collaborative_filtering, recommendation</tags>
     <dependencies>
       <dependency id="MathNet.Numerics" version="2.6.1" />
+      <dependency id="C5" version="2.3" />
     </dependencies>
   </metadata>
 </package>
