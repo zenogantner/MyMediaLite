@@ -40,6 +40,15 @@ namespace MyMediaLite.ItemRecommendation
 	///         https://www.researchgate.net/profile/Joao_Vinagre2/publication/263416416_Fast_Incremental_Matrix_Factorization_for_Recommendation_with_Positive-Only_Feedback/file/60b7d53ac3b980d4e2.pdf
 	///       </description></item>
 	///     </list>
+	///   </para>
+	///   <para>
+	///     Known issues:
+	///     <list type="bullet">
+	/// 	  <item>This algorithm tends to saturate (converges globally to a single value) 
+	/// 		and slowly degrades with more than a few tens of thousands observations;</item>
+	///       <item>This algorithm is primarily designed to use with incremental learning, 
+	/// 		batch behavior has not been studied.</item>
+	/// 	</list> 
 	///   </para> 
 	///   <para>
 	///     This algorithm supports (and encourages) incremental updates. 
@@ -60,13 +69,12 @@ namespace MyMediaLite.ItemRecommendation
 		public float Decay { get { return decay; } set { decay = value; } }
 		float decay = 1.0f;
 
-		/// <summary>Incremental iteration number</summary>
+		/// <summary>Incremental iteration number (if unset assumes the value for batch)</summary>
 		public uint IncrIter { get; set; }
 
 		/// <summary>The learn rate used for the current epoch</summary>
 		protected internal float current_learnrate;
 
-		// float max_score = 1.0f;
 
 		/// <summary>
 		/// Default constructor
@@ -106,7 +114,6 @@ namespace MyMediaLite.ItemRecommendation
 			{
 				int u = Feedback.Users[index];
 				int i = Feedback.Items[index];
-				//Console.WriteLine("User " + u + " Item " + i);
 
 				UpdateFactors(u, i, update_user, update_item);
 			}
@@ -238,7 +245,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_item">true to update item factors.</param> 
 		protected virtual void UpdateFactors(int user_id, int item_id, bool update_user, bool update_item)
 		{
-			//Console.WriteLine(float.MinValue);
 			float err = 1 - Predict(user_id, item_id, false);
 
 			// adjust factors
