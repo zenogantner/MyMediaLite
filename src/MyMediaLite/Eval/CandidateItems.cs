@@ -27,7 +27,7 @@ namespace MyMediaLite.Eval
 		TEST,
 		/// <summary>use all items that are both in the training and the test set</summary>
 		OVERLAP,
-		/// <summary>use all items that are both in the training and the test set</summary>
+		/// <summary>use all items present in the training and test set</summary>
 		UNION,
 		/// <summary>use items provided in a list given by the user</summary>
 		EXPLICIT
