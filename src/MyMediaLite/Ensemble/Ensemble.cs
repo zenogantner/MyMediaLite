@@ -26,6 +26,7 @@ using MyMediaLite.RatingPrediction;
 namespace MyMediaLite.Ensemble
 {
 	/// <summary>Abtract class for combining several prediction methods</summary>
+	[Obsolete]
 	public abstract class Ensemble : IRecommender
 	{
 		/// <summary>list of recommenders</summary>

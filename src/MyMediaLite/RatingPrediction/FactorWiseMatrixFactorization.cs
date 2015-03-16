@@ -44,6 +44,7 @@ namespace MyMediaLite.RatingPrediction
 	///      This recommender does NOT support incremental updates.
 	///   </para>
 	/// </remarks>
+	[Obsolete]
 	public class FactorWiseMatrixFactorization : RatingPredictor, IIterativeModel
 	{
 		///

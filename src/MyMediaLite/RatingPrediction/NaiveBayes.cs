@@ -29,6 +29,7 @@ namespace MyMediaLite.RatingPrediction
 	/// <remarks>
 	/// This recommender supports incremental updates.
 	/// </remarks>
+	[Obsolete]
 	public class NaiveBayes : IncrementalRatingPredictor, IItemAttributeAwareRecommender
 	{
 		/// <summary>Smoothing parameter for the class probabilities (rating priors)</summary>

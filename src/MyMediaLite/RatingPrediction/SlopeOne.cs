@@ -33,6 +33,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender does NOT support incremental updates. They would be easy to implement, though.
 	/// </remarks>
+	[Obsolete]
 	public class SlopeOne : RatingPredictor
 	{
 		private SkewSymmetricSparseMatrix diff_matrix;

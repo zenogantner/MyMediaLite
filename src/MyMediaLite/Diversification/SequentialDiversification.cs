@@ -37,6 +37,7 @@ namespace MyMediaLite.Diversification
 	///   </description></item>
 	/// </list>
 	/// </remarks>
+	[Obsolete]
 	public class SequentialDiversification
 	{
 		SymmetricCorrelationMatrix ItemCorrelations { get; set; }

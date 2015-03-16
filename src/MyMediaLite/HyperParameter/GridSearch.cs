@@ -27,6 +27,7 @@ using MyMediaLite.RatingPrediction;
 namespace MyMediaLite.HyperParameter
 {
 	/// <summary>Grid search for finding suitable hyperparameters</summary>
+	[Obsolete]
 	public static class GridSearch
 	{
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure (1D)</summary>

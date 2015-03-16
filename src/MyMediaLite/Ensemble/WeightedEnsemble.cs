@@ -30,6 +30,7 @@ namespace MyMediaLite.Ensemble
 	/// <remarks>
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
+	[Obsolete]
 	public class WeightedEnsemble : Ensemble
 	{
 		/// <summary>List of component weights</summary>

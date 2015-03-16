@@ -40,6 +40,7 @@ namespace MyMediaLite.RatingPrediction
 	///
 	/// This recommender does NOT support incremental updates.
 	/// </remarks>
+	[Obsolete]
 	public class CoClustering : RatingPredictor, IIterativeModel
 	{
 		/// <summary>Random number generator</summary>
