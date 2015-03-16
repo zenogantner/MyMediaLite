@@ -21,15 +21,14 @@ do
 	rm tmp.model*
 done
 
-for method in ItemAverage #FactorWiseMatrixFactorization
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt | perl -pe "s/\w+_time\s*\S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --load-user-mapping=um.txt --load-item-mapping=im.txt
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --load-user-mapping=um.txt --load-item-mapping=im.txt | perl -pe "s/\w+_time\s*\S+//g" > output2.txt
-	diff --ignore-space-change output1.txt output2.txt
-	rm tmp.model* um.txt im.txt
-done
+
+method=ItemAverage
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --save-user-mapping=um.txt --save-item-mapping=im.txt | perl -pe "s/\w+_time\s*\S+//g" > output1.txt
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --load-user-mapping=um.txt --load-item-mapping=im.txt
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --load-user-mapping=um.txt --load-item-mapping=im.txt | perl -pe "s/\w+_time\s*\S+//g" > output2.txt
+diff --ignore-space-change output1.txt output2.txt
+rm tmp.model* um.txt im.txt
 
 
 for method in CoClustering SVDPlusPlus SigmoidSVDPlusPlus SigmoidUserAsymmetricFactorModel SigmoidItemAsymmetricFactorModel SigmoidCombinedAsymmetricFactorModel
@@ -41,6 +40,7 @@ do
 	diff --ignore-space-change output1.txt output2.txt
 	rm tmp.model* um.txt im.txt
 done
+
 
 for method in UserKNN ItemKNN
 do
@@ -71,21 +71,21 @@ echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method 
 diff --ignore-space-change output1.txt output2.txt
 rm tmp.model*
 
+
 echo
 echo "item recommenders"
 echo "-----------------"
 
 PROGRAM="bin/item_recommendation"
 
-for method in MostPopular
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
-	diff --ignore-all-space output1.txt output2.txt
-	rm tmp.model*
-done
+method=MostPopular
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --random-seed=1
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --random-seed=1
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
+diff --ignore-all-space output1.txt output2.txt
+rm tmp.model*
+
 
 for method in WRMF BPRMF
 do
@@ -111,14 +111,12 @@ do
 	done
 done
 
-for method in ItemAttributeKNN
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
-	diff --ignore-all-space output1.txt output2.txt
-	rm tmp.model*
-done
+method=ItemAttributeKNN
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1
+$PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1
+$PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
+diff --ignore-all-space output1.txt output2.txt
+rm tmp.model*
 
 rm output1.txt output2.txt
