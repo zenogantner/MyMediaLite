@@ -170,7 +170,6 @@
     <Compile Include="ItemRecommendation\WeightedBPRMF.cs" />
     <Compile Include="RatingPrediction\Random.cs" />
     <Compile Include="RatingPrediction\Constant.cs" />
-    <Compile Include="ItemRecommendation\BPRLinear.cs" />
     <Compile Include="IO\KDDCup2011\Items.cs" />
     <Compile Include="IO\KDDCup2011\Ratings.cs" />
     <Compile Include="IO\KDDCup2011\Track2Items.cs" />

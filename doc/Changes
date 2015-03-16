@@ -2,6 +2,7 @@
 	recommenders
 	 - fix incremental update bug (user vs. item ID confusion) for item
 	   recommendation ItemKNN (pull request by Jessica Tölke)
+         - get rid of recommender BPRLinear
          - mark (Weighted)Ensemble, (BiPolar)SlopeOne, GridSearch, CoClustering,
            FactorWiseMatrixFactorization, NaiveBayes as obsolete
 	misc

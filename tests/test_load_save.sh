@@ -5,7 +5,7 @@ DATA_DIR=data/ml-100k
 K=2
 
 echo "MyMediaLite load/save test script"
-echo "This will take about 2 minutes ..."
+echo "This will take about 9 minutes ..."
 
 echo
 echo "rating predictors"
@@ -117,16 +117,6 @@ do
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
 	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1
 	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
-	diff --ignore-all-space output1.txt output2.txt
-	rm tmp.model*
-done
-
-for method in BPRLinear
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --recommender-options=\"num_iter=1\" --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --save-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --recommender-options="num_iter=1" --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output1.txt
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --recommender-options=\"num_iter=1\" --random-seed=1
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --load-model=tmp.model --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --recommender-options="num_iter=1" --random-seed=1 | perl -pe "s/\w+_time \S+//g" > output2.txt
 	diff --ignore-all-space output1.txt output2.txt
 	rm tmp.model*
 done
