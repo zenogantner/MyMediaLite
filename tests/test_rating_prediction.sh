@@ -63,17 +63,9 @@ echo "--------------"
 
 DATA_DIR=data/ml-100k
 
-for method in UserItemBaseline SlopeOne BipolarSlopeOne
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
-done
-
-for method in FactorWiseMatrixFactorization CoClustering
-do
-	echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
-	     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=byte
-done
+method=UserItemBaseline
+echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
+     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --rating-type=float
 
 for method in SigmoidCombinedAsymmetricFactorModel SigmoidSVDPlusPlus SVDPlusPlus
 do

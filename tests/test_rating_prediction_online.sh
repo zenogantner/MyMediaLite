@@ -33,6 +33,3 @@ method=ItemAttributeKNN
 echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt
      $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --recommender-options="k=$K" --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt | perl -pe "s/\w+_time \S+//g" > output1.txt
 
-method=NaiveBayes
-echo $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --online-evaluation
-     $PROGRAM --training-file=u1.base --test-file=u1.test --recommender=$method --data-dir=$DATA_DIR --item-attributes=item-attributes-genres.txt --online-evaluation
