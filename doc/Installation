@@ -23,6 +23,8 @@ Tested configurations:
    - Doxygen 1.6.3
  - Ubuntu 11.10
    - with Mono 2.10.5
+ - Ubuntu 14-04
+   - with Mono 3.2.8 and and MonoDevelop 4.0.12
  - Debian Wheezy
    - with Mono 2.10.1 and MonoDevelop 2.8.2
  - Windows with Visual Studio 2010
@@ -30,5 +32,5 @@ Tested configurations:
 Let us know on which configuration of .NET or Mono you are using MyMediaLite,
 or whether you experience difficulties.
 
-e-mail contact:   mymedialite@ismll.de
+e-mail contact:   mymedialite@googlegroups.com
 Google group:     http://groups.google.com/group/mymedialite
