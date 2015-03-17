@@ -11,6 +11,7 @@
 	   Newell)
          - mark SequentialDiversification as obsolete
          - remove GUI demo
+	 - remove Perl6, Python, and Ruby examples
 
 3.10	2013-09-23
 	recommenders
