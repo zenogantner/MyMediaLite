@@ -52,7 +52,7 @@ fix_csproj:
 MyMediaLite-${VERSION}.tar.gz:
 	mkdir MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/doc/
-	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation doc/TODO MyMediaLite-${VERSION}/doc
+	cp doc/Authors doc/Changes doc/ComponentLicenses doc/GPL-3 doc/Installation MyMediaLite-${VERSION}/doc
 	cp -r bin examples scripts MyMediaLite-${VERSION}
 	cp README MyMediaLite-${VERSION}
 	mkdir MyMediaLite-${VERSION}/lib/
@@ -131,7 +131,6 @@ download-imdb: data
 	scripts/download_imdb.sh
 
 todo:
-	${ACK} --type=csharp TODO                    ${SRC_DIR}; echo
 	${ACK} --type=csharp FIXME                   ${SRC_DIR}; echo
 	${ACK} --type=csharp HACK                    ${SRC_DIR}; echo
 	${ACK} --type=csharp NotImplementedException ${SRC_DIR}; echo
