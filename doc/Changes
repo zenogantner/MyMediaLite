@@ -1,4 +1,4 @@
-3.11	2015-03-
+3.11	2015-03-23
 	recommenders
 	 - fix incremental update bug (user vs. item ID confusion) for item
 	   recommendation ItemKNN (pull request by Jessica Tölke)
