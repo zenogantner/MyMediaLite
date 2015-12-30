@@ -61,6 +61,7 @@
     <Compile Include="Correlation\BinaryCosine.cs" />
     <Compile Include="Correlation\Jaccard.cs" />
     <Compile Include="Correlation\Pearson.cs" />
+    <Compile Include="Correlation\RatingCosine.cs" />
     <Compile Include="Data\CombinedRatings.cs" />
     <Compile Include="Data\IPosOnlyFeedback.cs" />
     <Compile Include="Data\IRatings.cs" />
