@@ -26,8 +26,8 @@ namespace MyMediaLite.Correlation
 {
 	/// <summary>Rating cosine similarity for rating data</summary>
 	/// <remarks>
-  ///   Similarity is computed between common ratings values.
-  ///   https://en.wikipedia.org/wiki/Cosine_similarity#Definition
+	///   Similarity is computed between common ratings values.
+	///   https://en.wikipedia.org/wiki/Cosine_similarity#Definition
 	/// </remarks>
 	public sealed class RatingCosine : SymmetricCorrelationMatrix, IRatingCorrelationMatrix
 	{
