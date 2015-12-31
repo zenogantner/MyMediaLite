@@ -35,7 +35,9 @@ namespace MyMediaLite.Correlation
 		/// <summary>use stored/precomputed correlation</summary>
 		Stored,
 		/// <summary>Pearson correlation</summary>
-		Pearson
+		Pearson,
+		/// <summary>rating cosine similarity</summary>
+		RatingCosine
 	}
 }
 

@@ -113,6 +113,9 @@ namespace MyMediaLite.RatingPrediction
 				case RatingCorrelationType.Pearson:
 					correlation_matrix = new Pearson(num_entities, Alpha);
 					break;
+				case RatingCorrelationType.RatingCosine:
+					correlation_matrix = new RatingCosine(num_entities);
+					break;
 				default:
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
