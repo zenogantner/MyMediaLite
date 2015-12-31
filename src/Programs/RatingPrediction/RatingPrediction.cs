@@ -50,6 +50,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 
 	protected virtual string DefaultMeasure { get { return "RMSE"; } }
 	protected override ICollection<string> Measures { get { return MyMediaLite.Eval.Ratings.Measures; } }
+	protected override string ProgramName { get { return "Rating Prediction"; } }
 
 	public RatingPrediction()
 	{
@@ -57,19 +58,11 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 		cutoff = double.MaxValue;
 	}
 
-	protected override void ShowVersion()
-	{
-		ShowVersion(
-			"Rating Prediction",
-			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
-		);
-	}
-
 	// TODO generalize
 	protected override void Usage(int exit_code)
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite rating prediction {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", ProgramName, version.Major, version.Minor);
 		Console.WriteLine(@"
  usage:  rating_prediction --training-file=FILE --recommender=METHOD [OPTIONS]
 

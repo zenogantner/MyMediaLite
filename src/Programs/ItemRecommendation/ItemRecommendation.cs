@@ -58,24 +58,18 @@ class ItemRecommendation : CommandLineProgram<IRecommender>
 
 	protected override ICollection<string> Measures { get { return Items.Measures; } }
 
+	protected override string ProgramName { get { return "Item Recommendation from Positive-Only Feedback"; } }
+
 	public ItemRecommendation()
 	{
 		cutoff  = double.MinValue;
 		eval_measures = ItemRecommendationEvaluationResults.DefaultMeasuresToShow;
 	}
 
-	protected override void ShowVersion()
-	{
-		ShowVersion(
-			"Item Recommendation from Positive-Only Feedback",
-			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler"
-		);
-	}
-
 	protected override void Usage(int exit_code)
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite item recommendation from positive-only feedback {0}.{1:00}", version.Major, version.Minor);
+		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", ProgramName, version.Major, version.Minor);
 		Console.WriteLine(@"
  usage:   item_recommendation --training-file=FILE --recommender=METHOD [OPTIONS]
 
