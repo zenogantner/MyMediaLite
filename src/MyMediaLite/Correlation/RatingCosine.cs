@@ -33,8 +33,7 @@ namespace MyMediaLite.Correlation
 	/// </remarks>
 	public sealed class RatingCosine : Pearson
 	{
-		/// <summary>Constructor. Create a RatingCosine correlation matrix</summary>
-		/// <param name="num_entities">the number of entities</param>
+		///
 		public RatingCosine(int num_entities, float shrinkage) : base(num_entities, shrinkage) {}
 
 		protected override double GetDenominator(double i_sum, double j_sum, double ii_sum, double jj_sum, int n)
