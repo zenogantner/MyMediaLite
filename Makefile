@@ -158,5 +158,5 @@ edit-flyer:
 view-flyer:
 	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf &
 
-copy-packages-website:
+copy-packages-website: MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz
 	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOMEPAGE}/download
