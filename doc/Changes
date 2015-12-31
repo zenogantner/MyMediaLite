@@ -1,10 +1,12 @@
-3.11	2015-03-23
+3.11	2015-12-31
 	recommenders
 	 - fix incremental update bug (user vs. item ID confusion) for item
 	   recommendation ItemKNN (pull request by Jessica Tölke)
          - get rid of recommender BPRLinear
          - mark (Weighted)Ensemble, (BiPolar)SlopeOne, GridSearch, CoClustering,
            FactorWiseMatrixFactorization, NaiveBayes as obsolete
+	correlations
+	 - add RatingCosine (Nicolas Hug)
 	misc
 	 - #440: fix MovieLens 10M URL (pull request by Greg Najda)
 	 - #448: fix misleading documentation in Eval.CandidateItems (Chris
