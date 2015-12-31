@@ -3,6 +3,7 @@
 *.bak
 *.tmp
 *.suo
+*.exe
 bin
 *.tar.gz
 *.userprefs
