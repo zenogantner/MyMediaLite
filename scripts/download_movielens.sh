@@ -4,20 +4,14 @@
 
 echo "The MovieLens datasets are for NON-COMMERCIAL use only."
 echo "Refer to the README file for the details of the usage license."
-echo "Hit enter to continue, Ctrl-C to abort."
-read DUMMY
-
-echo "This may take a while ..."
-echo
 
 mkdir -p data
+cd data
 
 # download MovieLens data
-wget --output-document=data/ml-100k.zip  http://www.grouplens.org/system/files/ml-100k.zip
-wget --output-document=data/ml-1m.zip    http://www.grouplens.org/system/files/ml-1m.zip
-wget --output-document=data/ml-10m.zip   http://files.grouplens.org/papers/ml-10m.zip
-
-cd data
+wget http://grouplens.org/system/files/ml-100k.zip
+wget http://grouplens.org/system/files/ml-1m.zip
+wget http://files.grouplens.org/papers/ml-10m.zip
 
 # unzip data
 unzip ml-100k.zip
