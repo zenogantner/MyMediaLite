@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>MyMediaLite</id>
-    <version>3.10</version>
+    <version>3.11</version>
     <authors>Zeno Gantner, Steffen Rendle, Lucas Drumond</authors>
     <owners>Zeno Gantner, Greg Najda</owners>
     <description>Recommender system library for CLR (.NET)</description>
