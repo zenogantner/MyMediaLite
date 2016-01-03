@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
@@ -21,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MathNet.Numerics.Distributions;
+using System.Threading.Tasks;
 
 namespace MyMediaLite.DataType
 {
@@ -68,6 +70,24 @@ namespace MyMediaLite.DataType
 				matrix.data[i] = (float) nd.Sample();
 		}
 
+        // Initializes a float matrix with non-negative random values within a range [0,1]
+        static public void InitNonNegative(this Matrix<float> matrix)
+        {
+            System.Random rand = new System.Random();
+
+            for (int i = 0; i < matrix.data.Length; i++)
+                matrix.data[i] = (float)rand.NextDouble();
+        }
+
+        // Initializes a float matrix with zeros
+        static public void InitZeros(this Matrix<float> matrix)
+        {
+            System.Random rand = new System.Random();
+
+            for (int i = 0; i < matrix.data.Length; i++)
+                matrix.data[i] = 0;
+        }
+
 		/// <summary>Increments the specified matrix element by a double value</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
@@ -86,7 +106,7 @@ namespace MyMediaLite.DataType
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
 
-			for (int i = 0; i < matrix1.data.Length; i++)
+            for (int i = 0; i < matrix1.data.Length; i++)
 				matrix1.data[i] += matrix2.data[i];
 		}
 
@@ -104,7 +124,7 @@ namespace MyMediaLite.DataType
 		/// <param name="v">the value to increment with</param>
 		static public void Inc(this Matrix<float> matrix, float v)
 		{
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				matrix.data[i] += v;
 		}
 		
@@ -157,7 +177,7 @@ namespace MyMediaLite.DataType
 		/// <param name="f">the number to multiply with</param>
 		static public void Multiply(this Matrix<float> matrix, float f)
 		{
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				matrix.data[i] *= f;
 		}
 
@@ -170,7 +190,7 @@ namespace MyMediaLite.DataType
 		static public float FrobeniusNorm(this Matrix<float> matrix)
 		{
 			double squared_entry_sum = 0;
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				squared_entry_sum += Math.Pow(matrix.data[i], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
@@ -304,11 +324,145 @@ namespace MyMediaLite.DataType
 			return m.data.Max();
 		}
 
+
+
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
 		static public float Max(this Matrix<float> m)
 		{
 			return m.data.Max();
 		}
+
+        // (c) Dimitris
+        // Multiply matrix by another matrix
+        static public Matrix<float> Multiply(Matrix<float> matrix1, Matrix<float> matrix2)
+        {
+            Matrix<float> result = new Matrix<float>(matrix1.dim1, matrix2.dim2);
+
+            //for (int i = 0; i < matrix1.dim1; i++)
+            Parallel.For(0, matrix1.dim1, i =>
+            {
+                for (int j = 0; j < matrix2.dim2; j++)
+                {
+                    float sum = 0.0f;
+                    for (int k = 0; k < matrix2.dim1; k++)
+                        sum += matrix1.data[i * matrix1.dim2 + k] * matrix2.data[k * matrix2.dim2 + j];
+                    result.data[i * result.dim2 + j] = sum;
+                }
+            });
+            return result;
+        }
+
+        // (c) Dimitris
+        // Multiply sparse boolean matrix by a matrix
+        static public Matrix<float> Multiply(IBooleanMatrix boolMatrix, Matrix<float> matrix)
+        {
+
+            if (boolMatrix.NumberOfColumns != matrix.dim1)
+                throw new ArgumentOutOfRangeException("matrices cannot be multiplied due to wrong dimensions");
+
+            Matrix<float> result = new Matrix<float>(boolMatrix.NumberOfRows, matrix.dim2);
+
+            //for (int i = 0; i < boolMatrix.NumberOfRows; i++)
+            Parallel.For(0, boolMatrix.NumberOfRows, i =>
+            {
+                for (int j = 0; j < matrix.dim2; j++)
+                    foreach (int k in boolMatrix.GetEntriesByRow(i))
+                        result[i, j] += matrix[k, j];
+            });
+
+
+            return result;
+        }
+
+        // (c) Dimitris
+        // Multiply matrix by a sparse boolean matrix
+        static public Matrix<float> Multiply(Matrix<float> matrix, IBooleanMatrix boolMatrix)
+        {
+
+            if (boolMatrix.NumberOfRows != matrix.dim2)
+                throw new ArgumentOutOfRangeException("matrices cannot be multiplied due to wrong dimensions");
+
+            Matrix<float> result = new Matrix<float>(matrix.dim1, boolMatrix.NumberOfColumns);
+            SparseBooleanMatrix Xt = (SparseBooleanMatrix)boolMatrix.Transpose();
+            Matrix<float> Mt = (Matrix<float>) matrix.Transpose();
+
+            result = (Matrix<float>) Multiply(Xt, Mt).Transpose();
+
+            /*
+
+            //Parallel.For(0, matrix.dim1, i=>
+            for (int i = 0; i < matrix.dim1; i++)
+            {
+                Parallel.ForEach(boolMatrix.NonEmptyColumnIDs, j =>
+                {
+                    var columnVector = boolMatrix.GetEntriesByColumn(j);
+                    //result[i, j] += matrix[i, k];
+                });
+            }
+
+            */
+
+                /*
+                for (int j = 0; j < boolMatrix.NumberOfColumns; j++)
+                {
+                    var x = 1;
+                }
+                */
+
+            /*
+            for (int i = 0; i < matrix.dim1; i++)
+                for (int j = 0; j < boolMatrix.NumberOfColumns; j++)
+                    foreach (int k in boolMatrix.GetEntriesByColumn(j))
+                        result[i, j] += matrix[i, k];
+            */
+            return result;
+        }
+
+        // (c) Dimitris
+        // Pointwise multiply two matrices
+        static public Matrix<float> MultiplyPointwise(Matrix<float> matrix1, Matrix<float> matrix2)
+        {
+
+            if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
+                throw new ArgumentOutOfRangeException("matrices cannot be multiplied due to wrong dimensions");
+
+            Matrix<float> result = new Matrix<float>(matrix1.dim1, matrix1.dim2);
+
+            for (int i = 0; i < matrix1.data.Length; i++)
+                result.data[i] = matrix1.data[i] * matrix2.data[i];
+
+            return result;
+        }
+
+        // (c) Dimitris
+        // Pointwise divide two matrices
+        static public Matrix<float> DividePointwise(Matrix<float> matrix1, Matrix<float> matrix2)
+        {
+
+            if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
+                throw new ArgumentOutOfRangeException("matrices cannot be multiplied due to wrong dimensions");
+
+            Matrix<float> result = new Matrix<float>(matrix1.dim1, matrix1.dim2);
+
+            for (int i = 0; i < matrix1.data.Length; i++)
+                result.data[i] = matrix1.data[i] / matrix2.data[i];
+
+            return result;
+        }
+
+        // (c) Dimitris
+        // Add scalar to a matrix
+        static public Matrix<float> AddScalar(Matrix<float> matrix, float scalar)
+        {
+
+            Matrix<float> result = new Matrix<float>(matrix.dim1, matrix.dim2);
+
+            for (int i = 0; i < matrix.data.Length; i++)
+                result.data[i] = matrix.data[i] + scalar;
+
+            return result;
+        }
+
 	}
 }
