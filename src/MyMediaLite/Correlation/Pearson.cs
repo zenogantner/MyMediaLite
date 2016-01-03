@@ -55,7 +55,7 @@ namespace MyMediaLite.Correlation
 	///     </list>
 	///   </para>
 	/// </remarks>
-	public sealed class Pearson : SymmetricCorrelationMatrix, IRatingCorrelationMatrix
+	public class Pearson : SymmetricCorrelationMatrix, IRatingCorrelationMatrix
 	{
 		/// <summary>shrinkage parameter, if set to 0 we have the standard Pearson correlation without shrinkage</summary>
 		public float Shrinkage { get; set; }
@@ -67,8 +67,6 @@ namespace MyMediaLite.Correlation
 		{
 			Shrinkage = shrinkage;
 		}
-
-		// TODO get rid of some code here
 
 		///
 		public float ComputeCorrelation(IRatings ratings, EntityType entity_type, int i, int j)
@@ -119,13 +117,7 @@ namespace MyMediaLite.Correlation
 				jj_sum += r2 * r2;
 			}
 
-			double denominator = Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
-
-			if (denominator == 0)
-				return 0;
-			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
-
-			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
+			return ComputeCorrelation (i_sum, j_sum, ii_sum, jj_sum, ij_sum, n);
 		}
 
 		///
@@ -171,13 +163,7 @@ namespace MyMediaLite.Correlation
 				jj_sum += r2 * r2;
 			}
 
-			double denominator = Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
-
-			if (denominator == 0)
-				return 0;
-			double pmcc = (n * ij_sum - i_sum * j_sum) / denominator;
-
-			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
+			return ComputeCorrelation (i_sum, j_sum, ii_sum, jj_sum, ij_sum, n);
 		}
 
 		///
@@ -229,27 +215,30 @@ namespace MyMediaLite.Correlation
 
 			for (int i = 0; i < num_entities; i++)
 				for (int j = i + 1; j < num_entities; j++)
-				{
-					int n = freqs[i, j];
-
-					if (n < 2)
-					{
+					if (freqs[i, j] < 2)
 						this[i, j] = 0;
-						continue;
-					}
+					else
+						this[i, j] = ComputeCorrelation (i_sums[i, j], j_sums[i, j], ii_sums[i, j], jj_sums[i, j], ij_sums[i, j], freqs[i, j]);
+		}
 
-					double numerator = ij_sums[i, j] * n - i_sums[i, j] * j_sums[i, j];
+		protected virtual float ComputeCorrelation(double i_sum, double j_sum, double ii_sum, double jj_sum, double ij_sum, int n)
+		{
+			double denominator = GetDenominator(i_sum, j_sum, ii_sum, jj_sum, n);
+			if (denominator == 0)
+				return 0f;
+			double pmcc = GetNumerator(i_sum, j_sum, ij_sum, n) / denominator;
 
-					double denominator = Math.Sqrt( (n * ii_sums[i, j] - i_sums[i, j] * i_sums[i, j]) * (n * jj_sums[i, j] - j_sums[i, j] * j_sums[i, j]) );
-					if (denominator == 0)
-					{
-						this[i, j] = 0;
-						continue;
-					}
+			return (float) pmcc * ((n - 1) / (n - 1 + Shrinkage));
+		}
 
-					double pmcc = numerator / denominator;
-					this[i, j] = (float) (pmcc * ((n - 1) / (n - 1 + Shrinkage)));
-				}
+		protected virtual double GetDenominator(double i_sum, double j_sum, double ii_sum, double jj_sum, int n)
+		{
+			return Math.Sqrt( (n * ii_sum - i_sum * i_sum) * (n * jj_sum - j_sum * j_sum) );
+		}
+
+		protected virtual double GetNumerator(double i_sum, double j_sum, double ij_sum, int n)
+		{
+			return n * ij_sum - i_sum * j_sum;
 		}
 	}
 }

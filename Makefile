@@ -15,7 +15,7 @@ RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 ACK=ack-grep
 export IRONPYTHONPATH := ${MYMEDIA_ASSEMBLY_DIR}
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens copy-packages-website example-python example-ruby unittests
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens copy-packages-website example-fsharp example-csharp unittests
 
 all: mymedialite
 
@@ -109,15 +109,6 @@ example-fsharp: data/ml-100k/u.data
 	cd data/ml-100k && mono ../../examples/fsharp/rating_prediction.exe
 	cd data/ml-100k && mono ../../examples/fsharp/item_recommendation.exe
 
-
-example-python: data/ml-100k/u.data
-	cd data/ml-100k && ipy ../../examples/python/rating_prediction.py
-	cd data/ml-100k && ipy ../../examples/python/item_recommendation.py
-
-example-ruby: data/ml-100k/u.data
-	cd data/ml-100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/rating_prediction.rb
-	cd data/ml-100k && ir -I${MYMEDIA_ASSEMBLY_DIR} ../../examples/ruby/item_recommendation.rb
-
 data:
 	mkdir data/
 
@@ -167,5 +158,5 @@ edit-flyer:
 view-flyer:
 	${PDF_VIEWER} doc/flyer/mymedialite-flyer.pdf &
 
-copy-packages-website:
+copy-packages-website: MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz
 	cp MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}.src.tar.gz MyMediaLite-${VERSION}.doc.tar.gz ${HOMEPAGE}/download

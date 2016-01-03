@@ -113,6 +113,9 @@ namespace MyMediaLite.RatingPrediction
 				case RatingCorrelationType.Pearson:
 					correlation_matrix = new Pearson(num_entities, Alpha);
 					break;
+				case RatingCorrelationType.RatingCosine:
+					correlation_matrix = new RatingCosine(num_entities, Alpha);
+					break;
 				default:
 					throw new NotImplementedException(string.Format("Support for {0} is not implemented", Correlation));
 			}
@@ -166,7 +169,7 @@ namespace MyMediaLite.RatingPrediction
 		public override string ToString()
 		{
 			return string.Format(
-				"{0} k={1} correlation={2} weighted_binary={3} alpha={4} (only for BidirectionalConditionalProbability and Pearson); baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
+				"{0} k={1} correlation={2} weighted_binary={3} alpha={4}; baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
 				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, WeightedBinary, Alpha, RegU, RegI, NumIter);
 		}
 	}

@@ -37,18 +37,11 @@ class RatingBasedRanking : RatingPrediction
 	bool all_items;
 
 	protected override ICollection<string> Measures { get { return Items.Measures; } }
+	protected override string ProgramName { get { return "Rating-based Item Ranking"; } }
 
 	public RatingBasedRanking()
 	{
 		eval_measures = new string[] { "AUC", "prec@5" };
-	}
-
-	protected override void ShowVersion()
-	{
-		ShowVersion(
-			"Rating-based Item Ranking",
-			"Copyright (C) 2011, 2012, 2013 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle"
-		);
 	}
 
 	protected override void SetupOptions()

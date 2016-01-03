@@ -1,0 +1,12 @@
+language: csharp
+mono:
+ - latest
+ - 3.8.0
+solution: src/MyMediaLite-nogui.sln
+install:
+  - nuget restore src/MyMediaLite-nogui.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release src/MyMediaLite-nogui.sln
+  - make data/ml-100k/u.data
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./src/Tests/bin/Release/Tests.dll

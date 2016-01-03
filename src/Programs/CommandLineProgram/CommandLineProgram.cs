@@ -89,6 +89,8 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 
 	protected abstract ICollection<string> Measures { get; }
 
+	protected abstract string ProgramName { get; }
+
 	protected virtual void Usage(string message)
 	{
 		Console.WriteLine(message);
@@ -100,8 +102,6 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 
 	protected abstract void SetupOptions();
 
-	protected abstract void ShowVersion();
-
 	protected void ShowMeasures()
 	{
 		Console.WriteLine("--measures=\"LIST\"");
@@ -112,11 +112,11 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 		Environment.Exit(0);
 	}
 
-	protected void ShowVersion(string program_name, string copyright)
+	protected void ShowVersion()
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
-		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", program_name, version.Major, version.Minor);
-		Console.WriteLine(copyright);
+		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", ProgramName, version.Major, version.Minor);
+		Console.WriteLine("Copyright (C) 2011, 2012, 2013, 2015 Zeno Gantner\nCopyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler");
 		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
 		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);

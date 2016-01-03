@@ -67,19 +67,20 @@ Just send an e-mail to mymedialite@googlegroups.com
 
 Acknowledgements
 ----------------
-Thanks go to the following people, who provided valuable feedback,
+Thanks to the following people, who provided valuable feedback,
 patches, or other kinds of assistance:
 Roberto Abalde, Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
 Alejandro Bellogín, Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri,
 Simon Dooms, Lucas Drumond, Michael Ekstrand, Jagadeesh Gorla, Josif Grabocka,
 Mark Graus, Guibing Guo, Andreas Hoffmann, Tomas Horvath, Kenneth Hoste,
-Frantisek Hrdina, Jia Huang, KwangSeob Kim, Dietmar Jannach, Peng Jiang,
-Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler, Damir Logar,
-Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell, Thai-Nghe Nguyen,
-Simon Renaud, Marco Ribeiro, Roland Richter, Saurabh S., Sebastian Schelter,
-Lars Schmidt-Thieme, Yue Shi, Jessica Tölke, Tom Tung, Pieter-Jan Verbruggen,
-Elvio Vicosa, João Vinagre, Oleksandr Vitvitskyi, Yongfeng Wang, Lina Weichbrodt,
-Cees Wesseling, Yong Zheng, GitHub user jkleint.
+Frantisek Hrdina, Jia Huang, Nicolas Hug, KwangSeob Kim, Dietmar Jannach,
+Peng Jiang, Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler,
+Damir Logar, Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell,
+Thai-Nghe Nguyen, Simon Renaud, Marco Ribeiro, Roland Richter, Saurabh S.,
+Sebastian Schelter, Lars Schmidt-Thieme, Yue Shi, Jessica Tölke, Tom Tung,
+Pieter-Jan Verbruggen, Elvio Vicosa, João Vinagre, Oleksandr Vitvitskyi,
+Yongfeng Wang, Lina Weichbrodt, Cees Wesseling, Yong Zheng,
+GitHub user jkleint.
 
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
@@ -87,6 +88,7 @@ under the grant agreement no. 215006.
 
 Copyright & Licensing
 ---------------------
+Copyright (C) 2015 Zeno Gantner
 Copyright (C) 2013 Zeno Gantner, João Vinagre
 Copyright (C) 2012 Zeno Gantner, Lucas Drumond, Marcelo Manzato
 Copyright (C) 2011 Zeno Gantner
