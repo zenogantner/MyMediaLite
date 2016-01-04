@@ -33,7 +33,7 @@ namespace MyMediaLite.Correlation
         Cooccurrence,
         /// <summary>use a similarity provider to get the correlation</summary>
         SimilarityProvider,
-        /// <summary>loglikelihood ratio, as implemented in Mahout. Currently available only in MahoutUserKNN!</summary>
+        /// <summary>similarity based on loglikelihood ratio</summary>
         Loglikelihood,
         /// <summary>use stored/precomputed correlation</summary>
         Stored
