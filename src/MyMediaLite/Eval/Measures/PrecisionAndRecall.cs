@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
@@ -144,5 +145,17 @@ namespace MyMediaLite.Eval.Measures
 
 			return hit_count;
 		}
+
+        /// <summary>
+        /// Compute R-precision, which is the precision at the level of recall
+        /// </summary>
+        /// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
+        /// <param name="correct_items">>a collection of positive/correct item IDs</param>
+        /// <returns></returns>
+        public static double R_Precision(IList<int> ranked_items, ICollection<int> correct_items)
+        {
+            int testset_size = correct_items.Count;
+            return (double)HitsAt(ranked_items, correct_items, testset_size) / testset_size;
+        }
 	}
 }
