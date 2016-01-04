@@ -22,7 +22,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MathNet.Numerics.Distributions;
-using System.Threading.Tasks;
 
 namespace MyMediaLite.DataType
 {
