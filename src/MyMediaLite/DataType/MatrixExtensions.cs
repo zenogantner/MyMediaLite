@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
@@ -68,6 +69,22 @@ namespace MyMediaLite.DataType
 				matrix.data[i] = (float) nd.Sample();
 		}
 
+	        // Initializes a float matrix with non-negative random values within a range [0,1]
+	        static public void InitNonNegative(this Matrix<float> matrix)
+	        {
+	            System.Random rand = new System.Random();
+	
+	            for (int i = 0; i < matrix.data.Length; i++)
+	                matrix.data[i] = (float)rand.NextDouble();
+	        }
+	
+	        // Initializes a float matrix with zeros
+	        static public void InitZeros(this Matrix<float> matrix)
+	        {
+	            for (int i = 0; i < matrix.data.Length; i++)
+	                matrix.data[i] = 0;
+	        }
+
 		/// <summary>Increments the specified matrix element by a double value</summary>
 		/// <param name="matrix">the matrix</param>
 		/// <param name="i">the row</param>
@@ -86,7 +103,7 @@ namespace MyMediaLite.DataType
 			if (matrix1.dim1 != matrix2.dim1 || matrix1.dim2 != matrix2.dim2)
 				throw new ArgumentOutOfRangeException("Matrix sizes do not match.");
 
-			for (int i = 0; i < matrix1.data.Length; i++)
+            for (int i = 0; i < matrix1.data.Length; i++)
 				matrix1.data[i] += matrix2.data[i];
 		}
 
@@ -104,7 +121,7 @@ namespace MyMediaLite.DataType
 		/// <param name="v">the value to increment with</param>
 		static public void Inc(this Matrix<float> matrix, float v)
 		{
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				matrix.data[i] += v;
 		}
 		
@@ -157,7 +174,7 @@ namespace MyMediaLite.DataType
 		/// <param name="f">the number to multiply with</param>
 		static public void Multiply(this Matrix<float> matrix, float f)
 		{
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				matrix.data[i] *= f;
 		}
 
@@ -170,7 +187,7 @@ namespace MyMediaLite.DataType
 		static public float FrobeniusNorm(this Matrix<float> matrix)
 		{
 			double squared_entry_sum = 0;
-			for (int i = 0; i < matrix.data.Length; i++)
+            for (int i = 0; i < matrix.data.Length; i++)
 				squared_entry_sum += Math.Pow(matrix.data[i], 2);
 			return (float) Math.Sqrt(squared_entry_sum);
 		}
@@ -303,6 +320,8 @@ namespace MyMediaLite.DataType
 		{
 			return m.data.Max();
 		}
+
+
 
 		/// <summary>return the maximum value contained in a matrix</summary>
 		/// <param name='m'>the matrix</param>
