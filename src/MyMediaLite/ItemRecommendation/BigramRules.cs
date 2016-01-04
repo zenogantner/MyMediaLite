@@ -32,31 +32,24 @@ namespace MyMediaLite.ItemRecommendation
     {
         List<Dictionary<int, int>> rulesList = new List<Dictionary<int, int>>();
 
-        /// <summary>Default constructor</summary>
         public BigramRules() {}
 
-        ///
         public override void Train()
         {
-            Console.WriteLine("\nComputing the rules matrix...");
             for (int item1 = 0; item1 < MaxItemID + 1; item1++)
             {
                 HashSet<int> item1Vector = (HashSet<int>)Feedback.ItemMatrix[item1];
                 HashSet<int> correlatedItems = new HashSet<int>();
 
-                // Get all items consumed together with the current item
                 foreach(int user in item1Vector)
                     correlatedItems.UnionWith(Feedback.UserMatrix[user]);
                 correlatedItems.Remove(item1);
 
-                // Compute overlap-based score of each bigram
                 Dictionary<int, int> bigramScore = new Dictionary<int, int>();
-
                 foreach (int item2 in correlatedItems)
                 {
                     int intersection = 0;
                     HashSet<int> item2Vector = (HashSet<int>)Feedback.ItemMatrix[item2];
-
                     foreach (int user in item1Vector)
                     {
                         if (item2Vector.Contains(user))
@@ -66,23 +59,20 @@ namespace MyMediaLite.ItemRecommendation
                 }
                 rulesList.Add(bigramScore);
             }
-            Console.WriteLine("\nComputing recommendations...");
         }
 
-        ///
+        // The prediction is based on linear combination of confidence and support
         public override float Predict(int user_id, int item_id)
         {
             if (item_id > MaxItemID)
                 return float.MinValue;
 
             float score = 0;
-
             foreach (int item in Feedback.UserMatrix[user_id])
             {
                 int itemTransactions = 0;
                 float confidence = 0;
                 float support = 0;
-
                 if (rulesList[item].ContainsKey(item_id))
                 {
                     itemTransactions = Feedback.ItemMatrix[item].Count;
