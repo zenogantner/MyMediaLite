@@ -65,22 +65,22 @@ Please inform us about if you have a publication that uses
 this software, so we can list it on MyMediaLite's website:
 Just send an e-mail to mymedialite@googlegroups.com
 
-Acknowledgements
-----------------
-Thanks to the following people, who provided valuable feedback,
-patches, or other kinds of assistance:
+Contributors
+------------
+Thanks to the following people, who provided valuable feedback, code, or other
+kinds of assistance:
 Roberto Abalde, Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
 Alejandro Bellogín, Christian Brauch, Fu Changhong, Subramanyeshwar Cherukuri,
-Simon Dooms, Lucas Drumond, Michael Ekstrand, Jagadeesh Gorla, Josif Grabocka,
-Mark Graus, Guibing Guo, Andreas Hoffmann, Tomas Horvath, Kenneth Hoste,
-Frantisek Hrdina, Jia Huang, Nicolas Hug, KwangSeob Kim, Dietmar Jannach,
-Peng Jiang, Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler,
-Damir Logar, Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell,
-Thai-Nghe Nguyen, Dimitris Paraschakis, Simon Renaud, Marco Ribeiro,
-Roland Richter, Saurabh S., Sebastian Schelter, Lars Schmidt-Thieme, Yue Shi,
-Jessica Tölke, Tom Tung, Pieter-Jan Verbruggen, Elvio Vicosa, João Vinagre,
-Oleksandr Vitvitskyi, Yongfeng Wang, Lina Weichbrodt, Cees Wesseling,
-Yong Zheng, GitHub user jkleint.
+Simon Dooms, Lucas Drumond, Michael Ekstrand, Christoph Freudenthaler,
+Zeno Gantner, Jagadeesh Gorla, Josif Grabocka, Mark Graus, Guibing Guo,
+Andreas Hoffmann, Tomas Horvath, Kenneth Hoste, Frantisek Hrdina, Jia Huang,
+Nicolas Hug, KwangSeob Kim, Dietmar Jannach, Peng Jiang, Artus Krohn-Grimberghe,
+Tobias Lang, Christina Lichtenthäler, Damir Logar, Marcelo Manzato, Brian McFee,
+Greg Najda, Chris Newell, Thai-Nghe Nguyen, Dimitris Paraschakis, Simon Renaud,
+Steffen Rendle, Marco Ribeiro, Roland Richter, Saurabh S., Sebastian Schelter,
+Lars Schmidt-Thieme, Yue Shi, Jessica Tölke, Tom Tung, Pieter-Jan Verbruggen,
+Elvio Vicosa, João Vinagre, Oleksandr Vitvitskyi, Yongfeng Wang, Lina Weichbrodt,
+Cees Wesseling, Yong Zheng, GitHub user jkleint.
 
 This work was funded by the European Commission FP7 project MyMedia
 (Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
@@ -88,11 +88,7 @@ under the grant agreement no. 215006.
 
 Copyright & Licensing
 ---------------------
-Copyright (C) 2015 Zeno Gantner
-Copyright (C) 2013 Zeno Gantner, João Vinagre
-Copyright (C) 2012 Zeno Gantner, Lucas Drumond, Marcelo Manzato
-Copyright (C) 2011 Zeno Gantner
-Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
+Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 The MyMediaLite contributors
 
 MyMediaLite is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
