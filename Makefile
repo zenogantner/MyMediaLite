@@ -112,10 +112,10 @@ example-fsharp: data/ml-100k/u.data
 data:
 	mkdir data/
 
-data/ml-100k/u.data:
-	scripts/download_movielens.sh
+data/ml-100k/u.data: data
+	scripts/download_ml-100k.sh
 
-download-movielens: data
+download-movielens: data/ml-100k/u.data
 	scripts/download_movielens.sh
 
 download-imdb: data

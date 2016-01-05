@@ -1,6 +1,7 @@
 3.12	2016-
 	misc
 	 - We now use Travis CI for continuous integration.
+	 - split up MovieLens download scripts
 
 3.11	2015-12-31
 	recommenders
