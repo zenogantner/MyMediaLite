@@ -19,13 +19,15 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary> Recommender based on bigram association rules (item1 -> item2) /// <summary>
+	/// <summary> Recommender based on bigram association rules (item1 -&gt; item2)</summary>
 	public class BigramRules : ItemRecommender
 	{
 		List<Dictionary<int, int>> rulesList = new List<Dictionary<int, int>>();
 
+		///<summary>Default constructor</summary>
 		public BigramRules() {}
 
+		///
 		public override void Train()
 		{
 			for (int item1 = 0; item1 < MaxItemID + 1; item1++)
@@ -54,6 +56,7 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		// The prediction is based on linear combination of confidence and support
+		///
 		public override float Predict(int user_id, int item_id)
 		{
 			if (item_id > MaxItemID)
