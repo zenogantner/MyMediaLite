@@ -1,4 +1,6 @@
 3.12	2016-
+	recommenders:
+	 - #457: add bigram association rules recommender (Dimitris Paraschakis)
 	misc
 	 - We now use Travis CI for continuous integration.
 	 - split up MovieLens download scripts
