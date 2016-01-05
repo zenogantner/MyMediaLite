@@ -19,62 +19,61 @@ using System.Collections.Generic;
 
 namespace MyMediaLite.ItemRecommendation
 {
-    /// <summary> Recommender based on bigram association rules (item1 -> item2) /// <summary>
+	/// <summary> Recommender based on bigram association rules (item1 -> item2) /// <summary>
+	public class BigramRules : ItemRecommender
+	{
+		List<Dictionary<int, int>> rulesList = new List<Dictionary<int, int>>();
 
-    public class BigramRules : ItemRecommender
-    {
-        List<Dictionary<int, int>> rulesList = new List<Dictionary<int, int>>();
+		public BigramRules() {}
 
-        public BigramRules() {}
+		public override void Train()
+		{
+			for (int item1 = 0; item1 < MaxItemID + 1; item1++)
+			{
+				HashSet<int> item1Vector = (HashSet<int>)Feedback.ItemMatrix[item1];
+				HashSet<int> correlatedItems = new HashSet<int>();
 
-        public override void Train()
-        {
-            for (int item1 = 0; item1 < MaxItemID + 1; item1++)
-            {
-                HashSet<int> item1Vector = (HashSet<int>)Feedback.ItemMatrix[item1];
-                HashSet<int> correlatedItems = new HashSet<int>();
+				foreach (int user in item1Vector)
+					correlatedItems.UnionWith(Feedback.UserMatrix[user]);
+				correlatedItems.Remove(item1);
 
-                foreach(int user in item1Vector)
-                    correlatedItems.UnionWith(Feedback.UserMatrix[user]);
-                correlatedItems.Remove(item1);
+				Dictionary<int, int> bigramScore = new Dictionary<int, int>();
+				foreach (int item2 in correlatedItems)
+				{
+					int intersection = 0;
+					HashSet<int> item2Vector = (HashSet<int>)Feedback.ItemMatrix[item2];
+					foreach (int user in item1Vector)
+					{
+						if (item2Vector.Contains(user))
+							intersection++;
+					}
+					bigramScore.Add(item2, intersection);
+				}
+				rulesList.Add(bigramScore);
+			}
+		}
 
-                Dictionary<int, int> bigramScore = new Dictionary<int, int>();
-                foreach (int item2 in correlatedItems)
-                {
-                    int intersection = 0;
-                    HashSet<int> item2Vector = (HashSet<int>)Feedback.ItemMatrix[item2];
-                    foreach (int user in item1Vector)
-                    {
-                        if (item2Vector.Contains(user))
-                            intersection++;
-                    }
-                    bigramScore.Add(item2, intersection);
-                }
-                rulesList.Add(bigramScore);
-            }
-        }
+		// The prediction is based on linear combination of confidence and support
+		public override float Predict(int user_id, int item_id)
+		{
+			if (item_id > MaxItemID)
+				return float.MinValue;
 
-        // The prediction is based on linear combination of confidence and support
-        public override float Predict(int user_id, int item_id)
-        {
-            if (item_id > MaxItemID)
-                return float.MinValue;
-
-            float score = 0;
-            foreach (int item in Feedback.UserMatrix[user_id])
-            {
-                int itemTransactions = 0;
-                float confidence = 0;
-                float support = 0;
-                if (rulesList[item].ContainsKey(item_id))
-                {
-                    itemTransactions = Feedback.ItemMatrix[item].Count;
-                    confidence = rulesList[item][item_id] / (float)itemTransactions;
-                    support = rulesList[item][item_id] / (float)Feedback.Count;
-                    score += support * confidence;
-                }
-            }
-            return score;
-        }
-    }
+			float score = 0;
+			foreach (int item in Feedback.UserMatrix[user_id])
+			{
+				int itemTransactions = 0;
+				float confidence = 0;
+				float support = 0;
+				if (rulesList[item].ContainsKey(item_id))
+				{
+					itemTransactions = Feedback.ItemMatrix[item].Count;
+					confidence = rulesList[item][item_id] / (float)itemTransactions;
+					support = rulesList[item][item_id] / (float)Feedback.Count;
+					score += support * confidence;
+				}
+			}
+			return score;
+		}
+	}
 }
