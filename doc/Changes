@@ -1,3 +1,7 @@
+3.12	2016-
+	misc
+	 - We now use Travis CI for continuous integration.
+
 3.11	2015-12-31
 	recommenders
 	 - fix incremental update bug (user vs. item ID confusion) for item
