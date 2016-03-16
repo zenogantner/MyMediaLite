@@ -342,18 +342,19 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
 
-			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+			double exp = Math.Exp(x_uij);
+			double sigmoid_derivative = exp / (1 + Math.Exp(x_uij));
 
 			// adjust bias terms
 			if (update_i)
 			{
-				double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
+				double update = sigmoid_derivative - BiasReg * item_bias[item_id];
 				item_bias[item_id] += (float) (learn_rate * update);
 			}
 
 			if (update_j)
 			{
-				double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
+				double update = -sigmoid_derivative - BiasReg * item_bias[other_item_id];
 				item_bias[other_item_id] += (float) (learn_rate * update);
 			}
 
@@ -366,19 +367,19 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u)
 				{
-					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
+					double update = (h_if - h_jf) * sigmoid_derivative - reg_u * w_uf;
 					user_factors[user_id, f] = (float) (w_uf + learn_rate * update);
 				}
 
 				if (update_i)
 				{
-					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
+					double update = w_uf * sigmoid_derivative - reg_i * h_if;
 					item_factors[item_id, f] = (float) (h_if + learn_rate * update);
 				}
 
 				if (update_j)
 				{
-					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
+					double update = -w_uf * sigmoid_derivative - reg_j * h_jf;
 					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
 				}
 			}
