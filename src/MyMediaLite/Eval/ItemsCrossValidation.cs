@@ -108,6 +108,8 @@ namespace MyMediaLite.Eval
 				avg_results[key] /= split.NumberOfFolds;
 			avg_results["num_users"] /= split.NumberOfFolds;
 			avg_results["num_items"] /= split.NumberOfFolds;
+			avg_results["fit"] /= split.NumberOfFolds;
+
 
 			return avg_results;
 		}
