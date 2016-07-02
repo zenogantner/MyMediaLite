@@ -1,6 +1,8 @@
 3.12	2016-
 	recommenders:
 	 - #457: add bigram association rules recommender (Dimitris Paraschakis)
+	evaluation:
+	 - #464: fix fit computation in cross-validation (Dominik Imrich)
 	misc
 	 - We now use Travis CI for continuous integration.
 	 - split up MovieLens download scripts
