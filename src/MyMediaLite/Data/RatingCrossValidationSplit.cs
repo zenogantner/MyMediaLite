@@ -67,12 +67,12 @@ namespace MyMediaLite.Data
 			}
 
 			// assign indices to folds
-			foreach (int i in random_indices)
+			for (int i = 0; i < random_indices.Count; i++)
 				for (int j = 0; j < num_folds; j++)
 					if (j == i % num_folds)
-						test_indices[j].Add(i);
+						test_indices[j].Add(random_indices[i]);
 					else
-						train_indices[j].Add(i);
+						train_indices[j].Add(random_indices[i]);
 
 			// create split data structures
 			Train = new List<IRatings>((int) num_folds);
