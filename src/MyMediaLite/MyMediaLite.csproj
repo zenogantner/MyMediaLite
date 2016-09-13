@@ -242,7 +242,7 @@
     <Compile Include="RatingPrediction\GSVDPlusPlus.cs" />
     <Compile Include="Eval\RatingBasedRankingCrossValidation.cs" />
     <Compile Include="IO\FileSystem.cs" />
-    <Compile Include="ItemRecommendation\SimpleSGD.cs" />
+    <Compile Include="ItemRecommendation\ISGD.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
   <Import Project="MyMediaLite.targets" />
