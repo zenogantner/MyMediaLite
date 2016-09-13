@@ -20,9 +20,7 @@ using C5;
 using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra.Double;
 using MyMediaLite.DataType;
-using MyMediaLite.Data;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -37,7 +35,7 @@ namespace MyMediaLite.ItemRecommendation
 	///         João Vinagre, Alípio Mário Jorge, João Gama:
 	///         Fast incremental matrix factorization for recommendation with positive-only feedback.
 	///         UMAP 2014.
-	///         https://www.researchgate.net/profile/Joao_Vinagre2/publication/263416416_Fast_Incremental_Matrix_Factorization_for_Recommendation_with_Positive-Only_Feedback/file/60b7d53ac3b980d4e2.pdf
+	///         http://link.springer.com/chapter/10.1007/978-3-319-08786-3_41
 	///       </description></item>
 	///     </list>
 	///   </para>
