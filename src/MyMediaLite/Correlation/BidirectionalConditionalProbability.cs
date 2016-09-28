@@ -24,9 +24,20 @@ namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for storing and computing 'bi-directional' conditional probabilities</summary>
 	/// <remarks>
-	/// TODO LIT
+	///   <para>
+	///     A generalization of both conditional probability (alpha=1) and cosine similarity (alpha=0.5).
+	///   </para>
+	///   <para>
+	///     Literature:
+	///     <list type="bullet">
+	///       <item><description>
+	///         Fabio Aiolli: Efficient top-n recommendation for very large scale binary rated datasets.
+	///         RecSys 2013.
+	///         http://www.math.unipd.it/~aiolli/PAPERS/MSD_final.pdf
+	///       </description></item>
+	///     </list>
+	///   </para>
 	/// </remarks>
-	///
 	public sealed class BidirectionalConditionalProbability : BinaryDataAsymmetricCorrelationMatrix
 	{
 		readonly float alpha;
