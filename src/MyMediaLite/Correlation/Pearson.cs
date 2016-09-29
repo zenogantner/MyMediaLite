@@ -44,13 +44,13 @@ namespace MyMediaLite.Correlation
 	///     <list type="bullet">
 	///       <item><description>
 	///         Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
-	///         Transactions on Knowledge Discovery from Data (TKDD), 2009.
-	///         http://public.research.att.com/~volinsky/netflix/factorizedNeighborhood.pdf
+	///         Transactions on Knowledge Discovery from Data (TKDD), 2010.
+	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.476.4158&rep=rep1&type=pdf
 	///       </description></item>
 	///       <item><description>
 	///         Yehuda Koren, Robert Bell: Advances in Collaborative Filtering,
 	///         Chapter 5 of the Recommender Systems Handbook, Springer, 2011.
-	///         http://research.yahoo.net/files/korenBellChapterSpringer.pdf
+	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.269.6294&rep=rep1&type=pdf
 	///       </description></item>
 	///     </list>
 	///   </para>
