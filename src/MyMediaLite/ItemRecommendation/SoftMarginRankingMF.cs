@@ -67,18 +67,19 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			double x_uij = item_bias[i] - item_bias[j] + MatrixExtensions.RowScalarProductWithRowDifference(user_factors, u, item_factors, i, item_factors, j);
 
-			double common_part = x_uij < 0 ? 1 : 0;
+			if (x_uij > 0)
+				return;
 
 			// adjust bias terms
 			if (update_i)
 			{
-				double bias_update = common_part - BiasReg * item_bias[i];
+				double bias_update = 1 - BiasReg * item_bias[i];
 				item_bias[i] += (float) (learn_rate * bias_update);
 			}
 
 			if (update_j)
 			{
-				double bias_update = -common_part - BiasReg * item_bias[j];
+				double bias_update = -1 - BiasReg * item_bias[j];
 				item_bias[j] += (float) (learn_rate * bias_update);
 			}
 
@@ -91,19 +92,19 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u)
 				{
-					double uf_update = (h_if - h_jf) * common_part - reg_u * w_uf;
+					double uf_update = h_if - h_jf - reg_u * w_uf;
 					user_factors[u, f] = (float) (w_uf + learn_rate * uf_update);
 				}
 
 				if (update_i)
 				{
-					double if_update = w_uf * common_part - reg_i * h_if;
+					double if_update = w_uf - reg_i * h_if;
 					item_factors[i, f] = (float) (h_if + learn_rate * if_update);
 				}
 
 				if (update_j)
 				{
-					double jf_update = -w_uf  * common_part - reg_j * h_jf;
+					double jf_update = -w_uf - reg_j * h_jf;
 					item_factors[j, f] = (float) (h_jf + learn_rate * jf_update);
 				}
 			}
