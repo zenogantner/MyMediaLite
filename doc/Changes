@@ -9,6 +9,7 @@
          - improved documentation, e.g. updated literature pointers
 	 - We now use Travis CI for continuous integration.
 	 - split up MovieLens download scripts
+	 - #469: fix ignore_first_line bug in ItemData.cs (Jordan Silva)
 
 3.11	2015-12-31
 	recommenders
