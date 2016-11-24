@@ -42,7 +42,7 @@ namespace MyMediaLite.IO
 			return Wrap.FormatException<IPosOnlyFeedback>(filename, delegate() {
 				using ( var reader = new StreamReader(filename) )
 				{
-					var feedback_data = (ISerializable) Read(reader, user_mapping, item_mapping);
+					var feedback_data = (ISerializable) Read(reader, user_mapping, item_mapping, ignore_first_line);
 					if (FileSerializer.Should(user_mapping, item_mapping) && FileSerializer.CanWrite(binary_filename))
 						feedback_data.Serialize(binary_filename);
 					return (IPosOnlyFeedback) feedback_data;
