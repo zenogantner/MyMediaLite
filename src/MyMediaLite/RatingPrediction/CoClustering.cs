@@ -252,6 +252,10 @@ namespace MyMediaLite.RatingPrediction
 			var item_cluster_counts = new int[NumItemClusters];
 			var cocluster_counts    = new int[NumUserClusters, NumItemClusters];
 
+			this.user_cluster_averages = new float[NumUserClusters];
+			this.item_cluster_averages = new float[NumItemClusters];
+			this.cocluster_averages    = new Matrix<float>(NumUserClusters, NumItemClusters);
+
 			for (int i = 0; i < ratings.Count; i++)
 			{
 				int user_id = ratings.Users[i];
