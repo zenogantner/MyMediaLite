@@ -340,52 +340,52 @@ namespace MyMediaLite.ItemRecommendation
 		/// <param name="update_j">if true, update the latent factors of the second item</param>
 		protected virtual void UpdateFactors(int user_id, int item_id, int other_item_id, bool update_u, bool update_i, bool update_j)
 		{
-			double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
+            double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
 
-			double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+            double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
-			// adjust bias terms
-			if (update_i)
-			{
-				double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
-				item_bias[item_id] += (float) (learn_rate * update);
-			}
+            // adjust bias terms
+            if (update_i)
+            {
+                double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
+                item_bias[item_id] += (float)(learn_rate * update);
+            }
 
-			if (update_j)
-			{
-				double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
-				item_bias[other_item_id] += (float) (learn_rate * update);
-			}
+            if (update_j)
+            {
+                double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
+                item_bias[other_item_id] += (float)(learn_rate * update);
+            }
 
-			// adjust factors
-			for (int f = 0; f < num_factors; f++)
-			{
-				float w_uf = user_factors[user_id, f];
-				float h_if = item_factors[item_id, f];
-				float h_jf = item_factors[other_item_id, f];
+            // adjust factors
+            for (int f = 0; f < num_factors; f++)
+            {
+                float w_uf = user_factors[user_id, f];
+                float h_if = item_factors[item_id, f];
+                float h_jf = item_factors[other_item_id, f];
 
-				if (update_u)
-				{
-					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[user_id, f] = (float) (w_uf + learn_rate * update);
-				}
+                if (update_u)
+                {
+                    double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
+                    user_factors[user_id, f] = (float)(w_uf + learn_rate * update);
+                }
 
-				if (update_i)
-				{
-					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[item_id, f] = (float) (h_if + learn_rate * update);
-				}
+                if (update_i)
+                {
+                    double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
+                    item_factors[item_id, f] = (float)(h_if + learn_rate * update);
+                }
 
-				if (update_j)
-				{
-					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
-				}
-			}
-		}
+                if (update_j)
+                {
+                    double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
+                    item_factors[other_item_id, f] = (float)(h_jf + learn_rate * update);
+                }
+            }
+        }
 
-		///
-		protected override void AddItem(int item_id)
+        ///
+        protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
 			Array.Resize(ref item_bias, MaxItemID + 1);
