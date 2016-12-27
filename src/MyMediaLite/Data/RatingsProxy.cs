@@ -24,6 +24,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Data
 {
 	/// <summary>Data structure that allows access to selected entries of a rating data structure</summary>
+	[Serializable]
 	public class RatingsProxy : Ratings
 	{
 		IList<int> indices;

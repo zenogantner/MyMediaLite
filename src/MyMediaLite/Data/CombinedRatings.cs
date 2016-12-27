@@ -21,6 +21,7 @@ using MyMediaLite.DataType;
 namespace MyMediaLite.Data
 {
 	/// <summary>Combine two IRatings objects</summary>
+	[Serializable]
 	public class CombinedRatings : Ratings
 	{
 		/// <summary>Create a CombinedRatings object from to existing IRatings objects</summary>
