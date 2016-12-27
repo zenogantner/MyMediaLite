@@ -13,6 +13,7 @@
 	 - split up MovieLens download scripts
 	 - #469: fix ignore_first_line bug in ItemData.cs (Jordan Silva)
          - remove SequentialDiversification
+         - upgrade to C5 2.4 and MathNet.Numerics 3.15
 
 3.11	2015-12-31
 	recommenders
