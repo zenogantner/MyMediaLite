@@ -1,18 +1,18 @@
-PDF_VIEWER=evince
-EDITOR=editor
-GENDARME_OPTIONS=--quiet --severity critical+
-SRC_DIR=src
-PREFIX=/usr/local
-VERSION=3.11
-HOMEPAGE=../mymedialite.net/public_html
-HOMEPAGE_SRC=../mymedialite.net/src
-HOMEPAGE_INC=../mymedialite.net/lib
-HTML_DOXYGEN_DIR=${HOMEPAGE}/documentation/doxygen
-MYMEDIA_ASSEMBLY_DIR=$(CURDIR)/src/MyMediaLite/bin/Debug
-ITEM_REC_DIR=${SRC_DIR}/Programs/ItemRecommendation
-RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
-RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
-ACK=ack-grep
+PDF_VIEWER:=evince
+EDITOR:=editor
+GENDARME_OPTIONS:=--quiet --severity critical+
+SRC_DIR:=src
+PREFIX:=/usr/local
+VERSION:=3.11
+HOMEPAGE:=../mymedialite.net/public_html
+HOMEPAGE_SRC:=../mymedialite.net/src
+HOMEPAGE_INC:=../mymedialite.net/lib
+HTML_DOXYGEN_DIR:=${HOMEPAGE}/documentation/doxygen
+MYMEDIA_ASSEMBLY_DIR:=$(CURDIR)/src/MyMediaLite/bin/Debug
+ITEM_REC_DIR:=${SRC_DIR}/Programs/ItemRecommendation
+RATING_PRED_DIR:=${SRC_DIR}/Programs/RatingPrediction
+RATING_RANK_DIR:=${SRC_DIR}/Programs/RatingBasedRanking
+ACK:=ack-grep
 
 .PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens download-imdb copy-packages-website example-fsharp example-csharp unittests
 
