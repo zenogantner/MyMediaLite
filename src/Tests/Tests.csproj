@@ -3,13 +3,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{21DB122B-6D35-41F2-AE88-790A55859209}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
-    <ReleaseVersion>3.11</ReleaseVersion>
+    <ReleaseVersion>3.06</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,8 +51,6 @@
     <Compile Include="DataType\SparseBooleanMatrixTest.cs" />
     <Compile Include="DataType\SparseMatrixTest.cs" />
     <Compile Include="DataType\SymmetricSparseMatrixTest.cs" />
-    <Compile Include="RatingPrediction\BiPolarSlopeOneTest.cs" />
-    <Compile Include="RatingPrediction\SlopeOneTest.cs" />
     <Compile Include="Data\PosOnlyFeedbackTest.cs" />
     <Compile Include="Eval\Measures\PrecisionAndRecallTest.cs" />
     <Compile Include="DataType\VectorExtensionsTest.cs" />

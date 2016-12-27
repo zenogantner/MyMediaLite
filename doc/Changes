@@ -2,6 +2,7 @@
 	recommenders:
 	 - #457: add bigram association rules recommender (Dimitris Paraschakis)
          - SoftMarginBPRMF: speed up -- only update if there is a ranking violation
+         - remove the recommenders that were marked as obsolete 1 year ago
 	evaluation:
 	 - #464: fix fit computation in cross-validation (Dominik Imrich)
 	 - #465: fix randomization in cross-validation for rating prediction (NEBabylon)
@@ -11,6 +12,7 @@
          - test item recommenders a bit more thoroughly
 	 - split up MovieLens download scripts
 	 - #469: fix ignore_first_line bug in ItemData.cs (Jordan Silva)
+         - remove SequentialDiversification
 
 3.11	2015-12-31
 	recommenders

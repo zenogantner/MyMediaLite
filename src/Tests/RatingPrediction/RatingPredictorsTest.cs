@@ -81,7 +81,7 @@ namespace Tests.RatingPrediction
 				{
 					if (type.Name == "Random" || type.Name == "ExternalRatingPredictor")
 						continue;
-					if (type.Name == "LatentFeatureLogLinearModel" || type.Name == "NaiveBayes")
+					if (type.Name == "LatentFeatureLogLinearModel")
 						continue;
 					if (type.Name == "TimeAwareBaseline" || type.Name == "TimeAwareBaselineWithFrequencies")
 						continue;
