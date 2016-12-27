@@ -36,18 +36,18 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			for (int item1 = 0; item1 <= MaxItemID; item1++)
 			{
-				ICollection<int> item1_vector = Feedback.ItemMatrix[item1];
-				HashSet<int> correlated_items = new HashSet<int>();
+				var item1_vector = Feedback.ItemMatrix[item1];
+				var correlated_items = new HashSet<int>();
 
 				foreach (int user in item1_vector)
 					correlated_items.UnionWith(Feedback.UserMatrix[user]);
 				correlated_items.Remove(item1);
 
-				Dictionary<int, int> bigram_score = new Dictionary<int, int>();
+				var bigram_score = new Dictionary<int, int>();
 				foreach (int item2 in correlated_items)
 				{
 					int intersection = 0;
-					ICollection<int> item2_vector = Feedback.ItemMatrix[item2];
+					var item2_vector = Feedback.ItemMatrix[item2];
 					foreach (int user in item1_vector)
 					{
 						if (item2_vector.Contains(user))
