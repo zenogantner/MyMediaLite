@@ -80,10 +80,20 @@ namespace Tests.ItemRecommendation
 						for (int i = 0; i < results.Length; i++)
 							results[i] = recommender.Predict(0, i);
 
+						int max_user_id = recommender.MaxUserID;
+						int max_item_id = recommender.MaxItemID;
+
 						recommender.SaveModel("tmp.model");
+
+						// reset recommender
+						recommender = (ItemRecommender) type.CreateItemRecommender();
+						recommender.Feedback = TestUtils.CreatePosOnlyFeedback();
+
 						recommender.LoadModel("tmp.model");
 						for (int i = 0; i < results.Length; i++)
 							Assert.AreEqual(results[i], recommender.Predict(0, i), 0.0001);
+						Assert.AreEqual(max_user_id, recommender.MaxUserID);
+						Assert.AreEqual(max_item_id, recommender.MaxItemID);
 					}
 					catch (Exception e)
 					{
