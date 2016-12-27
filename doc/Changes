@@ -6,8 +6,10 @@
 	evaluation:
 	 - #464: fix fit computation in cross-validation (Dominik Imrich)
 	 - #465: fix randomization in cross-validation for rating prediction (NEBabylon)
-	misc
+	documentation
          - improved documentation, e.g. updated literature pointers
+         - API documentation with properly rendered diamond inheritance
+        misc
 	 - We now use Travis CI for continuous integration.
          - test item recommenders a bit more thoroughly
 	 - split up MovieLens download scripts

@@ -16,6 +16,7 @@ Instructions:
 Requirements for building MyMediaLite:
  - the above requirements plus
    - Doxygen 1.6.3 or later
+   - Graphviz
 
 Tested configurations:
  - Ubuntu 10.04
