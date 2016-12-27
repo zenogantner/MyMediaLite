@@ -14,7 +14,7 @@ RATING_PRED_DIR=${SRC_DIR}/Programs/RatingPrediction
 RATING_RANK_DIR=${SRC_DIR}/Programs/RatingBasedRanking
 ACK=ack-grep
 
-.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens copy-packages-website example-fsharp example-csharp unittests
+.PHONY: all clean veryclean mymedialite install uninstall todo gendarme monodoc doxygen view-doxygen flyer edit-flyer test release download-movielens download-imdb copy-packages-website example-fsharp example-csharp unittests
 
 all: mymedialite
 
