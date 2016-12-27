@@ -37,4 +37,4 @@ uninstall:
 	rm -rf ${PREFIX}/bin/rating_based_ranking
 
 test:
-	nunit-console --run=Tests MyMediaLite-nogui.sln --config=Debug
+	LANG=C && nunit-console --run=Tests MyMediaLite-nogui.sln --config=Debug
