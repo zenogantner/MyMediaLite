@@ -36,7 +36,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			for (int item1 = 0; item1 <= MaxItemID; item1++)
 			{
-				HashSet<int> item1_vector = (HashSet<int>)Feedback.ItemMatrix[item1];
+				ICollection<int> item1_vector = Feedback.ItemMatrix[item1];
 				HashSet<int> correlated_items = new HashSet<int>();
 
 				foreach (int user in item1_vector)
@@ -47,7 +47,7 @@ namespace MyMediaLite.ItemRecommendation
 				foreach (int item2 in correlated_items)
 				{
 					int intersection = 0;
-					HashSet<int> item2_vector = (HashSet<int>)Feedback.ItemMatrix[item2];
+					ICollection<int> item2_vector = Feedback.ItemMatrix[item2];
 					foreach (int user in item1_vector)
 					{
 						if (item2_vector.Contains(user))
@@ -69,13 +69,13 @@ namespace MyMediaLite.ItemRecommendation
 			float score = 0;
 			foreach (int item in Feedback.UserMatrix[user_id])
 			{
-				int item_transactions = 0;
+				int itemTransactions = 0;
 				float confidence = 0;
 				float support = 0;
 				if (rules_list[item].ContainsKey(item_id))
 				{
-					item_transactions = Feedback.ItemMatrix[item].Count;
-					confidence = rules_list[item][item_id] / (float)item_transactions;
+					itemTransactions = Feedback.ItemMatrix[item].Count;
+					confidence = rules_list[item][item_id] / (float)itemTransactions;
 					support = rules_list[item][item_id] / (float)Feedback.Count;
 					score += support * confidence;
 				}
