@@ -1,4 +1,5 @@
 ﻿// Copyright (C) 2015 Dimitris Paraschakis
+// Copyright (C) 2016 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -16,6 +17,9 @@
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
@@ -77,6 +81,48 @@ namespace MyMediaLite.ItemRecommendation
 				}
 			}
 			return score;
+		}
+
+		///
+		public override void SaveModel(string file)
+		{
+			using (StreamWriter writer = Model.GetWriter(file, this.GetType(), "3.12"))
+			{
+				writer.WriteLine(MaxUserID + " " + MaxItemID);
+				foreach (var dict in rulesList)
+				{
+					string line = string.Join(" ", dict.OrderByDescending(x => x.Value).Select(x => x.Key + ":" + x.Value).ToArray());
+					writer.WriteLine(line);
+				}
+			}
+		}
+
+		///
+		public override void LoadModel(string file)
+		{
+			List<Dictionary<int, int>> rules_list = new List<Dictionary<int, int>>();
+			using (StreamReader reader = Model.GetReader(file, this.GetType()))
+			{
+				string[] fields = reader.ReadLine().Split(' ');
+				int max_user_id = int.Parse(fields[0]);
+				int max_item_id = int.Parse(fields[1]);
+
+				string line;
+				while ((line = reader.ReadLine()) != null)
+				{
+					var dict = new Dictionary<int, int>();
+					foreach (var pair in line.Split(' '))
+					{
+						string[] key_value = pair.Split(':');
+						dict[int.Parse(key_value[0])] = int.Parse(key_value[1]);
+					}
+					rules_list.Add(dict);
+				}
+
+				MaxUserID = max_user_id;
+				MaxItemID = max_item_id;
+			}
+			this.rulesList = rules_list;
 		}
 	}
 }
