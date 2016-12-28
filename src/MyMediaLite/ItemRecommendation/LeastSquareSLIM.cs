@@ -130,9 +130,7 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>
-		/// Iterate this instance.
-		/// </summary>
+		///
 		public override void Iterate()
 		{
 			Parallel.For(0, MaxItemID + 1, item_id => {
@@ -183,15 +181,9 @@ namespace MyMediaLite.ItemRecommendation
 		/// into consideration. This is needed for the coordinate descent update rule (equation 5 from
 		/// Friedman et al. (2010)).
 		/// </summary>
-		/// <param name='user_id'>
-		/// User_id.
-		/// </param>
-		/// <param name='item_id'>
-		/// Item_id.
-		/// </param>
-		/// <param name='exclude_item_id'>
-		/// Current item ID which shouldn't .
-		/// </param>
+		/// <param name='user_id'>the user ID</param>
+		/// <param name='item_id'>the item ID</param>
+		/// <param name='exclude_item_id'>Current item ID which should not be considered</param>
 		public float Predict(int user_id, int item_id, int exclude_item_id)
 		{
 			var user_items = Feedback.UserMatrix.GetEntriesByRow(user_id);

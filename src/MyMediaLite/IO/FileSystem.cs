@@ -26,27 +26,17 @@ namespace MyMediaLite.IO
 	/// <summary>File-system related helper functions</summary>
 	public static class FileSystem
 	{
-		/// <summary>
-		/// Check whether the program runs on Unix or not
-		/// </summary>
-		/// <returns>
-		/// true if it runs on Unix (including MacOS X, false otherwise)
-		/// </returns>
+		/// <summary>Check whether the program runs on Unix or not</summary>
+		/// <returns>true if it runs on Unix (including MacOS X, false otherwise)</returns>
 		public static bool RunningOnUnix()
 		{
 			int p = (int) Environment.OSVersion.Platform;
 			return p == 4 || p == 6 || p == 128;
 		}
 
-		/// <summary>
-		/// Creates a StreamWriter which will be appended to
-		/// </summary>
-		/// <returns>
-		/// a StreamWriter to a file that was opened with the append flag
-		/// </returns>
-		/// <param name='filename'>
-		/// the name of the file
-		/// </param>
+		/// <summary>Creates a StreamWriter which will be appended to</summary>
+		/// <returns>a StreamWriter to a file that was opened with the append flag</returns>
+		/// <param name='filename'>the name of the file</param>
 		public static StreamWriter CreateUnixAppendStreamWriter(string filename)
 		{
 			OpenFlags flags = OpenFlags.O_WRONLY | OpenFlags.O_LARGEFILE | OpenFlags.O_APPEND;
@@ -55,15 +45,9 @@ namespace MyMediaLite.IO
 			return new StreamWriter(fs);
 		}
 
-		/// <summary>
-		/// Given a file name, create a StreamWriter
-		/// </summary>
-		/// <returns>
-		/// a StreamWriter that will write to the file
-		/// </returns>
-		/// <param name='filename'>
-		/// name of the file to be written to
-		/// </param>
+		/// <summary>Given a file name, create a StreamWriter</summary>
+		/// <returns>a StreamWriter that will write to the file</returns>
+		/// <param name='filename'>name of the file to be written to</param>
 		public static StreamWriter CreateStreamWriter(string filename)
 		{
 			if (RunningOnUnix() && filename.StartsWith("/dev"))

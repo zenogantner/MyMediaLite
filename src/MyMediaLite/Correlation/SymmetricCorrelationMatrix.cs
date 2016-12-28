@@ -45,9 +45,7 @@ namespace MyMediaLite.Correlation
 		}
 
 		/// <summary>Write out the correlations to a StreamWriter</summary>
-		/// <param name="writer">
-		/// A <see cref="StreamWriter"/>
-		/// </param>
+		/// <param name="writer">the <see cref="StreamWriter"/> to write to</param>
 		public void Write(StreamWriter writer)
 		{
 			writer.WriteLine(NumEntities);

@@ -28,7 +28,6 @@ namespace MyMediaLite.Data
 	///
 	/// This data structure supports incremental updates.
 	/// </remarks>
-	///
 	[Serializable()]
 	public class Ratings : DataSet, IRatings
 	{

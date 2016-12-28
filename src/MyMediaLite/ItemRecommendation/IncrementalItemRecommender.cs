@@ -26,8 +26,6 @@ namespace MyMediaLite.ItemRecommendation
 	/// <summary>
 	/// Base class for item recommenders that support incremental updates
 	/// </summary>
-	/// <remarks>
-	/// </remarks>
 	public abstract class IncrementalItemRecommender : ItemRecommender, IIncrementalItemRecommender
 	{
 		///
