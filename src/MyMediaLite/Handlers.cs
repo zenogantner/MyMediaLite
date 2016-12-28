@@ -42,12 +42,12 @@ namespace MyMediaLite
 				}
 
 				Console.Error.WriteLine();
-				Console.Error.WriteLine("  *****************************************************************************************************");
-				Console.Error.WriteLine("  *** An uncaught exception occured. Please send a bug report to zeno.gantner+mymedialite@gmail.com,***");
-				Console.Error.WriteLine("  *** or report the problem in our issue tracker: https://github.com/zenogantner/MyMediaLite/issues ***");
+				Console.Error.WriteLine("  **************************************************************************************");
+				Console.Error.WriteLine("  *** An uncaught exception occured. Please report the problem in our issue tracker: ***");
+				Console.Error.WriteLine("  *** https://github.com/zenogantner/MyMediaLite/issues ***");
 				var version = Assembly.GetEntryAssembly().GetName().Version;
-				Console.Error.WriteLine("  *** MyMediaLite {0}.{1:00}                                                                              ***", version.Major, version.Minor);
-				Console.Error.WriteLine("  *****************************************************************************************************");
+				Console.Error.WriteLine("  *** MyMediaLite {0}.{1:00}                                                               ***", version.Major, version.Minor);
+				Console.Error.WriteLine("  **************************************************************************************");
 				Console.Error.WriteLine(e.Message + e.StackTrace);
 				Console.Error.WriteLine ("Terminate on unhandled exception.");
 			}
