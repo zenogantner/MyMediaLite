@@ -20,7 +20,6 @@ using System.IO;
 using Mono.Unix;
 using Mono.Unix.Native;
 
-
 namespace MyMediaLite.IO
 {
 	/// <summary>File-system related helper functions</summary>
