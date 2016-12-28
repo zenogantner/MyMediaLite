@@ -23,7 +23,7 @@ namespace MyMediaLite.Correlation
 {
 	/// <summary>Class for storing cosine similarities</summary>
 	/// <remarks>
-	/// http://en.wikipedia.org/wiki/Cosine_similarity
+	/// <a href="http://en.wikipedia.org/wiki/Cosine_similarity">Wikipedia: Cosine similarity</a>
 	/// </remarks>
 	public sealed class BinaryCosine : BinaryDataSymmetricCorrelationMatrix
 	{

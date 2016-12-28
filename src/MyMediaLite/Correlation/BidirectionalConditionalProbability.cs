@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Steffen Rendle, Zeno Gantner
 //
 // This file is part of MyMediaLite.
@@ -31,9 +31,9 @@ namespace MyMediaLite.Correlation
 	///     Literature:
 	///     <list type="bullet">
 	///       <item><description>
-	///         Fabio Aiolli: Efficient top-n recommendation for very large scale binary rated datasets.
+	///         Fabio Aiolli:
+	///         <a href="http://www.math.unipd.it/~aiolli/PAPERS/MSD_final.pdf">Efficient top-n recommendation for very large scale binary rated datasets.</a>
 	///         RecSys 2013.
-	///         http://www.math.unipd.it/~aiolli/PAPERS/MSD_final.pdf
 	///       </description></item>
 	///     </list>
 	///   </para>

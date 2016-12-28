@@ -25,7 +25,7 @@ namespace MyMediaLite.Correlation
 	/// <remarks>
 	/// The Jaccard index is often also called the Tanimoto coefficient.
 	///
-	/// http://en.wikipedia.org/wiki/Jaccard_index
+	/// <a href="http://en.wikipedia.org/wiki/Jaccard_index">Wikipedia: Jaccard index</a>
 	/// </remarks>
 	public sealed class Jaccard : BinaryDataSymmetricCorrelationMatrix
 	{

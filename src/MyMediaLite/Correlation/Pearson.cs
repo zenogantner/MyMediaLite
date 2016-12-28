@@ -31,7 +31,7 @@ namespace MyMediaLite.Correlation
 	///     Otherwise, we would give too much weight to similarities estimated from just a few examples.
 	///   </para>
 	///   <para>
-	///     http://en.wikipedia.org/wiki/Pearson_correlation
+	///     <a href="http://en.wikipedia.org/wiki/Pearson_correlation">Wikipedia: Pearson correlation</a>
 	///   </para>
 	///   <para>
 	///     We apply shrinkage as in formula (5.16) of chapter 5 of the Recommender Systems Handbook.
@@ -43,14 +43,14 @@ namespace MyMediaLite.Correlation
 	///     Literature:
 	///     <list type="bullet">
 	///       <item><description>
-	///         Yehuda Koren: Factor in the Neighbors: Scalable and Accurate Collaborative Filtering,
+	///         Yehuda Koren:
+	///         <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.476.4158&rep=rep1&type=pdf">Factor in the Neighbors: Scalable and Accurate Collaborative Filtering</a>,
 	///         Transactions on Knowledge Discovery from Data (TKDD), 2010.
-	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.476.4158&rep=rep1&type=pdf
 	///       </description></item>
 	///       <item><description>
-	///         Yehuda Koren, Robert Bell: Advances in Collaborative Filtering,
+	///         Yehuda Koren, Robert Bell:
+	///         <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.269.6294&rep=rep1&type=pdf">Advances in Collaborative Filtering</a>,
 	///         Chapter 5 of the Recommender Systems Handbook, Springer, 2011.
-	///         http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.269.6294&rep=rep1&type=pdf
 	///       </description></item>
 	///     </list>
 	///   </para>
