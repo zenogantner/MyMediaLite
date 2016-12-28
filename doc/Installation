@@ -24,8 +24,10 @@ Tested configurations:
    - Doxygen 1.6.3
  - Ubuntu 11.10
    - with Mono 2.10.5
- - Ubuntu 14-04
-   - with Mono 3.2.8 and and MonoDevelop 4.0.12
+ - Ubuntu 14.04
+   - with Mono 3.2.8 and MonoDevelop 4.0.12
+ - Ubuntu 16.04 LTS
+   - with Mono 4.2.1 and MonoDevelop 5.10
  - Debian Wheezy
    - with Mono 2.10.1 and MonoDevelop 2.8.2
  - Windows with Visual Studio 2010
