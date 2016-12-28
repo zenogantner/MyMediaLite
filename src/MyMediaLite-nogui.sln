@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLite", "MyMediaLite\MyMediaLite.csproj", "{73424F09-BEEA-4992-B116-5F123496F5D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMediaLite", "MyMediaLite/MyMediaLite.csproj", "{73424F09-BEEA-4992-B116-5F123496F5D3}"
 EndProject
 Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Packages", "Packages.mdproj", "{AD1EB4BB-DE14-418B-B704-67D76E468FF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{21DB122B-6D35-41F2-AE88-790A55859209}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests/Tests.csproj", "{21DB122B-6D35-41F2-AE88-790A55859209}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{233B7F1D-99AA-4D55-BDD9-770B3428A317}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "Programs\ItemRecommendation\ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemRecommendation", "Programs/ItemRecommendation/ItemRecommendation.csproj", "{E1ECFAE9-E3D8-4567-8FA9-536A50F1C531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "Programs\RatingPrediction\RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingPrediction", "Programs/RatingPrediction/RatingPrediction.csproj", "{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingBasedRanking", "Programs\RatingBasedRanking\RatingBasedRanking.csproj", "{7180F796-4365-498D-87AA-4A6F8DE42A1D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineProgram", "Programs\CommandLineProgram\CommandLineProgram.csproj", "{CF099BD4-46D6-4FB0-B42B-641A1F829241}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingBasedRanking", "Programs/RatingBasedRanking/RatingBasedRanking.csproj", "{7180F796-4365-498D-87AA-4A6F8DE42A1D}"
+EndProject1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineProgram", "Programs/CommandLineProgram/CommandLineProgram.csproj", "{CF099BD4-46D6-4FB0-B42B-641A1F829241}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
