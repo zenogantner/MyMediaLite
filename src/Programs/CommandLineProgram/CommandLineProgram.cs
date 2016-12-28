@@ -256,7 +256,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 			item_mapping = load_item_mapping_file.LoadMapping();
 
 		if (measures != null)
-			eval_measures = measures.Split(' ', ',');
+			eval_measures = measures.Split(new char[] {' ', ','}, int.MaxValue, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
 
 		SetupRecommender();
 		CheckParameters(extra_args);
