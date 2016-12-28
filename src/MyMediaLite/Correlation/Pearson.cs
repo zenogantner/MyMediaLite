@@ -221,7 +221,7 @@ namespace MyMediaLite.Correlation
 						this[i, j] = ComputeCorrelation (i_sums[i, j], j_sums[i, j], ii_sums[i, j], jj_sums[i, j], ij_sums[i, j], freqs[i, j]);
 		}
 
-		protected virtual float ComputeCorrelation(double i_sum, double j_sum, double ii_sum, double jj_sum, double ij_sum, int n)
+		private float ComputeCorrelation(double i_sum, double j_sum, double ii_sum, double jj_sum, double ij_sum, int n)
 		{
 			double denominator = GetDenominator(i_sum, j_sum, ii_sum, jj_sum, n);
 			if (denominator == 0)
