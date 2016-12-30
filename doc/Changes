@@ -1,10 +1,10 @@
-3.12	2016-12-28
+3.12	2016-12-30
 	recommenders:
 	 - #457: add bigram association rules recommender (Dimitris Paraschakis)
          - SoftMarginBPRMF: speed up -- only update if there is a ranking violation
          - remove the recommenders that were marked as obsolete 1 year ago
         command-line tools:
-         - more robust specification of evaluation metrics (Julien Vedev)
+         - more robust specification of evaluation metrics (Julien Verplanken)
 	evaluation:
 	 - #464: fix fit computation in cross-validation (Dominik Imrich)
 	 - #465: fix randomization in cross-validation for rating prediction (NEBabylon)
