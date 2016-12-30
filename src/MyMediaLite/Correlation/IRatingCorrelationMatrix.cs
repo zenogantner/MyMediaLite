@@ -41,7 +41,7 @@ namespace MyMediaLite.Correlation
 		/// <param name="ratings">the rating data</param>
 		/// <param name="entity_type">the entity type, either USER or ITEM</param>
 		/// <param name="entity_ratings">ratings identifying the first entity</param>
-		/// <param name="j">the ID of second entity</param>
+		/// <param name="j">the ID of the second entity</param>
 		float ComputeCorrelation(IRatings ratings, EntityType entity_type, IList<Tuple<int, float>> entity_ratings, int j);
 	}
 }
