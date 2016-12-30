@@ -53,12 +53,10 @@ namespace MyMediaLite.ItemRecommendation
 	public class WRMF : MF
 	{
 		/// <summary>parameter for the weight/confidence that is put on positive observations</summary>
-		public double Alpha { get { return alpha; } set { alpha = value; } }
-		double alpha = 1;
+		public double Alpha { get; set; } = 1;
 
 		/// <summary>Regularization parameter</summary>
-		public double Regularization { get { return regularization; } set { regularization = value; } }
-		double regularization = 0.015;
+		public double Regularization { get; set; } = 0.015;
 
 		///
 		public WRMF()
@@ -121,8 +119,8 @@ namespace MyMediaLite.ItemRecommendation
 					double d = 0;
 					foreach (int i in row)
 						d += H[i, f_1] * H[i, f_2];
-					HC_minus_IH[f_1, f_2] = d * alpha;
-					HC_minus_IH[f_2, f_1] = d * alpha;
+					HC_minus_IH[f_1, f_2] = d * Alpha;
+					HC_minus_IH[f_2, f_1] = d * Alpha;
 				}
 			// create HCp in O(f|S_u|)
 			var HCp = new double[num_factors];
@@ -131,7 +129,7 @@ namespace MyMediaLite.ItemRecommendation
 				double d = 0;
 				foreach (int i in row)
 					d += H[i, f];
-				HCp[f] = d * (1 + alpha);
+				HCp[f] = d * (1 + Alpha);
 			}
 			// create m = HH + HC_minus_IH + reg*I
 			// m is symmetric
@@ -142,7 +140,7 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					double d = HH[f_1, f_2] + HC_minus_IH[f_1, f_2];
 					if (f_1 == f_2)
-						d += regularization;
+						d += Regularization;
 					m[f_1, f_2] = d;
 					m[f_2, f_1] = d;
 				}

@@ -29,10 +29,10 @@ namespace MyMediaLite.ItemRecommendation
 	public abstract class KNN : IncrementalItemRecommender
 	{
 		/// <summary>The number of neighbors to take into account for prediction</summary>
-		public uint K { get { return k; } set { k = value; } }
+		public uint K { get; set; } = 80;
 
 		/// <summary>Alpha parameter for BidirectionalConditionalProbability</summary>
-		public float Alpha { get; set; }
+		public float Alpha { get; set; } = 0.5f;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="MyMediaLite.ItemRecommendation.KNN"/> is weighted.
@@ -53,16 +53,13 @@ namespace MyMediaLite.ItemRecommendation
 		///     TODO LIT
 		///   </para>
 		/// </remarks>
-		public float Q { get; set; }
+		public float Q { get; set; } = 1.0f;
 
 		/// <summary>The kind of correlation to use</summary>
-		public BinaryCorrelationType Correlation { get; set; }
+		public BinaryCorrelationType Correlation { get; set; } = BinaryCorrelationType.Cosine;
 
 		/// <summary>data matrix to learn the correlation from</summary>
 		protected abstract IBooleanMatrix DataMatrix { get; }
-
-		/// <summary>The number of neighbors to take into account for prediction</summary>
-		protected uint k = 80;
 
 		/// <summary>Precomputed nearest neighbors</summary>
 		protected IList<IList<int>> nearest_neighbors;
@@ -73,9 +70,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Default constructor</summary>
 		public KNN()
 		{
-			Correlation = BinaryCorrelationType.Cosine;
-			Alpha = 0.5f;
-			Q = 1.0f;
 			UpdateUsers = true;
 			UpdateItems = true;
 		}
@@ -110,7 +104,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected void RecomputeNeighbors(ICollection<int> update_entities)
 		{
 			foreach (int entity_id in update_entities)
-				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, k);
+				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, K);
 		}
 
 		///
@@ -160,7 +154,7 @@ namespace MyMediaLite.ItemRecommendation
 				else
 					throw new NotSupportedException("Unknown correlation type: " + correlation_matrix.GetType());
 
-				this.k = (uint) nearest_neighbors[0].Length;
+				this.K = (uint) nearest_neighbors[0].Length;
 				this.nearest_neighbors = nearest_neighbors;
 			}
 		}
@@ -179,7 +173,7 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				"{0} k={1} correlation={2} q={3} weighted={4} alpha={5} (only for BidirectionalConditionalProbability)",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, Q, Weighted, Alpha);
+				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), Correlation, Q, Weighted, Alpha);
 		}
 	}
 }

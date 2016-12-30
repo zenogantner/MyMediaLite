@@ -34,10 +34,10 @@ namespace MyMediaLite.ItemRecommendation
 		protected Matrix<float> item_factors;
 
 		/// <summary>Mean of the normal distribution used to initialize the latent factors</summary>
-		public double InitMean { get; set; }
+		public double InitMean { get; set; } = 0;
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the latent factors</summary>
-		public double InitStdDev { get; set; }
+		public double InitStdDev { get; set; } = 0.1;
 
 		/// <summary>Number of latent factors per user/item</summary>
 		public uint NumFactors { get { return (uint) num_factors; } set { num_factors = (int) value; } }
@@ -45,15 +45,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected int num_factors = 10;
 
 		/// <summary>Number of iterations over the training data</summary>
-		public uint NumIter { get; set; }
-
-		/// <summary>Default constructor</summary>
-		public MF()
-		{
-			NumIter = 30;
-			InitMean = 0;
-			InitStdDev = 0.1;
-		}
+		public uint NumIter { get; set; } = 30;
 
 		///
 		protected virtual void InitModel()

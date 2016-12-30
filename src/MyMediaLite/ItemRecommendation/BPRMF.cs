@@ -79,35 +79,25 @@ namespace MyMediaLite.ItemRecommendation
 		public bool WithReplacement { get; set; }
 
 		/// <summary>Sample uniformly from users</summary>
-		public bool UniformUserSampling { get; set; }
+		public bool UniformUserSampling { get; set; } = true;
 
 		/// <summary>Regularization parameter for the bias term</summary>
 		public float BiasReg { get; set; }
 
 		/// <summary>Learning rate alpha</summary>
-		public float LearnRate { get { return learn_rate; } set { learn_rate = value; } }
-		/// <summary>Learning rate alpha</summary>
-		protected float learn_rate = 0.05f;
+		public float LearnRate { get; set; } = 0.05f;
 
 		/// <summary>Regularization parameter for user factors</summary>
-		public float RegU { get { return reg_u; } set { reg_u = value; } }
-		/// <summary>Regularization parameter for user factors</summary>
-		protected float reg_u = 0.0025f;
+		public float RegU { get; set; } = 0.0025f;
 
 		/// <summary>Regularization parameter for positive item factors</summary>
-		public float RegI { get { return reg_i; } set { reg_i = value;	} }
-		/// <summary>Regularization parameter for positive item factors</summary>
-		protected float reg_i = 0.0025f;
+		public float RegI { get; set; } = 0.0025f;
 
 		/// <summary>Regularization parameter for negative item factors</summary>
-		public float RegJ { get { return reg_j; } set { reg_j = value; } }
-		/// <summary>Regularization parameter for negative item factors</summary>
-		protected float reg_j = 0.00025f;
+		public float RegJ { get; set; } = 0.00025f;
 
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
-		public bool UpdateJ { get { return update_j; } set { update_j = value; } }
-		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
-		protected bool update_j = true;
+		public bool UpdateJ { get; set; } = true;
 
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
@@ -123,7 +113,6 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>Default constructor</summary>
 		public BPRMF()
 		{
-			UniformUserSampling = true;
 			UpdateUsers = true;
 			UpdateItems = false;
 		}
@@ -217,7 +206,7 @@ namespace MyMediaLite.ItemRecommendation
 					while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
 					break;
 				}
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, UpdateJ);
 			}
 		}
 
@@ -232,7 +221,7 @@ namespace MyMediaLite.ItemRecommendation
 			for (int i = 0; i < num_pos_events; i++)
 			{
 				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, UpdateJ);
 			}
 		}
 
@@ -249,7 +238,7 @@ namespace MyMediaLite.ItemRecommendation
 				int pos_item_id = Feedback.Items[index];
 				int neg_item_id = -1;
 				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, UpdateJ);
 			}
 		}
 
@@ -274,7 +263,7 @@ namespace MyMediaLite.ItemRecommendation
 				int pos_item_id = Feedback.Items[index];
 				int neg_item_id = -1;
 				SampleOtherItem(user_id, pos_item_id, out neg_item_id);
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, update_j);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, UpdateJ);
 			}
 		}
 
@@ -348,13 +337,13 @@ namespace MyMediaLite.ItemRecommendation
 			if (update_i)
 			{
 				double update = one_over_one_plus_ex - BiasReg * item_bias[item_id];
-				item_bias[item_id] += (float) (learn_rate * update);
+				item_bias[item_id] += (float) (LearnRate * update);
 			}
 
 			if (update_j)
 			{
 				double update = -one_over_one_plus_ex - BiasReg * item_bias[other_item_id];
-				item_bias[other_item_id] += (float) (learn_rate * update);
+				item_bias[other_item_id] += (float) (LearnRate * update);
 			}
 
 			// adjust factors
@@ -366,20 +355,20 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u)
 				{
-					double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-					user_factors[user_id, f] = (float) (w_uf + learn_rate * update);
+					double update = (h_if - h_jf) * one_over_one_plus_ex - RegU * w_uf;
+					user_factors[user_id, f] = (float) (w_uf + LearnRate * update);
 				}
 
 				if (update_i)
 				{
-					double update = w_uf * one_over_one_plus_ex - reg_i * h_if;
-					item_factors[item_id, f] = (float) (h_if + learn_rate * update);
+					double update = w_uf * one_over_one_plus_ex - RegI * h_if;
+					item_factors[item_id, f] = (float) (h_if + LearnRate * update);
 				}
 
 				if (update_j)
 				{
-					double update = -w_uf * one_over_one_plus_ex - reg_j * h_jf;
-					item_factors[other_item_id, f] = (float) (h_jf + learn_rate * update);
+					double update = -w_uf * one_over_one_plus_ex - RegJ * h_jf;
+					item_factors[other_item_id, f] = (float) (h_jf + LearnRate * update);
 				}
 			}
 		}
@@ -568,8 +557,8 @@ namespace MyMediaLite.ItemRecommendation
 						float h_if = item_factors[pos_item_id, f];
 						float h_jf = item_factors[neg_item_id, f];
 
-						double update = (h_if - h_jf) * one_over_one_plus_ex - reg_u * w_uf;
-						user_factors[f] = (float) (w_uf + learn_rate * update);
+						double update = (h_if - h_jf) * one_over_one_plus_ex - RegU * w_uf;
+						user_factors[f] = (float) (w_uf + LearnRate * update);
 					}
 				}
 			}
@@ -580,8 +569,8 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			return string.Format(
 				CultureInfo.InvariantCulture,
-				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} learn_rate={7} uniform_user_sampling={8} with_replacement={9} update_j={10}",
-				this.GetType().Name, num_factors, BiasReg, reg_u, reg_i, reg_j, NumIter, learn_rate, UniformUserSampling, WithReplacement, UpdateJ);
+				"{0} num_factors={1} bias_reg={2} reg_u={3} reg_i={4} reg_j={5} num_iter={6} LearnRate={7} uniform_user_sampling={8} with_replacement={9} update_j={10}",
+				this.GetType().Name, num_factors, BiasReg, RegU, RegI, RegJ, NumIter, LearnRate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
 	}
 }

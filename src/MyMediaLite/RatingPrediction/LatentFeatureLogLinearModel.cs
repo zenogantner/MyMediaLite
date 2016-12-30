@@ -56,16 +56,16 @@ namespace MyMediaLite.RatingPrediction
 		public double InitMean { get; set; }
 
 		/// <summary>Standard deviation of the normal distribution used to initialize the factors</summary>
-		public double InitStdDev { get; set; }
+		public double InitStdDev { get; set; } = 0.1;
 
 		/// <summary>Number of latent factors</summary>
-		public uint NumFactors { get; set;}
+		public uint NumFactors { get; set; } = 10;
 
 		/// <summary>Learn rate</summary>
-		public float LearnRate { get; set; }
+		public float LearnRate { get; set; } = 0.01f;
 
 		/// <summary>Number of iterations over the training data</summary>
-		public uint NumIter { get; set; }
+		public uint NumIter { get; set; } = 30;
 
 		/// <summary>Regularization based on rating frequency</summary>
 		/// <description>
@@ -78,16 +78,16 @@ namespace MyMediaLite.RatingPrediction
 		public OptimizationTarget Loss { get; set; }
 
 		/// <summary>Learn rate factor for the bias terms</summary>
-		public float BiasLearnRate { get; set; }
+		public float BiasLearnRate { get; set; } = 1.0f;
 
 		/// <summary>regularization factor for the bias terms</summary>
-		public float BiasReg { get; set; }
+		public float BiasReg { get; set; } = 0.01f;
 
 		/// <summary>regularization constant for the user factors</summary>
-		public float RegU { get; set; }
+		public float RegU { get; set; } = 0.015f;
 
 		/// <summary>regularization constant for the item factors</summary>
-		public float RegI { get; set; }
+		public float RegI { get; set; } = 0.015f;
 
 		// base category does not need biases and latent factors
 		// all further categories are represented by the following structure
@@ -99,19 +99,6 @@ namespace MyMediaLite.RatingPrediction
 		// base category is last one
 		IList<float> label_id_to_value;
 		Dictionary<float, int> value_to_label_id;
-
-		/// <summary>Default constructor</summary>
-		public LatentFeatureLogLinearModel()
-		{
-			BiasReg = 0.01f;
-			BiasLearnRate = 1.0f;
-			RegU = 0.015f;
-			RegI = 0.015f;
-			LearnRate = 0.01f;
-			NumIter = 30;
-			InitStdDev = 0.1;
-			NumFactors = 10;
-		}
 
 		///
 		public override void Train()

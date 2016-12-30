@@ -39,11 +39,11 @@ namespace MyMediaLite.ItemRecommendation
 			base.Train();
 
 			int num_items = MaxItemID + 1;
-			if (k != uint.MaxValue)
+			if (K != uint.MaxValue)
 			{
 				this.nearest_neighbors = new List<IList<int>>(num_items);
 				for (int i = 0; i < num_items; i++)
-					nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(i, k));
+					nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(i, K));
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (item_id > MaxItemID)
 				return float.MinValue;
 
-			if (k != uint.MaxValue)
+			if (K != uint.MaxValue)
 			{
 				double sum = 0;
 				double normalization = 0;
@@ -95,7 +95,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public IList<int> GetMostSimilarItems(int item_id, uint n = 10)
 		{
-			if (n <= k)
+			if (n <= K)
 				return nearest_neighbors[item_id].Take((int) n).ToArray();
 			else
 				return correlation_matrix.GetNearestNeighbors(item_id, n);

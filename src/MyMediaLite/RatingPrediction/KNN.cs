@@ -47,8 +47,7 @@ namespace MyMediaLite.RatingPrediction
 	public abstract class KNN : IncrementalRatingPredictor
 	{
 		/// <summary>Number of neighbors to take into account for predictions</summary>
-		public uint K { get { return k; } set { k = value; } }
-		private uint k = 80;
+		public uint K { get; set; } = 80;
 
 		///
 		public override IRatings Ratings
@@ -170,7 +169,7 @@ namespace MyMediaLite.RatingPrediction
 		{
 			return string.Format(
 				"{0} k={1} correlation={2} weighted_binary={3} alpha={4}; baseline predictor: reg_u={5} reg_i={6} num_iter={7}",
-				this.GetType().Name, k == uint.MaxValue ? "inf" : k.ToString(), Correlation, WeightedBinary, Alpha, RegU, RegI, NumIter);
+				this.GetType().Name, K == uint.MaxValue ? "inf" : K.ToString(), Correlation, WeightedBinary, Alpha, RegU, RegI, NumIter);
 		}
 	}
 }

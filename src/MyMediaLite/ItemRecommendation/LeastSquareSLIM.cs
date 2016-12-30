@@ -65,9 +65,7 @@ namespace MyMediaLite.ItemRecommendation
 		protected double reg_l2 = 0.001;
 
 		/// <summary>How many neighbors to use in the kNN feature selection</summary>
-		public uint K { get { return neighbors; } set { neighbors = value; } }
-		/// <summary>How many neighbors to use in the kNN feature selection</summary>
-		protected uint neighbors = 50;
+		public uint K { get; set; } = 50;
 
 		/// <summary>Default constructor</summary>
 		public LeastSquareSLIM() : base() { }

@@ -40,7 +40,7 @@ namespace MyMediaLite.ItemRecommendation
 			int num_users = MaxUserID + 1;
 			this.nearest_neighbors = new List<IList<int>>(num_users);
 			for (int u = 0; u < num_users; u++)
-				nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(u, k));
+				nearest_neighbors.Add(correlation_matrix.GetNearestNeighbors(u, K));
 		}
 
 		///
@@ -49,7 +49,7 @@ namespace MyMediaLite.ItemRecommendation
 			if ((user_id > MaxUserID) || (item_id > MaxItemID))
 				return float.MinValue;
 
-			if (k != uint.MaxValue)
+			if (K != uint.MaxValue)
 			{
 				double sum = 0;
 				double normalization = 0;
@@ -81,7 +81,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public IList<int> GetMostSimilarUsers(int user_id, uint n = 10)
 		{
-			if (n <= k)
+			if (n <= K)
 				return nearest_neighbors[user_id].Take((int) n).ToArray();
 			else
 				return correlation_matrix.GetNearestNeighbors(user_id, n);
@@ -92,7 +92,7 @@ namespace MyMediaLite.ItemRecommendation
 			if ((item_id < 0) || (item_id > MaxItemID))
 				return float.MinValue;
 
-			if (k != uint.MaxValue)
+			if (K != uint.MaxValue)
 			{
 				double sum = 0;
 				foreach (int neighbor in nearest_neighbors)
@@ -128,13 +128,13 @@ namespace MyMediaLite.ItemRecommendation
 			var user_similarities = FoldIn(accessed_items);
 
 			IList<int> nearest_neighbors = null;
-			if (k != uint.MaxValue)
+			if (K != uint.MaxValue)
 			{
 				var users = Enumerable.Range(0, MaxUserID - 1).ToList();
 				users.Sort(delegate(int i, int j) { return user_similarities[j].CompareTo(user_similarities[i]); });
 
-				if (k < users.Count)
-					nearest_neighbors = users.GetRange(0, (int) k).ToArray();
+				if (K < users.Count)
+					nearest_neighbors = users.GetRange(0, (int) K).ToArray();
 				else
 					nearest_neighbors = users.ToArray();
 			}

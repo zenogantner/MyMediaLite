@@ -82,10 +82,10 @@ namespace MyMediaLite.RatingPrediction
 		protected const int FOLD_IN_FACTORS_START = 1;
 
 		/// <summary>Learn rate factor for the bias terms</summary>
-		public float BiasLearnRate { get; set; }
+		public float BiasLearnRate { get; set; } = 1.0f;
 
 		/// <summary>regularization factor for the bias terms</summary>
-		public float BiasReg { get; set; }
+		public float BiasReg { get; set; } = 0.01f;
 
 		/// <summary>regularization constant for the user factors</summary>
 		public float RegU { get; set; }
@@ -117,7 +117,7 @@ namespace MyMediaLite.RatingPrediction
 		/// <remarks>
 		///   For parallel learning, set this number to a multiple of the number of available cores/CPUs
 		/// </remarks>
-		public int MaxThreads { get; set; }
+		public int MaxThreads { get; set; } = 1;
 
 		/// <summary>Use bold driver heuristics for learning rate adaption</summary>
 		/// <remarks>
@@ -156,14 +156,6 @@ namespace MyMediaLite.RatingPrediction
 
 		IList<int>[,] thread_blocks;
 		IList<IList<int>> thread_lists;
-
-		/// <summary>Default constructor</summary>
-		public BiasedMatrixFactorization() : base()
-		{
-			BiasReg = 0.01f;
-			BiasLearnRate = 1.0f;
-			MaxThreads = 1;
-		}
 
 		///
 		protected internal override void InitModel()
