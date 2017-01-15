@@ -1,3 +1,7 @@
+3.13	2017-??-??:
+	hyperparameter search
+         - do not explore negative values of hyperparameters
+
 3.12	2016-12-30
 	recommenders:
 	 - #457: add bigram association rules recommender (Dimitris Paraschakis)

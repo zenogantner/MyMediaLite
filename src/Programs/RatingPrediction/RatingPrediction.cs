@@ -287,7 +287,7 @@ public class RatingPrediction : CommandLineProgram<RatingPredictor>
 				{
 					if (search_hp)
 					{
-						double result = NelderMead.FindMinimum("RMSE", recommender);
+						double result = new NelderMead("RMSE", recommender).FindMinimum();
 						Console.Error.WriteLine("estimated quality (on split) {0}", result.ToString(CultureInfo.InvariantCulture));
 					}
 

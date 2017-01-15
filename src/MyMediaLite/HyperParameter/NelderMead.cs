@@ -1,4 +1,4 @@
-// Copyright (C) 2010, 2011, 2012 Zeno Gantner
+// Copyright (C) 2010, 2011, 2012, 2017 Zeno Gantner
 //
 // This file is part of MyMediaLite.
 //
@@ -25,11 +25,9 @@ using MyMediaLite.RatingPrediction;
 
 namespace MyMediaLite.HyperParameter
 {
-	/// <summary>Nealder-Mead algorithm for finding suitable hyperparameters</summary>
-	public static class NelderMead
+	/// <summary>Nelder-Mead algorithm for finding suitable hyperparameters</summary>
+	public class NelderMead
 	{
-		// TODO avoid negative values e.g. for regularization ...
-
 		// TODO make configurable
 		static double alpha = 1.0;
 		static double gamma = 2.0;
@@ -38,16 +36,45 @@ namespace MyMediaLite.HyperParameter
 		static double num_it = 50;
 		static double split_ratio = 0.2;
 
-		static string CreateConfigString(IList<string> hp_names, IList<double> hp_values)
+		private string evaluation_measure;
+		private RatingPredictor recommender;
+		private ISplit<IRatings> split;
+		private string[] hp_names;
+		private IList<DenseVector> initial_hp_values;
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="evaluation_measure">the name of the evaluation measure</param>/// 
+		/// <param name="recommender">the recommender</param>
+		public NelderMead(string evaluation_measure, RatingPredictor recommender)
+		{
+			this.evaluation_measure = evaluation_measure;
+			this.recommender = recommender;
+			Init();
+		}
+
+		private static void EnsureNonNegativity(DenseVector vector)
+		{
+			for (int i = 0; i < vector.Count; i++)
+				if (vector[i] < 0)
+					vector[i] = 0;
+		}
+
+		/// <summary>
+		/// Creates a config string out of a list of parameter names and values
+		/// </summary>
+		/// <returns>The config string.</returns>
+		/// <param name="vector">hyperparameter vector</param>
+		private string CreateConfigString(DenseVector vector)
 		{
 			string hp_string = string.Empty;
-			for (int i = 0; i < hp_names.Count; i++)
-				hp_string += string.Format(CultureInfo.InvariantCulture, " {0}={1}", hp_names[i], hp_values[i]);
-
+			for (int i = 0; i < hp_names.Length; i++)
+				hp_string += string.Format(CultureInfo.InvariantCulture, " {0}={1}", hp_names[i], vector[i]);
 			return hp_string;
 		}
 
-		static double Run(RatingPredictor recommender, ISplit<IRatings> split, string hp_string, string evaluation_measure)
+		private double Evaluate(string hp_string)
 		{
 			recommender.Configure(hp_string);
 
@@ -56,108 +83,103 @@ namespace MyMediaLite.HyperParameter
 			return result;
 		}
 
-		static DenseVector ComputeCenter(Dictionary<string, double> results, Dictionary<string, DenseVector> hp_values)
+		static DenseVector ComputeCenter(Dictionary<string, DenseVector> vectors)
 		{
-			if (hp_values.Count == 0)
+			if (vectors.Count == 0)
 				throw new ArgumentException("need at least one vector to build center");
 
-			var center = new DenseVector(hp_values.Values.First().Count);
+			var center = new DenseVector(vectors.Values.First().Count);
 
-			foreach (var key in results.Keys)
-				center += hp_values[key];
+			foreach (var vector in vectors.Values)
+				center += vector;
 
-			center /= hp_values.Count;
+			center /= vectors.Count;
 
 			return center;
 		}
-		
-		/// <summary>Find best hyperparameter (according to an error measure) using Nelder-Mead search</summary>
-		/// <param name="error_measure">an error measure (lower is better)</param>
-		/// <param name="recommender">a rating predictor (will be set to best hyperparameter combination)</param>
-		/// <returns>the estimated error of the best hyperparameter combination</returns>
-		public static double FindMinimum(
-			string error_measure,
-			RatingPredictor recommender)
-		{
-			var split = new RatingsSimpleSplit(recommender.Ratings, split_ratio);
-			//var split = new RatingCrossValidationSplit(recommender.Ratings, 5);
 
-			IList<string> hp_names;
-			IList<DenseVector> initial_hp_values;
+		private static IList<DenseVector> CreateInitialValues(double[][] values)
+		{
+			var result = new DenseVector[values.Length];
+			for (int i = 0; i < values.Length; i++)
+				result[i] = new DenseVector(values[i]);
+			return result;
+		}
+
+		private void Init()
+		{
+			this.split = new RatingsSimpleSplit(recommender.Ratings, split_ratio);
+			//this.split = new RatingCrossValidationSplit(recommender.Ratings, 5);
 
 			// TODO manage this via reflection?
-			if (recommender is UserItemBaseline)
-			{
-				hp_names = new string[] { "reg_u", "reg_i" };
-				initial_hp_values = new DenseVector[] {
-					new DenseVector( new double[] { 25, 10 } ),
-					new DenseVector( new double[] { 10, 25 } ),
-					new DenseVector( new double[] { 2, 5 } ),
-					new DenseVector( new double[] { 5, 2 } ),
-					new DenseVector( new double[] { 1, 4 } ),
-					new DenseVector( new double[] { 4, 1 } ),
-					new DenseVector( new double[] { 3, 3 } ),
-				};
+			if (recommender is UserItemBaseline) {
+				this.hp_names = new string[] { "reg_u", "reg_i" };
+				this.initial_hp_values = CreateInitialValues(
+					new double[][] {
+						new double[] { 25, 10 },
+						new double[] { 10, 25 },
+						new double[] { 2, 5 },
+						new double[] { 5, 2 },
+						new double[] { 1, 4 },
+						new double[] { 4, 1 },
+						new double[] { 3, 3 },
+					}
+				);
 			}
 			else if (recommender is BiasedMatrixFactorization)
 			{
-				hp_names = new string[] { "regularization", "bias_reg" };
-				initial_hp_values = new DenseVector[] { // TODO reg_u and reg_i (in a second step?)
-					new DenseVector( new double[] { 0.1,     0 } ),
-					new DenseVector( new double[] { 0.01,    0 } ),
-					new DenseVector( new double[] { 0.0001,  0 } ),
-					new DenseVector( new double[] { 0.00001, 0 } ),
-					new DenseVector( new double[] { 0.1,     0.0001 } ),
-					new DenseVector( new double[] { 0.01,    0.0001 } ),
-					new DenseVector( new double[] { 0.0001,  0.0001 } ),
-					new DenseVector( new double[] { 0.00001, 0.0001 } ),
-				};
+				this.hp_names = new string[] { "regularization", "bias_reg" };
+				this.initial_hp_values = CreateInitialValues(
+					// TODO reg_u and reg_i (in a second step?)
+					new double[][]
+					{
+						new double[] { 0.1,     0 },
+						new double[] { 0.01,    0 },
+						new double[] { 0.0001,  0 },
+						new double[] { 0.00001, 0 },
+						new double[] { 0.1,     0.0001 },
+						new double[] { 0.01,    0.0001 },
+						new double[] { 0.0001,  0.0001 },
+						new double[] { 0.00001, 0.0001 },
+					}
+				);
 			}
 			else if (recommender is MatrixFactorization)
-			{ // TODO normal interval search could be more efficient
-				hp_names = new string[] { "regularization", };
-				initial_hp_values = new DenseVector[] {
-					new DenseVector( new double[] { 0.1     } ),
-					new DenseVector( new double[] { 0.01    } ),
-					new DenseVector( new double[] { 0.0001  } ),
-					new DenseVector( new double[] { 0.00001 } ),
-				};				
+			{
+				this.hp_names = new string[] { "regularization" };
+				// TODO normal interval search could be more efficient
+				this.initial_hp_values = CreateInitialValues(
+					new double[][]
+					{
+						new double[] { 0.1 },
+						new double[] { 0.01 },
+						new double[] { 0.0001 },
+						new double[] { 0.00001 },
+					}
+				);
 			}
 			// TODO kNN-based methods
 			else
 			{
 				throw new Exception("not prepared for type " + recommender.GetType().ToString());
 			}
-
-			return FindMinimum(
-				error_measure,
-				hp_names, initial_hp_values, recommender, split);
 		}
-
+			
 		/// <summary>Find the the parameters resulting in the minimal results for a given evaluation measure</summary>
 		/// <remarks>The recommender will be set to the best parameter value after calling this method.</remarks>
-		/// <param name="evaluation_measure">the name of the evaluation measure</param>
-		/// <param name="hp_names">the names of the hyperparameters to optimize</param>
-		/// <param name="initial_hp_values">the values of the hyperparameters to try out first</param>
-		/// <param name="recommender">the recommender</param>
-		/// <param name="split">the dataset split to use</param>
 		/// <returns>the best (lowest) average value for the hyperparameter</returns>
-		public static double FindMinimum(
-			string evaluation_measure,
-			IList<string> hp_names,
-			IList<DenseVector> initial_hp_values,
-			RatingPredictor recommender, // TODO make more general?
-			ISplit<IRatings> split)
+		public double FindMinimum()
 		{
 			var results    = new Dictionary<string, double>();
 			var hp_vectors = new Dictionary<string, DenseVector>();
 
+			Console.WriteLine();
 			// initialize
-			foreach (var hp_values in initial_hp_values)
+			foreach (var vector in initial_hp_values)
 			{
-				string hp_string = CreateConfigString(hp_names, hp_values.ToArray());
-				results[hp_string] = Run(recommender, split, hp_string, evaluation_measure);
-				hp_vectors[hp_string] = hp_values;
+				string hp_string = CreateConfigString(vector);
+				results[hp_string] = Evaluate(hp_string);
+				hp_vectors[hp_string] = vector;
 			}
 
 			List<string> keys;
@@ -180,14 +202,13 @@ namespace MyMediaLite.HyperParameter
 				results.Remove(max_key);
 
 				// compute center
-				var center = ComputeCenter(results, hp_vectors);
+				DenseVector center = ComputeCenter(hp_vectors);
 
 				// reflection
-				//Console.Error.WriteLine("ref");
-				var reflection = center + alpha * (center - worst_vector);
-				string ref_string = CreateConfigString(hp_names, reflection.ToArray());
-				// .ToArray() is necessary to compile with Visual Studio
-				double ref_result = Run(recommender, split, ref_string, evaluation_measure);
+				DenseVector reflection = center + alpha * (center - worst_vector);
+				EnsureNonNegativity(reflection);
+				var ref_string = CreateConfigString(reflection);
+				double ref_result = Evaluate(ref_string);
 				if (results[min_key] <= ref_result && ref_result < results.Values.Max())
 				{
 					results[ref_string]    = ref_result;
@@ -198,11 +219,10 @@ namespace MyMediaLite.HyperParameter
 				// expansion
 				if (ref_result < results[min_key])
 				{
-					//Console.Error.WriteLine("exp");
-
 					var expansion = center + gamma * (center - worst_vector);
-					string exp_string = CreateConfigString(hp_names, expansion.ToArray());
-					double exp_result = Run(recommender, split, exp_string, evaluation_measure);
+					EnsureNonNegativity(expansion);
+					string exp_string = CreateConfigString(expansion);
+					double exp_result = Evaluate(exp_string);
 					if (exp_result < ref_result)
 					{
 						results[exp_string]    = exp_result;
@@ -217,10 +237,10 @@ namespace MyMediaLite.HyperParameter
 				}
 
 				// contraction
-				//Console.Error.WriteLine("con");
 				var contraction = worst_vector + rho * (center - worst_vector);
-				string con_string = CreateConfigString(hp_names, contraction.ToArray());
-				double con_result = Run(recommender, split, con_string, evaluation_measure);
+				EnsureNonNegativity(contraction);
+				string con_string = CreateConfigString(contraction);
+				double con_result = Evaluate(con_string);
 				if (con_result < worst_result)
 				{
 					results[con_string]    = con_result;
@@ -229,7 +249,6 @@ namespace MyMediaLite.HyperParameter
 				}
 
 				// reduction
-				//Console.Error.WriteLine("red");
 				var best_vector = hp_vectors[min_key];
 				var best_result = results[min_key];
 				hp_vectors.Remove(min_key);
@@ -237,8 +256,9 @@ namespace MyMediaLite.HyperParameter
 				foreach (var key in new List<string>(results.Keys))
 				{
 					var reduction = hp_vectors[key] + sigma * (hp_vectors[key] - best_vector);
-					string red_string = CreateConfigString(hp_names, reduction.ToArray());
-					double red_result = Run(recommender, split, red_string, evaluation_measure);
+					EnsureNonNegativity(reduction);
+					string red_string = CreateConfigString(reduction);
+					double red_result = Evaluate(red_string);
 
 					// replace by reduced vector
 					results.Remove(key);
