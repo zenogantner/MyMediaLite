@@ -1,5 +1,7 @@
 3.13	2017-??-??:
-	hyperparameter search
+        recommenders:
+         - IIterativeModel: get rid of ComputeObjective() -- not used
+	hyperparameter search:
          - do not explore negative values of hyperparameters
 
 3.12	2016-12-30

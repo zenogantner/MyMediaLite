@@ -140,9 +140,6 @@ namespace MyMediaLite.ItemRecommendation
 			item_factors.SetRowToOneValue(item_id, 0);
 		}
 
-		///
-		public abstract float ComputeObjective();
-
 		/// <summary>Predict the weight for a given user-item combination</summary>
 		/// <remarks>
 		/// If the user or the item are not known to the recommender, zero is returned.

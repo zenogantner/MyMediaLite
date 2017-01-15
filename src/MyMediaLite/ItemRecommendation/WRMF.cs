@@ -170,12 +170,6 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override float ComputeObjective()
-		{
-			return -1;
-		}
-
-		///
 		public override string ToString()
 		{
 			return string.Format(

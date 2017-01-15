@@ -312,13 +312,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>Compute the fit (AUC on training data)</summary>
-		/// <returns>the fit</returns>
-		public override float ComputeObjective()
-		{
-			return 0;
-		}
-
 		///
 		public double PredictWithDifference(int user_id, int pos_item_id, int neg_item_id)
 		{

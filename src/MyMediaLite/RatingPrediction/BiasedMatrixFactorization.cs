@@ -512,7 +512,7 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeObjective()
+		public virtual float ComputeObjective()
 		{
 			double complexity = 0;
 			if (FrequencyRegularization)

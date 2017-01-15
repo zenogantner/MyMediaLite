@@ -25,10 +25,6 @@ namespace MyMediaLite
 
 		/// <summary>Run one iteration (= pass over the training data)</summary>
 		void Iterate();
-
-		/// <summary>Compute the current optimization objective (usually loss plus regularization term) of the model</summary>
-		/// <returns>the current objective; -1 if not implemented</returns>
-		float ComputeObjective();
 	}
 }
 

@@ -242,15 +242,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public float ComputeObjective()
-		{
-			return (float) (
-				Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings)
-				+ RegU * Math.Pow(user_biases.EuclideanNorm(), 2)
-				+ RegI * Math.Pow(item_biases.EuclideanNorm(), 2));
-		}
-
-		///
 		public override string ToString()
 		{
 			return string.Format(

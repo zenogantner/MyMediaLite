@@ -110,13 +110,6 @@ namespace MyMediaLite.ItemRecommendation
 			}
 		}
 
-		/// <summary>Compute approximate loss</summary>
-		/// <returns>the approximate loss</returns>
-		public override float ComputeObjective()
-		{
-			throw new NotImplementedException();
-		}
-
 		///
 		public override string ToString()
 		{

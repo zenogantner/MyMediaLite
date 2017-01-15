@@ -271,13 +271,6 @@ namespace MyMediaLite.ItemRecommendation
 			return prediction;
 		}
 
-		/// <summary>Compute the regularized loss (regularized squared error on training data)</summary>
-		/// <returns>the objective</returns>
-		public override float ComputeObjective()
-		{
-			return 0;
-		}
-
 		///
 		public override void SaveModel(string filename)
 		{

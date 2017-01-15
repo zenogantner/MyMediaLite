@@ -407,21 +407,6 @@ namespace MyMediaLite.RatingPrediction
 			}
 		}
 
-		/// <summary>Compute the regularized loss</summary>
-		/// <returns>the regularized loss</returns>
-		public virtual float ComputeObjective()
-		{
-			double objective = Eval.Measures.RMSE.ComputeSquaredErrorSum(this, ratings);
-
-			for (int u = 0; u <= MaxUserID; u++)
-				objective += ratings.CountByUser[u] * Regularization * Math.Pow(user_factors.GetRow(u).EuclideanNorm(), 2);
-
-			for (int i = 0; i <= MaxItemID; i++)
-				objective += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-
-			return (float) objective;
-		}
-
 		///
 		public override string ToString()
 		{

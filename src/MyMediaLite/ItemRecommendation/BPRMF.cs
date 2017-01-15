@@ -422,29 +422,6 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override float ComputeObjective()
-		{
-			double ranking_loss = 0;
-			for (int c = 0; c < loss_sample_u.Length; c++)
-			{
-				double x_uij = Predict(loss_sample_u[c], loss_sample_i[c]) - Predict(loss_sample_u[c], loss_sample_j[c]);
-				ranking_loss += 1 / (1 + Math.Exp(x_uij));
-			}
-
-			double complexity = 0;
-			for (int c = 0; c < loss_sample_u.Length; c++)
-			{
-				complexity += RegU * Math.Pow(user_factors.GetRow(loss_sample_u[c]).EuclideanNorm(), 2);
-				complexity += RegI * Math.Pow(item_factors.GetRow(loss_sample_i[c]).EuclideanNorm(), 2);
-				complexity += RegJ * Math.Pow(item_factors.GetRow(loss_sample_j[c]).EuclideanNorm(), 2);
-				complexity += BiasReg * Math.Pow(item_bias[loss_sample_i[c]], 2);
-				complexity += BiasReg * Math.Pow(item_bias[loss_sample_j[c]], 2);
-			}
-
-			return (float) (ranking_loss + 0.5 * complexity);
-		}
-
-		///
 		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)

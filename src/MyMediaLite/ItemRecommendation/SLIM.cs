@@ -93,9 +93,6 @@ namespace MyMediaLite.ItemRecommendation
 		public abstract void Iterate();
 
 		///
-		public abstract float ComputeObjective();
-
-		///
 		public override float Predict(int user_id, int item_id)
 		{
 			if (user_id > MaxUserID || item_id >= item_weights.dim1)

@@ -147,12 +147,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeObjective()
-		{
-			return (float) (base.ComputeObjective() + RegItemBiasAtFrequency * Math.Pow(item_bias_at_frequency.FrobeniusNorm(), 2));
-		}
-
-		///
 		public override string ToString()
 		{
 			return string.Format(

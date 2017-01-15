@@ -46,7 +46,6 @@ namespace MyMediaLite.RatingPrediction
 	{
 		// TODO
 		//  - load/save
-		//  - ComputeObjective()
 		//  - RMSE/MAE optimization
 		//  - incremental updates
 		//  - fold-in
@@ -220,12 +219,6 @@ namespace MyMediaLite.RatingPrediction
 					}
 				}
 			}
-		}
-
-		///
-		public float ComputeObjective()
-		{
-			return -1;
 		}
 
 		IList<float> PredictPercentages(int user_id, int item_id)

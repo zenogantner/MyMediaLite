@@ -411,48 +411,6 @@ namespace MyMediaLite.RatingPrediction
 		}
 
 		///
-		public override float ComputeObjective()
-		{
-			double complexity = 0;
-			if (FrequencyRegularization)
-			{
-				for (int u = 0; u <= MaxUserID; u++)
-				{
-					if (ratings.CountByUser[u] > 0)
-					{
-						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u]))           * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
-						complexity += (Regularization / Math.Sqrt(ratings.CountByUser[u])) * BiasReg * Math.Pow(user_bias[u], 2);
-					}
-				}
-				for (int i = 0; i <= MaxItemID; i++)
-				{
-					complexity += y_reg[i] * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
-					if (ratings.CountByItem[i] > 0)
-					{
-						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i]))           * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-						complexity += (Regularization / Math.Sqrt(ratings.CountByItem[i])) * BiasReg * Math.Pow(item_bias[i], 2);
-					}
-				}
-			}
-			else
-			{
-				for (int u = 0; u <= MaxUserID; u++)
-				{
-					complexity += ratings.CountByUser[u] * Regularization * Math.Pow(p.GetRow(u).EuclideanNorm(), 2);
-					complexity += ratings.CountByUser[u] * Regularization * BiasReg * Math.Pow(user_bias[u], 2);
-				}
-				for (int i = 0; i <= MaxItemID; i++)
-				{
-					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(item_factors.GetRow(i).EuclideanNorm(), 2);
-					complexity += ratings.CountByItem[i] * Regularization * Math.Pow(y.GetRow(i).EuclideanNorm(), 2);
-					complexity += ratings.CountByItem[i] * Regularization * BiasReg * Math.Pow(item_bias[i], 2);
-				}
-			}
-
-			return (float) (ComputeLoss() + complexity);
-		}
-
-		///
 		public override string ToString()
 		{
 			return string.Format(
