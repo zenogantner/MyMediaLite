@@ -1,6 +1,7 @@
 3.13	2017-??-??:
         recommenders:
          - IIterativeModel: get rid of ComputeObjective() -- not used
+         - remove LatentFeatureLogLinearModel -- implementation was never complete
 	hyperparameter search:
          - do not explore negative values of hyperparameters
 
