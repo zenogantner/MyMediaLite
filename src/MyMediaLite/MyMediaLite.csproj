@@ -168,6 +168,7 @@
     <Compile Include="Data\KDDCupItems.cs" />
     <Compile Include="Taxonomy\KDDCupItemType.cs" />
     <Compile Include="HyperParameter\NelderMead.cs" />
+    <Compile Include="HyperParameter\IHyperParameterSearch.cs" />
     <Compile Include="IO\DataReaderExtensions.cs" />
     <Compile Include="RatingPrediction\IFoldInRatingPredictor.cs" />
     <Compile Include="Eval\FoldIn.cs" />
