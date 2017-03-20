@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B9489A
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UGrowRecommendations", "..\ConsoleApplication1\UGrowRecommendations.csproj", "{FFE21E43-0341-4D6F-A012-CB456C217BF0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,12 +70,6 @@ Global
 		{CF099BD4-46D6-4FB0-B42B-641A1F829241}.Default|Any CPU.Build.0 = Debug|Any CPU
 		{CF099BD4-46D6-4FB0-B42B-641A1F829241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF099BD4-46D6-4FB0-B42B-641A1F829241}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Default|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Default|Any CPU.Build.0 = Debug|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,7 +79,6 @@ Global
 		{7DCAB3F3-B687-4589-80F6-76F8BECBC6F8} = {233B7F1D-99AA-4D55-BDD9-770B3428A317}
 		{7180F796-4365-498D-87AA-4A6F8DE42A1D} = {233B7F1D-99AA-4D55-BDD9-770B3428A317}
 		{CF099BD4-46D6-4FB0-B42B-641A1F829241} = {233B7F1D-99AA-4D55-BDD9-770B3428A317}
-		{FFE21E43-0341-4D6F-A012-CB456C217BF0} = {233B7F1D-99AA-4D55-BDD9-770B3428A317}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

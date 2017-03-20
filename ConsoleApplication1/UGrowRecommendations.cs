@@ -81,20 +81,28 @@ namespace UGrowRecommendations
             Console.WriteLine(results);
             using (var writer = FileSystem.CreateStreamWriter("personalizedpluspredictions.txt"))
             {
-                foreach (var recommendation in recommender2.Recommend(1))
-                    writer.WriteLine(item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                foreach (var userid in training_data.AllUsers)
+                {
+                    foreach (var recommendation in recommender2.Recommend(userid))
+                        writer.WriteLine(user_mapping.ToOriginalID(userid) + " " + item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                }
             }
             using (var writer = FileSystem.CreateStreamWriter("genpoppredictions.txt"))
             {
-                foreach (var recommendation in recommender.Recommend(1))
-                    writer.WriteLine(item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                foreach (var userid in training_data.AllUsers)
+                {
+                    foreach (var recommendation in recommender.Recommend(userid))
+                        writer.WriteLine(user_mapping.ToOriginalID(userid) + " " + item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                }
             }
             using (var writer = FileSystem.CreateStreamWriter("personalizedpredictions.txt"))
             {
-                foreach (var recommendation in recommender3.Recommend(1))
-                    writer.WriteLine(item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                foreach (var userid in training_data.AllUsers)
+                {
+                    foreach (var recommendation in recommender3.Recommend(userid))
+                        writer.WriteLine(user_mapping.ToOriginalID(userid) + " " + item_mapping.ToOriginalID(recommendation.Item1) + " " + recommendation.Item2);
+                }
             }
-
         }
     }
 }

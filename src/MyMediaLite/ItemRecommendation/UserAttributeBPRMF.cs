@@ -88,10 +88,10 @@ namespace MyMediaLite.ItemRecommendation
 		public float LearnRate { get; set; } = 0.05f;
 
 		/// <summary>Regularization parameter for user factors based on user feedback</summary>
-		public float RegU_user_feedback { get; set; } = 0.0025f;
+		public float RegUfeedback { get; set; } = 0.0025f;
         
         /// <summary>Regularization parameter for user factors based on user attributes</summary>
-        public float RegU_user_attributes { get; set; } = 0.0025f;
+        public float RegUattributes { get; set; } = 0.0025f;
 
         /// <summary>Regularization parameter for positive item factors</summary>
         public float RegI { get; set; } = 0.0025f;
@@ -354,7 +354,9 @@ namespace MyMediaLite.ItemRecommendation
         protected virtual void UpdateFactors(int user_id, int item_id, int other_item_id, bool update_u_f, bool update_u_a, bool update_i, bool update_j)
 		{
             ///TODO: check if we first sum user_factors and user_attribute_factors or first do the two Products and then sum. 
-			double x_uij = item_bias[item_id] - item_bias[other_item_id] + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id) + DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_attribute_factors, user_id, item_factors, item_id, item_factors, other_item_id);
+			double x_uij = item_bias[item_id] - item_bias[other_item_id];
+            x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
+            x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_attribute_factors, user_id, item_factors, item_id, item_factors, other_item_id);
 
             double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
@@ -381,14 +383,14 @@ namespace MyMediaLite.ItemRecommendation
 
 				if (update_u_f)
 				{
-					double update = (h_if - h_jf) * one_over_one_plus_ex - RegU_user_feedback * w_uff;
+					double update = (h_if - h_jf) * one_over_one_plus_ex - RegUfeedback * w_uff;
 					user_factors[user_id, f] = (float) (w_uff + LearnRate * update);
 				}
 
                 if (update_u_a)
                 {
-                    double update = (h_if - h_jf) * one_over_one_plus_ex - RegU_user_feedback * w_ufa;
-                    user_factors[user_id, f] = (float)(w_ufa + LearnRate * update);
+                    double update = (h_if - h_jf) * one_over_one_plus_ex - RegUattributes * w_ufa;
+                    user_attribute_factors[user_id, f] = (float)(w_ufa + LearnRate * update);
                 }
 
                 if (update_i)
@@ -459,7 +461,7 @@ namespace MyMediaLite.ItemRecommendation
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return float.MinValue;
 
-			return item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+            return item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
 		///
@@ -559,7 +561,7 @@ namespace MyMediaLite.ItemRecommendation
 				{
 					SampleItemPair(user_items, out pos_item_id, out neg_item_id);
 					// TODO generalize and call UpdateFactors -- need to represent factors as arrays, not matrices for this
-					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] + DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
+					double x_uij = item_bias[pos_item_id] - item_bias[neg_item_id] - DataType.VectorExtensions.ScalarProduct(user_factors, DataType.MatrixExtensions.RowDifference(item_factors, pos_item_id, item_factors, neg_item_id));
 					double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
 					// adjust factors
@@ -570,10 +572,10 @@ namespace MyMediaLite.ItemRecommendation
                         float h_if = item_factors[pos_item_id, f];
 						float h_jf = item_factors[neg_item_id, f];
 
-						double update = (h_if - h_jf) * one_over_one_plus_ex - (RegU_user_feedback * w_uff);
+						double update = (h_if - h_jf) * one_over_one_plus_ex - (RegUfeedback * w_uff);
 						user_factors[f] = (float) (w_uff + LearnRate * update);
 
-                        update = (h_if - h_jf) * one_over_one_plus_ex - (RegU_user_attributes * w_ufa);
+                        update = (h_if - h_jf) * one_over_one_plus_ex - (RegUattributes * w_ufa);
                         user_factors[f] = (float)(w_ufa + LearnRate * update);
                     }
 				}
@@ -586,7 +588,7 @@ namespace MyMediaLite.ItemRecommendation
 			return string.Format(
 				CultureInfo.InvariantCulture,
 				"{0} num_factors={1} bias_reg={2} reg_u_feedback={3} reg_u_attributes={4} reg_i={5} reg_j={6} num_iter={7} LearnRate={8} uniform_user_sampling={9} with_replacement={10} update_j={11}",
-				this.GetType().Name, num_factors, BiasReg, RegU_user_feedback, RegU_user_attributes, RegI, RegJ, NumIter, LearnRate, UniformUserSampling, WithReplacement, UpdateJ);
+				this.GetType().Name, num_factors, BiasReg, RegUfeedback, RegUattributes, RegI, RegJ, NumIter, LearnRate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
 	}
 }
