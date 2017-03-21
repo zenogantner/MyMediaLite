@@ -465,17 +465,6 @@ namespace MyMediaLite.ItemRecommendation
 		}
 
 		///
-		public override void SaveModel(string file)
-		{
-			using ( StreamWriter writer = Model.GetWriter(file, this.GetType(), "2.99") )
-			{
-				writer.WriteMatrix(user_factors);
-				writer.WriteVector(item_bias);
-				writer.WriteMatrix(item_factors);
-			}
-		}
-
-		///
 		public override void LoadModel(string file)
 		{
 			random = MyMediaLite.Random.GetInstance();
@@ -486,7 +475,7 @@ namespace MyMediaLite.ItemRecommendation
 				var item_bias = reader.ReadVector();
 				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
 
-				if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
+                if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
 					throw new IOException(
 						string.Format(
 							"Number of user and item factors must match: {0} != {1}",
@@ -576,7 +565,7 @@ namespace MyMediaLite.ItemRecommendation
 						user_factors[f] = (float) (w_uff + LearnRate * update);
 
                         update = (h_if - h_jf) * one_over_one_plus_ex - (RegUattributes * w_ufa);
-                        user_factors[f] = (float)(w_ufa + LearnRate * update);
+                        user_attribute_factors[f] = (float)(w_ufa + LearnRate * update);
                     }
 				}
 			}
@@ -590,5 +579,17 @@ namespace MyMediaLite.ItemRecommendation
 				"{0} num_factors={1} bias_reg={2} reg_u_feedback={3} reg_u_attributes={4} reg_i={5} reg_j={6} num_iter={7} LearnRate={8} uniform_user_sampling={9} with_replacement={10} update_j={11}",
 				this.GetType().Name, num_factors, BiasReg, RegUfeedback, RegUattributes, RegI, RegJ, NumIter, LearnRate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
-	}
+
+        public override void SaveModel(string filename)
+        {
+            using (StreamWriter writer = Model.GetWriter(filename, this.GetType(), "marrk 2.99"))
+            {
+                writer.WriteMatrix(user_factors);
+                writer.WriteMatrix(user_attribute_factors);
+                writer.WriteVector(item_bias);
+                writer.WriteMatrix(item_factors);
+            }
+        }
+
+    }
 }
