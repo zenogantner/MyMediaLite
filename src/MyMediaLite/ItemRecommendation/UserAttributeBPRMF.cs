@@ -464,42 +464,6 @@ namespace MyMediaLite.ItemRecommendation
             return item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
 		}
 
-		///
-		public override void LoadModel(string file)
-		{
-			random = MyMediaLite.Random.GetInstance();
-
-			using ( StreamReader reader = Model.GetReader(file, this.GetType()) )
-			{
-				var user_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-				var item_bias = reader.ReadVector();
-				var item_factors = (Matrix<float>) reader.ReadMatrix(new Matrix<float>(0, 0));
-
-                if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
-					throw new IOException(
-						string.Format(
-							"Number of user and item factors must match: {0} != {1}",
-							user_factors.NumberOfColumns, item_factors.NumberOfColumns));
-				if (item_bias.Count != item_factors.dim1)
-					throw new IOException(
-						string.Format(
-							"Number of items must be the same for biases and factors: {0} != {1}",
-							item_bias.Count, item_factors.dim1));
-
-				this.MaxUserID = user_factors.NumberOfRows - 1;
-				this.MaxItemID = item_factors.NumberOfRows - 1;
-
-				// assign new model
-				if (this.num_factors != user_factors.NumberOfColumns)
-				{
-					Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
-					this.num_factors = user_factors.NumberOfColumns;
-				}
-				this.user_factors = user_factors;
-				this.item_bias    = (float[]) item_bias;
-				this.item_factors = item_factors;
-			}
-		}
 
 		///
 		public IList<Tuple<int, float>> ScoreItems(IList<int> accessed_items, IList<int> candidate_items)
@@ -580,14 +544,54 @@ namespace MyMediaLite.ItemRecommendation
 				this.GetType().Name, num_factors, BiasReg, RegUfeedback, RegUattributes, RegI, RegJ, NumIter, LearnRate, UniformUserSampling, WithReplacement, UpdateJ);
 		}
 
+        /// 
         public override void SaveModel(string filename)
         {
-            using (StreamWriter writer = Model.GetWriter(filename, this.GetType(), "marrk 2.99"))
+            using (StreamWriter writer = Model.GetWriter(filename, this.GetType(), "2.99"))
             {
                 writer.WriteMatrix(user_factors);
                 writer.WriteMatrix(user_attribute_factors);
                 writer.WriteVector(item_bias);
                 writer.WriteMatrix(item_factors);
+            }
+        }
+
+        ///
+        public override void LoadModel(string file)
+        {
+            random = MyMediaLite.Random.GetInstance();
+
+            using (StreamReader reader = Model.GetReader(file, this.GetType()))
+            {
+                var user_factors = (Matrix<float>)reader.ReadMatrix(new Matrix<float>(0, 0));
+                var user_attribute_factors = (Matrix<float>)reader.ReadMatrix(new Matrix<float>(0, 0));
+                var item_bias = reader.ReadVector();
+                var item_factors = (Matrix<float>)reader.ReadMatrix(new Matrix<float>(0, 0));
+
+                if (user_factors.NumberOfColumns != item_factors.NumberOfColumns)
+                    throw new IOException(
+                        string.Format(
+                            "Number of user and item factors must match: {0} != {1}",
+                            user_factors.NumberOfColumns, item_factors.NumberOfColumns));
+                if (item_bias.Count != item_factors.dim1)
+                    throw new IOException(
+                        string.Format(
+                            "Number of items must be the same for biases and factors: {0} != {1}",
+                            item_bias.Count, item_factors.dim1));
+
+                this.MaxUserID = user_factors.NumberOfRows - 1;
+                this.MaxItemID = item_factors.NumberOfRows - 1;
+
+                // assign new model
+                if (this.num_factors != user_factors.NumberOfColumns)
+                {
+                    Console.Error.WriteLine("Set num_factors to {0}", user_factors.NumberOfColumns);
+                    this.num_factors = user_factors.NumberOfColumns;
+                }
+                this.user_factors = user_factors;
+                this.item_bias = (float[])item_bias;
+                this.item_factors = item_factors;
+                this.user_attribute_factors = user_attribute_factors;
             }
         }
 
