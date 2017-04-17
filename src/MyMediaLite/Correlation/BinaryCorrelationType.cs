@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis 
 // Copyright (C) 2012 Zeno Gantner
 // 
 // This file is part of MyMediaLite.
@@ -17,23 +18,25 @@
 // 
 namespace MyMediaLite.Correlation
 {
-	/// <summary>Correlations based on binary data</summary>
-	public enum BinaryCorrelationType
-	{
-		/// <summary>cosine similarity</summary>
-		Cosine,
-		/// <summary>Jaccard index (Tanimoto coefficient)</summary>
-		Jaccard,
-		/// <summary>conditional probability</summary>
-		ConditionalProbability,
-		/// <summary>bidirectional conditional probability</summary>
-		BidirectionalConditionalProbability,
-		/// <summary>cooccurrence counts</summary>
-		Cooccurrence,
-		/// <summary>use a similarity provider to get the correlation</summary>
-		SimilarityProvider,
-		/// <summary>use stored/precomputed correlation</summary>
-		Stored
-	}
+    /// <summary>Correlations based on binary data</summary>
+    public enum BinaryCorrelationType
+    {
+        /// <summary>cosine similarity</summary>
+        Cosine,
+        /// <summary>Jaccard index (Tanimoto coefficient)</summary>
+        Jaccard,
+        /// <summary>conditional probability</summary>
+        ConditionalProbability,
+        /// <summary>bidirectional conditional probability</summary>
+        BidirectionalConditionalProbability,
+        /// <summary>cooccurrence counts</summary>
+        Cooccurrence,
+        /// <summary>use a similarity provider to get the correlation</summary>
+        SimilarityProvider,
+        /// <summary>loglikelihood ratio, as implemented in Mahout. Currently available only in MahoutUserKNN!</summary>
+        Loglikelihood,
+        /// <summary>use stored/precomputed correlation</summary>
+        Stored
+    }
 }
 
