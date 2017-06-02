@@ -27,7 +27,10 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Matrix factorization model for item prediction (ranking) optimized for BPR </summary>
+	/// <summary> Combination of User Attribute Aware recommender with Rendle's BPRMF.</summary>
+    /// Requires PositiveOnlyFeedback and an BooleanMatrix User Attributes. 
+    /// Feedback and attributes 
+    /// Item predictions are calculated from an item bias, dot product of 
 	/// <remarks>
 	///   <para>
 	///     BPR reduces ranking to pairwise classification.
@@ -70,7 +73,7 @@ namespace MyMediaLite.ItemRecommendation
 	///     This recommender supports incremental updates.
 	///   </para>
 	/// </remarks>
-	public class UserAttributeBPRMF : MF, IUserAttributeAwareRecommender, IFoldInItemRecommender
+	public class UserAttributeBPRMF : MF, IUserAttributeAwareRecommender, IFoldInItemRecommender, IIterativeModel
     {
 		/// <summary>Item bias terms</summary>
 		protected float[] item_bias;
@@ -102,13 +105,18 @@ namespace MyMediaLite.ItemRecommendation
 		/// <summary>If set (default), update factors for negative sampled items during learning</summary>
 		public bool UpdateJ { get; set; } = true;
 
+        /// <summary>The number of Attributes</summary>
+        public int MaxAttributeID;
 		/// <summary>array of user components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_u;
 		/// <summary>array of positive item components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_i;
 		/// <summary>array of negative item components of triples to use for approximate loss computation</summary>
 		int[] loss_sample_j;
-        
+
+        /// <summary>Matrix containing the latent item factors</summary>
+        protected Matrix<float> user_attribute_factors;
+
         ///
         public IBooleanMatrix UserAttributes
         {
@@ -122,10 +130,9 @@ namespace MyMediaLite.ItemRecommendation
         }
         private IBooleanMatrix user_attributes;
 
-        private Matrix<float> user_attribute_factors;
-        
         ///
         public int NumUserAttributes { get; private set; }
+
         /// <summary>Reference to (per-thread) singleton random number generator</summary>
         [ThreadStatic] // we need one random number generator per thread because synchronizing is slow
 		static protected System.Random random;
@@ -141,10 +148,11 @@ namespace MyMediaLite.ItemRecommendation
 		protected override void InitModel()
 		{
 			base.InitModel();
-
+            //Console.WriteLine("testing");
 			item_bias = new float[MaxItemID + 1];
-
-            user_attribute_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+            //Console.WriteLine("testing");
+            //Console.WriteLine(UserAttributes.NonEmptyRowIDs.Count);
+            user_attribute_factors = new Matrix<float>(UserAttributes.NonEmptyColumnIDs.Count, NumFactors);
             user_attribute_factors.InitNormal(InitMean, InitStdDev);
         }
 
@@ -173,7 +181,11 @@ namespace MyMediaLite.ItemRecommendation
 			}
 
 			for (int i = 0; i < NumIter; i++)
-				Iterate();
+            {
+                Iterate();
+            }
+				
+            
 		}
 
 		/// <summary>Perform one iteration of stochastic gradient ascent over the training data</summary>
@@ -229,8 +241,29 @@ namespace MyMediaLite.ItemRecommendation
 					while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
 					break;
 				}
-				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, true, UpdateJ);
+				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, false, UpdateJ);
 			}
+            foreach(int i in user_attributes.NonEmptyRowIDs)
+            {
+                while (true) // sampling with replacement
+                {
+                    user_id = i;
+                    var user_items = user_matrix[user_id];
+
+                    // reset user if already exhausted
+                    if (user_items.Count == 0)
+                        foreach (int item_id in Feedback.UserMatrix[user_id])
+                            user_matrix[user_id, item_id] = true;
+
+                    pos_item_id = user_items.ElementAt(random.Next(user_items.Count));
+                    user_matrix[user_id, pos_item_id] = false; // temporarily forget positive observation
+                    do
+                        neg_item_id = random.Next(MaxItemID + 1);
+                    while (Feedback.UserMatrix[user_id].Contains(neg_item_id));
+                    break;
+                }
+                UpdateAttributeFactors(user_id, pos_item_id, neg_item_id, true, UpdateJ);
+            }
 		}
 
 		/// <summary>
@@ -240,13 +273,27 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			int num_pos_events = Feedback.Count;
 			int user_id, pos_item_id, neg_item_id;
+            var user_matrix = Feedback.GetUserMatrixCopy();
 
-			for (int i = 0; i < num_pos_events; i++)
+            for (int i = 0; i < num_pos_events; i++)
 			{
 				SampleTriple(out user_id, out pos_item_id, out neg_item_id);
 				UpdateFactors(user_id, pos_item_id, neg_item_id, true, true, true, UpdateJ);
 			}
-		}
+
+            
+            foreach (int i in user_attributes.NonEmptyRowIDs.Intersect(Feedback.AllUsers))
+            {
+                user_id = i;
+                var pos_event_w_feedback = user_matrix.GetEntriesByRow(i);
+                foreach (int pos_item in pos_event_w_feedback)
+                {
+                    SampleOtherItem(user_id, pos_item, out neg_item_id);
+                    UpdateAttributeFactors(user_id, pos_item, neg_item_id, true, UpdateJ);
+                }
+                //Console.WriteLine("Updated user {0}", i);
+            }
+        }
 
 		/// <summary>
 		/// Iterate over the training data, uniformly sample from user-item pairs with replacement.
@@ -354,9 +401,23 @@ namespace MyMediaLite.ItemRecommendation
         protected virtual void UpdateFactors(int user_id, int item_id, int other_item_id, bool update_u_f, bool update_u_a, bool update_i, bool update_j)
 		{
             ///TODO: check if we first sum user_factors and user_attribute_factors or first do the two Products and then sum. 
+            ///
+            //Console.WriteLine("Updating user {0}, item {1} and anti-item {2}", user_id, item_id, other_item_id);
 			double x_uij = item_bias[item_id] - item_bias[other_item_id];
             x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
-            x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_attribute_factors, user_id, item_factors, item_id, item_factors, other_item_id);
+            IList<int> this_user_attributes = null;
+            bool this_user_has_attributes = false;
+            if (user_attributes.NonEmptyRowIDs.Contains(user_id))
+            {
+                this_user_has_attributes = true;
+                this_user_attributes = user_attributes.GetEntriesByRow(user_id);
+                //Console.WriteLine(user_attributes.GetEntriesByRow(user_id));
+                foreach (int user_attribute in this_user_attributes)
+                {
+                    //Console.WriteLine(user_attribute);
+                    x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_attribute_factors, UserAttributes.NonEmptyColumnIDs.IndexOf(user_attribute), item_factors, item_id, item_factors, other_item_id);
+                }
+            }
 
             double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
 
@@ -377,7 +438,6 @@ namespace MyMediaLite.ItemRecommendation
 			for (int f = 0; f < num_factors; f++)
 			{
 				float w_uff = user_factors[user_id, f];
-                float w_ufa = user_attribute_factors[user_id, f];
                 float h_if = item_factors[item_id, f];
 				float h_jf = item_factors[other_item_id, f];
 
@@ -387,28 +447,56 @@ namespace MyMediaLite.ItemRecommendation
 					user_factors[user_id, f] = (float) (w_uff + LearnRate * update);
 				}
 
-                if (update_u_a)
+                if (update_i)
                 {
-                    double update = (h_if - h_jf) * one_over_one_plus_ex - RegUattributes * w_ufa;
-                    user_attribute_factors[user_id, f] = (float)(w_ufa + LearnRate * update);
+                    double update = w_uff * one_over_one_plus_ex - RegI * h_if;
+                    item_factors[item_id, f] = (float)(h_if + LearnRate * update);
                 }
 
-                if (update_i)
-				{
-					double update = (w_uff + w_ufa) * one_over_one_plus_ex - RegI * h_if;
-					item_factors[item_id, f] = (float) (h_if + LearnRate * update);
-				}
-
-				if (update_j)
-				{
-					double update = -(w_uff + w_ufa) * one_over_one_plus_ex - RegJ * h_jf;
-					item_factors[other_item_id, f] = (float) (h_jf + LearnRate * update);
-				}
-			}
+                if (update_j)
+                {
+                    double update = -w_uff * one_over_one_plus_ex - RegJ * h_jf;
+                    item_factors[other_item_id, f] = (float)(h_jf + LearnRate * update);
+                }
+            }
 		}
 
-		///
-		protected override void AddItem(int item_id)
+        /// <summary>Update latent factors for User Attributes Features according to the stochastic gradient descent update rule</summary>
+        protected virtual void UpdateAttributeFactors(int user_id, int item_id, int other_item_id, bool update_u_a, bool update_j)
+        {
+            ///TODO: check if we first sum user_factors and user_attribute_factors or first do the two Products and then sum. 
+            ///
+            //Console.WriteLine("Updating user {0}, item {1} and anti-item {2}", user_id, item_id, other_item_id);
+            double x_uij = item_bias[item_id] - item_bias[other_item_id];
+            x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_factors, user_id, item_factors, item_id, item_factors, other_item_id);
+            IList<int> this_user_attributes = user_attributes.GetEntriesByRow(UserAttributes.NonEmptyRowIDs.IndexOf(user_id));
+            foreach (int user_attribute in this_user_attributes)
+            {
+                //Console.WriteLine(user_attribute);
+                x_uij += DataType.MatrixExtensions.RowScalarProductWithRowDifference(user_attribute_factors, UserAttributes.NonEmptyColumnIDs.IndexOf(user_attribute), item_factors, item_id, item_factors, other_item_id);
+            }
+
+            double one_over_one_plus_ex = 1 / (1 + Math.Exp(x_uij));
+            // adjust factors
+            for (int f = 0; f < num_factors; f++)
+            {
+                float h_if = item_factors[item_id, f];
+                float h_jf = item_factors[other_item_id, f];
+
+                foreach (int user_attribute in this_user_attributes)
+                {
+                    int user_attribute_row = UserAttributes.NonEmptyColumnIDs.IndexOf(user_attribute);
+                    float wua = user_attribute_factors[user_attribute_row, f];
+                    double update = (h_if - h_jf) * one_over_one_plus_ex - RegUattributes * wua;
+                    float newvalue = (float)(user_attribute_factors[UserAttributes.NonEmptyColumnIDs.IndexOf(user_attribute), f] + LearnRate * update);
+                    //Console.WriteLine("updating user {0} {1} to {2}", user_id, user_attribute_factors[user_attribute_row, f], newvalue);
+                    user_attribute_factors[user_attribute_row, f] = newvalue;
+                }
+            }
+        }
+
+        ///
+        protected override void AddItem(int item_id)
 		{
 			base.AddItem(item_id);
 			Array.Resize(ref item_bias, MaxItemID + 1);
@@ -460,8 +548,22 @@ namespace MyMediaLite.ItemRecommendation
 		{
 			if (user_id > MaxUserID || item_id > MaxItemID)
 				return float.MinValue;
+            float x_uij = item_bias[item_id];
+            x_uij += DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+            if (user_attributes.NonEmptyRowIDs.Contains(user_id))
+            {
+                //Console.WriteLine("User: {0}", user_id);
+                var this_user_attributes = user_attributes.GetEntriesByRow(user_id);
+                //Console.WriteLine(user_attributes.GetEntriesByRow(user_id));
+                foreach (int user_attribute in this_user_attributes)
+                {
+                    //Console.WriteLine("Attrib: {0}", user_attribute);
 
-            return item_bias[item_id] + DataType.MatrixExtensions.RowScalarProduct(user_factors, user_id, item_factors, item_id);
+                    //Console.WriteLine(user_attribute);
+                    x_uij += DataType.MatrixExtensions.RowScalarProduct(user_attribute_factors, UserAttributes.NonEmptyColumnIDs.IndexOf(user_attribute), item_factors, item_id);
+                }
+            }
+            return x_uij;
 		}
 
 
