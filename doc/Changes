@@ -6,6 +6,7 @@
          - do not explore negative values of hyperparameters
         misc
          - support Mono 5.x, drop support for older versions of Mono
+         - update MovieLens dataset URLs
 
 3.12	2016-12-30
 	recommenders:

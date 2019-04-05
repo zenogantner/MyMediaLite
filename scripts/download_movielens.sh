@@ -8,8 +8,8 @@ echo "Refer to the README files for the details of the usage license."
 cd data
 
 # download the other 2 MovieLens datasets
-wget http://grouplens.org/system/files/ml-1m.zip
-wget http://files.grouplens.org/papers/ml-10m.zip
+wget http://files.grouplens.org/datasets/movielens/ml-1m.zip
+wget http://files.grouplens.org/datasets/movielens/ml-10m.zip
 
 # unzip data
 unzip ml-1m.zip
