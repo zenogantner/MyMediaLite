@@ -4,8 +4,6 @@
 
 echo "The MovieLens datasets are for NON-COMMERCIAL use only."
 echo "Refer to the README files for the details of the usage license."
-echo "Hit enter to continue, Ctrl-C to abort."
-read DUMMY
 
 cd data
 
