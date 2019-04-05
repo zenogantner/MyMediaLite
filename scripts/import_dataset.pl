@@ -62,7 +62,7 @@ my $item_count  = scalar keys %item_id;
 
 print STDERR "Start with $user_count and $item_count known users and items\n";
 
-# skip lines
+# skip lines at beginning of file
 for (my $i = 0; $i < $ignore_lines; $i++) { <>; }
 
 LINE:
