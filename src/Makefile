@@ -2,10 +2,10 @@ all: ../lib/mymedialite
 	xbuild /p:Configuration=Debug MyMediaLite-nogui.sln
 	cp -r Programs/ItemRecommendation/bin/Debug/*.dll ../lib/mymedialite
 	cp -r Programs/ItemRecommendation/bin/Debug/*.exe ../lib/mymedialite
-	cp -r Programs/ItemRecommendation/bin/Debug/*.mdb ../lib/mymedialite
-	cp -r Programs/RatingPrediction/bin/Debug/*.mdb ../lib/mymedialite
+	cp -r Programs/ItemRecommendation/bin/Debug/*.pdb ../lib/mymedialite
+	cp -r Programs/RatingPrediction/bin/Debug/*.pdb ../lib/mymedialite
 	cp -r Programs/RatingPrediction/bin/Debug/*.exe ../lib/mymedialite
-	cp -r Programs/RatingBasedRanking/bin/Debug/*.mdb ../lib/mymedialite
+	cp -r Programs/RatingBasedRanking/bin/Debug/*.pdb ../lib/mymedialite
 	cp -r Programs/RatingBasedRanking/bin/Debug/*.exe ../lib/mymedialite
 
 ../lib/mymedialite:

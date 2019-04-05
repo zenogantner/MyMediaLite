@@ -1,5 +1,5 @@
 Requirements for running MyMediaLite:
- - Mono 2.8.x or another recent .NET runtime (Mono 2.10.x recommended)
+ - Mono 5.x or another recent .NET runtime (Mono 5.16 recommended)
  - Perl and File::Slurp for the download and data processing scripts
    (not necessary for running/building MyMediaLite)
 
@@ -19,18 +19,8 @@ Requirements for building MyMediaLite:
    - Graphviz
 
 Tested configurations:
- - Ubuntu 10.04
-   - with manually installed Mono 2.10.5 and MonoDevelop 2.6/2.8.1
-   - Doxygen 1.6.3
- - Ubuntu 11.10
-   - with Mono 2.10.5
- - Ubuntu 14.04
-   - with Mono 3.2.8 and MonoDevelop 4.0.12
- - Ubuntu 16.04 LTS
-   - with Mono 4.2.1 and MonoDevelop 5.10
- - Debian Wheezy
-   - with Mono 2.10.1 and MonoDevelop 2.8.2
- - Windows with Visual Studio 2010
+ - Ubuntu 18.04 LTS
+   - with Mono 5.16
 
 Let us know on which configuration of .NET or Mono you are using MyMediaLite,
 or whether you experience difficulties.
