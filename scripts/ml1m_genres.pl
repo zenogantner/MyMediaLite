@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# (c) 2009, 2010, 2011 by Zeno Gantner
+# (c) 2009, 2010, 2011, 2019 by Zeno Gantner
 #
 # This file is part of MyMediaLite.
 #
@@ -28,7 +28,8 @@ use Getopt::Long;
 
 GetOptions(
 	   'help'           => \(my $help          = 0),
-	   'sparse-output!' => \(my $sparse_output = 1),
+           'sparse-output!' => \(my $sparse_output = 1),
+           'ignore-lines=i' => \(my $ignore_lines  = 0),
 	  ) or usage(-1); ## TODO implement usage
 
 my @genres = (
@@ -45,16 +46,19 @@ my %genre_id = map { $_ => $counter++ } @genres;
 $genre_id{Children} = $genre_id{"Children's"};
 $genre_id{IMAX}     = $counter++;
 
+# skip lines at beginning of file
+for (my $i = 0; $i < $ignore_lines; $i++) { <>; }
+
 while (<>) {
     my $line = $_;
     chomp $line;
 
-    my @fields = split '::', $line;
-    if (scalar @fields != 3) {
-	croak "Could not parse line: '$line'\n";
+    unless ($line =~ /^(\d+).+?([-A-Za-z'| ()]*)$/) {
+	die "Could not parse line: '$line'\n";
     }
 
-    my ($movie_id, $movie_title, $movie_genres) = @fields;
+    my $movie_id = $1;
+    my $movie_genres = $2;
 
     next if $movie_genres eq '(no genres listed)';
 
@@ -67,7 +71,7 @@ while (<>) {
 		print "$movie_id\t$genre_id\n";
 	    }
 	    else {
-		print STDERR "Unknown genre in line '$line'\n";
+		print STDERR "Unknown genre in line '$line': '$movie_genres'\n";
 	    }
 	}
     }

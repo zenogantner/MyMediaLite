@@ -2,23 +2,28 @@
 
 # to be run from the root directory of MyMediaLite
 
+set -e
+
 echo "The MovieLens datasets are for NON-COMMERCIAL use only."
 echo "Refer to the README files for the details of the usage license."
 
 cd data
 
-# download the other 2 MovieLens datasets
+
+# download the other 3 MovieLens datasets
 wget http://files.grouplens.org/datasets/movielens/ml-1m.zip
 wget http://files.grouplens.org/datasets/movielens/ml-10m.zip
+wget http://files.grouplens.org/datasets/movielens/ml-20m.zip
 
 # unzip data
-unzip ml-1m.zip
-unzip ml-10m.zip
+unzip -a ml-1m.zip
+unzip -a ml-10m.zip
+unzip -a ml-20m.zip
 
 mv ml-10M100K ml-10m
 
 # remove downloaded archives
-rm ml-1m.zip ml-10m.zip
+rm ml-1m.zip ml-10m.zip ml-20m.zip
 
 
 # create attribute files for MovieLens 1M
@@ -34,5 +39,10 @@ rm ml-1m.zip ml-10m.zip
 # create tab-separated file for MovieLens 10M
 ../scripts/import_dataset.pl --separator=:: ml-10m/ratings.dat > ml-10m/ratings.txt
 ../scripts/ml1m_genres.pl ml-10m/movies.dat > ml-10m/item-attributes-genres.txt
+
+# create tab-separated file for MovieLens 20M
+../scripts/import_dataset.pl --separator=, --ignore-lines=1 ml-20m/ratings.csv > ml-20m/ratings.txt
+../scripts/ml1m_genres.pl --ignore-lines=1 ml-20m/movies.csv > ml-20m/item-attributes-genres.txt
+
 
 cd ..
