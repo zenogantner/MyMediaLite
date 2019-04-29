@@ -74,7 +74,7 @@ namespace MyMediaLite.Data
 					num_new_users = test.AllUsers.Except(train.AllUsers).Count();
 					num_new_items = test.AllItems.Except(train.AllItems).Count();
 				});
-				s += string.Format("{0} new users, {1} new items ({2} seconds)\n", num_new_users, num_new_items, seconds);
+				s += string.Format(CultureInfo.InvariantCulture, "{0} new users, {1} new items ({2} seconds)\n", num_new_users, num_new_items, seconds);
 			}
 
 			return s + Statistics(user_attributes, item_attributes);
@@ -120,12 +120,14 @@ namespace MyMediaLite.Data
 			if (user_attributes != null)
 			{
 				s += string.Format(
+					CultureInfo.InvariantCulture,
 					"{0} user attributes for {1} users, {2} assignments, {3} users with attribute assignments\n",
 					user_attributes.NumberOfColumns, user_attributes.NumberOfRows,
 					user_attributes.NumberOfEntries, user_attributes.NonEmptyRowIDs.Count);
 			}
 			if (item_attributes != null)
 				s += string.Format(
+					CultureInfo.InvariantCulture,
 					"{0} item attributes for {1} items, {2} assignments, {3} items with attribute assignments\n",
 					item_attributes.NonEmptyColumnIDs.Count, item_attributes.NumberOfRows,
 					item_attributes.NumberOfEntries, item_attributes.NonEmptyRowIDs.Count);

@@ -5,6 +5,8 @@
          - #423 #479: speed up external recommenders (Petr Sobotka)
 	hyperparameter search:
          - do not explore negative values of hyperparameters
+        evaluation:
+         - ensure culture-invariant output
         misc
          - support Mono 5.x, drop support for older versions of Mono
          - dataset download: update URLs, also download ML-20M

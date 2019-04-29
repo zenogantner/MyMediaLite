@@ -80,8 +80,8 @@ namespace MyMediaLite.Eval
 		/// <returns>a string containing the results</returns>
 		public override string ToString()
 		{
-			var metrics = (from m in MeasuresToShow select string.Format("{0} {1:" + FloatingPointFormat + "}", m, this[m])).ToList();
-			var ints    = (from i in IntsToShow    select string.Format("{0} {1}", i, this[i])).ToList();
+			var metrics = (from m in MeasuresToShow select string.Format(CultureInfo.InvariantCulture, "{0} {1:" + FloatingPointFormat + "}", m, this[m])).ToList();
+			var ints    = (from i in IntsToShow    select string.Format(CultureInfo.InvariantCulture, "{0} {1}", i, this[i])).ToList();
 
 			string s = string.Join(" ", metrics.Concat(ints));
 
