@@ -1,5 +1,8 @@
-MyMediaLite - a recommender system algorithm library
-====================================================
+MyMediaLite - a free recommender system algorithm library
+=========================================================
+
+[![Build Status](https://travis-ci.org/zenogantner/MyMediaLite.svg?branch=master)](https://travis-ci.org/zenogantner/MyMediaLite)
+
 
 Features
 --------
@@ -12,11 +15,9 @@ Features
       quality measures MAE, NAME, RMSE, CBD, AUC, MAP, precision@N, recall@N,
       NDCG, MRR; and
     - command line tools that read a simple text-based input format.
- - Compactness: Core library is about 275 KB "big".
- - Portability: Written in C#, for the .NET platform;
+ - Compact: Core library is about 275 KB "big".
+ - Portable: Written in C#, for the .NET platform;
    runs on every architecture where Mono works: Linux, Windows, Mac OS X.
- - Freedom: Free/Open Source software, distributed under the terms of the
-            GNU General Public License (GPL).
 
 
 Feedback and Contributions
