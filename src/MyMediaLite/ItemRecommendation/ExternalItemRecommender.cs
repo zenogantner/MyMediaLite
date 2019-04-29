@@ -1,4 +1,5 @@
 // Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2019 Petr Sobotka
 //
 // This file is part of MyMediaLite.
 //
@@ -14,6 +15,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
+using System.Collections.Generic;
 using MyMediaLite.Data;
 using MyMediaLite.IO;
 
@@ -39,7 +41,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public IMapping ItemMapping { get; set; }
 
-		private IRatings external_scores;
+		private Ratings external_scores;
 
 		/// <summary>Default constructor</summary>
 		public ExternalItemRecommender()
@@ -50,7 +52,7 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override void Train()
 		{
-			external_scores = RatingData.Read(PredictionFile, UserMapping, ItemMapping);
+			external_scores = (Ratings) RatingData.Read(PredictionFile, UserMapping, ItemMapping);
 			// we dont use it locally but it should be initialized before entering the parallel code
 			IList<IList<int>> nonsense = external_scores.ByUser;
 		}
@@ -65,17 +67,10 @@ namespace MyMediaLite.ItemRecommendation
 		///
 		public override float Predict(int user_id, int item_id)
 		{
-			float rating;
-			IList<int> indexes = ((Ratings) external_scores).ByUser[user_id];
-            
-			for (int index = 0; index < indexes.Count; index++)
-				if (external_scores.Items[indexes[index]] == item_id)
-				{
-					rating = external_scores[indexes[index]];
-					return rating;
-                		}
-
-           		 return float.MinValue;;
+			foreach (int index in external_scores.ByUser[user_id])
+				if (external_scores.Items[index] == item_id)
+					return external_scores[index];
+           	return float.MinValue;
 		}
 
 		///

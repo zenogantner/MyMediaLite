@@ -2,6 +2,7 @@
         recommenders:
          - IIterativeModel: get rid of ComputeObjective() -- not used
          - remove LatentFeatureLogLinearModel -- implementation was never complete
+         - #423 #479: speed up external recommenders (Petr Sobotka)
 	hyperparameter search:
          - do not explore negative values of hyperparameters
         misc
