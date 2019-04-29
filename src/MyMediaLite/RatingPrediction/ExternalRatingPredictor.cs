@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Zeno Gantner
+// Copyright (C) 2012, 2019 Zeno Gantner
 // Copyright (C) 2019 Petr Sobotka
 //
 // This file is part of MyMediaLite.
@@ -60,8 +60,10 @@ namespace MyMediaLite.RatingPrediction
 		///
 		public override bool CanPredict(int user_id, int item_id)
 		{
-			float rating;
-			return external_ratings.TryGet(user_id, item_id, out rating);
+			foreach (int index in external_ratings.ByUser[user_id])
+				if (external_ratings.Items[index] == item_id)
+					return true;
+			return false;
 		}
 
 		///
