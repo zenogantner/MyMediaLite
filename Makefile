@@ -58,11 +58,11 @@ MyMediaLite-${VERSION}.tar.gz:
 	mkdir MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${ITEM_REC_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${ITEM_REC_DIR}/bin/Debug/*.dll MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${ITEM_REC_DIR}/bin/Debug/*.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${ITEM_REC_DIR}/bin/Debug/*.pdb MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${RATING_PRED_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_PRED_DIR}/bin/Debug/*.exe.pdb MyMediaLite-${VERSION}/lib/mymedialite
 	cp ${RATING_RANK_DIR}/bin/Debug/*.exe MyMediaLite-${VERSION}/lib/mymedialite
-	cp ${RATING_RANK_DIR}/bin/Debug/*.exe.mdb MyMediaLite-${VERSION}/lib/mymedialite
+	cp ${RATING_RANK_DIR}/bin/Debug/*.exe.pdb MyMediaLite-${VERSION}/lib/mymedialite
 	tar -cvzf MyMediaLite-${VERSION}.tar.gz MyMediaLite-${VERSION}
 	rm -rf MyMediaLite-${VERSION}
 

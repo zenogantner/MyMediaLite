@@ -9,4 +9,4 @@ run:
 	#mono --debug foldin_incremental.exe
 
 clean:
-	rm -f *.exe *.mdb
+	rm -f *.exe *.pdb
