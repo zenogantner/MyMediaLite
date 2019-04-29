@@ -51,6 +51,8 @@ namespace MyMediaLite.ItemRecommendation
 		public override void Train()
 		{
 			external_scores = RatingData.Read(PredictionFile, UserMapping, ItemMapping);
+			// we dont use it locally but it should be initialized before entering the parallel code
+			IList<IList<int>> nonsense = external_scores.ByUser;
 		}
 
 		///
@@ -64,10 +66,16 @@ namespace MyMediaLite.ItemRecommendation
 		public override float Predict(int user_id, int item_id)
 		{
 			float rating;
-			if (external_scores.TryGet(user_id, item_id, out rating))
-				return rating;
-			else
-				return float.MinValue;
+			IList<int> indexes = ((Ratings) external_scores).ByUser[user_id];
+            
+			for (int index = 0; index < indexes.Count; index++)
+				if (external_scores.Items[indexes[index]] == item_id)
+				{
+					rating = external_scores[indexes[index]];
+					return rating;
+                		}
+
+           		 return float.MinValue;;
 		}
 
 		///
