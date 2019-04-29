@@ -1,15 +1,17 @@
 MyMediaLite - a recommender system algorithm library
+====================================================
 
 Features
 --------
+
  - Dozens of different recommendation methods,
-   - methods can use collaborative, attribute/content, and relational data,
+    - methods can use collaborative, attribute/content, and relational data,
  - support for incremental training for most models.
  - Ready to use:
-   - Includes evaluation routines for rating and item prediction;
-     quality measures MAE, NAME, RMSE, CBD, AUC, MAP, precision@N, recall@N,
-     NDCG, MRR; and
-   - command line tools that read a simple text-based input format.
+    - Includes evaluation routines for rating and item prediction;
+      quality measures MAE, NAME, RMSE, CBD, AUC, MAP, precision@N, recall@N,
+      NDCG, MRR; and
+    - command line tools that read a simple text-based input format.
  - Compactness: Core library is about 275 KB "big".
  - Portability: Written in C#, for the .NET platform;
    runs on every architecture where Mono works: Linux, Windows, Mac OS X.
@@ -19,38 +21,39 @@ Features
 
 Feedback and Contributions
 --------------------------
+
 We are always happy about feedback, and encourage MyMediaLite's users to
 contribute code to the project.
 
-Just fork it on GitHub and send pull requests!
+Just fork it on [GitHub](https://github.com/zenogantner/MyMediaLite) and send pull requests!
 
-http://mymedialite.net/contribute.html
+Bugs and feature requests can be reported on our
+[mailing list](https://groups.google.com/group/mymedialite) or in our
+[issue tracker](https://github.com/zenogantner/MyMediaLite/issues).
 
-Bugs and feature requests can be reported on our mailing list or in our issue
-tracker:
-https://groups.google.com/group/mymedialite
-https://github.com/zenogantner/MyMediaLite/issues
 
 Installation
 ------------
+
 See doc/Installation for installation instructions.
+
 
 Documentation
 -------------
-See doc/ and the website for more documentation.
 
-Website
--------
-  http://mymedialite.net
+See doc/ and the [website](http://mymedialite.net) for more documentation.
+
 
 Citing MyMediaLite
 ------------------
+
 If you use MyMediaLite for your research, it would be nice to acknowledge it
 in your papers by citing the following paper:
 
 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler, Lars Schmidt-Thieme:
 MyMediaLite: A Free Recommender System Library. RecSys 2011
 
+```
 @inproceedings{Gantner2011MyMediaLite,
   author    = {Zeno Gantner and Steffen Rendle and Christoph Freudenthaler and Lars Schmidt-Thieme},
   title     = {{MyMediaLite}: A Free Recommender System Library},
@@ -58,13 +61,15 @@ MyMediaLite: A Free Recommender System Library. RecSys 2011
   year      = 2011,
   location  = {Chicago, USA}
 }
+```
 
-Please inform us about if you have a publication that uses
-this software, so we can list it on MyMediaLite's website:
-Just send an e-mail to mymedialite@googlegroups.com
+
+[Academic publications that use or reference MyMediaLite](https://scholar.google.de/scholar?q=mymedialite)
+
 
 Contributors
 ------------
+
 Thanks to the following people, who provided valuable feedback, code, or other
 kinds of assistance:
 Roberto Abalde, Nicholas Ampazis, Thorsten Angermann, Suhrid Balakrishnan,
@@ -73,7 +78,7 @@ Simon Dooms, Lucas Drumond, Michael Ekstrand, Christoph Freudenthaler,
 Zeno Gantner, Jagadeesh Gorla, Josif Grabocka, Mark Graus, Guibing Guo,
 Andreas Hoffmann, Tomas Horvath, Kenneth Hoste, Frantisek Hrdina, Jia Huang,
 Nicolas Hug, Dominik Imrich, Dietmar Jannach, Peng Jiang, KwangSeob Kim,
-Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler, Damir Logar
+Artus Krohn-Grimberghe, Tobias Lang, Christina Lichtenthäler, Damir Logar,
 Marcelo Manzato, Brian McFee, Greg Najda, Chris Newell, Thai-Nghe Nguyen,
 Dimitris Paraschakis, Simon Renaud, Steffen Rendle, Marco Ribeiro,
 Roland Richter, Saurabh S., Sebastian Schelter, Lars Schmidt-Thieme, Yue Shi,
@@ -83,11 +88,12 @@ Yongfeng Wang, Lina Weichbrodt, Cees Wesseling, Yong Zheng, GitHub users
 jkleint and NEBabylon.
 
 This work was funded by the European Commission FP7 project MyMedia
-(Dynamic Personalization of Multimedia, http://www.mymediaproject.org/)
-under the grant agreement no. 215006.
+(Dynamic Personalization of Multimedia) under the grant agreement no. 215006.
+
 
 Copyright & Licensing
 ---------------------
+
 Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016, 2019 The MyMediaLite contributors
 
 MyMediaLite is free software: you can redistribute it and/or modify
@@ -104,14 +110,7 @@ You should have received a copy of the GNU General Public License
 along with MyMediaLite.  If not, see <http://www.gnu.org/licenses/>.
 
 ----
-This package contains Mono.Options, C5, the Math.NET Numerics library,
-a C# port of LIBSVM, and NUnit.
-
-The original packages can be found here:
-http://www.itu.dk/research/c5/
-http://numerics.mathdotnet.com
-http://www.csie.ntu.edu.tw/~cjlin/libsvm/
-http://www.matthewajohnson.org/software/svm.html
-http://www.nunit.org
+This package contains Mono.Options, [C5](http://www.itu.dk/research/c5/), [Math.NET Numerics](http://numerics.mathdotnet.com),
+and [NUnit](http://www.nunit.org).
 
 See doc/ComponentLicenses for more information about their licensing terms.

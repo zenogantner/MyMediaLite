@@ -9,6 +9,8 @@
          - do not explore negative values of hyperparameters
         evaluation:
          - ensure culture-invariant output
+        documentation:
+         - convert README to markdown format
         misc
          - support Mono 5.x, drop support for older versions of Mono
          - dataset download: update URLs, also download ML-20M
