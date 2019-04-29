@@ -1,6 +1,5 @@
 language: csharp
 mono:
- - 5.20.1.19
  - latest
  - beta
 solution: src/MyMediaLite-nogui.sln
