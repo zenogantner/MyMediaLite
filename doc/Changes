@@ -3,6 +3,8 @@
          - IIterativeModel: get rid of ComputeObjective() -- not used
          - remove LatentFeatureLogLinearModel -- implementation was never complete
          - #423 #479: speed up external recommenders (Petr Sobotka)
+        command-line tools:
+         - allow modifying the floating point format with --prediction-line
 	hyperparameter search:
          - do not explore negative values of hyperparameters
         evaluation:

@@ -67,10 +67,14 @@ namespace MyMediaLite.RatingPrediction
 			else
 				for (int index = 0; index < ratings.Count; index++)
 					writer.WriteLine(
-						line_format,
-						user_mapping.ToOriginalID(ratings.Users[index]),
-						item_mapping.ToOriginalID(ratings.Items[index]),
-						recommender.Predict(ratings.Users[index], ratings.Items[index]).ToString(CultureInfo.InvariantCulture));
+						string.Format(
+							CultureInfo.InvariantCulture,
+						    line_format,
+						    user_mapping.ToOriginalID(ratings.Users[index]),
+						    item_mapping.ToOriginalID(ratings.Items[index]),
+						    recommender.Predict(ratings.Users[index], ratings.Items[index])
+						)
+					);
 		}
 
 		/// <summary>Rate a given set of instances and write it to a file</summary>
