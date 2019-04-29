@@ -1,7 +1,8 @@
 language: csharp
 mono:
+ - 5.20.1.19
  - latest
- - 3.8.0
+ - beta
 solution: src/MyMediaLite-nogui.sln
 install:
   - nuget restore src/MyMediaLite-nogui.sln
