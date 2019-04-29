@@ -113,6 +113,7 @@ data:
 
 data/ml-100k/u.data: data
 	scripts/download_ml-100k.sh
+	touch $@
 
 download-movielens: data/ml-100k/u.data
 	scripts/download_movielens.sh
