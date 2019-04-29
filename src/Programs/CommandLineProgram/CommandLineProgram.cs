@@ -116,7 +116,7 @@ public abstract class CommandLineProgram<T> where T:IRecommender
 	{
 		var version = Assembly.GetEntryAssembly().GetName().Version;
 		Console.WriteLine("MyMediaLite {0} {1}.{2:00}", ProgramName, version.Major, version.Minor);
-		Console.WriteLine("Copyright (C) 2011, 2012, 2013, 2015, 2016 The MyMediaLite contributors.");
+		Console.WriteLine("Copyright (C) 2011, 2012, 2013, 2015, 2016, 2019 The MyMediaLite contributors.");
 		Console.WriteLine("This is free software; see the source for copying conditions.  There is NO");
 		Console.WriteLine("warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
 		Environment.Exit(0);
