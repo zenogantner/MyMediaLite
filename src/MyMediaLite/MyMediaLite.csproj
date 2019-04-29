@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MyMediaLite</RootNamespace>
     <AssemblyName>MyMediaLite</AssemblyName>
-    <ReleaseVersion>3.12</ReleaseVersion>
+    <ReleaseVersion>3.13</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
