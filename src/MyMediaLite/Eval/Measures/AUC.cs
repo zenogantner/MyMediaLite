@@ -26,15 +26,9 @@ using System.Linq;
 namespace MyMediaLite.Eval.Measures
 {
 	/// <summary>Area under the ROC curve (AUC) of a list of ranked items</summary>
-	/// <remarks>
-	/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
-	/// </remarks>
 	public static class AUC
 	{
 		/// <summary>Compute the area under the ROC curve (AUC) of a list of ranked items</summary>
-		/// <remarks>
-		/// See http://recsyswiki.com/wiki/Area_Under_the_ROC_Curve
-		/// </remarks>
 		/// <param name="ranked_items">a list of ranked item IDs, the highest-ranking item first</param>
 		/// <param name="relevant_items">a collection of positive/correct item IDs</param>
 		/// <param name="num_dropped_items">the number of items that were not ranked (considered to be ranked below all ranked_items)</param>
