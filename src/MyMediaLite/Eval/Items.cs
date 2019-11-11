@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2011, 2012, 2013 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
@@ -44,13 +45,16 @@ namespace MyMediaLite.Eval
 		///   <item><term>recall@10</term><description>recall at 10</description></item>
 		///   <item><term>NDCG</term><description>normalizad discounted cumulative gain</description></item>
 		///   <item><term>MRR</term><description>mean reciprocal rank</description></item>
+        ///   <item><term>R_prec</term><description>R-precision</description></item>
+        ///   <item><term>F1@5</term><description>F1-measure at 5</description></item>
+        ///   <item><term>F1@10</term><description>F1-measure at 10</description></item>
 		/// </list>
 		/// An item recommender is better than another according to one of those measures its score is higher.
 		/// </remarks>
 		static public ICollection<string> Measures
 		{
 			get {
-				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR" };
+                string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR", "R_prec", "F1@5", "F1@10" };
 				return new HashSet<string>(measures);
 			}
 		}
@@ -169,6 +173,7 @@ namespace MyMediaLite.Eval
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items);
 					double ndcg = NDCG.Compute(prediction_list, correct_items);
 					double rr   = ReciprocalRank.Compute(prediction_list, correct_items);
+                    double r_prec = PrecisionAndRecall.R_Precision(prediction_list, correct_items);
 					var positions = new int[] { 5, 10 };
 					var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, positions);
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, positions);
@@ -181,6 +186,7 @@ namespace MyMediaLite.Eval
 						result["MAP"]       += (float) map;
 						result["NDCG"]      += (float) ndcg;
 						result["MRR"]       += (float) rr;
+                        result["R_prec"]    += (float) r_prec;
 						result["prec@5"]    += (float) prec[5];
 						result["prec@10"]   += (float) prec[10];
 						result["recall@5"]  += (float) recall[5];
@@ -198,6 +204,9 @@ namespace MyMediaLite.Eval
 					throw;
 				}
 			});
+
+            result["F1@5"] = (float)2 * ((result["prec@5"] * result["recall@5"]) / (result["prec@5"] + result["recall@5"]));
+            result["F1@10"] = (float)2 * ((result["prec@10"] * result["recall@10"]) / (result["prec@10"] + result["recall@10"]));
 
 			foreach (string measure in Measures)
 				result[measure] /= num_users;
