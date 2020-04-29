@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012, 2013 Zeno Gantner
+// Copyright (C) 2011, 2012, 2013, 2020 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle
 //
 // This file is part of MyMediaLite.
@@ -37,11 +37,9 @@ namespace MyMediaLite.Eval
 		/// The evaluation measures currently are:
 		/// <list type="bullet">
 		///   <item><term>AUC</term><description>area under the ROC curve</description></item>
-		///   <item><term>prec@5</term><description>precision at 5</description></item>
-		///   <item><term>prec@10</term><description>precision at 10</description></item>
+		///   <item><term>prec@(5|10|20|50|100)</term><description>precision at 5/10/20/50/100</description></item>
 		///   <item><term>MAP</term><description>mean average precision</description></item>
-		///   <item><term>recall@5</term><description>recall at 5</description></item>
-		///   <item><term>recall@10</term><description>recall at 10</description></item>
+		///   <item><term>recall@(5|10|20|50|100)</term><description>recall at 5/10/20/50/100</description></item>
 		///   <item><term>NDCG</term><description>normalizad discounted cumulative gain</description></item>
 		///   <item><term>MRR</term><description>mean reciprocal rank</description></item>
 		/// </list>
@@ -50,7 +48,8 @@ namespace MyMediaLite.Eval
 		static public ICollection<string> Measures
 		{
 			get {
-				string[] measures = { "AUC", "prec@5", "prec@10", "MAP", "recall@5", "recall@10", "NDCG", "MRR" };
+				string[] measures = { "AUC", "prec@5", "prec@10", "prec@20", "prec@50", "prec@100", "MAP", "recall@5", "recall@10",
+				                      "recall@20", "recall@50", "recall@100", "NDCG", "MRR" };
 				return new HashSet<string>(measures);
 			}
 		}
@@ -169,7 +168,7 @@ namespace MyMediaLite.Eval
 					double map  = PrecisionAndRecall.AP(prediction_list, correct_items);
 					double ndcg = NDCG.Compute(prediction_list, correct_items);
 					double rr   = ReciprocalRank.Compute(prediction_list, correct_items);
-					var positions = new int[] { 5, 10 };
+					var positions = new int[] { 5, 10, 20, 50, 100 };
 					var prec   = PrecisionAndRecall.PrecisionAt(prediction_list, correct_items, positions);
 					var recall = PrecisionAndRecall.RecallAt(prediction_list, correct_items, positions);
 
@@ -183,8 +182,14 @@ namespace MyMediaLite.Eval
 						result["MRR"]       += (float) rr;
 						result["prec@5"]    += (float) prec[5];
 						result["prec@10"]   += (float) prec[10];
+						result["prec@20"]   += (float) prec[20];
+						result["prec@50"]   += (float) prec[50];
+						result["prec@100"]   += (float) prec[100];
 						result["recall@5"]  += (float) recall[5];
 						result["recall@10"] += (float) recall[10];
+						result["recall@20"] += (float) recall[20];
+						result["recall@50"] += (float) recall[50];
+						result["recall@100"] += (float) recall[100];
 					}
 
 					if (num_users % 1000 == 0)
