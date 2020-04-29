@@ -17,6 +17,7 @@ Requirements for building MyMediaLite:
  - the above requirements plus
    - Doxygen 1.6.3 or later
    - Graphviz
+   - nunit-console
 
 Tested configurations:
  - Ubuntu 18.04 LTS
