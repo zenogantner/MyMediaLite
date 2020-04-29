@@ -1,4 +1,4 @@
-3.13	2019-??-??:
+3.13	2020-??-??:
         recommenders:
          - IIterativeModel: get rid of ComputeObjective() -- not used
          - remove LatentFeatureLogLinearModel -- implementation was never complete
@@ -9,8 +9,10 @@
          - do not explore negative values of hyperparameters
         evaluation:
          - ensure culture-invariant output
+         - add precision/recall at 20/50/100
         documentation:
          - convert README to markdown format
+         - add test requirement nunit-console
         misc
          - support Mono 5.x, drop support for older versions of Mono
          - dataset download: update URLs, also download ML-20M
