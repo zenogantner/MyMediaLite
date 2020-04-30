@@ -26,10 +26,10 @@ using MyMediaLite.IO;
 
 namespace MyMediaLite.ItemRecommendation
 {
-	/// <summary>Sparse Linear Methods (SLIM) for item prediction (ranking) optimized for BPR-Opt optimization criterion </summary>
+	/// <summary>Sparse Linear Methods (SLIM) for item prediction (ranking) optimized for BPR-Opt optimization criterion</summary>
 	/// <remarks>
 	/// This implementation differs from the algorithm in the original SLIM paper since the model here is optimized for BPR-Opt
-	/// instead of the elastic net loss. The optmization algorithm used is the Sotchastic Gradient Ascent.
+	/// instead of the elastic net loss. The optmization algorithm used is Stochastic Gradient Ascent.
 	///
 	/// Literature:
 	/// <list type="bullet">
