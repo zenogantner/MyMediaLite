@@ -222,6 +222,8 @@
     <Compile Include="ItemRecommendation\SLIM.cs" />
     <Compile Include="ItemRecommendation\LeastSquareSLIM.cs" />
     <Compile Include="Eval\EvaluationResults.cs" />
+    <Compile Include="RatingPrediction\IntegratedSVDPlusPlusKNN.cs" />
+    <Compile Include="RatingPrediction\KorenImplicitKNN.cs" />
     <Compile Include="INeedsMappings.cs" />
     <Compile Include="RatingPrediction\ExternalRatingPredictor.cs" />
     <Compile Include="ItemRecommendation\ExternalItemRecommender.cs" />
