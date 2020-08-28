@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2011, 2012 Zeno Gantner
 // Copyright (C) 2010 Zeno Gantner, Steffen Rendle, Christoph Freudenthaler
 //
@@ -101,6 +102,7 @@ namespace MyMediaLite.RatingPrediction
 			// init factor matrices
 			user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
 			item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
+
 			user_factors.InitNormal(InitMean, InitStdDev);
 			item_factors.InitNormal(InitMean, InitStdDev);
 
@@ -114,6 +116,26 @@ namespace MyMediaLite.RatingPrediction
 
 			current_learnrate = LearnRate;
 		}
+
+        protected internal virtual void InitModelNonNegative()
+        {
+            // init factor matrices
+            user_factors = new Matrix<float>(MaxUserID + 1, NumFactors);
+            item_factors = new Matrix<float>(MaxItemID + 1, NumFactors);
+
+            user_factors.InitNonNegative();
+            item_factors.InitNonNegative();
+
+            // set factors to zero for users and items without training examples
+            for (int u = 0; u < ratings.CountByUser.Count; u++)
+                if (ratings.CountByUser[u] == 0)
+                    user_factors.SetRowToOneValue(u, 0);
+            for (int i = 0; i < ratings.CountByItem.Count; i++)
+                if (ratings.CountByItem[i] == 0)
+                    item_factors.SetRowToOneValue(i, 0);
+
+            current_learnrate = LearnRate;
+        }
 
 		///
 		public override void Train()
