@@ -54,8 +54,6 @@ namespace MyMediaLite.Eval.Measures
 					hit_count++;
 
 			int missing_relevant_items = relevant_items.Except(ranked_items).Count();
-			if (num_dropped_items - missing_relevant_items < 0)
-				throw new Exception("Should not happen.");
 			num_correct_pairs += hit_count * (num_dropped_items - missing_relevant_items);
 
 			return (double) num_correct_pairs / num_eval_pairs;
