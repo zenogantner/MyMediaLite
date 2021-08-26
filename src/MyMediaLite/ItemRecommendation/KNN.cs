@@ -1,3 +1,4 @@
+// Copyright (C) 2015 Zeno Gantner, Dimitris Paraschakis
 // Copyright (C) 2013 João Vinagre, Zeno Gantner
 // Copyright (C) 2010, 2011, 2012, 2013 Zeno Gantner
 //
@@ -74,9 +75,12 @@ namespace MyMediaLite.ItemRecommendation
 			UpdateItems = true;
 		}
 
-		void InitModel()
+		public void InitModel()
 		{
 			int num_entities = 0;
+
+            int num_col = DataMatrix.NumberOfColumns;
+
 			switch (Correlation)
 			{
 				case BinaryCorrelationType.Cosine:
@@ -94,14 +98,37 @@ namespace MyMediaLite.ItemRecommendation
 				case BinaryCorrelationType.Cooccurrence:
 					correlation_matrix = new Cooccurrence(num_entities);
 					break;
+                case BinaryCorrelationType.Loglikelihood:
+                    correlation_matrix = new Loglikelihood(num_entities, num_col);
+                    break;
 				default:
 					throw new NotImplementedException(string.Format("{0} does not support for {1}.", this.GetType().Name, Correlation));
 			}
 			correlation_matrix.Weighted = Weighted;
 		}
 
-		///
-		protected void RecomputeNeighbors(ICollection<int> update_entities)
+		/// <summary>Update the correlation matrix for the given feedback</summary>
+		/// <param name='feedback'>the feedback (user-item tuples)</param>
+		protected void Update(ICollection<Tuple<int, int>> feedback)
+		{
+			var update_entities = new HashSet<int>();
+			foreach (var t in feedback)
+				update_entities.Add(t.Item1);
+
+			foreach (int i in update_entities)
+			{
+				for (int j = 0; j < correlation_matrix.NumEntities; j++)
+				{
+					if (j < i && correlation_matrix.IsSymmetric && update_entities.Contains(j))
+						continue;
+
+					correlation_matrix[i, j] = correlation_matrix.ComputeCorrelation(DataMatrix.GetEntriesByRow(i), DataMatrix.GetEntriesByRow(j));
+				}
+			}
+			RecomputeNeighbors(update_entities);
+		}
+
+		public void RecomputeNeighbors(ICollection<int> update_entities)
 		{
 			foreach (int entity_id in update_entities)
 				nearest_neighbors[entity_id] = correlation_matrix.GetNearestNeighbors(entity_id, K);
@@ -125,6 +152,7 @@ namespace MyMediaLite.ItemRecommendation
 					writer.WriteLine(String.Join(" ", nn));
 
 				correlation_matrix.Write(writer);
+
 			}
 		}
 
